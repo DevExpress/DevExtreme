@@ -1,0 +1,99 @@
+@use "./mixins" as *;
+
+// adduse
+
+
+.dx-menu {
+  position: relative;
+}
+
+.dx-menu-horizontal {
+  @include vertical-middle();
+
+  .dx-menu-item-wrapper {
+    display: inline-block;
+  }
+
+  .dx-menu-separator {
+    display: inline-block;
+    margin: 0 15px 0 0;
+  }
+}
+
+.dx-menu-vertical {
+  @include vertical-middle();
+
+  .dx-menu-item-wrapper {
+    display: block;
+  }
+
+  .dx-menu-separator {
+    margin: 0 0 15px 0;
+  }
+}
+
+.dx-rtl.dx-menu {
+  text-align: right;
+}
+
+.dx-context-menu-container-border {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+}
+
+.dx-context-menu-content-delimiter {
+  position: absolute;
+  display: none;
+  z-index: 2000;
+  cursor: pointer;
+}
+
+.dx-menu-adaptive-mode {
+  .dx-treeview-toggle-item-visibility {
+    left: auto;
+    right: 0;
+
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+      left: 0;
+      right: auto;
+    }
+  }
+
+  .dx-treeview-item {
+    cursor: pointer;
+  }
+
+  .dx-treeview-node-container:first-child > .dx-treeview-node {
+    padding: 1px;
+
+    .dx-item-content {
+      padding-left: 15px;
+
+      @at-root #{selector-append(".dx-rtl", &)},
+      .dx-rtl & {
+        padding-right: 15px;
+      }
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.dx-menu-adaptive-mode-overlay-wrapper {
+  @include flex-container(row);
+
+  .dx-overlay-content {
+    display: flex;
+
+    .dx-treeview {
+      height: auto;
+      flex: 1 1 auto;
+    }
+  }
+}

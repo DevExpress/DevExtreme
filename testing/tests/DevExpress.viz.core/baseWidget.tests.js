@@ -1,19 +1,18 @@
 /* global currentTest */
 
+const errorsModule = require('viz/core/errors_warnings');
+
+errorsModule.ERROR_MESSAGES.W0001 = ''; // To prevent failure on reading "incidentOccurred" option in tests
+errorsModule.ERROR_MESSAGES.E100 = 'Templated text 1: {0}, Templated text 2: {1}';
+errorsModule.ERROR_MESSAGES.W100 = 'Warning: Templated text 1: {0}, Templated text 2: {1}';
+
 const $ = require('jquery');
-const renderer = require('core/renderer');
-const version = require('core/version');
+const { version } = require('core/version');
 const resizeCallbacks = require('core/utils/resize_callbacks');
 const registerComponent = require('core/component_registrator');
 const logger = require('core/utils/console').logger;
-const mock = require('../../helpers/mockModule.js').mock;
-const errorsModule = require('viz/core/errors_warnings');
-errorsModule.ERROR_MESSAGES = {
-    W0001: '', // To prevent failure on reading "incidentOccurred" option in tests
-    E100: 'Templated text 1: {0}, Templated text 2: {1}',
-    W100: 'Warning: Templated text 1: {0}, Templated text 2: {1}'
-};
-mock('viz/core/errors_warnings', errorsModule);
+const resizeObserverSingleton = require('core/resize_observer');
+const isFunction = require('core/utils/type').isFunction;
 // const errors = require('viz/core/errors_warnings');
 const BaseWidget = require('viz/core/base_widget');
 const DEBUG_createEventTrigger = require('viz/core/base_widget.utils').DEBUG_createEventTrigger;
@@ -24,6 +23,7 @@ let dxBaseWidgetTester;
 let StubThemeManager;
 let StubTitle;
 const vizMocks = require('../../helpers/vizMocks.js');
+const { implementationsMap } = require('core/utils/size');
 require('viz/core/base_widget');
 
 // TODO: Move export tests to a separate file
@@ -59,7 +59,7 @@ QUnit.begin(function() {
 
     registerComponent('dxBaseWidgetTester', dxBaseWidgetTester);
 
-    sinon.stub(rendererModule, 'Renderer', function() {
+    sinon.stub(rendererModule, 'Renderer').callsFake(function() {
         return currentTest().renderer;
     });
 
@@ -272,7 +272,7 @@ QUnit.test('Handler is called inside the renderer lock', function(assert) {
 QUnit.test('Another handler is called if option is changed inside the handler', function(assert) {
     this.createWidget();
     let lock = false;
-    const spy = sinon.stub(this.widget, '_applyChanges', function(options) {
+    const spy = sinon.stub(this.widget, '_applyChanges').callsFake(function(options) {
         if(!lock) {
             lock = true;
             this.option('rtlEnabled', 'rtl-enabled');
@@ -290,7 +290,7 @@ QUnit.test('Another handler is called if option is changed inside the handler', 
 QUnit.test('Count the actual number of changes', function(assert) {
     const widget = this.createWidget();
     const counts = [];
-    const spy = sinon.stub(widget, '_applyChanges', function() {
+    const spy = sinon.stub(widget, '_applyChanges').callsFake(function() {
         counts.push(widget._changes.count());
     });
 
@@ -367,7 +367,7 @@ QUnit.test('Unknown option', function(assert) {
 QUnit.module('ElementAttr support', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        $('head').append($('<style type=\'text/css\' id=\'size-style\'>' + '.size-class{width:300px;height:300px;}' + '</style>'));
+        $('head').append($('<style nonce="qunit-test" type=\'text/css\' id=\'size-style\'>' + '.size-class{width:300px;height:300px;}' + '</style>'));
     },
     afterEach: function() {
         $('#size-style').remove();
@@ -500,7 +500,7 @@ QUnit.test('Create and destroy / hidden', function(assert) {
 });
 
 QUnit.test('On window resize', function(assert) {
-    this.createWidget();
+    this.createWidget({ redrawOnResize: 'windowOnly' });
     this.reset();
 
     this.$container.width(100);
@@ -510,7 +510,7 @@ QUnit.test('On window resize', function(assert) {
 });
 
 QUnit.test('On window resize / size is not changed', function(assert) {
-    this.createWidget();
+    this.createWidget({ redrawOnResize: 'windowOnly' });
     this.reset();
 
     this.emulateWindowResize();
@@ -520,7 +520,7 @@ QUnit.test('On window resize / size is not changed', function(assert) {
 
 QUnit.test('On window resize / hidden', function(assert) {
     this.$container.hide();
-    this.createWidget();
+    this.createWidget({ redrawOnResize: 'windowOnly' });
     this.reset();
 
     this.$container.width(100);
@@ -618,8 +618,8 @@ QUnit.test('no options', function(assert) {
 
 QUnit.test('no options and container has no sizes', function(assert) {
     try {
-        sinon.stub(renderer.fn, 'width').returns(0);
-        sinon.stub(renderer.fn, 'height').returns(0);
+        sinon.stub(implementationsMap, 'getWidth').returns(0);
+        sinon.stub(implementationsMap, 'getHeight').returns(0);
         this.onGetDefaultSize = function() {
             return { width: 400, height: 300, left: 10, top: 20, right: 30, bottom: 40 };
         };
@@ -630,16 +630,16 @@ QUnit.test('no options and container has no sizes', function(assert) {
             left: 10, top: 20, right: 30, bottom: 40
         }, 'canvas');
     } finally {
-        renderer.fn.width.restore();
-        renderer.fn.height.restore();
+        implementationsMap.getWidth.restore();
+        implementationsMap.getHeight.restore();
     }
 });
 
 // T665179
 QUnit.test('Do not get size from container if size option is set', function(assert) {
     try {
-        const width = sinon.stub(renderer.fn, 'width').returns(0);
-        const height = sinon.stub(renderer.fn, 'height').returns(0);
+        const width = sinon.stub(implementationsMap, 'getWidth').returns(0);
+        const height = sinon.stub(implementationsMap, 'getHeight').returns(0);
 
         this.createWidget({
             size: {
@@ -651,15 +651,15 @@ QUnit.test('Do not get size from container if size option is set', function(asse
         assert.ok(!width.called);
         assert.ok(!height.called);
     } finally {
-        renderer.fn.width.restore();
-        renderer.fn.height.restore();
+        implementationsMap.getWidth.restore();
+        implementationsMap.getHeight.restore();
     }
 });
 
 QUnit.test('no options and container has negative sizes - get default size (T607069)', function(assert) {
     try {
-        sinon.stub(renderer.fn, 'width').returns(-2);
-        sinon.stub(renderer.fn, 'height').returns(-3);
+        sinon.stub(implementationsMap, 'getWidth').returns(-2);
+        sinon.stub(implementationsMap, 'getHeight').returns(-3);
         this.onGetDefaultSize = function() {
             return { width: 400, height: 300, left: 10, top: 20, right: 30, bottom: 40 };
         };
@@ -670,8 +670,8 @@ QUnit.test('no options and container has negative sizes - get default size (T607
             left: 10, top: 20, right: 30, bottom: 40
         }, 'canvas');
     } finally {
-        renderer.fn.width.restore();
-        renderer.fn.height.restore();
+        implementationsMap.getWidth.restore();
+        implementationsMap.getHeight.restore();
     }
 });
 
@@ -853,6 +853,9 @@ QUnit.module('Redraw on resize', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.onApplySize = sinon.spy();
+        this.onRender = sinon.spy();
+        sinon.stub(resizeObserverSingleton, 'observe');
+        sinon.stub(resizeObserverSingleton, 'unobserve');
     },
 
     triggerCallback: function() {
@@ -865,6 +868,12 @@ QUnit.module('Redraw on resize', $.extend({}, environment, {
         const result = environment.createWidget.apply(this, arguments);
         this.onApplySize.reset();
         return result;
+    },
+
+    afterEach() {
+        environment.afterEach.apply(this, arguments);
+        resizeObserverSingleton.observe.restore();
+        resizeObserverSingleton.unobserve.restore();
     }
 }));
 
@@ -873,7 +882,7 @@ QUnit.test('option is not defined', function(assert) {
 
     this.triggerCallback();
 
-    assert.strictEqual(this.onApplySize.callCount, 1);
+    assert.strictEqual(resizeObserverSingleton.observe.callCount, 1);
 });
 
 QUnit.test('option is false', function(assert) {
@@ -882,20 +891,21 @@ QUnit.test('option is false', function(assert) {
     this.triggerCallback();
 
     assert.strictEqual(this.onApplySize.callCount, 0);
+    assert.strictEqual(resizeObserverSingleton.observe.callCount, 0);
 });
 
 QUnit.test('option changing 1', function(assert) {
     this.createWidget({ redrawOnResize: false });
 
     this.triggerCallback();
-    this.widget.option({ redrawOnResize: true });
+    this.widget.option({ redrawOnResize: 'windowOnly' });
     this.triggerCallback();
 
     assert.strictEqual(this.onApplySize.callCount, 1);
 });
 
 QUnit.test('option changing 2', function(assert) {
-    this.createWidget({ redrawOnResize: true });
+    this.createWidget({ redrawOnResize: 'windowOnly' });
 
     this.triggerCallback();
     this.widget.option({ redrawOnResize: false });
@@ -922,6 +932,86 @@ QUnit.test('disposing during delay', function(assert) {
     this.clock.tick(100);
 
     assert.strictEqual(this.onApplySize.callCount, 0);
+});
+
+QUnit.test('Doudle resize', function(assert) {
+    this.createWidget({ redrawOnResize: 'windowOnly' });
+
+    this.triggerCallback();
+    this.clock.tick(50);
+    this.triggerCallback();
+    this.clock.tick(100);
+
+    assert.strictEqual(this.onRender.callCount, 1);
+});
+
+QUnit.module('ResizeObserver', Object.assign({}, environment, {
+    beforeEach() {
+        this.onApplySize = sinon.spy();
+        environment.beforeEach.apply(this, arguments);
+        sinon.stub(resizeObserverSingleton, 'observe');
+        sinon.stub(resizeObserverSingleton, 'unobserve');
+    },
+    afterEach() {
+        this.onApplySize.reset();
+        environment.afterEach.apply(this, arguments);
+        resizeObserverSingleton.observe.restore();
+        resizeObserverSingleton.unobserve.restore();
+    },
+    createWidget(options = {}) {
+        return environment.createWidget.call(this, Object.assign({
+            redrawOnResize: true
+        }, options));
+    }
+}));
+
+QUnit.test('Observe', function(assert) {
+    this.createWidget();
+
+    assert.strictEqual(resizeObserverSingleton.observe.callCount, 1);
+});
+
+QUnit.test('Unobserve on optionChange', function(assert) {
+    const chart = this.createWidget();
+
+    chart.option('redrawOnResize', false);
+
+    assert.strictEqual(resizeObserverSingleton.unobserve.callCount, 1);
+});
+
+QUnit.test('Unobserve on dispose', function(assert) {
+    this.createWidget();
+
+    this.$container.remove();
+
+    assert.strictEqual(resizeObserverSingleton.unobserve.callCount, 1);
+});
+
+QUnit.test('Observe arguments', function(assert) {
+    this.createWidget();
+
+    assert.strictEqual(resizeObserverSingleton.observe.lastCall.args[0], this.$container[0], 'element');
+    assert.ok(isFunction(resizeObserverSingleton.observe.lastCall.args[1]), 'callback');
+});
+
+QUnit.test('Unobserve arguments', function(assert) {
+    this.createWidget();
+
+    this.$container.remove();
+
+    assert.strictEqual(resizeObserverSingleton.unobserve.lastCall.args[0], this.$container[0], 'element');
+});
+
+QUnit.test('Rerender chart from observer callback', function(assert) {
+    this.createWidget();
+
+    this.onApplySize.reset();
+    this.$container.width(255);
+
+    resizeObserverSingleton.observe.lastCall.args[1]();
+    this.tick(100);
+
+    assert.strictEqual(this.onApplySize.callCount, 1);
 });
 
 QUnit.module('Visibility changing', $.extend({}, environment, {
@@ -965,33 +1055,6 @@ QUnit.module('Fix renderer root placement for sharping', $.extend({}, environmen
         return environment.createWidget.apply(this, arguments);
     }
 }));
-
-QUnit.test('Call renderer.fixPlacement on window resize', function(assert) {
-    this.createWidget();
-
-    this.triggerResizeCallback();
-
-    assert.strictEqual(this.renderer.fixPlacement.callCount, 1);
-});
-
-QUnit.test('Call renderer.fixPlacement on window resize even if redrawOnResize false', function(assert) {
-    this.createWidget({ redrawOnResize: false });
-
-    this.triggerResizeCallback();
-
-    assert.strictEqual(this.renderer.fixPlacement.callCount, 1);
-});
-
-QUnit.test('Call renderer.fixPlacement on container visibility change (show)', function(assert) {
-    // arrange
-    this.createWidget();
-    this.$container.trigger('dxhiding').hide();
-
-    // act
-    this.$container.show().trigger('dxshown');
-
-    assert.strictEqual(this.renderer.fixPlacement.callCount, 2);
-});
 
 QUnit.module('Incident occurred', $.extend({}, environment, {
     beforeEach: function() {
@@ -1335,7 +1398,9 @@ QUnit.module('createResizeHandler', {
         this.clock.restore();
     },
 
-    create: DEBUG_createResizeHandler,
+    create(resize) {
+        return DEBUG_createResizeHandler({}, 'windowOnly', resize);
+    },
 
     tick: function(count) {
         this.clock.tick(count);
@@ -1344,10 +1409,9 @@ QUnit.module('createResizeHandler', {
 
 QUnit.test('Callback is called after delay', function(assert) {
     const callback = sinon.spy();
-    const handler = this.create(callback);
+    this.create(callback);
 
-    handler();
-
+    resizeCallbacks.fire();
     assert.strictEqual(callback.callCount, 0, 'not called immediately');
     this.tick(40);
     assert.strictEqual(callback.callCount, 0, 'not called if timeout not passed');
@@ -1355,39 +1419,14 @@ QUnit.test('Callback is called after delay', function(assert) {
     assert.strictEqual(callback.callCount, 1, 'called if timeout passed');
 });
 
-QUnit.test('Single callback is called for multiple calls', function(assert) {
-    const callback = sinon.spy();
-    const handler = this.create(callback);
-
-    handler();
-    handler();
-
-    this.tick(100);
-    assert.strictEqual(callback.callCount, 1);
-});
-
-QUnit.test('Timeout is reset after new call', function(assert) {
-    const callback = sinon.spy();
-    const handler = this.create(callback);
-
-    handler();
-    this.tick(60);
-    handler();
-    this.tick(40);
-
-    assert.strictEqual(callback.callCount, 0, 'not called if first timeout passed');
-    this.tick(60);
-    assert.strictEqual(callback.callCount, 1, 'called if second timeout passed');
-
-});
-
 QUnit.test('Callback disposing', function(assert) {
     const callback = sinon.spy();
-    const handler = this.create(callback);
+    const dispose = this.create(callback);
 
-    handler();
+    resizeCallbacks.fire();
+
     this.tick(40);
-    handler.dispose();
+    dispose();
     this.tick(60);
 
     assert.strictEqual(callback.callCount, 0);
@@ -1421,13 +1460,13 @@ QUnit.test('creation', function(assert) {
         'name-2': {
         },
         'name-3': {
-            name: 'name-3-n'
+            name: 'name-3-n', actionSettings: 'settings'
         }
     });
 
     assert.strictEqual(this.callbackGetter.callCount, 2, 'callback getter - call count');
-    assert.deepEqual(this.callbackGetter.getCall(0).args, ['name-1'], 'callback getter - call 1');
-    assert.deepEqual(this.callbackGetter.getCall(1).args, ['name-3'], 'callback getter - call 2');
+    assert.deepEqual(this.callbackGetter.getCall(0).args, ['name-1', undefined], 'callback getter - call 1');
+    assert.deepEqual(this.callbackGetter.getCall(1).args, ['name-3', 'settings'], 'callback getter - call 2');
 });
 
 QUnit.test('calling', function(assert) {
@@ -1468,7 +1507,7 @@ QUnit.test('updating', function(assert) {
 
     trigger.applyChanges();
     assert.strictEqual(this.callbackGetter.callCount, 1, 'callback getter - call count');
-    assert.deepEqual(this.callbackGetter.getCall(0).args, ['name-1'], 'callback getter - call 1');
+    assert.deepEqual(this.callbackGetter.getCall(0).args, ['name-1', undefined], 'callback getter - call 1');
 });
 
 QUnit.module('Misc API', $.extend({}, environment, {
@@ -1562,4 +1601,18 @@ QUnit.test('Change disabled option if root has empty pointer-events attr', funct
     widget.option('disabled', false);
 
     assert.deepEqual(this.renderer.root.attr.lastCall.args, [{ 'pointer-events': '', filter: null }]);
+});
+
+/* T1072778  (it refers to the test "Changing props in..." in devextreme-vue/.../component.test  )*/
+QUnit.test('Repeat disposing', function(assert) {
+    this.createWidget();
+    this.widget._dispose();
+
+    try {
+        this.widget._dispose();
+        assert.ok(true, 'the error is not thrown');
+    } catch(e) {
+        assert.ok(false, 'the error is thrown');
+    }
+
 });

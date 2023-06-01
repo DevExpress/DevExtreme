@@ -1,6 +1,6 @@
 import fx from 'animation/fx';
 import translator from 'animation/translator';
-import 'common.css!';
+import 'generic_light.css!';
 import config from 'core/config';
 import devices from 'core/devices';
 import { isRenderer } from 'core/utils/type';
@@ -12,28 +12,31 @@ import { animation } from 'ui/multi_view/ui.multi_view.animation';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
-
 QUnit.testStart(() => {
     const markup =
-        `<style>
+        `<style nonce="qunit-test">
             #animated {
                 position: absolute;
             }
-            
             #multiView {
                 width: 800px;
                 height: 1000px;
             }
+            #customMultiViewTemplate1 {
+                height: 50px;
+            }
+            #customMultiViewTemplate2 {
+                height: 100px;
+            }
         </style>
-        
         <div id="animated"></div>
         <div id="container">
             <div id="multiView"></div>
         </div>
         <div id="container2">
             <div id="customMultiView">
-                <div data-options="dxTemplate: { name: 'template1' }" style="height: 50px;"></div>
-                <div data-options="dxTemplate: { name: 'template2' }" style="height: 100px;"></div>
+                <div id="customMultiViewTemplate1" data-options="dxTemplate: { name: 'template1' }"></div>
+                <div id="customMultiViewTemplate2" data-options="dxTemplate: { name: 'template2' }"></div>
             </div>
         </div>
         <div id="container3">
@@ -500,6 +503,19 @@ QUnit.module('interaction via swipe', {
         assert.equal(multiView.option('selectedIndex'), 1, 'selected index was changed');
     });
 
+    QUnit.test('swipe should skip disabled tabs', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [1, { disabled: true }, 3],
+            selectedIndex: 0,
+        });
+        const multiView = $('#multiView').dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(-1);
+
+        assert.equal(multiView.option('selectedIndex'), 2, 'selected index was changed');
+    });
+
     QUnit.test('item container should be animated back after canceled swipe', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3],
@@ -524,6 +540,17 @@ QUnit.module('interaction via swipe', {
         assert.strictEqual(startEvent.maxRightOffset, 0, 'container was not be moved');
     });
 
+    QUnit.test('item container should not be moved right if first item is disabled and next is selected', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [{ disabled: true }, 2, 3],
+            selectedIndex: 1,
+        });
+
+        const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxRightOffset, 0, 'container was not moved');
+    });
+
     QUnit.test('item container should not be moved left if selected index is 0 in RTL mode', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             rtlEnabled: true,
@@ -534,6 +561,18 @@ QUnit.module('interaction via swipe', {
         const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
 
         assert.strictEqual(startEvent.maxLeftOffset, 0, 'container was not be moved');
+    });
+
+    QUnit.test('item container should not be moved left if first item is disabled and next is selected in RTL mode', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            rtlEnabled: true,
+            items: [{ disabled: true }, 2, 3],
+            selectedIndex: 1,
+        });
+
+        const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxLeftOffset, 0, 'container was not moved');
     });
 
     QUnit.test('item container should not be moved right if selected index is last in RTL mode', function(assert) {
@@ -548,6 +587,18 @@ QUnit.module('interaction via swipe', {
         assert.strictEqual(startEvent.maxRightOffset, 0, 'container was not be moved');
     });
 
+    QUnit.test('item container should not be moved right if last item is disabled and previous is selected in RTL mode', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            rtlEnabled: true,
+            items: [1, 2, { disabled: true }],
+            selectedIndex: 1,
+        });
+
+        const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxRightOffset, 0, 'container was not moved');
+    });
+
     QUnit.test('item container should not be moved left if selected index is last', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3],
@@ -559,7 +610,18 @@ QUnit.module('interaction via swipe', {
         assert.strictEqual(startEvent.maxLeftOffset, 0, 'container was not be moved');
     });
 
-    QUnit.test('item container left animation should  be completed correctly if selected index is last', function(assert) {
+    QUnit.test('item container should not be moved left if last item is disabled and previous is selected', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [1, 2, { disabled: true }],
+            selectedIndex: 1,
+        });
+
+        const startEvent = pointerMock($multiView).start().swipeStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxLeftOffset, 0, 'container was not moved');
+    });
+
+    QUnit.test('item container left animation should be completed correctly if selected index is last', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3],
             selectedIndex: 2
@@ -643,6 +705,24 @@ QUnit.module('loop', {
         pointer.swipeEnd();
     });
 
+    QUnit.test('swipe should skip disabled tabs after items runtime change', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [{ text: 1 }, 2, 3],
+            selectedIndex: 0,
+            loop: true,
+        });
+        const multiView = $('#multiView').dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
+        assert.equal(multiView.option('selectedIndex'), 2, 'selected index was changed correct');
+
+        multiView.option('items[0].disabled', true);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(-1);
+        assert.equal(multiView.option('selectedIndex'), 1, 'selected index was changed correct');
+    });
+
     QUnit.test('selected index should be set to last item after right swipe from first one', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3],
@@ -656,6 +736,19 @@ QUnit.module('loop', {
         assert.equal(multiView.option('selectedIndex'), 2, 'selected index changed correctly');
     });
 
+    QUnit.test('selected index should be set to second item after right swipe from first one if last is disabled', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [1, 2, { disabled: true, text: 3 }],
+            selectedIndex: 0,
+            loop: true,
+        });
+        const multiView = $('#multiView').dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
+        assert.equal(multiView.option('selectedIndex'), 1, 'selected index changed correctly');
+    });
+
     QUnit.test('selected index should be set to first item after left swipe from last one', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3],
@@ -667,6 +760,19 @@ QUnit.module('loop', {
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
         assert.equal(multiView.option('selectedIndex'), 0, 'selected index changed correctly');
+    });
+
+    QUnit.test('selected index should be set to second item after left swipe from last one if first is disabled', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [{ disabled: true, text: 1 }, 2, 3],
+            selectedIndex: 2,
+            loop: true,
+        });
+        const multiView = $('#multiView').dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(-1);
+        assert.equal(multiView.option('selectedIndex'), 1, 'selected index changed correctly');
     });
 
     QUnit.test('selected index change from first item to last via right swipe should cause correct animation', function(assert) {

@@ -184,12 +184,16 @@ class FileManagerProgressPanel extends Widget {
     }
 
     updateOperationItemProgress(operationInfo, itemIndex, itemProgress, commonProgress) {
-        operationInfo.common.progressBar.option('value', commonProgress);
+        this.updateOperationCommonProgress(operationInfo, commonProgress);
 
         if(operationInfo.details) {
             const detailsItem = operationInfo.details[itemIndex];
             detailsItem.progressBar.option('value', itemProgress);
         }
+    }
+
+    updateOperationCommonProgress(operationInfo, commonProgress) {
+        operationInfo.common.progressBar?.option('value', commonProgress);
     }
 
     completeOperation(info, commonText, isError, statusText) {
@@ -198,7 +202,7 @@ class FileManagerProgressPanel extends Widget {
         if(isError) {
             this._removeProgressBar(info.common);
         } else if(info.allowProgressAutoUpdate) {
-            info.common.progressBar.option('value', 100);
+            this.updateOperationCommonProgress(info, 100);
         }
 
         if(statusText) {
@@ -224,16 +228,11 @@ class FileManagerProgressPanel extends Widget {
         this._setCloseButtonVisible(detailsItem, false);
     }
 
-    renderError($container, $target, errorText) {
+    _renderError($container, $target, errorText) {
         $('<div>')
             .text(errorText)
             .addClass(FILE_MANAGER_PROGRESS_BOX_ERROR_CLASS)
             .appendTo($container);
-    }
-
-    createErrorDetailsProgressBox($container, item, errorText) {
-        const detailsItem = this._createDetailsItem($container, item, -1, true);
-        this._renderOperationError(detailsItem, errorText);
     }
 
     _renderEmptyListText() {
@@ -242,7 +241,7 @@ class FileManagerProgressPanel extends Widget {
 
     _renderOperationError(info, errorText) {
         this._removeProgressBar(info);
-        this.renderError(info.$wrapper, info.$commonText, errorText);
+        this._renderError(info.$wrapper, info.$commonText, errorText);
     }
 
     _removeProgressBar(progressBox) {

@@ -36,11 +36,11 @@
 
             const prevGlobalHandler = errorsModule.errorHandler;
 
-            errorsModule.errorHandler = function(arg) {
+            errorsModule.setErrorHandler((arg) => {
                 log.push('global');
                 globalHandlerArg = arg;
                 globalFired.resolve();
-            };
+            });
 
             this.optionalHandlerImpl = function(arg) {
                 log.push('optional');
@@ -69,7 +69,7 @@
                     that.extraChecker(globalHandlerArg);
                 }
 
-                errorsModule.errorHandler = prevGlobalHandler;
+                errorsModule.setErrorHandler(prevGlobalHandler);
                 that.optionalHandlerImpl = null;
 
                 done();

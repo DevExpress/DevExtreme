@@ -7,11 +7,26 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Jest Tests",
+      "name": "Jest Tests watch",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [
         "--runInBand",
-        "--no-cache",
+        "--watch",
+      ],
+      "runtimeArgs": [
+        "--harmony"
+      ],
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Gulp Tests watch",
+      "program": "${workspaceRoot}/node_modules/gulp/bin/gulp.js",
+      "args": [
+        "build-renovation-testing:watch",
+        "--playgroundName",
       ],
       "runtimeArgs": [
         "--harmony"
@@ -35,5 +50,35 @@
       "sourceMaps": true,
       "cwd": "${workspaceRoot}"
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Tests",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--runInBand",
+        "--no-cache",
+      ],
+      "runtimeArgs": [
+        "--harmony"
+      ],
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}"
+    },
+    {
+      "type": "node",
+      "name": "vscode-jest-tests",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "sourceMaps": true,
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "--runInBand",
+        "--watchAll=false"
+      ]
+    }
   ]
 }

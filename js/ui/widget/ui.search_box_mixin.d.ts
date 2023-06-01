@@ -1,64 +1,62 @@
 import {
-    dxTextBoxOptions
+    Properties as TextBoxProperties,
 } from '../text_box';
 
-export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
+import {
+    SearchMode,
+} from '../../common';
+
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
+export interface SearchBoxMixinOptions {
     /**
-     * @docid SearchBoxMixinOptions.searchEditorOptions
-     * @type dxTextBoxOptions
+     * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxTextBoxOptions
      */
-    searchEditorOptions?: dxTextBoxOptions;
+    searchEditorOptions?: TextBoxProperties;
     /**
-     * @docid SearchBoxMixinOptions.searchEnabled
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchEnabled?: boolean;
     /**
-     * @docid SearchBoxMixinOptions.searchExpr
+     * @docid
      * @type getter|Array<getter>
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchExpr?: string | Function | Array<string | Function>;
     /**
-     * @docid SearchBoxMixinOptions.searchMode
-     * @type Enums.CollectionSearchMode
+     * @docid
      * @default 'contains'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    searchMode?: 'contains' | 'startswith' | 'equals';
+    searchMode?: SearchMode;
     /**
-     * @docid SearchBoxMixinOptions.searchTimeout
-     * @type number
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchTimeout?: number;
     /**
-     * @docid SearchBoxMixinOptions.searchValue
-     * @type String
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchValue?: string;
 }
 /**
- * @docid SearchBoxMixin
- * @module ui/widget/ui.search_box_mixin
- * @export default
+ * @docid
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @options SearchBoxMixinOptions
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class SearchBoxMixin {
-    constructor(options?: SearchBoxMixinOptions)
+    constructor(options?: SearchBoxMixinOptions);
 }

@@ -57,6 +57,23 @@ QUnit.module('General', {
         assert.ok(validator.validate.calledOnce, 'Validator should be validated as part of group');
     });
 
+    QUnit.test('validator should work a part of a validation group if they are created on the same element (T1102012)', function(assert) {
+        const $groupContainer = $('#dxValidationGroup');
+        const group = this.fixture.createGroup($groupContainer);
+        const $validator = $groupContainer.dxValidator({
+            adapter: sinon.createStubInstance(DefaultAdapter)
+        });
+        const validator = $validator.dxValidator('instance');
+        validator.validate = sinon.spy(validator.validate);
+
+        // act
+        triggerShownEvent($groupContainer);
+        ValidationEngine.validateGroup(group);
+
+        // assert
+        assert.ok(validator.validate.calledOnce, 'Validator should be validated as part of group');
+    });
+
     QUnit.test('group should be validated positively (async)', function(assert) {
         const $container = $('#dxValidationGroup');
         const group = this.fixture.createGroup($container);
@@ -210,6 +227,84 @@ QUnit.module('General', {
             done();
         });
         ValidationEngine.removeRegisteredValidator(group, validator1);
+    });
+
+    QUnit.test('group should be validated without non-actual cache on validator removing (T1006292)', function(assert) {
+        const $container = $('#dxValidationGroup');
+        const group = this.fixture.createGroup($container);
+        const adapter = sinon.createStubInstance(DefaultAdapter);
+        let callbackCallCount = 0;
+        const $validator1 = $('<div>').dxValidator({
+            adapter,
+            validationRules: [{
+                type: 'custom',
+                reevaluate: true,
+                validationCallback: () => {
+                    if(callbackCallCount === 0) {
+                        ++callbackCallCount;
+                        return false;
+                    }
+                    return true;
+                }
+            }]
+        });
+        const validator1 = $validator1.dxValidator('instance');
+        const $validator2 = $('<div>').dxValidator({
+            adapter: sinon.createStubInstance(DefaultAdapter)
+        });
+        const validator2 = $validator2.dxValidator('instance');
+
+
+        $validator1.appendTo($container);
+        $validator2.appendTo($container);
+        triggerShownEvent($container);
+
+        ValidationEngine.validateGroup(group);
+        validator1.validate();
+
+        ValidationEngine.getGroupConfig(group).on('validated', ({ isValid }) => {
+            assert.ok(isValid, 'validation is correct');
+        });
+        ValidationEngine.removeRegisteredValidator(group, validator2);
+    });
+
+    QUnit.test('group should be validated positively after all validators remove (T1006667)', function(assert) {
+        const $container = $('#dxValidationGroup');
+        const group = this.fixture.createGroup($container);
+        const adapter = sinon.createStubInstance(DefaultAdapter);
+        const $validator1 = $('<div>').dxValidator({
+            adapter,
+            validationRules: [{
+                type: 'custom',
+                validationCallback: () => {
+                    return false;
+                }
+            }]
+        });
+        const validator1 = $validator1.dxValidator('instance');
+        const $validator2 = $('<div>').dxValidator({
+            adapter: sinon.createStubInstance(DefaultAdapter),
+            validationRules: [{
+                type: 'custom',
+                validationCallback: () => {
+                    return false;
+                }
+            }]
+        });
+        const validator2 = $validator2.dxValidator('instance');
+
+
+        $validator1.appendTo($container);
+        $validator2.appendTo($container);
+        triggerShownEvent($container);
+
+        ValidationEngine.validateGroup(group);
+
+        ValidationEngine.removeRegisteredValidator(group, validator1);
+        ValidationEngine.getGroupConfig(group).on('validated', ({ isValid }) => {
+            assert.ok(isValid, 'validation is correct');
+        });
+        ValidationEngine.removeRegisteredValidator(group, validator2);
     });
 
     QUnit.test('group should be validated positively with a new validator (async)', function(assert) {

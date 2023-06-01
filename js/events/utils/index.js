@@ -27,16 +27,6 @@ const KEY_MAP = {
     'alt': 'alt',
     'control': 'control',
     'shift': 'shift',
-    // IE11:
-    'left': 'leftArrow',
-    'up': 'upArrow',
-    'right': 'rightArrow',
-    'down': 'downArrow',
-    'multiply': 'asterisk',
-    'spacebar': 'space',
-    'del': 'del',
-    'subtract': 'minus',
-    'esc': 'escape'
 };
 
 const LEGACY_KEY_CODES = {
@@ -148,22 +138,13 @@ export const needSkipEvent = e => {
     // TODO: this checking used in swipeable first move handler. is it correct?
     const { target } = e;
     const $target = $(target);
-    const touchInInput = $target.is('input, textarea, select');
-
-    if($target.is('.dx-skip-gesture-event *, .dx-skip-gesture-event')) {
-        return true;
-    }
+    const isContentEditable = target?.isContentEditable || target?.hasAttribute('contenteditable');
+    const touchInEditable = $target.is('input, textarea, select') || isContentEditable;
 
     if(isDxMouseWheelEvent(e)) {
         const isTextArea = $target.is('textarea') && $target.hasClass('dx-texteditor-input');
 
-        if(isTextArea) {
-            return false;
-        }
-
-        const isContentEditable = target.isContentEditable || target.hasAttribute('contenteditable');
-
-        if(isContentEditable) {
+        if(isTextArea || isContentEditable) {
             return false;
         }
 
@@ -173,11 +154,11 @@ export const needSkipEvent = e => {
     }
 
     if(isMouseEvent(e)) {
-        return touchInInput || e.which > 1; // only left mouse button
+        return touchInEditable || e.which > 1; // only left mouse button
     }
 
     if(isTouchEvent(e)) {
-        return touchInInput && focused($target);
+        return touchInEditable && focused($target);
     }
 };
 
@@ -201,21 +182,19 @@ export const fireEvent = props => {
 };
 
 export const normalizeKeyName = ({ key, which }) => {
-    const isKeySupported = !!key;
-
-    key = isKeySupported ? key : which;
-
-    if(key) {
-        if(isKeySupported) {
-            key = KEY_MAP[key.toLowerCase()] || key;
-        } else {
-            key = LEGACY_KEY_CODES[key] || String.fromCharCode(key);
-        }
-
-        return key;
+    const normalizedKey = KEY_MAP[key?.toLowerCase()] || key;
+    const normalizedKeyFromWhich = LEGACY_KEY_CODES[which];
+    if(normalizedKeyFromWhich && normalizedKey === key) {
+        return normalizedKeyFromWhich;
+    } else if(!normalizedKey && which) {
+        return String.fromCharCode(which);
     }
+
+    return normalizedKey;
 };
 
 export const getChar = ({ key, which }) => key || String.fromCharCode(which);
 
 export const addNamespace = mappedAddNamespace;
+
+export const isCommandKeyPressed = ({ ctrlKey, metaKey }) => ctrlKey || metaKey;

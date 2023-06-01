@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=@Model.IEMode" >
     <title>QUnit All Suites test page</title>
     <meta name="MobileOptimized" content="480">
 </head>
@@ -72,13 +71,13 @@
             suitesInProgress = [ ],
             urls = @Html.Raw(Json.Serialize(Model.Suites)),
             originalUrls = urls.slice(0),
-            ieMode = @Html.Raw(Json.Serialize(Model.IEMode)),
             noTryCatch = @Html.Raw(Json.Serialize(Model.NoTryCatch)),
             noGlobals = @Html.Raw(Json.Serialize(Model.NoGlobals)),
             noTimers = @Html.Raw(Json.Serialize(Model.NoTimers)),
-            jqueryVersion = @Html.Raw(Json.Serialize(Model.JQueryVersion)),
             noJQuery = @Html.Raw(Json.Serialize(Model.NoJQuery)),
-            renovation = @Html.Raw(Json.Serialize(Model.Renovation)),
+            shadowDom = @Html.Raw(Json.Serialize(Model.ShadowDom)),
+            noRenovation = @Html.Raw(Json.Serialize(Model.NoRenovation)),
+            noCsp = @Html.Raw(Json.Serialize(Model.NoCsp)),
             farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration)),
             DX_HTTP_CACHE = $.now(),
             lastTestCaseDoneTime = 0,
@@ -87,21 +86,6 @@
             WORKER_COUNT;
 
         var isWinPhone = /iemobile/i.test(navigator.userAgent) || /Windows Phone 10/.test(navigator.userAgent);
-
-        var trimIEMemory = (function() {
-            var lastCollectTime = $.now();
-
-            if(!isWinPhone || !$.isFunction(window.CollectGarbage))
-                return $.noop;
-
-            return function(force) {
-                var now = $.now();
-                if(force || now - lastCollectTime > 1234) {
-                    CollectGarbage();
-                    lastCollectTime = now;
-                }
-            }
-        })();
 
         var calcWorkerFrameCount = function() {
             if(runWorkerInNewWindow)
@@ -185,20 +169,21 @@
                 worker = workerByIndex(i),
                 additionalParams = { };
 
-            if(ieMode !== "edge")
-                additionalParams.ieMode = ieMode;
             if(noTryCatch)
                 additionalParams.notrycatch = "true";
             if(noGlobals)
                 additionalParams.noglobals = "true";
             if(noTimers)
                 additionalParams.notimers = "true";
-            if(jqueryVersion)
-                additionalParams.jquery = jqueryVersion;
             if(noJQuery)
                 additionalParams.nojquery = "true";
-            if(renovation)
-                additionalParams.renovation = "true";
+            if(shadowDom)
+                additionalParams.shadowDom = "true";
+            if(noRenovation)
+                additionalParams.norenovation = "true";
+            if(noCsp) {
+                additionalParams.nocsp = "true";
+            }
 
             additionalParams.DX_HTTP_CACHE = DX_HTTP_CACHE;
             additionalParams.frame = i;
@@ -232,8 +217,6 @@
             worker.name = WORKER_NAME_PREFIX + i;
             worker.location = urlInfo.Url + "?" + $.param(additionalParams);
             busyCount++;
-
-            trimIEMemory(true);
         };
 
         var workers = [ ];
@@ -349,6 +332,8 @@
                     new Error().stack
                 );
             }
+
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestStarted"))), { name: getTestCaseName(testSuite, qunitData) });
         };
 
         var indicateTestStatusInTitle = function(failed) {
@@ -397,7 +382,6 @@
         };
 
         window.RUNNER_ON_TEST_DONE = function(worker, qunitData) {
-            trimIEMemory();
 
             var i = indexFromWorkerName(worker),
                 testSuite = suitesInProgress[i],
@@ -407,6 +391,7 @@
             if($.now() - lastTestCaseDoneTime > 1000) {
                 lastTestCaseDoneTime = $.now();
                 notifyDeviceTestManager("QUnit.testCaseDone");
+                notifyIsAlive();
             }
 
             if(testSuite && StringEndsWith(qunitData.suiteUrl, escape(testSuite.name))) {
@@ -436,6 +421,8 @@
                     new Error().stack
                 );
             }
+
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestCompleted"))), { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total});
         };
 
         window.RUNNER_ON_DONE = function(worker, qunitData) {
@@ -444,7 +431,7 @@
 
             if(suite) {
                 suite.finalize(passed, qunitData.total);
-                notifySuiteFinalized(suite.name, passed);
+                notifySuiteFinalized(suite.name, passed, qunitData.runtime);
             }
         };
 
@@ -477,9 +464,11 @@
             }
         }
 
-        function notifySuiteFinalized(name, passed) {
-            var url = @Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized")));
-            $.post(url, { name: name, passed: passed });
+        function notifySuiteFinalized(name, passed, runtime) {
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized"))), { name: name, passed: passed, runtime: runtime });
+        }
+        function notifyIsAlive(){
+            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive"))));
         }
 
         function roundTime(time) {

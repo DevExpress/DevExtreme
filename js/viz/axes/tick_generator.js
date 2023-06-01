@@ -625,7 +625,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
 
 function getBaseTick(breakValue, [tick, insideTick], interval, getValue) {
     if(!isDefined(tick) || mathAbs(getValue(breakValue) - getValue(tick)) / interval > 0.25) {
-        if(isDefined(insideTick)) {
+        if(isDefined(insideTick) && mathAbs(getValue(insideTick) - getValue(tick)) / interval < 2) {
             tick = insideTick;
         } else if(!isDefined(tick)) {
             tick = breakValue;
@@ -645,6 +645,7 @@ function getScaleBreaksProcessor(convertTickInterval, getValue, addCorrection) {
             const from = addCorrection(getBaseTick(b.from, [].concat(breakTicks[breakTicks.length - 1], ticks[breakTicks.length]), interval, getValue), correction);
 
             breakTicks = ticks.filter(tick => tick >= b.to);
+
             const to = addCorrection(getBaseTick(b.to, [].concat(breakTicks[0], ticks[ticks.length - breakTicks.length - 1]), interval, getValue), -correction);
 
             if(getValue(to) - getValue(from) < interval && !b.gapSize) {
@@ -732,19 +733,19 @@ function dateGenerator(options) {
         value = correctDateWithUnitBeginning(value);
 
         if('years' in intervalObject) {
-            value.setFullYear(floorNumber(value.getFullYear(), intervalObject.years, 0));
+            value.setFullYear(floorNumber(value.getFullYear(), intervalObject.years));
         } else if('quarters' in intervalObject) {
             value = correctDateWithUnitBeginning(floorAtStartDate(value));
         } else if('months' in intervalObject) {
-            value.setMonth(floorNumber(value.getMonth(), intervalObject.months, 0));
+            value.setMonth(floorNumber(value.getMonth(), intervalObject.months));
         } else if('weeks' in intervalObject || 'days' in intervalObject) {
             value = correctDateWithUnitBeginning(floorAtStartDate(value));
         } else if('hours' in intervalObject) {
-            value.setHours(floorNumber(value.getHours(), intervalObject.hours, 0));
+            value.setHours(floorNumber(value.getHours(), intervalObject.hours));
         } else if('minutes' in intervalObject) {
-            value.setMinutes(floorNumber(value.getMinutes(), intervalObject.minutes, 0));
+            value.setMinutes(floorNumber(value.getMinutes(), intervalObject.minutes));
         } else if('seconds' in intervalObject) {
-            value.setSeconds(floorNumber(value.getSeconds(), intervalObject.seconds, 0));
+            value.setSeconds(floorNumber(value.getSeconds(), intervalObject.seconds));
         } else if('milliseconds' in intervalObject) {
             value = floorAtStartDate(value);
         }

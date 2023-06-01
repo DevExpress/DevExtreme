@@ -1,21 +1,18 @@
 /**
- * @docid dxSchedulerTimeZone
- * @prevFileNamespace DevExpress
+ * @docid
+ * @public
  */
 export interface dxSchedulerTimeZone {
-    /** 
-     * @docid dxSchedulerTimeZone.id
-     *  @type string
+    /**
+     * @docid
      */
     id: string;
     /**
-     * @docid dxSchedulerTimeZone.offset
-     * @type number
+     * @docid
      */
     offset: number;
     /**
-     * @docid dxSchedulerTimeZone.title
-     * @type string
+     * @docid
      */
     title: string;
 }
@@ -24,12 +21,8 @@ export interface dxSchedulerTimeZone {
  * @docid utils.getTimeZones
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
- * @return Array<dxSchedulerTimeZone>
  * @namespace DevExpress.utils
- * @module time_zone_utils
- * @export getTimeZones
  * @static
- * @prevFileNamespace DevExpress
  * @public
  */
 export function getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;

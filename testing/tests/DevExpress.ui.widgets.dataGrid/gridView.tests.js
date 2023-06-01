@@ -1,39 +1,16 @@
-QUnit.testStart(function() {
-    const markup =
-'<style>\
-    body {\
-        padding: 0;\
-        margin: 0;\
-    }\
-    .gridWithHeight {\
-        height: 440px;\
-    }\
-</style>\
-<div style="padding: 0px 40px; margin: 0px 50px">\
-    <div id="testContainer"></div>\
-</div>\
-<div id="root">\
-    <div id="container" class="dx-datagrid dx-widget"></div>\
-</div>\
-<div id="itemsContainer"><div style="width:125px; display: inline-block;" ></div><div style="width:125px; display: inline-block;" ></div></div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-
-import 'common.css!';
 import devices from 'core/devices';
 import visibilityChange from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import gridCore from 'ui/data_grid/ui.data_grid.core';
 import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
+import { getHeight, getOuterWidth, getWidth } from 'core/utils/size';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 function getTextFromCell(cell) {
     return $(cell).text();
 }
-
 
 function createGridView(options, userOptions) {
     this.options = $.extend({}, {
@@ -41,7 +18,7 @@ function createGridView(options, userOptions) {
         showColumnHeaders: true
     }, userOptions);
 
-    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail', 'selection'],
+    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editingCellBased', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail', 'selection'],
         {
             initViews: true,
             controllers: {
@@ -59,6 +36,40 @@ function createGridView(options, userOptions) {
 
     return this._views.gridView;
 }
+
+QUnit.testStart(function() {
+    const markup =
+        `<style nonce="qunit-test">
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            .gridWithHeight {
+                height: 440px;
+            }
+            #testWrapper {
+                padding: 0 40px;
+                margin: 0 50px;
+            }
+            #itemsContainer .itemsContainer__child {
+                width: 125px;
+                display: inline-block;
+            }
+        </style>
+        <div id="testWrapper">
+            <div id="testContainer"></div>
+        </div>
+        <div id="root">
+            <div id="container" class="dx-datagrid dx-widget"></div>
+        </div>
+        <div id="itemsContainer">
+            <div class="itemsContainer__child"></div>
+            <div class="itemsContainer__child"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 // Grid view module///
 QUnit.module('Grid view', {
@@ -333,7 +344,7 @@ QUnit.module('Grid view', {
         }));
 
         const columnHeadersViewHeight = gridView.getView('columnHeadersView').getHeight();
-        const rowsViewHeight = gridView.getView('rowsView').element().height();
+        const rowsViewHeight = getHeight(gridView.getView('rowsView').element());
 
         // act
         this.options.filterRow = { visible: true };
@@ -342,7 +353,7 @@ QUnit.module('Grid view', {
 
         // assert
         assert.notEqual(columnHeadersViewHeight, gridView.getView('columnHeadersView').getHeight());
-        assert.roughEqual(Math.round(columnHeadersViewHeight + rowsViewHeight), Math.round(gridView.getView('columnHeadersView').getHeight() + gridView.getView('rowsView').element().height()), 1.01);
+        assert.roughEqual(Math.round(columnHeadersViewHeight + rowsViewHeight), Math.round(gridView.getView('columnHeadersView').getHeight() + getHeight(gridView.getView('rowsView').element())), 1.01);
     });
 
     QUnit.test('Show headers', function(assert) {
@@ -392,7 +403,7 @@ QUnit.module('Grid view', {
 
         // act
         gridView.render(testElement, {});
-        gridView.optionChanged({ name: 'showBorders', value: true });
+        gridView.option('showBorders', true);
 
         // assert
         assert.equal(testElement.find('.dx-datagrid-borders').length, 1, 'borders class');
@@ -554,14 +565,14 @@ QUnit.module('Grid view', {
         const scrollerWidth = gridView.getView('rowsView').getScrollbarWidth();
         const device = devices.real();
 
-        if(device.ios || device.android || (device.deviceType !== 'desktop')) {
+        if(device.ios || device.mac || device.android || (device.deviceType !== 'desktop')) {
             assert.strictEqual(scrollerWidth, 0);
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
         }
-        assert.strictEqual(headersContainer.outerWidth() - headersTable.width(), scrollerWidth);
+        assert.strictEqual(getOuterWidth(headersContainer) - getWidth(headersTable), scrollerWidth);
         // T351379
-        assert.strictEqual(footerTable.width(), headersTable.width(), 'headers and footer table widths must be equals');
+        assert.strictEqual(getWidth(footerTable), getWidth(headersTable), 'headers and footer table widths must be equals');
     });
 
     QUnit.test('Footer fixed container should have padding-right when using native scrolling and fixed columns (T846658)', function(assert) {
@@ -674,7 +685,7 @@ QUnit.module('Grid view', {
         const pagerView = gridView.getView('pagerView');
 
         // B232626
-        assert.strictEqual(Math.round(columnsHeaderViewContainer[0].offsetHeight + rowsViewViewContainer[0].offsetHeight + pagerView.getHeight()), 100);
+        assert.roughEqual(columnsHeaderViewContainer[0].offsetHeight + rowsViewViewContainer[0].offsetHeight + pagerView.getHeight(), 1.01, 100);
         assert.notStrictEqual(columnsHeaderViewContainer[0].offsetHeight, 0);
         assert.notStrictEqual(rowsViewViewContainer[0].offsetHeight, 0);
         assert.notStrictEqual(pagerView.getHeight(), 0);
@@ -808,12 +819,12 @@ QUnit.module('Grid view', {
         const headersTable = gridView.getView('columnHeadersView')._tableElement;
         const scrollerWidth = gridView.getView('rowsView').getScrollbarWidth();
 
-        if(device.ios || device.android || (device.deviceType !== 'desktop')) {
+        if(device.ios || device.mac || device.android || (device.deviceType !== 'desktop')) {
             assert.strictEqual(scrollerWidth, 0);
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
         }
-        assert.strictEqual(headersContainer.outerWidth() - headersTable.width(), scrollerWidth);
+        assert.strictEqual(getOuterWidth(headersContainer) - getWidth(headersTable), scrollerWidth);
     });
 
     // B254732
@@ -1375,7 +1386,7 @@ QUnit.module('Synchronize columns', {
         gridView.update();
 
         // assert
-        assert.ok(that.rowsView._getTableElement().find('td').eq(1).outerWidth(true) > 30, 'width second column');
+        assert.ok(getOuterWidth(that.rowsView.getTableElement().find('td').eq(1), true) > 30, 'width second column');
     });
 
     QUnit.test('Columns synchronize with groupPanel', function(assert) {
@@ -1470,7 +1481,7 @@ QUnit.module('Synchronize columns', {
                 { caption: 'Column 1', width: '120px' },
                 {
                     caption: 'Column 2', width: '130px', cellTemplate: function(container, options) {
-                        $(container).append('<div style="width: 130px" />');
+                        $(container).append($('<div>').css('width', '130px'));
                         $(container).css('padding', 0);
                     }
                 }, { caption: 'Big Big Big Column Title' }, { caption: 'Column 4' }]),
@@ -1478,7 +1489,7 @@ QUnit.module('Synchronize columns', {
                 items: [{ values: ['Test Test Test', 'Test', 'Test Test', 'Test Test Test Test Test Test'] }]
             })
         };
-        const gridView = this.createGridView(defaultOptions, { columnAutoWidth: true });
+        const gridView = this.createGridView(defaultOptions, { columnAutoWidth: true, showColumnLines: true });
         const testElement = $('<div />').width(300).appendTo($('#container'));
 
         // act
@@ -1585,32 +1596,25 @@ QUnit.module('Synchronize columns', {
     // T389309
     QUnit.test('Scroll position headers when rtl mode is enabled', function(assert) {
         // arrange
-        const done = assert.async();
         const defaultOptions = {
             columnsController: new MockColumnsController([{ caption: 'Column 1', width: 500 }, { caption: 'Column 2', width: 500 }]),
             dataController: new MockDataController({
                 items: [{ values: [''] }]
-            })
+            }),
         };
-        const gridView = this.createGridView(defaultOptions);
-        let $scrollContainer;
+        const gridView = this.createGridView(defaultOptions, { rtlEnabled: true, scrolling: { useNative: false } });
         const $testElement = $('<div />').width(300).addClass('dx-rtl').appendTo($('#container'));
 
         // act
         gridView.render($testElement);
 
-        $testElement.find('.dx-scrollable-container').scroll(function() {
-            // assert
-            assert.ok($testElement.find('.dx-scrollable-content').children().width() > 300, 'horizontal scroller is shown');
+        // assert
+        assert.ok($testElement.find('.dx-scrollable-content').children().width() > 300, 'horizontal scroller is shown');
 
-            $scrollContainer = $testElement.find('.dx-datagrid-scroll-container').first();
-            assert.equal($scrollContainer.scrollLeft(), 250);
-            assert.equal($scrollContainer.scrollLeft(), $testElement.find('.dx-scrollable-container').scrollLeft());
-            assert.equal(Math.round($scrollContainer.find('.dx-datagrid-table').position().left), -250, 'left position of the table');
-            done();
-        });
-
-        $testElement.find('.dx-scrollable-container').scrollLeft(250);
+        const $scrollContainer = $testElement.find('.dx-datagrid-scroll-container').first();
+        assert.equal($scrollContainer.scrollLeft(), 0);
+        assert.equal($scrollContainer.scrollLeft(), $testElement.find('.dx-scrollable-container').scrollLeft());
+        assert.equal(Math.round($scrollContainer.find('.dx-datagrid-table').position().left), 0, 'left position of the table');
     });
 
     QUnit.test('Scroll position summary footer and container with columnWidth auto', function(assert) {
@@ -1653,7 +1657,6 @@ QUnit.module('Synchronize columns', {
     // T389309
     QUnit.test('Scroll position summary footer when rtl mode is enabled', function(assert) {
         // arrange
-        const done = assert.async();
         const defaultOptions = {
             columnsController: new MockColumnsController([{ caption: 'Column 1', width: 500 }, { caption: 'Column 2', width: 500 }]),
             dataController: new MockDataController({
@@ -1668,24 +1671,18 @@ QUnit.module('Synchronize columns', {
             })
         };
         const gridView = this.createGridView(defaultOptions);
-        let $scrollContainer;
         const $testElement = $('<div />').width(300).addClass('dx-rtl').appendTo($('#container'));
 
         // act
         gridView.render($testElement);
 
-        $testElement.find('.dx-scrollable-container').scroll(function() {
-            // assert
-            assert.ok($testElement.find('.dx-scrollable-content').children().width() > 300, 'horizontal scroller is shown');
+        // assert
+        assert.ok($testElement.find('.dx-scrollable-content').children().width() > 300, 'horizontal scroller is shown');
 
-            $scrollContainer = $testElement.find('.dx-datagrid-total-footer .dx-datagrid-scroll-container').first();
-            assert.equal($scrollContainer.scrollLeft(), 250);
-            assert.equal($scrollContainer.scrollLeft(), $testElement.find('.dx-scrollable-container').scrollLeft());
-            assert.equal(Math.round($scrollContainer.find('.dx-datagrid-table').position().left), -250, 'left position of the table');
-            done();
-        });
-
-        $testElement.find('.dx-scrollable-container').scrollLeft(250);
+        const $scrollContainer = $testElement.find('.dx-datagrid-total-footer .dx-datagrid-scroll-container').first();
+        assert.equal($scrollContainer.scrollLeft(), 0);
+        assert.equal($scrollContainer.scrollLeft(), $testElement.find('.dx-scrollable-container').scrollLeft());
+        assert.equal(Math.round($scrollContainer.find('.dx-datagrid-table').position().left), -700, 'left position of the table');
     });
 
     // B254644
@@ -1741,7 +1738,7 @@ QUnit.module('Synchronize columns', {
         assert.ok(!testElement.find('.dx-datagrid-scroll-container').length, 'no column headers');
         assert.ok(testElement.find('.dx-scrollable-content').children().width() > 300, 'horizontal scroller is shown');
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(testElement.find('.dx-scrollable-container').scrollLeft(), 100);
     });
 
@@ -1795,7 +1792,7 @@ QUnit.module('Synchronize columns', {
         const gridView = this.createGridView(defaultOptions, { columnAutoWidth: true });
         const testElement = $('<div />').width(300).appendTo($('#container'));
 
-        const stub = sinon.stub(this.resizingController, '_correctColumnWidths', function() {
+        const stub = sinon.stub(this.resizingController, '_correctColumnWidths').callsFake(function() {
             const $tables = gridView.element().find('.dx-datagrid-table');
             assert.ok($tables.hasClass('dx-datagrid-table-fixed'), 'the best fit mode is disabled');
         });
@@ -1911,7 +1908,7 @@ QUnit.module('Synchronize columns', {
 
         // act
         that.addRow();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.notOk($(that.getCellElement(0, 'field4'))[0].style.width, 'the fourth column has no width');
@@ -2010,7 +2007,7 @@ QUnit.module('Synchronize columns', {
         // arrange
         const $testElement = $('<div />').appendTo($('#container'));
         const gridView = this.createGridView({}, {
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3' }],
             columns: [
                 { dataField: 'field1' },
@@ -2036,7 +2033,6 @@ QUnit.module('Synchronize columns', {
         this.columnsController.beginUpdate();
 
         this.option('summary', []);
-        this.dataController.optionChanged({ name: 'summary', fullName: 'summary', value: [] });
         this.columnOption('field1', 'groupIndex', 0);
 
         this.columnsController.endUpdate();
@@ -2052,7 +2048,7 @@ QUnit.module('Synchronize columns', {
         // arrange
         const $testElement = $('<div />').appendTo($('#container'));
         const gridView = this.createGridView({}, {
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4' }],
             columnFixing: { enabled: true },
             selection: { mode: 'multiple', showCheckBoxesMode: 'always' },
@@ -2117,12 +2113,16 @@ QUnit.module('Fixed columns', {
         this.createGridView = createGridView;
     },
     afterEach: function() {
-        this.dispose();
+        this.dispose && this.dispose();
     }
 }, () => {
 
     if(devices.real().deviceType === 'desktop') {
         QUnit.test('Draw grid view with a native scrolling', function(assert) {
+            if(devices.real().mac) {
+                assert.ok(true, 'test is not actual for mac');
+                return;
+            }
             // arrange
             this.defaultOptions.columnsController = new MockColumnsController([
                 { caption: 'Column 1', width: 100, fixed: true },
@@ -2279,7 +2279,7 @@ QUnit.module('Fixed columns', {
         const $testElement = $('<div />').width(400).appendTo($('#container'));
         const gridView = this.createGridView({}, {
             columnAutoWidth: false,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4' }],
             columnFixing: { enabled: true },
             editing: {
@@ -2315,7 +2315,7 @@ QUnit.module('Fixed columns', {
         const $testElement = $('<div />').width(400).appendTo($('#container'));
         const gridView = this.createGridView({}, {
             columnAutoWidth: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 'test1', field2: 'test2' }],
             columns: [
                 {

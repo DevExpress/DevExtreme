@@ -2,20 +2,18 @@ import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
 
-fixture`Delete appointments`
+fixture.disablePageReloads`Delete appointments`
   .page(url(__dirname, '../container.html'));
 
-const scheduler = new Scheduler('#container');
-
-const createRecurrenceData = () => [{
+const createRecurrenceData = (): Record<string, unknown>[] => [{
   Text: 'Text',
   StartDate: new Date(2017, 4, 22, 1, 30, 0, 0),
   EndDate: new Date(2017, 4, 22, 2, 30, 0, 0),
   RecurrenceRule: 'FREQ=DAILY',
 }];
 
-const createScheduler = async (data) => {
-  createWidget('dxScheduler', {
+const createScheduler = async (data): Promise<void> => {
+  await createWidget('dxScheduler', {
     dataSource: data,
     views: ['week'],
     currentView: 'week',
@@ -26,10 +24,10 @@ const createScheduler = async (data) => {
     allDayExpr: 'AllDay',
     recurrenceRuleExpr: 'RecurrenceRule',
     recurrenceExceptionExpr: 'RecurrenceException',
-  }, true);
+  });
 };
 
-const createSimpleData = () => [{
+const createSimpleData = (): Record<string, unknown>[] => [{
   Text: 'Text',
   StartDate: new Date(2017, 4, 22, 1, 30, 0, 0),
   EndDate: new Date(2017, 4, 22, 2, 30, 0, 0),
@@ -40,13 +38,16 @@ const createSimpleData = () => [{
 }];
 
 test('Recurrence appointments should be deleted by click on \'delete\' button', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
-    .setTestSpeed(0.5)
     .expect(scheduler.getAppointmentCount()).eql(6)
     .click(scheduler.getAppointment('Text', 3).element)
 
-    .click(scheduler.appointmentTooltip.deleteElement)
-    .click(Scheduler.getDialog().appointment)
+    .expect(scheduler.appointmentTooltip.element.exists)
+    .ok()
+    .click(scheduler.appointmentTooltip.deleteButton)
+    .click(Scheduler.getDeleteRecurrenceDialog().appointment)
 
     .expect(scheduler.getAppointmentCount())
     .eql(5);
@@ -54,21 +55,22 @@ test('Recurrence appointments should be deleted by click on \'delete\' button', 
   await t
     .click(scheduler.getAppointment('Text', 3).element)
 
-    .click(scheduler.appointmentTooltip.deleteElement)
-    .click(Scheduler.getDialog().series)
+    .click(scheduler.appointmentTooltip.deleteButton)
+    .click(Scheduler.getDeleteRecurrenceDialog().series)
 
     .expect(scheduler.getAppointmentCount())
     .eql(0);
-}).before(() => createScheduler(createRecurrenceData()));
+}).before(async () => createScheduler(createRecurrenceData()));
 
 test('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
-    .setTestSpeed(0.5)
     .expect(scheduler.getAppointmentCount()).eql(6)
     .click(scheduler.getAppointment('Text', 3).element)
 
     .pressKey('delete')
-    .click(Scheduler.getDialog().appointment)
+    .click(Scheduler.getDeleteRecurrenceDialog().appointment)
 
     .expect(scheduler.getAppointmentCount())
     .eql(5);
@@ -77,17 +79,19 @@ test('Recurrence appointments should be deleted by press \'delete\' key', async 
     .click(scheduler.getAppointment('Text', 3).element)
 
     .pressKey('delete')
-    .click(Scheduler.getDialog().series)
+    .click(Scheduler.getDeleteRecurrenceDialog().series)
 
     .expect(scheduler.getAppointmentCount())
     .eql(0);
-}).before(() => createScheduler(createRecurrenceData()));
+}).before(async () => createScheduler(createRecurrenceData()));
 
 test('Common appointments should be deleted by click on \'delete\' button and press \'delete\' key', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   await t
     .expect(scheduler.getAppointmentCount()).eql(2)
     .click(scheduler.getAppointment('Text').element)
-    .click(scheduler.appointmentTooltip.deleteElement)
+    .click(scheduler.appointmentTooltip.deleteButton)
     .expect(scheduler.getAppointmentCount())
     .eql(1);
 
@@ -97,4 +101,4 @@ test('Common appointments should be deleted by click on \'delete\' button and pr
     .pressKey('delete')
     .expect(scheduler.getAppointmentCount())
     .eql(0);
-}).before(() => createScheduler(createSimpleData()));
+}).before(async () => createScheduler(createSimpleData()));

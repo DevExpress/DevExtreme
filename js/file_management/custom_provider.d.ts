@@ -1,137 +1,102 @@
 import FileSystemProviderBase, {
-    FileSystemProviderBaseOptions
+    FileSystemProviderBaseOptions,
 } from './provider_base';
 
 import FileSystemItem from './file_system_item';
 import UploadInfo from './upload_info';
 
+/** @public */
+export type Options = CustomFileSystemProviderOptions;
+
+/**
+ * @deprecated Use Options instead
+ * @namespace DevExpress.fileManagement
+ * @docid
+ */
 export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
     /**
-     * @docid CustomFileSystemProviderOptions.abortFileUpload
-     * @type function
-     * @type_function_param1 file:File
-     * @type_function_param2 uploadInfo:UploadInfo
-     * @type_function_param3 destinationDirectory:FileSystemItem
+     * @docid
      * @type_function_return Promise<any>|any
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    abortFileUpload?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    abortFileUpload?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => PromiseLike<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.copyItem
-     * @type function
-     * @type_function_param1 item:FileSystemItem
-     * @type_function_param2 destinationDirectory:FileSystemItem
+     * @docid
      * @type_function_return Promise<any>|any
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => PromiseLike<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.createDirectory
-     * @type function
-     * @type_function_param1 parentDirectory:FileSystemItem
-     * @type_function_param2 name:string
+     * @docid
      * @type_function_return Promise<any>|any
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    createDirectory?: ((parentDirectory: FileSystemItem, name: string) => Promise<any> | JQueryPromise<any> | any);
+    createDirectory?: ((parentDirectory: FileSystemItem, name: string) => PromiseLike<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.deleteItem
-     * @type function
-     * @type_function_param1 item:FileSystemItem
+     * @docid
      * @type_function_return Promise<any>|any
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    deleteItem?: ((item: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    deleteItem?: ((item: FileSystemItem) => PromiseLike<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.downloadItems
-     * @type function
-     * @type_function_param1 items:Array<FileSystemItem>
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid
      * @public
      */
-    downloadItems?: ((items: Array<FileSystemItem>) => any);
+    downloadItems?: ((items: Array<FileSystemItem>) => void);
 
     /**
-     * @docid CustomFileSystemProviderOptions.getItems
-     * @type function
-     * @type_function_param1 parentDirectory:FileSystemItem
+     * @docid
      * @type_function_return Promise<Array<object>>|Array<object>
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItems?: ((parentDirectory: FileSystemItem) => Promise<Array<any>> | JQueryPromise<Array<any>> | Array<any>);
+    getItems?: ((parentDirectory: FileSystemItem) => PromiseLike<Array<any>> | Array<any>);
 
     /**
-     * @docid CustomFileSystemProviderOptions.getItemsContent
-     * @type function
-     * @type_function_param1 items:Array<FileSystemItem>
+     * @docid
      * @type_function_return Promise<object>|object
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItemsContent?: ((items: Array<FileSystemItem>) => Promise<any> | JQueryPromise<any> | any);
+    getItemsContent?: ((items: Array<FileSystemItem>) => PromiseLike<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.hasSubDirectoriesExpr
-     * @type string|function(fileSystemItem)
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid
      * @public
      */
     hasSubDirectoriesExpr?: string | Function;
 
     /**
-     * @docid CustomFileSystemProviderOptions.moveItem
-     * @type function
-     * @type_function_param1 item:FileSystemItem
-     * @type_function_param2 destinationDirectory:FileSystemItem
+     * @docid
      * @type_function_return Promise<any>|any
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    moveItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    moveItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => PromiseLike<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.renameItem
-     * @type function
-     * @type_function_param1 item:FileSystemItem
-     * @type_function_param2 newName:string
+     * @docid
      * @type_function_return Promise<any>|any
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    renameItem?: ((item: FileSystemItem, newName: string) => Promise<any> | JQueryPromise<any> | any);
+    renameItem?: ((item: FileSystemItem, newName: string) => PromiseLike<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.uploadFileChunk
-     * @type function
-     * @type_function_param1 file:File
-     * @type_function_param2 uploadInfo:UploadInfo
-     * @type_function_param3 destinationDirectory:FileSystemItem
+     * @docid
      * @type_function_return Promise<any>|any
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    uploadFileChunk?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
+    uploadFileChunk?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => PromiseLike<any> | any);
 }
 
 /**
- * @docid CustomFileSystemProvider
+ * @docid
  * @inherits FileSystemProviderBase
- * @type object
- * @module file_management/custom_provider
  * @namespace DevExpress.fileManagement
- * @export default
- * @prevFileNamespace DevExpress.fileManagement
  * @public
+ * @options CustomFileSystemProviderOptions
  */
 export default class CustomFileSystemProvider extends FileSystemProviderBase {
-    constructor(options?: CustomFileSystemProviderOptions)
+    constructor(options?: Options);
 }

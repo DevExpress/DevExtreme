@@ -6,7 +6,8 @@ import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 
 import 'ui/box';
 import 'ui/responsive_box';
-import 'common.css!';
+
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -318,48 +319,6 @@ QUnit.module('layouting', moduleConfig, () => {
         'raised error E1025');
     });
 
-    QUnit.test('dxUpdate trigger async after render and dimension changed', function(assert) {
-        const clock = sinon.useFakeTimers();
-        try {
-            // screen:   xs      sm           md          lg
-            //  width: <768    768-<992    992-<1200    >1200
-            this.updateScreenSize(900);
-            const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
-                width: 'auto',
-                height: 'auto',
-                rows: [{ ratio: 1, baseSize: 'auto' }],
-                cols: [{ ratio: 1, baseSize: 'auto' }],
-                items: [{ location: { row: 0, col: 0 } }]
-            });
-
-            let $box = $responsiveBox.find('.dx-box').eq(0);
-            let dxUpdateEventCounter = 0;
-            $($box).on('dxupdate', () => {
-                dxUpdateEventCounter++;
-            });
-
-            assert.equal(dxUpdateEventCounter, 0, 'dxupdate was not fired sync after render');
-
-            clock.tick();
-            assert.equal(dxUpdateEventCounter, 1, 'dxupdate was fired async after render');
-
-            dxUpdateEventCounter = 0;
-            this.updateScreenSize(1000);
-            $box = $responsiveBox.find('.dx-box').eq(0);
-            $($box).on('dxupdate', () => {
-                dxUpdateEventCounter++;
-            });
-
-            assert.equal(dxUpdateEventCounter, 0, 'dxupdate was not fired sync after dimensionChanged');
-
-            clock.tick();
-            assert.equal(dxUpdateEventCounter, 1, 'dxupdate was fired async after dimensionChanged');
-
-        } finally {
-            clock.restore();
-        }
-    });
-
     QUnit.test('Box should has a class appropriate a screen resolution', function(assert) {
         const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             width: 'auto',
@@ -393,7 +352,6 @@ QUnit.module('layouting', moduleConfig, () => {
 
     QUnit.test('Set the shrink option of row to box', function(assert) {
         const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
-            _layoutStrategy: 'flex',
             rows: [{
                 ratio: 1,
                 shrink: 0
@@ -414,7 +372,6 @@ QUnit.module('layouting', moduleConfig, () => {
 
     QUnit.test('Set the shrink option of column to box', function(assert) {
         const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
-            _layoutStrategy: 'flex',
             rows: [{ ratio: 1 }],
             cols: [{ ratio: 1 }, { ratio: 1, shrink: 0 }],
             items: [
@@ -432,7 +389,6 @@ QUnit.module('layouting', moduleConfig, () => {
         this.updateScreenSize(500);
 
         const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
-            _layoutStrategy: 'flex',
             rows: [{
                 shrink: 0, screen: 'xs'
             }, {

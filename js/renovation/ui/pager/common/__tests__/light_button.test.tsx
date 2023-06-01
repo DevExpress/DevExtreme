@@ -1,5 +1,7 @@
 import React, { createRef } from 'react';
 import { mount } from 'enzyme';
+import { RefObject } from '@devextreme-generator/declarations';
+import { DisposeEffectReturn } from '../../../../utils/effect_return';
 import { LightButton, viewFunction as LightButtonComponent } from '../light_button';
 import { subscribeToClickEvent } from '../../../../utils/subscribe_to_event';
 
@@ -11,7 +13,9 @@ describe('LightButton', () => {
       const widgetRef = createRef();
       const props = {
         widgetRef: widgetRef as any,
-        props: { children: 'text', className: 'class', label: 'label' },
+        props: {
+          children: 'text', className: 'class', label: 'label', tabIndex: 0,
+        },
       } as Partial<LightButton>;
       const tree = mount(<LightButtonComponent {...props as any} /> as any);
 
@@ -29,18 +33,31 @@ describe('LightButton', () => {
 
       expect(tree.find('.child').exists()).toBe(true);
     });
+
+    // T1109686
+    it('should have aria-current if is selected', () => {
+      const getButtonDiv = (selected: boolean) => {
+        const props = { props: { selected } } as Partial<LightButton>;
+        const tree = mount(<LightButtonComponent {...props as any} />);
+
+        return tree.find('div');
+      };
+
+      expect(getButtonDiv(true).prop('aria-current')).toStrictEqual('page');
+      expect(getButtonDiv(false).prop('aria-current')).toBeUndefined();
+    });
   });
 
   describe('Effect', () => {
     describe('ClickEffect', () => {
       it('clickEffect', () => {
         const click = jest.fn();
-        const widgetRef = {} as HTMLDivElement;
+        const widgetRef = { current: {} } as RefObject<HTMLDivElement>;
         const component = new LightButton({ onClick: click });
         component.widgetRef = widgetRef;
-        const unsubscribeFn = component.subscribeToClick();
+        const unsubscribeFn = component.subscribeToClick() as DisposeEffectReturn;
         expect(subscribeToClickEvent).toBeCalledTimes(1);
-        expect(subscribeToClickEvent).toBeCalledWith(widgetRef, click);
+        expect(subscribeToClickEvent).toBeCalledWith(widgetRef.current, click);
         unsubscribeFn?.();
         expect(subscribeToClickEvent).toBeCalledTimes(1);
       });
@@ -49,7 +66,7 @@ describe('LightButton', () => {
     describe('keyboardEffect', () => {
       it('should call registerKeyboardAction with right parameters', () => {
         const registerKeyboardAction = jest.fn();
-        const widgetRef = {} as HTMLDivElement;
+        const widgetRef = { current: {} } as RefObject<HTMLDivElement>;
         const onClick = jest.fn();
         const button = new LightButton({ onClick });
         button.widgetRef = widgetRef;
@@ -58,7 +75,7 @@ describe('LightButton', () => {
 
         expect(registerKeyboardAction).toHaveBeenCalledTimes(1);
         expect(registerKeyboardAction).toHaveBeenCalledWith(
-          widgetRef,
+          widgetRef.current,
           onClick,
         );
       });

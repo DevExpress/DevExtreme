@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -12,7 +13,6 @@
 
 // adduse
 
-
 $generic-texteditor-border-width: $generic-base-border-width;
 $generic-texteditor-input-padding:
   $generic-base-inline-borderedwidget-top-padding
@@ -26,13 +26,18 @@ $generic-texteditor-icon-size: $generic-base-icon-size;
 
 $generic-texteditor-clear-icon-size: $generic-texteditor-icon-size + $generic-texteditor-clear-icon-oversize;
 
+$generic-texteditor-custom-button-margin: 1px;
 $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $generic-invalid-badge-horizontal-padding;
 
+$generic-texteditor-label-transition:
+  font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
 
 @mixin dx-texteditor-icon() {
   position: absolute;
   top: 50%;
-  margin-top: -$generic-texteditor-icon-container-size / 2;
+  margin-top: math.div(-$generic-texteditor-icon-container-size, 2);
 
   @include dx-icon-sizing($generic-texteditor-icon-size, $generic-texteditor-icon-container-size);
 }
@@ -43,8 +48,8 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   }
 
   &.dx-rtl .dx-texteditor-input {
-    padding: $generic-texteditor-input-padding;
     padding-left: $generic-texteditor-invalid-badge-size;
+    padding-right: 0;
   }
 }
 
@@ -134,6 +139,19 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   }
 
   &.dx-state-focused,
+  &.dx-state-focused.dx-state-hover {
+    .dx-texteditor-label {
+      color: $base-accent;
+    }
+
+    &.dx-invalid {
+      .dx-texteditor-label {
+        color: $base-invalid-color;
+      }
+    }
+  }
+
+  &.dx-state-focused,
   &.dx-state-active {
     &.dx-editor-filled,
     &.dx-editor-underlined,
@@ -165,6 +183,23 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   }
 }
 
+.dx-texteditor-buttons-container {
+  > .dx-button {
+    margin: 1px $generic-texteditor-custom-button-margin;
+
+    > .dx-button-content {
+      padding-top: $generic-texteditor-button-top-padding;
+      padding-bottom: $generic-texteditor-button-bottom-padding;
+    }
+
+    &.dx-button-has-icon:not(.dx-button-has-text) {
+      > .dx-button-content {
+        padding: $generic-texteditor-button-icononly-top-padding $generic-texteditor-button-icononly-horizontal-padding $generic-texteditor-button-icononly-bottom-padding;
+      }
+    }
+  }
+}
+
 /* B231111 */
 .dx-placeholder {
   color: $texteditor-placeholder-color;
@@ -174,6 +209,10 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
 
     .dx-editor-underlined & {
       padding-left: 0;
+
+      .dx-rtl & {
+        padding-right: 0;
+      }
     }
   }
 }
@@ -198,9 +237,596 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   }
 }
 
+.dx-texteditor-label {
+  position: absolute;
+  font-size: $generic-texteditor-label-size;
+  color: $texteditor-label-color;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  cursor: text;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  top: 0;
+  left: 0;
+
+  .dx-label {
+    display: flex;
+
+    span {
+      text-overflow: ellipsis;
+      width: auto;
+      max-width: 100%;
+      overflow: hidden;
+      display: block;
+    }
+  }
+
+  .dx-invalid & {
+    color: $base-invalid-color;
+  }
+
+  .dx-rtl & {
+    left: auto;
+    right: 0;
+  }
+}
+
+.dx-editor-filled {
+  $input-vertical-diff: $generic-base-inline-borderedwidget-top-padding - 1;
+
+  .dx-texteditor-label {
+    .dx-label-after,
+    .dx-label-before {
+      display: block;
+      box-sizing: border-box;
+      min-width: $generic-base-inline-borderedwidget-horizontal-padding;
+    }
+  }
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    position: relative;
+
+    .dx-texteditor-input,
+    &.dx-lookup .dx-lookup-field {
+      padding-top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
+      padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
+    }
+
+    .dx-texteditor-label {
+      font-size: $generic-texteditor-label-size;
+      height: $generic-base-inline-block-height;
+      line-height: $generic-base-line-height;
+      top: 0;
+      margin-top: 0;
+    }
+
+    .dx-placeholder::before {
+      padding-top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
+    }
+
+    &.dx-textarea {
+      .dx-texteditor-container {
+        padding-top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
+      }
+
+      .dx-placeholder::before,
+      .dx-texteditor-input {
+        padding-top: 0;
+      }
+
+      .dx-texteditor-label {
+        top: 0;
+      }
+    }
+  }
+
+  &.dx-texteditor-with-floating-label {
+    &.dx-texteditor-empty,
+    &.dx-lookup-empty,
+    &.dx-texteditor-empty.dx-state-readonly,
+    &.dx-lookup-empty.dx-state-readonly {
+      .dx-placeholder {
+        display: none;
+      }
+
+      .dx-lookup-field {
+        font-size: 0;
+      }
+
+      .dx-texteditor-label {
+        transition: $generic-texteditor-label-transition;
+        font-size: $generic-base-font-size;
+        height: $generic-base-inline-block-height;
+        line-height: $generic-base-line-height;
+        top: 50%;
+        margin-top: math.div(-$generic-base-inline-block-height, 2);
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          font-size: $generic-base-font-size;
+          top: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
+          margin-top: 0;
+          height: $generic-base-inline-block-height;
+          line-height: $generic-base-line-height;
+        }
+
+        .dx-placeholder {
+          display: none;
+        }
+      }
+    }
+
+    &.dx-state-focused,
+    &.dx-dropdowneditor-active,
+    &.dx-textarea.dx-state-focused {
+      .dx-placeholder {
+        display: block;
+      }
+
+      .dx-lookup-field {
+        font-size: $generic-base-font-size;
+      }
+
+      .dx-texteditor-label {
+        font-size: $generic-texteditor-label-size;
+        top: 0;
+        margin-top: 0;
+        height: $generic-base-inline-block-height;
+        line-height: $generic-base-line-height;
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: 0;
+        }
+      }
+    }
+  }
+}
+
+.dx-editor-outlined {
+  $border-width: 1px;
+  $label-offset-y: math.div(($border-width + $generic-base-font-size), 2);
+  $label-default-transform: translate(0, 0);
+
+  @mixin dx-state($borderColor, $borderStyle) {
+    border: 0;
+    outline: none;
+
+    .dx-texteditor-label {
+      height: 100%;
+
+      .dx-label {
+        height: 100%;
+        border-bottom: $border-width $borderStyle $borderColor;
+        border-top: 0;
+        border-left: $border-width $borderStyle transparent;
+        margin-left: -1px;
+        clip-path: inset(-$generic-texteditor-label-size -1px -1px 1px);
+        padding: 0 2px;
+
+        span {
+          transform: translate(0, -$label-offset-y);
+          font-size: $generic-texteditor-label-size;
+          line-height: $generic-base-line-height;
+          height: $generic-base-inline-block-height;
+          margin-top: 0;
+          top: 0;
+        }
+      }
+
+      .dx-label-before {
+        border-color: $borderColor;
+        border-style: $borderStyle;
+      }
+
+      .dx-label-after {
+        border-color: $borderColor;
+        border-style: $borderStyle;
+      }
+
+      .dx-label-before,
+      .dx-label-after {
+        border-top: $border-width $borderStyle $borderColor;
+        border-bottom: $border-width $borderStyle $borderColor;
+        height: 100%;
+      }
+    }
+
+    .dx-lookup-field {
+      font-size: $generic-base-font-size;
+    }
+
+    &.dx-rtl {
+      .dx-texteditor-label {
+        .dx-label-before {
+          border-right: $border-width $borderStyle $borderColor;
+          border-radius: 0 $texteditor-border-radius $texteditor-border-radius 0;
+          border-left: 0;
+        }
+
+        .dx-label-after {
+          border-left: $border-width $borderStyle $borderColor;
+          border-radius: $texteditor-border-radius 0 0 $texteditor-border-radius;
+          border-right: 0;
+        }
+      }
+    }
+  }
+
+  @mixin dx-state-empty($borderColor, $borderStyle) {
+    border: 0;
+
+    .dx-texteditor-label {
+      height: 100%;
+
+      .dx-label {
+        border-bottom: $border-width $borderStyle $borderColor;
+        border-top: $border-width $borderStyle $borderColor;
+
+        span {
+          transition: $generic-texteditor-label-transition;
+          transform: $label-default-transform;
+          font-size: $generic-base-font-size;
+          top: 50%;
+          height: $generic-base-inline-block-height;
+          margin-top: math.div(- $generic-base-inline-block-height, 2);
+          line-height: $generic-base-line-height;
+        }
+      }
+
+      .dx-label-before {
+        border-color: $borderColor;
+        border-style: $borderStyle;
+      }
+
+      .dx-label-after {
+        border-color: $borderColor;
+        border-style: $borderStyle;
+      }
+
+      .dx-label-before,
+      .dx-label-after {
+        height: 100%;
+        border-top: $border-width $borderStyle $borderColor;
+        border-bottom: $border-width $borderStyle $borderColor;
+      }
+    }
+
+    &.dx-textarea {
+      .dx-texteditor-label .dx-label span {
+        top: $generic-base-inline-borderedwidget-top-padding;
+        margin-top: 0;
+      }
+    }
+
+    .dx-lookup-field {
+      font-size: 0;
+    }
+
+    .dx-placeholder {
+      display: none;
+    }
+  }
+
+  .dx-texteditor-label {
+    top: 0;
+    left: 0;
+    right: 0;
+
+    .dx-label {
+      padding: 0;
+
+      span {
+        position: relative;
+        font-size: $generic-base-font-size;
+        top: 0;
+        margin-top: 0;
+      }
+    }
+
+    .dx-label-after,
+    .dx-label-before {
+      display: block;
+      box-sizing: border-box;
+    }
+
+    .dx-label-before {
+      min-width: $generic-base-inline-borderedwidget-horizontal-padding;
+      border-radius: $texteditor-border-radius 0 0 $texteditor-border-radius;
+    }
+
+    .dx-label-after {
+      min-width: $generic-base-inline-borderedwidget-horizontal-padding;
+      flex-grow: 1;
+      border-radius: 0 $texteditor-border-radius $texteditor-border-radius 0;
+    }
+  }
+
+  &.dx-texteditor-with-label {
+    &.dx-state-hover {
+      @include dx-state($texteditor-hover-border-color, solid);
+
+      &.dx-invalid {
+        @include dx-state($texteditor-invalid-focused-border-color, solid);
+      }
+    }
+  }
+
+  &.dx-texteditor-with-floating-label {
+    &.dx-texteditor-empty,
+    &.dx-lookup-empty {
+      @include dx-state-empty($texteditor-border-color, solid);
+
+      &.dx-invalid {
+        @include dx-state-empty($texteditor-invalid-faded-border-color, solid);
+      }
+
+      &.dx-state-hover {
+        @include dx-state-empty($texteditor-hover-border-color, solid);
+
+        &.dx-dropdowneditor-active {
+          @include dx-state($texteditor-hover-border-color, solid);
+        }
+
+        &.dx-invalid {
+          @include dx-state-empty($texteditor-invalid-focused-border-color, solid);
+        }
+      }
+
+      &.dx-dropdowneditor-active {
+        @include dx-state($texteditor-border-color, solid);
+      }
+
+      &.dx-state-readonly,
+      &.dx-state-disabled {
+        @include dx-state-empty($texteditor-border-color, dashed);
+
+        &.dx-state-hover {
+          @include dx-state-empty($texteditor-hover-border-color, dashed);
+        }
+
+        &.dx-state-focused,
+        &.dx-state-focused.dx-state-hover,
+        &.dx-textarea.dx-state-focused,
+        &.dx-textarea.dx-state-focused.dx-state-hover {
+          @include dx-state-empty($texteditor-focused-border-color, dashed);
+        }
+      }
+    }
+  }
+
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    border: 0;
+    outline: none;
+    position: relative;
+    margin-top: $label-offset-y;
+
+    &.dx-textarea {
+      .dx-texteditor-input-container {
+        padding-top: $generic-base-inline-borderedwidget-top-padding;
+
+        .dx-texteditor-input {
+          padding-top: 0;
+        }
+      }
+    }
+
+    &.dx-invalid {
+      @include dx-state($texteditor-invalid-faded-border-color, solid);
+    }
+
+    &.dx-state-readonly.dx-state-hover {
+      @include dx-state($texteditor-hover-border-color, dashed);
+    }
+
+    &.dx-state-readonly,
+    &.dx-state-disabled {
+      @include dx-state($texteditor-border-color, dashed);
+    }
+
+    .dx-texteditor-label {
+      height: 100%;
+
+
+      .dx-label {
+        padding: 0 2px;
+        border-bottom: 1px solid $texteditor-border-color;
+
+        span {
+          transform: translate(0, -$label-offset-y);
+          font-size: $generic-texteditor-label-size;
+          line-height: $generic-base-line-height;
+          height: $generic-base-inline-block-height;
+          top: 0;
+          margin-top: 0;
+        }
+      }
+
+      .dx-label-before {
+        border-left-width: 1px;
+        border-right-width: 0;
+        border-color: $texteditor-border-color;
+        border-style: solid;
+      }
+
+      .dx-label-after {
+        border-right-width: 1px;
+        border-left-width: 0;
+        border-color: $texteditor-border-color;
+        border-style: solid;
+      }
+
+      .dx-label-before,
+      .dx-label-after {
+        height: 100%;
+        border-top: 1px solid $texteditor-border-color;
+        border-bottom: 1px solid $texteditor-border-color;
+      }
+    }
+
+    &.dx-rtl,
+    .dx-rtl & {
+      .dx-texteditor-label {
+        .dx-label-before {
+          border-right-width: 1px;
+          border-radius: 0 $texteditor-border-radius $texteditor-border-radius 0;
+          border-left-width: 0;
+        }
+
+        .dx-label-after {
+          border-left-width: 1px;
+          border-radius: $texteditor-border-radius 0 0 $texteditor-border-radius;
+          border-right-width: 0;
+        }
+      }
+    }
+
+    &.dx-state-hover {
+      @include dx-state($texteditor-hover-border-color, solid);
+
+      &.dx-invalid {
+        @include dx-state($texteditor-invalid-focused-border-color, solid);
+      }
+    }
+
+    &.dx-textarea.dx-state-focused,
+    &.dx-textarea.dx-state-focused.dx-state-hover,
+    &.dx-dropdowneditor-active.dx-state-focused,
+    &.dx-dropdowneditor-active.dx-state-focused.dx-state-hover,
+    &.dx-state-focused,
+    &.dx-state-focused.dx-state-hover {
+      @include dx-state($texteditor-focused-border-color, solid);
+
+      &.dx-invalid {
+        @include dx-state($texteditor-invalid-focused-border-color, solid);
+      }
+
+      .dx-placeholder {
+        display: block;
+      }
+    }
+  }
+}
+
 .dx-editor-underlined {
-  .dx-texteditor-buttons-container {
-    + .dx-texteditor-input-container {
+  $input-vertical-diff: 4px;
+  $input-top-padding: $generic-base-inline-borderedwidget-top-padding + $input-vertical-diff;
+  $label-transform: translate(0, 0);
+
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    position: relative;
+
+    .dx-texteditor-label {
+      transform: $label-transform;
+      top: 0;
+      margin-top: 0;
+      height: $generic-base-inline-block-height;
+      line-height: $generic-base-line-height;
+    }
+
+    .dx-placeholder::before {
+      padding-top: $input-top-padding;
+    }
+
+    .dx-texteditor-input,
+    &.dx-lookup .dx-lookup-field {
+      padding-top: $input-top-padding;
+      padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $input-vertical-diff;
+    }
+
+    &.dx-textarea {
+      .dx-texteditor-container {
+        padding-top: $input-top-padding;
+      }
+
+      .dx-placeholder::before,
+      .dx-texteditor-input {
+        padding-top: 0;
+      }
+
+      .dx-texteditor-label {
+        top: 0;
+      }
+    }
+  }
+
+  &.dx-texteditor-with-floating-label {
+    &.dx-texteditor-empty,
+    &.dx-lookup-empty,
+    &.dx-texteditor-empty.dx-state-readonly,
+    &.dx-lookup-empty.dx-state-readonly {
+      .dx-placeholder {
+        display: none;
+      }
+
+      .dx-lookup-field {
+        font-size: 0;
+      }
+
+      .dx-texteditor-label {
+        transition: $generic-texteditor-label-transition;
+        transform: translate(0, 0);
+        font-size: $generic-base-font-size;
+        top: 50%;
+        height: $generic-base-inline-block-height;
+        margin-top: math.div(-$generic-base-inline-block-height, 2);
+        line-height: $generic-base-line-height;
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: $input-top-padding;
+          margin-top: 0;
+          transform: translate(0, 0);
+          font-size: $generic-base-font-size;
+          line-height: $generic-base-line-height;
+          height: $generic-base-inline-block-height;
+        }
+
+        .dx-placeholder {
+          display: none;
+        }
+      }
+    }
+
+    &.dx-state-focused,
+    &.dx-dropdowneditor-active,
+    &.dx-textarea.dx-state-focused {
+      .dx-placeholder {
+        display: block;
+      }
+
+      .dx-lookup-field {
+        font-size: $generic-base-font-size;
+      }
+
+      .dx-texteditor-label {
+        transform: $label-transform;
+        font-size: $generic-texteditor-label-size;
+        top: 0;
+        margin-top: 0;
+        height: $generic-base-inline-block-height;
+        line-height: $generic-base-line-height;
+      }
+
+      &.dx-textarea {
+        .dx-texteditor-label {
+          top: 0;
+        }
+      }
+    }
+  }
+
+  &.dx-texteditor-with-before-buttons {
+    .dx-texteditor-input-container {
       .dx-texteditor-input {
         padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
 
@@ -222,31 +848,48 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
       }
     }
 
-    > .dx-button {
-      &:first-child {
-        margin-left: 0;
-      }
-
-      &:last-child {
-        margin-right: 0;
+    .dx-texteditor-label {
+      .dx-label {
+        padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
       }
     }
 
-    @at-root #{selector-append(".dx-rtl", &)} {
+    &.dx-rtl {
+      .dx-texteditor-label {
+        .dx-label {
+          padding-left: 0;
+          padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
+        }
+      }
+    }
+
+    .dx-texteditor-buttons-container {
       > .dx-button {
         &:first-child {
-          margin-left: $generic-editor-custom-button-margin;
-          margin-right: 0;
+          margin-left: 0;
         }
 
         &:last-child {
-          margin-left: 0;
-          margin-right: $generic-editor-custom-button-margin;
-        }
-
-        &:first-child:last-child {
-          margin-left: 0;
           margin-right: 0;
+        }
+      }
+
+      @at-root #{selector-append(".dx-rtl", &)} {
+        > .dx-button {
+          &:first-child {
+            margin-left: $generic-texteditor-custom-button-margin;
+            margin-right: 0;
+          }
+
+          &:last-child {
+            margin-left: 0;
+            margin-right: $generic-texteditor-custom-button-margin;
+          }
+
+          &:first-child:last-child {
+            margin-left: 0;
+            margin-right: 0;
+          }
         }
       }
     }
@@ -303,18 +946,18 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
       &:first-child {
         > .dx-button {
           &:first-child {
-            margin-left: $generic-editor-custom-button-margin;
-            margin-right: $generic-editor-custom-button-margin;
+            margin-left: $generic-texteditor-custom-button-margin;
+            margin-right: $generic-texteditor-custom-button-margin;
           }
 
           &:last-child {
             margin-left: 0;
-            margin-right: $generic-editor-custom-button-margin;
+            margin-right: $generic-texteditor-custom-button-margin;
           }
 
           &:first-child:last-child {
             margin-left: 0;
-            margin-right: $generic-editor-custom-button-margin;
+            margin-right: $generic-texteditor-custom-button-margin;
           }
         }
       }
@@ -322,13 +965,13 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
       &:last-child {
         > .dx-button {
           &:first-child {
-            margin-left: $generic-editor-custom-button-margin;
+            margin-left: $generic-texteditor-custom-button-margin;
             margin-right: 0;
           }
 
           &:last-child {
-            margin-left: $generic-editor-custom-button-margin;
-            margin-right: $generic-editor-custom-button-margin;
+            margin-left: $generic-texteditor-custom-button-margin;
+            margin-right: $generic-texteditor-custom-button-margin;
           }
         }
       }

@@ -1,204 +1,342 @@
+import { DataSourceLike } from '../data/data_source';
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
-
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
 } from '../events/index';
 
+import {
+    SelectionChangedInfo,
+} from './collection/ui.collection_widget.base';
+
 import dxMultiView, {
-    dxMultiViewItem,
-    dxMultiViewOptions
+    Item as dxMultiViewItem,
+    dxMultiViewBaseOptions,
 } from './multi_view';
 
-export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
+type ItemLike = string | Item | any;
+
+interface TabPanelItemInfo<TItem extends ItemLike> {
+    readonly itemData?: TItem;
+    readonly itemElement?: DxElement;
+}
+
+/** @public */
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>>;
+
+/** @public */
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>>;
+
+/** @public */
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxTabPanel<TItem, TKey>>;
+
+/** @public */
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & SelectionChangedInfo<TItem>;
+
+/** @public */
+export type TitleClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & TabPanelItemInfo<TItem>;
+
+/** @public */
+export type TitleHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & TabPanelItemInfo<TItem>;
+
+/** @public */
+export type TitleRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & TabPanelItemInfo<TItem>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ * @docid
+ */
+export interface dxTabPanelOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends dxMultiViewBaseOptions<dxTabPanel<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid dxTabPanelOptions.animationEnabled
-     * @type boolean
+     * @docid
      * @default false
-     * @default true [for](Android|iOS)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(Android|iOS)
      * @public
      */
     animationEnabled?: boolean;
     /**
-     * @docid dxTabPanelOptions.dataSource
-     * @type string|Array<string,dxTabPanelItem,object>|DataSource|DataSourceOptions
+     * @docid
+     * @type string | Array<string | dxTabPanelItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxTabPanelItem | any> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid dxTabPanelOptions.hoverStateEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxTabPanelOptions.itemTitleTemplate
-     * @type template|function
+     * @docid
      * @default "title"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTitleTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxTabPanelOptions.items
-     * @type Array<string, dxTabPanelItem, object>
+     * @docid
+     * @type Array<string | dxTabPanelItem | any>
      * @fires dxTabPanelOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxTabPanelItem | any>;
+    items?: Array<TItem>;
     /**
-     * @docid dxTabPanelOptions.onTitleClick
-     * @extends Action
-     * @type function(e)|string
+     * @docid
+     * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 event:event
+     * @type_function_param1_field component:dxTabPanel
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleClick?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, event?: event }) => any) | string;
+    onTitleClick?: ((e: TitleClickEvent<TItem, TKey>) => void) | string;
     /**
-     * @docid dxTabPanelOptions.onTitleHold
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 event:event
+     * @type_function_param1_field component:dxTabPanel
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleHold?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, event?: event }) => any);
+    onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void);
     /**
-     * @docid dxTabPanelOptions.onTitleRendered
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field component:dxTabPanel
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onTitleRendered?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement }) => any);
+    onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void);
     /**
-     * @docid dxTabPanelOptions.repaintChangesOnly
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid dxTabPanelOptions.scrollByContent
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollByContent?: boolean;
     /**
-     * @docid dxTabPanelOptions.scrollingEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollingEnabled?: boolean;
     /**
-     * @docid dxTabPanelOptions.showNavButtons
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showNavButtons?: boolean;
     /**
-     * @docid dxTabPanelOptions.swipeEnabled
-     * @type boolean
-     * @default false [for](non-touch_devices)
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default false &for(non-touch_devices)
      * @public
      */
     swipeEnabled?: boolean;
 }
 /**
- * @docid dxTabPanel
+ * @docid
  * @inherits dxMultiView
- * @module ui/tab_panel
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxTabPanel extends dxMultiView {
-    constructor(element: Element, options?: dxTabPanelOptions)
-    constructor(element: JQuery, options?: dxTabPanelOptions)
-}
+export default class dxTabPanel<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends dxMultiView<dxTabPanelOptions<TItem, TKey>, TItem, TKey> { }
 
+/**
+ * @public
+ * @namespace DevExpress.ui.dxTabPanel
+ */
+export type Item = dxTabPanelItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTabPanelItem extends dxMultiViewItem {
     /**
-     * @docid dxTabPanelItem.badge
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     badge?: string;
     /**
-     * @docid dxTabPanelItem.icon
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     icon?: string;
     /**
-     * @docid dxTabPanelItem.tabTemplate
-     * @type template|function
+     * @docid
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tabTemplate?: template | (() => string | Element | JQuery);
+    tabTemplate?: template | (() => string | UserDefinedElement);
     /**
-     * @docid dxTabPanelItem.title
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     title?: string;
 }
 
-declare global {
-interface JQuery {
-    dxTabPanel(): JQuery;
-    dxTabPanel(options: "instance"): dxTabPanel;
-    dxTabPanel(options: string): any;
-    dxTabPanel(options: string, ...params: any[]): any;
-    dxTabPanel(options: dxTabPanelOptions): JQuery;
-}
-}
-export type Options = dxTabPanelOptions;
+/** @public */
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+    TitleClickEvent: TitleClickEvent<TItem, TKey>;
+    TitleHoldEvent: TitleHoldEvent<TItem, TKey>;
+    TitleRenderedEvent: TitleRenderedEvent<TItem, TKey>;
+};
 
-/** @deprecated use Options instead */
-export type IOptions = dxTabPanelOptions;
+/** @public */
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxTabPanelOptions<TItem, TKey>;
+
+/** @deprecated use Properties instead */
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onContentReady
+ * @type_function_param1 e:{ui/tab_panel:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onDisposing
+ * @type_function_param1 e:{ui/tab_panel:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onInitialized
+ * @type_function_param1 e:{ui/tab_panel:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onItemClick
+ * @type_function_param1 e:{ui/tab_panel:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/tab_panel:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onItemHold
+ * @type_function_param1 e:{ui/tab_panel:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onItemRendered
+ * @type_function_param1 e:{ui/tab_panel:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onOptionChanged
+ * @type_function_param1 e:{ui/tab_panel:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/tab_panel:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onTitleClick
+ * @type_function_param1 e:{ui/tab_panel:TitleClickEvent}
+ */
+onTitleClick?: ((e: TitleClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onTitleHold
+ * @type_function_param1 e:{ui/tab_panel:TitleHoldEvent}
+ */
+onTitleHold?: ((e: TitleHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxTabPanelOptions.onTitleRendered
+ * @type_function_param1 e:{ui/tab_panel:TitleRenderedEvent}
+ */
+onTitleRendered?: ((e: TitleRenderedEvent) => void);
+};
+///#ENDDEBUG

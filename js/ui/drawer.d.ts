@@ -1,179 +1,189 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    DxPromise,
+} from '../core/utils/deferred';
+
+import {
+    template,
 } from '../core/templates/template';
 
 import {
-    event
+    DxEvent,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+/** @public */
+export type OpenedStateMode = 'overlap' | 'shrink' | 'push';
+/** @public */
+export type PanelLocation = 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
+/** @public */
+export type RevealMode = 'slide' | 'expand';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxDrawer>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxDrawer>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxDrawer> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**
-     * @docid dxDrawerOptions.animationDuration
-     * @type number
+     * @docid
      * @default 400
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationDuration?: number;
     /**
-     * @docid dxDrawerOptions.animationEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationEnabled?: boolean;
     /**
-     * @docid dxDrawerOptions.closeOnOutsideClick
-     * @type boolean|function
+     * @docid
      * @default false
      * @type_function_param1 event:event
-     * @type_function_return Boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
-     * @docid dxDrawerOptions.maxSize
-     * @type number
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxSize?: number;
     /**
-     * @docid dxDrawerOptions.minSize
-     * @type number
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minSize?: number;
     /**
-     * @docid dxDrawerOptions.opened
-     * @type boolean
+     * @docid
      * @fires dxDrawerOptions.onOptionChanged
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     opened?: boolean;
     /**
-     * @docid dxDrawerOptions.openedStateMode
-     * @type Enums.DrawerOpenedStateMode
+     * @docid
      * @default "shrink"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    openedStateMode?: 'overlap' | 'shrink' | 'push';
+    openedStateMode?: OpenedStateMode;
     /**
-     * @docid dxDrawerOptions.position
-     * @type Enums.DrawerPosition
+     * @docid
      * @default "left"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    position?: 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
+    position?: PanelLocation;
     /**
-     * @docid dxDrawerOptions.revealMode
-     * @type Enums.DrawerRevealMode
+     * @docid
      * @default "slide"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    revealMode?: 'slide' | 'expand';
+    revealMode?: RevealMode;
     /**
-     * @docid dxDrawerOptions.shading
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     shading?: boolean;
     /**
-     * @docid dxDrawerOptions.target
-     * @type string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
-     * @deprecated
-     * @public
-     */
-    target?: string | Element | JQuery;
-    /**
-     * @docid dxDrawerOptions.template
-     * @type_function_param1 Element:dxElement
-     * @type template|function
+     * @docid
      * @default 'panel'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((Element: dxElement) => any);
+    template?: template | ((Element: DxElement) => any);
 }
 /**
- * @docid dxDrawer
+ * @docid
  * @inherits Widget
  * @hasTranscludedContent
- * @module ui/drawer
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxDrawer extends Widget {
-    constructor(element: Element, options?: dxDrawerOptions)
-    constructor(element: JQuery, options?: dxDrawerOptions)
+export default class dxDrawer extends Widget<dxDrawerOptions> {
     /**
-     * @docid dxDrawerMethods.content
+     * @docid
      * @publicName content()
-     * @return dxElement
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): dxElement;
+    content(): DxElement;
     /**
-     * @docid dxDrawerMethods.hide
+     * @docid
      * @publicName hide()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): Promise<void> & JQueryPromise<void>;
+    hide(): DxPromise<void>;
     /**
-     * @docid dxDrawerMethods.show
+     * @docid
      * @publicName show()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): Promise<void> & JQueryPromise<void>;
+    show(): DxPromise<void>;
     /**
-     * @docid dxDrawerMethods.toggle
+     * @docid
      * @publicName toggle()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(): Promise<void> & JQueryPromise<void>;
+    toggle(): DxPromise<void>;
 }
 
-declare global {
-interface JQuery {
-    dxDrawer(): JQuery;
-    dxDrawer(options: "instance"): dxDrawer;
-    dxDrawer(options: string): any;
-    dxDrawer(options: string, ...params: any[]): any;
-    dxDrawer(options: dxDrawerOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxDrawerOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDrawerOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxDrawerOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxDrawerOptions.onDisposing
+ * @type_function_param1 e:{ui/drawer:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxDrawerOptions.onInitialized
+ * @type_function_param1 e:{ui/drawer:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxDrawerOptions.onOptionChanged
+ * @type_function_param1 e:{ui/drawer:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

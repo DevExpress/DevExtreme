@@ -2,40 +2,27 @@
 
 // adduse
 
-$material-calendar-body-width: null !default;
-$material-calendar-body-height: null !default;
-$material-calendar-body-top: null !default;
-$material-calendar-navigator-height: null !default;
-$material-nav-button-width: null !default;
-$material-calendar-cell-width: null !default;
-$material-calendar-cell-diameter: null !default;
-$material-calendar-cell-vertical-padding: null !default;
+$material-calendar-legacy-width: null !default;
+$material-calendar-legacy-height: null !default;
 
-$material-calendar-cell-font-size: 12px;
-$material-calendar-footer-height: 45px;
-$material-calendar-navigator-vertical-padding: 9px;
-$material-calendar-header-bottom-padding: 10px;
-$material-calendar-cell-horizontal-padding: 8px;
-$material-calendar-caption-button-padding: 2px 15px 4px;
+$material-calendar-footer-button-height: null !default;
+$material-calendar-cell-font-size: null !default;
+
+$material-calendar-element-padding: 8px !default;
 
 @if $size == "default" {
-  $material-calendar-body-width: 320px;
-  $material-calendar-body-height: 267px;
-  $material-calendar-body-top: 49px;
-  $material-calendar-navigator-height: 36px;
-  $material-nav-button-width: 32px;
-  $material-calendar-cell-width: 39px;
-  $material-calendar-cell-diameter: 32px;
-  $material-calendar-cell-vertical-padding: 4px;
+  $material-calendar-legacy-width: 272px !default;
+  $material-calendar-legacy-height: 264px !default;
+
+  $material-calendar-cell-font-size: 14px !default;
+
+  $material-calendar-footer-button-height: 36px !default;
 }
 
 @else if $size == "compact" {
-  $material-calendar-body-width: 250px;
-  $material-calendar-body-height: 200px;
-  $material-calendar-body-top: 35px;
-  $material-calendar-navigator-height: 28px;
-  $material-nav-button-width: 28px;
-  $material-calendar-cell-width: 32px;
-  $material-calendar-cell-diameter: 28px;
-  $material-calendar-cell-vertical-padding: 0;
+  $material-calendar-legacy-width: 252px !default;
+  $material-calendar-legacy-height: 260px !default;
+
+  $material-calendar-cell-font-size: 12px !default;
+  $material-calendar-footer-button-height: 28px !default;
 }

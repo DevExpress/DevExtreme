@@ -1,141 +1,120 @@
-import '../../jquery_augmentation';
+import { DxPromise } from '../../core/utils/deferred';
+import Store, { Options as StoreOptions } from '../abstract_store';
+import { LoadOptions } from '../index';
+import { Query } from '../query';
+import { ODataRequestOptions } from './context';
 
-import Store, {
-    StoreOptions
-} from '../abstract_store';
+/** @public */
+export type Options<
+    TItem = any,
+    TKey = any,
+> = ODataStoreOptions<TItem, TKey>;
 
-import {
-    LoadOptions
-} from '../load_options';
-
-export interface ODataStoreOptions extends StoreOptions<ODataStore> {
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ * @docid
+ */
+export interface ODataStoreOptions<
+    TItem = any,
+    TKey = any,
+> extends StoreOptions<TItem, TKey> {
     /**
-     * @docid ODataStoreOptions.beforeSend
-     * @type function
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 url:string
-     * @type_function_param1_field2 async:boolean
-     * @type_function_param1_field3 method:string
-     * @type_function_param1_field4 timeout:number
-     * @type_function_param1_field5 params:object
-     * @type_function_param1_field6 payload:object
-     * @type_function_param1_field7 headers:object
-     * @prevFileNamespace DevExpress.data
+     * @docid
+     * @type_function_param1_field params:object
+     * @type_function_param1_field payload:object
+     * @type_function_param1_field headers:object
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
+    beforeSend?: ((options: { url: string; async: boolean; method: string; timeout: number; params: any; payload: any; headers: any }) => void);
     /**
-     * @docid ODataStoreOptions.deserializeDates
-     * @type boolean
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     deserializeDates?: boolean;
     /**
-     * @docid ODataStoreOptions.errorHandler
-     * @type function
+     * @docid
      * @type_function_param1 e:Error
-     * @type_function_param1_field1 httpStatus:number
-     * @type_function_param1_field2 errorDetails:object
-     * @type_function_param1_field3 requestOptions:object
-     * @prevFileNamespace DevExpress.data
+     * @type_function_param1_field errorDetails:object
+     * @type_function_param1_field requestOptions:object
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
+    errorHandler?: ((e: { httpStatus: number; errorDetails: any; requestOptions: ODataRequestOptions }) => void);
     /**
-     * @docid ODataStoreOptions.fieldTypes
-     * @type object
+     * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     fieldTypes?: any;
     /**
-     * @docid ODataStoreOptions.filterToLower
-     * @type boolean
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     filterToLower?: boolean;
     /**
-     * @docid ODataStoreOptions.jsonp
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     jsonp?: boolean;
     /**
-     * @docid ODataStoreOptions.keyType
+     * @docid
      * @type string|object
      * @acceptValues "String"|"Int32"|"Int64"|"Guid"|"Boolean"|"Single"|"Decimal"
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
     /**
-     * @docid ODataStoreOptions.onLoading
+     * @docid
+     * @type_function_param1 loadOptions:LoadOptions
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions) => any);
+    onLoading?: ((loadOptions: LoadOptions<TItem>) => void);
     /**
-     * @docid ODataStoreOptions.url
-     * @type string
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     url?: string;
     /**
-     * @docid ODataStoreOptions.version
-     * @type number
+     * @docid
      * @default 2
      * @acceptValues 2|3|4
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     version?: number;
     /**
-     * @docid ODataStoreOptions.withCredentials
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     withCredentials?: boolean;
 }
 /**
- * @docid ODataStore
+ * @docid
  * @inherits Store
- * @type object
- * @module data/odata/store
- * @export default
- * @prevFileNamespace DevExpress.data
  * @public
+ * @options ODataStoreOptions
  */
-export default class ODataStore extends Store {
-    constructor(options?: ODataStoreOptions)
-    byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+export default class ODataStore<
+    TItem = any,
+    TKey = any,
+> extends Store<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>);
+    byKey(key: TKey): DxPromise<TItem>;
     /**
-     * @docid ODataStoreMethods.byKey
+     * @docid
      * @publicName byKey(key, extraOptions)
      * @param1 key:object|string|number
-     * @param2 extraOptions:object
-     * @param2_field1 expand:string|Array<string>
-     * @param2_field2 select:string|Array<string>
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
+    byKey(key: TKey, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<TItem>;
     /**
-     * @docid ODataStoreMethods.createQuery
+     * @docid
      * @publicName createQuery(loadOptions)
-     * @param1 loadOptions:object
      * @return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    createQuery(loadOptions: any): any;
+    createQuery(loadOptions?: { expand?: string | Array<string>; requireTotalCount?: boolean; customQueryParams?: any }): Query;
 }

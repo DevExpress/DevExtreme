@@ -1,16 +1,19 @@
 import $ from 'jquery';
 import devices from 'core/devices';
+import support from 'core/utils/support';
+import { getWidth, getHeight } from 'core/utils/size';
 import fx from 'animation/fx';
 import ContextMenu from 'ui/context_menu';
 import { addNamespace } from 'events/utils/index';
 import contextMenuEvent from 'events/contextmenu';
+import holdEvent from 'events/hold';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 import 'ui/button';
-import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -33,6 +36,7 @@ const DX_MENU_ITEM_EXPANDED_CLASS = 'dx-menu-item-expanded';
 const DX_MENU_ITEM_POPOUT_CLASS = 'dx-menu-item-popout';
 const DX_SUBMENU_CLASS = 'dx-submenu';
 const DX_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
+const DX_OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
@@ -552,6 +556,17 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
         d = instance.hide();
 
         assert.ok($.isFunction(d.promise), 'type object is the Deferred');
+    });
+
+    QUnit.test('overlay wrapper should have the same size as window (T1102095)', function(assert) {
+        const instance = new ContextMenu(this.$element, { target: $('#menuTarget'), visible: false });
+
+        instance.show();
+
+        const $overlayWrapper = $(`.${DX_OVERLAY_WRAPPER_CLASS}`);
+
+        assert.strictEqual(getWidth($overlayWrapper), getWidth($(window)), 'width is equal');
+        assert.strictEqual(getHeight($overlayWrapper), getHeight($(window)), 'height is equal');
     });
 });
 
@@ -1408,18 +1423,20 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.ok(instance.option('visible'), 'menu is visible');
     });
 
-    QUnit.test('context menu should not block outside click for other overlays on outside click', function(assert) {
-        const otherOverlay = $('<div>').appendTo('#qunit-fixture').dxOverlay({
-            closeOnOutsideClick: true,
-            visible: true
-        }).dxOverlay('instance');
+    ['closeOnOutsideClick', 'hideOnOutsideClick'].forEach(closeOnOutsideClickOptionName => {
+        QUnit.test('context menu should not block outside click for other overlays on outside click', function(assert) {
+            const otherOverlay = $('<div>').appendTo('#qunit-fixture').dxOverlay({
+                [closeOnOutsideClickOptionName]: true,
+                visible: true
+            }).dxOverlay('instance');
 
-        const contextMenu = new ContextMenu(this.$element, { items: [{ text: 'item 1' }], visible: true });
+            const contextMenu = new ContextMenu(this.$element, { items: [{ text: 'item 1' }], visible: true });
 
-        $(document).trigger('dxpointerdown');
+            $(document).trigger('dxpointerdown');
 
-        assert.notOk(otherOverlay.option('visible'), 'other overlay was hidden');
-        assert.notOk(contextMenu.option('visible'), 'context menu was hidden');
+            assert.notOk(otherOverlay.option('visible'), 'other overlay was hidden');
+            assert.notOk(contextMenu.option('visible'), 'context menu was hidden');
+        });
     });
 
     QUnit.test('context menu should prevent default behavior if it shows', function(assert) {
@@ -1433,6 +1450,34 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         $('#menuTarget').trigger(contextMenuEvent);
         assert.ok(contextMenuEvent.isDefaultPrevented(), 'default prevented');
+    });
+
+    QUnit.test('context menu should prevent default behavior if it shows on touch', function(assert) {
+        const originalTouch = support.touch;
+        const originalIsSimulator = devices.isSimulator;
+
+        try {
+            support.touch = true;
+            devices.isSimulator = function() { return true; };
+
+            const instance = new ContextMenu(this.$element, {
+                items: [{ text: 'item 1' }],
+                target: '#menuTarget',
+                visible: false
+            });
+
+            $('#menuTarget').trigger(holdEvent.name);
+
+            const $itemsContainer = instance.itemsContainer();
+            const $rootItem = $itemsContainer.find('.' + DX_SUBMENU_CLASS).eq(0);
+            const contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse', target: $rootItem.get(0) });
+            $('#menuTarget').trigger(contextMenuEvent);
+
+            assert.ok(contextMenuEvent.isDefaultPrevented(), 'default prevented');
+        } finally {
+            support.touch = originalTouch;
+            devices.isSimulator = originalIsSimulator;
+        }
     });
 
     QUnit.test('onItemClick should fire for submenus', function(assert) {
@@ -1566,6 +1611,52 @@ QUnit.module('Selection', moduleConfig, () => {
 
         assert.ok(items[0].items[0].selected, 'nested item is selected');
         assert.notOk(items[0].selected, 'first item is not selected');
+    });
+
+    QUnit.test('Changing selection: selectByClick=true, item[1].closeMenuOnClick=false, item[2].closeMenuOnClick=true', function(assert) {
+        const onSelectionChangedHandler = sinon.spy();
+        const items = [{
+            text: 'item 1',
+            selected: true,
+            items: [{ text: 'item 11', closeMenuOnClick: false }, { text: 'item 111', closeMenuOnClick: true }]
+        }];
+
+        const instance = new ContextMenu(this.$element, {
+            items,
+            visible: true,
+            selectByClick: true,
+            selectionMode: 'single',
+            onSelectionChanged: onSelectionChangedHandler
+        });
+
+        const $itemContainer = instance.itemsContainer();
+
+        assert.ok(items[0].selected, '1st item is selected');
+
+        let $items = $itemContainer.find(`.${DX_MENU_ITEM_CLASS}`);
+        $($items.eq(0)).trigger('dxclick');
+
+        assert.strictEqual(onSelectionChangedHandler.callCount, 0, 'onSelectionChangedHandler.callCount');
+
+        $items = $itemContainer.find(`.${DX_MENU_ITEM_CLASS}`);
+
+        $($items.eq(1)).trigger('dxclick');
+        assert.strictEqual(onSelectionChangedHandler.callCount, 1, 'onSelectionChangedHandler.callCount');
+
+        assert.strictEqual(items[0].selected, false, 'root item selected');
+        assert.strictEqual(items[0].items[0].selected, true, 'items[0].items[0].selected');
+        assert.strictEqual(items[0].items[1].selected, undefined, 'items[0].items[1].selected');
+
+        assert.equal(getVisibleSubmenuCount(instance), 2, 'submenu is open');
+
+        $($items.eq(2)).trigger('dxclick');
+        assert.strictEqual(onSelectionChangedHandler.callCount, 2, 'onSelectionChangedHandler.callCount');
+
+        assert.strictEqual(items[0].selected, false, 'root item selected');
+        assert.strictEqual(items[0].items[0].selected, false, 'items[0].items[0].selected');
+        assert.strictEqual(items[0].items[1].selected, true, 'items[0].items[1].selected');
+
+        assert.equal(getVisibleSubmenuCount(instance), 1, 'submenu is close');
     });
 });
 
@@ -2132,7 +2223,7 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
         assert.ok($items.eq(3).hasClass(DX_STATE_FOCUSED_CLASS), 'Item 13 is focused');
     });
 
-    QUnit.test('Disabled item should be skipped when keyboard navigation', function(assert) {
+    QUnit.test('Disabled item should not be skipped when keyboard navigation', function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [
                 { text: 'Item 1', disabled: true },
@@ -2149,7 +2240,7 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
 
         kb.keyDown('down');
 
-        assert.ok($items.eq(1).hasClass(DX_STATE_FOCUSED_CLASS), 'disabled item was skipped');
+        assert.ok($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), 'disabled item was not skipped');
     });
 
     QUnit.test('Focus should follow the nested hovered item if item in the parent level is focused', function(assert) {
@@ -2244,6 +2335,50 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
         assert.strictEqual(focusedItem.is(instance.option('focusedElement')), true, 'focusedElement');
         assert.strictEqual(getFocusedItemText(instance), 'Item 1', 'focusedItem text');
         assert.strictEqual(getVisibleSubmenuCount(instance), 1, 'submenu.count');
+    });
+
+    [
+        (menu, keyboard) => menu.hide(),
+        (menu, keyboard) => keyboard.keyDown('esc')
+    ].forEach(hideFunction => {
+        QUnit.test(`FocusedElement should be cleaned when context menu was hidden by ${hideFunction} function (T952882)`, function(assert) {
+            const menu = new ContextMenu(this.$element, {
+                items: [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ],
+                focusStateEnabled: true
+            });
+            menu.show();
+
+            const keyboard = keyboardMock(menu.itemsContainer());
+            keyboard.keyDown('down');
+
+            hideFunction(menu, keyboard);
+            assert.strictEqual(menu.option('focusedElement'), null);
+        });
+    });
+
+    QUnit.test('vertical keyboard navigation works cyclically (T952882)', function(assert) {
+        const instance = new ContextMenu(this.$element, {
+            items: [
+                { text: 'item 1' },
+                { text: 'item 2', items: [{ text: 'item 21' }, { text: 'item 22' }, { text: 'item 23' }] },
+                { text: 'item 3' }
+            ],
+            focusStateEnabled: true
+        });
+
+        instance.show();
+
+        keyboardMock(instance.itemsContainer())
+            .keyDown('down')
+            .keyDown('down')
+            .keyDown('right')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up')
+            .keyDown('up');
+
+        assert.equal($(instance.option('focusedElement')).text(), 'item 22');
     });
 });
 

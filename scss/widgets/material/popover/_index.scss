@@ -9,26 +9,14 @@
 
 // adduse
 
-
-$material-popover-toolbar-padding: 15px;
-
 .dx-popover-wrapper {
   .dx-popup-title {
     margin: 0;
-
-    &.dx-toolbar {
-      padding-left: $material-popover-toolbar-padding;
-    }
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
   }
 
   .dx-popover-arrow {
     display: none;
-  }
-
-  .dx-rtl.dx-popup-title {
-    &.dx-toolbar {
-      padding-right: $material-popover-toolbar-padding;
-      padding-left: 0;
-    }
   }
 }

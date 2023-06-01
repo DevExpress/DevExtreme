@@ -1,369 +1,541 @@
+import DataSource, { DataSourceLike } from '../data/data_source';
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
-import Store from '../data/abstract_store';
-
 import {
-    DataSourceOptions
-} from '../data/data_source';
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
 
 import Widget, {
-    format,
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+    Format,
+} from '../localization';
+
+import {
+    DataType,
+} from '../common';
+
+export {
+    DataType,
+};
+
+export {
+    FilterOperation,
+} from '../common/grids';
+
+export type FilterBuilderOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between';
+/** @public */
+export type GroupOperation = 'and' | 'or' | 'notAnd' | 'notOr';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxFilterBuilder>;
+
+/** @public */
+export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
+    readonly value?: any;
+    readonly setValue: any;
+    readonly editorElement: DxElement;
+    readonly editorName: string;
+    readonly dataField?: string;
+    readonly filterOperation?: string;
+    readonly updateValueTimeout?: number;
+    readonly width?: number;
+    readonly readOnly: boolean;
+    readonly disabled: boolean;
+    readonly rtlEnabled: boolean;
+};
+
+/** @public */
+export type EditorPreparingEvent = Cancelable & EventInfo<dxFilterBuilder> & {
+    readonly value?: any;
+    readonly setValue: any;
+    readonly editorElement?: DxElement;
+    editorName: string;
+    editorOptions?: any;
+    readonly dataField?: string;
+    readonly filterOperation?: string;
+    updateValueTimeout?: number;
+    readonly width?: number;
+    readonly readOnly: boolean;
+    readonly disabled: boolean;
+    readonly rtlEnabled: boolean;
+};
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxFilterBuilder>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxFilterBuilder> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = EventInfo<dxFilterBuilder> & {
+    readonly value?: any;
+    readonly previousValue?: any;
+};
+
+/** @public */
+export type CustomOperationEditorTemplate = {
+    readonly value?: string | number | Date;
+    readonly field: Field;
+    readonly setValue: Function;
+};
+
+/** @public */
+export type FieldEditorTemplate = {
+    readonly value?: string | number | Date;
+    readonly filterOperation?: string;
+    readonly field: Field;
+    readonly setValue: Function;
+};
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
-     * @docid dxFilterBuilderOptions.allowHierarchicalFields
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowHierarchicalFields?: boolean;
     /**
-     * @docid dxFilterBuilderOptions.customOperations
+     * @docid
+     * @default []
+     * @public
      * @type Array<dxFilterBuilderCustomOperation>
-     * @default []
-     * @prevFileNamespace DevExpress.ui
-     * @public
      */
-    customOperations?: Array<dxFilterBuilderCustomOperation>;
+    customOperations?: Array<CustomOperation>;
     /**
-     * @docid dxFilterBuilderOptions.fields
+     * @docid
+     * @default []
+     * @public
      * @type Array<dxFilterBuilderField>
-     * @default []
-     * @prevFileNamespace DevExpress.ui
+     */
+    fields?: Array<Field>;
+    /**
+     * @docid
      * @public
      */
-    fields?: Array<dxFilterBuilderField>;
+    filterOperationDescriptions?: {
+      /**
+       * @docid
+       * @default "Between"
+       */
+      between?: string;
+      /**
+       * @docid
+       * @default "Contains"
+       */
+      contains?: string;
+      /**
+       * @docid
+       * @default "Ends with"
+       */
+      endsWith?: string;
+      /**
+       * @docid
+       * @default "Equals"
+       */
+      equal?: string;
+      /**
+       * @docid
+       * @default "Greater than"
+       */
+      greaterThan?: string;
+      /**
+       * @docid
+       * @default "Greater than or equal to"
+       */
+      greaterThanOrEqual?: string;
+      /**
+       * @docid
+       * @default "Is blank"
+       */
+      isBlank?: string;
+      /**
+       * @docid
+       * @default "Is not blank"
+       */
+      isNotBlank?: string;
+      /**
+       * @docid
+       * @default "Less than"
+       */
+      lessThan?: string;
+      /**
+       * @docid
+       * @default "Less than or equal to"
+       */
+      lessThanOrEqual?: string;
+      /**
+       * @docid
+       * @default "Does not contain"
+       */
+      notContains?: string;
+      /**
+       * @docid
+       * @default "Does not equal"
+       */
+      notEqual?: string;
+      /**
+       * @docid
+       * @default "Starts with"
+       */
+      startsWith?: string;
+    };
     /**
-     * @docid dxFilterBuilderOptions.filterOperationDescriptions
-     * @type object
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    filterOperationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string };
+    groupOperationDescriptions?: {
+      /**
+       * @docid
+       * @default "And"
+       */
+      and?: string;
+      /**
+       * @docid
+       * @default "Not And"
+       */
+      notAnd?: string;
+      /**
+       * @docid
+       * @default "Not Or"
+       */
+      notOr?: string;
+      /**
+       * @docid
+       * @default "Or"
+       */
+      or?: string;
+    };
     /**
-     * @docid dxFilterBuilderOptions.groupOperationDescriptions
-     * @type object
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    groupOperationDescriptions?: { and?: string, notAnd?: string, notOr?: string, or?: string };
-    /**
-     * @docid dxFilterBuilderOptions.groupOperations
-     * @type Array<Enums.FilterBuilderGroupOperations>
+     * @docid
      * @default ['and', 'or', 'notAnd', 'notOr']
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupOperations?: Array<'and' | 'or' | 'notAnd' | 'notOr'>;
+    groupOperations?: Array<GroupOperation>;
     /**
-     * @docid dxFilterBuilderOptions.maxGroupLevel
-     * @type number
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxGroupLevel?: number;
     /**
-     * @docid dxFilterBuilderOptions.onEditorPrepared
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:any
-     * @type_function_param1_field5 setValue(newValue):any
-     * @type_function_param1_field6 editorElement:dxElement
-     * @type_function_param1_field7 editorName:string
-     * @type_function_param1_field8 dataField:string
-     * @type_function_param1_field9 filterOperation:string
-     * @type_function_param1_field10 updateValueTimeout:number
-     * @type_function_param1_field11 width:number
-     * @type_function_param1_field12 readOnly:boolean
-     * @type_function_param1_field13 disabled:boolean
-     * @type_function_param1_field14 rtlEnabled:boolean
-     * @extends Action
+     * @type_function_param1_field component:dxFilterBuilder
+     * @type_function_param1_field setValue(newValue):any
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPrepared?: ((e: { component?: dxFilterBuilder, element?: dxElement, model?: any, value?: any, setValue?: any, editorElement?: dxElement, editorName?: string, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
+    onEditorPrepared?: ((e: EditorPreparedEvent) => void);
     /**
-     * @docid dxFilterBuilderOptions.onEditorPreparing
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:any
-     * @type_function_param1_field5 setValue(newValue):any
-     * @type_function_param1_field6 cancel:boolean
-     * @type_function_param1_field7 editorElement:dxElement
-     * @type_function_param1_field8 editorName:string
-     * @type_function_param1_field9 editorOptions:object
-     * @type_function_param1_field10 dataField:string
-     * @type_function_param1_field11 filterOperation:string
-     * @type_function_param1_field12 updateValueTimeout:number
-     * @type_function_param1_field13 width:number
-     * @type_function_param1_field14 readOnly:boolean
-     * @type_function_param1_field15 disabled:boolean
-     * @type_function_param1_field16 rtlEnabled:boolean
-     * @extends Action
+     * @type_function_param1_field component:dxFilterBuilder
+     * @type_function_param1_field setValue(newValue):any
+     * @type_function_param1_field editorOptions:object
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPreparing?: ((e: { component?: dxFilterBuilder, element?: dxElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: dxElement, editorName?: string, editorOptions?: any, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
+    onEditorPreparing?: ((e: EditorPreparingEvent) => void);
     /**
-     * @docid dxFilterBuilderOptions.onValueChanged
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:object
-     * @type_function_param1_field5 previousValue:object
+     * @type_function_param1_field component:dxFilterBuilder
+     * @type_function_param1_field value:object
+     * @type_function_param1_field previousValue:object
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxFilterBuilder, element?: dxElement, model?: any, value?: any, previousValue?: any }) => any);
+    onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
-     * @docid dxFilterBuilderOptions.value
+     * @docid
      * @type Filter expression
      * @default null
      * @fires dxFilterBuilderOptions.onValueChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: string | Array<any> | Function;
 }
 /**
- * @docid dxFilterBuilder
+ * @docid
  * @inherits Widget
- * @module ui/filter_builder
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxFilterBuilder extends Widget {
-    constructor(element: Element, options?: dxFilterBuilderOptions)
-    constructor(element: JQuery, options?: dxFilterBuilderOptions)
+export default class dxFilterBuilder extends Widget<dxFilterBuilderOptions> {
     /**
-     * @docid dxFilterBuilderMethods.getFilterExpression
+     * @docid
      * @publicName getFilterExpression()
      * @return Filter expression
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getFilterExpression(): string | Array<any> | Function;
 }
 
+/**
+ * @public
+ */
+export type CustomOperation = dxFilterBuilderCustomOperation;
+
+/**
+ * @namespace DevExpress.ui
+ * @deprecated Use the CustomOperation type instead
+ */
 export interface dxFilterBuilderCustomOperation {
     /**
-     * @docid dxFilterBuilderCustomOperation.calculateFilterExpression
-     * @type function(filterValue, field)
-     * @type_function_param1 filterValue:any
+     * @docid
      * @type_function_param2 field:dxFilterBuilderField
      * @type_function_return Filter expression
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | Array<any> | Function);
+    calculateFilterExpression?: ((filterValue: any, field: Field) => string | Array<any> | Function);
     /**
-     * @docid dxFilterBuilderCustomOperation.caption
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     caption?: string;
     /**
-     * @docid dxFilterBuilderCustomOperation.customizeText
-     * @type function(fieldInfo)
-     * @type_function_param1 fieldInfo:object
-     * @type_function_param1_field1 value:string|number|date
-     * @type_function_param1_field2 valueText:string
-     * @type_function_param1_field3 field:dxFilterBuilderField
-     * @type_function_return string
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @type_function_param1_field field:dxFilterBuilderField:optional
      * @public
      */
-    customizeText?: ((fieldInfo: { value?: string | number | Date, valueText?: string, field?: dxFilterBuilderField }) => string);
+    customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string; field?: Field }) => string);
     /**
-     * @docid dxFilterBuilderCustomOperation.dataTypes
-     * @type Array<Enums.FilterBuilderFieldDataType>
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataTypes?: Array<'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime'>;
+    dataTypes?: Array<DataType>;
     /**
-     * @docid dxFilterBuilderCustomOperation.editorTemplate
-     * @type template|function
+     * @docid
      * @type_function_param1 conditionInfo:object
-     * @type_function_param1_field1 value:string|number|date
-     * @type_function_param1_field2 field:dxFilterBuilderField
-     * @type_function_param1_field3 setValue:function
-     * @type_function_param2 container:dxElement
+     * @type_function_param1_field field:dxFilterBuilderField
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, field?: dxFilterBuilderField, setValue?: Function }, container: dxElement) => string | Element | JQuery);
+    editorTemplate?: template | ((conditionInfo: CustomOperationEditorTemplate, container: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxFilterBuilderCustomOperation.hasValue
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hasValue?: boolean;
     /**
-     * @docid dxFilterBuilderCustomOperation.icon
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
-     * @docid dxFilterBuilderCustomOperation.name
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
 }
 
+export type FilterLookupDataSource<T> = Exclude<DataSourceLike<T>, string | DataSource>;
+
+/**
+ * @public
+ * @docid dxFilterBuilderField
+ * @namespace DevExpress.ui
+ * @type object
+ */
+export type Field = dxFilterBuilderField;
+
+/**
+ * @namespace DevExpress.ui
+ * @deprecated Use the Field type instead
+ */
 export interface dxFilterBuilderField {
     /**
-     * @docid dxFilterBuilderField.calculateFilterExpression
-     * @type function(filterValue, selectedFilterOperation)
-     * @type_function_param1 filterValue:any
-     * @type_function_param2 selectedFilterOperation:string
+     * @docid
      * @type_function_return Filter expression
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | Array<any> | Function);
     /**
-     * @docid dxFilterBuilderField.caption
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     caption?: string;
     /**
-     * @docid dxFilterBuilderField.customizeText
-     * @type function(fieldInfo)
-     * @type_function_param1 fieldInfo:object
-     * @type_function_param1_field1 value:string|number|date
-     * @type_function_param1_field2 valueText:string
-     * @type_function_return string
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    customizeText?: ((fieldInfo: { value?: string | number | Date, valueText?: string }) => string);
+    customizeText?: ((fieldInfo: { value?: string | number | Date; valueText?: string }) => string);
     /**
-     * @docid dxFilterBuilderField.dataField
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataField?: string;
     /**
-     * @docid dxFilterBuilderField.dataType
-     * @type Enums.FilterBuilderFieldDataType
+     * @docid
      * @default "string"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
+    dataType?: DataType;
     /**
-     * @docid dxFilterBuilderField.editorOptions
-     * @type object
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     editorOptions?: any;
     /**
-     * @docid dxFilterBuilderField.editorTemplate
-     * @type template|function
+     * @docid
      * @type_function_param1 conditionInfo:object
-     * @type_function_param1_field1 value:string|number|date
-     * @type_function_param1_field2 filterOperation:string
-     * @type_function_param1_field3 field:dxFilterBuilderField
-     * @type_function_param1_field4 setValue:function
-     * @type_function_param2 container:dxElement
+     * @type_function_param1_field field:dxFilterBuilderField
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, filterOperation?: string, field?: dxFilterBuilderField, setValue?: Function }, container: dxElement) => string | Element | JQuery);
+    editorTemplate?: template | ((conditionInfo: FieldEditorTemplate, container: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxFilterBuilderField.falseText
-     * @type string
+     * @docid
      * @default "false"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     falseText?: string;
     /**
-     * @docid dxFilterBuilderField.filterOperations
-     * @type Array<Enums.FilterBuilderFieldFilterOperations, string>
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | string>;
+    filterOperations?: Array<FilterBuilderOperation | string>;
     /**
-     * @docid dxFilterBuilderField.format
-     * @type format
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
-     * @docid dxFilterBuilderField.lookup
-     * @type object
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store, displayExpr?: string | ((data: any) => string), valueExpr?: string | ((data: any) => string | number | boolean) };
+    lookup?: {
+      /**
+       * @docid
+       * @default false
+       */
+      allowClearing?: boolean;
+      /**
+       * @docid
+       * @default undefined
+       * @type Array<any> | Store | DataSourceOptions
+       */
+      dataSource?: FilterLookupDataSource<any> | null;
+      /**
+       * @docid
+       * @default undefined
+       * @type_function_param1 data:object
+       */
+      displayExpr?: string | ((data: any) => string);
+      /**
+       * @docid
+       * @default undefined
+       * @type_function_param1 data:object
+       */
+      valueExpr?: string | ((data: any) => string | number | boolean);
+    };
     /**
-     * @docid dxFilterBuilderField.name
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
-     * @docid dxFilterBuilderField.trueText
-     * @type string
+     * @docid
      * @default "true"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     trueText?: string;
 }
 
-declare global {
-interface JQuery {
-    dxFilterBuilder(): JQuery;
-    dxFilterBuilder(options: "instance"): dxFilterBuilder;
-    dxFilterBuilder(options: string): any;
-    dxFilterBuilder(options: string, ...params: any[]): any;
-    dxFilterBuilder(options: dxFilterBuilderOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxFilterBuilderOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxFilterBuilderOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxFilterBuilderOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onContentReady
+ * @type_function_param1 e:{ui/filter_builder:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onDisposing
+ * @type_function_param1 e:{ui/filter_builder:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onEditorPrepared
+ * @type_function_param1 e:{ui/filter_builder:EditorPreparedEvent}
+ */
+onEditorPrepared?: ((e: EditorPreparedEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onEditorPreparing
+ * @type_function_param1 e:{ui/filter_builder:EditorPreparingEvent}
+ */
+onEditorPreparing?: ((e: EditorPreparingEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onInitialized
+ * @type_function_param1 e:{ui/filter_builder:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onOptionChanged
+ * @type_function_param1 e:{ui/filter_builder:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxFilterBuilderOptions.onValueChanged
+ * @type_function_param1 e:{ui/filter_builder:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

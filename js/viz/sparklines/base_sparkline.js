@@ -6,8 +6,11 @@ import { extend } from '../../core/utils/extend';
 import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import { pointInCanvas } from '../core/utils';
+import $ from '../../core/renderer';
 
 const DEFAULT_LINE_SPACING = 2;
+const TOOLTIP_TABLE_BORDER_SPACING = 0;
+const TOOLTIP_TABLE_KEY_VALUE_SPACE = 15;
 const EVENT_NS = 'sparkline-tooltip';
 const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
 
@@ -17,12 +20,12 @@ const _extend = extend;
 const _floor = Math.floor;
 import { noop as _noop } from '../../core/utils/common';
 
-function inCanvas({ left, top, bottom, right, width, height }, x, y) {
+function inCanvas({ width, height }, x, y) {
     return pointInCanvas({
-        left,
-        top,
-        right: width - right,
-        bottom: height - bottom,
+        left: 0,
+        top: 0,
+        right: width,
+        bottom: height,
         width,
         height
     }, x, y);
@@ -35,35 +38,35 @@ function pointerHandler({ data }) {
     that._showTooltip();
 }
 
-function generateDefaultCustomizeTooltipCallback(fontOptions, rtlEnabled) {
-    const lineSpacing = fontOptions.lineSpacing;
-    const lineHeight = ((lineSpacing !== undefined && lineSpacing !== null) ? lineSpacing : DEFAULT_LINE_SPACING) + fontOptions.size;
+function getDefaultTemplate({ lineSpacing, size }, textAlign) {
+    const lineHeight = `${(lineSpacing ?? DEFAULT_LINE_SPACING) + size}px`;
 
-    return function(customizeObject) {
-        let html = '';
-        const vt = customizeObject.valueText;
-        for(let i = 0; i < vt.length; i += 2) {
-            html += '<tr><td>' + vt[i] + '</td><td style=\'width: 15px\'></td><td style=\'text-align: ' + (rtlEnabled ? 'left' : 'right') + '\'>' + vt[i + 1] + '</td></tr>';
+    return function({ valueText }, container) {
+        const table = $('<table>').css({
+            borderSpacing: TOOLTIP_TABLE_BORDER_SPACING,
+            lineHeight
+        });
+
+        for(let i = 0; i < valueText.length; i += 2) {
+            const tr = $('<tr>');
+            $('<td>')
+                .text(valueText[i])
+                .appendTo(tr);
+
+            $('<td>')
+                .css({ width: TOOLTIP_TABLE_KEY_VALUE_SPACE })
+                .appendTo(tr);
+
+            $('<td>')
+                .css({ textAlign })
+                .text(valueText[i + 1])
+                .appendTo(tr);
+
+            table.append(tr);
         }
 
-        return { html: '<table style=\'border-spacing:0px; line-height: ' + lineHeight + 'px\'>' + html + '</table>' };
+        container.append(table);
     };
-}
-
-function generateCustomizeTooltipCallback(customizeTooltip, fontOptions, rtlEnabled) {
-    const defaultCustomizeTooltip = generateDefaultCustomizeTooltipCallback(fontOptions, rtlEnabled);
-
-    if(isFunction(customizeTooltip)) {
-        return function(customizeObject) {
-            const res = customizeTooltip.call(customizeObject, customizeObject);
-            if(!('html' in res) && !('text' in res)) {
-                _extend(res, defaultCustomizeTooltip.call(customizeObject, customizeObject));
-            }
-            return res;
-        };
-    } else {
-        return defaultCustomizeTooltip;
-    }
 }
 
 function createAxis(isHorizontal) {
@@ -84,6 +87,9 @@ function createAxis(isHorizontal) {
         calculateInterval: _noop,
         getMarginOptions() {
             return {};
+        },
+        aggregatedPointBetweenTicks() {
+            return false;
         }
     };
 }
@@ -211,6 +217,7 @@ const BaseSparkline = BaseWidget.inherit({
             const { left, top } = that._renderer.getRootOffset();
             const x = _floor(pageX - left);
             const y = _floor(pageY - top);
+
             if(!inCanvas(that._canvas, x, y)) {
                 that._hideTooltip();
                 that._disableOutHandler();
@@ -268,12 +275,31 @@ BaseSparkline.prototype._setTooltipRendererOptions = function() {
     }
 };
 BaseSparkline.prototype._setTooltipOptions = function() {
-    const tooltip = this._tooltip;
-    const options = tooltip && this._getOption('tooltip');
-    tooltip && tooltip.update(_extend({}, options, {
-        customizeTooltip: generateCustomizeTooltipCallback(options.customizeTooltip, options.font, this.option('rtlEnabled')),
-        enabled: options.enabled && this._isTooltipEnabled()
-    }));
+    if(this._tooltip) {
+        const options = this._getOption('tooltip');
+        const defaultContentTemplate = this._getDefaultTooltipTemplate(options);
+        const contentTemplateOptions = defaultContentTemplate ? { contentTemplate: defaultContentTemplate } : {};
+        const optionsToUpdate = _extend(contentTemplateOptions, options, {
+            enabled: options.enabled && this._isTooltipEnabled()
+        });
+        this._tooltip.update(optionsToUpdate);
+    }
+};
+
+BaseSparkline.prototype._getDefaultTooltipTemplate = function(options) {
+    let defaultTemplateNeeded = true;
+    const textAlign = this.option('rtlEnabled') ? 'left' : 'right';
+
+    if(isFunction(options.customizeTooltip)) {
+        this._tooltip.update(options);
+
+        const formatObject = this._getTooltipData();
+        const customizeResult = options.customizeTooltip.call(formatObject, formatObject) ?? {};
+
+        defaultTemplateNeeded = !('html' in customizeResult) && !('text' in customizeResult);
+    }
+
+    return defaultTemplateNeeded && getDefaultTemplate(options.font, textAlign);
 };
 
 // PLUGINS_SECTION

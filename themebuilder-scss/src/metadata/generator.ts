@@ -11,18 +11,7 @@ export default class MetadataGenerator {
       .join('');
   }
 
-  clean(): void {
-    this.metadata = {
-      generic: [],
-      material: [],
-    };
-  }
-
-  getMetadata(): ThemesMetadata {
-    return this.metadata;
-  }
-
-  static executor(str: string, regex: RegExp, handler: Function): void {
+  static executor(str: string, regex: RegExp, handler: (matches: RegExpExecArray) => void): void {
     let matches = regex.exec(str);
     while (matches !== null) {
       handler(matches);
@@ -84,11 +73,22 @@ export default class MetadataGenerator {
   }
 
   static getBundleContent(content: string): string {
-    return content.replace(/(..\/widgets\/(material|generic))/, '$1/tb_index');
+    return content.replace(/(..\/widgets\/(material|generic))"/, '$1/tb_index"');
   }
 
   static getMainColorsFileContent(content: string, theme: string): string {
     return content.replace(/\.\/variables/g, `tb_${theme}`);
+  }
+
+  clean(): void {
+    this.metadata = {
+      generic: [],
+      material: [],
+    };
+  }
+
+  getMetadata(): ThemesMetadata {
+    return this.metadata;
   }
 
   fillMetaData(item: MetaItem, filePath: string): void {

@@ -1,5 +1,5 @@
 import { unique, getAddFunction, getLog } from '../../core/utils';
-import { isDefined } from '../../../core/utils/type';
+import { isDefined, isObject } from '../../../core/utils/type';
 import { noop } from '../../../core/utils/common';
 const DISCRETE = 'discrete';
 const { abs, floor, ceil, min } = Math;
@@ -64,8 +64,8 @@ function getInitialRange(axisType, dataType, firstValue) {
     if(axisType === DISCRETE) {
         range.categories = [];
     } else {
-        range.min = firstValue;
-        range.max = firstValue;
+        range.min = isObject(firstValue) ? firstValue.min : firstValue;
+        range.max = isObject(firstValue) ? firstValue.max : firstValue;
     }
     return range;
 }
@@ -195,7 +195,8 @@ export default {
     getRangeData: function(series) {
         const points = series.getPoints();
         const useAggregation = series.useAggregation();
-        const argumentCalculator = getRangeCalculator(series.argumentAxisType, points.length > 1 && series.getArgumentAxis(), createGetLogFunction(series.argumentAxisType, series.getArgumentAxis()));
+        const argumentAxis = series.getArgumentAxis();
+        const argumentCalculator = getRangeCalculator(series.argumentAxisType, points.length > 1 && argumentAxis, createGetLogFunction(series.argumentAxisType, argumentAxis));
         const valueRangeCalculator = getRangeCalculator(series.valueAxisType, null, createGetLogFunction(series.valueAxisType, series.getValueAxis()));
         const viewportReducer = getViewportReducer(series);
         const range = points.reduce(function(range, point, index, points) {
@@ -211,7 +212,7 @@ export default {
             }
             return range;
         }, {
-            arg: getInitialRange(series.argumentAxisType, series.argumentType),
+            arg: getInitialRange(series.argumentAxisType, series.argumentType, argumentAxis?.aggregatedPointBetweenTicks() ? undefined : series.getArgumentRangeInitialValue()),
             val: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined),
             viewport: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined)
         });
@@ -221,7 +222,7 @@ export default {
             if(series.argumentAxisType === DISCRETE) {
                 range.arg = argumentRange;
             } else {
-                const viewport = series.getArgumentAxis().getViewport();
+                const viewport = argumentAxis.getViewport();
                 if(isDefined(viewport.startValue) || isDefined(viewport.length)) {
                     argumentCalculator(range.arg, argumentRange.min, argumentRange.min);
                 }

@@ -27,7 +27,7 @@ const ListEdit = ListBase.inherit({
             const focusedItemIndex = editStrategy.getNormalizedIndex(focusedElement);
             const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
 
-            if(isLastIndexFocused && this._isDataSourceLoading()) {
+            if(isLastIndexFocused && this._dataController.isLoading()) {
                 return;
             }
 
@@ -49,13 +49,13 @@ const ListEdit = ListBase.inherit({
         };
 
         const enter = function(e) {
-            if(!this._editProvider.handleEnterPressing()) {
+            if(!this._editProvider.handleEnterPressing(e)) {
                 parent.enter.apply(this, arguments);
             }
         };
 
         const space = function(e) {
-            if(!this._editProvider.handleEnterPressing()) {
+            if(!this._editProvider.handleEnterPressing(e)) {
                 parent.space.apply(this, arguments);
             }
         };
@@ -88,6 +88,15 @@ const ListEdit = ListBase.inherit({
         }
     },
 
+    _isItemStrictEquals: function(item1, item2) {
+        const privateKey = item1 && item1.__dx_key__;
+        if(privateKey && !this.key() && this._selection.isItemSelected(privateKey)) {
+            return false;
+        }
+
+        return this.callBase(item1, item2);
+    },
+
     _getDefaultOptions() {
         return extend(this.callBase(), {
             showSelectionControls: false,
@@ -98,24 +107,8 @@ const ListEdit = ListBase.inherit({
 
             onSelectAllValueChanged: null,
 
-            /**
-            * @name dxListOptions.selectAllText
-            * @type string
-            * @default "Select All"
-            * @hidden
-            */
             selectAllText: localizationMessage.format('dxList-selectAll'),
 
-            /**
-            * @name dxListOptions.menuItems.text
-            * @type string
-            */
-            /**
-            * @name dxListOptions.menuItems.action
-            * @type function
-            * @type_function_param1 itemElement:dxElement
-            * @type_function_param2 itemData:object
-            */
             menuItems: [],
 
             menuMode: 'context',
@@ -215,7 +208,7 @@ const ListEdit = ListBase.inherit({
         if(handledByEditProvider) {
             return;
         }
-
+        this._saveSelectionChangeEvent(e);
         this.callBase(...arguments);
     },
 
@@ -236,6 +229,15 @@ const ListEdit = ListBase.inherit({
         }
 
         this.callBase(...arguments);
+    },
+
+    _getItemContainer: function(changeData) {
+        if(this.option('grouped')) {
+            const groupIndex = this._editStrategy.getIndexByItemData(changeData)?.group;
+            return this._getGroupContainerByIndex(groupIndex);
+        } else {
+            return this.callBase(changeData);
+        }
     },
 
     _itemContextMenuHandler(e) {
@@ -275,8 +277,8 @@ const ListEdit = ListBase.inherit({
         switch(args.name) {
             case 'selectAllMode':
                 this._initDataSource();
-                this._dataSource.pageIndex(0);
-                this._dataSource.load();
+                this._dataController.pageIndex(0);
+                this._dataController.load();
                 break;
             case 'grouped':
                 this._clearSelectedItems();
@@ -313,7 +315,7 @@ const ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods.getFlatIndexByItemElement
+    * @name dxList.getFlatIndexByItemElement
     * @publicName getFlatIndexByItemElement(itemElement)
     * @param1 itemElement:Element
     * @return object
@@ -324,7 +326,7 @@ const ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods.getItemElementByFlatIndex
+    * @name dxList.getItemElementByFlatIndex
     * @publicName getItemElementByFlatIndex(flatIndex)
     * @param1 flatIndex:Number
     * @return Element
@@ -341,18 +343,15 @@ const ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods.getItemByIndex
+    * @name dxList.getItemByIndex
     * @publicName getItemByIndex(index)
     * @param1 index:Number
     * @return object
     * @hidden
     */
-    // TODO: rename & rework because method return itemData but named as itemElement
     getItemByIndex(index) {
         return this._editStrategy.getItemDataByIndex(index);
     }
-
-
 });
 
 export default ListEdit;

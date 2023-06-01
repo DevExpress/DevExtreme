@@ -4,7 +4,6 @@ import { isDefined } from 'core/utils/type';
 import 'ui/form/ui.form';
 import 'ui/text_area';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {

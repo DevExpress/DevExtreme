@@ -6,11 +6,14 @@
 @use "../../base/icons" as *;
 @use "../button/sizes" as *;
 @use "../common/mixins" as *;
+@use "../../base/dropDownButton" as *;
 
 // adduse
-
+@include dx-dropdown-button(5px);
 
 .dx-dropdownbutton {
+  vertical-align: middle;
+
   .dx-button {
     overflow: hidden;
   }
@@ -22,13 +25,32 @@
 }
 
 .dx-dropdownbutton-toggle {
-  display: flex;
-  flex: 0 0 auto;
   max-width: 20px;
 }
 
 .dx-dropdownbutton-action {
   min-width: 0;
+
+  &.dx-button .dx-button-content {
+    padding-left: 10px;
+    padding-right: 4px;
+
+
+    .dx-rtl & {
+      padding-left: 4px;
+      padding-right: 10px;
+    }
+  }
+
+  &.dx-buttongroup-last-item {
+    &.dx-button .dx-button-content {
+      padding-right: 0;
+
+      .dx-rtl & {
+        padding-left: 0;
+      }
+    }
+  }
 }
 
 .dx-dropdownbutton-popup-wrapper {

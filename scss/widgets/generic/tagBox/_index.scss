@@ -6,9 +6,9 @@
 @use "../../base/icons" as *;
 @use "../textEditor" as *;
 @use "../common/sizes" as *;
+@use "../../base/tagBox";
 
 // adduse
-
 
 .dx-tagbox:not(.dx-texteditor-empty) {
   .dx-texteditor-input {
@@ -43,6 +43,30 @@
   .dx-texteditor-input {
     padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $generic-tagbox-tag-container-padding-bottom;
     min-height: $generic-texteditor-input-height - $generic-tagbox-tag-container-padding-bottom;
+  }
+}
+
+
+.dx-texteditor-with-label,
+.dx-texteditor-with-floating-label {
+  &.dx-editor-outlined {
+    .dx-tag-container.dx-texteditor-input-container {
+      padding-top: $generic-tagbox-outlined-with-label-top-padding;
+    }
+  }
+
+  &.dx-editor-filled {
+    .dx-tag-container.dx-texteditor-input-container {
+      padding-top: $generic-tagbox-filled--with-label-top-padding;
+      padding-bottom: $generic-tagbox-filled--with-label-bottom-padding;
+    }
+  }
+
+  &.dx-editor-underlined {
+    .dx-tag-container.dx-texteditor-input-container {
+      padding-top: $generic-tagbox-filled--with-label-top-padding;
+      padding-bottom: $generic-tagbox-filled--with-label-bottom-padding;
+    }
   }
 }
 

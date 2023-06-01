@@ -1,3 +1,4 @@
+import { getWidth, getHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import { getNavigator } from '../core/utils/window';
 const navigator = getNavigator();
@@ -97,6 +98,10 @@ const LoadIndicator = Widget.inherit({
         ]);
     },
 
+    _useTemplates: function() {
+        return false;
+    },
+
     _init: function() {
         this.callBase();
 
@@ -172,8 +177,8 @@ const LoadIndicator = Widget.inherit({
         let height = this.option('height');
 
         if(width || height) {
-            width = this.$element().width();
-            height = this.$element().height();
+            width = getWidth(this.$element());
+            height = getHeight(this.$element());
             const minDimension = Math.min(height, width);
 
             this._$wrapper.css({
@@ -217,13 +222,13 @@ const LoadIndicator = Widget.inherit({
     }
 
     /**
-    * @name dxLoadIndicatorMethods.registerKeyHandler
+    * @name dxLoadIndicator.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxLoadIndicatorMethods.focus
+    * @name dxLoadIndicator.focus
     * @publicName focus()
     * @hidden
     */

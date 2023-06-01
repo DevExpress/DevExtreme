@@ -2,7 +2,7 @@ import { grep } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
 import arrayQuery from './array_query';
-import dataUtils from './utils';
+import { normalizeSortingInfo } from './utils';
 
 function multiLevelGroup(query, groupInfo) {
     query = query.groupBy(groupInfo[0].selector);
@@ -37,6 +37,10 @@ function queryByOptions(query, options, isCountQuery) {
 
     const filter = options.filter;
 
+    if(options?.langParams) {
+        query.setLangParams?.(options.langParams);
+    }
+
     if(filter) {
         query = query.filter(filter);
     }
@@ -52,12 +56,11 @@ function queryByOptions(query, options, isCountQuery) {
     const take = options.take;
 
     if(group) {
-        group = dataUtils.normalizeSortingInfo(group);
+        group = normalizeSortingInfo(group);
         group.keepInitialKeyOrder = !!options.group.keepInitialKeyOrder;
     }
-
     if(sort || group) {
-        sort = dataUtils.normalizeSortingInfo(sort || []);
+        sort = normalizeSortingInfo(sort || []);
         if(group && !group.keepInitialKeyOrder) {
             sort = arrangeSortingInfo(group, sort);
         }

@@ -1,14 +1,16 @@
 import $ from '../../core/renderer';
 import Draggable from '../draggable';
-import { locate, move } from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
 import { LIST_ITEM_DATA_KEY } from './constants';
+import { isSchedulerComponent } from './utils/isSchedulerComponent';
+import { Deferred } from '../../core/utils/deferred';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
 export default class AppointmentDragBehavior {
     constructor(scheduler) {
         this.scheduler = scheduler;
+        this.workspace = scheduler._workSpace;
         this.appointments = scheduler._appointments;
 
         this.initialPosition = {
@@ -16,7 +18,9 @@ export default class AppointmentDragBehavior {
             top: 0
         };
 
-        this.currentAppointment = null;
+        this.appointmentInfo = null;
+
+        this.dragBetweenComponentsPromise = null;
     }
 
     isAllDay(appointment) {
@@ -24,7 +28,14 @@ export default class AppointmentDragBehavior {
     }
 
     onDragStart(e) {
-        this.initialPosition = locate($(e.itemElement));
+        const { itemSettings, itemData, initialPosition } = e;
+
+        this.initialPosition = initialPosition;
+        this.appointmentInfo = {
+            appointment: itemData,
+            settings: itemSettings,
+        };
+
         this.appointments.notifyObserver('hideAppointmentTooltip');
     }
 
@@ -40,24 +51,35 @@ export default class AppointmentDragBehavior {
         return $(itemElement);
     }
 
-    onDragEnd(e) {
-        const $appointment = this.getAppointmentElement(e);
-        const container = this.appointments._getAppointmentContainer(this.isAllDay($appointment));
-        container.append($appointment);
+    onDragEnd(event) {
+        const element = this.getAppointmentElement(event);
 
-        this.currentAppointment = $appointment;
+        const rawAppointment = this.appointments._getItemData(element);
+        const container = this.appointments._getAppointmentContainer(this.isAllDay(element));
+        container.append(element);
+
+        const newCellIndex = this.workspace.getDroppableCellIndex();
+        const oldCellIndex = this.workspace.getCellIndexByCoordinates(this.initialPosition);
 
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
-            event: e,
-            data: this.appointments._getItemData($appointment),
-            $appointment: $appointment,
-            coordinates: this.initialPosition
+            event,
+            element,
+            rawAppointment,
+            newCellIndex,
+            oldCellIndex
         });
     }
 
+    onDragCancel() {
+        this.removeDroppableClasses();
+    }
+
     getItemData(appointmentElement) {
-        const itemData = $(appointmentElement).data(LIST_ITEM_DATA_KEY);
-        return itemData?.targetedAppointment || itemData?.appointment || this.appointments._getItemData(appointmentElement);
+        const dataFromTooltip = $(appointmentElement).data(LIST_ITEM_DATA_KEY);
+        const itemDataFromTooltip = dataFromTooltip?.appointment;
+        const itemDataFromGrid = this.appointments._getItemData(appointmentElement);
+
+        return itemDataFromTooltip || itemDataFromGrid;
     }
 
     getItemSettings(appointment) {
@@ -90,6 +112,7 @@ export default class AppointmentDragBehavior {
 
     createDragEndHandler(options, appointmentDragging) {
         return (e) => {
+            this.appointmentInfo = null;
             appointmentDragging.onDragEnd && appointmentDragging.onDragEnd(e);
 
             if(!e.cancel) {
@@ -98,19 +121,30 @@ export default class AppointmentDragBehavior {
                     appointmentDragging.onRemove && appointmentDragging.onRemove(e);
                 }
             }
+
+            // NOTE: event.cancel may be promise or different type, so we need strict check here.
+            if(e.cancel === true) {
+                this.removeDroppableClasses();
+            }
+
+            if(e.cancel !== true && isSchedulerComponent(e.toComponent)) {
+                const targetDragBehavior = e.toComponent._getDragBehavior();
+                targetDragBehavior.dragBetweenComponentsPromise = new Deferred();
+            }
         };
     }
 
     createDropHandler(appointmentDragging) {
         return (e) => {
-            const rawAppointment = extend({}, e.itemData, this.appointments.invoke('getUpdatedData', {
-                data: e.itemData
-            }));
-
-            e.itemData = this.scheduler.createAppointmentAdapter(rawAppointment).clone({ pathTimeZone: 'fromGrid' }).source();
+            const updatedData = this.appointments.invoke('getUpdatedData', e.itemData);
+            e.itemData = extend({}, e.itemData, updatedData);
 
             if(e.fromComponent !== e.toComponent) {
                 appointmentDragging.onAdd && appointmentDragging.onAdd(e);
+            }
+
+            if(this.dragBetweenComponentsPromise) {
+                this.dragBetweenComponentsPromise.resolve();
             }
         };
     }
@@ -124,7 +158,8 @@ export default class AppointmentDragBehavior {
             immediate: false,
             onDragStart: this.onDragStart.bind(this),
             onDragMove: this.onDragMove.bind(this),
-            onDragEnd: this.onDragEnd.bind(this)
+            onDragEnd: this.onDragEnd.bind(this),
+            onDragCancel: this.onDragCancel.bind(this)
         }, config);
 
         this.appointments._createComponent(container, Draggable, extend({}, options, appointmentDragging, {
@@ -132,12 +167,24 @@ export default class AppointmentDragBehavior {
             onDragMove: this.createDragMoveHandler(options, appointmentDragging),
             onDragEnd: this.createDragEndHandler(options, appointmentDragging),
             onDrop: this.createDropHandler(appointmentDragging),
+            onCancelByEsc: true
         }));
     }
 
-    moveBack() {
-        if(this.currentAppointment && this.initialPosition.left !== undefined && this.initialPosition.top !== undefined) {
-            move(this.currentAppointment, this.initialPosition);
+    updateDragSource(appointment, settings) {
+        const { appointmentInfo } = this;
+        if(appointmentInfo || appointment) {
+            const currentAppointment = appointment || appointmentInfo.appointment;
+            const currentSettings = settings || appointmentInfo.settings;
+
+            this.appointments._setDragSourceAppointment(
+                currentAppointment, currentSettings,
+            );
         }
+    }
+
+    removeDroppableClasses() {
+        this.appointments._removeDragSourceClassFromDraggedAppointment();
+        this.workspace.removeDroppableCellClass();
     }
 }

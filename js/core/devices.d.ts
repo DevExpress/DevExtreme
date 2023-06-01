@@ -1,151 +1,122 @@
-export interface Device {
+/**
+ * @public
+ * @docid
+ * @section commonObjectStructures
+ * @namespace DevExpress
+ */
+export type Device = {
     /**
-     * @docid Device.android
-     * @type boolean
-     * @prevFileNamespace DevExpress.core
+     * @docid
      * @public
      */
     android?: boolean;
     /**
-     * @docid Device.deviceType
-     * @type string
-     * @acceptValues 'phone'|'tablet'|'desktop'
-     * @prevFileNamespace DevExpress.core
+     * @docid
      * @public
      */
     deviceType?: 'phone' | 'tablet' | 'desktop';
     /**
-     * @docid Device.generic
-     * @type boolean
-     * @prevFileNamespace DevExpress.core
+     * @docid
      * @public
      */
     generic?: boolean;
     /**
-     * @docid Device.grade
-     * @type string
-     * @acceptValues 'A'|'B'|'C'
-     * @prevFileNamespace DevExpress.core
+     * @docid
      * @public
      */
     grade?: 'A' | 'B' | 'C';
     /**
-     * @docid Device.ios
-     * @type boolean
-     * @prevFileNamespace DevExpress.core
+     * @docid
      * @public
      */
     ios?: boolean;
     /**
-     * @docid Device.phone
-     * @type boolean
-     * @prevFileNamespace DevExpress.core
+     * @docid
      * @public
      */
     phone?: boolean;
     /**
-     * @docid Device.platform
-     * @type string
-     * @acceptValues 'android'|'ios'|'generic'
-     * @prevFileNamespace DevExpress.core
+     * @docid
      * @public
      */
     platform?: 'android' | 'ios' | 'generic';
     /**
-     * @docid Device.tablet
-     * @type boolean
-     * @prevFileNamespace DevExpress.core
+     * @docid
      * @public
      */
     tablet?: boolean;
     /**
-     * @docid Device.version
-     * @type Array<number>
-     * @prevFileNamespace DevExpress.core
+     * @docid
      * @public
      */
     version?: Array<number>;
-}
+};
+
+type EventName = 'orientationChanged';
 
 /**
- * @docid DevicesObject
+ * @docid
  * @publicName devices
  * @section Utils
  * @namespace DevExpress
- * @module core/devices
- * @export default
- * @prevFileNamespace DevExpress.core
  * @public
  */
 declare class DevicesObject {
-    constructor(options: { window?: Window });
+    constructor(options?: { window?: Window });
     /**
-     * @docid DevicesObjectmethods.current
+     * @docid
      * @publicName current()
-     * @return Device
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     current(): Device;
     /**
-     * @docid DevicesObjectmethods.current
+     * @docid
      * @publicName current(deviceName)
-     * @param1 deviceName:string|Device
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     current(deviceName: string | Device): void;
     /**
-     * @docid DevicesObjectMethods.off
+     * @docid
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
-     * @prevFileNamespace DevExpress.core
      * @public
      */
-    off(eventName: string): this;
+    off(eventName: EventName): this;
     /**
-     * @docid DevicesObjectMethods.off
+     * @docid
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
-     * @prevFileNamespace DevExpress.core
      * @public
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: EventName, eventHandler: Function): this;
     /**
-     * @docid DevicesObjectMethods.on
+     * @docid
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
-     * @prevFileNamespace DevExpress.core
      * @public
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: EventName, eventHandler: Function): this;
     /**
-     * @docid DevicesObjectMethods.on
+     * @docid
      * @publicName on(events)
      * @param1 events:object
      * @return this
-     * @prevFileNamespace DevExpress.core
      * @public
      */
-    on(events: any): this;
+    on(events: { [key in EventName]?: Function }): this;
     /**
-     * @docid DevicesObjectMethods.orientation
+     * @docid
      * @publicName orientation()
      * @return String
-     * @prevFileNamespace DevExpress.core
      * @public
      */
-    orientation(): string;
+    orientation(): 'portrait' | 'landscape' | undefined;
     /**
-     * @docid DevicesObjectMethods.real
+     * @docid
      * @publicName real()
-     * @return Device
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     real(): Device;
@@ -154,10 +125,9 @@ declare class DevicesObject {
 
 /**
  * @const devices
- * @type DevicesObject
  * @namespace DevExpress
  * @hidden
- * @prevFileNamespace DevExpress.core
+ * @public
  */
 
 declare const devices: DevicesObject;

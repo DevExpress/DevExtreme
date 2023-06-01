@@ -1,493 +1,468 @@
-import '../jquery_augmentation';
-
-import Store, {
-    StoreOptions
-} from './abstract_store';
-
 import {
-    CustomStoreOptions
-} from './custom_store';
+  FilterDescriptor,
+  GroupDescriptor, LangParams,
+  LoadOptions,
+  SearchOperation,
+  SelectDescriptor,
+  SortDescriptor,
+  Store,
+  StoreOptions,
+} from './index';
+import { DxExtendedPromise } from '../core/utils/deferred';
+import { Options as CustomStoreOptions } from './custom_store';
 
-export interface DataSourceOptions {
+/** @public */
+export type Options<
+    TStoreItem = any,
+    TMappedItem = TStoreItem,
+    TItem = TMappedItem,
+    TKey = any,
+> = DataSourceOptions<TStoreItem, TItem, TMappedItem, TKey>;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ * @docid
+ */
+export interface DataSourceOptions<
+    TStoreItem = any,
+    TMappedItem = TStoreItem,
+    TItem = TMappedItem,
+    TKey = any,
+> {
     /**
-     * @docid DataSourceOptions.customQueryParams
-     * @type Object
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     customQueryParams?: any;
     /**
-     * @docid DataSourceOptions.expand
-     * @type Array<string>|string
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     expand?: Array<string> | string;
     /**
-     * @docid DataSourceOptions.filter
+     * @docid
      * @type Filter expression
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    filter?: string | Array<any> | Function;
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
     /**
-     * @docid DataSourceOptions.group
+     * @docid
      * @type Group expression
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    group?: string | Array<any> | Function;
+    group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
-     * @docid DataSourceOptions.map
-     * @type function
+     * @docid
+     * @public
+     */
+    // eslint-disable-next-line spellcheck/spell-checker
+    langParams?: LangParams;
+    /**
+     * @docid
      * @type_function_param1 dataItem:object
      * @type_function_return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    map?: ((dataItem: any) => any);
+    map?: ((dataItem: TStoreItem) => TMappedItem);
     /**
-     * @docid DataSourceOptions.onChanged
-     * @type function
-     * @type_function_param1 e:Object
-     * @type_function_param1_field1 changes:Array<any>
+     * @docid
+     * @type_function_param1_field changes:Array<any>
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onChanged?: ((e: { changes?: Array<any> }) => any);
+    onChanged?: ((e: { readonly changes?: Array<TMappedItem> }) => void);
     /**
-     * @docid DataSourceOptions.onLoadError
-     * @type function
-     * @type_function_param1 error:Object
-     * @type_function_param1_field1 message:string
+     * @docid
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoadError?: ((error: { message?: string }) => any);
+    onLoadError?: ((error: { readonly message?: string }) => void);
     /**
-     * @docid DataSourceOptions.onLoadingChanged
-     * @type function
-     * @type_function_param1 isLoading:boolean
+     * @docid
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoadingChanged?: ((isLoading: boolean) => any);
+    onLoadingChanged?: ((isLoading: boolean) => void);
     /**
-     * @docid DataSourceOptions.pageSize
-     * @type number
+     * @docid
      * @default 20
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     pageSize?: number;
     /**
-     * @docid DataSourceOptions.paginate
-     * @type Boolean
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     paginate?: boolean;
     /**
-     * @docid DataSourceOptions.postProcess
-     * @type function
+     * @docid
      * @type_function_param1 data:Array<any>
      * @type_function_return Array<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    postProcess?: ((data: Array<any>) => Array<any>);
+    postProcess?: ((data: Array<TMappedItem>) => Array<TItem>);
     /**
-     * @docid DataSourceOptions.pushAggregationTimeout
-     * @type number
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     pushAggregationTimeout?: number;
     /**
-     * @docid DataSourceOptions.requireTotalCount
-     * @type Boolean
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     requireTotalCount?: boolean;
     /**
-     * @docid DataSourceOptions.reshapeOnPush
-     * @type Boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     reshapeOnPush?: boolean;
     /**
-     * @docid DataSourceOptions.searchExpr
+     * @docid
      * @type getter|Array<getter>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     searchExpr?: string | Function | Array<string | Function>;
     /**
-     * @docid DataSourceOptions.searchOperation
-     * @type string
+     * @docid
      * @default "contains"
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    searchOperation?: string;
+    searchOperation?: SearchOperation;
     /**
-     * @docid DataSourceOptions.searchValue
-     * @type any
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     searchValue?: any;
     /**
-     * @docid DataSourceOptions.select
+     * @docid
      * @type Select expression
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    select?: string | Array<any> | Function;
+    select?: SelectDescriptor<TItem>;
     /**
-     * @docid DataSourceOptions.sort
+     * @docid
      * @type Sort expression
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    sort?: string | Array<any> | Function;
+    sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
     /**
-     * @docid DataSourceOptions.store
-     * @type Store|StoreOptions|Array<any>|any
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
+     * @type Store|StoreOptions|Array<any>
      */
-    store?: Store | StoreOptions | Array<any> | any;
+    store?: Array<TStoreItem> | Store<TStoreItem, TKey> | StoreOptions<TStoreItem, TKey>;
 }
 /**
- * @docid DataSource
- * @type object
- * @module data/data_source
- * @export default
- * @prevFileNamespace DevExpress.data
+ * @docid
  * @public
+ * @options DataSourceOptions
  */
-export default class DataSource {
-    constructor(data: Array<any>);
-    constructor(options: CustomStoreOptions | DataSourceOptions);
-    constructor(store: Store);
+export default class DataSource<
+    TItem = any,
+    TKey = any,
+> {
+    constructor(data: Array<TItem>);
+    constructor(options: CustomStoreOptions<TItem, TKey> | Options<any, any, TItem, TKey>);
+    constructor(store: Store<TItem, TKey>);
     constructor(url: string);
     /**
-     * @docid DataSourceMethods.cancel
+     * @docid
      * @publicName cancel(operationId)
-     * @return boolean
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    cancel(): boolean;
+    cancel(operationId: number): boolean;
     /**
-     * @docid DataSourceMethods.dispose
+     * @docid
      * @publicName dispose()
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     dispose(): void;
     /**
-     * @docid DataSourceMethods.filter
+     * @docid
      * @publicName filter()
      * @return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    filter(): any;
+    filter(): FilterDescriptor | Array<FilterDescriptor>;
     /**
-     * @docid DataSourceMethods.filter
+     * @docid
      * @publicName filter(filterExpr)
      * @param1 filterExpr:object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    filter(filterExpr: any): void;
+    filter(filterExpr: FilterDescriptor | Array<FilterDescriptor>): void;
     /**
-     * @docid DataSourceMethods.group
+     * @docid
      * @publicName group()
      * @return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    group(): any;
+    group(): GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
-     * @docid DataSourceMethods.group
+     * @docid
      * @publicName group(groupExpr)
      * @param1 groupExpr:object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    group(groupExpr: any): void;
+    group(groupExpr: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>): void;
     /**
-     * @docid DataSourceMethods.isLastPage
+     * @docid
      * @publicName isLastPage()
-     * @return boolean
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     isLastPage(): boolean;
     /**
-     * @docid DataSourceMethods.isLoaded
+     * @docid
      * @publicName isLoaded()
-     * @return boolean
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     isLoaded(): boolean;
     /**
-     * @docid DataSourceMethods.isLoading
+     * @docid
      * @publicName isLoading()
-     * @return boolean
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     isLoading(): boolean;
     /**
-     * @docid DataSourceMethods.items
+     * @docid
      * @publicName items()
-     * @return Array<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     items(): Array<any>;
     /**
-     * @docid DataSourceMethods.key
+     * @docid
      * @publicName key()
-     * @return object|string|number
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    key(): any & string & number;
+    key(): string | Array<string>;
     /**
-     * @docid DataSourceMethods.load
+     * @docid
      * @publicName load()
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    load(): Promise<any> & JQueryPromise<any>;
+    load(): DxExtendedPromise<any>;
     /**
-     * @docid DataSourceMethods.loadOptions
+     * @docid
      * @publicName loadOptions()
      * @return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    loadOptions(): any;
+    loadOptions(): LoadOptions<TItem>;
     /**
-     * @docid DataSourceMethods.off
+     * @docid
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    off(eventName: string): this;
+    off(eventName: EventName): this;
     /**
-     * @docid DataSourceMethods.off
+     * @docid
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: EventName, eventHandler: Function): this;
     /**
-     * @docid DataSourceMethods.on
+     * @docid
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: EventName, eventHandler: Function): this;
     /**
-     * @docid DataSourceMethods.on
+     * @docid
      * @publicName on(events)
      * @param1 events:object
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    on(events: any): this;
+    on(events: { [key in EventName]?: Function }): this;
     /**
-     * @docid DataSourceMethods.pageIndex
+     * @docid
      * @publicName pageIndex()
      * @return numeric
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     pageIndex(): number;
     /**
-     * @docid DataSourceMethods.pageIndex
+     * @docid
      * @publicName pageIndex(newIndex)
      * @param1 newIndex:numeric
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     pageIndex(newIndex: number): void;
     /**
-     * @docid DataSourceMethods.pageSize
+     * @docid
      * @publicName pageSize()
      * @return numeric
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     pageSize(): number;
     /**
-     * @docid DataSourceMethods.pageSize
+     * @docid
      * @publicName pageSize(value)
      * @param1 value:numeric
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     pageSize(value: number): void;
     /**
-     * @docid DataSourceMethods.paginate
+     * @docid
      * @publicName paginate()
-     * @return Boolean
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     paginate(): boolean;
     /**
-     * @docid DataSourceMethods.paginate
+     * @docid
      * @publicName paginate(value)
-     * @param1 value:Boolean
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     paginate(value: boolean): void;
     /**
-     * @docid DataSourceMethods.reload
+     * @docid
      * @publicName reload()
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    reload(): Promise<any> & JQueryPromise<any>;
+    reload(): DxExtendedPromise<any>;
     /**
-     * @docid DataSourceMethods.requireTotalCount
+     * @docid
      * @publicName requireTotalCount()
-     * @return boolean
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     requireTotalCount(): boolean;
     /**
-     * @docid DataSourceMethods.requireTotalCount
+     * @docid
      * @publicName requireTotalCount(value)
-     * @param1 value:boolean
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     requireTotalCount(value: boolean): void;
     /**
-     * @docid DataSourceMethods.searchExpr
+     * @docid
      * @publicName searchExpr()
      * @return getter|Array<getter>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     searchExpr(): string & Function & Array<string | Function>;
     /**
-     * @docid DataSourceMethods.searchExpr
+     * @docid
      * @publicName searchExpr(expr)
      * @param1 expr:getter|Array<getter>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     searchExpr(expr: string | Function | Array<string | Function>): void;
     /**
-     * @docid DataSourceMethods.searchOperation
+     * @docid
      * @publicName searchOperation()
-     * @return string
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     searchOperation(): string;
     /**
-     * @docid DataSourceMethods.searchOperation
+     * @docid
      * @publicName searchOperation(op)
-     * @param1 op:string
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     searchOperation(op: string): void;
     /**
-     * @docid DataSourceMethods.searchValue
+     * @docid
      * @publicName searchValue()
-     * @return any
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     searchValue(): any;
     /**
-     * @docid DataSourceMethods.searchValue
+     * @docid
      * @publicName searchValue(value)
-     * @param1 value:any
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     searchValue(value: any): void;
     /**
-     * @docid DataSourceMethods.select
+     * @docid
      * @publicName select()
      * @return any
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    select(): any;
+    select(): SelectDescriptor<TItem>;
     /**
-     * @docid DataSourceMethods.select
+     * @docid
      * @publicName select(expr)
      * @param1 expr:any
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    select(expr: any): void;
+    select(expr: SelectDescriptor<TItem>): void;
     /**
-     * @docid DataSourceMethods.sort
+     * @docid
      * @publicName sort()
      * @return any
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    sort(): any;
+    sort(): SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
     /**
-     * @docid DataSourceMethods.sort
+     * @docid
      * @publicName sort(sortExpr)
      * @param1 sortExpr:any
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    sort(sortExpr: any): void;
+    sort(sortExpr: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>): void;
     /**
-     * @docid DataSourceMethods.store
+     * @docid
      * @publicName store()
      * @return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    store(): any;
+    store(): Store<TItem, TKey>;
     /**
-     * @docid DataSourceMethods.totalCount
+     * @docid
      * @publicName totalCount()
      * @return numeric
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     totalCount(): number;
 }
+
+/**
+ * @docid
+ * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+ */
+export type DataSourceLike<TItem, TKey = any> =
+    string |
+    Array<TItem> |
+    Store<TItem, TKey> |
+    DataSourceOptionsStub<any, any, TItem> |
+    DataSource<TItem, TKey>;
+
+interface DataSourceOptionsStub<
+    TStoreItem = any,
+    TMappedItem = TStoreItem,
+    TItem = TMappedItem,
+> {
+    customQueryParams?: any;
+    expand?: Array<string> | string;
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
+    group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
+    map?: ((dataItem: TStoreItem) => TMappedItem);
+    onChanged?: ((e: { readonly changes?: Array<TMappedItem> }) => void);
+    onLoadError?: ((error: { readonly message?: string }) => void);
+    onLoadingChanged?: ((isLoading: boolean) => void);
+    pageSize?: number;
+    paginate?: boolean;
+    postProcess?: ((data: Array<TMappedItem>) => Array<TItem>);
+    pushAggregationTimeout?: number;
+    requireTotalCount?: boolean;
+    reshapeOnPush?: boolean;
+    searchExpr?: string | Function | Array<string | Function>;
+    searchOperation?: SearchOperation;
+    searchValue?: any;
+    select?: SelectDescriptor<TItem>;
+    sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
+    store?: Array<TStoreItem> | Store<TStoreItem, any> | StoreOptions<TStoreItem, any>;
+}
+
+type EventName = 'changed' | 'loadError' | 'loadingChanged';

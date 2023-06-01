@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import PivotGrid from 'ui/pivot_grid/ui.pivot_grid';
+import { PivotGrid } from '__internal/grids/pivot_grid/module_widget';
 
 const PIVOTGRID_EXPANDED_CLASS = 'dx-pivotgrid-expanded';
 const PIVOTGRID_TOTAL_CLASS = 'dx-total';
@@ -39,14 +39,14 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 }
             };
 
-            const pivotGridElement = document.getElementById('PivotGrid');
+            const pivotGridElement = $('#PivotGrid').get(0);
             new PivotGrid(pivotGridElement, {
                 ...pivotGridOptions,
                 width: 400,
                 height: 400,
                 showRowGrandTotals: true
             });
-            this.clock.tick();
+            this.clock.tick(10);
 
             const cellElement = pivotGridElement.querySelector(`.${PIVOTGRID_EXPANDED_CLASS}`);
             const cellTextElement = cellElement.lastChild;

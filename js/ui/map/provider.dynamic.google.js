@@ -6,7 +6,6 @@ import { getWindow } from '../../core/utils/window';
 const window = getWindow();
 import { noop } from '../../core/utils/common';
 import devices from '../../core/devices';
-import Promise from '../../core/polyfills/promise';
 import { extend } from '../../core/utils/extend';
 import { map } from '../../core/utils/iterator';
 import DynamicProvider from './provider.dynamic';

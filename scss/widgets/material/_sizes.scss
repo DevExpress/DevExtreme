@@ -10,40 +10,41 @@ $material-base-icon-size: null !default;
 $material-base-inline-horizontal-padding: null !default;
 $material-base-border-radius: null !default;
 $material-base-dropdown-widgets-shadow: null !default;
+$material-html-editor-add-image-dialog-base-padding: 5px !default;
 
 
 @if $size == "default" {
-  $material-size-postfix: "";
+  $material-size-postfix: "" !default;
 
   // Font sizes
-  $material-base-font-size: 14px;
+  $material-base-font-size: 14px !default;
 
   // Base sizes
-  $material-base-inline-widget-height: 56px;
-  $material-base-inline-block-height: 18px;
-  $material-base-icon-size: 24px;
-  $material-base-inline-horizontal-padding: 10px;
-  $material-base-border-radius: 4px;
-  $material-base-dropdown-widgets-shadow: 0 2px 7px $base-dropdown-shadow-color;
+  $material-base-inline-widget-height: 48px !default;
+  $material-base-inline-block-height: 18px !default;
+  $material-base-icon-size: 24px !default;
+  $material-base-inline-horizontal-padding: 10px !default;
+  $material-base-border-radius: 4px !default;
+  $material-base-dropdown-widgets-shadow: 0 2px 7px $base-dropdown-shadow-color !default;
 }
 
 @if $size == "compact" {
-  $material-size-postfix: ".compact";
+  $material-size-postfix: ".compact" !default;
 
   // Font sizes
-  $material-base-font-size: 13px;
+  $material-base-font-size: 13px !default;
 
   // Base sizes
-  $material-base-inline-widget-height: 40px;
-  $material-base-inline-block-height: 15px;
-  $material-base-icon-size: 18px;
-  $material-base-inline-horizontal-padding: 8px;
-  $material-base-border-radius: 2px;
-  $material-base-dropdown-widgets-shadow: 0 2px 4px $base-dropdown-shadow-color;
+  $material-base-inline-widget-height: 32px !default;
+  $material-base-inline-block-height: 15px !default;
+  $material-base-icon-size: 18px !default;
+  $material-base-inline-horizontal-padding: 8px !default;
+  $material-base-border-radius: 2px !default;
+  $material-base-dropdown-widgets-shadow: 0 2px 4px $base-dropdown-shadow-color !default;
 }
 
 // Base bordered inline widgets sizes
-$material-base-border-width: 1px;
+$material-base-border-width: 1px !default;
 
 
 /**
@@ -52,4 +53,4 @@ $material-base-border-width: 1px;
 */
 $base-border-radius: $material-base-border-radius !default;
 
-$material-base-standard-texteditor-input-horizontal-padding: 0;
+$material-base-standard-texteditor-input-horizontal-padding: 0 !default;

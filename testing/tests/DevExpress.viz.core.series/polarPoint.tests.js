@@ -16,7 +16,7 @@ const environment = {
     beforeEach: function() {
         const that = this;
 
-        this.valTranslator = { translate: sinon.stub(), getBusinessRange: sinon.stub() };
+        this.valTranslator = { translate: sinon.stub(), getBusinessRange: sinon.stub(), isInverted: sinon.stub() };
         this.argTranslator = { translate: sinon.stub() };
 
         this.valTranslator.translate.returns(10)
@@ -58,7 +58,7 @@ const environment = {
         series._argumentChecker.returns(true);
         series._valueChecker.returns(true);
 
-        this.createLabel = sinon.stub(labelModule, 'Label', function() {
+        this.createLabel = sinon.stub(labelModule, 'Label').callsFake(function() {
             label.getBoundingRect.returns({ x: 1, y: 2, width: 20, height: 10 });
             label.getLayoutOptions.returns({ alignment: 'center', radialOffset: 0 });
             resetStub(label);
@@ -75,7 +75,13 @@ const environment = {
 
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {
-        stubFunc && stubFunc.reset && stubFunc.reset();
+        if(stubFunc) {
+            if(stubFunc.resetHistory) {
+                stubFunc.resetHistory();
+            } else if(stubFunc.reset) {
+                stubFunc.reset();
+            }
+        }
     });
 }
 
@@ -295,6 +301,29 @@ QUnit.test('translate, value out of visible area (over then maxVisible)', functi
     const point = createAndDrawPoint.call(this);
 
     assert.notOk(point.inVisibleArea);
+});
+
+QUnit.module('Translate. inverted axis', {
+    afterEach: environment.afterEach,
+    beforeEach() {
+        environment.beforeEach.apply(this, arguments);
+        this.valTranslator.isInverted.returns(true);
+        this.valTranslator.translate.withArgs('canvas_position_end').returns(0);
+        this.valTranslator.translate.withArgs('canvas_position_start').returns(150);
+    }
+});
+
+QUnit.test('translate point for line series', function(assert) {
+    const point = createTranslatedPoint.call(this, { type: 'line' });
+
+    assert.strictEqual(point.inVisibleArea, true);
+});
+
+QUnit.test('translate point for bar series', function(assert) {
+    const point = createTranslatedPoint.call(this, { type: 'bar' });
+
+    assert.strictEqual(point.radiusOuter, 10);
+    assert.strictEqual(point.radiusInner, 2);
 });
 
 QUnit.module('Bar point', environment);

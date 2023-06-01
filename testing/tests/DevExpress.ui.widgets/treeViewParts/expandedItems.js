@@ -187,6 +187,21 @@ module('Expanded items', {
         });
     });
 
+    test('item with custom expander icons should expand on click', function(assert) {
+        const data = $.extend(true, [], DATA[5]);
+        const $treeView = initTree({
+            items: data,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+        const $icon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`);
+
+        $icon.trigger('dxclick');
+
+        assert.ok(treeView.option('items')[0].expanded, 'item was expanded');
+    });
+
     test('disabled item should not expand on click', function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].disabled = true;
@@ -200,6 +215,22 @@ module('Expanded items', {
         $icon.trigger('dxclick');
 
         assert.ok(!treeView.option('items')[0].expanded, 'disabled item was not expanded');
+    });
+
+    test('disabled item with custom expander icons should not expand on click', function(assert) {
+        const data = $.extend(true, [], DATA[5]);
+        data[0].disabled = true;
+        const $treeView = initTree({
+            items: data,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+        const $icon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`);
+
+        $icon.trigger('dxclick');
+
+        assert.notOk(treeView.option('items')[0].expanded, 'disabled item was not expanded');
     });
 
     test('expanded disabled item should not collapse on click', function(assert) {
@@ -216,6 +247,67 @@ module('Expanded items', {
         $icon.trigger('dxclick');
 
         assert.ok(treeView.option('items')[0].expanded, 'disabled item was not expanded');
+    });
+
+    test('expand and collapse custom icons should change visibility on click multiple times', function(assert) {
+        const data = $.extend(true, [], DATA[5]);
+        data[0].expanded = false;
+        initTree({
+            items: data,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+
+        const $expandIcon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`);
+        const $collapseIcon = $(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`);
+
+        $expandIcon.trigger('dxclick');
+
+        assert.ok($collapseIcon.is(':visible'));
+        assert.notOk($expandIcon.is(':visible'));
+
+        $expandIcon.trigger('dxclick');
+
+        assert.notOk($collapseIcon.is(':visible'));
+        assert.ok($expandIcon.is(':visible'));
+
+        $expandIcon.trigger('dxclick');
+
+        assert.ok($collapseIcon.is(':visible'));
+        assert.notOk($expandIcon.is(':visible'));
+    });
+
+    test('expanded disabled item with custom icon should not collapse on click', function(assert) {
+        const data = $.extend(true, [], DATA[5]);
+        data[0].expanded = true;
+        data[0].disabled = true;
+        const $treeView = initTree({
+            items: data,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+        const $icon = $(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`).eq(0);
+
+        $icon.trigger('dxclick');
+
+        assert.ok(treeView.option('items')[0].expanded, 'disabled item was not collapsed');
+    });
+
+    test('expanded item with custom icon should collapse on click', function(assert) {
+        const data = $.extend(true, [], DATA[5]);
+        data[0].expanded = true;
+        const $treeView = initTree({
+            items: data,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+        const $icon = $(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`).eq(0);
+
+        $icon.trigger('dxclick');
+
+        assert.notOk(treeView.option('items')[0].expanded, 'item was collapsed');
     });
 
     test('expanded item shouldn\'t collapse after setting .disable for it', function(assert) {
@@ -258,10 +350,30 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
         const $toggleExpandIcon = $($treeView.find('.dx-treeview-toggle-item-visibility').eq(0));
-
-        treeView.on('itemExpanded', () => assert.ok(true, 'itemExpanded was fired'));
+        const itemExpandedEventSpy = sinon.spy();
+        treeView.on('itemExpanded', itemExpandedEventSpy);
 
         $toggleExpandIcon.trigger('dxclick');
+
+        assert.ok(itemExpandedEventSpy.called);
+    });
+
+    test('itemExpanded should be fired when expanding item with custom expander icon', function(assert) {
+        const data = $.extend(true, [], DATA[5]);
+
+        const $treeView = initTree({
+            items: data,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+        const $toggleExpandIcon = $(`.${internals.CUSTOM_EXPAND_ICON_CLASS}`).eq(0);
+        const itemExpandedEventSpy = sinon.spy();
+        treeView.on('itemExpanded', itemExpandedEventSpy);
+
+        $toggleExpandIcon.trigger('dxclick');
+
+        assert.ok(itemExpandedEventSpy.called);
     });
 
     test('itemCollapsed should be fired when collapsing item by click', function(assert) {
@@ -610,7 +722,7 @@ module('Expanded items', {
         assert.ok(isNodeExpanded($node2), 'second node is expanded');
         assert.equal(getNodeItemId($node2), 11, 'id for second node');
 
-        assert.notOk(isNodeExpanded($node3), 'third node is expanded');
+        assert.ok(isNodeExpanded($node3), 'third node is expanded');
         assert.equal(getNodeItemId($node3), 111, 'id for third node');
     });
 
@@ -635,7 +747,7 @@ module('Expanded items', {
 
         treeView.expandAll();
 
-        assert.equal(contentReadyStub.callCount, 2, 'event is thrown twice');
+        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
     });
 
     test('Content ready event is thrown once when the expandAll is called with the slow data source', function(assert) {
@@ -660,7 +772,7 @@ module('Expanded items', {
 
         this.clock.tick(400);
 
-        assert.equal(contentReadyStub.callCount, 2, 'event is thrown twice');
+        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
     });
 
     test('Content ready event is thrown once when the expandAll is called with the slow data source and the virtual mode', function(assert) {
@@ -686,7 +798,7 @@ module('Expanded items', {
 
         this.clock.tick(400);
 
-        assert.equal(contentReadyStub.callCount, 2, 'event is thrown once');
+        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
     });
 
     test('Content ready event is thrown once when the expandAll is called with load data on demand', function(assert) {
@@ -715,7 +827,7 @@ module('Expanded items', {
 
         this.clock.tick(400);
 
-        assert.equal(contentReadyStub.callCount, 2, 'event is thrown twice');
+        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
     });
 
 

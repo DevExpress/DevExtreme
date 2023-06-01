@@ -27,7 +27,7 @@ describe('InkRipple', () => {
 
   describe('Behavior', () => {
     describe('Methods', () => {
-      const event = {};
+      const event: { element?: HTMLElement; event: Event } = { event: {} as Event };
 
       describe('hideWave', () => {
         it('should call hide wave function', () => {

@@ -1,112 +1,331 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
+
+import {
+    DropDownButtonTemplateDataModel,
+} from './drop_down_editor/ui.drop_down_editor';
+
 import dxDropDownList, {
-    dxDropDownListOptions
+    dxDropDownListOptions,
+    SelectionChangedInfo,
 } from './drop_down_editor/ui.drop_down_list';
 
-export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptions<T> {
+import {
+    ValueChangedInfo,
+} from './editor/editor';
+
+import {
+    Properties as PopupProperties,
+} from './popup';
+
+export interface CustomItemCreatingInfo {
+    readonly text?: string;
+    customItem?: string | any | PromiseLike<any>;
+}
+
+/** @public */
+export type ChangeEvent = NativeEventInfo<dxSelectBox, Event>;
+
+/** @public */
+export type ClosedEvent = EventInfo<dxSelectBox>;
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxSelectBox>;
+
+/** @public */
+export type CopyEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
+
+/** @public */
+export type CustomItemCreatingEvent = EventInfo<dxSelectBox> & CustomItemCreatingInfo;
+
+/** @public */
+export type CutEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSelectBox>;
+
+/** @public */
+export type EnterKeyEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
+
+/** @public */
+export type FocusInEvent = NativeEventInfo<dxSelectBox, FocusEvent>;
+
+/** @public */
+export type FocusOutEvent = NativeEventInfo<dxSelectBox, FocusEvent>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSelectBox>;
+
+/** @public */
+export type InputEvent = NativeEventInfo<dxSelectBox, UIEvent & { target: HTMLInputElement }>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxSelectBox, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
+
+/** @public */
+export type KeyDownEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
+
+/** @public */
+export type KeyPressEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
+
+/** @public */
+export type KeyUpEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
+
+/** @public */
+export type OpenedEvent = EventInfo<dxSelectBox>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSelectBox> & ChangedOptionInfo;
+
+/** @public */
+export type PasteEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxSelectBox> & SelectionChangedInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxSelectBox, KeyboardEvent | MouseEvent | Event> & ValueChangedInfo;
+
+/** @public */
+export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
+export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TComponent> {
     /**
-     * @docid dxSelectBoxOptions.acceptCustomValue
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     acceptCustomValue?: boolean;
     /**
-     * @docid dxSelectBoxOptions.fieldTemplate
-     * @type template|function
+     * @docid
      * @default null
      * @type_function_param1 selectedItem:object
-     * @type_function_param2 fieldElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: dxElement) => string | Element | JQuery);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxSelectBoxOptions.onCustomItemCreating
-     * @extends Action
-     * @type function(e)
+     * @section Utils
+     * @type function
+     * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 text:string
-     * @type_function_param1_field5 customItem:string|object|Promise<any>
+     * @type_function_param1_field component:this
+     * @type_function_param1_field customItem:string|object|Promise<any>
+     * @type_function_param1_field model:any
      * @action
      * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCustomItemCreating?: ((e: { component?: T, element?: dxElement, model?: any, text?: string, customItem?: string | any | Promise<any> | JQueryPromise<any> }) => any);
+    onCustomItemCreating?: ((e: EventInfo<TComponent> & CustomItemCreatingInfo) => void);
     /**
-     * @docid dxSelectBoxOptions.openOnFieldClick
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     openOnFieldClick?: boolean;
     /**
-     * @docid dxSelectBoxOptions.placeholder
-     * @type string
+     * @docid
      * @default "Select"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     placeholder?: string;
     /**
-     * @docid dxSelectBoxOptions.showDropDownButton
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     showDropDownButton?: boolean;
     /**
-     * @docid dxSelectBoxOptions.showSelectionControls
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showSelectionControls?: boolean;
     /**
-     * @docid dxSelectBoxOptions.valueChangeEvent
-     * @type string
+     * @docid
      * @default "change"
-     * @prevFileNamespace DevExpress.ui
+     * @deprecated dxSelectBoxOptions.customItemCreateEvent
      * @public
      */
     valueChangeEvent?: string;
+
+    /**
+     * @docid
+     * @default "change"
+     * @public
+     */
+    customItemCreateEvent?: string;
+
+    /**
+     * @docid
+     * @type dxPopupOptions
+     */
+    dropDownOptions?: PopupProperties;
 }
 /**
- * @docid dxSelectBox
+ * @docid
  * @isEditor
  * @inherits dxDropDownList
- * @module ui/select_box
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxSelectBox extends dxDropDownList {
-    constructor(element: Element, options?: dxSelectBoxOptions)
-    constructor(element: JQuery, options?: dxSelectBoxOptions)
-}
+export default class dxSelectBox<TProperties = Properties> extends dxDropDownList<TProperties> { }
 
-declare global {
-interface JQuery {
-    dxSelectBox(): JQuery;
-    dxSelectBox(options: "instance"): dxSelectBox;
-    dxSelectBox(options: string): any;
-    dxSelectBox(options: string, ...params: any[]): any;
-    dxSelectBox(options: dxSelectBoxOptions): JQuery;
-}
-}
-export type Options = dxSelectBoxOptions;
+interface SelectBoxInstance extends dxSelectBox<Properties> { }
 
-/** @deprecated use Options instead */
-export type IOptions = dxSelectBoxOptions;
+/** @public */
+export type Properties = dxSelectBoxOptions<SelectBoxInstance>;
+
+/** @deprecated use Properties instead */
+export type Options = Properties;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onChange
+ * @type_function_param1 e:{ui/select_box:ChangeEvent}
+ */
+onChange?: ((e: ChangeEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onClosed
+ * @type_function_param1 e:{ui/select_box:ClosedEvent}
+ */
+onClosed?: ((e: ClosedEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onContentReady
+ * @type_function_param1 e:{ui/select_box:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onCopy
+ * @type_function_param1 e:{ui/select_box:CopyEvent}
+ */
+onCopy?: ((e: CopyEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onCustomItemCreating
+ * @type_function_param1 e:{ui/select_box:CustomItemCreatingEvent}
+ */
+onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onCut
+ * @type_function_param1 e:{ui/select_box:CutEvent}
+ */
+onCut?: ((e: CutEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onDisposing
+ * @type_function_param1 e:{ui/select_box:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onEnterKey
+ * @type_function_param1 e:{ui/select_box:EnterKeyEvent}
+ */
+onEnterKey?: ((e: EnterKeyEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onFocusIn
+ * @type_function_param1 e:{ui/select_box:FocusInEvent}
+ */
+onFocusIn?: ((e: FocusInEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onFocusOut
+ * @type_function_param1 e:{ui/select_box:FocusOutEvent}
+ */
+onFocusOut?: ((e: FocusOutEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onInitialized
+ * @type_function_param1 e:{ui/select_box:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onInput
+ * @type_function_param1 e:{ui/select_box:InputEvent}
+ */
+onInput?: ((e: InputEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onItemClick
+ * @type_function_param1 e:{ui/select_box:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onKeyDown
+ * @type_function_param1 e:{ui/select_box:KeyDownEvent}
+ */
+onKeyDown?: ((e: KeyDownEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onKeyUp
+ * @type_function_param1 e:{ui/select_box:KeyUpEvent}
+ */
+onKeyUp?: ((e: KeyUpEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onOpened
+ * @type_function_param1 e:{ui/select_box:OpenedEvent}
+ */
+onOpened?: ((e: OpenedEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onOptionChanged
+ * @type_function_param1 e:{ui/select_box:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onPaste
+ * @type_function_param1 e:{ui/select_box:PasteEvent}
+ */
+onPaste?: ((e: PasteEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/select_box:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxSelectBoxOptions.onValueChanged
+ * @type_function_param1 e:{ui/select_box:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

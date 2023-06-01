@@ -3,13 +3,11 @@ import eventsEngine from '../../events/core/events_engine';
 import registerComponent from '../../core/component_registrator';
 import Guid from '../../core/guid';
 import { ensureDefined } from '../../core/utils/common';
+import config from '../../core/config';
 import { isDefined, isEmptyObject, isObject, isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
-import { isEmpty } from '../../core/utils/string';
-import browser from '../../core/utils/browser';
-import { triggerShownEvent } from '../../events/visibility_change';
+import { triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { getPublicElement } from '../../core/element';
 import messageLocalization from '../../localization/message';
 import Widget from '../widget/ui.widget';
@@ -22,6 +20,7 @@ import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
 import { isMaterial } from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
+import resizeObserverSingleton from '../../core/resize_observer';
 import './ui.form.layout_manager';
 import {
     concatPaths,
@@ -30,10 +29,16 @@ import {
     getOptionNameFromFullName,
     tryGetTabPath,
     getTextWithoutSpaces,
-    isExpectedItem,
+    isEqualToDataFieldOrNameOrTitleOrCaption,
     isFullPathContainsTabs,
-    getItemPath
+    getItemPath,
+    convertToLayoutManagerOptions
 } from './ui.form.utils';
+
+import { convertToLabelMarkOptions } from './ui.form.layout_manager.utils'; // TODO: remove reference to 'ui.form.layout_manager.utils.js'
+import {
+    setLabelWidthByMaxLabelWidth
+} from './components/label';
 
 import '../validation_summary';
 import '../validation_group';
@@ -43,25 +48,23 @@ import '../validation_group';
 import {
     FORM_CLASS,
     FIELD_ITEM_CLASS,
-    FIELD_ITEM_LABEL_TEXT_CLASS,
     FORM_GROUP_CLASS,
     FORM_GROUP_CONTENT_CLASS,
     FIELD_ITEM_CONTENT_HAS_GROUP_CLASS,
     FIELD_ITEM_CONTENT_HAS_TABS_CLASS,
     FORM_GROUP_WITH_CAPTION_CLASS,
     FORM_GROUP_CAPTION_CLASS,
-    HIDDEN_LABEL_CLASS,
-    FIELD_ITEM_LABEL_CLASS,
-    FIELD_ITEM_LABEL_CONTENT_CLASS,
     FIELD_ITEM_TAB_CLASS,
     FORM_FIELD_ITEM_COL_CLASS,
     GROUP_COL_COUNT_CLASS,
     GROUP_COL_COUNT_ATTR,
     FIELD_ITEM_CONTENT_CLASS,
     FORM_VALIDATION_SUMMARY,
-    ROOT_SIMPLE_ITEM_CLASS } from './constants';
+    ROOT_SIMPLE_ITEM_CLASS,
+    FORM_UNDERLINED_CLASS } from './constants';
 
-const WIDGET_CLASS = 'dx-widget';
+import { TOOLBAR_CLASS } from '../toolbar/constants';
+
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
@@ -77,33 +80,13 @@ const Form = Widget.inherit({
         this._attachSyncSubscriptions();
     },
 
-    _initOptions: function(options) {
-        if(!('screenByWidth' in options)) {
-            options.screenByWidth = defaultScreenFactorFunc;
-        }
-
-        this.callBase(options);
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             formID: 'dx-' + new Guid(),
             formData: {},
             colCount: 1,
-
-            screenByWidth: null,
-
-            /**
-            * @pseudo ColCountResponsibleType
-            * @type object
-            */
-            /**
-            * @name ColCountResponsible
-            * @hidden
-            */
-
+            screenByWidth: defaultScreenFactorFunc,
             colCountByScreen: undefined,
-
             labelLocation: 'left',
             readOnly: false,
             onFieldDataChanged: null,
@@ -123,119 +106,8 @@ const Form = Widget.inherit({
             items: undefined,
             scrollingEnabled: false,
             validationGroup: undefined,
-            stylingMode: undefined
-            /**
-            * @name dxFormSimpleItem
-			* @publicName SimpleItem
-            * @section FormItems
-            * @type object
-            */
-            /**
-             * @name dxFormSimpleItem.label.text
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.label.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormSimpleItem.label.showColon
-             * @type boolean
-             * @default from showColonAfterLabel
-             */
-            /**
-             * @name dxFormSimpleItem.label.location
-             * @type Enums.FormLabelLocation
-             * @default "left"
-             */
-            /**
-             * @name dxFormSimpleItem.label.alignment
-             * @type Enums.HorizontalAlignment
-             * @default "left"
-             */
-            /**
-            * @name dxFormGroupItem
-			* @publicName GroupItem
-            * @section FormItems
-            * @type object
-            */
-            /**
-            * @name dxFormTabbedItem
-			* @publicName TabbedItem
-            * @section FormItems
-            * @type object
-            */
-            /**
-             * @name dxFormTabbedItem.tabs.alignItemLabels
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.title
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.colCount
-             * @type number
-             * @default 1
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.colCountByScreen
-             * @extends ColCountResponsibleType
-             * @inherits ColCountResponsible
-             * @default undefined
-            */
-            /**
-             * @name dxFormTabbedItem.tabs.items
-             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.badge
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.disabled
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.icon
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.tabTemplate
-             * @type template|function
-             * @type_function_param1 tabData:object
-             * @type_function_param2 tabIndex:number
-             * @type_function_param3 tabElement:dxElement
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs.template
-             * @type template|function
-             * @type_function_param1 tabData:object
-             * @type_function_param2 tabIndex:number
-             * @type_function_param3 tabElement:dxElement
-             * @default undefined
-             */
-            /**
-            * @name dxFormEmptyItem
-			* @publicName EmptyItem
-            * @section FormItems
-            * @type object
-            */
-            /**
-            * @name dxFormButtonItem
-			* @publicName ButtonItem
-            * @section FormItems
-            * @type object
-            */
+            stylingMode: config().editorStylingMode,
+            labelMode: 'outside'
         });
     },
 
@@ -266,74 +138,15 @@ const Form = Widget.inherit({
         return parseInt($element.attr(GROUP_COL_COUNT_ATTR));
     },
 
-    _createHiddenElement: function(rootLayoutManager) {
-        this._$hiddenElement = $('<div>')
-            .addClass(WIDGET_CLASS)
-            .addClass(HIDDEN_LABEL_CLASS)
-            .appendTo('body');
-
-        const $hiddenLabel = rootLayoutManager._renderLabel({
-            text: ' ',
-            location: this._labelLocation()
-        }).appendTo(this._$hiddenElement);
-
-        this._hiddenLabelText = $hiddenLabel.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
-    },
-
-    _removeHiddenElement: function() {
-        this._$hiddenElement.remove();
-        this._hiddenLabelText = null;
-    },
-
-    _getLabelWidthByText: function(text) {
-        // this code has slow performance
-        this._hiddenLabelText.innerHTML = text;
-        return this._hiddenLabelText.offsetWidth;
-    },
-
-    _getLabelsSelectorByCol: function(index, options) {
-        options = options || {};
-
+    _applyLabelsWidthByCol: function($container, index, options = {}, labelMarkOptions) {
         const fieldItemClass = options.inOneColumn ? FIELD_ITEM_CLASS : FORM_FIELD_ITEM_COL_CLASS + index;
-        const cssExcludeTabbedSelector = options.excludeTabbed ? ':not(.' + FIELD_ITEM_TAB_CLASS + ')' : '';
-        const childLabelContentSelector = '> .' + FIELD_ITEM_LABEL_CLASS + ' > .' + FIELD_ITEM_LABEL_CONTENT_CLASS;
+        const cssExcludeTabbedSelector = options.excludeTabbed ? `:not(.${FIELD_ITEM_TAB_CLASS})` : '';
 
-        return '.' + fieldItemClass + cssExcludeTabbedSelector + childLabelContentSelector;
+        setLabelWidthByMaxLabelWidth($container, `.${fieldItemClass}${cssExcludeTabbedSelector}`, labelMarkOptions);
+        return;
     },
 
-    _getLabelText: function(labelText) {
-        const length = labelText.children.length;
-        let child;
-        let result = '';
-        let i;
-
-        for(i = 0; i < length; i++) {
-            child = labelText.children[i];
-            result = result + (!isEmpty(child.innerText) ? child.innerText : child.innerHTML);
-        }
-
-        return result;
-    },
-
-    _applyLabelsWidthByCol: function($container, index, options) {
-        const $labelTexts = $container.find(this._getLabelsSelectorByCol(index, options));
-        const $labelTextsLength = $labelTexts.length;
-        let labelWidth;
-        let i;
-        let maxWidth = 0;
-
-        for(i = 0; i < $labelTextsLength; i++) {
-            labelWidth = this._getLabelWidthByText(this._getLabelText($labelTexts[i]));
-            if(labelWidth > maxWidth) {
-                maxWidth = labelWidth;
-            }
-        }
-        for(i = 0; i < $labelTextsLength; i++) {
-            $labelTexts[i].style.width = maxWidth + 'px';
-        }
-    },
-
-    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn, colCount) {
+    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn, colCount, labelMarkOptions) {
         colCount = inOneColumn ? 1 : colCount || this._getGroupColCount($container);
         const applyLabelsOptions = {
             excludeTabbed: excludeTabbed,
@@ -342,7 +155,7 @@ const Form = Widget.inherit({
         let i;
 
         for(i = 0; i < colCount; i++) {
-            this._applyLabelsWidthByCol($container, i, applyLabelsOptions);
+            this._applyLabelsWidthByCol($container, i, applyLabelsOptions, labelMarkOptions);
         }
     },
 
@@ -353,31 +166,30 @@ const Form = Widget.inherit({
         return $container.find(groupSelector);
     },
 
-    _applyLabelsWidthWithGroups: function($container, colCount, excludeTabbed) {
-        if(this.option('alignRootItemLabels') === true) {
-            this._alignRootSimpleItems($container, colCount, excludeTabbed);
+    _applyLabelsWidthWithGroups: function($container, colCount, excludeTabbed, labelMarkOptions) {
+        if(this.option('alignRootItemLabels') === true) { // TODO: private option
+            const $rootSimpleItems = $container.find(`.${ROOT_SIMPLE_ITEM_CLASS}`);
+            for(let colIndex = 0; colIndex < colCount; colIndex++) {
+                // TODO: root items are aligned with root items only
+                // this code doesn't align root items with grouped items in the same column
+                // (see T942517)
+                this._applyLabelsWidthByCol($rootSimpleItems, colIndex, excludeTabbed, labelMarkOptions);
+            }
         }
 
         const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
         if(alignItemLabelsInAllGroups) {
-            this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed);
+            this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed, labelMarkOptions);
         } else {
             const $groups = this.$element().find('.' + FORM_GROUP_CLASS);
             let i;
             for(i = 0; i < $groups.length; i++) {
-                this._applyLabelsWidth($groups.eq(i), excludeTabbed);
+                this._applyLabelsWidth($groups.eq(i), excludeTabbed, undefined, undefined, labelMarkOptions);
             }
         }
     },
 
-    _alignRootSimpleItems: function($container, colCount, excludeTabbed) {
-        const $rootSimpleItems = $container.find(`.${ROOT_SIMPLE_ITEM_CLASS}`);
-        for(let colIndex = 0; colIndex < colCount; colIndex++) {
-            this._applyLabelsWidthByCol($rootSimpleItems, colIndex, excludeTabbed);
-        }
-    },
-
-    _applyLabelsWidthWithNestedGroups: function($container, colCount, excludeTabbed) {
+    _applyLabelsWidthWithNestedGroups: function($container, colCount, excludeTabbed, labelMarkOptions) {
         const applyLabelsOptions = { excludeTabbed: excludeTabbed };
         let colIndex;
         let groupsColIndex;
@@ -386,14 +198,14 @@ const Form = Widget.inherit({
 
         for(colIndex = 0; colIndex < colCount; colIndex++) {
             $groupsByCol = this._getGroupElementsInColumn($container, colIndex);
-            this._applyLabelsWidthByCol($groupsByCol, 0, applyLabelsOptions);
+            this._applyLabelsWidthByCol($groupsByCol, 0, applyLabelsOptions, labelMarkOptions);
 
             for(groupsColIndex = 0; groupsColIndex < this._groupsColCount.length; groupsColIndex++) {
                 $groupsByCol = this._getGroupElementsInColumn($container, colIndex, this._groupsColCount[groupsColIndex]);
                 const groupColCount = this._getGroupColCount($groupsByCol);
 
                 for(groupColIndex = 1; groupColIndex < groupColCount; groupColIndex++) {
-                    this._applyLabelsWidthByCol($groupsByCol, groupColIndex, applyLabelsOptions);
+                    this._applyLabelsWidthByCol($groupsByCol, groupColIndex, applyLabelsOptions, labelMarkOptions);
                 }
             }
         }
@@ -405,20 +217,21 @@ const Form = Widget.inherit({
 
     _alignLabelsInColumn: function({ layoutManager, inOneColumn, $container, excludeTabbed, items }) {
         if(!hasWindow() || this._labelLocation() === 'top') {
+            // TODO: label location can be changed to 'left/right' for some labels
+            // but this condition disables alignment for such items
             return;
         }
 
-        this._createHiddenElement(layoutManager);
+        const labelMarkOptions = convertToLabelMarkOptions(layoutManager._getMarkOptions());
         if(inOneColumn) {
-            this._applyLabelsWidth($container, excludeTabbed, true);
+            this._applyLabelsWidth($container, excludeTabbed, true, undefined, labelMarkOptions);
         } else {
             if(this._checkGrouping(items)) {
-                this._applyLabelsWidthWithGroups($container, layoutManager._getColCount(), excludeTabbed);
+                this._applyLabelsWidthWithGroups($container, layoutManager._getColCount(), excludeTabbed, labelMarkOptions);
             } else {
-                this._applyLabelsWidth($container, excludeTabbed, false, layoutManager._getColCount());
+                this._applyLabelsWidth($container, excludeTabbed, false, layoutManager._getColCount(), labelMarkOptions);
             }
         }
-        this._removeHiddenElement();
     },
 
     _prepareFormData: function() {
@@ -427,11 +240,18 @@ const Form = Widget.inherit({
         }
     },
 
+    _setStylingModeClass: function() {
+        if(this.option('stylingMode') === 'underlined') {
+            this.$element().addClass(FORM_UNDERLINED_CLASS);
+        }
+    },
+
     _initMarkup: function() {
         ValidationEngine.addGroup(this._getValidationGroup());
         this._clearCachedInstances();
         this._prepareFormData();
         this.$element().addClass(FORM_CLASS);
+        this._setStylingModeClass();
 
         this.callBase();
 
@@ -445,6 +265,25 @@ const Form = Widget.inherit({
         this._renderValidationSummary();
 
         this._lastMarkupScreenFactor = this._targetScreenFactor || this._getCurrentScreenFactor();
+
+        this._attachResizeObserverSubscription();
+    },
+
+    _attachResizeObserverSubscription: function() {
+        if(hasWindow()) {
+            const formRootElement = this.$element().get(0);
+
+            resizeObserverSingleton.unobserve(formRootElement);
+            resizeObserverSingleton.observe(formRootElement, () => { this._resizeHandler(); });
+        }
+    },
+
+    _resizeHandler: function() {
+        if(this._cachedLayoutManagers.length) {
+            each(this._cachedLayoutManagers, (_, layoutManager) => {
+                layoutManager.option('onLayoutChanged')?.(layoutManager.isSingleColumnMode());
+            });
+        }
     },
 
     _getCurrentScreenFactor: function() {
@@ -464,13 +303,20 @@ const Form = Widget.inherit({
             items: this.option('items'),
             inOneColumn
         });
+
+        triggerResizeEvent(this.$element().find(`.${TOOLBAR_CLASS}`));
     },
 
     _clean: function() {
+        this._clearValidationSummary();
+
         this.callBase();
+
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
         this._lastMarkupScreenFactor = undefined;
+
+        resizeObserverSingleton.unobserve(this.$element().get(0));
     },
 
     _renderScrollable: function() {
@@ -485,22 +331,24 @@ const Form = Widget.inherit({
     },
 
     _getContent: function() {
-        return this.option('scrollingEnabled') ? this._scrollable.$content() : this.$element();
+        return this.option('scrollingEnabled') ? $(this._scrollable.content()) : this.$element();
+    },
+
+    _clearValidationSummary: function() {
+        this._$validationSummary?.remove();
+        this._$validationSummary = undefined;
+        this._validationSummary = undefined;
     },
 
     _renderValidationSummary: function() {
-        const $validationSummary = this.$element().find('.' + FORM_VALIDATION_SUMMARY);
-
-        if($validationSummary.length > 0) {
-            $validationSummary.remove();
-        }
+        this._clearValidationSummary();
 
         if(this.option('showValidationSummary')) {
-            const $validationSummary = $('<div>')
+            this._$validationSummary = $('<div>')
                 .addClass(FORM_VALIDATION_SUMMARY)
                 .appendTo(this._getContent());
 
-            this._validationSummary = $validationSummary.dxValidationSummary({
+            this._validationSummary = this._$validationSummary.dxValidationSummary({
                 validationGroup: this._getValidationGroup()
             }).dxValidationSummary('instance');
         }
@@ -512,27 +360,29 @@ const Form = Widget.inherit({
             for(let i = 0; i < items.length; i++) {
                 let item = items[i];
                 const path = concatPaths(currentPath, createItemPathByIndex(i, isTabs));
-                const guid = this._itemsRunTimeInfo.add({ item, itemIndex: i, path });
+                const itemRunTimeInfo = { item, itemIndex: i, path };
+                const guid = this._itemsRunTimeInfo.add(itemRunTimeInfo);
 
                 if(isString(item)) {
                     item = { dataField: item };
                 }
 
                 if(isObject(item)) {
-                    const itemCopy = extend({}, item);
-                    itemCopy.guid = guid;
-                    this._tryPrepareGroupItem(itemCopy);
-                    this._tryPrepareTabbedItem(itemCopy, path);
-                    this._tryPrepareItemTemplate(itemCopy);
+                    const preparedItem = { ...item };
+                    itemRunTimeInfo.preparedItem = preparedItem;
+                    preparedItem.guid = guid;
+                    this._tryPrepareGroupItem(preparedItem);
+                    this._tryPrepareTabbedItem(preparedItem, path);
+                    this._tryPrepareItemTemplate(preparedItem);
 
                     if(parentIsTabbedItem) {
-                        itemCopy.cssItemClass = FIELD_ITEM_TAB_CLASS;
+                        preparedItem.cssItemClass = FIELD_ITEM_TAB_CLASS;
                     }
 
-                    if(itemCopy.items) {
-                        itemCopy.items = this._prepareItems(itemCopy.items, parentIsTabbedItem, path);
+                    if(preparedItem.items) {
+                        preparedItem.items = this._prepareItems(preparedItem.items, parentIsTabbedItem, path);
                     }
-                    result.push(itemCopy);
+                    result.push(preparedItem);
                 } else {
                     result.push(item);
                 }
@@ -546,11 +396,14 @@ const Form = Widget.inherit({
         if(item.itemType === 'group') {
             item.alignItemLabels = ensureDefined(item.alignItemLabels, true);
 
-            if(item.template) {
-                item.groupContentTemplate = this._getTemplate(item.template);
-            }
+            item._prepareGroupItemTemplate = (itemTemplate) => {
+                if(item.template) {
+                    item.groupContentTemplate = this._getTemplate(itemTemplate);
+                }
 
-            item.template = this._itemGroupTemplate.bind(this, item);
+                item.template = this._itemGroupTemplate.bind(this, item);
+            };
+            item._prepareGroupItemTemplate(item.template);
         }
     },
 
@@ -583,13 +436,16 @@ const Form = Widget.inherit({
         let items = that.option('items');
         const $content = that._getContent();
 
+        // TODO: Introduce this.preparedItems and use it for partial rerender???
+        // Compare new preparedItems with old preparedItems to detect what should be rerendered?
         items = that._prepareItems(items);
 
         //#DEBUG
         that._testResultItems = items;
         //#ENDDEBUG
 
-        that._rootLayoutManager = that._renderLayoutManager(items, $content, {
+        that._rootLayoutManager = that._renderLayoutManager($content, this._createLayoutManagerOptions(items, {
+            isRoot: true,
             colCount: that.option('colCount'),
             alignItemLabels: that.option('alignItemLabels'),
             screenByWidth: this.option('screenByWidth'),
@@ -600,7 +456,7 @@ const Form = Widget.inherit({
             onContentReady: function(e) {
                 that._alignLabels(e.component, e.component.isSingleColumnMode());
             }
-        });
+        }));
     },
 
     _tryGetItemsForTemplate: function(item) {
@@ -611,11 +467,15 @@ const Form = Widget.inherit({
         const $tabPanel = $('<div>').appendTo($container);
         const tabPanelOptions = extend({}, item.tabPanelOptions, {
             dataSource: item.tabs,
-            onItemRendered: args => triggerShownEvent(args.itemElement),
+            onItemRendered: args => {
+                item.tabPanelOptions?.onItemRendered?.(args);
+
+                triggerShownEvent(args.itemElement);
+            },
             itemTemplate: (itemData, e, container) => {
                 const $container = $(container);
                 const alignItemLabels = ensureDefined(itemData.alignItemLabels, true);
-                const layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(itemData), $container, {
+                const layoutManager = this._renderLayoutManager($container, this._createLayoutManagerOptions(this._tryGetItemsForTemplate(itemData), {
                     colCount: itemData.colCount,
                     alignItemLabels: alignItemLabels,
                     screenByWidth: this.option('screenByWidth'),
@@ -629,7 +489,7 @@ const Form = Widget.inherit({
                             inOneColumn
                         });
                     }
-                });
+                }));
 
                 if(this._itemsRunTimeInfo) {
                     this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(itemData.guid, { layoutManager });
@@ -662,24 +522,29 @@ const Form = Widget.inherit({
             }
         });
 
-        tryUpdateTabPanelInstance([{ guid: item.guid }, ...item.tabs], tabPanel);
+        tryUpdateTabPanelInstance([{ guid: item.guid }, ...(item.tabs ?? [])], tabPanel);
     },
 
-    _itemGroupTemplate: function(item, e, $container) {
+    _itemGroupTemplate: function(item, options, $container) {
+        const id = options.editorOptions.inputAttr.id;
         const $group = $('<div>')
             .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, isDefined(item.caption) && item.caption.length)
             .addClass(FORM_GROUP_CLASS)
             .appendTo($container);
 
-        $($container).parent().addClass(FIELD_ITEM_CONTENT_HAS_GROUP_CLASS);
+        const groupAria = {
+            role: 'group',
+            'labelledby': id,
+        };
+        this.setAria(groupAria, $group);
 
-        let colCount;
-        let layoutManager;
+        $($container).parent().addClass(FIELD_ITEM_CONTENT_HAS_GROUP_CLASS);
 
         if(item.caption) {
             $('<span>')
                 .addClass(FORM_GROUP_CAPTION_CLASS)
                 .text(item.caption)
+                .attr('id', id)
                 .appendTo($group);
         }
 
@@ -688,26 +553,30 @@ const Form = Widget.inherit({
             .appendTo($group);
 
         if(item.groupContentTemplate) {
-            const data = {
-                formData: this.option('formData'),
-                component: this
+            item._renderGroupContentTemplate = () => {
+                $groupContent.empty();
+                const data = {
+                    formData: this.option('formData'),
+                    component: this
+                };
+                item.groupContentTemplate.render({
+                    model: data,
+                    container: getPublicElement($groupContent)
+                });
             };
-            item.groupContentTemplate.render({
-                model: data,
-                container: getPublicElement($groupContent)
-            });
+            item._renderGroupContentTemplate();
         } else {
-            layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(item), $groupContent, {
+            const layoutManager = this._renderLayoutManager($groupContent, this._createLayoutManagerOptions(this._tryGetItemsForTemplate(item), {
                 colCount: item.colCount,
                 colCountByScreen: item.colCountByScreen,
                 alignItemLabels: item.alignItemLabels,
-                cssItemClass: item.cssItemClass
-            });
+                cssItemClass: item.cssItemClass,
+            }));
 
             this._itemsRunTimeInfo && this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(item.guid, { layoutManager });
 
-            colCount = layoutManager._getColCount();
-            if(inArray(colCount, this._groupsColCount) === -1) {
+            const colCount = layoutManager._getColCount();
+            if(!this._groupsColCount.includes(colCount)) {
                 this._groupsColCount.push(colCount);
             }
             $group.addClass(GROUP_COL_COUNT_CLASS + colCount);
@@ -715,71 +584,62 @@ const Form = Widget.inherit({
         }
     },
 
-    _renderLayoutManager: function(items, $rootElement, options) {
-        const $element = $('<div>');
-        const that = this;
-        const config = that._getLayoutManagerConfig(items, options);
-        const baseColCountByScreen = {
-            lg: options.colCount,
-            md: options.colCount,
-            sm: options.colCount,
-            xs: 1
-        };
-
-        that._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, options.colCountByScreen) });
-        $element.appendTo($rootElement);
-
-        const instance = that._createComponent($element, 'dxLayoutManager', config);
-        instance.on('autoColCountChanged', function() { that._refresh(); });
-        that._cachedLayoutManagers.push(instance);
-        return instance;
-    },
-
-    _getValidationGroup: function() {
-        return this.option('validationGroup') || this;
-    },
-
-    _getLayoutManagerConfig: function(items, options) {
-        const baseConfig = {
+    _createLayoutManagerOptions: function(items, extendedLayoutManagerOptions) {
+        return convertToLayoutManagerOptions({
             form: this,
+            formOptions: this.option(),
+            $formElement: this.$element(),
+            items,
             validationGroup: this._getValidationGroup(),
-            showRequiredMark: this.option('showRequiredMark'),
-            showOptionalMark: this.option('showOptionalMark'),
-            requiredMark: this.option('requiredMark'),
-            optionalMark: this.option('optionalMark'),
-            requiredMessage: this.option('requiredMessage'),
-            screenByWidth: this.option('screenByWidth'),
-            layoutData: this.option('formData'),
-            labelLocation: this.option('labelLocation'),
-            customizeItem: this.option('customizeItem'),
-            minColWidth: this.option('minColWidth'),
-            showColonAfterLabel: this.option('showColonAfterLabel'),
-            onEditorEnterKey: this.option('onEditorEnterKey'),
+            extendedLayoutManagerOptions,
             onFieldDataChanged: args => {
                 if(!this._isDataUpdating) {
                     this._triggerOnFieldDataChanged(args);
                 }
             },
-            validationBoundary: this.option('scrollingEnabled') ? this.$element() : undefined
-        };
-
-        return extend(baseConfig, {
-            items: items,
             onContentReady: args => {
                 this._itemsRunTimeInfo.addItemsOrExtendFrom(args.component._itemsRunTimeInfo);
-                options.onContentReady && options.onContentReady(args);
+                extendedLayoutManagerOptions.onContentReady && extendedLayoutManagerOptions.onContentReady(args);
             },
             onDisposing: ({ component }) => {
                 const nestedItemsRunTimeInfo = component.getItemsRunTimeInfo();
                 this._itemsRunTimeInfo.removeItemsByItems(nestedItemsRunTimeInfo);
             },
-            colCount: options.colCount,
-            alignItemLabels: options.alignItemLabels,
-            cssItemClass: options.cssItemClass,
-            colCountByScreen: options.colCountByScreen,
-            onLayoutChanged: options.onLayoutChanged,
-            width: options.width
+            onFieldItemRendered: () => {
+                this._validationSummary?.refreshValidationGroup();
+            }
         });
+    },
+
+    _renderLayoutManager: function($parent, layoutManagerOptions) {
+        const baseColCountByScreen = {
+            lg: layoutManagerOptions.colCount,
+            md: layoutManagerOptions.colCount,
+            sm: layoutManagerOptions.colCount,
+            xs: 1
+        };
+
+        this._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, layoutManagerOptions.colCountByScreen) });
+
+        const $element = $('<div>');
+        $element.appendTo($parent);
+        const instance = this._createComponent($element, 'dxLayoutManager', layoutManagerOptions);
+        instance.on(
+            'autoColCountChanged',
+            () => {
+                this._clearAutoColCountChangedTimeout();
+                this.autoColCountChangedTimeoutId = setTimeout(
+                    () => (!this._disposed) && this._refresh(),
+                    0
+                );
+            }
+        );
+        this._cachedLayoutManagers.push(instance);
+        return instance;
+    },
+
+    _getValidationGroup: function() {
+        return this.option('validationGroup') || this;
     },
 
     _createComponent: function($element, type, config) {
@@ -824,13 +684,25 @@ const Form = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        const rootNameOfComplexOption = this._getRootLevelOfExpectedComplexOption(args.fullName, ['formData', 'items']);
+        const splitFullName = args.fullName.split('.');
 
-        if(rootNameOfComplexOption) {
-            this._customHandlerOfComplexOption(args, rootNameOfComplexOption);
+        // search() is used because the string can be ['items', ' items ', ' items .', 'items[0]', 'items[ 10 ] .', ...]
+        if((splitFullName.length > 1)
+            && (splitFullName[0].search('items') !== -1)
+            && this._itemsOptionChangedHandler(args)) {
             return;
         }
 
+        if((splitFullName.length > 1)
+            && (splitFullName[0].search('formData') !== -1)
+            && this._formDataOptionChangedHandler(args)) {
+            return;
+        }
+
+        this._defaultOptionChangedHandler(args);
+    },
+
+    _defaultOptionChangedHandler: function(args) {
         switch(args.name) {
             case 'formData':
                 if(!this.option('items')) {
@@ -839,11 +711,13 @@ const Form = Widget.inherit({
                     this._resetValues();
                 }
                 break;
+            case 'onFieldDataChanged':
+                break;
             case 'items':
             case 'colCount':
-            case 'onFieldDataChanged':
             case 'onEditorEnterKey':
             case 'labelLocation':
+            case 'labelMode':
             case 'alignItemLabels':
             case 'showColonAfterLabel':
             case 'customizeItem':
@@ -876,13 +750,6 @@ const Form = Widget.inherit({
                 this._rootLayoutManager.option(args.name, args.value);
                 this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
                 break;
-            case 'visible':
-                this.callBase(args);
-
-                if(args.value) {
-                    triggerShownEvent(this.$element());
-                }
-                break;
             case 'validationGroup':
                 ValidationEngine.removeGroup(args.previousValue || this);
                 this._invalidate();
@@ -892,28 +759,44 @@ const Form = Widget.inherit({
         }
     },
 
-    _getRootLevelOfExpectedComplexOption: function(fullOptionName, expectedRootNames) {
-        const splitFullName = fullOptionName.split('.');
-        let result;
+    _itemsOptionChangedHandler: function(args) {
+        const nameParts = args.fullName.split('.');
+        const value = args.value;
+        const itemPath = this._getItemPath(nameParts);
+        const item = this.option(itemPath);
+        const optionNameWithoutPath = args.fullName.replace(itemPath + '.', '');
+        const simpleOptionName = optionNameWithoutPath.split('.')[0].replace(/\[\d+]/, '');
+        const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue, itemPath);
 
-        if(splitFullName.length > 1) {
-            let i;
-            const rootOptionName = splitFullName[0];
+        let result = this._tryExecuteItemOptionAction(itemAction) || this._tryChangeLayoutManagerItemOption(args.fullName, value);
 
-            for(i = 0; i < expectedRootNames.length; i++) {
-                if(rootOptionName.search(expectedRootNames[i]) !== -1) {
-                    result = expectedRootNames[i];
-                }
-            }
+        if(!result && item) {
+            this._changeItemOption(item, optionNameWithoutPath, value);
+            const items = this._generateItemsFromData(this.option('items'));
+            this.option('items', items);
+            result = true;
         }
 
         return result;
     },
 
+    _formDataOptionChangedHandler: function(args) {
+        const nameParts = args.fullName.split('.');
+        const value = args.value;
+        const dataField = nameParts.slice(1).join('.');
+        const editor = this.getEditor(dataField);
+        if(editor) {
+            editor.option('value', value);
+        } else {
+            this._triggerOnFieldDataChanged({ dataField, value });
+        }
+        return true;
+    },
+
     _tryCreateItemOptionAction: function(optionName, item, value, previousValue, itemPath) {
         if(optionName === 'tabs') {
             this._itemsRunTimeInfo.removeItemsByPathStartWith(`${itemPath}.tabs`);
-            value = this._prepareItems(value, true, itemPath, true);
+            value = this._prepareItems(value, true, itemPath, true); // preprocess user value as in _tryPrepareTabbedItem
         }
         return tryCreateItemOptionAction(optionName, {
             item,
@@ -932,7 +815,7 @@ const Form = Widget.inherit({
         if(ITEM_OPTIONS_FOR_VALIDATION_UPDATING.indexOf(optionName) > -1) {
             ValidationEngine.addGroup(this._getValidationGroup());
             if(this.option('showValidationSummary')) {
-                this._validationSummary && this._validationSummary._initGroupRegistration();
+                this._validationSummary?.refreshValidationGroup();
             }
         }
     },
@@ -940,7 +823,7 @@ const Form = Widget.inherit({
     _setLayoutManagerItemOption(layoutManager, optionName, value, path) {
         if(this._updateLockCount > 0) {
             !layoutManager._updateLockCount && layoutManager.beginUpdate();
-            const key = this._itemsRunTimeInfo.getKeyByPath(path);
+            const key = this._itemsRunTimeInfo.findKeyByPath(path);
             this.postponedOperations.add(key, () => {
                 !layoutManager._disposed && layoutManager.endUpdate();
                 return new Deferred().resolve();
@@ -950,13 +833,15 @@ const Form = Widget.inherit({
             e.component.off('contentReady', contentReadyHandler);
             if(isFullPathContainsTabs(path)) {
                 const tabPath = tryGetTabPath(path);
-                const tabLayoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(tabPath);
-                this._alignLabelsInColumn({
-                    items: tabLayoutManager.option('items'),
-                    layoutManager: tabLayoutManager,
-                    $container: tabLayoutManager.$element(),
-                    inOneColumn: tabLayoutManager.isSingleColumnMode()
-                });
+                const tabLayoutManager = this._itemsRunTimeInfo.findGroupOrTabLayoutManagerByPath(tabPath);
+                if(tabLayoutManager) {
+                    this._alignLabelsInColumn({
+                        items: tabLayoutManager.option('items'),
+                        layoutManager: tabLayoutManager,
+                        $container: tabLayoutManager.$element(),
+                        inOneColumn: tabLayoutManager.isSingleColumnMode()
+                    });
+                }
             } else {
                 this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
             }
@@ -972,7 +857,7 @@ const Form = Widget.inherit({
 
         if(optionName === 'items' && nameParts.length > 1) {
             const itemPath = this._getItemPath(nameParts);
-            const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
+            const layoutManager = this._itemsRunTimeInfo.findGroupOrTabLayoutManagerByPath(itemPath);
 
             if(layoutManager) {
                 this._itemsRunTimeInfo.removeItemsByItems(layoutManager.getItemsRunTimeInfo());
@@ -983,7 +868,7 @@ const Form = Widget.inherit({
         } else if(nameParts.length > 2) {
             const endPartIndex = nameParts.length - 2;
             const itemPath = this._getItemPath(nameParts.slice(0, endPartIndex));
-            const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
+            const layoutManager = this._itemsRunTimeInfo.findGroupOrTabLayoutManagerByPath(itemPath);
 
             if(layoutManager) {
                 const fullOptionName = getFullOptionName(nameParts[endPartIndex], optionName);
@@ -1021,37 +906,6 @@ const Form = Widget.inherit({
         });
         this.endUpdate();
         return result;
-    },
-
-    _customHandlerOfComplexOption: function(args, rootOptionName) {
-        const nameParts = args.fullName.split('.');
-        const value = args.value;
-
-        if(rootOptionName === 'items') {
-            const itemPath = this._getItemPath(nameParts);
-            const item = this.option(itemPath);
-            const optionNameWithoutPath = args.fullName.replace(itemPath + '.', '');
-            const simpleOptionName = optionNameWithoutPath.split('.')[0].replace(/\[\d+]/, '');
-            const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue, itemPath);
-
-            if(!this._tryExecuteItemOptionAction(itemAction) && !this._tryChangeLayoutManagerItemOption(args.fullName, value)) {
-                if(item) {
-                    this._changeItemOption(item, optionNameWithoutPath, value);
-                    const items = this._generateItemsFromData(this.option('items'));
-                    this.option('items', items);
-                }
-            }
-        }
-
-        if(rootOptionName === 'formData') {
-            const dataField = nameParts.slice(1).join('.');
-            const editor = this.getEditor(dataField);
-            if(editor) {
-                editor.option('value', value);
-            } else {
-                this._triggerOnFieldDataChanged({ dataField, value });
-            }
-        }
     },
 
     _getItemPath: function(nameParts) {
@@ -1148,7 +1002,7 @@ const Form = Widget.inherit({
                     item = that._getItemByField({ fieldName: fieldName, fieldPath: fieldPath }, item[subItemsField]);
                 }
 
-                if(isExpectedItem(item, fieldName)) {
+                if(isEqualToDataFieldOrNameOrTitleOrCaption(item, fieldName)) {
                     resultItem = item;
                     return false;
                 }
@@ -1283,7 +1137,7 @@ const Form = Widget.inherit({
 
     _resetValues: function() {
         this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
-            if(isDefined(itemRunTimeInfo.widgetInstance) && itemRunTimeInfo.widgetInstance instanceof Editor) {
+            if(isDefined(itemRunTimeInfo.widgetInstance) && Editor.isEditor(itemRunTimeInfo.widgetInstance)) {
                 itemRunTimeInfo.widgetInstance.reset();
                 itemRunTimeInfo.widgetInstance.option('isValid', true);
             }
@@ -1318,13 +1172,19 @@ const Form = Widget.inherit({
         return this.$element().find('.' + FIELD_ITEM_CONTENT_CLASS + ' [tabindex]').first();
     },
 
-    _visibilityChanged: function(visible) {
-        if(visible && browser.msie) {
-            this._refresh();
+    _visibilityChanged: function() {
+        this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
+    },
+
+    _clearAutoColCountChangedTimeout: function() {
+        if(this.autoColCountChangedTimeoutId) {
+            clearTimeout(this.autoColCountChangedTimeoutId);
+            this.autoColCountChangedTimeoutId = undefined;
         }
     },
 
     _dispose: function() {
+        this._clearAutoColCountChangedTimeout();
         ValidationEngine.removeGroup(this._getValidationGroup());
         this.callBase();
     },

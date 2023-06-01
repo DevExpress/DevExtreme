@@ -9,22 +9,22 @@ $generic-switch-font-size: null !default;
 $generic-switch-on-off-adding-padding: null !default;
 $generic-switch-height: null !default;
 
-$generic-switch-handle-width: 14px;
+$generic-switch-handle-width: 14px !default;
 
 @if $size == "default" {
-  $generic-switch-width: 44px;
-  $generic-switch-handle-offset: 2px;
-  $generic-switch-container-adjustment: 6px;
-  $generic-switch-font-size: 9px;
-  $generic-switch-on-off-adding-padding: 2px;
-  $generic-switch-height: 24px;
+  $generic-switch-width: 44px !default;
+  $generic-switch-handle-offset: 2px !default;
+  $generic-switch-container-adjustment: 6px !default;
+  $generic-switch-font-size: 9px !default;
+  $generic-switch-on-off-adding-padding: 2px !default;
+  $generic-switch-height: 24px !default;
 }
 
 @else if $size == "compact" {
-  $generic-switch-width: 36px;
-  $generic-switch-handle-offset: 1px;
-  $generic-switch-container-adjustment: 4px;
-  $generic-switch-font-size: 8px;
-  $generic-switch-on-off-adding-padding: 0;
-  $generic-switch-height: 18px;
+  $generic-switch-width: 36px !default;
+  $generic-switch-handle-offset: 1px !default;
+  $generic-switch-container-adjustment: 4px !default;
+  $generic-switch-font-size: 8px !default;
+  $generic-switch-on-off-adding-padding: 0 !default;
+  $generic-switch-height: 18px !default;
 }

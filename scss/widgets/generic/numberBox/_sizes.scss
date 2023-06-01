@@ -6,16 +6,16 @@ $generic-numberbox-spin-container-width: null !default;
 $generic-numberbox-touch-friendly-spin-container-width: null !default;
 $generic-numberbox-clear-button-area-width: null !default;
 
-$generic-numberbox-spin-padding: 1px;
+$generic-numberbox-spin-padding: 1px !default;
 
 @if $size == "default" {
-  $generic-numberbox-spin-container-width: 34px;
-  $generic-numberbox-touch-friendly-spin-container-width: 74px;
-  $generic-numberbox-clear-button-area-width: 32px;
+  $generic-numberbox-spin-container-width: 34px !default;
+  $generic-numberbox-touch-friendly-spin-container-width: 74px !default;
+  $generic-numberbox-clear-button-area-width: 32px !default;
 }
 
 @else if $size == "compact" {
-  $generic-numberbox-spin-container-width: 20px;
-  $generic-numberbox-touch-friendly-spin-container-width: 60px;
-  $generic-numberbox-clear-button-area-width: 20px;
+  $generic-numberbox-spin-container-width: 20px !default;
+  $generic-numberbox-touch-friendly-spin-container-width: 60px !default;
+  $generic-numberbox-clear-button-area-width: 20px !default;
 }

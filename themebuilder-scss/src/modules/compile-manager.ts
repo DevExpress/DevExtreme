@@ -1,8 +1,11 @@
+import * as sass from 'sass-embedded';
 import Compiler from './compiler';
 import WidgetsHandler from './widgets-handler';
-import PreCompiler from './pre-compiler';
+import { createSassForSwatch } from './pre-compiler';
 import resolveBundle from './bundle-resolver';
-import PostCompiler from './post-compiler';
+import {
+  fixSwatchCss, addBasePath, autoPrefix, cleanCss, removeExternalResources, addInfoHeader,
+} from './post-compiler';
 import BootstrapExtractor from './bootstrap-extractor';
 // eslint-disable-next-line import/extensions
 import { version, dependencies } from '../data/metadata/dx-theme-builder-metadata';
@@ -28,18 +31,23 @@ export default class CompileManager {
         modifiedVariables = await bootstrapExtractor.extract();
       }
 
-      const compileData = await this.compiler.compile(modifiedVariables, bundleOptions);
+      const compileData = await this.compiler.compile(
+        bundleOptions.file,
+        modifiedVariables,
+        bundleOptions.options,
+      );
       let css = compileData.result.css.toString();
       let swatchSelector: string = null;
 
       if (config.makeSwatch) {
-        const swatchSass = PreCompiler.createSassForSwatch(config.outColorScheme, css);
-        const swatchResult = await this.compiler.compile([], {
-          data: swatchSass.sass,
-          ...bundleOptions,
-        });
+        const swatchSass = createSassForSwatch(config.outColorScheme, css);
+        const swatchResult = await this.compiler.compileString(
+          swatchSass.sass,
+          [],
+          bundleOptions.options,
+        );
 
-        css = PostCompiler.fixSwatchCss(
+        css = fixSwatchCss(
           swatchResult.result.css,
           swatchSass.selector,
           config.colorScheme,
@@ -48,16 +56,20 @@ export default class CompileManager {
       }
 
       if (config.assetsBasePath) {
-        css = PostCompiler.addBasePath(css, config.assetsBasePath);
+        css = addBasePath(css, config.assetsBasePath);
       }
 
-      css = await PostCompiler.autoPrefix(css);
+      css = await autoPrefix(css);
 
       if (!config.noClean) {
-        css = await PostCompiler.cleanCss(css);
+        css = await cleanCss(css);
       }
 
-      css = PostCompiler.addInfoHeader(css, version, compileData.result.stats === null);
+      if (config.removeExternalResources) {
+        css = removeExternalResources(css);
+      }
+
+      css = addInfoHeader(css, version);
 
       return {
         compiledMetadata: compileData.changedVariables,
@@ -68,7 +80,10 @@ export default class CompileManager {
         version,
       };
     } catch (e) {
-      throw new Error(`Compilation failed. bundle: ${bundleOptions}, file: ${e.file} line: ${e.line} ${e.message}`);
+      const { span, message } = e as sass.Exception;
+      const { url, start } = span;
+      const { line, column } = start;
+      throw new Error(`Compilation failed.\nbundle: ${bundleOptions.file},\nfile: ${url}:${line}:${column},\n${message}`);
     }
   }
 }

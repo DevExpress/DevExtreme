@@ -14,6 +14,10 @@ const bracketsToDots = function(expr) {
         .replace(/\]/g, '');
 };
 
+export const getPathParts = function(name) {
+    return bracketsToDots(name).split('.');
+};
+
 const readPropValue = function(obj, propName, options) {
     options = options || { };
     if(propName === 'this') {
@@ -55,9 +59,7 @@ export const compileGetter = function(expr) {
     }
 
     if(typeof expr === 'string') {
-        expr = bracketsToDots(expr);
-
-        const path = expr.split('.');
+        const path = getPathParts(expr);
 
         return function(obj, options) {
             options = prepareOptions(options);
@@ -148,7 +150,7 @@ const ensurePropValueDefined = function(obj, propName, value, options) {
 };
 
 export const compileSetter = function(expr) {
-    expr = bracketsToDots(expr || 'this').split('.');
+    expr = getPathParts(expr || 'this');
     const lastLevelIndex = expr.length - 1;
 
     return function(obj, value, options) {
@@ -179,7 +181,7 @@ export const compileSetter = function(expr) {
     };
 };
 
-export const toComparable = function(value, caseSensitive) {
+export const toComparable = function(value, caseSensitive, options = {}) {
     if(value instanceof Date) {
         return value.getTime();
     }
@@ -189,7 +191,13 @@ export const toComparable = function(value, caseSensitive) {
     }
 
     if(!caseSensitive && typeof value === 'string') {
-        return value.toLowerCase();
+        if(options?.collatorOptions?.sensitivity === 'base') {
+            const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
+
+            value = value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
+        }
+
+        return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
     }
 
     return value;

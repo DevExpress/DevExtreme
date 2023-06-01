@@ -1,632 +1,754 @@
-import '../jquery_augmentation';
-
+import { DataSourceLike } from '../data/data_source';
 import {
-    dxElement
+    DxElement,
 } from '../core/element';
 
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+import {
+    DxPromise,
+} from '../core/utils/deferred';
 
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    CollectionWidgetItem
+    CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
 
 import HierarchicalCollectionWidget, {
-    HierarchicalCollectionWidgetOptions
+    HierarchicalCollectionWidgetOptions,
 } from './hierarchical_collection/ui.hierarchical_collection_widget';
 
 import {
-    SearchBoxMixinOptions
+    SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
-export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {
+import {
+    DataStructure,
+    SingleOrMultiple,
+    ScrollDirection,
+} from '../common';
+
+import dxScrollable from './scroll_view/ui.scrollable';
+
+interface ItemInfo<TKey = any> {
+    readonly itemData?: Item;
+    readonly itemElement?: DxElement;
+    readonly itemIndex?: number;
+    readonly node?: Node<TKey>;
+}
+
+export {
+    DataStructure,
+    SingleOrMultiple,
+    ScrollDirection,
+};
+
+/** @public */
+export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
+/** @public */
+export type TreeViewExpandEvent = 'dblclick' | 'click';
+
+/** @public */
+export type ContentReadyEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
+
+/** @public */
+export type DisposingEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
+
+/** @public */
+export type InitializedEvent<TKey = any> = InitializedEventInfo<dxTreeView<TKey>>;
+
+/** @public */
+export type ItemClickEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TKey>;
+
+/** @public */
+export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent> & ItemInfo<TKey>;
+
+/** @public */
+export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
+
+/** @public */
+export type ItemExpandedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent> & ItemInfo<TKey>;
+
+/** @public */
+export type ItemHoldEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
+
+/** @public */
+export type ItemRenderedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+
+/** @public */
+export type ItemSelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+
+/** @public */
+export type OptionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectAllValueChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & {
+    readonly value?: boolean | undefined;
+};
+
+/** @public */
+export type SelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ * @docid
+ */
+export interface dxTreeViewOptions<TKey = any>
+    extends Omit<HierarchicalCollectionWidgetOptions<dxTreeView<TKey>, dxTreeViewItem, TKey>, 'dataSource'>, SearchBoxMixinOptions {
     /**
-     * @docid dxTreeViewOptions.animationEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationEnabled?: boolean;
     /**
-     * @docid dxTreeViewOptions.createChildren
-     * @type function
+     * @docid
      * @type_function_param1 parentNode:dxTreeViewNode
      * @type_function_return Promise<any>|Array<Object>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    createChildren?: ((parentNode: dxTreeViewNode) => Promise<any> | JQueryPromise<any> | Array<any>);
+    createChildren?: ((parentNode: Node<TKey>) => PromiseLike<any> | Array<any>);
     /**
-     * @docid  dxTreeViewOptions.dataSource
-     * @type string|Array<dxTreeViewItem>|DataSource|DataSourceOptions
+     * @docid
+     * @type string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions | null
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<dxTreeViewItem> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<Item, TKey> | null;
     /**
-     * @docid dxTreeViewOptions.dataStructure
-     * @type Enums.TreeViewDataStructure
+     * @docid
      * @default 'tree'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataStructure?: 'plain' | 'tree';
+    dataStructure?: DataStructure;
     /**
-     * @docid dxTreeViewOptions.expandAllEnabled
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandAllEnabled?: boolean;
     /**
-     * @docid dxTreeViewOptions.expandEvent
-     * @type Enums.TreeViewExpandEvent
+     * @docid
      * @default "dblclick"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandEvent?: 'dblclick' | 'click';
+    expandEvent?: TreeViewExpandEvent;
     /**
-     * @docid dxTreeViewOptions.expandNodesRecursive
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandNodesRecursive?: boolean;
     /**
-     * @docid dxTreeViewOptions.expandedExpr
-     * @type string|function
+     * @docid
      * @default 'expanded'
      * @hidden false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandedExpr?: string | Function;
     /**
-     * @docid dxTreeViewOptions.hasItemsExpr
-     * @type string|function
+     * @docid
      * @default 'hasItems'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hasItemsExpr?: string | Function;
     /**
-     * @docid dxTreeViewOptions.items
+     * @docid
      * @type Array<dxTreeViewItem>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<dxTreeViewItem>;
+    items?: Array<Item>;
     /**
-     * @docid dxTreeViewOptions.onItemClick
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
+     * @type_function_param1_field component:dxTreeView
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field node:dxTreeViewNode
+
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event, node?: dxTreeViewNode }) => any);
+    onItemClick?: ((e: ItemClickEvent<TKey>) => void);
     /**
-     * @docid dxTreeViewOptions.onItemCollapsed
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 itemIndex:Number
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
+     * @type_function_param1_field component:dxTreeView
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field node:dxTreeViewNode
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemCollapsed?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event, node?: dxTreeViewNode }) => any);
+    onItemCollapsed?: ((e: ItemCollapsedEvent<TKey>) => void);
     /**
-     * @docid dxTreeViewOptions.onItemContextMenu
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field node:dxTreeViewNode
+     * @type_function_param1_field component:dxTreeView
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event, node?: dxTreeViewNode }) => any);
+    onItemContextMenu?: ((e: ItemContextMenuEvent<TKey>) => void);
     /**
-     * @docid dxTreeViewOptions.onItemExpanded
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 itemIndex:Number
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
+     * @type_function_param1_field component:dxTreeView
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field node:dxTreeViewNode
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemExpanded?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event, node?: dxTreeViewNode }) => any);
+    onItemExpanded?: ((e: ItemExpandedEvent<TKey>) => void);
     /**
-     * @docid dxTreeViewOptions.onItemHold
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 node:dxTreeViewNode
+     * @type_function_param1_field component:dxTreeView
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field node:dxTreeViewNode
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event, node?: dxTreeViewNode }) => any);
+    onItemHold?: ((e: ItemHoldEvent<TKey>) => void);
     /**
-     * @docid dxTreeViewOptions.onItemRendered
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 node:dxTreeViewNode
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field node:dxTreeViewNode
+     * @type_function_param1_field component:dxTreeView
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, node?: dxTreeViewNode }) => any);
+    onItemRendered?: ((e: ItemRenderedEvent<TKey>) => void);
     /**
-     * @docid dxTreeViewOptions.onItemSelectionChanged
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 node:dxTreeViewNode
-     * @type_function_param1_field5 itemElement:dxElement
+     * @type_function_param1_field node:dxTreeViewNode
+     * @type_function_param1_field component:dxTreeView
+     * @type_function_param1_field itemData:object
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, node?: dxTreeViewNode, itemElement?: dxElement }) => any);
+    onItemSelectionChanged?: ((e: ItemSelectionChangedEvent<TKey>) => void);
     /**
-     * @docid dxTreeViewOptions.onSelectAllValueChanged
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:boolean
+     * @type_function_param1_field component:dxTreeView
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: dxElement, model?: any, value?: boolean }) => any);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TKey>) => void);
     /**
-     * @docid dxTreeViewOptions.onSelectionChanged
-     * @extends Action
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:dxTreeView
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @override
      */
-    onSelectionChanged?: ((e: { component?: dxTreeView, element?: dxElement, model?: any }) => any);
+    onSelectionChanged?: ((e: SelectionChangedEvent<TKey>) => void);
     /**
-     * @docid dxTreeViewOptions.parentIdExpr
-     * @type string|function
+     * @docid
      * @default 'parentId'
      * @hidden false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     parentIdExpr?: string | Function;
     /**
-     * @docid dxTreeViewOptions.rootValue
-     * @type any
+     * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     rootValue?: any;
     /**
-     * @docid dxTreeViewOptions.scrollDirection
-     * @type Enums.ScrollDirection
+     * @docid
      * @default "vertical"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollDirection?: 'both' | 'horizontal' | 'vertical';
+    scrollDirection?: ScrollDirection;
     /**
-     * @docid dxTreeViewOptions.selectAllText
-     * @type string
+     * @docid
      * @default "Select All"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectAllText?: string;
     /**
-     * @docid dxTreeViewOptions.selectByClick
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectByClick?: boolean;
     /**
-     * @docid dxTreeViewOptions.selectNodesRecursive
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectNodesRecursive?: boolean;
     /**
-     * @docid dxTreeViewOptions.selectionMode
-     * @type Enums.NavSelectionMode
+     * @docid
      * @default "multiple"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: SingleOrMultiple;
     /**
-     * @docid dxTreeViewOptions.showCheckBoxesMode
-     * @type Enums.TreeViewCheckBoxMode
+     * @docid
      * @default 'none'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showCheckBoxesMode?: 'none' | 'normal' | 'selectAll';
+    showCheckBoxesMode?: TreeViewCheckBoxMode;
     /**
-     * @docid dxTreeViewOptions.virtualModeEnabled
-     * @type boolean
+     * @docid
+     * @default null
+     * @public
+     */
+    collapseIcon?: string | null;
+    /**
+     * @docid
+     * @default null
+     * @public
+     */
+    expandIcon?: string | null;
+    /**
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     virtualModeEnabled?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @default false &for(desktop except Mac)
+     * @public
+     */
+    useNativeScrolling?: boolean;
 }
 /**
- * @docid dxTreeView
+ * @docid
  * @inherits HierarchicalCollectionWidget, SearchBoxMixin
- * @module ui/tree_view
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxTreeView extends HierarchicalCollectionWidget {
-    constructor(element: Element, options?: dxTreeViewOptions)
-    constructor(element: JQuery, options?: dxTreeViewOptions)
+export default class dxTreeView<TKey = any>
+    extends HierarchicalCollectionWidget<dxTreeViewOptions<TKey>, dxTreeViewItem, TKey> {
     /**
-     * @docid dxTreeViewMethods.collapseAll
+     * @docid
      * @publicName collapseAll()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     collapseAll(): void;
     /**
-     * @docid dxTreeViewMethods.collapseItem
+     * @docid
      * @publicName collapseItem(itemData)
-     * @param1 itemData:Object
+     * @param1 itemData:dxTreeViewItem
+     * @param1_field items:Array<dxTreeViewItem>
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemData: any): Promise<void> & JQueryPromise<void>;
+    collapseItem(itemData: Item): DxPromise<void>;
     /**
-     * @docid dxTreeViewMethods.collapseItem
+     * @docid
      * @publicName collapseItem(itemElement)
-     * @param1 itemElement:Element
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
+    collapseItem(itemElement: Element): DxPromise<void>;
     /**
-     * @docid dxTreeViewMethods.collapseItem
+     * @docid
      * @publicName collapseItem(key)
-     * @param1 key:any
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(key: any): Promise<void> & JQueryPromise<void>;
+    collapseItem(key: TKey): DxPromise<void>;
     /**
-     * @docid dxTreeViewMethods.expandAll
+     * @docid
      * @publicName expandAll()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandAll(): void;
     /**
-     * @docid dxTreeViewMethods.expandItem
+     * @docid
      * @publicName expandItem(itemData)
-     * @param1 itemData:Object
+     * @param1 itemData:dxTreeViewItem
+     * @param1_field items:Array<dxTreeViewItem>
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemData: any): Promise<void> & JQueryPromise<void>;
+    expandItem(itemData: Item): DxPromise<void>;
     /**
-     * @docid dxTreeViewMethods.expandItem
+     * @docid
      * @publicName expandItem(itemElement)
-     * @param1 itemElement:Element
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
+    expandItem(itemElement: Element): DxPromise<void>;
     /**
-     * @docid dxTreeViewMethods.expandItem
+     * @docid
      * @publicName expandItem(key)
-     * @param1 key:any
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(key: any): Promise<void> & JQueryPromise<void>;
+    expandItem(key: TKey): DxPromise<void>;
     /**
-     * @docid dxTreeViewMethods.getNodes
+     * @docid
      * @publicName getNodes()
-     * @return Array<dxTreeViewNode>
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @return Array<dxTreeViewNode>
      */
-    getNodes(): Array<dxTreeViewNode>;
+    getNodes(): Array<Node<TKey>>;
     /**
-     * @docid dxTreeViewMethods.getSelectedNodes
+     * @docid
      * @publicName getSelectedNodes()
+     * @public
      * @return Array<dxTreeViewNode>
-     * @prevFileNamespace DevExpress.ui
-     * @public
      */
-    getSelectedNodes(): Array<dxTreeViewNode>;
+    getSelectedNodes(): Array<Node<TKey>>;
     /**
-     * @docid dxTreeViewMethods.getSelectedNodeKeys
+     * @docid
      * @publicName getSelectedNodeKeys()
-     * @return Array<any>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedNodeKeys(): Array<any>;
+    getSelectedNodeKeys(): Array<TKey>;
     /**
-     * @docid dxTreeViewMethods.selectAll
+     * @docid
      * @publicName selectAll()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectAll(): void;
     /**
-     * @docid dxTreeViewMethods.selectItem
+     * @docid
+     * @publicName getScrollable()
+     * @public
+     * @return dxScrollable
+     */
+    getScrollable(): Scrollable;
+    /**
+     * @docid
      * @publicName selectItem(itemData)
-     * @param1 itemData:Object
-     * @return boolean
-     * @prevFileNamespace DevExpress.ui
+     * @param1 itemData:dxTreeViewItem
+     * @param1_field items:Array<dxTreeViewItem>
      * @public
      */
-    selectItem(itemData: any): boolean;
+    selectItem(itemData: Item): boolean;
     /**
-     * @docid dxTreeViewMethods.selectItem
+     * @docid
      * @publicName selectItem(itemElement)
-     * @param1 itemElement:Element
-     * @return boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectItem(itemElement: Element): boolean;
     /**
-     * @docid dxTreeViewMethods.selectItem
+     * @docid
      * @publicName selectItem(key)
-     * @param1 key:any
-     * @return boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectItem(key: any): boolean;
+    selectItem(key: TKey): boolean;
     /**
-     * @docid dxTreeViewMethods.unselectAll
+     * @docid
      * @publicName unselectAll()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     unselectAll(): void;
     /**
-     * @docid dxTreeViewMethods.unselectItem
+     * @docid
      * @publicName unselectItem(itemData)
-     * @param1 itemData:Object
-     * @return boolean
-     * @prevFileNamespace DevExpress.ui
+     * @param1 itemData:dxTreeViewItem
+     * @param1_field items:Array<dxTreeViewItem>
      * @public
      */
-    unselectItem(itemData: any): boolean;
+    unselectItem(itemData: Item): boolean;
     /**
-     * @docid dxTreeViewMethods.unselectItem
+     * @docid
      * @publicName unselectItem(itemElement)
-     * @param1 itemElement:Element
-     * @return boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     unselectItem(itemElement: Element): boolean;
     /**
-     * @docid dxTreeViewMethods.unselectItem
+     * @docid
      * @publicName unselectItem(key)
-     * @param1 key:any
-     * @return boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    unselectItem(key: any): boolean;
+    unselectItem(key: TKey): boolean;
     /**
-     * @docid dxTreeViewMethods.updateDimensions
+     * @docid
      * @publicName updateDimensions()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): Promise<void> & JQueryPromise<void>;
+    updateDimensions(): DxPromise<void>;
     /**
-     * @docid dxTreeViewMethods.scrollToItem
+     * @docid
      * @publicName scrollToItem(itemData)
-     * @param1 itemData:Object
+     * @param1 itemData:dxTreeViewItem
+     * @param1_field items:Array<dxTreeViewItem>
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(itemData: any): Promise<void> & JQueryPromise<void>;
+    scrollToItem(itemData: Item): DxPromise<void>;
     /**
-     * @docid dxTreeViewMethods.scrollToItem
+     * @docid
      * @publicName scrollToItem(itemElement)
-     * @param1 itemElement:Element
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
+    scrollToItem(itemElement: Element): DxPromise<void>;
     /**
-     * @docid dxTreeViewMethods.scrollToItem
+     * @docid
      * @publicName scrollToItem(key)
-     * @param1 key:any
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrollToItem(key: any): Promise<void> & JQueryPromise<void>;
+    scrollToItem(key: TKey): DxPromise<void>;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui.dxTreeView
+ */
+export type Item = dxTreeViewItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
+ */
 export interface dxTreeViewItem extends CollectionWidgetItem {
     /**
-     * @docid dxTreeViewItem.expanded
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     expanded?: boolean;
     /**
-     * @docid dxTreeViewItem.hasItems
-     * @type boolean
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hasItems?: boolean;
     /**
-     * @docid dxTreeViewItem.icon
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     icon?: string;
     /**
-     * @docid dxTreeViewItem.items
-     * @type Array<dxTreeViewItem>
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     items?: Array<dxTreeViewItem>;
     /**
-     * @docid dxTreeViewItem.parentId
-     * @type number|string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    id?: number | string;
+    /**
+     * @docid
+     * @default undefined
      * @public
      */
     parentId?: number | string;
     /**
-     * @docid dxTreeViewItem.selected
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selected?: boolean;
+
+    [key: string]: any;
 }
 
-export interface dxTreeViewNode {
+/**
+ * @public
+ * @docid dxTreeViewNode
+ * @type object
+ */
+export type Node<TKey = any> = dxTreeViewNode<TKey>;
+
+/**
+ * @docid
+ * @deprecated {ui/tree_view.Node}
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxTreeViewNode<TKey = any> {
     /**
-     * @docid dxTreeViewNode.children
-     * @type Array<dxTreeViewNode>
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
+     * @type Array<dxTreeViewNode>;
      */
-    children?: Array<dxTreeViewNode>;
+    children?: Array<dxTreeViewNode<TKey>>;
     /**
-     * @docid dxTreeViewNode.disabled
-     * @type boolean
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     disabled?: boolean;
     /**
-     * @docid dxTreeViewNode.expanded
-     * @type boolean
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     expanded?: boolean;
     /**
-     * @docid dxTreeViewNode.itemData
-     * @type object
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @public
+     * @type dxTreeViewItem
+     */
+    itemData?: Item;
+    /**
+     * @docid
      * @public
      */
-    itemData?: any;
+    key?: TKey;
     /**
-     * @docid dxTreeViewNode.key
-     * @type any
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
-     */
-    key?: any;
-    /**
-     * @docid dxTreeViewNode.parent
      * @type dxTreeViewNode
-     * @prevFileNamespace DevExpress.ui
-     * @public
      */
-    parent?: dxTreeViewNode;
+    parent?: dxTreeViewNode<TKey>;
     /**
-     * @docid dxTreeViewNode.selected
-     * @type boolean
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     selected?: boolean;
     /**
-     * @docid dxTreeViewNode.text
-     * @type string
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     text?: string;
 }
 
-declare global {
-interface JQuery {
-    dxTreeView(): JQuery;
-    dxTreeView(options: "instance"): dxTreeView;
-    dxTreeView(options: string): any;
-    dxTreeView(options: string, ...params: any[]): any;
-    dxTreeView(options: dxTreeViewOptions): JQuery;
-}
-}
-export type Options = dxTreeViewOptions;
+/** @public */
+export type Scrollable = Omit<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
 
-/** @deprecated use Options instead */
-export type IOptions = dxTreeViewOptions;
+/** @public */
+export type ExplicitTypes<TKey = any> = {
+    Properties: Properties<TKey>;
+    Node: Node<TKey>;
+    ContentReadyEvent: ContentReadyEvent<TKey>;
+    DisposingEvent: DisposingEvent<TKey>;
+    InitializedEvent: InitializedEvent<TKey>;
+    ItemClickEvent: ItemClickEvent<TKey>;
+    ItemCollapsedEvent: ItemCollapsedEvent<TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TKey>;
+    ItemExpandedEvent: ItemExpandedEvent<TKey>;
+    ItemHoldEvent: ItemHoldEvent<TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TKey>;
+    ItemSelectionChangedEvent: ItemSelectionChangedEvent<TKey>;
+    OptionChangedEvent: OptionChangedEvent<TKey>;
+    SelectAllValueChangedEvent: SelectAllValueChangedEvent<TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TKey>;
+};
+
+/** @public */
+export type Properties<TKey = any> = dxTreeViewOptions<TKey>;
+
+/** @deprecated use Properties instead */
+export type Options<TKey = any> = Properties<TKey>;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onContentReady
+ * @type_function_param1 e:{ui/tree_view:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onDisposing
+ * @type_function_param1 e:{ui/tree_view:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onInitialized
+ * @type_function_param1 e:{ui/tree_view:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onItemClick
+ * @type_function_param1 e:{ui/tree_view:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onItemCollapsed
+ * @type_function_param1 e:{ui/tree_view:ItemCollapsedEvent}
+ */
+onItemCollapsed?: ((e: ItemCollapsedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/tree_view:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onItemExpanded
+ * @type_function_param1 e:{ui/tree_view:ItemExpandedEvent}
+ */
+onItemExpanded?: ((e: ItemExpandedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onItemHold
+ * @type_function_param1 e:{ui/tree_view:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onItemRendered
+ * @type_function_param1 e:{ui/tree_view:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onItemSelectionChanged
+ * @type_function_param1 e:{ui/tree_view:ItemSelectionChangedEvent}
+ */
+onItemSelectionChanged?: ((e: ItemSelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onOptionChanged
+ * @type_function_param1 e:{ui/tree_view:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onSelectAllValueChanged
+ * @type_function_param1 e:{ui/tree_view:SelectAllValueChangedEvent}
+ */
+onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeViewOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/tree_view:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+};
+///#ENDDEBUG

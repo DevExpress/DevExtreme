@@ -3,7 +3,7 @@ import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from './con
 import { noop } from '../../core/utils/common';
 import Node from './node_item';
 import Link from './link_item';
-import defaultLayoutBuilder from './layout';
+import { layout as defaultLayoutBuilder } from './layout';
 import { isString as _isString, isNumeric as _isNumber } from '../../core/utils/type';
 import baseWidget from '../core/base_widget';
 import componentRegistrator from '../../core/component_registrator';
@@ -350,7 +350,7 @@ const dxSankey = baseWidget.inherit({
                 that._links.push(linkItem);
             });
 
-            that._renderer.initHatching();
+            that._renderer.initDefsElements();
             that._change(['NODES_DRAW', 'LINKS_DRAW', 'LABELS']);
         }
 

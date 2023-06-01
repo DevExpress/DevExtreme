@@ -32,7 +32,9 @@
   }
 
   .dx-filemanager-progress-box-image {
-    font-size: $material-base-icon-size;
+    width: $material-base-icon-size * 2;
+    height: $material-base-icon-size * 2;
+    font-size: $material-base-icon-size * 2;
   }
 
   .dx-filemanager-progress-box-error {
@@ -45,7 +47,9 @@
   }
 
   .dx-filemanager-toolbar {
+    padding: 0 10px;
     background: $base-bg;
+    min-height: $filemanager-toolbar-height;
 
     &.dx-filemanager-file-toolbar,
     &.dx-filemanager-file-toolbar .dx-toolbar {
@@ -130,40 +134,33 @@
     }
   }
 
-  .dx-filemanager-thumbnails {
-    &.dx-filemanager-inactive-area .dx-filemanager-thumbnails-view-port .dx-filemanager-thumbnails-item.dx-filemanager-item-selected {
-      color: $base-text-color;
-      background: $base-bg;
+  .dx-filemanager-thumbnails .dx-filemanager-thumbnails-item {
+    &.dx-item-selected {
+      color: $filemanager-file-item-select-color;
+      background: $filemanager-file-item-select-bg;
     }
 
-    .dx-filemanager-thumbnails-item {
-      &.dx-item-selected {
-        color: $filemanager-file-item-select-color;
-        background: $filemanager-file-item-select-bg;
-      }
+    &.dx-state-hover:not(.dx-state-focused):not(.dx-item-selected) {
+      background: $filemanager-file-item-hover-bg;
+    }
 
-      &.dx-state-hover:not(.dx-state-focused):not(.dx-item-selected) {
-        background: $filemanager-file-item-hover-bg;
-      }
+    &.dx-state-focused {
+      border: $filemanager-file-item-focused-border 1px solid;
+    }
 
-      &.dx-state-focused {
-        border: $filemanager-file-item-focused-border 1px solid;
-      }
+    &.dx-item-selected.dx-state-focused {
+      color: $filemanager-file-item-select-focus-color;
+      background: $filemanager-file-item-select-focus-bg;
+    }
 
-      &.dx-item-selected.dx-state-focused {
-        color: $filemanager-file-item-select-focus-color;
-        background: $filemanager-file-item-select-focus-bg;
-      }
+    .dx-filemanager-thumbnails-item-thumbnail {
+      width: $material-base-icon-size * 2;
+      height: $material-base-icon-size * 2;
+      font-size: $material-base-icon-size * 2;
+    }
 
-      .dx-filemanager-thumbnails-item-thumbnail {
-        width: $material-base-icon-size * 2;
-        height: $material-base-icon-size * 2;
-        font-size: $material-base-icon-size * 2;
-      }
-
-      .dx-filemanager-item-custom-thumbnail {
-        color: $filemanager-custom-thumbnail-color;
-      }
+    .dx-filemanager-item-custom-thumbnail {
+      color: $filemanager-custom-thumbnail-color;
     }
   }
 
@@ -186,8 +183,8 @@
         }
 
         .dx-filemanager-details-item-is-directory {
-          padding-right: 0;
-          padding-left: 0;
+          padding-right: 0 !important; // stylelint-disable-line declaration-no-important
+          padding-left: 0 !important; // stylelint-disable-line declaration-no-important
         }
       }
 

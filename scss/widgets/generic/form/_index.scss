@@ -1,9 +1,11 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/form";
+@use "../../base/icons" as *;
 
 // adduse
 @use "../scrollable";
@@ -28,10 +30,19 @@
   color: $form-field-item-color;
 }
 
+.dx-field-item-optional .dx-label > span::after,
+.dx-field-item-optional-mark {
+  color: $form-field-mark-color;
+}
+
+.dx-field-item-required .dx-label > span::after,
 .dx-field-item-required-mark {
   color: $form-field-required-color;
 }
 
-.dx-field-item-optional-mark {
-  color: $form-field-mark-color;
+.dx-field-item-custom-label-content {
+  .dx-icon {
+    @include dx-icon-sizing($generic-form-label-icon-size);
+    @include dx-icon-margin(math.div($generic-base-icon-size, 2));
+  }
 }

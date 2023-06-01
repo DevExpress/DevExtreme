@@ -5,9 +5,9 @@
 $material-progressbar-status-padding: null !default;
 
 @if $size == "default" {
-  $material-progressbar-status-padding: 8px;
+  $material-progressbar-status-padding: 8px !default;
 }
 
 @else if $size == "compact" {
-  $material-progressbar-status-padding: 4px;
+  $material-progressbar-status-padding: 4px !default;
 }

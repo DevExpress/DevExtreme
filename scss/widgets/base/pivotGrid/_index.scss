@@ -8,6 +8,7 @@ $header-filter-color: null !default;
 $header-filter-color-empty: null !default;
 $pivotgrid-area-background: null !default;
 $pivotgrid-common-top-bottom-padding: null !default;
+$pivotgrid-header-top-bottom-padding: null !default;
 $pivotgrid-field-indicators-offset: null !default;
 $pivotgrid-indicators-line-height: null !default;
 $pivotgrid-totalcolor: null !default;
@@ -22,6 +23,8 @@ $pivotgrid-area-column-image: null !default;
 $pivotgrid-area-data-image: null !default;
 $pivotgrid-dimension-image: null !default;
 $pivotgrid-hierarchy-image: null !default;
+$pivotgrid-empty-area-text-padding: null !default;
+$pivotgrid-button-top-padding: null !default;
 
 @use "../mixins" as *;
 @use "../icons" as *;
@@ -34,7 +37,7 @@ $pivotgrid-border-width: 1px;
 $pivotgrid-border: $pivotgrid-border-width solid $pivotgrid-border-color;
 $pivotgrid-icon-size: 14px;
 $pivotgrid-common-field-padding: 2px;
-$pivotgrid-filter-area-border-spacing: $pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding;
+$pivotgrid-filter-area-border-spacing: $pivotgrid-common-left-right-padding - $pivotgrid-common-field-padding $pivotgrid-header-top-bottom-padding - $pivotgrid-common-field-padding;
 $pivotgrid-expand-icon-offset: -5px;
 $pivotgrid-expand-icon-text-offset: 0;
 
@@ -140,6 +143,10 @@ $pivotgrid-expand-icon-text-offset: 0;
       float: right;
       display: inline-block;
 
+      .dx-button {
+        margin-top: $pivotgrid-button-top-padding;
+      }
+
       .dx-pivotgrid-field-chooser-button {
         margin-right: 4px;
       }
@@ -236,7 +243,7 @@ $pivotgrid-expand-icon-text-offset: 0;
     td {
       position: relative;
       border: none;
-      padding: $pivotgrid-common-left-right-padding 2px;
+      padding: $pivotgrid-header-top-bottom-padding 2px;
     }
 
     tr > td:first-child {
@@ -249,7 +256,7 @@ $pivotgrid-expand-icon-text-offset: 0;
 
     .dx-empty-area-text {
       white-space: nowrap;
-      padding: 6px 0;
+      padding: $pivotgrid-empty-area-text-padding 0;
       border: $pivotgrid-border-width solid transparent;
       color: $pivotgrid-field-area-text-color;
     }
@@ -458,6 +465,12 @@ $pivotgrid-expand-icon-text-offset: 0;
       }
     }
   }
+
+  &.dx-context-menu {
+    .dx-pivotgrid.dx-submenu {
+      width: auto;
+    }
+  }
 }
 
 .dx-pivotgridfieldchooser {
@@ -466,7 +479,8 @@ $pivotgrid-expand-icon-text-offset: 0;
   }
 
   .dx-treeview-item .dx-icon {
-    margin-bottom: 1px;
+    vertical-align: middle;
+    margin: 0 5px 1px 0;
 
     @include dx-icon-sizing(16px);
   }
@@ -543,6 +557,10 @@ $pivotgrid-expand-icon-text-offset: 0;
 
   .dx-icon-hierarchy {
     background: $pivotgrid-hierarchy-image no-repeat center center;
+
+    &::before {
+      content: none;
+    }
   }
 }
 
@@ -622,6 +640,12 @@ $pivotgrid-expand-icon-text-offset: 0;
     }
 
     .dx-pivotgrid-area-data {
+      &.dx-scrollable-native {
+        .dx-scrollable-content {
+          float: none;
+        }
+      }
+
       tbody td {
         border-left: 0;
         border-right: $pivotgrid-border;

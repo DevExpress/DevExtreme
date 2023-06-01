@@ -3,7 +3,7 @@ import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Appointment overlapping in Scheduler`
+fixture.disablePageReloads`Appointment overlapping in Scheduler`
   .page(url(__dirname, '../../container.html'));
 
 test('Multi-day appointment should not overlap other appointments when specific width is set, \'auto\' mode (T864456)', async (t) => {
@@ -11,11 +11,14 @@ test('Multi-day appointment should not overlap other appointments when specific 
   const appointment = scheduler.getAppointment('Appointment 1', 1);
 
   await t
-    .expect(scheduler.getAppointmentCollectorCount()).eql(3)
-    .expect(appointment.size.height).eql('350px')
-    .expect(appointment.size.width)
-    .eql('93px');
-}).before(() => createScheduler({
+    .expect(scheduler.collectors.count).eql(3)
+
+    .expect(parseInt(await appointment.size.height, 10))
+    .eql(350)
+
+    .expect(parseInt(await appointment.size.width, 10))
+    .eql(93);
+}).before(async () => createScheduler({
   dataSource: simpleData,
 }));
 
@@ -24,9 +27,9 @@ test('Simple appointment should not overlap allDay appointment when specific wid
   const { element } = scheduler.getAppointment('Appointment 4');
 
   await t
-    .expect(scheduler.getAppointmentCollectorCount()).eql(0)
+    .expect(scheduler.collectors.count).eql(0)
     .expect(await element.getBoundingClientRectProperty('top')).eql(114);
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   dataSource: allDayData,
 }));
 
@@ -37,6 +40,6 @@ test('Crossing allDay appointments should not overlap each other (T893674)', asy
 
   await t
     .expect(await firstAppointment.element.getBoundingClientRectProperty('top')).notEql(await secondAppointment.element.getBoundingClientRectProperty('top'));
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   dataSource: allDayData,
 }));

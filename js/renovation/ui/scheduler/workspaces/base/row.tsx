@@ -1,29 +1,63 @@
 import {
-  Component, ComponentBindings, JSXComponent, Slot, OneWay,
-} from 'devextreme-generator/component_declaration/common';
-import { addHeightToStyle } from '../utils';
-import { combineClasses } from '../../../../utils/combine_classes';
+  Component, ComponentBindings, JSXComponent, Slot, OneWay, CSSAttributes,
+} from '@devextreme-generator/declarations';
+import { VirtualCell } from './virtual_cell';
 
-export const viewFunction = (viewModel: Row): JSX.Element => (
+export const viewFunction = ({
+  props: {
+    className,
+    leftVirtualCellWidth,
+    rightVirtualCellWidth,
+    leftVirtualCellCount,
+    rightVirtualCellCount,
+    children,
+    styles,
+    isHeaderRow,
+  },
+  hasLeftVirtualCell,
+  hasRightVirtualCell,
+}: Row): JSX.Element => (
   <tr
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    className={viewModel.classes}
-    style={viewModel.style}
+    className={className}
+    style={styles}
   >
-    {viewModel.props.children}
+    {hasLeftVirtualCell && (
+      <VirtualCell
+        width={leftVirtualCellWidth}
+        colSpan={leftVirtualCellCount}
+        isHeaderCell={isHeaderRow}
+      />
+    )}
+
+    {children}
+
+    {hasRightVirtualCell && (
+      <VirtualCell
+        width={rightVirtualCellWidth}
+        colSpan={rightVirtualCellCount}
+        isHeaderCell={isHeaderRow}
+      />
+    )}
   </tr>
 );
 
 @ComponentBindings()
 export class RowProps {
-  @OneWay() height?: number;
-
   @OneWay() className?: string = '';
 
-  @OneWay() isVirtual?: boolean = false;
+  @OneWay() leftVirtualCellWidth = 0;
 
-  @Slot() children?: any;
+  @OneWay() rightVirtualCellWidth = 0;
+
+  @OneWay() leftVirtualCellCount?: number;
+
+  @OneWay() rightVirtualCellCount?: number;
+
+  @OneWay() styles?: CSSAttributes;
+
+  @OneWay() isHeaderRow = false;
+
+  @Slot() children?: JSX.Element | JSX.Element[];
 }
 
 @Component({
@@ -31,19 +65,15 @@ export class RowProps {
   view: viewFunction,
 })
 export class Row extends JSXComponent(RowProps) {
-  get style(): { [key: string]: string | number | undefined } {
-    const { height } = this.props;
-    const { style } = this.restAttributes;
+  get hasLeftVirtualCell(): boolean {
+    const { leftVirtualCellCount } = this.props;
 
-    return addHeightToStyle(height, style);
+    return !!leftVirtualCellCount;
   }
 
-  get classes(): string {
-    const { className } = this.props;
+  get hasRightVirtualCell(): boolean {
+    const { rightVirtualCellCount } = this.props;
 
-    return combineClasses({
-      'dx-scheduler-virtual-row': !!this.props.isVirtual,
-      [className!]: !!className,
-    });
+    return !!rightVirtualCellCount;
   }
 }

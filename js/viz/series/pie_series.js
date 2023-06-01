@@ -3,7 +3,7 @@ import { noop } from '../../core/utils/common';
 
 import { each } from '../../core/utils/iterator';
 import { chart } from './scatter_series';
-import { normalizeAngle, map } from '../core/utils';
+import { normalizeAngle, map, extractColor } from '../core/utils';
 import { extend } from '../../core/utils/extend';
 import { chart as barChart } from './bar_series';
 ///#DEBUG
@@ -126,16 +126,24 @@ export const pie = _extend({}, barSeries, {
 
     _createPointStyles: function(pointOptions, data, point) {
         const that = this;
-        const mainColor = pointOptions.color || that._getMainColor(data, point);
+        const mainColor = extractColor(pointOptions.color, true) || that._getMainColor(data, point);
+        const colorId = pointOptions.color?.fillId;
+        const hoverStyle = pointOptions.hoverStyle || {};
+        const selectionStyle = pointOptions.selectionStyle || {};
+
+        if(colorId) {
+            that._turnOffHatching(hoverStyle, selectionStyle);
+        }
 
         return {
+            labelColor: mainColor,
             normal: that._parsePointStyle(pointOptions, mainColor, mainColor),
-            hover: that._parsePointStyle(pointOptions.hoverStyle, mainColor, mainColor),
-            selection: that._parsePointStyle(pointOptions.selectionStyle, mainColor, mainColor),
+            hover: that._parsePointStyle(hoverStyle, colorId || mainColor, mainColor),
+            selection: that._parsePointStyle(selectionStyle, colorId || mainColor, mainColor),
             legendStyles: {
                 normal: that._createLegendState(pointOptions, mainColor),
-                hover: that._createLegendState(pointOptions.hoverStyle, mainColor),
-                selection: that._createLegendState(pointOptions.selectionStyle, mainColor)
+                hover: that._createLegendState(hoverStyle, colorId || mainColor),
+                selection: that._createLegendState(selectionStyle, colorId || mainColor)
             }
         };
     },

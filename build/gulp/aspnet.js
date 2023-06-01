@@ -14,6 +14,5 @@ gulp.task('aspnet', function() {
             .pipe(compressionPipes.beautify())
             .pipe(headerPipes.bangLicense())
             .pipe(gulp.dest(context.RESULT_JS_PATH))
-            .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH))
     );
 });

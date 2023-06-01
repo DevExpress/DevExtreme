@@ -1,9 +1,10 @@
+import { getOuterHeight, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import EditDecoratorMenuHelperMixin from './ui.list.edit.decorator_menu_helper';
 import messageLocalization from '../../localization/message';
 import { register as registerDecorator } from './ui.list.edit.decorator_registry';
 import EditDecorator from './ui.list.edit.decorator';
-import Overlay from '../overlay';
+import Overlay from '../overlay/ui.overlay';
 import { ListBase } from './ui.list.base';
 
 const CONTEXTMENU_CLASS = 'dx-list-context-menu';
@@ -25,8 +26,8 @@ registerDecorator(
             return this._list._createComponent($element, Overlay, {
                 shading: false,
                 deferRendering: true,
-                closeOnTargetScroll: true,
-                closeOnOutsideClick: function(e) {
+                hideOnParentScroll: true,
+                hideOnOutsideClick: function(e) {
                     return !$(e.target).closest('.' + CONTEXTMENU_CLASS).length;
                 },
                 animation: {
@@ -38,7 +39,7 @@ registerDecorator(
                             opacity: 1
                         },
                         to: {
-                            height: (function() { return this._$menuList.outerHeight(); }).bind(this),
+                            height: (function() { return getOuterHeight(this._$menuList); }).bind(this),
                             opacity: 1
                         }
                     },
@@ -53,8 +54,9 @@ registerDecorator(
                         }
                     }
                 },
-                height: (function() { return this._$menuList ? this._$menuList.outerHeight() : 0; }).bind(this),
-                width: (function() { return this._list.$element().outerWidth(); }).bind(this),
+                _ignoreFunctionValueDeprecation: true,
+                height: (function() { return this._$menuList ? getOuterHeight(this._$menuList) : 0; }).bind(this),
+                width: (function() { return getOuterWidth(this._list.$element()); }).bind(this),
                 onContentReady: this._renderMenuContent.bind(this)
             });
         },

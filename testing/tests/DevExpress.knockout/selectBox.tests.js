@@ -5,6 +5,8 @@ const ko = require('knockout');
 
 require('integration/knockout');
 
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 QUnit.testStart(function() {
     const markup =
         '<div id="selectBoxWithFieldTemplate" data-bind="dxSelectBox: { dataSource: dataSource, fieldTemplate: \'field\', valueExpr: \'key\', value: value }">\
@@ -43,7 +45,7 @@ const moduleSetup = {
     }
 };
 
-QUnit.module('widget options', moduleSetup);
+moduleWithoutCsp('widget options', moduleSetup);
 
 QUnit.test('fieldTemplate is bound to selected item', function(assert) {
     const viewModel = {

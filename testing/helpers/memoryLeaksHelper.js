@@ -16,13 +16,15 @@
     const exports = {};
 
     exports.createTestNode = function() {
-        const testNode = $('<div />');
-        testNode.appendTo('body');
+        // NOTE: workaround for inferno
+        // component can not be rendered as body first-level child
+        const $container = $('<div />').appendTo('body');
+        const testNode = $('<div />').appendTo($container);
         return testNode;
     };
 
     exports.destroyTestNode = function(testNode) {
-        testNode.remove();
+        testNode.parent().remove();
     };
 
     exports.getAllPossibleEventTargets = function() {
@@ -77,44 +79,55 @@
     };
 
     exports.getComponentOptions = function(componentName) {
-        if(componentName === 'dxDataGrid') {
-            return {
-                dataSource: {
-                    group: 'name',
-                    store: [{ name: 'Alex', birthDate: new Date() }, { name: 'Dan', birthDate: new Date() }]
-                },
-                allowColumnResizing: true,
-                columnChooser: {
-                    enabled: true
-                },
-                pager: {
-                    visible: true,
-                    showPageSizeSelector: true
-                },
-                groupPanel: {
-                    visible: true
-                },
-                allowColumnReordering: true,
-                editing: {
-                    allowUpdating: true,
-                    allowDeleting: true,
-                    allowAdding: true
-                },
-                hoverStateEnabled: true,
-                searchPanel: {
-                    visible: true
-                },
-                filterRow: {
-                    visible: true
-                }
-            };
-        }
-        if(componentName === 'dxValidator') {
-            return {
-                adapter: {
+        switch(componentName) {
+            case 'dxDataGrid':
+                return {
+                    dataSource: {
+                        group: 'name',
+                        store: [{ name: 'Alex', birthDate: new Date() }, { name: 'Dan', birthDate: new Date() }]
+                    },
+                    allowColumnResizing: true,
+                    columnChooser: {
+                        enabled: true
+                    },
+                    pager: {
+                        visible: true,
+                        showPageSizeSelector: true
+                    },
+                    groupPanel: {
+                        visible: true
+                    },
+                    allowColumnReordering: true,
+                    editing: {
+                        allowUpdating: true,
+                        allowDeleting: true,
+                        allowAdding: true
+                    },
+                    hoverStateEnabled: true,
+                    searchPanel: {
+                        visible: true
+                    },
+                    filterRow: {
+                        visible: true
+                    }
+                };
+            case 'dxValidator':
+                return {
+                    adapter: {
 
-                }
-            };
+                    }
+                };
+            case 'dxFileManager':
+                return {
+                    fileSystemProvider: [{
+                        name: 'Folder 1',
+                        isDirectory: true,
+                        hasSubDirectories: false,
+                        items: []
+                    }]
+                };
+            default:
+                break;
         }
     };
 

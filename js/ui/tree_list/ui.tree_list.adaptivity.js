@@ -1,4 +1,1 @@
-import treeListCore from './ui.tree_list.core';
-import adaptivityModule from '../grid_core/ui.grid_core.adaptivity';
-
-treeListCore.registerModule('adaptivity', adaptivityModule);
+import '../../__internal/grids/tree_list/module_not_extended/adaptivity';

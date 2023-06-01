@@ -8,18 +8,18 @@ const CLASS = {
 };
 
 export default class SchedulerNavigator {
-  element: Selector;
+  readonly element: Selector;
 
-  nextDuration: Selector;
+  readonly nextButton: Selector;
 
-  prevDuration: Selector;
+  readonly prevButton: Selector;
 
-  caption: Selector;
+  readonly caption: Selector;
 
   constructor(scheduler: Selector) {
     this.element = scheduler.find(`.${CLASS.navigator}`);
-    this.nextDuration = Selector(`.${CLASS.navigatorButtonNext}`);
-    this.prevDuration = Selector(`.${CLASS.navigatorButtonPrev}`);
+    this.nextButton = Selector(`.${CLASS.navigatorButtonNext}`);
+    this.prevButton = Selector(`.${CLASS.navigatorButtonPrev}`);
     this.caption = Selector(`.${CLASS.navigatorButtonCaption}`);
   }
 }

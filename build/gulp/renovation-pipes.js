@@ -1,40 +1,63 @@
 'use strict';
 
+const env = require('./env-variables');
+const path = require('path');
 const lazyPipe = require('lazypipe');
 const gulpEach = require('gulp-each');
 const gulpIf = require('gulp-if');
-const replace = require('gulp-replace');
-const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 
-const toUnderscoreCase = str => str.replace(/\.?([A-Z])/g, (x, y) => '_' + y.toLowerCase()).replace(/^_/, '');
-const renovatedComponentsMeta = renovatedComponents.map(component => ({ name: component.name, fileName: toUnderscoreCase(component.name), ...component }));
-const renovatedNamesRegEx = new RegExp(renovatedComponentsMeta.map(({ fileName }) => ('^' + fileName + '\\b')).join('|'), 'i');
-const renovationFolder = /renovation/g;
-const renovationFileRegEx = new RegExp(renovatedComponentsMeta.map(({ fileName }) => ('ui(\\\\|\\/)' + fileName)).join('|'), 'i');
-const jsFileExtension = '.js';
+const renovatedComponentsPath = 'js/renovation/components';
+const fullRenovatedComponentsPath = '../../' + renovatedComponentsPath;
 
-function isOldComponentRenovated(file) {
-    const isRenovatedName = !!file.basename.match(renovatedNamesRegEx); // only renovated file names
-    const isNotRenovationFolder = file.path.match(renovationFolder) === null; // without renovation folder
-    const isJsFile = file.extname === jsFileExtension;
-    const isCorrectFilePath = !!file.path.match(renovationFileRegEx); // without ui/text_box/../button.js
+const overwriteWidgetTemplate = require('./overwrite-renovation-widget.js');
+const overwriteQUnitWidgetTemplate = require('./overwrite-qunit-renovation-widget.js');
 
-    return isRenovatedName && isNotRenovationFolder && isJsFile && isCorrectFilePath;
+let fileToComponentMap = {};
+
+function requireWithoutCache(module) {
+    delete require.cache[require.resolve(module)];
+    return require(module);
 }
 
+function loadConfig() {
+    const renovatedComponents = requireWithoutCache(fullRenovatedComponentsPath);
+    fileToComponentMap = {};
+    renovatedComponents.forEach((component) => {
+        if(component.inProgress && !env.BUILD_INPROGRESS_RENOVATION || !component.pathInJSFolder) {
+            return;
+        }
+
+        const oldComponentFileName = path.join('./js/', component.pathInJSFolder);
+        fileToComponentMap[path.resolve(oldComponentFileName)] = {
+            ...component,
+            pathToComponentRegistrator: path.relative(
+                path.dirname(oldComponentFileName),
+                './js/core/component_registrator'
+            ).replace(/\\/g, '/'),
+            pathInRenovationFolder: path
+                .relative(
+                    path.dirname(oldComponentFileName),
+                    path.join('./js/renovation', component.pathInRenovationFolder)
+                ).replace(/\\/g, '/'),
+        };
+    });
+}
+
+loadConfig();
+
 module.exports = {
-    TEMP_PATH: 'artifacts/_renovation-temp',
-    replaceWidgets: lazyPipe()
+    renovatedComponentsPath: renovatedComponentsPath,
+    reloadConfig: (done) => {
+        loadConfig();
+        done();
+    },
+    replaceWidgets: (wrapWidgetForQUnit) => (lazyPipe()
         .pipe(function() {
-            return gulpIf(isOldComponentRenovated, gulpEach((content, file, callback) => {
-                const component = renovatedComponentsMeta.find(component => component.fileName === file.stem);
-                const fileContext = 'import Widget from "../renovation/' + component.pathInRenovationFolder + '";export default Widget;';
+            return gulpIf((file) => fileToComponentMap[file.path], gulpEach((content, file, callback) => {
+                const component = fileToComponentMap[file.path];
+                const fileContext = wrapWidgetForQUnit ? overwriteQUnitWidgetTemplate(component) : overwriteWidgetTemplate(component);
                 callback(null, fileContext);
             }));
         })
-        .pipe(function() { // Workaround for scheduler `renovateRender` property.
-            return gulpIf(function(file) {
-                return file.basename === 'ui.scheduler.work_space.js';
-            }, replace('renovateRender: false', 'renovateRender: true'));
-        })
+    )()
 };

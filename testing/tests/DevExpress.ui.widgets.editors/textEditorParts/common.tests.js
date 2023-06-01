@@ -7,10 +7,12 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 import themes from 'ui/themes';
 import config from 'core/config';
-import { noop } from 'core/utils/common';
 import consoleUtils from 'core/utils/console';
+import { normalizeKeyName } from 'events/utils/index';
+import { getWidth } from 'core/utils/size';
 
-import 'ui/text_box/ui.text_editor';
+import TextEditor from 'ui/text_box/ui.text_editor';
+import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const INPUT_CLASS = 'dx-texteditor-input';
@@ -20,10 +22,14 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 const CLEAR_BUTTON_SELECTOR = '.dx-clear-button-area';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
+const LABEL_CLASS = 'dx-texteditor-label';
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
+
+const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 
 const EVENTS = [
     'FocusIn', 'FocusOut',
-    'KeyDown', 'KeyPress', 'KeyUp',
+    'KeyDown', 'KeyUp',
     'Change', 'Cut', 'Copy', 'Paste', 'Input'
 ];
 
@@ -194,7 +200,7 @@ QUnit.module('general', {}, () => {
 
         const $placeholder = element.find('.' + PLACEHOLDER_CLASS);
 
-        assert.equal($placeholder.hasClass('dx-state-invisible'), true, 'placeholder is invisible');
+        assert.equal($placeholder.hasClass(INVISIBLE_STATE_CLASS), true, 'placeholder is invisible');
     });
 
     QUnit.testInActiveWindow('placeholder pointerup event (T181734)', function(assert) {
@@ -341,6 +347,44 @@ QUnit.module('general', {}, () => {
         assert.strictEqual(blurStub.callCount, 0, 'FocusOut event has not been triggered');
     });
 
+    QUnit.testInActiveWindow('text editor should be focused out after focus is moved from custom button outside of editor (T1066348)', function(assert) {
+        const focusOutStub = sinon.stub();
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            onFocusOut: focusOutStub,
+            buttons: [{ name: 'test' }]
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const actionButton = textEditor.getButton('test');
+
+        textEditor.focus();
+        actionButton.focus();
+
+        $(actionButton.$element()).trigger('focusout');
+
+        assert.notOk($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is not focused');
+        assert.strictEqual(focusOutStub.callCount, 1, 'focusout was triggered');
+    });
+
+    QUnit.testInActiveWindow('input should be focused even after focus from inner button move (T963822)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            buttons: [{
+                name: 'test',
+                options: {
+                    icon: 'home'
+                }
+            }]
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const actionButton = textEditor.getButton('test');
+
+        actionButton.focus();
+        assert.notOk($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is not focused');
+
+        textEditor.focus();
+        assert.ok($textEditor.hasClass(STATE_FOCUSED_CLASS), 'input is focused');
+    });
+
     QUnit.test('TextEditor should pass integration options to the nested buttons (T894344)', function(assert) {
         const text = 'my template';
         const editor = $('#texteditor').dxTextEditor({
@@ -438,9 +482,239 @@ QUnit.module('general', {}, () => {
             stylingMode: 'someWrongOptionValue'
         });
 
-        assert.ok($textEditor.hasClass('dx-editor-underlined'));
+        assert.ok($textEditor.hasClass('dx-editor-filled'));
 
         themes.isMaterial = realIsMaterial;
+    });
+});
+
+QUnit.module('label integration', {
+    beforeEach: function() {
+        this.$textEditor = $('#texteditor');
+        const initialOptions = { label: 'some' };
+        this.init = (options = {}) => {
+            this.textEditor = this.$textEditor
+                .dxTextEditor($.extend(initialOptions, options))
+                .dxTextEditor('instance');
+            this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
+        };
+
+        const that = this;
+
+        class TextEditorLabelMock extends TextEditorLabel {
+            constructor(args) {
+                super(args);
+                that.labelArgs = args;
+                that.labelMock = this;
+            }
+
+            updateMaxWidth = sinon.stub();
+            updateBeforeWidth = sinon.stub();
+            updateMode = sinon.stub();
+            updateText = sinon.stub();
+            updateMark = sinon.stub();
+            updateContainsButtonsBefore = sinon.stub();
+        }
+
+        TextEditor.mockTextEditorLabel(TextEditorLabelMock);
+    },
+    afterEach: function() {
+        Object.values(this.labelMock, (stub) => {
+            stub.reset();
+        });
+
+        TextEditor.restoreTextEditorLabel();
+    }
+}, () => {
+    QUnit.module('init', {
+        beforeEach: function() {
+            this.getProps = () => this.labelArgs;
+        }
+    }, () => {
+        QUnit.test('correct props are passed to TextEditorLabel', function(assert) {
+            const labelText = 'new label';
+            const labelMode = 'floating';
+            const labelMark = ':';
+
+            this.init({
+                label: labelText,
+                labelMode,
+                labelMark,
+                buttons: [{
+                    name: 'button',
+                    location: 'before'
+                }],
+            });
+
+            const {
+                $editor,
+                text, mode, mark,
+                containsButtonsBefore,
+            } = this.getProps();
+
+            assert.strictEqual($editor.get(0), this.$textEditor.get(0));
+            assert.strictEqual(text, labelText);
+            assert.strictEqual(mode, labelMode);
+            assert.strictEqual(mark, labelMark);
+            assert.strictEqual(containsButtonsBefore, true);
+        });
+
+        QUnit.test('editor should pass containerWidth equal to input width', function(assert) {
+            this.init();
+            const inputWidth = getWidth(this.$input);
+            const borderWidth = 2;
+
+            assert.strictEqual(this.getProps().containerWidth + borderWidth, inputWidth);
+        });
+
+        QUnit.test('editor should pass beforeWidth equal to before buttons container width', function(assert) {
+            this.init();
+            const beforeButtonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+
+            assert.strictEqual(this.getProps().beforeWidth, beforeButtonsContainerWidth);
+        });
+    });
+
+    QUnit.module('option change', {
+        beforeEach: function() {
+            this.init();
+        }
+    }, () => {
+        QUnit.test('width', function(assert) {
+            this.textEditor.option('width', 300);
+            const inputWidth = getWidth(this.$input);
+
+            const updateMaxWidthCall = this.labelMock.updateMaxWidth.getCall(0);
+            assert.strictEqual(updateMaxWidthCall.args[0], inputWidth);
+        });
+
+
+        QUnit.test('label', function(assert) {
+            const labelText = 'new text';
+            this.textEditor.option('label', labelText);
+
+            const updateTextCall = this.labelMock.updateText.getCall(0);
+            assert.strictEqual(updateTextCall.args[0], labelText);
+        });
+
+        QUnit.test('labelMark', function(assert) {
+            const newLabelMark = '*';
+            this.textEditor.option('labelMark', newLabelMark);
+
+            const updateMarkCall = this.labelMock.updateMark.getCall(0);
+            assert.strictEqual(updateMarkCall.args[0], newLabelMark);
+        });
+
+        QUnit.test('labelMode', function(assert) {
+            const newLabelMode = 'floating';
+            this.textEditor.option('labelMode', newLabelMode);
+
+            const updateModeCall = this.labelMock.updateMode.getCall(0);
+            assert.strictEqual(updateModeCall.args[0], newLabelMode);
+        });
+
+        QUnit.test('before buttons', function(assert) {
+            this.textEditor.option('buttons', [{
+                name: 'button',
+                location: 'before',
+            }]);
+            const updateMaxWidthCall = this.labelMock.updateMaxWidth.getCall(0);
+            const updateBeforeWidthCall = this.labelMock.updateBeforeWidth.getCall(0);
+            const updateContainsButtonsBeforeCall = this.labelMock.updateContainsButtonsBefore.getCall(0);
+
+            const newLabelMaxWidth = getWidth(this.$input);
+            const newLabelBeforeWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+
+            assert.strictEqual(updateMaxWidthCall.args[0], newLabelMaxWidth);
+            assert.strictEqual(updateBeforeWidthCall.args[0], newLabelBeforeWidth);
+            assert.strictEqual(updateContainsButtonsBeforeCall.args[0], true);
+        });
+
+        QUnit.test('after buttons', function(assert) {
+            this.textEditor.option('buttons', [{
+                name: 'button',
+                location: 'after',
+            }]);
+            const updateBeforeWidthCall = this.labelMock.updateBeforeWidth.getCall(0);
+            const updateContainsButtonsBeforeCall = this.labelMock.updateContainsButtonsBefore.getCall(0);
+
+            assert.strictEqual(updateBeforeWidthCall.args[0], 0);
+            assert.strictEqual(updateContainsButtonsBeforeCall.args[0], false);
+        });
+
+        QUnit.test('stylingMode', function(assert) {
+            this.textEditor.option('stylingMode', 'underlined');
+
+            const updateMaxWidthCall = this.labelMock.updateMaxWidth.getCall(0);
+            const updateBeforeWidthCall = this.labelMock.updateBeforeWidth.getCall(0);
+
+            const newLabelMaxWidth = getWidth(this.$input);
+            const newLabelBeforeWidth = 0;
+
+            assert.strictEqual(updateMaxWidthCall.args[0], newLabelMaxWidth);
+            assert.strictEqual(updateBeforeWidthCall.args[0], newLabelBeforeWidth);
+        });
+    });
+});
+
+QUnit.module('aria-labelledby attribute', {
+    beforeEach: function() {
+        this.$textEditor = $('#texteditor');
+        this.textEditor = this.$textEditor
+            .dxTextEditor({
+                label: 'custom',
+                placeholder: 'custom',
+            })
+            .dxTextEditor('instance');
+        this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
+        this.$label = this.$textEditor.find(`.${LABEL_CLASS}`);
+        this.$placeholder = this.$textEditor.find(`.${PLACEHOLDER_CLASS}`);
+    }
+}, () => {
+    QUnit.test('aria-labelledby should be equal label and placeholder ids if label and placeholder are specified', function(assert) {
+        const inputAttr = this.$input.attr('aria-labelledby');
+        const labelId = this.$label.attr('id');
+        const placeholderId = this.$placeholder.attr('id');
+
+        assert.strictEqual(inputAttr, `${labelId} ${placeholderId}`);
+    });
+
+    QUnit.test('aria-labelledby should be equal label id if label is specified and placeholder is not specified', function(assert) {
+        this.textEditor.option({ placeholder: null });
+
+        const inputAttr = this.$input.attr('aria-labelledby');
+        const labelId = this.$label.attr('id');
+
+        assert.strictEqual(inputAttr, labelId);
+    });
+
+    QUnit.test('aria-labelledby should be equal placeholder id if label is not specified and placeholder is specified', function(assert) {
+        this.textEditor.option({ label: null });
+
+        const inputAttr = this.$input.attr('aria-labelledby');
+        const placeholderId = this.$placeholder.attr('id');
+
+        assert.strictEqual(inputAttr, placeholderId);
+    });
+
+    QUnit.test('aria-labelledby should be equal undefined if label and placeholderId are not specified', function(assert) {
+        this.textEditor.option({
+            label: null,
+            placeholder: null,
+        });
+        const inputAttr = this.$input.attr('aria-labelledby');
+
+        assert.strictEqual(inputAttr, undefined);
+    });
+
+    QUnit.test('aria-labelledby should be equal undefined if label mode has value "hidden" and placeholder is not specified', function(assert) {
+        this.textEditor.option({
+            labelMode: 'hidden',
+            placeholder: null,
+        });
+        const inputAttr = this.$input.attr('aria-labelledby');
+
+        assert.strictEqual(inputAttr, undefined);
     });
 });
 
@@ -621,6 +895,13 @@ QUnit.module('options changing', moduleConfig, () => {
         });
     });
 
+    QUnit.test('editor should not change value if it is readOnly (T1022447)', function(assert) {
+        this.instance.option({ value: null, readOnly: true });
+        this.keyboard.type('f').change();
+
+        assert.strictEqual(this.instance.option('value'), null);
+    });
+
     QUnit.test('Click on \'clear\' button', function(assert) {
         const $element = $('#texteditor').dxTextEditor({
             showClearButton: true,
@@ -678,16 +959,28 @@ QUnit.module('options changing', moduleConfig, () => {
         assert.notOk($clearButton.is(':visible'), 'clear button was hidden');
     });
 
-    QUnit.test('click on clear button should not reset active focus (T241583)', function(assert) {
-        const $element = $('#texteditor').dxTextEditor({ showClearButton: true, value: 'foo' });
-        const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
+    ['mouse', 'touch'].forEach((pointerType) => { // T241583, T310102
+        const pointerAction = pointerType === 'mouse' ? 'click' : 'tap';
+        QUnit.test(`${pointerAction} on clear button should not reset active focus and clear the value`, function(assert) {
+            const $element = $('#texteditor').dxTextEditor({ showClearButton: true, value: 'foo' });
+            const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
+            const $input = $element.find(`.${INPUT_CLASS}`);
+            const instance = $element.dxTextEditor('instance');
 
-        const dxPointerDown = $.Event('dxpointerdown');
-        dxPointerDown.pointerType = 'mouse';
+            const dxPointerDown = $.Event('dxpointerdown');
+            dxPointerDown.pointerType = pointerType;
 
-        $clearButton.on('dxpointerdown', e => {
-            assert.ok(e.isDefaultPrevented());
-        }).trigger(dxPointerDown);
+            $clearButton.on('dxpointerdown', e => {
+                assert.ok(e.isDefaultPrevented(), 'prevent input blurring');
+            }).trigger(dxPointerDown);
+
+            if(pointerType === 'mouse') {
+                $clearButton.trigger('dxclick');
+            }
+
+            assert.strictEqual($input.val(), '', 'input is empty');
+            assert.strictEqual(instance.option('value'), '', 'value is cleared');
+        });
     });
 
     QUnit.test('click on clear button should raise input event (T521817)', function(assert) {
@@ -707,17 +1000,6 @@ QUnit.module('options changing', moduleConfig, () => {
         pointerMock($clearButton).click();
 
         assert.equal(callCount, 1, 'onInput was called once');
-    });
-
-    QUnit.test('tap on clear button should reset value (T310102)', function(assert) {
-        const $element = $('#texteditor').dxTextEditor({ showClearButton: true, value: 'foo' });
-        const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
-
-        const dxPointerDown = $.Event('dxpointerdown');
-        dxPointerDown.pointerType = 'touch';
-        $clearButton.on('dxpointerdown', e => {
-            assert.ok(!e.isDefaultPrevented());
-        }).trigger(dxPointerDown);
     });
 
     QUnit.test('tap on clear button should not raise onValueChange event (T812448)', function(assert) {
@@ -901,7 +1183,7 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('events work when relevant actions is not set', function(assert) {
-        assert.expect(12);
+        assert.expect(8);
         const textBox = this.instance;
         const keyboard = this.keyboard;
 
@@ -910,13 +1192,6 @@ QUnit.module('api', moduleConfig, () => {
             assert.equal($(e.element).get(0), textBox.$element().get(0), 'event has link on element');
             assert.equal(e.event.type, 'keydown', 'event has related Event');
             assert.ok(true, 'keyDown was fired');
-        });
-
-        textBox.on('keyPress', e => {
-            assert.equal(e.component, textBox, 'event has link on component');
-            assert.equal($(e.element).get(0), textBox.$element().get(0), 'event has link on element');
-            assert.equal(e.event.type, 'keypress', 'event has related Event');
-            assert.ok(true, 'keyPress was fired');
         });
 
         textBox.on('keyUp', e => {
@@ -930,14 +1205,12 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('events supports chains', function(assert) {
-        assert.expect(3);
+        assert.expect(2);
         const textBox = this.instance;
         const keyboard = this.keyboard;
 
         textBox.on('keyDown', e => {
             assert.ok(true, 'keyDown was fired');
-        }).on('keyPress', e => {
-            assert.ok(true, 'keyPress was fired');
         }).on('keyUp', e => {
             assert.ok(true, 'keyUp was fired');
         });
@@ -972,23 +1245,6 @@ QUnit.module('deprecated options', {
         consoleUtils.logger.warn.restore();
     }
 }, () => {
-    QUnit.test('widget has no warnings if it is no user onKeyPress event subscriptions', function(assert) {
-        $('#texteditor').dxTextEditor({});
-        assert.strictEqual(consoleUtils.logger.warn.callCount, 0, 'Warning is not raised on init for widget without \'onKeyPress\' handler');
-    });
-
-    QUnit.test('user onKeyPress event subscriptions fires a deprecation warning', function(assert) {
-        const textBox = $('#texteditor').dxTextEditor({
-            onKeyPress: noop
-        }).dxTextEditor('instance');
-
-        assert.strictEqual(consoleUtils.logger.warn.callCount, 1, 'Warning is raised');
-        assert.strictEqual(consoleUtils.logger.warn.getCall(0).args[0].substring(0, 5), 'W0001', 'Warning is correct');
-
-        textBox.option('onKeyPress', null);
-        textBox.option('onKeyPress', noop);
-        assert.strictEqual(consoleUtils.logger.warn.callCount, 3, 'Warning is raised if set a new handler');
-    });
 });
 
 QUnit.module('regressions', moduleConfig, () => {
@@ -997,7 +1253,7 @@ QUnit.module('regressions', moduleConfig, () => {
 
         const EVENTS = [
             'focusIn', 'focusOut',
-            'keyDown', 'keyPress', 'keyUp',
+            'keyDown', 'keyUp',
             'change'
         ];
 
@@ -1086,13 +1342,11 @@ QUnit.module('regressions', moduleConfig, () => {
         const enterKeyStub = sinon.stub();
         const keyUpStub = sinon.stub();
         const keyDownStub = sinon.stub();
-        const keyPressStub = sinon.stub();
 
         const $textEditor = $('#texteditor').dxTextEditor({
             onEnterKey: enterKeyStub,
             onKeyUp: keyUpStub,
-            onKeyDown: keyDownStub,
-            onKeyPress: keyPressStub
+            onKeyDown: keyDownStub
         });
 
         const $input = $textEditor.find('input');
@@ -1106,7 +1360,6 @@ QUnit.module('regressions', moduleConfig, () => {
             assert.ok(!enterKeyStub.called, 'enter key action should not be called');
             assert.ok(!keyUpStub.called, 'key up action should not be called');
             assert.ok(!keyDownStub.called, 'key down action should not be called');
-            assert.ok(!keyPressStub.called, 'key press action should not be called');
         } finally {
             instance._disposed = disposed;
         }
@@ -1120,6 +1373,122 @@ QUnit.module('regressions', moduleConfig, () => {
 
         const $placeholder = $textEditor.find('.' + PLACEHOLDER_CLASS);
 
-        assert.equal($placeholder.hasClass('dx-state-invisible'), true, 'display none was attached as inline style');
+        assert.equal($placeholder.hasClass(INVISIBLE_STATE_CLASS), true, 'display none was attached as inline style');
+    });
+
+    QUnit.test('Only editor input placeholder should change visibility depending on input text (T970003)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor();
+        const $input = $textEditor.find(`.${INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        $textEditor.append($('<div>').attr('class', PLACEHOLDER_CLASS));
+        const $placeholders = $textEditor.find(`.${PLACEHOLDER_CLASS}`);
+
+        assert.notOk($placeholders.eq(0).hasClass(INVISIBLE_STATE_CLASS), 'input placeholder is visible');
+        assert.notOk($placeholders.eq(1).hasClass(INVISIBLE_STATE_CLASS), 'additional placeholder is visible');
+
+        keyboard
+            .focus()
+            .type('text')
+            .blur();
+
+        assert.ok($placeholders.eq(0).hasClass(INVISIBLE_STATE_CLASS), 'input placeholder is hidden');
+        assert.notOk($placeholders.eq(1).hasClass(INVISIBLE_STATE_CLASS), 'additional placeholder visibility is not changed');
+    });
+});
+
+QUnit.module('valueChanged should receive correct event parameter', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#texteditor').dxTextEditor({
+            onValueChanged: this.valueChangedHandler
+        });
+        this.instance = this.$element.dxTextEditor('instance');
+        this.$input = this.$element.find(`.${INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', 'custom text');
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+
+            // NOTE: the cached event.target is missing if the element is in shadow dom
+            // looks like a bug in a browser
+            if(!QUnit.isInShadowDomMode()) {
+                assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            }
+
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+    }
+}, () => {
+    QUnit.test('on program change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on change', function(assert) {
+        this.keyboard
+            .type('text')
+            .change();
+
+        this.checkEvent(assert, 'change', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on input if valueChangeEvent=input', function(assert) {
+        this.instance.option('valueChangeEvent', 'input');
+
+        this.keyboard
+            .type('text')
+            .change();
+
+        this.checkEvent(assert, 'input', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on focusout if valueChangeEvent=focusout', function(assert) {
+        this.instance.option('valueChangeEvent', 'focusout');
+
+        this.keyboard
+            .type('text')
+            .blur();
+
+        this.checkEvent(assert, 'focusout', this.$input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on keyup if valueChangeEvent=keyup', function(assert) {
+        this.instance.option('valueChangeEvent', 'keyup');
+
+        this.keyboard
+            .type('text')
+            .keyUp();
+
+
+        this.checkEvent(assert, 'keyup', this.$input);
+        this.testProgramChange(assert);
+    });
+});
+
+QUnit.module('validation', () => {
+    QUnit.test('editor input should be described by validation message content', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            isValid: false,
+            validationError: { message: 'error' },
+            validationStatus: 'invalid'
+        });
+        const $input = $textEditor.find(`.${INPUT_CLASS}`);
+        const messageId = $input.attr('aria-describedby');
+
+        assert.ok(messageId, 'input aria-describedby attr is specified');
+        assert.strictEqual($('.dx-invalid-message-content').attr('id'), messageId, 'message content id is correct');
     });
 });

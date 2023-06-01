@@ -1,57 +1,210 @@
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
+import {
+    ValueChangedInfo,
+} from './editor/editor';
+
 import dxTextEditor, {
-    dxTextEditorOptions
+    dxTextEditorOptions,
 } from './text_box/ui.text_editor.base';
 
-export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {
+/** @public */
+export type TextBoxType = 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
+
+/** @public */
+export type ChangeEvent = NativeEventInfo<dxTextBox, Event>;
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxTextBox>;
+
+/** @public */
+export type CopyEvent = NativeEventInfo<dxTextBox, ClipboardEvent>;
+
+/** @public */
+export type CutEvent = NativeEventInfo<dxTextBox, ClipboardEvent>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxTextBox>;
+
+/** @public */
+export type EnterKeyEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
+
+/** @public */
+export type FocusInEvent = NativeEventInfo<dxTextBox, FocusEvent>;
+
+/** @public */
+export type FocusOutEvent = NativeEventInfo<dxTextBox, FocusEvent>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxTextBox>;
+
+/** @public */
+export type InputEvent = NativeEventInfo<dxTextBox, UIEvent & { target: HTMLInputElement }>;
+
+/** @public */
+export type KeyDownEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
+
+/** @public */
+export type KeyPressEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
+
+/** @public */
+export type KeyUpEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxTextBox> & ChangedOptionInfo;
+
+/** @public */
+export type PasteEvent = NativeEventInfo<dxTextBox, ClipboardEvent>;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxTextBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
+export interface dxTextBoxOptions<TComponent> extends dxTextEditorOptions<TComponent> {
     /**
-     * @docid dxTextBoxOptions.maxLength
-     * @type string|number
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxLength?: string | number;
     /**
-     * @docid dxTextBoxOptions.mode
-     * @type Enums.TextBoxMode
+     * @docid
      * @default "text"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    mode?: 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
+    mode?: TextBoxType;
     /**
-     * @docid dxTextBoxOptions.value
-     * @type string
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: string;
 }
 /**
- * @docid dxTextBox
+ * @docid
  * @isEditor
  * @inherits dxTextEditor
- * @module ui/text_box
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxTextBox extends dxTextEditor {
-    constructor(element: Element, options?: dxTextBoxOptions)
-    constructor(element: JQuery, options?: dxTextBoxOptions)
-}
+export default class dxTextBox<TProperties = Properties> extends dxTextEditor<TProperties> { }
 
-declare global {
-interface JQuery {
-    dxTextBox(): JQuery;
-    dxTextBox(options: "instance"): dxTextBox;
-    dxTextBox(options: string): any;
-    dxTextBox(options: string, ...params: any[]): any;
-    dxTextBox(options: dxTextBoxOptions): JQuery;
-}
-}
-export type Options = dxTextBoxOptions;
+interface TextBoxInstance extends dxTextBox<Properties> { }
 
-/** @deprecated use Options instead */
-export type IOptions = dxTextBoxOptions;
+/** @public */
+export type Properties = dxTextBoxOptions<TextBoxInstance>;
+
+/** @deprecated use Properties instead */
+export type Options = Properties;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onChange
+ * @type_function_param1 e:{ui/text_box:ChangeEvent}
+ */
+onChange?: ((e: ChangeEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onContentReady
+ * @type_function_param1 e:{ui/text_box:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onCopy
+ * @type_function_param1 e:{ui/text_box:CopyEvent}
+ */
+onCopy?: ((e: CopyEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onCut
+ * @type_function_param1 e:{ui/text_box:CutEvent}
+ */
+onCut?: ((e: CutEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onDisposing
+ * @type_function_param1 e:{ui/text_box:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onEnterKey
+ * @type_function_param1 e:{ui/text_box:EnterKeyEvent}
+ */
+onEnterKey?: ((e: EnterKeyEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onFocusIn
+ * @type_function_param1 e:{ui/text_box:FocusInEvent}
+ */
+onFocusIn?: ((e: FocusInEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onFocusOut
+ * @type_function_param1 e:{ui/text_box:FocusOutEvent}
+ */
+onFocusOut?: ((e: FocusOutEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onInitialized
+ * @type_function_param1 e:{ui/text_box:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onInput
+ * @type_function_param1 e:{ui/text_box:InputEvent}
+ */
+onInput?: ((e: InputEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onKeyDown
+ * @type_function_param1 e:{ui/text_box:KeyDownEvent}
+ */
+onKeyDown?: ((e: KeyDownEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onKeyUp
+ * @type_function_param1 e:{ui/text_box:KeyUpEvent}
+ */
+onKeyUp?: ((e: KeyUpEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onOptionChanged
+ * @type_function_param1 e:{ui/text_box:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onPaste
+ * @type_function_param1 e:{ui/text_box:PasteEvent}
+ */
+onPaste?: ((e: PasteEvent) => void);
+/**
+ * @skip
+ * @docid dxTextBoxOptions.onValueChanged
+ * @type_function_param1 e:{ui/text_box:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

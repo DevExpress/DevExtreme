@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "../sizes" as *;
 @use "sizes" as *;
@@ -5,8 +6,7 @@
 @use "../../base/icons" as *;
 
 $material-button-padding: $material-button-vertical-padding $material-button-horizontal-padding;
-$material-button-icononly-padding: $material-button-vertical-padding;
-$material-button-icon-size: $material-base-icon-size;
+$material-button-icon-text-padding: 12px;
 $material-normal-button-shadow: $material-button-box-shadow-size $button-shadow-color;
 $material-normal-button-active-state-shadow: $material-button-active-box-shadow-size $button-active-shadow-color;
 $material-normal-button-hovered-state-shadow: $material-button-box-shadow-size $button-hover-shadow-color;
@@ -18,7 +18,10 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
   }
 
   .dx-icon {
-    @include dx-icon-sizing($icon-size);
+    width: $icon-size;
+    height: $icon-size;
+    font-size: $icon-size;
+
     @include dx-icon-margin($icon-margin);
   }
 }
@@ -26,15 +29,24 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 @mixin dx-button-onlyicon-sizing() {
   min-width: $material-button-height;
 
-  @include dx-button-sizing($material-button-icononly-padding, $material-button-icon-size, 0);
+  @include dx-button-sizing(0, $material-button-icon-size, 0);
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, $material-button-icon-size / 2);
+  @include dx-button-sizing($material-button-padding, $material-button-icon-size, math.div($material-button-icon-size, 2));
 }
 
 @mixin dx-button-text-and-icon-sizing() {
-  @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, 8px);
+  @include dx-button-sizing($material-button-padding, $material-button-icon-size, 8px);
+
+  .dx-button-content {
+    padding-left: $material-button-icon-text-padding;
+
+    .dx-rtl & {
+      padding-left: $material-button-horizontal-padding;
+      padding-right: $material-button-icon-text-padding;
+    }
+  }
 }
 
 
@@ -73,6 +85,12 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 
     .dx-icon {
       opacity: $button-disabled-icon-opacity;
+    }
+
+    &.dx-button-mode-contained {
+      .dx-icon {
+        color: $button-disabled-text-color;
+      }
     }
 
     .dx-button-text {
@@ -138,10 +156,4 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
     );
 
   border: 1px solid $border-color;
-}
-
-@mixin dx-button-styling-clear() {
-  box-shadow: none;
-  background: transparent;
-  border-color: transparent;
 }

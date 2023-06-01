@@ -5,9 +5,9 @@
 $generic-badge-horizontal-padding: null !default;
 
 @if $size == "default" {
-  $generic-badge-horizontal-padding: 6px;
+  $generic-badge-horizontal-padding: 6px !default;
 }
 
 @else if $size == "compact" {
-  $generic-badge-horizontal-padding: 5px;
+  $generic-badge-horizontal-padding: 5px !default;
 }

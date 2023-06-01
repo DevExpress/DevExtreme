@@ -1,6 +1,5 @@
-import { dxBaseGauge, compareArrays as _compareArrays } from './base_gauge';
+import { BaseGauge, compareArrays as _compareArrays } from './base_gauge';
 import { isDefined as _isDefined, isNumeric as _isNumber } from '../../core/utils/type';
-import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 const _isArray = Array.isArray;
 import { Axis } from '../axes/base_axis';
@@ -12,7 +11,6 @@ const _min = Math.min;
 const _max = Math.max;
 
 const _extend = extend;
-const _each = each;
 import { noop as _noop } from '../../core/utils/common';
 const SHIFT_ANGLE = 90;
 
@@ -32,7 +30,7 @@ function parseArrayOfNumbers(arg) {
     return _isArray(arg) ? arg : _isNumber(arg) ? [arg] : null;
 }
 
-export const dxGauge = dxBaseGauge.inherit({
+export const dxGauge = BaseGauge.inherit({
     _initCore: function() {
         const that = this;
         const renderer = that._renderer;
@@ -51,6 +49,8 @@ export const dxGauge = dxBaseGauge.inherit({
             themeManager: that._themeManager
         });
         that._initScale();
+        that._subvalueIndicatorContainer = that._renderer.g().attr({ class: 'dxg-subvalue-indicators' })
+            .linkOn(that._renderer.root, 'valueIndicator').enableLinks();
     },
 
     _fontFields: [
@@ -61,10 +61,12 @@ export const dxGauge = dxBaseGauge.inherit({
         const that = this;
 
         that._scaleGroup = that._renderer.g().attr({ 'class': 'dxg-scale' }).linkOn(that._renderer.root, 'scale');
+        that._labelsAxesGroup = that._renderer.g().attr({ 'class': 'dxg-scale-elements' }).linkOn(that._renderer.root, 'scale-elements');
         that._scale = new Axis({
             incidentOccurred: that._incidentOccurred,
             renderer: that._renderer,
             axesContainerGroup: that._scaleGroup,
+            labelsAxesGroup: that._labelsAxesGroup,
             axisType: that._scaleTypes.type,
             drawingType: that._scaleTypes.drawingType,
             widgetClass: 'dxg',
@@ -78,11 +80,13 @@ export const dxGauge = dxBaseGauge.inherit({
 
         that._scale.dispose();
         that._scaleGroup.linkOff();
+        that._labelsAxesGroup.linkOff();
 
         that._rangeContainer.dispose();
         that._disposeValueIndicators();
+        that._subvalueIndicatorContainer.linkOff();
 
-        that._scale = that._scaleGroup = that._rangeContainer = null;
+        that._scale = that._scaleGroup = that._labelsAxesGroup = that._rangeContainer = null;
     },
 
     _disposeValueIndicators: function() {
@@ -147,15 +151,14 @@ export const dxGauge = dxBaseGauge.inherit({
 
         that._rangeContainer.render(_extend(that._getOption('rangeContainer'), { vertical: that._area.vertical }));
         that._renderScale(scaleOptions);
+        that._subvalueIndicatorContainer.linkAppend();
 
         const elements = _map([that._rangeContainer].concat(that._prepareValueIndicators()), function(element) {
             return element && element.enabled ? element : null;
         });
 
         that._applyMainLayout(elements, that._measureScale(scaleOptions));
-        _each(elements, function(_, element) {
-            element.resize(that._getElementLayout(element.getOffset()));
-        });
+        elements.forEach(element => element.resize(that._getElementLayout(element.getOffset())));
         that._shiftScale(that._getElementLayout(0), scaleOptions);
 
         that._beginValueChanging();
@@ -190,7 +193,7 @@ export const dxGauge = dxBaseGauge.inherit({
         const startValue = bounds[0];
         const endValue = bounds[1];
         const angles = that._translator.getCodomain();
-        const invert = !!(startValue > endValue ^ scaleOptions.inverted);
+        const invert = !!((startValue > endValue) ^ scaleOptions.inverted);
         const min = _min(startValue, endValue);
         const max = _max(startValue, endValue);
 
@@ -211,6 +214,7 @@ export const dxGauge = dxBaseGauge.inherit({
         that._updateScaleTickIndent(scaleOptions);
 
         that._scaleGroup.linkAppend();
+        that._labelsAxesGroup.linkAppend();
         that._scale.draw(extend({}, that._canvas));
     },
 
@@ -268,7 +272,7 @@ export const dxGauge = dxBaseGauge.inherit({
 
     _createSubvalueIndicatorsSet: function() {
         const that = this;
-        const root = that._renderer.root;
+        const root = that._subvalueIndicatorContainer;
         return new ValueIndicatorsSet({
             createIndicator: function(type, i) {
                 return that._createIndicator(type, root, 'dxg-subvalue-indicator', 'subvalue-indicator', i);
@@ -338,31 +342,31 @@ export const dxGauge = dxBaseGauge.inherit({
     },
 
     _changeValue: function(value) {
-        const that = this;
-        that._setupValue(value);
-        that._beginValueChanging();
-        that._updateValueIndicator();
-        if(that.__value !== that.option(OPTION_VALUE)) {
-            that.option(OPTION_VALUE, that.__value);
+        this._setupValue(value);
+        this._beginValueChanging();
+        this._updateValueIndicator();
+        this._updateExtraElements();
+        if(this.__value !== this.option(OPTION_VALUE)) {
+            this.option(OPTION_VALUE, this.__value);
         }
-        that._endValueChanging();
+        this._endValueChanging();
     },
 
     _changeSubvalues: function(subvalues) {
-        const that = this;
-        if(that.__subvalues !== null) {
-            that._setupSubvalues(subvalues);
-            that._beginValueChanging();
-            that._updateSubvalueIndicators();
-            that._endValueChanging();
+        if(this.__subvalues !== null) {
+            this._setupSubvalues(subvalues);
+            this._beginValueChanging();
+            this._updateSubvalueIndicators();
+            this._updateExtraElements();
+            this._endValueChanging();
         } else {
-            that.__subvalues = parseArrayOfNumbers(subvalues);
-            that._setContentSize();
-            that._renderContent();
+            this.__subvalues = parseArrayOfNumbers(subvalues);
+            this._setContentSize();
+            this._renderContent();
         }
 
-        if(!_compareArrays(that.__subvalues, that.option(OPTION_SUBVALUES))) {
-            that.option(OPTION_SUBVALUES, that.__subvalues);
+        if(!_compareArrays(this.__subvalues, this.option(OPTION_SUBVALUES))) {
+            this.option(OPTION_SUBVALUES, this.__subvalues);
         }
     },
 
@@ -452,7 +456,7 @@ function selectHardMode(that) {
 
 function updateActiveElements_hardMode() {
     const that = this;
-    _each(that._valueIndicators, function(_, valueIndicator) {
+    that._valueIndicators.forEach(valueIndicator => {
         valueIndicator.value(that._indicatorValues[valueIndicator.index], that._noAnimation);
     });
 }
@@ -471,7 +475,7 @@ function prepareValueIndicators_hardMode() {
         optionList.push(null);
     }
     const newValueIndicators = [];
-    _each(optionList, function(i, userSettings) {
+    optionList.forEach((userSettings, i) => {
         let valueIndicator = valueIndicators[i];
         if(!userSettings) {
             valueIndicator && valueIndicator.dispose();
@@ -496,12 +500,12 @@ function prepareValueIndicators_hardMode() {
 }
 
 function disposeValueIndicators_hardMode() {
-    _each(this._valueIndicators, function(_, valueIndicator) { valueIndicator.dispose(); });
+    this._valueIndicators.forEach(valueIndicator => valueIndicator.dispose());
     this._valueIndicators = null;
 }
 
 function cleanValueIndicators_hardMode() {
-    _each(this._valueIndicators, function(_, valueIndicator) { valueIndicator.clean(); });
+    this._valueIndicators.forEach(valueIndicator => valueIndicator.clean());
 }
 
 function indicatorValue_hardMode(index, value) {
@@ -530,9 +534,7 @@ ValueIndicatorsSet.prototype = {
 
     dispose: function() {
         const that = this;
-        _each(that._indicators, function(_, indicator) {
-            indicator.dispose();
-        });
+        that._indicators.forEach(indicator => indicator.dispose());
         that._parameters = that._options = that._indicators = that._colorPalette = that._palette = null;
         return that;
     },
@@ -540,9 +542,7 @@ ValueIndicatorsSet.prototype = {
     clean: function() {
         const that = this;
         that._sample && that._sample.clean().dispose();
-        _each(that._indicators, function(_, indicator) {
-            indicator.clean();
-        });
+        that._indicators.forEach(indicator => indicator.clean());
         that._sample = that._options = that._palette = null;
         return that;
     },
@@ -575,9 +575,7 @@ ValueIndicatorsSet.prototype = {
     resize: function(layout) {
         const that = this;
         that._layout = layout;
-        _each(that._indicators, function(_, indicator) {
-            indicator.resize(layout);
-        });
+        that._indicators.forEach(indicator => indicator.resize(layout));
         return that;
     },
 
@@ -636,9 +634,7 @@ ValueIndicatorsSet.prototype = {
             }
             if(arg) {
                 that._adjustIndicatorsCount(arg.length);
-                _each(that._indicators, function(i, indicator) {
-                    indicator.value(arg[i], _noAnimation);
-                });
+                that._indicators.forEach((indicator, i) => indicator.value(arg[i], _noAnimation));
             }
             return that;
         }

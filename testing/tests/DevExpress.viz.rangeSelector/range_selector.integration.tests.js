@@ -4,9 +4,14 @@ import { DataSource } from 'data/data_source/data_source';
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="container" style="width: 300px; height: 150px"></div>';
+        '<div id="container"></div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#container').css({
+        width: '300px',
+        height: '150px'
+    });
 });
 
 QUnit.module('Render', function(hook) {
@@ -134,6 +139,37 @@ QUnit.module('Value', function(hook) {
         assert.equal(spy.callCount, 1);
         assert.deepEqual(spy.getCall(0).args[0].target.id, 'E2203');
         assert.deepEqual(spy.getCall(0).args[0].target.text, 'The range you are trying to set is invalid');
+    });
+
+    QUnit.test('rangeSelector should not raise an error when axis type is changed after dataSource load (T1136921)', function(assert) {
+        const onIncidentOccurred = sinon.spy();
+        const done = assert.async();
+        const dataSource = new DataSource({
+            load() {
+                const d = new $.Deferred();
+
+                setTimeout(() => {
+                    d.resolve([{ arg: '2013-10-19', val: 1 }, { arg: '2016-10-19', val: 1 }]);
+
+                    assert.strictEqual(onIncidentOccurred.callCount, 0, 'no errors with async dataSource');
+                    done();
+                }, 10);
+
+                return d.promise();
+            }
+        });
+
+        this.rangeSelector.option({
+            dataSource,
+            onIncidentOccurred,
+            chart: {
+                series: {},
+            },
+            scale: {
+                valueType: 'datetime',
+            },
+            value: ['2015-10-19', '2014-10-19']
+        });
     });
 
     QUnit.test('parse custom value option, with dataSource, valid value', function(assert) {
@@ -494,7 +530,7 @@ QUnit.test('Range selector with aggregation', function(assert) {
         }
     }).dxRangeSelector('instance');
 
-    assert.deepEqual(rangeSelector.getValue(), [0, 2]);
+    assert.deepEqual(rangeSelector.getValue(), [0, 4]);
 });
 
 QUnit.test('Range selector with aggregation when dataSource is set after widget creation', function(assert) {
@@ -523,7 +559,7 @@ QUnit.test('Range selector with aggregation when dataSource is set after widget 
         ]
     });
 
-    assert.deepEqual(rangeSelector.getValue(), [50, 90]);
+    assert.deepEqual(rangeSelector.getValue(), [50, 100]);
 });
 
 QUnit.test('Range selector with stacked series', function(assert) {
@@ -550,6 +586,66 @@ QUnit.test('Range selector with stacked series', function(assert) {
     }).dxRangeSelector('instance');
 
     assert.deepEqual(rangeSelector.getValue(), [0.5, 2.5]);
+});
+
+// T1003570
+QUnit.test('Remove overlapped labels. Semidiscrete scale. Right side', function(assert) {
+    const container = $('#container');
+    container.width(950).dxRangeSelector({
+        scale: {
+            startValue: new Date('1995-01-01T21:00:00.000Z'),
+            endValue: new Date('1995-12-31T21:00:00.000Z'),
+            type: 'semidiscrete',
+            marker: {
+                visible: false
+            },
+            label: {
+                customizeText(e) {
+                    return e.valueText.split(' ')[0];
+                },
+                format: 'month'
+            },
+            minorTick: {
+                visible: false
+            },
+            minRange: 'day'
+        }
+    }).dxRangeSelector('instance');
+
+    const drawnLabels = container.find('.dxrs-range-selector-elements text');
+
+    assert.strictEqual(drawnLabels.length, 12);
+    assert.strictEqual($(drawnLabels[drawnLabels.length - 1]).text(), 'December');
+});
+
+// T1003570
+QUnit.test('Remove overlapped labels. Semidiscrete scale. Left side', function(assert) {
+    const container = $('#container');
+    container.width(950).dxRangeSelector({
+        scale: {
+            startValue: new Date('1994-12-31T11:00:00.000Z'),
+            endValue: new Date('1995-12-31T21:00:00.000Z'),
+            type: 'semidiscrete',
+            marker: {
+                visible: false
+            },
+            label: {
+                customizeText(e) {
+                    return e.valueText.split(' ')[0];
+                },
+                format: 'month'
+            },
+            minorTick: {
+                visible: false
+            },
+            minRange: 'day'
+        }
+    }).dxRangeSelector('instance');
+
+    const drawnLabels = container.find('.dxrs-range-selector-elements text');
+
+    assert.strictEqual(drawnLabels.length, 12);
+    assert.strictEqual($(drawnLabels[0]).text(), 'January');
 });
 
 QUnit.module('selectedRangeUpdateMode', {

@@ -86,6 +86,10 @@ const ProgressBar = TrackBar.inherit({
         this._toggleStatus(this.option('showStatus'));
     },
 
+    _useTemplates: function() {
+        return false;
+    },
+
     _createCompleteAction: function() {
         this._completeAction = this._createActionByOption('onComplete');
     },
@@ -218,13 +222,13 @@ const ProgressBar = TrackBar.inherit({
     }
 
     /**
-    * @name dxProgressBarMethods.registerKeyHandler
+    * @name dxProgressBar.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxProgressBarMethods.focus
+    * @name dxProgressBar.focus
     * @publicName focus()
     * @hidden
     */

@@ -1,9 +1,9 @@
 import $ from 'jquery';
 const { test } = QUnit;
-import 'common.css!';
 import 'ui/diagram';
 
 import { Consts, getViewToolbarElement, getViewToolbarInstance, findViewToolbarItem, findContextMenuItem, getContextMenuItemCheck } from '../../../helpers/diagramHelpers.js';
+import { getActiveElement } from '../../../helpers/shadowDom.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -49,10 +49,10 @@ QUnit.module('View Toolbar', {
     test('diagram should be focused after button click', function(assert) {
         assert.notOk(this.$element.hasClass(Consts.FULLSCREEN_CLASS));
         const $fullScreenButton = findViewToolbarItem(this.$element, 'full screen');
-        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+        assert.notEqual(getActiveElement(), this.instance._diagramInstance.render.input.inputElement);
         $fullScreenButton.trigger('dxclick');
         this.clock.tick(200);
-        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+        assert.equal(getActiveElement(), this.instance._diagramInstance.render.input.inputElement);
     });
     test('should toggle check state on show grid button click', function(assert) {
         assert.equal(this.instance.option('showGrid'), true);
@@ -78,6 +78,8 @@ QUnit.module('View Toolbar', {
         const $zoomLevelTextBox = $viewToolbar.find('.dx-textbox');
         const $zoomLevelDropDownButton = $zoomLevelTextBox.find('.dx-button');
         $zoomLevelDropDownButton.trigger('dxclick');
+        this.clock.tick(200); // initiate render
+
         let $zoomLevel100Button = findContextMenuItem(this.$element, '100%');
         let $zoomLevel100ButtonCheck = getContextMenuItemCheck($zoomLevel100Button);
         let $zoomLevel200Button = findContextMenuItem(this.$element, '200%');
@@ -90,6 +92,9 @@ QUnit.module('View Toolbar', {
         assert.equal(this.instance.option('zoomLevel'), 2);
 
         $zoomLevelDropDownButton.trigger('dxclick');
+        this.clock.tick(200); // initiate render
+        $zoomLevelDropDownButton.trigger('dxclick');
+
         $zoomLevel100Button = findContextMenuItem(this.$element, '100%');
         $zoomLevel100ButtonCheck = getContextMenuItemCheck($zoomLevel100Button);
         $zoomLevel200Button = findContextMenuItem(this.$element, '200%');

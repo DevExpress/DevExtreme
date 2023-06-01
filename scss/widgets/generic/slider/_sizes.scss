@@ -7,13 +7,13 @@ $generic-slider-track-height: null !default;
 $generic-slider-height: null !default;
 
 @if $size == "default" {
-  $generic-slider-width: 14px;
-  $generic-slider-track-height: 4px;
-  $generic-slider-height: 28px;
+  $generic-slider-width: 14px !default;
+  $generic-slider-track-height: 4px !default;
+  $generic-slider-height: 28px !default;
 }
 
 @else if $size == "compact" {
-  $generic-slider-width: 9px;
-  $generic-slider-track-height: 2px;
-  $generic-slider-height: 20px;
+  $generic-slider-width: 9px !default;
+  $generic-slider-track-height: 2px !default;
+  $generic-slider-height: 20px !default;
 }

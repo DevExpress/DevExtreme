@@ -18,44 +18,44 @@ $generic-colorview-container-textbox-margin: null !default;
 $generic-colorview-controls-container-width: null !default;
 $generic-colorview-controls-container-margin: null !default;
 
-$generic-colorview-hue-scale-width: 18px;
+$generic-colorview-hue-scale-width: 18px !default;
 
 @if $size == "default" {
-  $generic-colorview-container-width: 450px;
-  $generic-colorview-palette-width: 288px;
-  $generic-colorview-palette-height: 299px;
-  $generic-colorview-alpha-margin: 10px;
-  $generic-colorview-hue-scale-margin: 19px;
-  $generic-colorview-color-preview-height: 40px;
-  $generic-colorview-preview-container-margin: 34px;
+  $generic-colorview-container-width: 450px !default;
+  $generic-colorview-palette-width: 288px !default;
+  $generic-colorview-palette-height: 299px !default;
+  $generic-colorview-alpha-margin: 10px !default;
+  $generic-colorview-hue-scale-margin: 19px !default;
+  $generic-colorview-color-preview-height: 40px !default;
+  $generic-colorview-preview-container-margin: 34px !default;
 
-  $generic-colorview-container-line-height: 36px;
-  $generic-colorview-container-hex-margin: 10px 0 0 0;
-  $generic-colorview-container-alpha-label-width: 115px;
-  $generic-colorview-container-alpha-label-margin: 43px;
-  $generic-colorview-container-textbox-width: 69px;
-  $generic-colorview-container-textbox-margin: 1px 1px 10px 0;
+  $generic-colorview-container-line-height: 36px !default;
+  $generic-colorview-container-hex-margin: 10px 0 0 0 !default;
+  $generic-colorview-container-alpha-label-width: 115px !default;
+  $generic-colorview-container-alpha-label-margin: 43px !default;
+  $generic-colorview-container-textbox-width: 69px !default;
+  $generic-colorview-container-textbox-margin: 1px 1px 10px 0 !default;
 
-  $generic-colorview-controls-container-width: 90px;
-  $generic-colorview-controls-container-margin: 27px;
+  $generic-colorview-controls-container-width: 90px !default;
+  $generic-colorview-controls-container-margin: 27px !default;
 }
 
 @else if $size == "compact" {
-  $generic-colorview-container-width: 316px;
-  $generic-colorview-palette-width: 190px;
-  $generic-colorview-palette-height: 200px;
-  $generic-colorview-alpha-margin: 5px;
-  $generic-colorview-hue-scale-margin: 15px;
-  $generic-colorview-color-preview-height: 25px;
-  $generic-colorview-preview-container-margin: 15px;
+  $generic-colorview-container-width: 316px !default;
+  $generic-colorview-palette-width: 190px !default;
+  $generic-colorview-palette-height: 200px !default;
+  $generic-colorview-alpha-margin: 5px !default;
+  $generic-colorview-hue-scale-margin: 15px !default;
+  $generic-colorview-color-preview-height: 25px !default;
+  $generic-colorview-preview-container-margin: 15px !default;
 
-  $generic-colorview-container-line-height: 25px;
-  $generic-colorview-container-hex-margin: 5px 0 0 0;
-  $generic-colorview-container-alpha-label-width: 92px;
-  $generic-colorview-container-alpha-label-margin: 29px;
-  $generic-colorview-container-textbox-width: 51px;
-  $generic-colorview-container-textbox-margin: 1px 1px 8px 0;
+  $generic-colorview-container-line-height: 25px !default;
+  $generic-colorview-container-hex-margin: 5px 0 0 0 !default;
+  $generic-colorview-container-alpha-label-width: 92px !default;
+  $generic-colorview-container-alpha-label-margin: 29px !default;
+  $generic-colorview-container-textbox-width: 51px !default;
+  $generic-colorview-container-textbox-margin: 1px 1px 8px 0 !default;
 
-  $generic-colorview-controls-container-width: 70px;
-  $generic-colorview-controls-container-margin: 15px;
+  $generic-colorview-controls-container-width: 70px !default;
+  $generic-colorview-controls-container-margin: 15px !default;
 }

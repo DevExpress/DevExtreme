@@ -13,6 +13,18 @@ const createDataSource = function(data, storeOptions, dataSourceOptions) {
     return dataSource;
 };
 
+const generateData = function(count) {
+    let i = 1;
+    const result = [];
+
+    while(i < count * 2) {
+        result.push({ id: i, parentId: 0, field: 'a' }, { id: i + 1, parentId: i, field: 'b' });
+        i += 2;
+    }
+
+    return result;
+};
+
 const setupModule = function() {
     this.options = {
         keyExpr: 'id',
@@ -639,7 +651,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         try {
             this.getDataSource().filter(['id', '=', 2]);
             this.getDataSource().load();
-            clock.tick();
+            clock.tick(10);
         } catch(e) {
             assert.ok(false, e);
         }
@@ -1741,14 +1753,14 @@ QUnit.module('Remote Operations', { beforeEach: function() {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(loadingArgs.length, 2, 'two loading on init');
 
         // act
         loadingArgs = [];
         this.collapseRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -2955,5 +2967,86 @@ QUnit.module('Filtering', { beforeEach: function() {
         assert.strictEqual(rows[1].key, 6, 'second row');
         assert.strictEqual(rows[2].key, 7, 'third row');
     });
+
+    // T1087885
+    QUnit.test('There should not be looping after search when filterMode is \'fullBranch\' and all nodes are expanded', function(assert) {
+        // arrange, act
+        const data = generateData(200);
+
+        this.setupTreeList({
+            dataSource: data,
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            filterMode: 'fullBranch',
+            expandNodesOnFiltering: true,
+            searchPanel: {
+                text: 'b'
+            },
+            expandedRowKeys: data.map((item) => item.id)
+        });
+
+        // act
+        assert.ok(true, 'no looping');
+    });
 });
 
+QUnit.module('Push API', {
+    beforeEach: function() {
+        this.items = [
+            { id: 1, parentId: 0, name: 'Name 1' },
+            { id: 2, parentId: 0, name: 'Name 2' },
+            { id: 3, parentId: 0, name: 'Name 3' },
+            { id: 4, parentId: 1, name: 'Name 4' },
+            { id: 5, parentId: 1, name: 'Name 5' },
+            { id: 6, parentId: 1, name: 'Name 6' }
+        ];
+
+        this.setupTreeList = function(options) {
+            if(!('loadingTimeout' in options)) {
+                options.loadingTimeout = null;
+            }
+            setupTreeListModules(this, ['data', 'columns'], {
+                initDefaultOptions: true,
+                options: options
+            });
+        };
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: teardownModule
+}, () => {
+    // T1113826
+    QUnit.test('Update the node using the push method of the store when changes have the \'data\' property', function(assert) {
+        // arrange
+        this.setupTreeList({
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            dataSource: this.items,
+            columns: ['name', 'age']
+        });
+        const store = this.getDataSource().store();
+
+        // act
+        store.push([{
+            type: 'update',
+            key: 1,
+            data: {
+                name: 'Root name 1',
+                data: {
+                    name: 'Inner name 1'
+                }
+            }
+        }]);
+        this.clock.tick(100);
+
+        // assert
+        const firstNode = this.getVisibleRows()[0];
+        assert.deepEqual(firstNode.data, {
+            id: 1,
+            parentId: 0,
+            name: 'Root name 1',
+            data: {
+                name: 'Inner name 1'
+            }
+        }, 'node data is correct');
+    });
+});

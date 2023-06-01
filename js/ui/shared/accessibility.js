@@ -55,7 +55,7 @@ function processKeyDown(viewName, instance, event, action, $mainElement, execute
     }
 }
 
-function saveFocusedElementInfo(target, instance) {
+export function saveFocusedElementInfo(target, instance) {
     const $target = $(target);
     const ariaLabel = $target.attr('aria-label');
     const $activeElements = getActiveAccessibleElements(ariaLabel, instance.element());
@@ -79,10 +79,12 @@ function getActiveAccessibleElements(ariaLabel, viewElement) {
     return $activeElements;
 }
 
-function findFocusedViewElement(viewSelectors) {
+function findFocusedViewElement(viewSelectors, element) {
+    const root = element?.getRootNode() || domAdapter.getDocument();
+
     for(const index in viewSelectors) {
         const selector = viewSelectors[index];
-        const $focusViewElement = $(selector).first();
+        const $focusViewElement = $(root).find(selector).first();
 
         if($focusViewElement.length) {
             return $focusViewElement;
@@ -128,16 +130,16 @@ export function registerKeyboardAction(viewName, instance, $element, selector, a
         return noop;
     }
 
-    const $mainElement = $(instance.element());
-    const keyDownHandler = e => processKeyDown(viewName, instance, e, action, $mainElement, executeKeyDown);
+    const getMainElement = () => $(instance.element());
+    const keyDownHandler = e => processKeyDown(viewName, instance, e, action, getMainElement(), executeKeyDown);
     const mouseDownHandler = () => {
         isMouseDown = true;
-        $mainElement.removeClass(FOCUS_STATE_CLASS);
+        getMainElement().removeClass(FOCUS_STATE_CLASS);
     };
     const focusinHandler = () => {
         const needShowOverlay = !isMouseDown && !isHiddenFocusing;
         if(needShowOverlay) {
-            $mainElement.addClass(FOCUS_STATE_CLASS);
+            getMainElement().addClass(FOCUS_STATE_CLASS);
         }
         isMouseDown = false;
     };
@@ -177,7 +179,7 @@ export function selectView(viewName, instance, event) {
             viewItemIndex = keyName === 'upArrow' ? --viewItemIndex : ++viewItemIndex;
             const viewName = viewNames[viewItemIndex];
             const viewSelectors = viewItemSelectorMap[viewName];
-            const $focusViewElement = findFocusedViewElement(viewSelectors);
+            const $focusViewElement = findFocusedViewElement(viewSelectors, event.target);
             if($focusViewElement && $focusViewElement.length) {
                 $focusViewElement.attr('tabindex', instance.option('tabindex') || 0);
                 eventsEngine.trigger($focusViewElement, 'focus');

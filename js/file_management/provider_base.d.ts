@@ -1,166 +1,132 @@
-import '../jquery_augmentation';
 import FileSystemItem from './file_system_item';
 import UploadInfo from './upload_info';
 
+import {
+    DxPromise,
+} from '../core/utils/deferred';
+
+/**
+ * @namespace DevExpress.fileManagement
+ * @docid
+ * @type object
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
-     * @docid FileSystemProviderBaseOptions.dateModifiedExpr
-     * @type string|function(fileSystemItem)
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid
      * @public
      */
     dateModifiedExpr?: string | Function;
     /**
-     * @docid FileSystemProviderBaseOptions.isDirectoryExpr
-     * @type string|function(fileSystemItem)
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid
      * @public
      */
     isDirectoryExpr?: string | Function;
     /**
-     * @docid FileSystemProviderBaseOptions.keyExpr
-     * @type string|function(fileSystemItem)
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid
      * @public
      */
     keyExpr?: string | Function;
     /**
-     * @docid FileSystemProviderBaseOptions.nameExpr
-     * @type string|function(fileSystemItem)
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid
      * @public
      */
     nameExpr?: string | Function;
     /**
-     * @docid FileSystemProviderBaseOptions.sizeExpr
-     * @type string|function(fileSystemItem)
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid
      * @public
      */
     sizeExpr?: string | Function;
     /**
-     * @docid FileSystemProviderBaseOptions.thumbnailExpr
-     * @type string|function(fileSystemItem)
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid
      * @public
      */
     thumbnailExpr?: string | Function;
 }
 /**
- * @docid FileSystemProviderBase
- * @type object
- * @module file_management/provider_base
+ * @docid
  * @namespace DevExpress.fileManagement
- * @export default
  * @hidden
- * @prevFileNamespace DevExpress.fileManagement
+ * @options FileSystemProviderBaseOptions
  */
 export default class FileSystemProviderBase {
-    constructor(options?: FileSystemProviderBaseOptions)
+    constructor(options?: FileSystemProviderBaseOptions);
     /**
-     * @docid FileSystemProviderBaseMethods.getItems
+     * @docid
      * @publicName getItems()
-     * @param1 parentDirectory:FileSystemItem
      * @return Promise<Array<FileSystemItem>>
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItems(parentDirectory: FileSystemItem): Promise<Array<FileSystemItem>> & JQueryPromise<Array<FileSystemItem>>;
+    getItems(parentDirectory: FileSystemItem): DxPromise<Array<FileSystemItem>>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.renameItem
+     * @docid
      * @publicName renameItem()
-     * @param1 item:FileSystemItem
-     * @param2 newName:string
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    renameItem(item: FileSystemItem, newName: string): Promise<any> & JQueryPromise<any>;
+    renameItem(item: FileSystemItem, newName: string): DxPromise<any>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.createDirectory
+     * @docid
      * @publicName createDirectory()
-     * @param1 parentDirectory:FileSystemItem
-     * @param2 name:string
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    createDirectory(parentDirectory: FileSystemItem, name: string): Promise<any> & JQueryPromise<any>;
+    createDirectory(parentDirectory: FileSystemItem, name: string): DxPromise<any>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.deleteItems
+     * @docid
      * @publicName deleteItems()
-     * @param1 items:Array<FileSystemItem>
      * @return Array<Promise<any>>
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    deleteItems(items: Array<FileSystemItem>): Array<Promise<any> & JQueryPromise<any>>;
+    deleteItems(items: Array<FileSystemItem>): Array<DxPromise<any>>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.moveItems
+     * @docid
      * @publicName moveItems()
-     * @param1 items:Array<FileSystemItem>
-     * @param2 destinationDirectory:FileSystemItem
      * @return Array<Promise<any>>
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    moveItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<Promise<any> & JQueryPromise<any>>;
+    moveItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<DxPromise<any>>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.copyItems
+     * @docid
      * @publicName copyItems()
-     * @param1 items:Array<FileSystemItem>
-     * @param2 destinationDirectory:FileSystemItem
      * @return Array<Promise<any>>
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    copyItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<Promise<any> & JQueryPromise<any>>;
+    copyItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<DxPromise<any>>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.uploadFileChunk
+     * @docid
      * @publicName uploadFileChunk()
-     * @param1 fileData:File
-     * @param2 uploadInfo:UploadInfo
-     * @param3 destinationDirectory:FileSystemItem
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+    uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): DxPromise<any>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.abortFileUpload
+     * @docid
      * @publicName abortFileUpload()
-     * @param1 fileData:File
-     * @param2 uploadInfo:UploadInfo
-     * @param3 destinationDirectory:FileSystemItem
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+    abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): DxPromise<any>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.downloadItems
+     * @docid
      * @publicName downloadItems()
-     * @param1 items:Array<FileSystemItem>
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     downloadItems(items: Array<FileSystemItem>): void;
 
     /**
-     * @docid FileSystemProviderBaseMethods.getItemsContent
+     * @docid
      * @publicName getItemsContent()
-     * @param1 items:Array<FileSystemItem>
      * @return Promise<object>
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    getItemsContent(items: Array<FileSystemItem>): Promise<any> & JQueryPromise<any>;
+    getItemsContent(items: Array<FileSystemItem>): DxPromise<any>;
 }

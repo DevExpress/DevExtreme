@@ -1,11 +1,9 @@
 import $ from 'jquery';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/text_box';
 import 'ui/select_box';
 import 'ui/number_box';
-import browser from 'core/utils/browser';
 import errors from 'ui/widget/ui.errors';
 
 const { module, test } = QUnit;
@@ -185,11 +183,7 @@ module('rendering', () => {
             });
             const beforeStyle = getComputedStyle($textBox.find('.dx-placeholder').get(0), ':before');
 
-            if(browser.msie) {
-                assert.strictEqual(beforeStyle.maxWidth, '100%', 'maxWidth of the before element is correct');
-            } else {
-                assert.ok(parseInt(beforeStyle.width) < $textBox.outerWidth(), 'placeholder is smaller than the editor');
-            }
+            assert.ok(parseInt(beforeStyle.width) < $textBox.outerWidth(), 'placeholder is smaller than the editor');
 
             $textBox.remove();
         });
@@ -938,6 +932,28 @@ module('collection updating', () => {
             textBox.option('stylingMode', 'filled');
             customButton = textBox.getButton('custom');
             assert.notStrictEqual(customButton.option('stylingMode'), 'text');
+        });
+
+        test('custom button should have \'text\' styling mode if editor has stylingMode = \'underlined\' and buttons config was changed (T992034)', function(assert) {
+            const buttonConfig = {
+                name: 'custom',
+                location: 'after',
+                options: {
+                    text: 'custom'
+                }
+            };
+            const $textBox = $('<div>').dxTextBox({
+                showClearButton: false,
+                stylingMode: 'underlined',
+                value: 'text',
+                buttons: [buttonConfig]
+            });
+            const textBox = $textBox.dxTextBox('instance');
+
+            textBox.option('buttons', [buttonConfig]);
+
+            const customButton = textBox.getButton('custom');
+            assert.strictEqual(customButton.option('stylingMode'), 'text');
         });
     });
 

@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -8,17 +9,18 @@
 @use "../button/sizes" as *;
 @use "../button/mixins" as *;
 @use "../checkBox/colors" as *;
-@use "../../base/list";
+@use "../../base/list" as *;
+@use "../../base/list/mixins" as *;
+@use "../radioGroup/colors" as *;
 
 // adduse
 @use "../badge";
 
-
 $material-list-item-border-width: 1px;
 $material-list-border-width: 1px;
-$material-mobile-list-item-horizontal-padding: 15px;
 $material-list-border: $material-list-border-width solid $list-border-color;
 $material-list-item-border: $material-list-item-border-width solid $list-border-color;
+$material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding - 2px;
 
 .dx-list-item-chevron {
   transform: rotate(0);
@@ -47,7 +49,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
 }
 
 .dx-list-search {
-  padding-top: $material-list-searchbox-vertical-padding - 2px;
+  padding-top: $material-list-searchbox-padding-top;
 
   &.dx-searchbox {
     .dx-placeholder::before {
@@ -111,12 +113,8 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
   .dx-list {
     border: none;
 
-    .dx-list-item .dx-icon {
-      color: $list-icon-color;
-    }
-
     &.dx-list-with-search .dx-scrollable-wrapper {
-      height: calc(100% - #{$material-list-item-height});
+      height: calc(100% - #{$material-list-item-height + $material-list-searchbox-padding-top + $list-searchbox-margin-bottom});
     }
 
     .dx-empty-message {
@@ -124,6 +122,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
     }
 
     &.dx-list-select-decorator-enabled {
+      .dx-list-select-all,
       .dx-list-item {
         &.dx-state-hover {
           .dx-radiobutton-icon::before {
@@ -132,6 +131,20 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
         }
 
         &.dx-state-focused {
+          .dx-radiobutton {
+            .dx-radiobutton-icon::after {
+              background-color: color.change($base-text-color, $alpha: 0.1);
+              transform: scale(1);
+            }
+
+            &.dx-radiobutton-checked {
+              .dx-radiobutton-icon::after {
+                background-color: color.change($radiogroup-checked-bg, $alpha: 0.1);
+                transform: scale(1);
+              }
+            }
+          }
+
           .dx-checkbox {
             .dx-checkbox-icon::after {
               background-color: color.change($checkbox-border-color, $alpha: 0.1);
@@ -229,6 +242,8 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
   }
 
   .dx-list-item {
+    @include toggle-delete-icon($list-icon-color);
+
     &.dx-state-hover,
     &.dx-state-active {
       background-color: $list-item-hover-bg;
@@ -249,8 +264,11 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
       margin-bottom: $material-list-vertical-padding;
     }
 
+    .dx-icon {
+      color: $list-icon-color;
+    }
+
     .dx-icon-toggle-delete {
-      background-image: $list-item-icon-toggle-delete-bg;
       background-size: 100%;
     }
 
@@ -283,7 +301,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
   }
 
   .dx-list .dx-empty-message { // stylelint-disable-line no-duplicate-selectors
-    padding: $material-list-item-vertical-padding / 2 + 1px $item-horizontal-padding $material-list-item-vertical-padding / 2;
+    padding: math.div($material-list-item-vertical-padding, 2) + 1px $item-horizontal-padding math.div($material-list-item-vertical-padding, 2);
     color: color.change($list-normal-color, $alpha: 0.54);
     font-size: 12px;
   }
@@ -302,7 +320,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
 
   .dx-list-item-chevron-container {
     width: 11px + $item-horizontal-padding;
-    padding-top: $material-list-item-vertical-padding / 2;
+    padding-top: math.div($material-list-item-vertical-padding, 2);
   }
 
   .dx-list-border-visible {
@@ -445,7 +463,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
   }
 
   .dx-list-switchable-delete-button-inner-wrapper {
-    padding-right: ($material-list-item-height - $material-button-height) / 2;
+    padding-right: math.div($material-list-item-height - $material-button-height, 2);
     background-color: $base-bg;
   }
 
@@ -498,7 +516,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
     }
 
     .dx-list-switchable-delete-button-inner-wrapper {
-      padding-left: ($material-list-item-height - $material-button-height) / 2;
+      padding-left: math.div($material-list-item-height - $material-button-height, 2);
       padding-right: 0;
     }
   }
@@ -509,7 +527,3 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
 }
 
 @include dx-list-sizing($material-list-item-horizontal-padding);
-
-.dx-device-mobile {
-  @include dx-list-sizing($material-mobile-list-item-horizontal-padding);
-}

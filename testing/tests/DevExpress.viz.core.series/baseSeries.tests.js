@@ -177,7 +177,7 @@ const environmentWithSinonStubPoint = {
     beforeEach: function() {
         environment.beforeEach.call(this);
         let mockPointIndex = 0;
-        this.createPoint = sinon.stub(pointModule, 'Point', function(series, data) {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(series, data) {
             const stub = mockPoints[mockPointIndex++];
             stub.series = series;
             stub.argument = data.argument || 1;
@@ -961,6 +961,24 @@ QUnit.test('T111893. Customize point and empty customize label result', function
     });
 });
 
+QUnit.test('displayFormat option. Passing to point', function(assert) {
+    const series = createSeries({
+        type: 'line',
+        label: {
+            visible: true,
+            displayFormat: '_{argument}_'
+        }
+    });
+    const data = [{ arg: 1, val: 3 }, { arg: 2, val: 4 }];
+
+    series.updateData(data);
+    series.createPoints();
+
+    series.getAllPoints().forEach(point => {
+        assert.equal(point.getOptions().label.displayFormat, '_{argument}_');
+    });
+});
+
 QUnit.test('Update data with null values for argument', function(assert) {
     const series = createSeries({ type: 'line', label: { visible: false } });
 
@@ -1590,6 +1608,41 @@ QUnit.test('Groups disposing when tracker drawn', function(assert) {
     assert.ok(trackersGroupSpy.called);
 });
 
+QUnit.test('Series groups disposing private API (T1028256)', function(assert) {
+    const series = this.series;
+    series._elementsGroup = this.renderer.g();
+    series._bordersGroup = this.renderer.g();
+    series._markersGroup = this.renderer.g();
+
+    series.updateData([{ arg: 1, val: 1 }]);
+    series.createPoints();
+
+    series.draw(false);
+    series._graphics = [{ line: {} }];
+
+    const point = series.getAllPoints()[0];
+    point.deleteMarker = sinon.spy();
+    series._removeElement = sinon.spy();
+    const elementsDetachSpy = series._elementsGroup.stub('dispose');
+    const bordersDetachSpy = series._bordersGroup.stub('dispose');
+    const markersDetachSpy = series._markersGroup.stub('dispose');
+
+    series.removePointElements();
+    series.removeGraphicElements();
+    series.removeBordersGroup();
+
+    assert.ok(series._removeElement.calledOnce, 'graphic elements dispose');
+    assert.ok(elementsDetachSpy.calledOnce, 'elementsGroup dispose');
+    assert.ok(bordersDetachSpy.calledOnce, 'bordersGroup dispose');
+    assert.ok(markersDetachSpy.calledOnce, 'markersGroup dispose');
+    assert.ok(point.deleteMarker.calledOnce, 'point markers dispose');
+    assert.strictEqual(series._elementsGroup, null, 'elementsGroup is null');
+    assert.strictEqual(series._bordersGroup, null, 'bordersGroup is null');
+    assert.strictEqual(series._markersGroup, null, 'markersGroup is null');
+    assert.strictEqual(series._graphics, null, 'graphics is null');
+
+});
+
 QUnit.test('Arrays disposing', function(assert) {
     const series = this.series;
     const trackerElement = this.renderer.g();
@@ -2153,7 +2206,7 @@ QUnit.test('Points count > maxLabelCount', function(assert) {
 QUnit.module('Series states - excludePointsMode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point', function() {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -2527,7 +2580,7 @@ QUnit.test('setHoverState after Selected State in includePointsMode', function(a
 QUnit.module('Series states - nearestPoint Mode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point', function(_, data) {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(_, data) {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
 
@@ -2901,7 +2954,7 @@ QUnit.test('reset nearest point on select', function(assert) {
 QUnit.module('Series states - includePointsMode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point', function() {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -3263,7 +3316,7 @@ QUnit.test('clear selection hovered', function(assert) {
 QUnit.module('Series states - none mode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point', function() {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -4060,7 +4113,7 @@ QUnit.test('double showing invisible series', function(assert) {
     assert.ok(series.getOptions().visible);
 });
 
-QUnit.test('set visibility from options', function(assert) {
+QUnit.test('set visibility from options. updating true -> false', function(assert) {
     const spy = sinon.spy();
     const seriesGroup = this.renderer.g();
     const series = createSeries({
@@ -4083,7 +4136,7 @@ QUnit.test('set visibility from options', function(assert) {
     assert.ok(series._group.stub('remove').called);
 });
 
-QUnit.test('set visibility from options', function(assert) {
+QUnit.test('set visibility from options. updating true -> true', function(assert) {
     const spy = sinon.spy();
     const seriesGroup = this.renderer.g();
     const series = createSeries({
@@ -4142,6 +4195,27 @@ QUnit.module('API', {
         };
     },
     afterEach: environmentWithSinonStubPoint.afterEach
+});
+
+QUnit.test('All points should be translated', function(assert) {
+    const series = createSeries({}, {
+        argumentAxis: new MockAxis({ renderer: this.renderer }),
+        valueAxis: new MockAxis({ renderer: this.renderer })
+    });
+    series.updateData(this.data);
+    series.createPoints();
+    const points = series.getAllPoints();
+    points.forEach(point => point.translate.reset());
+
+    // act
+    series.prepareCoordinatesForPoints();
+    // assert
+
+    assert.ok(points, 'Points were returned');
+    assert.strictEqual(points[0].translate.callCount, 1);
+    assert.strictEqual(points[1].translate.callCount, 1);
+    assert.strictEqual(points[2].translate.callCount, 1);
+    assert.strictEqual(points[3].translate.callCount, 1);
 });
 
 QUnit.test('hide labels', function(assert) {
@@ -4945,7 +5019,7 @@ QUnit.module('Legend states', {
     beforeEach: function() {
         this.legendCallback = sinon.stub();
         environment.beforeEach.call(this);
-        sinon.stub(pointModule, 'Point', function(series) {
+        sinon.stub(pointModule, 'Point').callsFake(function(series) {
             const point = new vizMocks.Point();
             point.argument = 1;
             point.series = series;

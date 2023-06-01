@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -9,17 +10,14 @@
 @use "../button/mixins" as *;
 @use "../checkBox/colors" as *;
 @use "../../base/list";
+@use "../../base/list/mixins" as *;
 
 // adduse
 @use "../badge";
 
-
-$generic-mobile-list-item-horizontal-padding: 15px;
-
 $generic-list-border: $generic-list-border-width solid $list-border-color;
 $generic-list-item-border: $generic-list-item-border-width solid $list-border-color;
 $generic-list-search-editor-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
-
 
 .dx-list-item-chevron {
   transform: rotate(0);
@@ -59,6 +57,8 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     .dx-icon {
       color: $list-item-hover-color;
     }
+
+    @include toggle-delete-icon($list-item-hover-color);
   }
 
   &.dx-list-item-selected {
@@ -73,6 +73,8 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
       background-color: $list-item-selected-hover-bg;
       color: $list-item-color;
     }
+
+    @include toggle-delete-icon($list-item-selected-color);
   }
 
   &.dx-state-focused {
@@ -86,6 +88,8 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     .dx-list-item-chevron {
       border-color: $list-chevron-focus-color;
     }
+
+    @include toggle-delete-icon($list-item-focus-color);
   }
 
   &.dx-state-focused.dx-list-item-selected {
@@ -105,6 +109,8 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
       background-color: $list-item-active-bg;
       color: $list-item-active-color;
     }
+
+    @include toggle-delete-icon($list-item-active-color);
   }
 
   .dx-icon {
@@ -178,7 +184,6 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     }
   }
 
-
   .dx-list-item {
     &:first-of-type {
       border-top: none;
@@ -189,9 +194,10 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     }
 
     .dx-icon-toggle-delete {
-      background-image: $list-item-icon-toggle-delete-bg;
       background-size: 100%;
     }
+
+    @include toggle-delete-icon($list-icon-color);
 
     &.dx-list-item-ghost-reordering {
       &.dx-state-focused {
@@ -259,7 +265,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
     }
 
     .dx-icon-toggle-delete {
-      margin: $generic-list-item-vertical-padding / 2 $item-horizontal-padding / 2 $generic-list-item-vertical-padding / 2 $item-horizontal-padding;
+      margin: math.div($generic-list-item-vertical-padding, 2) math.div($item-horizontal-padding, 2) math.div($generic-list-item-vertical-padding, 2) $item-horizontal-padding;
       width: 9px + $generic-list-item-vertical-padding;
       height: 9px + $generic-list-item-vertical-padding;
     }
@@ -351,7 +357,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
     .dx-list-item-before-bag {
       .dx-icon-toggle-delete {
-        margin: $generic-list-item-vertical-padding / 2 $item-horizontal-padding $generic-list-item-vertical-padding / 2 $item-horizontal-padding / 2;
+        margin: math.div($generic-list-item-vertical-padding, 2) $item-horizontal-padding math.div($generic-list-item-vertical-padding, 2) math.div($item-horizontal-padding, 2);
       }
 
       .dx-list-select-checkbox,
@@ -375,7 +381,3 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 }
 
 @include dx-list-sizing($generic-list-item-horizontal-padding);
-
-.dx-device-mobile {
-  @include dx-list-sizing($generic-mobile-list-item-horizontal-padding);
-}

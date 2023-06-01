@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/diagram';
 
@@ -16,7 +15,21 @@ import './diagramParts/commandManager.tests.js';
 import './diagramParts/clientSideEvents.tests.js';
 
 QUnit.testStart(() => {
-    const markup = '<style>.dxdi-control { width: 100%; height: 100%; overflow: auto; box-sizing: border-box; position: relative; }</style><div id="diagram"></div>';
+    const markup = `
+        <style nonce="qunit-test">
+            .dxdi-control {
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                box-sizing: border-box;
+                position: relative;
+            }
+        </style>
+        <div class="dx-viewport">
+            <div id="diagram"></div>
+        </div>
+    `;
+
     $('#qunit-fixture').html(markup);
 });
 

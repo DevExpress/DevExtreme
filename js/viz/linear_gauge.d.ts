@@ -1,142 +1,268 @@
 import {
-    dxBaseGauge,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
+import {
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo,
+} from './core/base_widget';
+
+import {
+    BaseGauge,
     BaseGaugeOptions,
     BaseGaugeRangeContainer,
     BaseGaugeScale,
     BaseGaugeScaleLabel,
-    GaugeIndicator
+    GaugeIndicator,
+    TooltipInfo,
 } from './gauges/base_gauge';
 
+import {
+    HorizontalAlignment,
+    Orientation,
+    VerticalAlignment,
+} from '../common';
+
+export {
+    HorizontalAlignment,
+    Orientation,
+    VerticalAlignment,
+};
+
+/** @public */
+export type DisposingEvent = EventInfo<dxLinearGauge>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxLinearGauge>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxLinearGauge>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxLinearGauge> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = FileSavingEventInfo<dxLinearGauge>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxLinearGauge> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxLinearGauge>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxLinearGauge> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = EventInfo<dxLinearGauge> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = EventInfo<dxLinearGauge> & TooltipInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ * @docid
+ */
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**
-     * @docid dxLinearGaugeOptions.geometry
-     * @type object
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
-    geometry?: { orientation?: 'horizontal' | 'vertical' };
+    geometry?: {
+      /**
+       * @docid
+       * @default 'horizontal'
+       */
+      orientation?: Orientation;
+    };
     /**
-     * @docid dxLinearGaugeOptions.rangeContainer
+     * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     rangeContainer?: dxLinearGaugeRangeContainer;
     /**
-     * @docid dxLinearGaugeOptions.scale
+     * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     scale?: dxLinearGaugeScale;
     /**
-     * @docid dxLinearGaugeOptions.subvalueIndicator
-     * @type GaugeIndicator
+     * @docid
      * @inheritAll
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     subvalueIndicator?: GaugeIndicator;
     /**
-     * @docid dxLinearGaugeOptions.valueIndicator
-     * @type GaugeIndicator
+     * @docid
      * @inheritAll
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     valueIndicator?: GaugeIndicator;
 }
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.horizontalOrientation
-     * @type Enums.HorizontalAlignment
      * @default 'right'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    horizontalOrientation?: 'center' | 'left' | 'right';
+    horizontalOrientation?: HorizontalAlignment;
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.verticalOrientation
-     * @type Enums.VerticalAlignment
      * @default 'bottom'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    verticalOrientation?: 'bottom' | 'center' | 'top';
+    verticalOrientation?: VerticalAlignment;
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.width
-     * @type object|number
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    width?: { end?: number, start?: number } | number;
+    width?: {
+      /**
+       * @docid dxLinearGaugeOptions.rangeContainer.width.start
+       * @default 5
+       */
+      start?: number;
+      /**
+       * @docid dxLinearGaugeOptions.rangeContainer.width.end
+       * @default 5
+       */
+      end?: number;
+    } | number;
 }
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxLinearGaugeScale extends BaseGaugeScale {
     /**
      * @docid dxLinearGaugeOptions.scale.horizontalOrientation
-     * @type Enums.HorizontalAlignment
      * @default 'right'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    horizontalOrientation?: 'center' | 'left' | 'right';
+    horizontalOrientation?: HorizontalAlignment;
     /**
      * @docid dxLinearGaugeOptions.scale.label
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     label?: dxLinearGaugeScaleLabel;
     /**
      * @docid dxLinearGaugeOptions.scale.scaleDivisionFactor
-     * @type number
      * @default 25
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     scaleDivisionFactor?: number;
     /**
      * @docid dxLinearGaugeOptions.scale.verticalOrientation
-     * @type Enums.VerticalAlignment
      * @default 'bottom'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    verticalOrientation?: 'bottom' | 'center' | 'top';
+    verticalOrientation?: VerticalAlignment;
 }
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
      * @docid dxLinearGaugeOptions.scale.label.indentFromTick
-     * @type number
      * @default -10
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     indentFromTick?: number;
 }
 /**
- * @docid dxLinearGauge
+ * @docid
  * @inherits BaseGauge
- * @module viz/linear_gauge
- * @export default
- * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxLinearGauge extends dxBaseGauge {
-    constructor(element: Element, options?: dxLinearGaugeOptions)
-    constructor(element: JQuery, options?: dxLinearGaugeOptions)
-}
+export default class dxLinearGauge extends BaseGauge<dxLinearGaugeOptions> { }
 
-declare global {
-interface JQuery {
-    dxLinearGauge(): JQuery;
-    dxLinearGauge(options: "instance"): dxLinearGauge;
-    dxLinearGauge(options: string): any;
-    dxLinearGauge(options: string, ...params: any[]): any;
-    dxLinearGauge(options: dxLinearGaugeOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxLinearGaugeOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxLinearGaugeOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxLinearGaugeOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onDisposing
+ * @type_function_param1 e:{viz/linear_gauge:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onDrawn
+ * @type_function_param1 e:{viz/linear_gauge:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onExported
+ * @type_function_param1 e:{viz/linear_gauge:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onExporting
+ * @type_function_param1 e:{viz/linear_gauge:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onFileSaving
+ * @type_function_param1 e:{viz/linear_gauge:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/linear_gauge:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onInitialized
+ * @type_function_param1 e:{viz/linear_gauge:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onOptionChanged
+ * @type_function_param1 e:{viz/linear_gauge:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onTooltipHidden
+ * @type_function_param1 e:{viz/linear_gauge:TooltipHiddenEvent}
+ */
+onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxLinearGaugeOptions.onTooltipShown
+ * @type_function_param1 e:{viz/linear_gauge:TooltipShownEvent}
+ */
+onTooltipShown?: ((e: TooltipShownEvent) => void);
+};
+///#ENDDEBUG

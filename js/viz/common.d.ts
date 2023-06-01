@@ -1,256 +1,347 @@
 import {
-    dxChartSeriesTypesCommonSeries
+    dxChartSeriesTypesCommonSeries,
 } from './chart';
 
 import {
-    Font
+    Font,
 } from './core/base_widget';
 
-export type ChartSeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
-export type DashStyleType = 'dash' | 'dot' | 'longDash' | 'solid';
-export type TimeIntervalType = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
-export type HatchingDirectionType = 'left' | 'none' | 'right';
+import {
+    HorizontalAlignment,
+    Orientation,
+    Position,
+    VerticalEdge,
+} from '../common';
 
+import {
+    DashStyle,
+    LegendMarkerState,
+    SeriesType as CommonSeriesType,
+} from '../common/charts';
+
+import type * as Common from '../common/charts';
+
+/** @deprecated Use SeriesType from 'devextreme/common/charts' instead */
+export type SeriesType = Common.SeriesType;
+
+/** @deprecated Use TimeIntervalConfig from 'devextreme/common/charts' instead */
+export type VizTimeInterval = Common.TimeIntervalConfig;
+
+/** @deprecated Use ScaleBreak from 'devextreme/common/charts' instead */
+export type ScaleBreak = Common.ScaleBreak;
+
+/** @deprecated Use VisualRange from 'devextreme/common/charts' instead */
+export type VisualRange = Common.VisualRange;
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.common.charts
+ * @hidden
+ */
 export interface BaseLegend {
     /**
-     * @docid BaseLegend.backgroundColor
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     backgroundColor?: string;
     /**
-     * @docid BaseLegend.border
-     * @type object
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
-    border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyleType, opacity?: number, visible?: boolean, width?: number };
+    border?: {
+      /**
+       * @docid
+       * @default '#d3d3d3'
+       */
+      color?: string;
+      /**
+       * @docid
+       * @default 0
+       */
+      cornerRadius?: number;
+      /**
+       * @docid
+       * @default 'solid'
+       */
+      dashStyle?: DashStyle;
+      /**
+       * @docid
+       * @default undefined
+       */
+      opacity?: number;
+      /**
+       * @docid
+       * @default false
+       */
+      visible?: boolean;
+      /**
+       * @docid
+       * @default 1
+       */
+      width?: number;
+    };
     /**
-     * @docid BaseLegend.columnCount
-     * @type number
+     * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     columnCount?: number;
     /**
-     * @docid BaseLegend.columnItemSpacing
-     * @type number
+     * @docid
      * @default 20
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     columnItemSpacing?: number;
     /**
-     * @docid BaseLegend.font
-     * @type Font
-     * @default '#767676' [prop](color)
-     * @prevFileNamespace DevExpress.viz
+     * @docid
+     * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
     /**
-     * @docid BaseLegend.horizontalAlignment
-     * @type Enums.HorizontalAlignment
+     * @docid
      * @default 'right'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    horizontalAlignment?: 'center' | 'left' | 'right';
+    horizontalAlignment?: HorizontalAlignment;
     /**
-     * @docid BaseLegend.itemTextPosition
-     * @type Enums.Position
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    itemTextPosition?: 'bottom' | 'left' | 'right' | 'top';
+    itemTextPosition?: Position;
     /**
-     * @docid BaseLegend.itemsAlignment
-     * @type Enums.HorizontalAlignment
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    itemsAlignment?: 'center' | 'left' | 'right';
+    itemsAlignment?: HorizontalAlignment;
     /**
-     * @docid BaseLegend.margin
-     * @type number | object
+     * @docid
      * @default 10
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    margin?: number | { bottom?: number, left?: number, right?: number, top?: number };
+    margin?: number | {
+      /**
+       * @docid
+       * @default 10
+       */
+      bottom?: number;
+      /**
+       * @docid
+       * @default 10
+       */
+      left?: number;
+      /**
+       * @docid
+       * @default 10
+       */
+      right?: number;
+      /**
+       * @docid
+       * @default 10
+       */
+      top?: number;
+    };
     /**
-     * @docid BaseLegend.markerSize
-     * @type number
+     * @docid
      * @default 20
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     markerSize?: number;
     /**
-     * @docid BaseLegend.orientation
-     * @type Enums.Orientation
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    orientation?: 'horizontal' | 'vertical';
+    orientation?: Orientation;
     /**
-     * @docid BaseLegend.paddingLeftRight
-     * @type number
+     * @docid
      * @default 10
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     paddingLeftRight?: number;
     /**
-     * @docid BaseLegend.paddingTopBottom
-     * @type number
+     * @docid
      * @default 10
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     paddingTopBottom?: number;
     /**
-     * @docid BaseLegend.rowCount
-     * @type number
+     * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     rowCount?: number;
     /**
-     * @docid BaseLegend.rowItemSpacing
-     * @type number
+     * @docid
      * @default 8
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     rowItemSpacing?: number;
     /**
-     * @docid BaseLegend.title
-     * @type object|string
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
-    title?: { font?: Font, horizontalAlignment?: 'center' | 'left' | 'right', margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, offset?: number, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
+    title?: {
+      /**
+       * @docid
+       * @default '#232323' &prop(color)
+       * @default 18 &prop(size)
+       * @default 200 &prop(weight)
+       * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
+       */
+      font?: Font;
+      /**
+       * @docid
+       * @default undefined
+       */
+      horizontalAlignment?: HorizontalAlignment;
+      /**
+       * @docid
+       */
+      margin?: {
+        /**
+         * @docid
+         * @default 9
+         */
+        bottom?: number;
+        /**
+         * @docid
+         * @default 0
+         */
+        left?: number;
+        /**
+         * @docid
+         * @default 0
+         */
+        right?: number;
+        /**
+         * @docid
+         * @default 0
+         */
+        top?: number;
+      };
+      /**
+       * @docid
+       * @default undefined
+       */
+      placeholderSize?: number;
+      /**
+       * @docid
+       */
+      subtitle?: {
+        /**
+         * @docid
+         * @default '#232323' &prop(color)
+         * @default 14 &prop(size)
+         * @default 200 &prop(weight)
+         * @default "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif" &prop(family)
+         */
+        font?: Font;
+        /**
+         * @docid
+         * @default 0
+         */
+        offset?: number;
+        /**
+         * @docid
+         * @default null
+         */
+        text?: string;
+      } | string;
+      /**
+       * @docid
+       * @default null
+       */
+      text?: string;
+      /**
+       * @docid
+       * @default 'top'
+       */
+      verticalAlignment?: VerticalEdge;
+    } | string;
     /**
-     * @docid BaseLegend.verticalAlignment
-     * @type Enums.VerticalEdge
+     * @docid
      * @default 'top'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    verticalAlignment?: 'bottom' | 'top';
+    verticalAlignment?: VerticalEdge;
     /**
-     * @docid BaseLegend.visible
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     visible?: boolean;
 }
 
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.common.charts
+ * @hidden
+ */
 export interface BaseLegendItem {
     /**
-     * @docid BaseLegendItem.marker
-     * @type object
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
-    marker?: { fill?: string, opacity?: number, size?: number, state?: 'normal' | 'hovered' | 'selected' };
+    marker?: {
+      /**
+       * @docid
+       */
+      fill?: string;
+      /**
+       * @docid
+       */
+      opacity?: number;
+      /**
+       * @docid
+       */
+      size?: number;
+      /**
+       * @docid
+       */
+      state?: LegendMarkerState;
+    };
     /**
-     * @docid BaseLegendItem.text
-     * @type string
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     text?: string;
     /**
-     * @docid BaseLegendItem.visible
-     * @type boolean
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     visible?: boolean;
 }
 
+/**
+ * @docid
+ * @type object
+ * @inherits dxChartSeriesTypes.CommonSeries
+ * @hidden
+ */
 export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid ChartSeries.name
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     name?: string;
     /**
-     * @docid ChartSeries.tag
-     * @type any
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     tag?: any;
     /**
-     * @docid ChartSeries.type
-     * @type Enums.SeriesType
+     * @docid
      * @default 'line'
-     * @prevFileNamespace DevExpress.viz
+     * @type Enums.SeriesType
      * @public
      */
-    type?: ChartSeriesType;
-}
-
-export interface ScaleBreak {
-    /**
-     * @docid ScaleBreak.endValue
-     * @type number|date|string
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    endValue?: number | Date | string;
-    /**
-     * @docid ScaleBreak.startValue
-     * @type number|date|string
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    startValue?: number | Date | string;
-}
-
-export interface VizRange {
-    /**
-     * @docid VizRange.endValue
-     * @type number|date|string
-     * @default undefined
-     * @fires BaseWidgetOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    endValue?: number | Date | string;
-    /**
-     * @docid VizRange.length
-     * @inherits VizTimeInterval
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    length?: number | any | TimeIntervalType;
-    /**
-     * @docid VizRange.startValue
-     * @type number|date|string
-     * @default undefined
-     * @fires BaseWidgetOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    startValue?: number | Date | string;
+    type?: CommonSeriesType;
 }

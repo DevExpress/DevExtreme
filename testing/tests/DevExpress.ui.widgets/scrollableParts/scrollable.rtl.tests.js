@@ -1,22 +1,35 @@
 import animationFrame from 'animation/frame';
-import 'common.css!';
 import 'generic_light.css!';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
-import { RTL_CLASS } from './scrollable.constants.js';
+import {
+    RTL_CLASS
+} from './scrollable.constants.js';
 
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '\
-            <div id="scrollable" style="height: 50px; width: 50px;">\
-                <div class="content1" style="height: 100px; width: 100px;"></div>\
-                <div class="content2"></div>\
-            </div>\
-            <div id="scrollableVary" style="height: auto">\
-                <div class="content3" style="height: 100px; width: 100px;"></div>\
-            </div>';
+        const markup = `
+            <style nonce="qunit-test">
+                #scrollable {
+                    height: 50px;
+                    width: 50px;
+                }
+                #scrollableVary {
+                    height: auto;
+                }
+                .content1, .content3 {
+                    height: 100px; width: 100px;
+                }
+            </style>
+            <div id="scrollable">
+                <div class="content1"></div>
+                <div class="content2"></div>
+            </div>
+            <div id="scrollableVary">
+                <div class="content3"></div>
+            </div>`;
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
@@ -52,7 +65,7 @@ QUnit.test('rtlEnabled scrolls to very right position', function(assert) {
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const veryRightPosition = $(scrollable.content()).width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
@@ -67,12 +80,14 @@ QUnit.test('rtlEnabled scrolls to very right position after changing the size of
     });
 
     const scrollable = $scrollable.dxScrollable('instance');
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const veryRightPosition = $(scrollable.content()).width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
 
 QUnit.test('rtlEnabled scrolls to very right position after shown event', function(assert) {
+    this.clock.restore();
+    const done = assert.async();
     const $scrollable = $('#scrollable');
     const $wrapper = $scrollable.wrap('<div>').parent().hide();
 
@@ -84,10 +99,13 @@ QUnit.test('rtlEnabled scrolls to very right position after shown event', functi
 
     $wrapper.show();
     triggerShownEvent($wrapper);
-    const scrollable = $scrollable.dxScrollable('instance');
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    setTimeout(() => {
+        const scrollable = $scrollable.dxScrollable('instance');
+        const veryRightPosition = $(scrollable.content()).width() - $scrollable.width();
 
-    assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
+        assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
+        done();
+    });
 });
 
 QUnit.test('init option \'rtl\' is true', function(assert) {
@@ -111,6 +129,6 @@ QUnit.test('rtlEnabled scrolls to very right position when a width was changing 
     const scrollable = $scrollable.dxScrollable('instance');
     scrollable.option('width', 50);
 
-    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const veryRightPosition = $(scrollable.content()).width() - $scrollable.width();
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });

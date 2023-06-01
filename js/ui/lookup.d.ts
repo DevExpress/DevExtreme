@@ -1,437 +1,421 @@
 import {
-    animationConfig
-} from '../animation/fx';
-
-import {
-    positionConfig
-} from '../animation/position';
-
-import '../jquery_augmentation';
-
-import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
 } from '../events/index';
 
+import {
+    ValueChangedInfo,
+} from './editor/editor';
+
 import dxDropDownList, {
-    dxDropDownListOptions
+    dxDropDownListOptions,
+    SelectionChangedInfo,
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
-    dxPopoverOptions
+    ScrollInfo,
+} from './list';
+
+import {
+    Properties as PopoverProperties,
 } from './popover';
 
+import {
+    TitleRenderedInfo,
+} from './popup';
+
+import {
+    ApplyValueMode,
+    PageLoadMode,
+} from '../common';
+
+export {
+    ApplyValueMode,
+    PageLoadMode,
+};
+
+/** @public */
+export type ClosedEvent = EventInfo<dxLookup>;
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxLookup>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxLookup>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxLookup>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
+
+/** @public */
+export type OpenedEvent = EventInfo<dxLookup>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxLookup> & ChangedOptionInfo;
+
+/** @public */
+export type PageLoadingEvent = EventInfo<dxLookup>;
+
+/** @public */
+export type PullRefreshEvent = EventInfo<dxLookup>;
+
+/** @public */
+export type ScrollEvent = NativeEventInfo<dxLookup, MouseEvent | Event> & ScrollInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxLookup> & SelectionChangedInfo;
+
+/** @public */
+export type TitleRenderedEvent = EventInfo<dxLookup> & TitleRenderedInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
-     * @docid dxLookupOptions.animation
-     * @type object
-     * @default undefined
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    animation?: { hide?: animationConfig, show?: animationConfig };
-    /**
-     * @docid dxLookupOptions.applyButtonText
-     * @type string
+     * @docid
      * @default "OK"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     applyButtonText?: string;
     /**
-     * @docid dxLookupOptions.applyValueMode
-     * @type Enums.EditorApplyValueMode
+     * @docid
      * @hidden false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: ApplyValueMode;
     /**
-     * @docid dxLookupOptions.cancelButtonText
-     * @type string
+     * @docid
      * @default "Cancel"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cancelButtonText?: string;
     /**
-     * @docid dxLookupOptions.cleanSearchOnOpening
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cleanSearchOnOpening?: boolean;
     /**
-     * @docid dxLookupOptions.clearButtonText
-     * @type string
+     * @docid
      * @default "Clear"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     clearButtonText?: string;
     /**
-     * @docid dxLookupOptions.closeOnOutsideClick
-     * @type boolean|function
-     * @default false
-     * @type_function_return boolean
-     * @publicName closeOnOutsideClick
-     * @default true [for](Material)
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    closeOnOutsideClick?: boolean | (() => boolean);
-    /**
-     * @docid dxLookupOptions.fieldTemplate
-     * @type template|function
+     * @docid
      * @default null
      * @type_function_param1 selectedItem:object
-     * @type_function_param2 fieldElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((selectedItem: any, fieldElement: dxElement) => string | Element | JQuery);
+    fieldTemplate?: template | ((selectedItem: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxLookupOptions.focusStateEnabled
-     * @type boolean
+     * @docid
      * @default false
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxLookupOptions.fullScreen
-     * @type boolean
+     * @docid
      * @default false
-     * @default true [for](iPhone)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(iPhone)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
     fullScreen?: boolean;
     /**
-     * @docid dxLookupOptions.groupTemplate
-     * @type template|function
+     * @docid
      * @default "group"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxLookupOptions.grouped
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     grouped?: boolean;
     /**
-     * @docid dxLookupOptions.nextButtonText
-     * @type string
+     * @docid
      * @default "More"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     nextButtonText?: string;
     /**
-     * @docid dxLookupOptions.onPageLoading
-     * @extends Action
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onPageLoading?: ((e: { component?: dxLookup, element?: dxElement, model?: any }) => any);
-    /**
-     * @docid dxLookupOptions.onPullRefresh
-     * @extends Action
-     * @action
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    onPullRefresh?: ((e: { component?: dxLookup, element?: dxElement, model?: any }) => any);
-    /**
-     * @docid dxLookupOptions.onScroll
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 scrollOffset:object
-     * @type_function_param1_field6 reachedLeft:boolean
-     * @type_function_param1_field7 reachedRight:boolean
-     * @type_function_param1_field8 reachedTop:boolean
-     * @type_function_param1_field9 reachedBottom:boolean
+     * @type_function_param1_field component:dxLookup
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: dxLookup, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onPageLoading?: ((e: PageLoadingEvent) => void);
     /**
-     * @docid dxLookupOptions.onTitleRendered
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 titleElement:dxElement
+     * @type_function_param1_field component:dxLookup
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
-     * @deprecated dxLookupOptions.dropDownOptions
      */
-    onTitleRendered?: ((e: { component?: dxLookup, element?: dxElement, model?: any, titleElement?: dxElement }) => any);
+    onPullRefresh?: ((e: PullRefreshEvent) => void);
     /**
-     * @docid dxLookupOptions.onValueChanged
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:object
-     * @type_function_param1_field5 previousValue:object
-     * @type_function_param1_field6 event:event
+     * @type_function_param1_field event:event
+     * @type_function_param1_field scrollOffset:object
+     * @type_function_param1_field component:dxLookup
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxLookup, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
+    onScroll?: ((e: ScrollEvent) => void);
     /**
-     * @docid dxLookupOptions.pageLoadMode
-     * @type Enums.ListPageLoadMode
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field value:object
+     * @type_function_param1_field previousValue:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxLookup
+     * @action
+     * @public
+     */
+    onValueChanged?: ((e: ValueChangedEvent) => void);
+    /**
+     * @docid
      * @default "scrollBottom"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    pageLoadMode?: 'nextButton' | 'scrollBottom';
+    pageLoadMode?: PageLoadMode;
     /**
-     * @docid dxLookupOptions.pageLoadingText
-     * @type string
+     * @docid
      * @default "Loading..."
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     pageLoadingText?: string;
     /**
-     * @docid dxLookupOptions.placeholder
-     * @type string
+     * @docid
      * @default "Select"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     placeholder?: string;
     /**
-     * @docid dxLookupOptions.popupHeight
-     * @type number|string|function
-     * @default function() { return $(window).height() * 0.8 }
-     * @type_function_return number|string
-     * @default 'auto' [for](desktop|iPad)
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    popupHeight?: number | string | (() => number | string);
-    /**
-     * @docid dxLookupOptions.popupWidth
-     * @type number|string|function
-     * @default function() {return $(window).width() * 0.8 }
-     * @type_function_return number|string
-     * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } [for](iPad)
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-
-     */
-    popupWidth?: number | string | (() => number | string);
-    /**
-     * @docid dxLookupOptions.position
-     * @type positionConfig
-     * @default undefined
-     * @publicName position
-     * @default { my: 'left top', at: 'left top', of: lookupContainer } [for](Material)
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    position?: positionConfig;
-    /**
-     * @docid dxLookupOptions.pullRefreshEnabled
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     pullRefreshEnabled?: boolean;
     /**
-     * @docid dxLookupOptions.pulledDownText
-     * @type string
+     * @docid
      * @default "Release to refresh..."
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     pulledDownText?: string;
     /**
-     * @docid dxLookupOptions.pullingDownText
-     * @type string
+     * @docid
      * @default "Pull down to refresh..."
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     pullingDownText?: string;
     /**
-     * @docid dxLookupOptions.refreshingText
-     * @type string
+     * @docid
      * @default "Refreshing..."
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     refreshingText?: string;
     /**
-     * @docid dxLookupOptions.searchEnabled
-     * @type boolean
+     * @docid
      * @default true
      * @publicName searchEnabled
-     * @default false [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default false &for(Material)
      * @public
      */
     searchEnabled?: boolean;
     /**
-     * @docid dxLookupOptions.searchPlaceholder
-     * @type string
+     * @docid
      * @default "Search"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchPlaceholder?: string;
     /**
-     * @docid dxLookupOptions.shading
-     * @type boolean
-     * @default true
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    shading?: boolean;
-    /**
-     * @docid dxLookupOptions.showCancelButton
-     * @type boolean
+     * @docid
      * @default true
      * @publicName showCancelButton
-     * @default false [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default false &for(Material)
      * @public
      */
     showCancelButton?: boolean;
     /**
-     * @docid dxLookupOptions.showClearButton
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showClearButton?: boolean;
     /**
-     * @docid dxLookupOptions.showPopupTitle
-     * @type boolean
+     * @docid
+     * @default "input change keyup"
+     * @public
+     */
+    searchStartEvent?: string;
+    /**
+     * @docid
      * @default true
-     * @publicName showPopupTitle
-     * @default false [for](Material)
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    showPopupTitle?: boolean;
-    /**
-     * @docid dxLookupOptions.title
-     * @type string
-     * @default ""
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    title?: string;
-    /**
-     * @docid dxLookupOptions.titleTemplate
-     * @type template|function
-     * @default "title"
-     * @type_function_param1 titleElement:dxElement
-     * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    titleTemplate?: template | ((titleElement: dxElement) => string | Element | JQuery);
-    /**
-     * @docid dxLookupOptions.useNativeScrolling
-     * @type boolean
-     * @default true
-     * @default false [for](desktop)
-     * @default true [for](Mac)
-     * @prevFileNamespace DevExpress.ui
+     * @default false &for(desktop except Mac)
      * @public
      */
     useNativeScrolling?: boolean;
     /**
-     * @docid dxLookupOptions.usePopover
-     * @type boolean
+     * @docid
      * @default false
-     * @default true [for](desktop|iOS)
+     * @default true &for(desktop|iOS)
      * @publicName usePopover
-     * @default false [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default false &for(Material)
      * @public
      */
     usePopover?: boolean;
     /**
-     * @docid dxLookupOptions.dropDownCentered
-     * @type boolean
+     * @docid
+     * @deprecated
+     * @default "input change keyup"
+     * @public
+     */
+    valueChangeEvent?: string;
+    /**
+     * @docid
      * @default false
-     * @default true [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(Material)
      * @public
      */
     dropDownCentered?: boolean;
     /**
-     * @docid dxLookupOptions.dropDownOptions
+     * @docid
      * @type dxPopoverOptions
      */
-    dropDownOptions?: dxPopoverOptions;
+    dropDownOptions?: PopoverProperties;
 
 }
 /**
- * @docid dxLookup
+ * @docid
  * @isEditor
  * @inherits dxDropDownList
- * @module ui/lookup
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxLookup extends dxDropDownList {
-    constructor(element: Element, options?: dxLookupOptions)
-    constructor(element: JQuery, options?: dxLookupOptions)
-}
+export default class dxLookup extends dxDropDownList<dxLookupOptions> { }
 
-declare global {
-interface JQuery {
-    dxLookup(): JQuery;
-    dxLookup(options: "instance"): dxLookup;
-    dxLookup(options: string): any;
-    dxLookup(options: string, ...params: any[]): any;
-    dxLookup(options: dxLookupOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxLookupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxLookupOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxLookupOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxLookupOptions.onClosed
+ * @type_function_param1 e:{ui/lookup:ClosedEvent}
+ */
+onClosed?: ((e: ClosedEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onContentReady
+ * @type_function_param1 e:{ui/lookup:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onDisposing
+ * @type_function_param1 e:{ui/lookup:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onInitialized
+ * @type_function_param1 e:{ui/lookup:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onItemClick
+ * @type_function_param1 e:{ui/lookup:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onOpened
+ * @type_function_param1 e:{ui/lookup:OpenedEvent}
+ */
+onOpened?: ((e: OpenedEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onOptionChanged
+ * @type_function_param1 e:{ui/lookup:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onPageLoading
+ * @type_function_param1 e:{ui/lookup:PageLoadingEvent}
+ */
+onPageLoading?: ((e: PageLoadingEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onPullRefresh
+ * @type_function_param1 e:{ui/lookup:PullRefreshEvent}
+ */
+onPullRefresh?: ((e: PullRefreshEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onScroll
+ * @type_function_param1 e:{ui/lookup:ScrollEvent}
+ */
+onScroll?: ((e: ScrollEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/lookup:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxLookupOptions.onValueChanged
+ * @type_function_param1 e:{ui/lookup:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

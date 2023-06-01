@@ -8,8 +8,8 @@ jest.mock('../date_table/layout', () => ({
 jest.mock('../../base/header_panel/layout', () => ({
   HeaderPanelLayout: () => null,
 }));
-jest.mock('../../base/layout', () => ({
-  LayoutBase: (props) => <div {...props} />,
+jest.mock('../../base/ordinary_layout', () => ({
+  OrdinaryLayout: (props) => <div {...props} />,
 }));
 
 describe('MonthLayout', () => {

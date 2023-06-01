@@ -1,4 +1,3 @@
-import Promise from '../../core/polyfills/promise';
 import Class from '../../core/class';
 import { map } from '../../core/utils/iterator';
 import { isPlainObject, isNumeric } from '../../core/utils/type';
@@ -99,7 +98,7 @@ const Provider = Class.inherit({
     },
 
     _keyOption: function(providerName) {
-        const key = this._option('key');
+        const key = this._option('apiKey');
 
         return key[providerName] === undefined ? key : key[providerName];
     },

@@ -1049,9 +1049,14 @@ MapLayer.prototype = _extend({
                 if(!_isArray(coords)) {
                     return;
                 }
-                const initValue = coords[0];
 
-                return coords.reduce((min, c) => {
+                const coordsToBoundsSearch = (_isArray(coords[0][0]) ?
+                    coords.reduce((ac, val) => ac.concat(val), [])
+                    : coords);
+
+                const initValue = coordsToBoundsSearch[0];
+
+                return coordsToBoundsSearch.reduce((min, c) => {
                     return [_min(min[0], c[0]), _min(min[1], c[1]), _max(min[2], c[0]), _max(min[3], c[1])];
                 }, [initValue[0], initValue[1], initValue[0], initValue[1]]);
             })
@@ -1576,7 +1581,6 @@ MapLayerCollection.prototype = {
     setOptions(options) {
         const that = this;
         const optionList = options ? (_isArray(options) ? options : [options]) : [];
-        let layerByName = that._layerByName;
         let layers = that._layers;
         let readyCallbacks = [];
         const needToCreateLayers = optionList.length !== layers.length || layers.some((l, i) => {
@@ -1587,7 +1591,7 @@ MapLayerCollection.prototype = {
         if(needToCreateLayers) {
             that._params.tracker.reset();
             that._layers.forEach(l => l.dispose());
-            that._layerByName = layerByName = {};
+            const layerByName = that._layerByName = {};
             that._layers = layers = [];
             for(let i = 0, ii = optionList.length; i < ii; ++i) {
                 const name = getName(optionList, i) || ('map-layer-' + i);

@@ -1,34 +1,28 @@
-import '../jquery_augmentation';
+import {
+    UserDefinedElement,
+} from '../core/element';
 
 import dxOverlay, {
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
-export interface dxValidationMessageOptions<T = dxValidationMessage> extends dxOverlayOptions<T> {
+/** @namespace DevExpress.ui */
+export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidationMessage> {
     mode?: string;
 
     validationErrors?: Array<object> | null;
 
-    positionRequest?: string;
+    positionSide?: string;
 
-    boundary?: String | Element | JQuery;
+    boundary?: String | UserDefinedElement;
 
     offset?: object;
 }
+/** @namespace DevExpress.ui */
+export default class dxValidationMessage extends dxOverlay<dxValidationMessageOptions> { }
 
-export default class dxValidationMessage extends dxOverlay {
-    constructor(element: Element, options?: dxValidationMessageOptions)
-    constructor(element: JQuery, options?: dxValidationMessageOptions)
-}
+/** @public */
+export type Properties = dxValidationMessageOptions;
 
-declare global {
-interface JQuery {
-    dxValidationMessage(): JQuery;
-    dxValidationMessage(options: "instance"): dxValidationMessage;
-    dxValidationMessage(options: string): any;
-    dxValidationMessage(options: string, ...params: any[]): any;
-    dxValidationMessage(options: dxValidationMessageOptions): JQuery;
-}
-}
+/** @deprecated use Properties instead */
 export type Options = dxValidationMessageOptions;
-export type IOptions = dxValidationMessageOptions;

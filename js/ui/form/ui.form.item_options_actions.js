@@ -30,6 +30,23 @@ class TabOptionItemOptionAction extends ItemOptionAction {
     }
 }
 
+class SimpleItemTemplateChangedAction extends ItemOptionAction {
+    tryExecute() {
+        return false;
+    }
+}
+
+class GroupItemTemplateChangedAction extends ItemOptionAction {
+    tryExecute() {
+        const preparedItem = this.findPreparedItem();
+        if(preparedItem != null && preparedItem._prepareGroupItemTemplate && preparedItem._renderGroupContentTemplate) {
+            preparedItem._prepareGroupItemTemplate(this._options.item.template);
+            preparedItem._renderGroupContentTemplate();
+            return true;
+        }
+        return false;
+    }
+}
 class TabsOptionItemOptionAction extends ItemOptionAction {
     tryExecute() {
         const tabPanel = this.findInstance();
@@ -74,22 +91,31 @@ class CssClassItemOptionAction extends ItemOptionAction {
 
 const tryCreateItemOptionAction = (optionName, itemActionOptions) => {
     switch(optionName) {
-        case 'editorOptions':
-        case 'buttonOptions':
+        case 'editorOptions': // SimpleItem/#editorOptions
+        case 'buttonOptions': // ButtonItem/#buttonOptions
             return new WidgetOptionItemOptionAction(itemActionOptions);
-        case 'validationRules':
+        case 'validationRules': // SimpleItem/#validationRules
             return new ValidationRulesItemOptionAction(itemActionOptions);
-        case 'cssClass':
+        case 'cssClass': // ButtonItem/#cssClass or EmptyItem/#cssClass or GroupItem/#cssClass or SimpleItem/#cssClass or TabbedItem/#cssClass
             return new CssClassItemOptionAction(itemActionOptions);
-        case 'badge':
-        case 'disabled':
-        case 'icon':
-        case 'template':
-        case 'tabTemplate':
-        case 'title':
+        case 'badge': // TabbedItem/tabs/#badge
+        case 'disabled': // TabbedItem/tabs/#disabled
+        case 'icon': // TabbedItem/tabs/#icon
+        case 'tabTemplate': // TabbedItem/tabs/#tabTemplate
+        case 'title': // TabbedItem/tabs/#title
             return new TabOptionItemOptionAction(extend(itemActionOptions, { optionName }));
-        case 'tabs':
+        case 'tabs': // TabbedItem/tabs
             return new TabsOptionItemOptionAction(itemActionOptions);
+        case 'template': {
+            // TabbedItem/tabs/#template or SimpleItem/#template or GroupItem/#template
+            const itemType = itemActionOptions?.item?.itemType ?? itemActionOptions.itemsRunTimeInfo.findPreparedItemByItem(itemActionOptions?.item)?.itemType;
+            if(itemType === 'simple') {
+                return new SimpleItemTemplateChangedAction(itemActionOptions);
+            } else if(itemType === 'group') {
+                return new GroupItemTemplateChangedAction(itemActionOptions);
+            }
+            return new TabOptionItemOptionAction(extend(itemActionOptions, { optionName }));
+        }
         default:
             return null;
     }

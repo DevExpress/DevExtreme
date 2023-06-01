@@ -11,62 +11,57 @@ import {
   Slot,
   Consumer,
   ForwardRef,
-} from 'devextreme-generator/component_declaration/common';
+  RefObject,
+} from '@devextreme-generator/declarations';
 import '../../../events/click';
 import '../../../events/hover';
 
+import { isFunction } from '../../../core/utils/type';
 import {
-  active, dxClick, focus, hover, keyboard, resize, visibility,
+  dxClick, focus, keyboard, resize, visibility,
 } from '../../../events/short';
-import globalConfig from '../../../core/config';
+import {
+  subscribeToDxActiveEvent,
+  subscribeToDxInactiveEvent,
+  subscribeToDxHoverStartEvent,
+  subscribeToDxHoverEndEvent,
+  subscribeToDxFocusInEvent,
+  subscribeToDxFocusOutEvent,
+} from '../../utils/subscribe_to_event';
 import { combineClasses } from '../../utils/combine_classes';
 import { extend } from '../../../core/utils/extend';
-import { focusable } from '../../../ui/widget/selectors';
-import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
-import BaseWidgetProps from '../../utils/base_props';
-import { EffectReturn } from '../../utils/effect_return.d';
-import { ConfigContextValue, ConfigContext } from './config_context';
-import { ConfigProvider } from './config_provider';
-import { isDefined } from '../../../core/utils/type';
+import { BaseWidgetProps } from './base_props';
+import { EffectReturn } from '../../utils/effect_return';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
+import { ConfigProvider } from '../../common/config_provider';
+import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
+import resizeCallbacks from '../../../core/utils/resize_callbacks';
+import errors from '../../../core/errors';
+import domAdapter from '../../../core/dom_adapter';
 
-const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
-  if (args[key]) {
-    return {
-      ...r,
-      [(key === 'role' || key === 'id') ? key : `aria-${key}`]: String(args[key]),
-    };
-  }
-  return r;
-}, {});
+const DEFAULT_FEEDBACK_HIDE_TIMEOUT = 400;
+const DEFAULT_FEEDBACK_SHOW_TIMEOUT = 30;
 
-const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string => {
-  const isFocusable = !!model.focusStateEnabled && !model.disabled;
-  const isHoverable = !!model.hoverStateEnabled && !model.disabled;
-  const classesMap = {
-    'dx-widget': true,
-    [String(model.classes)]: !!model.classes,
-    [String(model.className)]: !!model.className,
-    'dx-state-disabled': !!model.disabled,
-    'dx-state-invisible': !model.visible,
-    'dx-state-focused': !!model.focused && isFocusable,
-    'dx-state-active': !!model.active,
-    'dx-state-hover': !!model.hovered && isHoverable && !model.active,
-    'dx-rtl': !!model.rtlEnabled,
-    'dx-visibility-change-handler': !!model.onVisibilityChange,
-  };
-
-  return combineClasses(classesMap);
-};
+const getAria = (args: Record<string, unknown>): Record<string, string> => Object
+  .keys(args)
+  .reduce((r, key) => {
+    if (args[key]) {
+      return {
+        ...r,
+        [key === 'role' || key === 'id' ? key : `aria-${key}`]: String(args[key]),
+      };
+    }
+    return r;
+  }, {});
 
 export const viewFunction = (viewModel: Widget): JSX.Element => {
   const widget = (
     <div
-      ref={viewModel.widgetRef as any}
+      ref={viewModel.widgetElementRef}
       {...viewModel.attributes} // eslint-disable-line react/jsx-props-no-spreading
       tabIndex={viewModel.tabIndex}
       title={viewModel.props.hint}
-      hidden={!viewModel.props.visible}
       className={viewModel.cssClasses}
       style={viewModel.styles}
     >
@@ -86,23 +81,25 @@ export const viewFunction = (viewModel: Widget): JSX.Element => {
 
 @ComponentBindings()
 export class WidgetProps extends BaseWidgetProps {
-  @ForwardRef() rootElementRef?: HTMLDivElement;
+  @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 
-  @OneWay() _feedbackHideTimeout?: number = 400;
+  @OneWay() _feedbackHideTimeout?: number = DEFAULT_FEEDBACK_HIDE_TIMEOUT;
 
-  @OneWay() _feedbackShowTimeout?: number = 30;
+  @OneWay() _feedbackShowTimeout?: number = DEFAULT_FEEDBACK_SHOW_TIMEOUT;
 
   @OneWay() activeStateUnit?: string;
 
-  @OneWay() aria?: object = {};
+  @OneWay() cssText = '';
+
+  @OneWay() aria?: Record<string, string> = {};
 
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 
   @OneWay() classes?: string | undefined = '';
 
-  @OneWay() className?: string = '';
-
   @OneWay() name?: string = '';
+
+  @OneWay() addWidgetClass? = true;
 
   @Event() onActive?: (e: Event) => void;
 
@@ -110,13 +107,17 @@ export class WidgetProps extends BaseWidgetProps {
 
   @Event() onInactive?: (e: Event) => void;
 
-  @Event() onKeyboardHandled?: (args: object) => void;
-
   @Event() onVisibilityChange?: (args: boolean) => void;
 
   @Event() onFocusIn?: (e: Event) => void;
 
   @Event() onFocusOut?: (e: Event) => void;
+
+  @Event() onHoverStart?: (e: Event) => void;
+
+  @Event() onHoverEnd?: (e: Event) => void;
+
+  @Event() onRootElementRendered?: (rootElement: HTMLDivElement) => void;
 }
 
 @Component({
@@ -135,84 +136,74 @@ export class Widget extends JSXComponent(WidgetProps) {
   @InternalState() hovered = false;
 
   @Ref()
-  widgetRef!: HTMLDivElement;
+  widgetElementRef!: RefObject<HTMLDivElement>;
 
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
   get shouldRenderConfigProvider(): boolean {
-    const isPropDefined = isDefined(this.props.rtlEnabled);
-    const onlyGlobalDefined = isDefined(globalConfig().rtlEnabled)
-    && !isPropDefined && !isDefined(this.config?.rtlEnabled);
-    return (isPropDefined
-    && (this.props.rtlEnabled !== this.config?.rtlEnabled))
-    || onlyGlobalDefined;
+    const { rtlEnabled } = this.props;
+    return resolveRtlEnabledDefinition(rtlEnabled, this.config);
   }
 
   get rtlEnabled(): boolean | undefined {
-    if (this.props.rtlEnabled !== undefined) {
-      return this.props.rtlEnabled;
-    }
-    if (this.config?.rtlEnabled !== undefined) {
-      return this.config.rtlEnabled;
-    }
-    return globalConfig().rtlEnabled;
+    const { rtlEnabled } = this.props;
+    return resolveRtlEnabled(rtlEnabled, this.config);
   }
 
   @Effect({ run: 'once' }) setRootElementRef(): void {
-    const { rootElementRef } = this.props;
+    const { rootElementRef, onRootElementRendered } = this.props;
     if (rootElementRef) {
-      this.props.rootElementRef = this.widgetRef;
+      rootElementRef.current = this.widgetElementRef.current;
     }
+    onRootElementRendered?.(this.widgetElementRef.current!);
   }
 
   @Effect()
-  accessKeyEffect(): EffectReturn {
+  activeEffect(): EffectReturn {
+    const {
+      activeStateEnabled, activeStateUnit, disabled,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _feedbackShowTimeout, onActive,
+    } = this.props;
     const namespace = 'UIFeedback';
-    const { accessKey, focusStateEnabled, disabled } = this.props;
-    const isFocusable = focusStateEnabled && !disabled;
-    const canBeFocusedByKey = isFocusable && accessKey;
+    const selector = activeStateUnit;
 
-    if (canBeFocusedByKey) {
-      dxClick.on(this.widgetRef, (e: Event) => {
-        if (isFakeClickEvent(e)) {
-          e.stopImmediatePropagation();
-          this.focused = true;
-        }
-      }, { namespace });
-
-      return (): void => dxClick.off(this.widgetRef, { namespace });
+    if (activeStateEnabled) {
+      if (!disabled) {
+        return subscribeToDxActiveEvent(this.widgetElementRef.current,
+          (event: Event) => {
+            this.active = true;
+            onActive?.(event);
+          },
+          { timeout: _feedbackShowTimeout, selector },
+          namespace);
+      }
     }
 
     return undefined;
   }
 
   @Effect()
-  activeEffect(): EffectReturn {
+  inactiveEffect(): EffectReturn {
     const {
-      activeStateEnabled, activeStateUnit, disabled, onInactive,
-      _feedbackShowTimeout, _feedbackHideTimeout, onActive,
+      activeStateEnabled, activeStateUnit,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _feedbackHideTimeout, onInactive,
     } = this.props;
-    const selector = activeStateUnit;
     const namespace = 'UIFeedback';
+    const selector = activeStateUnit;
 
-    if (activeStateEnabled && !disabled) {
-      active.on(this.widgetRef,
-        ({ event }: { event: Event }) => {
-          this.active = true;
-          onActive?.(event);
+    if (activeStateEnabled) {
+      return subscribeToDxInactiveEvent(this.widgetElementRef.current,
+        (event: Event) => {
+          if (this.active) {
+            this.active = false;
+            onInactive?.(event);
+          }
         },
-        ({ event }: { event: Event }) => {
-          this.active = false;
-          onInactive?.(event);
-        }, {
-          hideTimeout: _feedbackHideTimeout,
-          namespace,
-          selector,
-          showTimeout: _feedbackShowTimeout,
-        });
-
-      return (): void => active.off(this.widgetRef, { selector, namespace });
+        { timeout: _feedbackHideTimeout, selector },
+        namespace);
     }
 
     return undefined;
@@ -224,8 +215,8 @@ export class Widget extends JSXComponent(WidgetProps) {
     const namespace = name;
 
     if (onClick && !disabled) {
-      dxClick.on(this.widgetRef, onClick, { namespace });
-      return (): void => dxClick.off(this.widgetRef, { namespace });
+      dxClick.on(this.widgetElementRef.current, onClick, { namespace });
+      return (): void => dxClick.off(this.widgetElementRef.current, { namespace });
     }
 
     return undefined;
@@ -233,54 +224,109 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Method()
   focus(): void {
-    focus.trigger(this.widgetRef);
+    focus.trigger(this.widgetElementRef.current);
+  }
+
+  @Method()
+  blur(): void {
+    const activeElement = domAdapter.getActiveElement(this.widgetElementRef.current);
+
+    if (this.widgetElementRef.current === activeElement) {
+      activeElement.blur();
+    }
+  }
+
+  @Method()
+  activate(): void {
+    this.active = true;
+  }
+
+  @Method()
+  deactivate(): void {
+    this.active = false;
   }
 
   @Effect()
-  focusEffect(): EffectReturn {
+  focusInEffect(): EffectReturn {
     const {
-      disabled, focusStateEnabled, name, onFocusIn, onFocusOut,
+      disabled, focusStateEnabled, name, onFocusIn,
     } = this.props;
     const namespace = `${name}Focus`;
-    const isFocusable = focusStateEnabled && !disabled;
 
-    if (isFocusable) {
-      focus.on(this.widgetRef,
-        (e: Event & { isDefaultPrevented: () => boolean }) => {
-          if (!e.isDefaultPrevented()) {
-            this.focused = true;
-            onFocusIn?.(e);
-          }
-        },
-        (e: Event & { isDefaultPrevented: () => boolean }) => {
-          if (!e.isDefaultPrevented()) {
-            this.focused = false;
-            onFocusOut?.(e);
-          }
-        },
-        {
-          isFocusable: focusable,
-          namespace,
-        });
-      return (): void => focus.off(this.widgetRef, { namespace });
+    if (focusStateEnabled) {
+      if (!disabled) {
+        return subscribeToDxFocusInEvent(this.widgetElementRef.current,
+          (event: Event & { isDefaultPrevented: () => boolean }) => {
+            if (!event.isDefaultPrevented()) {
+              this.focused = true;
+              onFocusIn?.(event);
+            }
+          }, null, namespace);
+      }
     }
 
     return undefined;
   }
 
   @Effect()
-  hoverEffect(): EffectReturn {
-    const namespace = 'UIFeedback';
-    const { activeStateUnit, hoverStateEnabled, disabled } = this.props;
-    const selector = activeStateUnit;
-    const isHoverable = hoverStateEnabled && !disabled;
+  focusOutEffect(): EffectReturn {
+    const {
+      focusStateEnabled, name, onFocusOut,
+    } = this.props;
+    const namespace = `${name}Focus`;
 
-    if (isHoverable) {
-      hover.on(this.widgetRef,
-        () => { !this.active && (this.hovered = true); },
-        () => { this.hovered = false; },
-        { selector, namespace });
-      return (): void => hover.off(this.widgetRef, { selector, namespace });
+    if (focusStateEnabled) {
+      return subscribeToDxFocusOutEvent(this.widgetElementRef.current,
+        (event: Event & { isDefaultPrevented: () => boolean }) => {
+          if (!event.isDefaultPrevented() && this.focused) {
+            this.focused = false;
+            onFocusOut?.(event);
+          }
+        }, null, namespace);
+    }
+
+    return undefined;
+  }
+
+  @Effect()
+  hoverStartEffect(): EffectReturn {
+    const {
+      activeStateUnit, hoverStateEnabled, disabled, onHoverStart,
+    } = this.props;
+    const namespace = 'UIFeedback';
+    const selector = activeStateUnit;
+
+    if (hoverStateEnabled) {
+      if (!disabled) {
+        return subscribeToDxHoverStartEvent(this.widgetElementRef.current,
+          (event: Event) => {
+            !this.active && (this.hovered = true);
+            onHoverStart?.(event);
+          },
+          { selector }, namespace);
+      }
+    }
+
+    return undefined;
+  }
+
+  @Effect()
+  hoverEndEffect(): EffectReturn {
+    const {
+      activeStateUnit, hoverStateEnabled, onHoverEnd,
+    } = this.props;
+    const namespace = 'UIFeedback';
+    const selector = activeStateUnit;
+
+    if (hoverStateEnabled) {
+      return subscribeToDxHoverEndEvent(this.widgetElementRef.current,
+        (event: Event) => {
+          if (this.hovered) {
+            this.hovered = false;
+            onHoverEnd?.(event);
+          }
+        },
+        { selector }, namespace);
     }
 
     return undefined;
@@ -288,10 +334,14 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Effect()
   keyboardEffect(): EffectReturn {
-    const { onKeyDown } = this.props;
+    const { onKeyDown, focusStateEnabled } = this.props;
 
-    if (onKeyDown) {
-      const id = keyboard.on(this.widgetRef, this.widgetRef, (e: Event): void => onKeyDown(e));
+    if (focusStateEnabled && onKeyDown) {
+      const id = keyboard.on(
+        this.widgetElementRef.current,
+        this.widgetElementRef.current,
+        (e: Event): void => onKeyDown(e) as undefined,
+      );
 
       return (): void => keyboard.off(id);
     }
@@ -305,8 +355,20 @@ export class Widget extends JSXComponent(WidgetProps) {
     const { onDimensionChanged } = this.props;
 
     if (onDimensionChanged) {
-      resize.on(this.widgetRef, onDimensionChanged, { namespace });
-      return (): void => resize.off(this.widgetRef, { namespace });
+      resize.on(this.widgetElementRef.current, onDimensionChanged, { namespace });
+      return (): void => resize.off(this.widgetElementRef.current, { namespace });
+    }
+
+    return undefined;
+  }
+
+  @Effect() windowResizeEffect(): EffectReturn {
+    const { onDimensionChanged } = this.props;
+
+    if (onDimensionChanged) {
+      resizeCallbacks.add(onDimensionChanged);
+
+      return (): void => { resizeCallbacks.remove(onDimensionChanged); };
     }
 
     return undefined;
@@ -318,18 +380,38 @@ export class Widget extends JSXComponent(WidgetProps) {
     const namespace = `${name}VisibilityChange`;
 
     if (onVisibilityChange) {
-      visibility.on(this.widgetRef,
+      visibility.on(this.widgetElementRef.current,
         (): void => onVisibilityChange(true),
         (): void => onVisibilityChange(false),
         { namespace });
 
-      return (): void => visibility.off(this.widgetRef, { namespace });
+      return (): void => visibility.off(this.widgetElementRef.current, { namespace });
     }
 
     return undefined;
   }
 
-  get attributes(): { [key: string]: string } {
+  @Effect()
+  checkDeprecation(): void {
+    const { width, height } = this.props;
+    if (isFunction(width)) {
+      errors.log('W0017', 'width');
+    }
+    if (isFunction(height)) {
+      errors.log('W0017', 'height');
+    }
+  }
+
+  @Effect()
+  applyCssTextEffect(): void {
+    const { cssText } = this.props;
+
+    if (cssText !== '') {
+      this.widgetElementRef.current!.style.cssText = cssText;
+    }
+  }
+
+  get attributes(): Record<string, string> {
     const {
       aria,
       disabled,
@@ -338,18 +420,19 @@ export class Widget extends JSXComponent(WidgetProps) {
     } = this.props;
 
     const accessKey = focusStateEnabled && !disabled && this.props.accessKey;
+
     return {
-      ...extend({}, this.restAttributes, accessKey && { accessKey }),
+      ...extend({}, accessKey && { accessKey }) as Record<string, string>,
       ...getAria({ ...aria, disabled, hidden: !visible }),
+      ...extend({}, this.restAttributes) as Record<string, string>,
     };
   }
 
-  get styles(): { [key: string]: string | number } {
+  get styles(): Record<string, string | number> {
     const { width, height } = this.props;
-    const style = this.restAttributes.style || {};
-
-    const computedWidth = normalizeStyleProp('width', typeof width === 'function' ? width() : width);
-    const computedHeight = normalizeStyleProp('height', typeof height === 'function' ? height() : height);
+    const style = this.restAttributes.style as Record<string, string | number> || {};
+    const computedWidth = normalizeStyleProp('width', isFunction(width) ? width() : width);
+    const computedHeight = normalizeStyleProp('height', isFunction(height) ? height() : height);
 
     return {
       ...style,
@@ -361,27 +444,33 @@ export class Widget extends JSXComponent(WidgetProps) {
   get cssClasses(): string {
     const {
       classes,
+      addWidgetClass,
       className,
       disabled,
+      activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
       onVisibilityChange,
       visible,
     } = this.props;
 
-    return getCssClasses({
-      active: this.active,
-      focused: this.focused,
-      hovered: this.hovered,
-      className,
-      classes,
-      disabled,
-      focusStateEnabled,
-      hoverStateEnabled,
-      onVisibilityChange,
-      rtlEnabled: this.rtlEnabled,
-      visible,
-    });
+    const isFocusable = !!focusStateEnabled && !disabled;
+    const isHoverable = !!hoverStateEnabled && !disabled;
+    const canBeActive = !!activeStateEnabled && !disabled;
+    const classesMap = {
+      'dx-widget': !!addWidgetClass,
+      [String(classes)]: !!classes,
+      [String(className)]: !!className,
+      'dx-state-disabled': !!disabled,
+      'dx-state-invisible': !visible,
+      'dx-state-focused': !!this.focused && isFocusable,
+      'dx-state-active': !!this.active && canBeActive,
+      'dx-state-hover': !!this.hovered && isHoverable && !this.active,
+      'dx-rtl': !!this.rtlEnabled,
+      'dx-visibility-change-handler': !!onVisibilityChange,
+    };
+
+    return combineClasses(classesMap);
   }
 
   get tabIndex(): undefined | number {

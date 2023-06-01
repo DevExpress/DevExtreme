@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+      "jsx": "preserve",
+      "skipLibCheck": true,
+      "noEmit": true,
+      "target": "ES2019",
+      "typeRoots": [],
+      "types": ["@types/jest"],
+      "emitDecoratorMetadata": false // coverage broke if true
+    },
+  "include": ["./js/renovation"],
+  "exclude": ["artifacts","node_modules","**/dist","playground", "**/*.j.tsx"]
+}

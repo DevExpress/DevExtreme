@@ -8,31 +8,27 @@ import { browserslist } from '../../../package.json';
 const stylesDirectory = '../scss';
 const stylesDestinationDirectory = './src/data/scss';
 const metadataDestinationFile = './src/data/metadata/dx-theme-builder-metadata.ts';
-const jsonMetadataDestinationFile = './dart-compiler/metadata/dx-theme-builder-metadata.json';
 const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 
-const sourceHandler = (content: string): string => resolveDataUri(content.replace(commentsRegex, ''));
+const sourceHandler = (content: string): string => resolveDataUri(content.replace(commentsRegex, '')) as string;
 
 const generate = async (): Promise<void> => {
-  try {
-    const collector = new MetadataCollector();
-    const dependencyCollector = new DependencyCollector();
-    const sourceFiles = collector.readFiles(stylesDirectory, sourceHandler);
-    await MetadataCollector.saveScssFiles(sourceFiles, stylesDestinationDirectory);
+  const collector = new MetadataCollector();
+  const dependencyCollector = new DependencyCollector();
+  const sourceFiles = collector.readFiles(stylesDirectory, sourceHandler);
+  await MetadataCollector.saveScssFiles(sourceFiles, stylesDestinationDirectory);
 
-    dependencyCollector.collect();
+  dependencyCollector.collect();
 
-    await collector.saveMetadata(
-      metadataDestinationFile,
-      jsonMetadataDestinationFile,
-      version.package,
-      browserslist,
-      dependencyCollector.flatStylesDependencyTree,
-    );
-  } catch (e) {
-    console.error(e);
-    process.exit(1);
-  }
+  await collector.saveMetadata(
+    metadataDestinationFile,
+    version.package,
+    browserslist,
+    dependencyCollector.flatStylesDependencyTree,
+  );
 };
 
-generate();
+generate().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

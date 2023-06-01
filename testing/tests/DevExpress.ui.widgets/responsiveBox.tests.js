@@ -4,9 +4,12 @@ import registerComponent from 'core/component_registrator';
 import Widget from 'ui/widget/ui.widget';
 import ResponsiveBox from 'ui/responsive_box';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
-
-import 'common.css!';
+import dxButton from 'ui/button';
 import 'ui/box';
+import eventsEngine from 'events/core/events_engine';
+import domAdapter from 'core/dom_adapter';
+
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -130,8 +133,8 @@ QUnit.module('layouting', moduleConfig, () => {
 
         const $rootItems = $rootBox.find('.' + BOX_ITEM_CLASS);
 
-        assert.roughEqual($rootItems.eq(0).height(), 16, 2.1, 'Height of the root item is OK');
-        assert.roughEqual($rootItems.eq(1).height(), 16, 2.1, 'Height of the root item is OK');
+        assert.roughEqual($rootItems.eq(0).height(), 19, 2.1, 'Height of the root item is OK');
+        assert.roughEqual($rootItems.eq(1).height(), 19, 2.1, 'Height of the root item is OK');
     });
 
     QUnit.test('check width of colspan', function(assert) {
@@ -323,7 +326,7 @@ QUnit.module('layouting', moduleConfig, () => {
             height: 'auto',
             rows: [{ ratio: 1, baseSize: 'auto' }],
             cols: [{ ratio: 1, baseSize: 'auto' }],
-            items: [{ location: { row: 0, col: 0 }, html: '<div style=\'height: 100px;\'></div>' }]
+            items: [{ location: { row: 0, col: 0 }, template: $('<div>').css('height', '100px') }]
         });
 
         assert.equal($responsiveBox.height(), 100, 'height calculated correctly');
@@ -332,42 +335,12 @@ QUnit.module('layouting', moduleConfig, () => {
 
         assert.equal($item.width(), $responsiveBox.width(), 'item width calculated correctly');
     });
-
-    QUnit.test('dxUpdate should not be bubbling to parent container', function(assert) {
-        const clock = sinon.useFakeTimers();
-        const $parentContainer = $('<div>');
-
-        $parentContainer.appendTo('#qunit-fixture');
-
-        try {
-            const dxUpdateStub = sinon.stub();
-            const $responsiveBox = $('<div>').dxResponsiveBox({
-                width: 'auto',
-                height: 'auto',
-                rows: [{ ratio: 1, baseSize: 'auto' }],
-                cols: [{ ratio: 1, baseSize: 'auto' }],
-                items: [{ location: { row: 0, col: 0 } }],
-                _layoutStrategy: 'fallback'
-            });
-            $responsiveBox.appendTo($parentContainer);
-
-            $($parentContainer).on('dxupdate', dxUpdateStub);
-
-            $responsiveBox.dxResponsiveBox('repaint');
-            clock.tick();
-
-            assert.equal(dxUpdateStub.callCount, 0, 'dxupdate was not fired after repaint');
-        } finally {
-            $parentContainer.remove();
-            clock.restore();
-        }
-    });
 });
 
 QUnit.module('template rendering', moduleConfig, () => {
     QUnit.test('widget inside item is not disposed', function(assert) {
-    // screen:   xs      sm           md          lg
-    //  width: <768    768-<992    992-<1200    >1200
+        // screen:   xs      sm           md          lg
+        //  width: <768    768-<992    992-<1200    >1200
 
         this.updateScreenSize(1000);
 
@@ -483,8 +456,8 @@ QUnit.module('events', moduleConfig, () => {
 
 QUnit.module('option', moduleConfig, () => {
     QUnit.test('currentScreenFactor', function(assert) {
-    // screen:   xs      sm           md          lg
-    //  width: <768    768-<992    992-<1200    >1200
+        // screen:   xs      sm           md          lg
+        //  width: <768    768-<992    992-<1200    >1200
 
         this.updateScreenSize(500);
         const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
@@ -499,55 +472,29 @@ QUnit.module('option', moduleConfig, () => {
 
         assert.equal(responsiveBox.option('currentScreenFactor'), 'xs', 'currentScreenFactor update on start');
 
-        // sm screen
         this.updateScreenSize(800);
 
         assert.equal(responsiveBox.option('currentScreenFactor'), 'sm', 'currentScreenFactor update after restart');
     });
 
-    QUnit.test('_layoutStrategy pass to internal box', function(assert) {
+    QUnit.test('Changing visibility should update height', function(assert) {
         const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
-            rows: [{}],
-            cols: [{}],
-            items: [
-                { location: { row: 0, col: 0 } }
+            visible: false,
+            height: 400,
+            rows: [
+                { ratio: 1 },
+                { ratio: 1 }
             ],
-            _layoutStrategy: 'test'
+            cols: [{}],
+            items: [{ location: { row: 0, col: 0 }, template: function() { return $('<div>').prop('id', 'cellTest'); } }]
         });
+        const responsiveBox = $responsiveBox.dxResponsiveBox('instance');
 
-        const box = $responsiveBox.find('.dx-box').eq(0).dxBox('instance');
+        responsiveBox.option('visible', true);
 
-        assert.equal(box.option('_layoutStrategy'), 'test', '_layoutStrategy was passed to internal box');
-    });
+        const $firstItem = $('#cellTest').closest('.dx-item');
 
-    QUnit.test('Changing visibility should update simulated strategy', function(assert) {
-        const clock = sinon.useFakeTimers();
-        try {
-            const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
-                visible: false,
-                _layoutStrategy: 'fallback',
-                height: 400,
-                rows: [
-                    { ratio: 1 },
-                    { ratio: 1 }
-                ],
-                cols: [{}],
-                items: [{ location: { row: 0, col: 0 }, template: function() { return $('<div>').prop('id', 'cellTest'); } }]
-            });
-            const responsiveBox = $responsiveBox.dxResponsiveBox('instance');
-
-            clock.tick();
-
-            responsiveBox.option('visible', true);
-
-            clock.tick();
-
-            const $firstItem = $('#cellTest').closest('.dx-item');
-
-            assert.equal($firstItem.height(), 200, 'height calculate correctly');
-        } finally {
-            clock.restore();
-        }
+        assert.equal($firstItem.height(), 200, 'height calculate correctly');
     });
 
     QUnit.test('onOptionChanged should not be fired after click on item', function(assert) {
@@ -583,7 +530,6 @@ QUnit.module('option', moduleConfig, () => {
         const responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}],
             cols: [{}],
-            _layoutStrategy: 'flex',
             items: [{ location: { col: 0, row: 0 }, html: '<div class=\'test\'>' }]
         }).dxResponsiveBox('instance');
 
@@ -593,5 +539,65 @@ QUnit.module('option', moduleConfig, () => {
         assert.equal($('#responsiveBox').find('.dx-item').eq(0).get(0).style.display, 'flex', 'Layout is correct');
         assert.equal($('#responsiveBox').find('.dx-item').eq(0).get(0).style.flex, '1 1 auto', 'Layout is correct');
     });
+
+    [
+        box => {
+            box.option('items[0].visible', false);
+            box.option('items[0].visible', true);
+        }, box => {
+            box.option('items[0].disabled', true);
+            box.option('items[0].disabled', false);
+        }
+    ].forEach(optionRefreshAction => {
+        QUnit.test(`nested component is recreated after item option ${optionRefreshAction.toString()} changed  (T940715)`, function(assert) {
+            registerComponent('dxWidget', Widget.inherit({}));
+
+            let isDisposed = false;
+            const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+                items: [ { ratio: 1 } ],
+                itemTemplate: function(data, index, element) {
+                    const $button = domAdapter.getDocument().createElement('div');
+                    new dxButton($button, {
+                        onDisposing: function() {
+                            isDisposed = true;
+                        }
+                    });
+                    $(element).append($button);
+                },
+            });
+
+            const getButton = () => $responsiveBox.find('.dx-button').dxButton('instance');
+            const initialWidget = getButton();
+
+            const responsiveBox = $responsiveBox.dxResponsiveBox('instance');
+            optionRefreshAction(responsiveBox);
+
+            assert.equal(isDisposed, true, 'disposed is called for old instance');
+            assert.notEqual(initialWidget, getButton(), 'widget is new instance');
+            assert.equal(responsiveBox._assistantRoots, undefined, 'there is no roots cache');
+        });
+
+        QUnit.test(`nested component in template should work after item option  ${optionRefreshAction.toString()} changed (T940715)`, function(assert) {
+            let expected = false;
+            const responsiveBox = $('#responsiveBox').dxResponsiveBox({
+                items: [ { ratio: 1 } ],
+                itemTemplate: function(data, index, element) {
+                    const $button = domAdapter.getDocument().createElement('div');
+                    new dxButton($button, {
+                        onClick: function() {
+                            expected = true;
+                        }
+                    });
+                    $(element).append($button);
+                },
+            }).dxResponsiveBox('instance');
+
+            optionRefreshAction(responsiveBox);
+            eventsEngine.trigger(responsiveBox.$element().find('.dx-button'), 'dxclick');
+
+            assert.equal(expected, true, 'onClick event is processed');
+        });
+    });
+
 });
 

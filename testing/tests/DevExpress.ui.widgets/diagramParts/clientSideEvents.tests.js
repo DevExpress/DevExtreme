@@ -1,6 +1,5 @@
 import $ from 'jquery';
 const { test } = QUnit;
-import 'common.css!';
 import 'ui/diagram';
 
 import { DiagramCommand, DiagramModelOperation, DiagramUnit } from 'devexpress-diagram';
@@ -43,7 +42,68 @@ QUnit.module('ClientSideEvents', {
         for(const key in clickedItem) {
             if(Object.prototype.hasOwnProperty.call(clickedItem, key)) count++;
         }
-        assert.equal(count, 9);
+        assert.equal(count, 12);
+    });
+    test('getItemByKey of unbound diagram', function(assert) {
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
+        const apiItem = this.instance.getItemByKey('107');
+        assert.equal(apiItem, undefined);
+    });
+    test('getItemById of unbound diagram', function(assert) {
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
+        const apiItem = this.instance.getItemById('107');
+        assert.equal(apiItem.id, '107');
+        assert.equal(apiItem.key, undefined);
+        assert.equal(apiItem.text, 'A new ticket');
+        assert.equal(apiItem.dataItem, undefined);
+        assert.equal(apiItem.position.x, 1);
+        assert.equal(apiItem.position.y, 0.75);
+        assert.equal(apiItem.size.width, 1);
+        assert.equal(apiItem.size.height, 0.5);
+        assert.equal(apiItem.attachedConnectorIds.length, 0);
+        let count = 0;
+        for(const key in apiItem) {
+            if(Object.prototype.hasOwnProperty.call(apiItem, key)) count++;
+        }
+        assert.equal(count, 12);
+    });
+    test('getItemById of unbound diagram (Container)', function(assert) {
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM_WITH_CONTAINER);
+        // child
+        let apiItem = this.instance.getItemById('5');
+        assert.equal(apiItem.id, '5');
+        assert.equal(apiItem.key, undefined);
+        assert.equal(apiItem.text, 'Laurence Lebihan');
+        assert.equal(apiItem.dataItem, undefined);
+        assert.equal(apiItem.position.x, 1);
+        assert.equal(apiItem.position.y, 1.5);
+        assert.equal(apiItem.size.width, 1);
+        assert.equal(apiItem.size.height, 0.75);
+        assert.equal(apiItem.attachedConnectorIds.length, 0);
+        assert.equal(apiItem.containerId, '1');
+
+        // container
+        apiItem = this.instance.getItemById('1');
+        assert.equal(apiItem.id, '1');
+        assert.equal(apiItem.key, undefined);
+        assert.equal(apiItem.text, 'ASP.NET Team');
+        assert.equal(apiItem.type, 'verticalContainer');
+        assert.equal(apiItem.dataItem, undefined);
+        assert.equal(apiItem.position.x, 0.75);
+        assert.equal(apiItem.position.y, 1);
+        assert.equal(apiItem.size.width, 1.5);
+        assert.equal(apiItem.size.height, 4);
+        assert.equal(apiItem.attachedConnectorIds.length, 0);
+        assert.equal(apiItem.containerChildItemIds.length, 1);
+        assert.equal(apiItem.containerChildItemIds[0], '5');
+        assert.equal(apiItem.containerId, null);
+        assert.equal(apiItem.containerExpanded, true);
+
+        let count = 0;
+        for(const key in apiItem) {
+            if(Object.prototype.hasOwnProperty.call(apiItem, key)) count++;
+        }
+        assert.equal(count, 12);
     });
     test('selectionchanged on unbound diagram', function(assert) {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
@@ -89,7 +149,7 @@ QUnit.module('ClientSideEvents', {
         for(const key in clickedItem) {
             if(Object.prototype.hasOwnProperty.call(clickedItem, key)) count++;
         }
-        assert.equal(count, 9);
+        assert.equal(count, 12);
         assert.equal(dblClickedItem, undefined);
 
         this.instance._diagramInstance.onNativeAction.raise('notifyItemDblClick', this.instance._diagramInstance.model.findShapeByDataKey('123').toNative(DiagramUnit.In));
@@ -104,6 +164,62 @@ QUnit.module('ClientSideEvents', {
         assert.equal(clickedItem.fromKey, '123');
         assert.equal(clickedItem.toKey, '345');
         assert.equal(clickedItem.dataItem.key, edges[0].key);
+    });
+    test('getItemByKey of bound diagram', function(assert) {
+        const nodes = [
+            { key: '123', text: 'mytext', foo: 'bar' },
+            { key: '345', text: 'myconnector' }
+        ];
+        const edges = [
+            { key: '1', from: '123', to: '345' }
+        ];
+        this.instance.option('nodes.keyExpr', 'key');
+        this.instance.option('nodes.textExpr', 'text');
+        this.instance.option('edges.keyExpr', 'key');
+        this.instance.option('edges.fromKey', 'from');
+        this.instance.option('edges.toKey', 'to');
+        this.instance.option('nodes.dataSource', nodes);
+        this.instance.option('edges.dataSource', edges);
+
+        const apiItem = this.instance.getItemByKey('123');
+        assert.equal(apiItem.key, '123');
+        assert.equal(apiItem.dataItem.key, '123');
+        assert.equal(apiItem.dataItem.foo, 'bar');
+        assert.equal(apiItem.text, 'mytext');
+        assert.equal(apiItem.dataItem.key, nodes[0].key);
+        let count = 0;
+        for(const key in apiItem) {
+            if(Object.prototype.hasOwnProperty.call(apiItem, key)) count++;
+        }
+        assert.equal(count, 12);
+    });
+    test('getItemById of bound diagram', function(assert) {
+        const nodes = [
+            { key: '123', text: 'mytext', foo: 'bar' },
+            { key: '345', text: 'myconnector' }
+        ];
+        const edges = [
+            { key: '1', from: '123', to: '345' }
+        ];
+        this.instance.option('nodes.keyExpr', 'key');
+        this.instance.option('nodes.textExpr', 'text');
+        this.instance.option('edges.keyExpr', 'key');
+        this.instance.option('edges.fromKey', 'from');
+        this.instance.option('edges.toKey', 'to');
+        this.instance.option('nodes.dataSource', nodes);
+        this.instance.option('edges.dataSource', edges);
+
+        const apiItem = this.instance.getItemById('0');
+        assert.equal(apiItem.key, '123');
+        assert.equal(apiItem.dataItem.key, '123');
+        assert.equal(apiItem.dataItem.foo, 'bar');
+        assert.equal(apiItem.text, 'mytext');
+        assert.equal(apiItem.dataItem.key, nodes[0].key);
+        let count = 0;
+        for(const key in apiItem) {
+            if(Object.prototype.hasOwnProperty.call(apiItem, key)) count++;
+        }
+        assert.equal(count, 12);
     });
 });
 
@@ -168,13 +284,13 @@ QUnit.module('ClientSideEvents.requestOperation', {
         instance._diagramInstance.commandManager.getCommand(DiagramCommand.Delete).execute();
         callCount += 2;
         assert.equal(onRequestEditOperation.getCalls().length, callCount);
-        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['operation'], 'changeConnection');
-        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['args'].connector.id, '2');
-        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['args'].shape, undefined);
-        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['allowed'], false);
-        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['operation'], 'deleteShape');
-        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].shape.id, '0');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['operation'], 'changeConnection');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].connector.id, '2');
+        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].shape, undefined);
         assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['allowed'], false);
+        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['operation'], 'deleteShape');
+        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['args'].shape.id, '0');
+        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['allowed'], false);
         assert.equal(instance._diagramInstance.model.items.length, 3);
 
         instance._diagramInstance.selection.set(['2']);

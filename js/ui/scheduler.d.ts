@@ -1,24 +1,25 @@
-import '../jquery_augmentation';
-import './scheduler/utils';
-
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
-    event
+    DxEvent,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    Cancelable,
 } from '../events/index';
 
 import {
-    CollectionWidgetItem
+    CollectionWidgetItem,
 } from './collection/ui.collection_widget.base';
 
 import dxDraggable from './draggable';
@@ -29,798 +30,1260 @@ import dxPopup from './popup';
 import dxSortable from './sortable';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+    FirstDayOfWeek,
+    Orientation,
+    ScrollMode,
+} from '../common';
+
+interface AppointmentDraggingEvent {
+  readonly component: dxScheduler;
+  readonly event?: DxEvent<MouseEvent | TouchEvent>;
+  readonly itemData?: any;
+  readonly itemElement?: DxElement;
+  readonly fromData?: any;
+}
+
+interface TargetedAppointmentInfo {
+  readonly appointmentData: Appointment;
+  readonly targetedAppointmentData?: Appointment;
+}
+
+export {
+    FirstDayOfWeek,
+    Orientation,
+    ScrollMode,
+};
+
+/** @public */
+export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
+/** @public */
+export type CellAppointmentsLimit = 'auto' | 'unlimited';
+/** @public */
+export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
+/** @public */
+export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+
+/** @public */
+export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
+  readonly appointmentData: Appointment;
+  readonly error?: Error;
+};
+
+/** @public */
+export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
+  readonly appointmentData: Appointment;
+  cancel: boolean | PromiseLike<boolean>;
+};
+
+/** @public */
+export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardEvent | MouseEvent | PointerEvent> & TargetedAppointmentInfo & {
+  readonly appointmentElement: DxElement;
+};
+
+/** @public */
+export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & TargetedAppointmentInfo & {
+  readonly appointmentElement: DxElement;
+};
+
+/** @public */
+export type AppointmentDblClickEvent = Cancelable & NativeEventInfo<dxScheduler, MouseEvent | PointerEvent> & TargetedAppointmentInfo & {
+  readonly appointmentElement: DxElement;
+};
+
+/** @public */
+export type AppointmentDeletedEvent = EventInfo<dxScheduler> & {
+  readonly appointmentData: Appointment;
+  readonly error?: Error;
+};
+
+/** @public */
+export type AppointmentDeletingEvent = EventInfo<dxScheduler> & {
+  readonly appointmentData: Appointment;
+  cancel: boolean | PromiseLike<boolean>;
+};
+
+/** @public */
+export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & {
+  readonly appointmentData?: Appointment;
+  readonly form: dxForm;
+  readonly popup: dxPopup;
+};
+
+/**
+ * @docid
+ * @public
+ */
+export type AppointmentTooltipShowingAppointmentInfo = {
+  readonly appointmentData: Appointment;
+  readonly currentAppointmentData: Appointment;
+  readonly color: PromiseLike<string>;
+};
+
+/** @public */
+export type AppointmentTooltipShowingEvent = Cancelable & EventInfo<dxScheduler> & {
+  readonly targetElement: DxElement;
+  readonly appointments: AppointmentTooltipShowingAppointmentInfo[];
+};
+
+/** @public */
+export type AppointmentRenderedEvent = EventInfo<dxScheduler> & TargetedAppointmentInfo & {
+  readonly appointmentElement: DxElement;
+};
+
+/** @public */
+export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
+  readonly appointmentData: Appointment;
+  readonly error?: Error;
+};
+
+/** @public */
+export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
+  readonly oldData: any;
+  readonly newData: any;
+  cancel?: boolean | PromiseLike<boolean>;
+};
+
+/** @public */
+export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardEvent | MouseEvent | PointerEvent> & {
+  readonly cellData: any;
+  readonly cellElement: DxElement;
+};
+
+/** @public */
+export type CellContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & {
+  readonly cellData: any;
+  readonly cellElement: DxElement;
+};
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxScheduler>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxScheduler>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxScheduler>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxScheduler> & ChangedOptionInfo;
+
+/** @public */
+export type AppointmentDraggingAddEvent = AppointmentDraggingEvent & {
+  readonly fromComponent?: dxSortable | dxDraggable;
+  readonly toComponent?: dxSortable | dxDraggable;
+  readonly toData?: any;
+};
+
+/** @public */
+export type AppointmentDraggingEndEvent = Cancelable & AppointmentDraggingEvent & {
+  readonly fromComponent?: dxSortable | dxDraggable;
+  readonly toComponent?: dxSortable | dxDraggable;
+  readonly toData?: any;
+};
+
+/** @public */
+export type AppointmentDraggingMoveEvent = Cancelable & AppointmentDraggingEvent & {
+  readonly fromComponent?: dxSortable | dxDraggable;
+  readonly toComponent?: dxSortable | dxDraggable;
+  readonly toData?: any;
+};
+
+/** @public */
+export type AppointmentDraggingStartEvent = Cancelable & AppointmentDraggingEvent;
+
+/** @public */
+export type AppointmentDraggingRemoveEvent = AppointmentDraggingEvent & {
+  readonly fromComponent?: dxSortable | dxDraggable;
+  readonly toComponent?: dxSortable | dxDraggable;
+};
+
+/** @public */
+export type AppointmentTemplateData = TargetedAppointmentInfo;
+
+/** @public */
+export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
+  readonly isButtonClicked: boolean;
+};
+
+/** @public */
+export type AppointmentCollectorTemplateData = {
+  readonly appointmentCount: number;
+  readonly isCompact: boolean;
+};
+
+/** @public */
+export type DateNavigatorTextInfo = {
+  readonly startDate: Date;
+  readonly endDate: Date;
+  readonly text: string;
+};
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
-     * @docid dxSchedulerOptions.adaptivityEnabled
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     adaptivityEnabled?: boolean;
     /**
-     * @docid dxSchedulerOptions.allDayExpr
-     * @type string
+     * @docid
      * @default 'allDay'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     allDayExpr?: string;
     /**
-     * @docid dxSchedulerOptions.appointmentCollectorTemplate
+     * @docid
      * @default "appointmentCollector"
-     * @extends AppointmentCollectorTemplate
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: dxElement) => string | Element | JQuery);
+    appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxSchedulerOptions.appointmentDragging
-     * @type object
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    appointmentDragging?: { autoScroll?: boolean, data?: any, group?: string, onAdd?: ((e: { event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragEnd?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragMove?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragStart?: ((e: { event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromData?: any }) => any), onRemove?: ((e: { event?: event, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any }) => any), scrollSensitivity?: number, scrollSpeed?: number };
+    appointmentDragging?: {
+      /**
+       * @docid
+       * @default true
+       */
+      autoScroll?: boolean;
+      /**
+       * @docid
+       * @default undefined
+       */
+      data?: any;
+      /**
+       * @docid
+       * @default undefined
+       */
+      group?: string;
+      /**
+       * @docid
+       * @type_function_param1 e:object
+       * @type_function_param1_field event:event
+       */
+      onAdd?: ((e: AppointmentDraggingAddEvent) => void);
+      /**
+       * @docid
+       * @type_function_param1 e:object
+       * @type_function_param1_field event:event
+       */
+      onDragEnd?: ((e: AppointmentDraggingEndEvent) => void);
+      /**
+       * @docid
+       * @type_function_param1 e:object
+       * @type_function_param1_field event:event
+       */
+      onDragMove?: ((e: AppointmentDraggingMoveEvent) => void);
+      /**
+       * @docid
+       * @type_function_param1 e:object
+       * @type_function_param1_field event:event
+       */
+      onDragStart?: ((e: AppointmentDraggingStartEvent) => void);
+      /**
+       * @docid
+       * @type_function_param1 e:object
+       * @type_function_param1_field event:event
+       */
+      onRemove?: ((e: AppointmentDraggingRemoveEvent) => void);
+      /**
+       * @docid
+       * @default 60
+       */
+      scrollSensitivity?: number;
+      /**
+       * @docid
+       * @default 60
+       */
+      scrollSpeed?: number;
+    };
     /**
-     * @docid dxSchedulerOptions.appointmentTemplate
-     * @extends AppointmentTemplate
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default "item"
+     * @type_function_param1_field appointmentData:object
+     * @type_function_param1_field targetedAppointmentData:object
      * @public
      */
-    appointmentTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: dxElement) => string | Element | JQuery);
+    appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxSchedulerOptions.appointmentTooltipTemplate
-     * @extends AppointmentTooltipTemplate
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default "appointmentTooltip"
+     * @type_function_param1_field appointmentData:object
+     * @type_function_param1_field targetedAppointmentData:object
      * @public
      */
-    appointmentTooltipTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: dxElement) => string | Element | JQuery);
+    appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxSchedulerOptions.cellDuration
-     * @extends CellDuration
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default 30
      * @public
      */
     cellDuration?: number;
     /**
-     * @docid dxSchedulerOptions.crossScrollingEnabled
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     crossScrollingEnabled?: boolean;
     /**
-     * @docid dxSchedulerOptions.currentDate
-     * @type Date|number|string
+     * @docid
      * @default new Date()
      * @fires dxSchedulerOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     currentDate?: Date | number | string;
     /**
-     * @docid dxSchedulerOptions.currentView
-     * @type Enums.SchedulerViewType
+     * @docid
      * @default "day"
      * @fires dxSchedulerOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    currentView?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+    currentView?: ViewType;
     /**
-     * @docid dxSchedulerOptions.customizeDateNavigatorText
-     * @type function(info)
+     * @docid
      * @type_function_param1 info:object
-     * @type_function_param1_field1 startDate:date
-     * @type_function_param1_field2 endDate:date
-     * @type_function_param1_field3 text:string
-     * @type_function_return string
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeDateNavigatorText?: ((info: { startDate?: Date, endDate?: Date, text?: string }) => string);
+    customizeDateNavigatorText?: ((info: DateNavigatorTextInfo) => string);
     /**
-     * @docid dxSchedulerOptions.dataCellTemplate
-     * @extends DataCellTemplate
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
-    /**
-     * @docid dxSchedulerOptions.dataSource
-     * @type string|Array<dxSchedulerAppointment>|DataSource|DataSourceOptions
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 itemData:object
      * @public
      */
-    dataSource?: string | Array<dxSchedulerAppointment> | DataSource | DataSourceOptions;
+    dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxSchedulerOptions.dateCellTemplate
-     * @extends DateCellTemplate
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default null
+     * @public
+     * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions|null
+     */
+    dataSource?: DataSourceLike<Appointment> | null;
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 itemData:object
      * @public
      */
-    dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxSchedulerOptions.dateSerializationFormat
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dateSerializationFormat?: string;
     /**
-     * @docid dxSchedulerOptions.descriptionExpr
-     * @type string
+     * @docid
      * @default 'description'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     descriptionExpr?: string;
     /**
-     * @docid dxSchedulerOptions.dropDownAppointmentTemplate
-     * @type template|function
-     * @default "dropDownAppointment"
-     * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 contentElement:dxElement
-     * @type_function_return string|Element|jQuery
-     * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: dxElement) => string | Element | JQuery);
+      * @docid
+      * @default "dropDownAppointment"
+      * @type_function_param1 itemData:object
+      * @type_function_return string|Element|jQuery
+      * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
+      * @public
+      */
+    dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxSchedulerOptions.editing
-     * @type boolean|object
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    editing?: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowUpdating?: boolean, allowEditingTimeZones?: boolean };
+    editing?: boolean | {
+      /**
+       * @docid
+       * @default true
+       */
+      allowAdding?: boolean;
+      /**
+       * @docid
+       * @default true
+       */
+      allowDeleting?: boolean;
+      /**
+       * @docid
+       * @default true
+       * @default false &for(Android|iOS)
+       */
+      allowDragging?: boolean;
+      /**
+       * @docid
+       * @default true
+       * @default false &for(Android|iOS)
+       */
+      allowResizing?: boolean;
+      /**
+       * @docid
+       * @default false
+       */
+      allowTimeZoneEditing?: boolean;
+      /**
+       * @docid
+       * @default true
+       */
+      allowUpdating?: boolean;
+    };
     /**
-     * @docid dxSchedulerOptions.endDateExpr
-     * @type string
+     * @docid
      * @default 'endDate'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     endDateExpr?: string;
     /**
-     * @docid dxSchedulerOptions.endDateTimeZoneExpr
-     * @type string
+     * @docid
      * @default 'endDateTimeZone'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     endDateTimeZoneExpr?: string;
     /**
-     * @docid dxSchedulerOptions.endDayHour
-     * @extends EndDayHour
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default 24
      * @public
      */
     endDayHour?: number;
     /**
-     * @docid dxSchedulerOptions.firstDayOfWeek
-     * @extends FirstDayOfWeek
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default undefined
      * @public
      */
-    firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    firstDayOfWeek?: FirstDayOfWeek;
     /**
-     * @docid dxSchedulerOptions.focusStateEnabled
-     * @type boolean
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxSchedulerOptions.groupByDate
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     groupByDate?: boolean;
     /**
-     * @docid dxSchedulerOptions.groups
-     * @extends Groups
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default []
      * @public
      */
     groups?: Array<string>;
     /**
-     * @docid dxSchedulerOptions.indicatorUpdateInterval
-     * @type number
+     * @docid
      * @default 300000
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     indicatorUpdateInterval?: number;
     /**
-     * @docid dxSchedulerOptions.max
-     * @type Date|number|string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     max?: Date | number | string;
     /**
-     * @docid dxSchedulerOptions.maxAppointmentsPerCell
-     * @type number|Enums.MaxAppointmentsPerCell
+     * @docid
      * @default "auto"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+    maxAppointmentsPerCell?: number | CellAppointmentsLimit;
     /**
-     * @docid dxSchedulerOptions.min
-     * @type Date|number|string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     min?: Date | number | string;
     /**
-     * @docid dxSchedulerOptions.noDataText
-     * @type string
+     * @docid
      * @default "No data to display"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     noDataText?: string;
     /**
-     * @docid dxSchedulerOptions.onAppointmentAdded
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:Object
-     * @type_function_param1_field5 error:Error
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentAdded?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, error?: Error }) => any);
+    onAppointmentAdded?: ((e: AppointmentAddedEvent) => void);
     /**
-     * @docid dxSchedulerOptions.onAppointmentAdding
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:Object
-     * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field cancel:Boolean|Promise<Boolean>
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentAdding?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, cancel: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
+    onAppointmentAdding?: ((e: AppointmentAddingEvent) => void);
     /**
-     * @docid dxSchedulerOptions.onAppointmentClick
-     * @type function(e)|string
-     * @extends Action
+     * @docid
+     * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:object
-     * @type_function_param1_field5 targetedAppointmentData:object
-     * @type_function_param1_field6 appointmentElement:dxElement
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 cancel:Boolean
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentClick?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: dxElement, event?: event, cancel: boolean }) => any) | string;
+    onAppointmentClick?: ((e: AppointmentClickEvent) => void) | string;
     /**
-     * @docid dxSchedulerOptions.onAppointmentContextMenu
-     * @type function(e)|string
-     * @extends Action
+     * @docid
+     * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:object
-     * @type_function_param1_field5 targetedAppointmentData:object
-     * @type_function_param1_field6 appointmentElement:dxElement
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentContextMenu?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: dxElement, event?: event }) => any) | string;
+    onAppointmentContextMenu?: ((e: AppointmentContextMenuEvent) => void) | string;
     /**
-     * @docid dxSchedulerOptions.onAppointmentDblClick
-     * @type function(e)|string
-     * @extends Action
+     * @docid
+     * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:object
-     * @type_function_param1_field5 targetedAppointmentData:object
-     * @type_function_param1_field6 appointmentElement:dxElement
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 cancel:Boolean
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentDblClick?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: dxElement, event?: event, cancel: boolean }) => any) | string;
+    onAppointmentDblClick?: ((e: AppointmentDblClickEvent) => void) | string;
     /**
-     * @docid dxSchedulerOptions.onAppointmentDeleted
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:Object
-     * @type_function_param1_field5 error:Error
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field component:dxScheduler
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentDeleted?: ((e: { component: dxScheduler, element: dxElement, model: any, appointmentData: any, error?: Error }) => any);
+    onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
+
     /**
-     * @docid dxSchedulerOptions.onAppointmentDeleting
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:Object
-     * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field cancel:Boolean|Promise<Boolean>
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentDeleting?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, cancel: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
+    onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void);
     /**
-     * @docid dxSchedulerOptions.onAppointmentFormOpening
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:object
-     * @type_function_param1_field5 form:dxForm
-     * @type_function_param1_field6 popup:dxPopup
-     * @type_function_param1_field7 cancel:Boolean
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointments:Array<object>
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentFormOpening?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData?: any, form: dxForm, popup: dxPopup, cancel: boolean }) => any);
+    onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void);
     /**
-     * @docid dxSchedulerOptions.onAppointmentRendered
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:object
-     * @type_function_param1_field5 targetedAppointmentData:object|undefined
-     * @type_function_param1_field6 appointmentElement:dxElement
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentRendered?: ((e: { component: dxScheduler, element: dxElement, model: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement?: dxElement }) => any);
+    onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void);
     /**
-     * @docid dxSchedulerOptions.onAppointmentUpdated
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 appointmentData:Object
-     * @type_function_param1_field5 error:Error
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment|undefined
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentUpdated?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, error?: Error }) => any);
+    onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void);
     /**
-     * @docid dxSchedulerOptions.onAppointmentUpdating
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 oldData:Object
-     * @type_function_param1_field5 newData:Object
-     * @type_function_param1_field6 cancel:Boolean|Promise<Boolean>
+     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1_field component:dxScheduler
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAppointmentUpdating?: ((e: { component: dxScheduler, element: dxElement, model?: any, oldData?: any, newData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
+    onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void);
     /**
-     * @docid dxSchedulerOptions.onCellClick
-     * @type function(e)|string
-     * @extends Action
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 cellData:object
-     * @type_function_param1_field5 cellElement:dxElement
-     * @type_function_param1_field6 event:event
-     * @type_function_param1_field7 cancel:Boolean
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field oldData:Object
+     * @type_function_param1_field newData:Object
+     * @type_function_param1_field cancel:Boolean|Promise<Boolean>
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component: dxScheduler, element: dxElement, model?: any, cellData: any, cellElement: dxElement, event?: event, cancel: boolean }) => any) | string;
+    onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void);
     /**
-     * @docid dxSchedulerOptions.onCellContextMenu
-     * @type function(e)|string
-     * @extends Action
+     * @docid
+     * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 cellData:object
-     * @type_function_param1_field5 cellElement:dxElement
-     * @type_function_param1_field6 event:event
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field event:event
+     * @type_function_param1_field cellData:object
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellContextMenu?: ((e: { component: dxScheduler, element: dxElement, model?: any, cellData: any, cellElement: dxElement, event?: event }) => any) | string;
+    onCellClick?: ((e: CellClickEvent) => void) | string;
     /**
-     * @docid dxSchedulerOptions.recurrenceEditMode
-     * @type Enums.SchedulerRecurrenceEditMode
+     * @docid
+     * @default null
+     * @type function
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1_field event:event
+     * @type_function_param1_field cellData:object
+     * @action
+     * @public
+     */
+    onCellContextMenu?: ((e: CellContextMenuEvent) => void) | string;
+    /**
+     * @docid
      * @default "dialog"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    recurrenceEditMode?: 'dialog' | 'occurrence' | 'series';
+    recurrenceEditMode?: RecurrenceEditMode;
     /**
-     * @docid dxSchedulerOptions.recurrenceExceptionExpr
-     * @type string
+     * @docid
      * @default 'recurrenceException'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     recurrenceExceptionExpr?: string;
     /**
-     * @docid dxSchedulerOptions.recurrenceRuleExpr
-     * @type string
+     * @docid
      * @default 'recurrenceRule'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     recurrenceRuleExpr?: string;
     /**
-     * @docid dxSchedulerOptions.remoteFiltering
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     remoteFiltering?: boolean;
     /**
-     * @docid dxSchedulerOptions.resourceCellTemplate
-     * @extends ResourceCellTemplate
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default null
+     * @type_function_param1 itemData:object
      * @public
      */
-    resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxSchedulerOptions.resources
-     * @type Array<Object>
+     * @docid
      * @default []
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    resources?: Array<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: string | Array<any> | DataSource | DataSourceOptions, displayExpr?: string | ((resource: any) => string), fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: string | Function }>;
+    resources?: Array<{
+      /**
+       * @docid
+       * @default false
+       */
+      allowMultiple?: boolean;
+      /**
+       * @docid
+       * @default "color"
+       */
+      colorExpr?: string;
+      /**
+       * @docid
+       * @default null
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+       */
+      dataSource?: DataSourceLike<any> | null;
+      /**
+       * @docid
+       * @type_function_param1 resource:object
+       * @default 'text'
+       */
+      displayExpr?: string | ((resource: any) => string);
+      /**
+       * @docid
+       * @default ""
+       */
+      fieldExpr?: string;
+      /**
+       * @docid
+       * @default ""
+       */
+      label?: string;
+      /**
+       * @docid
+       * @default false
+       */
+      useColorAsDefault?: boolean;
+      /**
+       * @docid
+       * @default 'id'
+       */
+      valueExpr?: string | Function;
+    }>;
     /**
-     * @docid dxSchedulerOptions.scrolling
-     * @type dxSchedulerScrolling
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     scrolling?: dxSchedulerScrolling;
     /**
-     * @docid dxSchedulerOptions.selectedCellData
+     * @docid
      * @readonly
-     * @type Array<any>
      * @default []
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedCellData?: Array<any>;
     /**
-     * @docid dxSchedulerOptions.shadeUntilCurrentTime
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     shadeUntilCurrentTime?: boolean;
     /**
-     * @docid dxSchedulerOptions.showAllDayPanel
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showAllDayPanel?: boolean;
     /**
-     * @docid dxSchedulerOptions.showCurrentTimeIndicator
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showCurrentTimeIndicator?: boolean;
     /**
-     * @docid dxSchedulerOptions.startDateExpr
-     * @type string
+     * @docid
      * @default 'startDate'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     startDateExpr?: string;
     /**
-     * @docid dxSchedulerOptions.startDateTimeZoneExpr
-     * @type string
+     * @docid
      * @default 'startDateTimeZone'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     startDateTimeZoneExpr?: string;
     /**
-     * @docid dxSchedulerOptions.startDayHour
-     * @extends StartDayHour
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default 0
      * @public
      */
     startDayHour?: number;
     /**
-     * @docid dxSchedulerOptions.textExpr
-     * @type string
+     * @docid
      * @default 'text'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     textExpr?: string;
     /**
-     * @docid dxSchedulerOptions.timeCellTemplate
-     * @extends TimeCellTemplate
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default null
+     * @type_function_param1 itemData:object
      * @public
      */
-    timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxSchedulerOptions.timeZone
-     * @type string
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     timeZone?: string;
     /**
-     * @docid dxSchedulerOptions.useDropDownViewSwitcher
-     * @type boolean
+     * @docid
      * @default false
-     * @default true [for](Android|iOS)
-     * @default true [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(Android|iOS)
+     * @default true &for(Material)
      * @public
      */
     useDropDownViewSwitcher?: boolean;
     /**
-     * @docid dxSchedulerOptions.views
-     * @type Array<string, object>
+     * @docid
+     * @default "all"
+     */
+    allDayPanelMode?: AllDayPanelMode;
+    /**
+     * @docid
      * @default ['day', 'week']
-     * @acceptValues 'day'|'week'|'workWeek'|'month'|'timelineDay'|'timelineWeek'|'timelineWorkWeek'|'timelineMonth'|'agenda'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { agendaDuration?: number, appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: dxElement) => string | Element | JQuery), appointmentTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: dxElement) => string | Element | JQuery), cellDuration?: number, dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: dxElement) => string | Element | JQuery), endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: 'horizontal' | 'vertical', groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', name?: string, resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery), type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek', scrolling?: dxSchedulerScrolling }>;
+    views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | {
+      /**
+       * @docid
+       * @default 7
+       */
+      agendaDuration?: number;
+      /**
+       * @docid
+       * @default "appointmentCollector"
+       */
+      appointmentCollectorTemplate?: template | ((data: AppointmentCollectorTemplateData, collectorElement: DxElement) => string | UserDefinedElement);
+      /**
+       * @docid
+       * @default "item"
+       * @type_function_param1_field appointmentData:object
+       * @type_function_param1_field targetedAppointmentData:object
+       */
+      appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+      /**
+       * @docid
+       * @default "appointmentTooltip"
+       * @type_function_param1_field appointmentData:object
+       * @type_function_param1_field targetedAppointmentData:object
+       */
+      appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+      /**
+      * @docid
+      * @default "dropDownAppointment"
+      * @type_function_param1 itemData:object
+      * @type_function_return string|Element|jQuery
+      * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
+      */
+      dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+      /**
+       * @docid
+       * @default 30
+       */
+      cellDuration?: number;
+      /**
+       * @docid
+       * @default null
+       * @type_function_param1 itemData:object
+       */
+      dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+      /**
+       * @docid
+       * @default null
+       * @type_function_param1 itemData:object
+       */
+      dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+      /**
+       * @docid
+       * @default 24
+       */
+      endDayHour?: number;
+      /**
+       * @docid
+       * @default undefined
+       */
+      firstDayOfWeek?: FirstDayOfWeek;
+      /**
+       * @docid
+       * @default false
+       */
+      groupByDate?: boolean;
+      /**
+       * @docid
+       */
+      groupOrientation?: Orientation;
+      /**
+       * @docid
+       * @default []
+       */
+      groups?: Array<string>;
+      /**
+       * @docid
+       * @default 1
+       */
+      intervalCount?: number;
+      /**
+       * @docid
+       * @default "auto"
+       */
+      maxAppointmentsPerCell?: number | CellAppointmentsLimit;
+      /**
+       * @docid
+       * @default undefined
+       */
+      name?: string;
+      /**
+       * @docid
+       * @default null
+       * @type_function_param1 itemData:object
+       */
+      resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+      /**
+       * @docid
+       * @default undefined
+       */
+      startDate?: Date | number | string;
+      /**
+       * @docid
+       * @default 0
+       */
+      startDayHour?: number;
+      /**
+       * @docid
+       * @default null
+       * @type_function_param1 itemData:object
+       */
+      timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+      /**
+       * @docid
+       * @default undefined
+       */
+      type?: ViewType;
+      /**
+       * @docid
+       */
+      scrolling?: dxSchedulerScrolling;
+      /**
+       * @docid
+       * @default "all"
+       */
+       allDayPanelMode?: AllDayPanelMode;
+    }>;
 }
 /**
- * @docid dxScheduler
+ * @docid
  * @inherits Widget, DataHelperMixin
- * @module ui/scheduler
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxScheduler extends Widget {
-    constructor(element: Element, options?: dxSchedulerOptions)
-    constructor(element: JQuery, options?: dxSchedulerOptions)
+export default class dxScheduler extends Widget<dxSchedulerOptions> {
     /**
-     * @docid dxSchedulerMethods.addAppointment
+     * @docid
      * @publicName addAppointment(appointment)
-     * @param1 appointment:Object
-     * @prevFileNamespace DevExpress.ui
+     * @param1 appointment:dxSchedulerAppointment
      * @public
      */
-    addAppointment(appointment: any): void;
+    addAppointment(appointment: Appointment): void;
     /**
-     * @docid dxSchedulerMethods.deleteAppointment
+     * @docid
      * @publicName deleteAppointment(appointment)
-     * @param1 appointment:Object
-     * @prevFileNamespace DevExpress.ui
+     * @param1 appointment:dxSchedulerAppointment
      * @public
      */
-    deleteAppointment(appointment: any): void;
+    deleteAppointment(appointment: Appointment): void;
+    /**
+     * @docid
+     * @publicName deleteRecurrence(appointment, date, recurrenceEditMode)
+     * @param1 appointmentData:dxSchedulerAppointment
+     * @public
+     */
+    deleteRecurrence(
+      appointmentData: Appointment,
+      date: Date | string,
+      recurrenceEditMode: RecurrenceEditMode,
+    ): void;
     getDataSource(): DataSource;
     /**
-     * @docid dxSchedulerMethods.getEndViewDate
+     * @docid
      * @publicName getEndViewDate()
-     * @return Date
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getEndViewDate(): Date;
     /**
-     * @docid dxSchedulerMethods.getStartViewDate
+     * @docid
      * @publicName getStartViewDate()
-     * @return Date
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getStartViewDate(): Date;
     /**
-     * @docid dxSchedulerMethods.hideAppointmentPopup
+     * @docid
      * @publicName hideAppointmentPopup(saveChanges)
      * @param1 saveChanges:Boolean|undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hideAppointmentPopup(saveChanges?: boolean): void;
     /**
-     * @docid dxSchedulerMethods.hideAppointmentTooltip
+     * @docid
      * @publicName hideAppointmentTooltip()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hideAppointmentTooltip(): void;
     /**
-     * @docid dxSchedulerMethods.scrollToTime
+     * @docid
+     * @publicName scrollTo(date, group, allDay)
+     * @param2 group:Object|undefined
+     * @param3 allDay:Boolean|undefined
+     * @public
+     */
+    scrollTo(date: Date, group?: object, allDay?: boolean): void;
+    /**
+     * @docid
      * @publicName scrollToTime(hours, minutes, date)
-     * @param1 hours:Number
-     * @param2 minutes:Number
      * @param3 date:Date|undefined
-     * @prevFileNamespace DevExpress.ui
+     * @deprecated dxScheduler.scrollTo
      * @public
      */
     scrollToTime(hours: number, minutes: number, date?: Date): void;
     /**
-     * @docid dxSchedulerMethods.showAppointmentPopup
+     * @docid
      * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
-     * @param1 appointmentData:Object|undefined
+     * @param1 appointmentData:dxSchedulerAppointment|undefined
      * @param2 createNewAppointment:Boolean|undefined
-     * @param3 currentAppointmentData:Object|undefined
-     * @prevFileNamespace DevExpress.ui
+     * @param3 currentAppointmentData:dxSchedulerAppointment|undefined
      * @public
      */
-    showAppointmentPopup(appointmentData?: any, createNewAppointment?: boolean, currentAppointmentData?: any): void;
+    showAppointmentPopup(appointmentData?: Appointment, createNewAppointment?: boolean, currentAppointmentData?: Appointment): void;
     /**
-     * @docid dxSchedulerMethods.showAppointmentTooltip
+     * @docid
      * @publicName showAppointmentTooltip(appointmentData, target, currentAppointmentData)
-     * @param1 appointmentData:Object
+     * @param1 appointmentData:dxSchedulerAppointment
      * @param2 target:string|Element|jQuery
-     * @param3 currentAppointmentData:Object|undefined
-     * @prevFileNamespace DevExpress.ui
+     * @param3 currentAppointmentData:dxSchedulerAppointment|undefined
      * @public
      */
-    showAppointmentTooltip(appointmentData: any, target: string | Element | JQuery, currentAppointmentData?: any): void;
+    showAppointmentTooltip(appointmentData: Appointment, target: string | UserDefinedElement, currentAppointmentData?: Appointment): void;
     /**
-     * @docid dxSchedulerMethods.updateAppointment
+     * @docid
      * @publicName updateAppointment(target, appointment)
-     * @param1 target:Object
-     * @param2 appointment:Object
-     * @prevFileNamespace DevExpress.ui
+     * @param1 target:dxSchedulerAppointment
+     * @param2 appointment:dxSchedulerAppointment
      * @public
      */
-    updateAppointment(target: any, appointment: any): void;
+    updateAppointment(target: Appointment, appointment: Appointment): void;
 }
 
-export interface dxSchedulerAppointment extends CollectionWidgetItem {
+/**
+ * @public
+ * @docid dxSchedulerAppointment
+ * @namespace DevExpress.ui
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
+export type Appointment = dxSchedulerAppointment;
+
+/**
+ * @namespace DevExpress.ui
+ * @deprecated Use the Scheduler's Appointment type instead
+ */
+export type dxSchedulerAppointment = CollectionWidgetItem & {
     /**
-     * @docid dxSchedulerAppointment.allDay
-     * @type Boolean
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     allDay?: boolean;
     /**
-     * @docid dxSchedulerAppointment.description
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     description?: string;
     /**
-     * @docid dxSchedulerAppointment.disabled
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabled?: boolean;
     /**
-     * @docid dxSchedulerAppointment.endDate
-     * @type Date
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    endDate?: Date;
+    endDate?: Date | string;
     /**
-     * @docid dxSchedulerAppointment.endDateTimeZone
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     endDateTimeZone?: string;
     /**
-     * @docid dxSchedulerAppointment.html
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     html?: string;
     /**
-     * @docid dxSchedulerAppointment.recurrenceException
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     recurrenceException?: string;
     /**
-     * @docid dxSchedulerAppointment.recurrenceRule
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     recurrenceRule?: string;
     /**
-     * @docid dxSchedulerAppointment.startDate
-     * @type Date
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    startDate?: Date;
+    startDate?: Date | string;
     /**
-     * @docid dxSchedulerAppointment.startDateTimeZone
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     startDateTimeZone?: string;
     /**
-     * @docid dxSchedulerAppointment.template
-     * @type template
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     template?: template;
     /**
-     * @docid dxSchedulerAppointment.text
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     text?: string;
     /**
-     * @docid dxSchedulerAppointment.visible
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;
-}
+} & Record<string, any>;
 
-declare global {
-interface JQuery {
-    dxScheduler(): JQuery;
-    dxScheduler(options: "instance"): dxScheduler;
-    dxScheduler(options: string): any;
-    dxScheduler(options: string, ...params: any[]): any;
-    dxScheduler(options: dxSchedulerOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxSchedulerOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSchedulerOptions;
 
 /**
- * @docid dxSchedulerScrolling
+ * @docid
  * @public
+ * @namespace DevExpress.ui
  */
 export interface dxSchedulerScrolling {
   /**
-   * @docid dxSchedulerScrolling.mode
-   * @type Enums.SchedulerScrollingMode
+   * @docid
    * @default "standard"
-   * @prevFileNamespace DevExpress.ui
    * @public
    */
-  mode?: 'standard' | 'virtual';
+  mode?: ScrollMode;
 }
 
-/** @deprecated use Options instead */
-export type IOptions = dxSchedulerOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentAdded
+ * @type_function_param1 e:{ui/scheduler:AppointmentAddedEvent}
+ */
+onAppointmentAdded?: ((e: AppointmentAddedEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentAdding
+ * @type_function_param1 e:{ui/scheduler:AppointmentAddingEvent}
+ */
+onAppointmentAdding?: ((e: AppointmentAddingEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentClick
+ * @type_function_param1 e:{ui/scheduler:AppointmentClickEvent}
+ */
+onAppointmentClick?: ((e: AppointmentClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentContextMenu
+ * @type_function_param1 e:{ui/scheduler:AppointmentContextMenuEvent}
+ */
+onAppointmentContextMenu?: ((e: AppointmentContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentDblClick
+ * @type_function_param1 e:{ui/scheduler:AppointmentDblClickEvent}
+ */
+onAppointmentDblClick?: ((e: AppointmentDblClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentDeleted
+ * @type_function_param1 e:{ui/scheduler:AppointmentDeletedEvent}
+ */
+onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentDeleting
+ * @type_function_param1 e:{ui/scheduler:AppointmentDeletingEvent}
+ */
+onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentFormOpening
+ * @type_function_param1 e:{ui/scheduler:AppointmentFormOpeningEvent}
+ */
+onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentRendered
+ * @type_function_param1 e:{ui/scheduler:AppointmentRenderedEvent}
+ */
+onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentTooltipShowing
+ * @type_function_param1 e:{ui/scheduler:AppointmentTooltipShowingEvent}
+ */
+onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentUpdated
+ * @type_function_param1 e:{ui/scheduler:AppointmentUpdatedEvent}
+ */
+onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onAppointmentUpdating
+ * @type_function_param1 e:{ui/scheduler:AppointmentUpdatingEvent}
+ */
+onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onCellClick
+ * @type_function_param1 e:{ui/scheduler:CellClickEvent}
+ */
+onCellClick?: ((e: CellClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onCellContextMenu
+ * @type_function_param1 e:{ui/scheduler:CellContextMenuEvent}
+ */
+onCellContextMenu?: ((e: CellContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onContentReady
+ * @type_function_param1 e:{ui/scheduler:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onDisposing
+ * @type_function_param1 e:{ui/scheduler:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onInitialized
+ * @type_function_param1 e:{ui/scheduler:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSchedulerOptions.onOptionChanged
+ * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

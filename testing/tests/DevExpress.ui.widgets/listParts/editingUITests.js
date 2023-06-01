@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import renderer from 'core/renderer';
 import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
 import translator from 'animation/translator';
@@ -16,17 +15,16 @@ import SwitchableButtonEditDecorator from 'ui/list/ui.list.edit.decorator.switch
 import themes from 'ui/themes';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
+import { reorderingPointerMock, toSelector } from './utils.js';
 
 import 'ui/action_sheet';
 import 'ui/list';
-import 'common.css!';
+import { implementationsMap } from 'core/utils/size';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
 const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
-
-const toSelector = (cssClass) => `.${cssClass}`;
 
 const SWITCHABLE_DELETE_READY_CLASS = 'dx-list-switchable-delete-ready';
 const SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS = 'dx-list-switchable-menu-shield-positioning';
@@ -946,7 +944,8 @@ QUnit.test('multiple swipes should not break deletion', function(assert) {
 });
 
 QUnit.test('optimizations', function(assert) {
-    const origOuterWidth = renderer.fn.outerWidth;
+    const getOrigOuterWidth = implementationsMap.getOuterWidth;
+    const setOrigOuterWidth = implementationsMap.setOuterWidth;
     const outerWidthStub = sinon.stub();
 
     try {
@@ -960,16 +959,21 @@ QUnit.test('optimizations', function(assert) {
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
 
-        renderer.fn.outerWidth = function() {
+        implementationsMap.getOuterWidth = function() {
             outerWidthStub();
-            return origOuterWidth.apply(this, arguments);
+            return getOrigOuterWidth.apply(this, arguments);
+        };
+        implementationsMap.setOuterWidth = function() {
+            outerWidthStub();
+            return setOrigOuterWidth.apply(this, arguments);
         };
 
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
     } finally {
         assert.strictEqual(outerWidthStub.callCount, 2, 'outerWidth should be calculated only once for item and button');
-        renderer.fn.outerWidth = origOuterWidth;
+        implementationsMap.getOuterWidth = getOrigOuterWidth;
+        implementationsMap.setOuterWidth = setOrigOuterWidth;
     }
 });
 
@@ -1573,7 +1577,14 @@ QUnit.test('rtlEnabled option should be passed to overlay', function(assert) {
 });
 
 
-QUnit.module('item select decorator');
+QUnit.module('item select decorator', {
+    beforeEach() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach() {
+        this.clock.restore();
+    },
+});
 
 const SELECT_DECORATOR_ENABLED_CLASS = 'dx-list-select-decorator-enabled';
 const SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
@@ -1820,9 +1831,11 @@ QUnit.test('click on delete toggle should not change selected state', function(a
     const checkbox = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
 
     $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    this.clock.tick(10);
     assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 
     $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    this.clock.tick(10);
     assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 });
 
@@ -1840,10 +1853,12 @@ QUnit.test('click on item ready to delete with toggle mode should not change sel
     const checkbox = $item.find(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
 
     $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    this.clock.tick(10);
     $item.find($item).trigger('dxclick');
     assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 
     $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    this.clock.tick(10);
     $item.find($item1).trigger('dxclick');
     assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 });
@@ -2371,27 +2386,6 @@ QUnit.test('selectAll checkbox is selected when all items selected (ds with tota
     assert.strictEqual($checkbox.dxCheckBox('option', 'value'), true, 'selectAll checkbox checked');
 });
 
-QUnit.test('', function(assert) {
-    const ds = new DataSource({
-        store: [1, 2, 3, 4],
-        pageSize: 2,
-        paginate: true
-    });
-    const $list = $('#list').dxList({
-        dataSource: ds,
-        showSelectionControls: true,
-        selectionMode: 'all',
-        onSelectAllValueChanged: (args) => {
-            return false;
-        }
-    });
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
-
-    $checkbox.trigger('dxclick');
-
-    assert.deepEqual($list.dxList('option', 'selectedItems'), [], 'no items was selected');
-});
-
 QUnit.test('selectAll checkbox has indeterminate state when not all items selected', function(assert) {
     const $list = $('#list').dxList({
         items: [0, 1],
@@ -2505,7 +2499,7 @@ QUnit.test('keyboard navigation should work with without selectAll checkbox', fu
         selectionMode: 'single'
     });
     const instance = $list.dxList('instance');
-    const keyboard = keyboardMock($list);
+    const keyboard = keyboardMock($list.find('[tabindex=0]'));
 
     keyboard
         .press('down')
@@ -2532,43 +2526,8 @@ QUnit.module('reordering decorator', {
     }
 });
 
-const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
 const REORDERING_ITEM_CLASS = 'dx-sortable-source-hidden';
 const REORDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering';
-
-const reorderingPointerMock = ($item, clock, usePixel) => {
-    const itemOffset = $item.offset().top;
-    const itemHeight = $item.outerHeight();
-    const scale = usePixel ? 1 : itemHeight;
-    const $handle = $item.find(toSelector(REORDER_HANDLE_CLASS));
-    const pointer = pointerMock($handle);
-
-    return {
-        dragStart: function(offset) {
-            offset = offset || 0;
-
-            pointer.start().down(0, itemOffset + scale * offset);
-
-            if(clock) {
-                clock.tick(30);
-            }
-
-            return this;
-        },
-        drag: function(offset) {
-            offset = offset || 0;
-
-            pointer.move(0, scale * offset);
-
-            return this;
-        },
-        dragEnd: function() {
-            pointer.up();
-
-            return this;
-        }
-    };
-};
 
 const topTranslation = ($item) => {
     return translator.locate($item).top;
@@ -2697,7 +2656,7 @@ QUnit.test('reordering class should be present on item during drag', function(as
     const pointer = reorderingPointerMock($item, this.clock, true);
 
     pointer.dragStart().drag(10);
-    this.clock.tick();
+    this.clock.tick(10);
     assert.ok($item.hasClass(REORDERING_ITEM_CLASS), 'class was added');
     pointer.dragEnd();
     assert.ok(!$item.hasClass(REORDERING_ITEM_CLASS), 'class was removed');
@@ -2727,7 +2686,7 @@ QUnit.test('list item should be duplicated on drag start', function(assert) {
 
     pointer.dragStart().drag(10);
 
-    this.clock.tick();
+    this.clock.tick(10);
     let $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
     assert.strictEqual($ghostItem.text(), $item.text(), 'correct item was duplicated');
     assert.strictEqual($ghostItem.offset().top, $item.offset().top + 10, 'correct ghost position');
@@ -2752,7 +2711,7 @@ QUnit.test('list item duplicate should inherit direction (rtl)', function(assert
 
     pointer.dragStart().drag(10);
 
-    this.clock.tick();
+    this.clock.tick(10);
     let $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
     assert.strictEqual($ghostItem.text(), $item.text(), 'correct item was duplicated');
     assert.strictEqual($ghostItem.offset().top, $item.offset().top + 10, 'correct ghost position');
@@ -2776,7 +2735,7 @@ QUnit.test('cached items doesn\'t contains a ghost item after reordering', funct
     const pointer = reorderingPointerMock($items.first(), this.clock);
 
     pointer.dragStart(0.5).drag(0.6);
-    this.clock.tick();
+    this.clock.tick(10);
     pointer.dragEnd();
 
     const cachedItems = list._itemElements();
@@ -2796,7 +2755,7 @@ QUnit.test('ghost item should be moved by drag', function(assert) {
 
     pointer.dragStart().drag(10);
 
-    this.clock.tick();
+    this.clock.tick(10);
     const $ghostItem = $list.find(toSelector(REORDERING_ITEM_GHOST_CLASS));
     const startPosition = topTranslation($ghostItem.parent());
 
@@ -2934,7 +2893,7 @@ QUnit.test('drop item should reorder list items with correct indexes', function(
     const pointer = reorderingPointerMock($item1, this.clock);
 
     pointer.dragStart(0.5).drag(1);
-    this.clock.tick();
+    this.clock.tick(10);
     pointer.dragEnd();
 });
 
@@ -2965,7 +2924,7 @@ QUnit.test('reordering should correctly handle items contains List widget', func
     const pointer = reorderingPointerMock($item1, this.clock);
 
     pointer.dragStart(0.5).drag(2);
-    this.clock.tick();
+    this.clock.tick(10);
     pointer.dragEnd();
 });
 
@@ -3009,4 +2968,30 @@ QUnit.test('Drag and drop item to the top of the list should not work when allow
 
         assert.equal($item.text(), index, 'item text');
     });
+});
+
+QUnit.test('sortable should be updated after rendering on scroll bottom', function(assert) {
+    const onItemRenderedSpy = sinon.spy();
+    const $list = $('#list').dxList({
+        pageLoadMode: 'scrollBottom',
+        dataSource: {
+            store: [1, 2, 3, 4],
+            pageSize: 2
+        },
+        itemDragging: {
+            allowReordering: true
+        },
+        onItemRendered: onItemRenderedSpy
+    });
+
+    assert.deepEqual(onItemRenderedSpy.callCount, 2, 'rendered item count');
+
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const updateSpy = sinon.spy(sortable, 'update');
+
+    $list.dxScrollView('option', 'onReachBottom')();
+
+    assert.strictEqual(updateSpy.callCount, 1, 'sortable.update is called once');
+    assert.ok(updateSpy.lastCall.calledAfter(onItemRenderedSpy.lastCall), 'update is called after items change');
+    assert.deepEqual(onItemRenderedSpy.callCount, 4, 'rendered item count');
 });

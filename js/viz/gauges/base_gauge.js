@@ -11,9 +11,10 @@ import { plugin as exportPlugin } from '../core/export';
 import { plugin as titlePlugin } from '../core/title';
 import { plugin as tooltipPlugin } from '../core/tooltip';
 import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
+import { noop } from '../../core/utils/common';
 
 const _format = formatHelper.format;
-export const dxBaseGauge = BaseWidget.inherit({
+export const BaseGauge = BaseWidget.inherit({
     _rootClassPrefix: 'dxg',
 
     _themeSection: 'gauge',
@@ -97,6 +98,7 @@ export const dxBaseGauge = BaseWidget.inherit({
         if(!that._isValidDomain) return;
 
         that._renderContent();
+        that._renderGraphicObjects();
         that._tracker.setTooltipState(that._tooltip.isEnabled());
         that._tracker.activate();
         that._noAnimation = false;
@@ -157,6 +159,8 @@ export const dxBaseGauge = BaseWidget.inherit({
     _change_MOSTLY_TOTAL: function() {
         this._applyMostlyTotalChange();
     },
+
+    _updateExtraElements: noop,
 
     _setupDomain: function() {
         const that = this;
@@ -225,6 +229,9 @@ export const dxBaseGauge = BaseWidget.inherit({
 
 //  TODO: find a better place for it
 export const formatValue = function(value, options, extra) {
+    if(Object.is(value, -0)) {
+        value = 0;
+    }
     options = options || {};
     const text = _format(value, options.format);
     let formatObject;
@@ -266,14 +273,14 @@ function compareArraysElements(array1, array2) {
 }
 
 // PLUGINS_SECTION
-dxBaseGauge.addPlugin(exportPlugin);
-dxBaseGauge.addPlugin(titlePlugin);
-dxBaseGauge.addPlugin(tooltipPlugin);
-dxBaseGauge.addPlugin(loadingIndicatorPlugin);
+BaseGauge.addPlugin(exportPlugin);
+BaseGauge.addPlugin(titlePlugin);
+BaseGauge.addPlugin(tooltipPlugin);
+BaseGauge.addPlugin(loadingIndicatorPlugin);
 
 // These are gauges specifics on using tooltip - they require refactoring.
-const _setTooltipOptions = dxBaseGauge.prototype._setTooltipOptions;
-dxBaseGauge.prototype._setTooltipOptions = function() {
+const _setTooltipOptions = BaseGauge.prototype._setTooltipOptions;
+BaseGauge.prototype._setTooltipOptions = function() {
     _setTooltipOptions.apply(this, arguments);
     this._tracker && this._tracker.setTooltipState(this._tooltip.isEnabled());
 };

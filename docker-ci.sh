@@ -1,93 +1,91 @@
 #!/bin/bash -e
 
-# Run inside https://hub.docker.com/r/devexpress/devextreme-build/
-
 trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
-export DEVEXTREME_DOCKER_CI=true
-export NUGET_PACKAGES=$PWD/dotnet_packages
-
-function run_lint {
-    npm i
-    npm run lint
-}
-
-function run_ts {
-    target=./ts/dx.all.d.ts
-    cp $target $target.current
-
-    npm i
-    npm update devextreme-internal-tools
-    npm ls devextreme-internal-tools || :
-
-    npm run validate-declarations
-    npm run update-ts
-
-    if ! diff $target.current $target -U 5 > $target.diff; then
-        echo "FAIL: $target is outdated:"
-        cat $target.diff | sed "1,2d"
-        exit 1
-    else
-        echo "TS is up-to-date"
-    fi
-
-    npx gulp ts-compilation-check ts-jquery-check ts-modules-check
-}
+export DEVEXTREME_TEST_CI=true
 
 function run_test {
-    export DEVEXTREME_TEST_CI=true
+    local i
+    local status
 
+    for i in {1..3}; do
+        set +e
+        (set -e; run_test_impl); status=$?
+        set -e
+        [ $status == 0 ] && exit 0
+    done
+
+    exit 1
+}
+
+function run_test_impl {
     local port=`node -e "console.log(require('./ports.json').qunit)"`
     local url="http://localhost:$port/run?notimers=true"
     local runner_pid
     local runner_result=0
 
+    [ "$LOCAL" == "true" ] && url="http://host.docker.internal:$port/run?notimers=true"
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
-    [ -z "$JQUERY"  ] && url="$url&nojquery=true"
-    [ -n "$PERF" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
+    [ "$JQUERY" == "false"  ] && url="$url&nojquery=true"
+    [ "$SHADOW_DOM" == "true" ] && url="$url&shadowDom=true"
+    [ "$PERF" == "true" ] && url="$url&include=DevExpress.performance&workerInWindow=true"
+    [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
+    [ "$NO_CSP" == "true" ] && url="$url&nocsp=true"
 
     if [ -n "$TZ" ]; then
-        ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
-        dpkg-reconfigure --frontend noninteractive tzdata
+        sudo ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
+        sudo dpkg-reconfigure --frontend noninteractive tzdata
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
-        Xvfb :99 -ac -screen 0 1200x600x24 &
-        x11vnc -display :99 2>/dev/null &
+        Xvfb -ac :99 -screen 0 1200x600x24 > /dev/null 2>&1 &
+        if [ "$GITHUBACTION" != "true" ]; then
+            x11vnc -display :99 2>/dev/null &
+        fi
     fi
 
-    npm i
-    npm run build
-
-    dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
-
-    for i in {15..0}; do
-        if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
-            echo "Runner exited unexpectedly"
-            exit 1
+    if [ "$LOCAL" != "true" ]; then
+        if [ "$GITHUBACTION" != "true" ]; then
+        npm i
+        npm run build
         fi
 
-        httping -qsc1 "$url" && break
+        dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
-        if [ $i -eq 0 ]; then
-            echo "Runner not reached"
-            exit 1
-        fi
+        for i in {15..0}; do
+            if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
+                echo "Runner exited unexpectedly"
+                return 1
+            fi
 
-        sleep 1
-        echo "Waiting for runner..."
-    done
+            httping -qsc1 "$url" && break
+
+            if [ $i -eq 0 ]; then
+                echo "Runner not reached"
+                return 1
+            fi
+
+            sleep 1
+            echo "Waiting for runner..."
+        done
+    fi
 
     echo "URL: $url"
 
     case "$BROWSER" in
 
         "firefox")
-            local firefox_args="-profile /firefox-profile $url"
+            kill -9 $(ps -x | grep firefox | awk '{print $1}') || true
+
+            local profile_path="/firefox-profile"
+            [ "$GITHUBACTION" == "true" ] && profile_path="/tmp/firefox-profile"
+            local firefox_args="-profile $profile_path $url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
             firefox --version
+            echo "$firefox_args"
+
             firefox $firefox_args &
         ;;
 
@@ -125,18 +123,19 @@ function run_test {
                     --enable-impl-side-painting
                     --enable-skia-benchmarking
                     --disable-web-security
+                    --remote-allow-origins=*
                 )
             fi
 
             if [ -n "$MOBILE_UA" ]; then
                 local user_agent
 
-                if [ "$MOBILE_UA" == "ios9" ]; then
-                    user_agent="Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1"
+                if [ "$MOBILE_UA" == "ios10" ]; then
+                    user_agent="Mozilla/5.0 (iPad; CPU OS 10_2_1 like Mac OS X) AppleWebKit/602.4.6 (KHTML, like Gecko) Version/10.0 Mobile/14D27 Safari/602.1)"
                 elif [ "$MOBILE_UA" == "android6" ]; then
                     user_agent="Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Mobile Safari/537.36"
                 else
-                    exit 1
+                    return 1
                 fi
 
                 echo "Mobile user agent: $MOBILE_UA"
@@ -149,12 +148,15 @@ function run_test {
                     --enable-features=OverlayScrollbar
                 )
             fi
-
-            tput setaf 6
-            echo "$chrome_command"
-            printf '  %s\n' "${chrome_args[@]}"
-            tput setaf 9
-
+            if [ "$GITHUBACTION" == "true" ]; then
+                echo "$chrome_command"
+                printf '  %s\n' "${chrome_args[@]}"
+            else
+                tput setaf 6
+                echo "$chrome_command"
+                printf '  %s\n' "${chrome_args[@]}"
+                tput setaf 9
+            fi
             google-chrome-stable --version
             eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
         ;;
@@ -163,56 +165,20 @@ function run_test {
 
     start_runner_watchdog $runner_pid
     wait $runner_pid || runner_result=1
-    exit $runner_result
-}
-
-function run_test_testcafe {
-    export DEVEXTREME_TEST_CI=true
-
-    npm i
-    npm run build
-
-    local args="--browsers=chrome:headless";
-    [ -n "$COMPONENT" ] && args="$args --componentFolder=$COMPONENT";
-    [ -n "$QUARANTINE_MODE" ] && args="$args --quarantineMode=true";
-
-    npm run test-testcafe -- $args
-}
-
-function run_test_jest {
-    npm i
-    npx gulp localization
-    npm run test-jest
-}
-
-function run_native_components {
-    npm i
-    npx gulp localization
-    npx gulp react-compilation-check
-}
-
-function run_test_scss {
-    npm i
-    npm run build-themes
-    cd themebuilder-scss
-    npm i && npm run build && npm run test
-}
-
-function run_font_icons_test {
-    npm i jest
-    npm i font-carrier
-    npm run test-jest -- content.test.ts --coverage false --testPathPattern ./testing/FontIcons/content.test.ts
+    return $runner_result
 }
 
 function start_runner_watchdog {
     local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
+    local raw_log_file="$PWD/testing/RawLog.txt"
     local last_suite_time=unknown
 
     while true; do
-        sleep 300
+        sleep 180
 
         if [ ! -f $last_suite_time_file ] || [ $(cat $last_suite_time_file) == $last_suite_time ]; then
             echo "Runner stalled"
+            tail -n 100 $raw_log_file
             kill -9 $1
         else
             last_suite_time=$(cat $last_suite_time_file)

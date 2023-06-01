@@ -2,16 +2,16 @@ import $ from '../core/renderer';
 import config from './config';
 import errors from './errors';
 import windowResizeCallbacks from '../core/utils/resize_callbacks';
-import Component from './component';
+import { Component } from './component';
 import { TemplateManager } from './template_manager';
 import { attachInstanceToElement, getInstanceByElement } from './utils/public_component';
+import { addShadowDomStyles } from './utils/shadow_dom';
 import { cleanDataRecursive } from './element_data';
 import { each } from './utils/iterator';
 import { extend } from './utils/extend';
 import { getPublicElement } from '../core/element';
 import { grep, noop } from './utils/common';
-import { inArray } from './utils/array';
-import { isString, isDefined } from './utils/type';
+import { isString, isDefined, isFunction } from './utils/type';
 import { hasWindow } from '../core/utils/window';
 import { resize as resizeEvent, visibility as visibilityEvents } from '../events/short';
 
@@ -35,13 +35,15 @@ const DOMComponent = Component.inherit({
         }, this._useTemplates() ? TemplateManager.createDefaultOptions() : {});
     },
     /**
-    * @name DOMComponentMethods.ctor
+    * @name DOMComponent.ctor
     * @publicName ctor(element,options)
     * @param1 element:Element|JQuery
     * @param2 options:DOMComponentOptions|undefined
     * @hidden
     */
     ctor(element, options) {
+        this._customClass = null;
+
         this._createElement(element);
         attachInstanceToElement(this._$element, this, this._dispose);
 
@@ -56,11 +58,27 @@ const DOMComponent = Component.inherit({
         return ['rtlEnabled', 'disabled', 'templatesRenderAsynchronously'];
     },
 
+    _checkFunctionValueDeprecation: function(optionNames) {
+        if(!this.option('_ignoreFunctionValueDeprecation')) {
+            optionNames.forEach(optionName => {
+                if(isFunction(this.option(optionName))) {
+                    errors.log('W0017', optionName);
+                }
+            });
+        }
+    },
+
     _visibilityChanged: abstract,
     _dimensionChanged: abstract,
 
     _init() {
         this.callBase();
+        this._checkFunctionValueDeprecation([
+            'width', 'height',
+            'maxHeight', 'maxWidth',
+            'minHeight', 'minWidth',
+            'popupHeight', 'popupWidth'
+        ]);
         this._attachWindowResizeCallback();
         this._initTemplateManager();
     },
@@ -105,6 +123,8 @@ const DOMComponent = Component.inherit({
 
     _render() {
         this._attachVisibilityChangeHandlers();
+
+        addShadowDomStyles(this.$element());
     },
 
     _renderElementAttributes() {
@@ -116,7 +136,10 @@ const DOMComponent = Component.inherit({
 
         this.$element()
             .attr(attributes)
+            .removeClass(this._customClass)
             .addClass(classNames);
+
+        this._customClass = classNames;
     },
 
     _renderVisibilityChange() {
@@ -277,7 +300,7 @@ const DOMComponent = Component.inherit({
 
         if(instance) {
             const optionChangedHandler = ({ name, value }) => {
-                if(inArray(name, synchronizableOptions) >= 0) {
+                if(synchronizableOptions.includes(name)) {
                     instance.option(name, value);
                 }
             };
@@ -302,16 +325,6 @@ const DOMComponent = Component.inherit({
         return extend(this.callBase(), { context });
     },
 
-    /**
-    * @pseudo Action
-    * @section Utils
-    * @type function
-    * @default null
-    * @type_function_param1 e:object
-    * @type_function_param1_field1 component:this
-    * @type_function_param1_field2 element:dxElement
-    * @type_function_param1_field3 model:object
-    **/
     _defaultActionArgs() {
         const $element = this.$element();
         const model = this._modelByElement($element);

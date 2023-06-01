@@ -1,7 +1,14 @@
-import ListEdit from './list/ui.list.edit.search';
-import registerComponent from '../core/component_registrator';
-// STYLE list
+import List from './list_light';
+import './list/modules/selection';
+import './list/modules/deleting';
+import './list/modules/dragging';
+import './list/modules/context';
+import './list/modules/search';
 
-registerComponent('dxList', ListEdit);
+export default List;
 
-export default ListEdit;
+/**
+ * @name dxListItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

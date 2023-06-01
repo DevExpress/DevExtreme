@@ -1,12 +1,9 @@
-import 'ui/action_sheet';
 import 'ui/button';
 import 'ui/tabs';
-import 'ui/drop_down_menu';
 import $ from 'jquery';
 import Toolbar from 'ui/toolbar';
 import themes from 'ui/themes';
 
-import 'common.css!';
 
 QUnit.testStart(() => {
     const markup = '<div id=\'toolbar\'></div>';
@@ -433,12 +430,5 @@ QUnit.module('default template', () => {
         assert.equal(tabs.length, 1);
         assert.equal(tabs.find('.dx-tab').length, 1);
         assert.equal($.trim(tabs.text()), 'test');
-    });
-
-    test('template should be rendered correctly with dropDownMenu', function(assert) {
-        const $content = prepareItemTest({ widget: 'dxDropDownMenu', options: { items: [{ text: 'test' }] } });
-
-        const dropDown = $content.filter('.dx-dropdownmenu');
-        assert.equal(dropDown.length, 1);
     });
 });

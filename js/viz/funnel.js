@@ -16,3 +16,8 @@ dxFunnel.addPlugin(pluginTooltip);
 dxFunnel.addPlugin(pluginLoadingIndicator);
 
 export default dxFunnel;
+
+/**
+ * @name dxFunnelItem
+ * @publicName Item
+ */

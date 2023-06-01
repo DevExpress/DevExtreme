@@ -7,8 +7,8 @@ import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import Button from './button';
 import CollectionWidget from './collection/ui.collection_widget.edit';
-import Popup from './popup';
-import Popover from './popover';
+import Popup from './popup/ui.popup';
+import Popover from './popover/ui.popover';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred } from '../core/utils/deferred';
 
@@ -22,6 +22,7 @@ const ACTION_SHEET_CANCEL_BUTTON_CLASS = 'dx-actionsheet-cancel';
 const ACTION_SHEET_ITEM_CLASS = 'dx-actionsheet-item';
 const ACTION_SHEET_ITEM_DATA_KEY = 'dxActionSheetItemData';
 const ACTION_SHEET_WITHOUT_TITLE_CLASS = 'dx-actionsheet-without-title';
+const ACTION_SHEET_BUTTON_DEFAULT_STYLING_MODE = 'outlined';
 
 
 const ActionSheet = CollectionWidget.inherit({
@@ -105,7 +106,7 @@ const ActionSheet = CollectionWidget.inherit({
              */
             focusStateEnabled: false,
 
-            selectionByClick: false
+            selectByClick: false
         });
     },
 
@@ -121,11 +122,6 @@ const ActionSheet = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
         /**
-        * @name dxActionSheetItem
-        * @inherits CollectionWidgetItem
-        * @type object
-        */
-        /**
         * @name dxActionSheetItem.visible
         * @type boolean
         * @default true
@@ -138,9 +134,12 @@ const ActionSheet = CollectionWidget.inherit({
         */
         this._templateManager.addDefaultTemplates({
             item: new BindableTemplate(function($container, data) {
-                const button = new Button($('<div>'), extend({ onClick: data && data.click }, data));
+                const button = new Button($('<div>'), extend({
+                    onClick: data && data.click,
+                    stylingMode: data && data.stylingMode || ACTION_SHEET_BUTTON_DEFAULT_STYLING_MODE
+                }, data));
                 $container.append(button.$element());
-            }, ['disabled', 'icon', 'text', 'type', 'onClick', 'click'], this.option('integrationOptions.watchMethod'))
+            }, ['disabled', 'icon', 'text', 'type', 'onClick', 'click', 'stylingMode'], this.option('integrationOptions.watchMethod'))
         });
     },
 
@@ -196,7 +195,7 @@ const ActionSheet = CollectionWidget.inherit({
 
     _renderPopupTitle: function() {
         this._mapPopupOption('showTitle');
-        this._popup && this._popup._wrapper().toggleClass(ACTION_SHEET_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
+        this._popup && this._popup.$wrapper().toggleClass(ACTION_SHEET_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
     },
 
     _clean: function() {
@@ -228,7 +227,9 @@ const ActionSheet = CollectionWidget.inherit({
             target: this.option('target')
         }));
 
-        this._popup._wrapper().addClass(ACTION_SHEET_POPOVER_WRAPPER_CLASS);
+        this._popup.$overlayContent().attr('role', 'dialog');
+
+        this._popup.$wrapper().addClass(ACTION_SHEET_POPOVER_WRAPPER_CLASS);
     },
 
     _createPopup: function() {
@@ -282,7 +283,7 @@ const ActionSheet = CollectionWidget.inherit({
             }
         }));
 
-        this._popup._wrapper().addClass(ACTION_SHEET_POPUP_WRAPPER_CLASS);
+        this._popup.$wrapper().addClass(ACTION_SHEET_POPUP_WRAPPER_CLASS);
     },
 
     _popupContentReadyAction: function() {
@@ -313,6 +314,7 @@ const ActionSheet = CollectionWidget.inherit({
                 .appendTo(this._popup && this._popup.$content());
             this._createComponent(this._$cancelButton, Button, {
                 disabled: false,
+                stylingMode: ACTION_SHEET_BUTTON_DEFAULT_STYLING_MODE,
                 text: this.option('cancelText'),
                 onClick: function(e) {
                     const hidingArgs = { event: e, cancel: false };
@@ -395,13 +397,13 @@ const ActionSheet = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxActionSheetMethods.registerKeyHandler
+    * @name dxActionSheet.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxActionSheetMethods.focus
+    * @name dxActionSheet.focus
     * @publicName focus()
     * @hidden
     */
@@ -411,3 +413,9 @@ const ActionSheet = CollectionWidget.inherit({
 registerComponent('dxActionSheet', ActionSheet);
 
 export default ActionSheet;
+
+/**
+ * @name dxActionSheetItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

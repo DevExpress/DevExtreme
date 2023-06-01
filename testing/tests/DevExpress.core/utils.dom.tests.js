@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import domUtils from 'core/utils/dom';
-import domAdapter from 'core/dom_adapter';
 import support from 'core/utils/support';
 import styleUtils from 'core/utils/style';
 import devices from 'core/devices';
@@ -65,24 +64,6 @@ QUnit.test('clearSelection should not run if selectionType is \'Caret\'', functi
     }
 });
 
-QUnit.test('resetActiveElement should not throw an error in IE', function(assert) {
-    const getActiveElement = sinon.stub(domAdapter, 'getActiveElement').returns({
-        blur: function() {
-            throw 'IE throws an \'Incorrect Function\' exception in blur method';
-        }
-    });
-    const bodyBlur = sinon.spy(document.body, 'blur');
-
-    try {
-        domUtils.resetActiveElement();
-        assert.strictEqual(bodyBlur.callCount, 1, 'body should be blured if blur function on element does not work');
-    } finally {
-        bodyBlur.restore();
-        getActiveElement.restore();
-    }
-});
-
-
 QUnit.module('initMobileViewPort');
 
 QUnit.test('allowSelection should be detected by realDevice', function(assert) {
@@ -125,6 +106,20 @@ QUnit.test('it correctly detect the body element', function(assert) {
     assert.ok(domUtils.contains(document, body), 'Document contains the body element');
 });
 
+QUnit.test('it does not raise error if element is a href', function(assert) {
+    const hrefElement = $('<a>')
+        .attr({ href: 'text' })
+        .get(0);
+
+    try {
+        domUtils.contains(document, hrefElement);
+    } catch(e) {
+        assert.ok(false, `error is raised: ${e.message}`);
+    } finally {
+        assert.ok(true, 'no error raised');
+    }
+});
+
 QUnit.test('it correctly detects the window element', function(assert) {
     assert.ok(domUtils.contains(window, document.body), 'Window contains the body element');
 });
@@ -136,4 +131,40 @@ QUnit.test('it correctly works with svg elements', function(assert) {
     svgContainer.appendChild(childElement);
 
     assert.ok(domUtils.contains(svgContainer, childElement));
+});
+
+QUnit.test('element in shadow dom should be detected if container is window', function(assert) {
+    const $div = $('<div>').appendTo('#qunit-fixture');
+    const divContent = $div.get(0);
+
+    divContent.attachShadow({ mode: 'open' });
+    divContent.shadowRoot.innerHTML = '<p>Inner Text</p>';
+
+    const textElement = divContent.shadowRoot.querySelector('p');
+
+    assert.ok(domUtils.contains(window, textElement));
+});
+
+QUnit.test('element in shadow dom should be detected if container is div element', function(assert) {
+    const $div = $('<div>').appendTo('#qunit-fixture');
+    const divContent = $div.get(0);
+
+    divContent.attachShadow({ mode: 'open' });
+    divContent.shadowRoot.innerHTML = '<p>Inner Text</p>';
+
+    const textElement = divContent.shadowRoot.querySelector('p');
+
+    assert.ok(domUtils.contains(divContent, textElement));
+});
+
+QUnit.test('element in shadow dom should be detected if container is document', function(assert) {
+    const $div = $('<div>').appendTo('#qunit-fixture');
+    const divContent = $div.get(0);
+
+    divContent.attachShadow({ mode: 'open' });
+    divContent.shadowRoot.innerHTML = '<p>Inner Text</p>';
+
+    const textElement = divContent.shadowRoot.querySelector('p');
+
+    assert.ok(domUtils.contains(document, textElement));
 });

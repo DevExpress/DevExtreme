@@ -6,11 +6,11 @@ $generic-radiobutton-size: null !default;
 $generic-radiobutton-dot-size: null !default;
 
 @if $size == "default" {
-  $generic-radiobutton-size: 22px;
-  $generic-radiobutton-dot-size: 10px;
+  $generic-radiobutton-size: 22px !default;
+  $generic-radiobutton-dot-size: 10px !default;
 }
 
 @else if $size == "compact" {
-  $generic-radiobutton-size: 16px;
-  $generic-radiobutton-dot-size: 8px;
+  $generic-radiobutton-size: 16px !default;
+  $generic-radiobutton-dot-size: 8px !default;
 }

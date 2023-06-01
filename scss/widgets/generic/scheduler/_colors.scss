@@ -85,6 +85,14 @@ $scheduler-time-indicator-background-color: null !default;
 $scheduler-first-month-cell-background-color: null !default;
 $scheduler-time-panel-background-color: null !default;
 
+$scheduler-tooltip-appointment-text-color: null !default;
+$scheduler-appointment-overlay-bg: null !default;
+
+// Agenda
+$agenda-appointment-recurrence-icon-color: null !default;
+$agenda-appointment-hover-bg: $base-hover-bg !default;
+$agenda-appointment-active-bg: null !default;
+$agenda-appointment-text-color: null !default;
 
 @if $color == "carmine" {
   $scheduler-base-border-color: color.change($base-border-color, $alpha: 0.6) !default;
@@ -116,6 +124,13 @@ $scheduler-time-panel-background-color: null !default;
   $scheduler-fill-focused-appointment: false !default;
   $scheduler-time-indicator-background-color: rgba(51, 51, 51, 0.04) !default;
   $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
+
+  $scheduler-tooltip-appointment-text-color: $base-text-color !default;
+  $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
+  $agenda-appointment-active-bg: color.change($base-accent, $alpha: 0.15) !default;
 }
 
 @if $color == "contrast" {
@@ -148,6 +163,13 @@ $scheduler-time-panel-background-color: null !default;
   $scheduler-time-indicator-background-color: color.change(#3806ff, $alpha: 0.6) !default;
   $scheduler-time-indicator-color: $scheduler-current-time-cell-color !default;
   $scheduler-first-month-cell-background-color: $base-bg !default;
+
+  $scheduler-tooltip-appointment-text-color: $base-inverted-text-color !default;
+  $scheduler-appointment-overlay-bg: $base-inverted-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
+  $agenda-appointment-active-bg: $base-accent !default;
 }
 
 @if $color == "dark" {
@@ -180,6 +202,13 @@ $scheduler-time-panel-background-color: null !default;
   $scheduler-fill-focused-appointment: false !default;
   $scheduler-time-indicator-background-color: rgba(222, 222, 222, 0.07) !default;
   $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
+
+  $scheduler-tooltip-appointment-text-color: $base-text-color !default;
+  $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
+  $agenda-appointment-active-bg: color.change(#fff, $alpha: 0.15) !default;
 }
 
 @if $color == "darkmoon" {
@@ -214,6 +243,13 @@ $scheduler-time-panel-background-color: null !default;
   $scheduler-fill-focused-appointment: false !default;
   $scheduler-time-indicator-background-color: rgba(222, 222, 222, 0.07) !default;
   $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
+
+  $scheduler-tooltip-appointment-text-color: $base-text-color !default;
+  $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
+  $agenda-appointment-active-bg: color.change(#000, $alpha: 0.15) !default;
 }
 
 @if $color == "darkviolet" {
@@ -246,6 +282,13 @@ $scheduler-time-panel-background-color: null !default;
   $scheduler-fill-focused-appointment: false !default;
   $scheduler-time-indicator-background-color: rgba(222, 222, 222, 0.07) !default;
   $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
+
+  $scheduler-tooltip-appointment-text-color: $base-text-color !default;
+  $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
+  $agenda-appointment-active-bg: color.change(#9e9ec5, $alpha: 0.35) !default;
 }
 
 @if $color == "greenmist" {
@@ -279,6 +322,13 @@ $scheduler-time-panel-background-color: null !default;
   $scheduler-fill-focused-appointment: false !default;
   $scheduler-time-indicator-background-color: rgba(51, 51, 51, 0.04) !default;
   $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
+
+  $scheduler-tooltip-appointment-text-color: $base-text-color !default;
+  $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
+  $agenda-appointment-active-bg: color.change(#000, $alpha: 0.15) !default;
 }
 
 @if $color == "light" {
@@ -311,6 +361,13 @@ $scheduler-time-panel-background-color: null !default;
   $scheduler-fill-focused-appointment: false !default;
   $scheduler-time-indicator-background-color: rgba(51, 51, 51, 0.04) !default;
   $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
+
+  $scheduler-tooltip-appointment-text-color: $base-text-color !default;
+  $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
+  $agenda-appointment-active-bg: color.change(#000, $alpha: 0.08) !default;
 }
 
 @if $color == "softblue" {
@@ -343,5 +400,12 @@ $scheduler-time-panel-background-color: null !default;
   $scheduler-fill-focused-appointment: false !default;
   $scheduler-time-indicator-background-color: rgba(51, 51, 51, 0.04) !default;
   $scheduler-first-month-cell-background-color: color.adjust($scheduler-appointment-base-color, $alpha: -0.85) !default;
+
+  $scheduler-tooltip-appointment-text-color: $base-text-color !default;
+  $scheduler-appointment-overlay-bg: $base-bg !default;
+
+  $agenda-appointment-recurrence-icon-color: $base-inverted-text-color !default;
+  $agenda-appointment-text-color: $base-text-color !default;
+  $agenda-appointment-active-bg: color.change(#000, $alpha: 0.08) !default;
 }
 

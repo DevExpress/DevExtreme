@@ -77,6 +77,7 @@ const CollectionItem = Class.inherit({
 
     _renderDisabled: function(value, oldValue) {
         this._$element.toggleClass(DISABLED_STATE_CLASS, !!value);
+        this._$element.attr('aria-disabled', !!value);
 
         this._updateOwnerFocus(value);
     },

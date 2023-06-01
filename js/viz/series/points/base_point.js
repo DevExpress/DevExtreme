@@ -83,7 +83,8 @@ export function Point(series, dataItem, options) {
     this._emptySettings = {
         fill: null,
         stroke: null,
-        dashStyle: null
+        dashStyle: null,
+        filter: null
     };
 }
 
@@ -199,10 +200,10 @@ Point.prototype = {
     },
 
     applyView: function(legendCallback) {
-        const style = this._getViewStyle();
         const that = this;
+        const style = that._getViewStyle();
         that._currentStyle = style;
-        if(!that.graphic && that.series.autoHidePointMarkers && (style === SELECTION || style === HOVER)) {
+        if(!that.graphic && that.getMarkerVisibility() && that.series.autoHidePointMarkers && (style === SELECTION || style === HOVER)) {
             that._drawMarker(that.series.getRenderer(), that.series.getMarkersGroup());
         }
         if(that.graphic) {
@@ -396,22 +397,6 @@ Point.prototype = {
         return this.series.getValueAxis().getTranslator();
     },
 
-    _calculateVisibility: function(x, y, width, height) {
-        const that = this;
-        const visibleArea = that._getVisibleArea();
-        const rotated = that._options.rotated;
-
-        if(((visibleArea.minX) > (x + (width || 0)) || ((visibleArea.maxX) < x) ||
-            ((visibleArea.minY) > (y + (height || 0))) || ((visibleArea.maxY) < y)) ||
-            (rotated && _isDefined(width) && width !== 0 && (visibleArea.minX === (x + width) || visibleArea.maxX === x)) ||
-        (!rotated && _isDefined(height) && height !== 0 && (visibleArea.minY === (y + height) || visibleArea.maxY === y))
-        ) {
-            that.inVisibleArea = false;
-        } else {
-            that.inVisibleArea = true;
-        }
-    },
-
     isArgumentCorrect() {
         return this.series._argumentChecker(this.argument);
     },
@@ -487,7 +472,9 @@ Point.prototype = {
         const aggregationInfo = that.aggregationInfo;
         if(aggregationInfo) {
             const axis = that.series.getArgumentAxis();
-            const rangeText = axis.formatRange(aggregationInfo.intervalStart, aggregationInfo.intervalEnd, aggregationInfo.aggregationInterval);
+            const rangeText = axis.formatRange(aggregationInfo.intervalStart, aggregationInfo.intervalEnd,
+                aggregationInfo.aggregationInterval, tooltip.getOptions().argumentFormat);
+
             if(rangeText) {
                 tooltipFormatObject.valueText += `\n${rangeText}`;
             }

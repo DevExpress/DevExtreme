@@ -1,232 +1,210 @@
-import '../../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions
-} from '../../data/data_source';
+import DataSource, { DataSourceLike } from '../../data/data_source';
 
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    ItemInfo,
 } from '../../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from '../widget/ui.widget';
 
-export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOptions<T> {
+export type ItemLike = string | CollectionWidgetItem | any;
+
+export interface SelectionChangedInfo<TItem extends ItemLike = any> {
+    readonly addedItems: Array<TItem>;
+    readonly removedItems: Array<TItem>;
+}
+
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @type object
+ */
+export interface CollectionWidgetOptions<
+    TComponent extends CollectionWidget<any, TItem, TKey> | any,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends WidgetOptions<TComponent> {
     /**
-     * @docid CollectionWidgetOptions.dataSource
-     * @type string|Array<string,CollectionWidgetItem>|DataSource|DataSourceOptions
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
+     * @type Store|DataSource|DataSourceOptions|string|Array<string | CollectionWidgetItem>|null
      * @public
      */
-    dataSource?: string | Array<string | CollectionWidgetItem> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid CollectionWidgetOptions.itemHoldTimeout
-     * @type number
+     * @docid
      * @default 750
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemHoldTimeout?: number;
     /**
-     * @docid CollectionWidgetOptions.itemTemplate
-     * @type template|function
+     * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid CollectionWidgetOptions.items
-     * @type Array<string, CollectionWidgetItem, object>
+     * @docid
      * @fires CollectionWidgetOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
+     * @type Array<string | CollectionWidgetItem | any>
      * @public
      */
-    items?: Array<string | CollectionWidgetItem | any>;
+    items?: Array<TItem>;
     /**
-     * @docid CollectionWidgetOptions.keyExpr
-     * @type string|function
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyExpr?: string | Function;
     /**
-     * @docid CollectionWidgetOptions.noDataText
-     * @type string
+     * @docid
      * @default "No data to display"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     noDataText?: string;
     /**
-     * @docid CollectionWidgetOptions.onItemClick
-     * @type function(e)|string
-     * @extends Action
+     * @docid
+     * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any) | string;
+    onItemClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & ItemInfo<TItem>) => void) | string;
     /**
-     * @docid CollectionWidgetOptions.onItemContextMenu
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemContextMenu?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
+    onItemContextMenu?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>) => void);
     /**
-     * @docid CollectionWidgetOptions.onItemHold
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemHold?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any);
+    onItemHold?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>) => void);
     /**
-     * @docid CollectionWidgetOptions.onItemRendered
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 itemIndex:number
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field component:this
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemRendered?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number }) => any);
+    onItemRendered?: ((e: EventInfo<TComponent> & ItemInfo<TItem>) => void);
     /**
-     * @docid CollectionWidgetOptions.onSelectionChanged
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 addedItems:array<any>
-     * @type_function_param1_field5 removedItems:array<any>
+     * @type_function_param1_field addedItems:array<any>
+     * @type_function_param1_field removedItems:array<any>
+     * @type_function_param1_field component:this
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: T, element?: dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
+    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo<TItem>) => void);
     /**
-     * @docid CollectionWidgetOptions.selectedIndex
-     * @type number
+     * @docid
      * @default -1
      * @fires CollectionWidgetOptions.onSelectionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
     /**
-     * @docid CollectionWidgetOptions.selectedItem
-     * @type object
+     * @docid
      * @default null
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectedItem?: any;
+    selectedItem?: TItem;
     /**
-     * @docid CollectionWidgetOptions.selectedItemKeys
-     * @type Array<any>
+     * @docid
      * @fires CollectionWidgetOptions.onSelectionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectedItemKeys?: Array<any>;
+    selectedItemKeys?: Array<TKey>;
     /**
-     * @docid CollectionWidgetOptions.selectedItems
-     * @type Array<any>
+     * @docid
      * @fires CollectionWidgetOptions.onSelectionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectedItems?: Array<any>;
+    selectedItems?: Array<TItem>;
 }
 /**
- * @docid CollectionWidget
- * @type object
+ * @docid
  * @inherits Widget, DataHelperMixin
- * @module ui/collection/ui.collection_widget.base
- * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
+ * @options CollectionWidgetOptions
  */
-export default class CollectionWidget extends Widget {
-    constructor(element: Element, options?: CollectionWidgetOptions)
-    constructor(element: JQuery, options?: CollectionWidgetOptions)
-    getDataSource(): DataSource;
+export default class CollectionWidget<
+    TProperties extends CollectionWidgetOptions<any, TItem, TKey>,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends Widget<TProperties> {
+    getDataSource(): DataSource<TItem, TKey>;
 }
 
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
 export interface CollectionWidgetItem {
     /**
-     * @docid CollectionWidgetItem.disabled
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabled?: boolean;
     /**
-     * @docid CollectionWidgetItem.html
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     html?: string;
     /**
-     * @docid CollectionWidgetItem.template
-     * @type template|function
+     * @docid
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | (() => string | Element | JQuery);
+    template?: template | ((itemData: this, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid CollectionWidgetItem.text
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     text?: string;
     /**
-     * @docid CollectionWidgetItem.visible
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;

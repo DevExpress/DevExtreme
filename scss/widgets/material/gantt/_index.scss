@@ -26,7 +26,7 @@ $gantt-successor-background-color: white;
     }
 
     .dx-toolbar .dx-toolbar-items-container {
-      height: 42px;
+      min-height: 42px;
     }
   }
 
@@ -187,7 +187,7 @@ $gantt-successor-background-color: white;
     padding-left: 1px;
 
     .dx-gantt-task-edit-frame {
-      height: $gantt-task-height;
+      height: 100%;
       border: 1px solid darken($base-accent, 10%);
       border-radius: $base-border-radius;
 
@@ -224,7 +224,9 @@ $gantt-successor-background-color: white;
     border: 1px solid darken($base-accent, 10%);
     width: $gantt-dependency-successor-size;
     height: $gantt-dependency-successor-size;
-    top: ($gantt-task-height - $gantt-dependency-successor-size - 1) / 2;
+    margin: auto;
+    top: 0;
+    bottom: 0;
   }
 
   .dx-gantt-task-edit-dependency-r,

@@ -7,13 +7,13 @@ class FileSystemItem {
         ctor.apply(this, arguments);
     }
 
-    _internalCtor(pathInfo, name, isDirectory) {
+    _internalCtor(pathInfo, name, isDirectory, key) {
         this.name = name || '';
 
         this.pathInfo = pathInfo && [...pathInfo] || [];
         this.parentPath = this._getPathByPathInfo(this.pathInfo);
         this.relativeName = pathCombine(this.parentPath, name);
-        this.key = this._getPathByPathInfo(this.getFullPathInfo(), true);
+        this.key = key || this._getPathByPathInfo(this.getFullPathInfo(), true);
 
         this.path = pathCombine(this.parentPath, name);
 
@@ -87,7 +87,7 @@ class FileSystemItem {
     }
 
     createClone() {
-        const result = new FileSystemItem(this.pathInfo, this.name, this.isDirectory);
+        const result = new FileSystemItem(this.pathInfo, this.name, this.isDirectory, this.key);
         result.key = this.key;
         result.size = this.size;
         result.dateModified = this.dateModified;

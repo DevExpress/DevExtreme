@@ -1,9 +1,13 @@
-import $ from 'jquery';
-import RenovatedPager from 'renovation/ui/pager/pager.j.js';
-import resizeCallbacks from 'core/utils/resize_callbacks';
-import { act } from 'preact/test-utils';
+const $ = require('jquery');
+const RenovatedPager = require('renovation/ui/pager/pager.j.js');
+const resizeCallbacks = require('core/utils/resize_callbacks');
 
-export class RenovatedPagerForTest extends RenovatedPager {
+// eslint-disable-next-line spellcheck/spell-checker
+const reRender = require('inferno').rerender;
+
+// default export not supported
+exports.WrappedWidget = class WrappedWidget extends RenovatedPager {
+
     get _$pagesSizeChooser() {
         return this._$element.find('.dx-page-sizes');
     }
@@ -27,7 +31,8 @@ export class RenovatedPagerForTest extends RenovatedPager {
     _dimensionChanged() {
         if(!this.firing) {
             this.firing = true;
-            act(() => resizeCallbacks.fire());
+            resizeCallbacks.fire();
+            reRender();
         }
         this.firing = false;
     }
@@ -37,4 +42,5 @@ export class RenovatedPagerForTest extends RenovatedPager {
         const currentIndex = pages.indexOf(page);
         pages[currentIndex]._$page.trigger('dxclick');
     }
-}
+};
+

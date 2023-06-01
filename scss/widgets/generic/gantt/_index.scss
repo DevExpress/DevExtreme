@@ -6,6 +6,7 @@
 @use "../../base/gantt";
 @use "../../base/gantt/mixins" as *;
 @use "../gridBase/colors" as *;
+@use "../toolbar/sizes" as *;
 
 // adduse
 @use "../splitter";
@@ -25,8 +26,16 @@ $gantt-successor-background-color: white;
     }
   }
 
+  .dx-toolbar .dx-toolbar-items-container {
+    min-height: $generic-toolbar-height;
+  }
+
   .dx-treelist-text-content {
     min-height: $gantt-treelist-text-min-height;
+  }
+
+  .dx-treelist-headers .dx-treelist-table {
+    min-height: 32px;
   }
 
   .dx-treelist-icon-container {
@@ -222,7 +231,7 @@ $gantt-successor-background-color: white;
     padding-left: 1px;
 
     .dx-gantt-task-edit-frame {
-      height: $gantt-task-height;
+      height: 100%;
       border: 1px solid darken($base-accent, 10%);
       border-radius: $base-border-radius;
 
@@ -259,7 +268,9 @@ $gantt-successor-background-color: white;
     border: 1px solid darken($base-accent, 10%);
     width: $gantt-dependency-successor-size;
     height: $gantt-dependency-successor-size;
-    top: ($gantt-task-height - $gantt-dependency-successor-size - 1) / 2;
+    margin: auto;
+    top: 0;
+    bottom: 0;
   }
 
   .dx-gantt-task-edit-dependency-r,

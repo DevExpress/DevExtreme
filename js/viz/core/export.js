@@ -1,6 +1,7 @@
 import { extend } from '../../core/utils/extend';
 import { getWindow } from '../../core/utils/window';
 import { patchFontOptions } from './utils';
+import { HIDDEN_FOR_EXPORT } from '../../core/utils/svg';
 import { export as _export, image as imageExporter, svg as svgExporter, pdf as pdfExporter } from '../../exporter';
 import messageLocalization from '../../localization/message';
 import { isDefined } from '../../core/utils/type';
@@ -8,6 +9,7 @@ import { getTheme } from '../themes';
 import { start as hoverEventStart, end as hoverEventEnd } from '../../events/hover';
 import pointerEvents from '../../events/pointer';
 import { logger } from '../../core/utils/console';
+import { getWidth } from '../../core/utils/size';
 
 const pointerActions = [pointerEvents.down, pointerEvents.move].join(' ');
 
@@ -28,6 +30,8 @@ const DEFAULT_EXPORT_FORMAT = 'PNG';
 const ALLOWED_IMAGE_FORMATS = [DEFAULT_EXPORT_FORMAT, 'JPEG', 'GIF'];
 const ALLOWED_EXTRA_FORMATS = ['PDF', 'SVG'];
 const EXPORT_CSS_CLASS = 'dx-export-menu';
+
+const A4WidthCm = '21cm';
 
 const EXPORT_DATA_KEY = 'export-element-type';
 const FORMAT_DATA_KEY = 'export-element-format';
@@ -76,11 +80,23 @@ function print(imageSrc, options) {
     document.body.appendChild(iFrame);
 }
 
+function calculatePrintPageWidth(iFrameBody) {
+    iFrameBody.style.width = A4WidthCm;
+
+    const width = getWidth(iFrameBody);
+
+    iFrameBody.style.width = '';
+
+    return width;
+}
+
 function setPrint(imageSrc, options) {
     return function() {
         let window = this.contentWindow;
         const img = window.document.createElement('img');
         window.document.body.appendChild(img);
+
+        const widthRatio = calculatePrintPageWidth(window.document.body) / options.width;
 
         ///#DEBUG
         const origImageSrc = imageSrc;
@@ -90,13 +106,18 @@ function setPrint(imageSrc, options) {
         }
         ///#ENDDEBUG
 
+        if(widthRatio < 1) {
+            window.document.body.style.transform = `scale(${widthRatio})`;
+            window.document.body.style['transform-origin'] = '0 0';
+        }
+
         const removeFrame = () => {
             ///#DEBUG
             options.__test && options.__test.checkAssertions();
             ///#ENDDEBUG
             this.parentElement.removeChild(this);
             ///#DEBUG
-            options.__test && options.__test.deferred.resolve(origImageSrc);
+            options.__test && options.__test.deferred.resolve(origImageSrc, window?.document?.body?.style);
             ///#ENDDEBUG
         };
 
@@ -332,7 +353,7 @@ export let ExportMenu = function(params) {
     this._shadow.attr({ opacity: 0.8 });
     this._group = renderer.g().attr({
         'class': EXPORT_CSS_CLASS,
-        'hidden-for-export': true
+        [HIDDEN_FOR_EXPORT]: true
     }).linkOn(renderer.root, { name: 'export-menu', after: 'peripheral' });
     this._buttonGroup = renderer.g().attr({ 'class': EXPORT_CSS_CLASS + '-button' }).append(this._group);
     this._listGroup = renderer.g().attr({ 'class': EXPORT_CSS_CLASS + '-list' }).append(this._group);
@@ -582,19 +603,19 @@ function getExportOptions(widget, exportOptions, fileName, format) {
     if(format || exportOptions.format) {
         format = validateFormat(format || exportOptions.format, widget._incidentOccurred);
     }
+    const { width, height } = widget.getSize();
+
     return {
         format: format || DEFAULT_EXPORT_FORMAT,
         fileName: fileName || exportOptions.fileName || 'file',
-        proxyUrl: exportOptions.proxyUrl,
         backgroundColor: exportOptions.backgroundColor,
-        width: widget._canvas.width,
-        height: widget._canvas.height,
+        width,
+        height,
         margin: exportOptions.margin,
         svgToCanvas: exportOptions.svgToCanvas,
-        forceProxy: exportOptions.forceProxy,
-        exportingAction: widget._createActionByOption('onExporting'),
-        exportedAction: widget._createActionByOption('onExported'),
-        fileSavingAction: widget._createActionByOption('onFileSaving')
+        exportingAction: widget._createActionByOption('onExporting', { excludeValidators: ['disabled'] }),
+        exportedAction: widget._createActionByOption('onExported', { excludeValidators: ['disabled'] }),
+        fileSavingAction: widget._createActionByOption('onFileSaving', { excludeValidators: ['disabled'] })
     };
 }
 
@@ -658,9 +679,9 @@ export const plugin = {
             options.exportedAction = null;
             options.margin = 0;
             options.format = 'PNG';
-            options.forceProxy = true;
+            options.useBase64 = true;
             options.fileSavingAction = eventArgs => {
-                print(`data:image/png;base64,${eventArgs.data}`, { __test: options.__test });
+                print(`data:image/png;base64,${eventArgs.data}`, { width: options.width, __test: options.__test });
                 eventArgs.cancel = true;
             };
 

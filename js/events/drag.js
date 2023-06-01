@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import { data as elementData, removeData } from '../core/element_data';
-import { wrapToArray, inArray } from '../core/utils/array';
+import { wrapToArray } from '../core/utils/array';
 import * as iteratorUtils from '../core/utils/iterator';
 import { contains } from '../core/utils/dom';
 import registerEvent from './core/event_registrator';
@@ -27,7 +27,7 @@ const knownDropTargetConfigs = [];
 const dropTargetRegistration = {
 
     setup: function(element, data) {
-        const knownDropTarget = inArray(element, knownDropTargets) !== -1;
+        const knownDropTarget = knownDropTargets.includes(element);
         if(!knownDropTarget) {
             knownDropTargets.push(element);
             knownDropTargetSelectors.push([]);
@@ -36,11 +36,11 @@ const dropTargetRegistration = {
     },
 
     add: function(element, handleObj) {
-        const index = inArray(element, knownDropTargets);
+        const index = knownDropTargets.indexOf(element);
         this.updateEventsCounter(element, handleObj.type, 1);
 
         const selector = handleObj.selector;
-        if(inArray(selector, knownDropTargetSelectors[index]) === -1) {
+        if(!knownDropTargetSelectors[index].includes(selector)) {
             knownDropTargetSelectors[index].push(selector);
         }
     },
@@ -59,7 +59,7 @@ const dropTargetRegistration = {
     teardown: function(element) {
         const handlersCount = elementData(element, DX_DRAG_EVENTS_COUNT_KEY);
         if(!handlersCount) {
-            const index = inArray(element, knownDropTargets);
+            const index = knownDropTargets.indexOf(element);
             knownDropTargets.splice(index, 1);
             knownDropTargetSelectors.splice(index, 1);
             knownDropTargetConfigs.splice(index, 1);
@@ -96,18 +96,18 @@ registerEvent(DRAG_LEAVE_EVENT, dropTargetRegistration);
 registerEvent(DROP_EVENT, dropTargetRegistration);
 
 const getItemDelegatedTargets = function($element) {
-    const dropTargetIndex = inArray($element.get(0), knownDropTargets);
+    const dropTargetIndex = knownDropTargets.indexOf($element.get(0));
     const dropTargetSelectors = knownDropTargetSelectors[dropTargetIndex].filter((selector) => selector);
 
     let $delegatedTargets = $element.find(dropTargetSelectors.join(', '));
-    if(inArray(undefined, knownDropTargetSelectors[dropTargetIndex]) !== -1) {
+    if(knownDropTargetSelectors[dropTargetIndex].includes(undefined)) {
         $delegatedTargets = $delegatedTargets.add($element);
     }
     return $delegatedTargets;
 };
 
 const getItemConfig = function($element) {
-    const dropTargetIndex = inArray($element.get(0), knownDropTargets);
+    const dropTargetIndex = knownDropTargets.indexOf($element.get(0));
     return knownDropTargetConfigs[dropTargetIndex];
 };
 
@@ -150,8 +150,12 @@ const DragEmitter = GestureEmitter.inherit({
         this._maxTopOffset = e.maxTopOffset;
         this._maxBottomOffset = e.maxBottomOffset;
 
-        const dropTargets = wrapToArray(e.targetElements || (e.targetElements === null ? [] : knownDropTargets));
-        this._dropTargets = iteratorUtils.map(dropTargets, function(element) { return $(element).get(0); });
+        if(e.targetElements || e.targetElements === null) {
+            const dropTargets = wrapToArray(e.targetElements || []);
+            this._dropTargets = iteratorUtils.map(dropTargets, function(element) { return $(element).get(0); });
+        } else {
+            this._dropTargets = knownDropTargets;
+        }
     },
 
     _move: function(e) {

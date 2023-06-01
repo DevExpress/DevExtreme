@@ -3,9 +3,10 @@ import registerComponent from '../../core/component_registrator';
 import { clone } from '../../core/utils/object';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { dxBaseGauge } from './base_gauge';
+import { BaseGauge } from './base_gauge';
 import { dxGauge, createIndicatorCreator } from './common';
 import { normalizeAngle, getCosAndSin } from '../core/utils';
+import { plugins as centerTemplatePlugins } from '../core/center_template';
 const _normalizeAngle = normalizeAngle;
 const _getCosAndSin = getCosAndSin;
 import * as circularIndicators from './circular_indicators';
@@ -66,15 +67,29 @@ const dxCircularGauge = dxGauge.inherit({
         const indentFromTick = scaleOptions.label.indentFromTick;
         const length = scaleOptions.tick.visible ? scaleOptions.tick.length : 0;
         const textParams = this._scale.measureLabels(extend({}, this._canvas));
-        let tickCorrection = length;
+        const scaleOrientation = scaleOptions.orientation;
+        const tickCorrection = length;
 
-        if(scaleOptions.orientation === 'inside') {
-            tickCorrection = 0;
-        } else if(scaleOptions.orientation === 'center') {
-            tickCorrection = 0.5 * length;
+        let indentFromAxis = indentFromTick;
+
+        if(indentFromTick >= 0) {
+            if(scaleOrientation === 'outside') {
+                indentFromAxis += tickCorrection;
+            } else if(scaleOrientation === 'center') {
+                indentFromAxis += tickCorrection / 2;
+            }
+        } else {
+            const labelCorrection = _max(textParams.width, textParams.height);
+            indentFromAxis -= labelCorrection;
+            if(scaleOrientation === 'inside') {
+                indentFromAxis -= tickCorrection;
+            } else if(scaleOrientation === 'center') {
+                indentFromAxis -= tickCorrection / 2;
+            }
         }
 
-        scaleOptions.label.indentFromAxis = indentFromTick >= 0 ? indentFromTick + tickCorrection : indentFromTick - tickCorrection - _max(textParams.width, textParams.height);
+        scaleOptions.label.indentFromAxis = indentFromAxis;
+
         this._scale.updateOptions(scaleOptions);
     },
 
@@ -103,6 +118,10 @@ const dxCircularGauge = dxGauge.inherit({
             sides: sides
         };
         that._translator.setCodomain(startAngle, endAngle);
+    },
+
+    _getCenter: function() {
+        return this._getElementLayout();
     },
 
     _shiftScale: function(layout) {
@@ -208,7 +227,7 @@ const dxCircularGauge = dxGauge.inherit({
         this._innerRect = rect;
     },
 
-    _getElementLayout: function(offset) {
+    _getElementLayout: function(offset = 0) {
         return { x: this._area.x, y: this._area.y, radius: _round(this._area.radius - offset) };
     },
 
@@ -226,7 +245,7 @@ const dxCircularGauge = dxGauge.inherit({
         return { width: 300, height: 300 };
     },
 
-    _factory: clone(dxBaseGauge.prototype._factory)
+    _factory: clone(BaseGauge.prototype._factory)
 });
 
 function getWidth(rect) {
@@ -279,6 +298,7 @@ dxCircularGauge._TESTS_selectRectByAspectRatio = selectRectByAspectRatio;
 const indicators = dxCircularGauge.prototype._factory.indicators = {};
 dxCircularGauge.prototype._factory.createIndicator = createIndicatorCreator(indicators);
 
+/* eslint-disable import/namespace */
 indicators._default = circularIndicators._default;
 indicators['rectangleneedle'] = circularIndicators['rectangleneedle'];
 indicators['triangleneedle'] = circularIndicators['triangleneedle'];
@@ -286,9 +306,12 @@ indicators['twocolorneedle'] = circularIndicators['twocolorneedle'];
 indicators['trianglemarker'] = circularIndicators['trianglemarker'];
 indicators['textcloud'] = circularIndicators['textcloud'];
 indicators['rangebar'] = circularIndicators['rangebar'];
+/* eslint-enable import/namespace */
 
 dxCircularGauge.prototype._factory.RangeContainer = CircularRangeContainer;
 
 registerComponent('dxCircularGauge', dxCircularGauge);
+
+dxCircularGauge.addPlugin(centerTemplatePlugins.gauge);
 
 export default dxCircularGauge;

@@ -1,29 +1,10 @@
 /**
-* @name polarChartSeriesObject
-* @publicName Series
-* @type object
-* @inherits baseSeriesObject
+* @name polarChartSeriesObject.axis
+* @type string
+* @hidden
 */
-const polarSeriesObject = {
-    /**
-    * @name polarChartSeriesObjectFields.axis
-    * @type string
-    * @hidden
-    */
-    axis: null
-};
-
 /**
-* @name polarPointObject
-* @publicName Point
-* @type object
-* @inherits basePointObject
+* @name polarPointObject.getBoundingRect
+* @publicName getBoundingRect()
+* @hidden
 */
-const polarPointObject = {
-    /**
-    * @name polarPointObjectMethods.getBoundingRect
-    * @publicName getBoundingRect()
-    * @hidden
-    */
-    getBoundingRect: function() { }
-};

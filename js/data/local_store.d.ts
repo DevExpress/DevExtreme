@@ -1,47 +1,54 @@
 import ArrayStore, {
-    ArrayStoreOptions
+    ArrayStoreOptions,
 } from './array_store';
 
-export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
+/** @public */
+export type Options<
+    TItem = any,
+    TKey = any,
+> = LocalStoreOptions<TItem, TKey>;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ * @docid
+ */
+export interface LocalStoreOptions<
+    TItem = any,
+    TKey = any,
+> extends ArrayStoreOptions<TItem, TKey> {
     /**
-     * @docid LocalStoreOptions.flushInterval
-     * @type number
+     * @docid
      * @default 10000
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     flushInterval?: number;
     /**
-     * @docid LocalStoreOptions.immediate
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     immediate?: boolean;
     /**
-     * @docid LocalStoreOptions.name
-     * @type string
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     name?: string;
 }
 /**
- * @docid LocalStore
+ * @docid
  * @inherits ArrayStore
- * @type object
- * @module data/local_store
- * @export default
- * @prevFileNamespace DevExpress.data
  * @public
+ * @options LocalStoreOptions
  */
-export default class LocalStore extends ArrayStore {
-    constructor(options?: LocalStoreOptions)
+export default class LocalStore<
+    TItem = any,
+    TKey = any,
+> extends ArrayStore<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>);
     /**
-     * @docid LocalStoreMethods.clear
+     * @docid
      * @publicName clear()
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     clear(): void;

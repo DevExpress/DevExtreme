@@ -5,22 +5,31 @@
 $pivotgrid-empty-column-width: null !default;
 $pivotgrid-common-left-right-padding: null !default;
 $pivotgrid-common-top-bottom-padding: null !default;
+$pivotgrid-header-top-bottom-padding: null !default;
 $pivotgrid-field-indicators-offset: null !default;
 $pivotgrid-indicators-line-height: null !default;
+$pivotgrid-button-top-padding: null !default;
+$pivotgrid-empty-area-text-padding: null !default;
 
 @if $size == "default" {
-  $pivotgrid-empty-column-width: 19px;
-  $pivotgrid-common-left-right-padding: 10px;
-  $pivotgrid-common-top-bottom-padding: 7px;
-  $pivotgrid-field-indicators-offset: 6px;
-  $pivotgrid-indicators-line-height: 19px;
+  $pivotgrid-empty-column-width: 19px !default;
+  $pivotgrid-common-left-right-padding: 10px !default;
+  $pivotgrid-header-top-bottom-padding: 10px !default;
+  $pivotgrid-common-top-bottom-padding: 7px !default;
+  $pivotgrid-field-indicators-offset: 6px !default;
+  $pivotgrid-indicators-line-height: 19px !default;
+  $pivotgrid-button-top-padding: 12px;
+  $pivotgrid-empty-area-text-padding: 7px !default;
 }
 
 @else if $size == "compact" {
-  $pivotgrid-empty-column-width: 16px;
-  $pivotgrid-common-left-right-padding: 6px;
-  $pivotgrid-common-top-bottom-padding: 5px;
-  $pivotgrid-field-indicators-offset: 4px;
-  $pivotgrid-indicators-line-height: 16px;
+  $pivotgrid-empty-column-width: 16px !default;
+  $pivotgrid-common-left-right-padding: 6px !default;
+  $pivotgrid-header-top-bottom-padding: 6px !default;
+  $pivotgrid-common-top-bottom-padding: 5px !default;
+  $pivotgrid-field-indicators-offset: 4px !default;
+  $pivotgrid-indicators-line-height: 16px !default;
+  $pivotgrid-button-top-padding: 8px;
+  $pivotgrid-empty-area-text-padding: 5px !default;
 }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
@@ -21,6 +22,8 @@ namespace Runner
             try
             {
                 var rootPath = Path.Combine(AppContext.BaseDirectory, "../../..");
+                ConsoleHelper.Logger.SetWorkingFolder(rootPath);
+                ConsoleHelper.Logger.Write();
                 Ports.Load(Path.Combine(rootPath, "ports.json"));
 
                 var url = "http://0.0.0.0:" + Ports.Get("qunit");
@@ -35,12 +38,15 @@ namespace Runner
                             .AddMvcCore()
                             .AddViews()
                             .AddRazorViewEngine()
-                            .AddJsonFormatters()
-                            .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
-
+                            .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+                        services.AddMvc(options => options.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
                         services.AddWebEncoders();
 
                         services.Configure<RazorViewEngineOptions>(options => options.ViewLocationExpanders.Add(new ViewLocationExpander()));
+                        services.Configure<KestrelServerOptions>(options =>
+                        {
+                            options.AllowSynchronousIO = true;
+                        });
 
                         services.AddSingleton(new RunFlags
                         {
@@ -72,7 +78,7 @@ namespace Runner
                 using (var host = builder.Build())
                 {
                     host.Start();
-                    Console.WriteLine($"QUnit runner server listens on {url}...");
+                    ConsoleHelper.WriteLine($"QUnit runner server listens on {url}...");
                     Thread.Sleep(Timeout.Infinite);
                 }
 
@@ -80,7 +86,7 @@ namespace Runner
             }
             catch (Exception x)
             {
-                Console.Error.WriteLine(x.Message);
+                ConsoleHelper.Error.WriteLine(x.Message);
                 return 1;
             }
         }
@@ -107,16 +113,14 @@ namespace Runner
         static bool IsContinuousIntegration()
         {
             return !String.IsNullOrEmpty(Environment.GetEnvironmentVariable("CCNetWorkingDirectory"))
-                || !String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DEVEXTREME_DOCKER_CI"));
+                || !String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DEVEXTREME_TEST_CI"));
         }
 
         static bool IsIntranet()
         {
             try
             {
-                var task = Dns.GetHostAddressesAsync("corp.devexpress.com");
-                task.Wait();
-                return task.Result.Length > 0;
+                return Dns.GetHostAddresses("corp.devexpress.com").Length > 0;
             }
             catch
             {

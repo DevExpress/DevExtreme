@@ -1,3 +1,4 @@
+import { getOuterWidth, setOuterWidth, getOuterHeight, getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
@@ -16,6 +17,7 @@ import CollectionWidget from './collection/ui.collection_widget.edit';
 import Swipeable from '../events/gesture/swipeable';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred } from '../core/utils/deferred';
+import { triggerResizeEvent } from '../events/visibility_change';
 
 // STYLE gallery
 
@@ -35,6 +37,7 @@ const GALLERY_INDICATOR_CLASS = GALLERY_CLASS + '-indicator';
 const GALLERY_INDICATOR_ITEM_CLASS = GALLERY_INDICATOR_CLASS + '-item';
 const GALLERY_INDICATOR_ITEM_SELECTOR = '.' + GALLERY_INDICATOR_ITEM_CLASS;
 const GALLERY_INDICATOR_ITEM_SELECTED_CLASS = GALLERY_INDICATOR_ITEM_CLASS + '-selected';
+const ITEM_CONTENT_SELECTOR = '.dx-item-content';
 
 const GALLERY_IMAGE_CLASS = 'dx-gallery-item-image';
 
@@ -89,6 +92,7 @@ const GalleryNavButton = Widget.inherit({
 const Gallery = CollectionWidget.inherit({
 
     _activeStateUnit: GALLERY_ITEM_SELECTOR,
+    _wasAnyItemTemplateRendered: false,
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -146,7 +150,7 @@ const Gallery = CollectionWidget.inherit({
             selectOnFocus: true,
             selectionMode: 'single',
             selectionRequired: true,
-            selectionByClick: false
+            selectByClick: false
         });
     },
 
@@ -171,11 +175,6 @@ const Gallery = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-        /**
-        * @name dxGalleryItem
-        * @inherits CollectionWidgetItem
-        * @type object
-        */
         /**
         * @name dxGalleryItem.visible
         * @hidden
@@ -234,7 +233,7 @@ const Gallery = CollectionWidget.inherit({
 
     _itemPercentWidth: function() {
         let percentWidth;
-        const elementWidth = this.$element().outerWidth();
+        const elementWidth = getOuterWidth(this.$element());
         const initialItemWidth = this.option('initialItemWidth');
 
         if(initialItemWidth && initialItemWidth <= elementWidth) {
@@ -341,6 +340,15 @@ const Gallery = CollectionWidget.inherit({
         this._loadNextPageIfNeeded();
     },
 
+    _onItemTemplateRendered() {
+        return () => {
+            if(!this._wasAnyItemTemplateRendered) {
+                this._wasAnyItemTemplateRendered = true;
+                triggerResizeEvent(this.$element()); // NOTE: T1132935
+            }
+        };
+    },
+
     _renderItemsContainer: function() {
         if(this._$container) {
             return;
@@ -380,11 +388,13 @@ const Gallery = CollectionWidget.inherit({
 
     _cloneItemForDuplicate: function(item, $container) {
         if(item) {
-            $(item)
-                .clone(true)
+            const $clonedItem = $(item)
+                .clone(false)
                 .addClass(GALLERY_LOOP_ITEM_CLASS)
                 .css('margin', 0)
                 .appendTo($container);
+
+            this.setAria({ role: 'presentation' }, $clonedItem);
         }
     },
 
@@ -410,7 +420,7 @@ const Gallery = CollectionWidget.inherit({
         }
 
         $items.each(function(index) {
-            $($items[index]).outerWidth(itemWidth * 100 + '%');
+            setOuterWidth($($items[index]), itemWidth * 100 + '%');
         });
     },
 
@@ -549,17 +559,17 @@ const Gallery = CollectionWidget.inherit({
 
     _reviseDimensions: function() {
         const that = this;
-        const $firstItem = that._itemElements().first().find('.dx-item-content');
+        const $firstItem = that._itemElements().first().find(ITEM_CONTENT_SELECTOR);
 
         if(!$firstItem || $firstItem.is(':hidden')) {
             return;
         }
 
         if(!that.option('height')) {
-            that.option('height', $firstItem.outerHeight());
+            that.option('height', getOuterHeight($firstItem));
         }
         if(!that.option('width')) {
-            that.option('width', $firstItem.outerWidth());
+            that.option('width', getOuterWidth($firstItem));
         }
 
         this._dimensionChanged();
@@ -631,25 +641,16 @@ const Gallery = CollectionWidget.inherit({
             this._releaseInvisibleItems();
             return;
         }
-
-        this._itemElements().each((function(index, item) {
-            if(this.option('selectedIndex') === index) {
-                $(item).removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
-            } else {
-                $(item).addClass(GALLERY_INVISIBLE_ITEM_CLASS);
+        const selectedIndex = this.option('selectedIndex');
+        this._itemElements().each((index, item) => {
+            if(selectedIndex !== index) {
+                $(item).find(ITEM_CONTENT_SELECTOR).addClass(GALLERY_INVISIBLE_ITEM_CLASS);
             }
-        }).bind(this));
-
-        this._getLoopedItems()
-            .addClass(GALLERY_INVISIBLE_ITEM_CLASS);
+        });
     },
 
     _releaseInvisibleItems: function() {
-        this._itemElements()
-            .removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
-
-        this._getLoopedItems()
-            .removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
+        this._itemElements().find(ITEM_CONTENT_SELECTOR).removeClass(GALLERY_INVISIBLE_ITEM_CLASS);
     },
 
     _renderSelectedPageIndicator: function() {
@@ -862,7 +863,7 @@ const Gallery = CollectionWidget.inherit({
 
     _elementWidth: function() {
         if(!this._cacheElementWidth) {
-            this._cacheElementWidth = this.$element().width();
+            this._cacheElementWidth = getWidth(this.$element());
         }
 
         return this._cacheElementWidth;
@@ -992,6 +993,7 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _dispose: function() {
+        this._wasAnyItemTemplateRendered = null;
         clearTimeout(this._slideshowTimer);
         this.callBase();
     },
@@ -1168,3 +1170,9 @@ const Gallery = CollectionWidget.inherit({
 registerComponent('dxGallery', Gallery);
 
 export default Gallery;
+
+/**
+ * @name dxGalleryItem
+ * @type object
+ * @inherits CollectionWidgetItem
+ */

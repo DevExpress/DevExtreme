@@ -2,27 +2,17 @@ import $ from 'jquery';
 import ExcelJS from 'exceljs';
 import { ExcelJSDataGridTestHelper, ExcelJSPivotGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid, exportPivotGrid } from 'excel_exporter';
-import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
-import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'ui/pivot_grid/ui.pivot_grid';
 
 const ExcelJSLocalizationFormatTests = {
     runCurrencyTests(values) {
         let helper;
         QUnit.module('Format', {
-            before: function() {
-                initializeDxObjectAssign();
-                initializeDxArrayFind();
-            },
             beforeEach: function() {
                 this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
                 helper = new ExcelJSDataGridTestHelper(this.worksheet);
-            },
-            after: function() {
-                clearDxObjectAssign();
-                clearDxArrayFind();
             }
         }, () => {
             values.forEach((currency) => {
@@ -44,16 +34,16 @@ const ExcelJSLocalizationFormatTests = {
                             { dataField: 'f6', dataType: 'number', format: { type: 'currency', currency: currency.value } }
                         ],
                         showColumnHeaders: false,
-                        loadingTimeout: undefined
+                        loadingTimeout: null
                     }).dxDataGrid('instance');
 
                     const expectedCells = [[
-                        { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', numberFormat: currency.expected }, gridCell: { value: undefined, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                        { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', numFmt: currency.expected }, gridCell: { value: undefined, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
                         { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: 'object' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                        { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                        { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
-                        { excelCell: { value: ds[0].f5, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } },
-                        { excelCell: { value: ds[0].f6, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } }
+                        { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                        { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                        { excelCell: { value: ds[0].f5, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } },
+                        { excelCell: { value: ds[0].f6, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: currency.expected }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } }
                     ]];
 
                     helper._extendExpectedCells(expectedCells, topLeft);
@@ -74,17 +64,9 @@ const ExcelJSLocalizationFormatTests = {
     runPivotGridCurrencyTests(values) {
         let helper;
         QUnit.module('PivotGrid currency Format', {
-            before: function() {
-                initializeDxObjectAssign();
-                initializeDxArrayFind();
-            },
             beforeEach: function() {
                 this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
                 helper = new ExcelJSPivotGridTestHelper(this.worksheet);
-            },
-            after: function() {
-                clearDxObjectAssign();
-                clearDxArrayFind();
             }
         }, () => {
             values.forEach((currency) => {
@@ -115,7 +97,7 @@ const ExcelJSLocalizationFormatTests = {
                         { excelCell: { value: 'a', type: ExcelJS.ValueType.String, dataType: 'string' }, pivotCell: { } }
                     ], [
                         { excelCell: { value: 'A', type: ExcelJS.ValueType.String, dataType: 'string' }, pivotCell: { } },
-                        { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: currency.expected, }, pivotCell: { } }
+                        { excelCell: { value: 1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: currency.expected, }, pivotCell: { } }
                     ]];
 
                     helper.extendExpectedCells(expectedCells, topLeft);

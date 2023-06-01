@@ -9,13 +9,17 @@
   display: block;
   height: 100%;
   min-height: 0;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .dx-scrollable-native {
   -ms-overflow-style: -ms-autohiding-scrollbar;
   -ms-scroll-snap-type: proximity; // stylelint-disable-line property-no-vendor-prefix
 
-  .dx-scrollable-scrollbar {
+  &.dx-scrollable-wrapper > .dx-scrollable-container > .dx-scrollable-scrollbar {
     display: none;
   }
 
@@ -23,23 +27,22 @@
     display: block;
   }
 
-  .dx-scrollable-container {
+  &.dx-scrollable-wrapper > .dx-scrollable-container,
+  > div.dx-scrollable-wrapper > .dx-scrollable-container {
     -webkit-overflow-scrolling: touch;
     position: relative;
     height: 100%;
   }
 
   &.dx-scrollable-vertical,
-  &.dx-scrollable-vertical > .dx-scrollable-wrapper > .dx-scrollable-container,
-  &.dx-scrollable-vertical > div > .dx-scrollable-wrapper > .dx-scrollable-container {
+  &.dx-scrollable-vertical > .dx-scrollable-wrapper > .dx-scrollable-container {
     touch-action: pan-y;
     overflow-x: hidden;
     overflow-y: auto;
   }
 
   &.dx-scrollable-horizontal,
-  &.dx-scrollable-horizontal > .dx-scrollable-wrapper > .dx-scrollable-container,
-  &.dx-scrollable-horizontal > div > .dx-scrollable-wrapper > .dx-scrollable-container {
+  &.dx-scrollable-horizontal > .dx-scrollable-wrapper > .dx-scrollable-container {
     touch-action: pan-x;
     float: none;
     overflow-x: auto;
@@ -47,8 +50,7 @@
   }
 
   &.dx-scrollable-both,
-  &.dx-scrollable-both > .dx-scrollable-wrapper > .dx-scrollable-container,
-  &.dx-scrollable-both > div > .dx-scrollable-wrapper > .dx-scrollable-container {
+  &.dx-scrollable-both > .dx-scrollable-wrapper > .dx-scrollable-container {
     touch-action: pan-y pan-x;
     float: none;
     overflow-x: auto;
@@ -60,10 +62,8 @@
     touch-action: auto;
   }
 
-  &.dx-scrollable-scrollbars-hidden {
-    ::-webkit-scrollbar {
-      opacity: 0;
-    }
+  &.dx-scrollable-scrollbars-hidden > .dx-scrollable-wrapper > .dx-scrollable-container {
+    overflow: hidden;
   }
 
   &.dx-scrollable-native-ios {
@@ -101,6 +101,9 @@
     ::-webkit-scrollbar {
       display: none;
     }
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 }
 
@@ -126,7 +129,11 @@
   min-height: 100%;
   box-sizing: border-box;
 
-  @include dx-clearfix-mixin();
+  &::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
 }
 
 .dx-scrollable-horizontal .dx-scrollable-content,
@@ -163,6 +170,7 @@
 
 .dx-scrollable-scroll {
   position: relative;
+  box-sizing: border-box;
   background-color: #888; /* NOTE: fallback for rgba non-supporting */
   background-color: rgba(0, 0, 0, 0.5);
   -webkit-transform: translate(0, 0); // stylelint-disable-line property-no-vendor-prefix
@@ -183,6 +191,16 @@
   .dx-scrollable-content,
   .dx-scrollable-container {
     direction: ltr;
+
+    @at-root #{selector-append(".dx-scrollable-native", &)} {
+      direction: rtl;
+    }
+  }
+
+  .dx-scrollable-content {
+    @at-root #{selector-append(".dx-scrollable-native", &)} {
+      float: right;
+    }
   }
 
   .dx-scrollable-content > * {
@@ -197,20 +215,6 @@
 
     &.dx-scrollbar-horizontal {
       direction: ltr;
-    }
-  }
-}
-
-.dx-device-ios-6 {
-  .dx-scrollable-content {
-    backface-visibility: hidden;
-  }
-}
-
-.dx-device-android {
-  .dx-scrollable-native.dx-scrollable-scrollbars-hidden {
-    ::-webkit-scrollbar {
-      display: none;
     }
   }
 }

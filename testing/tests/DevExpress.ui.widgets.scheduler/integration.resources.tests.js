@@ -1,11 +1,11 @@
 import $ from 'jquery';
 import devices from 'core/devices';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
+import { getOuterHeight } from 'core/utils/size';
 import CustomStore from 'data/custom_store';
 import Color from 'color';
 import translator from 'animation/translator';
@@ -13,6 +13,8 @@ import translator from 'animation/translator';
 import 'ui/scheduler/ui.scheduler';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+
+import { getOrLoadResourceItem } from 'ui/scheduler/resources/utils';
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -39,16 +41,16 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                 },
                 'appointment2': {
                     top: 190,
-                    left: 431
+                    left: 430
                 }
             }, {
                 'appointment1': {
                     top: 0,
-                    left: 100
+                    left: 0
                 },
                 'appointment2': {
                     top: 100,
-                    left: 406
+                    left: 307
                 }
             }
         ];
@@ -237,7 +239,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(task1);
 
         let taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
@@ -299,7 +301,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(task);
 
         const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
@@ -350,7 +352,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 4, 24)
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(appointment);
 
         const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
@@ -362,8 +364,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.strictEqual(taskDetailsView.option('formData').Movie.ID, 3, 'Value is OK');
     });
 
-    QUnit.test('Alias for getResourceDataByValue method', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Alias for getOrLoadResourceItem method', function(assert) {
+        const { instance } = createWrapper({
             resources: [{
                 field: 'ownerId',
                 dataSource: [
@@ -378,7 +380,12 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         const done = assert.async();
 
-        scheduler.instance.getResourceManager().getResourceDataByValue('ownerId', 1).done(function(resource) {
+        getOrLoadResourceItem(
+            instance.option('resources'),
+            instance.option('resourceLoaderMap'),
+            'ownerId',
+            1
+        ).done(function(resource) {
             assert.deepEqual(resource, {
                 text: 'Jack',
                 id: 1,
@@ -387,7 +394,6 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
             done();
         });
-
     });
 
     QUnit.test('Appointments should be repainted if \'groups\' option is changed', function(assert) {
@@ -536,26 +542,28 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.equal(byKeyStub.callCount, 0, 'Resources are loaded only once');
     });
 
-    QUnit.test('Resources should be set correctly is the resources[].dataSource option is changed(T396746)', function(assert) {
-        const resourceData = [{ id: 1, text: 'John', color: 'red' }];
+    [true, false].forEach((renovateRender) => {
+        QUnit.test(`Resources should be set correctly is the resources[].dataSource option is changed(T396746) when renovateRender is ${renovateRender}`, function(assert) {
+            const resourceData = [{ id: 1, text: 'John', color: 'red' }];
 
-        const scheduler = createWrapper({
-            dataSource: [],
-            currentDate: new Date(2015, 4, 26),
-            groups: ['ownerId'],
-            resources: [{
+            const { instance } = createWrapper({
+                dataSource: [],
+                currentDate: new Date(2015, 4, 26),
+                groups: ['ownerId'],
+                resources: [{
+                    fieldExpr: 'ownerId',
+                    dataSource: []
+                }],
+                renovateRender,
+            });
+
+            instance.option('resources[0].dataSource', resourceData);
+
+            assert.deepEqual(instance.option('resources'), [{
                 fieldExpr: 'ownerId',
-                dataSource: []
-            }]
+                dataSource: resourceData
+            }], 'Resources were changed correctly');
         });
-
-        scheduler.instance.option('resources[0].dataSource', resourceData);
-        const resources = scheduler.instance.getResourceManager().getResources();
-
-        assert.deepEqual(resources, [{
-            fieldExpr: 'ownerId',
-            dataSource: resourceData
-        }], 'Resources were changed correctly');
     });
 
     QUnit.test('Appointment should have correct color after resources option changing', function(assert) {
@@ -604,7 +612,6 @@ if(devices.real().deviceType === 'desktop') {
 
     QUnit.module('Integration: Multiple resources', desktopModuleConfig, () => {
         const SCHEDULER_HORIZONTAL_SCROLLBAR = '.dx-scheduler-date-table-scrollable .dx-scrollbar-horizontal';
-        const SCHEDULER_SCROLLBAR_CONTAINER = '.dx-scheduler-work-space-both-scrollbar';
 
         QUnit.test('Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)', function(assert) {
             const getData = function(count) {
@@ -632,7 +639,13 @@ if(devices.real().deviceType === 'desktop') {
             });
 
             const scrollbar = $(scheduler.instance.$element()).find(SCHEDULER_HORIZONTAL_SCROLLBAR);
-            assert.roughEqual(scrollbar.offset().top + scrollbar.outerHeight(), $(scheduler.instance.$element()).find(SCHEDULER_SCROLLBAR_CONTAINER).outerHeight(), 1, 'Horizontal scrollbar has visible top coordinate');
+
+            assert.roughEqual(
+                scrollbar.offset().top + scrollbar.outerHeight(),
+                getOuterHeight(scheduler.instance.$element()) - 1,
+                1,
+                'Horizontal scrollbar has visible top coordinate',
+            );
         });
     });
 }

@@ -1,22 +1,20 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div id="container"  class="dx-datagrid"></div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-
-import 'common.css!';
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import $ from 'jquery';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import devices from 'core/devices';
 import typeUtils from 'core/utils/type';
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div id="container"  class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Header panel', {
     beforeEach: function() {
@@ -44,7 +42,7 @@ QUnit.module('Header panel', {
 }, () => {
 
     QUnit.test('Draw searchPanel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -71,7 +69,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Change search text', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
         let input;
@@ -99,7 +97,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Draw groupPanel without grouping', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -124,7 +122,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Render groupPanel with visible="auto"', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
         const countOfRenderedElements = devices.current().deviceType === 'desktop' ? 1 : 0;
@@ -148,7 +146,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Bounding rect of groupPanel when panel is not visible', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -167,7 +165,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Bounding rect of groupPanel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -188,7 +186,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Group items with cssClass', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -213,7 +211,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Draw groupPanel with grouping', function(assert) {
-    // arrange
+        // arrange
 
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
@@ -244,7 +242,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Group panel with sorting, check alignment', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -265,7 +263,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Group panel with sorting, height after change font size', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -290,7 +288,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Draw header panel with group panel and search panel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -315,7 +313,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Not draw header panel without group panel and search panel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -327,7 +325,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Enter text in searchPanel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -346,7 +344,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Draw searchPanel custom width', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -366,8 +364,26 @@ QUnit.module('Header panel', {
         assert.equal(searchPanel.outerWidth(), 213, 'default search panel width');
     });
 
+    // T947070
+    QUnit.test('Toolbar must have aria-label', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const testElement = $('#container');
+
+        this.options.searchPanel = {
+            visible: true
+        };
+
+        // act
+        headerPanel.render(testElement);
+
+        // assert
+        const $toolbar = testElement.find('.dx-toolbar');
+        assert.equal($toolbar.attr('aria-label'), 'Data grid toolbar', 'aria-label');
+    });
+
     QUnit.test('Hide search panel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const container = $('#container');
 
@@ -392,7 +408,7 @@ QUnit.module('Header panel', {
     });
 
     function updateSearchTextTest(assert, that, eventToTrigger) {
-    // arrange
+        // arrange
         const headerPanel = that.headerPanel;
         const container = $('#container');
 
@@ -432,7 +448,7 @@ QUnit.module('Header panel', {
 
     // T117339
     QUnit.test('Not allow dragging when no visible group panel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -449,7 +465,7 @@ QUnit.module('Header panel', {
 
     // T117339
     QUnit.test('Not allow dragging when allowGrouping in column false', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -466,7 +482,7 @@ QUnit.module('Header panel', {
 
     // T117339
     QUnit.test('Allow dragging when visible group panel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -482,7 +498,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('EmptyPanelText is displayed when allowColumnDragging is false', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -501,7 +517,7 @@ QUnit.module('Header panel', {
 
 QUnit.module('Draw buttons in header panel', {
     beforeEach: function() {
-        setupDataGridModules(this, ['columns', 'data', 'headerPanel', 'editing', 'editorFactory', 'columnChooser'], {
+        setupDataGridModules(this, ['columns', 'data', 'headerPanel', 'editing', 'editingCellBased', 'editorFactory', 'columnChooser'], {
             initViews: true,
             controllers: {
                 columns: new MockColumnsController([]),
@@ -518,7 +534,7 @@ QUnit.module('Draw buttons in header panel', {
 }, () => {
 
     QUnit.test('Draw add row button', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -539,7 +555,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('Draw cancel and save buttons', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -568,7 +584,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('Draw show column chooser button', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -587,7 +603,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('Draw hidden show column chooser button', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container').width(10);
 
@@ -607,7 +623,7 @@ QUnit.module('Draw buttons in header panel', {
                     },
                     showText: 'inMenu',
                     location: 'after',
-                    name: 'columnChooser',
+                    name: 'columnChooserButton',
                     locateInMenu: 'auto'
                 }
             ];
@@ -617,7 +633,7 @@ QUnit.module('Draw buttons in header panel', {
         headerPanel.render(testElement);
 
         const $columnChooserButton = testElement.find('.dx-toolbar .dx-toolbar-item:visible');
-        const $toolbarMenuButton = $('.dx-toolbar .dx-dropdownmenu:visible');
+        const $toolbarMenuButton = $('.dx-toolbar .dx-dropdownmenu').filter(':visible');
 
         // assert
         assert.equal($toolbarMenuButton.length, 1, 'has shown toolbar menu button');
@@ -625,7 +641,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('Add button via the onToolbarPreparing option', function(assert) {
-    // arrange
+        // arrange
         let callCountToolbarPreparing = 0;
         const headerPanel = this.headerPanel;
         const $testElement = $('#container');
@@ -660,7 +676,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('Add button via the onToolbarPreparing option when there is column chooser button', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const $testElement = $('#container');
 
@@ -701,7 +717,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('onToolbarPreparing - setting handler to the click event for column chooser button', function(assert) {
-    // arrange
+        // arrange
         let callCountClick = 0;
         const headerPanel = this.headerPanel;
         const $testElement = $('#container');
@@ -735,5 +751,207 @@ QUnit.module('Draw buttons in header panel', {
         // assert
         assert.equal(callCountClick, 1, 'call count click');
     });
-});
 
+    QUnit.test('Add custom button via toolbar.items option', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.toolbar = {
+            items: [
+                {
+                    widget: 'dxButton',
+                    options: {
+                        text: 'Custom button',
+                        icon: 'back',
+                        width: 50
+                    },
+                    location: 'after',
+                    locateInMenu: 'auto'
+                }
+            ]
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $button = $testElement.find('.dx-toolbar .dx-item');
+
+        // assert
+        assert.equal($button.length, 1, 'button count');
+        assert.equal($button.text(), 'Custom button', 'text of the custom button');
+    });
+
+    QUnit.test('Change default button settings via toolbar.items option', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.columnChooser = {
+            enabled: true,
+            title: 'Column chooser'
+        };
+
+        this.options.editing = {
+            allowAdding: true
+        };
+
+        this.options.toolbar = {
+            items: [
+                {
+                    name: 'columnChooserButton',
+                    location: 'before'
+                },
+                {
+                    name: 'addRowButton',
+                    location: 'before'
+                }
+            ]
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $buttonsBefore = $testElement.find('.dx-toolbar-before .dx-item .dx-button');
+
+        // assert
+        assert.equal($buttonsBefore.length, 2, 'count button');
+        assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
+        assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
+    });
+
+    QUnit.test('toolbar.item[].location should be \'after\' by default', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.toolbar = {
+            items: [
+                {
+                    widget: 'dxButton',
+                    options: { text: 'Custom button' },
+                }
+            ]
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $button = $testElement.find('.dx-toolbar .dx-toolbar-after .dx-item');
+
+        // assert
+        assert.equal($button.length, 1, 'button location is after');
+    });
+
+    QUnit.test('toolbar.item[].location should be \'center\' by default if added via onToolbarPrepared', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.onToolbarPreparing = function(e) {
+            e.toolbarOptions.items.push({
+                widget: 'dxButton',
+                options: { text: 'Custom button' },
+            });
+        };
+
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $button = $testElement.find('.dx-toolbar .dx-toolbar-center .dx-item');
+
+        // assert
+        assert.equal($button.length, 1, 'button location is center');
+    });
+
+    // T1043654
+    QUnit.test('The default buttons should be hidden when they are specified in the toolbar.items option', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.toolbar = {
+            items: ['addRowButton', 'applyFilterButton', 'columnChooserButton', 'exportButton', 'groupPanel', 'revertButton', 'saveButton', 'searchPanel']
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $toolbarItemElements = $testElement.find('.dx-toolbar-item');
+
+        // assert
+        assert.strictEqual($toolbarItemElements.length, 8, 'count button');
+        $.each($toolbarItemElements, (_, toolbarItemElement) => {
+            assert.ok($(toolbarItemElement).hasClass('dx-state-invisible'), 'button is hidden');
+        });
+    });
+
+    // T1043654
+    QUnit.test('The default buttons should be hidden when they are specified in the toolbar.items option using name', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.toolbar = {
+            items: ['addRowButton', 'applyFilterButton', 'columnChooserButton', 'exportButton', 'groupPanel', 'revertButton', 'saveButton', 'searchPanel']
+                .map(name => ({ name }))
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $toolbarItemElements = $testElement.find('.dx-toolbar-item');
+
+        // assert
+        assert.strictEqual($toolbarItemElements.length, 8, 'count button');
+        $.each($toolbarItemElements, (_, toolbarItemElement) => {
+            assert.ok($(toolbarItemElement).hasClass('dx-state-invisible'), 'button is hidden');
+        });
+
+        // T1085151
+        this.options.toolbar.items.forEach(item => {
+            assert.strictEqual(item.visible, undefined, 'visible option should not be changed in user props');
+        });
+    });
+
+    QUnit.test('Toolbar item with custom name should be visible', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.toolbar = {
+            items: [{
+                name: 'myItem',
+                cssClass: 'my-item',
+                widget: 'dxButton',
+                options: {
+                    text: 'My Button'
+                }
+            }]
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $customToolbarItem = $testElement.find('.my-item');
+
+        // assert
+        assert.strictEqual($customToolbarItem.length, 1, 'item is rendered');
+        assert.ok($customToolbarItem.is(':visible'), 'item is visible');
+    });
+
+    QUnit.test('The error should be raised if new default toolbar item is not added to DEFAULT_TOOLBAR_ITEM_NAMES', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        // act
+        headerPanel._getToolbarItems = () => [{ name: 'new' }];
+
+        assert.throws(function() {
+            headerPanel.init();
+            headerPanel.render($testElement);
+        }, function(e) {
+            return e.message === 'Default toolbar item \'new\' is not added to DEFAULT_TOOLBAR_ITEM_NAMES';
+        }, 'exception');
+    });
+});

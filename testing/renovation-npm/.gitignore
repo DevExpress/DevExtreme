@@ -1,0 +1,5 @@
+*.tgz
+package-lock.json
+screenshots
+artifacts
+thumbnails

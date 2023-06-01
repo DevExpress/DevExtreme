@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -7,7 +8,6 @@
 @use "../../base/gallery";
 
 // adduse
-
 
 .dx-gallery {
   .dx-gallery-nav-button-prev,
@@ -88,7 +88,7 @@
   box-sizing: border-box;
   border: 1px solid $gallery-indicator-item-border-color;
   pointer-events: auto;
-  margin: 5px - $material-gallery-indicator-size / 2 6px;
+  margin: 5px - math.div($material-gallery-indicator-size, 2) 6px;
   width: $material-gallery-indicator-size;
   height: $material-gallery-indicator-size;
   background: $gallery-indicator-bg;
@@ -100,7 +100,7 @@
   height: $material-gallery-indicator-selected-size;
   background: $gallery-indicator-item-selected-bg;
   border: 2px solid $gallery-indicator-selected-border-color;
-  margin: 5px - $material-gallery-indicator-selected-size / 2 6px;
+  margin: 5px - math.div($material-gallery-indicator-selected-size, 2) 6px;
 }
 
 

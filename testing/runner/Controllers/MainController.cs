@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using IOFile = System.IO.File;
 
@@ -16,15 +17,19 @@ namespace Runner.Controllers
     public class MainController : Controller
     {
         static readonly object IO_SYNC = new object();
+        readonly string _completedSuitesFileName;
 
         UIModelHelper _uiModelHelper;
-        IHostingEnvironment _env;
+        IWebHostEnvironment _env;
         RunFlags _runFlags;
 
-        public MainController(IHostingEnvironment env, RunFlags runFlags)
+        public MainController(IWebHostEnvironment env, RunFlags runFlags)
         {
+            ConsoleHelper.Logger.SetWorkingFolder(env.ContentRootPath);
             _env = env;
             _runFlags = runFlags;
+
+            _completedSuitesFileName = Path.Combine(_env.ContentRootPath, "testing/CompletedSuites.txt");
         }
 
         protected UIModelHelper UIModelHelper
@@ -71,21 +76,38 @@ namespace Runner.Controllers
 
         public IActionResult RunAll(string constellation, string include, string exclude)
         {
-            HashSet<string> includeSet = null, excludeSet = null;
+            HashSet<string> includeSet = null, excludeSet = null, excludeSuites = null;
+            int partIndex = 0;
+            int partCount = 1;
 
             if (!String.IsNullOrEmpty(include))
                 includeSet = new HashSet<string>(include.Split(','));
             if (!String.IsNullOrEmpty(exclude))
                 excludeSet = new HashSet<string>(exclude.Split(','));
+            if (!String.IsNullOrEmpty(constellation) && constellation.Contains('(') && constellation.EndsWith(')')) {
+                var constellationParts = constellation.TrimEnd(')').Split('(');
+                var parts = constellationParts[1].Split('/');
+
+                constellation = constellationParts[0];
+                partIndex = Int32.Parse(parts[0]) - 1;
+                partCount = Int32.Parse(parts[1]);
+            }
 
             var packageJson = IOFile.ReadAllText(Path.Combine(_env.ContentRootPath, "package.json"));
+
+            if (_runFlags.IsContinuousIntegration) {
+                if (IOFile.Exists(_completedSuitesFileName)) {
+                    var completedSuites = IOFile.ReadAllLines(_completedSuitesFileName);
+                    excludeSuites = new HashSet<string>(completedSuites);
+                }
+            }
 
             var model = new RunAllViewModel
             {
                 Constellation = constellation ?? "",
                 CategoriesList = include,
                 Version = JsonConvert.DeserializeObject<IDictionary>(packageJson)["version"].ToString(),
-                Suites = UIModelHelper.GetAllSuites(HasDeviceModeFlag(), constellation, includeSet, excludeSet)
+                Suites = UIModelHelper.GetAllSuites(HasDeviceModeFlag(), constellation, includeSet, excludeSet, excludeSuites, partIndex, partCount)
             };
 
             AssignBaseRunProps(model);
@@ -94,28 +116,48 @@ namespace Runner.Controllers
         }
 
         [HttpPost]
-        public void NotifySuiteFinalized(string name, bool passed)
+        public void NotifyTestStarted(string name) {
+            lock (IO_SYNC) {
+                ConsoleHelper.Logger.WriteLine($"       [ run] {name}");
+            }
+        }
+        [HttpPost]
+        public void NotifyTestCompleted(string name, bool passed) {
+            lock (IO_SYNC) {
+                ConsoleHelper.Logger.WriteLine($"       [{(passed ? "  ok" : "fail")}] {name}");
+            }
+        }
+        [HttpPost]
+        public void NotifySuiteFinalized(string name, bool passed, int runtime)
         {
             Response.ContentType = "text/plain";
             lock (IO_SYNC)
             {
-                Console.Write("[");
+                if (passed && _runFlags.IsContinuousIntegration)
+                {
+                    IOFile.AppendAllLines(_completedSuitesFileName, new[] { name });
+                }
+                ConsoleHelper.Write("[");
                 if (passed)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write(" OK ");
-                }
+                    ConsoleHelper.Write(" OK ", ConsoleColor.Green);
                 else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("FAIL");
-                }
-                Console.ResetColor();
-                Console.WriteLine("] " + name);
+                    ConsoleHelper.Write("FAIL", ConsoleColor.Red);
 
-                if (_runFlags.IsContinuousIntegration)
-                    IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt"), DateTime.Now.ToString("s"));
+                TimeSpan runSpan = TimeSpan.FromMilliseconds(runtime);
+                ConsoleHelper.WriteLine($"] {name} in {Math.Round(runSpan.TotalSeconds, 3)}s");
+
+                NotifyIsAlive();
             }
+        }
+
+        static readonly object IOLock = new object();
+
+        [HttpPost]
+        public void NotifyIsAlive() {
+            if (_runFlags.IsContinuousIntegration)
+                lock (IOLock) {
+                    IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt"), DateTime.Now.ToString("s"));
+                }
         }
 
         [HttpPost]
@@ -137,7 +179,7 @@ namespace Runner.Controllers
 
                 if (singleRun)
                 {
-                    Console.WriteLine();
+                    ConsoleHelper.WriteLine();
                     results.PrintTextReport();
                 }
             }
@@ -190,37 +232,21 @@ namespace Runner.Controllers
         {
             var q = Request.Query;
 
-            m.IEMode = IEMode();
             m.IsContinuousIntegration = _runFlags.IsContinuousIntegration;
             m.IsIntranet = _runFlags.IsIntranet;
-            m.JQueryVersion = JQueryVersion();
             m.NoGlobals = q.ContainsKey("noglobals");
             m.NoTimers = q.ContainsKey("notimers");
             m.NoTryCatch = q.ContainsKey("notrycatch");
             m.NoJQuery = q.ContainsKey("nojquery");
+            m.ShadowDom = q.ContainsKey("shadowDom");
             m.WorkerInWindow = q.ContainsKey("workerinwindow");
-            m.Renovation = q.ContainsKey("renovation") || false;
-        }
-
-        string JQueryVersion()
-        {
-            var requestValue = Request.Query["jquery"];
-            if (!String.IsNullOrEmpty(requestValue))
-                return requestValue;
-            return null;
+            m.NoRenovation = q.ContainsKey("norenovation") || false;
+            m.NoCsp = q.ContainsKey("nocsp") || false;
         }
 
         bool HasDeviceModeFlag()
         {
             return Request.Query.ContainsKey("deviceMode");
-        }
-
-        string IEMode()
-        {
-            var requestValue = Request.Query["ieMode"];
-            if (!String.IsNullOrEmpty(requestValue))
-                return requestValue;
-            return "edge";
         }
 
         string ResultXmlPath()

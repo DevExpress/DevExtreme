@@ -1,125 +1,115 @@
-import '../../jquery_augmentation';
+import {
+    DxPromise,
+} from '../../core/utils/deferred';
 
+export interface ODataRequestOptions {
+    accepts: any;
+    async: boolean;
+    contentType: string | boolean;
+    data: any;
+    dataType: string;
+    headers: any;
+    jsonp?: boolean;
+    method: string;
+    timeout: number;
+    url: string;
+    xhrFields: any;
+}
+
+/**
+ * @docid
+ * @namespace DevExpress.data
+ * @type object
+ */
 export interface ODataContextOptions {
     /**
-     * @docid ODataContextOptions.beforeSend
-     * @type function
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 url:string
-     * @type_function_param1_field2 async:boolean
-     * @type_function_param1_field3 method:string
-     * @type_function_param1_field4 timeout:number
-     * @type_function_param1_field5 params:object
-     * @type_function_param1_field6 payload:object
-     * @type_function_param1_field7 headers:object
-     * @prevFileNamespace DevExpress.data
+     * @docid
+     * @type_function_param1_field params:object
+     * @type_function_param1_field payload:object
+     * @type_function_param1_field headers:object
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
+    beforeSend?: ((options: { url: string; async: boolean; method: string; timeout: number; params: any; payload: any; headers: any }) => void);
     /**
-     * @docid ODataContextOptions.deserializeDates
-     * @type boolean
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     deserializeDates?: boolean;
     /**
-     * @docid ODataContextOptions.entities
-     * @type object
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     entities?: any;
     /**
-     * @docid ODataContextOptions.errorHandler
-     * @type function
+     * @docid
      * @type_function_param1 e:Error
-     * @type_function_param1_field1 httpStatus:number
-     * @type_function_param1_field2 errorDetails:object
-     * @type_function_param1_field3 requestOptions:object
-     * @prevFileNamespace DevExpress.data
+     * @type_function_param1_field errorDetails:object
+     * @type_function_param1_field requestOptions:object
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
+    errorHandler?: ((e: { httpStatus: number; errorDetails: any; requestOptions: ODataRequestOptions }) => void);
     /**
-     * @docid ODataContextOptions.filterToLower
-     * @type boolean
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     filterToLower?: boolean;
     /**
-     * @docid ODataContextOptions.jsonp
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     jsonp?: boolean;
     /**
-     * @docid ODataContextOptions.url
-     * @type string
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     url?: string;
     /**
-     * @docid ODataContextOptions.version
-     * @type number
+     * @docid
      * @default 2
      * @acceptValues 2|3|4
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     version?: number;
     /**
-     * @docid ODataContextOptions.withCredentials
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     withCredentials?: boolean;
 }
 /**
- * @docid ODataContext
- * @type object
- * @module data/odata/context
- * @export default
- * @prevFileNamespace DevExpress.data
+ * @docid
  * @public
+ * @options ODataContextOptions
  */
 export default class ODataContext {
-    constructor(options?: ODataContextOptions)
+    constructor(options?: ODataContextOptions);
     /**
-     * @docid ODataContextmethods.get
+     * @docid
      * @publicName get(operationName, params)
-     * @param1 operationName:string
      * @param2 params:object
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    get(operationName: string, params: any): Promise<any> & JQueryPromise<any>;
+    get(operationName: string, params: any): DxPromise<any>;
     /**
-     * @docid ODataContextmethods.invoke
+     * @docid
      * @publicName invoke(operationName, params, httpMethod)
-     * @param1 operationName:string
      * @param2 params:object
-     * @param3 httpMethod:object
+     * @param3 httpMethod:string
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    invoke(operationName: string, params: any, httpMethod: any): Promise<void> & JQueryPromise<void>;
+    invoke(operationName: string, params: any, httpMethod: HttpMethod): DxPromise<void>;
     /**
-     * @docid ODataContextmethods.objectLink
+     * @docid
      * @publicName objectLink(entityAlias, key)
-     * @param1 entityAlias:string
      * @param2 key:object|string|number
      * @return object
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     objectLink(entityAlias: string, key: any | string | number): any;
 }
+
+type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'MERGE';

@@ -3,11 +3,14 @@
 // adduse
 
 $material-toggle-button-flex: null !default;
+$material-text-button-horizontal-padding: null !default;
 
 @if $size == "default" {
-  $material-toggle-button-flex: 0 0 24px;
+  $material-toggle-button-flex: 0 0 24px !default;
+  $material-text-button-horizontal-padding: 8px;
 }
 
 @else if $size == "compact" {
-  $material-toggle-button-flex: 0 0 20px;
+  $material-toggle-button-flex: 0 0 20px !default;
+  $material-text-button-horizontal-padding: 5px;
 }

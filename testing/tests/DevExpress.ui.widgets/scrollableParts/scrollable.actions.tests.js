@@ -1,10 +1,9 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import translator from 'animation/translator';
+import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
 import pointerMock from '../../../helpers/pointerMock.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import {
@@ -15,12 +14,22 @@ import {
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '\
-            <div id="scrollable" style="height: 50px; width: 50px;">\
-                <div class="content1" style="height: 100px; width: 100px;"></div>\
-                <div class="content2"></div>\
-            </div>\
-            <div id="scrollableNeighbour"></div>';
+        const markup = `
+            <style nonce="qunit-test">
+                #scrollable {
+                    height: 50px;
+                    width: 50px;
+                }
+                #scrollable .content1 {
+                    height: 100px;
+                    width: 100px;
+                }
+            </style>
+            <div id="scrollable">
+                <div class="content1"></div>
+                <div class="content2"></div>
+            </div>
+            <div id="scrollableNeighbour"></div>`;
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
@@ -36,9 +45,9 @@ const moduleConfig = {
 };
 
 const getScrollOffset = function($scrollable) {
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    const location = translator.locate($content);
+    const location = getTranslateValues($content.get(0));
 
     return {
         top: location.top - $container.scrollTop(),
@@ -181,6 +190,24 @@ QUnit.test('end action isn\'t fired without move', function(assert) {
         .up();
 
     assert.equal(end, 0, 'end action wasn\'t fired');
+});
+
+['vertical', 'horizontal', 'both'].forEach((direction) => {
+    [{ left: 50 }, { top: 50 }, { top: 50, left: 50 }, 50].forEach((scrollToValue) => {
+        QUnit.test(`fire onEnd action after scrollTo: ${JSON.stringify(scrollToValue)}, direction: ${direction}`, function(assert) {
+            const onEndHandler = sinon.spy();
+
+            const scrollable = $('#scrollable').dxScrollable({
+                direction,
+                useNative: false,
+                onEnd: onEndHandler
+            }).dxScrollable('instance');
+
+            scrollable.scrollTo(scrollToValue);
+
+            assert.strictEqual(onEndHandler.callCount, 1, 'end action fired');
+        });
+    });
 });
 
 QUnit.test('set actions by option', function(assert) {
@@ -332,42 +359,10 @@ QUnit.test('changing action option does not cause render', function(assert) {
         assert.equal(location.top, -10, actionName + ' case scrollable rerendered');
     };
 
-    testAction('onStop');
     testAction('onStart');
     testAction('onEnd');
 
     testAction('onScroll');
     testAction('onBounce');
     testAction('onUpdated');
-});
-
-QUnit.test('onStop action is called on `scrollable` stop (T818446)', function(assert) {
-    assert.expect(1);
-
-    animationFrame.requestAnimationFrame = function(callback) {
-        setTimeout(callback, 0);
-    };
-
-    let stopCalled = false;
-    const $scrollable = $('#scrollable').dxScrollable({
-        useNative: false,
-        onStop: function(e) {
-            stopCalled = true;
-            assert.ok(stopCalled, 'onStop is called');
-        }
-    });
-
-    const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
-
-    mouse
-        .down()
-        .wait(10)
-        .move(0, -10)
-        .up();
-
-    mouse
-        .down()
-        .up();
-
-    this.clock.tick();
 });

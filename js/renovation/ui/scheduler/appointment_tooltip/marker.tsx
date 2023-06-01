@@ -1,13 +1,11 @@
 import {
-  Component, ComponentBindings, JSXComponent, Effect, OneWay,
-} from 'devextreme-generator/component_declaration/common';
-import { DeferredColor, Color } from './types.d';
+  Component, ComponentBindings, JSXComponent, OneWay, CSSAttributes,
+} from '@devextreme-generator/declarations';
+import { Color } from './types';
 
-export const viewFunction = (viewModel: Marker) => (
+export const viewFunction = (viewModel: Marker): JSX.Element => (
   <div
     className={`dx-tooltip-appointment-item-marker ${viewModel.props.className}`}
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
   >
     <div
       className="dx-tooltip-appointment-item-marker-body"
@@ -18,7 +16,7 @@ export const viewFunction = (viewModel: Marker) => (
 
 @ComponentBindings()
 export class MarkerProps {
-  @OneWay() color?: DeferredColor;
+  // @OneWay() color?: DeferredColor;
 
   @OneWay() className?: string = '';
 }
@@ -30,15 +28,7 @@ export class MarkerProps {
 export class Marker extends JSXComponent(MarkerProps) {
   appointmentColor!: Color;
 
-  @Effect()
-  colorEffect(): void {
-    const { color } = this.props;
-    color?.done((value) => {
-      this.appointmentColor = value;
-    });
-  }
-
-  get style() {
-    return { background: this.appointmentColor! };
+  get style(): CSSAttributes {
+    return { background: this.appointmentColor };
   }
 }

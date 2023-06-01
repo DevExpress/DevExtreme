@@ -2,13 +2,12 @@ import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
 import { executeAsync } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
-import { isString, isNumeric, isBoolean, isDefined, isPlainObject } from '../../core/utils/type';
-import dataUtils from '../utils';
+import { isString, isNumeric, isBoolean, isDefined, isObject, isEmptyObject } from '../../core/utils/type';
+import { throttleChanges } from '../utils';
 import { applyBatch } from '../array_utils';
 import CustomStore from '../custom_store';
 import { EventsStrategy } from '../../core/events_strategy';
-import errorUtils from '../errors';
-import { isEmpty } from '../../core/utils/array';
+import { errors } from '../errors';
 import { create } from '../../core/utils/queue';
 import { Deferred, when } from '../../core/utils/deferred';
 import OperationManager from './operation_manager';
@@ -23,55 +22,77 @@ import {
 
 export const DataSource = Class.inherit({
     /**
-    * @name DataSourceMethods.ctor
+    * @name DataSource.ctor
     * @publicName ctor(url)
     * @param1 url:string
     * @hidden
     */
     /**
-    * @name DataSourceMethods.ctor
+    * @name DataSource.ctor
     * @publicName ctor(data)
     * @param1 data:Array<any>
     * @hidden
     */
     /**
-    * @name DataSourceMethods.ctor
+    * @name DataSource.ctor
     * @publicName ctor(store)
     * @param1 store:Store
     * @hidden
     */
     /**
-    * @name DataSourceMethods.ctor
+    * @name DataSource.ctor
     * @publicName ctor(options)
     * @param1 options:CustomStoreOptions|DataSourceOptions
     * @hidden
     */
     ctor(options) {
         options = normalizeDataSourceOptions(options);
-        this._eventsStrategy = new EventsStrategy(this);
+        this._eventsStrategy = new EventsStrategy(this, {
+            syncStrategy: true
+        });
 
         /**
         * @name DataSourceOptions.store.type
-        * @type Enums.DataSourceStoreType
+        * @type Enums.StoreType
         */
 
-        const onPushHandler = options.pushAggregationTimeout !== 0
-            ? dataUtils.throttleChanges(this._onPush, () =>
-                options.pushAggregationTimeout === undefined
-                    ? this._changedTime * 5
-                    : options.pushAggregationTimeout
-            )
-            : this._onPush;
-
+        this._store = options.store;
         this._changedTime = 0;
 
-        this._onPushHandler = (changes) => {
-            this._aggregationTimeoutId = onPushHandler.call(this, changes);
-        };
+        const needThrottling = options.pushAggregationTimeout !== 0;
 
-        this._store = options.store;
-        this._store.on('push', this._onPushHandler);
+        if(needThrottling) {
+            const throttlingTimeout = options.pushAggregationTimeout === undefined
+                ? () => this._changedTime * 5
+                : options.pushAggregationTimeout;
 
+            let pushDeferred;
+            let lastPushWaiters;
+
+            const throttlingPushHandler = throttleChanges((changes) => {
+                pushDeferred.resolve();
+                const storePushPending = when(...lastPushWaiters);
+                storePushPending.done(() => this._onPush(changes));
+
+                lastPushWaiters = undefined;
+                pushDeferred = undefined;
+            }, throttlingTimeout);
+
+            this._onPushHandler = (args) => {
+                this._aggregationTimeoutId = throttlingPushHandler(args.changes);
+
+                if(!pushDeferred) {
+                    pushDeferred = new Deferred();
+                }
+
+                lastPushWaiters = args.waitFor;
+                args.waitFor.push(pushDeferred.promise());
+            };
+            this._store.on('beforePush', this._onPushHandler);
+        } else {
+            this._onPushHandler = (changes) => this._onPush(changes);
+            this._store.on('push', this._onPushHandler);
+        }
 
         this._storeLoadOptions = this._extractLoadOptions(options);
 
@@ -131,22 +152,24 @@ export const DataSource = Class.inherit({
     },
 
     dispose() {
+        this._store.off('beforePush', this._onPushHandler);
         this._store.off('push', this._onPushHandler);
         this._eventsStrategy.dispose();
         clearTimeout(this._aggregationTimeoutId);
 
-        delete this._store;
-
         this._delayedLoadTask?.abort();
-
         this._operationManager.cancelAll();
+
+        delete this._store;
+        delete this._items;
+        delete this._delayedLoadTask;
 
         this._disposed = true;
     },
 
     _extractLoadOptions(options) {
         const result = {};
-        let names = ['sort', 'filter', 'select', 'group', 'requireTotalCount'];
+        let names = ['sort', 'filter', 'langParams', 'select', 'group', 'requireTotalCount'];
         const customNames = this._store._customLoadOptions();
 
         if(customNames) {
@@ -219,7 +242,6 @@ export const DataSource = Class.inherit({
         if(newFilter === undefined) {
             return this._storeLoadOptions.filter;
         }
-
         this._storeLoadOptions.filter = newFilter;
         this.pageIndex(0);
     },
@@ -350,8 +372,9 @@ export const DataSource = Class.inherit({
         const store = this._store;
         const options = this._createStoreLoadOptions();
         const handleDone = (data) => {
-            if(!isDefined(data) || isEmpty(data)) {
-                d.reject(new errorUtils.errors.Error('E4009'));
+            const isEmptyArray = Array.isArray(data) && !data.length;
+            if(!isDefined(data) || isEmptyArray) {
+                d.reject(new errors.Error('E4009'));
             } else {
                 if(!Array.isArray(data)) {
                     data = [data];
@@ -435,12 +458,13 @@ export const DataSource = Class.inherit({
         if(this._reshapeOnPush) {
             this.load();
         } else {
-            this._eventsStrategy.fireEvent('changing', [{ changes }]);
+            const changingArgs = { changes };
+            this._eventsStrategy.fireEvent('changing', [changingArgs]);
 
             const group = this.group();
             const items = this.items();
             let groupLevel = 0;
-            const dataSourceChanges = this.paginate() || group ? changes.filter(item => item.type === 'update') : changes;
+            let dataSourceChanges = this.paginate() || group ? changes.filter(item => item.type === 'update') : changes;
 
             if(group) {
                 groupLevel = Array.isArray(group) ? group.length : 1;
@@ -452,6 +476,10 @@ export const DataSource = Class.inherit({
                         item.data = this._mapFunc(item.data);
                     }
                 });
+            }
+
+            if(changingArgs.postProcessChanges) {
+                dataSourceChanges = changingArgs.postProcessChanges(dataSourceChanges);
             }
 
             applyBatch({
@@ -469,6 +497,10 @@ export const DataSource = Class.inherit({
         const operationId = this._operationManager.add(deferred);
         const storeLoadOptions = this._createStoreLoadOptions();
 
+        if(this._store && !isEmptyObject(storeLoadOptions?.langParams)) {
+            this._store._langParams = { ...this._store._langParams, ...storeLoadOptions.langParams };
+        }
+
         deferred.always(() => this._operationManager.remove(operationId));
 
         return {
@@ -479,9 +511,8 @@ export const DataSource = Class.inherit({
 
     reload() {
         const store = this.store();
-        if(store instanceof CustomStore) {
-            store.clearRawDataCache();
-        }
+
+        store._clearCache();
 
         this._init();
         return this.load();
@@ -511,6 +542,7 @@ export const DataSource = Class.inherit({
 
     _createStoreLoadOptions() {
         const result = extend({}, this._storeLoadOptions);
+
         this._addSearchOptions(result);
 
         if(this._paginate) {
@@ -617,7 +649,7 @@ export const DataSource = Class.inherit({
 
         data = this._applyPostProcessFunction(this._applyMapFunction(data));
 
-        if(!isPlainObject(extra)) {
+        if(!isObject(extra)) {
             extra = {};
         }
 

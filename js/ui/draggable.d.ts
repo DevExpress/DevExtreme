@@ -1,209 +1,272 @@
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
 
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    event
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxSortable from './sortable';
 
-export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends DOMComponentOptions<T> {
+import {
+    DragDirection,
+} from '../common';
+
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @type object
+ */
+export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
-     * @docid DraggableBaseOptions.autoScroll
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     autoScroll?: boolean;
     /**
-     * @docid DraggableBaseOptions.boundary
-     * @type string|Element|jQuery
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    boundary?: string | Element | JQuery;
+    boundary?: string | UserDefinedElement;
     /**
-     * @docid DraggableBaseOptions.container
-     * @type string|Element|jQuery
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | UserDefinedElement;
     /**
-     * @docid DraggableBaseOptions.cursorOffset
-     * @type string|object
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    cursorOffset?: string | { x?: number, y?: number };
+    cursorOffset?: string | {
+      /**
+       * @docid
+       * @default 0
+       */
+      x?: number;
+      /**
+       * @docid
+       * @default 0
+       */
+      y?: number;
+    };
     /**
-     * @docid DraggableBaseOptions.data
-     * @type any
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     data?: any;
     /**
-     * @docid DraggableBaseOptions.dragDirection
-     * @type Enums.DragDirection
+     * @docid
      * @default "both"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragDirection?: 'both' | 'horizontal' | 'vertical';
+    dragDirection?: DragDirection;
     /**
-     * @docid DraggableBaseOptions.group
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     group?: string;
     /**
-     * @docid DraggableBaseOptions.handle
-     * @type string
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     handle?: string;
     /**
-     * @docid DraggableBaseOptions.scrollSensitivity
-     * @type number
+     * @docid
      * @default 60
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollSensitivity?: number;
     /**
-     * @docid DraggableBaseOptions.scrollSpeed
-     * @type number
+     * @docid
      * @default 30
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollSpeed?: number;
 }
 /**
- * @docid DraggableBase
+ * @docid
  * @inherits DOMComponent
- * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
+ * @options DraggableBaseOptions
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DraggableBase { }
 
+/** @public */
+export type DisposingEvent = EventInfo<dxDraggable>;
+
+/** @public */
+export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
+    readonly itemData?: any;
+    readonly itemElement?: DxElement;
+    readonly fromComponent: dxSortable | dxDraggable;
+    readonly toComponent: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+};
+
+/** @public */
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
+    readonly itemData?: any;
+    readonly itemElement?: DxElement;
+    readonly fromComponent: dxSortable | dxDraggable;
+    readonly toComponent: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+};
+
+/** @public */
+export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
+    itemData?: any;
+    readonly itemElement?: DxElement;
+    readonly fromData?: any;
+};
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxDraggable>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxDraggable> & ChangedOptionInfo;
+
+/** @public */
+export type DragTemplateData = {
+    readonly itemData?: any;
+    readonly itemElement: DxElement;
+};
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
-     * @docid dxDraggableOptions.clone
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     clone?: boolean;
     /**
-     * @docid dxDraggableOptions.dragTemplate
-     * @type template|function
+     * @docid
      * @type_function_param1 dragInfo:object
-     * @type_function_param1_field1 itemData:any
-     * @type_function_param1_field2 itemElement:dxElement
-     * @type_function_param2 containerElement:dxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: dxElement }, containerElement: dxElement) => string | Element | JQuery);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxDraggableOptions.onDragEnd
-     * @type function(e)
-     * @extends Action
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 cancel:boolean
-     * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
-     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
-     * @type_function_param1_field10 fromData:any
-     * @type_function_param1_field11 toData:any
+     * @type_function_param1_field component:dxDraggable
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragEnd?: ((e: { component?: dxDraggable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
+    onDragEnd?: ((e: DragEndEvent) => void);
     /**
-     * @docid dxDraggableOptions.onDragMove
-     * @type function(e)
-     * @extends Action
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 cancel:boolean
-     * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
-     * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
-     * @type_function_param1_field10 fromData:any
-     * @type_function_param1_field11 toData:any
+     * @type_function_param1_field component:dxDraggable
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragMove?: ((e: { component?: dxDraggable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
+    onDragMove?: ((e: DragMoveEvent) => void);
     /**
-     * @docid dxDraggableOptions.onDragStart
-     * @type function(e)
-     * @extends Action
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 cancel:boolean
-     * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
-     * @type_function_param1_field8 fromData:any
+     * @type_function_param1_field component:dxDraggable
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragStart?: ((e: { component?: dxDraggable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromData?: any }) => any);
+    onDragStart?: ((e: DragStartEvent) => void);
 }
 /**
- * @docid dxDraggable
+ * @docid
  * @inherits DraggableBase
  * @hasTranscludedContent
- * @module ui/draggable
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxDraggable extends DOMComponent implements DraggableBase {
-    constructor(element: Element, options?: dxDraggableOptions)
-    constructor(element: JQuery, options?: dxDraggableOptions)
-}
+export default class dxDraggable extends DOMComponent<dxDraggableOptions> implements DraggableBase { }
 
-declare global {
-interface JQuery {
-    dxDraggable(): JQuery;
-    dxDraggable(options: "instance"): dxDraggable;
-    dxDraggable(options: string): any;
-    dxDraggable(options: string, ...params: any[]): any;
-    dxDraggable(options: dxDraggableOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxDraggableOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDraggableOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxDraggableOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onDrop'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxDraggableOptions.onDisposing
+ * @type_function_param1 e:{ui/draggable:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxDraggableOptions.onDragEnd
+ * @type_function_param1 e:{ui/draggable:DragEndEvent}
+ */
+onDragEnd?: ((e: DragEndEvent) => void);
+/**
+ * @skip
+ * @docid dxDraggableOptions.onDragMove
+ * @type_function_param1 e:{ui/draggable:DragMoveEvent}
+ */
+onDragMove?: ((e: DragMoveEvent) => void);
+/**
+ * @skip
+ * @docid dxDraggableOptions.onDragStart
+ * @type_function_param1 e:{ui/draggable:DragStartEvent}
+ */
+onDragStart?: ((e: DragStartEvent) => void);
+/**
+ * @skip
+ * @docid dxDraggableOptions.onInitialized
+ * @type_function_param1 e:{ui/draggable:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxDraggableOptions.onOptionChanged
+ * @type_function_param1 e:{ui/draggable:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

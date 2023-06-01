@@ -5,11 +5,16 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import devices from 'core/devices';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import keyboardMock from '../../../helpers/keyboardMock.js';
+import { isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
 
 const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';
 const SELECT_ALL_ITEM_CLASS = 'dx-treeview-select-all-item';
+const SEARCH_BAR_CLASS = 'dx-treeview-search';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
+const CHECKBOX_CHECKED_STATE_CLASS = 'dx-checkbox-checked';
 
 QUnit.module('Focusing');
 
@@ -27,10 +32,10 @@ QUnit.testInActiveWindow('item should have focus-state class after click on it',
     $item.trigger('dxpointerdown');
 
     assert.equal(isRenderer(treeView.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-    assert.ok($node.hasClass('dx-state-focused'), 'focus state was toggle after click');
+    assert.ok($node.hasClass(FOCUSED_STATE_CLASS), 'focus state was toggle after click');
 });
 
-QUnit.testInActiveWindow('disabled item should not have focus-state class after click on it', function(assert) {
+QUnit.testInActiveWindow('disabled item should have focus-state class after click on it', function(assert) {
     const treeViewData = $.extend(true, [], DATA[0]);
     treeViewData[0].disabled = true;
 
@@ -43,7 +48,7 @@ QUnit.testInActiveWindow('disabled item should not have focus-state class after 
 
     $item.trigger('dxpointerdown');
 
-    assert.ok(!$node.hasClass('dx-state-focused'), 'focus state was toggle after click');
+    assert.ok($node.hasClass(FOCUSED_STATE_CLASS), 'focus state was toggle after click');
 });
 
 QUnit.testInActiveWindow('widget should not have focus-state class after click on arrow', function(assert) {
@@ -57,7 +62,7 @@ QUnit.testInActiveWindow('widget should not have focus-state class after click o
 
     $arrow.trigger('dxclick');
 
-    assert.ok(!$node.hasClass('dx-state-focused'), 'focus state was toggle after click');
+    assert.ok(!$node.hasClass(FOCUSED_STATE_CLASS), 'focus state was toggle after click');
 });
 
 const configs = [];
@@ -205,8 +210,33 @@ QUnit.test('Scroll should not jump down when focusing on item (T492496)', functi
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
 
         $items.first().trigger('dxpointerdown');
-        clock.tick();
+        clock.tick(10);
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
+    } finally {
+        clock.restore();
+    }
+});
+
+QUnit.test('First node should not has been focused when focusing on SelectAll item (T1109632)', function(assert) {
+    const $treeView = initTree({
+        items: [
+            { id: 1, text: 'item 1' },
+            { id: 2, text: 'item 2' }
+        ],
+        showCheckBoxesMode: 'selectAll',
+        focusStateEnabled: true,
+        height: 40,
+    });
+    const $selectAllItem = $treeView.find('.' + SELECT_ALL_ITEM_CLASS).first();
+    const $firstItem = $treeView.find('.' + ITEM_CLASS).first();
+
+    const clock = sinon.useFakeTimers();
+
+    try {
+        $selectAllItem.trigger('focusin');
+        clock.tick(10);
+
+        assert.notOk($firstItem.hasClass(FOCUSED_STATE_CLASS), 'first item has not focus state class');
     } finally {
         clock.restore();
     }
@@ -235,7 +265,7 @@ QUnit.test('Scroll should not jump down when focusing on Select All (T517945)', 
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
 
         $treeView.find('.' + SELECT_ALL_ITEM_CLASS).first().trigger('dxpointerdown');
-        clock.tick();
+        clock.tick(10);
         assert.equal(scrollable.scrollTop(), 0, 'scroll top position');
     } finally {
         clock.restore();
@@ -251,5 +281,73 @@ QUnit.testInActiveWindow('Focusing widget when there is search editor', function
 
     instance.focus();
 
-    assert.ok($treeView.children('.dx-treeview-search').hasClass('dx-state-focused'), 'search editor is focused');
+    assert.ok($treeView.children(`.${SEARCH_BAR_CLASS}`).hasClass(FOCUSED_STATE_CLASS), 'search editor is focused');
+});
+
+QUnit.test('select all item should be focused on treeview focus', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
+    initTree({
+        items: $.extend(true, [], DATA[0]),
+        showCheckBoxesMode: 'selectAll',
+    }).dxTreeView('focus');
+
+    const $selectAllItem = $(`.${SELECT_ALL_ITEM_CLASS}`);
+
+    assert.ok($selectAllItem.hasClass(FOCUSED_STATE_CLASS));
+});
+
+QUnit.test('SelectAll checkbox should be checked with space key', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
+    initTree({
+        items: [ { id: 1 }],
+        showCheckBoxesMode: 'selectAll',
+    });
+
+    const $selectAllItem = $(`.${SELECT_ALL_ITEM_CLASS}`);
+
+    $selectAllItem.trigger('focus');
+
+    keyboardMock($selectAllItem).keyDown('space');
+
+    assert.ok($selectAllItem.hasClass(CHECKBOX_CHECKED_STATE_CLASS));
+});
+
+QUnit.test('search bar should be focused when both search and selectAll item are enabled', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
+    initTree({
+        items: $.extend(true, [], DATA[0]),
+        searchEnabled: true,
+        showCheckBoxesMode: 'selectAll',
+    }).dxTreeView('focus');
+
+    const $searchBar = $(`.${SEARCH_BAR_CLASS}`);
+
+    assert.ok($searchBar.hasClass(FOCUSED_STATE_CLASS));
+});
+
+QUnit.test('first item should be focused if both search bar and selectAll item are absent', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
+    initTree({
+        items: $.extend(true, [], DATA[0]),
+    }).dxTreeView('focus');
+
+    const $firstItem = $(`.${NODE_CLASS}`).eq(0);
+
+    assert.ok($firstItem.hasClass(FOCUSED_STATE_CLASS));
 });

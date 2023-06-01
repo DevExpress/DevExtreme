@@ -16,35 +16,35 @@ $generic-lookup-invalid-message-padding-bottom: null !default;
 $generic-lookup-invalid-message-margin-bottom: null !default;
 
 @if $size == "default" {
-  $generic-lookup-height: 36px;
-  $generic-lookup-popup-content-top: 49px;
-  $generic-lookup-popup-content-padding: 20px;
-  $generic-lookup-list-top: 70px;
+  $generic-lookup-height: 36px !default;
+  $generic-lookup-popup-content-top: 49px !default;
+  $generic-lookup-popup-content-padding: 20px !default;
+  $generic-lookup-list-top: 70px !default;
 
-  $generic-lookup-arrow-margin: -6px;
-  $generic-lookup-arrow-right: 10px;
-  $generic-lookup-arrow-left: 16px;
+  $generic-lookup-arrow-margin: -6px !default;
+  $generic-lookup-arrow-right: 10px !default;
+  $generic-lookup-arrow-left: 16px !default;
 
-  $generic-lookup-invalid-message-font-size: 14px;
-  $generic-lookup-invalid-message-padding-horizontal: 20px;
-  $generic-lookup-invalid-message-padding-top: 13px;
-  $generic-lookup-invalid-message-padding-bottom: 12px;
-  $generic-lookup-invalid-message-margin-bottom: 20px;
+  $generic-lookup-invalid-message-font-size: 14px !default;
+  $generic-lookup-invalid-message-padding-horizontal: 20px !default;
+  $generic-lookup-invalid-message-padding-top: 13px !default;
+  $generic-lookup-invalid-message-padding-bottom: 12px !default;
+  $generic-lookup-invalid-message-margin-bottom: 20px !default;
 }
 
 @else if $size == "compact" {
-  $generic-lookup-height: 26px;
-  $generic-lookup-popup-content-top: 36px;
-  $generic-lookup-popup-content-padding: 10px;
-  $generic-lookup-list-top: 40px;
+  $generic-lookup-height: 26px !default;
+  $generic-lookup-popup-content-top: 36px !default;
+  $generic-lookup-popup-content-padding: 10px !default;
+  $generic-lookup-list-top: 40px !default;
 
-  $generic-lookup-arrow-margin: -5px;
-  $generic-lookup-arrow-right: 5px;
-  $generic-lookup-arrow-left: 11px;
+  $generic-lookup-arrow-margin: -5px !default;
+  $generic-lookup-arrow-right: 5px !default;
+  $generic-lookup-arrow-left: 11px !default;
 
-  $generic-lookup-invalid-message-font-size: 12px;
-  $generic-lookup-invalid-message-padding-horizontal: 10px;
-  $generic-lookup-invalid-message-padding-top: 7px;
-  $generic-lookup-invalid-message-padding-bottom: 10px;
-  $generic-lookup-invalid-message-margin-bottom: 10px;
+  $generic-lookup-invalid-message-font-size: 12px !default;
+  $generic-lookup-invalid-message-padding-horizontal: 10px !default;
+  $generic-lookup-invalid-message-padding-top: 7px !default;
+  $generic-lookup-invalid-message-padding-bottom: 10px !default;
+  $generic-lookup-invalid-message-margin-bottom: 10px !default;
 }

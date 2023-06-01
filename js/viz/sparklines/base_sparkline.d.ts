@@ -1,91 +1,131 @@
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
+import {
+    EventInfo,
+} from '../../events/index';
+
 import BaseWidget, {
+    BaseWidgetExport,
+    BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
-    BaseWidgetTooltip
+    BaseWidgetTitle,
+    BaseWidgetTooltip,
 } from '../core/base_widget';
 
-export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptions<T> {
+/**
+ * @namespace DevExpress.viz
+ * @docid
+ * @hidden
+ */
+export interface BaseSparklineOptions<TComponent> extends BaseWidgetOptions<TComponent> {
     /**
-     * @docid BaseSparklineOptions.onTooltipHidden
-     * @extends Action
-     * @notUsedInTheme
-     * @action
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    onTooltipHidden?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
-    /**
-     * @docid BaseSparklineOptions.onTooltipShown
-     * @extends Action
-     * @notUsedInTheme
-     * @action
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    onTooltipShown?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
-    /**
-     * @docid BaseSparklineOptions.tooltip
+     * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
+     * @hidden
+     */
+    export?: BaseWidgetExport;
+    /**
+     * @docid
+     * @type object
+     * @hidden
+     */
+    loadingIndicator?: BaseWidgetLoadingIndicator;
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:EventInfo
+     * @notUsedInTheme
+     * @action
+     * @public
+     */
+    onTooltipHidden?: ((e: EventInfo<TComponent>) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:EventInfo
+     * @notUsedInTheme
+     * @action
+     * @public
+     */
+    onTooltipShown?: ((e: EventInfo<TComponent>) => void);
+    /**
+     * @docid
+     * @hidden
+     */
+    redrawOnResize?: boolean;
+    /**
+     * @docid
+     * @type object
+     * @hidden
+     */
+    title?: BaseWidgetTitle | string;
+    /**
+     * @docid
+     * @type object
      * @public
      */
     tooltip?: BaseSparklineTooltip;
 }
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseSparklineOptions.tooltip.contentTemplate
-     * @type template|function(pointsInfo, element)
      * @type_function_param1 pointsInfo:object
-     * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((pointsInfo: any, element: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((pointsInfo: any, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid BaseSparklineOptions.tooltip.customizeTooltip
-     * @type function(pointsInfo)
      * @type_function_param1 pointsInfo:object
      * @type_function_return object
      * @default undefined
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     customizeTooltip?: ((pointsInfo: any) => any);
     /**
      * @docid BaseSparklineOptions.tooltip.enabled
-     * @type boolean
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     enabled?: boolean;
     /**
      * @docid BaseSparklineOptions.tooltip.interactive
-     * @type boolean
      * @default false
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     interactive?: boolean;
 }
 /**
- * @docid BaseSparkline
- * @type object
+ * @docid
  * @hidden
  * @inherits BaseWidget
- * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
+ * @options BaseSparklineOptions
  */
-export default class BaseSparkline extends BaseWidget {
-    constructor(element: Element, options?: BaseSparklineOptions)
-    constructor(element: JQuery, options?: BaseSparklineOptions)
+export default class BaseSparkline<TProperties> extends BaseWidget<TProperties> {
+    /**
+     * @docid
+     * @publicName hideLoadingIndicator()
+     * @hidden
+     */
+    hideLoadingIndicator(): void;
+    /**
+     * @docid
+     * @publicName showLoadingIndicator()
+     * @hidden
+     */
+    showLoadingIndicator(): void;
 }

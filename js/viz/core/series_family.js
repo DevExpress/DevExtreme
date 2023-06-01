@@ -4,6 +4,7 @@ import { each as _each } from '../../core/utils/iterator';
 import { sign } from '../../core/utils/math';
 import { noop as _noop } from '../../core/utils/common';
 import { map as _map, normalizeEnum as _normalizeEnum } from './utils';
+import dateUtils from '../../core/utils/date';
 ///#DEBUG
 import { debug } from '../../core/utils/console';
 ///#ENDDEBUG
@@ -45,11 +46,17 @@ function correctStackCoordinates(series, currentStacks, arg, stack, parameters, 
         if(isDefined(barPadding) || isDefined(barWidth)) {
             extraParameters = calculateParams(barsArea, currentStacks.length, 1 - barPadding, barWidth);
             width = extraParameters.width;
-            offset = getOffset(stackIndex, extraParameters);
+            if(!series.getBarOverlapGroup()) {
+                offset = getOffset(stackIndex, extraParameters);
+            }
         }
 
         correctPointCoordinates(points, width, offset);
     });
+}
+
+function getStackName(series) {
+    return series.getStackName() || series.getBarOverlapGroup();
 }
 
 function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback) {
@@ -57,11 +64,25 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
     const allArguments = [];
     const seriesInStacks = {};
     const barGroupWidth = options.barGroupWidth;
-    const interval = series[0] && series[0].getArgumentAxis().getTranslator().getInterval();
+    const argumentAxis = series[0]?.getArgumentAxis();
+    let interval;
+
+    if(series[0]?.useAggregation()) {
+        const isDateArgAxis = series[0]?.argumentType === 'datetime';
+        let tickInterval = argumentAxis.getTickInterval();
+        let aggregationInterval = argumentAxis.getAggregationInterval();
+
+        tickInterval = isDateArgAxis ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval;
+        aggregationInterval = isDateArgAxis ? dateUtils.dateToMilliseconds(aggregationInterval) : aggregationInterval;
+        interval = aggregationInterval < tickInterval ? aggregationInterval : tickInterval;
+    }
+
+    interval = argumentAxis?.getTranslator().getInterval(interval);
+
     const barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
 
     series.forEach(function(s, i) {
-        const stackName = s.getStackName() || s.getBarOverlapGroup() || i.toString();
+        const stackName = getStackName(s) || i.toString();
         let argument;
 
         for(argument in s.pointsByArgument) {
@@ -97,21 +118,22 @@ function calculateParams(barsArea, count, percentWidth, fixedBarWidth) {
     let width;
 
     if(fixedBarWidth) {
-        width = _min(fixedBarWidth, round(barsArea / count));
-        spacing = count > 1 ? round((barsArea - width * count) / (count - 1)) : 0;
+        width = _min(fixedBarWidth, barsArea / count);
+        spacing = count > 1 ? round((barsArea - round(width) * count) / (count - 1)) : 0;
     } else if(isDefined(percentWidth)) {
-        width = round(barsArea * percentWidth / count);
-        spacing = round(count > 1 ? (barsArea - barsArea * percentWidth) / (count - 1) : 0);
+        width = barsArea * percentWidth / count;
+        spacing = count > 1 ? round((barsArea - barsArea * percentWidth) / (count - 1)) : 0;
     } else {
         spacing = round(barsArea / count * 0.2);
-        width = round((barsArea - spacing * (count - 1)) / count);
+        width = (barsArea - spacing * (count - 1)) / count;
     }
 
-    return { width: width > 1 ? width : 1, spacing: spacing, middleIndex: count / 2 };
+    return { width: width > 1 ? round(width) : 1, spacing: spacing, middleIndex: count / 2, rawWidth: width };
 }
 
 function getOffset(stackIndex, parameters) {
-    return ((stackIndex - parameters.middleIndex) + 0.5) * parameters.width - (((parameters.middleIndex - stackIndex) - 0.5) * parameters.spacing);
+    const width = parameters.rawWidth < 1 ? parameters.rawWidth : parameters.width;
+    return ((stackIndex - parameters.middleIndex) + 0.5) * width - (((parameters.middleIndex - stackIndex) - 0.5) * parameters.spacing);
 }
 
 function correctPointCoordinates(points, width, offset) {
@@ -192,7 +214,7 @@ function adjustStackedSeriesValues() {
     const lastSeriesInNegativeStack = {};
 
     series.forEach(function(singleSeries) {
-        const stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup();
+        const stackName = getStackName(singleSeries);
         let hole = false;
 
         const stack = getFirstValueSign(singleSeries) < 0 ? lastSeriesInNegativeStack : lastSeriesInPositiveStack;
@@ -256,7 +278,7 @@ function adjustStackedSeriesValues() {
     series.forEach(function(singleSeries) {
         singleSeries.getPoints().forEach(function(point) {
             const argument = point.argument.valueOf();
-            const stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup();
+            const stackName = getStackName(singleSeries);
             const absTotal = getAbsStackSumByArg(stackKeepers, stackName, argument);
             const total = getStackSumByArg(stackKeepers, stackName, argument);
 
@@ -322,6 +344,28 @@ function updateFullStackedSeriesValues(series, stackKeepers) {
                 }
             }
         });
+    });
+}
+
+function updateRangeSeriesValues() {
+    const that = this;
+    const series = getVisibleSeries(that);
+    _each(series, function(_, singleSeries) {
+        const minBarSize = singleSeries.getOptions().minBarSize;
+        const valueAxisTranslator = singleSeries.getValueAxis().getTranslator();
+        const minShownBusinessValue = minBarSize && valueAxisTranslator.getMinBarSize(minBarSize);
+        if(minShownBusinessValue) {
+            _each(singleSeries.getPoints(), function(_, point) {
+                if(!point.hasValue()) {
+                    return;
+                }
+                if(point.value.valueOf() - point.minValue.valueOf() < minShownBusinessValue) {
+                    point.value = point.value.valueOf() + minShownBusinessValue / 2;
+                    point.minValue = point.minValue.valueOf() - minShownBusinessValue / 2;
+                }
+            });
+        }
+
     });
 }
 
@@ -410,6 +454,7 @@ export function SeriesFamily(options) {
             break;
         case 'rangebar':
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;
+            that.updateSeriesValues = updateRangeSeriesValues;
             break;
 
         case 'fullstackedbar':

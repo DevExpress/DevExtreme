@@ -1,81 +1,148 @@
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
 import Editor, {
-    EditorOptions
+    EditorOptions,
+    ValueChangedInfo,
 } from './editor/editor';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxCheckBox>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxCheckBox>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxCheckBox>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxCheckBox> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxCheckBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
     /**
-     * @docid dxCheckBoxOptions.activeStateEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxCheckBoxOptions.focusStateEnabled
-     * @type boolean
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default false
+     * @public
+     */
+    enableThreeStateBehavior?: boolean;
+    /**
+     * @docid
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxCheckBoxOptions.hoverStateEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxCheckBoxOptions.name
-     * @type string
+     * @docid
+     * @default undefined
+     * @public
+     */
+    iconSize?: number | string;
+    /**
+     * @docid
      * @hidden false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
-     * @docid dxCheckBoxOptions.text
-     * @type string
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
-     * @docid dxCheckBoxOptions.value
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    value?: boolean;
+    value?: boolean | null | undefined;
 }
 /**
- * @docid dxCheckBox
+ * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/check_box
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxCheckBox extends Editor {
-    constructor(element: Element, options?: dxCheckBoxOptions)
-    constructor(element: JQuery, options?: dxCheckBoxOptions)
+export default class dxCheckBox extends Editor<dxCheckBoxOptions> {
+    /**
+     * @docid
+     * @publicName blur()
+     * @public
+     */
+     blur(): void;
 }
 
-declare global {
-interface JQuery {
-    dxCheckBox(): JQuery;
-    dxCheckBox(options: "instance"): dxCheckBox;
-    dxCheckBox(options: string): any;
-    dxCheckBox(options: string, ...params: any[]): any;
-    dxCheckBox(options: dxCheckBoxOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxCheckBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxCheckBoxOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxCheckBoxOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxCheckBoxOptions.onContentReady
+ * @type_function_param1 e:{ui/check_box:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxCheckBoxOptions.onDisposing
+ * @type_function_param1 e:{ui/check_box:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxCheckBoxOptions.onInitialized
+ * @type_function_param1 e:{ui/check_box:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxCheckBoxOptions.onOptionChanged
+ * @type_function_param1 e:{ui/check_box:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxCheckBoxOptions.onValueChanged
+ * @type_function_param1 e:{ui/check_box:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

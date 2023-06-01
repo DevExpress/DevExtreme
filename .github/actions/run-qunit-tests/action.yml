@@ -1,0 +1,122 @@
+name: "Run QUnit tests"
+description: "Runs tests with environment specified through parameters"
+
+inputs:
+  name:
+    description: "Test run name"
+    required: true
+  constel:
+    description: "Name of the test group"
+  browser:
+    description: "Name of the browser"
+    default: "chrome"
+  useJQuery:
+    description: "Indicates if jQuery should be used"
+    default: "false"
+  userAgent:
+    description: "User agent string to be passed to the browser"
+    default: ""
+  useShadowDom:
+    description: "Specifies if shadow DOM should be utilized"
+    default: "false"
+  timezone:
+    description: "Timezone for the test environment"
+    default: ""
+  isPerformance:
+    description: "Indicates if performance testing should be conducted"
+    default: "false"
+  headless:
+    description: "Specifies if the browser should run in headless mode"
+    default: "true"
+  useCsp:
+    description: "Indicates if tests should run with Content Security Policy (CSP) enabled"
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: Setup MATRIX_ENVS_NAME_SAFE
+      shell: bash
+      run: |
+        MATRIX_ENVS_NAME_SAFE=$(echo -n "${{ inputs.name }}" | sed 's|/|-|g')
+        echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
+        echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
+
+    - name: Setup firefox profile
+      shell: bash
+      run: |
+        mkdir -p /tmp/firefox-profile
+        for p in \
+        '"browser.shell.checkDefaultBrowser", false' \
+        '"datareporting.policy.dataSubmissionEnabled", false' \
+        '"font.name-list.monospace.x-western", "Liberation Mono"' \
+        '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
+        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /tmp/firefox-profile/prefs.js; done
+
+#    - name: Update apt
+#      run: |
+#        sudo apt-get update
+
+#    - name: Setup utils
+#      run: |
+#        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
+
+    - name: Pin browsers
+      uses: ./.github/actions/pin-browsers
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      shell: bash
+      run: npm install --no-package-lock --no-audit --no-fund
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: devextreme-artifacts
+
+    - name: Unpack artifacts
+      shell: bash
+      run: 7z x artifacts.zip
+
+    - name: Build dotnet
+      shell: bash
+      run: dotnet build build/build-dotnet.sln
+
+    - name: Run QUnit tests
+      shell: bash
+      env:
+        CONSTEL: ${{ inputs.constel }}
+        BROWSER: ${{ inputs.browser }}
+        JQUERY: ${{ inputs.useJQuery }}
+        MOBILE_UA: ${{ inputs.userAgent }}
+        SHADOW_DOM: ${{ inputs.useShadowDom }}
+        TZ: ${{ inputs.timezone }}
+        PERF: ${{ inputs.isPerformance }}
+        NO_HEADLESS: ${{ inputs.headless == 'false' && 'true' || 'false' }}
+        NO_CSP: ${{ inputs.useCsp == 'false' && 'true' || 'false' }}
+        NORENOVATION: "false"
+        GITHUBACTION: "true"
+        TARGET: "test"
+        DISPLAY: ":99"
+      run: |
+        chmod +x ./docker-ci.sh
+        ./docker-ci.sh
+
+    - name: Copy RawLog.txt
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}
+        path: ${{ github.workspace }}/testing/RawLog.txt
+        if-no-files-found: ignore

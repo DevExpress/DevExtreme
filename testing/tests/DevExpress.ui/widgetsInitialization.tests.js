@@ -5,20 +5,18 @@ QUnit.module('Widget initialization', {
         const fixture = document.getElementById('qunit-fixture');
         this.element = document.createElement('div');
         fixture.appendChild(this.element);
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.tick();
-        this.instance.dispose();
-        this.clock.restore();
     }
-});
-
-Object.keys(widgetsList).forEach(function(widget) {
-    [true, false].forEach(function(templatesRenderAsynchronously) {
-        QUnit.test(`${widget} templatesRenderAsynchronously option check`, function(assert) {
-            this.instance = new widgetsList[widget](this.element, { templatesRenderAsynchronously: templatesRenderAsynchronously });
-            assert.strictEqual(this.instance.option('templatesRenderAsynchronously'), templatesRenderAsynchronously, `it is possible to set ${templatesRenderAsynchronously} templatesRenderAsynchronously option value for the ${widget} widget`);
+}, () => {
+    Object.keys(widgetsList).forEach(function(widget) {
+        [true, false].forEach(function(templatesRenderAsynchronously) {
+            QUnit.test(`${widget} templatesRenderAsynchronously set to ${templatesRenderAsynchronously} on init`, function(assert) {
+                this.clock = sinon.useFakeTimers();
+                this.instance = new widgetsList[widget](this.element, { templatesRenderAsynchronously });
+                this.clock.tick();
+                assert.strictEqual(this.instance.option('templatesRenderAsynchronously'), templatesRenderAsynchronously);
+                this.instance.dispose();
+                this.clock.restore();
+            });
         });
     });
 });

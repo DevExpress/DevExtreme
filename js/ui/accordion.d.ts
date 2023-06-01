@@ -1,222 +1,336 @@
-import '../jquery_augmentation';
-
+import { DataSourceLike } from '../data/data_source';
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+import {
+    DxPromise,
+} from '../core/utils/deferred';
 
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
+type ItemLike = string | Item | any;
+
+/** @public */
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>>;
+
+/** @public */
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>>;
+
+/** @public */
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxAccordion<TItem, TKey>>;
+
+/** @public */
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemTitleClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & SelectionChangedInfo<TItem>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ * @docid
+ */
+export interface dxAccordionOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxAccordion<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid dxAccordionOptions.animationDuration
-     * @type number
+     * @docid
      * @default 300
-     * @default 200 [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default 200 &for(Material)
      * @public
      */
     animationDuration?: number;
     /**
-     * @docid dxAccordionOptions.collapsible
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     collapsible?: boolean;
     /**
-     * @docid dxAccordionOptions.dataSource
-     * @type string|Array<string,dxAccordionItem,object>|DataSource|DataSourceOptions
+     * @docid
+     * @type string | Array<string | dxAccordionItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxAccordionItem | any> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid dxAccordionOptions.deferRendering
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
     /**
-     * @docid dxAccordionOptions.focusStateEnabled
-     * @type boolean
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxAccordionOptions.height
-     * @type number|string|function
+     * @docid
      * @default undefined
-     * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxAccordionOptions.hoverStateEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxAccordionOptions.itemTemplate
-     * @type template|function
+     * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxAccordionOptions.itemTitleTemplate
-     * @type template|function
+     * @docid
      * @default "title"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTitleTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxAccordionOptions.items
-     * @type Array<string, dxAccordionItem, object>
+     * @docid
+     * @type Array<string | dxAccordionItem | any>
      * @fires dxAccordionOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxAccordionItem | any>;
+    items?: Array<TItem>;
     /**
-     * @docid dxAccordionOptions.multiple
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     multiple?: boolean;
     /**
-     * @docid dxAccordionOptions.onItemTitleClick
-     * @type function(e)|string
-     * @extends Action
+     * @docid
+     * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:dxElement
-     * @type_function_param1_field6 itemIndex:number
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxAccordion
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemTitleClick?: ((e: { component?: dxAccordion, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any) | string;
+    onItemTitleClick?: ((e: ItemTitleClickEvent<TItem, TKey>) => void) | string;
     /**
-     * @docid dxAccordionOptions.repaintChangesOnly
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid dxAccordionOptions.selectedIndex
-     * @type number
+     * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
 }
 /**
- * @docid dxAccordion
+ * @docid
  * @inherits CollectionWidget
- * @module ui/accordion
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxAccordion extends CollectionWidget {
-    constructor(element: Element, options?: dxAccordionOptions)
-    constructor(element: JQuery, options?: dxAccordionOptions)
+export default class dxAccordion<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidget<dxAccordionOptions<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid dxAccordionMethods.collapseItem
+     * @docid
      * @publicName collapseItem(index)
      * @param1 index:numeric
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseItem(index: number): Promise<void> & JQueryPromise<void>;
+    collapseItem(index: number): DxPromise<void>;
     /**
-     * @docid dxAccordionMethods.expandItem
+     * @docid
      * @publicName expandItem(index)
      * @param1 index:numeric
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandItem(index: number): Promise<void> & JQueryPromise<void>;
+    expandItem(index: number): DxPromise<void>;
     /**
-     * @docid dxAccordionMethods.updateDimensions
+     * @docid
      * @publicName updateDimensions()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    updateDimensions(): Promise<void> & JQueryPromise<void>;
+    updateDimensions(): DxPromise<void>;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui.dxAccordion
+ */
+export type Item = dxAccordionItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
+ */
 export interface dxAccordionItem extends CollectionWidgetItem {
     /**
-     * @docid dxAccordionItem.icon
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     icon?: string;
     /**
-     * @docid dxAccordionItem.title
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     title?: string;
+    /**
+     * @docid
+     * @type_function_return string|Element|jQuery
+     * @public
+     */
+    titleTemplate?: template | (() => string | UserDefinedElement);
 }
 
-declare global {
-interface JQuery {
-    dxAccordion(): JQuery;
-    dxAccordion(options: "instance"): dxAccordion;
-    dxAccordion(options: string): any;
-    dxAccordion(options: string, ...params: any[]): any;
-    dxAccordion(options: dxAccordionOptions): JQuery;
-}
-}
-export type Options = dxAccordionOptions;
+/** @public */
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    ItemTitleClickEvent: ItemTitleClickEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+};
 
-/** @deprecated use Options instead */
-export type IOptions = dxAccordionOptions;
+/** @public */
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxAccordionOptions<TItem, TKey>;
+
+/** @deprecated use Properties instead */
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxAccordionOptions.onContentReady
+ * @type_function_param1 e:{ui/accordion:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onDisposing
+ * @type_function_param1 e:{ui/accordion:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onInitialized
+ * @type_function_param1 e:{ui/accordion:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onItemClick
+ * @type_function_param1 e:{ui/accordion:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/accordion:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onItemHold
+ * @type_function_param1 e:{ui/accordion:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onItemRendered
+ * @type_function_param1 e:{ui/accordion:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onItemTitleClick
+ * @type_function_param1 e:{ui/accordion:ItemTitleClickEvent}
+ */
+onItemTitleClick?: ((e: ItemTitleClickEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onOptionChanged
+ * @type_function_param1 e:{ui/accordion:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxAccordionOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/accordion:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+};
+///#ENDDEBUG

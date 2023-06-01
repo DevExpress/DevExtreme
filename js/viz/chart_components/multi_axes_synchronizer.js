@@ -1,7 +1,7 @@
 import { debug } from '../../core/utils/console';
 import { isDefined, isNumeric } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import { getLog, raiseTo } from '../core/utils';
+import { getLogExt, raiseToExt } from '../core/utils';
 import { adjust } from '../../core/utils/math';
 
 const _math = Math;
@@ -23,33 +23,37 @@ function getValueAxesPerPanes(valueAxes) {
     return result;
 }
 
-const linearConverter = {
+const linearConverter = (br) => ({
     transform: function(v, b) {
-        return adjust(getLog(v, b));
+        return adjust(getLogExt(v, b, br.allowNegatives, br.linearThreshold));
     },
+    getTicks: function(interval, tickValues, base) {
+        const ticks = [];
+        let tick = this.transform(tickValues[0], base);
 
-    addInterval: function(v, i) {
-        return adjust(v + i);
+        while(ticks.length < tickValues.length) {
+            ticks.push(tick);
+            tick = adjust(tick + interval);
+        }
+
+        return ticks;
     },
+});
 
-    getInterval: function(base, tickInterval) {
-        return tickInterval;
-    }
-};
-
-const logConverter = {
+const logConverter = (br) => ({
     transform: function(v, b) {
-        return adjust(raiseTo(v, b));
+        return adjust(raiseToExt(v, b, br.allowNegatives, br.linearThreshold));
     },
-
-    addInterval: function(v, i) {
-        return adjust(v * i);
+    getTicks: function(interval, tickValues, base) {
+        const ticks = [];
+        let tick;
+        for(let i = 0; i < tickValues.length; i += 1) {
+            tick = this.transform(tickValues[i], base);
+            ticks.push(tick);
+        }
+        return ticks;
     },
-
-    getInterval: function(base, tickInterval) {
-        return _math.pow(base, tickInterval);
-    }
-};
+});
 
 function convertAxisInfo(axisInfo, converter) {
     if(!axisInfo.isLogarithmic) {
@@ -57,8 +61,6 @@ function convertAxisInfo(axisInfo, converter) {
     }
     const base = axisInfo.logarithmicBase;
     const tickValues = axisInfo.tickValues;
-    let tick;
-    const ticks = [];
 
     axisInfo.minValue = converter.transform(axisInfo.minValue, base);
     axisInfo.oldMinValue = converter.transform(axisInfo.oldMinValue, base);
@@ -70,12 +72,7 @@ function convertAxisInfo(axisInfo, converter) {
         axisInfo.tickInterval = 1;
     }
 
-    const interval = converter.getInterval(base, axisInfo.tickInterval);
-    tick = converter.transform(tickValues[0], base);
-    while(ticks.length < tickValues.length) {
-        ticks.push(tick);
-        tick = converter.addInterval(tick, interval);
-    }
+    const ticks = converter.getTicks(axisInfo.tickInterval, tickValues, base);
 
     ticks.tickInterval = axisInfo.tickInterval;
     axisInfo.tickValues = ticks;
@@ -92,13 +89,14 @@ function populateAxesInfo(axes) {
         let axisInfo;
         let tickInterval = axis._tickInterval;
         const synchronizedValue = options.synchronizedValue;
+        const action = axis.getViewport().action;
 
         if(majorTicks && majorTicks.length > 0 &&
             isNumeric(majorTicks[0]) &&
             options.type !== 'discrete' &&
             !businessRange.isEmpty() &&
             !(businessRange.breaks && businessRange.breaks.length) &&
-            axis.getViewport().action !== 'zoom'
+            action !== 'zoom' && action !== 'pan'
         ) {
 
             axis.applyMargins();
@@ -130,7 +128,7 @@ function populateAxesInfo(axes) {
                 synchronizedValue: synchronizedValue
             };
 
-            convertAxisInfo(axisInfo, linearConverter);
+            convertAxisInfo(axisInfo, linearConverter(axis.getTranslator().getBusinessRange()));
 
             result.push(axisInfo);
 
@@ -407,7 +405,7 @@ const multiAxesSynchronizer = {
                 updateMinorTicks(axesInfo);
 
                 axesInfo.forEach(info => {
-                    convertAxisInfo(info, logConverter);
+                    convertAxisInfo(info, logConverter(info.axis.getTranslator().getBusinessRange()));
                 });
                 applyMinMaxValues(axesInfo);
             }

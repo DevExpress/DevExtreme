@@ -10,7 +10,7 @@ const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
 
 const SELECTION_SHIFT = 20;
-const SELECTION_MASK = 0x8FF;
+const SELECTION_MASK = (1 << SELECTION_SHIFT) - 1;
 
 const combineIndex = function(indices) {
     return (indices.group << SELECTION_SHIFT) + indices.item;
@@ -125,13 +125,13 @@ const GroupedEditStrategy = EditStrategy.inherit({
 
         each(groups, function(groupIndex, group) {
             if(!group.items) return;
-            const keys = that.getKeysByItems(group.items);
 
-            each(keys, function(keyIndex, itemKey) {
+            each(group.items, function(itemIndex, item) {
+                const itemKey = that._collectionWidget.keyOf(item);
                 if(that._equalKeys(itemKey, key)) {
                     index = {
                         group: groupIndex,
-                        item: keyIndex
+                        item: itemIndex
                     };
                     return false;
                 }
@@ -146,8 +146,8 @@ const GroupedEditStrategy = EditStrategy.inherit({
     },
 
     _getGroups: function(items) {
-        const dataSource = this._collectionWidget.getDataSource();
-        const group = dataSource && dataSource.group();
+        const dataController = this._collectionWidget._dataController;
+        const group = dataController.group();
 
         if(group) {
             return storeHelper.queryByOptions(query(items), { group: group }).toArray();
@@ -158,41 +158,38 @@ const GroupedEditStrategy = EditStrategy.inherit({
 
     getItemsByKeys: function(keys, items) {
         const result = [];
+        const groups = this._getGroups(items);
+        const groupItemByKeyMap = {};
+
+        const getItemMeta = (key) => {
+            const index = this.getIndexByKey(key, groups);
+            const group = index && groups[index.group];
+
+            if(!group) return;
+
+            return {
+                groupKey: group.key,
+                item: group.items[index.item]
+            };
+        };
 
         each(keys, function(_, key) {
-            const getItemMeta = function(groups) {
-                const index = this.getIndexByKey(key, groups);
-                const group = index && groups[index.group];
-
-                if(!group) return;
-
-                return {
-                    groupKey: group.key,
-                    item: group.items[index.item]
-                };
-            }.bind(this);
-
-            const itemMeta = getItemMeta(this._getGroups(items));
+            const itemMeta = getItemMeta(key);
 
             if(!itemMeta) return;
 
             const groupKey = itemMeta.groupKey;
             const item = itemMeta.item;
 
-            let selectedGroup;
-            each(result, function(_, item) {
-                if(item.key === groupKey) {
-                    selectedGroup = item;
-                    return false;
-                }
-            });
-
+            let selectedGroup = groupItemByKeyMap[groupKey];
             if(!selectedGroup) {
                 selectedGroup = { key: groupKey, items: [] };
+                groupItemByKeyMap[groupKey] = selectedGroup;
                 result.push(selectedGroup);
             }
+
             selectedGroup.items.push(item);
-        }.bind(this));
+        });
 
         return result;
     },

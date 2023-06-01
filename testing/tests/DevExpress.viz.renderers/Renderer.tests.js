@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const animation = require('viz/core/renderers/animation');
-const renderers = require('viz/core/renderers/renderer');
-const vizMocks = require('../../helpers/vizMocks.js');
-const browser = require('core/utils/browser');
+import $ from 'jquery';
+import animation from 'viz/core/renderers/animation';
+import renderers from 'viz/core/renderers/renderer';
+import vizMocks from '../../helpers/vizMocks.js';
+import utils from 'viz/core/utils';
 
 $('<div>')
     .attr('id', 'qunit-fixture')
@@ -16,7 +16,7 @@ function getMockElement() {
     };
 }
 
-renderers.DEBUG_set_getNextDefsSvgId(function() { return 'DevExpressId'; });
+utils.getNextDefsSvgId = sinon.stub().returns('DevExpressId');
 
 QUnit.testDone(function() {
     renderers.SvgElement.reset && renderers.SvgElement.reset();
@@ -388,135 +388,6 @@ QUnit.test('Several renderers share same backup container', function(assert) {
     renderer.unlock();
 
     assert.ok(!container.parentNode, 'container is removed after second renderer');
-});
-
-QUnit.module('Fix sharping', {
-    before: setMockElements,
-    after: resetMockElements,
-    beforeEach: function() {
-        const that = this;
-        this.boundingRect = { left: 123.76, top: 2.15 };
-        this.container = document.createElement('div');
-        sinon.stub(this.container, 'getBoundingClientRect', function() {
-            return that.boundingRect;
-        });
-    }
-});
-
-QUnit.test('Compensate root coordinates on creation', function(assert) {
-    // arrange
-    // act
-    const renderer = new Renderer({
-        container: this.container
-    });
-
-    // assert
-    if(browser.mozilla) {
-        assert.deepEqual(renderer.root.move.firstCall.args, [-0.76, -0.15]);
-    } else if(browser.msie) {
-        assert.deepEqual(renderer.root.css.getCall(1).args, [{
-            transform: 'translate(-0.76px,-0.15px)'
-        }]);
-    } else {
-        assert.deepEqual(renderer.root.stub('move').callCount, 0);
-        assert.deepEqual(renderer.root.css.callCount, 1);
-    }
-});
-
-QUnit.test('Compensate root coordinates on Unlock', function(assert) {
-    // arrange
-    const renderer = new Renderer({
-        container: this.container
-    });
-    renderer.lock();
-    $('#qunit-fixture').append(this.container);
-    this.boundingRect = { left: 123.34, top: 2.5 };
-
-    // act
-    renderer.unlock();
-
-    // assert
-    if(browser.mozilla) {
-        assert.deepEqual(renderer.root.move.callCount, 2);
-        assert.deepEqual(renderer.root.move.lastCall.args, [-0.34, -0.5]);
-    } else if(browser.msie) {
-        assert.deepEqual(renderer.root.css.callCount, 3);
-        assert.deepEqual(renderer.root.css.getCall(2).args, [{
-            transform: 'translate(-0.34px,-0.5px)'
-        }]);
-    } else {
-        assert.deepEqual(renderer.root.stub('move').callCount, 0);
-        assert.deepEqual(renderer.root.css.callCount, 1);
-    }
-});
-
-QUnit.test('Compensate root coordinates on fixPlacement call', function(assert) {
-    // arrange
-    const renderer = new Renderer({
-        container: this.container
-    });
-    this.boundingRect = { left: 123.34, top: 2.5 };
-
-    // act
-    renderer.fixPlacement();
-
-    // assert
-    if(browser.mozilla) {
-        assert.deepEqual(renderer.root.move.callCount, 2);
-        assert.deepEqual(renderer.root.move.lastCall.args, [-0.34, -0.5]);
-    } else if(browser.msie) {
-        assert.deepEqual(renderer.root.css.callCount, 3);
-        assert.deepEqual(renderer.root.css.getCall(2).args, [{
-            transform: 'translate(-0.34px,-0.5px)'
-        }]);
-    } else {
-        assert.deepEqual(renderer.root.stub('move').callCount, 0);
-        assert.deepEqual(renderer.root.css.callCount, 1);
-    }
-});
-
-QUnit.test('Remove compensation before getting markup, compensate again after', function(assert) {
-    // arrange
-    const renderer = new Renderer({
-        container: this.container
-    });
-    this.boundingRect = { left: 123.34, top: 2.5 };
-    renderer.root.stub('attr').reset();
-    renderer.root.stub('css').reset();
-    renderer.root.stub('markup').reset();
-    renderer.root.stub('move').reset();
-
-    // act
-    renderer.svg();
-
-    // assert
-    if(browser.mozilla) {
-        assert.deepEqual(renderer.root.attr.callCount, 1);
-        assert.deepEqual(renderer.root.attr.getCall(0).args, [{ transform: null }]);
-
-        assert.strictEqual(renderer.root.markup.callCount, 1);
-        assert.ok(renderer.root.markup.getCall(0).calledAfter(renderer.root.attr.getCall(0)));
-
-        assert.deepEqual(renderer.root.move.callCount, 1);
-        assert.deepEqual(renderer.root.move.getCall(0).args, [-0.34, -0.5]);
-        assert.ok(renderer.root.move.getCall(0).calledAfter(renderer.root.markup.getCall(0)));
-
-    } else if(browser.msie) {
-        assert.deepEqual(renderer.root.css.callCount, 2);
-        assert.deepEqual(renderer.root.css.getCall(0).args, [{ transform: '' }]);
-
-        assert.strictEqual(renderer.root.markup.callCount, 1);
-        assert.ok(renderer.root.markup.getCall(0).calledAfter(renderer.root.css.getCall(0)));
-
-        assert.deepEqual(renderer.root.css.getCall(1).args, [{
-            transform: 'translate(-0.34px,-0.5px)'
-        }]);
-        assert.ok(renderer.root.css.getCall(1).calledAfter(renderer.root.markup.getCall(0)));
-    } else {
-        assert.deepEqual(renderer.root.stub('move').callCount, 0);
-        assert.deepEqual(renderer.root.stub('css').callCount, 0);
-        assert.strictEqual(renderer.root.markup.callCount, 1);
-    }
 });
 
 QUnit.module('Renderer drawing API', {
@@ -1094,60 +965,295 @@ QUnit.test('text with params. text argument is null', function(assert) {
     assert.strictEqual(text.stub('css').callCount, 0, 'text\'s css is not called');
     assert.strictEqual(text.stub('append').callCount, 0, 'text is not appended');
 });
-QUnit.module('Hatching', {
+
+QUnit.test('linear gradient, id is set', function(assert) {
+    const stops = [{ offset: 'offset_1', color: 'color_1' }, { offset: 'offset_2', color: 'color_2', opacity: 0.3 }];
+    const linearGradient = this.renderer.linearGradient(stops, 'id');
+
+    assert.ok(linearGradient);
+    assert.ok(linearGradient instanceof renderers.SvgElement);
+    assert.strictEqual(linearGradient.append.callCount, 1, 'linearGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        gradientTransform: 'rotate(0)',
+        id: 'id'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 'color_1',
+        'stop-opacity': undefined,
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+});
+
+QUnit.test('linear gradient, stops color set as `stop-color` (sankey chart)', function(assert) {
+    const stops = [{ offset: 'offset_1', 'stop-color': 'color_1' }, { offset: 'offset_2', 'stop-color': 'color_2', opacity: 0.3 }];
+    const linearGradient = this.renderer.linearGradient(stops, 'id');
+
+    assert.ok(linearGradient);
+    assert.ok(linearGradient instanceof renderers.SvgElement);
+    assert.strictEqual(linearGradient.append.callCount, 1, 'linearGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        gradientTransform: 'rotate(0)',
+        id: 'id'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 'color_1',
+        'stop-opacity': undefined,
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+});
+
+QUnit.test('linear gradient, stops color set as `stop-color` equal to 0 (sankey chart)', function(assert) {
+    const stops = [{ offset: 'offset_1', 'stop-color': 0 }, { offset: 'offset_2', 'stop-color': 'color_2', opacity: 0.3 }];
+    const linearGradient = this.renderer.linearGradient(stops, 'id');
+
+    assert.ok(linearGradient);
+    assert.ok(linearGradient instanceof renderers.SvgElement);
+    assert.strictEqual(linearGradient.append.callCount, 1, 'linearGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        gradientTransform: 'rotate(0)',
+        id: 'id'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 0,
+        'stop-opacity': undefined,
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+});
+
+QUnit.test('linear gradient, id is not set', function(assert) {
+    const stops = [{ offset: 'offset_1', color: 'color_1' }, { offset: 'offset_2', color: 'color_2', opacity: 0.3 }];
+    const linearGradient = this.renderer.linearGradient(stops);
+
+    assert.ok(linearGradient);
+    assert.ok(linearGradient instanceof renderers.SvgElement);
+    assert.strictEqual(linearGradient.append.callCount, 1, 'linearGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        gradientTransform: 'rotate(0)',
+        id: 'DevExpressId'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 'color_1',
+        'stop-opacity': undefined,
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+});
+
+QUnit.test('linear gradient, with rotationAngle', function(assert) {
+    const stops = [{ offset: 'offset_1', color: 'color_1' }, { offset: 'offset_2', color: 'color_2', opacity: 0.3 }];
+    const linearGradient = this.renderer.linearGradient(stops, 'id', 30);
+
+    assert.ok(linearGradient);
+    assert.ok(linearGradient instanceof renderers.SvgElement);
+    assert.strictEqual(linearGradient.append.callCount, 1, 'linearGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        gradientTransform: 'rotate(30)',
+        id: 'id'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 'color_1',
+        'stop-opacity': undefined,
+    });
+    assert.strictEqual(renderers.SvgElement.getCall(3).returnValue.append.callCount, 1);
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+    assert.strictEqual(renderers.SvgElement.getCall(4).returnValue.append.callCount, 1);
+});
+
+QUnit.test('radial gradient', function(assert) {
+    const stops = [{ offset: 'offset_1', color: 'color_1' }, { offset: 'offset_2', color: 'color_2', opacity: 0.3 }];
+    const radialGradient = this.renderer.radialGradient(stops, 'id');
+
+    assert.ok(radialGradient);
+    assert.ok(radialGradient instanceof renderers.SvgElement);
+    assert.strictEqual(radialGradient.append.callCount, 1, 'radialGradient is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        id: 'id'
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_1',
+        'stop-color': 'color_1',
+        'stop-opacity': undefined,
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(4).returnValue.attr.getCall(0).args[0], {
+        offset: 'offset_2',
+        'stop-color': 'color_2',
+        'stop-opacity': 0.3,
+    });
+});
+
+QUnit.test('custom pattern', function(assert) {
+    const template = { render: sinon.stub() };
+    const customPattern = this.renderer.customPattern('id', template, 20, 10);
+
+    assert.ok(customPattern);
+    assert.ok(customPattern instanceof renderers.SvgElement);
+    assert.strictEqual(customPattern.append.callCount, 1, 'customPattern is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        id: 'id',
+        width: 20,
+        height: 10,
+        patternContentUnits: 'userSpaceOnUse',
+        patternUnits: 'userSpaceOnUse'
+    });
+    assert.equal(template.render.getCall(0).args[0].container, customPattern.element);
+});
+
+QUnit.test('custom pattern with width and height as strings', function(assert) {
+    const template = { render: sinon.stub() };
+    const customPattern = this.renderer.customPattern('id', template, '20', '10');
+
+    assert.ok(customPattern);
+    assert.ok(customPattern instanceof renderers.SvgElement);
+    assert.strictEqual(customPattern.append.callCount, 1, 'customPattern is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        id: 'id',
+        width: '20',
+        height: '10',
+        patternContentUnits: 'userSpaceOnUse',
+        patternUnits: 'userSpaceOnUse'
+    });
+    assert.equal(template.render.getCall(0).args[0].container, customPattern.element);
+});
+
+QUnit.test('custom pattern with width and height as strings with percents', function(assert) {
+    const template = { render: sinon.stub() };
+    const customPattern = this.renderer.customPattern('id', template, '20%', '10%');
+
+    assert.ok(customPattern);
+    assert.ok(customPattern instanceof renderers.SvgElement);
+    assert.strictEqual(customPattern.append.callCount, 1, 'customPattern is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        id: 'id',
+        width: '20%',
+        height: '10%',
+        patternContentUnits: 'userSpaceOnUse',
+        patternUnits: undefined
+    });
+    assert.equal(template.render.getCall(0).args[0].container, customPattern.element);
+});
+
+QUnit.test('lightenFilter', function(assert) {
+    const lightenFilter = this.renderer.lightenFilter('id');
+    const coef = 1.3;
+
+    assert.ok(lightenFilter);
+    assert.ok(lightenFilter instanceof renderers.SvgElement);
+    assert.strictEqual(lightenFilter.append.callCount, 1, 'lightenFilter is appended');
+    assert.deepEqual(renderers.SvgElement.getCall(2).returnValue.attr.getCall(0).args[0], {
+        id: 'id',
+    });
+    assert.deepEqual(renderers.SvgElement.getCall(3).returnValue.attr.getCall(0).args[0], {
+        type: 'matrix', values: `${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 ${coef} 0 0 0 0 0 1 0`
+    });
+});
+
+QUnit.module('DefsElements, pattern', {
     before: setMockElements,
 
     beforeEach: function() {
         const container = document.createElement('div');
         this.renderer = new Renderer({ container: container });
-        this.renderer.initHatching();
+        this.renderer.initDefsElements();
     },
 
     after: resetMockElements
 });
 
 QUnit.test('lock', function(assert) {
-    assert.strictEqual(this.renderer.lockHatching('red', { direction: 'left' }), 'DevExpressId-hatching-0', '1');
+    assert.strictEqual(this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern'), 'DevExpressId-hatching-0', '1');
     assert.strictEqual(renderers.SvgElement.callCount, 3, 'patterns');
 });
 
 QUnit.test('lock / different pattern', function(assert) {
-    assert.strictEqual(this.renderer.lockHatching('red', { direction: 'left' }), 'DevExpressId-hatching-0', '1');
-    assert.strictEqual(this.renderer.lockHatching('blue', { direction: 'left' }), 'DevExpressId-hatching-1', '2');
+    assert.strictEqual(this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern'), 'DevExpressId-hatching-0', '1');
+    assert.strictEqual(this.renderer.lockDefsElements({ color: 'blue', hatching: { direction: 'left' } }, undefined, 'pattern'), 'DevExpressId-hatching-1', '2');
     assert.strictEqual(renderers.SvgElement.callCount, 4, 'patterns');
 });
 
 QUnit.test('lock / same pattern', function(assert) {
-    assert.strictEqual(this.renderer.lockHatching('red', { direction: 'left' }), 'DevExpressId-hatching-0', '1');
-    assert.strictEqual(this.renderer.lockHatching('red', { direction: 'left' }), 'DevExpressId-hatching-0', '2');
+    assert.strictEqual(this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern'), 'DevExpressId-hatching-0', '1');
+    assert.strictEqual(this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern'), 'DevExpressId-hatching-0', '2');
     assert.strictEqual(renderers.SvgElement.callCount, 3, 'patterns');
 });
 
 QUnit.test('unlock', function(assert) {
-    this.renderer.lockHatching('red', { direction: 'left' });
-    this.renderer.releaseHatching('DevExpressId-hatching-0');
+    this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern');
+    this.renderer.releaseDefsElements('DevExpressId-hatching-0');
     assert.strictEqual(renderers.SvgElement.returnValues[2].dispose.callCount, 1, 'pattern');
 });
 
 QUnit.test('unlock / several references', function(assert) {
-    this.renderer.lockHatching('red', { direction: 'left' });
-    this.renderer.lockHatching('red', { direction: 'left' });
-    this.renderer.releaseHatching('DevExpressId-hatching-0');
+    this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern');
+    this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern');
+    this.renderer.releaseDefsElements('DevExpressId-hatching-0');
     assert.strictEqual(renderers.SvgElement.returnValues[2].stub('dispose').callCount, 0, 'pattern');
 });
 
 QUnit.test('init', function(assert) {
-    this.renderer.lockHatching('red', { direction: 'left' });
-    this.renderer.lockHatching('blue', { direction: 'left' });
-    this.renderer.initHatching();
+    this.renderer.lockDefsElements({ color: 'red', hatching: { direction: 'left' } }, undefined, 'pattern');
+    this.renderer.lockDefsElements({ color: 'blue', hatching: { direction: 'left' } }, undefined, 'pattern');
+    this.renderer.initDefsElements();
     assert.strictEqual(renderers.SvgElement.returnValues[2].dispose.callCount, 1, 'pattern 1');
     assert.strictEqual(renderers.SvgElement.returnValues[3].dispose.callCount, 1, 'pattern 2');
 });
 
-QUnit.test('release after init', function(assert) {
-    this.renderer.initHatching();
-    this.renderer.releaseHatching('DevExpressId-hatching-0');
+QUnit.test('release should be correct after init', function(assert) {
+    this.renderer.initDefsElements();
+    this.renderer.releaseDefsElements('DevExpressId-hatching-0');
     assert.ok(true);
+});
+
+QUnit.module('DefsElements, filter', {
+    before: setMockElements,
+
+    beforeEach: function() {
+        const container = document.createElement('div');
+        this.renderer = new Renderer({ container: container });
+        this.renderer.initDefsElements();
+    },
+
+    after: resetMockElements
+});
+
+QUnit.test('lock', function(assert) {
+    assert.strictEqual(this.renderer.lockDefsElements({ }, undefined, 'filter'), 'DevExpressId-lightening-0', '1');
+    assert.strictEqual(renderers.SvgElement.callCount, 4, 'filters');
+});
+
+QUnit.test('lock / same filter', function(assert) {
+    assert.strictEqual(this.renderer.lockDefsElements({ }, undefined, 'filter'), 'DevExpressId-lightening-0', '1');
+    assert.strictEqual(this.renderer.lockDefsElements({ }, undefined, 'filter'), 'DevExpressId-lightening-0', '2');
+    assert.strictEqual(renderers.SvgElement.callCount, 4, 'filters');
+});
+
+QUnit.test('unlock', function(assert) {
+    this.renderer.lockDefsElements({ }, undefined, 'filter');
+    this.renderer.releaseDefsElements('DevExpressId-lightening-0');
+    assert.strictEqual(renderers.SvgElement.returnValues[2].dispose.callCount, 1, 'filters');
 });
 
 if('pushState' in history) {

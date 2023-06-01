@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import { value as viewPort } from 'core/utils/view_port';
 import fx from 'animation/fx';
 import Tooltip from 'ui/tooltip';
 import renderer from 'core/renderer';
+import uiErrors from 'ui/widget/ui.errors';
 
-import 'common.css!';
+import 'generic_light.css!';
 
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
@@ -13,9 +13,6 @@ const DX_INVISIBILITY_CLASS = 'dx-state-invisible';
 const wrapper = function() {
     return $('body').find('.' + TOOLTIP_WRAPPER_CLASS);
 };
-
-viewPort($('#qunit-fixture').addClass('dx-viewport'));
-
 
 QUnit.testStart(function() {
     const markup =
@@ -41,8 +38,8 @@ QUnit.module('render', () => {
     });
 
     QUnit.test('tooltip should render when target is core renderer object', function(assert) {
-        const target = renderer('#target');
-        const target2 = renderer('#target2');
+        const target = renderer($('#target'));
+        const target2 = renderer($('#target2'));
 
         const $tooltip = $('#tooltip');
         const $tooltip2 = $('#tooltip2');
@@ -79,6 +76,42 @@ QUnit.module('render', () => {
 
         assert.notOk($tooltip.hasClass(DX_INVISIBILITY_CLASS), 'first tooltip is visible');
     });
+
+    QUnit.module('Breaking change t1123711 - warning W1021', () => {
+        QUnit.test('should be logged if container is invalid', function(assert) {
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                $('#tooltip').dxTooltip({
+                    container: 'invalid',
+                    visible: true
+                });
+
+                assert.ok(uiErrors.log.calledOnce, 'only one warning is logged');
+                assert.deepEqual(uiErrors.log.lastCall.args, [
+                    'W1021',
+                    'dxTooltip',
+                ], 'args of the log method');
+            } finally {
+                uiErrors.log.restore();
+            }
+        });
+
+        QUnit.test('should not not be logged if container is valid', function(assert) {
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                $('#tooltip').dxTooltip({
+                    container: 'body',
+                    visible: true
+                });
+
+                assert.ok(uiErrors.log.notCalled, 'no warning is logged');
+            } finally {
+                uiErrors.log.restore();
+            }
+        });
+    });
 });
 
 QUnit.module('overlay integration', {
@@ -91,32 +124,34 @@ QUnit.module('overlay integration', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('tooltip should be closed on outside click if closeOnOutsideClick is true', function(assert) {
-        const $tooltip = $('#tooltip').dxTooltip({
-            closeOnOutsideClick: true
+    ['closeOnOutsideClick', 'hideOnOutsideClick'].forEach(closeOnOutsideClickOptionName => {
+        QUnit.test(`tooltip should be closed on outside click if ${closeOnOutsideClickOptionName} is true`, function(assert) {
+            const $tooltip = $('#tooltip').dxTooltip({
+                [closeOnOutsideClickOptionName]: true
+            });
+            const instance = $tooltip.dxTooltip('instance');
+
+            instance.show();
+            $('#qunit-fixture').trigger('dxpointerdown');
+
+            assert.equal(instance.option('visible'), false, 'toast was hidden should be hiding');
         });
-        const instance = $tooltip.dxTooltip('instance');
 
-        instance.show();
-        $('#qunit-fixture').trigger('dxpointerdown');
+        QUnit.test(`tooltip should not prevent ${closeOnOutsideClickOptionName} handler of other overlays`, function(assert) {
+            const tooltip = new Tooltip($('#tooltip'));
+            const $overlay = $('<div>').appendTo('.dx-viewport');
 
-        assert.equal(instance.option('visible'), false, 'toast was hidden should be hiding');
-    });
+            const overlay = $overlay.dxOverlay({
+                [closeOnOutsideClickOptionName]: true
+            }).dxOverlay('instance');
 
-    QUnit.test('tooltip should not prevent closeOnOutsideClick handler of other overlays', function(assert) {
-        const tooltip = new Tooltip($('#tooltip'));
-        const $overlay = $('<div>').appendTo('.dx-viewport');
+            overlay.show();
+            tooltip.show();
 
-        const overlay = $overlay.dxOverlay({
-            closeOnOutsideClick: true
-        }).dxOverlay('instance');
+            $('#qunit-fixture').trigger('dxpointerdown');
 
-        overlay.show();
-        tooltip.show();
-
-        $('#qunit-fixture').trigger('dxpointerdown');
-
-        assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
+            assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
+        });
     });
 });
 
@@ -125,14 +160,14 @@ QUnit.module('base z-index', () => {
         Tooltip.baseZIndex(10000);
 
         const tooltip = new Tooltip($('#tooltip'), { visible: true });
-        const $tooltipContent = tooltip.overlayContent();
+        const $tooltipContent = tooltip.$overlayContent();
 
         assert.equal($tooltipContent.css('zIndex'), 10001, 'tooltip\'s z-index is correct');
     });
 });
 
 QUnit.module('aria accessibility', () => {
-    QUnit.test('aria role', function(assert) {
+    QUnit.test('role="tooltip" attribute should be added to tooltip', function(assert) {
         const $tooltip = $('#tooltip');
         new Tooltip($tooltip);
         const $overlayContent = $tooltip.find('.dx-overlay-content');
@@ -141,8 +176,9 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.test('aria-describedby property should be set on target when tooltip is visible', function(assert) {
-        const $target = $('#target'); const $element = $('#tooltip');
-        new Tooltip($element, { target: '#target', visible: false });
+        const $target = $('#target');
+        const $element = $('#tooltip');
+        new Tooltip($element, { target: $target, visible: false });
         const $overlay = $element.find('.dx-overlay-content');
 
         assert.notEqual($target.attr('aria-describedby'), undefined, 'aria-describedby exists on target');
@@ -150,4 +186,3 @@ QUnit.module('aria accessibility', () => {
 
     });
 });
-

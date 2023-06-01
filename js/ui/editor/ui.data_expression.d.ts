@@ -1,85 +1,74 @@
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions
-} from '../../data/data_source';
+import DataSource, { DataSourceLike } from '../../data/data_source';
 
 import {
-    CollectionWidgetItem
+    CollectionWidgetItem,
 } from '../collection/ui.collection_widget.base';
 
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
-     * @docid DataExpressionMixinOptions.dataSource
-     * @type string|Array<CollectionWidgetItem, object>|DataSource|DataSourceOptions
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
+     * @type Store|DataSource|DataSourceOptions|string|Array<CollectionWidgetItem | any>|null
      * @public
      */
-    dataSource?: string | Array<CollectionWidgetItem | any> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<CollectionWidgetItem | any> | null;
     /**
-     * @docid DataExpressionMixinOptions.displayExpr
-     * @type string|function(item)
+     * @docid
      * @default undefined
      * @type_function_param1 item:object
-     * @type_function_return string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     displayExpr?: string | ((item: any) => string);
     /**
-     * @docid DataExpressionMixinOptions.itemTemplate
-     * @type template|function
+     * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid DataExpressionMixinOptions.items
-     * @type Array<CollectionWidgetItem, object>
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     items?: Array<CollectionWidgetItem | any>;
     /**
-     * @docid DataExpressionMixinOptions.value
-     * @type any
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;
     /**
-     * @docid DataExpressionMixinOptions.valueExpr
-     * @type string|function(item)
+     * @docid
      * @default "this"
      * @type_function_param1 item:object
-     * @type_function_return string|number|boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     valueExpr?: string | ((item: any) => string | number | boolean);
 }
 /**
- * @docid DataExpressionMixin
- * @module ui/editor/ui.data_expression
+ * @docid
  * @inherits DataHelperMixin
- * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
+ * @options DataExpressionMixinOptions
  */
 export default class DataExpressionMixin {
-    constructor(options?: DataExpressionMixinOptions)
+    constructor(options?: DataExpressionMixinOptions);
     getDataSource(): DataSource;
 }

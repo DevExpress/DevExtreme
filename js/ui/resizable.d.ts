@@ -1,136 +1,192 @@
-import '../jquery_augmentation';
-
+import { UserDefinedElement } from '../core/element';
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
 
 import {
-    dxElement
-} from '../core/element';
-
-import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
+/** @public */
+export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
+
+export interface ResizeInfo {
+    readonly width: number;
+    readonly height: number;
+}
+
+/** @public */
+export type DisposingEvent = EventInfo<dxResizable>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxResizable>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxResizable> & ChangedOptionInfo;
+
+/** @public */
+export type ResizeEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
+
+/** @public */
+export type ResizeStartEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
+
+/** @public */
+export type ResizeEndEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
-     * @docid dxResizableOptions.handles
-     * @type Enums.ResizeHandle | string
-     * @default "all"
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default undefined
      * @public
      */
-    handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
+    area?: string | UserDefinedElement;
     /**
-     * @docid dxResizableOptions.height
+     * @docid
+     * @default "all"
+     * @public
+     */
+    handles?: ResizeHandle | string;
+    /**
+     * @docid
      * @fires dxResizableOptions.onResize
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxResizableOptions.maxHeight
-     * @type number
+     * @docid
+     * @default true
+     * @public
+     */
+    keepAspectRatio?: boolean;
+    /**
+     * @docid
      * @default Infinity
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxHeight?: number;
     /**
-     * @docid dxResizableOptions.maxWidth
-     * @type number
+     * @docid
      * @default Infinity
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxWidth?: number;
     /**
-     * @docid dxResizableOptions.minHeight
-     * @type number
+     * @docid
      * @default 30
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minHeight?: number;
     /**
-     * @docid dxResizableOptions.minWidth
-     * @type number
+     * @docid
      * @default 30
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minWidth?: number;
     /**
-     * @docid dxResizableOptions.onResize
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 width:number
-     * @type_function_param1_field6 height:number
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxResizable
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResize?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
+    onResize?: ((e: ResizeEvent) => void);
     /**
-     * @docid dxResizableOptions.onResizeEnd
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 width:number
-     * @type_function_param1_field6 height:number
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxResizable
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeEnd?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
+    onResizeEnd?: ((e: ResizeEndEvent) => void);
     /**
-     * @docid dxResizableOptions.onResizeStart
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 width:number
-     * @type_function_param1_field6 height:number
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxResizable
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onResizeStart?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
+    onResizeStart?: ((e: ResizeStartEvent) => void);
     /**
-     * @docid dxResizableOptions.width
+     * @docid
      * @fires dxResizableOptions.onResize
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     width?: number | string | (() => number | string);
 }
 /**
- * @docid dxResizable
+ * @docid
  * @inherits DOMComponent
  * @hasTranscludedContent
- * @module ui/resizable
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxResizable extends DOMComponent {
-    constructor(element: Element, options?: dxResizableOptions)
-    constructor(element: JQuery, options?: dxResizableOptions)
-}
+export default class dxResizable extends DOMComponent<dxResizableOptions> { }
 
-declare global {
-interface JQuery {
-    dxResizable(): JQuery;
-    dxResizable(options: "instance"): dxResizable;
-    dxResizable(options: string): any;
-    dxResizable(options: string, ...params: any[]): any;
-    dxResizable(options: dxResizableOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxResizableOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxResizableOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxResizableOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxResizableOptions.onDisposing
+ * @type_function_param1 e:{ui/resizable:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxResizableOptions.onInitialized
+ * @type_function_param1 e:{ui/resizable:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxResizableOptions.onOptionChanged
+ * @type_function_param1 e:{ui/resizable:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxResizableOptions.onResize
+ * @type_function_param1 e:{ui/resizable:ResizeEvent}
+ */
+onResize?: ((e: ResizeEvent) => void);
+/**
+ * @skip
+ * @docid dxResizableOptions.onResizeEnd
+ * @type_function_param1 e:{ui/resizable:ResizeEndEvent}
+ */
+onResizeEnd?: ((e: ResizeEndEvent) => void);
+/**
+ * @skip
+ * @docid dxResizableOptions.onResizeStart
+ * @type_function_param1 e:{ui/resizable:ResizeStartEvent}
+ */
+onResizeStart?: ((e: ResizeStartEvent) => void);
+};
+///#ENDDEBUG

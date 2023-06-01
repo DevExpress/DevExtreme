@@ -1,174 +1,236 @@
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    ChangedOptionInfo,
+    EventInfo,
+    InitializedEventInfo,
+    NativeEventInfo,
+} from '../events/index';
+
+import {
+    template,
 } from '../core/templates/template';
 
 import Editor, {
-    EditorOptions
+    ValueChangedInfo,
+    EditorOptions,
 } from './editor/editor';
 
+import {
+    FirstDayOfWeek,
+} from '../common';
+
+export {
+    FirstDayOfWeek,
+};
+
+export interface ComponentDisabledDate<T> {
+    component: T;
+    readonly date: Date;
+    readonly view: string;
+}
+
+/** @public */
+export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
+
+/** @public */
+export type WeekNumberRule = 'auto' | 'firstDay' | 'fullWeek' | 'firstFourDays';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxCalendar>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxCalendar>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxCalendar>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxCalendar> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxCalendar, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
+
+/** @public */
+export type CellTemplateData = {
+    readonly date: Date;
+    readonly view: string;
+    readonly text?: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @type object
+ */
+export type DisabledDate = ComponentDisabledDate<dxCalendar>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
-     * @docid dxCalendarOptions.activeStateEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxCalendarOptions.cellTemplate
-     * @type template|function
+     * @docid
      * @default "cell"
      * @type_function_param1 itemData:object
-     * @type_function_param1_field1 date:Date
-     * @type_function_param1_field2 view:string
-     * @type_function_param1_field3 text:string
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    cellTemplate?: template | ((itemData: { date?: Date, view?: string, text?: string }, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    cellTemplate?: template | ((itemData: CellTemplateData, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxCalendarOptions.dateSerializationFormat
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     dateSerializationFormat?: string;
     /**
-     * @docid dxCalendarOptions.disabledDates
-     * @type Array<Date>|function(data)
+     * @docid
      * @default null
-     * @type_function_param1 data:object
-     * @type_function_param1_field1 component:object
-     * @type_function_param1_field2 date:Date
-     * @type_function_param1_field3 view:string
-     * @type_function_return boolean
-     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 data:DisabledDate
      * @public
      */
-    disabledDates?: Array<Date> | ((data: { component?: any, date?: Date, view?: string }) => boolean);
+    disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
     /**
-     * @docid dxCalendarOptions.firstDayOfWeek
-     * @type Enums.FirstDayOfWeek
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    firstDayOfWeek?: FirstDayOfWeek;
     /**
-     * @docid dxCalendarOptions.focusStateEnabled
-     * @type boolean
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxCalendarOptions.hoverStateEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxCalendarOptions.max
-     * @type Date|number|string
+     * @docid
      * @default new Date(3000, 0)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     max?: Date | number | string;
     /**
-     * @docid dxCalendarOptions.maxZoomLevel
-     * @type Enums.CalendarZoomLevel
+     * @docid
      * @default 'month'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    maxZoomLevel?: 'century' | 'decade' | 'month' | 'year';
+    maxZoomLevel?: CalendarZoomLevel;
     /**
-     * @docid dxCalendarOptions.min
-     * @type Date|number|string
+     * @docid
      * @default new Date(1000, 0)
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     min?: Date | number | string;
     /**
-     * @docid dxCalendarOptions.minZoomLevel
-     * @type Enums.CalendarZoomLevel
+     * @docid
      * @default 'century'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
+    minZoomLevel?: CalendarZoomLevel;
     /**
-     * @docid dxCalendarOptions.name
-     * @type string
+     * @docid
      * @hidden false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
-     * @docid dxCalendarOptions.showTodayButton
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showTodayButton?: boolean;
     /**
-     * @docid dxCalendarOptions.value
-     * @type Date|number|string
+     * @docid
+     * @default false
+     * @public
+     */
+    showWeekNumbers?: boolean;
+    /**
+     * @docid
+     * @default 'auto'
+     * @public
+     */
+    weekNumberRule?: WeekNumberRule;
+    /**
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: Date | number | string;
     /**
-     * @docid dxCalendarOptions.zoomLevel
-     * @type Enums.CalendarZoomLevel
+     * @docid
      * @default 'month'
      * @fires dxCalendarOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    zoomLevel?: 'century' | 'decade' | 'month' | 'year';
+    zoomLevel?: CalendarZoomLevel;
 }
 /**
- * @docid dxCalendar
+ * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/calendar
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxCalendar extends Editor {
-    constructor(element: Element, options?: dxCalendarOptions)
-    constructor(element: JQuery, options?: dxCalendarOptions)
-}
+export default class dxCalendar extends Editor<dxCalendarOptions> { }
 
-declare global {
-interface JQuery {
-    dxCalendar(): JQuery;
-    dxCalendar(options: "instance"): dxCalendar;
-    dxCalendar(options: string): any;
-    dxCalendar(options: string, ...params: any[]): any;
-    dxCalendar(options: dxCalendarOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxCalendarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxCalendarOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxCalendarOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxCalendarOptions.onDisposing
+ * @type_function_param1 e:{ui/calendar:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxCalendarOptions.onInitialized
+ * @type_function_param1 e:{ui/calendar:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxCalendarOptions.onOptionChanged
+ * @type_function_param1 e:{ui/calendar:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxCalendarOptions.onValueChanged
+ * @type_function_param1 e:{ui/calendar:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

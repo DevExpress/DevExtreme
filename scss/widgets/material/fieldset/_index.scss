@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -9,7 +10,7 @@
 @use "../checkBox/sizes" as *;
 @use "../switch/sizes" as *;
 @use "../slider/sizes" as *;
-
+@use "../../base/fieldset";
 
 // adduse
 
@@ -48,7 +49,7 @@
 @mixin dx-field-value-widget-position($name, $size) {
   &.#{$name},
   &:not(.dx-widget) > .#{$name} {
-    margin: ($material-field-min-height - $size) / 2 0;
+    margin: math.div($material-field-min-height - $size, 2) 0;
   }
 }
 
@@ -141,12 +142,3 @@
   $material-fieldset-header-vertical-margin,
   $material-field-vertical-margin
 );
-
-.dx-device-mobile {
-  @include dx-fieldset-sizing(
-    $material-mobile-fieldset-vertical-margin,
-    $material-mobile-fieldset-horizontal-margin,
-    $material-mobile-fieldset-header-vertical-margin,
-    $material-mobile-field-vertical-margin
-  );
-}

@@ -16,6 +16,7 @@ const stubAddDefaultTemplates = sinon.stub();
 const stubGetAppointmentTemplate = sinon.stub().returns('template');
 const stubCheckAndDeleteAppointment = sinon.stub();
 const stubCreateFormattedDateText = sinon.stub().returns('text');
+const stubGetAppointmentDisabled = sinon.stub().returns(false);
 const stubIsAppointmentInAllDayPanel = sinon.stub().returns(true);
 
 const environment = {
@@ -29,8 +30,9 @@ const environment = {
         getAppointmentTemplate: stubGetAppointmentTemplate,
         showAppointmentPopup: stubShowAppointmentPopup,
         createFormattedDateText: stubCreateFormattedDateText,
+        getAppointmentDisabled: stubGetAppointmentDisabled,
         checkAndDeleteAppointment: stubCheckAndDeleteAppointment,
-        isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel,
+        isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel
     },
     extraOptions: {
         rtlEnabled: true,
@@ -40,13 +42,14 @@ const environment = {
         isButtonClick: false,
     },
     afterEach: function() {
-        stubCreateComponent.reset();
-        stubComponent.option.reset();
-        stubShowAppointmentPopup.reset();
-        stubAddDefaultTemplates.reset();
-        stubGetAppointmentTemplate.reset();
-        stubCreateFormattedDateText.reset();
-        stubCheckAndDeleteAppointment.reset();
+        stubCreateComponent.resetHistory();
+        stubComponent.option.resetHistory();
+        stubShowAppointmentPopup.resetHistory();
+        stubAddDefaultTemplates.resetHistory();
+        stubGetAppointmentTemplate.resetHistory();
+        stubCreateFormattedDateText.resetHistory();
+        stubCreateFormattedDateText.resetHistory();
+        stubCheckAndDeleteAppointment.resetHistory();
     }
 };
 
@@ -90,7 +93,7 @@ QUnit.test('createComponent should be called with correct options', function(ass
 
     assert.equal(stubCreateComponent.getCall(0).args[0][0].className, 'dx-scheduler-appointment-tooltip-wrapper');
     assert.deepEqual(stubCreateComponent.getCall(0).args[1], Tooltip);
-    assert.equal(Object.keys(stubCreateComponent.getCall(0).args[2]).length, 5);
+    assert.equal(Object.keys(stubCreateComponent.getCall(0).args[2]).length, 6);
     assert.equal(stubCreateComponent.getCall(0).args[2].target, 'target');
     assert.equal(stubCreateComponent.getCall(0).args[2].maxHeight, 200);
     assert.equal(stubCreateComponent.getCall(0).args[2].rtlEnabled, true);
@@ -112,13 +115,14 @@ QUnit.test('contentTemplate passed to createComponent should work correct', func
 
         assert.equal(stubCreateComponent.getCall(1).args[0][0].nodeName, 'DIV');
         assert.equal(stubCreateComponent.getCall(1).args[1], List);
-        assert.equal(Object.keys(stubCreateComponent.getCall(1).args[2]).length, 6);
+        assert.equal(Object.keys(stubCreateComponent.getCall(1).args[2]).length, 7);
         assert.equal(stubCreateComponent.getCall(1).args[2].dataSource, dataList);
         assert.equal(stubCreateComponent.getCall(1).args[2].showScrollbar, 'onHover');
         assert.ok(stubCreateComponent.getCall(1).args[2].onContentReady);
         assert.ok(stubCreateComponent.getCall(1).args[2].onItemClick);
         assert.ok(stubCreateComponent.getCall(1).args[2].itemTemplate);
         assert.notOk(stubCreateComponent.getCall(1).args[2]._swipeEnabled);
+        assert.equal(stubCreateComponent.getCall(1).args[2].pageLoadMode, 'scrollBottom'); // T1062566
     } finally {
         support.touch = _touch;
     }
@@ -337,29 +341,39 @@ QUnit.test('isAlreadyShown method, tooltip is hide', function(assert) {
     assert.ok(!tooltip.isAlreadyShown(target), 'tooltip is hidden');
 });
 
-// deprecated option
-QUnit.test('dropDownAppointmentTemplate equal to "dropDownAppointment"', function(assert) {
-    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
-    const dataList = ['data1', 'data2'];
-    const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
+['appointmentTooltip', 'dropDownAppointment'].forEach(template => {
+    const templateName = template + 'Template';
 
-    tooltip.show('target', dataList, extend(this.extraOptions, { dropDownAppointmentTemplate: 'dropDownAppointment' }));
-    stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
-    stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
+    QUnit.test(`${templateName} equal to "${templateName}"`, function(assert) {
+        const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+        const dataList = ['data1', 'data2'];
+        const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
 
-    assert.ok(stubAddDefaultTemplates.getCall(0).args[0]['appointmentTooltip'] instanceof FunctionTemplate);
-    assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'appointmentTooltipTemplate');
+        const config = {};
+        config[templateName] = templateName;
+
+        tooltip.show('target', dataList, extend(this.extraOptions, config));
+        stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
+        stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
+
+        assert.ok(stubAddDefaultTemplates.getCall(0).args[0][template] instanceof FunctionTemplate);
+        assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], templateName);
+    });
+
+    QUnit.test(`${templateName} equal to custom template`, function(assert) {
+        const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+        const dataList = ['data1', 'data2'];
+        const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
+
+        const config = {};
+        config[templateName] = templateName;
+
+        tooltip.show('target', dataList, extend(this.extraOptions, config));
+        stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
+        stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
+
+        assert.ok(stubAddDefaultTemplates.getCall(0).args[0][template] instanceof FunctionTemplate);
+        assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], templateName);
+    });
 });
 
-QUnit.test('dropDownAppointmentTemplate equal to custom template', function(assert) {
-    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
-    const dataList = ['data1', 'data2'];
-    const item = { appointment: 'appointment', targetedAppointment: 'targetedAppointment', color: { done: sinon.spy() } };
-
-    tooltip.show('target', dataList, extend(this.extraOptions, { dropDownAppointmentTemplate: 'custom_template' }));
-    stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
-    stubCreateComponent.getCall(1).args[2].itemTemplate(item, 'index');
-
-    assert.ok(stubAddDefaultTemplates.getCall(0).args[0]['dropDownAppointment'] instanceof FunctionTemplate);
-    assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'dropDownAppointmentTemplate');
-});

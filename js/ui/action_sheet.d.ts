@@ -1,187 +1,308 @@
-import '../jquery_augmentation';
-
+import { DataSourceLike } from '../data/data_source';
 import {
-    dxElement
+    UserDefinedElement,
 } from '../core/element';
 
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+import {
+    DxPromise,
+} from '../core/utils/deferred';
 
 import {
-    event
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
+import {
+    ButtonType,
+    ButtonStyle,
+} from '../common';
+
+type ItemLike<TKey> = string | Item<TKey> | any;
+
+export {
+    ButtonType,
+    ButtonStyle,
+};
+
+/** @public */
+export type CancelClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Cancelable & EventInfo<dxActionSheet<TItem, TKey>>;
+
+/** @public */
+export type ContentReadyEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>>;
+
+/** @public */
+export type DisposingEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>>;
+
+/** @public */
+export type InitializedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = InitializedEventInfo<dxActionSheet<TItem, TKey>>;
+
+/** @public */
+export type ItemClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemHoldEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemRenderedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ * @docid
+ */
+export interface dxActionSheetOptions<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxActionSheet<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid dxActionSheetOptions.cancelText
-     * @type string
+     * @docid
      * @default "Cancel"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cancelText?: string;
     /**
-     * @docid dxActionSheetOptions.dataSource
-     * @type string|Array<string,dxActionSheetItem,object>|DataSource|DataSourceOptions
+     * @docid
+     * @type string | Array<string | dxActionSheetItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxActionSheetItem | any> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid dxActionSheetOptions.items
-     * @type Array<string, dxActionSheetItem, object>
+     * @docid
+     * @type Array<string | dxActionSheetItem | any>
      * @fires dxActionSheetOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxActionSheetItem | any>;
+    items?: Array<TItem>;
     /**
-     * @docid dxActionSheetOptions.onCancelClick
-     * @type function(e)|string
-     * @extends Action
+     * @docid
+     * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 cancel:boolean
+     * @type_function_param1_field component:dxActionSheet
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCancelClick?: ((e: { component?: dxActionSheet, element?: dxElement, model?: any, cancel?: boolean }) => any) | string;
+    onCancelClick?: ((e: CancelClickEvent<TItem, TKey>) => void) | string;
     /**
-     * @docid dxActionSheetOptions.showCancelButton
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showCancelButton?: boolean;
     /**
-     * @docid dxActionSheetOptions.showTitle
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showTitle?: boolean;
     /**
-     * @docid dxActionSheetOptions.target
-     * @type string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    target?: string | Element | JQuery;
+    target?: string | UserDefinedElement;
     /**
-     * @docid dxActionSheetOptions.title
-     * @type string
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     title?: string;
     /**
-     * @docid dxActionSheetOptions.usePopover
-     * @type boolean
+     * @docid
      * @default false
-     * @default true [for](iPad)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(iPad)
      * @public
      */
     usePopover?: boolean;
     /**
-     * @docid dxActionSheetOptions.visible
-     * @type boolean
+     * @docid
      * @default false
      * @fires dxActionSheetOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;
 }
 /**
- * @docid dxActionSheet
+ * @docid
  * @inherits CollectionWidget
- * @module ui/action_sheet
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxActionSheet extends CollectionWidget {
-    constructor(element: Element, options?: dxActionSheetOptions)
-    constructor(element: JQuery, options?: dxActionSheetOptions)
+export default class dxActionSheet<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> extends CollectionWidget<dxActionSheetOptions<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid dxActionSheetMethods.hide
+     * @docid
      * @publicName hide()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide(): Promise<void> & JQueryPromise<void>;
+    hide(): DxPromise<void>;
     /**
-     * @docid dxActionSheetMethods.show
+     * @docid
      * @publicName show()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(): Promise<void> & JQueryPromise<void>;
+    show(): DxPromise<void>;
     /**
-     * @docid dxActionSheetMethods.toggle
+     * @docid
      * @publicName toggle(showing)
-     * @param1 showing:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
+    toggle(showing: boolean): DxPromise<void>;
 }
 
-export interface dxActionSheetItem extends CollectionWidgetItem {
+/**
+ * @public
+ * @namespace DevExpress.ui.dxActionSheet
+ */
+export type Item<TKey = any> = dxActionSheetItem<TKey>;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
+ */
+export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
     /**
-     * @docid dxActionSheetItem.icon
-     * @type String
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     icon?: string;
     /**
-     * @docid dxActionSheetItem.onClick
-     * @type function(e)|string
+     * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxActionSheet
-     * @type_function_param1_field2 element:dxElement
-     * @type_function_param1_field3 model:object
-     * @type_function_param1_field4 event:event
-     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1 e:NativeEventInfo
+     * @type function
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet, element?: dxElement, model?: any, event?: event }) => any) | string;
+    onClick?: ((e: NativeEventInfo<dxActionSheet<this, TKey>, MouseEvent | PointerEvent>) => void) | string;
     /**
-     * @docid dxActionSheetItem.type
-     * @type Enums.ButtonType
+     * @docid
      * @default 'normal'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    type?: ButtonType;
+    /**
+     * @docid
+     * @default 'outlined'
+     * @public
+     */
+    stylingMode?: ButtonStyle;
 }
 
-declare global {
-interface JQuery {
-    dxActionSheet(): JQuery;
-    dxActionSheet(options: "instance"): dxActionSheet;
-    dxActionSheet(options: string): any;
-    dxActionSheet(options: string, ...params: any[]): any;
-    dxActionSheet(options: dxActionSheetOptions): JQuery;
-}
-}
-export type Options = dxActionSheetOptions;
+/** @public */
+export type ExplicitTypes<
+    TItem extends ItemLike<TKey>,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    CancelClickEvent: CancelClickEvent<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+};
 
-/** @deprecated use Options instead */
-export type IOptions = dxActionSheetOptions;
+/** @public */
+export type Properties<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> = dxActionSheetOptions<TItem, TKey>;
+
+/** @deprecated use Properties instead */
+export type Options<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered' | 'onSelectionChanged'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxActionSheetOptions.onCancelClick
+ * @type_function_param1 e:{ui/action_sheet:CancelClickEvent}
+ */
+onCancelClick?: ((e: CancelClickEvent) => void);
+/**
+ * @skip
+ * @docid dxActionSheetOptions.onContentReady
+ * @type_function_param1 e:{ui/action_sheet:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxActionSheetOptions.onDisposing
+ * @type_function_param1 e:{ui/action_sheet:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxActionSheetOptions.onInitialized
+ * @type_function_param1 e:{ui/action_sheet:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxActionSheetOptions.onItemClick
+ * @type_function_param1 e:{ui/action_sheet:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxActionSheetOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/action_sheet:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxActionSheetOptions.onItemHold
+ * @type_function_param1 e:{ui/action_sheet:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxActionSheetOptions.onItemRendered
+ * @type_function_param1 e:{ui/action_sheet:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxActionSheetOptions.onOptionChanged
+ * @type_function_param1 e:{ui/action_sheet:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

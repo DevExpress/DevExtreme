@@ -7,7 +7,6 @@ import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.j
 
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
@@ -77,6 +76,7 @@ module('crossScrollingEnabled = true', config, () => {
     test('Appointment should have correct position while vertical dragging', function(assert) {
         const scheduler = createWrapper({
             currentDate: new Date(2015, 6, 10),
+            _draggingMode: 'default',
             editing: true,
             views: ['month'],
             currentView: 'month',
@@ -111,7 +111,8 @@ module('crossScrollingEnabled = true', config, () => {
 
         pointer.down().move(0, dragDistance);
 
-        const currentPosition = translator.locate($appointment);
+        const $draggedAppointment = $(scheduler.appointments.getAppointment().get(0)).parent();
+        const currentPosition = translator.locate($draggedAppointment);
 
         assert.roughEqual(startPosition.top, currentPosition.top - dragDistance, 1.001, 'Appointment position is correct');
         pointer.up();
@@ -183,6 +184,7 @@ module('crossScrollingEnabled = true', config, () => {
 
             const scheduler = createWrapper({
                 height: 500,
+                _draggingMode: 'default',
                 editing: true,
                 currentDate: new Date(2015, 1, 9),
                 currentView: 'week',
@@ -199,13 +201,17 @@ module('crossScrollingEnabled = true', config, () => {
 
             pointer.down().move(dragDistance, 0);
 
-            assert.roughEqual(startPosition.left, translator.locate($appointment).left - dragDistance, 2, 'Appointment position is correct');
+            const $draggedAppointment = $(scheduler.appointments.getAppointment().get(0)).parent();
+            const currentPosition = translator.locate($draggedAppointment);
+
+            assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, 'Appointment position is correct');
             pointer.up();
         });
 
         test('Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)', function(assert) {
             const scheduler = createWrapper({
                 height: 500,
+                _draggingMode: 'default',
                 editing: true,
                 currentDate: new Date(2015, 1, 9),
                 currentView: 'week',
@@ -225,7 +231,8 @@ module('crossScrollingEnabled = true', config, () => {
 
             pointer.down().move(dragDistance, 0);
 
-            const currentPosition = translator.locate($appointment);
+            const $draggedAppointment = $(scheduler.appointments.getAppointment().get(0)).parent();
+            const currentPosition = translator.locate($draggedAppointment);
 
             assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, 'Appointment position is correct');
             pointer.up();
@@ -235,6 +242,7 @@ module('crossScrollingEnabled = true', config, () => {
             const scheduler = createWrapper({
                 height: 500,
                 width: 800,
+                _draggingMode: 'default',
                 editing: true,
                 currentDate: new Date(2015, 1, 9),
                 currentView: 'week',
@@ -260,7 +268,8 @@ module('crossScrollingEnabled = true', config, () => {
             const pointer = pointerMock($appointment).start();
             pointer.down().move(100, 0);
 
-            const currentPosition = translator.locate($appointment);
+            const $draggedAppointment = $(scheduler.appointments.getAppointment().get(0)).parent();
+            const currentPosition = translator.locate($draggedAppointment);
 
             assert.equal(currentPosition.left, startPosition.left - 400 + 100, 'Appointment position is correct');
             pointer.up();

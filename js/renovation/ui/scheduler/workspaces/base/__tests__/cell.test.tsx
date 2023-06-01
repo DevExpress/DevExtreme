@@ -17,13 +17,6 @@ describe('DateTableCellBase', () => {
       props: { ...viewModel.props },
     }));
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { customAttribute: 'customAttribute' } });
-
-      expect(cell.prop('customAttribute'))
-        .toBe('customAttribute');
-    });
-
     it('should combine `className` with predefined classes', () => {
       const cell = render({ classes: 'some-classes' });
 
@@ -38,48 +31,15 @@ describe('DateTableCellBase', () => {
         .toBe(true);
     });
 
-    it('should render template and should not render children', () => {
-      const contentTemplate = () => null;
+    it('should pass aria-label to the root', () => {
       const cell = render({
         props: {
-          children: <div className="child-class" />,
-          contentTemplate,
+          ariaLabel: 'Custom aria label',
         },
       });
 
-      expect(cell.find('.child-class').exists())
-        .toBe(false);
-      expect(cell.find(contentTemplate).exists())
-        .toBe(true);
-    });
-
-    it('should pass correct props to the template', () => {
-      const contentTemplateProps = {
-        index: 1,
-        data: {
-          date: new Date(2020, 7, 25),
-          startDate: new Date(2020, 7, 26),
-          endDate: new Date(2020, 7, 27),
-          text: 'Test text',
-          groups: { id: 1 },
-          groupIndex: 1,
-        },
-      };
-      const contentTemplate = () => null;
-
-      const cell = render({
-        props: {
-          children: <div className="child-class" />,
-          contentTemplate,
-          contentTemplateProps,
-        },
-      });
-
-      const renderedTemplate = cell.find(contentTemplate);
-      expect(renderedTemplate.exists())
-        .toBe(true);
-      expect(renderedTemplate.props())
-        .toEqual(contentTemplateProps);
+      expect(cell.prop('aria-label'))
+        .toBe('Custom aria label');
     });
   });
 

@@ -1,17 +1,27 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Template, Event,
-} from 'devextreme-generator/component_declaration/common';
-import noop from '../../../utils/noop';
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
+  Template,
+  Event,
+  JSXTemplate,
+} from '@devextreme-generator/declarations';
 import { List } from '../../list';
 import { TooltipItemLayout } from './item_layout';
 import {
-  GetTextAndFormatDateFn, GetSingleAppointmentFn,
-  CheckAndDeleteAppointmentFn, ShowAppointmentPopupFn, AppointmentItem,
-} from './types.d';
+  GetTextAndFormatDateFn,
+  GetSingleAppointmentFn,
+  CheckAndDeleteAppointmentFn,
+  ShowAppointmentPopupFn,
+  AppointmentItem,
+  AppointmentTooltipTemplate,
+} from './types';
 import getCurrentAppointment from './utils/get_current_appointment';
 import {
   defaultGetTextAndFormatDate, defaultGetSingleAppointment,
 } from './utils/default_functions';
+import { EventCallback } from '../../common/event_callback';
 
 interface ItemTemplateProps {
   item: AppointmentItem;
@@ -19,10 +29,10 @@ interface ItemTemplateProps {
   container: HTMLDivElement;
 }
 interface ListItemProps {
-  itemData?: AppointmentItem;
+  itemData: AppointmentItem;
 }
 
-export const viewFunction = (viewModel: AppointmentList) => (
+export const viewFunction = (viewModel: AppointmentList): JSX.Element => (
   <List
     itemTemplate={({ item, index }: ItemTemplateProps): JSX.Element => (
       <TooltipItemLayout
@@ -32,8 +42,8 @@ export const viewFunction = (viewModel: AppointmentList) => (
         onHide={viewModel.props.onHide}
         itemContentTemplate={viewModel.props.itemContentTemplate}
         getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
-        singleAppointment={viewModel.props.getSingleAppointmentData!(
-          item.data, viewModel.props.target!,
+        singleAppointment={viewModel.props.getSingleAppointmentData(
+          item.data, viewModel.props.target,
         )}
         showDeleteButton={viewModel.props.isEditingAllowed && !item.data.disabled}
       />
@@ -56,17 +66,17 @@ export class AppointmentListProps {
 
   @OneWay() target?: HTMLElement;
 
-  @Event() showAppointmentPopup?: ShowAppointmentPopupFn = noop;
+  @Event() showAppointmentPopup?: ShowAppointmentPopupFn;
 
-  @Event() onHide?: () => void = noop;
+  @Event() onHide?: EventCallback;
 
-  @Event() checkAndDeleteAppointment?: CheckAndDeleteAppointmentFn = noop;
+  @Event() checkAndDeleteAppointment?: CheckAndDeleteAppointmentFn;
 
   @Event() getTextAndFormatDate?: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
 
-  @Event() getSingleAppointmentData?: GetSingleAppointmentFn = defaultGetSingleAppointment;
+  @Event() getSingleAppointmentData: GetSingleAppointmentFn = defaultGetSingleAppointment;
 
-  @Template() itemContentTemplate?: any;
+  @Template() itemContentTemplate?: JSXTemplate<AppointmentTooltipTemplate>;
 }
 
 @Component({
@@ -77,7 +87,8 @@ export class AppointmentList extends JSXComponent(AppointmentListProps) {
   get onItemClick() {
     return ({ itemData }: ListItemProps): void => {
       const { showAppointmentPopup } = this.props;
-      showAppointmentPopup!(itemData!.data, false, getCurrentAppointment(itemData!));
+
+      showAppointmentPopup?.(itemData.data, false, getCurrentAppointment(itemData));
     };
   }
 }

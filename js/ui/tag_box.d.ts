@@ -1,160 +1,363 @@
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
+import {
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
+
+import {
+    SelectionChangedInfo,
+} from './collection/ui.collection_widget.base';
+
+import {
+    DropDownButtonTemplateDataModel,
+} from './drop_down_editor/ui.drop_down_editor';
+
+import {
+    ValueChangedInfo,
+} from './editor/editor';
+
 import dxSelectBox, {
-    dxSelectBoxOptions
+    dxSelectBoxOptions,
+    CustomItemCreatingInfo,
 } from './select_box';
 
-export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
+import {
+    ApplyValueMode,
+    SelectAllMode,
+} from '../common';
+
+/** @public */
+export type ChangeEvent = NativeEventInfo<dxTagBox, Event>;
+
+/** @public */
+export type ClosedEvent = EventInfo<dxTagBox>;
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxTagBox>;
+
+/** @public */
+export type CustomItemCreatingEvent = EventInfo<dxTagBox> & CustomItemCreatingInfo;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxTagBox>;
+
+/** @public */
+export type EnterKeyEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
+
+/** @public */
+export type FocusInEvent = NativeEventInfo<dxTagBox, FocusEvent>;
+
+/** @public */
+export type FocusOutEvent = NativeEventInfo<dxTagBox, FocusEvent>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxTagBox>;
+
+/** @public */
+export type InputEvent = NativeEventInfo<dxTagBox, UIEvent & { target: HTMLInputElement }>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxTagBox> & ItemInfo;
+
+/** @public */
+export type KeyDownEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
+
+/** @public */
+export type KeyPressEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
+
+/** @public */
+export type KeyUpEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
+
+/** @public */
+export type MultiTagPreparingEvent = Cancelable & EventInfo<dxTagBox> & {
+    readonly multiTagElement: DxElement;
+    readonly selectedItems?: Array<string | number | any>;
+    text?: string;
+};
+
+/** @public */
+export type OpenedEvent = EventInfo<dxTagBox>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxTagBox> & ChangedOptionInfo;
+
+/** @public */
+export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
+    readonly value: boolean;
+};
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangedInfo<string | number | any>;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxTagBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
+
+/** @public */
+export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
+export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>> {
     /**
-     * @docid dxTagBoxOptions.applyValueMode
-     * @type Enums.EditorApplyValueMode
+     * @docid
      * @default "instantly"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: ApplyValueMode;
     /**
-     * @docid dxTagBoxOptions.hideSelectedItems
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hideSelectedItems?: boolean;
     /**
-     * @docid dxTagBoxOptions.maxDisplayedTags
-     * @type number
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     maxDisplayedTags?: number;
     /**
-     * @docid dxTagBoxOptions.multiline
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     multiline?: boolean;
     /**
-     * @docid dxTagBoxOptions.onMultiTagPreparing
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 multiTagElement:dxElement
-     * @type_function_param1_field5 selectedItems:Array<string,number,Object>
-     * @type_function_param1_field6 text:string
-     * @type_function_param1_field7 cancel:boolean
+     * @type_function_param1_field component:dxTagBox
+     * @type_function_param1_field selectedItems:Array<string,number,Object>
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onMultiTagPreparing?: ((e: { component?: dxTagBox, element?: dxElement, model?: any, multiTagElement?: dxElement, selectedItems?: Array<string | number | any>, text?: string, cancel?: boolean }) => any);
+    onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void);
     /**
-     * @docid dxTagBoxOptions.onSelectAllValueChanged
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:boolean
+     * @type_function_param1_field component:dxTagBox
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectAllValueChanged?: ((e: { component?: dxTagBox, element?: dxElement, model?: any, value?: boolean }) => any);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
     /**
-     * @docid dxTagBoxOptions.onSelectionChanged
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 addedItems:Array<string,number,Object>
-     * @type_function_param1_field5 removedItems:Array<string,number,Object>
+     * @type_function_param1_field addedItems:Array<string,number,Object>
+     * @type_function_param1_field removedItems:Array<string,number,Object>
+     * @type_function_param1_field component:dxTagBox
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxTagBox, element?: dxElement, model?: any, addedItems?: Array<string | number | any>, removedItems?: Array<string | number | any> }) => any);
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
-     * @docid dxTagBoxOptions.selectAllMode
-     * @type Enums.SelectAllMode
+     * @docid
      * @default 'page'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectAllMode?: 'allPages' | 'page';
+    selectAllMode?: SelectAllMode;
     /**
-     * @docid dxTagBoxOptions.selectedItems
-     * @type Array<string,number,Object>
+     * @docid
      * @readonly
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItems?: Array<string | number | any>;
     /**
-     * @docid dxTagBoxOptions.showDropDownButton
+     * @docid
+     * @default "Select All"
+     * @public
+     */
+    selectAllText?: string;
+    /**
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
-     * @docid dxTagBoxOptions.showMultiTagOnly
-     * @type boolean
+     * @docid
+     * @default 1500
+     * @public
+     */
+    maxFilterQueryLength?: number;
+    /**
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showMultiTagOnly?: boolean;
     /**
-     * @docid dxTagBoxOptions.tagTemplate
-     * @type template|function
+     * @docid
      * @default "tag"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    tagTemplate?: template | ((itemData: any, itemElement: dxElement) => string | Element | JQuery);
+    tagTemplate?: template | ((itemData: any, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxTagBoxOptions.value
-     * @type Array<string,number,Object>
+     * @docid
      * @default []
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: Array<string | number | any>;
 }
 /**
- * @docid dxTagBox
+ * @docid
  * @isEditor
  * @inherits dxSelectBox
- * @module ui/tag_box
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxTagBox extends dxSelectBox {
-    constructor(element: Element, options?: dxTagBoxOptions)
-    constructor(element: JQuery, options?: dxTagBoxOptions)
-}
+export default class dxTagBox extends dxSelectBox<dxTagBoxOptions> { }
 
-declare global {
-interface JQuery {
-    dxTagBox(): JQuery;
-    dxTagBox(options: "instance"): dxTagBox;
-    dxTagBox(options: string): any;
-    dxTagBox(options: string, ...params: any[]): any;
-    dxTagBox(options: dxTagBoxOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxTagBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxTagBoxOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxTagBoxOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onCopy' | 'onCut' | 'onPaste'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onChange
+ * @type_function_param1 e:{ui/tag_box:ChangeEvent}
+ */
+onChange?: ((e: ChangeEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onClosed
+ * @type_function_param1 e:{ui/tag_box:ClosedEvent}
+ */
+onClosed?: ((e: ClosedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onContentReady
+ * @type_function_param1 e:{ui/tag_box:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onCustomItemCreating
+ * @type_function_param1 e:{ui/tag_box:CustomItemCreatingEvent}
+ */
+onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onDisposing
+ * @type_function_param1 e:{ui/tag_box:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onEnterKey
+ * @type_function_param1 e:{ui/tag_box:EnterKeyEvent}
+ */
+onEnterKey?: ((e: EnterKeyEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onFocusIn
+ * @type_function_param1 e:{ui/tag_box:FocusInEvent}
+ */
+onFocusIn?: ((e: FocusInEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onFocusOut
+ * @type_function_param1 e:{ui/tag_box:FocusOutEvent}
+ */
+onFocusOut?: ((e: FocusOutEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onInitialized
+ * @type_function_param1 e:{ui/tag_box:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onInput
+ * @type_function_param1 e:{ui/tag_box:InputEvent}
+ */
+onInput?: ((e: InputEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onItemClick
+ * @type_function_param1 e:{ui/tag_box:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onKeyDown
+ * @type_function_param1 e:{ui/tag_box:KeyDownEvent}
+ */
+onKeyDown?: ((e: KeyDownEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onKeyUp
+ * @type_function_param1 e:{ui/tag_box:KeyUpEvent}
+ */
+onKeyUp?: ((e: KeyUpEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onMultiTagPreparing
+ * @type_function_param1 e:{ui/tag_box:MultiTagPreparingEvent}
+ */
+onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onOpened
+ * @type_function_param1 e:{ui/tag_box:OpenedEvent}
+ */
+onOpened?: ((e: OpenedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onOptionChanged
+ * @type_function_param1 e:{ui/tag_box:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onSelectAllValueChanged
+ * @type_function_param1 e:{ui/tag_box:SelectAllValueChangedEvent}
+ */
+onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/tag_box:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTagBoxOptions.onValueChanged
+ * @type_function_param1 e:{ui/tag_box:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

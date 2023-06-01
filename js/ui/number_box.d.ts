@@ -1,120 +1,259 @@
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
 import dxTextEditor, {
     dxTextEditorButton,
-    dxTextEditorOptions
+    dxTextEditorOptions,
 } from './text_box/ui.text_editor.base';
 
 import {
-    format
-} from './widget/ui.widget';
+    ValueChangedInfo,
+} from './editor/editor';
 
+import {
+    Format,
+  } from '../localization';
+
+/** @public */
+export type NumberBoxPredefinedButton = 'clear' | 'spins';
+/** @public */
+export type NumberBoxType = 'number' | 'text' | 'tel';
+
+/** @public */
+export type ChangeEvent = NativeEventInfo<dxNumberBox, Event>;
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxNumberBox>;
+
+/** @public */
+export type CopyEvent = NativeEventInfo<dxNumberBox, ClipboardEvent>;
+
+/** @public */
+export type CutEvent = NativeEventInfo<dxNumberBox, ClipboardEvent>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxNumberBox>;
+
+/** @public */
+export type EnterKeyEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
+
+/** @public */
+export type FocusInEvent = NativeEventInfo<dxNumberBox, FocusEvent>;
+
+/** @public */
+export type FocusOutEvent = NativeEventInfo<dxNumberBox, FocusEvent>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxNumberBox>;
+
+/** @public */
+export type InputEvent = NativeEventInfo<dxNumberBox, UIEvent & { target: HTMLInputElement }>;
+
+/** @public */
+export type KeyDownEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
+
+/** @public */
+export type KeyPressEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
+
+/** @public */
+export type KeyUpEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxNumberBox> & ChangedOptionInfo;
+
+/** @public */
+export type PasteEvent = NativeEventInfo<dxNumberBox, ClipboardEvent>;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxNumberBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
-     * @docid dxNumberBoxOptions.buttons
-     * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
+    buttons?: Array<NumberBoxPredefinedButton | dxTextEditorButton>;
     /**
-     * @docid dxNumberBoxOptions.format
-     * @type format
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    format?: format;
+    format?: Format;
     /**
-     * @docid dxNumberBoxOptions.invalidValueMessage
-     * @type string
+     * @docid
      * @default "Value must be a number"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     invalidValueMessage?: string;
     /**
-     * @docid dxNumberBoxOptions.max
-     * @type number
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     max?: number;
     /**
-     * @docid dxNumberBoxOptions.min
-     * @type number
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     min?: number;
     /**
-     * @docid dxNumberBoxOptions.mode
-     * @type Enums.NumberBoxMode
+     * @docid
      * @default "text"
-     * @default 'number' [for](mobile_devices)
-     * @prevFileNamespace DevExpress.ui
+     * @default 'number' &for(mobile_devices)
      * @public
      */
-    mode?: 'number' | 'text' | 'tel';
+    mode?: NumberBoxType;
     /**
-     * @docid dxNumberBoxOptions.showSpinButtons
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showSpinButtons?: boolean;
     /**
-     * @docid dxNumberBoxOptions.step
-     * @type number
+     * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     step?: number;
     /**
-     * @docid dxNumberBoxOptions.useLargeSpinButtons
-     * @type boolean
+     * @docid
      * @default true
-     * @default false [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default false &for(desktop)
      * @public
      */
     useLargeSpinButtons?: boolean;
     /**
-     * @docid dxNumberBoxOptions.value
-     * @type number
+     * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: number;
 }
 /**
- * @docid dxNumberBox
+ * @docid
  * @isEditor
  * @inherits dxTextEditor
- * @module ui/number_box
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxNumberBox extends dxTextEditor {
-    constructor(element: Element, options?: dxNumberBoxOptions)
-    constructor(element: JQuery, options?: dxNumberBoxOptions)
-}
+export default class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> { }
 
-declare global {
-interface JQuery {
-    dxNumberBox(): JQuery;
-    dxNumberBox(options: "instance"): dxNumberBox;
-    dxNumberBox(options: string): any;
-    dxNumberBox(options: string, ...params: any[]): any;
-    dxNumberBox(options: dxNumberBoxOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxNumberBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxNumberBoxOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxNumberBoxOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onChange
+ * @type_function_param1 e:{ui/number_box:ChangeEvent}
+ */
+onChange?: ((e: ChangeEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onContentReady
+ * @type_function_param1 e:{ui/number_box:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onCopy
+ * @type_function_param1 e:{ui/number_box:CopyEvent}
+ */
+onCopy?: ((e: CopyEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onCut
+ * @type_function_param1 e:{ui/number_box:CutEvent}
+ */
+onCut?: ((e: CutEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onDisposing
+ * @type_function_param1 e:{ui/number_box:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onEnterKey
+ * @type_function_param1 e:{ui/number_box:EnterKeyEvent}
+ */
+onEnterKey?: ((e: EnterKeyEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onFocusIn
+ * @type_function_param1 e:{ui/number_box:FocusInEvent}
+ */
+onFocusIn?: ((e: FocusInEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onFocusOut
+ * @type_function_param1 e:{ui/number_box:FocusOutEvent}
+ */
+onFocusOut?: ((e: FocusOutEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onInitialized
+ * @type_function_param1 e:{ui/number_box:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onInput
+ * @type_function_param1 e:{ui/number_box:InputEvent}
+ */
+onInput?: ((e: InputEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onKeyDown
+ * @type_function_param1 e:{ui/number_box:KeyDownEvent}
+ */
+onKeyDown?: ((e: KeyDownEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onKeyUp
+ * @type_function_param1 e:{ui/number_box:KeyUpEvent}
+ */
+onKeyUp?: ((e: KeyUpEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onOptionChanged
+ * @type_function_param1 e:{ui/number_box:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onPaste
+ * @type_function_param1 e:{ui/number_box:PasteEvent}
+ */
+onPaste?: ((e: PasteEvent) => void);
+/**
+ * @skip
+ * @docid dxNumberBoxOptions.onValueChanged
+ * @type_function_param1 e:{ui/number_box:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

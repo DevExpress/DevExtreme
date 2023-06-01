@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 function checkBoundingClientRect(assert, element, expectedRect, elementName) {
     assert.ok(!!element, elementName + ' is defined');
     if(element) {
@@ -46,24 +48,31 @@ function checkWhenPanelContentRendered(assert, drawer, drawerElement, panelTempl
     // Check View element rect
 
     if(!drawer.option('minSize') || (drawer.option('openedStateMode') === 'overlap')) {
-        checkBoundingClientRect(assert, document.getElementById('view'), expectedViewRect, 'view');
+        checkBoundingClientRect(assert, $('#view').get(0), expectedViewRect, 'view');
     }
 }
 
 const leftTemplateSize = 150;
 const LeftDrawerTester = {
     templateSize: leftTemplateSize,
-    template: () => `<div id="template" style="width: ${leftTemplateSize}px; height: 100%; background-color: green">template</div>`,
+    template: () => $('<div id="template">template</div>').css({
+        width: `${leftTemplateSize}px`,
+        height: '100%',
+        'background-color': 'green',
+    }),
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + leftTemplateSize, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
+            assert.ok(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), 'view element should override panel element');
         }
         function checkShrink(assert, env) {
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + leftTemplateSize, top: env.drawerRect.top, width: env.drawerRect.width - leftTemplateSize, height: env.drawerRect.height }, 'view');
             checkMargin(assert, env.templateElement.parentElement, 0, 0, 0, 0, 'template should be visible by position');
+            assert.strictEqual(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), false, 'theme-background-color is not used in shrink mode');
         }
         function checkOverlap(assert, env) {
+            assert.strictEqual(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), false, 'theme-background-color is not used in shrink mode');
             checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: leftTemplateSize, height: env.drawerRect.height }, 'template.parentElement size should not cut template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + env.minSize, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
             assert.equal(window.getComputedStyle(env.templateElement.parentElement).zIndex, '1501', 'template should be shown over view');
@@ -105,6 +114,7 @@ const LeftDrawerTester = {
                 window.getComputedStyle(env.templateElement.parentElement).position === 'absolute' &&
                 window.getComputedStyle(env.viewElement.parentElement).transform.indexOf('matrix') >= 0,
                 'template element should be hidden, view element should be visible');
+            assert.ok(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), 'view element should override panel element');
         }
         function checkShrink(assert, env) {
             if(env.revealMode === 'expand') {
@@ -116,8 +126,10 @@ const LeftDrawerTester = {
             }
             assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).overflow, 'hidden', 'template should not be visible by parent.overflow');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + env.minSize, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
+            assert.strictEqual(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), false, 'theme-background-color is not used in shrink mode');
         }
         function checkOverlap(assert, env) {
+            assert.strictEqual(env.drawer._$viewContentWrapper[0].classList.contains('dx-theme-background-color'), false, 'theme-background-color is not used in shrink mode');
             if(env.revealMode === 'expand') {
                 if(env.minSize) {
                     checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: leftTemplateSize, height: env.drawerRect.height }, 'template');
@@ -191,7 +203,11 @@ const LeftDrawerTester = {
 const rightTemplateSize = 150;
 const RightDrawerTester = {
     templateSize: rightTemplateSize,
-    template: () => `<div id="template" style="width: ${rightTemplateSize}px; height: 100%; background-color: green">template</div>`,
+    template: () => $('<div id="template">template</div>').css({
+        width: `${rightTemplateSize}px`,
+        height: '100%',
+        'background-color': 'green',
+    }),
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
@@ -275,7 +291,7 @@ const RightDrawerTester = {
                     if(env.templateElement === null) {
                         assert.ok(true);
                     } else {
-                        checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right - rightTemplateSize, top: env.drawerRect.top, width: rightTemplateSize, height: env.drawerRect.height }, 'template');
+                        checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right, top: env.drawerRect.top, width: rightTemplateSize, height: env.drawerRect.height }, 'template');
                         checkBoundingClientRect(assert, env.templateElement.parentElement, { width: 0 }, 'template.parentElement');
                         assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).overflow, 'hidden', 'template element should be hidden');
                     }
@@ -339,7 +355,11 @@ const RightDrawerTester = {
 const topTemplateSize = 75;
 const TopDrawerTester = {
     templateSize: topTemplateSize,
-    template: () => `<div id="template" style="width: 100%; height: ${topTemplateSize}px; background-color: green">template</div>`,
+    template: () => $('<div id="template">template</div>').css({
+        width: '100%',
+        height: `${topTemplateSize}px`,
+        'background-color': 'green',
+    }),
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
@@ -476,7 +496,11 @@ const TopDrawerTester = {
 const bottomTemplateSize = 75;
 const BottomDrawerTester = {
     templateSize: bottomTemplateSize,
-    template: () => `<div id="template" style="width: 100%; height: ${bottomTemplateSize}px; background-color: green">template</div>`,
+    template: () => $('<div id="template">template</div>').css({
+        width: '100%',
+        height: `${bottomTemplateSize}px`,
+        'background-color': 'green',
+    }),
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
@@ -614,11 +638,7 @@ const BottomDrawerTester = {
 
 const drawerElementId = 'drawer1';
 export const drawerTesters = {
-    drawerElementId: drawerElementId,
-    markup: `
-        <div id="${drawerElementId}" style="background-color: blue; width: 200px; height: 100px">
-            <div id="view" style="width: 100%; height: 100%; background-color: yellow">view</div>
-        </div>`,
+    drawerElementId,
     left: LeftDrawerTester,
     top: TopDrawerTester,
     right: RightDrawerTester,

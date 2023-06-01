@@ -2,3 +2,17 @@
 
 // adduse
 
+$generic-toolbar-size-editor-width: null !default;
+$generic-html-editor-horizontal-padding: 15px !default;
+$generic-html-editor-add-image-dialog-base-padding: 5px !default;
+$generic-html-editor-add-image-dialog-fileuploader-padding: null !default;
+
+@if $size == "default" {
+  $generic-toolbar-size-editor-width: 105px !default;
+  $generic-html-editor-add-image-dialog-fileuploader-padding: 60px 20px !default;
+}
+
+@else if $size == "compact" {
+  $generic-toolbar-size-editor-width: 80px !default;
+  $generic-html-editor-add-image-dialog-fileuploader-padding: 40px 20px !default;
+}

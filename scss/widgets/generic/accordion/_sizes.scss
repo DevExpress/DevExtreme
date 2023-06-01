@@ -9,17 +9,17 @@ $accordion-title-icon-top-offset: null !default;
 $accordion-title-icon-margin: null !default;
 
 @if $size == "default" {
-  $generic-accordion-title-padding: 9px 12px;
-  $generic-accordion-body-padding: 8px 12px 22px;
-  $generic-accordion-arrow-line-height: 24px;
-  $accordion-title-icon-top-offset: 4px;
-  $accordion-title-icon-margin: 6px;
+  $generic-accordion-title-padding: 9px 12px !default;
+  $generic-accordion-body-padding: 8px 12px 22px !default;
+  $generic-accordion-arrow-line-height: 24px !default;
+  $accordion-title-icon-top-offset: 4px !default;
+  $accordion-title-icon-margin: 6px !default;
 }
 
 @else if $size == "compact" {
-  $generic-accordion-title-padding: 5px 7px;
-  $generic-accordion-body-padding: 3px 7px 12px;
-  $generic-accordion-arrow-line-height: 21px;
-  $accordion-title-icon-top-offset: 1px;
-  $accordion-title-icon-margin: 4px;
+  $generic-accordion-title-padding: 5px 7px !default;
+  $generic-accordion-body-padding: 3px 7px 12px !default;
+  $generic-accordion-arrow-line-height: 21px !default;
+  $accordion-title-icon-top-offset: 1px !default;
+  $accordion-title-icon-margin: 4px !default;
 }

@@ -4,13 +4,16 @@
 
 $material-menu-item-line-height: null !default;
 $material-menu-item-with-icon-horizontal-padding: null !default;
+$material-menu-horizontal-padding: null !default;
 
 @if $size == "default" {
-  $material-menu-item-line-height: 24px;
-  $material-menu-item-with-icon-horizontal-padding: 64px;
+  $material-menu-item-line-height: 24px !default;
+  $material-menu-horizontal-padding: 16px !default;
+  $material-menu-item-with-icon-horizontal-padding: 64px !default;
 }
 
 @else if $size == "compact" {
-  $material-menu-item-line-height: 18px;
-  $material-menu-item-with-icon-horizontal-padding: 46px;
+  $material-menu-item-line-height: 20px !default;
+  $material-menu-horizontal-padding: 11px !default;
+  $material-menu-item-with-icon-horizontal-padding: 46px !default;
 }

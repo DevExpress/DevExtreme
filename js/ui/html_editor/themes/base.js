@@ -10,6 +10,8 @@ if(Quill) {
 
             super(quill, options);
             this.quill.root.classList.add('dx-htmleditor-content');
+            this.quill.root.setAttribute('role', 'textbox');
+            this.quill.root.setAttribute('aria-label', 'Editor content');
         }
     };
 } else {

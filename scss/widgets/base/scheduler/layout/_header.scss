@@ -1,0 +1,123 @@
+$arrow-down: "\f016";
+
+@mixin header-base(
+  $border,
+) {
+  border: $border;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  flex-shrink: 0;
+
+  .dx-toolbar {
+    height: 100%;
+    background-color: transparent;
+
+    .dx-toolbar-items-container {
+      height: 100%;
+    }
+
+    .dx-toolbar-menu-container {
+      .dx-icon::before {
+        content: $arrow-down;
+      }
+    }
+  }
+}
+
+@mixin header-sizes(
+  $height,
+  $item-padding,
+) {
+  height: $height;
+
+  .dx-toolbar {
+    .dx-toolbar-item-content,
+    .dx-toolbar-menu-container {
+      padding: $item-padding;
+    }
+
+    .dx-scheduler-navigator {
+      .dx-scheduler-navigator-caption {
+        min-width: 180px;
+
+        .dx-scheduler-adaptive & {
+          min-width: 140px;
+        }
+      }
+    }
+  }
+}
+
+@mixin header-buttons(
+  $base-color,
+  $active-color,
+) {
+  .dx-toolbar {
+    .dx-button {
+      &.dx-item-selected,
+      &.dx-state-focused,
+      &.dx-state-hover {
+        background-color: $active-color;
+      }
+    }
+
+    .dx-scheduler-navigator {
+      .dx-buttongroup {
+        .dx-button {
+          &.dx-item-selected {
+            background-color: $base-color;
+
+            &.dx-state-focused {
+              background-color: $active-color;
+            }
+
+            &.dx-state-hover {
+              background-color: $active-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin header-buttons-material(
+  $base-color,
+  $text-color,
+  $icon-font-size,
+) {
+  .dx-toolbar {
+    .dx-button {
+      color: $base-color;
+
+      .dx-icon {
+        color: $base-color;
+      }
+    }
+
+    .dx-scheduler-navigator {
+      .dx-buttongroup {
+        .dx-button {
+          .dx-icon {
+            width: $icon-font-size;
+            height: $icon-font-size;
+            font-size: $icon-font-size;
+          }
+
+          &.dx-item-selected {
+            color: $text-color;
+
+            .dx-icon {
+              color: $text-color;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .dx-button-text {
+    text-transform: none;
+  }
+}

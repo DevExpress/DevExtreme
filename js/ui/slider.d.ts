@@ -1,123 +1,235 @@
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
+import {
+    ValueChangedInfo,
+} from './editor/editor';
+
 import dxTrackBar, {
-    dxTrackBarOptions
+    dxTrackBarOptions,
 } from './track_bar';
 
 import {
-    format
-} from './widget/ui.widget';
+    Format,
+} from '../localization';
 
+import {
+    SliderValueChangeMode,
+    TooltipShowMode,
+    VerticalEdge,
+} from '../common';
+
+export {
+    TooltipShowMode,
+    VerticalEdge,
+};
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxSlider>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSlider>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSlider>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
+
+/**
+ * @deprecated Use /common/SliderValueChangeMode instead
+ */
+export type ValueChangeMode = SliderValueChangeMode;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
     /**
-     * @docid dxSliderOptions.value
-     * @type number
+     * @docid
      * @default 50
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: number;
 }
 /**
- * @docid dxSlider
+ * @docid
  * @isEditor
  * @inherits dxSliderBase
- * @module ui/slider
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxSlider extends dxTrackBar {
-    constructor(element: Element, options?: dxSliderOptions)
-    constructor(element: JQuery, options?: dxSliderOptions)
-}
+export default class dxSlider extends dxTrackBar<dxSliderOptions> { }
 
 /**
- * @docid dxSliderBase
- * @inherits dxTrackBar
+ * @docid
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
-export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
+export interface dxSliderBaseOptions<TComponent> extends dxTrackBarOptions<TComponent> {
     /**
-     * @docid dxSliderBaseOptions.activeStateEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxSliderBaseOptions.focusStateEnabled
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxSliderBaseOptions.hoverStateEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxSliderBaseOptions.keyStep
-     * @type number
+     * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyStep?: number;
     /**
-     * @docid dxSliderBaseOptions.label
-     * @type object
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    label?: { format?: format, position?: 'bottom' | 'top', visible?: boolean };
+    label?: {
+      /**
+       * @docid
+       * @default function(value) { return value }
+       */
+      format?: Format;
+      /**
+       * @docid
+       * @default 'bottom'
+       */
+      position?: VerticalEdge;
+      /**
+       * @docid
+       * @default false
+       */
+      visible?: boolean;
+    };
     /**
-     * @docid dxSliderBaseOptions.name
-     * @type string
+     * @docid
      * @hidden false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
-     * @docid dxSliderBaseOptions.showRange
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showRange?: boolean;
     /**
-     * @docid dxSliderBaseOptions.step
-     * @type number
+     * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     step?: number;
     /**
-     * @docid dxSliderBaseOptions.tooltip
-     * @type object
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    tooltip?: { enabled?: boolean, format?: format, position?: 'bottom' | 'top', showMode?: 'always' | 'onHover' };
+    tooltip?: {
+      /**
+       * @docid
+       * @default false
+       */
+      enabled?: boolean;
+      /**
+       * @docid
+       * @default function(value) { return value }
+       */
+      format?: Format;
+      /**
+       * @docid
+       * @default 'top'
+       */
+      position?: VerticalEdge;
+      /**
+       * @docid
+       * @default 'onHover'
+       */
+      showMode?: TooltipShowMode;
+    };
+    /**
+     * @docid
+     * @default 'onHandleMove'
+     * @public
+     */
+     valueChangeMode?: SliderValueChangeMode;
 }
 
-declare global {
-interface JQuery {
-    dxSlider(): JQuery;
-    dxSlider(options: "instance"): dxSlider;
-    dxSlider(options: string): any;
-    dxSlider(options: string, ...params: any[]): any;
-    dxSlider(options: dxSliderOptions): JQuery;
-}
-}
+/**
+ * @docid
+ * @inherits dxTrackBar
+ * @hidden
+ * @namespace DevExpress.ui
+ * @options dxSliderBaseOptions
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface dxSliderBase { }
+
+/** @public */
+export type Properties = dxSliderOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSliderOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxSliderOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxSliderOptions.onContentReady
+ * @type_function_param1 e:{ui/slider:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxSliderOptions.onDisposing
+ * @type_function_param1 e:{ui/slider:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSliderOptions.onInitialized
+ * @type_function_param1 e:{ui/slider:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSliderOptions.onOptionChanged
+ * @type_function_param1 e:{ui/slider:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxSliderOptions.onValueChanged
+ * @type_function_param1 e:{ui/slider:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

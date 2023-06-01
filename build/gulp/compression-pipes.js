@@ -2,7 +2,7 @@
 
 const lazyPipe = require('lazypipe');
 const replace = require('gulp-replace');
-const uglify = require('gulp-uglify');
+const uglify = require('gulp-uglify-es').default;
 const gulpIf = require('gulp-if');
 const eol = require('gulp-eol');
 const prettify = require('gulp-jsbeautifier');
@@ -15,6 +15,8 @@ const removeDebug = lazyPipe().pipe(function() {
 
 function saveLicenseComments(node, comment) {
     return comment.value.charAt(0) === '!'
+        // Workaround for rrule, on v2.7.1 the space char was added to the license header https://github.com/jakubroztocil/rrule/commit/803c03b85ac074d92d443306805a68e104069c02#diff-a2a171449d862fe29692ce031981047d7ab755ae7f84c707aef80701b3ea0c80R1
+        || comment.value.startsWith(' !')
         || comment.value.indexOf(context.EULA_URL) > -1;
 }
 
@@ -26,10 +28,10 @@ module.exports = {
         .pipe(removeDebug)
         .pipe(function() {
             return gulpIf(context.uglify, uglify({
-                compress: { screw_ie8: true },
-                mangle: { screw_ie8: true },
-                preserveComments: saveLicenseComments,
-                output: { ascii_only: true }
+                output: {
+                    ascii_only: true,
+                    comments: saveLicenseComments
+                }
             }));
         })
         .pipe(eol),
@@ -38,8 +40,8 @@ module.exports = {
         .pipe(function() {
             return gulpIf(context.uglify, uglify({
                 mangle: false,
+                warnings: false,
                 compress: {
-                    'screw_ie8': true,
                     'sequences': false,
                     'properties': true,
                     'dead_code': true,
@@ -55,15 +57,14 @@ module.exports = {
                     'hoist_vars': false,
                     'if_return': false,
                     'join_vars': false,
-                    'cascade': false,
+                    'collapse_vars': false,
                     'side_effects': false,
-                    'warnings': false,
                     'global_defs': {}
                 },
-                preserveComments: saveLicenseComments,
                 output: {
-                    'bracketize': true,
-                    'ascii_only': true
+                    'braces': true,
+                    'ascii_only': true,
+                    comments: saveLicenseComments
                 }
             }));
         })

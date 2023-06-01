@@ -1,51 +1,35 @@
-import $ from 'jquery';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
+import { calculateScrollbarWidth } from '__internal/grids/pivot_grid/module_widget_utils';
 
 const SCROLLABLE_CONTAINER = 'dx-scrollable-container';
 const SCROLLABLE_CONTENT = 'dx-scrollable-content';
 
-const $tempVScrollBar = $('<div id="getVScrollBarWidth" style="width: 75px; height: 100px"><div style="width: 125px; height: 150px"></div></div>');
-$('#qunit').append($tempVScrollBar);
-$tempVScrollBar.dxScrollable({ direction: 'both', useNative: true });
-const $tempVScrollBarContainer = $tempVScrollBar.find(`.${SCROLLABLE_CONTAINER}`);
-
-export const nativeVScrollBarWidth = $tempVScrollBarContainer[0].offsetWidth - $tempVScrollBarContainer[0].clientWidth;
-export const nativeVScrollBarHeight = $tempVScrollBarContainer[0].offsetHeight - $tempVScrollBarContainer[0].clientHeight;
-
-$tempVScrollBar.remove();
-
 export function checkScrollableSizes(assert, $rootContainer, { id, width, height, containerWidth, containerScrollWidth, containerHeight, containerScrollHeight, nestedElementWidth, nestedElementHeight, overflowX, overflowY, useNativeScrolling, configDetails }) {
+    const nativeScrollbarWidth = calculateScrollbarWidth();
+
     let expectedContainerClientWidth = containerWidth;
-    if(browser.msie) {
-        if(useNativeScrolling && overflowY || useNativeScrolling && overflowX) {
-            expectedContainerClientWidth = containerWidth - nativeVScrollBarWidth;
-        }
-    } else if(useNativeScrolling && overflowY) {
-        expectedContainerClientWidth = containerWidth - nativeVScrollBarWidth;
+
+    if(useNativeScrolling && overflowY) {
+        expectedContainerClientWidth = containerWidth - nativeScrollbarWidth;
     }
 
     let expectedContainerClientHeight = containerHeight;
     if(useNativeScrolling && overflowX) {
-        expectedContainerClientHeight = containerHeight - nativeVScrollBarHeight;
+        expectedContainerClientHeight = containerHeight - nativeScrollbarWidth;
     }
 
     let expectedContainerScrollWidth = containerScrollWidth;
     if(!overflowX && useNativeScrolling && overflowY) {
-        expectedContainerScrollWidth = containerScrollWidth - nativeVScrollBarWidth;
+        expectedContainerScrollWidth = containerScrollWidth - nativeScrollbarWidth;
     }
 
     let expectedContainerScrollHeight = containerScrollHeight;
     if(devices.real().ios) {
         if(useNativeScrolling) {
-            expectedContainerScrollHeight = containerScrollHeight + (overflowY ? 2 : 3); // magic numbers for ios: padding-top: 1px; padding-bottom: 1px; min-height: 101%;
-        }
-    } else if(browser.msie) {
-        if(useNativeScrolling && overflowX && !overflowY && configDetails !== 'insideResponsiveBox') {
-            expectedContainerScrollHeight = containerScrollHeight - nativeVScrollBarHeight;
+            expectedContainerScrollHeight = containerScrollHeight + (overflowY ? 0 : 1); // magic numbers for ios: min-height: 101%;
         }
     } else if(useNativeScrolling && overflowX && !overflowY) {
-        expectedContainerScrollHeight = containerScrollHeight - nativeVScrollBarHeight;
+        expectedContainerScrollHeight = containerScrollHeight - nativeScrollbarWidth;
     }
 
     const $scrollable = $rootContainer.find(`#${id}`);

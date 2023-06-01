@@ -540,7 +540,7 @@ QUnit.module('Draw', {
             attributes: { r: 6 },
             symbol: 'circle'
         };
-        this.sinonFactory = sinon.stub(labelModule, 'Label', function() {
+        this.sinonFactory = sinon.stub(labelModule, 'Label').callsFake(function() {
             return sinon.createStubInstance(originalLabel);
         });
         this.series = {
@@ -606,7 +606,7 @@ QUnit.module('Label', {
         this.renderer = new vizMocks.Renderer();
         this.group = this.renderer.g();
 
-        this.sinonFactory = sinon.stub(labelModule, 'Label', function() {
+        this.sinonFactory = sinon.stub(labelModule, 'Label').callsFake(function() {
             return sinon.createStubInstance(originalLabel);
         });
         this.labelsGroup = {};
@@ -849,7 +849,8 @@ QUnit.test('apply view', function(assert) {
     assert.deepEqual(this.point.graphic.stub('attr').firstCall.args[0], {
         fill: null,
         stroke: null,
-        dashStyle: null
+        dashStyle: null,
+        filter: null
     });
 });
 
@@ -1257,7 +1258,7 @@ QUnit.module('Dispose', {
             attributes: { r: 6 },
             symbol: 'circle'
         };
-        this.sinonFactory = sinon.stub(labelModule, 'Label', function() {
+        this.sinonFactory = sinon.stub(labelModule, 'Label').callsFake(function() {
             return sinon.createStubInstance(originalLabel);
         });
         this.series = {

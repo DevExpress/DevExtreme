@@ -6,17 +6,15 @@ const concat = require('gulp-concat');
 const rename = require('gulp-rename');
 const header = require('gulp-header');
 const eol = require('gulp-eol');
-const gulpIf = require('gulp-if');
 
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
-const env = require('./env-variables');
+const { packageDir } = require('./utils');
 
 const BUNDLE_CONFIG_SOURCES = [
     'js/bundles/modules/parts/core.js',
     'js/bundles/modules/parts/data.js',
     'js/bundles/modules/parts/widgets-base.js',
-    'js/bundles/modules/parts/widgets-mobile.js',
     'js/bundles/modules/parts/widgets-web.js',
     'js/bundles/modules/parts/viz.js',
     'js/bundles/modules/parts/aspnet.js'
@@ -35,10 +33,13 @@ gulp.task('bundler-config', function() {
         .pipe(gulp.dest('js/bundles'))
         .pipe(rename('dx.custom.config.js'))
         .pipe(replace(/require *\( *["']..\//g, 'require(\'devextreme/'))
-        .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme/bundles'))
-        .pipe(gulpIf(env.USE_RENOVATION, gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles')));
+        .pipe(gulp.dest(`${context.RESULT_NPM_PATH}/${packageDir}/bundles`));
 });
 
-gulp.task('bundler-config-dev', function() {
-    return gulp.watch(BUNDLE_CONFIG_SOURCES, gulp.series('bundler-config'));
+gulp.task('bundler-config-watch', function() {
+    return gulp
+        .watch(BUNDLE_CONFIG_SOURCES, gulp.series('bundler-config'))
+        .on('ready', () => console.log(
+            'bundler-config task is watching for changes...'
+        ));
 });

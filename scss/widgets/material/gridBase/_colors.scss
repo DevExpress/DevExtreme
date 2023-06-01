@@ -1,10 +1,16 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+@use "../button/colors" as *;
 
 // adduse
 
 $datagrid-base-color: $base-text-color !default;
+
+/**
+* $name 60. Background color
+* $type color
+*/
 $datagrid-base-background-color: $base-bg !default;
 $datagrid-border-color: $base-border-color !default;
 $datagrid-border: 1px solid $datagrid-border-color !default;
@@ -78,7 +84,9 @@ $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
 * $type color
 */
 $datagrid-cell-modified-border-color: color.change($base-success, $alpha: 0.32) !default;
-$datagrid-row-removed-bg: color.change($base-success, $alpha: 0.32) !default;
+$datagrid-cell-removed-border-color: $datagrid-border-color !default;
+$datagrid-row-removed-bg: $datagrid-border-color !default;
+$datagrid-cell-removed-text-color: null !default;
 
 /**
 * $name 45. Invalidate data faded color
@@ -161,6 +169,9 @@ $datagrid-active-header-filter-icon-color: $base-accent !default;
 $datagrid-text-stub-background-image-path: null !default;
 $datagrid-filter-panel-color: $base-accent !default;
 
+$datagrid-text-link-disabled-opacity: $base-disabled-opacity;
+$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
+
 @if $mode == "light" {
   $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.54) !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 12%) !default;
@@ -173,6 +184,7 @@ $datagrid-filter-panel-color: $base-accent !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
   $datagrid-row-alternation-bg: darken($datagrid-base-background-color, 4%) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/light/grid/text-stub.png') !default;
+  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
 
 @if $mode == "dark" {
@@ -187,5 +199,6 @@ $datagrid-filter-panel-color: $base-accent !default;
   $datagrid-columnchooser-item-bg: lighten($datagrid-columnchooser-bg, 3%) !default;
   $datagrid-row-alternation-bg: lighten($datagrid-base-background-color, 4%) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/dark/grid/text-stub.png') !default;
+  $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
 

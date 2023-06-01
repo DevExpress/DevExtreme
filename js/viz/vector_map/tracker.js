@@ -285,15 +285,13 @@ Tracker.prototype = {
         that._docHandlers = {};
         that._rootHandlers = {};
 
-        // Because of "stopPropagation" at any time only one of two handlers will be fully executed
-        that._rootHandlers[EVENTS.start] /* T322560 */ = that._docHandlers[EVENTS.start] = function(event) {
+        that._docHandlers[EVENTS.start] = function(event) {
             const isTouch = isTouchEvent(event);
             const data = getData(event);
 
             if(isTouch && !that._isTouchEnabled) { return; }
             if(data) {
                 event.preventDefault();
-                event.stopPropagation(); // T322560
             }
 
             that._startClick(event, data);

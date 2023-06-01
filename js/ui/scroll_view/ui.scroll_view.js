@@ -40,6 +40,7 @@ const scrollViewServerConfig = {
     finishLoading: noop,
     release: noop,
     refresh: noop,
+    scrollOffset: () => ({ top: 0, left: 0 }),
     _optionChanged: function(args) {
         if(args.name !== 'onUpdated') {
             return this.callBase.apply(this, arguments);
@@ -163,11 +164,7 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
     _createStrategy: function() {
         const strategyName = this.option('useNative') ? this.option('refreshStrategy') : 'simulated';
-
         const strategyClass = refreshStrategies[strategyName];
-        if(!strategyClass) {
-            throw Error('E1030', this.option('refreshStrategy'));
-        }
 
         this._strategy = new strategyClass(this);
         this._strategy.pullDownCallbacks.add(this._pullDownHandler.bind(this));
@@ -274,10 +271,6 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         }
     },
 
-    isEmpty: function() {
-        return !$(this.content()).children().length;
-    },
-
     content: function() {
         return getPublicElement(this._$content.children().eq(1));
     },
@@ -290,23 +283,13 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     /**
-    * @name dxScrollViewMethods.toggleLoading
+    * @name dxScrollView.toggleLoading
     * @publicName toggleLoading(showOrHide)
     * @param1 showOrHide:boolean
     * @hidden
     */
     toggleLoading: function(showOrHide) {
         this._reachBottomEnable(showOrHide);
-    },
-
-    /**
-    * @name dxScrollViewMethods.isFull
-    * @publicName isFull()
-    * @return boolean
-    * @hidden
-    */
-    isFull: function() {
-        return $(this.content()).height() > this._$container.height();
     },
 
     refresh: function() {

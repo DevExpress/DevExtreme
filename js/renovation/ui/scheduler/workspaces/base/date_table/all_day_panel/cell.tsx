@@ -1,22 +1,37 @@
 import {
   Component, JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
+import { ALL_DAY_PANEL_CELL_CLASS } from '../../../const';
 import { DateTableCellBaseProps, DateTableCellBase } from '../cell';
 
-export const viewFunction = (viewModel: AllDayPanelCell): JSX.Element => (
+export const viewFunction = ({
+  props: {
+    className,
+    startDate,
+    endDate,
+    groups,
+    groupIndex,
+    isFirstGroupCell,
+    isLastGroupCell,
+    index,
+    dataCellTemplate,
+    isSelected,
+    isFocused,
+  },
+}: AllDayPanelCell): JSX.Element => (
   <DateTableCellBase
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    className={`dx-scheduler-all-day-table-cell ${viewModel.props.className}`}
-    startDate={viewModel.props.startDate}
-    endDate={viewModel.props.endDate}
-    groups={viewModel.props.groups}
-    groupIndex={viewModel.props.groupIndex}
+    className={`${ALL_DAY_PANEL_CELL_CLASS} ${className}`}
+    startDate={startDate}
+    endDate={endDate}
+    groups={groups}
+    groupIndex={groupIndex}
     allDay
-    isFirstGroupCell={viewModel.props.isFirstGroupCell}
-    isLastGroupCell={viewModel.props.isLastGroupCell}
-    index={viewModel.props.index}
-    dataCellTemplate={viewModel.props.dataCellTemplate}
+    isFirstGroupCell={isFirstGroupCell}
+    isLastGroupCell={isLastGroupCell}
+    index={index}
+    dataCellTemplate={dataCellTemplate}
+    isSelected={isSelected}
+    isFocused={isFocused}
   />
 );
 

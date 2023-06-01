@@ -20,6 +20,7 @@
   $header-filter-color-empty: $header-filter-color-empty,
   $pivotgrid-area-background: $pivotgrid-area-background,
   $pivotgrid-common-top-bottom-padding: $pivotgrid-common-top-bottom-padding,
+  $pivotgrid-header-top-bottom-padding: $pivotgrid-header-top-bottom-padding,
   $pivotgrid-field-indicators-offset: $pivotgrid-field-indicators-offset,
   $pivotgrid-indicators-line-height: $pivotgrid-indicators-line-height,
   $pivotgrid-totalcolor: $pivotgrid-totalcolor,
@@ -34,6 +35,8 @@
   $pivotgrid-area-data-image: $pivotgrid-area-data-image,
   $pivotgrid-dimension-image: $pivotgrid-dimension-image,
   $pivotgrid-hierarchy-image: $pivotgrid-hierarchy-image,
+  $pivotgrid-empty-area-text-padding: $pivotgrid-empty-area-text-padding,
+  $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
 );
 
 // adduse
@@ -98,6 +101,15 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
 
     td {
       padding: $material-pivotgrid-cell-padding;
+
+      &.dx-pivotgrid-collapsed,
+      &.dx-pivotgrid-expanded {
+        padding: $material-pivotgrid-expanded-cell-padding;
+
+        > span {
+          padding: 0 5px 0 10px;
+        }
+      }
     }
   }
 
@@ -112,27 +124,24 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
     }
   }
 
-  .dx-row-total.dx-last-cell {
-    padding-left: 22px;
-  }
-
-  .dx-grandtotal.dx-last-cell {
-    padding-left: 22px;
+  .dx-row-total,
+  .dx-grandtotal {
+    &.dx-last-cell {
+      padding-left: $material-pivotgrid-total-text-left-padding;
+    }
   }
 
   .dx-column-header,
   .dx-filter-header {
     .dx-pivotgrid-toolbar {
       .dx-button {
-        margin-top: 7px;
-
         @include dx-button-flat-color-styling($base-text-color, color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.08), color.change($button-normal-bg-inverted, $alpha: 0.3));
       }
     }
   }
 
   .dx-expand-icon-container {
-    margin: 0 0 0 5px;
+    margin: 0;
 
     @include dx-icon(chevronright);
 
@@ -157,23 +166,10 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
     color: $pivotgrid-chevron-icon-color;
   }
 
-  .dx-pivotgrid-collapsed,
-  .dx-pivotgrid-expanded {
-    > span {
-      padding: 0 5px 0 10px;
-    }
-  }
-
   .dx-area-tree-view {
     td.dx-white-space-column {
       width: $pivotgrid-empty-column-width;
       min-width: $pivotgrid-empty-column-width;
-    }
-  }
-
-  .dx-ie {
-    .dx-pivotgrid-fields-area {
-      @include dx-base-typography();
     }
   }
 }

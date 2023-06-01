@@ -1,3 +1,4 @@
+import { getWidth, setWidth } from '../../core/utils/size';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import $ from '../../core/renderer';
@@ -10,12 +11,12 @@ import eventsEngine from '../../events/core/events_engine';
 import Swipeable from '../../events/gesture/swipeable';
 import pointerEvents from '../../events/pointer';
 import { addNamespace, isMouseEvent, isTouchEvent, eventData } from '../../events/utils/index';
-import { triggerShownEvent } from '../../events/visibility_change';
 import numberLocalization from '../../localization/number';
 import { isMaterial, current as currentTheme } from '../themes';
 import TrackBar from '../track_bar';
 import { render } from '../widget/utils.ink_ripple';
 import SliderHandle from './ui.slider_handle';
+import { roundFloatPart, getExponentLength, getRemainderByDivision } from '../../core/utils/math';
 
 // STYLE slider
 
@@ -38,19 +39,20 @@ const Slider = TrackBar.inherit({
     _supportedKeys: function() {
         const isRTL = this.option('rtlEnabled');
 
-        const that = this;
         const roundedValue = (offset, isLeftDirection) => {
-            offset = that._valueStep(offset);
-            const step = that.option('step');
-            const value = that.option('value');
+            offset = this._valueStep(offset);
+            const step = this.option('step');
+            const value = this.option('value');
 
-            const division = (value - that.option('min')) % step;
+            const currentPosition = value - this.option('min');
+            const remainder = getRemainderByDivision(currentPosition, step, this._getValueExponentLength());
+
             let result = isLeftDirection
-                ? value - offset + (division ? step - division : 0)
-                : value + offset - division;
+                ? value - offset + (remainder ? step - remainder : 0)
+                : value + offset - remainder;
 
-            const min = that.option('min');
-            const max = that.option('max');
+            const min = this.option('min');
+            const max = this.option('max');
 
             if(result < min) {
                 result = min;
@@ -58,14 +60,14 @@ const Slider = TrackBar.inherit({
                 result = max;
             }
 
-            return result;
+            return this._roundToExponentLength(result);
         };
 
-        const moveHandleRight = offset => {
-            that.option('value', roundedValue(offset, isRTL));
+        const moveHandleRight = (offset) => {
+            this.option('value', roundedValue(offset, isRTL));
         };
-        const moveHandleLeft = offset => {
-            that.option('value', roundedValue(offset, !isRTL));
+        const moveHandleLeft = (offset) => {
+            this.option('value', roundedValue(offset, !isRTL));
         };
 
         return extend(this.callBase(), {
@@ -116,7 +118,6 @@ const Slider = TrackBar.inherit({
 
             hoverStateEnabled: true,
 
-
             activeStateEnabled: true,
 
             step: 1,
@@ -124,57 +125,17 @@ const Slider = TrackBar.inherit({
             showRange: true,
 
             tooltip: {
-                /**
-                * @name dxSliderBaseOptions.tooltip.enabled
-                * @type boolean
-                * @default false
-                */
                 enabled: false,
-
-                /**
-                * @name dxSliderBaseOptions.tooltip.format
-                * @type format
-                * @default function(value) { return value }
-                */
                 format: function(value) {
                     return value;
                 },
-
-                /**
-                * @name dxSliderBaseOptions.tooltip.position
-                * @type Enums.VerticalEdge
-                * @default 'top'
-                */
                 position: 'top',
-
-                /**
-                * @name dxSliderBaseOptions.tooltip.showMode
-                * @type Enums.SliderTooltipShowMode
-                * @default 'onHover'
-                */
                 showMode: 'onHover'
             },
 
             label: {
-                /**
-                * @name dxSliderBaseOptions.label.visible
-                * @type boolean
-                * @default false
-                */
                 visible: false,
-
-                /**
-                * @name dxSliderBaseOptions.label.position
-                * @type Enums.VerticalEdge
-                * @default 'bottom'
-                */
                 position: 'bottom',
-
-                /**
-                * @name dxSliderBaseOptions.label.format
-                * @type format
-                * @default function(value) { return value }
-                */
                 format: function(value) {
                     return value;
                 }
@@ -186,8 +147,9 @@ const Slider = TrackBar.inherit({
 
             validationMessageOffset: isMaterial() ? { h: 18, v: 0 } : { h: 7, v: 4 },
 
-            focusStateEnabled: true
+            focusStateEnabled: true,
 
+            valueChangeMode: 'onHandleMove'
         });
     },
 
@@ -306,6 +268,7 @@ const Slider = TrackBar.inherit({
         this._createComponent(this._$wrapper, Swipeable, {
             elastic: false,
             immediate: true,
+            immediateTimeout: 0,
             onStart: this._swipeStartHandler.bind(this),
             onUpdated: this._swipeUpdateHandler.bind(this),
             onEnd: this._swipeEndHandler.bind(this),
@@ -337,21 +300,15 @@ const Slider = TrackBar.inherit({
 
     _renderHandleImpl: function(value, $element) {
         const $handle = $element || $('<div>').appendTo(this._$range);
-        const format = this.option('tooltip.format');
-        const tooltipEnabled = this.option('tooltip.enabled');
-        const tooltipPosition = this.option('tooltip.position');
+        const tooltip = this.option('tooltip');
 
         this.$element()
-            .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + 'bottom', tooltipEnabled && tooltipPosition === 'bottom')
-            .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + 'top', tooltipEnabled && tooltipPosition === 'top');
+            .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + 'bottom', tooltip.enabled && tooltip.position === 'bottom')
+            .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + 'top', tooltip.enabled && tooltip.position === 'top');
 
         this._createComponent($handle, SliderHandle, {
             value,
-            tooltipEnabled,
-            tooltipPosition,
-            tooltipFormat: format,
-            tooltipShowMode: this.option('tooltip.showMode'),
-            tooltipFitIn: this.$element()
+            tooltip
         });
 
         return $handle;
@@ -364,16 +321,8 @@ const Slider = TrackBar.inherit({
         }, this._$handle);
     },
 
-    _hoverStartHandler: function(e) {
-        SliderHandle.getInstance($(e.currentTarget)).updateTooltip();
-    },
-
     _toggleActiveState: function($element, value) {
         this.callBase($element, value);
-
-        if(value) {
-            SliderHandle.getInstance($element).updateTooltip();
-        }
 
         this._renderInkWave($element, null, !!value, 1);
     },
@@ -406,7 +355,7 @@ const Slider = TrackBar.inherit({
                     .appendTo(this._$wrapper);
             }
 
-            this._$minLabel.html(numberLocalization.format(min, labelFormat));
+            this._$minLabel.text(numberLocalization.format(min, labelFormat));
 
             if(!this._$maxLabel) {
                 this._$maxLabel = $('<div>')
@@ -414,7 +363,7 @@ const Slider = TrackBar.inherit({
                     .appendTo(this._$wrapper);
             }
 
-            this._$maxLabel.html(numberLocalization.format(max, labelFormat));
+            this._$maxLabel.text(numberLocalization.format(max, labelFormat));
 
             this.$element().addClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + position);
 
@@ -443,6 +392,7 @@ const Slider = TrackBar.inherit({
                 startAction({ event: e });
             }
         });
+
         eventsEngine.off($element, clickEventName);
         eventsEngine.on($element, clickEventName, e => {
             const $handle = this._activeHandle();
@@ -452,6 +402,11 @@ const Slider = TrackBar.inherit({
                 eventsEngine.trigger($handle, 'focus');
             }
             startAction({ event: e });
+
+            if(this.option('valueChangeMode') === 'onHandleRelease') {
+                this.option('value', this._getActualValue());
+                this._actualValue = undefined;
+            }
         });
     },
 
@@ -476,19 +431,31 @@ const Slider = TrackBar.inherit({
         e.event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
         e.event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
 
-        this._itemWidthRatio = this.$element().width() / this._swipePixelRatio();
+        this._itemWidthRatio = getWidth(this.$element()) / this._swipePixelRatio();
 
         this._needPreventAnimation = true;
     },
 
     _swipeEndHandler: function(e) {
+        if(this._isSingleValuePossible()) {
+            return;
+        }
+
         this._feedbackDeferred.resolve();
         this._toggleActiveState(this._activeHandle(), false);
 
         const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
+        const ratio = this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio();
+
         delete this._needPreventAnimation;
-        this._saveValueChangeEvent(e);
-        this._changeValueOnSwipe(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
+        this._saveValueChangeEvent(e.event);
+        this._changeValueOnSwipe(ratio);
+
+        if(this.option('valueChangeMode') === 'onHandleRelease') {
+            this.option('value', this._getActualValue());
+        }
+
+        this._actualValue = undefined;
         delete this._startOffset;
         this._renderValue();
     },
@@ -498,7 +465,11 @@ const Slider = TrackBar.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        this._saveValueChangeEvent(e);
+        if(this._isSingleValuePossible()) {
+            return;
+        }
+
+        this._saveValueChangeEvent(e.event);
         this._updateHandlePosition(e);
     },
 
@@ -506,7 +477,7 @@ const Slider = TrackBar.inherit({
         const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
         const newRatio = Math.min(this._startOffset + offsetDirection * e.event.offset / this._swipePixelRatio(), 1);
 
-        this._$range.width(newRatio * 100 + '%');
+        setWidth(this._$range, newRatio * 100 + '%');
 
         SliderHandle.getInstance(this._activeHandle())['fitTooltipPosition'];
 
@@ -526,13 +497,22 @@ const Slider = TrackBar.inherit({
             step = 1;
         }
 
-        step = parseFloat(step.toFixed(5));
-        // TODO or exception?
-        if(step === 0) {
-            step = 0.00001;
-        }
-
         return step;
+    },
+
+    _getValueExponentLength: function() {
+        const { step, min } = this.option();
+
+        return Math.max(
+            getExponentLength(step),
+            getExponentLength(min)
+        );
+    },
+
+    _roundToExponentLength: function(value) {
+        const valueExponentLength = this._getValueExponentLength();
+
+        return roundFloatPart(value, valueExponentLength);
     },
 
     _changeValueOnSwipe: function(ratio) {
@@ -549,28 +529,41 @@ const Slider = TrackBar.inherit({
         if(newValue === max || newValue === min) {
             this._setValueOnSwipe(newValue);
         } else {
-            const stepExponent = (step + '').split('.')[1];
-            const minExponent = (min + '').split('.')[1];
-            const exponentLength = Math.max(
-                stepExponent && stepExponent.length || 0,
-                minExponent && minExponent.length || 0
-            );
             const stepCount = Math.round((newValue - min) / step);
-
-            newValue = Number((stepCount * step + min).toFixed(exponentLength));
+            newValue = this._roundToExponentLength(stepCount * step + min);
             this._setValueOnSwipe(Math.max(Math.min(newValue, max), min));
         }
     },
 
     _setValueOnSwipe: function(value) {
-        this.option('value', value);
-        this._saveValueChangeEvent(undefined);
+        this._actualValue = value;
+
+        if(this.option('valueChangeMode') === 'onHandleRelease') {
+            SliderHandle.getInstance(this._activeHandle()).option('value', value);
+        } else {
+            this.option('value', value);
+            this._saveValueChangeEvent(undefined);
+        }
+    },
+
+    _getActualValue: function() {
+        return this._actualValue ?? this.option('value');
+    },
+
+    _isSingleValuePossible: function() {
+        const { min, max } = this.option();
+
+        return min === max;
     },
 
     _startHandler: function(args) {
+        if(this._isSingleValuePossible()) {
+            return;
+        }
+
         const e = args.event;
 
-        this._currentRatio = (eventData(e).x - this._$bar.offset().left) / this._$bar.width();
+        this._currentRatio = (eventData(e).x - this._$bar.offset().left) / getWidth(this._$bar);
 
         if(this.option('rtlEnabled')) {
             this._currentRatio = 1 - this._currentRatio;
@@ -583,7 +576,7 @@ const Slider = TrackBar.inherit({
     _renderValue: function() {
         this.callBase();
 
-        const value = this.option('value');
+        const value = this._getActualValue();
 
         this._getSubmitElement().val(applyServerDecimalSeparator(value));
         SliderHandle.getInstance(this._activeHandle()).option('value', value);
@@ -602,7 +595,7 @@ const Slider = TrackBar.inherit({
     },
 
     _fitTooltip: function() {
-        this._callHandlerMethod('fitTooltipPosition');
+        this._callHandlerMethod('updateTooltipPosition');
     },
 
     _optionChanged: function(args) {
@@ -611,7 +604,6 @@ const Slider = TrackBar.inherit({
                 this.callBase(args);
                 this._renderHandle();
                 this._repaintHandle();
-                triggerShownEvent(this.$element()); // TODO: move firing dxshown event to Widget
                 break;
             case 'min':
             case 'max':
@@ -639,6 +631,8 @@ const Slider = TrackBar.inherit({
             case 'useInkRipple':
                 this._invalidate();
                 break;
+            case 'valueChangeMode':
+                break;
             default:
                 this.callBase(args);
         }
@@ -654,6 +648,7 @@ const Slider = TrackBar.inherit({
 
     _clean: function() {
         delete this._inkRipple;
+        delete this._actualValue;
         this.callBase();
     }
 });

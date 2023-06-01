@@ -1,18 +1,13 @@
 import DataSource from './data/data_source';
 
 /**
- * @docid DataHelperMixin
- * @module data_helper
- * @export default
+ * @docid
  * @hidden
- * @prevFileNamespace DevExpress
  */
 export default class DataHelperMixin {
     /**
-     * @docid DataHelperMixinMethods.getDataSource
+     * @docid
      * @publicName getDataSource()
-     * @return DataSource
-     * @prevFileNamespace DevExpress
      * @public
      */
     getDataSource(): DataSource;

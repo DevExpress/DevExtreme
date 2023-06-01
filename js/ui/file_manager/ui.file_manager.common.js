@@ -75,3 +75,10 @@ export const findItemsByKeys = (itemInfos, keys) => {
 
     return result;
 };
+
+export const getMapFromObject = function(object) {
+    const keys = Object.keys(object);
+    const values = [];
+    keys.forEach(key => values.push(object[key]));
+    return { keys, values };
+};

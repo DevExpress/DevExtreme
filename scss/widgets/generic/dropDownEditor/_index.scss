@@ -7,6 +7,7 @@
 @use "../textEditor/sizes" as *;
 @use "../button/colors" as *;
 @use "../../base/icons" as *;
+@use "../../base/dropDownEditor";
 
 // adduse
 
@@ -76,6 +77,17 @@ $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $gener
     &.dx-editor-underlined {
       border: none;
       background: transparent;
+    }
+
+    &.dx-texteditor-with-floating-label,
+    &.dx-texteditor-with-label {
+      .dx-texteditor-label {
+        .dx-label-before,
+        .dx-label,
+        .dx-label-after {
+          border: none;
+        }
+      }
     }
   }
 }

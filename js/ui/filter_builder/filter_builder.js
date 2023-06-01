@@ -9,7 +9,7 @@ import messageLocalization from '../../localization/message';
 import { when } from '../../core/utils/deferred';
 import { isDefined } from '../../core/utils/type';
 import TreeView from '../tree_view';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 import { getElementMaxHeightByWindow } from '../overlay/utils';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
 import { normalizeKeyName } from '../../events/utils/index';
@@ -80,58 +80,15 @@ const FilterBuilder = Widget.inherit({
 
             onEditorPrepared: null,
 
-            /**
-            * @name dxFilterBuilderField
-            * @type object
-            */
-
             onValueChanged: null,
 
             fields: [],
 
-
-            /**
-             * @name dxFilterBuilderField.lookup.dataSource
-             * @type Array<any>|DataSourceOptions|Store
-             * @default undefined
-             */
-
-            /**
-             * @name dxFilterBuilderField.lookup.valueExpr
-             * @type string|function(data)
-             * @default undefined
-             * @type_function_param1 data:object
-             * @type_function_return string|number|boolean
-             */
-
-            /**
-             * @name dxFilterBuilderField.lookup.displayExpr
-             * @type string|function(data)
-             * @default undefined
-             * @type_function_param1 data:object
-             * @type_function_return string
-             */
-
-            /**
-             * @name dxFilterBuilderField.lookup.allowClearing
-             * @type boolean
-             * @default false
-             */
-
             /**
              * @name dxFilterBuilderField.defaultFilterOperation
-             * @type Enums.FilterBuilderFieldFilterOperations | string
+             * @type Enums.FilterBuilderOperation | string
              * @hidden
              */
-
-
-            /**
-            * @name dxFilterBuilderOptions.defaultGroupOperation
-            * @type string
-            * @default "and"
-            * @hidden
-            */
-            defaultGroupOperation: 'and',
 
             groupOperations: ['and', 'or', 'notAnd', 'notOr'],
 
@@ -142,29 +99,9 @@ const FilterBuilder = Widget.inherit({
             allowHierarchicalFields: false,
 
             groupOperationDescriptions: {
-                /**
-                 * @name dxFilterBuilderOptions.groupOperationDescriptions.and
-                 * @type string
-                 * @default "And"
-                 */
                 and: messageLocalization.format('dxFilterBuilder-and'),
-                /**
-                 * @name dxFilterBuilderOptions.groupOperationDescriptions.or
-                 * @type string
-                 * @default "Or"
-                 */
                 or: messageLocalization.format('dxFilterBuilder-or'),
-                /**
-                 * @name dxFilterBuilderOptions.groupOperationDescriptions.notAnd
-                 * @type string
-                 * @default "Not And"
-                 */
                 notAnd: messageLocalization.format('dxFilterBuilder-notAnd'),
-                /**
-                 * @name dxFilterBuilderOptions.groupOperationDescriptions.notOr
-                 * @type string
-                 * @default "Not Or"
-                 */
                 notOr: messageLocalization.format('dxFilterBuilder-notOr'),
             },
 
@@ -172,90 +109,19 @@ const FilterBuilder = Widget.inherit({
 
             closePopupOnTargetScroll: true,
 
-            /**
-             * @name dxFilterBuilderCustomOperation
-             * @type object
-             */
-
-
             filterOperationDescriptions: {
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.between
-                 * @type string
-                 * @default "Between"
-                 */
                 between: messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.equal
-                 * @type string
-                 * @default "Equals"
-                 */
                 equal: messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.notEqual
-                 * @type string
-                 * @default "Does not equal"
-                 */
                 notEqual: messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.lessThan
-                 * @type string
-                 * @default "Less than"
-                 */
                 lessThan: messageLocalization.format('dxFilterBuilder-filterOperationLess'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.lessThanOrEqual
-                 * @type string
-                 * @default "Less than or equal to"
-                 */
                 lessThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.greaterThan
-                 * @type string
-                 * @default "Greater than"
-                 */
                 greaterThan: messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.greaterThanOrEqual
-                 * @type string
-                 * @default "Greater than or equal to"
-                 */
                 greaterThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.startsWith
-                 * @type string
-                 * @default "Starts with"
-                 */
                 startsWith: messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.contains
-                 * @type string
-                 * @default "Contains"
-                 */
                 contains: messageLocalization.format('dxFilterBuilder-filterOperationContains'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.notContains
-                 * @type string
-                 * @default "Does not contain"
-                 */
                 notContains: messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.endsWith
-                 * @type string
-                 * @default "Ends with"
-                 */
                 endsWith: messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.isBlank
-                 * @type string
-                 * @default "Is blank"
-                 */
                 isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
-                /**
-                 * @name dxFilterBuilderOptions.filterOperationDescriptions.isNotBlank
-                 * @type string
-                 * @default "Is not blank"
-                 */
                 isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank')
             }
         });
@@ -275,7 +141,6 @@ const FilterBuilder = Widget.inherit({
                 this._invalidate();
                 break;
             case 'fields':
-            case 'defaultGroupOperation':
             case 'maxGroupLevel':
             case 'groupOperations':
             case 'allowHierarchicalFields':
@@ -341,8 +206,12 @@ const FilterBuilder = Widget.inherit({
         this._customOperations = getMergedOperations(this.option('customOperations'), this.option('filterOperationDescriptions.between'), this);
     },
 
+    _getDefaultGroupOperation: function() {
+        return this.option('groupOperations')?.[0] ?? OPERATORS.and;
+    },
+
     _getModel: function(value) {
-        return convertToInnerStructure(value, this._customOperations);
+        return convertToInnerStructure(value, this._customOperations, this._getDefaultGroupOperation());
     },
 
     _initModel: function() {
@@ -387,10 +256,10 @@ const FilterBuilder = Widget.inherit({
         for(let i = 0; i < groupCriteria.length; i++) {
             const innerCriteria = groupCriteria[i];
             if(isGroup(innerCriteria)) {
-                this._createGroupElementByCriteria(innerCriteria, groupCriteria, groupLevel + 1)
+                this._createGroupElementByCriteria(innerCriteria, criteria, groupLevel + 1)
                     .appendTo($groupContent);
             } else if(isCondition(innerCriteria)) {
-                this._createConditionElement(innerCriteria, groupCriteria)
+                this._createConditionElement(innerCriteria, criteria)
                     .appendTo($groupContent);
             }
         }
@@ -413,7 +282,7 @@ const FilterBuilder = Widget.inherit({
         this._createGroupOperationButton(criteria).appendTo($groupItem);
 
         this._createAddButton(() => {
-            const newGroup = createEmptyGroup(this.option('defaultGroupOperation'));
+            const newGroup = createEmptyGroup(this._getDefaultGroupOperation());
             addItem(newGroup, criteria);
             this._createGroupElement(newGroup, criteria, groupLevel + 1).appendTo($groupContent);
             this._updateFilter();
@@ -447,7 +316,7 @@ const FilterBuilder = Widget.inherit({
                     onItemClick: (e) => {
                         if(groupMenuItem !== e.itemData) {
                             setGroupValue(criteria, e.itemData.value);
-                            $operationButton.html(e.itemData.text);
+                            $operationButton.text(e.itemData.text);
                             groupMenuItem = e.itemData;
                             this._updateFilter();
                         }
@@ -908,18 +777,20 @@ const FilterBuilder = Widget.inherit({
                 // T852701
                 this.repaint();
             },
+            _ignoreFunctionValueDeprecation: true,
             maxHeight: function() {
                 return getElementMaxHeightByWindow(options.menu.position.of);
             },
             visible: true,
             focusStateEnabled: false,
-            closeOnTargetScroll: this.option('closePopupOnTargetScroll'),
-            closeOnOutsideClick: true,
+            hideOnParentScroll: this.option('closePopupOnTargetScroll'),
+            hideOnOutsideClick: true,
             onShown: options.popup.onShown,
             shading: false,
             width: 'auto',
             height: 'auto',
-            showTitle: false
+            showTitle: false,
+            _wrapperClassExternal: options.menu.cssClass,
         });
     },
 

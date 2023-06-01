@@ -1,5 +1,8 @@
+// eslint-disable-next-line max-classes-per-file
+import { Selector } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
+import { CellEditor } from './cellEditor';
 
 const CLASS = {
   hiddenColumn: 'hidden-column',
@@ -11,12 +14,11 @@ const CLASS = {
   cellModified: 'dx-cell-modified',
   pendingIndicator: 'dx-pending-indicator',
   overlay: 'dx-overlay',
-  revertButton: 'dx-revert-button',
+  checkbox: 'dx-checkbox',
+  linkEdit: 'dx-link-edit',
 };
 
 export default class DataCell extends FocusableElement {
-  element: Selector;
-
   isEditCell: Promise<boolean>;
 
   isFocused: Promise<boolean>;
@@ -42,11 +44,23 @@ export default class DataCell extends FocusableElement {
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
   }
 
-  getEditor(): FocusableElement {
-    return new FocusableElement(this.element.find(`.${CLASS.editorInput}`));
+  static getModifiedCells(): Selector {
+    return Selector(`.${CLASS.cellModified}`);
   }
 
-  getRevertButton(): Selector {
-    return this.element.find(`.${CLASS.revertButton}`);
+  getEditor(): CellEditor {
+    return new CellEditor(this.element.find(`.${CLASS.editorInput}, .${CLASS.checkbox}`));
+  }
+
+  getCheckbox(): Selector {
+    return this.element.find(`.${CLASS.checkbox}`);
+  }
+
+  getLinkEdit(): Selector {
+    return this.element.find(`.${CLASS.linkEdit}`);
+  }
+
+  getIconByTitle(title: string): Selector {
+    return this.element.find(`a[title=${title}]`);
   }
 }

@@ -1,22 +1,37 @@
+import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import uiErrors from 'ui/widget/ui.errors';
 import fx from 'animation/fx';
 
-import 'common.css!';
+import 'generic_light.css!';
 import 'ui/load_panel';
 
 QUnit.testStart(function() {
     const markup =
         '<div id="qunit-fixture" class="dx-viewport">\
-            <div id="target" style="position: absolute; top: 0; left: 0; width: 100px; height: 100px;">\
+            <div id="target">\
                 <div id="container">\
-                    <div id="loadPanel" style="width: 100px; height: 100px;"></div>\
+                    <div id="loadPanel"></div>\
                     <div id="loadPanel2"></div>\
                 </div>\
             </div>\
         </div>';
 
     $('#qunit-fixture').replaceWith(markup);
+
+    $('#target').css({
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100px',
+        height: '100px'
+    });
+
+    $('#loadPanel').css({
+        width: '100px',
+        height: '100px'
+    });
 });
 
 const LOADPANEL_CLASS = 'dx-loadpanel';
@@ -56,7 +71,7 @@ QUnit.module('init', {
 
             assert.strictEqual(instance.option('templatesRenderAsynchronously'), true, 'templatesRenderAsynchronously option can be reassigned (T896267)');
             assert.strictEqual(onShowingSpy.called, false);
-            clock.tick();
+            clock.tick(10);
             assert.strictEqual(onShowingSpy.called, true);
         } finally {
             clock.restore();
@@ -126,6 +141,42 @@ QUnit.module('init', {
             position: { of: '#non-exist' }
         }).dxLoadPanel('instance');
     });
+
+    QUnit.module('Breaking change t1123711 - warning W1021', () => {
+        QUnit.test('should be logged if container is invalid', function(assert) {
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                $('#loadPanel').dxLoadPanel({
+                    container: 'invalid',
+                    visible: true
+                });
+
+                assert.ok(uiErrors.log.calledOnce, 'only one warning is logged');
+                assert.deepEqual(uiErrors.log.lastCall.args, [
+                    'W1021',
+                    'dxLoadPanel',
+                ], 'args of the log method');
+            } finally {
+                uiErrors.log.restore();
+            }
+        });
+
+        QUnit.test('should not not be logged if container is valid', function(assert) {
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                $('#loadPanel').dxLoadPanel({
+                    container: 'body',
+                    visible: true
+                });
+
+                assert.ok(uiErrors.log.notCalled, 'no warning is logged');
+            } finally {
+                uiErrors.log.restore();
+            }
+        });
+    });
 });
 
 QUnit.module('options changed callbacks', {
@@ -143,10 +194,10 @@ QUnit.module('options changed callbacks', {
     QUnit.test('width/height', function(assert) {
         this.instance.option('visible', true);
         this.instance.option('width', 123);
-        assert.equal(this.instance.$content().outerWidth(), 123);
+        assert.equal(getOuterWidth(this.instance.$content()), 123);
 
         this.instance.option('height', 321);
-        assert.equal(this.instance.$content().outerHeight(), 321);
+        assert.equal(getOuterHeight(this.instance.$content()), 321);
     });
 
     QUnit.test('showIndicator option', function(assert) {
@@ -369,6 +420,17 @@ QUnit.module('delay', {
         this.clock.tick(delayTimeout);
 
         assert.equal($content.is(':visible'), false, 'load panel was not shown after hide');
+    });
+});
+
+QUnit.module('default options', {
+    beforeEach: function() {
+        this.element = $('#loadPanel').dxLoadPanel({});
+        this.instance = this.element.dxLoadPanel('instance');
+    }
+}, () => {
+    QUnit.test('"propagateOutsideClick" option by default should be set to true (T1085638)', function(assert) {
+        assert.ok(this.instance.option('propagateOutsideClick'), true);
     });
 });
 

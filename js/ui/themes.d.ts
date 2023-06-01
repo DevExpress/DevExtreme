@@ -1,47 +1,41 @@
 /**
  * @docid ui.themes
  * @namespace DevExpress.ui
- * @module ui/themes
- * @export default
- * @prevFileNamespace DevExpress.ui
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class themes {
     /**
-     * @docid ui.themesmethods.current
+     * @docid ui.themes.current
      * @publicName current()
      * @static
-     * @return string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static current(): string;
     /**
-     * @docid ui.themesmethods.current
+     * @docid ui.themes.current
      * @publicName current(themeName)
-     * @param1 themeName:string
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static current(themeName: string): void;
     /**
-     * @docid ui.themesmethods.ready
+     * @docid ui.themes.ready
      * @publicName ready(callback)
-     * @param1 callback:function
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static ready(callback: Function): void;
     /**
-     * @docid ui.themesmethods.initialized
+     * @docid ui.themes.initialized
      * @publicName initialized(callback)
-     * @param1 callback:function
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static initialized(callback: Function): void;
     static isMaterial(theme: string): boolean;
 }
+
+export function current(): string;
+export function isMaterial(theme: string): boolean;
+export function isCompact(theme: string): boolean;

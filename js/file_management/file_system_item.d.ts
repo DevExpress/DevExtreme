@@ -1,100 +1,74 @@
 /**
  * @docid FileSystemItem
- * @type object
- * @module file_management/file_system_item
  * @namespace DevExpress.fileManagement
- * @export default
- * @prevFileNamespace DevExpress.fileManagement
  * @public
  */
 export default class FileSystemItem {
     constructor(path: string, isDirectory: boolean, pathKeys?: Array<string>);
 
     /**
-     * @docid FileSystemItemFields.path
-     * @type string
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid FileSystemItem.path
      * @public
      */
     path: string;
 
     /**
-     * @docid FileSystemItemFields.pathKeys
-     * @type Array<string>
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid FileSystemItem.pathKeys
      * @public
      */
     pathKeys: Array<string>;
 
     /**
-     * @docid FileSystemItemFields.key
-     * @type string
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid FileSystemItem.key
      * @public
      */
     key: string;
 
     /**
-     * @docid FileSystemItemFields.name
-     * @type string
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid FileSystemItem.name
      * @public
      */
     name: string;
 
     /**
-     * @docid FileSystemItemFields.dateModified
-     * @type Date
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid FileSystemItem.dateModified
      * @public
      */
     dateModified: Date;
 
     /**
-     * @docid FileSystemItemFields.size
-     * @type number
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid FileSystemItem.size
      * @public
      */
     size: number;
 
     /**
-     * @docid FileSystemItemFields.isDirectory
-     * @type boolean
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid FileSystemItem.isDirectory
      * @public
      */
     isDirectory: boolean;
 
     /**
-     * @docid FileSystemItemFields.hasSubDirectories
-     * @type boolean
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid FileSystemItem.hasSubDirectories
      * @public
      */
     hasSubDirectories: boolean;
 
     /**
-     * @docid FileSystemItemFields.thumbnail
-     * @type string
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid FileSystemItem.thumbnail
      * @public
      */
     thumbnail: string;
 
     /**
-     * @docid FileSystemItemFields.dataItem
-     * @type object
-     * @prevFileNamespace DevExpress.fileManagement
+     * @docid FileSystemItem.dataItem
      * @public
      */
     dataItem: any;
 
     /**
-     * @docid FileSystemItemMethods.getFileExtension
+     * @docid FileSystemItem.getFileExtension
      * @publicName getFileExtension()
-     * @return string
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     getFileExtension(): string;

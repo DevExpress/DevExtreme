@@ -3,7 +3,7 @@ import { chart as scatterSeries } from './scatter_series';
 import { chart as barChart } from './bar_series';
 import { extend as _extend } from '../../core/utils/extend';
 import { isDefined as _isDefined } from '../../core/utils/type';
-import { normalizeEnum as _normalizeEnum } from '../core/utils';
+import { normalizeEnum as _normalizeEnum, extractColor } from '../core/utils';
 import { noop as _noop } from '../../core/utils/common';
 
 const barSeries = barChart.bar;
@@ -138,17 +138,17 @@ export const stock = _extend({}, scatterSeries, {
     },
 
     _parsePointStyle: function(style, defaultColor, innerColor) {
+        const color = extractColor(style.color, true);
         return {
-            stroke: style.color || defaultColor,
+            stroke: color || defaultColor,
             'stroke-width': style.width,
-            fill: style.color || innerColor
+            fill: color || innerColor
         };
     },
 
     _getDefaultStyle: function(options) {
         const that = this;
-        const mainPointColor = options.color || that._options.mainSeriesColor;
-
+        const mainPointColor = extractColor(options.color, true) || that._options.mainSeriesColor;
         return {
             normal: that._parsePointStyle(options, mainPointColor, mainPointColor),
             hover: that._parsePointStyle(options.hoverStyle, mainPointColor, mainPointColor),
@@ -181,6 +181,7 @@ export const stock = _extend({}, scatterSeries, {
         styles.positive = positiveStyle;
         styles.reduction = reductionStyle;
         styles.reductionPositive = reductionPositiveStyle;
+        styles.labelColor = innerColor;
 
         return styles;
     },
@@ -192,7 +193,7 @@ export const stock = _extend({}, scatterSeries, {
     _defaultAggregator: 'ohlc',
 
     _aggregators: {
-        'ohlc': ({ intervalStart, data }, series) => {
+        'ohlc': ({ intervalStart, intervalEnd, data }, series) => {
             if(!data.length) {
                 return;
             }
@@ -221,7 +222,7 @@ export const stock = _extend({}, scatterSeries, {
             if(!isFinite(result[lowValueField])) {
                 result[lowValueField] = null;
             }
-            result[series.getArgumentField()] = intervalStart;
+            result[series.getArgumentField()] = series._getIntervalCenter(intervalStart, intervalEnd);
 
             return result;
         }
@@ -282,7 +283,7 @@ export const stock = _extend({}, scatterSeries, {
 export const candlestick = _extend({}, stock, {
 
     _parsePointStyle: function(style, defaultColor, innerColor) {
-        const color = style.color || innerColor;
+        const color = extractColor(style.color, true) || innerColor;
         const base = stock._parsePointStyle.call(this, style, defaultColor, color);
         base.fill = color;
         base.hatching = style.hatching;

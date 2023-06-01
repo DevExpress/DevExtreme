@@ -6,14 +6,14 @@ import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import eventsEngine from '../../../events/core/events_engine';
 
+import BaseModule from './base';
 import PopupModule from './popup';
 import Mention from '../formats/mention';
 
-let MentionModule = {};
+let MentionModule = BaseModule;
 
 if(Quill) {
     const USER_ACTION = 'user';
-    const SILENT_ACTION = 'silent';
     const DEFAULT_MARKER = '@';
 
     const KEYS = {
@@ -63,7 +63,6 @@ if(Quill) {
         constructor(quill, options) {
             super(quill, options);
             this._mentions = {};
-            this.editorInstance = options.editorInstance;
 
             options.mentions.forEach((item) => {
                 let marker = item.marker;
@@ -74,14 +73,14 @@ if(Quill) {
                 const template = item.template;
                 if(template) {
                     const preparedTemplate = this.editorInstance._getTemplate(template);
-                    preparedTemplate && Mention.addTemplate(marker, preparedTemplate);
+                    preparedTemplate && Mention.addTemplate({ marker, editorKey: this.editorInstance.getMentionKeyInTemplateStorage() }, preparedTemplate);
                 }
 
                 this._mentions[marker] = extend({}, this._getDefaultOptions(), item);
             });
 
             this._attachKeyboardHandlers();
-            this.editorInstance.addCleanCallback(this.clean.bind(this));
+            this.addCleanCallback(this.clean.bind(this));
             this.quill.on('text-change', this.onTextChange.bind(this));
         }
 
@@ -149,7 +148,9 @@ if(Quill) {
 
         _selectItemHandler() {
             if(this._isMentionActive) {
-                this._list.selectItem(this._list.option('focusedElement'));
+                this._list.option('items').length
+                    ? this._list.selectItem(this._list.option('focusedElement'))
+                    : this._popup.hide();
             }
             return !this._isMentionActive;
         }
@@ -191,21 +192,23 @@ if(Quill) {
             const markerLength = this._activeMentionConfig.marker.length;
             const textLength = markerLength + this._searchValue.length;
             const caretPosition = this.getPosition();
-            const startIndex = Math.max(0, caretPosition - markerLength);
             const selectedItem = this._list.option('selectedItem');
-
             const value = {
                 value: this._valueGetter(selectedItem),
                 id: this._idGetter(selectedItem),
-                marker: this._activeMentionConfig.marker
+                marker: this._activeMentionConfig.marker,
+                keyInTemplateStorage: this.editorInstance.getMentionKeyInTemplateStorage()
             };
+            const Delta = Quill.import('delta');
+            const startIndex = Math.max(0, caretPosition - markerLength);
+            const newDelta = new Delta()
+                .retain(startIndex)
+                .delete(textLength)
+                .insert({ mention: value })
+                .insert(' ');
 
-            setTimeout(function() {
-                this.quill.insertText(startIndex, ' ', SILENT_ACTION);
-                this.quill.deleteText(startIndex + 1, textLength, SILENT_ACTION);
-                this.quill.insertEmbed(startIndex, 'mention', value);
-                this.quill.setSelection(startIndex + 2);
-            }.bind(this));
+            this.quill.updateContents(newDelta);
+            this.quill.setSelection(startIndex + 2);
         }
 
         _getLastInsertOperation(ops) {
@@ -279,7 +282,10 @@ if(Quill) {
 
             if(this._activeMentionConfig) {
                 this._updateList(this._activeMentionConfig);
-                this.savePosition(caret.index);
+                // NOTE: Fix of off-by-one error in selection index after insert on a new line.
+                // See https://github.com/quilljs/quill/issues/1763.
+                const isOnNewLine = caret.index && this._getCharByIndex(caret.index - 1) === '\n';
+                this.savePosition(caret.index + isOnNewLine);
                 this._popup.option('position', this._popupPosition);
                 this._searchValue = '';
                 this._popup.show();
@@ -375,7 +381,7 @@ if(Quill) {
 
         _getPopupConfig() {
             return extend(super._getPopupConfig(), {
-                closeOnTargetScroll: false,
+                hideOnParentScroll: false,
                 onShown: () => {
                     this._isMentionActive = true;
                     this._hasSearch = false;
@@ -398,7 +404,10 @@ if(Quill) {
         clean() {
             Object.keys(this._mentions).forEach((marker) => {
                 if(this._mentions[marker].template) {
-                    Mention.removeTemplate(marker);
+                    Mention.removeTemplate({
+                        marker,
+                        editorKey: this.editorInstance.getMentionKeyInTemplateStorage()
+                    });
                 }
             });
         }

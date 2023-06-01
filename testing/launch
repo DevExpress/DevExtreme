@@ -1,44 +1,35 @@
 #!/usr/bin/env node
 
-const path = require('path');
 const http = require('http');
-const gulp = require('gulp');
-const childProcess = require('child_process');
-const os = require('os');
-
+const { join } = require('path');
+const { spawn } = require('child_process');
+const { platform } = require('os');
+const { env, versions } = require('process');
 const PORT = require('./../ports.json').qunit;
 
-if(parseInt(process.versions.node.split('.')[0]) < 6) {
+if(parseInt(versions.node.split('.')[0]) < 6) {
     throw 'Node version is too low';
 }
 
-watchForTests();
+execRunner();
 
-childProcess.spawn(
-    'dotnet',
-    [ path.join(__dirname, 'runner/bin/runner.dll') ],
-    { stdio: 'inherit' }
-);
-waitForRunner();
+function execRunner () {
+    spawn(
+        'dotnet',
+        [ join(__dirname, 'runner/bin/runner.dll') ],
+        { stdio: 'inherit', shell: true }
+    );
 
-
-function watchForTests() {
-    const process = require('process');
-    process.chdir(path.join(__dirname, '../'));
-
-    require('../gulpfile');
-    gulp.parallel(
-        'generate-components-watch',
-        'transpile-watch',
-        'style-compiler-themes-dev'
-    )();
+    waitForRunner();
 }
 
 function waitForRunner() {
     const timestamp = Date.now();
-    http.request({ port: PORT }, res => openBrowser())
-        .on('error', e => setTimeout(
-            function() {
+
+    http
+        .request({ port: PORT, family: 4 }, openBrowser)
+        .on('error', () => setTimeout(
+            () => {
                 console.log('waiting...');
                 waitForRunner();
             },
@@ -48,19 +39,15 @@ function waitForRunner() {
 }
 
 function openBrowser() {
-    childProcess.spawn(
+    spawn(
         getBrowserCommand(),
         [ 'http://localhost:' + PORT ],
-        {
-            shell: true,
-            detached: true
-        }
+        { shell: true, detached: true }
     );
 }
 
-
 function getBrowserCommand() {
-    switch(os.platform()) {
+    switch(platform()) {
         case 'win32':
             return 'start';
 

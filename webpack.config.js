@@ -1,6 +1,15 @@
 /* eslint-env node */
+const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
+    mode: 'production',
+    optimization: {
+        // eslint-disable-next-line spellcheck/spell-checker
+        minimizer: [new TerserPlugin({
+            extractComments: false,
+        })],
+    },
     output: {
         sourcePrefix: '    ',
         devtoolModuleFilenameTemplate: 'devextreme:///[resource-path]',
@@ -19,11 +28,22 @@ module.exports = {
         'globalize/message': 'window.Globalize',
         'devextreme-quill': 'window.DevExpress.Quill',
         'turndown': 'window.TurndownService',
-        'showdown': 'window.showdown',
+        'devextreme-showdown': 'window.showdown',
         'exceljs': 'window.ExcelJS',
         'jspdf': 'window.jspdf.jsPDF',
         'devexpress-diagram': 'window.DevExpress.diagram',
         'devexpress-gantt': 'window.DevExpress.Gantt',
         'luxon': 'window.luxon'
-    }
+    },
+    resolve: {
+        alias: {
+            '@devextreme/vdom': path.resolve('./node_modules/@devextreme/vdom/dist/cjs/index.js'),
+            '@devextreme/runtime/common': path.resolve('./node_modules/@devextreme/runtime/cjs/common/index.js'),
+            '@devextreme/runtime/inferno': path.resolve('./node_modules/@devextreme/runtime/cjs/inferno/index.js'),
+            '@devextreme/runtime/declarations': path.resolve('./node_modules/@devextreme/runtime/cjs/declarations/index.js'),
+            '@devextreme/runtime/angular': path.resolve('./node_modules/@devextreme/runtime/cjs/angular/index.js'),
+            '@devextreme/runtime/vue': path.resolve('./node_modules/@devextreme/runtime/cjs/vue/index.js'),
+            '@devextreme/runtime/react': path.resolve('./node_modules/@devextreme/runtime/cjs/react/index.js')
+        }
+    },
 };

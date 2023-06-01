@@ -1,11 +1,9 @@
+require('../../helpers/trackerMock.js');
+
 const $ = require('jquery');
-const mock = require('../../helpers/mockModule.js').mock;
 const vizMocks = require('../../helpers/vizMocks.js');
-const { ChartTracker } = require('viz/chart_components/tracker');
-const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
-const trackerModule = mock('viz/chart_components/tracker', {
-    ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters))
-});
+const trackerModule = require('viz/chart_components/tracker');
+const domAdapter = require('core/dom_adapter');
 const noop = require('core/utils/common').noop;
 const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 const vizUtils = require('viz/core/utils');
@@ -38,6 +36,23 @@ setupSeriesFamily();
 
 rendererModule.Renderer = function(parameters) {
     return new vizMocks.Renderer(parameters);
+};
+
+const defaultCrosshairOptions = {
+    horizontalLine: {},
+    verticalLine: {}
+};
+
+const defaultCommonPaneSettings = {
+    backgroundColor: 'none',
+    border: {
+        visible: false,
+        top: true,
+        bottom: true,
+        left: true,
+        right: true,
+        dashStyle: 'solid'
+    }
 };
 
 const ExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
@@ -90,17 +105,8 @@ const environment = {
         that.themeManager.getOptions.withArgs('series').returnsArg(1);
         that.themeManager.getOptions.withArgs('seriesTemplate').returns(false);
         that.themeManager.getOptions.withArgs('export').returns({ enabled: true });
-        that.themeManager.getOptions.withArgs('commonPaneSettings').returns({
-            backgroundColor: 'none',
-            border: {
-                visible: false,
-                top: true,
-                bottom: true,
-                left: true,
-                right: true,
-                dashStyle: 'solid'
-            }
-        });
+        that.themeManager.getOptions.withArgs('commonPaneSettings').returns(defaultCommonPaneSettings);
+        that.themeManager.getOptions.withArgs('crosshair').returns(defaultCrosshairOptions);
 
         that.themeManager.getOptions.withArgs('dataPrepareSettings').returns({
             checkTypeForAllData: true,
@@ -127,17 +133,9 @@ const environment = {
             }, options);
             $.each(options || {}, function(k, v) {
                 if(k === 'commonPaneSettings') {
-                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {
-                        backgroundColor: 'none',
-                        border: {
-                            visible: false,
-                            top: true,
-                            bottom: true,
-                            left: true,
-                            right: true,
-                            dashStyle: 'solid'
-                        }
-                    }, v));
+                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCommonPaneSettings, v));
+                } else if(k === 'crosshair') {
+                    that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCrosshairOptions, v));
                 } else if(k !== 'valueAxis' && k !== 'argumentAxis' && k !== 'series') {
                     that.themeManager.getOptions.withArgs(k).returns(v);
                 }
@@ -145,7 +143,7 @@ const environment = {
             return createChartInstance(options, this.$container);
         };
 
-        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
+        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
             return that.themeManager;
         });
         this.layoutManager = new LayoutManager();
@@ -153,7 +151,7 @@ const environment = {
             arguments[2] && arguments[2]();
         });
 
-        sinon.stub(layoutManagerModule, 'LayoutManager', function() {
+        sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
             const layoutManager = new LayoutManager();
             layoutManager
                 .stub('needMoreSpaceForPanesCanvas')
@@ -166,9 +164,11 @@ const environment = {
             return layoutManager;
         });
 
-        tooltipModule.Tooltip = function(parameters) {
+
+        sinon.stub(tooltipModule, 'Tooltip').callsFake(function(parameters) {
             return new StubTooltip(parameters);
-        };
+        });
+
         sinon.stub(vizUtils, 'updatePanesCanvases', function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
@@ -196,6 +196,9 @@ const environment = {
 
         layoutManagerModule.LayoutManager.reset();
         layoutManagerModule.LayoutManager.restore();
+
+        tooltipModule.Tooltip.reset();
+        tooltipModule.Tooltip.restore();
 
         this.layoutManager.layoutElements.reset();
 
@@ -695,7 +698,7 @@ const environment = {
 
     QUnit.test('draw chart when scrollBar is visible', function(assert) {
         // arrange
-        sinon.stub(scrollBarModule, 'ScrollBar', function() {
+        sinon.stub(scrollBarModule, 'ScrollBar').callsFake(function() {
             const stub = sinon.createStubInstance(ScrollBar);
             stub.init.returns(stub);
             stub.update.returns(stub);
@@ -847,7 +850,7 @@ const environment = {
         const argAxis = chart._argumentAxes[0];
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
+            sinon.stub(family, 'updateOptions').callsFake(function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
             });
         });
@@ -878,7 +881,7 @@ const environment = {
         const argAxis = chart._argumentAxes[0];
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
+            sinon.stub(family, 'updateOptions').callsFake(function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
             });
         });
@@ -906,7 +909,7 @@ const environment = {
         });
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
+            sinon.stub(family, 'updateOptions').callsFake(function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
             });
         });
@@ -929,7 +932,7 @@ const environment = {
         });
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
+            sinon.stub(family, 'updateOptions').callsFake(function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
             });
         });
@@ -956,7 +959,7 @@ const environment = {
         const argAxis = chart._argumentAxes[0];
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
+            sinon.stub(family, 'updateOptions').callsFake(function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
             });
         });
@@ -994,10 +997,6 @@ const environment = {
 
         assert.ok(chart._argumentAxes[0].wasDrawn, 'Horizontal axis was drawn');
         assert.ok(chart._valueAxes[0].wasDrawn, 'Vertical axis was drawn');
-        assert.ok(chart._argumentAxes[0].beforeCleanGroups.called, 'beforeCleanGroups called');
-        assert.ok(chart._argumentAxes[0].afterCleanGroups.called, 'afterCleanGroups called');
-        assert.ok(chart._valueAxes[0].beforeCleanGroups.called, 'beforeCleanGroups called');
-        assert.ok(chart._valueAxes[0].afterCleanGroups.called, 'afterCleanGroups called');
         assert.ok(chart.series[0].wasDrawn, 'Series was drawn');
         assert.ok(!chart._seriesGroup.stub('linkRemove').called, 'Series group should be detached');
         assert.ok(!chart._seriesGroup.stub('clear').called, 'Series group should be cleared');
@@ -1006,7 +1005,8 @@ const environment = {
         assert.ok(chart._labelsGroup.stub('clear').called, 'Series Labels group should be cleared');
         assert.ok(chart._labelsGroup.linkAppend.called, 'Series labels group should be added to root');
         assert.ok(chart._axesGroup.linkAppend.called, 'Axes group should be added to root');
-        assert.ok(chart._labelAxesGroup.linkAppend.called, 'Label axes group should be added to root');
+        assert.ok(chart._labelsAxesGroup.linkAppend.called, 'Label axes group should be added to root');
+        assert.ok(chart._stripLabelAxesGroup.linkAppend.called, 'Strips label group should be added to root');
         assert.ok(chart._panesBorderGroup.linkAppend.called, 'Panes border group should be added to root');
         assert.ok(chart._stripsGroup.linkAppend.called, 'Strips group should be added to root');
         assert.ok(chart._constantLinesGroup.above.linkAppend.called, 'Constant lines group should be added to root');
@@ -1514,7 +1514,7 @@ const environment = {
         mockObjectDispose('_stripsGroup');
         mockObjectDispose('_constantLinesGroup');
         mockObjectDispose('_axesGroup');
-        mockObjectDispose('_labelAxesGroup');
+        mockObjectDispose('_stripLabelAxesGroup');
         mockObjectDispose('_panesBorderGroup');
         mockObjectDispose('_seriesGroup');
         mockObjectDispose('_labelsGroup');
@@ -1523,6 +1523,7 @@ const environment = {
         mockObjectDispose('_scrollGroup');
         mockObjectDispose('_backgroundRect');
         mockObjectDispose('_scaleBreaksGroup');
+        mockObjectDispose('_labelsAxesGroup');
 
         // act
         this.$container.remove();
@@ -1573,8 +1574,8 @@ const environment = {
         assert.strictEqual(chart._constantLinesGroup, null, 'constant lines group is null');
         assert.ok(chart._axesGroupDisposed, '_axesGroup');
         assert.strictEqual(chart._axesGroup, null, 'axes group is null');
-        assert.ok(chart._axesGroupDisposed, '_labelAxesGroup');
-        assert.strictEqual(chart._labelAxesGroup, null, 'label axes group is null');
+        assert.ok(chart._axesGroupDisposed, '_stripLabelAxesGroup');
+        assert.strictEqual(chart._stripLabelAxesGroup, null, 'strip label axes group is null');
         assert.ok(chart._panesBorderGroupDisposed, '_panesBorderGroup');
         assert.strictEqual(chart._panesBorderGroup, null, 'panes border group is null');
         assert.ok(chart._seriesGroupDisposed, '_seriesGroup');
@@ -1585,9 +1586,52 @@ const environment = {
         assert.strictEqual(chart._crosshairCursorGroup, null, 'crosshair cursor group is null');
         assert.ok(chart._scaleBreaksGroupDisposed, '_scaleBreaksGroup');
         assert.strictEqual(chart._scaleBreaksGroup, null, 'scalebreaks group is null');
+        assert.ok(chart._labelsAxesGroupDisposed, '_labelsAxesGroup');
+        assert.strictEqual(chart._labelsAxesGroup, null, 'labelsAxesGroup is null');
 
         assert.deepEqual(loadIndicator.dispose.lastCall.args, [], 'load indicator dispose args');
         assert.strictEqual(chart._loadingIndicator, null, 'load indicator is null');
+    });
+
+    // T1001697
+    QUnit.test('Call annotationsPointerEventHandler after dispose', function(assert) {
+        // arrange
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+
+        const chart = this.createChart({
+            series: [{ type: 'line' }]
+        });
+
+        this.$container.remove();
+
+        try {
+            chart._annotationsPointerEventHandler({});
+
+            assert.ok(true, 'should be no exceptions');
+        } catch(e) {
+            assert.ok(false, 'Exception rised on mousedown');
+        }
+    });
+
+    // T1063025
+    QUnit.test('mousedown handling when chart disposed', function(assert) {
+        $(domAdapter.getDocument()).on('dxpointerdown', () => {
+            this.$container.remove();
+        });
+
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+
+        this.createChart({
+            series: [{ type: 'line' }]
+        });
+
+        try {
+            $(domAdapter.getDocument()).trigger(new $.Event('mousedown'));
+
+            assert.strictEqual(tooltipModule.Tooltip.lastCall.returnValue.stub('isCursorOnTooltip').callCount, 0);
+        } catch(e) {
+            assert.ok(false, 'Exception rised on mousedown');
+        }
     });
 
     QUnit.test('Call Dispose several times', function() {
@@ -1673,9 +1717,9 @@ function resetMocksInChart(chart) {
     chart._axesGroup.stub('linkAppend').reset();
     chart._axesGroup.stub('linkRemove').reset();
     chart._axesGroup.stub('clear').reset();
-    chart._labelAxesGroup.stub('linkAppend').reset();
-    chart._labelAxesGroup.stub('linkRemove').reset();
-    chart._labelAxesGroup.stub('clear').reset();
+    chart._stripLabelAxesGroup.stub('linkAppend').reset();
+    chart._stripLabelAxesGroup.stub('linkRemove').reset();
+    chart._stripLabelAxesGroup.stub('clear').reset();
     validateData.reset();
     chart._crosshairCursorGroup.stub('linkAppend').reset();
     chart._crosshairCursorGroup.stub('linkRemove').reset();

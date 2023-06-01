@@ -7,13 +7,13 @@ $generic-toast-icon-size: null !default;
 $generic-toast-content-padding: null !default;
 
 @if $size == "default" {
-  $generic-toast-line-height: 32px;
-  $generic-toast-icon-size: 35px;
-  $generic-toast-content-padding: 10px;
+  $generic-toast-line-height: 32px !default;
+  $generic-toast-icon-size: 35px !default;
+  $generic-toast-content-padding: 10px !default;
 }
 
 @else if $size == "compact" {
-  $generic-toast-line-height: 25px;
-  $generic-toast-icon-size: 25px;
-  $generic-toast-content-padding: 5px;
+  $generic-toast-line-height: 25px !default;
+  $generic-toast-icon-size: 25px !default;
+  $generic-toast-content-padding: 5px !default;
 }

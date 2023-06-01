@@ -1,8 +1,9 @@
+import { getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import 'ui/form/ui.form';
 import 'ui/form/ui.form.layout_manager';
+import { renderLabel } from 'ui/form/components/label.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
@@ -33,8 +34,8 @@ class FormTestWrapper {
     }
 
     _getLabelWidth(text) {
-        const $label = this._form._rootLayoutManager._renderLabel({ text: text, location: 'left' }).appendTo(this._getTestContainer());
-        const width = $label.children().first().width();
+        const $label = renderLabel({ text: text, location: 'left' }).appendTo(this._getTestContainer());
+        const width = getWidth($label.children().first());
         $label.remove();
         return width;
     }
@@ -48,7 +49,7 @@ class FormTestWrapper {
         const etalonLabelWidth = this._getLabelWidth(`${etalonLabelText}:`);
         $labelTexts.toArray().forEach(text => {
             const $text = $(text);
-            const textWidth = $text.width();
+            const textWidth = getWidth($text);
             QUnit.assert.roughEqual(textWidth, etalonLabelWidth, 1, `width of the ${$text.text()}`);
         });
     }
@@ -1457,6 +1458,81 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkItemElement('.test-item2', false);
         testWrapper.checkRequired('.test-item1', true, 'required of dataField 1');
     });
+
+    test('{ items: [{ caption:group1, [{ caption:group1_1 }] } -> itemOption(group1.group1_1, template)', function() {
+        const myClass = 'myClass';
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [ {
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: 1
+                }]
+            }]
+        }).dxForm('instance');
+
+
+        form.itemOption('group1.group1_1', 'template', `<div class="${myClass}"></div>`);
+
+        QUnit.assert.strictEqual(
+            JSON.stringify(form.option('items')),
+            JSON.stringify([{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [{
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: `<div class="${myClass}"></div>`
+                }]
+            }])
+        );
+        QUnit.assert.strictEqual(JSON.stringify($('.dx-form-group-caption').toArray().map(item => $(item).text())), JSON.stringify(['group 1', 'group 1_1']));
+        QUnit.assert.strictEqual($(`.${myClass}`).length, 1, '$(`.${myClass}`).length');
+    });
+
+    test('{ items: [{ caption:group1, [{ caption:group1_1 }] } -> itemOption(group1.group1_1, template, null)', function() {
+        const myClass = 'myClass';
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [ {
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: `<div class="${myClass}"></div>`
+                }]
+            }]
+        }).dxForm('instance');
+
+
+        form.itemOption('group1.group1_1', 'template', null);
+
+        QUnit.assert.strictEqual(
+            JSON.stringify(form.option('items')),
+            JSON.stringify([{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [{
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: null
+                }]
+            }])
+        );
+        QUnit.assert.strictEqual(JSON.stringify($('.dx-form-group-caption').toArray().map(item => $(item).text())), JSON.stringify(['group 1', 'group 1_1']));
+        QUnit.assert.strictEqual($(`.${myClass}`).length, 0, '$(`.${myClass}`).length');
+    });
+
+    test('{ items: [{ caption:group1, [{ caption:group1_1 }] } -> itemOption(group1.group1_1, template, undefined)', function() {
+        const myClass = 'myClass';
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [ {
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: `<div class="${myClass}"></div>`
+                }]
+            }]
+        }).dxForm('instance');
+
+
+        form.itemOption('group1.group1_1', 'template', undefined);
+
+        QUnit.assert.strictEqual(
+            JSON.stringify(form.option('items')),
+            JSON.stringify([{
+                itemType: 'group', name: 'group1', caption: 'group 1', items: [{
+                    itemType: 'group', name: 'group1_1', caption: 'group 1_1', template: undefined
+                }]
+            }])
+        );
+        QUnit.assert.strictEqual(JSON.stringify($('.dx-form-group-caption').toArray().map(item => $(item).text())), JSON.stringify(['group 1', 'group 1_1']));
+        QUnit.assert.strictEqual($(`.${myClass}`).length, 0, '$(`.${myClass}`).length');
+    });
 });
 
 module('Tabbed item. Use the itemOption method', function() {
@@ -2266,6 +2342,29 @@ module('Validation', () => {
         testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
     });
 
+    test('Change the visible option of the simple item to force rebuild items and reconnect validation summary', function() {
+        const testWrapper = new FormTestWrapper({
+            showValidationSummary: true,
+            items: [{
+                itemType: 'group',
+                caption: 'General',
+                items: [{
+                    dataField: 'field1', visible: false,
+                }, {
+                    dataField: 'field2',
+                    validationRules: [{
+                        type: 'required',
+                        message: 'dataField2 is required'
+                    }]
+                }]
+            }],
+        });
+
+        testWrapper._form.option('items[0].items[0].visible', true);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
+        testWrapper.checkValidationSummaryContent(['dataField2 is required']);
+    });
+
     test('Change the visible option of the simple item with validationSummary', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
@@ -2293,5 +2392,33 @@ module('Validation', () => {
         testWrapper.setItemOption('dataField2', 'visible', true);
         testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
         testWrapper.checkValidationSummaryContent(['Required']);
+    });
+
+    [
+        () => {},
+        (form) => { form.itemOption('group1', 'visible', false); },
+        (form) => { form.repaint(); },
+        (form) => { form._refresh(); }
+    ].forEach(additionalTestAction => {
+        test(`field1.optionChange, field2.optionChange (T948708). Additional action: ${additionalTestAction.toString()}`, function(assert) {
+            const form = new FormTestWrapper({
+                items: [ {
+                    itemType: 'group',
+                    name: 'group1',
+                    items: ['field1', {
+                        itemType: 'group',
+                        name: 'group2',
+                        items: ['field2']
+                    }]
+                }]
+            })._form;
+
+            form.itemOption('group1.field1', 'colSpan', 1);
+            additionalTestAction(form);
+            form.itemOption('group1.group2.field2', 'colSpan', 1);
+
+            assert.ok('no error is raised');
+            assert.strictEqual(form.itemOption('group1.group2.field2').colSpan, 1);
+        });
     });
 });

@@ -10,14 +10,17 @@ QUnit.test('get/set', function(assert) {
     try {
         assert.equal(originalConfig.rtlEnabled, false);
         assert.equal(originalConfig.defaultCurrency, 'USD');
+        assert.ok(originalConfig.defaultUseCurrencyAccountingStyle);
 
         config({
             rtlEnabled: true,
-            defaultCurrency: 'EUR'
+            defaultCurrency: 'EUR',
+            defaultUseCurrencyAccountingStyle: false
         });
 
         assert.equal(config().rtlEnabled, true);
         assert.equal(config().defaultCurrency, 'EUR');
+        assert.notOk(config().defaultUseCurrencyAccountingStyle);
 
         config({
             rtlEnabled: false
@@ -25,6 +28,7 @@ QUnit.test('get/set', function(assert) {
 
         assert.equal(config().rtlEnabled, false);
         assert.equal(config().defaultCurrency, 'EUR');
+        assert.notOk(config().defaultUseCurrencyAccountingStyle);
     } finally {
         config(originalConfig);
     }
@@ -83,4 +87,42 @@ QUnit.test('deprecated fields', function(assert) {
     } finally {
         errors.log = originalLog;
     }
+});
+
+QUnit.test('DevExpress.config.optionsParser works correct', function(assert) {
+    const optionsParser = DevExpress.config().optionsParser;
+
+    const testData = [
+        [
+            'dxTemplate: { "name": "title" }',
+            { 'dxTemplate': { 'name': 'title' } },
+        ],
+        [
+            `'dxTemplate': {
+               name: "title",
+               max-count: 123,
+               isOpen: true,
+               test: {
+                arr: ['a1', 'a2', true, 123],
+               },
+              }`,
+            { 'dxTemplate': { name: 'title', 'max-count': 123, isOpen: true, test: { arr: ['a1', 'a2', true, 123] } } },
+        ],
+        [
+            '"dxTemplate": { "name": "title" }',
+            { 'dxTemplate': { 'name': 'title' } }
+        ],
+        [
+            `{
+              "dxTemplate": {
+                "name": "title"
+               }
+              }`,
+            { 'dxTemplate': { 'name': 'title' } }
+        ]
+    ];
+
+    testData.forEach(([optionsString, etalon]) => {
+        assert.deepEqual(optionsParser(optionsString), etalon);
+    });
 });

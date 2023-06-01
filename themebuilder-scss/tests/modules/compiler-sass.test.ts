@@ -1,8 +1,8 @@
-import sass from 'sass';
+import * as sass from 'sass-embedded';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { OrderedMap } from 'immutable';
 
 import Compiler from '../../src/modules/compiler';
-
-jest.mock('fibers', () => undefined);
 
 jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
   __esModule: true,
@@ -28,46 +28,67 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
 describe('Sass features', () => {
   test('collector function', () => {
     const compiler = new Compiler();
-    const map = new sass.types.Map(7);
+    const map = new sass.SassMap(OrderedMap<sass.Value, sass.Value>([
+      // number variable
+      [
+        new sass.SassString('$var1'),
+        new sass.SassNumber(300, 'px'),
+      ],
+      // string variable
+      [
+        new sass.SassString('$var2'),
+        new sass.SassString('Helvetica', { quotes: false }),
+      ],
+      // color variable
+      [
+        new sass.SassString('$var3'),
+        new sass.SassColor({
+          red: 50,
+          green: 60,
+          blue: 70,
+          alpha: 0.4,
+        }),
+      ],
+      // list variable with ','
+      [
+        new sass.SassString('$var4'),
+        new sass.SassList([
+          new sass.SassNumber(10, 'px'),
+          new sass.SassNumber(15, 'px'),
+          new sass.SassNumber(32, 'px'),
+        ], {
+          separator: ',',
+        }),
+      ],
+      // list variable
+      [
+        new sass.SassString('$var5'),
+        new sass.SassList([
+          new sass.SassNumber(10, 'px'),
+          new sass.SassNumber(15, 'px'),
+          new sass.SassNumber(32, 'px'),
+        ], {
+          separator: ' ',
+        }),
+      ],
+      // null variable
+      [
+        new sass.SassString('$var6'),
+        sass.sassNull,
+      ],
+      // next variable after null
+      [
+        new sass.SassString('$var7'),
+        new sass.SassNumber(200, 'px'),
+      ],
+    ]));
 
-    // number variable
-    map.setKey(0, new sass.types.String('$var1'));
-    map.setValue(0, new sass.types.Number(300, 'px'));
-    // string variable
-    map.setKey(1, new sass.types.String('$var2'));
-    map.setValue(1, new sass.types.String('Helvetica'));
-    // color variable
-    map.setKey(2, new sass.types.String('$var3'));
-    map.setValue(2, new sass.types.Color(50, 60, 70, 0.4));
-    // list variable
-    map.setKey(3, new sass.types.String('$var4'));
-    const list1 = new sass.types.List(3);
-    list1.setValue(0, new sass.types.Number(10, 'px'));
-    list1.setValue(1, new sass.types.Number(15, 'px'));
-    list1.setValue(2, new sass.types.Number(32, 'px'));
-    list1.setSeparator(true);
-    map.setValue(3, list1);
-    // list variable with ','
-    map.setKey(4, new sass.types.String('$var5'));
-    const list2 = new sass.types.List(3);
-    list2.setValue(0, new sass.types.Number(10, 'px'));
-    list2.setValue(1, new sass.types.Number(15, 'px'));
-    list2.setValue(2, new sass.types.Number(32, 'px'));
-    list2.setSeparator(false);
-    map.setValue(4, list2);
-    // null variable
-    map.setKey(5, new sass.types.String('$var6'));
-    map.setValue(5, sass.types.Null.NULL);
-    // next variable after null
-    map.setKey(6, new sass.types.String('$var7'));
-    map.setValue(6, new sass.types.Number(200, 'px'));
-
-    compiler.collector(map);
+    compiler.collector([map]);
 
     expect(compiler.changedVariables).toEqual({
       $var1: '300px',
       $var2: 'Helvetica',
-      $var3: 'rgba(50, 60, 70, 0.4)',
+      $var3: '#323c4666',
       $var4: '10px, 15px, 32px',
       $var5: '10px 15px 32px',
       $var7: '200px',
@@ -101,23 +122,26 @@ describe('Sass features', () => {
       value: '10px',
     }];
 
-    const url = 'tb_generic';
+    const url = new URL('db:tb_generic');
     const expectedContent = '$var2: rgba(0,0,0,0);$var0: 10px;';
 
-    const setterResult = compiler.setter(url);
-    expect(setterResult).toEqual({ contents: expectedContent });
-    expect(compiler.importerCache[url]).toBe(expectedContent);
+    const setterResult = compiler.load(url);
+    expect(setterResult).toEqual({
+      contents: expectedContent,
+      syntax: 'scss',
+    });
+    expect(compiler.importerCache[url.pathname]).toBe(expectedContent);
   });
 
   test('setter call getMatchingUserItemsAsString once for every url', () => {
-    const url = 'tb_generic';
+    const url = new URL('db:tb_generic');
     const compiler = new Compiler();
     compiler.getMatchingUserItemsAsString = jest.fn().mockImplementation(() => 'content');
-    compiler.setter(url);
-    compiler.setter(url);
-    compiler.setter(url);
+    compiler.load(url);
+    compiler.load(url);
+    compiler.load(url);
 
     expect(compiler.getMatchingUserItemsAsString).toHaveBeenCalledTimes(1);
-    expect(compiler.importerCache[url]).toBe('content');
+    expect(compiler.importerCache[url.pathname]).toBe('content');
   });
 });

@@ -1,51 +1,27 @@
 import {
-  ComponentBindings, OneWay, TwoWay, Event,
-} from 'devextreme-generator/component_declaration/common';
-import { EventCallback } from '../../common/event_callback.d';
+  ComponentBindings,
+  OneWay,
+  TwoWay,
+  Event,
+} from '@devextreme-generator/declarations';
+import { BasePagerProps } from './base_pager_props';
 
-export type DisplayMode = 'adaptive' | 'compact' | 'full';
+import { EventCallback } from '../../common/event_callback';
 
 @ComponentBindings()
-export default class PagerProps {
-  @OneWay() gridCompatibility = true;
-
-  @OneWay() className?: string;
-
-  @OneWay() showInfo = false;
-
-  @OneWay() infoText?: string;
-
-  @OneWay() lightModeEnabled?: boolean;
-
-  @OneWay() displayMode: DisplayMode = 'adaptive';
-
-  @OneWay() maxPagesCount = 10;
-
-  @OneWay() pageCount = 10;
-
-  @OneWay() pagesCountText?: string;
-
-  @OneWay() visible = true;
-
-  @OneWay() hasKnownLastPage = true;
-
-  @OneWay() pagesNavigatorVisible: boolean | 'auto' = 'auto';
-
-  @TwoWay() pageIndex = 1;
-
-  @Event() pageIndexChange?: EventCallback<number>;
-
+export class PagerProps extends BasePagerProps {
   @TwoWay() pageSize = 5;
 
-  @Event() pageSizeChange?: EventCallback<number>;
+  @TwoWay() pageIndex = 1;
+}
 
-  @OneWay() showPageSizes = true;
+@ComponentBindings()
+export class InternalPagerProps extends BasePagerProps {
+  @OneWay() pageSize = 5;
 
-  @OneWay() pageSizes: (number | 'all')[] = [5, 10];
+  @OneWay() pageIndex = 1;
 
-  @OneWay() rtlEnabled?: boolean;
+  @Event() pageIndexChange!: EventCallback<number>;
 
-  @OneWay() showNavigationButtons = false;
-
-  @OneWay() totalCount = 0;
+  @Event() pageSizeChange!: EventCallback<number>;
 }

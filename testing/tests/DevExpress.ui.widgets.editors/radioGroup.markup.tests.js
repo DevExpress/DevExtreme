@@ -8,9 +8,10 @@ QUnit.testStart(() => {
         '<div id="radioGroup"> </div>\
         <div id="radioGroup2"> </div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+        <div id="widthRootStyle"></div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const { test, module } = QUnit;
@@ -75,15 +76,18 @@ QUnit.module('buttons group rendering', moduleConfig, () => {
         assert.ok(!$radioGroup.find('.dx-collection').hasClass('dx-state-disabled'), 'inner collection hasn\'t disabled-state class');
     });
 
-    test('widget should not try to load undefined initial value from the data source', function(assert) {
-        const loadStub = sinon.stub().returns([1, 2, 3]);
-        $('#radioGroup').dxRadioGroup({
-            dataSource: {
-                load: loadStub
-            }
-        });
+    [null, undefined].forEach(value => {
+        test(`widget should not try to load ${value} initial value from the data source`, function(assert) {
+            const loadStub = sinon.stub().returns([1, 2, 3]);
+            $('#radioGroup').dxRadioGroup({
+                dataSource: {
+                    load: loadStub
+                },
+                value
+            });
 
-        assert.ok(loadStub.calledOnce, 'load callback called once');
+            assert.ok(loadStub.calledOnce, 'load callback called once');
+        });
     });
 
     test('widget should not try to extra load initial value from the data source', function(assert) {
@@ -321,7 +325,7 @@ QUnit.module('Aria accessibility', {
         helper.createWidget({ items: [1, 2, 3], value: 1 });
 
         helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
-        helper.checkItemsAttributes([0], { attributes: ['aria-selected', 'aria-checked'], role: 'radio' });
+        helper.checkItemsAttributes([0], { attributes: ['aria-checked'], role: 'radio' });
     });
 
     QUnit.test('Items: [1, 2, 3], Item.selected: true, set focusedElement -> clean focusedElement', function() {
@@ -329,11 +333,11 @@ QUnit.module('Aria accessibility', {
 
         helper.widget.option('focusedElement', helper.getItems().eq(0));
         helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
-        helper.checkItemsAttributes([0], { attributes: ['aria-selected', 'aria-checked'], role: 'radio' });
+        helper.checkItemsAttributes([0], { attributes: ['aria-checked'], role: 'radio' });
 
         helper.widget.option('focusedElement', null);
         helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
-        helper.checkItemsAttributes([0], { attributes: ['aria-selected', 'aria-checked'], role: 'radio' });
+        helper.checkItemsAttributes([0], { attributes: ['aria-checked'], role: 'radio' });
     });
 });
 

@@ -1,57 +1,39 @@
-import {
-    format
-} from './ui/widget/ui.widget';
+import { Format as PredefinedFormat } from './common';
 
 /**
  * @docid localization.formatDate
  * @publicName formatDate(value, format)
- * @param1 value:date
- * @param2 format:format
- * @return string
  * @static
- * @module localization
- * @export formatDate
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
-export function formatDate(value: Date, format: format): string;
+export function formatDate(value: Date, format: Format): string;
 
 /**
  * @docid localization.formatMessage
  * @publicName formatMessage(key, value)
- * @param1 key:string
  * @param2 value:string|Array<string>
- * @return string
  * @static
- * @module localization
- * @export formatMessage
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
-export function formatMessage(key: string, value: string | Array<string>): string;
+export function formatMessage(key: string, ...values: Array<string>): string;
 
 /**
  * @docid localization.formatNumber
  * @publicName formatNumber(value, format)
- * @param1 value:number
- * @param2 format:format
- * @return string
  * @static
- * @module localization
- * @export formatNumber
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
-export function formatNumber(value: number, format: format): string;
+export function formatNumber(value: number, format: Format): string;
 
 /**
  * @docid localization.loadMessages
  * @publicName loadMessages(messages)
  * @param1 messages:object
  * @static
- * @module localization
- * @export loadMessages
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function loadMessages(messages: any): void;
@@ -59,11 +41,8 @@ export function loadMessages(messages: any): void;
 /**
  * @docid localization.locale
  * @publicName locale()
- * @return string
  * @static
- * @module localization
- * @export locale
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
 export function locale(): string;
@@ -71,41 +50,80 @@ export function locale(): string;
 /**
  * @docid localization.locale
  * @publicName locale(locale)
- * @param1 locale:string
  * @static
- * @module localization
- * @export locale
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function locale(locale: string): void;
 
 /**
  * @docid localization.parseDate
  * @publicName parseDate(text, format)
- * @param1 text:string
- * @param2 format:format
- * @return date
  * @static
- * @module localization
- * @export parseDate
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
-export function parseDate(text: string, format: format): Date;
+export function parseDate(text: string, format: Format): Date;
 
 /**
  * @docid localization.parseNumber
  * @publicName parseNumber(text, format)
- * @param1 text:string
- * @param2 format:format
- * @return number
  * @static
- * @module localization
- * @export parseNumber
- * @prevFileNamespace DevExpress
+ * @namespace DevExpress.localization
  * @public
  */
-export function parseNumber(text: string, format: format): number;
+export function parseNumber(text: string, format: Format): number;
 
+export interface FormatObject {
+    /**
+     * @docid Format.currency
+     * @public
+     */
+   currency?: string;
+   /**
+     * @docid Format.useCurrencyAccountingStyle
+     * @type boolean
+     * @default true
+     * @public
+     */
+    useCurrencyAccountingStyle?: boolean;
+   /**
+    * @docid Format.formatter
+    * @public
+    */
+   formatter?: ((value: number | Date) => string);
+   /**
+    * @docid Format.parser
+    * @public
+    */
+   parser?: ((value: string) => number | Date);
+   /**
+    * @docid Format.precision
+    * @public
+    */
+   precision?: number;
+   /**
+    * @docid Format.type
+    * @public
+    */
+   type?: PredefinedFormat | string;
+}
+type ExternalFormat = never;
 
+/**
+ * @docid
+ * @type Object|Enums.Format|string|function
+ * @default undefined
+ * @section Common
+ * @namespace DevExpress.ui
+ * @public
+ */
+export type Format =
+  FormatObject |
+  PredefinedFormat |
+  string |
+  ((value: number | Date) => string) |
+  ((value: Date) => string) |
+  ((value: number) => string) |
+  ExternalFormat;

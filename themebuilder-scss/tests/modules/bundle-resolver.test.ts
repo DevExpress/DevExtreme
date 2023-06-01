@@ -24,7 +24,7 @@ describe('Bundle resolver', () => {
 
       const result = resolveBundle(themeData.theme, themeData.colorScheme);
       expect(result.file).toBe(join(basePath, themeData.fileName));
-      expect(result.includePaths).toEqual([includePath]);
+      expect(result.options.loadPaths).toEqual([includePath]);
     });
   });
 });

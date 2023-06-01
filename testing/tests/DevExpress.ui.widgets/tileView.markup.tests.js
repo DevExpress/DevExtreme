@@ -1,14 +1,16 @@
 import $ from 'jquery';
 
 import 'ui/tile_view';
-import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
-    const markup =
-        '<div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+    const markup = `
+        <div id="widget"></div>
+        <div id="widthRootStyle"></div>
+    `;
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const TILEVIEW_CLASS = 'dx-tileview';
@@ -100,14 +102,15 @@ const getPositionCreator = function(config) {
 
 QUnit.module('rendering', {
     beforeEach: function() {
-        this.element = $('<div></div>').appendTo('body');
+        const $container = $('<div>').appendTo('body');
+        this.$element = $('<div>').appendTo($container);
     },
     afterEach: function() {
-        this.element.remove();
+        this.$element.parent().remove();
     }
 }, () => {
     QUnit.test('template should be rendered correctly', function(assert) {
-        const element = this.element.dxTileView({
+        const element = this.$element.dxTileView({
             items: prepareItems(items, configs.horizontal),
             itemTemplate: function(item) {
                 return 'Text is: ' + item.text;
@@ -125,14 +128,15 @@ $.each(configs, function(direction, config) {
 
     QUnit.module('rendering ' + direction, {
         beforeEach: function() {
-            this.element = $('<div></div>').appendTo('body');
+            const $container = $('<div>').appendTo('body');
+            this.$element = $('<div>').appendTo($container);
         },
         afterEach: function() {
-            this.element.remove();
+            this.$element.parent().remove();
         }
     }, () => {
         QUnit.test('items positions should be correct', function(assert) {
-            const element = this.element.dxTileView({
+            const element = this.$element.dxTileView({
                 direction: direction,
                 height: 200,
                 width: 200,

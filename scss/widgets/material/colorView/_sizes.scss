@@ -2,21 +2,21 @@
 
 // adduse
 
-$material-colorview-container-width: 450px;
-$material-colorview-palette-width: 288px;
-$material-colorview-palette-height: 299px;
-$material-colorview-alpha-margin: 10px;
-$material-colorview-hue-scale-width: 18px;
-$material-colorview-hue-scale-margin: 19px;
-$material-colorview-color-preview-height: 40px;
-$material-colorview-preview-container-margin: 34px;
+$material-colorview-container-width: 450px !default;
+$material-colorview-palette-width: 288px !default;
+$material-colorview-palette-height: 299px !default;
+$material-colorview-alpha-margin: 10px !default;
+$material-colorview-hue-scale-width: 18px !default;
+$material-colorview-hue-scale-margin: 19px !default;
+$material-colorview-color-preview-height: 40px !default;
+$material-colorview-preview-container-margin: 34px !default;
 
-$material-colorview-container-line-height: normal;
-$material-colorview-container-hex-margin: 20px 0 0 0;
-$material-colorview-container-alpha-label-width: 115px;
-$material-colorview-container-alpha-label-margin: 43px;
-$material-colorview-container-textbox-width: 69px;
-$material-colorview-container-textbox-margin: 0 0 0 10px;
+$material-colorview-container-line-height: normal !default;
+$material-colorview-container-hex-margin: 20px 0 0 0 !default;
+$material-colorview-container-alpha-label-width: 115px !default;
+$material-colorview-container-alpha-label-margin: 43px !default;
+$material-colorview-container-textbox-width: 69px !default;
+$material-colorview-container-textbox-margin: 0 0 0 10px !default;
 
-$material-colorview-controls-container-width: 90px;
-$material-colorview-controls-container-margin: 27px;
+$material-colorview-controls-container-width: 90px !default;
+$material-colorview-controls-container-margin: 27px !default;

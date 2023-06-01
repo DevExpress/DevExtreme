@@ -1,6 +1,8 @@
 import { extend } from '../../core/utils/extend';
 import errors from '../widget/ui.errors';
 import { deepExtendArraySafe } from '../../core/utils/object';
+import { getRecurrenceProcessor } from './recurrence';
+import { ExpressionUtils } from './expressionUtils';
 
 const PROPERTY_NAMES = {
     startDate: 'startDate',
@@ -11,11 +13,14 @@ const PROPERTY_NAMES = {
     startDateTimeZone: 'startDateTimeZone',
     endDateTimeZone: 'endDateTimeZone',
     recurrenceRule: 'recurrenceRule',
-    recurrenceException: 'recurrenceException'
+    recurrenceException: 'recurrenceException',
+    disabled: 'disabled'
 };
 class AppointmentAdapter {
-    constructor(rawAppointment, options) {
+    constructor(rawAppointment, dataAccessors, timeZoneCalculator, options) {
         this.rawAppointment = rawAppointment;
+        this.dataAccessors = dataAccessors;
+        this.timeZoneCalculator = timeZoneCalculator;
         this.options = options;
     }
 
@@ -90,19 +95,28 @@ class AppointmentAdapter {
     }
 
     get disabled() {
-        return !!this.rawAppointment.disabled;
+        return !!this.getField(PROPERTY_NAMES.disabled);
     }
 
-    get timeZoneCalculator() {
-        return this.options.getTimeZoneCalculator();
+    get isRecurrent() {
+        return getRecurrenceProcessor().isValidRecurrenceRule(this.recurrenceRule);
     }
 
     getField(property) {
-        return this.options.getField(this.rawAppointment, property);
+        return ExpressionUtils.getField(
+            this.dataAccessors,
+            property,
+            this.rawAppointment
+        );
     }
 
     setField(property, value) {
-        return this.options.setField(this.rawAppointment, property, value);
+        return ExpressionUtils.setField(
+            this.dataAccessors,
+            property,
+            this.rawAppointment,
+            value
+        );
     }
 
     calculateStartDate(pathTimeZoneConversion) {
@@ -129,12 +143,18 @@ class AppointmentAdapter {
     }
 
     clone(options = undefined) {
-        const result = new AppointmentAdapter(deepExtendArraySafe({}, this.rawAppointment), this.options);
+        const result = new AppointmentAdapter(
+            deepExtendArraySafe({}, this.rawAppointment),
+            this.dataAccessors,
+            this.timeZoneCalculator,
+            options
+        );
 
         if(options?.pathTimeZone) {
             result.startDate = result.calculateStartDate(options.pathTimeZone);
             result.endDate = result.calculateEndDate(options.pathTimeZone);
         }
+
         return result;
     }
 
@@ -153,3 +173,7 @@ class AppointmentAdapter {
 }
 
 export default AppointmentAdapter;
+
+export const createAppointmentAdapter = (rawAppointment, dataAccessors, timeZoneCalculator, options) => {
+    return new AppointmentAdapter(rawAppointment, dataAccessors, timeZoneCalculator, options);
+};

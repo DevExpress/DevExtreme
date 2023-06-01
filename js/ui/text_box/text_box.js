@@ -1,19 +1,14 @@
 import $ from '../../core/renderer';
-import { getNavigator, getWindow } from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 const window = getWindow();
-const navigator = getNavigator();
-import browser from '../../core/utils/browser';
-import eventsEngine from '../../events/core/events_engine';
-import devices from '../../core/devices';
-import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import TextEditor from './ui.text_editor';
-import { addNamespace, normalizeKeyName } from '../../events/utils/index';
+import { normalizeKeyName } from '../../events/utils/index';
+import { getOuterWidth, getWidth } from '../../core/utils/size';
 
 // STYLE textBox
 
-let ua = navigator.userAgent;
 const ignoreKeys = ['backspace', 'tab', 'enter', 'pageUp', 'pageDown', 'end', 'home', 'leftArrow', 'rightArrow', 'downArrow', 'upArrow', 'del'];
 
 const TEXTBOX_CLASS = 'dx-textbox';
@@ -47,22 +42,14 @@ const TextBox = TextEditor.inherit({
         this.setAria('role', 'textbox');
     },
 
-    _renderContentImpl: function() {
-        this._renderMaxLengthHandlers();
-        this.callBase();
-    },
-
     _renderInputType: function() {
         this.callBase();
 
         this._renderSearchMode();
     },
 
-    _renderMaxLengthHandlers: function() {
-        if(this._isAndroidOrIE()) {
-            eventsEngine.on(this._input(), addNamespace('keydown', this.NAME), this._onKeyDownCutOffHandler.bind(this));
-            eventsEngine.on(this._input(), addNamespace('change', this.NAME), this._onChangeCutOffHandler.bind(this));
-        }
+    _useTemplates: function() {
+        return false;
     },
 
     _renderProps: function() {
@@ -107,11 +94,34 @@ const TextBox = TextEditor.inherit({
         this._$searchIcon = $searchIcon;
     },
 
+    _getLabelContainerWidth: function() {
+        if(this._$searchIcon) {
+            const $inputContainer = this._input().parent();
+
+            return getWidth($inputContainer) - this._getLabelBeforeWidth();
+        }
+
+        return this.callBase();
+    },
+
+    _getLabelBeforeWidth: function() {
+        let labelBeforeWidth = this.callBase();
+
+        if(this._$searchIcon) {
+            labelBeforeWidth += getOuterWidth(this._$searchIcon);
+        }
+
+        return labelBeforeWidth;
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'maxLength':
                 this._toggleMaxLengthProp();
-                this._renderMaxLengthHandlers();
+                break;
+            case 'mode':
+                this.callBase(args);
+                this._updateLabelWidth();
                 break;
             case 'mask':
                 this.callBase(args);
@@ -124,14 +134,15 @@ const TextBox = TextEditor.inherit({
 
     _onKeyDownCutOffHandler: function(e) {
         const actualMaxLength = this._getMaxLength();
-        if(actualMaxLength) {
+
+        if(actualMaxLength && !e.ctrlKey && !this._hasSelection()) {
             const $input = $(e.target);
             const key = normalizeKeyName(e);
 
             this._cutOffExtraChar($input);
 
             return ($input.val().length < actualMaxLength
-                    || inArray(key, ignoreKeys) !== -1
+                    || ignoreKeys.includes(key)
                     || window.getSelection().toString() !== '');
         } else {
             return true;
@@ -156,29 +167,9 @@ const TextBox = TextEditor.inherit({
     _getMaxLength: function() {
         const isMaskSpecified = !!this.option('mask');
         return isMaskSpecified ? null : this.option('maxLength');
-    },
-
-    _isAndroidOrIE: function() {
-        const realDevice = devices.real();
-        const version = realDevice.version.join('.');
-        return browser.msie || realDevice.platform === 'android' && version && /^(2\.|4\.1)/.test(version) && !/chrome/i.test(ua);
     }
 });
 
-///#DEBUG
-
-TextBox.__internals = {
-    uaAccessor: function(value) {
-        if(!arguments.length) {
-            return window.DevExpress.ui;
-        }
-        ua = value;
-    },
-    SEARCHBOX_CLASS: SEARCHBOX_CLASS,
-    SEARCH_ICON_CLASS: SEARCH_ICON_CLASS
-};
-
-///#ENDDEBUG
 registerComponent('dxTextBox', TextBox);
 
 export default TextBox;

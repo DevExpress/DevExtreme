@@ -1,24 +1,28 @@
 const CLASS = {
   listItem: 'dx-list-item',
   stateFocused: 'dx-state-focused',
-  tooltipAppointmentItemContentDate: 'dx-tooltip-appointment-item-content-date',
-  tooltipAppointmentItemContentSubject: 'dx-tooltip-appointment-item-content-subject',
+  contentDate: 'dx-tooltip-appointment-item-content-date',
+  contentSubject: 'dx-tooltip-appointment-item-content-subject',
 };
 
-export default class AppointmentTooltipListItem {
-  element: Selector;
+export default class ListItem {
+  readonly element: Selector;
 
-  date: Selector;
+  readonly date: Selector;
 
-  subject: Selector;
+  readonly subject: Selector;
 
-  isFocused: Promise<boolean>;
+  constructor(wrapper: Selector, title?: string, index = 0) {
+    if (title) {
+      this.element = wrapper.find(`.${CLASS.listItem}`).withText(title).nth(index);
+    } else {
+      this.element = wrapper.find(`.${CLASS.listItem}`).nth(index);
+    }
+    this.date = this.element.find(`.${CLASS.contentDate}`);
+    this.subject = this.element.find(`.${CLASS.contentSubject}`);
+  }
 
-  constructor(wrapper: Selector, title: string, index = 0) {
-    this.element = wrapper.find(`.${CLASS.listItem}`).withText(title).nth(index);
-    this.isFocused = this.element.hasClass(CLASS.stateFocused);
-
-    this.date = this.element.find(`.${CLASS.tooltipAppointmentItemContentDate}`);
-    this.subject = this.element.find(`.${CLASS.tooltipAppointmentItemContentSubject}`);
+  get isFocused(): Promise<boolean> {
+    return this.element.hasClass(CLASS.stateFocused);
   }
 }

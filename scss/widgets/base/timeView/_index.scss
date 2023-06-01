@@ -1,0 +1,25 @@
+@use "./mixins";
+
+// adduse
+
+.dx-timeview {
+  &.dx-state-disabled,
+  .dx-state-disabled {
+    &.dx-widget,
+    .dx-widget {
+      opacity: 1;
+    }
+  }
+}
+
+.dx-timeview-clock {
+  position: relative;
+}
+
+.dx-timeview-field .dx-numberbox {
+  width: 70px;
+
+  &.dx-numberbox-spin-touch-friendly {
+    width: 110px;
+  }
+}

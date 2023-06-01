@@ -1,6 +1,6 @@
+import { getOuterHeight } from '../core/utils/size';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
-import Promise from '../core/polyfills/promise';
 import $ from '../core/renderer';
 import { Deferred } from '../core/utils/deferred';
 import { parseHTML } from '../core/utils/html_parser';
@@ -39,7 +39,7 @@ function readThemeMarker() {
     let result;
 
     try {
-        result = element.css('fontFamily');
+        result = window.getComputedStyle(element.get(0))['fontFamily'];
         if(!result) {
             return null;
         }
@@ -103,7 +103,7 @@ export function waitForThemeLoad(themeName) {
     }
 }
 
-function isPendingThemeLoaded() {
+export function isPendingThemeLoaded() {
     if(!pendingThemeName) {
         return true;
     }
@@ -237,18 +237,16 @@ export function current(options) {
     }
 
     if(currentThemeData) {
-        // NOTE:
-        // 1. <link> element re-creation leads to incorrect CSS rules priority in Internet Explorer (T246821).
-        // 2. We have no reliable info, why this hack has been applied and whether it is still relevant.
-        // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
-        //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr('href', knownThemes[currentThemeName].url);
         if((themeReadyCallback.has() || initDeferred.state() !== 'resolved' || options._forceTimeout)) {
             waitForThemeLoad(currentThemeName);
         }
     } else {
         if(isAutoInit) {
-            waitForThemeLoad(ANY_THEME);
+            if(hasWindow()) {
+                waitForThemeLoad(ANY_THEME);
+            }
+
             themeReadyCallback.fire();
             themeReadyCallback.empty();
         } else {
@@ -294,7 +292,7 @@ export function attachCssClasses(element, themeName) {
         const $tester = $('<div>');
         $tester.css('border', '.5px solid transparent');
         $('body').append($tester);
-        if($tester.outerHeight() === 1) {
+        if(getOuterHeight($tester) === 1) {
             $(element).addClass(DX_HAIRLINES_CLASS);
             themeClasses += ' ' + DX_HAIRLINES_CLASS;
         }
@@ -330,6 +328,10 @@ export function isGeneric(themeName) {
 
 export function isDark(themeName) {
     return isTheme('dark', themeName);
+}
+
+export function isCompact(themeName) {
+    return isTheme('compact', themeName);
 }
 
 export function isWebFontLoaded(text, fontWeight) {
@@ -428,3 +430,24 @@ export function setDefaultTimeout(timeout) {
     defaultTimeout = timeout;
 }
 
+/**
+ * Added default export according to our documentation
+ * https://js.devexpress.com/Documentation/ApiReference/Common/Utils/ui/themes/
+ * */
+export default {
+    setDefaultTimeout,
+    initialized,
+    resetTheme,
+    ready: themeReady,
+    waitWebFont,
+    isWebFontLoaded,
+    isCompact,
+    isDark,
+    isGeneric,
+    isMaterial,
+    detachCssClasses,
+    attachCssClasses,
+    current,
+    waitForThemeLoad,
+    isPendingThemeLoaded,
+};

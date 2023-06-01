@@ -1,57 +1,95 @@
 import {
-  Component, ComponentBindings, JSXComponent, Fragment, OneWay,
-} from 'devextreme-generator/component_declaration/common';
-import { Row as DateTableRow } from '../row';
-import { ViewCellData } from '../../types.d';
-import {
-  getKeyByGroup,
-  getIsGroupedAllDayPanel,
-} from '../../utils';
-import { LayoutProps } from '../layout_props';
+  Component,
+  JSXComponent,
+  Fragment,
+  ComponentBindings,
+  Template,
+  JSXTemplate,
+} from '@devextreme-generator/declarations';
+import { Row } from '../row';
+import { DataCellTemplateProps, ViewCellData } from '../../types';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
-import { MonthDateTableCell } from '../../month/date_table/cell';
+import { LayoutProps } from '../layout_props';
 import { DateTableCellBase } from './cell';
+import { combineClasses } from '../../../../../utils/combine_classes';
+import { DATE_TABLE_ROW_CLASS } from '../../const';
 
-export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
+export interface CellTemplateProps extends ViewCellData {
+  dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
+}
+
+export const viewFunction = ({
+  props: {
+    viewData,
+    dataCellTemplate,
+    cellTemplate: Cell,
+  },
+  rowClasses,
+}: DateTableBody): JSX.Element => (
   <Fragment>
-    {viewModel.props.viewData!
-      .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
-        <Fragment key={getKeyByGroup(groupIndex)}>
-          {getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex) && (
+    {viewData
+      .groupedData.map(({
+        dateTable,
+        allDayPanel,
+        key: fragmentKey,
+        isGroupedAllDayPanel,
+      }) => (
+        <Fragment key={fragmentKey}>
+          {isGroupedAllDayPanel && (
             <AllDayPanelTableBody
               viewData={allDayPanel}
-              dataCellTemplate={viewModel.props.dataCellTemplate}
+              dataCellTemplate={dataCellTemplate}
               isVerticalGroupOrientation
+              leftVirtualCellWidth={viewData.leftVirtualCellWidth}
+              rightVirtualCellWidth={viewData.rightVirtualCellWidth}
+              leftVirtualCellCount={viewData.leftVirtualCellCount}
+              rightVirtualCellCount={viewData.rightVirtualCellCount}
             />
           )}
-          {dateTable.map((cellsRow) => (
-            <DateTableRow
-              className="dx-scheduler-date-table-row"
-              key={cellsRow[0].key}
+          {dateTable.map(({ key: rowKey, cells }) => (
+            <Row
+              className={rowClasses}
+              key={rowKey}
+              leftVirtualCellWidth={viewData.leftVirtualCellWidth}
+              rightVirtualCellWidth={viewData.rightVirtualCellWidth}
+              leftVirtualCellCount={viewData.leftVirtualCellCount}
+              rightVirtualCellCount={viewData.rightVirtualCellCount}
             >
-              {cellsRow.map(({
+              {cells.map(({
                 startDate,
                 endDate,
                 groups,
                 groupIndex: cellGroupIndex,
-                index,
+                index: cellIndex,
                 isFirstGroupCell,
                 isLastGroupCell,
+                isSelected,
+                isFocused,
                 key,
+                text,
+                otherMonth,
+                firstDayOfMonth,
+                today,
               }: ViewCellData) => (
-                <viewModel.cell
+                <Cell
                   isFirstGroupCell={isFirstGroupCell}
                   isLastGroupCell={isLastGroupCell}
                   startDate={startDate}
                   endDate={endDate}
                   groups={groups}
                   groupIndex={cellGroupIndex}
-                  index={index}
-                  dataCellTemplate={viewModel.props.dataCellTemplate}
+                  index={cellIndex}
+                  dataCellTemplate={dataCellTemplate}
                   key={key}
+                  text={text}
+                  today={today}
+                  otherMonth={otherMonth}
+                  firstDayOfMonth={firstDayOfMonth}
+                  isSelected={isSelected}
+                  isFocused={isFocused}
                 />
               ))}
-            </DateTableRow>
+            </Row>
           ))}
         </Fragment>
       ))}
@@ -60,18 +98,20 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
 
 @ComponentBindings()
 export class DateTableBodyProps extends LayoutProps {
-  @OneWay() viewType?: string;
+  @Template() cellTemplate: JSXTemplate<CellTemplateProps> = DateTableCellBase;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent(DateTableBodyProps) {
-  // This is a workaround: cannot use template inside a template
-  get cell(): any {
-    const { viewType } = this.props;
+export class DateTableBody extends JSXComponent<DateTableBodyProps, 'cellTemplate'>() {
+  get rowClasses(): string {
+    const { addVerticalSizesClassToRows } = this.props;
 
-    return viewType === 'month' ? MonthDateTableCell : DateTableCellBase;
+    return combineClasses({
+      [DATE_TABLE_ROW_CLASS]: true,
+      'dx-scheduler-cell-sizes-vertical': addVerticalSizesClassToRows,
+    });
   }
 }

@@ -5,10 +5,4 @@ const query = function() {
     return queryImpl[impl].apply(this, arguments);
 };
 
-/**
-* @name Query
-* @type object
-*/
-
-
 export default query;

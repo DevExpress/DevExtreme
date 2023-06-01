@@ -5,7 +5,7 @@ const _round = Math.round;
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import { clone } from '../../core/utils/object';
-import { dxBaseGauge } from './base_gauge';
+import { BaseGauge } from './base_gauge';
 import { dxGauge, createIndicatorCreator } from './common';
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
 import * as linearIndicators from './linear_indicators';
@@ -204,7 +204,7 @@ const dxLinearGauge = dxGauge.inherit({
         }
     },
 
-    _factory: clone(dxBaseGauge.prototype._factory)
+    _factory: clone(BaseGauge.prototype._factory)
 });
 
 function selectRectBySizes(srcRect, sizes, margins) {
@@ -242,6 +242,7 @@ dxLinearGauge._TESTS_selectRectBySizes = selectRectBySizes;
 const indicators = dxLinearGauge.prototype._factory.indicators = {};
 dxLinearGauge.prototype._factory.createIndicator = createIndicatorCreator(indicators);
 
+/* eslint-disable import/namespace */
 indicators._default = linearIndicators._default;
 indicators['rectangle'] = linearIndicators['rectangle'];
 indicators['rhombus'] = linearIndicators['rhombus'];
@@ -249,6 +250,7 @@ indicators['circle'] = linearIndicators['circle'];
 indicators['trianglemarker'] = linearIndicators['trianglemarker'];
 indicators['textcloud'] = linearIndicators['textcloud'];
 indicators['rangebar'] = linearIndicators['rangebar'];
+/* eslint-enable import/namespace */
 
 dxLinearGauge.prototype._factory.RangeContainer = LinearRangeContainer;
 

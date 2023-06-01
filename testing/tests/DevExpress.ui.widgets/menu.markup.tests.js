@@ -6,7 +6,7 @@ import 'ui/menu/ui.submenu';
 
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
-import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =

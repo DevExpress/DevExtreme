@@ -6,15 +6,21 @@ import MenuBase from 'ui/context_menu/ui.menu_base';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
-import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="menuContainer1" style="width: 100%; height: 100%"></div>\
-        <div id="menuContainer3" style="width: 100%; height: 100%"></div>\
-        <div id="menuContainer2" style="width: 100%; height: 100%"></div>\
-        <div id="menu"></div>\
-        <div class="dx-viewport"></div>';
+        `<style nonce="qunit-test">
+            #menuContainer1, #menuContainer2, #menuContainer3 {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+        <div id="menuContainer1"></div>
+        <div id="menuContainer3"></div>
+        <div id="menuContainer2"></div>
+        <div id="menu"></div>
+        <div class="dx-viewport"></div>`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -41,6 +47,9 @@ const DX_ITEM_HAS_TEXT = DX_MENU_ITEM_CLASS + '-has-text';
 const DX_ITEM_HAS_ICON = DX_MENU_ITEM_CLASS + '-has-icon';
 const DX_ITEM_HAS_SUBMENU = DX_MENU_ITEM_CLASS + '-has-submenu';
 
+const DX_ITEM_URL_CLASS = 'dx-item-url';
+const DX_MENU_ITEM_TEXT_URL_CLASS = `${DX_MENU_ITEM_TEXT_CLASS}-with-url`;
+const DX_ICON_WITH_URL_CLASS = `${DX_ICON_CLASS}-with-url`;
 
 const TestComponent = MenuBase.inherit({
     NAME: 'TestComponent',
@@ -332,6 +341,189 @@ QUnit.module('Menu rendering', () => {
         const $element = menuBase.element;
 
         assert.equal($element.find('.dx-menu-item-content').first().text(), 'Test item');
+    });
+
+    ['http', 'https'].forEach((protocol) => {
+        QUnit.test(`item should be rendered as link if item.url starts with ${protocol}`, function(assert) {
+            const url = `${protocol}://some_url`;
+            const menuBase = createMenu({
+                items: [{ text: 'Item text', url }]
+            });
+            const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
+
+            assert.strictEqual(content.tagName, 'A');
+            assert.strictEqual(content.getAttribute('href'), url);
+            assert.strictEqual(content.text, 'Item text');
+        });
+    });
+
+    QUnit.test('item should be rendered as link if item.url without protocol', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: '/some_url' }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.tagName, 'A');
+        assert.strictEqual(content.getAttribute('href'), '/some_url');
+        assert.strictEqual(content.text, 'Item text');
+    });
+
+    QUnit.test('item should contain correct classes if item.url is set', function(assert) {
+        const url = 'http://some_url';
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children();
+
+        assert.ok(content.hasClass(DX_ITEM_URL_CLASS));
+        assert.ok(content.children().hasClass(DX_MENU_ITEM_TEXT_URL_CLASS));
+    });
+
+    QUnit.test('item icon should be rendered as link if item.url is set', function(assert) {
+        const menuBase = createMenu({
+            items: [{ icon: 'save', url: '/some_url' }]
+        });
+
+        const icon = menuBase.element.find(`.${DX_ITEM_URL_CLASS}`).children();
+
+        assert.ok(icon.hasClass(DX_ICON_WITH_URL_CLASS));
+    });
+
+    QUnit.test('should update item link after update item option with new url', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }]
+        });
+
+        menuBase.instance.option('items', [{ text: 'Item text', url: 'http://some_new_url' }]);
+
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.getAttribute('href'), 'http://some_new_url');
+    });
+
+    QUnit.test('should update item link after update url option of specific item', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }]
+        });
+
+        menuBase.instance.option('items[0].url', 'http://some_new_url');
+
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.getAttribute('href'), 'http://some_new_url');
+    });
+
+    QUnit.test('item should be rendered with extra attributes for link if item.linkAttr and item.url are set', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url', linkAttr: { target: '_blank' } }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.tagName, 'A');
+        assert.strictEqual(content.getAttribute('href'), 'http://some_url');
+        assert.strictEqual(content.getAttribute('target'), '_blank');
+        assert.strictEqual(content.text, 'Item text');
+    });
+
+    QUnit.test('should not raise error if linkAttr option is not object', function(assert) {
+        try {
+            createMenu({
+                items: [{ text: 'Item text', url: 'http://some_url', linkAttr: 'string' }]
+            });
+        } catch(e) {
+            assert.ok(false, `error ${e.message}`);
+        } finally {
+            assert.ok(true, 'no error');
+        }
+    });
+
+    QUnit.test('should update item link after update item option with new linkAttr', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url', linkAttr: { target: '_blank' } }]
+        });
+
+        menuBase.instance.option('items', [{ text: 'Item text', url: 'http://some_url', linkAttr: { target: '_self' } }]);
+
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.getAttribute('href'), 'http://some_url');
+        assert.strictEqual(content.getAttribute('target'), '_self');
+    });
+
+    QUnit.test('should update item link after update item.linkAttr option of specific item', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url', linkAttr: { target: '_blank' } }]
+        });
+
+        menuBase.instance.option('items[0].linkAttr', { target: '_self' });
+
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.getAttribute('href'), 'http://some_url');
+        assert.strictEqual(content.getAttribute('target'), '_self');
+    });
+
+    QUnit.test('item.url option should not applied if template option is set', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'https://some_url', template: '<div>Custom Item</div>' }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`);
+
+        assert.notOk(content.children()[0].getAttribute('href'));
+        assert.strictEqual(content.text(), 'Custom Item');
+    });
+
+    QUnit.test('linkAttr.href option should not replace item.url', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url', linkAttr: { href: '/extra_url' } }]
+        });
+        const content = menuBase.element.find(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.tagName, 'A');
+        assert.strictEqual(content.getAttribute('href'), 'http://some_url');
+        assert.strictEqual(content.text, 'Item text');
+    });
+
+    QUnit.test('Link should not be programmatically clicked if item.url is set and text inside link is clicked', function(assert) {
+        const clickSpy = sinon.spy();
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }],
+        });
+
+        const $menuItemLink = menuBase.element
+            .find(`.${DX_ITEM_URL_CLASS}`)
+            .get(0);
+
+        $menuItemLink.click = clickSpy;
+
+        const $itemText = menuBase.element
+            .find(`.${DX_MENU_ITEM_TEXT_CLASS}`)
+            .eq(0);
+
+        $itemText.trigger('dxclick');
+
+        assert.notOk(clickSpy.calledOnce);
+    });
+
+    QUnit.test('Link should be programmatically clicked if item.url is set and item is clicked', function(assert) {
+        const clickSpy = sinon.spy();
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }],
+        });
+
+        const $menuItemLink = menuBase.element
+            .find(`.${DX_ITEM_URL_CLASS}`)
+            .get(0);
+
+        $menuItemLink.click = clickSpy;
+
+        const $item = menuBase.element
+            .find(`.${DX_MENU_ITEM_CLASS}`)
+            .eq(0);
+
+        $item.trigger('dxclick');
+
+        assert.ok(clickSpy.calledOnce);
     });
 });
 
@@ -913,6 +1105,42 @@ QUnit.module('Keyboard navigation', () => {
         assert.equal(itemClickArgs[0].customField, 'cf');
 
         this.clock.restore();
+    });
+
+    QUnit.test('Url in item should be clicked by enter key press if item.url is set', function(assert) {
+        const clickSpy = sinon.spy();
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }],
+            focusStateEnabled: true
+        });
+
+        const menuItem = menuBase.element
+            .find(`.${DX_ITEM_URL_CLASS}`)
+            .get(0);
+
+        menuItem.click = clickSpy;
+
+        keyboardMock(menuBase.element)
+            .keyDown('down')
+            .keyDown('enter');
+
+        assert.ok(clickSpy.calledOnce);
+    });
+
+    QUnit.test('Error should not be raised if item.url and item.template are set and enter is pressed', function(assert) {
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url', template: '<div>Custom Item</div>' }],
+            focusStateEnabled: true
+        });
+
+        try {
+            keyboardMock(menuBase.element)
+                .keyDown('down')
+                .keyDown('enter');
+            assert.ok(true, 'There is no error');
+        } catch(e) {
+            assert.ok(false, `Error is raised: ${e.message}`);
+        }
     });
 });
 

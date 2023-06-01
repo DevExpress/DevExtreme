@@ -1,6 +1,7 @@
+import { getHeight } from '../core/utils/size';
 import { noop } from '../core/utils/common';
 import { extend as _extend } from '../core/utils/extend';
-import { inArray } from '../core/utils/array';
+import { hasWindow } from '../core/utils/window';
 import { each as _each } from '../core/utils/iterator';
 import registerComponent from '../core/component_registrator';
 import { prepareSegmentRectPoints } from './utils';
@@ -8,8 +9,9 @@ import {
     map as _map, getLog, getCategoriesInfo,
     updatePanesCanvases, convertVisualRangeObject, PANE_PADDING,
     normalizePanesHeight,
-    checkElementHasPropertyFromStyleSheet,
-    rangesAreEqual
+    rangesAreEqual,
+    isRelativeHeightPane,
+    extractColor
 } from './core/utils';
 import { type, isDefined as _isDefined } from '../core/utils/type';
 import { getPrecision } from '../core/utils/math';
@@ -17,7 +19,7 @@ import { overlapping } from './chart_components/base_chart';
 import multiAxesSynchronizer from './chart_components/multi_axes_synchronizer';
 import { AdvancedChart } from './chart_components/advanced_chart';
 import { ScrollBar } from './chart_components/scroll_bar';
-import { Crosshair } from './chart_components/crosshair';
+import { Crosshair, getMargins } from './chart_components/crosshair';
 import rangeDataCalculator from './series/helpers/range_data_calculator';
 import { LayoutManager } from './chart_components/layout_manager';
 import { Range } from './translators/range';
@@ -175,6 +177,11 @@ function getHorizontalAxesMargins(axes, getMarginsFunc) {
         margins.left = pickMax('left', paneMargins, margins);
         margins.right = pickMax('right', paneMargins, margins);
 
+        const orthogonalAxis = axis.getOrthogonalAxis?.();
+        if(orthogonalAxis && orthogonalAxis.customPositionIsAvailable() &&
+            (!axis.customPositionIsBoundaryOrthogonalAxis() || !orthogonalAxis.customPositionEqualsToPredefined())) {
+            margins[orthogonalAxis.getResolvedBoundaryPosition()] = 0;
+        }
         return margins;
     }, { panes: {} });
 }
@@ -233,8 +240,7 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
             return space;
         }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)] - canvases[paneNames[paneNames.length - 1]][getOriginalField(startMargin)]) - PANE_PADDING * (paneNames.length - 1);
 
-        const totalCustomSpace = Object.keys(sizes).reduce((prev, key) => prev + (sizes[key].unit ? sizes[key].height : 0), 0);
-        emptySpace -= totalCustomSpace;
+        emptySpace -= Object.keys(sizes).reduce((prev, key) => prev + (!isRelativeHeightPane(sizes[key]) ? sizes[key].height : 0), 0);
 
         paneNames.reduce((offset, pane) => {
             const canvas = canvases[pane];
@@ -242,7 +248,7 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
 
             offset -= getMaxMargin(endMargin, verticalMargins, horizontalMargins, pane);
             canvas[endMargin] = firstPane[sizeField] - offset;
-            offset -= paneSize.unit ? paneSize.height : Math.floor(emptySpace * paneSize.height);
+            offset -= !isRelativeHeightPane(paneSize) ? paneSize.height : Math.floor(emptySpace * paneSize.height);
             canvas[startMargin] = offset;
             offset -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, pane) + PANE_PADDING;
 
@@ -366,31 +372,37 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
     return { series, overloadedSeries };
 }
 
-function applyAutoHidePointMarkers(allSeries, filteredSeries, overloadedSeries, argAxis) {
-    const argAxisType = argAxis.getOptions().type;
-    filteredSeries.forEach(s => {
-        const seriesIndex = allSeries.indexOf(s);
-        s.autoHidePointMarkers = false;
-        const tickCount = argAxis.getTicksValues().majorTicksValues.length;
-        if(s.autoHidePointMarkersEnabled() && (argAxisType === DISCRETE || overloadedSeries[seriesIndex].pointsCount > tickCount)) {
-            for(const index in overloadedSeries[seriesIndex]) {
-                const i = parseInt(index);
-                if(isNaN(i) || overloadedSeries[seriesIndex].total / overloadedSeries[seriesIndex].continuousSeries < 3) {
-                    continue;
-                }
-                if(i === seriesIndex) {
-                    if(overloadedSeries[i][i] * 2 >= overloadedSeries[i].pointsCount) {
-                        s.autoHidePointMarkers = true;
-                        break;
-                    }
-                } else if(overloadedSeries[seriesIndex].total >= overloadedSeries[seriesIndex].pointsCount) {
-                    s.autoHidePointMarkers = true;
-                    break;
-                }
+const isOverlay = (currentPoint, overlayPoint, pointRadius) => {
+    const pointHitsLeftBorder = overlayPoint.x - pointRadius <= currentPoint.x;
+    const pointHitsRightBorder = overlayPoint.x + pointRadius >= currentPoint.x;
+    const pointHitsTopBorder = overlayPoint.y - pointRadius <= currentPoint.y;
+    const pointHitsBottomBorder = overlayPoint.y + pointRadius >= currentPoint.y;
+    const isPointOverlappedHorizontally = pointHitsLeftBorder && pointHitsRightBorder;
+    const isPointOverlappedVertically = pointHitsTopBorder && pointHitsBottomBorder;
+
+    return isPointOverlappedHorizontally && isPointOverlappedVertically;
+};
+
+const isPointOverlapped = (currentPoint, points, skipSamePointsComparing) => {
+    const radiusPoint = currentPoint.getOptions().size / 2;
+
+    for(let i = 0; i < points.length; i++) {
+        if(!skipSamePointsComparing) {
+            const isXCoordinateSame = points[i].x === currentPoint.x;
+            const isYCoordinateSame = points[i].y === currentPoint.y;
+
+            if(isXCoordinateSame && isYCoordinateSame) {
+                continue;
             }
         }
-    });
-}
+
+        if(isOverlay(currentPoint, points[i], radiusPoint)) {
+            return true;
+        }
+    }
+    return false;
+};
+
 
 function fastHidingPointMarkersByArea(canvas, markersInfo, series) {
     const area = canvas.width * canvas.height;
@@ -453,8 +465,20 @@ const dxChart = AdvancedChart.inherit({
         this.callBase();
     },
 
+    _init() {
+        this._containerInitialHeight = hasWindow() ? getHeight(this._$element) : 0;
+        this.callBase();
+    },
+
     _correctAxes: function() {
         this._correctValueAxes(true);
+    },
+
+    _setDeprecatedOptions() {
+        this.callBase();
+        _extend(this._deprecatedOptions, {
+            'argumentAxis.aggregateByCategory': { since: '23.1', message: 'Use the aggregation.enabled property' }
+        });
     },
 
     _getExtraOptions: noop,
@@ -509,7 +533,7 @@ const dxChart = AdvancedChart.inherit({
         const paneList = _map(this.panes, function(pane) { return pane.name; });
         seriesTheme.pane = seriesTheme.pane || this.defaultPane;
 
-        return inArray(seriesTheme.pane, paneList) !== -1;
+        return paneList.includes(seriesTheme.pane);
     },
 
     _initCustomPositioningAxes() {
@@ -545,15 +569,9 @@ const dxChart = AdvancedChart.inherit({
         return this._argumentAxes.concat(this._valueAxes);
     },
 
-    _resetAxesAnimation(isFirstDrawing) {
-        this._getAllAxes().forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
-    },
-
-    // for async templates. Should be fixed
-    _cleanGroups() {
-        this._getAllAxes().forEach(a => a.beforeCleanGroups());
-        this.callBase();
-        this._getAllAxes().forEach(a => a.afterCleanGroups());
+    _resetAxesAnimation(isFirstDrawing, isHorizontal) {
+        const axes = _isDefined(isHorizontal) ? (isHorizontal ^ this._isRotated() ? this._argumentAxes : this._valueAxes) : this._getAllAxes();
+        axes.forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
     },
 
     _axesBoundaryPositioning() {
@@ -571,6 +589,20 @@ const dxChart = AdvancedChart.inherit({
         });
 
         return boundaryStateChanged;
+    },
+
+    _getCrosshairMargins: function() {
+        const crosshairOptions = this._getCrosshairOptions() || {};
+        const crosshairEnabled = crosshairOptions.enabled;
+        const margins = getMargins();
+
+        const horizontalLabel = _extend(true, {}, crosshairOptions.label, crosshairOptions.horizontalLine.label);
+        const verticalLabel = _extend(true, {}, crosshairOptions.label, crosshairOptions.verticalLine.label);
+
+        return {
+            x: crosshairEnabled && crosshairOptions.horizontalLine.visible && horizontalLabel.visible ? margins.x : 0,
+            y: crosshairEnabled && crosshairOptions.verticalLine.visible && verticalLabel.visible ? margins.y : 0
+        };
     },
 
     _getValueAxis: function(paneName, axisName) {
@@ -637,7 +669,12 @@ const dxChart = AdvancedChart.inherit({
             if(!axis.pane) {
                 axis.setPane(that.defaultPane);
             }
-            return doesPaneExist(that.panes, axis.pane);
+            const paneExists = doesPaneExist(that.panes, axis.pane);
+            if(!paneExists) {
+                axis.dispose();
+                axis = null;
+            }
+            return paneExists;
         }).sort(compareAxes);
 
         const defaultAxis = this.getValueAxis();
@@ -697,6 +734,10 @@ const dxChart = AdvancedChart.inherit({
         }
     },
 
+    _executeAppendAfterSeries(append) {
+        append();
+    },
+
     _prepareToRender(drawOptions) {
         const panesBorderOptions = this._createPanesBorderOptions();
 
@@ -710,17 +751,13 @@ const dxChart = AdvancedChart.inherit({
 
     _adjustViewport() {
         const that = this;
-        const series = that._getVisibleSeries();
-        const argumentAxis = that.getArgumentAxis();
-        const useAggregation = series.some(s => s.useAggregation());
         const adjustOnZoom = that._themeManager.getOptions('adjustOnZoom');
-        const alignToBounds = !argumentAxis.dataVisualRangeIsReduced();
 
-        if(!useAggregation && !adjustOnZoom) {
+        if(!adjustOnZoom) {
             return;
         }
 
-        that._valueAxes.forEach(axis => axis.adjust(alignToBounds));
+        that._valueAxes.forEach(axis => axis.adjust());
     },
 
     _recreateSizeDependentObjects(isCanvasChanged) {
@@ -857,6 +894,51 @@ const dxChart = AdvancedChart.inherit({
         return rangeDataCalculator.getViewPortFilter(this.getArgumentAxis().visualRange() || {});
     },
 
+    _hidePointsForSingleSeriesIfNeeded(series) {
+        const seriesPoints = series.getPoints();
+        let overlappedPointsCount = 0;
+
+        for(let i = 0; i < seriesPoints.length; i++) {
+            const currentPoint = seriesPoints[i];
+            const overlappingPoints = seriesPoints.slice(i + 1);
+
+            overlappedPointsCount += isPointOverlapped(currentPoint, overlappingPoints);
+            if(overlappedPointsCount > seriesPoints.length / 2) {
+                series.autoHidePointMarkers = true;
+                break;
+            }
+        }
+    },
+
+    _applyAutoHidePointMarkers(filteredSeries) {
+        let overlappingPoints = [];
+
+        for(let i = filteredSeries.length - 1; i >= 0; i--) {
+            const currentSeries = filteredSeries[i];
+
+            if(!currentSeries.autoHidePointMarkersEnabled()) {
+                continue;
+            }
+
+            currentSeries.autoHidePointMarkers = false;
+            this._hidePointsForSingleSeriesIfNeeded(currentSeries);
+
+            if(!currentSeries.autoHidePointMarkers) {
+                const seriesPoints = currentSeries.getPoints();
+                const overlappingPointsCount = seriesPoints
+                    .reduce((pointsCount, currentPoint) => {
+                        return pointsCount + isPointOverlapped(currentPoint, overlappingPoints, true);
+                    }, 0);
+
+                if(overlappingPointsCount < seriesPoints.length) {
+                    overlappingPoints = overlappingPoints.concat(seriesPoints);
+                } else {
+                    currentSeries.autoHidePointMarkers = true;
+                }
+            }
+        }
+    },
+
     _applyPointMarkersAutoHiding() {
         const that = this;
         const allSeries = that.series;
@@ -868,10 +950,12 @@ const dxChart = AdvancedChart.inherit({
 
         that.panes.forEach(({ borderCoords, name }) => {
             const series = allSeries.filter(s => s.pane === name && s.usePointsToDefineAutoHiding());
+            series.forEach(singleSeries => {
+                singleSeries.prepareCoordinatesForPoints();
+            });
             const argAxis = that.getArgumentAxis();
             const markersInfo = collectMarkersInfoBySeries(allSeries, series, argAxis);
             fastHidingPointMarkersByArea(borderCoords, markersInfo, series);
-
             if(markersInfo.series.length) {
                 const argVisualRange = argAxis.visualRange();
                 const argAxisIsDiscrete = argAxis.getOptions().type === DISCRETE;
@@ -882,9 +966,8 @@ const dxChart = AdvancedChart.inherit({
 
                 markersInfo.series.forEach(s => points = points.concat(s.points));
                 points.sort(sortingCallback);
-
                 updateMarkersInfo(points, markersInfo.overloadedSeries);
-                applyAutoHidePointMarkers(allSeries, series, markersInfo.overloadedSeries, argAxis);
+                that._applyAutoHidePointMarkers(series);
             }
         });
     },
@@ -909,6 +992,7 @@ const dxChart = AdvancedChart.inherit({
         const horizontalElements = rotated ? that._valueAxes : extendedArgAxes;
         const allAxes = verticalAxes.concat(horizontalAxes);
         const allElements = allAxes.concat(scrollBar);
+        const verticalAxesFirstDrawing = verticalAxes.some(v => v.isFirstDrawing());
 
         that._normalizePanesHeight();
         that._updatePanesCanvases(drawOptions);
@@ -972,8 +1056,9 @@ const dxChart = AdvancedChart.inherit({
 
         const visibleSeries = that._getVisibleSeries();
         const pointsToAnimation = that._getPointsToAnimation(visibleSeries);
+        const axesIsAnimated = axisAnimationEnabled(drawOptions, pointsToAnimation);
 
-        performActionOnAxes(allElements, 'updateSize', panesCanvases, axisAnimationEnabled(drawOptions, pointsToAnimation));
+        performActionOnAxes(allElements, 'updateSize', panesCanvases, axesIsAnimated);
 
         horizontalElements.forEach(shiftAxis('top', 'bottom'));
         verticalElements.forEach(shiftAxis('left', 'right'));
@@ -989,7 +1074,7 @@ const dxChart = AdvancedChart.inherit({
         });
 
         verticalAxes.forEach((axis, i) => {
-            if(axis.hasWrap && axis.hasWrap()) {
+            if(axis.hasWrap?.()) {
                 const title = axis.getTitle();
                 const newTitleWidth = title ? title.bBox.width : 0;
                 const offset = newTitleWidth - oldTitlesWidth[i];
@@ -1008,7 +1093,8 @@ const dxChart = AdvancedChart.inherit({
         });
 
         if(verticalAxes.some(v => v.customPositionIsAvailable() && v.getCustomPosition() !== v._axisPosition)) {
-            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, false);
+            axesIsAnimated && that._resetAxesAnimation(verticalAxesFirstDrawing, false);
+            performActionOnAxes(verticalAxes, 'updateSize', panesCanvases, axesIsAnimated);
         }
 
         horizontalAxes.forEach(a => a.resolveOverlappingForCustomPositioning(verticalAxes));
@@ -1068,7 +1154,7 @@ const dxChart = AdvancedChart.inherit({
                 const realSize = that.getSize();
                 const customSize = that.option('size');
                 const container = that._$element[0];
-                const containerHasStyledHeight = !!container.style.height || checkElementHasPropertyFromStyleSheet(container, 'height');
+                const containerHasStyledHeight = !!parseInt(container.style.height) || that._containerInitialHeight !== 0;
 
                 if(!rotated && !(customSize && customSize.height) && !containerHasStyledHeight) {
                     that._forceResize(realSize.width, realSize.height + needVerticalSpace);
@@ -1137,7 +1223,7 @@ const dxChart = AdvancedChart.inherit({
             const argAxisLabelPosition = argumentAxis.getOptions().label?.position;
             const scrollBarPosition = that._scrollBar.getOptions().position;
 
-            return argumentAxis.hasCustomPosition() || scrollBarPosition === argAxisPosition && argAxisLabelPosition !== scrollBarPosition;
+            return argumentAxis.hasNonBoundaryPosition() || scrollBarPosition === argAxisPosition && argAxisLabelPosition !== scrollBarPosition;
         }
 
         return false;
@@ -1209,7 +1295,7 @@ const dxChart = AdvancedChart.inherit({
                 continue;
             }
             rect = renderer.rect(0, 0, 0, 0).attr({
-                fill: backgroundColor,
+                fill: extractColor(backgroundColor),
                 'stroke-width': 0
             }).append(that._panesBackgroundGroup);
             rects.push(rect);
@@ -1325,13 +1411,11 @@ const dxChart = AdvancedChart.inherit({
     _applyClipRectsForAxes() {
         const that = this;
         const axes = that._getAllAxes();
-        const customPositionAxes = axes.filter(a => a.hasCustomPosition());
         const chartCanvasClipRectID = that._getCanvasClipRectID();
 
         for(let i = 0; i < axes.length; i++) {
             const elementsClipRectID = that._getElementsClipRectID(axes[i].pane);
-            const canvasClipRectID = customPositionAxes.indexOf(axes[i]) >= 0 ? elementsClipRectID : chartCanvasClipRectID;
-            axes[i].applyClipRects(elementsClipRectID, canvasClipRectID);
+            axes[i].applyClipRects(elementsClipRectID, chartCanvasClipRectID);
         }
     },
 
@@ -1373,7 +1457,8 @@ const dxChart = AdvancedChart.inherit({
 
         _each(that._getStackPoints(), function(_, stacks) {
             _each(stacks, function(_, points) {
-                overlapping.resolveLabelOverlappingInOneDirection(points, that._getCommonCanvas(), isRotated, shiftDirection, (a, b) => {
+                const isInverted = points[0].series.getValueAxis().getOptions().inverted;
+                overlapping.resolveLabelOverlappingInOneDirection(points, that._getCommonCanvas(), isRotated, isInverted, shiftDirection, (a, b) => {
                     const coordPosition = isRotated ? 1 : 0;
                     const figureCenter1 = a.labels[0].getFigureCenter()[coordPosition];
                     const figureCenter12 = b.labels[0].getFigureCenter()[coordPosition];

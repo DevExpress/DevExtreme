@@ -9,6 +9,8 @@ import ValidationEngine from '../validation_engine';
 import EventsEngine from '../../events/core/events_engine';
 import ValidationMessage from '../validation_message';
 import Guid from '../../core/guid';
+import { noop } from '../../core/utils/common';
+import { resetActiveElement } from '../../core/utils/dom';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
@@ -19,8 +21,11 @@ const VALIDATION_STATUS_VALID = 'valid';
 const VALIDATION_STATUS_INVALID = 'invalid';
 const READONLY_NAMESPACE = 'editorReadOnly';
 
+const ALLOWED_STYLING_MODES = ['outlined', 'filled', 'underlined'];
+
 const VALIDATION_MESSAGE_KEYS_MAP = {
     validationMessageMode: 'mode',
+    validationMessagePosition: 'positionSide',
     validationMessageOffset: 'offset',
     validationBoundary: 'boundary',
 };
@@ -79,11 +84,15 @@ const Editor = Widget.inherit({
 
             validationMessageMode: 'auto',
 
+            validationMessagePosition: 'bottom',
+
             validationBoundary: undefined,
 
             validationMessageOffset: { h: 0, v: 0 },
 
-            validationTooltipOptions: {}
+            validationTooltipOptions: {},
+
+            _showValidationMessage: true
         });
     },
 
@@ -121,6 +130,7 @@ const Editor = Widget.inherit({
 
         this.callBase();
         this._renderValidationState();
+        this.option('_onMarkupRendered')?.();
     },
 
     _raiseValueChangeAction: function(value, previousValue) {
@@ -149,7 +159,7 @@ const Editor = Widget.inherit({
         // it can change the editor's value
         if(this._canValueBeChangedByClick() && isValidationMessageShownOnFocus) {
             // NOTE: Prevent the validation message from showing
-            const $validationMessageWrapper = this._validationMessage?._wrapper();
+            const $validationMessageWrapper = this._validationMessage?.$wrapper();
             $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
 
             clearTimeout(this.showValidationMessageTimeout);
@@ -167,6 +177,32 @@ const Editor = Widget.inherit({
         return false;
     },
 
+    _getStylingModePrefix: function() {
+        return 'dx-editor-';
+    },
+
+    _renderStylingMode: function() {
+        const optionName = 'stylingMode';
+        const optionValue = this.option(optionName);
+        const prefix = this._getStylingModePrefix();
+
+        const allowedStylingClasses = ALLOWED_STYLING_MODES.map((mode) => {
+            return prefix + mode;
+        });
+
+        allowedStylingClasses.forEach(className => this.$element().removeClass(className));
+
+        let stylingModeClass = prefix + optionValue;
+
+        if(allowedStylingClasses.indexOf(stylingModeClass) === -1) {
+            const defaultOptionValue = this._getDefaultOptions()[optionName];
+            const platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
+            stylingModeClass = prefix + (platformOptionValue || defaultOptionValue);
+        }
+
+        this.$element().addClass(stylingModeClass);
+    },
+
     _getValidationErrors: function() {
         let validationErrors = this.option('validationErrors');
         if(!validationErrors && this.option('validationError')) {
@@ -179,7 +215,8 @@ const Editor = Widget.inherit({
         if(this._$validationMessage) {
             this._$validationMessage.remove();
             this.setAria('describedby', null);
-            this._$validationMessage = null;
+            this._$validationMessage = undefined;
+            this._validationMessage = undefined;
         }
     },
 
@@ -195,27 +232,35 @@ const Editor = Widget.inherit({
 
         this._toggleValidationClasses(!isValid);
 
-        if(!hasWindow()) {
+        if(!hasWindow() || this.option('_showValidationMessage') === false) {
             return;
         }
 
         this._disposeValidationMessage();
         if(!isValid && validationErrors) {
+            const { validationMessageMode, validationMessageOffset, validationBoundary, rtlEnabled } = this.option();
+
             this._$validationMessage = $('<div>').appendTo($element);
-            this.setAria('describedby', 'dx-' + new Guid());
+            const validationMessageContentId = `dx-${new Guid()}`;
+            this.setAria('describedby', validationMessageContentId);
 
             this._validationMessage = new ValidationMessage(this._$validationMessage, extend({
                 validationErrors,
+                rtlEnabled,
                 target: this._getValidationMessageTarget(),
-                container: $element,
-                mode: this.option('validationMessageMode'),
-                positionRequest: 'below',
-                offset: this.option('validationMessageOffset'),
-                boundary: this.option('validationBoundary'),
-                rtlEnabled: this.option('rtlEnabled')
+                visualContainer: $element,
+                mode: validationMessageMode,
+                positionSide: this._getValidationMessagePosition(),
+                offset: validationMessageOffset,
+                boundary: validationBoundary,
+                contentId: validationMessageContentId
             }, this._options.cache('validationTooltipOptions')));
             this._bindInnerWidgetOptions(this._validationMessage, 'validationTooltipOptions');
         }
+    },
+
+    _getValidationMessagePosition: function() {
+        return this.option('validationMessagePosition');
     },
 
     _getValidationMessageTarget: function() {
@@ -250,6 +295,7 @@ const Editor = Widget.inherit({
 
         data(element, VALIDATION_TARGET, null);
         clearTimeout(this.showValidationMessageTimeout);
+        this._disposeValidationMessage();
         this.callBase();
     },
 
@@ -275,6 +321,8 @@ const Editor = Widget.inherit({
         const optionKey = VALIDATION_MESSAGE_KEYS_MAP[name] ? VALIDATION_MESSAGE_KEYS_MAP[name] : name;
         this._validationMessage?.option(optionKey, value);
     },
+
+    _hasActiveElement: noop,
 
     _optionChanged: function(args) {
         switch(args.name) {
@@ -313,6 +361,7 @@ const Editor = Widget.inherit({
                 break;
             case 'validationBoundary':
             case 'validationMessageMode':
+            case 'validationMessagePosition':
             case 'validationMessageOffset':
                 this._setValidationMessageOption(args);
                 break;
@@ -323,8 +372,16 @@ const Editor = Widget.inherit({
             case 'validationTooltipOptions':
                 this._innerWidgetOptionChanged(this._validationMessage, args);
                 break;
+            case '_showValidationMessage':
+                break;
             default:
                 this.callBase(args);
+        }
+    },
+
+    blur: function() {
+        if(this._hasActiveElement()) {
+            resetActiveElement();
         }
     },
 
@@ -334,4 +391,7 @@ const Editor = Widget.inherit({
     }
 });
 
+Editor.isEditor = (instance) => {
+    return instance instanceof Editor;
+};
 export default Editor;

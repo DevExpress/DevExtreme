@@ -1,12 +1,12 @@
+import { getHeight, getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
-import Component from '../core/component';
 import Action from '../core/action';
 import devices from '../core/devices';
 import config from '../core/config';
 
 import { resetActiveElement } from '../core/utils/dom';
 import { Deferred } from '../core/utils/deferred';
-import { isFunction, isPlainObject } from '../core/utils/type';
+import { isPlainObject } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { getWindow } from '../core/utils/window';
@@ -15,7 +15,7 @@ import { value as getViewport } from '../core/utils/view_port';
 
 import messageLocalization from '../localization/message';
 import errors from './widget/ui.errors';
-import Popup from './popup';
+import Popup from './popup/ui.popup';
 
 import { ensureDefined } from '../core/utils/common';
 
@@ -40,40 +40,10 @@ const DX_DIALOG_BUTTON_CLASSNAME = `${DX_DIALOG_CLASSNAME}-button`;
 
 const DX_BUTTON_CLASSNAME = 'dx-button';
 
-export const FakeDialogComponent = Component.inherit({
-    ctor: function(element, options) {
-        this.callBase(options);
-    },
-
-    _defaultOptionsRules: function() {
-
-        return this.callBase().concat([
-            {
-                device: { platform: 'ios' },
-                options: {
-                    width: 276
-                }
-            },
-            {
-                device: { platform: 'android' },
-                options: {
-                    lWidth: '60%',
-                    pWidth: '80%'
-                }
-            }
-        ]);
-    }
-});
-
-export let title = '';
-
-
 export const custom = function(options) {
     const deferred = new Deferred();
 
-    const defaultOptions = new FakeDialogComponent().option();
-
-    options = extend(defaultOptions, options);
+    options = options || {};
 
     const $element = $('<div>')
         .addClass(DX_DIALOG_CLASSNAME)
@@ -112,19 +82,16 @@ export const custom = function(options) {
     });
 
     const popupInstance = new Popup($element, extend({
-        title: options.title || title,
+        title: options.title ?? '',
         showTitle: ensureDefined(options.showTitle, true),
         dragEnabled: ensureDefined(options.dragEnabled, true),
         height: 'auto',
-        width: function() {
-            const isPortrait = $(window).height() > $(window).width();
-            const key = (isPortrait ? 'p' : 'l') + 'Width';
-            const widthOption = Object.prototype.hasOwnProperty.call(options, key) ? options[key] : options['width'];
-
-            return isFunction(widthOption) ? widthOption() : widthOption;
-        },
+        width: options.width,
         showCloseButton: options.showCloseButton || false,
         ignoreChildEvents: false,
+        container: $element,
+        visualContainer: window,
+        dragAndResizeArea: window,
         onContentReady: function(args) {
             args.component.$content()
                 .addClass(DX_DIALOG_CONTENT_CLASSNAME)
@@ -150,6 +117,9 @@ export const custom = function(options) {
         onHiding: function() {
             deferred.reject();
         },
+        onHidden: function({ element }) {
+            $(element).remove();
+        },
         toolbarItems: popupToolbarItems,
         animation: {
             show: {
@@ -170,28 +140,34 @@ export const custom = function(options) {
             }
         },
         rtlEnabled: config().rtlEnabled,
-        boundaryOffset: { h: 10, v: 0 }
+        position: {
+            boundaryOffset: { h: 10, v: 0 }
+        }
     }, options.popupOptions));
 
-    popupInstance._wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
+    popupInstance.$wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
 
     if(options.position) {
         popupInstance.option('position', options.position);
     }
 
-    popupInstance._wrapper()
+    popupInstance.$wrapper()
         .addClass(DX_DIALOG_ROOT_CLASSNAME);
 
     function show() {
+        if(devices.real().deviceType === 'phone') {
+            const isPortrait = getHeight(window) > getWidth(window);
+            const width = isPortrait ? '90%' : '60%';
+            popupInstance.option({ width });
+        }
+
         popupInstance.show();
         return deferred.promise();
     }
 
     function hide(value) {
         deferred.resolve(value);
-        popupInstance.hide().done(function() {
-            popupInstance.$element().remove();
-        });
+        popupInstance.hide();
     }
 
     return {
@@ -200,13 +176,13 @@ export const custom = function(options) {
     };
 };
 
-export const alert = function(messageHtml, title, showTitle) {
+export const alert = function(messageHtml, title = '', showTitle) {
     const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle, dragEnabled: showTitle };
 
     return custom(options).show();
 };
 
-export const confirm = function(messageHtml, title, showTitle) {
+export const confirm = function(messageHtml, title = '', showTitle) {
     const options = isPlainObject(messageHtml)
         ? messageHtml
         : {
@@ -222,9 +198,3 @@ export const confirm = function(messageHtml, title, showTitle) {
 
     return custom(options).show();
 };
-
-///#DEBUG
-export const DEBUG_set_title = function(value) {
-    title = value;
-};
-///#ENDDEBUG

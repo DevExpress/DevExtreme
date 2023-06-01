@@ -1,7 +1,6 @@
 import $ from '../../../core/renderer';
 import CustomButton from './custom';
 import { extend } from '../../../core/utils/extend';
-import { find } from '../../../core/utils/array';
 import errors from '../../widget/ui.errors';
 
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
@@ -50,7 +49,7 @@ function checkNamesUniqueness(existingNames, newName) {
 }
 
 function isPredefinedButtonName(name, predefinedButtonsInfo) {
-    return !!(find(predefinedButtonsInfo, (info) => info.name === name));
+    return !!(predefinedButtonsInfo.find(info => info.name === name));
 }
 
 export default class TextEditorButtonCollection {
@@ -72,7 +71,7 @@ export default class TextEditorButtonCollection {
             const isDefaultButton = isStringButton || isPredefinedButtonName(button.name, this.defaultButtonsInfo);
 
             if(isDefaultButton) {
-                const defaultButtonInfo = find(this.defaultButtonsInfo, ({ name }) => name === button || name === button.name);
+                const defaultButtonInfo = this.defaultButtonsInfo.find(({ name }) => name === button || name === button.name);
 
                 if(!defaultButtonInfo) {
                     throw errors.Error('E1056', this.editor.NAME, button);
@@ -130,7 +129,7 @@ export default class TextEditorButtonCollection {
     }
 
     getButton(buttonName) {
-        const button = find(this.buttons, ({ name }) => name === buttonName);
+        const button = this.buttons.find(({ name }) => name === buttonName);
 
         return button && button.instance;
     }

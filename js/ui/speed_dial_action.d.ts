@@ -1,94 +1,140 @@
 import {
-    dxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+/** @public */
+export type ClickEvent = NativeEventInfo<dxSpeedDialAction, MouseEvent | PointerEvent> & {
+    actionElement?: DxElement;
+};
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxSpeedDialAction> & {
+    actionElement?: DxElement;
+};
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSpeedDialAction>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSpeedDialAction>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSpeedDialAction> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**
-     * @docid dxSpeedDialActionOptions.icon
-     * @type string
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
-     * @docid dxSpeedDialActionOptions.index
-     * @type number
+     * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     index?: number;
     /**
-     * @docid dxSpeedDialActionOptions.label
-     * @type string
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     label?: string;
     /**
-     * @docid dxSpeedDialActionOptions.onClick
-     * @type function(e)
+     * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field1 event:event
-     * @type_function_param1_field2 component:this
-     * @type_function_param1_field3 element:dxElement
-     * @type_function_param1_field4 actionElement:dxElement
+     * @type_function_param1_field component:this
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: dxElement, actionElement?: dxElement }) => any);
+    onClick?: ((e: ClickEvent) => void);
     /**
-     * @docid dxSpeedDialActionOptions.onContentReady
-     * @type function
-     * @extends Action
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 actionElement:dxElement
+     * @type_function_param1_field component:dxSpeedDialAction
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: dxSpeedDialAction, element?: dxElement, model?: any, actionElement?: dxElement }) => any);
+    onContentReady?: ((e: ContentReadyEvent) => void);
     /**
-     * @docid dxSpeedDialActionOptions.visible
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     visible?: boolean;
 }
 /**
- * @docid dxSpeedDialAction
+ * @docid
  * @inherits Widget
- * @module ui/speed_dial_action
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxSpeedDialAction extends Widget {
-    constructor(element: Element, options?: dxSpeedDialActionOptions)
-    constructor(element: JQuery, options?: dxSpeedDialActionOptions)
-}
+export default class dxSpeedDialAction extends Widget<dxSpeedDialActionOptions> { }
 
-declare global {
-interface JQuery {
-    dxSpeedDialAction(): JQuery;
-    dxSpeedDialAction(options: "instance"): dxSpeedDialAction;
-    dxSpeedDialAction(options: string): any;
-    dxSpeedDialAction(options: string, ...params: any[]): any;
-    dxSpeedDialAction(options: dxSpeedDialActionOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxSpeedDialActionOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSpeedDialActionOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxSpeedDialActionOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxSpeedDialActionOptions.onClick
+ * @type_function_param1 e:{ui/speed_dial_action:ClickEvent}
+ */
+onClick?: ((e: ClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSpeedDialActionOptions.onContentReady
+ * @type_function_param1 e:{ui/speed_dial_action:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxSpeedDialActionOptions.onDisposing
+ * @type_function_param1 e:{ui/speed_dial_action:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSpeedDialActionOptions.onInitialized
+ * @type_function_param1 e:{ui/speed_dial_action:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSpeedDialActionOptions.onOptionChanged
+ * @type_function_param1 e:{ui/speed_dial_action:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

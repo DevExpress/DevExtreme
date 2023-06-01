@@ -1,113 +1,149 @@
-import '../jquery_augmentation';
+import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
+import { Options as StoreOptions, Store } from './abstract_store';
+import { DxExtendedPromise, DxPromise } from '../core/utils/deferred';
 
-import Store, {
-    StoreOptions
-} from './abstract_store';
+/** @public */
+export type Options<
+    TItem = any,
+    TKey = any,
+> = CustomStoreOptions<TItem, TKey>;
 
-import {
-    LoadOptions
-} from './load_options';
+/**
+ * @docid
+ * @public
+ */
+export type GroupItem<
+    TItem = any,
+> = {
+  key: any | string | number;
+  items: Array<TItem> | Array<GroupItem<TItem>> | null;
+  count?: number;
+  summary?: Array<any>;
+};
 
-export interface CustomStoreOptions extends StoreOptions<CustomStore> {
+type ItemsArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ */
+export type ResolvedData<
+    TItem = any,
+> =
+  | Object
+  | ItemsArray<TItem>
+  | {
+      data: Array<TItem> | Array<GroupItem>;
+      totalCount?: number;
+      summary?: Array<any>;
+      groupCount?: number;
+    };
+
+type LoadResult<T> = T | DxPromise<T> | PromiseLike<T>;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ * @docid
+ */
+export interface CustomStoreOptions<
+    TItem = any,
+    TKey = any,
+> extends StoreOptions<TItem, TKey> {
     /**
-     * @docid CustomStoreOptions.byKey
-     * @type function
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey?: ((key: any | string | number) => Promise<any> | JQueryPromise<any>);
+    byKey?: ((key: TKey) => PromiseLike<TItem>);
     /**
-     * @docid CustomStoreOptions.cacheRawData
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     cacheRawData?: boolean;
     /**
-     * @docid CustomStoreOptions.insert
-     * @type function
+     * @docid
      * @type_function_param1 values:object
      * @type_function_return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    insert?: ((values: any) => Promise<any> | JQueryPromise<any>);
+    insert?: ((values: TItem) => PromiseLike<TItem>);
     /**
-     * @docid CustomStoreOptions.load
-     * @type function
+     * @docid
      * @type_function_param1 options:LoadOptions
-     * @type_function_return Promise<any>|Array<any>
-     * @prevFileNamespace DevExpress.data
+     * @type_function_return Promise<Array<any>|object>|Array<any>
      * @public
      */
-    load?: ((options: LoadOptions) => Promise<any> | JQueryPromise<any> | Array<any>);
+    load: (options: LoadOptions<TItem>) => LoadResult<ResolvedData<TItem>>;
     /**
-     * @docid CustomStoreOptions.loadMode
-     * @type string
+     * @docid
      * @default 'processed'
-     * @acceptValues 'processed'|'raw'
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     loadMode?: 'processed' | 'raw';
     /**
-     * @docid CustomStoreOptions.remove
-     * @type function
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_return Promise<void>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    remove?: ((key: any | string | number) => Promise<void> | JQueryPromise<void>);
+    remove?: ((key: TKey) => PromiseLike<void>);
     /**
-     * @docid CustomStoreOptions.totalCount
-     * @type function
-     * @type_function_param1 loadOptions:object
-     * @type_function_param1_field1 filter:object
-     * @type_function_param1_field2 group:object
+     * @docid
+     * @type_function_param1_field filter:object
+     * @type_function_param1_field group:object
      * @type_function_return Promise<number>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    totalCount?: ((loadOptions: { filter?: any, group?: any }) => Promise<number> | JQueryPromise<number>);
+    totalCount?: ((loadOptions: { filter?: FilterDescriptor | Array<FilterDescriptor>; group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>> }) => PromiseLike<number>);
     /**
-     * @docid CustomStoreOptions.update
-     * @type function
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @type_function_return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    update?: ((key: any | string | number, values: any) => Promise<any> | JQueryPromise<any>);
+    update?: ((key: TKey, values: TItem) => PromiseLike<any>);
     /**
-     * @docid CustomStoreOptions.useDefaultSearch
-     * @type boolean
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     useDefaultSearch?: boolean;
 }
 /**
- * @docid CustomStore
+ * @docid
  * @inherits Store
- * @type object
- * @module data/custom_store
- * @export default
- * @prevFileNamespace DevExpress.data
  * @public
+ * @options CustomStoreOptions
  */
-export default class CustomStore extends Store {
-    constructor(options?: CustomStoreOptions)
+export default class CustomStore<
+    TItem = any,
+    TKey = any,
+> extends Store<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>);
     /**
-     * @docid CustomStoreMethods.clearRawDataCache
+     * @docid
      * @publicName clearRawDataCache()
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     clearRawDataCache(): void;
+    /**
+     * @docid
+     * @publicName load()
+     * @return Promise<any>
+     * @public
+     */
+    load(): DxExtendedPromise<ResolvedData<TItem>>;
+    /**
+     * @docid
+     * @publicName load(options)
+     * @param1 options:LoadOptions
+     * @return Promise<any>
+     * @public
+     */
+    load(options: LoadOptions<TItem>): DxExtendedPromise<ResolvedData<TItem>>;
 }

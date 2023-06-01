@@ -1,4 +1,1 @@
-import core from './ui.tree_list.core';
-import filterBuilderModule from '../grid_core/ui.grid_core.filter_builder';
-
-core.registerModule('filterBuilder', filterBuilderModule);
+import '../../__internal/grids/tree_list/module_not_extended/filter_builder';

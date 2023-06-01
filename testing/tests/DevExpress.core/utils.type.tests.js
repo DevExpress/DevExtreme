@@ -8,6 +8,7 @@ QUnit.module('Type checking');
 
 QUnit.test('type method', function(assert) {
     const element = $('#qunit-fixture').html('"<div id="widget"></div>"');
+    const origObjectToString = Object.prototype.toString;
 
     assert.strictEqual(typeUtils.type(0), 'number', 'number');
     assert.strictEqual(typeUtils.type(null), 'null', 'null');
@@ -17,6 +18,14 @@ QUnit.test('type method', function(assert) {
     assert.strictEqual(typeUtils.type([]), 'array', 'array');
     assert.strictEqual(typeUtils.type(function() { }), 'function', 'function');
     assert.strictEqual(typeUtils.type(element[0].firstElementChild), 'object', 'HTMLDivElement');
+
+    /* eslint-disable */
+    Object.prototype.toString = (obj) => origObjectToString(obj === null ? top : obj); // T1150251
+
+    assert.strictEqual(typeUtils.type(null), 'null', 'null');
+
+    Object.prototype.toString = origObjectToString;
+    /* eslint-enable */
 });
 
 QUnit.test('isDefined', function(assert) {
@@ -98,6 +107,7 @@ QUnit.test('isPlainObject', function(assert) {
 
     assert.strictEqual(typeUtils.isPlainObject({}), true, 'object is plain');
     assert.strictEqual(typeUtils.isPlainObject(new Object({})), true, 'object is plain');
+    assert.strictEqual(typeUtils.isPlainObject(Object.create(null)), true, 'object without prototype is plain object');
 
     assert.strictEqual(typeUtils.isPlainObject(new testFunction()), false, 'function is not plain object');
     assert.strictEqual(typeUtils.isPlainObject([]), false, 'array is not plain object');
@@ -127,4 +137,11 @@ QUnit.test('isPromise', function(assert) {
     assert.strictEqual(typeUtils.isPromise(Promise.resolve()), true, 'native Promise');
     assert.strictEqual(typeUtils.isPromise({ then: function() {} }), true, 'thenable is Promise');
     assert.strictEqual(typeUtils.isPromise({ then: 1 }), false, 'object with property \'then\' isn\'t Promise');
+});
+
+QUnit.test('isEvent', function(assert) {
+    assert.strictEqual(typeUtils.isEvent($('body')), false, 'body is not event');
+    assert.strictEqual(typeUtils.isEvent(window), false, 'window is not event');
+    assert.strictEqual(typeUtils.isEvent(undefined), false, 'undefined is not event');
+    assert.strictEqual(typeUtils.isEvent($.Event('dxpointerdown')), true, 'dxpointerdown event is event');
 });

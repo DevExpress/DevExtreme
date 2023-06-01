@@ -1,8 +1,9 @@
 module.exports = {
     'globals': {
         'ts-jest': {
-            tsConfig: 'tests/tsconfig.json',
-        },
+            // eslint-disable-next-line spellcheck/spell-checker
+            tsconfig: './tsconfig.tests.json',
+        }
     },
     moduleFileExtensions: [
         'ts',

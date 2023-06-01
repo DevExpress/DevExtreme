@@ -1,0 +1,110 @@
+$scheduler-header-panel-top-gap: null !default;
+$scheduler-group-header-table-cell-width: null !default;
+$scheduler-small-size-factor: null !default;
+$scheduler-small-font-size: null !default;
+$scheduler-workspace-info-font-size: null !default;
+$scheduler-other-month-cell-opacity: null !default;
+
+$scheduler-agenda-left-column-width: 70px;
+$scheduler-group-header-agenda-font-size: 18px;
+
+.dx-scheduler-agenda {
+  .dx-scheduler-date-table-scrollable {
+    padding-top: $scheduler-header-panel-top-gap;
+  }
+
+  .dx-scheduler-time-panel-cell {
+    vertical-align: top;
+  }
+
+  .dx-scheduler-time-panel-cell::after {
+    display: none;
+  }
+
+  .dx-scheduler-group-table {
+    border-spacing: 0;
+    margin-top: 0;
+    height: 100%;
+    float: left;
+  }
+
+  .dx-scheduler-time-panel {
+    margin-top: 0;
+    width: $scheduler-agenda-left-column-width;
+    border: none;
+  }
+
+  .dx-scheduler-time-panel-cell,
+  .dx-scheduler-date-table-cell {
+    border: none;
+  }
+
+  &.dx-scheduler-work-space-grouped {
+    .dx-scheduler-date-table {
+      float: right;
+    }
+
+    .dx-scheduler-group-row {
+      &:first-child {
+        .dx-scheduler-group-header-content::before {
+          border-bottom: none;
+        }
+      }
+    }
+
+    .dx-scheduler-time-panel-cell::after {
+      display: none;
+    }
+  }
+
+  .dx-scheduler-group-header {
+    vertical-align: top;
+    width: $scheduler-group-header-table-cell-width;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-size: $scheduler-group-header-agenda-font-size;
+    font-weight: bold;
+    padding: 0;
+
+    .dx-scheduler-small & {
+      width: $scheduler-group-header-table-cell-width * $scheduler-small-size-factor;
+      font-size: $scheduler-small-font-size;
+    }
+  }
+
+  .dx-scheduler-group-header-content {
+    width: $scheduler-group-header-table-cell-width;
+    overflow: hidden;
+
+    div {
+      white-space: normal;
+    }
+  }
+}
+
+.dx-scheduler-agenda-nodata {
+  text-align: center;
+  font-size: $scheduler-workspace-info-font-size;
+  opacity: $scheduler-other-month-cell-opacity;
+  position: absolute;
+  top: 45%;
+  left: 0;
+  right: 0;
+}
+
+.dx-rtl {
+  .dx-scheduler-agenda {
+    .dx-scheduler-time-panel {
+      border: none;
+    }
+  }
+}
+
+.dx-scheduler-small {
+  .dx-scheduler-agenda {
+    .dx-scheduler-time-panel {
+      width: $scheduler-agenda-left-column-width;
+    }
+  }
+}

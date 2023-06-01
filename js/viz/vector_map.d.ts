@@ -1,710 +1,999 @@
-import '../jquery_augmentation';
+import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    PaletteType
-} from './palette';
-
-import {
-    template
+    template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
-
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
+    Format,
+} from '../localization';
+
+import {
     BaseLegend,
-    BaseLegendItem
+    BaseLegendItem,
 } from './common';
 
 import BaseWidget, {
+    BaseWidgetMargin,
     BaseWidgetOptions,
     BaseWidgetTooltip,
     Font,
-    BaseWidgetAnnotationConfig
+    BaseWidgetAnnotationConfig,
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo,
 } from './core/base_widget';
 
 import {
-    VectorMapProjectionConfig
+    VectorMapProjection,
+    VectorMapProjectionConfig,
 } from './vector_map/projection';
 
+import {
+    Palette,
+} from '../common/charts';
+
+import {
+    HorizontalAlignment,
+    SingleMultipleOrNone,
+    VerticalEdge,
+} from '../common';
+
+export {
+    SingleMultipleOrNone,
+    Palette,
+    VectorMapProjection,
+    VerticalEdge,
+};
+
+/** @public */
+export type VectorMapLayerType = 'area' | 'line' | 'marker';
+/** @public */
+export type VectorMapMarkerShape = 'circle' | 'square';
+/** @public */
+export type VectorMapMarkerType = 'bubble' | 'dot' | 'image' | 'pie';
+
+export interface TooltipInfo {
+    target?: MapLayerElement | dxVectorMapAnnotationConfig;
+}
+
+/** @public */
+export type CenterChangedEvent = EventInfo<dxVectorMap> & {
+    readonly center: Array<number>;
+};
+
+/** @public */
+export type ClickEvent = NativeEventInfo<dxVectorMap, MouseEvent | PointerEvent> & {
+    readonly target: MapLayerElement;
+};
+
+/** @public */
+export type DisposingEvent = EventInfo<dxVectorMap>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxVectorMap>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxVectorMap>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxVectorMap> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = FileSavingEventInfo<dxVectorMap>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxVectorMap> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxVectorMap>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxVectorMap> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxVectorMap> & {
+    readonly target: MapLayerElement;
+};
+
+/** @public */
+export type TooltipHiddenEvent = EventInfo<dxVectorMap> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = EventInfo<dxVectorMap> & TooltipInfo;
+
+/** @public */
+export type ZoomFactorChangedEvent = EventInfo<dxVectorMap> & {
+    readonly zoomFactor: number;
+};
+
+/**
+ * @docid
+ * @publicName Layer
+ * @namespace DevExpress.viz
+ */
 export interface MapLayer {
     /**
-     * @docid MapLayerMethods.clearSelection
+     * @docid
      * @publicName clearSelection()
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid MapLayerFields.elementType
-     * @type string
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     elementType?: string;
     /**
-     * @docid MapLayerMethods.getDataSource
+     * @docid
      * @publicName getDataSource()
-     * @return DataSource
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     getDataSource(): DataSource;
     /**
-     * @docid MapLayerMethods.getElements
+     * @docid
      * @publicName getElements()
-     * @return Array<MapLayerElement>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     getElements(): Array<MapLayerElement>;
     /**
-     * @docid MapLayerFields.index
-     * @type number
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     index?: number;
     /**
-     * @docid MapLayerFields.name
-     * @type string
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     name?: string;
     /**
-     * @docid MapLayerFields.type
-     * @type string
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     type?: string;
 }
 
+/**
+ * @docid
+ * @publicName Layer Element
+ * @namespace DevExpress.viz
+ */
 export interface MapLayerElement {
     /**
-     * @docid MapLayerElementMethods.applySettings
+     * @docid
      * @publicName applySettings(settings)
      * @param1 settings:object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     applySettings(settings: any): void;
     /**
-     * @docid MapLayerElementMethods.attribute
+     * @docid
      * @publicName attribute(name)
-     * @return any
-     * @param1 name:string
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     attribute(name: string): any;
     /**
-     * @docid MapLayerElementMethods.attribute
+     * @docid
      * @publicName attribute(name, value)
-     * @param1 name:string
-     * @param2 value:any
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     attribute(name: string, value: any): void;
     /**
-     * @docid MapLayerElementMethods.coordinates
+     * @docid
      * @publicName coordinates()
      * @return object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     coordinates(): any;
     /**
-     * @docid MapLayerElementFields.layer
-     * @type object
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     layer?: any;
     /**
-     * @docid MapLayerElementMethods.selected
+     * @docid
      * @publicName selected()
-     * @return boolean
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     selected(): boolean;
     /**
-     * @docid MapLayerElementMethods.selected
+     * @docid
      * @publicName selected(state)
-     * @param1 state:boolean
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     selected(state: boolean): void;
 }
 
+/**
+ * @public
+ * @docid VectorMapLegendItem
+ * @namespace DevExpress.viz.dxVectorMap
+ * @inherits BaseLegendItem
+ * @type object
+ */
+export type LegendItem = VectorMapLegendItem;
+
+/**
+ * @deprecated Use LegendItem instead
+ * @namespace DevExpress.viz
+ */
 export interface VectorMapLegendItem extends BaseLegendItem {
     /**
-     * @docid VectorMapLegendItem.color
-     * @type string
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     color?: string;
     /**
-     * @docid VectorMapLegendItem.end
-     * @type number
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     end?: number;
     /**
-     * @docid VectorMapLegendItem.size
-     * @type number
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     size?: number;
     /**
-     * @docid VectorMapLegendItem.start
-     * @type number
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     start?: number;
 }
 
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ * @docid
+ */
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
-     * @docid dxVectorMapOptions.background
-     * @type object
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
-    background?: { borderColor?: string, color?: string };
+    background?: {
+      /**
+       * @docid
+       * @default '#cacaca'
+       */
+      borderColor?: string;
+      /**
+       * @docid
+       * @default '#ffffff'
+       */
+      color?: string;
+    };
     /**
-     * @docid dxVectorMapOptions.bounds
-     * @type Array<number>
+     * @docid
      * @default undefined
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     bounds?: Array<number>;
     /**
-     * @docid dxVectorMapOptions.center
-     * @type Array<number>
+     * @docid
      * @default [0, 0]
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     center?: Array<number>;
     /**
-     * @docid dxVectorMapOptions.controlBar
-     * @type object
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
-    controlBar?: { borderColor?: string, color?: string, enabled?: boolean, horizontalAlignment?: 'center' | 'left' | 'right', margin?: number, opacity?: number, verticalAlignment?: 'bottom' | 'top' };
+    controlBar?: {
+      /**
+       * @docid
+       * @default '#5d5d5d'
+       */
+      borderColor?: string;
+      /**
+       * @docid
+       * @default '#ffffff'
+       */
+      color?: string;
+      /**
+       * @docid
+       * @default true
+       */
+      enabled?: boolean;
+      /**
+       * @docid
+       * @default 'true'
+       */
+      panVisible?: boolean;
+      /**
+       * @docid
+       * @default 'true'
+       */
+      zoomVisible?: boolean;
+      /**
+       * @docid
+       * @default 'left'
+       */
+      horizontalAlignment?: HorizontalAlignment;
+      /**
+       * @docid
+       * @default 20
+       */
+      margin?: number;
+      /**
+       * @docid
+       * @default 0.3
+       */
+      opacity?: number;
+      /**
+       * @docid
+       * @default 'top'
+       */
+      verticalAlignment?: VerticalEdge;
+    };
     /**
-     * @docid dxVectorMapOptions.layers
-     * @type Array<Object>|Object
+     * @docid
      * @default undefined
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    layers?: Array<{ borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DataSource | DataSourceOptions | string, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | PaletteType, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DataSource | DataSourceOptions | string, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | PaletteType, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
+    layers?: Array<{
+      /**
+       * @docid
+       * @default '#9d9d9d'
+       */
+      borderColor?: string;
+      /**
+       * @docid
+       * @default 1
+       */
+      borderWidth?: number;
+      /**
+       * @docid
+       * @default '#d2d2d2'
+       */
+      color?: string;
+      /**
+       * @docid
+       * @default undefined
+       */
+      colorGroupingField?: string;
+      /**
+       * @docid
+       * @default undefined
+       */
+      colorGroups?: Array<number>;
+      /**
+       * @docid
+       * @notUsedInTheme
+       */
+      customize?: ((elements: Array<MapLayerElement>) => void);
+      /**
+       * @docid
+       * @default undefined
+       */
+      dataField?: string;
+      /**
+       * @docid
+       * @type object|Store|DataSource|DataSourceOptions|string|Array<any>|null
+       * @notUsedInTheme
+       */
+      dataSource?: object | DataSourceLike<any> | null;
+      /**
+       * @docid
+       * @notUsedInTheme
+       */
+      elementType?: VectorMapMarkerType;
+      /**
+       * @docid
+       * @default true
+       */
+      hoverEnabled?: boolean;
+      /**
+       * @docid
+       * @default '#303030'
+       */
+      hoveredBorderColor?: string;
+      /**
+       * @docid
+       * @default 1
+       */
+      hoveredBorderWidth?: number;
+      /**
+       * @docid
+       * @default '#d2d2d2'
+       */
+      hoveredColor?: string;
+      /**
+       * @docid
+       */
+      label?: {
+        /**
+         * @docid
+         */
+        dataField?: string;
+        /**
+         * @docid
+         * @default <i>true</i> for markers; <i>false</i> for areas
+         */
+        enabled?: boolean;
+        /**
+         * @docid
+         * @default '#2b2b2b' &prop(color)
+         */
+        font?: Font;
+      };
+      /**
+       * @docid
+       * @default 50
+       */
+      maxSize?: number;
+      /**
+       * @docid
+       * @default 20
+       */
+      minSize?: number;
+      /**
+       * @docid
+       * @notUsedInTheme
+       */
+      name?: string;
+      /**
+       * @docid
+       * @default 1
+       */
+      opacity?: number;
+      /**
+       * @docid
+       * @default "Material"
+       */
+      palette?: Array<string> | Palette;
+      /**
+       * @docid
+       * @default 0
+       */
+      paletteSize?: number;
+      /**
+       * @docid
+       */
+      paletteIndex?: number;
+      /**
+       * @docid
+       * @default '#303030'
+       */
+      selectedBorderColor?: string;
+      /**
+       * @docid
+       * @default 2
+       */
+      selectedBorderWidth?: number;
+      /**
+       * @docid
+       * @default '#d2d2d2'
+       */
+      selectedColor?: string;
+      /**
+       * @docid
+       * @default 'single'
+       */
+      selectionMode?: SingleMultipleOrNone;
+      /**
+       * @docid
+       * @default 8
+       */
+      size?: number;
+      /**
+       * @docid
+       * @default undefined
+       */
+      sizeGroupingField?: string;
+      /**
+       * @docid
+       * @default undefined
+       */
+      sizeGroups?: Array<number>;
+      /**
+       * @docid
+       * @notUsedInTheme
+       */
+      type?: VectorMapLayerType;
+    }> | { borderColor?: string; borderWidth?: number; color?: string; colorGroupingField?: string; colorGroups?: Array<number>; customize?: ((elements: Array<MapLayerElement>) => any); dataField?: string; dataSource?: object | DataSourceLike<any> | null; elementType?: 'bubble' | 'dot' | 'image' | 'pie'; hoverEnabled?: boolean; hoveredBorderColor?: string; hoveredBorderWidth?: number; hoveredColor?: string; label?: { dataField?: string; enabled?: boolean; font?: Font }; maxSize?: number; minSize?: number; name?: string; opacity?: number; palette?: Array<string> | Palette; paletteSize?: number; selectedBorderColor?: string; selectedBorderWidth?: number; selectedColor?: string; selectionMode?: SingleMultipleOrNone; size?: number; sizeGroupingField?: string; sizeGroups?: Array<number>; type?: 'area' | 'line' | 'marker' };
     /**
-     * @docid dxVectorMapOptions.legends
+     * @docid
      * @type Array<Object>
      * @inherits BaseLegend
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     legends?: Array<dxVectorMapLegends>;
     /**
-     * @docid dxVectorMapOptions.maxZoomFactor
-     * @type number
+     * @docid
+     * @type object
+     * @hidden
+     */
+    margin?: BaseWidgetMargin;
+    /**
+     * @docid
      * @default 256
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     maxZoomFactor?: number;
     /**
-     * @docid dxVectorMapOptions.onCenterChanged
-     * @extends Action
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:dxVectorMap
+     * @type_function_param1_field center:Array<number>
+     * @notUsedInTheme
+     * @action
+     * @public
+     */
+    onCenterChanged?: ((e: CenterChangedEvent) => void);
+    /**
+     * @docid
+     * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 center:Array<number>
+     * @type_function_param1_field component:dxVectorMap
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onCenterChanged?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, center?: Array<number> }) => any);
+    onClick?: ((e: ClickEvent) => void) | string;
     /**
-     * @docid dxVectorMapOptions.onClick
-     * @extends Action
-     * @type function|string
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 target:MapLayerElement
+     * @type_function_param1_field component:dxVectorMap
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, event?: event, target?: MapLayerElement }) => any) | string;
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
-     * @docid dxVectorMapOptions.onSelectionChanged
-     * @extends Action
-     * @type function
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 target:MapLayerElement
+     * @type_function_param1_field component:dxVectorMap
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement }) => any);
+    onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
     /**
-     * @docid dxVectorMapOptions.onTooltipHidden
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
+     * @type_function_param1_field component:dxVectorMap
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => any);
+    onTooltipShown?: ((e: TooltipShownEvent) => void);
     /**
-     * @docid dxVectorMapOptions.onTooltipShown
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
+     * @type_function_param1_field component:dxVectorMap
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => any);
+    onZoomFactorChanged?: ((e: ZoomFactorChangedEvent) => void);
     /**
-     * @docid dxVectorMapOptions.onZoomFactorChanged
-     * @extends Action
-     * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 zoomFactor:number
-     * @notUsedInTheme
-     * @action
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, zoomFactor?: number }) => any);
-    /**
-     * @docid dxVectorMapOptions.panningEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     panningEnabled?: boolean;
     /**
-     * @docid dxVectorMapOptions.projection
+     * @docid
      * @type Enums.VectorMapProjection|VectorMapProjectionConfig|string|object
      * @default "mercator"
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    projection?: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | VectorMapProjectionConfig | string | any;
+    projection?: VectorMapProjection | VectorMapProjectionConfig | string | any;
     /**
-     * @docid dxVectorMapOptions.tooltip
+     * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     tooltip?: dxVectorMapTooltip;
     /**
-     * @docid dxVectorMapOptions.touchEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     touchEnabled?: boolean;
     /**
-     * @docid dxVectorMapOptions.wheelEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     wheelEnabled?: boolean;
     /**
-     * @docid dxVectorMapOptions.zoomFactor
-     * @type number
+     * @docid
      * @default 1
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     zoomFactor?: number;
     /**
-     * @docid dxVectorMapOptions.zoomingEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     zoomingEnabled?: boolean;
     /**
-     * @docid dxVectorMapOptions.commonAnnotationSettings
-     * @type dxVectorMapCommonAnnotationConfig
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     commonAnnotationSettings?: dxVectorMapCommonAnnotationConfig;
     /**
-     * @docid dxVectorMapOptions.annotations
-     * @type Array<dxVectorMapAnnotationConfig,object>
+     * @docid
      * @inherits dxVectorMapOptions.commonAnnotationSettings
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     annotations?: Array<dxVectorMapAnnotationConfig | any>;
     /**
-     * @docid dxVectorMapOptions.customizeAnnotation
-     * @type function(annotation)
-     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
-     * @type_function_return dxVectorMapAnnotationConfig
+     * @docid
      * @default undefined
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     customizeAnnotation?: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig);
 }
 
+/**
+ * @docid
+ * @inherits dxVectorMapCommonAnnotationConfig
+ * @type object
+ * @namespace DevExpress.viz
+ */
 export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
     /**
-     * @docid dxVectorMapAnnotationConfig.name
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     name?: string;
 }
 
+/**
+ * @docid
+ * @inherits BaseWidgetAnnotationConfig
+ * @type object
+ * @namespace DevExpress.viz
+ */
 export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
-     * @docid dxVectorMapCommonAnnotationConfig.coordinates
-     * @type Array<number>
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     coordinates?: Array<number>;
     /**
-     * @docid dxVectorMapCommonAnnotationConfig.customizeTooltip
-     * @type function(annotation)
-     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
+     * @docid
      * @type_function_return object
      * @default undefined
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
     /**
-     * @docid dxVectorMapCommonAnnotationConfig.template
-     * @type template|function
+     * @docid
      * @default undefined
-     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
-     * @docid dxVectorMapCommonAnnotationConfig.tooltipTemplate
-     * @type template|function(annotation, element)
-     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
-     * @type_function_param2 element:dxElement
+     * @docid
      * @type_function_return string|Element|jQuery
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
+    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: DxElement) => string | UserDefinedElement);
 }
 
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxVectorMapLegends extends BaseLegend {
     /**
      * @docid dxVectorMapOptions.legends.customizeHint
-     * @type function(itemInfo)
-     * @type_function_param1 itemInfo:object
-     * @type_function_param1_field1 start:number
-     * @type_function_param1_field2 end:number
-     * @type_function_param1_field3 index:number
-     * @type_function_param1_field4 color:string
-     * @type_function_param1_field5 size:number
-     * @type_function_return string
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
+    customizeHint?: ((itemInfo: { start?: number; end?: number; index?: number; color?: string; size?: number }) => string);
     /**
      * @docid dxVectorMapOptions.legends.customizeItems
-     * @type function(items)
      * @type_function_param1 items:Array<VectorMapLegendItem>
      * @type_function_return Array<VectorMapLegendItem>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>);
+    customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxVectorMapOptions.legends.customizeText
-     * @type function(itemInfo)
-     * @type_function_param1 itemInfo:object
-     * @type_function_param1_field1 start:number
-     * @type_function_param1_field2 end:number
-     * @type_function_param1_field3 index:number
-     * @type_function_param1_field4 color:string
-     * @type_function_param1_field5 size:number
-     * @type_function_return string
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
+    customizeText?: ((itemInfo: { start?: number; end?: number; index?: number; color?: string; size?: number }) => string);
     /**
      * @docid dxVectorMapOptions.legends.font
-     * @type Font
-     * @default '#2b2b2b' [prop](color)
-     * @prevFileNamespace DevExpress.viz
+     * @default '#2b2b2b' &prop(color)
      * @public
      */
     font?: Font;
     /**
      * @docid dxVectorMapOptions.legends.markerColor
-     * @type string
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     markerColor?: string;
     /**
      * @docid dxVectorMapOptions.legends.markerShape
-     * @type Enums.VectorMapMarkerShape
      * @default "square"
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerShape?: 'circle' | 'square';
+    markerShape?: VectorMapMarkerShape;
     /**
      * @docid dxVectorMapOptions.legends.markerSize
-     * @type number
      * @default 12
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     markerSize?: number;
     /**
      * @docid dxVectorMapOptions.legends.markerTemplate
-     * @type template|function
      * @default undefined
      * @type_function_param1 legendItem:VectorMapLegendItem
-     * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
+    markerTemplate?: template | ((legendItem: LegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
     /**
      * @docid dxVectorMapOptions.legends.source
-     * @type object
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    source?: { grouping?: string, layer?: string };
+    source?: {
+      /**
+       * @docid dxVectorMapOptions.legends.source.grouping
+       * @notUsedInTheme
+       */
+      grouping?: string;
+      /**
+       * @docid dxVectorMapOptions.legends.source.layer
+       * @notUsedInTheme
+       */
+      layer?: string;
+    };
 }
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxVectorMapOptions.tooltip.contentTemplate
-     * @type template | function(info, element)
-     * @type_function_param1 info:MapLayerElement
-     * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    contentTemplate?: template | ((info: MapLayerElement, element: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((info: MapLayerElement, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxVectorMapOptions.tooltip.customizeTooltip
-     * @type function(info)
-     * @type_function_param1 info:MapLayerElement
      * @type_function_return object
      * @default undefined
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     customizeTooltip?: ((info: MapLayerElement) => any);
+    /**
+     * @docid dxVectorMapOptions.tooltip.format
+     * @hidden
+     */
+    format?: Format;
 }
 /**
- * @docid dxVectorMap
+ * @docid
  * @inherits BaseWidget
- * @module viz/vector_map
- * @export default
- * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxVectorMap extends BaseWidget {
-    constructor(element: Element, options?: dxVectorMapOptions)
-    constructor(element: JQuery, options?: dxVectorMapOptions)
+export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
     /**
-     * @docid dxVectorMapMethods.center
+     * @docid
      * @publicName center()
-     * @return Array<number>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     center(): Array<number>;
     /**
-     * @docid dxVectorMapMethods.center
+     * @docid
      * @publicName center(centerCoordinates)
-     * @param1 centerCoordinates:Array<number>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     center(centerCoordinates: Array<number>): void;
     /**
-     * @docid dxVectorMapMethods.clearSelection
+     * @docid
      * @publicName clearSelection()
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid dxVectorMapMethods.convertCoordinates
+     * @docid
      * @publicName convertCoordinates(x, y)
-     * @param1 x:number
-     * @param2 y:number
-     * @return Array<number>
-     * @deprecated dxVectorMapMethods.convertToGeo
-     * @prevFileNamespace DevExpress.viz
+     * @deprecated dxVectorMap.convertToGeo
      * @public
      */
     convertCoordinates(x: number, y: number): Array<number>;
     /**
-     * @docid dxVectorMapMethods.convertToGeo
+     * @docid
      * @publicName convertToGeo(x, y)
-     * @param1 x:number
-     * @param2 y:number
-     * @return Array<number>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     convertToGeo(x: number, y: number): Array<number>;
     /**
-     * @docid dxVectorMapMethods.convertToXY
+     * @docid
      * @publicName convertToXY(longitude, latitude)
-     * @param1 longitude:number
-     * @param2 latitude:number
-     * @return Array<number>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     convertToXY(longitude: number, latitude: number): Array<number>;
     /**
-     * @docid dxVectorMapMethods.getLayerByIndex
+     * @docid
      * @publicName getLayerByIndex(index)
-     * @return MapLayer
-     * @param1 index:number
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     getLayerByIndex(index: number): MapLayer;
     /**
-     * @docid dxVectorMapMethods.getLayerByName
+     * @docid
      * @publicName getLayerByName(name)
-     * @return MapLayer
-     * @param1 name:string
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     getLayerByName(name: string): MapLayer;
     /**
-     * @docid dxVectorMapMethods.getLayers
+     * @docid
      * @publicName getLayers()
-     * @return Array<MapLayer>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     getLayers(): Array<MapLayer>;
     /**
-     * @docid dxVectorMapMethods.viewport
+     * @docid
      * @publicName viewport()
-     * @return Array<number>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     viewport(): Array<number>;
     /**
-     * @docid dxVectorMapMethods.viewport
+     * @docid
      * @publicName viewport(viewportCoordinates)
-     * @param1 viewportCoordinates:Array<number>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     viewport(viewportCoordinates: Array<number>): void;
     /**
-     * @docid dxVectorMapMethods.zoomFactor
+     * @docid
      * @publicName zoomFactor()
-     * @return number
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     zoomFactor(): number;
     /**
-     * @docid dxVectorMapMethods.zoomFactor
+     * @docid
      * @publicName zoomFactor(zoomFactor)
-     * @param1 zoomFactor:number
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     zoomFactor(zoomFactor: number): void;
 }
 
-declare global {
-interface JQuery {
-    dxVectorMap(): JQuery;
-    dxVectorMap(options: "instance"): dxVectorMap;
-    dxVectorMap(options: string): any;
-    dxVectorMap(options: string, ...params: any[]): any;
-    dxVectorMap(options: dxVectorMapOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxVectorMapOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxVectorMapOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxVectorMapOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onCenterChanged
+ * @type_function_param1 e:{viz/vector_map:CenterChangedEvent}
+ */
+onCenterChanged?: ((e: CenterChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onClick
+ * @type_function_param1 e:{viz/vector_map:ClickEvent}
+ */
+onClick?: ((e: ClickEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onDisposing
+ * @type_function_param1 e:{viz/vector_map:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onDrawn
+ * @type_function_param1 e:{viz/vector_map:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onExported
+ * @type_function_param1 e:{viz/vector_map:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onExporting
+ * @type_function_param1 e:{viz/vector_map:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onFileSaving
+ * @type_function_param1 e:{viz/vector_map:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/vector_map:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onInitialized
+ * @type_function_param1 e:{viz/vector_map:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onOptionChanged
+ * @type_function_param1 e:{viz/vector_map:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onSelectionChanged
+ * @type_function_param1 e:{viz/vector_map:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onTooltipHidden
+ * @type_function_param1 e:{viz/vector_map:TooltipHiddenEvent}
+ */
+onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onTooltipShown
+ * @type_function_param1 e:{viz/vector_map:TooltipShownEvent}
+ */
+onTooltipShown?: ((e: TooltipShownEvent) => void);
+/**
+ * @skip
+ * @docid dxVectorMapOptions.onZoomFactorChanged
+ * @type_function_param1 e:{viz/vector_map:ZoomFactorChangedEvent}
+ */
+onZoomFactorChanged?: ((e: ZoomFactorChangedEvent) => void);
+};
+///#ENDDEBUG

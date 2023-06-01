@@ -1,51 +1,115 @@
-export interface positionConfig {
+import {
+    UserDefinedElement,
+} from '../core/element';
+
+import {
+    HorizontalAlignment,
+    PositionAlignment,
+    VerticalAlignment,
+} from '../common';
+
+/** @public */
+export type CollisionResolution = 'fit' | 'flip' | 'flipfit' | 'none';
+/** @public */
+export type CollisionResolutionCombination = 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit';
+
+/**
+ * @docid
+ * @namespace DevExpress
+ * @type object
+ * @public
+ */
+export interface PositionConfig {
     /**
-     * @docid positionConfig.at
-     * @type Enums.PositionAlignment|object
-     * @prevFileNamespace DevExpress.animation
+     * @docid
      * @public
      */
-    at?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
+    at?: PositionAlignment | {
+      /**
+       * @docid
+       */
+      x?: HorizontalAlignment;
+      /**
+       * @docid
+       */
+      y?: VerticalAlignment;
+    };
     /**
-     * @docid positionConfig.boundary
-     * @type string|Element|jQuery|window
-     * @prevFileNamespace DevExpress.animation
+     * @docid
      * @public
      */
-    boundary?: string | Element | JQuery | Window;
+    boundary?: string | UserDefinedElement | Window;
     /**
-     * @docid positionConfig.boundaryOffset
-     * @type string|object
-     * @prevFileNamespace DevExpress.animation
+     * @docid
      * @public
      */
-    boundaryOffset?: string | { x?: number, y?: number };
+    boundaryOffset?: string | {
+      /**
+       * @docid
+       * @default 0
+       */
+      x?: number;
+      /**
+       * @docid
+       * @default 0
+       */
+      y?: number;
+    };
     /**
-     * @docid positionConfig.collision
-     * @type Enums.PositionResolveCollisionXY|object
-     * @prevFileNamespace DevExpress.animation
+     * @docid
      * @public
      */
-    collision?: 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit' | { x?: 'fit' | 'flip' | 'flipfit' | 'none', y?: 'fit' | 'flip' | 'flipfit' | 'none' };
+    collision?: CollisionResolutionCombination | {
+      /**
+       * @docid
+       * @default 'none'
+       */
+      x?: CollisionResolution;
+      /**
+       * @docid
+       * @default 'none'
+       */
+      y?: CollisionResolution;
+    };
     /**
-     * @docid positionConfig.my
-     * @type Enums.PositionAlignment|object
-     * @prevFileNamespace DevExpress.animation
+     * @docid
      * @public
      */
-    my?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
+    my?: PositionAlignment | {
+      /**
+       * @docid
+       */
+      x?: HorizontalAlignment;
+      /**
+       * @docid
+       */
+      y?: VerticalAlignment;
+    };
     /**
-     * @docid positionConfig.of
-     * @type string|Element|jQuery|window
-     * @prevFileNamespace DevExpress.animation
+     * @docid
      * @public
      */
-    of?: string | Element | JQuery | Window;
+    of?: string | UserDefinedElement | Window;
     /**
-     * @docid positionConfig.offset
-     * @type string|object
-     * @prevFileNamespace DevExpress.animation
+     * @docid
      * @public
      */
-    offset?: string | { x?: number, y?: number };
+    offset?: string | {
+      /**
+       * @docid
+       * @default 0
+       */
+      x?: number;
+      /**
+       * @docid
+       * @default 0
+       */
+      y?: number;
+    };
 }
+
+/**
+ * @public
+ * @deprecated Use the PositionConfig type instead
+ */
+export interface positionConfig extends PositionConfig { }

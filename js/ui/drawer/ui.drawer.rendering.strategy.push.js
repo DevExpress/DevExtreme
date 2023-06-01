@@ -2,17 +2,15 @@ import { animation } from './ui.drawer.animation';
 import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
 import { move } from '../../animation/translator';
-import { extend } from '../../core/utils/extend';
 
 class PushStrategy extends DrawerStrategy {
-    _useDefaultAnimation() {
-        return true;
-    }
-
-    _defaultPositionRendering(config, _, animate) {
+    _internalRenderPosition(changePositionUsingFxAnimation, whenAnimationCompleted) {
         const drawer = this.getDrawerInstance();
+        const openedPanelSize = this._getPanelSize(true);
+        const contentPosition = this._getPanelSize(drawer.option('opened')) * drawer._getPositionCorrection();
 
-        $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', config.maxSize);
+        $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', openedPanelSize);
+
         if(drawer.getMinSize()) {
             let paddingCssPropertyName = 'padding';
             switch(drawer.calcTargetPosition()) {
@@ -22,35 +20,33 @@ class PushStrategy extends DrawerStrategy {
                 case 'bottom': paddingCssPropertyName += 'Top'; break;
             }
             $(drawer.viewContent()).css(paddingCssPropertyName, drawer.getMinSize());
+        } else {
+            // TODO: ???
         }
 
-        if(animate) {
-            const animationConfig = {
-                $element: config.$content,
-                position: config.contentPosition,
+        if(changePositionUsingFxAnimation) {
+            animation.moveTo({
+                $element: $(drawer.viewContent()),
+                position: contentPosition,
                 direction: drawer.calcTargetPosition(),
                 duration: drawer.option('animationDuration'),
                 complete: () => {
-                    this._elementsAnimationCompleteHandler();
+                    whenAnimationCompleted.resolve();
                 }
-            };
-
-            animation.moveTo(animationConfig);
+            });
         } else {
             if(drawer.isHorizontalDirection()) {
-                move(config.$content, { left: config.contentPosition });
+                move($(drawer.viewContent()), { left: contentPosition });
             } else {
-                move(config.$content, { top: config.contentPosition });
+                move($(drawer.viewContent()), { top: contentPosition });
             }
         }
     }
 
-    _getPositionRenderingConfig(isDrawerOpened) {
-        return extend(super._getPositionRenderingConfig(isDrawerOpened), {
-            contentPosition: this._getPanelSize(isDrawerOpened) * this.getDrawerInstance()._getPositionCorrection(),
-            maxSize: this._getPanelSize(true)
-        });
+    onPanelContentRendered() {
+        $(this.getDrawerInstance().viewContent()).addClass('dx-theme-background-color');
     }
+
 }
 
 export default PushStrategy;

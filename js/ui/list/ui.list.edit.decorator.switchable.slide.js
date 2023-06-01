@@ -1,3 +1,4 @@
+import { getOuterWidth, setWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { noop } from '../../core/utils/common';
@@ -219,9 +220,9 @@ registerDecorator(
             }
 
             this._$cachedContent = $itemElement.find('.' + SLIDE_MENU_CONTENT_CLASS);
-            this._cachedItemWidth = $itemElement.outerWidth();
-            this._cachedButtonWidth = this._cachedButtonWidth || this._$buttons.outerWidth();
-            this._$buttonsContainer.width(this._cachedButtonWidth);
+            this._cachedItemWidth = getOuterWidth($itemElement);
+            this._cachedButtonWidth = this._cachedButtonWidth || getOuterWidth(this._$buttons);
+            setWidth(this._$buttonsContainer, this._cachedButtonWidth);
 
             if(this._$cachedContent.length) {
                 this._cachedNode = $itemElement[0];

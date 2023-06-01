@@ -4,7 +4,7 @@ import messageLocalization from '../localization/message';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import LoadIndicator from './load_indicator';
-import Overlay from './overlay';
+import Overlay from './overlay/ui.overlay';
 import { Deferred } from '../core/utils/deferred';
 import { isMaterial } from './themes';
 
@@ -34,7 +34,6 @@ const LoadPanel = Overlay.inherit({
 
             height: 90,
 
-
             animation: null,
 
             /**
@@ -54,20 +53,15 @@ const LoadPanel = Overlay.inherit({
 
             hideTopOverlayHandler: null,
 
-            /**
-            * @name dxLoadPanelOptions.resizeEnabled
-            * @hidden
-            */
-            resizeEnabled: false,
+            focusStateEnabled: false,
 
-            focusStateEnabled: false
+            propagateOutsideClick: true,
 
-            /**
-            * @name dxLoadPanelOptions.dragEnabled
-            * @hidden
-            */
+            preventScrollEvents: false,
+
             /**
             * @name dxLoadPanelOptions.contentTemplate
+            * @type template
             * @hidden
             */
 
@@ -118,7 +112,7 @@ const LoadPanel = Overlay.inherit({
         this.callBase();
 
         this.$element().addClass(LOADPANEL_CLASS);
-        this._wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
+        this.$wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
     },
 
     _renderContentImpl: function() {
@@ -126,8 +120,8 @@ const LoadPanel = Overlay.inherit({
 
         this.$content().addClass(LOADPANEL_CONTENT_CLASS);
 
-        this._$contentWrapper = $('<div>').addClass(LOADPANEL_CONTENT_WRAPPER_CLASS);
-        this._$contentWrapper.appendTo(this._$content);
+        this._$loadPanelContentWrapper = $('<div>').addClass(LOADPANEL_CONTENT_WRAPPER_CLASS);
+        this._$loadPanelContentWrapper.appendTo(this.$content());
 
         this._togglePaneVisible();
 
@@ -166,7 +160,7 @@ const LoadPanel = Overlay.inherit({
     },
 
     _renderMessage: function() {
-        if(!this._$contentWrapper) {
+        if(!this._$loadPanelContentWrapper) {
             return;
         }
 
@@ -177,18 +171,18 @@ const LoadPanel = Overlay.inherit({
         const $message = $('<div>').addClass(LOADPANEL_MESSAGE_CLASS)
             .text(message);
 
-        this._$contentWrapper.append($message);
+        this._$loadPanelContentWrapper.append($message);
     },
 
     _renderLoadIndicator: function() {
-        if(!this._$contentWrapper || !this.option('showIndicator')) {
+        if(!this._$loadPanelContentWrapper || !this.option('showIndicator')) {
             return;
         }
 
         if(!this._$indicator) {
             this._$indicator = $('<div>')
                 .addClass(LOADPANEL_INDICATOR_CLASS)
-                .appendTo(this._$contentWrapper);
+                .appendTo(this._$loadPanelContentWrapper);
         }
 
         this._createComponent(this._$indicator, LoadIndicator, {
@@ -233,13 +227,13 @@ const LoadPanel = Overlay.inherit({
     }
 
     /**
-    * @name dxLoadPanelMethods.registerKeyHandler
+    * @name dxLoadPanel.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxLoadPanelMethods.focus
+    * @name dxLoadPanel.focus
     * @publicName focus()
     * @hidden
     */

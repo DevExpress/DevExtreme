@@ -1,24 +1,13 @@
-QUnit.testStart(function() {
-    const markup = `
-    <style>[tabindex]{background-color:yellow!important;}</style>
-        <div>
-            <div id="container" class="dx-datagrid"></div>
-        </div>`;
-
-    $('#qunit-fixture').html(markup);
-});
-
-import 'common.css!';
 import 'generic_light.css!';
 
 import $ from 'jquery';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
-import browser from 'core/utils/browser';
 import commonUtils from 'core/utils/common';
 import pointerEvents from 'events/pointer';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
+import { getActiveElement } from '../../helpers/shadowDom.js';
 import {
     CLICK_EVENT,
     triggerKeyDown,
@@ -27,6 +16,20 @@ import {
 import devices from 'core/devices';
 
 const device = devices.real();
+
+QUnit.testStart(function() {
+    const markup = `
+        <style nonce="qunit-test">
+            [tabindex] {
+                background-color: yellow !important;
+            }
+        </style>
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Real DataController and ColumnsController', {
     setupModule: function() {
@@ -59,7 +62,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         setupDataGridModules(this, [
             'data', 'columns', 'columnHeaders', 'rows',
-            'editorFactory', 'gridView', 'editing', 'focus',
+            'editorFactory', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'focus',
             'keyboardNavigation', 'validating', 'masterDetail', 'selection',
             'grouping'
         ], {
@@ -69,13 +72,13 @@ QUnit.module('Real DataController and ColumnsController', {
     setupAndRender: function() {
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
     },
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.dispose();
+        this.dispose && this.dispose();
         this.clock.restore();
     }
 }, function() {
@@ -94,7 +97,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         const keyboardController = this.getController('keyboardNavigation');
         const rowsView = this.gridView.getView('rowsView');
@@ -102,9 +105,9 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         $expandCell.trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('rightArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(keyboardController._focusedCellPosition, { rowIndex: 0, columnIndex: 1 }, 'focusedCellPosition is a first column');
@@ -134,7 +137,7 @@ QUnit.module('Real DataController and ColumnsController', {
             this.gridView.render($('#container'));
 
             this.editingController.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
             const $newRow = $('#container').find('.dx-data-row').first();
 
             assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
@@ -143,7 +146,7 @@ QUnit.module('Real DataController and ColumnsController', {
             // act
             this.triggerKeyDown('tab', false, false, $('#container').find('input'));
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
@@ -164,7 +167,7 @@ QUnit.module('Real DataController and ColumnsController', {
             this.gridView.render($('#container'));
 
             this.editingController.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $newRow = $('#container').find('.dx-data-row').first();
 
@@ -174,7 +177,7 @@ QUnit.module('Real DataController and ColumnsController', {
             // act
             this.triggerKeyDown('tab', false, false, $('#container').find('input'));
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
@@ -250,7 +253,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.setupAndRender();
 
         $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const navigationController = this.getController('keyboardNavigation');
         const rowsView = this.getView('rowsView');
@@ -259,7 +262,7 @@ QUnit.module('Real DataController and ColumnsController', {
         navigationController._isNeedFocus = true;
         rowsView.render();
         navigationController._focusedView = this.getView('rowsView');
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok($(this.getCellElement(1, 1)).is(':focus'), 'cell is focused');
     });
@@ -275,11 +278,11 @@ QUnit.module('Real DataController and ColumnsController', {
                 'name',
                 {
                     dataField: 'phone',
-                    editCellTemplate: cell => $(cell).append($(`
-                        <input class='input1' style='display: none' />
-                        <input class='input2' />
-                        <input class='input3' style='display: none' />
-                    `))
+                    editCellTemplate: cell => $(cell).append(
+                        $('<input class="input1" />').css('display', 'none'),
+                        $('<input class="input2" />'),
+                        $('<input class="input3" />').css('display', 'none')
+                    )
                 },
                 'room'
             ]
@@ -292,15 +295,15 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         this.editRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
-        this.triggerKeyDown('tab', false, false, $(':focus'));
-        this.clock.tick();
+        this.triggerKeyDown('tab', false, false, getActiveElement());
+        this.clock.tick(10);
 
         assert.deepEqual(navigationController._focusedCellPosition, { rowIndex: 1, columnIndex: 1 });
         const cell = dataGridWrapper.rowsView.getDataRow(1).getCell(1);
         assert.ok(cell.hasFocusedClass());
-        assert.ok($(':focus').hasClass('input2'));
+        assert.ok($(getActiveElement()).hasClass('input2'));
     });
 
     // T802790
@@ -320,7 +323,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.setupModule();
 
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.triggerKeyDown('space', false, false, this.getRowElement(0));
@@ -343,7 +346,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.setupModule();
 
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.focusCell(0, 0);
@@ -370,7 +373,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.setupModule();
 
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.focusCell(0, 0);
@@ -401,7 +404,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
 
         this.option('focusedRowIndex', 1);
@@ -431,7 +434,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         this.gridView.render($('#container'));
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $cell = $(this.getCellElement(0, 1));
@@ -464,7 +467,7 @@ QUnit.module('Real DataController and ColumnsController', {
         const $cell = $(this.rowsView.element().find('.dx-row').eq(1).find('td').eq(1));
         $cell.trigger(CLICK_EVENT);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!keyboardNavigationController._isHiddenFocus, 'not hidden focus');
@@ -506,7 +509,7 @@ QUnit.module('Real DataController and ColumnsController', {
         $cell = $(this.getCellElement(1, 1));
         $cell.trigger(CLICK_EVENT);
         this.editCell(1, 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(focusedCellChangingFiresCount, 1, 'onFocusedCellChanging fires count');
@@ -520,7 +523,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         this.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(focusedCellChangingFiresCount, 2, 'onFocusedCellChanging fires count');
@@ -529,10 +532,8 @@ QUnit.module('Real DataController and ColumnsController', {
 
         assert.notOk(keyboardNavigationController._editingController.isEditing(), 'Is editing');
         assert.equal(this.rowsView.element().find('input').length, 0, 'input');
-        if(!browser.msie) {
-            assert.ok(keyboardNavigationController._isHiddenFocus, 'hidden focus');
-            assert.notOk($cell.hasClass('dx-focused'), 'cell has no .dx-focused');
-        }
+        assert.ok(keyboardNavigationController._isHiddenFocus, 'hidden focus');
+        assert.notOk($cell.hasClass('dx-focused'), 'cell has no .dx-focused');
     });
 
     QUnit.testInActiveWindow('DataGrid should preserve fosused overlay after cancel editing (T812546)', function(assert) {
@@ -561,16 +562,16 @@ QUnit.module('Real DataController and ColumnsController', {
         // act
         this.gridView.render($('#container'));
         $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('upArrow', false, false, $(':focus'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(0, 1)).hasClass('dx-focused'), 'Cell has focus overlay');
 
         // act
         this.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(editingStartFiresCount, 1, 'onEditingStart fires count');
@@ -612,10 +613,10 @@ QUnit.module('Real DataController and ColumnsController', {
         $cell = $(this.rowsView.element().find('.dx-row').eq(1).find('td').eq(1));
         $cell.trigger(CLICK_EVENT);
         this.editCell(1, 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
-        assert.equal(editingStartCount, 1, 'onStartEdiitng fires count');
+        assert.equal(editingStartCount, 1, 'onStartEditing fires count');
         assert.equal(focusedCellChangingFiresCount, 1, 'onFocusedCellChanging fires count');
         assert.equal(focusedCellChangedFiresCount, 1, 'onFocusedCellChanged fires count');
 
@@ -627,10 +628,10 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         this.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.notOk(keyboardNavigationController._canceledCellPosition, 'Check _canceledCellPosition');
-        assert.equal(editingStartCount, 1, 'onStartEdiitng fires count');
+        assert.equal(editingStartCount, 1, 'onStartEditing fires count');
         assert.equal(focusedCellChangingFiresCount, 2, 'onFocusedCellChanging fires count');
         assert.equal(focusedCellChangedFiresCount, 1, 'onFocusedCellChanged fires count');
 
@@ -663,13 +664,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
-
-        this.optionCalled.add((name, value) => {
-            if(name === 'focusedRowKey' && value) {
-                this.focusController.optionChanged({ name: name, value: value });
-            }
-        });
+        this.clock.tick(10);
 
         // act
         this.addRow();
@@ -678,12 +673,12 @@ QUnit.module('Real DataController and ColumnsController', {
         this.cellValue(0, 2, '5');
         this.saveEditData();
         // assert
-        assert.equal(focusedRowChangedFiresCount, 1, 'onFocusedRowChanged fires count');
+        assert.equal(focusedRowChangedFiresCount, 2, 'onFocusedRowChanged fires count');
 
         // act
         this.refresh();
         // assert
-        assert.equal(focusedRowChangedFiresCount, 1, 'onFocusedRowChanged fires count');
+        assert.equal(focusedRowChangedFiresCount, 2, 'onFocusedRowChanged fires count');
     });
 
     // T804439
@@ -701,7 +696,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         this.setupModule();
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $(this.getCellElement(0, 0))
@@ -727,18 +722,18 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         $(this.getCellElement(0, 0)).trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
-        assert.ok($(':focus').closest('#container').length, 'focus in grid');
+        assert.ok($(getActiveElement()).closest('#container').length, 'focus in grid');
 
         // act
         $anotherRowsView.trigger(pointerEvents.down);
         this.rowsView.render();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
-        assert.notOk($(':focus').closest('#container').length, 'focus is not in grid');
+        assert.notOk($(getActiveElement()).closest('#container').length, 'focus is not in grid');
     });
 
     QUnit.testInActiveWindow('Focus must be after enter key pressed if \'cell\' edit mode (T653709)', function(assert) {
@@ -764,10 +759,10 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         this.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter', false, false, $(this.rowsView.element().find('.dx-data-row:nth-child(1) td:nth-child(2)')));
         this.gridView.component.editorFactoryController._$focusedElement = undefined;
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cell = $(this.rowsView.element().find('.dx-data-row:nth-child(1) td:nth-child(2)'));
 
@@ -856,14 +851,14 @@ QUnit.module('Real DataController and ColumnsController', {
 
         const keyboardNavigationController = this.gridView.component.keyboardNavigationController;
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const rowsView = this.gridView.getView('rowsView');
 
         const $expandCell = $(rowsView.element().find('td').first());
         $expandCell.trigger(CLICK_EVENT);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!keyboardNavigationController._isNeedFocus, 'is key down');
@@ -906,7 +901,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         this.triggerKeyDown('pageDown', false, false, $(':focus').get(0));
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $cell = $(this.getCellElement(1, 1));
@@ -944,7 +939,7 @@ QUnit.module('Real DataController and ColumnsController', {
         let $cell = $(that.rowsView.element().find('.dx-freespace-row').eq(0).find('td').eq(1));
         $cell.trigger(CLICK_EVENT);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $cell = $(that.rowsView.element().find('.dx-freespace-row').eq(0).find('td').eq(1));
@@ -984,13 +979,13 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         this.editCell(1, 1);
-        this.clock.tick();
+        this.clock.tick(10);
         const $cell = $(that.rowsView.element().find('.dx-freespace-row').eq(0).find('td').eq(1));
 
         try {
             // act
             $cell.trigger(CLICK_EVENT);
-            this.clock.tick();
+            this.clock.tick(10);
             // assert
             assert.ok(true, 'No exception');
         } catch(e) {
@@ -1039,7 +1034,7 @@ QUnit.module('Real DataController and ColumnsController', {
         $cell = $(that.rowsView.element().find('.dx-virtual-row').eq(0).find('td').eq(1)).trigger(CLICK_EVENT);
         $cell.trigger(CLICK_EVENT);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         $cell = $(that.rowsView.element().find('.dx-virtual-row').eq(0).find('td').eq(1));
@@ -1076,7 +1071,7 @@ QUnit.module('Real DataController and ColumnsController', {
         $cell.trigger(CLICK_EVENT, false, false, $(':focus').get(0));
         this.triggerKeyDown('pageDown');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange
         $cell = $(this.getCellElement(0, 1));
@@ -1124,22 +1119,17 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         that.gridView.render($('#container'));
-        $('#editButton')
+        $('#editButton').eq(0)
             .trigger('dxpointerdown.dxDataGridKeyboardNavigation')
             .click();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
-        assert.equal($('input:focus').val(), 'Alex', 'value of first editor');
+        assert.equal($(getActiveElement()).val(), 'Alex', 'value of first editor');
     });
 
     QUnit.test('Editor\'s input should be focused after mouse click (T650581)', function(assert) {
-        if(browser.msie && browser.version === '18.17763') {
-            assert.ok(true);
-            return;
-        }
-
         // arrange
         const that = this;
 
@@ -1172,7 +1162,7 @@ QUnit.module('Real DataController and ColumnsController', {
         $testElement.find('input').focus();
         $testElement.trigger(CLICK_EVENT);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // arrange, assert
         assert.notOk($testElement.hasClass('dx-cell-focus-disabled'), 'no keyboard interaction with cell template element');
@@ -1207,20 +1197,18 @@ QUnit.module('Real DataController and ColumnsController', {
         that.setupModule();
         that.gridView.render($('#container'));
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         // act
         that.editCell(0, 0);
-        that.clock.tick();
-
-        browser.msie && $(that.getCellElement(0, 0)).focus(); // should be removed after the IE death
+        that.clock.tick(10);
 
         const $input = $(that.getCellElement(0, 0)).find('input');
         $input.val('test').trigger('change');
-        that.clock.tick();
+        that.clock.tick(10);
 
         $input.trigger($.Event('keydown', { key: 'Enter' }));
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal($('.dx-revert-button').length, 0, 'has no revert button');
@@ -1261,7 +1249,7 @@ QUnit.module('Real DataController and ColumnsController', {
         that.saveEditData();
         that.getController('keyboardNavigation').focus(that.getCellElement(0, 1));
 
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal($('.dx-revert-button').length, 0, 'has no revert button');
@@ -1304,7 +1292,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // arrange
         that.editCell(0, 0);
-        that.clock.tick();
+        that.clock.tick(10);
 
         $inputElement = $testElement.find('.dx-texteditor-input').first();
         $inputElement.val('Bob');
@@ -1312,10 +1300,10 @@ QUnit.module('Real DataController and ColumnsController', {
         // act
         countCallCalculateCellValue = 0;
         $inputElement.change();
-        that.clock.tick();
+        that.clock.tick(10);
         $inputElement = $testElement.find('.dx-texteditor-input').first();
         $testElement.find('.dx-datagrid-rowsview').trigger($.Event('keydown', { key: 'Tab', target: $inputElement }));
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.ok(countCallCalculateCellValue, 'calculateCellValue is called');
@@ -1347,7 +1335,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.setupModule();
         this.gridView.render($container);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $rowsView = this.rowsView.element();
 
@@ -1395,7 +1383,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.setupModule();
         this.gridView.render($container);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $rowsView = this.rowsView.element();
         $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
@@ -1433,7 +1421,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.setupModule();
         this.gridView.render($container);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $rowsView = this.rowsView.element();
 
@@ -1483,7 +1471,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
                 // act
                 $(this.getCellElement(0, 1)).trigger(startEditClickEventName);
-                this.clock.tick();
+                this.clock.tick(10);
                 // assert
                 assert.ok(editingController.isEditCell(0, 1), 'Cell[0, 1] is in edit mode');
 
@@ -1501,7 +1489,7 @@ QUnit.module('Real DataController and ColumnsController', {
 
                 this.data = [{ name: 'Alex', lastName: 'John' }],
                 this.options = {
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     selection: {
                         mode: 'multiple',
                         showCheckBoxesMode: 'always'
@@ -1523,13 +1511,13 @@ QUnit.module('Real DataController and ColumnsController', {
                     .focus()
                     .removeClass('dx-cell-focus-disabled');
                 this.getController('editorFactory')._updateFocusCore();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 $selectCell
                     .trigger(pointerEvents.down)
                     .trigger(pointerEvents.up)
                     .trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.notOk($selectCell.hasClass('dx-focused'), 'Cell has no .dx-focused');
@@ -1540,13 +1528,13 @@ QUnit.module('Real DataController and ColumnsController', {
                     .focus()
                     .removeClass('dx-cell-focus-disabled');
                 this.getController('editorFactory')._updateFocusCore();
-                this.clock.tick();
+                this.clock.tick(10);
 
                 $selectCheckBox
                     .trigger(pointerEvents.down)
                     .trigger(pointerEvents.up)
                     .trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
 
                 // assert
                 assert.notOk($selectCell.hasClass('dx-focused'), 'Cell has no .dx-focused');
@@ -1570,23 +1558,76 @@ QUnit.module('Real DataController and ColumnsController', {
 
         this.setupModule();
         this.gridView.render($container);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let $commandCell = $(this.getCellElement(0, 0));
         $commandCell.focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($commandCell.is(':focus'), 'command cell is focused');
         assert.equal($commandCell.find('.dx-datagrid-group-closed').length, 1, 'cell is rendered as collapsed');
 
         this.triggerKeyDown('enter', false, false, $commandCell);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $commandCell = $(this.getCellElement(0, 0));
 
         // assert
-        assert.ok($commandCell.is(':focus'), 'command cell is still focused afteк expanding');
+        assert.ok($commandCell.is(':focus'), 'command cell is still focused after expanding');
         assert.equal($commandCell.find('.dx-datagrid-group-opened').length, 1, 'cell is rendered as expanded');
+    });
+
+    // T1117801
+    QUnit.testInActiveWindow('Do not prevent default behavior on \'tab\' key press after expand and collapse last master detail row', function(assert) {
+        // arrange
+        this.options = {
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: {
+                    type: 'array',
+                    data: [
+                        { name: 'Alex', phone: '555555' },
+                        { name: 'Dan', phone: '553355' }
+                    ],
+                    key: 'name'
+                },
+                paginate: true
+            },
+            masterDetail: {
+                enabled: true,
+                template: commonUtils.noop
+            },
+            paging: {
+                pageSize: 2,
+                enabled: true
+            }
+        };
+
+        this.setupModule();
+        this.gridView.render($('#container'));
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(this.getVisibleRows().length, 2, 'count data row');
+
+        // act
+        this.expandRow('Dan');
+        this.clock.tick(10);
+        this.collapseRow('Dan');
+        this.clock.tick(10);
+
+        // assert
+        const rows = this.getVisibleRows();
+        assert.strictEqual(this.getVisibleRows().length, 3, 'count data row + master detail');
+        assert.strictEqual(rows[2].rowType, 'detail', 'last row is the master detail');
+        assert.strictEqual(rows[2].visible, false, 'master detail is hidden');
+
+        // act
+        const result = this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
+        this.clock.tick(10);
+
+        // assert
+        assert.notOk(result.preventDefault, 'prevent default is not called');
     });
 });

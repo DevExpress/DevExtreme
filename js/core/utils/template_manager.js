@@ -28,7 +28,7 @@ export const findTemplates = (element, name) => {
 export const suitableTemplatesByName = (rawTemplates) => {
     const templatesMap = groupBy(rawTemplates, (template) => template.options.name);
 
-    if(templatesMap[undefined]) {
+    if(templatesMap['undefined']) {
         throw Errors.Error('E0023');
     }
 

@@ -1,3 +1,4 @@
+import { getWidth, getHeight, setWidth, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { noop } from '../../core/utils/common';
 import { getPublicElement } from '../../core/element';
@@ -108,14 +109,20 @@ class Submenu extends ContextMenu {
         const rootOffset = $rootItem.offset();
         const offsetLeft = Math.round(rootOffset.left);
         const offsetTop = Math.round(rootOffset.top);
-        const rootWidth = $rootItem.width();
-        const rootHeight = $rootItem.height();
-        const submenuWidth = $submenu.width();
-        const submenuHeight = $submenu.height();
+        const rootWidth = getWidth($rootItem);
+        const rootHeight = getHeight($rootItem);
+        const submenuWidth = getWidth($submenu);
+        const submenuHeight = getHeight($submenu);
 
         this.$contentDelimiter.css('display', 'block');
-        this.$contentDelimiter.width(this._isMenuHorizontal() ? (rootWidth < submenuWidth ? rootWidth - 2 : submenuWidth) : 2);
-        this.$contentDelimiter.height(this._isMenuHorizontal() ? 2 : (rootHeight < submenuHeight ? rootHeight - 2 : submenuHeight));
+        setWidth(
+            this.$contentDelimiter,
+            this._isMenuHorizontal() ? (rootWidth < submenuWidth ? rootWidth - 2 : submenuWidth) : 2
+        );
+        setHeight(
+            this.$contentDelimiter,
+            this._isMenuHorizontal() ? 2 : (rootHeight < submenuHeight ? rootHeight - 2 : submenuHeight)
+        );
 
         if(this._isMenuHorizontal()) {
             if(vLocation > offsetTop) {
@@ -127,7 +134,7 @@ class Submenu extends ContextMenu {
                     position.at = position.my = 'right top';
                 }
             } else {
-                this.$contentDelimiter.height(5);
+                setHeight(this.$contentDelimiter, 5);
                 if(Math.round(hLocation) === offsetLeft) {
                     position.offset = '1 4';
                     position.at = position.my = 'left bottom';

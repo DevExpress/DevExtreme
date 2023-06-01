@@ -1,7 +1,14 @@
 const ko = require('knockout');
 const variableWrapper = require('core/utils/variable_wrapper');
+const { logger } = require('core/utils/console');
 
 require('integration/knockout');
+
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('variableWrapperUtils');
+} else {
+    QUnit.module.skip('variableWrapperUtils');
+}
 
 QUnit.test('wrapped value', function(assert) {
     const observableValue = ko.observable(3);
@@ -26,7 +33,9 @@ QUnit.test('wrapped value', function(assert) {
     variableWrapper.assign(observableValue, 5);
     assert.equal(observableValue(), 5, 'assign method for observable variable');
 
-    assert.throws(variableWrapper.assign(notWrappedValue, 5), 'assign method for not observable variable');
+    const loggerErrorSpy = sinon.spy(logger, 'error');
+    variableWrapper.assign(notWrappedValue, 5);
+    assert.strictEqual(loggerErrorSpy.callCount, 1, 'assign method for not observable variable');
 
     variableWrapper.resetInjection();
     assert.equal(variableWrapper.wrap(3), 3, 'reset method');

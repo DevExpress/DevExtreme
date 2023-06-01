@@ -11,14 +11,19 @@ import Callbacks from '../../core/utils/callbacks';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
-import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
+import { Event as dxEvent } from '../../events/index';
+import scrollEvents from '../../events/gesture/emitter.gesture.scroll';
 import { prepareScrollData } from '../text_box/utils.scroll';
+
+import pointerEvents from '../../events/pointer';
+import devices from '../../core/devices';
 
 import QuillRegistrator from './quill_registrator';
 import './converters/delta';
 import ConverterController from './converterController';
 import getWordMatcher from './matchers/wordLists';
 import FormDialog from './ui/formDialog';
+import config from '../../core/config';
 
 // STYLE htmlEditor
 
@@ -32,6 +37,10 @@ const MARKDOWN_VALUE_TYPE = 'markdown';
 
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 
+const isIos = devices.current().platform === 'ios';
+
+let editorsCount = 0;
+
 const HtmlEditor = Editor.inherit({
 
     _getDefaultOptions: function() {
@@ -44,39 +53,22 @@ const HtmlEditor = Editor.inherit({
             toolbar: null,
             variables: null,
             mediaResizing: null,
+            tableResizing: null,
             mentions: null,
             customizeModules: null,
+            tableContextMenu: null,
+            allowSoftLineBreak: false,
 
-            formDialogOptions: null
+            formDialogOptions: null,
 
-            /**
-            * @name dxHtmlEditorToolbar
-            * @type object
-            */
+            imageUpload: null,
 
-            /**
-            * @name dxHtmlEditorToolbarItem
-            * @inherits dxToolbarItem
-            */
-
-            /**
-            * @name dxHtmlEditorVariables
-            * @type object
-            */
-
-            /**
-            * @name dxHtmlEditorMediaResizing
-            * @type object
-            */
-
-            /**
-            * @name dxHtmlEditorMention
-            * @type object
-            */
+            stylingMode: config().editorStylingMode || 'outlined',
         });
     },
 
     _init: function() {
+        this._mentionKeyInTemplateStorage = editorsCount++;
         this.callBase();
         this._cleanCallback = Callbacks();
         this._contentInitializedCallback = Callbacks();
@@ -129,8 +121,11 @@ const HtmlEditor = Editor.inherit({
         this._$htmlContainer = $('<div>').addClass(QUILL_CONTAINER_CLASS);
 
         this.$element()
+            .attr('role', 'application')
             .addClass(HTML_EDITOR_CLASS)
             .wrapInner(this._$htmlContainer);
+
+        this._renderStylingMode();
 
         const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
         const transclude = true;
@@ -164,6 +159,62 @@ const HtmlEditor = Editor.inherit({
         return this._$submitElement;
     },
 
+    _createNoScriptFrame: function() {
+        return $('<iframe>')
+            .css('display', 'none')
+            .attr({
+                // eslint-disable-next-line spellcheck/spell-checker
+                srcdoc: '', // NOTE: srcdoc is used to prevent an excess "Blocked script execution" error in Opera. See T1150911.
+                id: 'xss-frame',
+                sandbox: 'allow-same-origin'
+            });
+    },
+
+    _removeXSSVulnerableHtml: function(value) {
+        // NOTE: Script tags and inline handlers are removed to prevent XSS attacks.
+        // "Blocked script execution in 'about:blank' because the document's frame is sandboxed and the 'allow-scripts' permission is not set."
+        // error can be logged to the console if the html value is XSS vulnerable.
+
+        const $frame = this
+            ._createNoScriptFrame()
+            .appendTo('body');
+
+        const frame = $frame.get(0);
+        const frameWindow = frame.contentWindow;
+        const frameDocument = frameWindow.document;
+        const frameDocumentBody = frameDocument.body;
+
+        frameDocumentBody.innerHTML = value;
+
+        const removeInlineHandlers = (element) => {
+            if(element.attributes) {
+                for(let i = 0; i < element.attributes.length; i++) {
+                    const name = element.attributes[i].name;
+                    if(name.startsWith('on')) {
+                        element.removeAttribute(name);
+                    }
+                }
+            }
+            if(element.childNodes) {
+                for(let i = 0; i < element.childNodes.length; i++) {
+                    removeInlineHandlers(element.childNodes[i]);
+                }
+            }
+        };
+
+        removeInlineHandlers(frameDocumentBody);
+
+        // NOTE: Do not use jQuery to prevent an excess "Blocked script execution" error in Safari.
+        frameDocumentBody
+            .querySelectorAll('script')
+            .forEach(scriptNode => { scriptNode.remove(); });
+
+        const sanitizedHtml = frameDocumentBody.innerHTML;
+
+        $frame.remove();
+        return sanitizedHtml;
+    },
+
     _updateContainerMarkup: function() {
         let markup = this.option('value');
 
@@ -173,7 +224,8 @@ const HtmlEditor = Editor.inherit({
         }
 
         if(markup) {
-            this._$htmlContainer.html(markup);
+            const sanitizedMarkup = this._removeXSSVulnerableHtml(markup);
+            this._$htmlContainer.html(sanitizedMarkup);
         }
     },
 
@@ -231,6 +283,12 @@ const HtmlEditor = Editor.inherit({
         return renderContentPromise;
     },
 
+    _pointerMoveHandler: function(e) {
+        if(isIos) {
+            e.stopPropagation();
+        }
+    },
+
     _attachFocusEvents: function() {
         deferRender(this.callBase.bind(this));
     },
@@ -279,6 +337,8 @@ const HtmlEditor = Editor.inherit({
         const initScrollData = prepareScrollData($scrollContainer);
 
         eventsEngine.on($scrollContainer, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
+
+        eventsEngine.on($scrollContainer, addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
     },
 
     _applyTranscludedContent: function() {
@@ -310,20 +370,28 @@ const HtmlEditor = Editor.inherit({
             // TODO: extract some IE11 tweaks for the Quill uploader module
             // dropImage: this._getBaseModuleConfig(),
             resizing: this._getModuleConfigByOption('mediaResizing'),
+            tableResizing: this._getModuleConfigByOption('tableResizing'),
+            tableContextMenu: this._getModuleConfigByOption('tableContextMenu'),
+            imageUpload: this._getModuleConfigByOption('imageUpload'),
+            imageCursor: this._getBaseModuleConfig(),
             mentions: this._getModuleConfigByOption('mentions'),
             uploader: {
-                onDrop: (e) => this._saveValueChangeEvent(e),
+                onDrop: (e) => this._saveValueChangeEvent(dxEvent(e)),
                 imageBlot: 'extendedImage'
             },
+            keyboard: {
+                onKeydown: (e) => this._saveValueChangeEvent(dxEvent(e))
+            },
             clipboard: {
-                onPaste: (e) => this._saveValueChangeEvent(e),
-                onCut: (e) => this._saveValueChangeEvent(e),
+                onPaste: (e) => this._saveValueChangeEvent(dxEvent(e)),
+                onCut: (e) => this._saveValueChangeEvent(dxEvent(e)),
                 matchers: [
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
                     ['p.MsoListParagraphCxSpLast', wordListMatcher]
                 ]
-            }
+            },
+            multiline: Boolean(this.option('allowSoftLineBreak'))
         }, this._getCustomModules());
 
         return modulesConfig;
@@ -415,40 +483,78 @@ const HtmlEditor = Editor.inherit({
         const userOptions = extend(true, {
             width: 'auto',
             height: 'auto',
-            closeOnOutsideClick: true
+            hideOnOutsideClick: true
         }, this.option('formDialogOptions'));
 
         this._formDialog = new FormDialog(this, userOptions);
+    },
+
+    _getStylingModePrefix: function() {
+        return 'dx-htmleditor-';
     },
 
     _getQuillContainer: function() {
         return this._$htmlContainer;
     },
 
+    _prepareModuleOptions(args) {
+        const optionData = args.fullName?.split('.');
+        let value = args.value;
+        const optionName = optionData.length >= 2 ? optionData[1] : args.name;
+
+        if(optionData.length === 3) {
+            value = { [optionData[2]]: value };
+        }
+
+        return [ optionName, value ];
+    },
+
+    _moduleOptionChanged: function(moduleName, args) {
+        const moduleInstance = this.getModule(moduleName);
+        const shouldPassOptionsToModule = Boolean(moduleInstance);
+
+        if(shouldPassOptionsToModule) {
+            moduleInstance.option(...this._prepareModuleOptions(args));
+        } else {
+            this._invalidate();
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
-            case 'value':
+            case 'value': {
                 if(this._quillInstance) {
                     if(this._isEditorUpdating) {
                         this._isEditorUpdating = false;
                     } else {
                         const updatedValue = this._isMarkdownValue() ? this._updateValueByType('HTML', args.value) : args.value;
+
+                        this._suppressValueChangeAction();
                         this._updateHtmlContent(updatedValue);
+                        this._resumeValueChangeAction();
                     }
                 } else {
                     this._$htmlContainer.html(args.value);
                 }
 
-                this._setSubmitValue(args.value);
-
-                this.callBase(args);
+                // NOTE: value can be optimized by Quill
+                const value = this.option('value');
+                if(value !== args.previousValue) {
+                    this._setSubmitValue(value);
+                    this.callBase({ ...args, value });
+                }
                 break;
+            }
             case 'placeholder':
             case 'variables':
             case 'toolbar':
             case 'mentions':
             case 'customizeModules':
+            case 'allowSoftLineBreak':
                 this._invalidate();
+                break;
+            case 'tableResizing':
+                this._moduleOptionChanged('tableResizing', args);
                 break;
             case 'valueType': {
                 this._prepareConverters();
@@ -461,6 +567,9 @@ const HtmlEditor = Editor.inherit({
                 }
                 break;
             }
+            case 'stylingMode':
+                this._renderStylingMode();
+                break;
             case 'readOnly':
             case 'disabled':
                 this.callBase(args);
@@ -469,16 +578,22 @@ const HtmlEditor = Editor.inherit({
             case 'formDialogOptions':
                 this._renderFormDialog();
                 break;
+            case 'tableContextMenu':
+                this._moduleOptionChanged('tableContextMenu', args);
+                break;
             case 'mediaResizing':
                 if(!args.previousValue || !args.value) {
                     this._invalidate();
                 } else {
-                    this._quillInstance.getModule('resizing').option(args.name, args.value);
+                    this.getModule('resizing').option(args.name, args.value);
                 }
                 break;
             case 'width':
                 this.callBase(args);
                 this._repaintToolbar();
+                break;
+            case 'imageUpload':
+                this._moduleOptionChanged('imageUpload', args);
                 break;
             default:
                 this.callBase(args);
@@ -486,8 +601,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _repaintToolbar: function() {
-        const toolbar = this._quillInstance.getModule('toolbar');
-        toolbar && toolbar.repaint();
+        this._applyToolbarMethod('repaint');
     },
 
     _updateHtmlContent: function(html) {
@@ -527,6 +641,10 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
+    _applyToolbarMethod(methodName) {
+        this.getModule('toolbar')?.[methodName]();
+    },
+
     addCleanCallback(callback) {
         this._cleanCallback.add(callback);
     },
@@ -555,12 +673,16 @@ const HtmlEditor = Editor.inherit({
         return this._quillInstance;
     },
 
-    getSelection: function() {
-        return this._applyQuillMethod('getSelection');
+    getSelection: function(focus) {
+        return this._applyQuillMethod('getSelection', arguments);
     },
 
     setSelection: function(index, length) {
         this._applyQuillMethod('setSelection', arguments);
+    },
+
+    getText: function(index, length) {
+        return this._applyQuillMethod('getText', arguments);
     },
 
     format: function(formatName, formatValue) {
@@ -585,6 +707,7 @@ const HtmlEditor = Editor.inherit({
 
     clearHistory: function() {
         this._applyQuillHistoryMethod('clear');
+        this._applyToolbarMethod('updateHistoryWidgets');
     },
 
     undo: function() {
@@ -599,6 +722,10 @@ const HtmlEditor = Editor.inherit({
 
     getLength: function() {
         return this._applyQuillMethod('getLength');
+    },
+
+    getBounds: function(index, length) {
+        return this._applyQuillMethod('getBounds', arguments);
     },
 
     delete: function(index, length) {
@@ -623,8 +750,15 @@ const HtmlEditor = Editor.inherit({
 
     focus: function() {
         this.callBase();
-
         this._applyQuillMethod('focus');
+    },
+
+    blur: function() {
+        this._applyQuillMethod('blur');
+    },
+
+    getMentionKeyInTemplateStorage() {
+        return this._mentionKeyInTemplateStorage;
     }
 });
 

@@ -7,13 +7,13 @@ $material-radiobutton-dot-size: null !default;
 $material-radiobutton-ripple-size: null !default;
 
 @if $size == "default" {
-  $material-radiobutton-size: 20px;
-  $material-radiobutton-dot-size: 10px;
-  $material-radiobutton-ripple-size: 40px;
+  $material-radiobutton-size: 20px !default;
+  $material-radiobutton-dot-size: 10px !default;
+  $material-radiobutton-ripple-size: 40px !default;
 }
 
 @else if $size == "compact" {
-  $material-radiobutton-size: 16px;
-  $material-radiobutton-dot-size: 8px;
-  $material-radiobutton-ripple-size: 32px;
+  $material-radiobutton-size: 16px !default;
+  $material-radiobutton-dot-size: 8px !default;
+  $material-radiobutton-ripple-size: 32px !default;
 }

@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -14,9 +13,11 @@ import './fileManagerParts/thumbnailsView.tests.js';
 import './fileManagerParts/toolbar.tests.js';
 import './fileManagerParts/navigation.tests.js';
 import './fileManagerParts/selection.tests.js';
+import './fileManagerParts/scroll.tests.js';
 import './fileManagerParts/editing.tests.js';
 import './fileManagerParts/adaptivity.tests.js';
 import './fileManagerParts/editingProgress.tests.js';
+import './fileManagerParts/editingEvents.tests.js';
 import './fileManagerParts/progressPanel.tests.js';
 import './fileManagerParts/fileItemsController.tests.js';
 

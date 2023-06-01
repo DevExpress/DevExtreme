@@ -1,104 +1,241 @@
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOptions<T> {
+export type ItemLike = string | Item | any;
+
+/** @public */
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>>;
+
+/** @public */
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>>;
+
+/** @public */
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<MultiViewInstance<TItem, TKey>>;
+
+/** @public */
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>> & SelectionChangedInfo<TItem>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ * @docid
+ */
+export interface dxMultiViewOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends dxMultiViewBaseOptions<MultiViewInstance<TItem, TKey>, TItem, TKey> {}
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid dxMultiViewOptions
+ */
+export interface dxMultiViewBaseOptions<
+    TComponent extends dxMultiView<any, TItem, TKey> = dxMultiView<any, any, any>,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
      * @docid dxMultiViewOptions.animationEnabled
-     * @type boolean
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationEnabled?: boolean;
     /**
      * @docid dxMultiViewOptions.dataSource
-     * @type string|Array<string,dxMultiViewItem,object>|DataSource|DataSourceOptions
+     * @type string | Array<string | dxMultiViewItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxMultiViewItem | any> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid dxMultiViewOptions.deferRendering
-     * @type boolean
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
     /**
      * @docid dxMultiViewOptions.focusStateEnabled
-     * @type boolean
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid dxMultiViewOptions.items
-     * @type Array<string, dxMultiViewItem, object>
+     * @type Array<string | dxMultiViewItem | any>
      * @fires dxMultiViewOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxMultiViewItem | any>;
+    items?: Array<TItem>;
     /**
      * @docid dxMultiViewOptions.loop
-     * @type boolean
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     loop?: boolean;
     /**
      * @docid dxMultiViewOptions.selectedIndex
-     * @type number
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
     /**
      * @docid dxMultiViewOptions.swipeEnabled
-     * @type boolean
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     swipeEnabled?: boolean;
 }
+
 /**
- * @docid dxMultiView
+ * @docid
  * @inherits CollectionWidget
- * @module ui/multi_view
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxMultiView extends CollectionWidget {
-    constructor(element: Element, options?: dxMultiViewOptions)
-    constructor(element: JQuery, options?: dxMultiViewOptions)
-}
+export default class dxMultiView<
+    TProperties extends dxMultiViewOptions<TItem, TKey> = dxMultiViewOptions<any, any>,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidget<TProperties, TItem, TKey> { }
 
-export interface dxMultiViewItem extends CollectionWidgetItem {
-}
+/**
+ * @public
+ * @namespace DevExpress.ui.dxMultiView
+ */
+export type Item = dxMultiViewItem;
 
-declare global {
-interface JQuery {
-    dxMultiView(): JQuery;
-    dxMultiView(options: "instance"): dxMultiView;
-    dxMultiView(options: string): any;
-    dxMultiView(options: string, ...params: any[]): any;
-    dxMultiView(options: dxMultiViewOptions): JQuery;
-}
-}
-export type Options = dxMultiViewOptions;
+ /**
+  * @deprecated Use Item instead
+  * @namespace DevExpress.ui
+  */
+export interface dxMultiViewItem extends CollectionWidgetItem {}
 
-/** @deprecated use Options instead */
-export type IOptions = dxMultiViewOptions;
+/** @public */
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+};
+
+interface MultiViewInstance<TItem, TKey> extends dxMultiView<Properties<TItem, TKey>, TItem, TKey> { }
+
+/** @public */
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxMultiViewOptions<TItem, TKey>;
+
+/** @deprecated use Properties instead */
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onContentReady
+ * @type_function_param1 e:{ui/multi_view:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onDisposing
+ * @type_function_param1 e:{ui/multi_view:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onInitialized
+ * @type_function_param1 e:{ui/multi_view:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onItemClick
+ * @type_function_param1 e:{ui/multi_view:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/multi_view:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onItemHold
+ * @type_function_param1 e:{ui/multi_view:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onItemRendered
+ * @type_function_param1 e:{ui/multi_view:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onOptionChanged
+ * @type_function_param1 e:{ui/multi_view:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxMultiViewOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/multi_view:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+};
+///#ENDDEBUG

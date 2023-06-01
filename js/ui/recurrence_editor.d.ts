@@ -1,42 +1,98 @@
 import Editor, {
-    EditorOptions
+    EditorOptions, ValueChangedInfo,
 } from './editor/editor';
 
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    NativeEventInfo,
+} from '../events/index';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxRecurrenceEditor>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxRecurrenceEditor>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxRecurrenceEditor>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxRecurrenceEditor> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxRecurrenceEditor, Event> & ValueChangedInfo;
+
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @type object
+ */
 export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
     /**
-     * @docid dxRecurrenceEditorOptions.value
-     * @type string
+     * @docid
      * @default null
      * @fires dxRecurrenceEditorOptions.onValueChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: string;
 }
 /**
- * @docid dxRecurrenceEditor
+ * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/recurrence_editor
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxRecurrenceEditor extends Editor {
-    constructor(element: Element, options?: dxRecurrenceEditorOptions)
-    constructor(element: JQuery, options?: dxRecurrenceEditorOptions)
-}
+export default class dxRecurrenceEditor extends Editor<dxRecurrenceEditorOptions> { }
 
-declare global {
-interface JQuery {
-    dxRecurrenceEditor(): JQuery;
-    dxRecurrenceEditor(options: "instance"): dxRecurrenceEditor;
-    dxRecurrenceEditor(options: string): any;
-    dxRecurrenceEditor(options: string, ...params: any[]): any;
-    dxRecurrenceEditor(options: dxRecurrenceEditorOptions): JQuery;
-}
-}
+export type Properties = dxRecurrenceEditorOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxRecurrenceEditorOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxRecurrenceEditorOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxRecurrenceEditorOptions.onContentReady
+ * @type_function_param1 e:{ui/recurrence_editor:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxRecurrenceEditorOptions.onDisposing
+ * @type_function_param1 e:{ui/recurrence_editor:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxRecurrenceEditorOptions.onInitialized
+ * @type_function_param1 e:{ui/recurrence_editor:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxRecurrenceEditorOptions.onOptionChanged
+ * @type_function_param1 e:{ui/recurrence_editor:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxRecurrenceEditorOptions.onValueChanged
+ * @type_function_param1 e:{ui/recurrence_editor:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

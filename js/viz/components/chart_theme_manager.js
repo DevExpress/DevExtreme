@@ -7,7 +7,7 @@ import {
 } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { BaseThemeManager } from '../core/base_theme_manager';
-import { normalizeEnum as _normalizeEnum } from '../core/utils';
+import { normalizeEnum as _normalizeEnum, extractColor } from '../core/utils';
 
 export const ThemeManager = BaseThemeManager.inherit((function() {
     const ctor = function(params) {
@@ -63,8 +63,8 @@ export const ThemeManager = BaseThemeManager.inherit((function() {
     const applyParticularAxisOptions = function(name, userOptions, rotated) {
         const theme = this._theme;
         const position = !(rotated ^ (name === 'valueAxis')) ? 'horizontalAxis' : 'verticalAxis';
-        const processedUserOptions = processAxisOptions(userOptions, name);
-        const commonAxisSettings = processAxisOptions(this._userOptions['commonAxisSettings'], name);
+        const processedUserOptions = processAxisOptions(userOptions);
+        const commonAxisSettings = processAxisOptions(this._userOptions['commonAxisSettings']);
         const mergeOptions = extend(true, {}, theme.commonAxisSettings, theme[position], theme[name], commonAxisSettings, processedUserOptions);
 
         mergeOptions.workWeek = processedUserOptions.workWeek || theme[name].workWeek;
@@ -128,9 +128,8 @@ export const ThemeManager = BaseThemeManager.inherit((function() {
             settings.containerBackgroundColor = containerBackgroundColor;
 
             if(widgetType !== 'pie') {
-                mainSeriesColor = settings.color || palette.getNextColor(seriesCount);
+                mainSeriesColor = extractColor(settings.color, true) || palette.getNextColor(seriesCount);
             } else {
-
                 mainSeriesColor = function(argument, index, count) {
                     const cat = `${argument}-${index}`;
 

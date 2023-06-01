@@ -1,3 +1,4 @@
+import { getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import registerComponent from '../../core/component_registrator';
@@ -11,7 +12,7 @@ import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import { end as hoverEventEnd } from '../../events/hover';
 import MenuBase from '../context_menu/ui.menu_base';
-import Overlay from '../overlay';
+import Overlay from '../overlay/ui.overlay';
 import Submenu from './ui.submenu';
 import Button from '../button';
 import TreeView from '../tree_view';
@@ -63,31 +64,9 @@ class Menu extends MenuBase {
             submenuDirection: 'auto',
 
             showFirstSubmenuMode: {
-                /**
-                * @name dxMenuOptions.showFirstSubmenuMode.name
-                * @type Enums.ShowSubmenuMode
-                * @default "onClick"
-                */
                 name: 'onClick',
-
-                /**
-                * @name dxMenuOptions.showFirstSubmenuMode.delay
-                * @type Object|number
-                * @default { show: 50, hide: 300 }
-                */
                 delay: {
-                    /**
-                    * @name dxMenuOptions.showFirstSubmenuMode.delay.show
-                    * @type number
-                    * @default 50
-                    */
                     show: 50,
-
-                    /**
-                    * @name dxMenuOptions.showFirstSubmenuMode.delay.hide
-                    * @type number
-                    * @default 300
-                    */
                     hide: 300
                 }
             },
@@ -118,11 +97,6 @@ class Menu extends MenuBase {
             /**
             * @name dxMenuOptions.onItemReordered
             * @hidden
-            */
-            /**
-            * @name dxMenuItem
-            * @inherits dxMenuBaseItem
-            * @type object
             */
         });
     }
@@ -265,7 +239,7 @@ class Menu extends MenuBase {
             return;
         }
 
-        const containerWidth = this.$element().outerWidth();
+        const containerWidth = getOuterWidth(this.$element());
         this._toggleAdaptiveMode(this._menuItemsWidth > containerWidth);
     }
 
@@ -287,6 +261,8 @@ class Menu extends MenuBase {
         this.$element().addClass(DX_MENU_CLASS);
 
         super._initMarkup();
+        this._addCustomCssClass(this.$element());
+
         this.setAria('role', 'menubar');
     }
 
@@ -357,18 +333,19 @@ class Menu extends MenuBase {
         const position = rtl ? 'right' : 'left';
 
         return {
+            _ignoreFunctionValueDeprecation: true,
             maxHeight: () => {
                 return getElementMaxHeightByWindow(this.$element());
             },
             deferRendering: false,
             shading: false,
             animation: false,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             onHidden: () => {
                 this._toggleHamburgerActiveState(false);
             },
             height: 'auto',
-            closeOnOutsideClick(e) {
+            hideOnOutsideClick(e) {
                 return !($(e.target).closest(`.${DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS}`).length);
             },
             position: {
@@ -388,12 +365,11 @@ class Menu extends MenuBase {
             'itemsExpr', 'items', 'itemTemplate', 'selectedExpr',
             'selectionMode', 'tabIndex', 'visible'
         ];
-        const actionsToTransfer = ['onItemContextMenu', 'onSelectionChanged'];
-
         each(optionsToTransfer, (_, option) => {
             menuOptions[option] = this.option(option);
         });
 
+        const actionsToTransfer = ['onItemContextMenu', 'onSelectionChanged', 'onItemRendered'];
         each(actionsToTransfer, (_, actionName) => {
             menuOptions[actionName] = (e) => {
                 this._actions[actionName](e);
@@ -434,7 +410,7 @@ class Menu extends MenuBase {
             .addClass(DX_ADAPTIVE_MODE_CLASS)
             .addClass(this.option('cssClass'));
 
-        this._overlay._wrapper().addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
+        this._overlay.$wrapper().addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
 
         this._$adaptiveContainer.append($hamburger);
         this._$adaptiveContainer.append(this._overlay.$element());
@@ -486,7 +462,7 @@ class Menu extends MenuBase {
             .appendTo($rootItem);
 
         const items = this._getChildNodes(node);
-        const result = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
+        const subMenu = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
             _dataAdapter: this._dataAdapter,
             _parentKey: node.internalFields.key,
             items: items,
@@ -494,9 +470,9 @@ class Menu extends MenuBase {
             position: this.getSubmenuPosition($rootItem)
         }));
 
-        this._attachSubmenuHandlers($rootItem, result);
+        this._attachSubmenuHandlers($rootItem, subMenu);
 
-        return result;
+        return subMenu;
     }
 
     _getSubmenuOptions() {
@@ -832,6 +808,8 @@ class Menu extends MenuBase {
 
         if(submenu) {
             this._clearTimeouts();
+            this.focus();
+
             submenu.show();
             this.option('focusedElement', submenu.option('focusedElement'));
         }
@@ -923,6 +901,11 @@ class Menu extends MenuBase {
     }
 
     _optionChanged(args) {
+        if(ACTIONS.indexOf(args.name) >= 0) {
+            this._initActions();
+            return;
+        }
+
         switch(args.name) {
             case 'orientation':
             case 'submenuDirection':
@@ -933,12 +916,6 @@ class Menu extends MenuBase {
                 break;
             case 'showSubmenuMode':
                 this._changeSubmenusOption(args.name, args.value);
-                break;
-            case 'onSubmenuShowing':
-            case 'onSubmenuShown':
-            case 'onSubmenuHiding':
-            case 'onSubmenuHidden':
-                this._initActions();
                 break;
             case 'adaptivityEnabled':
                 args.value ? this._initAdaptivity() : this._removeAdaptivity();
@@ -958,8 +935,9 @@ class Menu extends MenuBase {
                 super._optionChanged(args);
                 break;
             default:
-                if(this._isAdaptivityEnabled()) {
-                    this._treeView.option(args.name, args.value);
+                if(this._isAdaptivityEnabled() && ((args.name === args.fullName) || (args.name === 'items'))) {
+                    // TODO: if(args.name === 'items') this._treeView.option('items', this.option('items')) or treeView.repaint() ?
+                    this._treeView.option(args.fullName, args.value);
                 }
                 super._optionChanged(args);
         }

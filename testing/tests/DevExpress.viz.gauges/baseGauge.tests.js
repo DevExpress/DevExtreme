@@ -1,25 +1,22 @@
 /* global currentTest */
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const registerComponent = require('core/component_registrator');
-const resizeCallbacks = require('core/utils/resize_callbacks');
-const baseGaugeModule = require('viz/gauges/base_gauge');
-const dxBaseGauge = baseGaugeModule.dxBaseGauge;
-const formatValue = baseGaugeModule.formatValue;
-const getSampleText = baseGaugeModule.getSampleText;
-const titleModule = require('viz/core/title');
-const loadingIndicatorModule = require('viz/core/loading_indicator');
-const rendererModule = require('viz/core/renderers/renderer');
-const tooltipModule = require('viz/core/tooltip');
-const translator1DModule = require('viz/translators/translator1d');
-const themeManagerModule = require('viz/gauges/theme_manager');
-const ThemeManager = themeManagerModule.ThemeManager;
-const Tracker = require('viz/gauges/tracker');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import registerComponent from 'core/component_registrator';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import { BaseGauge, formatValue, getSampleText } from 'viz/gauges/base_gauge';
+import titleModule from 'viz/core/title';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
+import rendererModule from 'viz/core/renderers/renderer';
+import tooltipModule from 'viz/core/tooltip';
+import translator1DModule from 'viz/translators/translator1d';
+import themeManagerModule from 'viz/gauges/theme_manager';
+import Tracker from 'viz/gauges/tracker';
+import graphicObjects from 'common/charts';
 
-registerComponent('dxBaseGauge', dxBaseGauge);
+registerComponent('BaseGauge', BaseGauge);
 
-const factory = dxBaseGauge.prototype._factory;
+const factory = BaseGauge.prototype._factory;
 
 const BASE_METHODS = ['_invalidate', '_refresh'];
 // var ABSTRACT_FIELDS = ["_width", "_height", "_rootRect"];
@@ -29,7 +26,7 @@ const CONTAINER_WIDTH = 200;
 const CONTAINER_HEIGHT = 100;
 
 const StubTranslator = vizMocks.stubClass(translator1DModule.Translator1D);
-const StubThemeManager = vizMocks.stubClass(ThemeManager);
+const StubThemeManager = vizMocks.stubClass(themeManagerModule.ThemeManager);
 const StubTracker = vizMocks.stubClass(Tracker);
 // StubLayoutManager = null,
 const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return 'tooltip_enabled'; } });
@@ -40,11 +37,11 @@ StubThemeManager.prototype.setTheme = function() {
 };
 
 $.each(BASE_METHODS, function(_, name) {
-    dxBaseGauge.prototype[name] = sinon.stub();
+    BaseGauge.prototype[name] = sinon.stub();
 });
 
 $.each(ABSTRACT_METHODS, function(_, name) {
-    dxBaseGauge.prototype[name] = sinon.stub();
+    BaseGauge.prototype[name] = sinon.stub();
 });
 
 rendererModule.Renderer = sinon.spy(function() {
@@ -87,15 +84,15 @@ const environment = {
         this.title = new StubTitle();
         const baseMethods = this.baseMethods = {};
         $.each(BASE_METHODS, function(_, name) {
-            baseMethods[name] = dxBaseGauge.prototype[name];
+            baseMethods[name] = BaseGauge.prototype[name];
         });
         const abstractMethods = this.abstractMethods = {};
         $.each(ABSTRACT_METHODS, function(_, name) {
-            abstractMethods[name] = dxBaseGauge.prototype[name];
+            abstractMethods[name] = BaseGauge.prototype[name];
         });
         abstractMethods._getDefaultSize.returns({});
         // $.each(ABSTRACT_FIELDS, function (_, name) {
-        //    delete dxBaseGauge.prototype[name];
+        //    delete BaseGauge.prototype[name];
         // });
         this.clock = sinon.useFakeTimers();
         // this.setAbstractField("_width", 200);
@@ -113,11 +110,11 @@ const environment = {
         this.title = null;
 
         $.each(BASE_METHODS, function(_, name) {
-            dxBaseGauge.prototype[name].reset();
+            BaseGauge.prototype[name].reset();
         });
 
         $.each(ABSTRACT_METHODS, function(_, name) {
-            dxBaseGauge.prototype[name].reset();
+            BaseGauge.prototype[name].reset();
         });
 
         rendererModule.Renderer.reset();
@@ -126,7 +123,7 @@ const environment = {
         factory.createTracker.reset();
     },
     createGauge: function(options) {
-        return new dxBaseGauge(this.$container, options);
+        return new BaseGauge(this.$container, options);
     },
     waitForCallback: function() {
         this.clock.tick(0);
@@ -138,7 +135,7 @@ QUnit.module('General', environment);
 QUnit.test('Instance type', function(assert) {
     const gauge = this.createGauge();
 
-    assert.ok(gauge instanceof dxBaseGauge);
+    assert.ok(gauge instanceof BaseGauge);
 });
 
 QUnit.test('Components creation', function(assert) {
@@ -511,6 +508,15 @@ QUnit.test('extra parameters for customizeText context', function(assert) {
     }, null), '200');
 });
 
+// T1085587
+QUnit.test('format negative zero', function(assert) {
+    assert.strictEqual(formatValue(-0, {
+        format: {
+            precision: 2, type: 'fixedPoint'
+        }
+    }), '0.00');
+});
+
 QUnit.module('util - getSampleText', {
     test_getSampleText: function(start, end) {
         return getSampleText(new translator1DModule.Translator1D(start, end, 0, 1), {
@@ -531,4 +537,50 @@ QUnit.test('case 2', function(assert) {
 
 QUnit.test('case 3', function(assert) {
     assert.strictEqual(this.test_getSampleText(-9.11, 9.999), '-9.11##');
+});
+
+QUnit.module('Graphic objects render', $.extend({}, environment, {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        this.fakeGraphicObjects = sinon.stub(graphicObjects, 'getGraphicObjects').callsFake(function() {
+            return {
+                'id_1': { type: 'linear', colors: 'colors_1', rotationAngle: 30 },
+                'id_2': { type: 'radial', colors: 'colors_2' },
+                'id_3': { type: 'pattern', template: () => {}, width: 20, height: 10 },
+                'id_4': { type: 'incorrect_type' }
+            };
+        });
+    },
+    afterEach: function() {
+        environment.afterEach.call(this);
+        this.fakeGraphicObjects.restore();
+    },
+}));
+
+QUnit.test('Should create graphic objects on widget creating', function(assert) {
+    const gauge = this.createGauge();
+
+    assert.strictEqual(gauge._graphicObjects['id_1']._stored_settings.color, 'colors_1');
+    assert.strictEqual(gauge._graphicObjects['id_1']._stored_settings.id, 'id_1');
+    assert.strictEqual(gauge._graphicObjects['id_1']._stored_settings.rotationAngle, 30);
+
+    assert.strictEqual(gauge._graphicObjects['id_2']._stored_settings.color, 'colors_2');
+    assert.strictEqual(gauge._graphicObjects['id_2']._stored_settings.id, 'id_2');
+
+    assert.strictEqual(gauge._graphicObjects['id_3']._stored_settings.width, 20);
+    assert.strictEqual(gauge._graphicObjects['id_3']._stored_settings.height, 10);
+    assert.strictEqual(gauge._graphicObjects['id_3']._stored_settings.id, 'id_3');
+    assert.ok(gauge._graphicObjects['id_3']._stored_settings.template);
+
+    assert.strictEqual(gauge._renderer.linearGradient.callCount, 1);
+    assert.strictEqual(gauge._renderer.radialGradient.callCount, 1);
+    assert.strictEqual(gauge._renderer.customPattern.callCount, 1);
+});
+
+QUnit.test('Should dispose graphic objects on container remove', function(assert) {
+    const gauge = this.createGauge();
+
+    this.$container.remove();
+
+    assert.strictEqual(gauge._graphicObjects, null);
 });

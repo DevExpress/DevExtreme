@@ -3,17 +3,10 @@
 import { extend } from './utils/extend';
 import errors from './errors';
 
-/**
-* @name globalConfig
-* @section commonObjectStructures
-* @type object
-* @namespace DevExpress
-* @module core/config
-* @export default
-*/
 const config = {
     rtlEnabled: false,
     defaultCurrency: 'USD',
+    defaultUseCurrencyAccountingStyle: true,
     oDataFilterToLower: true,
     serverDecimalSeparator: '.',
     decimalSeparator: '.',
@@ -22,7 +15,7 @@ const config = {
     wrapActionsBeforeExecute: true,
     useLegacyStoreResult: false,
     /**
-    * @name globalConfig.useJQuery
+    * @name GlobalConfig.useJQuery
     * @type boolean
     * @hidden
     */
@@ -31,32 +24,9 @@ const config = {
     useLegacyVisibleIndex: false,
 
     floatingActionButtonConfig: {
-        /**
-        * @name globalConfig.floatingActionButtonConfig.icon
-        * @type string
-        * @default "add"
-        */
         icon: 'add',
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.closeIcon
-        * @type string
-        * @default "close"
-        */
         closeIcon: 'close',
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.label
-        * @type string
-        * @default ""
-        */
         label: '',
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.position
-        * @type Enums.PositionAlignment|positionConfig|function
-        * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
-        */
         position: {
             at: 'right bottom',
             my: 'right bottom',
@@ -65,26 +35,8 @@ const config = {
                 y: -16
             }
         },
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.maxSpeedDialActionCount
-        * @type number
-        * @default 5
-        */
         maxSpeedDialActionCount: 5,
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.shading
-        * @type boolean
-        * @default false
-        */
         shading: false,
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.direction
-        * @type Enums.floatingActionButtonDirection
-        * @default "auto"
-        */
         direction: 'auto'
     },
 
@@ -92,13 +44,24 @@ const config = {
         if(optionsString.trim().charAt(0) !== '{') {
             optionsString = '{' + optionsString + '}';
         }
+
         try {
-            // eslint-disable-next-line no-new-func
-            return (new Function('return ' + optionsString))();
+            return JSON.parse(optionsString);
         } catch(ex) {
-            throw errors.Error('E3018', ex, optionsString);
+            try {
+                return JSON.parse(normalizeToJSONString(optionsString));
+            } catch(exNormalize) {
+                throw errors.Error('E3018', ex, optionsString);
+            }
         }
-    }
+    },
+};
+
+const normalizeToJSONString = (optionsString) => {
+    return optionsString
+        .replace(/'/g, '"') // replace all ' to "
+        .replace(/,\s*([\]}])/g, '$1') // remove trailing commas
+        .replace(/([{,])\s*([^":\s]+)\s*:/g, '$1"$2":'); // add quotes for unquoted keys
 };
 
 const deprecatedFields = [ 'decimalSeparator', 'thousandsSeparator' ];

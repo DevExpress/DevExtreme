@@ -2,7 +2,7 @@ import $ from 'jquery';
 import ContextMenu from 'ui/context_menu';
 
 import 'ui/button';
-import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup = '\
@@ -15,7 +15,7 @@ QUnit.testStart(() => {
 QUnit.module('Context menu', () => {
     // T755681
     QUnit.test('Context menu should shown in the same position after repaint()', function(assert) {
-        assert.expect(5);
+        const done = assert.async();
 
         const menuTargetSelector = '#menuTarget';
         const instance = new ContextMenu($('#simpleMenu'), {
@@ -29,19 +29,18 @@ QUnit.module('Context menu', () => {
         }));
 
         const $target = $(menuTargetSelector);
-        new Promise((resolve) => {
-            instance.option('onShown', (e) => {
-                const position = e.component._overlay.option('position');
-                assert.equal(position.at, 'top left', 'at of overlay position');
-                assert.equal(position.my, 'top left', 'my of overlay position');
-                assert.equal(position.of.pageX, 120, 'pageX of overlay position');
-                assert.equal(position.of.pageY, 50, 'pageX of overlay position');
-                assert.equal(position.of.target, $target.get(0), 'target of overlay position');
-                resolve();
-            });
 
-            instance.repaint();
+        instance.option('onShown', (e) => {
+            const position = e.component._overlay.option('position');
+            assert.equal(position.at, 'top left', 'at of overlay position');
+            assert.equal(position.my, 'top left', 'my of overlay position');
+            assert.equal(position.of.pageX, 120, 'pageX of overlay position');
+            assert.equal(position.of.pageY, 50, 'pageX of overlay position');
+            assert.equal(position.of.target, $target.get(0), 'target of overlay position');
+            done();
         });
+
+        instance.repaint();
     });
 
     QUnit.test('Add item on positioning', function(assert) {

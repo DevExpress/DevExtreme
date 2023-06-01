@@ -5,10 +5,10 @@
 $generic-datagrid-cell-padding: null !default;
 
 @if $size == "default" {
-  $generic-datagrid-cell-padding: 7px;
+  $generic-datagrid-cell-padding: 7px !default;
 }
 
 @else if $size == "compact" {
-  $generic-datagrid-cell-padding: 5px;
+  $generic-datagrid-cell-padding: 5px !default;
 }
 

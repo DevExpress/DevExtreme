@@ -1010,3 +1010,24 @@ QUnit.test('ContentReady event rise once when the data source is remote by first
 
     assert.strictEqual(contentReadyHandler.callCount, 1, 'onContentReady was first time');
 });
+
+QUnit.test('Should not throw error if event does not have the \'originalEvent\' property', function(assert) {
+    // NOTE: skip test execution in the `noquery` mode
+    // this is specific only of the `mouseenter` event triggering
+    // the cause of the problem is the `_cursorEnterHandler` method: .\js\ui\scroll_view\ui.scrollable.simulated.js
+    // Check it to fix the initial issue
+    if(QUnit.urlParams['nojquery']) {
+        assert.ok(true);
+    } else {
+        const onItemRenderedHandler = sinon.spy();
+
+        const $treeView = initTree({
+            dataSource: window.dataID,
+            onItemRendered: onItemRenderedHandler
+        });
+
+        $treeView.find('.dx-treeview-item').eq(0).trigger('mouseenter');
+
+        assert.strictEqual(onItemRenderedHandler.callCount, 5);
+    }
+});

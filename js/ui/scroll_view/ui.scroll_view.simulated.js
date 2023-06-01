@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import { each } from '../../core/utils/iterator';
@@ -24,6 +25,7 @@ const ScrollViewScroller = Scroller.inherit({
 
     ctor: function() {
         this._topPocketSize = 0;
+        this._bottomPocketSize = 0;
         this.callBase.apply(this, arguments);
         this._initCallbacks();
         this._releaseState();
@@ -62,11 +64,16 @@ const ScrollViewScroller = Scroller.inherit({
     _updateBounds: function() {
         const considerPockets = this._direction !== 'horizontal';
 
-        this._topPocketSize = considerPockets ? Math.round(this._$topPocket[this._dimension]()) : 0;
-        this._bottomPocketSize = considerPockets ? Math.round(this._$bottomPocket[this._dimension]()) : 0;
+        if(considerPockets) {
+            this._topPocketSize = this._$topPocket.get(0).clientHeight;
+            this._bottomPocketSize = this._$bottomPocket.get(0).clientHeight;
+
+            const containerEl = this._$container.get(0);
+            const contentEl = this._$content.get(0);
+            this._bottomBoundary = Math.max(contentEl.clientHeight - this._bottomPocketSize - containerEl.clientHeight, 0);
+        }
 
         this.callBase();
-        this._bottomBound = this._minOffset + this._bottomPocketSize;
     },
 
     _updateScrollbar: function() {
@@ -98,7 +105,9 @@ const ScrollViewScroller = Scroller.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && (this._location - this._bottomBound <= 0.5); // T858013
+        const containerEl = this._$container.get(0);
+
+        return this._reachBottomEnabled && Math.round(this._bottomBoundary - Math.ceil(containerEl.scrollTop)) <= 1;
     },
 
     _scrollComplete: function() {
@@ -213,7 +222,7 @@ const ScrollViewScroller = Scroller.inherit({
     },
 
     _considerTopPocketChange: function() {
-        this._location -= this._$topPocket.height() || -this._topPocketSize;
+        this._location -= getHeight(this._$topPocket) || -this._topPocketSize;
         this._maxOffset = 0;
         this._move();
     },
@@ -307,7 +316,7 @@ const SimulatedScrollViewStrategy = SimulatedStrategy.inherit({
 
     location: function() {
         const location = this.callBase();
-        location.top += this._$topPocket.height();
+        location.top += getHeight(this._$topPocket);
         return location;
     },
 

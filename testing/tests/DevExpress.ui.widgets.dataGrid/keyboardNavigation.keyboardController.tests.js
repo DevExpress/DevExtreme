@@ -1,20 +1,10 @@
-QUnit.testStart(function() {
-    const markup = `
-        <div>
-            <div id="container" class="dx-datagrid"></div>
-        </div>`;
-
-    $('#qunit-fixture').html(markup);
-});
-
 import $ from 'jquery';
 
-import 'common.css!';
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
-import keyboardNavigationModule from 'ui/grid_core/ui.grid_core.keyboard_navigation';
+import { keyboardNavigationModule } from 'ui/grid_core/ui.grid_core.keyboard_navigation.js';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import publicComponentUtils from 'core/utils/public_component';
@@ -24,6 +14,15 @@ import { MockDataController, MockColumnsController, MockEditingController } from
 import { CLICK_EVENT, callViewsRenderCompleted } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 const KeyboardNavigationController = keyboardNavigationModule.controllers.keyboardNavigation;
+
+QUnit.testStart(function() {
+    const markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Keyboard controller', {
     beforeEach: function() {
@@ -105,6 +104,7 @@ QUnit.module('Keyboard controller', {
                 getView: function(name) {
                     return this._views[name];
                 },
+                renderFocusState: commonUtils.noop,
                 renderCompleted: $.Callbacks()
             };
         };
@@ -361,13 +361,14 @@ QUnit.module('Keyboard controller', {
 
     QUnit.testInActiveWindow('Interactive element is focused when edit mode is enabled (T403964)', function(assert) {
         // arrange
-        const $rowsElement = $('<div />').appendTo('#container').append($(`
+        const $rowsElement = $('<div />').appendTo($('#container')).append($(`
                 <tr class='dx-row'>"
                     <td class='cell-0'><input></td>
                     <td><input></td>
                     <td><textarea></textarea></td>
                     <td><a>Link<a/></td>
                     <td><select></select></td>
+                    <td><div class='dx-checkbox'></div></td>
                 </tr>`));
 
         const view = this.getView('rowsView');
@@ -388,26 +389,33 @@ QUnit.module('Keyboard controller', {
         // act, assert
         navigationController.setFocusedCellPosition(0, 1);
         callViewsRenderCompleted(this.component._views);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('input'), 'Interactive element is input');
 
         // act, assert
         navigationController.setFocusedCellPosition(0, 2);
         callViewsRenderCompleted(this.component._views);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('textarea'), 'Interactive element is textarea');
 
         // act, assert
         navigationController.setFocusedCellPosition(0, 3);
         callViewsRenderCompleted(this.component._views);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('a'), 'Interactive element is link');
 
         // act, assert
         navigationController.setFocusedCellPosition(0, 4);
         callViewsRenderCompleted(this.component._views);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('select'), 'Interactive element is select');
+
+        // T1034050
+        // act, assert
+        navigationController.setFocusedCellPosition(0, 5);
+        callViewsRenderCompleted(this.component._views);
+        this.clock.tick(10);
+        assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('.dx-checkbox'), 'Interactive element is select');
     });
 
     QUnit.testInActiveWindow('View is not focused when row is inline edited', function(assert) {
@@ -683,7 +691,7 @@ QUnit.module('Keyboard controller', {
 
         callViewsRenderCompleted(this.component._views);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(!isFocused, 'cell is not focused');
         assert.ok(!$cell.attr('tabindex'), 'tabindex');

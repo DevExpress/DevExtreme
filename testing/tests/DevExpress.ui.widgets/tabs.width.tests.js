@@ -1,7 +1,8 @@
-import 'common.css!';
+import 'generic_light.css!';
 import { triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import 'ui/tabs';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 
 const TABS_ITEM_CLASS = 'dx-tab';
@@ -31,6 +32,7 @@ QUnit.module('Width', () => {
             }).dxTabs('instance');
 
             this.$container.appendTo('#qunit-fixture');
+            addShadowDomStyles($('#qunit-fixture'));
 
             if(!this._isOptionApproach()) {
                 this.setContainerWidth(width);
@@ -44,7 +46,7 @@ QUnit.module('Width', () => {
         }
 
         setContainerWidth(width) {
-            this.$container[0].setAttribute('style', `width:${width}px`);
+            this.$container[0].style = `width: ${width}px`;
         }
 
         _getTabItem(index) {
@@ -60,8 +62,8 @@ QUnit.module('Width', () => {
             this.assert.equal(this.tabs.option('width'), this._isOptionApproach() ? 400 : undefined);
 
             this.assert.equal(this.$tabs.outerWidth(), 400);
-            this.assert.ok(this._getTabItem(0).width() > 190, this._getTabItem(0).width() + ' > 190');
-            this.assert.ok(this._getTabItem(1).width() > 190, this._getTabItem(1).width() + ' > 190');
+            this.assert.ok(this._getTabItem(0).outerWidth() > 190, this._getTabItem(0).outerWidth() + ' > 190');
+            this.assert.ok(this._getTabItem(1).outerWidth() > 190, this._getTabItem(1).outerWidth() + ' > 190');
             this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
         }
 
@@ -74,8 +76,8 @@ QUnit.module('Width', () => {
             this.assert.equal(this.tabs.option('width'), this._isOptionApproach() ? 200 : undefined);
 
             this.assert.equal(this.$tabs.outerWidth(), 200);
-            this.assert.ok(this._getTabItem(0).width() < 70, this._getTabItem(0).width() + ' < 70');
-            this.assert.ok(this._getTabItem(1).width() > 130, this._getTabItem(1).width() + ' > 130');
+            this.assert.ok(this._getTabItem(0).outerWidth() < 70, this._getTabItem(0).outerWidth() + ' < 70');
+            this.assert.ok(this._getTabItem(1).outerWidth() > 130, this._getTabItem(1).outerWidth() + ' > 130');
             this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
         }
 
@@ -90,12 +92,12 @@ QUnit.module('Width', () => {
             this.assert.equal(this.$tabs.outerWidth(), 100);
 
             if(this.scrollingEnabled) {
-                this.assert.ok(this._getTabItem(0).width() < 70, this._getTabItem().width() + ' < 70');
-                this.assert.ok(this._getTabItem(1).width() > 100, this._getTabItem().width() + ' > 100');
+                this.assert.ok(this._getTabItem(0).outerWidth() < 70, this._getTabItem().outerWidth() + ' < 70');
+                this.assert.ok(this._getTabItem(1).outerWidth() > 100, this._getTabItem().outerWidth() + ' > 100');
                 this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons aren\'t rendered');
             } else {
-                this.assert.ok(this._getTabItem(0).width() < 55, this._getTabItem(0).width() + ' < 55');
-                this.assert.ok(this._getTabItem(1).width() < 55, this._getTabItem(1).width() + ' < 55');
+                this.assert.ok(this._getTabItem(0).outerWidth() < 55, this._getTabItem(0).outerWidth() + ' < 55');
+                this.assert.ok(this._getTabItem(1).outerWidth() < 55, this._getTabItem(1).outerWidth() + ' < 55');
                 this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
             }
         }
@@ -166,7 +168,12 @@ QUnit.module('Width', () => {
     });
 
     QUnit.test('Does not render navbuttons: dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }', function(assert) {
-        const styles = '<style>.dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }</style>';
+        const styles = `
+            <style nonce="qunit-test">
+                .dx-tabs { max-width: 413px; }
+                .dx-tab { width: 100px; }
+            </style>
+        `;
 
         $('#qunit-fixture').html(styles);
 
@@ -194,7 +201,12 @@ QUnit.module('Width', () => {
     });
 
     QUnit.test('Render navbuttons: dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }', function(assert) {
-        const styles = '<style>.dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }</style>';
+        const styles = `
+            <style nonce="qunit-test">
+                .dx-tabs { max-width: 380px; }
+                .dx-tab { width: 100px; }
+            </style>
+        `;
 
         $('#qunit-fixture').html(styles);
 

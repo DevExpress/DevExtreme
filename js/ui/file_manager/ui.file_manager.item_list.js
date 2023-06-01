@@ -1,5 +1,6 @@
 import { extend } from '../../core/utils/extend';
 import { when } from '../../core/utils/deferred';
+import { hasWindow } from '../../core/utils/window';
 import { name as dblClickName } from '../../events/double_click';
 import { addNamespace } from '../../events/utils/index';
 import eventsEngine from '../../events/core/events_engine';
@@ -24,6 +25,7 @@ class FileManagerItemListBase extends Widget {
     }
 
     _initMarkup() {
+        this._needResetScrollPosition = false;
         this.$element().addClass(FILE_MANAGER_FILES_VIEW_CLASS);
 
         const dblClickEventName = addNamespace(dblClickName, FILE_MANAGER_ITEM_LIST_ITEM_OPEN_EVENT_NAMESPACE);
@@ -37,7 +39,9 @@ class FileManagerItemListBase extends Widget {
             onError: this._createActionByOption('onError'),
             onSelectionChanged: this._createActionByOption('onSelectionChanged'),
             onFocusedItemChanged: this._createActionByOption('onFocusedItemChanged'),
-            onSelectedItemOpened: this._createActionByOption('onSelectedItemOpened')
+            onSelectedItemOpened: this._createActionByOption('onSelectedItemOpened'),
+            onContextMenuShowing: this._createActionByOption('onContextMenuShowing'),
+            onItemListDataLoaded: this._createActionByOption('onItemListDataLoaded')
         };
     }
 
@@ -52,7 +56,8 @@ class FileManagerItemListBase extends Widget {
             onError: null,
             onSelectionChanged: null,
             onFocusedItemChanged: null,
-            onSelectedItemOpened: null
+            onSelectedItemOpened: null,
+            onContextMenuShowing: null
         });
     }
 
@@ -78,6 +83,8 @@ class FileManagerItemListBase extends Widget {
             case 'onSelectedItemOpened':
             case 'onSelectionChanged':
             case 'onFocusedItemChanged':
+            case 'onContextMenuShowing':
+            case 'onItemListDataLoaded':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -86,13 +93,20 @@ class FileManagerItemListBase extends Widget {
     }
 
     _getItems() {
-        return this._getItemsInternal().done(itemInfos => {
-            this._itemCount = itemInfos.length;
+        return this._getItemsInternal()
+            .done(itemInfos => {
+                this._itemCount = itemInfos.length;
+                if(this._itemCount === 0) {
+                    this._resetFocus();
+                }
 
-            const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
-            this._hasParentDirectoryItem = !!parentDirectoryItem;
-            this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
-        });
+                const parentDirectoryItem = this._findParentDirectoryItem(itemInfos);
+                this._hasParentDirectoryItem = !!parentDirectoryItem;
+                this._parentDirectoryItemKey = parentDirectoryItem ? parentDirectoryItem.fileItem.key : null;
+            })
+            .always(() => {
+                this._onDataLoaded();
+            });
     }
 
     _getItemsInternal() {
@@ -115,6 +129,26 @@ class FileManagerItemListBase extends Widget {
 
     _raiseSelectedItemOpened(fileItemInfo) {
         this._actions.onSelectedItemOpened({ fileItemInfo });
+    }
+
+    _raiseContextMenuShowing(e) {
+        this._actions.onContextMenuShowing(e);
+    }
+
+    _raiseItemListDataLoaded() {
+        this._actions.onItemListDataLoaded();
+    }
+
+    _onDataLoaded() {
+        this._raiseItemListDataLoaded();
+        this._refreshDeferred?.resolve();
+    }
+
+    _onContentReady() {
+        if(this._needResetScrollPosition) {
+            this._resetScrollTopPosition();
+            this._needResetScrollPosition = false;
+        }
     }
 
     _tryRaiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
@@ -148,6 +182,22 @@ class FileManagerItemListBase extends Widget {
         this._lockFocusedItemProcessing = false;
 
         this._raiseFocusedItemChanged(args);
+    }
+
+    _resetFocus() {
+
+    }
+
+
+    _resetScrollTopPosition() {
+        if(!hasWindow()) {
+            return;
+        }
+        setTimeout(() => this._getScrollable()?.scrollTo(0));
+    }
+
+    _getScrollable() {
+
     }
 
     _getItemThumbnail(fileInfo) {
@@ -184,8 +234,8 @@ class FileManagerItemListBase extends Widget {
         return devices.real().deviceType === 'desktop';
     }
 
-    _showContextMenu(items, element, offset, targetFileItem) {
-        this._contextMenu.showAt(items, element, offset, targetFileItem);
+    _showContextMenu(items, element, event, target) {
+        this._contextMenu.showAt(items, element, event, target);
     }
 
     get _contextMenu() {
@@ -282,6 +332,7 @@ class FileManagerItemListBase extends Widget {
 
     }
 
+    refresh(options, operation) { }
 }
 
 export default FileManagerItemListBase;

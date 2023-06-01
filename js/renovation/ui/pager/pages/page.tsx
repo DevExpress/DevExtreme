@@ -1,28 +1,36 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 
 import { LightButton } from '../common/light_button';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
 import { combineClasses } from '../../../utils/combine_classes';
-import { EventCallback } from '../../common/event_callback.d';
+import { EventCallback } from '../../common/event_callback';
+import messageLocalization from '../../../../localization/message';
+import { format } from '../../../../core/utils/string';
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
-  className, value, label, props: { onClick },
-}: Page) => (
+  className, value, label, props: { onClick, selected },
+}: Page): JSX.Element => (
   <LightButton
     className={className}
     label={label}
     onClick={onClick}
+    selected={selected}
   >
     {value}
   </LightButton>
 );
 
+// for angular type inference (onClick type in angular changes to EventEmitter)
+export interface PagePropsInterface {
+  index: number;
+  onClick?: EventCallback;
+  selected: boolean;
+}
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
-export class PageProps {
+export class PageProps implements PagePropsInterface {
   @OneWay() index = 0;
 
   /* istanbul ignore next: EventCallback cannot be tested */
@@ -30,7 +38,7 @@ export class PageProps {
 
   @OneWay() selected = false;
 
-  @OneWay() className?: string;
+  @OneWay() className?: string = PAGER_PAGE_CLASS;
 }
 
 @Component({
@@ -40,7 +48,7 @@ export class PageProps {
 
 export class Page extends JSXComponent<PageProps>() {
   get label(): string {
-    return `Page ${this.value}`;
+    return format(messageLocalization.getFormatter('dxPager-page'), this.value) as string;
   }
 
   get value(): number {
@@ -51,7 +59,6 @@ export class Page extends JSXComponent<PageProps>() {
     const
       { selected } = this.props;
     return combineClasses({
-      [PAGER_PAGE_CLASS]: true,
       [`${this.props.className}`]: !!this.props.className,
       [PAGER_SELECTION_CLASS]: !!selected,
     });

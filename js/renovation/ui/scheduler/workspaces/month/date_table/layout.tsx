@@ -1,20 +1,40 @@
-import { Component, JSXComponent } from 'devextreme-generator/component_declaration/common';
-import { DateTableLayoutBase } from '../../base/date_table/layout';
-import { LayoutProps } from '../../base/layout_props';
+import { Component, JSXComponent } from '@devextreme-generator/declarations';
+import { DateTable } from '../../../../../component_wrapper/scheduler/date_table';
+import { DateTableLayoutBase, DateTableLayoutProps } from '../../base/date_table/layout';
+import { MonthDateTableCell } from './cell';
 
-export const viewFunction = (viewModel: MonthDateTableLayout): JSX.Element => (
+export const viewFunction = ({
+  restAttributes,
+  props: {
+    viewData,
+    dataCellTemplate,
+    addDateTableClass,
+    groupOrientation,
+    tableRef,
+    addVerticalSizesClassToRows,
+    width,
+  },
+}: MonthDateTableLayout): JSX.Element => (
   <DateTableLayoutBase
-    // This is a workaround: cannot use template inside a template
-    viewType="month"
-    viewData={viewModel.props.viewData}
-    dataCellTemplate={viewModel.props.dataCellTemplate}
+    viewData={viewData}
+    groupOrientation={groupOrientation}
+    addDateTableClass={addDateTableClass}
+    dataCellTemplate={dataCellTemplate}
+    cellTemplate={MonthDateTableCell}
+    tableRef={tableRef}
+    addVerticalSizesClassToRows={addVerticalSizesClassToRows}
+    width={width}
     // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
+    {...restAttributes}
   />
 );
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: {
+    register: true,
+    component: DateTable,
+  },
 })
-export class MonthDateTableLayout extends JSXComponent(LayoutProps) {}
+export class MonthDateTableLayout extends JSXComponent(DateTableLayoutProps) {}

@@ -1,323 +1,379 @@
-import '../jquery_augmentation';
+import {
+    ButtonStyle,
+} from '../common';
 
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
-} from '../core/templates/template';
-
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+    DxPromise,
+} from '../core/utils/deferred';
 
 import {
-    event
+    template,
+} from '../core/templates/template';
+
+import DataSource, { DataSourceLike } from '../data/data_source';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    dxListItem
+    Item as dxListItem,
 } from './list';
 
 import {
-    dxPopupOptions
+    Properties as PopupProperties,
 } from './popup';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+export {
+    ButtonStyle,
+};
+
+/** @public */
+export type ButtonClickEvent = NativeEventInfo<dxDropDownButton, KeyboardEvent | MouseEvent | PointerEvent> & {
+    readonly selectedItem?: any;
+};
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxDropDownButton>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxDropDownButton>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxDropDownButton>;
+
+/** @public */
+export type ItemClickEvent = NativeEventInfo<dxDropDownButton, KeyboardEvent | MouseEvent | PointerEvent> & {
+    readonly itemData?: any;
+    readonly itemElement: DxElement;
+};
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxDropDownButton> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent = EventInfo<dxDropDownButton> & {
+    readonly item: any;
+    readonly previousItem: any;
+};
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
-     * @docid dxDropDownButtonOptions.dataSource
-     * @type string|Array<dxDropDownButtonItem, object>|DataSource|DataSourceOptions
+     * @docid
+     * @type string | Array<dxDropDownButtonItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<dxDropDownButtonItem | any> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<Item | any> | null;
     /**
-     * @docid dxDropDownButtonOptions.deferRendering
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
     /**
-     * @docid dxDropDownButtonOptions.displayExpr
-     * @type string|function
-     * @default 'this'
+     * @docid
+     * @default undefined
      * @type_function_param1 itemData:object
-     * @type_function_return string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     displayExpr?: string | ((itemData: any) => string);
     /**
-     * @docid dxDropDownButtonOptions.dropDownContentTemplate
-     * @type template|function
+     * @docid
      * @default "content"
      * @type_function_param1 data:Array<string,number,Object>|DataSource
-     * @type_function_param2 contentElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: dxElement) => string | Element | JQuery);
+    dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxDropDownButtonOptions.dropDownOptions
-     * @type dxPopupOptions
+     * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxPopupOptions
      */
-    dropDownOptions?: dxPopupOptions;
+    dropDownOptions?: PopupProperties;
     /**
-     * @docid dxDropDownButtonOptions.focusStateEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxDropDownButtonOptions.hoverStateEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxDropDownButtonOptions.icon
-     * @type string
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
-     * @docid dxDropDownButtonOptions.itemTemplate
-     * @type template|function
+     * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxDropDownButtonOptions.items
-     * @type Array<dxDropDownButtonItem, object>
+     * @docid
+     * @type Array<dxDropDownButtonItem | any>
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<dxDropDownButtonItem | any>;
+    items?: Array<Item | any>;
     /**
-     * @docid dxDropDownButtonOptions.keyExpr
-     * @type string
+     * @docid
      * @default 'this'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyExpr?: string;
     /**
-     * @docid dxDropDownButtonOptions.noDataText
-     * @type string
+     * @docid
      * @default 'No data to display'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     noDataText?: string;
     /**
-     * @docid dxDropDownButtonOptions.onButtonClick
-     * @type function(e)|string
-     * @extends Action
+     * @docid
+     * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 selectedItem:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field selectedItem:object
+     * @type_function_param1_field component:dxDropDownButton
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onButtonClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event, selectedItem?: any }) => any) | string;
+    onButtonClick?: ((e: ButtonClickEvent) => void) | string;
     /**
-     * @docid dxDropDownButtonOptions.onItemClick
-     * @type function(e)|string
-     * @extends Action
+     * @docid
+     * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 itemData:object
-     * @type_function_param1_field6 itemElement:dxElement
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field component:dxDropDownButton
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement }) => any) | string;
+    onItemClick?: ((e: ItemClickEvent) => void) | string;
     /**
-     * @docid dxDropDownButtonOptions.onSelectionChanged
-     * @type function(e)|string
-     * @extends Action
+     * @docid
+     * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 item:object
-     * @type_function_param1_field5 previousItem:object
+     * @type_function_param1_field item:object
+     * @type_function_param1_field previousItem:object
+     * @type_function_param1_field component:dxDropDownButton
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, item?: any, previousItem?: any }) => any) | string;
+    onSelectionChanged?: ((e: SelectionChangedEvent) => void) | string;
     /**
-     * @docid dxDropDownButtonOptions.opened
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     opened?: boolean;
     /**
-     * @docid dxDropDownButtonOptions.selectedItem
-     * @type string|integer|object
+     * @docid
      * @default null
      * @readonly
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItem?: string | number | any;
     /**
-     * @docid dxDropDownButtonOptions.selectedItemKey
-     * @type string|integer
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItemKey?: string | number;
     /**
-     * @docid dxDropDownButtonOptions.showArrowIcon
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showArrowIcon?: boolean;
     /**
-     * @docid dxDropDownButtonOptions.splitButton
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     splitButton?: boolean;
     /**
-     * @docid dxDropDownButtonOptions.stylingMode
-     * @type Enums.ButtonStylingMode
+     * @docid
      * @default 'outlined'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    stylingMode?: 'text' | 'outlined' | 'contained';
+    stylingMode?: ButtonStyle;
     /**
-     * @docid dxDropDownButtonOptions.text
-     * @type string
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
-     * @docid dxDropDownButtonOptions.useSelectMode
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     useSelectMode?: boolean;
     /**
-     * @docid dxDropDownButtonOptions.wrapItemText
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     wrapItemText?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    useItemTextAsTitle?: boolean;
 }
 /**
- * @docid dxDropDownButton
+ * @docid
  * @inherits Widget, DataHelperMixin
- * @module ui/drop_down_button
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxDropDownButton extends Widget {
-    constructor(element: Element, options?: dxDropDownButtonOptions)
-    constructor(element: JQuery, options?: dxDropDownButtonOptions)
+export default class dxDropDownButton extends Widget<dxDropDownButtonOptions> {
     /**
-     * @docid dxDropDownButton.close
+     * @docid
      * @publicName close()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    close(): Promise<void> & JQueryPromise<void>;
+    close(): DxPromise<void>;
     getDataSource(): DataSource;
     /**
-     * @docid dxDropDownButton.open
+     * @docid
      * @publicName open()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    open(): Promise<void> & JQueryPromise<void>;
+    open(): DxPromise<void>;
     /**
-     * @docid dxDropDownButton.toggle
+     * @docid
      * @publicName toggle()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(): Promise<void> & JQueryPromise<void>;
+    toggle(): DxPromise<void>;
     /**
-     * @docid dxDropDownButton.toggle
+     * @docid
      * @publicName toggle(visibility)
-     * @param1 visibility:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
+    toggle(visibility: boolean): DxPromise<void>;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDropDownButton
+ */
+export type Item = dxDropDownButtonItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
+ */
 export interface dxDropDownButtonItem extends dxListItem {
     /**
-     * @docid dxDropDownButtonItem.onClick
-     * @type function(e)|string
+     * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxDropDownButton
-     * @type_function_param1_field2 element:dxElement
-     * @type_function_param1_field3 model:object
-     * @type_function_param1_field4 event:event
-     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1_field component:dxDropDownButton
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
      * @public
      */
-    onClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event }) => any) | string;
+     onClick?: ((e: ItemClickEvent) => void) | string;
 }
 
-declare global {
-interface JQuery {
-    dxDropDownButton(): JQuery;
-    dxDropDownButton(options: "instance"): dxDropDownButton;
-    dxDropDownButton(options: string): any;
-    dxDropDownButton(options: string, ...params: any[]): any;
-    dxDropDownButton(options: dxDropDownButtonOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxDropDownButtonOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDropDownButtonOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxDropDownButtonOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxDropDownButtonOptions.onButtonClick
+ * @type_function_param1 e:{ui/drop_down_button:ButtonClickEvent}
+ */
+onButtonClick?: ((e: ButtonClickEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownButtonOptions.onContentReady
+ * @type_function_param1 e:{ui/drop_down_button:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownButtonOptions.onDisposing
+ * @type_function_param1 e:{ui/drop_down_button:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownButtonOptions.onInitialized
+ * @type_function_param1 e:{ui/drop_down_button:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownButtonOptions.onItemClick
+ * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownButtonOptions.onOptionChanged
+ * @type_function_param1 e:{ui/drop_down_button:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownButtonOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/drop_down_button:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+};
+///#ENDDEBUG

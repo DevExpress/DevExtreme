@@ -14,10 +14,8 @@ function getOriginalData(data) {
     });
 }
 
-const createSeries = function(options, renderSettings, widgetType) {
-    renderSettings = renderSettings || {};
-    renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
-    renderSettings.argumentAxis = renderSettings.argumentAxis || {
+function getDefaultAxis() {
+    return {
         getViewport: function() { return {}; },
         getMarginOptions() { return {}; },
         visualRange: function() { },
@@ -30,10 +28,21 @@ const createSeries = function(options, renderSettings, widgetType) {
         },
         getOptions() {
             return {
-                logarithmBase: 10
+                logarithmBase: 10,
+                type: 'continuous'
             };
-        }
+        },
+        getVisualRangeCenter({ minVisible, maxVisible }) {
+            return (minVisible + maxVisible) / 2;
+        },
+        aggregatedPointBetweenTicks: sinon.spy()
     };
+}
+
+const createSeries = function(options, renderSettings, widgetType) {
+    renderSettings = renderSettings || {};
+    renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    renderSettings.argumentAxis = renderSettings.argumentAxis || getDefaultAxis();
     renderSettings.valueAxis = renderSettings.valueAxis || {
         getViewport: function() { return {}; },
         getMarginOptions() { return {}; },
@@ -2375,7 +2384,8 @@ QUnit.module('Zooming range data. Simple', {
             calculateInterval: function(a, b) {
                 return a - b;
             },
-            getMarginOptions() { return {}; }
+            getMarginOptions() { return {}; },
+            aggregatedPointBetweenTicks: sinon.stub()
         };
         this.defaultOptions = {
             type: 'line',
@@ -2770,7 +2780,8 @@ QUnit.module('Get points in viewport', {
         this.argumentAxis = {
             visualRange: function() {
                 return { startValue: argumentViewPort[0], endValue: argumentViewPort[1] };
-            }
+            },
+            aggregatedPointBetweenTicks: sinon.spy()
         };
         this.valueAxis = {
             visualRange: function() {
@@ -2990,8 +3001,19 @@ QUnit.test('Calculate interval in range data when aggregation is enabled', funct
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
-    assert.strictEqual(rangeData.arg.max, 20, 'Max arg should be correct');
-    assert.strictEqual(rangeData.arg.interval, 3, 'Min interval arg should be correct');
+    assert.strictEqual(rangeData.arg.max, 25, 'Max arg should be correct');
+    assert.strictEqual(rangeData.arg.interval, 4, 'Min interval arg should be correct');
+});
+
+QUnit.test('Calculate range data when aggregation is enabled. Discrete data', function(assert) {
+    const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
+    const series = createSeries({ type: 'bar', argumentAxisType: 'discrete', aggregation: { enabled: true, type: 'sum' } });
+
+    series.updateData(data);
+    series.createPoints();
+    const rangeData = series.getRangeData();
+
+    assert.deepEqual(rangeData.arg, { categories: [2, 5, 13, 20] });
 });
 
 QUnit.test('Calculate range data when aggregation enabled. Add data range if axis viewport is set ', function(assert) {
@@ -3043,7 +3065,7 @@ QUnit.test('Calculate range data when aggregation enabled. Do not inculde data r
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 5, 'Min arg should be correct');
-    assert.strictEqual(rangeData.arg.max, 10, 'Max arg should be correct');
+    assert.strictEqual(rangeData.arg.max, 15, 'Max arg should be correct');
     assert.strictEqual(rangeData.arg.interval, 5, 'Min interval arg should be correct');
 });
 
@@ -3070,7 +3092,7 @@ QUnit.test('Calculate range data when aggregation enabled. Do not inculde data m
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
-    assert.strictEqual(rangeData.arg.max, 10, 'Max arg should be correct');
+    assert.strictEqual(rangeData.arg.max, 15, 'Max arg should be correct');
     assert.strictEqual(rangeData.arg.interval, 5, 'Min interval arg should be correct');
 });
 
@@ -3099,4 +3121,25 @@ QUnit.test('Calculate range data when aggregation enabled. Do not inculde data r
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
     assert.strictEqual(rangeData.arg.max, 20, 'Max arg should be correct');
     assert.strictEqual(rangeData.arg.interval, 5, 'Min interval arg should be correct');
+});
+
+QUnit.test('Calculate interval in range data when aggregation is enabled. aggregatedPointsPosition = crossTicks', function(assert) {
+    const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
+    const series = createSeries({
+        type: 'scatter',
+        argumentAxisType: 'continuous',
+        aggregation: { enabled: true }
+    }, {
+        argumentAxis: $.extend({}, getDefaultAxis(), { aggregatedPointBetweenTicks: () => true })
+    });
+
+    series.updateData(data);
+    series.createPoints();
+
+    const rangeData = series.getRangeData();
+
+    assert.ok(rangeData, 'Range data should be created');
+    assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
+    assert.strictEqual(rangeData.arg.max, 20, 'Max arg should be correct');
+    assert.strictEqual(rangeData.arg.interval, 3, 'Min interval arg should be correct');
 });

@@ -1,14 +1,15 @@
 import $ from '../../core/renderer';
 import BaseView from './ui.calendar.base_view';
+import domAdapter from '../../core/dom_adapter';
 import { noop } from '../../core/utils/common';
 import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 import dateSerialization from '../../core/utils/date_serialization';
-import { isDefined } from '../../core/utils/type';
 
 const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
+const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 
 const Views = {
 
@@ -20,7 +21,7 @@ const Views = {
 
         _getDefaultOptions: function() {
             return extend(this.callBase(), {
-                firstDayOfWeek: undefined,
+                firstDayOfWeek: 0,
                 rowCount: 6,
                 colCount: 7
             });
@@ -52,13 +53,19 @@ const Views = {
             for(let colIndex = 0, colCount = this.option('colCount'); colIndex < colCount; colIndex++) {
                 this._renderHeaderCell(colIndex, $headerRow);
             }
+
+            if(this.option('showWeekNumbers')) {
+                this._renderWeekHeaderCell($headerRow);
+            }
         },
 
         _renderHeaderCell: function(cellIndex, $headerRow) {
+            const { firstDayOfWeek } = this.option();
+
             const {
                 full: fullCaption,
                 abbreviated: abbrCaption
-            } = this._getDayCaption(this._getFirstDayOfWeek() + cellIndex);
+            } = this._getDayCaption(firstDayOfWeek + cellIndex);
             const $cell = $('<th>')
                 .attr({
                     scope: 'col',
@@ -66,7 +73,56 @@ const Views = {
                 })
                 .text(abbrCaption);
 
-            this._appendCell($headerRow, $cell);
+            $headerRow.append($cell);
+        },
+
+        _renderWeekHeaderCell: function($headerRow) {
+            const $weekNumberHeaderCell = $('<th>')
+                .attr({
+                    scope: 'col',
+                    abbr: 'WeekNumber',
+                    class: 'dx-week-number-header'
+                });
+
+            $headerRow.prepend($weekNumberHeaderCell);
+        },
+
+        _renderWeekNumberCell: function(rowData) {
+            const { showWeekNumbers, cellTemplate } = this.option();
+
+            if(!showWeekNumbers) {
+                return;
+            }
+
+            const weekNumber = this._getWeekNumber(rowData.prevCellDate);
+
+            const cell = domAdapter.createElement('td');
+            const $cell = $(cell);
+
+            cell.className = CALENDAR_WEEK_NUMBER_CELL_CLASS;
+
+            if(cellTemplate) {
+                cellTemplate.render(this._prepareCellTemplateData(weekNumber, -1, $cell));
+            } else {
+                cell.innerHTML = weekNumber;
+            }
+
+            rowData.row.prepend(cell);
+
+            this.setAria({
+                'role': 'gridcell',
+                'label': `Week ${weekNumber}`,
+            }, $cell);
+        },
+
+        _getWeekNumber: function(date) {
+            const { weekNumberRule, firstDayOfWeek } = this.option();
+
+            if(weekNumberRule === 'auto') {
+                return dateUtils.getWeekNumber(date, firstDayOfWeek, firstDayOfWeek === 1 ? 'firstFourDays' : 'firstDay');
+            }
+
+            return dateUtils.getWeekNumber(date, firstDayOfWeek, weekNumberRule);
         },
 
         getNavigatorCaption: function() {
@@ -74,7 +130,7 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            const today = new Date();
+            const today = this.option('_todayDate')();
 
             return dateUtils.sameDate(cellDate, today);
         },
@@ -88,6 +144,14 @@ const Views = {
 
         _isOtherView: function(cellDate) {
             return cellDate.getMonth() !== this.option('date').getMonth();
+        },
+
+        _isStartDayOfMonth: function(cellDate) {
+            return dateUtils.sameDate(cellDate, dateUtils.getFirstMonthDate(this.option('date')));
+        },
+
+        _isEndDayOfMonth: function(cellDate) {
+            return dateUtils.sameDate(cellDate, dateUtils.getLastMonthDate(this.option('date')));
         },
 
         _getCellText: function(cellDate) {
@@ -105,8 +169,10 @@ const Views = {
         },
 
         _getFirstCellData: function() {
+            const { firstDayOfWeek } = this.option();
+
             const firstDay = dateUtils.getFirstMonthDate(this.option('date'));
-            let firstMonthDayOffset = this._getFirstDayOfWeek() - firstDay.getDay();
+            let firstMonthDayOffset = firstDayOfWeek - firstDay.getDay();
             const daysInWeek = this.option('colCount');
 
             if(firstMonthDayOffset >= 0) {
@@ -118,13 +184,9 @@ const Views = {
         },
 
         _getNextCellData: function(date) {
-            date = dateUtils.createDate(date);
+            date = new Date(date);
             date.setDate(date.getDate() + 1);
             return date;
-        },
-
-        _getFirstDayOfWeek: function() {
-            return isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : dateLocalization.firstDayOfWeekIndex();
         },
 
         _getCellByDate: function(date) {
@@ -155,7 +217,9 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return dateUtils.sameMonthAndYear(cellDate, new Date());
+            const today = this.option('_todayDate')();
+
+            return dateUtils.sameMonthAndYear(cellDate, today);
         },
 
         _isDateOutOfRange: function(cellDate) {
@@ -166,13 +230,21 @@ const Views = {
             return false;
         },
 
+        _isStartDayOfMonth: function() {
+            return false;
+        },
+
+        _isEndDayOfMonth: function() {
+            return false;
+        },
+
         _getCellText: function(cellDate) {
             return dateLocalization.getMonthNames('abbreviated')[cellDate.getMonth()];
         },
 
         _getFirstCellData: function() {
             const currentDate = this.option('date');
-            const data = dateUtils.createDate(currentDate);
+            const data = new Date(currentDate);
 
             data.setDate(1);
             data.setMonth(0);
@@ -181,13 +253,13 @@ const Views = {
         },
 
         _getNextCellData: function(date) {
-            date = dateUtils.createDate(date);
+            date = new Date(date);
             date.setMonth(date.getMonth() + 1);
             return date;
         },
 
         _getCellByDate: function(date) {
-            const foundDate = dateUtils.createDate(date);
+            const foundDate = new Date(date);
             foundDate.setDate(1);
 
             return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
@@ -203,7 +275,9 @@ const Views = {
 
         isBoundary: function(date) {
             return dateUtils.sameYear(date, this.option('min')) || dateUtils.sameYear(date, this.option('max'));
-        }
+        },
+
+        _renderWeekNumberCell: noop,
     }),
 
     'decade': BaseView.inherit({
@@ -213,7 +287,9 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return dateUtils.sameYear(cellDate, new Date());
+            const today = this.option('_todayDate')();
+
+            return dateUtils.sameYear(cellDate, today);
         },
 
         _isDateOutOfRange: function(cellDate) {
@@ -224,10 +300,18 @@ const Views = {
         },
 
         _isOtherView: function(cellDate) {
-            const date = dateUtils.createDate(cellDate);
+            const date = new Date(cellDate);
             date.setMonth(1);
 
             return !dateUtils.sameDecade(date, this.option('date'));
+        },
+
+        _isStartDayOfMonth: function() {
+            return false;
+        },
+
+        _isEndDayOfMonth: function() {
+            return false;
         },
 
         _getCellText: function(cellDate) {
@@ -240,7 +324,7 @@ const Views = {
         },
 
         _getNextCellData: function(date) {
-            date = dateUtils.createDate(date);
+            date = new Date(date);
             date.setFullYear(date.getFullYear() + 1);
             return date;
         },
@@ -248,8 +332,8 @@ const Views = {
         getNavigatorCaption: function() {
             const currentDate = this.option('date');
             const firstYearInDecade = dateUtils.getFirstYearInDecade(currentDate);
-            const startDate = dateUtils.createDate(currentDate);
-            const endDate = dateUtils.createDate(currentDate);
+            const startDate = new Date(currentDate);
+            const endDate = new Date(currentDate);
 
             startDate.setFullYear(firstYearInDecade);
             endDate.setFullYear(firstYearInDecade + 9);
@@ -262,7 +346,7 @@ const Views = {
         },
 
         _getCellByDate: function(date) {
-            const foundDate = dateUtils.createDate(date);
+            const foundDate = new Date(date);
             foundDate.setDate(1);
             foundDate.setMonth(0);
 
@@ -271,7 +355,9 @@ const Views = {
 
         isBoundary: function(date) {
             return dateUtils.sameDecade(date, this.option('min')) || dateUtils.sameDecade(date, this.option('max'));
-        }
+        },
+
+        _renderWeekNumberCell: noop,
     }),
 
     'century': BaseView.inherit({
@@ -281,7 +367,9 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return dateUtils.sameDecade(cellDate, new Date());
+            const today = this.option('_todayDate')();
+
+            return dateUtils.sameDecade(cellDate, today);
         },
 
         _isDateOutOfRange: function(cellDate) {
@@ -293,15 +381,23 @@ const Views = {
         },
 
         _isOtherView: function(cellDate) {
-            const date = dateUtils.createDate(cellDate);
+            const date = new Date(cellDate);
             date.setMonth(1);
 
             return !dateUtils.sameCentury(date, this.option('date'));
         },
 
+        _isStartDayOfMonth: function() {
+            return false;
+        },
+
+        _isEndDayOfMonth: function() {
+            return false;
+        },
+
         _getCellText: function(cellDate) {
             const startDate = dateLocalization.format(cellDate, 'yyyy');
-            const endDate = dateUtils.createDate(cellDate);
+            const endDate = new Date(cellDate);
 
             endDate.setFullYear(endDate.getFullYear() + 9);
 
@@ -314,13 +410,13 @@ const Views = {
         },
 
         _getNextCellData: function(date) {
-            date = dateUtils.createDate(date);
+            date = new Date(date);
             date.setFullYear(date.getFullYear() + 10);
             return date;
         },
 
         _getCellByDate: function(date) {
-            const foundDate = dateUtils.createDate(date);
+            const foundDate = new Date(date);
             foundDate.setDate(1);
             foundDate.setMonth(0);
             foundDate.setFullYear(dateUtils.getFirstYearInDecade(foundDate));
@@ -331,8 +427,8 @@ const Views = {
         getNavigatorCaption: function() {
             const currentDate = this.option('date');
             const firstDecadeInCentury = dateUtils.getFirstDecadeInCentury(currentDate);
-            const startDate = dateUtils.createDate(currentDate);
-            const endDate = dateUtils.createDate(currentDate);
+            const startDate = new Date(currentDate);
+            const endDate = new Date(currentDate);
 
             startDate.setFullYear(firstDecadeInCentury);
             endDate.setFullYear(firstDecadeInCentury + 99);
@@ -342,7 +438,9 @@ const Views = {
 
         isBoundary: function(date) {
             return dateUtils.sameCentury(date, this.option('min')) || dateUtils.sameCentury(date, this.option('max'));
-        }
+        },
+
+        _renderWeekNumberCell: noop,
     })
 };
 

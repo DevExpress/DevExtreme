@@ -21,7 +21,7 @@ import {
 import { requestAnimationFrame, cancelAnimationFrame } from './frame';
 import { transitionEndEventName, transition } from '../core/utils/support';
 import positionUtils from './position';
-import removeEvent from '../core/remove_event';
+import { removeEvent } from '../events/remove';
 import { addNamespace } from '../events/utils/index';
 import { when, Deferred } from '../core/utils/deferred';
 const removeEventName = addNamespace(removeEvent, 'dxFX');
@@ -32,13 +32,6 @@ const RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i;
 const ANIM_DATA_KEY = 'dxAnimData';
 const ANIM_QUEUE_KEY = 'dxAnimQueue';
 const TRANSFORM_PROP = 'transform';
-
-
-/**
-* @name animationConfig
-* @namespace DevExpress
-* @type object
-*/
 
 const TransitionAnimationStrategy = {
     initAnimation: function($element, config) {
@@ -269,7 +262,7 @@ const FrameAnimationStrategy = {
     _parseTransform: function(transformString) {
         const result = {};
 
-        each(transformString.match(/(\w|\d)+\([^)]*\)\s*/g), function(i, part) {
+        each(transformString.match(/\w+\d*\w*\([^)]*\)\s*/g), function(i, part) {
             const translateData = parseTranslate(part);
             const scaleData = part.match(/scale\((.+?)\)/);
             const rotateData = part.match(/(rotate.)\((.+)deg\)/);
@@ -345,7 +338,7 @@ const FrameAnimationStrategy = {
             };
 
             each(to, function(propName, endPropValue) {
-                if(typeof endPropValue === 'string' && parseFloat(endPropValue, 10) === false) {
+                if(typeof endPropValue === 'string' && parseFloat(endPropValue) === false) {
                     return true;
                 }
 
@@ -361,7 +354,7 @@ const FrameAnimationStrategy = {
     },
 
     _normalizeValue: function(value) {
-        const numericValue = parseFloat(value, 10);
+        const numericValue = parseFloat(value);
 
         if(numericValue === false) {
             return value;
@@ -499,8 +492,15 @@ const SlideAnimationConfigurator = {
 const FadeAnimationConfigurator = {
     setup: function($element, config) {
         const from = config.from;
-        const fromOpacity = isPlainObject(from) ? (config.skipElementInitialStyles ? 0 : $element.css('opacity')) : String(from);
-        let toOpacity;
+        const to = config.to;
+        const defaultFromOpacity = config.type === 'fadeOut' ? 1 : 0;
+        const defaultToOpacity = config.type === 'fadeOut' ? 0 : 1;
+        let fromOpacity = isPlainObject(from) ? String(from.opacity ?? defaultFromOpacity) : String(from);
+        let toOpacity = isPlainObject(to) ? String(to.opacity ?? defaultToOpacity) : String(to);
+
+        if(!config.skipElementInitialStyles) {
+            fromOpacity = $element.css('opacity');
+        }
 
         switch(config.type) {
             case 'fadeIn':
@@ -509,8 +509,6 @@ const FadeAnimationConfigurator = {
             case 'fadeOut':
                 toOpacity = 0;
                 break;
-            default:
-                toOpacity = String(config.to);
         }
 
         config.from = {
@@ -830,13 +828,6 @@ const stop = function(element, jumpToEnd) {
     destroyAnimQueueData($element);
 };
 
-/**
-* @name fx
-* @section utils
-* @module animation/fx
-* @namespace DevExpress
-* @export default
-*/
 const fx = {
     off: false,
     animationTypes: animationConfigurators,

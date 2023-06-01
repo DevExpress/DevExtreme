@@ -1,109 +1,287 @@
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
-import DataSource from '../data/data_source';
+import DataSource, { DataSourceLike } from '../data/data_source';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
+    DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    DataExpressionMixinOptions
+    ValueChangedInfo,
+} from './editor/editor';
+
+import {
+    DataExpressionMixinOptions,
 } from './editor/ui.data_expression';
 
 import {
-    dxPopupOptions
+    Properties as PopupProperties,
 } from './popup';
 
+/** @public */
+export type ChangeEvent = NativeEventInfo<dxDropDownBox, Event>;
+
+/** @public */
+export type ClosedEvent = EventInfo<dxDropDownBox>;
+
+/** @public */
+export type CopyEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
+
+/** @public */
+export type CutEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxDropDownBox>;
+
+/** @public */
+export type EnterKeyEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
+
+/** @public */
+export type FocusInEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
+
+/** @public */
+export type FocusOutEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxDropDownBox>;
+
+/** @public */
+export type InputEvent = NativeEventInfo<dxDropDownBox, UIEvent & { target: HTMLInputElement }>;
+
+/** @public */
+export type KeyDownEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
+
+/** @public */
+export type KeyPressEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
+
+/** @public */
+export type KeyUpEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
+
+/** @public */
+export type OpenedEvent = EventInfo<dxDropDownBox>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxDropDownBox> & ChangedOptionInfo;
+
+/** @public */
+export type PasteEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
+
+/** @public */
+export type ContentTemplateData = {
+    component: dxDropDownBox;
+    readonly value?: any;
+};
+
+/** @public */
+export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {
     /**
-     * @docid dxDropDownBoxOptions.acceptCustomValue
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     acceptCustomValue?: boolean;
     /**
-     * @docid dxDropDownBoxOptions.contentTemplate
-     * @type template|function
+     * @docid
      * @default 'content'
      * @type_function_param1 templateData:object
-     * @type_function_param1_field1 component:dxDropDownBox
-     * @type_function_param1_field2 value:any
-     * @type_function_param2 contentElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    contentTemplate?: template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: dxElement) => string | Element | JQuery);
+    contentTemplate?: template | ((templateData: ContentTemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxDropDownBoxOptions.displayValueFormatter
-     * @type function(value)
-     * @type_function_param1 value:string|Array<any>
-     * @type_function_return string
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default null
+     * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+     */
+    dataSource?: DataSourceLike<any> | null;
+    /**
+     * @docid
      * @public
      */
     displayValueFormatter?: ((value: string | Array<any>) => string);
     /**
-     * @docid dxDropDownBoxOptions.fieldTemplate
-     * @type template|function
+     * @docid
      * @default null
      * @type_function_param1 value:object
-     * @type_function_param2 fieldElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldTemplate?: template | ((value: any, fieldElement: dxElement) => string | Element | JQuery);
+    fieldTemplate?: template | ((value: any, fieldElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxDropDownBoxOptions.openOnFieldClick
+     * @docid
+     * @public
+     */
+    items?: Array<any>;
+    /**
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     openOnFieldClick?: boolean;
     /**
-     * @docid dxDropDownBoxOptions.valueChangeEvent
-     * @type string
+     * @docid
      * @default "change"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     valueChangeEvent?: string;
+
+    /**
+     * @docid
+     * @type dxPopupOptions
+     */
+    dropDownOptions?: PopupProperties;
 }
 /**
- * @docid dxDropDownBox
+ * @docid
  * @isEditor
  * @inherits DataExpressionMixin, dxDropDownEditor
  * @hasTranscludedContent
- * @module ui/drop_down_box
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxDropDownBox extends dxDropDownEditor {
-    constructor(element: Element, options?: dxDropDownBoxOptions)
-    constructor(element: JQuery, options?: dxDropDownBoxOptions)
+export default class dxDropDownBox extends dxDropDownEditor<dxDropDownBoxOptions> {
     getDataSource(): DataSource;
 }
 
-declare global {
-interface JQuery {
-    dxDropDownBox(): JQuery;
-    dxDropDownBox(options: "instance"): dxDropDownBox;
-    dxDropDownBox(options: string): any;
-    dxDropDownBox(options: string, ...params: any[]): any;
-    dxDropDownBox(options: dxDropDownBoxOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxDropDownBoxOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDropDownBoxOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxDropDownBoxOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onContentReady'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onChange
+ * @type_function_param1 e:{ui/drop_down_box:ChangeEvent}
+ */
+onChange?: ((e: ChangeEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onClosed
+ * @type_function_param1 e:{ui/drop_down_box:ClosedEvent}
+ */
+onClosed?: ((e: ClosedEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onCopy
+ * @type_function_param1 e:{ui/drop_down_box:CopyEvent}
+ */
+onCopy?: ((e: CopyEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onCut
+ * @type_function_param1 e:{ui/drop_down_box:CutEvent}
+ */
+onCut?: ((e: CutEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onDisposing
+ * @type_function_param1 e:{ui/drop_down_box:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onEnterKey
+ * @type_function_param1 e:{ui/drop_down_box:EnterKeyEvent}
+ */
+onEnterKey?: ((e: EnterKeyEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onFocusIn
+ * @type_function_param1 e:{ui/drop_down_box:FocusInEvent}
+ */
+onFocusIn?: ((e: FocusInEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onFocusOut
+ * @type_function_param1 e:{ui/drop_down_box:FocusOutEvent}
+ */
+onFocusOut?: ((e: FocusOutEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onInitialized
+ * @type_function_param1 e:{ui/drop_down_box:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onInput
+ * @type_function_param1 e:{ui/drop_down_box:InputEvent}
+ */
+onInput?: ((e: InputEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onKeyDown
+ * @type_function_param1 e:{ui/drop_down_box:KeyDownEvent}
+ */
+onKeyDown?: ((e: KeyDownEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onKeyUp
+ * @type_function_param1 e:{ui/drop_down_box:KeyUpEvent}
+ */
+onKeyUp?: ((e: KeyUpEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onOpened
+ * @type_function_param1 e:{ui/drop_down_box:OpenedEvent}
+ */
+onOpened?: ((e: OpenedEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onOptionChanged
+ * @type_function_param1 e:{ui/drop_down_box:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onPaste
+ * @type_function_param1 e:{ui/drop_down_box:PasteEvent}
+ */
+onPaste?: ((e: PasteEvent) => void);
+/**
+ * @skip
+ * @docid dxDropDownBoxOptions.onValueChanged
+ * @type_function_param1 e:{ui/drop_down_box:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
@@ -12,6 +13,7 @@ const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
 
 const FILE_MANAGER_ADAPTIVITY_DRAWER_PANEL_CLASS = 'dx-filemanager-adaptivity-drawer-panel';
 const DRAWER_PANEL_CONTENT_INITIAL = 'dx-drawer-panel-content-initial';
+const DRAWER_PANEL_CONTENT_ADAPTIVE = 'dx-drawer-panel-content-adaptive';
 
 class FileManagerAdaptivityControl extends Widget {
 
@@ -41,6 +43,7 @@ class FileManagerAdaptivityControl extends Widget {
         if(isFunction(contentRenderer)) {
             contentRenderer($drawerContent);
         }
+        this._updateDrawerMaxSize();
     }
 
     _createDrawerTemplate(container) {
@@ -49,9 +52,11 @@ class FileManagerAdaptivityControl extends Widget {
             container: this.$element(),
             leftElement: $(this._drawer.content()),
             rightElement: $(this._drawer.viewContent()),
-            onApplyPanelSize: this._onApplyPanelSize.bind(this)
+            onApplyPanelSize: this._onApplyPanelSize.bind(this),
+            onActiveStateChanged: this._onActiveStateChanged.bind(this)
         });
         this._splitter.$element().appendTo(container);
+        this._splitter.disableSplitterCalculation(true);
     }
 
     _render() {
@@ -65,19 +70,26 @@ class FileManagerAdaptivityControl extends Widget {
         }
 
         if(!this._splitter.isSplitterMoved()) {
-            this._updateDrawerDimensions();
+            this._setDrawerWidth('');
             return;
         }
         $(this._drawer.content()).removeClass(DRAWER_PANEL_CONTENT_INITIAL);
-        $(this._drawer.content()).css('width', e.leftPanelWidth);
-        this._drawer._initSize();
-        this._drawer.resizeContent();
+        this._setDrawerWidth(e.leftPanelWidth);
     }
 
-    _updateDrawerDimensions() {
-        $(this._drawer.content()).css('width', '');
-        this._drawer._initSize();
-        this._drawer._strategy.setPanelSize(true);
+    _onActiveStateChanged({ isActive }) {
+        this._splitter.disableSplitterCalculation(!isActive);
+        !isActive && this._splitter.$element().css('left', 'auto');
+    }
+
+    _setDrawerWidth(width) {
+        $(this._drawer.content()).css('width', width);
+        this._updateDrawerMaxSize();
+        this._drawer.resizeViewContent();
+    }
+
+    _updateDrawerMaxSize() {
+        this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
     }
 
     _dimensionChanged(dimension) {
@@ -91,12 +103,20 @@ class FileManagerAdaptivityControl extends Widget {
         this._isInAdaptiveState = this._isSmallScreen();
         if(oldState !== this._isInAdaptiveState) {
             this.toggleDrawer(!this._isInAdaptiveState, true);
+            $(this._drawer.content()).toggleClass(DRAWER_PANEL_CONTENT_ADAPTIVE, this._isInAdaptiveState);
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
+        }
+        if(this._isInAdaptiveState && this._isDrawerOpened()) {
+            this._updateDrawerMaxSize();
         }
     }
 
     _isSmallScreen() {
-        return $(window).width() <= ADAPTIVE_STATE_SCREEN_WIDTH;
+        return getWidth(window) <= ADAPTIVE_STATE_SCREEN_WIDTH;
+    }
+
+    _isDrawerOpened() {
+        return this._drawer.option('opened');
     }
 
     _initActions() {
@@ -138,10 +158,15 @@ class FileManagerAdaptivityControl extends Widget {
     }
 
     toggleDrawer(showing, skipAnimation) {
+        this._updateDrawerMaxSize();
         this._drawer.option('animationEnabled', !skipAnimation);
         this._drawer.toggle(showing);
-        const isSplitterActive = this._drawer.option('opened') && !this.isInAdaptiveState();
-        this._splitter.toggleState(isSplitterActive);
+        const isSplitterActive = this._isDrawerOpened() && !this.isInAdaptiveState();
+        this._splitter.toggleDisabled(!isSplitterActive);
+    }
+
+    getSplitterElement() {
+        return this._splitter.getSplitterBorderElement().get(0);
     }
 }
 

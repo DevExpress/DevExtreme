@@ -1,5 +1,6 @@
 define(function(require) {
-    require('/artifacts/transpiled/bundles/dx.all.js');
+    QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+    require('bundles/dx.all.js');
 
     QUnit.module('config.useJQuery');
 

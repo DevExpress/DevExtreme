@@ -29,10 +29,7 @@ const ValidationSummary = CollectionWidget.inherit({
             * @name dxValidationSummaryOptions.dataSource
             * @hidden
             */
-            /**
-            * @name dxValidationSummaryOptions.itemRender
-            * @hidden
-            */
+
             /**
             * @name dxValidationSummaryOptions.activeStateEnabled
             * @hidden
@@ -285,22 +282,26 @@ const ValidationSummary = CollectionWidget.inherit({
     _dispose() {
         this.callBase();
         this._unsubscribeGroup();
+    },
+
+    refreshValidationGroup() {
+        this._initGroupRegistration();
     }
 
     /**
-    * @name dxValidationSummaryMethods.registerKeyHandler
+    * @name dxValidationSummary.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxValidationSummaryMethods.getDataSource
+    * @name dxValidationSummary.getDataSource
     * @publicName getDataSource()
     * @hidden
     */
 
     /**
-    * @name dxValidationSummaryMethods.focus
+    * @name dxValidationSummary.focus
     * @publicName focus()
     * @hidden
     */

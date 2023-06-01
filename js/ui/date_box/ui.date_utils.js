@@ -4,11 +4,8 @@ import { isDate } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import dateLocalization from '../../localization/date';
 
-// TODO: move to dx.utils
-
-const dateComponents = function() {
-    return ['year', 'day', 'month', 'day'];
-};
+const DATE_COMPONENTS = ['year', 'day', 'month', 'day'];
+const TIME_COMPONENTS = ['hours', 'minutes', 'seconds', 'milliseconds'];
 
 const ONE_MINUTE = 1000 * 60;
 const ONE_DAY = ONE_MINUTE * 60 * 24;
@@ -29,22 +26,11 @@ const getStringFormat = function(format) {
 };
 
 const dateUtils = {
-
     SUPPORTED_FORMATS: ['date', 'time', 'datetime'],
 
-    // TODO: move to dateView
-    DATE_COMPONENT_TEXT_FORMATTER: function(value, name) {
-        const $container = $('<div>').addClass('dx-dateview-formatter-container');
-
-        $('<span>').text(value).addClass('dx-dateview-value-formatter').appendTo($container);
-        $('<span>').text(name).addClass('dx-dateview-name-formatter').appendTo($container);
-
-        return $container;
-    },
-
-    ONE_MINUTE: ONE_MINUTE,
-    ONE_DAY: ONE_DAY,
-    ONE_YEAR: ONE_YEAR,
+    ONE_MINUTE,
+    ONE_DAY,
+    ONE_YEAR,
 
     MIN_DATEVIEW_DEFAULT_DATE: new Date(1900, 0, 1),
     MAX_DATEVIEW_DEFAULT_DATE: function() {
@@ -57,13 +43,13 @@ const dateUtils = {
             getStandardPattern: function() {
                 return 'yyyy-MM-dd';
             },
-            components: dateComponents()
+            components: DATE_COMPONENTS
         },
         'time': {
             getStandardPattern: function() {
                 return 'HH:mm';
             },
-            components: ['hours', 'minutes', 'seconds', 'milliseconds']
+            components: TIME_COMPONENTS
         },
         'datetime': {
             getStandardPattern: function() {
@@ -91,13 +77,13 @@ const dateUtils = {
 
                 return standardPattern;
             },
-            components: dateComponents().concat(['hours', 'minutes', 'seconds', 'milliseconds'])
+            components: [...DATE_COMPONENTS, ...TIME_COMPONENTS]
         },
         'datetime-local': {
             getStandardPattern: function() {
                 return 'yyyy-MM-ddTHH:mm:ss';
             },
-            components: dateComponents().concat(['hours', 'minutes', 'seconds'])
+            components: [...DATE_COMPONENTS, 'hours', 'minutes', 'seconds']
         }
     },
 

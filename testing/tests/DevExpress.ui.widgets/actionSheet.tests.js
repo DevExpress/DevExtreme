@@ -1,12 +1,12 @@
+import { getWidth, getHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import holdEvent from 'events/hold';
 import pointerMock from '../../helpers/pointerMock.js';
-import { setupRenovation } from '../../helpers/renovationHelper.js';
 
-import 'common.css!';
-import ActionSheet from 'ui/action_sheet';
+import 'generic_light.css!';
+import 'ui/action_sheet';
 
 QUnit.testStart(function() {
     const markup =
@@ -20,8 +20,8 @@ QUnit.testStart(function() {
 });
 
 const ACTION_SHEET_WITHOUT_TITLE_CLASS = 'dx-actionsheet-without-title';
-
-setupRenovation(ActionSheet);
+const POPOVER_CLASS = 'dx-popover';
+const POPUP_CLASS = 'dx-popup';
 
 QUnit.module('action sheet', {
     beforeEach: function() {
@@ -37,7 +37,7 @@ QUnit.module('action sheet', {
     }
 }, () => {
     QUnit.test('render popup', function(assert) {
-        const popupElement = $('.dx-popup', this.element);
+        const popupElement = $(`.${POPUP_CLASS}`, this.element);
         const popup = popupElement.dxPopup('instance');
         const popupPosition = popup.option('position');
 
@@ -53,6 +53,25 @@ QUnit.module('action sheet', {
         assert.equal(popup.option('height'), 'auto');
     });
 
+    QUnit.test('popover should have role="dialog" attribute', function(assert) {
+        $('#actionSheet').dxActionSheet({
+            usePopover: true,
+            target: $('#container')
+        });
+
+        const $popoverInstance = $(`.${POPOVER_CLASS}`).dxPopover('instance');
+
+        assert.strictEqual($popoverInstance.$content().parent().attr('role'), 'dialog');
+    });
+
+    QUnit.test('popup should have role="dialog" attribute', function(assert) {
+        $('#actionSheet').dxActionSheet({ usePopover: false });
+
+        const $popupInstance = $(`.${POPUP_CLASS}`).dxPopup('instance');
+
+        assert.strictEqual($popupInstance.$content().parent().attr('role'), 'dialog');
+    });
+
     QUnit.test('popup is not draggable', function(assert) {
         const $overlayContent = $('.dx-overlay-content');
 
@@ -62,7 +81,10 @@ QUnit.module('action sheet', {
     QUnit.test('popup position (B252842)', function(assert) {
         assert.expect(1);
 
-        const $popup = $('.dx-popup', this.element); const $overlayContent = $('.dx-overlay-content', $popup); const popup = $popup.dxPopup('instance'); const positionConfig = popup.option('position');
+        const $popup = $(`.${POPUP_CLASS}`, this.element);
+        const $overlayContent = $('.dx-overlay-content', $popup);
+        const popup = $popup.dxPopup('instance');
+        const positionConfig = popup.option('position');
 
         this.instance.show().done(function() {
             const expectedPosition = positionUtils.calculate($overlayContent, positionConfig).v.location;
@@ -82,8 +104,8 @@ QUnit.module('action sheet', {
             width: setUpWidth,
             height: setUpHeight
         });
-        const initialWidth = $actionSheet.width();
-        const initialHeight = $actionSheet.height();
+        const initialWidth = getWidth($actionSheet);
+        const initialHeight = getHeight($actionSheet);
         const actionSheet = $actionSheet.dxActionSheet('instance');
         const popup = actionSheet._popup;
 
@@ -105,8 +127,8 @@ QUnit.module('action sheet', {
             w: initialWidth,
             h: initialHeight
         }, {
-            w: $actionSheet.width(),
-            h: $actionSheet.height()
+            w: getWidth($actionSheet),
+            h: getHeight($actionSheet)
         }, 'Resize does NOT effect element itself');
 
         assert.deepEqual({
@@ -119,7 +141,7 @@ QUnit.module('action sheet', {
     });
 
     QUnit.test('render cancel', function(assert) {
-        const popup = $('.dx-popup', this.element).dxPopup('instance');
+        const popup = $(`.${POPUP_CLASS}`, this.element).dxPopup('instance');
 
         this.instance.option('showCancelButton', true);
         let cancelButton = $('.dx-actionsheet-cancel', popup.$content());
@@ -160,7 +182,7 @@ QUnit.module('action sheet', {
     QUnit.test('show and hide methods are provided to popup', function(assert) {
         assert.expect(5);
 
-        const popup = $('.dx-popup', this.element).dxPopup('instance');
+        const popup = $(`.${POPUP_CLASS}`, this.element).dxPopup('instance');
         const instance = this.instance;
 
         assert.equal(popup.option('visible'), false, 'hidden on init');
@@ -180,7 +202,7 @@ QUnit.module('action sheet', {
 
     QUnit.test('cancel button click hides popup', function(assert) {
         const $cancelButton = $('.dx-actionsheet-cancel', this.element);
-        const popup = $('.dx-popup', this.element).dxPopup('instance');
+        const popup = $(`.${POPUP_CLASS}`, this.element).dxPopup('instance');
 
         this.instance.show();
         assert.equal(popup.option('visible'), true, 'shown before click');
@@ -212,7 +234,7 @@ QUnit.module('action sheet', {
         this.instance.option('items', items);
         this.instance.show();
 
-        const itemElements = $('.dx-actionsheet-item', $($('.dx-popup', this.element).dxPopup('instance').$content()));
+        const itemElements = $('.dx-actionsheet-item', $($(`.${POPUP_CLASS}`, this.element).dxPopup('instance').$content()));
         assert.equal(itemElements.length, 2, 'correct items count');
 
         const first = itemElements.find('.dx-button').eq(0);
@@ -227,6 +249,30 @@ QUnit.module('action sheet', {
 
         // NOTE: B233186
         assert.equal($('.dx-actionsheet-cancel').length, 1, 'there is only one \'cancel\' button');
+    });
+
+    QUnit.test('render items with the right stylingMode', function(assert) {
+        const items = [
+            {
+                text: 'Action 1'
+            },
+            {
+                text: 'Action 2',
+                stylingMode: 'text'
+            }
+        ];
+
+        this.instance.option('items', items);
+        this.instance.show();
+
+        const itemElements = $('.dx-actionsheet-item', $($(`.${POPUP_CLASS}`, this.element).dxPopup('instance').$content()));
+        assert.equal(itemElements.length, 2, 'correct items count');
+
+        const first = itemElements.find('.dx-button').eq(0);
+        assert.equal(first.dxButton('instance').option('stylingMode'), 'outlined', 'default stylingMode is correct');
+
+        const second = itemElements.find('.dx-button').eq(-1);
+        assert.equal(second.dxButton('instance').option('stylingMode'), items[1].stylingMode, 'correct stylingMode is set by option');
     });
 
     QUnit.test('\'onItemHold\' should be fired after hold (T106668)', function(assert) {
@@ -247,7 +293,7 @@ QUnit.module('action sheet', {
     });
 
     QUnit.test('title option', function(assert) {
-        const popup = $('.dx-popup', this.element).dxPopup('instance');
+        const popup = $(`.${POPUP_CLASS}`, this.element).dxPopup('instance');
 
         assert.equal(popup.option('title'), '', 'default value');
 
@@ -257,7 +303,8 @@ QUnit.module('action sheet', {
 
     QUnit.test('showTitle option', function(assert) {
         this.instance.show();
-        const $popupTitle = $('.dx-popup-title'); const $popup = $('.dx-popup-wrapper');
+        const $popupTitle = $('.dx-popup-title');
+        const $popup = $('.dx-popup-wrapper');
 
         assert.ok($popupTitle.is(':visible'), 'visible by default');
         assert.ok(!$popup.hasClass(ACTION_SHEET_WITHOUT_TITLE_CLASS), 'class set');
@@ -290,7 +337,7 @@ QUnit.module('action sheet', {
         this.instance.show();
         this.instance.option('items', items);
 
-        const popup = this.instance.$element().find('.dx-popup').dxPopup('instance');
+        const popup = this.instance.$element().find(`.${POPUP_CLASS}`).dxPopup('instance');
 
         assert.ok(popup.option('visible'), 'popup is shown after items change');
         assert.equal(popup.$content().text(), ['Action 1', 'Action 2', 'Cancel'].join(''), 'popup refreshed after items change');
@@ -310,11 +357,11 @@ QUnit.module('action sheet', {
         this.instance.option('items', items);
         this.instance.show();
 
-        const itemElements = $('.dx-actionsheet-item', $($('.dx-popup', this.element).dxPopup('instance').$content()));
+        const itemElements = $('.dx-actionsheet-item', $($(`.${POPUP_CLASS}`, this.element).dxPopup('instance').$content()));
         const first = itemElements.first();
         const second = itemElements.last();
 
-        const popup = this.element.find('.dx-popup').dxPopup('instance');
+        const popup = this.element.find(`.${POPUP_CLASS}`).dxPopup('instance');
 
         this.instance.show();
         first.trigger('dxclick');
@@ -328,7 +375,7 @@ QUnit.module('action sheet', {
     QUnit.test('popup toggling on option \'visible\' change', function(assert) {
         assert.expect(4);
 
-        const popup = $('.dx-popup', this.element).dxPopup('instance');
+        const popup = $(`.${POPUP_CLASS}`, this.element).dxPopup('instance');
 
         assert.equal(popup.option('visible'), false, 'hidden on init');
 
@@ -340,13 +387,14 @@ QUnit.module('action sheet', {
 
         const anotherActionSheet = $('<div/>').appendTo($('#container'));
         anotherActionSheet.dxActionSheet({ visible: true });
-        assert.equal($('.dx-popup', anotherActionSheet).dxPopup('instance').option('visible'), true, 'shown on init');
+        assert.equal($(`.${POPUP_CLASS}`, anotherActionSheet).dxPopup('instance').option('visible'), true, 'shown on init');
 
         anotherActionSheet.remove();
     });
 
     QUnit.test('items rendered correctly after changing items and showing (Q570978)', function(assert) {
-        const $actionSheet = $('<div>').dxActionSheet({}).appendTo('#qunit-fixture'); const actionSheet = $actionSheet.dxActionSheet('instance');
+        const $actionSheet = $('<div>').dxActionSheet({}).appendTo('#qunit-fixture');
+        const actionSheet = $actionSheet.dxActionSheet('instance');
 
         actionSheet.option('items', [{ text: '1' }, { text: '2' }, { text: '3' }]);
         actionSheet.option('visible', true);
@@ -427,7 +475,7 @@ QUnit.module('popover integration', {
         });
 
         $actionSheet.dxActionSheet('option', 'visible', true);
-        const $popup = $actionSheet.find('.dx-popup');
+        const $popup = $actionSheet.find(`.${POPUP_CLASS}`);
         assert.equal($popup.length, 1, 'popup was created');
     });
 
@@ -440,7 +488,8 @@ QUnit.module('popover integration', {
 
         $actionSheet.dxActionSheet('option', 'visible', true);
 
-        const $popover = $('.dx-popover'); const $target = $($popover.dxPopover('option', 'target'));
+        const $popover = $(`.${POPOVER_CLASS}`);
+        const $target = $($popover.dxPopover('option', 'target'));
 
         assert.equal($popover.length, 1, 'popover was created');
         assert.equal($target.get(0), $container.get(0), 'popover target is element');
@@ -457,13 +506,13 @@ QUnit.module('popover integration', {
             target: $container
         }).dxActionSheet('instance');
 
-        assert.equal($('.dx-popover').length, 0, 'popover is not selected');
+        assert.equal($(`.${POPOVER_CLASS}`).length, 0, 'popover is not selected');
 
         actionSheet.option('usePopover', true);
-        assert.equal($('.dx-popover').length, 1, 'popover is selected');
+        assert.equal($(`.${POPOVER_CLASS}`).length, 1, 'popover is selected');
 
         actionSheet.option('usePopover', false);
-        assert.equal($('.dx-popover').length, 0, 'popover is not selected');
+        assert.equal($(`.${POPOVER_CLASS}`).length, 0, 'popover is not selected');
     });
 
 
@@ -537,7 +586,7 @@ QUnit.module('regressions', {
         $actionSheet.dxActionSheet('show');
         $actionSheet.dxActionSheet('option', 'items', items);
 
-        const $itemElements = $('.dx-actionsheet-item', $('.dx-popup', $actionSheet).dxPopup('instance').$content());
+        const $itemElements = $('.dx-actionsheet-item', $(`.${POPUP_CLASS}`, $actionSheet).dxPopup('instance').$content());
         assert.equal($itemElements.length, 2, 'correct items count');
     });
 
@@ -555,28 +604,32 @@ QUnit.module('regressions', {
 
 QUnit.module('widget sizing render', () => {
     QUnit.test('default', function(assert) {
-        const $element = $('#widget').dxActionSheet(); const instance = $element.dxActionSheet('instance');
+        const $element = $('#widget').dxActionSheet();
+        const instance = $element.dxActionSheet('instance');
 
         instance.show();
 
-        assert.ok(instance._popup._container().outerWidth() > 0, 'outer width of the element must be more than zero');
+        assert.ok(getOuterWidth(instance._popup.$overlayContent()) > 0, 'outer width of the element must be more than zero');
     });
 
     QUnit.test('constructor', function(assert) {
-        const $element = $('#widget').dxActionSheet({ width: 400 }); const instance = $element.dxActionSheet('instance');
+        const $element = $('#widget').dxActionSheet({ width: 400 });
+        const instance = $element.dxActionSheet('instance');
 
         instance.show();
 
         assert.strictEqual(instance.option('width'), 400);
-        assert.strictEqual(instance._popup._container().outerWidth(), 400, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(getOuterWidth(instance._popup.$overlayContent()), 400, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('change width', function(assert) {
-        const $element = $('#widget').dxActionSheet(); const instance = $element.dxActionSheet('instance'); const customWidth = 400;
+        const $element = $('#widget').dxActionSheet();
+        const instance = $element.dxActionSheet('instance');
+        const customWidth = 400;
 
         instance.option('width', customWidth);
 
         instance.show();
-        assert.strictEqual(instance._popup._container().outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
+        assert.strictEqual(getOuterWidth(instance._popup.$overlayContent()), customWidth, 'outer width of the element must be equal to custom width');
     });
 });

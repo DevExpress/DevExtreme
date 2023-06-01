@@ -1,7 +1,7 @@
+import { getWidth, getHeight } from '../../core/utils/size';
 import { noop } from '../../core/utils/common';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
-import Promise from '../../core/polyfills/promise';
 import { extend } from '../../core/utils/extend';
 import errors from '../widget/ui.errors';
 import { map, each } from '../../core/utils/iterator';
@@ -15,9 +15,6 @@ const BING_MAP_READY = '_bingScriptReady';
 let BING_URL_V8 = 'https://www.bing.com/api/maps/mapcontrol?callback=' + BING_MAP_READY;
 
 const INFOBOX_V_OFFSET_V8 = 13;
-
-const BING_CREDENTIALS = 'AhuxC0dQ1DBTNo8L-H9ToVMQStmizZzBJdraTSgCzDSWPsA1Qd8uIvFSflzxdaLH';
-
 const MIN_LOCATION_RECT_LENGTH = 0.0000000000000001;
 
 
@@ -166,7 +163,7 @@ const BingProvider = DynamicProvider.inherit({
         const controls = this._option('controls');
 
         this._map = new Microsoft.Maps.Map(this._$container[0], {
-            credentials: this._keyOption('bing') || BING_CREDENTIALS,
+            credentials: this._keyOption('bing'),
             zoom: this._option('zoom'),
             showDashboard: controls,
             showMapTypeSelector: controls,
@@ -201,8 +198,8 @@ const BingProvider = DynamicProvider.inherit({
         const $container = this._$container;
 
         this._map.setOptions({
-            width: $container.width(),
-            height: $container.height()
+            width: getWidth($container),
+            height: getHeight($container)
         });
 
         return Promise.resolve();

@@ -7,13 +7,28 @@ import MetadataGenerator from './generator';
 export default class MetadataCollector {
   generator = new MetadataGenerator();
 
+  static async saveScssFiles(files: Promise<FileInfo[]>, destination: string): Promise<void> {
+    await Promise.all((await files).map(async (file) => {
+      const absolutePath = resolve(join(destination, file.path));
+      const directory = dirname(absolutePath);
+      await fs.mkdir(directory, { recursive: true });
+      await fs.writeFile(absolutePath, file.content);
+    }));
+  }
+
+  static getStringFromObject(
+    object: ThemesMetadata | string[] | FlatStylesDependencies,
+  ): string {
+    return JSON.stringify(object).replace(/"/g, '\'').replace(/'(ON|OFF)'/g, '"$1"');
+  }
+
   async getFileList(dirName: string): Promise<string[]> {
     const directories = await fs.readdir(dirName, { withFileTypes: true });
     const files = await Promise.all(directories.map((directory) => {
       const res = resolve(dirName, directory.name);
       return directory.isDirectory() ? this.getFileList(res) : [res];
     }));
-    return Array.prototype.concat(...files);
+    return Array.prototype.concat(...files) as string[];
   }
 
   async readFiles(
@@ -31,30 +46,13 @@ export default class MetadataCollector {
     }));
   }
 
-  static async saveScssFiles(files: Promise<FileInfo[]>, destination: string): Promise<void> {
-    (await files).forEach(async (file) => {
-      const absolutePath = resolve(join(destination, file.path));
-      const directory = dirname(absolutePath);
-      await fs.mkdir(directory, { recursive: true });
-      await fs.writeFile(absolutePath, file.content);
-    });
-  }
-
-  static getStringFromObject(
-    object: ThemesMetadata | string[] | FlatStylesDependencies,
-  ): string {
-    return JSON.stringify(object).replace(/"/g, '\'').replace(/'(ON|OFF)'/g, '"$1"');
-  }
-
   async saveMetadata(
     filePath: string,
-    jsonFilePath: string,
     version: string,
     browsersList: string[],
     dependencies: FlatStylesDependencies,
   ): Promise<void> {
     const absolutePath = resolve(filePath);
-    const absoluteJsonPath = resolve(jsonFilePath);
     const metadata = this.generator.getMetadata();
     const metaString = MetadataCollector.getStringFromObject(metadata);
     const browsersListString = MetadataCollector.getStringFromObject(browsersList);
@@ -66,8 +64,6 @@ export const browsersList: Array<string> = ${browsersListString};
 export const dependencies: FlatStylesDependencies = ${dependenciesString};
 `;
     await fs.mkdir(dirname(absolutePath), { recursive: true });
-    await fs.mkdir(dirname(absoluteJsonPath), { recursive: true });
     await fs.writeFile(absolutePath, metaContent);
-    await fs.writeFile(absoluteJsonPath, JSON.stringify(metadata));
   }
 }

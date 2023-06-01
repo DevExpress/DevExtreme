@@ -1,9 +1,7 @@
 import $ from 'jquery';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 
 import 'ui/text_box';
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -55,12 +53,10 @@ QUnit.module('markup', () => {
 
     QUnit.test('\'maxLength\' option', function(assert) {
         const originalDevices = devices.real();
-        const originalIE = browser.msie;
         devices.real({
             platform: 'not android and not ie',
             version: ['32']
         });
-        browser.msie = false;
 
         try {
             const element = $('#textbox').dxTextBox({ maxLength: '5' });
@@ -68,7 +64,6 @@ QUnit.module('markup', () => {
             assert.equal(input.attr('maxLength'), '5');
         } finally {
             devices.real(originalDevices);
-            browser.msie = originalIE;
         }
     });
 

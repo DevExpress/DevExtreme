@@ -1,4 +1,4 @@
-import { AppointmentItem } from '../types.d';
+import { AppointmentItem } from '../types';
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../../../ui/scheduler';
 

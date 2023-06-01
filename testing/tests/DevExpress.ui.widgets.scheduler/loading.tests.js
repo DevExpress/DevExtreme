@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const loading = require('ui/scheduler/ui.loading');
+const loading = require('ui/scheduler/loading');
 const viewPort = require('core/utils/view_port').value;
 const fx = require('animation/fx');
 const LoadPanel = require('ui/load_panel');

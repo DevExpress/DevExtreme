@@ -1,261 +1,253 @@
-import '../jquery_augmentation';
-
+// eslint-disable-next-line max-classes-per-file
 import {
-    LoadOptions
-} from './load_options';
+  DxPromise,
+  DxExtendedPromise,
+} from '../core/utils/deferred';
+import { DeepPartial } from '../core/index';
+import {
+  FilterDescriptor,
+  GroupDescriptor,
+  LoadOptions,
+} from './index';
 
-export interface StoreOptions<T = Store> {
+export type Options<
+    TItem = any,
+    TKey = any,
+> = StoreOptions<TItem, TKey>;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ * @docid
+ * @hidden
+ */
+export interface StoreOptions<
+    TItem = any,
+    TKey = any,
+> {
     /**
-     * @docid StoreOptions.errorHandler
-     * @type function
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     errorHandler?: Function;
     /**
-     * @docid StoreOptions.key
-     * @type string|Array<string>
-     * @prevFileNamespace DevExpress.data
+     * @docid
      * @public
      */
     key?: string | Array<string>;
     /**
-     * @docid StoreOptions.onInserted
-     * @type function
+     * @docid
      * @type_function_param1 values:object
      * @type_function_param2 key:object|string|number
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onInserted?: ((values: any, key: any | string | number) => any);
+    onInserted?: ((values: TItem, key: TKey) => void);
     /**
-     * @docid StoreOptions.onInserting
-     * @type function
+     * @docid
      * @type_function_param1 values:object
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onInserting?: ((values: any) => any);
+    onInserting?: ((values: TItem) => void);
     /**
-     * @docid StoreOptions.onLoaded
-     * @type function
-     * @type_function_param1 result:Array<any>
+     * @docid
+     * @type_function_param2 loadOptions:LoadOptions
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoaded?: ((result: Array<any>) => any);
+    onLoaded?: ((result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void);
     /**
-     * @docid StoreOptions.onLoading
-     * @type function
+     * @docid
      * @type_function_param1 loadOptions:LoadOptions
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions) => any);
+    onLoading?: ((loadOptions: LoadOptions<TItem>) => void);
     /**
-     * @docid StoreOptions.onModified
-     * @type function
+     * @docid
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     onModified?: Function;
     /**
-     * @docid StoreOptions.onModifying
-     * @type function
+     * @docid
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     onModifying?: Function;
     /**
-     * @docid StoreOptions.onPush
-     * @type function
-     * @type_function_param1 changes:Array<any>
+     * @docid
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onPush?: ((changes: Array<any>) => any);
+    onPush?: ((changes: Array<TItem>) => void);
     /**
-     * @docid StoreOptions.onRemoved
-     * @type function
+     * @docid
      * @type_function_param1 key:object|string|number
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onRemoved?: ((key: any | string | number) => any);
+    onRemoved?: ((key: TKey) => void);
     /**
-     * @docid StoreOptions.onRemoving
-     * @type function
+     * @docid
      * @type_function_param1 key:object|string|number
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onRemoving?: ((key: any | string | number) => any);
+    onRemoving?: ((key: TKey) => void);
     /**
-     * @docid StoreOptions.onUpdated
-     * @type function
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onUpdated?: ((key: any | string | number, values: any) => any);
+    onUpdated?: ((key: TKey, values: TItem) => void);
     /**
-     * @docid StoreOptions.onUpdating
-     * @type function
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @action
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    onUpdating?: ((key: any | string | number, values: any) => any);
+    onUpdating?: ((key: TKey, values: TItem) => void);
 }
+
+type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
+
 /**
  * @docid Store
- * @type object
  * @hidden
- * @module data/abstract_store
- * @export default
- * @prevFileNamespace DevExpress.data
+ * @namespace DevExpress.data
+ * @options StoreOptions
  */
-export default class Store {
-    constructor(options?: StoreOptions)
+export class Store<
+    TItem = any,
+    TKey = any,
+> {
+    constructor(options?: Options<TItem, TKey>);
     /**
-     * @docid StoreMethods.byKey
+     * @docid
      * @publicName byKey(key)
      * @param1 key:object|string|number
+     * @param2 extraOptions:LoadOptions
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+    byKey(key: TKey, extraOptions?: LoadOptions<TItem>): DxPromise<TItem>;
     /**
-     * @docid StoreMethods.insert
+     * @docid
      * @publicName insert(values)
      * @param1 values:object
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    insert(values: any): Promise<any> & JQueryPromise<any>;
+    insert(values: TItem): DxExtendedPromise<TItem>;
     /**
-     * @docid StoreMethods.key
+     * @docid
      * @publicName key()
-     * @return any
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    key(): any;
+    key(): string | Array<string>;
     /**
-     * @docid StoreMethods.keyOf
+     * @docid
      * @publicName keyOf(obj)
      * @param1 obj:object
-     * @return any
-     * @prevFileNamespace DevExpress.data
+     * @return any|string|number
      * @public
      */
-    keyOf(obj: any): any;
+    keyOf(obj: TItem): TKey;
     /**
-     * @docid StoreMethods.load
-     * @publicName load()
-     * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
-     * @public
-     */
-    load(): Promise<any> & JQueryPromise<any>;
-    /**
-     * @docid StoreMethods.load
-     * @publicName load(options)
-     * @param1 options:LoadOptions
-     * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
-     * @public
-     */
-    load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
-    /**
-     * @docid StoreMethods.off
+     * @docid
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    off(eventName: string): this;
+    off(eventName: EventName): this;
     /**
-     * @docid StoreMethods.off
+     * @docid
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    off(eventName: string, eventHandler: Function): this;
+    off(eventName: EventName, eventHandler: Function): this;
     /**
-     * @docid StoreMethods.on
+     * @docid
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    on(eventName: string, eventHandler: Function): this;
+    on(eventName: EventName, eventHandler: Function): this;
     /**
-     * @docid StoreMethods.on
+     * @docid
      * @publicName on(events)
      * @param1 events:object
      * @return this
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    on(events: any): this;
+    on(events: { [key in EventName]?: Function }): this;
     /**
-     * @docid StoreMethods.push
+     * @docid
      * @publicName push(changes)
      * @param1 changes:Array<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    push(changes: Array<any>): void;
+    push(changes: Array<{ type: 'insert' | 'update' | 'remove'; data?: DeepPartial<TItem>; key?: TKey; index?: number }>): void;
     /**
-     * @docid StoreMethods.remove
+     * @docid
      * @publicName remove(key)
      * @param1 key:object|string|number
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
+    remove(key: TKey): DxPromise<void>;
     /**
-     * @docid StoreMethods.totalCount
+     * @docid
      * @publicName totalCount(options)
-     * @param1 obj:object
-     * @param1_field1 filter:object
-     * @param1_field2 group:object
+     * @param1_field filter:object
+     * @param1_field group:object
      * @return Promise<number>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    totalCount(obj: { filter?: any, group?: any }): Promise<number> & JQueryPromise<number>;
+    totalCount(obj: { filter?: FilterDescriptor | Array<FilterDescriptor>; group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>> }): DxPromise<number>;
     /**
-     * @docid StoreMethods.update
+     * @docid
      * @publicName update(key, values)
      * @param1 key:object|string|number
      * @param2 values:object
      * @return Promise<any>
-     * @prevFileNamespace DevExpress.data
      * @public
      */
-    update(key: any | string | number, values: any): Promise<any> & JQueryPromise<any>;
+    update(key: TKey, values: DeepPartial<TItem>): DxExtendedPromise<TItem>;
 }
+
+  /**
+   * @namespace DevExpress.data
+   */
+  export default class AbstractStore<
+    TItem = any,
+    TKey = any,
+    > extends Store<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>);
+
+    /**
+     * @docid Store.load()
+     * @publicName load()
+     * @return Promise<any>
+     * @public
+     */
+    load(): DxExtendedPromise<Array<TItem>>;
+
+    /**
+     * @docid Store.load(options)
+     * @publicName load(options)
+     * @param1 options:LoadOptions
+     * @return Promise<any>
+     * @public
+     */
+    load(options: LoadOptions<TItem>): DxExtendedPromise<Array<TItem>>;
+  }

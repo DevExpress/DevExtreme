@@ -1,26 +1,39 @@
 import $ from 'jquery';
 import exporter from 'exporter';
-
 const imageCreator = exporter.image.creator;
 import typeUtils from 'core/utils/type';
 const testingMarkupStart = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'>';
 const testingMarkupEnd = '</svg>';
-import browser from 'core/utils/browser';
-import proxyUrlFormatter from 'data/proxy_url_formatter';
 import svgUtils from 'core/utils/svg';
 import { Deferred } from 'core/utils/deferred';
+import { getWindow } from 'core/utils/window';
+
+const window = getWindow();
+
+const testWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+
+const pathNameByUrl = (url) => {
+    const a = document.createElement('a');
+    a.href = url;
+
+    return a.pathname.charAt(0) === '/'
+        ? a.pathname
+        : '/' + a.pathname;
+};
 
 function setupCanvasStub(drawnElements, paths) {
     const prototype = window.CanvasRenderingContext2D.prototype;
     const canvasPrototype = window.HTMLCanvasElement.prototype;
 
+    sinon.spy(exporter.image.creator, '_createCanvas');
+
     // image
-    sinon.stub(prototype, 'drawImage', function(img, x, y, width, height) {
+    sinon.stub(prototype, 'drawImage').callsFake(function(img, x, y, width, height) {
         drawnElements.push({
             type: 'image',
             args: {
                 node: img.nodeName,
-                src: proxyUrlFormatter.parseUrl(img.src).pathname,
+                src: pathNameByUrl(img.src),
                 x: x,
                 y: y,
                 width: width,
@@ -33,7 +46,7 @@ function setupCanvasStub(drawnElements, paths) {
     sinon.spy(canvasPrototype, 'toDataURL');
 
     // stroke, fill
-    sinon.stub(prototype, 'stroke', function() {
+    sinon.stub(prototype, 'stroke').callsFake(function() {
         drawnElements.push({
             type: 'stroke',
             style: {
@@ -44,7 +57,7 @@ function setupCanvasStub(drawnElements, paths) {
             }
         });
     });
-    sinon.stub(prototype, 'fill', function() {
+    sinon.stub(prototype, 'fill').callsFake(function() {
         const style = {
             fillStyle: this.fillStyle,
             globalAlpha: this.globalAlpha
@@ -64,7 +77,7 @@ function setupCanvasStub(drawnElements, paths) {
             style: style
         });
     });
-    sinon.stub(prototype, 'fillRect', function(x, y, w, h) {
+    sinon.stub(prototype, 'fillRect').callsFake(function(x, y, w, h) {
         drawnElements.push({
             type: 'fillRect',
             args: {
@@ -81,24 +94,24 @@ function setupCanvasStub(drawnElements, paths) {
     });
 
     // paths, rect, circle
-    sinon.stub(prototype, 'beginPath', function() {
+    sinon.stub(prototype, 'beginPath').callsFake(function() {
         paths.push([]);
     });
-    sinon.stub(prototype, 'moveTo', function(x, y) {
+    sinon.stub(prototype, 'moveTo').callsFake(function(x, y) {
         paths[paths.length - 1].push({
             action: 'M',
             x: x,
             y: y
         });
     });
-    sinon.stub(prototype, 'lineTo', function(x, y) {
+    sinon.stub(prototype, 'lineTo').callsFake(function(x, y) {
         paths[paths.length - 1].push({
             action: 'L',
             x: x,
             y: y
         });
     });
-    sinon.stub(prototype, 'bezierCurveTo', function(x1, y1, x2, y2, x, y) {
+    sinon.stub(prototype, 'bezierCurveTo').callsFake(function(x1, y1, x2, y2, x, y) {
         paths[paths.length - 1].push({
             action: 'C',
             x1: x1,
@@ -109,7 +122,7 @@ function setupCanvasStub(drawnElements, paths) {
             y: y
         });
     });
-    sinon.stub(prototype, 'arc', function(x, y, r, sa, ea, c) {
+    sinon.stub(prototype, 'arc').callsFake(function(x, y, r, sa, ea, c) {
         drawnElements.push({
             type: 'arc',
             args: {
@@ -135,12 +148,12 @@ function setupCanvasStub(drawnElements, paths) {
             });
         }
     });
-    sinon.stub(prototype, 'closePath', function() {
+    sinon.stub(prototype, 'closePath').callsFake(function() {
         paths[paths.length - 1].push({
             action: 'Z'
         });
     });
-    sinon.stub(prototype, 'rect', function(x, y, width, height) {
+    sinon.stub(prototype, 'rect').callsFake(function(x, y, width, height) {
         drawnElements.push({
             type: 'rect',
             args: {
@@ -152,7 +165,7 @@ function setupCanvasStub(drawnElements, paths) {
             style: {}
         });
     });
-    sinon.stub(prototype, 'arcTo', function(x1, y1, x2, y2, radius) {
+    sinon.stub(prototype, 'arcTo').callsFake(function(x1, y1, x2, y2, radius) {
         drawnElements.push({
             action: 'arcTo',
             args: {
@@ -164,7 +177,7 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
-    sinon.stub(prototype, 'createLinearGradient', function(x0, y0, x1, y1) {
+    sinon.stub(prototype, 'createLinearGradient').callsFake(function(x0, y0, x1, y1) {
         const addColorStop = sinon.spy();
         drawnElements.push({
             type: 'linearGradient',
@@ -173,6 +186,28 @@ function setupCanvasStub(drawnElements, paths) {
                 y0,
                 x1,
                 y1
+            },
+            addColorStop
+        });
+        return {
+            addColorStop,
+            toString() {
+                return '#aaa';
+            }
+        };
+    });
+
+    sinon.stub(prototype, 'createRadialGradient').callsFake(function(x0, y0, r0, x1, y1, r1) {
+        const addColorStop = sinon.spy();
+        drawnElements.push({
+            type: 'radialGradient',
+            args: {
+                x0,
+                y0,
+                r0,
+                x1,
+                y1,
+                r1
             },
             addColorStop
         });
@@ -212,7 +247,7 @@ function setupCanvasStub(drawnElements, paths) {
     });
 
     // texts
-    sinon.stub(prototype, 'fillText', function() {
+    sinon.stub(prototype, 'fillText').callsFake(function() {
         const tempFont = this.font.replace(/px\s/g, 'px__');
         const fontParts = tempFont.split('__');
         const style = {
@@ -241,7 +276,7 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
-    sinon.stub(prototype, 'strokeText', function() {
+    sinon.stub(prototype, 'strokeText').callsFake(function() {
         const tempFont = this.font.replace(/px\s/g, 'px__');
         const fontParts = tempFont.split('__');
         const style = {
@@ -272,11 +307,13 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
 
+    sinon.stub(prototype, 'setTransform');
+
     // clips & patterns
     sinon.stub(prototype, 'clip');
     sinon.stub(prototype, 'save');
     sinon.stub(prototype, 'restore');
-    sinon.stub(prototype, 'createPattern', function() {
+    sinon.stub(prototype, 'createPattern').callsFake(function() {
         drawnElements.push({
             type: 'pattern'
         });
@@ -294,6 +331,8 @@ function setupCanvasStub(drawnElements, paths) {
 function teardownCanvasStub() {
     const prototype = window.CanvasRenderingContext2D.prototype;
     const canvasPrototype = window.HTMLCanvasElement.prototype;
+
+    exporter.image.creator._createCanvas.restore();
 
     // image
     prototype.drawImage.restore();
@@ -336,6 +375,11 @@ function teardownCanvasStub() {
 
     // createLinearGradient
     prototype.createLinearGradient.restore();
+
+    // createRadialGradient
+    prototype.createRadialGradient.restore();
+
+    prototype.setTransform.restore();
 }
 
 function getData(markup, isFullMode) {
@@ -350,6 +394,45 @@ QUnit.module('Svg to image to canvas', {
     },
     afterEach: function() {
         teardownCanvasStub();
+    }
+});
+
+QUnit.test('Canvas size', function(assert) {
+    const done = assert.async();
+    const imageBlob = exporter.image.getData(testingMarkupStart + testingMarkupEnd, {
+        format: 'png', width: 500,
+        height: 250, margin: 10
+    });
+
+    $.when(imageBlob).done(function() {
+        const createCanvas = exporter.image.creator._createCanvas;
+
+        assert.strictEqual(createCanvas.callCount, 1);
+        assert.deepEqual(createCanvas.getCall(0).args, [500, 250, 10]);
+        done();
+    });
+});
+
+QUnit.test('Canvas size. Scaled screen', function(assert) {
+    const done = assert.async();
+    const srcPixelRatio = window.devicePixelRatio;
+    window.devicePixelRatio = 2;
+
+    try {
+        const imageBlob = exporter.image.getData(testingMarkupStart + testingMarkupEnd, {
+            format: 'png', width: 500,
+            height: 250, margin: 10
+        });
+
+        $.when(imageBlob).done(function() {
+            const createCanvas = exporter.image.creator._createCanvas;
+
+            assert.strictEqual(createCanvas.callCount, 1);
+            assert.deepEqual(createCanvas.getCall(0).args, [1000, 500, 10]);
+            done();
+        });
+    } finally {
+        window.devicePixelRatio = srcPixelRatio;
     }
 });
 
@@ -373,14 +456,9 @@ QUnit.test('toDataURL ImageQuality', function(assert) {
 
 // T374627
 QUnit.test('Special symbols drown on canvas correct', function(assert) {
-    if(browser.msie) {
-        assert.ok(true, 'This test is not for IE/Edge');
-        return;
-    }
-
     const that = this;
     const done = assert.async();
-    const imageBlob = imageCreator.getData(testingMarkupStart + '<g class=\'dxc-title\' transform=\'translate(0,0)\'><text x=\'0\' y=\'30\' transform=\'translate(160,0)\' text-anchor=\'middle\'>Специальные символы</text></g>' + testingMarkupEnd,
+    const imageBlob = imageCreator.getData(testingMarkupStart + '<g class=\'dxc-title\' transform=\'translate(0,0)\'><text x=\'0\' y=\'30\' transform=\'translate(160,0)\' text-anchor=\'middle\'>Symboles spéciaux</text></g>' + testingMarkupEnd,
         {
             width: 500,
             height: 250,
@@ -391,7 +469,7 @@ QUnit.test('Special symbols drown on canvas correct', function(assert) {
     $.when(imageBlob).done(function() {
         try {
             assert.equal(that.drawnElements[1].type, 'text', 'Text element was drawned correct');
-            assert.equal(that.drawnElements[1].args[0], 'Специальные символы', 'The text symbols is correct');
+            assert.equal(that.drawnElements[1].args[0], 'Symboles spéciaux', 'The text symbols is correct');
         } finally {
             done();
         }
@@ -399,11 +477,6 @@ QUnit.test('Special symbols drown on canvas correct', function(assert) {
 });
 
 QUnit.test('Defined background', function(assert) {
-    if(browser.msie) {
-        assert.ok(true, 'This test is not for IE/Edge');
-        return;
-    }
-
     const that = this;
     const done = assert.async();
     const imageBlob = imageCreator.getData(testingMarkupStart + '<polygon points=\'220,10 300,210 170,250 123,234\' style=\'fill:lime;stroke:purple;stroke-width:1\'/>' + testingMarkupEnd,
@@ -437,6 +510,28 @@ QUnit.test('Defined background', function(assert) {
     });
 });
 
+QUnit.test('Transformation of canvas context args (T892041, T1020859)', function(assert) {
+    const done = assert.async();
+    const srcPixelRatio = window.devicePixelRatio;
+    window.devicePixelRatio = 2;
+    const context = window.CanvasRenderingContext2D.prototype;
+    const imageBlob = imageCreator.getData(testingMarkupStart + '<polygon points=\'220,10 300,210 170,250 123,234\' style=\'fill:lime;stroke:purple;stroke-width:1\'/>' + testingMarkupEnd,
+        {
+            width: 560,
+            height: 290,
+            format: 'png'
+        });
+
+    assert.expect(1);
+    $.when(imageBlob).done(function() {
+        try {
+            assert.deepEqual(context.setTransform.getCall(0).args, [2, 0, 0, 2, 0, 0], 'setTransform');
+        } finally {
+            done();
+            window.devicePixelRatio = srcPixelRatio;
+        }
+    });
+});
 
 QUnit.module('Svg to canvas', {
     beforeEach: function() {
@@ -451,7 +546,7 @@ QUnit.module('Svg to canvas', {
     stubGetComputedStyle: function(testElement, testStyle) {
         const getComputedStyle = window.getComputedStyle;
 
-        this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(element) {
+        this.getComputedStyle = sinon.stub(window, 'getComputedStyle').callsFake(function(element) {
             if(element === testElement) {
                 return testStyle;
             }
@@ -858,6 +953,23 @@ QUnit.test('Skip unknown command', function(assert) {
     });
 });
 
+QUnit.test('Comments should not to be exported(T1168423)', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<!-- text -->' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+
+    assert.expect(2);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 1, 'Canvas elements count');
+            assert.equal(that.drawnElements[0].type, 'fillRect', 'Drawn "fillRect" only');
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test('Rect', function(assert) {
     const that = this;
     const done = assert.async();
@@ -1023,11 +1135,6 @@ QUnit.test('Stroke-opacity / Fill-opacity', function(assert) {
 });
 
 QUnit.test('Filter shadow', function(assert) {
-    if(browser.msie) {
-        assert.ok(true, 'Not supported in Internet explorer');
-        return;
-    }
-
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart +
@@ -1082,6 +1189,83 @@ QUnit.test('lineargradient', function(assert) {
             assert.strictEqual(this.drawnElements.length, 3, 'Canvas elements count');
             assert.strictEqual(this.drawnElements[1].type, 'linearGradient', 'First element is linearGradient');
             assert.deepEqual(this.drawnElements[1].args, { x0: 0, y0: 0, x1: 30, y1: 0 });
+            assert.strictEqual(this.drawnElements[1].addColorStop.callCount, 2);
+            assert.deepEqual(this.drawnElements[1].addColorStop.getCall(0).args, [0, 'red']);
+            assert.deepEqual(this.drawnElements[1].addColorStop.getCall(1).args, [1, 'blue']);
+
+            assert.roughEqual(this.drawnElements[2].style.globalAlpha, 0.3, 0.1);
+            assert.strictEqual(this.drawnElements[2].style.fillStyle, '#aaaaaa');
+            assert.strictEqual(this.drawnElements[2].type, 'fill', 'fill');
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test('lineargradient with rotation angle', function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart +
+        '<defs>' +
+
+        '<linearGradient id="testlineargradient1" gradientTransform="rotate(45)">' +
+        '<stop offset="0%" stop-color="red"></stop>' +
+        '<stop offset="100%" stop-color="blue"></stop>' +
+        '</linearGradient>' +
+
+        '</defs>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradient1)" opacity="0.3"></path>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testlineargradient2)" opacity="0.3"></path>' +
+        testingMarkupEnd;
+
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
+
+    $.when(imageBlob).done(() => {
+        try {
+            assert.strictEqual(this.drawnElements.length, 3, 'Canvas elements count');
+            assert.strictEqual(this.drawnElements[1].type, 'linearGradient', 'First element is linearGradient');
+            assert.deepEqual(this.drawnElements[1].args, { x0: 0, y0: 0, x1: 30, y1: 0 });
+            assert.strictEqual(this.drawnElements[1].addColorStop.callCount, 2);
+            assert.deepEqual(this.drawnElements[1].addColorStop.getCall(0).args, [0, 'red']);
+            assert.deepEqual(this.drawnElements[1].addColorStop.getCall(1).args, [1, 'blue']);
+
+            assert.roughEqual(this.drawnElements[2].style.globalAlpha, 0.3, 0.1);
+            assert.strictEqual(this.drawnElements[2].style.fillStyle, '#aaaaaa');
+            assert.strictEqual(this.drawnElements[2].type, 'fill', 'fill');
+
+            assert.strictEqual(context.translate.callCount, 5, 'translate call count');
+            assert.deepEqual(context.translate.getCall(2).args, [15, 10]);
+            assert.deepEqual(context.translate.getCall(3).args, [-15, -10]);
+
+            assert.strictEqual(context.rotate.callCount, 1, 'rotate call count');
+            assert.roughEqual(context.rotate.getCall(0).args[0], 0.78, 0.01);
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test('radialgradient', function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart +
+        '<defs>' +
+
+        '<radialGradient id="testradialgradient">' +
+        '<stop offset="0%" stop-color="red"></stop>' +
+        '<stop offset="100%" stop-color="blue"></stop>' +
+        '</radialGradient>' +
+
+        '</defs>' +
+        '<path d="M 0 0 C 10 10 20 20 30 20 Z" fill="url(#testradialgradient)" opacity="0.3"></path>' +
+        testingMarkupEnd;
+
+    const imageBlob = getData(markup);
+
+    $.when(imageBlob).done(() => {
+        try {
+            assert.strictEqual(this.drawnElements.length, 3, 'Canvas elements count');
+            assert.strictEqual(this.drawnElements[1].type, 'radialGradient', 'First element is radialGradient');
+            assert.deepEqual(this.drawnElements[1].args, { r0: 0, r1: 15, x0: 15, x1: 15, y0: 10, y1: 10 });
             assert.strictEqual(this.drawnElements[1].addColorStop.callCount, 2);
             assert.deepEqual(this.drawnElements[1].addColorStop.getCall(0).args, [0, 'red']);
             assert.deepEqual(this.drawnElements[1].addColorStop.getCall(1).args, [1, 'blue']);
@@ -1173,6 +1357,32 @@ QUnit.test('Image with xlink:href', function(assert) {
     });
 });
 
+QUnit.test('Image drawing. Default x&y coordinates', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/testing/content/exporterTestsContent/test-image.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+
+    assert.expect(3);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 3, 'Canvas elements count');
+            assert.equal(that.drawnElements[2].type, 'image', 'Canvas drawn rect element');
+            assert.deepEqual(that.drawnElements[2].args, {
+                node: 'IMG',
+                src: '/testing/content/exporterTestsContent/test-image.png',
+                x: 0,
+                y: 0,
+                width: 20,
+                height: 25
+            });
+
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test('Image with href', function(assert) {
     const that = this;
     const done = assert.async();
@@ -1244,7 +1454,7 @@ QUnit.test('Export draws into hidden canvas', function(assert) {
     assert.strictEqual($('canvas')[0].hidden, true);
 });
 
-QUnit.test('Text', function(assert) {
+testWithoutCsp('Text', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="20" y="30" text-anchor="middle" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd;
@@ -1270,6 +1480,28 @@ QUnit.test('Text', function(assert) {
             assert.equal(textElem.args[0], 'Test', 'Text');
             assert.equal(textElem.args[1], 20, 'X coord');
             assert.equal(textElem.args[2], 30, 'Y coord');
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test('Defaults of text', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="20" y="30" text-anchor="middle" style="font-style: italic; font-weight:bold; opacity: 0.3;">Test</text>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+
+    assert.expect(4);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 2, 'Canvas elements count');
+
+            const { style } = that.drawnElements[1];
+
+            assert.equal(style.font, 'sans-serif', 'Style font');
+            assert.equal(style.size, '10px', 'Style size');
+            assert.equal(style.fillStyle, '#000000', 'Style fill');
         } finally {
             done();
         }
@@ -1540,7 +1772,7 @@ QUnit.test('Text with big amount of spaces', function(assert) {
     });
 });
 
-QUnit.test('Stroke text', function(assert) {
+testWithoutCsp('Stroke text', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="50" y="50" text-anchor="start" stroke-width="5" style="fill:#222; font-family:\'Trebuchet MS\', Verdana; stroke: #F2f2f2; stroke-width: 5px;"><tspan style="font-weight: bold; font-style: italic; " stroke-opacity="0.7">Age</tspan></text>' + testingMarkupEnd;
@@ -1575,7 +1807,7 @@ QUnit.test('Stroke text', function(assert) {
 });
 
 // T697125
-QUnit.test('Multiline text with shadow and stroked texts', function(assert) {
+testWithoutCsp('Multiline text with shadow and stroked texts', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart +
@@ -1753,7 +1985,7 @@ QUnit.test('Text with °. On error behavior', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="0" y="0" transform="translate(100,10) rotate(270,100,10)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Temperature, °C</text>' + testingMarkupEnd;
-    const imageBlob = getData(markup, browser.msie);
+    const imageBlob = getData(markup);
 
     assert.expect(3);
     $.when(imageBlob).done(function(blob) {
@@ -1767,7 +1999,7 @@ QUnit.test('Text with °. On error behavior', function(assert) {
     });
 });
 
-QUnit.test('Text decoration', function(assert) {
+testWithoutCsp('Text decoration', function(assert) {
     const that = this;
     const done = assert.async();
     const context = window.CanvasRenderingContext2D.prototype;
@@ -2048,6 +2280,35 @@ QUnit.test('Pattern canvas has same siza as pattern', function(assert) {
     });
 });
 
+QUnit.test('Pattern with image', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<defs><pattern id="DevExpress_3-hatching-2" width="30" height="30"><image href="/testing/content/exporterTestsContent/test-image.png" x="0" y="0" width="30" height="30" preserveAspectRatio="none"></image></pattern></defs><rect x="10" y="10" width="70" height="150" stroke-width="0" fill="url(#DevExpress_3-hatching-2)" stroke="#ffa500"></rect>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+
+    assert.expect(6);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 5, 'Canvas elements count');
+            assert.equal(that.drawnElements[1].type, 'rect', 'The first element on canvas is rect');
+            assert.equal(that.drawnElements[2].type, 'image', 'The third element on canvas is image - pattern');
+            assert.equal(that.drawnElements[3].type, 'pattern', 'The fourth element on canvas is pattern');
+            assert.equal(that.drawnElements[4].type, 'fill', 'The fifth element on canvas is fill');
+
+            assert.deepEqual(that.drawnElements[2].args, {
+                height: 30,
+                node: 'IMG',
+                src: '/testing/content/exporterTestsContent/test-image.png',
+                width: 30,
+                x: 0,
+                y: 0
+            }, 'pattern image args');
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test('Rotated elements', function(assert) {
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="0" y="0" transform="translate(-70.5,90.5) rotate(-270,-100.5,10.5)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Test text</text><path d="M 150 125 L 300 125" transform="translate(0.5,0.5) rotate(330,300,125)" stroke="#d3d3d3" stroke-width="1"></path>' + testingMarkupEnd;
@@ -2219,73 +2480,7 @@ QUnit.test('Export.color option', function(assert) {
     });
 });
 
-QUnit.test('getData returns Blob when it supported by Browser', function(assert) {
-    if(!typeUtils.isFunction(window.Blob)) {
-        assert.ok(true, 'Skip if there isn\'t blob');
-        return;
-    }
-
-    const done = assert.async();
-    const _getBlob = imageCreator._getBlob;
-    const _getBase64 = imageCreator._getBase64;
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
-
-    imageCreator._getBlob = function() {
-        return 'blobData';
-    };
-
-    imageCreator._getBase64 = function() {
-        return 'base64Data';
-    };
-
-    const deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
-
-    assert.expect(1);
-    $.when(deferred).done(function(data) {
-        try {
-            assert.equal(data, 'blobData', '_getBlob was called');
-        } finally {
-            imageCreator._getBlob = _getBlob;
-            imageCreator._getBase64 = _getBase64;
-            done();
-        }
-    });
-});
-
-QUnit.test('getData returns Base64 when Blob not supported by Browser', function(assert) {
-    if(typeUtils.isFunction(window.Blob)) {
-        assert.ok(true, 'Skip if there isn\'t Blob');
-        return;
-    }
-
-    const done = assert.async();
-    const _getBlob = imageCreator._getBlob;
-    const _getBase64 = imageCreator._getBase64;
-    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
-
-    imageCreator._getBlob = function() {
-        return 'blobData';
-    };
-
-    imageCreator._getBase64 = function() {
-        return 'base64Data';
-    };
-
-    const deferred = imageCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
-
-    assert.expect(1);
-    $.when(deferred).done(function(data) {
-        try {
-            assert.equal(data, 'base64Data', '_getBase64 was called');
-        } finally {
-            imageCreator._getBlob = _getBlob;
-            imageCreator._getBase64 = _getBase64;
-            done();
-        }
-    });
-});
-
-QUnit.test('Read computed style of elements if export target is attached element', function(assert) {
+testWithoutCsp('Read computed style of elements if export target is attached element', function(assert) {
     const that = this;
     const done = assert.async();
     const markup = testingMarkupStart + '<text x="20" y="30" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd;
@@ -2509,4 +2704,69 @@ QUnit.test('Some items is async', function(assert) {
         }
         done();
     });
+});
+
+QUnit.module('Tests with private API usage', {
+    beforeEach() {
+        this.originalGetBlob = imageCreator._getBlob;
+        this.originalGetBase64 = imageCreator._getBase64;
+
+        imageCreator._getBlob = () => 'blobData';
+        imageCreator._getBase64 = () => 'base64Data';
+    },
+    afterEach() {
+        imageCreator._getBlob = this.originalGetBlob;
+        imageCreator._getBase64 = this.originalGetBase64;
+    }
+}, () => {
+
+    QUnit.test('getData returns Blob when it supported by Browser', function(assert) {
+        if(!typeUtils.isFunction(window.Blob)) {
+            assert.ok(true, 'Skip if there isn\'t blob');
+            return;
+        }
+
+        const done = assert.async();
+        const markup = '<svg></svg>';
+
+        const deferred = imageCreator.getData(markup, { backgroundColor: '#aaa' });
+
+        assert.expect(1);
+        $.when(deferred).done(function(data) {
+            assert.strictEqual(data, 'blobData', '_getBlob was called');
+            done();
+        });
+    });
+
+    QUnit.test('data has base64 format if useBase64 is true(T1136337)', function(assert) {
+        const done = assert.async();
+        const markup = '<svg></svg>';
+
+        const deferred = imageCreator.getData(markup, { useBase64: true });
+
+        assert.expect(1);
+        $.when(deferred).done(function(data) {
+            assert.strictEqual(data, 'base64Data', 'data has base64 format');
+            done();
+        });
+    });
+
+    QUnit.test('getData returns Base64 when Blob not supported by Browser', function(assert) {
+        if(typeUtils.isFunction(window.Blob)) {
+            assert.ok(true, 'Skip if there isn\'t Blob');
+            return;
+        }
+
+        const done = assert.async();
+        const markup = '<svg></svg>';
+
+        const deferred = imageCreator.getData(markup, { backgroundColor: '#aaa' });
+
+        assert.expect(1);
+        $.when(deferred).done(function(data) {
+            assert.strictEqual(data, 'base64Data', '_getBase64 was called');
+            done();
+        });
+    });
+
 });

@@ -7,10 +7,8 @@ QUnit.testStart(() => {
             </div>');
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
-import translator from 'animation/translator';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import devices from 'core/devices';
@@ -36,7 +34,11 @@ QUnit.module('Integration: Timeline', {
 });
 
 QUnit.test('Special classes should be applied in grouped timeline', function(assert) {
-    const $style = $('<style>').text('#scheduler .dx-scheduler-cell-sizes-vertical {height: 100px } ');
+    const $style = $('<style nonce="qunit-test">').text(`
+        #scheduler .dx-scheduler-cell-sizes-vertical {
+            height: 100px
+        }
+    `);
 
     try {
         $style.appendTo('head');
@@ -243,73 +245,6 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
     } finally {
         workSpace.scrollTo.restore();
     }
-});
-
-QUnit.test('Appointments should have a right order on timeline month(lots of appts)', function(assert) {
-    const scheduler = createInstance({
-        currentDate: new Date(2016, 1, 2),
-        dataSource: new DataSource([
-            {
-                'text': 'Google AdWords Strategy',
-                'startDate': new Date(2016, 1, 1, 9, 0),
-                'endDate': new Date(2016, 1, 1, 10, 30)
-            }, {
-                'text': 'New Brochures',
-                'startDate': new Date(2016, 1, 1, 11, 30),
-                'endDate': new Date(2016, 1, 1, 14, 15)
-            }, {
-                'text': 'Brochure Design Review',
-                'startDate': new Date(2016, 1, 1, 15, 15),
-                'endDate': new Date(2016, 1, 1, 17, 15)
-            }, {
-                'text': 'Website Re-Design Plan',
-                'startDate': new Date(2016, 1, 1, 18, 45),
-                'endDate': new Date(2016, 1, 1, 20, 15)
-            }, {
-                'text': 'Rollout of New Website and Marketing Brochures',
-                'startDate': new Date(2016, 1, 2, 8, 15),
-                'endDate': new Date(2016, 1, 2, 10, 45)
-            }, {
-                'text': 'Update Sales Strategy Documents',
-                'startDate': new Date(2016, 1, 2, 12, 0),
-                'endDate': new Date(2016, 1, 2, 13, 45)
-            }, {
-                'text': 'Direct vs Online Sales Comparison Report',
-                'startDate': new Date(2016, 1, 2, 15, 30),
-                'endDate': new Date(2016, 1, 2, 17, 30)
-            }, {
-                'text': 'Non-Compete Agreements',
-                'startDate': new Date(2016, 1, 3, 8, 15),
-                'endDate': new Date(2016, 1, 3, 9, 0)
-            }, {
-                'text': 'Approve Hiring of John Jeffers',
-                'startDate': new Date(2016, 1, 3, 10, 0),
-                'endDate': new Date(2016, 1, 3, 11, 15)
-            }, {
-                'text': 'Update NDA Agreement',
-                'startDate': new Date(2016, 1, 3, 11, 45),
-                'endDate': new Date(2016, 1, 3, 13, 45)
-            }, {
-                'text': 'Update Employee Files with New NDA',
-                'startDate': new Date(2016, 1, 3, 14, 0),
-                'endDate': new Date(2016, 1, 3, 16, 45)
-            }
-        ]),
-        views: ['timelineMonth'],
-        currentView: 'timelineMonth',
-        maxAppointmentsPerCell: 'unlimited',
-        height: 505,
-        startDayHour: 8,
-        endDayHour: 20,
-        cellDuration: 60,
-        firstDayOfWeek: 0,
-        width: 800
-    });
-
-    assert.roughEqual(translator.locate(scheduler.appointments.getAppointment(0)).top, 0, 2.001, 'Appointment position is OK');
-    assert.roughEqual(translator.locate(scheduler.appointments.getAppointment(1)).top, 100, 2.001, 'Appointment position is OK');
-    assert.roughEqual(translator.locate(scheduler.appointments.getAppointment(2)).top, 200, 2.001, 'Appointment position is OK');
-    assert.roughEqual(translator.locate(scheduler.appointments.getAppointment(3)).top, 300, 2.001, 'Appointment position is OK');
 });
 
 QUnit.test('Appointments should have a right order on timeline month', function(assert) {

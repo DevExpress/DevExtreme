@@ -2,18 +2,18 @@ import $ from 'jquery';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import customOperations from 'ui/grid_core/ui.grid_core.filter_custom_operations';
 import fx from 'animation/fx';
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 const HEADER_FILTER_CLASS = 'dx-header-filter';
 const HEADER_FILTER_EMPTY_CLASS = HEADER_FILTER_CLASS + '-empty';
 
 QUnit.testStart(function() {
     const markup =
-    '<div>\
-        <div class="dx-datagrid">\
-            <div id="container"></div>\
-        </div>\
-    </div>';
+    `<div>
+        <div class="dx-datagrid">
+            <div id="container"></div>
+        </div>
+    </div>`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -42,6 +42,24 @@ QUnit.module('Sync with FilterValue', {
         assert.deepEqual(this.columnsController.columnOption('field', 'filterValues'), [2]);
         assert.deepEqual(this.columnsController.columnOption('field', 'filterType'), 'include');
         assert.deepEqual(this.columnsController.columnOption('field', 'filterValue'), 2);
+    });
+
+    ['string', 'number', 'date'].forEach(dataType => {
+        QUnit.test(`check equals to null for ${dataType} column (T1017975)`, function(assert) {
+            // act
+            this.setupDataGrid({
+                filterValue: ['field', '=', null],
+                columns: [{ dataField: 'field', allowHeaderFiltering: true, dataType }]
+            });
+
+            // act
+            this.columnOption('field', { filterValues: [null] });
+
+            // assert
+            assert.deepEqual(this.columnsController.columnOption('field', 'filterValues'), [null]);
+            assert.deepEqual(this.columnsController.columnOption('field', 'filterType'), 'include');
+            assert.deepEqual(this.columnsController.columnOption('field', 'filterValue'), undefined);
+        });
     });
 
     QUnit.test('anyof with one value', function(assert) {
@@ -205,7 +223,6 @@ QUnit.module('Sync with FilterValue', {
 
         // act
         this.option('filterValue', null);
-        this.dataController.optionChanged({ name: 'filterValue' });
 
         // assert
         assert.deepEqual(this.option('filterValue'), null);
@@ -796,7 +813,7 @@ QUnit.module('Sync on initialization', {
         assert.deepEqual(this.columnsController.columnOption('field', 'filterValues'), ['1']);
     });
 
-    // T695018
+    // T695018 -> T1049956
     QUnit.test('sync column.filterValue if column has dataField && name', function(assert) {
         // act
         this.setupDataGrid({
@@ -812,7 +829,38 @@ QUnit.module('Sync on initialization', {
         });
 
         // assert
-        assert.deepEqual(this.option('filterValue'), ['field', '=', '1' ], 'filterValue');
+        assert.deepEqual(this.option('filterValue'), ['field1', '=', '1' ], 'filterValue');
+    });
+
+    // T1049956
+    QUnit.test('sync column.filterValue when there are columns with the same dataField and and different names', function(assert) {
+        // act
+        this.setupDataGrid({
+            filterValue: null,
+            filterSyncEnabled: true,
+            columns: [{
+                dataField: 'field',
+                name: 'field1',
+                dataType: 'string'
+            }, {
+                dataField: 'field',
+                name: 'field2',
+                dataType: 'string',
+                selectedFilterOperation: '=',
+                filterValue: '1'
+            }]
+        });
+
+        // assert
+        assert.deepEqual(this.option('filterValue'), ['field2', '=', '1' ], 'filterValue');
+
+        // act
+        this.option('filterValue', null);
+
+        // assert
+        assert.deepEqual(this.option('filterValue'), null, 'filterValue');
+        assert.strictEqual(this.columnsController.columnOption(0, 'filterValue'), undefined, 'filterValue of the first column');
+        assert.strictEqual(this.columnsController.columnOption(1, 'filterValue'), undefined, 'filterValue of the second column');
     });
 
     QUnit.test('Error E1049', function(assert) {
@@ -830,7 +878,7 @@ QUnit.module('Sync on initialization', {
             function(e) {
                 return /E1049/.test(e.message);
             },
-            'Сolumn \'Field\': filtering is allowed but the \'dataField\' or \'name\' option is not specified'
+            'Column \'Field\': filtering is allowed but the \'dataField\' or \'name\' option is not specified'
         );
     });
 
@@ -940,7 +988,7 @@ QUnit.module('Real dataGrid', {
             this.dataGrid = $('#container').dxDataGrid($.extend({
                 dataSource: [{}],
                 filterSyncEnabled: true,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 filterRow: {
                     visible: true
                 },
@@ -1215,6 +1263,42 @@ QUnit.module('Real dataGrid', {
         assert.deepEqual(dataGrid.option('filterValue'), ['field', '=', 2]);
     });
 
+    ['string', 'number', 'date'].forEach(dataType => {
+        QUnit.test(`check equals to null for ${dataType} column (T1017975)`, function(assert) {
+            // arrange
+            const dataGrid = this.initDataGrid({
+                columns: [{ dataField: 'field', allowHeaderFiltering: true, dataType }]
+            });
+
+            // act
+            dataGrid.columnOption('field', { filterValues: [null] });
+
+            // assert
+            assert.deepEqual(dataGrid.option('filterValue'), ['field', '=', null]);
+            assert.deepEqual(dataGrid.columnOption('field', 'selectedFilterOperation'), undefined);
+        });
+    });
+
+    QUnit.test('check equals to null for column with headerFilter.dataSource (T1017975)', function(assert) {
+        // arrange
+        const dataGrid = this.initDataGrid({
+            columns: [{
+                dataField: 'field',
+                allowHeaderFiltering: true,
+                headerFilter: {
+                    dataSource: (options) => options.dataSource
+                }
+            }]
+        });
+
+        // act
+        dataGrid.columnOption('field', { filterValues: [null] });
+
+        // assert
+        assert.deepEqual(dataGrid.option('filterValue'), ['field', '=', null]);
+        assert.deepEqual(dataGrid.columnOption('field', 'selectedFilterOperation'), undefined);
+    });
+
     QUnit.test('check any of (two value)', function(assert) {
         // arrange
         const dataGrid = this.initDataGrid({
@@ -1274,7 +1358,7 @@ QUnit.module('Real dataGrid', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('field', 'filterValue'), 2);
@@ -1311,7 +1395,7 @@ QUnit.module('Real dataGrid', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('field', 'filterValue'), 1);
@@ -1348,7 +1432,7 @@ QUnit.module('Real dataGrid', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('field', 'filterValue'), 2);
@@ -1383,7 +1467,7 @@ QUnit.module('Real dataGrid', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('field', 'filterValue'), 2);
@@ -1418,7 +1502,7 @@ QUnit.module('Real dataGrid', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.columnOption('field', 'filterValue'), 2);
@@ -1441,9 +1525,9 @@ QUnit.module('Real dataGrid', {
                 savingTimeout: 0
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.option('filterValue', ['field', '=', 1]);
-        this.clock.tick();
+        this.clock.tick(10);
         assert.deepEqual(customSaveSpy.lastCall.args[0].filterValue, ['field', '=', 1]);
     });
 });
@@ -1453,7 +1537,7 @@ QUnit.module('Custom operations', {
         this.getAnyOfOperation = function(field, dataSource) {
             const dataGrid = $('#container').dxDataGrid({
                 dataSource: dataSource || [{}],
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 columns: [field]
             }).dxDataGrid('instance');
             return customOperations.anyOf(dataGrid);
@@ -1550,7 +1634,7 @@ QUnit.module('Custom operations', {
                 }]
             }
         };
-        const dataSource = [{ field: '2014/1/1' }, { field: '2014/1/3' }, { field: '2014/2/4' }];
+        const dataSource = [{ field: 'California' }, { field: 'Nevada' }, { field: 'Colorado' }];
         const anyOfOperation = this.getAnyOfOperation(field, dataSource);
 
         // act

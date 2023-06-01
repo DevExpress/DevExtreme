@@ -1,10 +1,11 @@
 import { extend as _extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-const defaultCustomizeLinkTooltip = function(info) {
-    return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${info.weight}` };
+
+const defaultCustomizeLinkTooltip = (formatter) => function(info) {
+    return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${formatter(info.weight)}` };
 };
-const defaultCustomizeNodeTooltip = function(info) {
-    return { html: `<strong>${info.label}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outgoing weight: ${info.weightOut}` };
+const defaultCustomizeNodeTooltip = (formatter) => function(info) {
+    return { html: `<strong>${info.label}</strong><br/>Incoming weight: ${formatter(info.weightIn)}<br/>Outgoing weight: ${formatter(info.weightOut)}` };
 };
 const generateCustomCallback = function(customCallback, defaultCallback) {
     return function(objectInfo) {
@@ -36,10 +37,11 @@ export function setTooltipCustomOptions(sankey) {
                 if(!(linkTemplate && args.type === 'link' || nodeTemplate && args.type === 'node')) {
                     args.skipTemplate = true;
                 }
+                const formatter = value => tooltip.formatValue(value);
                 if(args.type === 'node') {
-                    return generateCustomCallback(options.customizeNodeTooltip, defaultCustomizeNodeTooltip)(args.info);
+                    return generateCustomCallback(options.customizeNodeTooltip, defaultCustomizeNodeTooltip(formatter))(args.info);
                 } else if(args.type === 'link') {
-                    return generateCustomCallback(options.customizeLinkTooltip, defaultCustomizeLinkTooltip)(args.info);
+                    return generateCustomCallback(options.customizeLinkTooltip, defaultCustomizeLinkTooltip(formatter))(args.info);
                 }
 
                 return {};

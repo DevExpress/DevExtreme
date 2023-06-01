@@ -1,21 +1,23 @@
+// NOTE: This import should be first! Because it overrides window.Intl.
+import '../../helpers/noIntl.js';
+
 import $ from 'jquery';
-import PivotGridDataSource from 'ui/pivot_grid/data_source';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/module';
+
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-import 'viz/core/themes/generic.light'; // remove
-
 /* global orders */
-import '../../../testing/content/orders.js';
+import '../../content/orders.js';
 
 import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
 import 'ui/pivot_grid/ui.pivot_grid';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'viz/chart';
 
 $('<div id="pivotGridContainer">').appendTo('#qunit-fixture');
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
+
 
 function createPivotGrid(options, container) {
     container = container === undefined ? $('#pivotGridContainer') : $(container);

@@ -1,168 +1,242 @@
 import {
-    animationConfig
+    AnimationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig,
 } from '../animation/position';
 
 import {
-    event
+    DxEvent,
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxOverlay, {
     dxOverlayAnimation,
-    dxOverlayOptions
+    dxOverlayOptions,
 } from './overlay';
 
+/** @public */
+export type ToastType = 'custom' | 'error' | 'info' | 'success' | 'warning';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxToast>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxToast>;
+
+/** @public */
+export type HidingEvent = Cancelable & EventInfo<dxToast>;
+
+/** @public */
+export type HiddenEvent = EventInfo<dxToast>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxToast>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxToast> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = Cancelable & EventInfo<dxToast>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxToast>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
-     * @docid dxToastOptions.animation
-     * @type object
-     * @default { show: { type: "fade", duration: 400, from: 0, to: 1 }, hide: { type: "fade", duration: 400, to: 0 } }
-     * @default {show: {type: 'slide', duration: 200, from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 200, to: { position: {my: 'top', at: 'bottom', of: window}}}} [for](Android)
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
+     * @type object
      */
     animation?: dxToastAnimation;
     /**
-     * @docid dxToastOptions.closeOnClick
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     closeOnClick?: boolean;
     /**
-     * @docid dxToastOptions.closeOnOutsideClick
-     * @default true [for](Android)
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @deprecated dxToastOptions.hideOnOutsideClick
+     * @type_function_param1 event:event
+     * @default true &for(Android)
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
-     * @docid dxToastOptions.closeOnSwipe
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     closeOnSwipe?: boolean;
     /**
-     * @docid dxToastOptions.displayTime
-     * @type number
+     * @docid
      * @default 2000
-     * @default 4000 [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @default 4000 &for(Material)
      * @public
      */
     displayTime?: number;
     /**
-     * @docid dxToastOptions.height
+     * @docid
+     * @type boolean | function
+     * @type_function_param1 event:event
+     * @default true &for(Android)
+     * @public
+     */
+    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    /**
+     * @docid
      * @default 'auto'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxToastOptions.maxWidth
-     * @default 568 [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default 568 &for(Material)
      * @public
      */
     maxWidth?: number | string | (() => number | string);
     /**
-     * @docid dxToastOptions.message
-     * @type string
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     message?: string;
     /**
-     * @docid dxToastOptions.minWidth
-     * @default 344 [for](Material)
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default 344 &for(Material)
      * @public
      */
     minWidth?: number | string | (() => number | string);
     /**
-     * @docid dxToastOptions.position
-     * @type positionConfig|string
+     * @docid
      * @default "bottom center"
-     * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} [for](Android)
-     * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } [for](phones_on_Android)
-     * @prevFileNamespace DevExpress.ui
+     * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} &for(Android)
+     * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } &for(phones_on_Android)
      * @public
      */
-    position?: positionConfig | string;
+    position?: PositionConfig | string;
     /**
-     * @docid dxToastOptions.shading
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     shading?: boolean;
     /**
-     * @docid dxToastOptions.type
-     * @type Enums.ToastType
+     * @docid
      * @default 'info'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type?: 'custom' | 'error' | 'info' | 'success' | 'warning';
+    type?: ToastType;
     /**
-     * @docid dxToastOptions.width
-     * @default function() {return $(window).width() * 0.8 }
-     * @default 'auto' [for](Android)
-     * @default function() { return $(window).width(); } [for](phones_on_Android)
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default '80vw'
+     * @default 'auto' &for(Android)
+     * @default '100vw' &for(phones_on_Android)
      * @public
      */
     width?: number | string | (() => number | string);
 }
+/**
+ * @docid
+ * @namespace DevExpress.ui
+ */
 export interface dxToastAnimation extends dxOverlayAnimation {
     /**
      * @docid dxToastOptions.animation.hide
-     * @type animationConfig
      * @default { type: "fade", duration: 400, to: 0 }
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxToastOptions.animation.show
-     * @type animationConfig
      * @default { type: "fade", duration: 400, from: 0, to: 1 }
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
- * @docid dxToast
+ * @docid
  * @inherits dxOverlay
- * @module ui/toast
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxToast extends dxOverlay {
-    constructor(element: Element, options?: dxToastOptions)
-    constructor(element: JQuery, options?: dxToastOptions)
-}
+export default class dxToast extends dxOverlay<dxToastOptions> { }
 
-declare global {
-interface JQuery {
-    dxToast(): JQuery;
-    dxToast(options: "instance"): dxToast;
-    dxToast(options: string): any;
-    dxToast(options: string, ...params: any[]): any;
-    dxToast(options: dxToastOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxToastOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxToastOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxToastOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxToastOptions.onContentReady
+ * @type_function_param1 e:{ui/toast:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxToastOptions.onDisposing
+ * @type_function_param1 e:{ui/toast:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxToastOptions.onHidden
+ * @type_function_param1 e:{ui/toast:HiddenEvent}
+ */
+onHidden?: ((e: HiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxToastOptions.onHiding
+ * @type_function_param1 e:{ui/toast:HidingEvent}
+ */
+onHiding?: ((e: HidingEvent) => void);
+/**
+ * @skip
+ * @docid dxToastOptions.onInitialized
+ * @type_function_param1 e:{ui/toast:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxToastOptions.onOptionChanged
+ * @type_function_param1 e:{ui/toast:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxToastOptions.onShowing
+ * @type_function_param1 e:{ui/toast:ShowingEvent}
+ */
+onShowing?: ((e: ShowingEvent) => void);
+/**
+ * @skip
+ * @docid dxToastOptions.onShown
+ * @type_function_param1 e:{ui/toast:ShownEvent}
+ */
+onShown?: ((e: ShownEvent) => void);
+};
+///#ENDDEBUG

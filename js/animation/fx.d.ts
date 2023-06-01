@@ -1,127 +1,153 @@
-import '../jquery_augmentation';
+import { DxElement } from '../core/element';
+import { DxPromise } from '../core/utils/deferred';
+import { PositionConfig } from './position';
 
 import {
-    dxElement
-} from '../core/element';
+    Direction,
+} from '../common';
 
-export interface animationConfig {
+export type AnimationType = 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
+
+/**
+ * @docid
+ * @public
+ * @type object
+ */
+export type AnimationState = string | number | {
     /**
-     * @docid animationConfig.complete
-     * @type function
-     * @type_function_param1 $element:dxElement
-     * @type_function_param2 config:object
-     * @prevFileNamespace DevExpress.animation
+     * @docid
      * @public
      */
-    complete?: (($element: dxElement, config: any) => any);
+    opacity: number;
+} | {
     /**
-     * @docid animationConfig.delay
-     * @type number
+     * @docid
+     * @public
+     */
+    scale: number;
+} | {
+    /**
+     * @docid
+     * @public
+     */
+    position: PositionConfig;
+} | {
+    /**
+    * @docid
+    * @public
+    */
+    left: number;
+} | {
+    /**
+    * @docid
+    * @public
+    */
+    top: number;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress
+ * @type object|number|string
+ * @public
+ */
+export type AnimationConfig = {
+    /**
+     * @docid
+     * @public
+     */
+    complete?: (($element: DxElement, config: AnimationConfig) => void);
+    /**
+     * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     delay?: number;
     /**
-     * @docid animationConfig.direction
-     * @type Enums.Direction
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    direction?: 'bottom' | 'left' | 'right' | 'top';
+    direction?: Direction;
     /**
-     * @docid animationConfig.duration
-     * @type number
+     * @docid
      * @default 400
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     duration?: number;
     /**
-     * @docid animationConfig.easing
-     * @type string
+     * @docid
      * @default 'ease'
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     easing?: string;
     /**
-     * @docid animationConfig.from
-     * @type number|string|object
+     * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    from?: number | string | any;
+    from?: AnimationState;
     /**
-     * @docid animationConfig.staggerDelay
-     * @type number
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     staggerDelay?: number;
     /**
-     * @docid animationConfig.start
-     * @type function
-     * @type_function_param1 $element:dxElement
-     * @type_function_param2 config:object
-     * @prevFileNamespace DevExpress.animation
+     * @docid
      * @public
      */
-    start?: (($element: dxElement, config: any) => any);
+    start?: (($element: DxElement, config: AnimationConfig) => void);
     /**
-     * @docid animationConfig.to
-     * @type number|string|object
+     * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    to?: number | string | any;
+    to?: AnimationState;
     /**
-     * @docid animationConfig.type
-     * @type Enums.AnimationType
+     * @docid
      * @default 'custom'
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
-}
+    type?: AnimationType;
+};
 
+/**
+ * @public
+ * @deprecated Use the AnimationConfig type instead
+ */
+export type animationConfig = AnimationConfig;
+
+/**
+ * @public
+ * @docid
+ * @section utils
+ * @namespace DevExpress
+ */
 declare const fx: {
     /**
-     * @docid fxmethods.animate
+     * @docid
      * @publicName animate(element, config)
-     * @param1 element:Element
-     * @param2 config:animationConfig
      * @return Promise<void>
      * @namespace DevExpress.fx
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    animate(element: Element, config: animationConfig): Promise<void> & JQueryPromise<void>;
-    
+    animate(element: Element, config: AnimationConfig): DxPromise<void>;
+
     /**
-     * @docid fxmethods.isAnimating
+     * @docid
      * @publicName isAnimating(element)
-     * @param1 element:Element
-     * @return boolean
      * @namespace DevExpress.fx
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     isAnimating(element: Element): boolean;
-    
+
     /**
-     * @docid fxmethods.stop
+     * @docid
      * @publicName stop(element, jumpToEnd)
-     * @param1 element:Element
-     * @param2 jumpToEnd:boolean
      * @namespace DevExpress.fx
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     stop(element: Element, jumpToEnd: boolean): void;
-}
+};
 export default fx;

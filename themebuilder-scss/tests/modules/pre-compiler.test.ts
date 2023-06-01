@@ -1,14 +1,14 @@
-import PreCompiler from '../../src/modules/pre-compiler';
+import { createSassForSwatch } from '../../src/modules/pre-compiler';
 
-describe('PreCompiler class tests', () => {
+describe('PreCompiler', () => {
   test('createSassForSwatch', () => {
-    const swatchSass = PreCompiler.createSassForSwatch('test-theme-name', 'sass');
+    const swatchSass = createSassForSwatch('test-theme-name', 'sass');
     expect(swatchSass.sass).toBe('.dx-swatch-test-theme-name { sass };');
     expect(swatchSass.selector).toBe('.dx-swatch-test-theme-name');
   });
 
   test('createSassForSwatch clean sass from encoding', () => {
-    const swatchSass = PreCompiler.createSassForSwatch('test-theme-name', '@charset "UTF-8";\nsass');
+    const swatchSass = createSassForSwatch('test-theme-name', '@charset "UTF-8";\nsass');
     expect(swatchSass.sass).toBe('.dx-swatch-test-theme-name { \nsass };');
     expect(swatchSass.selector).toBe('.dx-swatch-test-theme-name');
   });
@@ -58,7 +58,7 @@ describe('PreCompiler class tests', () => {
   font-weight: 400;
   src: local("Roboto"),local("Roboto-Regular"),url(fonts/Roboto-400.woff2) format("woff2"),url(fonts/Roboto-400.woff) format("woff"),url(fonts/Roboto-400.ttf) format("truetype");
 }
-.dx-swatch-test-theme-name { 
+.dx-swatch-test-theme-name {${' '}
 
 .dx-validationsummary-item-content {
   border-bottom: 1px dashed;
@@ -73,7 +73,7 @@ describe('PreCompiler class tests', () => {
   font-family: Roboto,RobotoFallback,"Noto Kufi Arabic",Helvetica,Arial,sans-serif;
   line-height: 1.2857;
 } };`;
-    const swatchSass = PreCompiler.createSassForSwatch('test-theme-name', sourceCss);
+    const swatchSass = createSassForSwatch('test-theme-name', sourceCss);
     expect(swatchSass.sass).toBe(expectedCss);
     expect(swatchSass.selector).toBe('.dx-swatch-test-theme-name');
   });

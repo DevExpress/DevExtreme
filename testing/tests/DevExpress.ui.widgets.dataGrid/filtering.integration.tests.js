@@ -1,3 +1,18 @@
+import $ from 'jquery';
+import { EdmLiteral } from 'data/odata/utils';
+import commonUtils from 'core/utils/common';
+import devices from 'core/devices';
+import ArrayStore from 'data/array_store';
+import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
+import fx from 'animation/fx';
+import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
+
+const dataGridWrapper = new DataGridWrapper('#dataGrid');
+
+fx.off = true;
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -5,8 +20,9 @@ QUnit.testStart(function() {
             </div>
         </div>
     `;
+
     const markup = `
-        <style>
+        <style nonce="qunit-test">
             .fixed-height {
                 height: 400px;
             }
@@ -17,6 +33,7 @@ QUnit.testStart(function() {
             .dx-scrollable-native-ios .dx-scrollable-content {
                 padding: 0 !important;
             }
+            ${getEmulatorStyles()}
         </style>
 
         <!--qunit-fixture-->
@@ -25,29 +42,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
-    // $(gridMarkup).appendTo('body');
 });
-
-import $ from 'jquery';
-import { EdmLiteral } from 'data/odata/utils';
-import commonUtils from 'core/utils/common';
-import devices from 'core/devices';
-import browser from 'core/utils/browser';
-import ArrayStore from 'data/array_store';
-import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
-import fx from 'animation/fx';
-import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-
-const dataGridWrapper = new DataGridWrapper('#dataGrid');
-
-if('chrome' in window && devices.real().deviceType !== 'desktop') {
-    // Chrome DevTools device emulation
-    // Erase differences in user agent stylesheet
-    $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
-
-fx.off = true;
 
 QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('DataGrid - Should hide filter row menu after losing it\'s focus', function(assert) {
@@ -58,7 +53,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             filterRow: { visible: true },
             dataSource: [{ field1: '1', field2: '2' }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $menu = filterRowWrapper.getMenuElement(0);
@@ -73,13 +68,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(subMenu._isVisible(), 'submenu exists');
 
         // act
-        if(browser.msie && browser.version <= 11) {
-            const event = document.createEvent('Event');
-            event.initEvent('blur', true, true);
-            $menu[0].dispatchEvent(event);
-        } else {
-            $menu.blur();
-        }
+        $menu.blur();
 
         // assert
         assert.notOk(subMenu._isVisible(), 'submenu is hidden');
@@ -94,7 +83,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             filterRow: { visible: true },
             dataSource: [{ field1: '1' }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $menu = filterRowWrapper.getMenuElement(0);
@@ -123,7 +112,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('There are no exceptions when changing a filterValue to an array and selectedFilterOperation to \'between\' for date column', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field: new Date(1992, 7, 6) }, { field: new Date(1992, 7, 9) }],
             filterRow: { visible: true },
             columns: [{ dataField: 'field', dataType: 'date' }]
@@ -165,7 +154,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(onEditorPreparingCallCount, 2, 'onEditorPreparing call count');
@@ -191,11 +180,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.state({ pageIndex: 1, pageSize: 2, filterValue: ['id', '<>', 1] });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.pageIndex(), 1, 'pageIndex is applied');
@@ -215,7 +204,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $input = $(dataGrid.$element()).find('.dx-editor-cell').first().find('.dx-texteditor-input');
         $input.focus().val('1').trigger('change');
@@ -228,7 +217,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             selectionRangeArgs.push([element, range]);
         };
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         gridCoreUtils.setSelectionRange = oldSetSelectionRange;
 
@@ -255,7 +244,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 width: 200,
                 allowColumnResizing: true,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 filterRow: {
                     visible: true
                 },
@@ -269,7 +258,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
             $filterRangeContent = $('#dataGrid').find('.dx-datagrid-filter-row').find('.dx-filter-range-content').first();
             $filterRangeContent.focus();
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.strictEqual($('.dx-overlay-wrapper.dx-datagrid-filter-range-overlay').length, 1, 'has overlay wrapper');
@@ -340,7 +329,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(dataGrid);
         assert.equal(contentReadyCallCount, 1, 'contentReady is called once');
         assert.equal(loadCallCount, 1, '1 load count on start');
@@ -357,7 +346,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         try {
             createDataGrid({
                 height: 1000,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 scrolling: {
                     mode: 'virtual'
                 },
@@ -391,7 +380,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }
         let calculateFilterExpressionCallCount = 0;
         const grid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: data,
             filterPanel: { visible: true },
             columns: [{
@@ -462,7 +451,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             remoteOperations: { groupPaging: true },
             height: 400,
             filterSyncEnabled: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual'
             },
@@ -481,14 +470,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 dataField: 'type'
             }]
         }).dxDataGrid('instance');
-        this.clock.tick(100);
+        this.clock.tick(500);
 
         dataGrid.expandRow(['group']);
-        this.clock.tick(100);
+        this.clock.tick(500);
 
         // act
         dataGrid.columnOption('type', 'filterValue', 1);
-        this.clock.tick(100);
+        this.clock.tick(500);
 
         // assert
         assert.notOk(dataGrid.getDataSource().isLoading(), 'not loading');
@@ -539,7 +528,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         createDataGrid({
             dataSource: [{ id: 1, boolean: true }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             renderAsync: true,
             filterRow: {
                 visible: true
@@ -562,7 +551,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         cellPreparedCells = [];
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(cellPreparedCells, [
@@ -587,12 +576,12 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', 'name']
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const filterValue = 'test2';
         dataGrid.option('columns', ['id', { dataField: 'name', filterValue }]);
-        this.clock.tick();
+        this.clock.tick(10);
         const visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -615,7 +604,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', 'name']
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option('filterPanel.visible', true); // causes reloading a data source
@@ -627,7 +616,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         const filterValue = 'test2';
         dataGrid.option('columns', ['id', { dataField: 'name', filterValue }]);
-        this.clock.tick();
+        this.clock.tick(10);
         const visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -651,7 +640,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValue }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -660,7 +649,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValue, selectedFilterOperation: '<>' }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -684,7 +673,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValue }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -700,7 +689,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValue, selectedFilterOperation: '<>' }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -724,7 +713,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValue }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -732,7 +721,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValue, allowFiltering: false }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -755,7 +744,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValue }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -770,7 +759,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValue, allowFiltering: false }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -793,11 +782,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', 'name']
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValues }]);
-        this.clock.tick();
+        this.clock.tick(10);
         const visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -821,7 +810,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', 'name']
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.option('filterPanel.visible', true); // causes reloading a data source
@@ -832,7 +821,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValues }]);
-        this.clock.tick();
+        this.clock.tick(10);
         const visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -856,7 +845,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValues }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -865,7 +854,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValues, filterType: 'exclude' }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -889,7 +878,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValues }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -905,7 +894,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValues, filterType: 'exclude' }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -919,13 +908,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: [{ a: 1111, b: 222 }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.clearFilter();
         dataGrid.option('filterRow.visible', true);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($(dataGrid.$element()).find('.dx-datagrid-filter-row').length, 1, 'filter row is rendered');
@@ -944,7 +933,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
         let filter;
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         filter = ['field1', '=', 'test1'];
@@ -955,7 +944,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.option('filterValue'), undefined, 'dataGrid\'s filter');
@@ -969,7 +958,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.option('filterValue'), undefined, 'dataGrid\'s filter');
@@ -983,7 +972,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.option('filterValue'), undefined, 'dataGrid\'s filter');
@@ -1000,7 +989,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             return result;
         };
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             height: 50,
             dataSource: generateDataSource(10),
             scrolling: {
@@ -1044,14 +1033,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.pageIndex(5);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.filter(['id', '=', 666]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'no rows');
@@ -1071,7 +1060,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const dataGrid = createDataGrid({
             dataSource: dataSource,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual'
             },
@@ -1091,7 +1080,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     // T820316
     QUnit.test('Error should not be thrown when searching text in calculated column with lookup', function(assert) {
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ text: 'text', num: 1 }, { text: 'text', num: 2 }],
             searchPanel: {
                 visible: true
@@ -1111,7 +1100,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         try {
             dataGrid.option('searchPanel.text', 'one');
-            this.clock.tick();
+            this.clock.tick(10);
         } catch(e) {
             assert.ok(false, 'error was thrown');
         }
@@ -1122,10 +1111,132 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(visibleRows[0].data, { text: 'text', num: 1 }, 'visible row\'s data');
     });
 
+    QUnit.test('Should not display all rows when no search results and lookup is used (T1059631)', function(assert) {
+        // arrange
+        let loadingTimes = 0;
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: {
+                load(e) {
+                    loadingTimes += 1;
+                    return [{ text: 'text', num: 1 }, { text: 'text', num: 2 }];
+                }
+            },
+            searchPanel: {
+                visible: true
+            },
+            columns: [{
+                dataField: 'num',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, name: 'one' }, { id: 2, name: 'two' }],
+                    valueExpr: 'id',
+                    displayExpr: 'name'
+                }
+            }]
+        });
+
+        // act
+        this.clock.tick(10);
+
+        // assert
+        const visibleRowsBeforeSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsBeforeSearch.length, 2, 'two visible rows');
+
+        // act
+        dataGrid.option('searchPanel.text', 'three');
+        this.clock.tick(10);
+
+        // assert
+        const visibleRowsAfterSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsAfterSearch.length, 0, 'no visible rows');
+        assert.strictEqual(loadingTimes, 1, 'doesn\'t load items if no search results');
+    });
+
+    QUnit.test('Should not display all rows when no search results and lookup is used (remoteOperations: true, additionalFilter is used) (T1059631)', function(assert) {
+        // arrange
+        let loadingTimes = 0;
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: {
+                load() {
+                    loadingTimes += 1;
+                    return $.Deferred().resolve({
+                        data: [{ text: 'text', num: 1 }, { text: 'text', num: 2 }],
+                        totalCount: 2,
+                    });
+                }
+            },
+            filterValue: ['num', '<=', '2'],
+            searchPanel: {
+                visible: true
+            },
+            remoteOperations: true,
+            columns: [{
+                dataField: 'num',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, name: 'one' }, { id: 2, name: 'two' }],
+                    valueExpr: 'id',
+                    displayExpr: 'name'
+                }
+            }]
+        });
+
+        // act
+        this.clock.tick(10);
+
+        // assert
+        const visibleRowsBeforeSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsBeforeSearch.length, 2, 'two visible rows');
+        assert.strictEqual(loadingTimes, 2, 'loads before search request');
+
+        // act
+        dataGrid.option('searchPanel.text', 'three');
+        this.clock.tick(10);
+
+        // assert
+        const visibleRowsAfterSearch = dataGrid.getVisibleRows();
+        assert.strictEqual(visibleRowsAfterSearch.length, 0, 'no visible rows');
+        assert.strictEqual(loadingTimes, 2, 'doesn\'t load items if no search results');
+    });
+
+    QUnit.test('Correct number parsing in search', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [
+                { number: 1, string: 'FIC112' },
+                { number: 1, string: 'FIC115' },
+                { number: 1, string: 'FIC233' },
+                { number: 1, string: 'PIC122' },
+                { number: 1, string: 'PIC123' },
+                { number: 1, string: 'PIC125' },
+            ],
+            searchPanel: {
+                visible: true
+            },
+            columns: [{
+                dataField: 'number',
+                format: '#'
+            }, 'string']
+        });
+
+        // act
+        dataGrid.option('searchPanel.text', 'FIC1');
+        this.clock.tick(10);
+
+        // assert
+        const visibleRows = dataGrid.getVisibleRows();
+
+        assert.equal(visibleRows.length, 2, 'row are filtered');
+        assert.deepEqual(visibleRows.map(i => i.data.string), ['FIC112', 'FIC115'], 'number rows are not shown');
+    });
+
     QUnit.test('search editor have not been recreated when search text is changed', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             remoteOperations: { filtering: true, sorting: true, paging: true },
             searchPanel: {
                 visible: true,
@@ -1148,13 +1259,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('search editor value should be changed when search text is changed if grid is rendered in toolbar', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             onToolbarPreparing: function(e) {
                 e.toolbarOptions.items.unshift({
                     location: 'before',
                     template: function() {
                         return $('<div>').dxDataGrid({
-                            loadingTimeout: undefined,
+                            loadingTimeout: null,
                             searchPanel: {
                                 visible: true
                             }
@@ -1180,7 +1291,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('search editor have not been recreated on typing', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             remoteOperations: { filtering: true, sorting: true, paging: true },
             searchPanel: {
                 visible: true,
@@ -1226,7 +1337,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(dataGrid.columnOption('groupIndex:0').dataField, 'Terms', 'grouped column exists');
 
@@ -1245,7 +1356,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.state(strState);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!dataGrid.columnOption('groupIndex:0'), 'no grouped columns');
@@ -1284,7 +1395,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         let $headersView;
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         $headersView = $dataGrid.find('.dx-datagrid-headers' + ' .dx-datagrid-scroll-container').first();
         $headersView.scrollLeft(200);
@@ -1309,7 +1420,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             remoteOperations: {
                 paging: true, filtering: true
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 mode: 'virtual'
             },
@@ -1335,5 +1446,359 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(dataGrid);
         assert.equal(loadCallCount, 1, 'one load count on start');
         assert.equal(contentReadyCallCount, 1, 'one contentReady on start');
+    });
+
+
+    // T1072812
+    QUnit.test('getCombinedFilter returns actual value when called in onOptionChanged', function(assert) {
+        let filterChangedCount = 0;
+
+        const dataGrid = createDataGrid({
+            columns: [{ dataField: 'column1' }],
+            dataSource: [],
+            loadingTimeout: null,
+            filterRow: {
+                visible: true,
+            },
+            onOptionChanged: (e) => {
+                const filter = e.component.getCombinedFilter();
+
+                if(filterChangedCount === 0) {
+                    assert.strictEqual(filter[2], 35);
+                } else if(filterChangedCount === 1) {
+                    assert.strictEqual(filter, undefined);
+                }
+
+                filterChangedCount++;
+            },
+        });
+
+        dataGrid.columnOption(0, 'filterValue', 35);
+        dataGrid.columnOption(0, 'filterValue', null);
+    });
+
+    // T1118433
+    QUnit.test('getCombinedFilter returns actual value when called in onOptionChanged with filterSyncEnabled', function(assert) {
+        let filterChangedCount = 0;
+
+        const dataGrid = createDataGrid({
+            columns: [{ dataField: 'column1' }],
+            dataSource: [],
+            loadingTimeout: null,
+            filterSyncEnabled: true,
+            filterRow: {
+                visible: true,
+            },
+            onOptionChanged: (e) => {
+                if(e.fullName !== 'filterValue') {
+                    return;
+                }
+
+                const filter = e.component.getCombinedFilter();
+
+                if(filterChangedCount === 0) {
+                    assert.strictEqual(filter[2], 35);
+                } else if(filterChangedCount === 1) {
+                    assert.strictEqual(filter, undefined);
+                }
+
+                filterChangedCount++;
+            },
+        });
+
+        dataGrid.columnOption(0, 'filterValue', 35);
+        dataGrid.columnOption(0, 'filterValue', null);
+    });
+
+    // T1122553
+    QUnit.test('dataGrid should not make second request after changing filterRow selectbox value', function(assert) {
+        // arrange
+        const load = sinon.spy(function(loadOptions) {
+            return new ArrayStore([
+                { column1: 1, column2: 1 },
+                { column1: 2, column2: 2 },
+            ]).load(loadOptions).then(data => ({
+                data,
+                totalCount: 2,
+            }));
+        });
+        createDataGrid({
+            columns: [{
+                dataField: 'column1',
+                allowFiltering: true,
+                visible: false,
+            }, {
+                dataField: 'column2',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                    valueExpr: 'id',
+                    displayExpr: 'value'
+                }
+            }],
+            dataSource: { load },
+            filterRow: {
+                visible: true,
+            },
+            remoteOperations: true,
+        });
+
+        this.clock.tick(10);
+
+        // act
+        const selectBox = $('.dx-datagrid-filter-row').find('.dx-selectbox').eq(0).dxSelectBox('instance');
+
+        selectBox.open();
+        this.clock.tick(10);
+
+        selectBox.option('value', 1);
+        this.clock.tick(10);
+
+        // assert
+
+        const groupRequests = load.getCalls().map(l => l.args[0]).filter(l => l.group);
+
+        assert.deepEqual(groupRequests.length, 1);
+    });
+
+    // T1122553
+    QUnit.test('dataGrid should not make second request after changing filterRow selectbox value with resetting other filter', function(assert) {
+        // arrange
+        const load = sinon.spy(function(loadOptions) {
+            return new ArrayStore([
+                { column1: 1, column2: 1 },
+                { column1: 2, column2: 2 },
+            ]).load(loadOptions).then(data => ({
+                data,
+                totalCount: 2,
+            }));
+        });
+        createDataGrid({
+            columns: [{
+                dataField: 'column1',
+                allowFiltering: true,
+            }, {
+                dataField: 'column2',
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                    valueExpr: 'id',
+                    displayExpr: 'value'
+                }
+            }],
+            dataSource: { load },
+            filterRow: {
+                visible: true,
+            },
+            remoteOperations: true,
+        });
+
+        this.clock.tick(10);
+
+        // act
+        const numberBox = $('.dx-datagrid-filter-row').find('.dx-numberbox').eq(0).dxNumberBox('instance');
+        const selectBox = $('.dx-datagrid-filter-row').find('.dx-selectbox').eq(0).dxSelectBox('instance');
+
+        selectBox.open(); // first request on opening
+        this.clock.tick(10);
+
+        numberBox.option('value', 'test'); // second request because of filter changing
+        this.clock.tick(10);
+        numberBox.option('value', ''); // third request because of filter changing
+        this.clock.tick(10);
+
+        selectBox.option('value', 1); // NO request cause changing lookup filter itself
+        this.clock.tick(10);
+
+        // assert
+
+        const groupRequests = load.getCalls().map(l => l.args[0]).filter(l => l.group);
+
+        assert.deepEqual(groupRequests.length, 3);
+    });
+
+    // T1093656, T1096053
+    QUnit.testInActiveWindow('Filter row editor should have focus when filterPanel is visible', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            filterRow: { visible: true },
+            columns: [
+                { dataField: 'field1' },
+                {
+                    dataField: 'field2',
+                    filterValue: 4,
+                    selectedFilterOperation: '='
+                }
+            ],
+            filterPanel: {
+                visible: true
+            },
+            dataSource: [{ field1: 1, field2: 2 }, { field1: 3, field2: 4 }]
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 1, 'row count');
+
+        // act
+        const $input = $(dataGrid.$element()).find('.dx-datagrid-filter-row').first().find('.dx-texteditor-input').first();
+        $input
+            .trigger('focus')
+            .val('1')
+            .trigger('change');
+        this.clock.tick(100);
+
+        // assert
+        const $focusedInput = $(dataGrid.$element()).find('.dx-datagrid-filter-row .dx-texteditor-input:focus');
+        assert.deepEqual($focusedInput.get(0), $input.get(0), 'filter cell has focus after filter applyed');
+        assert.strictEqual(dataGrid.getVisibleRows().length, 0, 'row count after filtering');
+        assert.deepEqual(dataGrid.option('filterValue'), [['field2', '=', 4], 'and', ['field1', '=', 1]], 'filterValue');
+    });
+
+    // T1129825
+    QUnit.testInActiveWindow('Header filter indicator should restore focus after closing header filter', function(assert) {
+        // arrange
+        createDataGrid({
+            headerFilter: { visible: true },
+            columns: [
+                { dataField: 'field1' },
+            ],
+            filterPanel: {
+                visible: true
+            },
+        });
+
+        this.clock.tick(100);
+
+        // act
+        $('.dx-header-filter').trigger('dxclick');
+        this.clock.tick(10);
+        $('.dx-button').eq(1).trigger('dxclick');
+        this.clock.tick(600);
+
+        // assert
+        assert.ok($('.dx-header-filter').is(':focus'), 'header filter indicator has focus');
+    });
+
+    // T1129825
+    QUnit.test('Filter should be updated after changing filterOperation when calculateFilterExpression returns getter func', function(assert) {
+        // arrange
+        const grid = createDataGrid({
+            dataSource: [{ a: 'asd' }],
+            columns: [{
+                dataField: 'a',
+                filterValue: 'a',
+                selectedFilterOperation: '=',
+                calculateFilterExpression: function(filterValue, selectedFilterOperation) {
+                    function getter(data) {
+                        if(selectedFilterOperation === 'contains') {
+                            return data.a.includes(filterValue);
+                        } else if(selectedFilterOperation === '=') {
+                            return data.a === filterValue;
+                        }
+                    }
+
+                    return [getter, '=', true];
+                }
+            }],
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(grid.getVisibleRows().length, 0);
+
+        // act
+        grid.option('columns[0].selectedFilterOperation', 'contains');
+        this.clock.tick(100);
+
+        // assert
+        assert.strictEqual(grid.getVisibleRows().length, 1);
+        assert.deepEqual(grid.getVisibleRows()[0].data, { a: 'asd' });
+    });
+
+    QUnit.test('Date in filter data should be serialized to string in correct format when focusedRowKey is set (T1147560)', function(assert) {
+        const actualFilterValues = [];
+        const expectedFilterValues = [
+            [
+                'Id', '=', 3
+            ],
+            [
+                [
+                    ['Date', '<', '10.00.00__31/00/2022'],
+                    'or',
+                    ['Date', '=', null]
+                ],
+                'or',
+                [
+                    ['Date', '=', '10.00.00__31/00/2022'],
+                    'and',
+                    [
+                        [
+                            ['Id', '<', 0],
+                            'or',
+                            ['Id', '=', null]
+                        ],
+                        'or',
+                        [
+                            ['Id', '=', 0],
+                            'and',
+                            ['Id', '<', 3]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        const loadedData = [
+            {
+                Id: 0,
+                Date: new Date(2023, 0, 0, 10),
+            },
+            {
+                Id: 1,
+                Date: new Date(2023, 0, 1, 10),
+            }
+        ];
+        const store = new ArrayStore({
+            data: [],
+            key: 'Id',
+        });
+        const originLoad = store.load;
+        store.load = sinon.spy(function(loadOptions) {
+            loadOptions.filter && actualFilterValues.push(loadOptions.filter);
+            return originLoad.call(store, loadOptions).then(() => {
+                return {
+                    data: loadedData,
+                    totalCount: 4,
+                };
+            });
+        });
+
+        createDataGrid({
+            dataSource: {
+                store,
+            },
+            columns: [
+                {
+                    dataField: 'Id',
+                },
+                {
+                    dataField: 'Date',
+                    dataType: 'date',
+                    sortOrder: 'asc',
+                },
+            ],
+            dateSerializationFormat: 'HH.mm.ss__dd/mm/yyyy',
+            remoteOperations: true,
+            focusedRowKey: 3,
+            focusedRowEnabled: true,
+        });
+
+        this.clock.tick(100);
+
+        assert.equal(actualFilterValues.length, expectedFilterValues.length);
+        assert.deepEqual(actualFilterValues[0], expectedFilterValues[0]);
+        assert.deepEqual(actualFilterValues[1], expectedFilterValues[1]);
     });
 });

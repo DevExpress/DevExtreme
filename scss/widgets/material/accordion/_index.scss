@@ -1,12 +1,13 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+@use "../../base/accordion";
 
 // adduse
-
 
 $material-accordion-disabled-opacity: 0.5;
 
@@ -62,19 +63,12 @@ $material-accordion-disabled-opacity: 0.5;
   }
 
   & > .dx-accordion-item-title {
-    height: $material-accordion-opened-title-height;
-
-    .dx-accordion-item-title-caption {
-      top: floor(($material-accordion-opened-title-height - $material-accordion-title-font-size) / 2);
-    }
-
     &::before {
       content: "\f014";
-      top: floor(($material-accordion-opened-title-height - $material-base-icon-size) / 2) - 2;
     }
   }
 
-  + .dx-accordion-item-closed {
+  + .dx-accordion-item {
     border-top: none;
   }
 }
@@ -88,14 +82,13 @@ $material-accordion-disabled-opacity: 0.5;
   .dx-accordion-item-title-caption,
   &::before {
     position: absolute;
-    transition: top 200ms cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: top;
   }
 
   .dx-accordion-item-title-caption {
     color: $accordion-title-color;
     font-size: $material-accordion-title-font-size;
-    top: floor(($material-accordion-title-height - $material-accordion-title-font-size) / 2);
+    font-weight: 500;
+    top: floor(math.div($material-accordion-title-height - $material-accordion-title-font-size, 2));
     left: $material-accordion-title-padding;
     right: $material-accordion-title-padding * 2 + $material-base-icon-size;
     text-overflow: ellipsis;
@@ -104,12 +97,12 @@ $material-accordion-disabled-opacity: 0.5;
   }
 
   &::before {
-    top: floor(($material-accordion-title-height - $material-base-icon-size) / 2) - 1;
+    top: floor(math.div($material-accordion-title-height - $material-base-icon-size, 2)) - 2;
     right: $material-accordion-title-padding;
     font-weight: normal;
     color: $accordion-icon-color;
     content: "\f016";
-    font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
+    font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
     font-size: $material-base-icon-size;
     height: $material-base-icon-size;
     width: $material-base-icon-size;

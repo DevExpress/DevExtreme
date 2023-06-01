@@ -1,212 +1,287 @@
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+import DataSource, { DataSourceLike } from '../data/data_source';
+
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
+import {
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo,
+} from './core/base_widget';
 
 import BaseSparkline, {
-    BaseSparklineOptions
+    BaseSparklineOptions,
 } from './sparklines/base_sparkline';
 
+import {
+    PointSymbol,
+} from '../common/charts';
+
+export {
+    PointSymbol,
+};
+
+/** @public */
+export type SparklineType = 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSparkline>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxSparkline>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxSparkline>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxSparkline> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = FileSavingEventInfo<dxSparkline>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxSparkline> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSparkline>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSparkline> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = EventInfo<dxSparkline>;
+
+/** @public */
+export type TooltipShownEvent = EventInfo<dxSparkline>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ * @docid
+ */
 export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     /**
-     * @docid dxSparkLineOptions.argumentField
-     * @type string
+     * @docid
      * @default 'arg'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     argumentField?: string;
     /**
-     * @docid dxSparkLineOptions.barNegativeColor
-     * @type string
+     * @docid
      * @default '#d7d7d7'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     barNegativeColor?: string;
     /**
-     * @docid dxSparkLineOptions.barPositiveColor
-     * @type string
+     * @docid
      * @default '#a9a9a9'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     barPositiveColor?: string;
     /**
-     * @docid dxSparkLineOptions.dataSource
-     * @extends CommonVizDataSource
-     * @prevFileNamespace DevExpress.viz
+     * @docid
+     * @notUsedInTheme
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: Array<any> | DataSource | DataSourceOptions | string;
+    dataSource?: DataSourceLike<any> | null;
     /**
-     * @docid dxSparkLineOptions.firstLastColor
-     * @type string
+     * @docid
      * @default '#666666'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     firstLastColor?: string;
     /**
-     * @docid dxSparkLineOptions.ignoreEmptyPoints
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     ignoreEmptyPoints?: boolean;
     /**
-     * @docid dxSparkLineOptions.lineColor
-     * @type string
+     * @docid
      * @default '#666666'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     lineColor?: string;
     /**
-     * @docid dxSparkLineOptions.lineWidth
-     * @type number
+     * @docid
      * @default 2
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     lineWidth?: number;
     /**
-     * @docid dxSparkLineOptions.lossColor
-     * @type string
+     * @docid
      * @default '#d7d7d7'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     lossColor?: string;
     /**
-     * @docid dxSparkLineOptions.maxColor
-     * @type string
+     * @docid
      * @default '#e55253'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     maxColor?: string;
     /**
-     * @docid dxSparkLineOptions.maxValue
-     * @type number
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     maxValue?: number;
     /**
-     * @docid dxSparkLineOptions.minColor
-     * @type string
+     * @docid
      * @default '#e8c267'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     minColor?: string;
     /**
-     * @docid dxSparkLineOptions.minValue
-     * @type number
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     minValue?: number;
     /**
-     * @docid dxSparkLineOptions.pointColor
-     * @type string
+     * @docid
      * @default '#ffffff'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     pointColor?: string;
     /**
-     * @docid dxSparkLineOptions.pointSize
-     * @type number
+     * @docid
      * @default 4
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     pointSize?: number;
     /**
-     * @docid dxSparkLineOptions.pointSymbol
-     * @type Enums.VizPointSymbol
+     * @docid
      * @default 'circle'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    pointSymbol?: 'circle' | 'cross' | 'polygon' | 'square' | 'triangle';
+    pointSymbol?: PointSymbol;
     /**
-     * @docid dxSparkLineOptions.showFirstLast
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     showFirstLast?: boolean;
     /**
-     * @docid dxSparkLineOptions.showMinMax
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     showMinMax?: boolean;
     /**
-     * @docid dxSparkLineOptions.type
-     * @type Enums.SparklineType
+     * @docid
      * @default 'line'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    type?: 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
+    type?: SparklineType;
     /**
-     * @docid dxSparkLineOptions.valueField
-     * @type string
+     * @docid
      * @default 'val'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     valueField?: string;
     /**
-     * @docid dxSparkLineOptions.winColor
-     * @type string
+     * @docid
      * @default '#a9a9a9'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     winColor?: string;
     /**
-     * @docid dxSparkLineOptions.winlossThreshold
-     * @type number
+     * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     winlossThreshold?: number;
 }
 /**
- * @docid dxSparkline
+ * @docid
  * @inherits BaseSparkline, DataHelperMixin
- * @module viz/sparkline
- * @export default
- * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxSparkline extends BaseSparkline {
-    constructor(element: Element, options?: dxSparklineOptions)
-    constructor(element: JQuery, options?: dxSparklineOptions)
+export default class dxSparkline extends BaseSparkline<dxSparklineOptions> {
     getDataSource(): DataSource;
 }
 
-declare global {
-interface JQuery {
-    dxSparkline(): JQuery;
-    dxSparkline(options: "instance"): dxSparkline;
-    dxSparkline(options: string): any;
-    dxSparkline(options: string, ...params: any[]): any;
-    dxSparkline(options: dxSparklineOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxSparklineOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSparklineOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxSparklineOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxSparklineOptions.onDisposing
+ * @type_function_param1 e:{viz/sparkline:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onDrawn
+ * @type_function_param1 e:{viz/sparkline:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onExported
+ * @type_function_param1 e:{viz/sparkline:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onExporting
+ * @type_function_param1 e:{viz/sparkline:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onFileSaving
+ * @type_function_param1 e:{viz/sparkline:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/sparkline:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onInitialized
+ * @type_function_param1 e:{viz/sparkline:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onOptionChanged
+ * @type_function_param1 e:{viz/sparkline:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onTooltipHidden
+ * @type_function_param1 e:{viz/sparkline:TooltipHiddenEvent}
+ */
+onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxSparklineOptions.onTooltipShown
+ * @type_function_param1 e:{viz/sparkline:TooltipShownEvent}
+ */
+onTooltipShown?: ((e: TooltipShownEvent) => void);
+};
+///#ENDDEBUG

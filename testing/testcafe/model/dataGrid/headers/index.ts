@@ -6,6 +6,8 @@ import FilterRow from '../filter/row';
 const CLASS = {
   headerRow: 'dx-header-row',
   filterRow: 'filter-row',
+  content: 'content',
+  contentFixed: 'content-fixed',
 };
 
 export default class Headers extends FocusableElement {
@@ -17,7 +19,7 @@ export default class Headers extends FocusableElement {
   }
 
   getHeaderRow(index: number): HeaderRow {
-    return new HeaderRow(this.element.find(`.${CLASS.headerRow}:nth-child(${index + 1})`), this.widgetName);
+    return new HeaderRow(this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.content)}:not(.${Widget.addClassPrefix(this.widgetName, CLASS.contentFixed)}) .${CLASS.headerRow}:nth-child(${index + 1})`), this.widgetName);
   }
 
   getFilterRow(): FilterRow {

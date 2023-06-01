@@ -6,6 +6,8 @@
 @use "../../base/icons" as *;
 @use "../menuBase/sizes" as *;
 @use "../menu/colors" as *;
+@use "../menu/sizes" as *;
+@use "../../base/contextMenu";
 
 // adduse
 @use "../overlay";
@@ -18,7 +20,7 @@
     color: $base-text-color;
 
     .dx-menu-item-content {
-      padding: 3px $material-context-menu-horizontal-padding 4px;
+      padding: $material-menu-vertical-padding $material-context-menu-horizontal-padding;
 
       .dx-menu-item-popout-container {
         right: $material-context-menu-horizontal-padding;
@@ -40,7 +42,7 @@
     &.dx-menu-item-has-text {
       &.dx-menu-item-has-icon {
         .dx-icon {
-          margin-right: $material-menu-item-with-icon-horizontal-padding - $material-menu-horizontal-padding - $material-base-icon-size;
+          margin-right: $material-menu-horizontal-padding;
         }
       }
     }

@@ -1,9 +1,8 @@
 import errors from '../../core/errors';
 import { each } from '../../core/utils/iterator';
-import { inArray } from '../../core/utils/array';
 import { RRule, RRuleSet } from 'rrule';
 import dateUtils from '../../core/utils/date';
-import timeZoneUtils from './utils.timeZone.js';
+import timeZoneUtils from './utils.timeZone';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -11,8 +10,11 @@ const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymont
 const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
 const days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
 const loggedWarnings = [];
+const MS_IN_HOUR = 1000 * 60 * 60;
+const MS_IN_DAY = MS_IN_HOUR * 24;
 
 let recurrence = null;
+
 export function getRecurrenceProcessor() {
     if(!recurrence) {
         recurrence = new RecurrenceProcessor();
@@ -28,35 +30,82 @@ class RecurrenceProcessor {
     }
 
     generateDates(options) {
-        const result = [];
         const recurrenceRule = this.evalRecurrenceRule(options.rule);
         const rule = recurrenceRule.rule;
 
         if(!recurrenceRule.isValid || !rule.freq) {
-            return result;
+            return [];
         }
 
-        const startDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.start);
-        const endDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.end);
-        const minDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.min);
-        const maxDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.max);
+        const rruleIntervalParams = this._createRruleIntervalParams(options);
 
-        const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
+        this._initializeRRule(options,
+            rruleIntervalParams.startIntervalDate,
+            rule.until);
 
-        this._initializeRRule(options, startDateUtc);
+        return this.rRuleSet.between(
+            rruleIntervalParams.minViewDate,
+            rruleIntervalParams.maxViewDate,
+            true
+        )
+            .filter((date) => date.getTime() + rruleIntervalParams.appointmentDuration >= rruleIntervalParams.minViewTime)
+            .map((date) => this._convertRruleResult(rruleIntervalParams, options, date));
+    }
 
-        const minTime = minDateUtc.getTime();
-        const leftBorder = this._getLeftBorder(options, minDateUtc, duration);
-        this.rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
-            const endAppointmentTime = date.getTime() + duration;
+    _createRruleIntervalParams(options) {
+        const { start, min, max, appointmentTimezoneOffset } = options;
+        // NOTE: Get local timezone offset of each Rrule date params.
+        const clientOffsets = {
+            startDate: timeZoneUtils.getClientTimezoneOffset(start),
+            minViewDate: timeZoneUtils.getClientTimezoneOffset(min),
+            maxViewDate: timeZoneUtils.getClientTimezoneOffset(max),
+        };
+        const duration = options.end ? options.end.getTime() - options.start.getTime() : 0;
 
-            if(endAppointmentTime >= minTime) {
-                const correctDate = timeZoneUtils.createDateFromUTCWithLocalOffset(date);
-                result.push(correctDate);
-            }
-        });
+        // NOTE: Remove local timezone offsets from Rrule date params.
+        const startIntervalDate = timeZoneUtils.setOffsetsToDate(options.start, [-clientOffsets.startDate, appointmentTimezoneOffset]);
+        const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentTimezoneOffset;
+        // NOTE: Shift minViewDate, because recurrent appointment may start before start view date.
+        const minViewDate = new Date(minViewTime - duration);
+        const maxViewDate = timeZoneUtils.setOffsetsToDate(options.max, [-clientOffsets.maxViewDate, appointmentTimezoneOffset]);
 
-        return result;
+        // NOTE: Check DST after start date without local timezone offset conversion.
+        const startDateDSTDifferenceMs = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(options.start, startIntervalDate);
+        const switchToSummerTime = startDateDSTDifferenceMs < 0;
+
+        return {
+            startIntervalDate,
+            minViewTime,
+            minViewDate,
+            maxViewDate,
+            startIntervalDateDSTShift: switchToSummerTime ? 0 : startDateDSTDifferenceMs,
+            appointmentDuration: duration,
+        };
+    }
+
+    _convertRruleResult(rruleIntervalParams, options, rruleDate) {
+        const localTimezoneOffset = timeZoneUtils.getClientTimezoneOffset(rruleDate);
+        // NOTE: Workaround for the RRule bug with timezones greater than GMT+12 (e.g. Apia Standard Time GMT+13)
+        // GitHub issue: https://github.com/jakubroztocil/rrule/issues/555
+        const additionalWorkaroundOffsetForRrule =
+            localTimezoneOffset / MS_IN_HOUR <= -13 ? -MS_IN_DAY : 0;
+        const convertedBackDate = timeZoneUtils.setOffsetsToDate(
+            rruleDate, [
+                localTimezoneOffset,
+                additionalWorkaroundOffsetForRrule,
+                -options.appointmentTimezoneOffset,
+                rruleIntervalParams.startIntervalDateDSTShift,
+            ]);
+        const convertedDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(convertedBackDate, rruleDate);
+        const switchToSummerTime = convertedDateDSTShift < 0;
+        const resultDate = timeZoneUtils.setOffsetsToDate(convertedBackDate, [convertedDateDSTShift]);
+        const resultDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(resultDate, convertedBackDate);
+
+        if(resultDateDSTShift && switchToSummerTime) {
+            return new Date(resultDate.getTime() + resultDateDSTShift);
+        }
+
+        return resultDate;
     }
 
     hasRecurrence(options) {
@@ -92,11 +141,14 @@ class RecurrenceProcessor {
             }
         }
 
-        return result;
+        return result.map(item => {
+            const match = item.match(/[A-Za-z]+/);
+            return !!match && match[0];
+        }).filter(item => !!item);
     }
 
     getAsciiStringByDate(date) {
-        const currentOffset = this._getTimeZoneOffset() * toMs('minute');
+        const currentOffset = date.getTimezoneOffset() * toMs('minute');
         const offsetDate = new Date(date.getTime() + currentOffset);
 
         return offsetDate.getFullYear() + ('0' + (offsetDate.getMonth() + 1)).slice(-2) + ('0' + offsetDate.getDate()).slice(-2) +
@@ -128,28 +180,42 @@ class RecurrenceProcessor {
         return result.toUpperCase();
     }
 
-    getDateByAsciiString(string, initialDate) {
-        if(typeof string !== 'string') {
-            return string;
+    _parseExceptionToRawArray(value) {
+        return value.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
+    }
+
+    getDateByAsciiString(exceptionText) {
+        if(typeof exceptionText !== 'string') {
+            return exceptionText;
         }
 
-        const arrayDate = string.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
+        const result = this._parseExceptionToRawArray(exceptionText);
 
-        if(!arrayDate) {
+        if(!result) {
             return null;
         }
 
-        const isUTCString = arrayDate[8] !== undefined;
-        let currentOffset = initialDate ? initialDate.getTimezoneOffset() : this._getTimeZoneOffset();
-        let date = new (Function.prototype.bind.apply(Date, this._prepareDateArrayToParse(arrayDate)))();
+        const [year, month, date, hours, minutes, seconds, isUtc] = this._createDateTuple(result);
 
-        currentOffset = currentOffset * toMs('minute');
-
-        if(isUTCString) {
-            date = new Date(date.getTime() - currentOffset);
+        if(isUtc) {
+            return new Date(Date.UTC(
+                year,
+                month,
+                date,
+                hours,
+                minutes,
+                seconds)
+            );
         }
 
-        return date;
+        return new Date(
+            year,
+            month,
+            date,
+            hours,
+            minutes,
+            seconds
+        );
     }
 
     _dispose() {
@@ -167,7 +233,7 @@ class RecurrenceProcessor {
         return new Date().getTimezoneOffset();
     }
 
-    _initializeRRule(options, startDateUtc) {
+    _initializeRRule(options, startDateUtc, until) {
         const ruleOptions = RRule.parseString(options.rule);
         const firstDayOfWeek = options.firstDayOfWeek;
 
@@ -178,13 +244,27 @@ class RecurrenceProcessor {
             ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
         }
 
+        if(until) {
+            ruleOptions.until = timeZoneUtils.setOffsetsToDate(until,
+                [-timeZoneUtils.getClientTimezoneOffset(until), options.appointmentTimezoneOffset]);
+        }
+
         this._createRRule(ruleOptions);
 
         if(options.exception) {
-            const splitDates = options.exception.split(',');
-            const exceptDates = this._getDatesByRecurrenceException(splitDates, startDateUtc);
-            exceptDates.forEach(date => {
-                const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
+            const exceptionStrings = options.exception;
+            const exceptionDates = exceptionStrings
+                .split(',')
+                .map(rule => this.getDateByAsciiString(rule));
+
+            exceptionDates.forEach(date => {
+                if(options.getPostProcessedException) {
+                    date = options.getPostProcessedException(date);
+                }
+
+                const utcDate = timeZoneUtils.setOffsetsToDate(date,
+                    [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset]);
+
                 this.rRuleSet.exdate(utcDate);
             });
         }
@@ -193,26 +273,10 @@ class RecurrenceProcessor {
     _createRRule(ruleOptions) {
         this._dispose();
 
-        const rRuleSet = new RRuleSet();
-
-        this.rRuleSet = rRuleSet;
+        this.rRuleSet = new RRuleSet();
         this.rRule = new RRule(ruleOptions);
 
         this.rRuleSet.rrule(this.rRule);
-    }
-
-    _getLeftBorder(options, minDateUtc, appointmentDuration) {
-        if(options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end)) {
-            return new Date(minDateUtc.getTime() - appointmentDuration);
-        }
-
-        return minDateUtc;
-    }
-
-    _getDatesByRecurrenceException(ruleValues, date) {
-        const result = [];
-        ruleValues.forEach(rule => result.push(this.getDateByAsciiString(rule, date)));
-        return result;
     }
 
     _parseRecurrenceRule(recurrence) {
@@ -250,28 +314,38 @@ class RecurrenceProcessor {
         return ruleObject;
     }
 
-    _prepareDateArrayToParse(arrayDate) {
-        arrayDate.shift();
+    _createDateTuple(parseResult) {
+        const isUtc = parseResult[8] !== undefined;
 
-        if(arrayDate[3] === undefined) {
-            arrayDate.splice(3);
+        parseResult.shift();
+
+        if(parseResult[3] === undefined) {
+            parseResult.splice(3);
         } else {
-            arrayDate.splice(3, 1);
-            arrayDate.splice(6);
+            parseResult.splice(3, 1);
+            parseResult.splice(6);
         }
 
-        arrayDate[1]--;
+        parseResult[1]--;
 
-        arrayDate.unshift(null);
+        parseResult.unshift(null);
 
-        return arrayDate;
+        return [
+            parseInt(parseResult[1]),
+            parseInt(parseResult[2]),
+            parseInt(parseResult[3]),
+            parseInt(parseResult[4]) || 0,
+            parseInt(parseResult[5]) || 0,
+            parseInt(parseResult[6]) || 0,
+            isUtc
+        ];
     }
 }
 
 class RecurrenceValidator {
     validateRRule(rule, recurrence) {
         if(this._brokenRuleNameExists(rule) ||
-            inArray(rule.freq, freqNames) === -1 ||
+            !freqNames.includes(rule.freq) ||
             this._wrongCountRule(rule) || this._wrongIntervalRule(rule) ||
             this._wrongDayOfWeek(rule) ||
             this._wrongByMonthDayRule(rule) || this._wrongByMonth(rule) ||
@@ -362,7 +436,7 @@ class RecurrenceValidator {
         let brokenRuleExists = false;
 
         each(rule, function(ruleName) {
-            if(inArray(ruleName, ruleNames) === -1) {
+            if(!ruleNames.includes(ruleName)) {
                 brokenRuleExists = true;
                 return false;
             }
@@ -372,7 +446,7 @@ class RecurrenceValidator {
     }
 
     _logBrokenRule(recurrence) {
-        if(inArray(recurrence, loggedWarnings) === -1) {
+        if(!loggedWarnings.includes(recurrence)) {
             errors.log('W0006', recurrence);
             loggedWarnings.push(recurrence);
         }

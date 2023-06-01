@@ -1,10 +1,11 @@
 import $ from 'jquery';
 import Class from 'core/class';
-import { DataController } from 'ui/pivot_grid/ui.pivot_grid.data_controller';
-import virtualScrolling from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
+import { DataController } from '__internal/grids/pivot_grid/data_controller/module';
+import virtualScrolling from '__internal/grids/grid_core/virtual_scrolling/module_core';
 import stateStoring from 'ui/grid_core/ui.grid_core.state_storing_core';
-import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
-import PivotGridDataSource from 'ui/pivot_grid/data_source';
+import pivotGridUtils from '__internal/grids/pivot_grid/module_widget_utils';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/module';
+
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 const moduleConfig = {
@@ -14,7 +15,7 @@ const moduleConfig = {
         const stateStoringController = sinon.createStubInstance(StateStoringController);
         stateStoringController.init.returns(stateStoringController);
 
-        sinon.stub(stateStoring, 'StateStoringController', function() {
+        sinon.stub(stateStoring, 'StateStoringController').callsFake(function() {
             return stateStoringController;
         });
 
@@ -2498,7 +2499,7 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
         dataController.updateViewOptions({
             showColumnTotals: false,
             texts: {
-                grandTotal: 'Итого'
+                grandTotal: 'Total'
             }
         });
 
@@ -2508,7 +2509,7 @@ QUnit.module('dxPivotGrid DataController', moduleConfig, () => {
                 [
                     { text: 'A', colspan: 2, expanded: true, path: ['A'], type: 'D' },
                     { text: 'C1', rowspan: 2, expanded: false, path: ['C1'], type: 'D', isLast: true },
-                    { text: 'Итого', rowspan: 2, type: 'GT', isLast: true }],
+                    { text: 'Total', rowspan: 2, type: 'GT', isLast: true }],
                 [
                     { text: 'P1', type: 'D', path: ['A', 'P1'], isLast: true, width: 100 },
                     { text: 'P2', type: 'D', path: ['A', 'P2'], isLast: true, width: 100 }
@@ -4381,7 +4382,7 @@ QUnit.module('Virtual scrolling', {
 
         const VirtualScrollController = virtualScrolling.VirtualScrollController;
 
-        this.VirtualScrollController = sinon.stub(virtualScrolling, 'VirtualScrollController', function() {
+        this.VirtualScrollController = sinon.stub(virtualScrolling, 'VirtualScrollController').callsFake(function() {
             return sinon.createStubInstance(VirtualScrollController);
         });
 
@@ -4475,16 +4476,16 @@ QUnit.module('Virtual scrolling', {
         assert.strictEqual(columnsScrollController.viewportItemSize.firstCall.args[0], 15);
 
         assert.strictEqual(columnsScrollController.viewportSize.lastCall.args[0], 15);
-        assert.strictEqual(columnsScrollController.setContentSize.lastCall.args[0], itemWidths);
+        assert.strictEqual(columnsScrollController.setContentItemSizes.lastCall.args[0], itemWidths);
 
         assert.strictEqual(rowsScrollController.viewportSize.lastCall.args[0], 10);
-        assert.strictEqual(rowsScrollController.setContentSize.lastCall.args[0], itemHeights);
+        assert.strictEqual(rowsScrollController.setContentItemSizes.lastCall.args[0], itemHeights);
 
         assert.strictEqual(rowsScrollController.loadIfNeed.callCount, 1);
         assert.strictEqual(columnsScrollController.loadIfNeed.callCount, 1);
 
-        assert.ok(rowsScrollController.loadIfNeed.calledAfter(rowsScrollController.setContentSize));
-        assert.ok(columnsScrollController.loadIfNeed.calledAfter(columnsScrollController.setContentSize));
+        assert.ok(rowsScrollController.loadIfNeed.calledAfter(rowsScrollController.setContentItemSizes));
+        assert.ok(columnsScrollController.loadIfNeed.calledAfter(columnsScrollController.setContentItemSizes));
 
         assert.deepEqual(result, {
             contentLeft: 150,

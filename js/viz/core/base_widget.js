@@ -4,7 +4,6 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import { isNumeric, isFunction, isDefined, isObject as _isObject, type } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import _windowResizeCallbacks from '../../core/utils/resize_callbacks';
 import { extend } from '../../core/utils/extend';
 import { BaseThemeManager } from '../core/base_theme_manager';
 import DOMComponent from '../../core/dom_component';
@@ -12,16 +11,19 @@ import { changes, replaceInherit } from './helpers';
 import { parseScalar as _parseScalar } from './utils';
 import warnings from './errors_warnings';
 import { Renderer } from './renderers/renderer';
+import { getWidth, getHeight } from '../../core/utils/size';
 import _Layout from './layout';
 import devices from '../../core/devices';
 import eventsEngine from '../../events/core/events_engine';
 import { when } from '../../core/utils/deferred';
+import { getGraphicObjects } from '../../common/charts';
 import {
     createEventTrigger,
     createResizeHandler,
     createIncidentOccurred } from './base_widget.utils';
 const _floor = Math.floor;
 const _log = warnings.log;
+const SIZE_CHANGING_THRESHOLD = 0.3;
 
 const OPTION_RTL_ENABLED = 'rtlEnabled';
 
@@ -38,7 +40,7 @@ function getFalse() {
 }
 
 function areCanvasesDifferent(canvas1, canvas2) {
-    return !(canvas1.width === canvas2.width && canvas1.height === canvas2.height &&
+    return !(Math.abs(canvas1.width - canvas2.width) < SIZE_CHANGING_THRESHOLD && Math.abs(canvas1.height - canvas2.height) < SIZE_CHANGING_THRESHOLD &&
         canvas1.left === canvas2.left && canvas1.top === canvas2.top && canvas1.right === canvas2.right && canvas1.bottom === canvas2.bottom);
 }
 
@@ -111,6 +113,14 @@ function callForEach(functions) {
     functions.forEach(c => c());
 }
 
+function floorCanvasDimensions(canvas) {
+    return {
+        ...canvas,
+        height: _floor(canvas.height),
+        width: _floor(canvas.width)
+    };
+}
+
 const isServerSide = !hasWindow();
 
 function sizeIsValid(value) {
@@ -119,8 +129,8 @@ function sizeIsValid(value) {
 
 const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _eventsMap: {
-        'onIncidentOccurred': { name: 'incidentOccurred' },
-        'onDrawn': { name: 'drawn' }
+        'onIncidentOccurred': { name: 'incidentOccurred', actionSettings: { excludeValidators: ['disabled'] } },
+        'onDrawn': { name: 'drawn', actionSettings: { excludeValidators: ['disabled'] } }
     },
 
     _getDefaultOptions: function() {
@@ -135,6 +145,8 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const that = this;
 
         that._$element.children('.' + SIZED_ELEMENT_CLASS).remove();
+
+        that._graphicObjects = {};
 
         that.callBase.apply(that, arguments);
         that._changesLocker = 0;
@@ -212,6 +224,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             that._applyChanges();
             that._changes.reset();
             that._applyingChanges = false;
+            that._changesApplied();
             that._renderer.unlock();
             if(that._optionsQueue) {
                 that._applyQueuedOptions();
@@ -384,7 +397,8 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _initRenderer: function() {
         const that = this;
         // Canvas is calculated before the renderer is created in order to capture actual size of the container
-        that._canvas = that._calculateCanvas();
+        const rawCanvas = that._calculateRawCanvas();
+        that._canvas = floorCanvasDimensions(rawCanvas);
         that._renderer = new Renderer({ cssClass: that._rootClassPrefix + ' ' + that._rootClass, pathModified: that.option('pathModified'), container: that._$element[0] });
         that._renderer.resize(that._canvas.width, that._canvas.height);
     },
@@ -395,6 +409,13 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         this._useLinks && this._renderer.root.checkLinks();
         ///#ENDDEBUG
         this._renderer.dispose();
+    },
+
+    _disposeGraphicObjects: function() {
+        for(const id in this._graphicObjects) {
+            this._graphicObjects[id].dispose();
+        }
+        this._graphicObjects = null;
     },
 
     _getAnimationOptions: noop,
@@ -430,6 +451,11 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _dispose: function() {
         const that = this;
+
+        if(this._disposed) {
+            return;
+        }
+
         that.callBase.apply(that, arguments);
         that._toggleParentsScrollSubscription(false);
         that._removeResizeHandler();
@@ -437,6 +463,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         that._eventTrigger.dispose();
         that._disposeCore();
         that._disposePlugins();
+        that._disposeGraphicObjects();
         that._disposeRenderer();
         that._themeManager.dispose();
         that._themeManager = that._renderer = that._eventTrigger = null;
@@ -444,26 +471,28 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _initEventTrigger: function() {
         const that = this;
-        that._eventTrigger = createEventTrigger(that._eventsMap, function(name) { return that._createActionByOption(name); });
+        that._eventTrigger = createEventTrigger(that._eventsMap, function(name, actionSettings) {
+            return that._createActionByOption(name, actionSettings);
+        });
     },
 
-    _calculateCanvas: function() {
+    _calculateRawCanvas: function() {
         const that = this;
         const size = that.option('size') || {};
         const margin = that.option('margin') || {};
         const defaultCanvas = that._getDefaultSize() || {};
-        const getSizeOfSide = (size, side) => {
+        const getSizeOfSide = (size, side, getter) => {
             if(sizeIsValid(size[side]) || !hasWindow()) {
                 return 0;
             }
-            const elementSize = that._$element[side]();
+            const elementSize = getter(that._$element);
             return elementSize <= 1 ? 0 : elementSize;
         };
-        const elementWidth = getSizeOfSide(size, 'width');
-        const elementHeight = getSizeOfSide(size, 'height');
+        const elementWidth = getSizeOfSide(size, 'width', (x) => getWidth(x));
+        const elementHeight = getSizeOfSide(size, 'height', (x) => getHeight(x));
         let canvas = {
-            width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
-            height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),
+            width: size.width <= 0 ? 0 : pickPositiveValue([size.width, elementWidth, defaultCanvas.width]),
+            height: size.height <= 0 ? 0 : pickPositiveValue([size.height, elementHeight, defaultCanvas.height]),
             left: pickPositiveValue([margin.left, defaultCanvas.left]),
             top: pickPositiveValue([margin.top, defaultCanvas.top]),
             right: pickPositiveValue([margin.right, defaultCanvas.right]),
@@ -479,13 +508,12 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _updateSize: function() {
         const that = this;
-        const canvas = that._calculateCanvas();
+        const rawCanvas = that._calculateRawCanvas();
 
-        that._renderer.fixPlacement();
-        if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /* for charts */) {
-            that._canvas = canvas;
+        if(areCanvasesDifferent(that._canvas, rawCanvas) || that.__forceRender /* for charts */) {
+            that._canvas = floorCanvasDimensions(rawCanvas);
             that._recreateSizeDependentObjects(true);
-            that._renderer.resize(canvas.width, canvas.height);
+            that._renderer.resize(this._canvas.width, this._canvas.height);
             that._change(['LAYOUT']);
         }
     },
@@ -526,27 +554,19 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _setupResizeHandler: function() {
         const that = this;
-        const redrawOnResize = _parseScalar(this._getOption('redrawOnResize', true), true);
+        const redrawOnResize = _parseScalar(that._getOption('redrawOnResize', true), true);
 
-        if(that._resizeHandler) {
+        if(that._disposeResizeHandler) {
             that._removeResizeHandler();
         }
 
-        that._resizeHandler = createResizeHandler(function() {
-            if(redrawOnResize) {
-                that._requestChange(['CONTAINER_SIZE']);
-            } else {
-                that._renderer.fixPlacement();
-            }
-        });
-        _windowResizeCallbacks.add(that._resizeHandler);
+        that._disposeResizeHandler = createResizeHandler(that._$element[0], redrawOnResize, () => that._requestChange(['CONTAINER_SIZE']));
     },
 
     _removeResizeHandler: function() {
-        if(this._resizeHandler) {
-            _windowResizeCallbacks.remove(this._resizeHandler);
-            this._resizeHandler.dispose();
-            this._resizeHandler = null;
+        if(this._disposeResizeHandler) {
+            this._disposeResizeHandler();
+            this._disposeResizeHandler = null;
         }
     },
 
@@ -623,6 +643,8 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     },
 
     _notify: noop,
+
+    _changesApplied: noop,
 
     _optionChangesMap: {
         size: 'CONTAINER_SIZE',
@@ -717,6 +739,28 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     _resetIsReady: function() {
         this.isReady = getFalse;
+    },
+
+    _renderGraphicObjects: function() {
+        const renderer = this._renderer;
+        const graphics = getGraphicObjects();
+        for(const id in graphics) {
+            if(!this._graphicObjects[id]) {
+                const { type, colors, rotationAngle, template, width, height } = graphics[id];
+
+                switch(type) {
+                    case 'linear':
+                        this._graphicObjects[id] = renderer.linearGradient(colors, id, rotationAngle);
+                        break;
+                    case 'radial':
+                        this._graphicObjects[id] = renderer.radialGradient(colors, id);
+                        break;
+                    case 'pattern':
+                        this._graphicObjects[id] = renderer.customPattern(id, this._getTemplate(template), width, height);
+                        break;
+                }
+            }
+        }
     },
 
     _drawn: function() {

@@ -105,9 +105,14 @@ const GestureEmitter = Emitter.inherit({
             return;
         }
 
+        if(this.immediateTimeout === 0) {
+            this._immediateAccepted = true;
+            return;
+        }
+
         this._immediateTimer = setTimeout((function() {
             this._immediateAccepted = true;
-        }).bind(this), IMMEDIATE_TIMEOUT);
+        }).bind(this), this.immediateTimeout ?? IMMEDIATE_TIMEOUT);
     },
 
     move: function(e) {

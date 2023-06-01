@@ -79,11 +79,11 @@ export default class FormItemsRunTimeInfo {
         return this._findWidgetInstance(storedItem => storedItem === item);
     }
 
-    getGroupOrTabLayoutManagerByPath(targetPath) {
+    findGroupOrTabLayoutManagerByPath(targetPath) {
         return this._findFieldByCondition(({ path }) => path === targetPath, 'layoutManager');
     }
 
-    getKeyByPath(targetPath) {
+    findKeyByPath(targetPath) {
         return this._findFieldByCondition(({ path }) => path === targetPath, 'guid');
     }
 
@@ -108,6 +108,10 @@ export default class FormItemsRunTimeInfo {
         return this._findFieldByCondition(({ item }) => item === targetItem, 'itemIndex');
     }
 
+    findPreparedItemByItem(item) {
+        return this._findFieldByCondition(({ item: currentItem }) => currentItem === item, 'preparedItem');
+    }
+
     getItems() {
         return this._map;
     }
@@ -120,7 +124,12 @@ export default class FormItemsRunTimeInfo {
 
     removeItemsByPathStartWith(path) {
         const keys = Object.keys(this._map);
-        const filteredKeys = keys.filter(key => this._map[key].path.indexOf(path, 0) > -1);
+        const filteredKeys = keys.filter(key => {
+            if(this._map[key].path) {
+                return this._map[key].path.indexOf(path, 0) > -1;
+            }
+            return false;
+        });
         filteredKeys.forEach(key => this.removeItemByKey(key));
     }
 }

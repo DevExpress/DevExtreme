@@ -60,8 +60,7 @@ QUnit.test('Show tooltip', function(assert) {
         percentText: 'percent-formatted',
         item: testItem
     }, 'show arg0');
-    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 }, 'show arg1');
-    assert.deepEqual(this.tooltip.move.lastCall.args, [440, 330, 0], 'move');
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 440, y: 330, offset: 0 }, 'show arg1');
     assert.equal(this.tooltip.formatValue.args[0][0], 1);
 });
 
@@ -73,25 +72,26 @@ QUnit.test('Show tooltip, async render', function(assert) {
     });
     const testItem = widget.getAllItems()[0];
 
-    this.tooltip.stub('formatValue').withArgs(0.2, 'percent').returns('percent-formatted');
-
     testItem.showTooltip();
 
-    assert.equal(this.tooltip.hide.callCount, 1);
-
     this.tooltip.show.lastCall.args[4](true);
-    assert.equal(this.tooltip.move.callCount, 1);
+    assert.ok(!this.tooltip.hide.called);
 });
 
-QUnit.test('Show tooltip with passed coords', function(assert) {
+QUnit.test('Hide tooltip if it does not render, async render', function(assert) {
+    this.tooltip.stub('show').returns(undefined);
     const widget = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }]
     });
+    const testItem = widget.getAllItems()[0];
 
-    widget.getAllItems()[0].showTooltip([100, 200]);
+    testItem.showTooltip();
 
-    assert.deepEqual(this.tooltip.move.lastCall.args, [100, 200, 0], 'move');
+    assert.ok(!this.tooltip.hide.called);
+
+    this.tooltip.show.lastCall.args[4](false);
+    assert.ok(this.tooltip.hide.called);
 });
 
 QUnit.test('Only move tooltip if it shown on item', function(assert) {
@@ -133,8 +133,7 @@ QUnit.test('Show tooltip on different items', function(assert) {
         percent: 0.5,
         item: testItem
     }, 'show arg0');
-    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 }, 'show arg1');
-    assert.deepEqual(this.tooltip.move.lastCall.args, [100, 100, 0], 'move');
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 100, y: 100, offset: 0 }, 'show arg1');
 });
 
 QUnit.test('Hide tooltip', function(assert) {

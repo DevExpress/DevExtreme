@@ -7,7 +7,6 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require('common.css!');
 require('generic_light.css!');
 
 const fx = require('animation/fx');
@@ -15,6 +14,7 @@ const dragEvents = require('events/drag');
 const DataSource = require('data/data_source/data_source').DataSource;
 
 require('ui/scheduler/ui.scheduler');
+require('ui/drop_down_button');
 
 QUnit.module('Integration: recurrence rules validation', {
     beforeEach: function() {
@@ -99,5 +99,5 @@ QUnit.test('Confirmation dialog should not be shown if rrule is invalid', functi
     $(this.instance.$element()).find('.dx-scheduler-date-table-cell').eq(5).trigger(dragEvents.enter);
     $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0).trigger(dragEvents.end);
 
-    assert.notOk($('.dx-dialog.dx-overlay-modal').length, 'Dialog was not shown');
+    assert.notOk($('.dx-dialog').length, 'Dialog was not shown');
 });

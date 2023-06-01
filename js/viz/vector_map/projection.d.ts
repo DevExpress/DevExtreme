@@ -1,71 +1,59 @@
+/** @public */
+export type VectorMapProjection = 'equirectangular' | 'lambert' | 'mercator' | 'miller';
+
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ * @type object
+ */
 export interface VectorMapProjectionConfig {
     /**
-     * @docid VectorMapProjectionConfig.aspectRatio
-     * @type number
+     * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     aspectRatio?: number;
     /**
-     * @docid VectorMapProjectionConfig.from
-     * @type function
-     * @type_function_param1 coordinates:Array<number>
-     * @type_function_return Array<number>
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     from?: ((coordinates: Array<number>) => Array<number>);
     /**
-     * @docid VectorMapProjectionConfig.to
-     * @type function
-     * @type_function_param1 coordinates:Array<number>
-     * @type_function_return Array<number>
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     to?: ((coordinates: Array<number>) => Array<number>);
 }
 
-type Projection = (data: VectorMapProjectionConfig) => any;
-
-type ProjectionMethods = {
-    /**
-     * @docid viz.map.projectionmethods.add
-     * @publicName add(name, projection)
-     * @param1 name:string
-     * @param2 projection:VectorMapProjectionConfig|object
-     * @namespace DevExpress.viz.map.projection
-     * @static
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    add(name: string, projection: VectorMapProjectionConfig | any): void;
-
-    /**
-     * @docid viz.map.projectionmethods.get
-     * @publicName get(name)
-     * @param1 name:Enums.VectorMapProjection|string
-     * @return object
-     * @namespace DevExpress.viz.map.projection
-     * @static
-     * @hidden
-     * @prevFileNamespace DevExpress.viz
-     */
-    get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;
-}
-
 /**
- * @docid viz.mapmethods.projection
+ * @docid viz.map.projection
  * @publicName projection(data)
  * @param1 data:VectorMapProjectionConfig
  * @return object
  * @static
  * @namespace DevExpress.viz.map
- * @module viz/vector_map/projection
- * @export projection
- * @hidden
- * @prevFileNamespace DevExpress.viz
  */
-export const projection: Projection & ProjectionMethods;
+// eslint-disable-next-line @typescript-eslint/init-declarations
+export const projection: {
+    /**
+     * @docid viz.map.projection.add
+     * @publicName add(name, projectionConfig)
+     * @param2 projectionConfig:VectorMapProjectionConfig|object
+     * @namespace DevExpress.viz.map.projection
+     * @static
+     * @public
+     */
+    add(name: string, projectionConfig: VectorMapProjectionConfig | any): void;
 
+    /**
+     * @docid viz.map.projection.get
+     * @publicName get(name)
+     * @return object
+     * @namespace DevExpress.viz.map.projection
+     * @static
+     * @hidden
+     */
+    get(name: VectorMapProjection | string): any;
+
+    (data: VectorMapProjectionConfig): any;
+};

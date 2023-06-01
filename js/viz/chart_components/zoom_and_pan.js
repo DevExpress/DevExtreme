@@ -12,9 +12,11 @@ const DRAG_START_EVENT_NAME = dragEventStart + EVENTS_NS;
 const DRAG_EVENT_NAME = dragEventMove + EVENTS_NS;
 const DRAG_END_EVENT_NAME = dragEventEnd + EVENTS_NS;
 
+/* eslint-disable import/namespace */
 const PINCH_START_EVENT_NAME = transformEvents['pinchstart'] + EVENTS_NS;
 const PINCH_EVENT_NAME = transformEvents['pinch'] + EVENTS_NS;
 const PINCH_END_EVENT_NAME = transformEvents['pinchend'] + EVENTS_NS;
+/* eslint-enable import/namespace */
 
 const SCROLL_BAR_START_EVENT_NAME = 'dxc-scroll-start' + EVENTS_NS;
 const SCROLL_BAR_MOVE_EVENT_NAME = 'dxc-scroll-move' + EVENTS_NS;
@@ -59,8 +61,52 @@ function sortAxes(axes, onlyAxisToNotify) {
     return axes;
 }
 
-function isNotEmptyAxisBusinessRange(axis) {
-    return !axis.getTranslator().getBusinessRange().isEmpty();
+function getFilteredAxes(axes) {
+    return axes.filter(a => !a.getTranslator().getBusinessRange().isEmpty());
+}
+
+function isAxisAvailablePanning(axes) {
+    return axes.some(axis => !axis.isExtremePosition(false) || !axis.isExtremePosition(true));
+}
+
+function axisZoom(axis, onlyAxisToNotify, getRange, getParameters, actionField, scale, e) {
+    const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
+    const range = getRange(axis);
+
+    const { stopInteraction, correctedRange } = axis.checkZoomingLowerLimitOvercome(actionField, scale, range);
+
+    const result = axis.handleZooming(stopInteraction ? null : correctedRange, getParameters(silent), e, actionField);
+    stopInteraction && axis.handleZoomEnd();
+    return { stopInteraction, result };
+}
+
+function zoomAxes(e, axes, getRange, zoom, params, onlyAxisToNotify) {
+    axes = sortAxes(axes, onlyAxisToNotify);
+    let zoomStarted = false;
+    const getParameters = (silent) => {
+        return { start: !!silent, end: !!silent };
+    };
+    getFilteredAxes(axes).some(axis => {
+        const translator = axis.getTranslator();
+        const scale = translator.getMinScale(zoom);
+        const {
+            stopInteraction,
+            result
+        } = axisZoom(axis, onlyAxisToNotify, getRange({ scale, translator, axis, ...params }), getParameters, 'zoom', scale, e);
+        zoomStarted = !stopInteraction;
+        return onlyAxisToNotify && result.isPrevented;
+    });
+
+    return zoomStarted;
+}
+
+function cancelEvent(e) {
+    if(e.originalEvent) {
+        cancelEvent(e.originalEvent);
+    }
+    if(e.cancelable !== false) {
+        e.cancel = true;
+    }
 }
 
 export default {
@@ -69,61 +115,49 @@ export default {
         const chart = this;
         const renderer = this._renderer;
 
-        function cancelEvent(e) {
-            if(e.originalEvent) {
-                cancelEvent(e.originalEvent);
-            }
-            if(e.cancelable !== false) {
-                e.cancel = true;
-            }
-        }
-
-        function startAxesViewportChanging(zoomAndPan, actionField, e) {
+        function getAxesCopy(zoomAndPan, actionField) {
+            let axes = [];
             const options = zoomAndPan.options;
             const actionData = zoomAndPan.actionData;
-            let axes = [];
             if(options.argumentAxis[actionField]) {
                 axes.push(chart.getArgumentAxis());
             }
             if(options.valueAxis[actionField]) {
                 axes = axes.concat(actionData.valueAxes);
             }
+            return axes;
+        }
 
-            axes.reduce((isPrevented, axis) => {
-                if(isPrevented) {
-                    return isPrevented;
-                }
-                if(isNotEmptyAxisBusinessRange(axis)) {
-                    return axis.handleZooming(null, { end: true }, e, actionField).isPrevented;
-                }
-                return isPrevented;
-            }, false) && cancelEvent(e);
+        function startAxesViewportChanging(zoomAndPan, actionField, e) {
+            const axes = getAxesCopy(zoomAndPan, actionField);
+
+            getFilteredAxes(axes).some((axis) => axis.handleZooming(null, { end: true }, e, actionField).isPrevented) && cancelEvent(e);
         }
 
         function axesViewportChanging(zoomAndPan, actionField, e, offsetCalc, centerCalc) {
             function zoomAxes(axes, criteria, coordField, e, actionData) {
                 let zoom = { zoomed: false };
-                criteria && axes.filter(isNotEmptyAxisBusinessRange).forEach(axis => {
+                criteria && getFilteredAxes(axes).forEach(axis => {
                     const options = axis.getOptions();
                     const viewport = axis.visualRange();
                     const scale = axis.getTranslator().getEventScale(e);
                     const translate = -offsetCalc(e, actionData, coordField, scale);
                     zoom = extend(true, zoom, axis.getTranslator().zoom(translate, scale, axis.getZoomBounds()));
                     const range = axis.adjustRange(getVizRangeObject([zoom.min, zoom.max]));
-                    const isMinZoom = axis.isZoomingLowerLimitOvercome(actionField, scale, range);
+                    const { stopInteraction, correctedRange } = axis.checkZoomingLowerLimitOvercome(actionField, scale, range);
 
                     if(!isDefined(viewport) ||
-                        viewport.startValue.valueOf() !== range.startValue.valueOf() ||
-                        viewport.endValue.valueOf() !== range.endValue.valueOf()) {
-                        axis.handleZooming(isMinZoom ? null : range, { start: true, end: true }, e, actionField);
-                        if(!isMinZoom) {
+                        viewport.startValue.valueOf() !== correctedRange.startValue.valueOf() ||
+                        viewport.endValue.valueOf() !== correctedRange.endValue.valueOf()) {
+                        axis.handleZooming(stopInteraction ? null : correctedRange, { start: true, end: true }, e, actionField);
+                        if(!stopInteraction) {
                             zoom.zoomed = true;
                             zoom.deltaTranslate = translate - zoom.translate;
                         }
                     } else if(e.pointerType === 'touch' && options.type === 'discrete') {
                         const isMinPosition = axis.isExtremePosition(false);
                         const isMaxPosition = axis.isExtremePosition(true);
-                        const zoomInEnabled = scale > 1 && !isMinZoom;
+                        const zoomInEnabled = scale > 1 && !stopInteraction;
                         const zoomOutEnabled = scale < 1 && (!isMinPosition || !isMaxPosition);
                         const panningEnabled = scale === 1 && !(isMinPosition && (translate < 0 && !options.inverted || translate > 0 && options.inverted) ||
                             isMaxPosition && (translate > 0 && !options.inverted || translate < 0 && options.inverted));
@@ -170,17 +204,18 @@ export default {
         }
 
         function finishAxesViewportChanging(zoomAndPan, actionField, e, offsetCalc) {
-            function zoomAxes(axes, criteria, coordField, e, actionData, onlyAxisToNotify) {
+            function zoomAxes(axes, coordField, actionData, onlyAxisToNotify) {
                 let zoomStarted = false;
-                criteria && axes.forEach(axis => {
-                    const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
-                    const scale = e.scale || 1;
+                const scale = e.scale || 1;
+                const getRange = (axis) => {
                     const zoom = axis.getTranslator().zoom(-offsetCalc(e, actionData, coordField, scale), scale, axis.getZoomBounds());
-                    const range = { startValue: zoom.min, endValue: zoom.max };
-                    const isMinZoom = axis.isZoomingLowerLimitOvercome(actionField, scale, range);
-
-                    axis.handleZooming(isMinZoom ? null : range, { start: true, end: silent }, e, actionField);
-                    isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
+                    return { startValue: zoom.min, endValue: zoom.max };
+                };
+                const getParameters = (silent) => {
+                    return { start: true, end: silent };
+                };
+                getFilteredAxes(axes).forEach(axis => {
+                    zoomStarted = !axisZoom(axis, onlyAxisToNotify, getRange, getParameters, actionField, scale, e).stopInteraction;
                 });
                 return zoomStarted;
             }
@@ -191,21 +226,15 @@ export default {
             let zoomStarted = true;
 
             if(actionData.fallback) {
-                zoomStarted &= zoomAxes(chart._argumentAxes, options.argumentAxis[actionField], rotated ? 'y' : 'x', e, actionData, chart.getArgumentAxis());
-                zoomStarted |= zoomAxes(actionData.valueAxes, options.valueAxis[actionField], rotated ? 'x' : 'y', e, actionData);
+                zoomStarted &= options.argumentAxis[actionField] && zoomAxes(chart._argumentAxes, rotated ? 'y' : 'x', actionData, chart.getArgumentAxis());
+                zoomStarted |= options.valueAxis[actionField] && zoomAxes(actionData.valueAxes, rotated ? 'x' : 'y', actionData);
             } else {
-                let axes = [];
-                if(options.argumentAxis[actionField]) {
-                    axes.push(chart.getArgumentAxis());
-                }
-                if(options.valueAxis[actionField]) {
-                    axes = axes.concat(actionData.valueAxes);
-                }
+                const axes = getAxesCopy(zoomAndPan, actionField);
 
-                axes.filter(isNotEmptyAxisBusinessRange).forEach(axis => {
+                getFilteredAxes(axes).forEach(axis => {
                     axis.handleZooming(null, { start: true }, e, actionField);
                 });
-                zoomStarted = zoomStarted && axes.length;
+                zoomStarted = axes.length;
             }
             zoomStarted && chart._requestChange(['VISUAL_RANGE']);
         }
@@ -284,9 +313,7 @@ export default {
                         action = cancelPanning ? null : 'pan';
                     }
                 } else {
-                    if(dragToZoom && wantPan && panKeyPressed) {
-                        action = 'pan';
-                    } else if(!dragToZoom && wantPan) {
+                    if(dragToZoom && wantPan && panKeyPressed || !dragToZoom && wantPan) {
                         action = 'pan';
                     } else if(dragToZoom && wantZoom) {
                         action = 'zoom';
@@ -367,41 +394,31 @@ export default {
                 const options = zoomAndPan.options;
                 const actionData = zoomAndPan.actionData;
                 const isTouch = e.pointerType === 'touch';
+                const getRange = ({ translator, startCoord, curCoord }) => () => {
+                    return [translator.from(startCoord), translator.from(curCoord)];
+                };
+                const getCoords = (curCoords, startCoords, field) => {
+                    return {
+                        curCoord: curCoords[field],
+                        startCoord: startCoords[field]
+                    };
+                };
+                const needToZoom = (axisOption, coords) => {
+                    return axisOption.zoom && _abs(coords.curCoord - coords.startCoord) > MIN_DRAG_DELTA;
+                };
 
                 const panIsEmpty = actionData && actionData.action === 'pan' && !actionData.fallback && actionData.offset.x === 0 && actionData.offset.y === 0;
 
                 if(!actionData || isTouch && !zoomAndPan.panningVisualRangeEnabled() || panIsEmpty) {
                     return;
                 }
-
-                (!isTouch || !zoomAndPan.actionData.isNative) && preventDefaults(e);
+                (!isTouch) && preventDefaults(e);
                 if(actionData.action === 'zoom') {
-                    const zoomAxes = (axes, criteria, coordField, startCoords, curCoords, onlyAxisToNotify) => {
-                        axes = sortAxes(axes, onlyAxisToNotify);
-                        const curCoord = curCoords[coordField];
-                        const startCoord = startCoords[coordField];
-                        let zoomStarted = false;
-                        if(criteria && _abs(curCoord - startCoord) > MIN_DRAG_DELTA) {
-                            axes.some(axis => {
-                                const tr = axis.getTranslator();
-                                if(tr.getBusinessRange().isEmpty()) {
-                                    return;
-                                }
-                                const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
-                                const range = [tr.from(startCoord), tr.from(curCoord)];
-                                const isMinZoom = axis.isZoomingLowerLimitOvercome(actionData.action, tr.getMinScale(true), range);
-
-                                const result = axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, actionData.action);
-                                isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
-                                return onlyAxisToNotify && result.isPrevented;
-                            });
-                        }
-                        return zoomStarted;
-                    };
-
                     const curCoords = getPointerCoord(actionData.curAxisRect, e);
-                    const argumentAxesZoomed = zoomAxes(chart._argumentAxes, options.argumentAxis.zoom, rotated ? 'y' : 'x', actionData.startCoords, curCoords, chart.getArgumentAxis());
-                    const valueAxesZoomed = zoomAxes(actionData.valueAxes, options.valueAxis.zoom, rotated ? 'x' : 'y', actionData.startCoords, curCoords);
+                    const argumentCoords = getCoords(curCoords, actionData.startCoords, rotated ? 'y' : 'x');
+                    const valueCoords = getCoords(curCoords, actionData.startCoords, rotated ? 'x' : 'y');
+                    const argumentAxesZoomed = needToZoom(options.argumentAxis, argumentCoords) && zoomAxes(e, chart._argumentAxes, getRange, true, argumentCoords, chart.getArgumentAxis());
+                    const valueAxesZoomed = needToZoom(options.valueAxis, valueCoords) && zoomAxes(e, actionData.valueAxes, getRange, true, valueCoords);
 
                     if(valueAxesZoomed || argumentAxesZoomed) {
                         chart._requestChange(['VISUAL_RANGE']);
@@ -415,7 +432,6 @@ export default {
             },
             pinchStartHandler: function(e) {
                 const actionData = prepareActionData(calcCenterForPinch(e), 'zoom');
-                actionData.isNative = !zoomAndPan.panningVisualRangeEnabled();
                 if(actionData.cancel) {
                     cancelEvent(e);
                     return;
@@ -427,11 +443,10 @@ export default {
                 if(!zoomAndPan.actionData) {
                     return;
                 }
-                const viewportChanged = axesViewportChanging(zoomAndPan, 'zoom', e,
+                axesViewportChanging(zoomAndPan, 'zoom', e,
                     (e, actionData, coordField, scale) => calcCenterForPinch(e)[coordField] - actionData.center[coordField] + (actionData.center[coordField] - actionData.center[coordField] * scale),
                     calcCenterForPinch);
-                zoomAndPan.defineTouchBehavior(!viewportChanged, e);
-                !viewportChanged && (zoomAndPan.actionData = null);
+                preventDefaults(e);
             },
             pinchEndHandler: function(e) {
                 if(!zoomAndPan.actionData) {
@@ -440,6 +455,53 @@ export default {
                 finishAxesViewportChanging(zoomAndPan, 'zoom', e,
                     (e, actionData, coordField, scale) => actionData.center[coordField] - actionData.startCenter[coordField] + (actionData.startCenter[coordField] - actionData.startCenter[coordField] * scale));
                 zoomAndPan.actionData = null;
+            },
+            mouseWheelHandler: function(e) {
+                const options = zoomAndPan.options;
+                const rotated = chart.option('rotated');
+                const getRange = ({ translator, coord, scale, axis }) => () => {
+                    const zoom = translator.zoom(-(coord - coord * scale), scale, axis.getZoomBounds());
+                    return { startValue: zoom.min, endValue: zoom.max };
+                };
+                const coords = calcCenterForDrag(e);
+                let axesZoomed = false;
+                let targetAxes;
+                if(options.valueAxis.zoom) {
+                    targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords));
+
+                    if(targetAxes.length === 0) {
+                        const targetCanvas = chart._valueAxes.reduce((r, axis) => {
+                            if(!r && axis.coordsIn(coords.x, coords.y)) {
+                                r = axis.getCanvas();
+                            }
+                            return r;
+                        }, null);
+                        if(targetCanvas) {
+                            targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), {
+                                x: targetCanvas.left,
+                                y: targetCanvas.top
+                            }));
+                        }
+                    }
+                    axesZoomed |= zoomAxes(e, targetAxes, getRange, e.delta > 0, { coord: rotated ? coords.x : coords.y });
+                }
+                if(options.argumentAxis.zoom) {
+                    const canZoom = chart._argumentAxes.some(axis => {
+                        if(checkCoords(canvasToRect(axis.getCanvas()), coords)
+                            || axis.coordsIn(coords.x, coords.y)) {
+                            return true;
+                        }
+                        return false;
+                    });
+                    axesZoomed |= canZoom && zoomAxes(e, chart._argumentAxes, getRange, e.delta > 0, { coord: rotated ? coords.y : coords.x }, chart.getArgumentAxis());
+                }
+
+                if(axesZoomed) {
+                    chart._requestChange(['VISUAL_RANGE']);
+                    if(targetAxes && isAxisAvailablePanning(targetAxes) || !targetAxes && zoomAndPan.panningVisualRangeEnabled()) {
+                        preventDefaults(e); // T249548
+                    }
+                }
             },
             cleanup: function() {
                 renderer.root.off(EVENTS_NS);
@@ -457,79 +519,14 @@ export default {
                 }
                 zoomAndPan.options = options;
 
-                const rotated = chart.option('rotated');
-
                 if((options.argumentAxis.zoom || options.valueAxis.zoom) && options.allowMouseWheel) {
-                    renderer.root.on(wheelEvent + EVENTS_NS, function(e) {
-                        function zoomAxes(axes, coord, delta, onlyAxisToNotify) {
-                            axes = sortAxes(axes, onlyAxisToNotify);
-                            let zoomStarted = false;
-                            axes.some(axis => {
-                                const translator = axis.getTranslator();
-                                if(translator.getBusinessRange().isEmpty()) {
-                                    return;
-                                }
-                                const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
-                                const scale = translator.getMinScale(delta > 0);
-                                const zoom = translator.zoom(-(coord - coord * scale), scale, axis.getZoomBounds());
-                                const range = { startValue: zoom.min, endValue: zoom.max };
-                                const isMinZoom = axis.isZoomingLowerLimitOvercome('zoom', scale, range);
-
-                                const result = axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, 'zoom');
-                                isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
-                                return onlyAxisToNotify && result.isPrevented;
-                            });
-
-                            return !!zoomStarted;
-                        }
-
-                        const coords = calcCenterForDrag(e);
-                        let axesZoomed = false;
-                        let targetAxes;
-                        if(options.valueAxis.zoom) {
-                            targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords));
-
-                            if(targetAxes.length === 0) {
-                                const targetCanvas = chart._valueAxes.reduce((r, axis) => {
-                                    if(!r && axis.coordsIn(coords.x, coords.y)) {
-                                        r = axis.getCanvas();
-                                    }
-                                    return r;
-                                }, null);
-                                if(targetCanvas) {
-                                    targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), {
-                                        x: targetCanvas.left,
-                                        y: targetCanvas.top
-                                    }));
-                                }
-                            }
-
-                            axesZoomed |= zoomAxes(targetAxes, rotated ? coords.x : coords.y, e.delta);
-                        }
-                        if(options.argumentAxis.zoom) {
-                            const canZoom = chart._argumentAxes.some(axis => {
-                                if(checkCoords(canvasToRect(axis.getCanvas()), coords)
-                                    || axis.coordsIn(coords.x, coords.y)) {
-                                    return true;
-                                }
-                                return false;
-                            });
-                            axesZoomed |= canZoom && zoomAxes(chart._argumentAxes, rotated ? coords.y : coords.x, e.delta, chart.getArgumentAxis());
-                        }
-
-                        if(axesZoomed) {
-                            chart._requestChange(['VISUAL_RANGE']);
-                            zoomAndPan.panningVisualRangeEnabled(targetAxes) && preventDefaults(e); // T249548
-                        }
-                    });
+                    renderer.root.on(wheelEvent + EVENTS_NS, zoomAndPan.mouseWheelHandler);
                 }
-                if(options.allowTouchGestures) {
-                    if(options.argumentAxis.zoom || options.valueAxis.zoom) {
-                        renderer.root
-                            .on(PINCH_START_EVENT_NAME, { passive: false }, zoomAndPan.pinchStartHandler)
-                            .on(PINCH_EVENT_NAME, { passive: false }, zoomAndPan.pinchHandler)
-                            .on(PINCH_END_EVENT_NAME, zoomAndPan.pinchEndHandler);
-                    }
+                if((options.argumentAxis.zoom || options.valueAxis.zoom) && options.allowTouchGestures) {
+                    renderer.root
+                        .on(PINCH_START_EVENT_NAME, { passive: false }, zoomAndPan.pinchStartHandler)
+                        .on(PINCH_EVENT_NAME, { passive: false }, zoomAndPan.pinchHandler)
+                        .on(PINCH_END_EVENT_NAME, zoomAndPan.pinchEndHandler);
                 }
 
                 renderer.root
@@ -538,45 +535,29 @@ export default {
                     .on(DRAG_END_EVENT_NAME, zoomAndPan.dragEndHandler);
 
 
-                if(options.argumentAxis.pan) {
-                    renderer.root
-                        .on(SCROLL_BAR_START_EVENT_NAME, function(e) {
-                            zoomAndPan.actionData = {
-                                valueAxes: [],
-                                offset: { x: 0, y: 0 },
-                                center: { x: 0, y: 0 }
-                            };
-                            preventDefaults(e);
-                            startAxesViewportChanging(zoomAndPan, 'pan', e);
-                        })
-                        .on(SCROLL_BAR_MOVE_EVENT_NAME, function(e) {
-                            preventDefaults(e);
-                            axesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag, e => e.offset);
-                        })
-                        .on(SCROLL_BAR_END_EVENT_NAME, function(e) {
-                            preventDefaults(e);
-                            finishAxesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag);
-                            zoomAndPan.actionData = null;
-                        });
-                }
+                renderer.root
+                    .on(SCROLL_BAR_START_EVENT_NAME, function(e) {
+                        zoomAndPan.actionData = {
+                            valueAxes: [],
+                            offset: { x: 0, y: 0 },
+                            center: { x: 0, y: 0 }
+                        };
+                        preventDefaults(e);
+                        startAxesViewportChanging(zoomAndPan, 'pan', e);
+                    })
+                    .on(SCROLL_BAR_MOVE_EVENT_NAME, function(e) {
+                        preventDefaults(e);
+                        axesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag, e => e.offset);
+                    })
+                    .on(SCROLL_BAR_END_EVENT_NAME, function(e) {
+                        preventDefaults(e);
+                        finishAxesViewportChanging(zoomAndPan, 'pan', e, calcOffsetForDrag);
+                        zoomAndPan.actionData = null;
+                    });
             },
 
-            defineTouchBehavior: function(isDefault, e) {
-                zoomAndPan.actionData && (zoomAndPan.actionData.isNative = isDefault);
-                if(!isDefault) {
-                    preventDefaults(e);
-                }
-            },
-
-            panningVisualRangeEnabled: function(targetAxes) {
-                if(targetAxes?.length) {
-                    return targetAxes.some(axis => !axis.isExtremePosition(false) || !axis.isExtremePosition(true));
-                }
-                const enablePanByValueAxis =
-                    chart._valueAxes.some(axis => !axis.isExtremePosition(false) || !axis.isExtremePosition(true));
-                const enablePanByArgumentAxis =
-                    chart._argumentAxes.some(axis => !axis.isExtremePosition(false) || !axis.isExtremePosition(true));
-                return enablePanByValueAxis || enablePanByArgumentAxis;
+            panningVisualRangeEnabled: function() {
+                return isAxisAvailablePanning(chart._valueAxes) || isAxisAvailablePanning(chart._argumentAxes);
             }
         };
 

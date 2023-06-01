@@ -1,427 +1,793 @@
+import DataSource, { DataSourceLike } from '../data/data_source';
+
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    PaletteType,
-    PaletteExtensionModeType
-} from './palette';
-
-import {
-    template
+    template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
-
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo,
 } from './core/base_widget';
 
-import { HatchingDirectionType } from './common';
+import {
+    VerticalAlignment,
+} from '../common';
 
+import {
+    HatchDirection,
+    Palette,
+    PaletteExtensionMode,
+    TextOverflow,
+} from '../common/charts';
+
+export {
+    HatchDirection,
+    Palette,
+    PaletteExtensionMode,
+    TextOverflow,
+};
+
+/** @public */
+export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSankey>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxSankey>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxSankey>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxSankey> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = FileSavingEventInfo<dxSankey>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxSankey> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSankey>;
+
+/** @public */
+export type LinkClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
+    readonly target: dxSankeyLink;
+};
+/** @public */
+export type LinkHoverEvent = EventInfo<dxSankey> & {
+    readonly target: dxSankeyLink;
+};
+/** @public */
+export type NodeClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
+    readonly target: dxSankeyNode;
+};
+/** @public */
+export type NodeHoverEvent = EventInfo<dxSankey> & {
+    readonly target: dxSankeyNode;
+};
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ * @docid
+ */
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
-     * @docid dxSankeyOptions.adaptiveLayout
-     * @type object
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
-    adaptiveLayout?: { height?: number, keepLabels?: boolean, width?: number };
+    adaptiveLayout?: {
+      /**
+       * @docid
+       * @default 80
+       */
+      height?: number;
+      /**
+       * @docid
+       * @default true
+       */
+      keepLabels?: boolean;
+      /**
+       * @docid
+       * @default 80
+       */
+      width?: number;
+    };
     /**
-     * @docid dxSankeyOptions.alignment
-     * @type Enums.VerticalAlignment|Array<Enums.VerticalAlignment>
+     * @docid
      * @default 'center'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    alignment?: 'bottom' | 'center' | 'top' | Array<'bottom' | 'center' | 'top'>;
+    alignment?: VerticalAlignment | Array<VerticalAlignment>;
     /**
-     * @docid dxSankeyOptions.dataSource
-     * @extends CommonVizDataSource
-     * @prevFileNamespace DevExpress.viz
+     * @docid
+     * @notUsedInTheme
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: Array<any> | DataSource | DataSourceOptions | string;
+    dataSource?: DataSourceLike<any> | null;
     /**
-     * @docid dxSankeyOptions.hoverEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     hoverEnabled?: boolean;
     /**
-     * @docid dxSankeyOptions.label
-     * @type object
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
-    label?: { border?: { color?: string, visible?: boolean, width?: number }, customizeText?: ((itemInfo: dxSankeyNode) => string), font?: Font, horizontalOffset?: number, overlappingBehavior?: 'ellipsis' | 'hide' | 'none', shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean };
+    label?: {
+      /**
+       * @docid
+       */
+      border?: {
+        /**
+         * @docid
+         * @default '#000000'
+         */
+        color?: string;
+        /**
+         * @docid
+         * @default false
+         */
+        visible?: boolean;
+        /**
+         * @docid
+         * @default 2
+         */
+        width?: number;
+      };
+      /**
+       * @docid
+       * @notUsedInTheme
+       */
+      customizeText?: ((itemInfo: dxSankeyNode) => string);
+      /**
+       * @docid
+       * @default '#FFFFFF' &prop(color)
+       */
+      font?: Font;
+      /**
+       * @docid
+       * @default 5
+       */
+      horizontalOffset?: number;
+      /**
+       * @docid
+       * @default 'ellipsis'
+       */
+      overlappingBehavior?: TextOverflow;
+      /**
+       * @docid
+       */
+      shadow?: {
+        /**
+         * @docid
+         * @default 1
+         */
+        blur?: number;
+        /**
+         * @docid
+         * @default '#000000'
+         */
+        color?: string;
+        /**
+         * @docid
+         * @default 0
+         */
+        offsetX?: number;
+        /**
+         * @docid
+         * @default 1
+         */
+        offsetY?: number;
+        /**
+         * @docid
+         * @default 0
+         */
+        opacity?: number;
+      };
+      /**
+       * @docid
+       * @default false
+       */
+      useNodeColors?: boolean;
+      /**
+       * @docid
+       * @default 0
+       */
+      verticalOffset?: number;
+      /**
+       * @docid
+       * @default true
+       */
+      visible?: boolean;
+    };
     /**
-     * @docid dxSankeyOptions.link
-     * @type object
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
-    link?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, colorMode?: 'none' | 'source' | 'target' | 'gradient', hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number };
+    link?: {
+      /**
+       * @docid
+       */
+      border?: {
+        /**
+         * @docid
+         * @default '#000000'
+         */
+        color?: string;
+        /**
+         * @docid
+         * @default false
+         */
+        visible?: boolean;
+        /**
+         * @docid
+         * @default 2
+         */
+        width?: number;
+      };
+      /**
+       * @docid
+       * @default '#000000'
+       */
+      color?: string;
+      /**
+       * @docid
+       * @default 'none'
+       */
+      colorMode?: SankeyColorMode;
+      /**
+       * @docid
+       */
+      hoverStyle?: {
+        /**
+         * @docid
+         */
+        border?: {
+          /**
+           * @docid
+           * @default undefined
+           */
+          color?: string;
+          /**
+           * @docid
+           * @default undefined
+           */
+          visible?: boolean;
+          /**
+           * @docid
+           * @default undefined
+           */
+          width?: number;
+        };
+        /**
+         * @docid
+         * @default undefined
+         */
+        color?: string;
+        /**
+         * @docid
+         */
+        hatching?: {
+          /**
+           * @docid
+           * @default 'right'
+           */
+          direction?: HatchDirection;
+          /**
+           * @docid
+           * @default 0.75
+           */
+          opacity?: number;
+          /**
+           * @docid
+           * @default 6
+           */
+          step?: number;
+          /**
+           * @docid
+           * @default 2
+           */
+          width?: number;
+        };
+        /**
+         * @docid
+         * @default 0.5
+         */
+        opacity?: number;
+      };
+      /**
+       * @docid
+       * @default 0.3
+       */
+      opacity?: number;
+    };
     /**
-     * @docid dxSankeyOptions.node
-     * @type object
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
-    node?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number, padding?: number, width?: number };
+    node?: {
+      /**
+       * @docid
+       */
+      border?: {
+        /**
+         * @docid
+         * @default '#000000'
+         */
+        color?: string;
+        /**
+         * @docid
+         * @default false
+         */
+        visible?: boolean;
+        /**
+         * @docid
+         * @default 1
+         */
+        width?: number;
+      };
+      /**
+       * @docid
+       * @default undefined
+       */
+      color?: string;
+      /**
+       * @docid
+       */
+      hoverStyle?: {
+        /**
+         * @docid
+         */
+        border?: {
+          /**
+           * @docid
+           * @default undefined
+           */
+          color?: string;
+          /**
+           * @docid
+           * @default undefined
+           */
+          visible?: boolean;
+          /**
+           * @docid
+           * @default undefined
+           */
+          width?: number;
+        };
+        /**
+         * @docid
+         * @default undefined
+         */
+        color?: string;
+        /**
+         * @docid
+         */
+        hatching?: {
+          /**
+           * @docid
+           * @default 'right'
+           */
+          direction?: HatchDirection;
+          /**
+           * @docid
+           * @default 0.75
+           */
+          opacity?: number;
+          /**
+           * @docid
+           * @default 6
+           */
+          step?: number;
+          /**
+           * @docid
+           * @default 2
+           */
+          width?: number;
+        };
+        /**
+         * @docid
+         * @default undefined
+         */
+        opacity?: number;
+      };
+      /**
+       * @docid
+       * @default 1
+       */
+      opacity?: number;
+      /**
+       * @docid
+       * @default 30
+       */
+      padding?: number;
+      /**
+       * @docid
+       * @default 15
+       */
+      width?: number;
+    };
     /**
-     * @docid dxSankeyOptions.onLinkClick
-     * @extends Action
-     * @type function|string
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 target:dxSankeyLink
-     * @notUsedInTheme
-     * @action
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    onLinkClick?: ((e: { component?: dxSankey, element?: dxElement, model?: any, event?: event, target?: dxSankeyLink }) => any) | string;
-    /**
-     * @docid dxSankeyOptions.onLinkHoverChanged
-     * @extends Action
+     * @docid
+     * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 target:dxSankeyLink
+     * @type_function_param1_field component:dxSankey
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLinkHoverChanged?: ((e: { component?: dxSankey, element?: dxElement, model?: any, target?: dxSankeyLink }) => any);
+    onLinkClick?: ((e: LinkClickEvent) => void) | string;
     /**
-     * @docid dxSankeyOptions.onNodeClick
-     * @extends Action
-     * @type function|string
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 target:dxSankeyNode
+     * @type_function_param1_field component:dxSankey
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeClick?: ((e: { component?: dxSankey, element?: dxElement, model?: any, event?: event, target?: dxSankeyNode }) => any) | string;
+    onLinkHoverChanged?: ((e: LinkHoverEvent) => void);
     /**
-     * @docid dxSankeyOptions.onNodeHoverChanged
-     * @extends Action
+     * @docid
+     * @default null
      * @type function
      * @type_function_param1 e:object
-     * @type_function_param1_field4 target:dxSankeyNode
+     * @type_function_param1_field component:dxSankey
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onNodeHoverChanged?: ((e: { component?: dxSankey, element?: dxElement, model?: any, target?: dxSankeyNode }) => any);
+    onNodeClick?: ((e: NodeClickEvent) => void) | string;
     /**
-     * @docid dxSankeyOptions.palette
-     * @extends CommonVizPalette
-     * @prevFileNamespace DevExpress.viz
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:dxSankey
+     * @notUsedInTheme
+     * @action
      * @public
      */
-    palette?: Array<string> | PaletteType;
+    onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
     /**
-     * @docid dxSankeyOptions.paletteExtensionMode
-     * @type Enums.VizPaletteExtensionMode
+     * @docid
+     * @default "Material"
+     * @public
+     */
+    palette?: Array<string> | Palette;
+    /**
+     * @docid
      * @default 'blend'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: PaletteExtensionMode;
     /**
-     * @docid dxSankeyOptions.sortData
-     * @type object
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     sortData?: any;
     /**
-     * @docid dxSankeyOptions.sourceField
-     * @type string
+     * @docid
      * @default 'source'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     sourceField?: string;
     /**
-     * @docid dxSankeyOptions.targetField
-     * @type string
+     * @docid
      * @default 'target'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     targetField?: string;
     /**
-     * @docid dxSankeyOptions.tooltip
+     * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     tooltip?: dxSankeyTooltip;
     /**
-     * @docid dxSankeyOptions.weightField
-     * @type string
+     * @docid
      * @default 'weight'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     weightField?: string;
 }
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * @docid  dxSankeyOptions.tooltip.customizeLinkTooltip
      * @default undefined
-     * @type function(info)
-     * @type_function_param1 info:object
-     * @type_function_param1_field1 source:string
-     * @type_function_param1_field2 target:string
-     * @type_function_param1_field3 weight:Number
      * @type_function_return object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    customizeLinkTooltip?: ((info: { source?: string, target?: string, weight?: number }) => any);
+    customizeLinkTooltip?: ((info: { source?: string; target?: string; weight?: number }) => any);
     /**
      * @docid  dxSankeyOptions.tooltip.customizeNodeTooltip
      * @default undefined
-     * @type function(info)
-     * @type_function_param1 info:object
-     * @type_function_param1_field1 title:string:deprecated(label)
-     * @type_function_param1_field2 label:string
-     * @type_function_param1_field3 weightIn:Number
-     * @type_function_param1_field4 weightOut:Number
+     * @type_function_param1_field title:string:deprecated(label)
      * @type_function_return object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    customizeNodeTooltip?: ((info: { title?: string, label?: string, weightIn?: number, weightOut?: number }) => any);
+    customizeNodeTooltip?: ((info: { title?: string; label?: string; weightIn?: number; weightOut?: number }) => any);
     /**
      * @docid dxSankeyOptions.tooltip.enabled
-     * @type boolean
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     enabled?: boolean;
     /**
      * @docid dxSankeyOptions.tooltip.linkTooltipTemplate
-     * @type template|function(info, element)
-     * @type_function_param1 info:object
-     * @type_function_param1_field1 source:string
-     * @type_function_param1_field2 target:string
-     * @type_function_param1_field3 weight:Number
-     * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: dxElement) => string | Element | JQuery);
+    linkTooltipTemplate?: template | ((info: { source?: string; target?: string; weight?: number }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
-     * @type template|function(info, element)
-     * @type_function_param1 info:object
-     * @type_function_param1_field1 label:string
-     * @type_function_param1_field2 weightIn:Number
-     * @type_function_param1_field3 weightOut:Number
-     * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    nodeTooltipTemplate?: template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: dxElement) => string | Element | JQuery);
+    nodeTooltipTemplate?: template | ((info: { label?: string; weightIn?: number; weightOut?: number }, element: DxElement) => string | UserDefinedElement);
 }
 /**
- * @docid dxSankey
+ * @docid
  * @inherits BaseWidget, DataHelperMixin
- * @module viz/sankey
- * @export default
- * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxSankey extends BaseWidget {
-    constructor(element: Element, options?: dxSankeyOptions)
-    constructor(element: JQuery, options?: dxSankeyOptions)
+export default class dxSankey extends BaseWidget<dxSankeyOptions> {
     /**
-     * @docid dxSankeyMethods.getAllLinks
+     * @docid
      * @publicName getAllLinks()
-     * @return Array<dxSankeyLink>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     getAllLinks(): Array<dxSankeyLink>;
     /**
-     * @docid dxSankeyMethods.getAllNodes
+     * @docid
      * @publicName getAllNodes()
-     * @return Array<dxSankeyNode>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     getAllNodes(): Array<dxSankeyNode>;
     getDataSource(): DataSource;
     /**
-     * @docid dxSankeyMethods.hideTooltip
+     * @docid
      * @publicName hideTooltip()
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideTooltip(): void;
 }
 
+/**
+ * @docid
+ * @publicName connection
+ * @type object
+ * @namespace DevExpress.viz
+ */
 export interface dxSankeyConnectionInfoObject {
     /**
-     * @docid dxSankeyConnectionInfoObject.source
-     * @type string
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     source?: string;
     /**
-     * @docid dxSankeyConnectionInfoObject.target
-     * @type string
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     target?: string;
     /**
-     * @docid dxSankeyConnectionInfoObject.weight
-     * @type Number
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     weight?: number;
 }
 
+/**
+ * @docid
+ * @publicName Link
+ * @namespace DevExpress.viz
+ */
 export interface dxSankeyLink {
     /**
-     * @docid dxSankeyLinkfields.connection
-     * @type dxSankeyConnectionInfoObject
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     connection?: dxSankeyConnectionInfoObject;
     /**
-     * @docid dxSankeyLinkmethods.hideTooltip
+     * @docid
      * @publicName hideTooltip()
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideTooltip(): void;
     /**
-     * @docid dxSankeyLinkmethods.hover
+     * @docid
      * @publicName hover(state)
-     * @param1 state:boolean
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     hover(state: boolean): void;
     /**
-     * @docid dxSankeyLinkmethods.isHovered
+     * @docid
      * @publicName isHovered()
-     * @return boolean
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     isHovered(): boolean;
     /**
-     * @docid dxSankeyLinkmethods.showTooltip
+     * @docid
      * @publicName showTooltip()
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     showTooltip(): void;
 }
 
+/**
+ * @docid
+ * @publicName Node
+ * @namespace DevExpress.viz
+ */
 export interface dxSankeyNode {
     /**
-     * @docid dxSankeyNodemethods.hideTooltip
+     * @docid
      * @publicName hideTooltip()
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideTooltip(): void;
     /**
-     * @docid dxSankeyNodemethods.hover
+     * @docid
      * @publicName hover(state)
-     * @param1 state:boolean
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     hover(state: boolean): void;
     /**
-     * @docid dxSankeyNodemethods.isHovered
+     * @docid
      * @publicName isHovered()
-     * @return boolean
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     isHovered(): boolean;
     /**
-     * @docid dxSankeyNodefields.label
-     * @type string
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     label?: string;
     /**
-     * @docid dxSankeyNodefields.linksIn
-     * @type Array<Object>
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     linksIn?: Array<any>;
     /**
-     * @docid dxSankeyNodefields.linksOut
-     * @type Array<Object>
-     * @prevFileNamespace DevExpress.viz
+     * @docid
      * @public
      */
     linksOut?: Array<any>;
     /**
-     * @docid dxSankeyNodemethods.showTooltip
+     * @docid
      * @publicName showTooltip()
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     showTooltip(): void;
     /**
-     * @docid dxSankeyNodefields.title
-     * @type string
-     * @deprecated
-     * @prevFileNamespace DevExpress.viz
+     * @docid
+     * @deprecated dxSankeyNode.label
      * @public
      */
     title?: string;
 }
 
-declare global {
-interface JQuery {
-    dxSankey(): JQuery;
-    dxSankey(options: "instance"): dxSankey;
-    dxSankey(options: string): any;
-    dxSankey(options: string, ...params: any[]): any;
-    dxSankey(options: dxSankeyOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxSankeyOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSankeyOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxSankeyOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxSankeyOptions.onDisposing
+ * @type_function_param1 e:{viz/sankey:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onDrawn
+ * @type_function_param1 e:{viz/sankey:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onExported
+ * @type_function_param1 e:{viz/sankey:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onExporting
+ * @type_function_param1 e:{viz/sankey:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onFileSaving
+ * @type_function_param1 e:{viz/sankey:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/sankey:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onInitialized
+ * @type_function_param1 e:{viz/sankey:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onLinkClick
+ * @type_function_param1 e:{viz/sankey:LinkClickEvent}
+ */
+onLinkClick?: ((e: LinkClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onLinkHoverChanged
+ * @type_function_param1 e:{viz/sankey:LinkHoverChangedEvent}
+ */
+onLinkHoverChanged?: ((e: LinkHoverEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onNodeClick
+ * @type_function_param1 e:{viz/sankey:NodeClickEvent}
+ */
+onNodeClick?: ((e: NodeClickEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onNodeHoverChanged
+ * @type_function_param1 e:{viz/sankey:NodeHoverChangedEvent}
+ */
+onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
+/**
+ * @skip
+ * @docid dxSankeyOptions.onOptionChanged
+ * @type_function_param1 e:{viz/sankey:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

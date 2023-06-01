@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import 'ui/form/ui.form';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const { testStart, test, module, assert } = QUnit;
@@ -224,6 +223,58 @@ module('Public API: option method', function() {
             testWrapper.setOption(`items[0].tabs[0].${optionName}`, 'test');
             testWrapper.checkTabOption(0, optionName, 'test');
         });
+    });
+
+    test('onItemRendered event should be rised on every tab render, deferRendering: false', function() {
+        const onItemRenderedSpy = sinon.spy();
+
+        new FormTestWrapper({
+            items: [{
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    onItemRendered: onItemRenderedSpy,
+                    deferRendering: false,
+                },
+                tabs: [{
+                    title: 'Phone',
+                    items: ['Phone'],
+                }, {
+                    title: 'Skype',
+                    items: ['Skype'],
+                }, {
+                    title: 'Email',
+                    items: ['Email'],
+                }]
+            }]
+        });
+
+        assert.strictEqual(onItemRenderedSpy.callCount, 3, 'onItemRendered was called on every tab render');
+    });
+
+    test('onItemRendered event should be rised on the first tab render, deferRendering: true', function() {
+        const onItemRenderedSpy = sinon.spy();
+
+        new FormTestWrapper({
+            items: [{
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    onItemRendered: onItemRenderedSpy,
+                    deferRendering: true,
+                },
+                tabs: [{
+                    title: 'Phone',
+                    items: ['Phone'],
+                }, {
+                    title: 'Skype',
+                    items: ['Skype'],
+                }, {
+                    title: 'Email',
+                    items: ['Email'],
+                }]
+            }]
+        });
+
+        assert.strictEqual(onItemRenderedSpy.callCount, 1, 'onItemRendered was called on the first tab render');
     });
 
     [false, true].forEach(deferRendering => {

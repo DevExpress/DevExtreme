@@ -3,7 +3,6 @@ import { extend } from '../../core/utils/extend';
 import devices from '../../core/devices';
 import { deferRender } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
-import * as inkRipple from '../widget/utils.ink_ripple';
 import registerComponent from '../../core/component_registrator';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import DataExpressionMixin from '../editor/ui.data_expression';
@@ -107,13 +106,11 @@ class RadioCollection extends CollectionWidget {
     _itemElements() {
         return this._itemContainer().children(this._itemSelector());
     }
+
+    _setAriaSelectionAttribute() {}
 }
 
 class RadioGroup extends Editor {
-    _clean() {
-        delete this._inkRipple;
-        super._clean();
-    }
 
     _dataSourceOptions() {
         return { paginate: false };
@@ -156,11 +153,7 @@ class RadioGroup extends Editor {
 
             activeStateEnabled: true,
 
-            layout: 'vertical',
-
-            useInkRipple: false
-
-
+            layout: 'vertical'
         }));
     }
 
@@ -184,7 +177,6 @@ class RadioGroup extends Editor {
         this._renderSubmitElement();
         this.setAria('role', 'radiogroup');
         this._renderRadios();
-        this.option('useInkRipple') && this._renderInkRipple();
         this._renderLayout();
         super._initMarkup();
     }
@@ -200,8 +192,16 @@ class RadioGroup extends Editor {
         }
     }
 
+    _getSelectedItemKeys(value = this.option('value')) {
+        const isNullSelectable = this.option('valueExpr') !== 'this';
+        const shouldSelectValue = isNullSelectable && value === null || isDefined(value);
+
+        return shouldSelectValue ? [value] : [];
+    }
+
     _setSelection(currentValue) {
-        this._setCollectionWidgetOption('selectedItemKeys', [this._unwrappedValue(currentValue)]);
+        const value = this._unwrappedValue(currentValue);
+        this._setCollectionWidgetOption('selectedItemKeys', this._getSelectedItemKeys(value));
     }
 
     _optionChanged(args) {
@@ -210,7 +210,7 @@ class RadioGroup extends Editor {
         this._dataExpressionOptionChanged(args);
 
         switch(name) {
-            case 'useInkRipple':
+            case 'dataSource':
                 this._invalidate();
                 break;
             case 'focusStateEnabled':
@@ -221,10 +221,6 @@ class RadioGroup extends Editor {
             case 'disabled':
                 super._optionChanged(args);
                 this._setCollectionWidgetOption(name, value);
-                break;
-            case 'dataSource':
-                this._setCollectionWidgetOption('dataSource', this._dataSource);
-                this._setSelection(this.option('value'));
                 break;
             case 'valueExpr':
                 this._setCollectionWidgetOption('keyExpr', this._getCollectionKeyExpr());
@@ -254,14 +250,6 @@ class RadioGroup extends Editor {
         this._updateItemsSize();
     }
 
-    _renderInkRipple() {
-        this._inkRipple = inkRipple.render({
-            waveSizeCoefficient: 3.3,
-            useHoldAnimation: false,
-            isCentered: true
-        });
-    }
-
     _renderLayout() {
         const layout = this.option('layout');
         const $element = this.$element();
@@ -274,17 +262,21 @@ class RadioGroup extends Editor {
         this._areRadiosCreated = new Deferred();
         const $radios = $('<div>').appendTo(this.$element());
         const {
-            value,
             displayExpr,
             accessKey,
             focusStateEnabled,
             itemTemplate,
-            tabIndex,
-            valueExpr
+            tabIndex
         } = this.option();
-        const isNullSelectable = valueExpr !== 'this';
 
-        this._radios = this._createComponent($radios, RadioCollection, {
+        this._createComponent($radios, RadioCollection, {
+            onInitialized: ({ component }) => {
+                this._radios = component;
+            },
+            onContentReady: (e) => {
+                this._fireContentReadyAction(true);
+            },
+            onItemClick: this._itemClickHandler.bind(this),
             displayExpr,
             accessKey,
             dataSource: this._dataSource,
@@ -292,12 +284,10 @@ class RadioGroup extends Editor {
             itemTemplate,
             keyExpr: this._getCollectionKeyExpr(),
             noDataText: '',
-            onContentReady: () => this._fireContentReadyAction(true),
-            onItemClick: this._itemClickHandler.bind(this),
             scrollingEnabled: false,
-            selectionByClick: false,
+            selectByClick: false,
             selectionMode: 'single',
-            selectedItemKeys: isNullSelectable || isDefined(value) ? [value] : [],
+            selectedItemKeys: this._getSelectedItemKeys(),
             tabIndex
         });
         this._areRadiosCreated.resolve();
@@ -317,7 +307,7 @@ class RadioGroup extends Editor {
     }
 
     _setSubmitValue(value) {
-        value = value || this.option('value');
+        value = value ?? this.option('value');
 
         const submitValue = this.option('valueExpr') === 'this' ? this._displayGetter(value) : value;
 
@@ -326,19 +316,6 @@ class RadioGroup extends Editor {
 
     _setCollectionWidgetOption() {
         this._areRadiosCreated.done(this._setWidgetOption.bind(this, '_radios', arguments));
-    }
-
-    _toggleActiveState($element, value, e) {
-        super._toggleActiveState($element, value, e);
-
-        if(this._inkRipple) {
-            const event = {
-                element: $element.find(`.${RADIO_BUTTON_ICON_CLASS}`),
-                event: e
-            };
-
-            value ? this._inkRipple.showWave(event) : this._inkRipple.hideWave(event);
-        }
     }
 
     _updateItemsSize() {
@@ -352,11 +329,11 @@ class RadioGroup extends Editor {
     }
 
     focus() {
-        this._radios && this._radios.focus();
+        this._radios?.focus();
     }
 
     itemElements() {
-        return this._radios.itemElements();
+        return this._radios?.itemElements();
     }
 }
 

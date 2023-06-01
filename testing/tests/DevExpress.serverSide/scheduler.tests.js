@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
 QUnit.testStart(() => {
     const markup =
@@ -13,14 +14,16 @@ QUnit.testStart(() => {
 
 QUnit.module('View switcher server markup');
 
-QUnit.test('View switcher tabs should be expanded on server', function(assert) {
-    const scheduler = $('#scheduler').dxScheduler().dxScheduler('instance');
-    const $switcher = scheduler.$element().find('.dx-tabs.dx-scheduler-view-switcher');
+QUnit.test('RenovateRender in workspace should be false on server', function(assert) {
+    const scheduler = createWrapper({
+        renovateRender: true,
+    });
 
-    assert.ok($switcher.hasClass('dx-tabs-expanded'), 'Tabs is expanded');
+    const workSpace = scheduler.instance.getWorkSpace();
+
+    assert.notOk(workSpace.option('renovateRender', false));
 });
 
 import '../DevExpress.ui.widgets.scheduler/workSpace.markup.tests.js';
 import '../DevExpress.ui.widgets.scheduler/common.markup.tests.js';
-import '../DevExpress.ui.widgets.scheduler/navigator.markup.tests.js';
 import '../DevExpress.ui.widgets.scheduler/timeline.markup.tests.js';

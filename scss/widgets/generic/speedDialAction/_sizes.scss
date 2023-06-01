@@ -1,4 +1,17 @@
 @use "../sizes" as *;
 
 // adduse
-$generic-main-fa-button-size: 48px;
+$generic-main-fa-button-label-padding: null !default;
+$generic-main-fa-button-size: null !default;
+
+$generic-fa-button-label-font-size: 12px !default;
+
+@if $size == "default" {
+  $generic-main-fa-button-size: 48px !default;
+  $generic-main-fa-button-label-padding: 0 25px 0 10px;
+}
+
+@else if $size == "compact" {
+  $generic-main-fa-button-size: 34px !default;
+  $generic-main-fa-button-label-padding: 0 15px 0 5px;
+}

@@ -4,6 +4,8 @@ import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import $ from 'jquery';
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
+const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
+
 QUnit.module('searching');
 
 ['dataSource', 'items'].forEach((optionName) => {
@@ -177,6 +179,50 @@ QUnit.test('search should consider dataSource sorting', function(assert) {
 
     const $items = $(treeView.$element()).find('.dx-treeview-item');
     const expectedValues = ['Cars', 'Audi', 'A1', 'BMW', 'X1', 'Motobikes', 'Yamaha', 'YX 1'];
+
+    $.each($items, function(index, item) {
+        assert.equal($(item).text(), expectedValues[index], 'Correct item');
+    });
+});
+
+QUnit.test('search should consider dataSource langParams', function(assert) {
+    const data = [
+        { id: 1, parentId: 0, text: 'Towns' },
+        { id: 2, parentId: 1, text: 'istanbul' },
+        { id: 3, parentId: 1, text: 'İstanbul' },
+        { id: 4, parentId: 1, text: 'quebec' },
+        { id: 5, parentId: 1, text: 'Québec' },
+
+    ];
+
+    const treeView = initTree({
+        dataSource: { store: data, sort: 'text', langParams: { locale: 'tr', collatorOptions: { caseFirst: 'upper' } } },
+        dataStructure: 'plain',
+        parentIdExpr: 'parentId',
+        keyExpr: 'id'
+    }).dxTreeView('instance');
+
+    treeView.option('searchValue', 'is');
+
+    let $items = $(treeView.$element()).find('.dx-treeview-item');
+    let expectedValues = ['Towns', 'İstanbul', 'istanbul'];
+
+    $.each($items, function(index, item) {
+        assert.equal($(item).text(), expectedValues[index], 'Correct item');
+    });
+
+    treeView.option('dataSource', {
+        store: data,
+        sort: 'text',
+        langParams: { locale: 'fr', collatorOptions: { sensitivity: 'base' } }
+    });
+
+    treeView.option('searchValue', 'que');
+
+    $items = $(treeView.$element()).find('.dx-treeview-item');
+    expectedValues = ['Towns', 'quebec', 'Québec'];
+
+    assert.equal($items.length, 3);
 
     $.each($items, function(index, item) {
         assert.equal($(item).text(), expectedValues[index], 'Correct item');
@@ -496,4 +542,53 @@ QUnit.test('apply search after searchTimeout', function(assert) {
     $items = $treeView.find('.dx-treeview-item');
     assert.equal($items.length, 4, 'filter was applied after timeout');
     this.clock.restore();
+});
+
+['none', 'selectAll', 'normal'].forEach(selectionMode => {
+    QUnit.testInActiveWindow(`focusIn -> search -> focusIn -> clearSearch -> focusIn. selectionMode: ${selectionMode}`, function(assert) {
+        const treeView = initTree({
+            items: [{ id: 1, text: 'item1' }, { id: 2, text: 'item2' }],
+            searchEnabled: true
+        }).dxTreeView('instance');
+
+        if(!treeView.option('focusStateEnabled')) {
+            // not run if focus state is disabled
+            assert.ok(true);
+            return;
+        }
+
+        const $treeView = $(treeView.$element());
+
+        const isNodeFocused = (id) => $treeView.find(`[data-item-id="${id}"]`).hasClass('dx-state-focused');
+        const triggerFocus = () => $(treeView.$element().find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`)).trigger('focusin');
+
+        assert.equal(isNodeFocused(1), false, 'item1 is not focused after initialization');
+        assert.equal(isNodeFocused(2), false, 'item2 is not focused after initialization');
+        assert.deepEqual(treeView.option('focusedElement'), null, 'focusedElement is null after initialization');
+
+        triggerFocus();
+        assert.equal(isNodeFocused(1), true, 'item1 is focused after focus');
+        assert.equal(isNodeFocused(2), false, 'item2 is not focused after focus');
+        assert.deepEqual($(treeView.option('focusedElement')).text(), 'item1', 'item1 is focused element');
+
+        treeView.option('searchValue', '2');
+        assert.equal(isNodeFocused(1), false, 'item1 is not focused after search');
+        assert.equal(isNodeFocused(2), false, 'item2 is not focused after search');
+        assert.deepEqual(treeView.option('focusedElement'), null, 'focusedElement is null after initialization');
+
+        triggerFocus();
+        assert.equal(isNodeFocused(1), false, 'item1 is not focused after searching and focus');
+        assert.equal(isNodeFocused(2), true, 'item2 is focused after search and focus');
+        assert.deepEqual($(treeView.option('focusedElement')).text(), 'item2', 'item2 is focused element after search and focus');
+
+        treeView.option('searchValue', '');
+        assert.equal(isNodeFocused(1), false, 'item1 is not focused after clearing search');
+        assert.equal(isNodeFocused(2), false, 'item2 is not focused after clearing search');
+        assert.deepEqual(treeView.option('focusedElement'), null, 'focusElement is null after clearing focus');
+
+        triggerFocus();
+        assert.equal(isNodeFocused(1), true, 'item1 is focused after clearing search and focus');
+        assert.equal(isNodeFocused(2), false, 'item2 is not focused after clearing search and focus');
+        assert.deepEqual($(treeView.option('focusedElement')).text(), 'item1', 'item1 is focused element after clear search and focus');
+    });
 });

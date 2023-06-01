@@ -1,6 +1,5 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
-import Promise from '../core/polyfills/promise';
 import { fromPromise } from '../core/utils/deferred';
 import registerComponent from '../core/component_registrator';
 import errors from './widget/ui.errors';
@@ -9,7 +8,7 @@ import Widget from './widget/ui.widget';
 import { titleize } from '../core/utils/inflector';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
-import { inArray, wrapToArray } from '../core/utils/array';
+import { wrapToArray } from '../core/utils/array';
 import { isNumeric } from '../core/utils/type';
 import { addNamespace } from '../events/utils/index';
 import pointerEvents from '../events/pointer';
@@ -26,11 +25,11 @@ const PROVIDERS = {
     bing
 };
 
+// STYLE map
 
 const MAP_CLASS = 'dx-map';
 const MAP_CONTAINER_CLASS = 'dx-map-container';
 const MAP_SHIELD_CLASS = 'dx-map-shield';
-const NATIVE_CLICK_CLASS = 'dx-native-click';
 
 const Map = Widget.inherit({
 
@@ -84,10 +83,6 @@ const Map = Widget.inherit({
             },
 
             /**
-            * @pseudo MapLocationType
-            * @type Object|string|Array<number>
-            */
-            /**
             * @name MapLocation
             * @hidden
             */
@@ -107,33 +102,6 @@ const Map = Widget.inherit({
             provider: 'google',
 
             autoAdjust: true,
-
-            /**
-            * @name dxMapOptions.markers.location
-            * @extends MapLocationType
-            * @inherits MapLocation
-            */
-            /**
-            * @name dxMapOptions.markers.tooltip
-            * @type string|object
-            */
-            /**
-            * @name dxMapOptions.markers.tooltip.text
-            * @type string
-            */
-            /**
-            * @name dxMapOptions.markers.tooltip.isShown
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name dxMapOptions.markers.onClick
-            * @type function
-            */
-            /**
-            * @name dxMapOptions.markers.iconSrc
-            * @type string
-            */
             markers: [],
 
             markerIconSrc: null,
@@ -142,58 +110,15 @@ const Map = Widget.inherit({
 
             onMarkerRemoved: null,
 
-            /**
-            * @name dxMapOptions.routes.locations
-            * @extends MapLocationType
-            * @inherits MapLocation
-            * @type Array<Object>
-            */
-            /**
-            * @name dxMapOptions.routes.mode
-            * @type Enums.GeoMapRouteMode
-            * @default 'driving'
-            */
-            /**
-            * @name dxMapOptions.routes.color
-            * @type string
-            * @default '#0000FF'
-            */
-            /**
-            * @name dxMapOptions.routes.weight
-            * @type number
-            * @default 5
-            */
-            /**
-            * @name dxMapOptions.routes.opacity
-            * @type number
-            * @default 0.5
-            */
             routes: [],
 
             onRouteAdded: null,
 
             onRouteRemoved: null,
 
-            key: {
-                /**
-                * @name dxMapOptions.key.bing
-                * @type string
-                * @default ""
-                */
+            apiKey: {
                 bing: '',
-
-                /**
-                * @name dxMapOptions.key.google
-                * @type string
-                * @default ""
-                */
                 google: '',
-
-                /**
-                * @name dxMapOptions.key.googleStatic
-                * @type string
-                * @default ""
-                */
                 googleStatic: ''
             },
 
@@ -232,8 +157,7 @@ const Map = Widget.inherit({
         this.callBase();
 
         this.$element()
-            .addClass(MAP_CLASS)
-            .addClass(NATIVE_CLICK_CLASS);
+            .addClass(MAP_CLASS);
 
         this._lastAsyncAction = Promise.resolve();
 
@@ -245,6 +169,10 @@ const Map = Widget.inherit({
         this._grabEvents();
 
         this._rendered = {};
+    },
+
+    _useTemplates: function() {
+        return false;
     },
 
     _checkOption: function(option) {
@@ -339,7 +267,7 @@ const Map = Widget.inherit({
                 this._suppressAsyncAction = true;
                 this._invalidate();
                 break;
-            case 'key':
+            case 'apiKey':
                 errors.log('W1001');
                 break;
             case 'bounds':
@@ -479,7 +407,7 @@ const Map = Widget.inherit({
         each(removingValues, function(removingIndex, removingValue) {
             const index = isNumeric(removingValue)
                 ? removingValue
-                : inArray(removingValue, optionValue);
+                : optionValue?.indexOf(removingValue);
 
             if(index !== -1) {
                 const removing = optionValue.splice(index, 1)[0];

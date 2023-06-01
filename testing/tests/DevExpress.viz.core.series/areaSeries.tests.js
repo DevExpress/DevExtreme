@@ -32,10 +32,12 @@ const createSeries = function(options, renderSettings) {
             displayMode: 'none'
         },
         hoverStyle: {
-            hatching: 'h-hatching'
+            hatching: 'h-hatching',
+            highlight: true,
         },
         selectionStyle: {
-            hatching: 's-hatching'
+            hatching: 's-hatching',
+            highlight: true,
         },
         hoverMode: 'excludePoints',
         selectionMode: 'excludePoints'
@@ -94,7 +96,7 @@ const environmentWithSinonStubPoint = {
     beforeEach: function() {
         environment.beforeEach.call(this);
         let mockPointIndex = 0;
-        this.createPoint = sinon.stub(pointModule, 'Point', function(series, data) {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(series, data) {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.angle = -data.argument;
@@ -845,19 +847,20 @@ function setDiscreteType(series) {
         series.draw();
 
         assert.deepEqual(series._elementsGroup._stored_settings, {
-            'class': 'dxc-elements',
+            class: 'dxc-elements',
             'clip-path': undefined,
-            'fill': 'n color',
-            'hatching': undefined,
-            'opacity': 'n opacity',
-            'stroke': 'none'
+            fill: 'n color',
+            filter: null,
+            hatching: undefined,
+            opacity: 'n opacity',
+            stroke: 'none'
         });
 
         assert.deepEqual(series._bordersGroup._stored_settings, {
-            'class': 'dxc-borders',
+            class: 'dxc-borders',
             'clip-path': undefined,
-            'dashStyle': 'b-n dashStyle',
-            'stroke': 'b-n color',
+            dashStyle: 'b-n dashStyle',
+            stroke: 'b-n color',
             'stroke-width': 'b-n width'
         });
 
@@ -878,19 +881,20 @@ function setDiscreteType(series) {
         });
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            'fill': 'h color',
-            'opacity': 'h opacity',
-            'stroke': 'none',
-            'hatching': {
+            fill: 'h color',
+            opacity: 'h opacity',
+            stroke: 'none',
+            hatching: {
                 direction: 'h-h direction',
                 width: 'h-h width',
                 opacity: 'h-h opacity'
-            }
+            },
+            filter: true,
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            'dashStyle': 'b-h dashStyle',
-            'stroke': 'b-h color',
+            dashStyle: 'b-h dashStyle',
+            stroke: 'b-h color',
             'stroke-width': 'b-h width'
         });
 
@@ -912,15 +916,16 @@ function setDiscreteType(series) {
         series.clearHover(false);
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            'fill': 'n color',
-            'opacity': 'n opacity',
-            'stroke': 'none',
-            hatching: undefined
+            fill: 'n color',
+            opacity: 'n opacity',
+            stroke: 'none',
+            hatching: undefined,
+            filter: null,
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            'dashStyle': 'b-n dashStyle',
-            'stroke': 'b-n color',
+            dashStyle: 'b-n dashStyle',
+            stroke: 'b-n color',
             'stroke-width': 'b-n width'
         });
 
@@ -943,10 +948,11 @@ function setDiscreteType(series) {
         });
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            'fill': 's color',
-            'opacity': 's opacity',
-            'stroke': 'none',
-            'hatching': {
+            fill: 's color',
+            opacity: 's opacity',
+            stroke: 'none',
+            filter: true,
+            hatching: {
                 direction: 's-h direction',
                 width: 's-h width',
                 opacity: 's-h opacity'
@@ -954,8 +960,8 @@ function setDiscreteType(series) {
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            'dashStyle': 'b-s dashStyle',
-            'stroke': 'none',
+            dashStyle: 'b-s dashStyle',
+            stroke: 'none',
             'stroke-width': 'b-s width'
         });
 
@@ -976,15 +982,16 @@ function setDiscreteType(series) {
         series.draw(undefined, undefined, noop);
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            'fill': 's color',
-            'opacity': 's opacity',
-            'stroke': 'none',
-            'hatching': 's-hatching'
+            fill: 's color',
+            filter: true,
+            opacity: 's opacity',
+            stroke: 'none',
+            hatching: 's-hatching'
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            'dashStyle': 'b-s dashStyle',
-            'stroke': 'none',
+            dashStyle: 'b-s dashStyle',
+            stroke: 'none',
             'stroke-width': 'b-s width'
         });
 
@@ -1011,8 +1018,8 @@ function setDiscreteType(series) {
         series.select();
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            'dashStyle': 'b-s dashStyle',
-            'stroke': 'none',
+            dashStyle: 'b-s dashStyle',
+            stroke: 'none',
             'stroke-width': 1
         });
 
@@ -1020,6 +1027,91 @@ function setDiscreteType(series) {
             assert.equal(path._stored_settings['stroke-width'], 1);
             assert.ok(path.sharp.called);
             assert.ok(path.sharp.lastCall.calledAfter(path.attr.lastCall));
+        });
+    });
+
+    QUnit.module('Custom styles. Area Series', {
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
+        beforeEach: function() {
+            environment.beforeEach.call(this);
+            this.options = {
+                type: seriesType,
+                border: { visible: true },
+                color: { base: 'seriesColor', fillId: 'id_color_0' },
+                selectionStyle: {
+                    hatching: { direction: 'left' },
+                    color: { fillId: 'id_color_1' },
+                    border: { visible: true },
+                },
+                hoverStyle: {
+                    hatching: { direction: 'left' },
+                    color: { fillId: 'id_color_2' },
+                    border: { visible: true },
+                }
+            };
+        },
+        afterEach: environment.afterEach
+    });
+
+    QUnit.test('should have normal style', function(assert) {
+        const series = this.createSeries(this.options);
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+
+        assert.deepEqual(series._elementsGroup._stored_settings, {
+            class: 'dxc-elements',
+            'clip-path': undefined,
+            fill: 'id_color_0',
+            filter: null,
+            opacity: undefined,
+            hatching: undefined,
+            stroke: 'none'
+        });
+    });
+
+    QUnit.test('should have hover style after hover series', function(assert) {
+        const series = this.createSeries(this.options);
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+        series.hover();
+
+        assert.deepEqual(series._elementsGroup._stored_settings, {
+            class: 'dxc-elements',
+            'clip-path': undefined,
+            fill: 'id_color_2',
+            filter: true,
+            opacity: undefined,
+            hatching: { direction: 'none' },
+            stroke: 'none'
+        });
+    });
+
+    QUnit.test('should have selection style after select series', function(assert) {
+        const series = this.createSeries(this.options);
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+        series.select();
+
+        assert.deepEqual(series._elementsGroup._stored_settings, {
+            class: 'dxc-elements',
+            'clip-path': undefined,
+            fill: 'id_color_1',
+            filter: true,
+            opacity: undefined,
+            hatching: { direction: 'none' },
+            stroke: 'none'
         });
     });
 
@@ -1033,20 +1125,23 @@ function setDiscreteType(series) {
         });
 
         assert.deepEqual(series.getLegendStyles(), {
-            'hover': {
-                'fill': 'mainSeriesColor',
-                'hatching': 'h-hatching',
-                opacity: undefined
+            hover: {
+                fill: 'mainSeriesColor',
+                hatching: 'h-hatching',
+                opacity: undefined,
+                filter: true,
             },
-            'normal': {
-                'fill': 'mainSeriesColor',
+            normal: {
+                fill: 'mainSeriesColor',
                 opacity: 0.5,
-                hatching: undefined
+                hatching: undefined,
+                filter: undefined,
             },
-            'selection': {
-                'fill': 'mainSeriesColor',
-                'hatching': 's-hatching',
-                opacity: undefined
+            selection: {
+                fill: 'mainSeriesColor',
+                hatching: 's-hatching',
+                opacity: undefined,
+                filter: true,
             }
         });
     });
@@ -1065,20 +1160,59 @@ function setDiscreteType(series) {
         });
 
         assert.deepEqual(series.getLegendStyles(), {
-            'hover': {
-                'fill': 'h-color',
-                'hatching': 'h-hatching',
-                opacity: undefined
+            hover: {
+                fill: 'h-color',
+                hatching: 'h-hatching',
+                opacity: undefined,
+                filter: true,
             },
-            'normal': {
-                'fill': 'n-color',
+            normal: {
+                fill: 'n-color',
                 opacity: 'opacity',
-                hatching: undefined
+                hatching: undefined,
+                filter: undefined,
             },
-            'selection': {
-                'fill': 's-color',
-                'hatching': 's-hatching',
-                opacity: undefined
+            selection: {
+                fill: 's-color',
+                hatching: 's-hatching',
+                opacity: undefined,
+                filter: true,
+            }
+        });
+    });
+
+    QUnit.test('should contain custom styles from series', function(assert) {
+        const series = createSeries({
+            type: seriesType,
+            color: { fillId: 'id_color_0' },
+            hoverStyle: {
+                hatching: { direction: 'left' },
+                color: { fillId: 'id_color_1' }
+            },
+            selectionStyle: {
+                hatching: { direction: 'left' },
+                color: { fillId: 'id_color_2' }
+            }
+        });
+
+        assert.deepEqual(series.getLegendStyles(), {
+            hover: {
+                fill: 'id_color_1',
+                hatching: { direction: 'none' },
+                opacity: undefined,
+                filter: true,
+            },
+            normal: {
+                fill: 'id_color_0',
+                opacity: undefined,
+                hatching: undefined,
+                filter: undefined,
+            },
+            selection: {
+                fill: 'id_color_2',
+                hatching: { direction: 'none' },
+                opacity: undefined,
+                filter: true,
             }
         });
     });
@@ -3031,7 +3165,7 @@ function setDiscreteType(series) {
 
         assert.equal(this.renderer.stub('path').callCount, 2);
 
-        assert.equal(this.renderer.stub('path').getCall(1).args[0].length, 724);
+        assert.equal(this.renderer.stub('path').getCall(1).args[0].length, 722);
         assert.deepEqual(this.renderer.stub('path').getCall(1).args[1], 'area');
         $.each(this.renderer.stub('path').getCall(1).args[0], function(_, pt) {
             assert.equal(pt.x, pt.y);

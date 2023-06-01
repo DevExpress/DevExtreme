@@ -8,7 +8,7 @@ const find = function(array, predicate) {
 require('viz/sankey/sankey');
 require('viz/themes');
 
-const layoutBuilder = require('viz/sankey/layout');
+const layoutBuilder = require('viz/sankey/layout').layout;
 const spiesLayoutBuilder = {
     computeLayout: sinon.spy(layoutBuilder, 'computeLayout'),
     _computeNodes: sinon.spy(layoutBuilder, '_computeNodes')
@@ -34,7 +34,7 @@ const environment = {
         this.nodesGroupIndex = 1;
         this.labelsGroupIndex = 2;
 
-        sinon.stub(rendererModule, 'Renderer', function() {
+        sinon.stub(rendererModule, 'Renderer').callsFake(function() {
             return that.renderer;
         });
     },

@@ -5,7 +5,6 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
 import { extendFromObject } from './extend';
 import { isDefined } from './type';
-import Promise from '../polyfills/promise';
 import injector from './dependency_injector';
 
 const SUCCESS = 'success';
@@ -35,6 +34,10 @@ const paramsConvert = function(params) {
 
         if(value === null) {
             value = '';
+        }
+
+        if(typeof value === 'function') {
+            value = value();
         }
 
         result.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
@@ -300,7 +303,7 @@ const sendRequest = function(options) {
 
     if(async) {
         xhr.timeout = timeout;
-        timeoutId = setHttpTimeout(timeout, xhr, d);
+        timeoutId = setHttpTimeout(timeout, xhr);
     }
 
     xhr['onreadystatechange'] = function(e) {

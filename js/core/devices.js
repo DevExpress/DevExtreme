@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from './utils/size';
 import $ from '../core/renderer';
 import { getWindow, getNavigator, hasWindow } from './utils/window';
 import { extend } from './utils/extend';
@@ -9,7 +10,7 @@ import readyCallbacks from './utils/ready_callbacks';
 import resizeCallbacks from './utils/resize_callbacks';
 import { EventsStrategy } from './events_strategy';
 import { sessionStorage as SessionStorage } from './utils/storage';
-import { changeCallback } from './utils/view_port';
+import { changeCallback, value as viewPort } from './utils/view_port';
 import Config from './config';
 
 const navigator = getNavigator();
@@ -28,14 +29,6 @@ const KNOWN_UA_TABLE = {
     'desktop': 'desktop'
 };
 
-/**
-* @name Device
-* @section commonObjectStructures
-* @type object
-* @namespace DevExpress
-* @module core/devices
-* @export default
-*/
 const DEFAULT_DEVICE = {
     deviceType: 'desktop',
     platform: 'generic',
@@ -112,13 +105,7 @@ const uaParsers = {
 
 class Devices {
     /**
-    * @name DevicesObjectevents.orientationChanged
-    * @type classEventType
-    * @type_function_param1 e:object
-    * @type_function_param1_field1 orientation:String
-    */
-    /**
-    * @name DevicesObjectMethods.ctor
+    * @name DevicesObject.ctor
     * @publicName ctor(options)
     * @param1 options:object
     * @param1_field1 window:Window
@@ -324,7 +311,7 @@ class Devices {
 
     _changeOrientation() {
         const $window = $(this._window);
-        const orientation = $window.height() > $window.width() ? 'portrait' : 'landscape';
+        const orientation = getHeight($window) > getWidth($window) ? 'portrait' : 'landscape';
 
         if(this._currentOrientation === orientation) {
             return;
@@ -338,7 +325,7 @@ class Devices {
     }
 
     _recalculateOrientation() {
-        const windowWidth = $(this._window).width();
+        const windowWidth = getWidth(this._window);
 
         if(this._currentWidth === windowWidth) {
             return;
@@ -361,6 +348,11 @@ class Devices {
 }
 
 const devices = new Devices();
+
+const viewPortElement = viewPort();
+if(viewPortElement) {
+    devices.attachCssClasses(viewPortElement);
+}
 
 changeCallback.add((viewPort, prevViewport) => {
     devices.detachCssClasses(prevViewport);

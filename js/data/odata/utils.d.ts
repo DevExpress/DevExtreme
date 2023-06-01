@@ -1,19 +1,13 @@
 /**
- * @docid EdmLiteral
- * @type object
+ * @docid
  * @namespace DevExpress.data
- * @module data/odata/utils
- * @export EdmLiteral
- * @prevFileNamespace DevExpress.data
  * @public
  */
 export class EdmLiteral {
     constructor(value: string);
     /**
-     * @docid EdmLiteralMethods.valueOf
+     * @docid
      * @publicName valueOf()
-     * @return string
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     valueOf(): string;
@@ -22,11 +16,8 @@ export class EdmLiteral {
 /**
  * @const Utils.keyConverters
  * @publicName odata.keyConverters
- * @type object
  * @namespace DevExpress.data.utils.odata
- * @module data/odata/utils
- * @export keyConverters
- * @prevFileNamespace DevExpress.data
  * @public
  */
+// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
 export var keyConverters: any;

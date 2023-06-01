@@ -1,0 +1,100 @@
+@use "./mixins" as *;
+
+// adduse
+
+.dx-progressbar {
+  .dx-position-left,
+  .dx-position-right {
+    .dx-progressbar-range-container,
+    .dx-progressbar-status {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+
+  .dx-position-top-left,
+  .dx-position-bottom-left {
+    .dx-progressbar-range-container,
+    .dx-progressbar-status {
+      float: left;
+    }
+  }
+
+  .dx-position-top-right,
+  .dx-position-bottom-right {
+    .dx-progressbar-range-container,
+    .dx-progressbar-status {
+      float: right;
+    }
+  }
+
+  .dx-position-top-center,
+  .dx-position-bottom-center {
+    .dx-progressbar-status {
+      text-align: center;
+    }
+  }
+
+  .dx-position-left .dx-progressbar-status {
+    padding-right: 8px;
+  }
+
+  .dx-position-right .dx-progressbar-status {
+    padding-left: 8px;
+  }
+
+  &::before {
+    display: inline-block;
+    height: 100%;
+    content: '';
+    vertical-align: middle;
+  }
+}
+
+.dx-progressbar-range-container {
+  width: 100%;
+}
+
+.dx-progressbar-container {
+  position: relative;
+  width: 100%;
+}
+
+.dx-progressbar-wrapper {
+  display: inline-block;
+  width: 100%;
+  vertical-align: middle;
+  direction: ltr;
+}
+
+.dx-progressbar-range {
+  height: 100%;
+
+  @include user-select(none);
+
+  -webkit-user-drag: none;
+}
+
+.dx-progressbar-status {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: auto;
+  height: 20px;
+  font-size: 12px;
+}
+
+.dx-progressbar-animating-segment {
+  display: none;
+}
+
+.dx-progressbar-animating-container {
+  width: 100%;
+}
+
+.dx-rtl.dx-progressbar,
+.dx-rtl .dx-progressbar {
+  .dx-progressbar-wrapper {
+    direction: rtl;
+  }
+}

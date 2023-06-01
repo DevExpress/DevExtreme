@@ -1,4 +1,2 @@
-import gridCore from './ui.data_grid.core';
-import pagerModule from '../grid_core/ui.grid_core.pager';
-
-gridCore.registerModule('pager', pagerModule);
+// deprecated
+export * from '../../__internal/grids/data_grid/module_not_extended/pager';

@@ -1,6 +1,8 @@
 import fs from 'fs';
 import cabinet from 'filing-cabinet';
-import DependencyCollector from '../../src/metadata/dependency-collector';
+import { dependencies as idealDependencies } from '../data/dependencies';
+import DependencyCollector, { filePathMap } from '../../src/metadata/dependency-collector';
+import { dependencies as builtDependencies } from '../../src/data/metadata/dx-theme-builder-metadata';
 
 const simpleDependencies: ScriptsDependencyTree = {
   dependencies: {
@@ -15,6 +17,10 @@ const simpleDependencies: ScriptsDependencyTree = {
             'icon.js': {
               dependencies: {},
               widget: 'icon',
+            },
+            'render.js': {
+              dependencies: {},
+              widget: '',
             },
           },
           widget: '',
@@ -38,24 +44,53 @@ const simpleDependencies: ScriptsDependencyTree = {
               dependencies: {},
               widget: 'icon',
             },
+            'render.js': {
+              dependencies: {},
+              widget: '',
+            },
           },
           widget: '',
         },
       },
       widget: 'toolbar',
     },
+    'data_grid.js': {
+      dependencies: {
+        'grid_core.ts': {
+          dependencies: {
+            'menu.js': {
+              dependencies: {},
+              widget: 'menu',
+            },
+            'render.js': {
+              dependencies: {},
+              widget: '',
+            },
+          },
+          widget: '',
+        },
+      },
+      widget: 'datagrid',
+    },
   },
   widget: '',
 };
 
+const tsFilesSet = new Set<string>([
+  'grid_core',
+]);
+
 const filesContent: { [key: string]: string } = {
-  'dx.all.js': 'import t from \'./toolbar\';import b from \'./button\';',
+  'dx.all.js': 'import t from \'./toolbar\';import b from \'./button\'; import grid from \'./data_grid\';',
   'toolbar.js': 'import m from \'./menu\';import u from \'./utils\';\n// STYLE toolbar',
   'menu.js': '// STYLE menu',
   'button.js': 'import u from \'./utils\';\n// STYLE button',
   'icon.js': '// STYLE icon',
-  'utils.js': 'import f from \'./fx\';import i from \'./icon\';',
+  'utils.js': 'import f from \'./fx\';import i from \'./icon\';import t from \'./render\';',
+  'render.js': 'import t from \'./utils\';',
   'fx.js': '',
+  'data_grid.js': 'import core from \'./grid_core\'; // STYLE dataGrid',
+  'grid_core.ts': 'import menu from \'./menu\'; import r from \'./render\';',
 
   // validation tests
   '../scss/widgets/righttheme/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";',
@@ -71,16 +106,23 @@ const filesContent: { [key: string]: string } = {
 jest.mock('fs', () => ({
   readFileSync: jest.fn().mockImplementation((path: string): string => filesContent[path] || ''),
   existsSync: (path: string): boolean => filesContent[path] !== undefined,
+  // eslint-disable-next-line spellcheck/spell-checker
+  realpathSync: (): void => { }, // https://github.com/facebook/jest/issues/10012
+  readFile: (): void => { }, // The "original" argument must be of type function. Received undefined
 }));
 
 jest.mock('filing-cabinet', () => ({
   __esModule: true,
-  default: (options: cabinet.Options): string => `${options.partial.replace('./', '')}.js`,
+  default: (options: cabinet.Options): string => {
+    const normalizedPartial = options.partial.replace('./', '');
+    return `${normalizedPartial}.${tsFilesSet.has(normalizedPartial) ? 'ts' : 'js'}`;
+  },
 }));
 
 describe('DependencyCollector', () => {
   beforeEach(() => {
     (fs.readFileSync as jest.Mock).mockClear();
+    filePathMap.clear();
   });
 
   test('getWidgetFromAst - no comments in ast', () => {
@@ -188,7 +230,7 @@ describe('DependencyCollector', () => {
     const dependencyCollector = new DependencyCollector();
     dependencyCollector.collect();
 
-    expect(fs.readFileSync).toBeCalledTimes(9);
+    expect(fs.readFileSync).toHaveBeenCalledTimes(10);
     expect(dependencyCollector.flatStylesDependencyTree).toEqual({
       toolbar: ['menu', 'icon'],
       button: ['icon'],
@@ -219,5 +261,11 @@ describe('validation', () => {
   test('validate - index file has less widgets than in dependencies', () => {
     dependencyCollector.themes = ['lesstheme'];
     expect(() => dependencyCollector.validate()).toThrow('Some public widgets (lesstheme) has no // STYLE comment in source code or private widget has one');
+  });
+});
+
+describe('Integration test', () => {
+  test('Check if dependensies is good', () => {
+    expect(builtDependencies).toEqual(idealDependencies);
   });
 });

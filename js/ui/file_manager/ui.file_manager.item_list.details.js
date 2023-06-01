@@ -8,6 +8,8 @@ import DataGrid from '../data_grid/ui.data_grid';
 
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
+import { Deferred } from '../../core/utils/deferred';
+import { OPERATIONS } from './file_items_controller';
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = 'dx-filemanager-details';
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-details-item-thumbnail';
@@ -89,16 +91,20 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 mode: 'single',
                 showSortIndexes: false
             },
+            loadPanel: {
+                shading: true
+            },
             showColumnLines: false,
             showRowLines: false,
-            columnHidingEnabled: true,
+            columnHidingEnabled: false,
             columns: this._createColumns(),
             onEditorPreparing: this._onEditorPreparing.bind(this),
             onRowPrepared: this._onRowPrepared.bind(this),
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
             onSelectionChanged: this._onFilesViewSelectionChanged.bind(this),
             onFocusedRowChanged: this._onFilesViewFocusedRowChanged.bind(this),
-            onOptionChanged: this._onFilesViewOptionChanged.bind(this)
+            onOptionChanged: this._onFilesViewOptionChanged.bind(this),
+            onContentReady: this._onContentReady.bind(this)
         });
     }
 
@@ -131,15 +137,25 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         if(this._isDefaultColumn(columnOptions.dataField)) {
             const defaultConfig = extend(true, {}, DEFAULT_COLUMN_CONFIGS[columnOptions.dataField]);
             resultCssClass = defaultConfig.cssClass || '';
-            if(columnOptions.dataField === 'thumbnail') {
-                defaultConfig.cellTemplate = this._createThumbnailColumnCell.bind(this);
-                defaultConfig.calculateSortValue = `fileItem.${defaultConfig.calculateSortValue}`;
-            }
-            if(columnOptions.dataField === 'name') {
-                defaultConfig.cellTemplate = this._createNameColumnCell.bind(this);
-            }
-            if(columnOptions.dataField === 'size') {
-                defaultConfig.calculateCellValue = this._calculateSizeColumnCellValue.bind(this);
+            switch(columnOptions.dataField) {
+                case 'thumbnail':
+                    defaultConfig.cellTemplate = this._createThumbnailColumnCell.bind(this);
+                    defaultConfig.calculateSortValue = `fileItem.${defaultConfig.calculateSortValue}`;
+                    break;
+                case 'name':
+                    defaultConfig.cellTemplate = this._createNameColumnCell.bind(this);
+                    defaultConfig.caption = messageLocalization.format('dxFileManager-listDetailsColumnCaptionName');
+                    break;
+                case 'size':
+                    defaultConfig.calculateCellValue = this._calculateSizeColumnCellValue.bind(this);
+                    defaultConfig.caption = messageLocalization.format('dxFileManager-listDetailsColumnCaptionFileSize');
+                    defaultConfig.calculateSortValue = rowData => rowData.fileItem.isDirectory ? -1 : rowData.fileItem.size;
+                    break;
+                case 'dateModified':
+                    defaultConfig.caption = messageLocalization.format('dxFileManager-listDetailsColumnCaptionDateModified');
+                    break;
+                default:
+                    break;
             }
             extend(true, result, defaultConfig);
         }
@@ -158,7 +174,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         ]);
 
         if(columnOptions.cssClass) {
-            resultCssClass = resultCssClass ? `${resultCssClass} ${columnOptions.cssClass}` : columnOptions.cssClass;
+            resultCssClass = `${resultCssClass} ${columnOptions.cssClass}`;
         }
 
         if(resultCssClass) {
@@ -183,7 +199,13 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         const $row = component.$element().closest(this._getItemSelector());
         const fileItemInfo = $row.data('item');
         this._selectItem(fileItemInfo);
-        this._showContextMenu(this._getFileItemsForContextMenu(fileItemInfo), element, fileItemInfo);
+        const target = {
+            itemData: fileItemInfo,
+            itemElement: $row,
+            isActionButton: true
+        };
+        const items = this._getFileItemsForContextMenu(fileItemInfo);
+        this._showContextMenu(items, element, event, target);
         this._activeFileActionsButton = component;
         this._activeFileActionsButton.setActive(true);
     }
@@ -274,7 +296,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             return;
         }
         let fileItems = null;
-        let item = null;
+        let item = {};
 
         if(e.row && e.row.rowType === 'data') {
             item = e.row.data;
@@ -282,7 +304,16 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             fileItems = this._getFileItemsForContextMenu(item);
         }
 
-        e.items = this._contextMenu.createContextMenuItems(fileItems, null, item);
+        const eventArgs = extend({}, {
+            targetElement: e.target === 'content' && isDefined(e.row) ? this._filesView.getRowElement(e.rowIndex) : undefined,
+            itemData: item,
+            options: this._contextMenu.option(),
+            event: e.event,
+            isActionButton: false,
+            cancel: false
+        });
+        this._raiseContextMenuShowing(eventArgs);
+        e.items = eventArgs.cancel ? [] : this._contextMenu.createContextMenuItems(fileItems, null, item);
     }
 
     _onFilesViewSelectionChanged({ component, selectedRowsData, selectedRowKeys, currentSelectedRowKeys, currentDeselectedRowKeys }) {
@@ -324,6 +355,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 sortIndex: 0
             });
         }
+    }
+
+    _resetFocus() {
+        this._setFocusedItemKey(undefined);
     }
 
     _createThumbnailColumnCell(container, cellInfo) {
@@ -373,7 +408,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
             const selectedItems = [];
             const selectedKeys = [];
-            if(fileItemInfo) {
+            if(fileItemInfo && !this._isParentDirectoryItem(fileItemInfo)) {
                 selectedItems.push(fileItemInfo.fileItem);
                 selectedKeys.push(fileItemInfo.fileItem.key);
             }
@@ -400,7 +435,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _setFocusedItemKey(itemKey) {
-        this._filesView.option('focusedRowKey', itemKey);
+        this._filesView?.option('focusedRowKey', itemKey);
     }
 
     clearSelection() {
@@ -411,7 +446,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         }
     }
 
-    refresh(options) {
+    refresh(options, operation) {
         const actualOptions = {
             dataSource: this._createDataSource()
         };
@@ -424,7 +459,21 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             }
         }
 
+        const hasNoScrollTarget = !isDefined(actualOptions.focusedRowKey) && actualOptions.focusedRowIndex === -1;
+        if(hasNoScrollTarget && operation === OPERATIONS.NAVIGATION) {
+            actualOptions.paging = {
+                pageIndex: 0
+            };
+            this._needResetScrollPosition = true;
+        }
         this._filesView.option(actualOptions);
+
+        this._refreshDeferred = new Deferred();
+        return this._refreshDeferred.promise();
+    }
+
+    _getScrollable() {
+        return this._filesView.getScrollable();
     }
 
     getSelectedItems() {

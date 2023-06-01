@@ -1,180 +1,181 @@
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import dxTextBox, {
-    dxTextBoxOptions
+    dxTextBoxOptions,
+
 } from '../text_box';
 
 import {
-    dxTextEditorButton
+    dxTextEditorButton,
 } from '../text_box/ui.text_editor.base';
 
 import {
-    dxPopupOptions
+    Properties as PopoverProperties,
+} from '../popover';
+
+import {
+    Properties as PopupProperties,
 } from '../popup';
 
-export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
+import {
+    EventInfo,
+} from '../../events/index';
+
+import {
+    ApplyValueMode,
+    Mode,
+    Position,
+} from '../../common';
+
+/** @public */
+export type DropDownPredefinedButton = 'clear' | 'dropDown';
+
+export interface DropDownButtonTemplateDataModel {
+    readonly text?: string;
+    readonly icon?: string;
+}
+
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
+export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptions<TComponent>, 'validationMessagePosition'> {
     /**
-     * @docid dxDropDownEditorOptions.acceptCustomValue
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     acceptCustomValue?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.activeStateEnabled
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.applyValueMode
-     * @type Enums.EditorApplyValueMode
+     * @docid
      * @default "instantly"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: ApplyValueMode;
     /**
-     * @docid dxDropDownEditorOptions.dropDownOptions
-     * @type dxPopupOptions
+     * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxPopupOptions | dxPopoverOptions
      */
-    dropDownOptions?: dxPopupOptions;
+    dropDownOptions?: PopupProperties | PopoverProperties;
     /**
-     * @docid dxDropDownEditorOptions.buttons
-     * @type Array<Enums.DropDownEditorButtonName,dxTextEditorButton>
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    buttons?: Array<'clear' | 'dropDown' | dxTextEditorButton>;
+    buttons?: Array<DropDownPredefinedButton | dxTextEditorButton>;
     /**
-     * @docid dxDropDownEditorOptions.deferRendering
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     deferRendering?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.dropDownButtonTemplate
-     * @type template|function
+     * @docid
      * @default "dropDownButton"
      * @type_function_param1 buttonData:object
-     * @type_function_param1_field1 text:string
-     * @type_function_param1_field2 icon:string
-     * @type_function_param2 contentElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropDownButtonTemplate?: template | ((buttonData: { text?: string, icon?: string }, contentElement: dxElement) => string | Element | JQuery);
+    dropDownButtonTemplate?: template | ((buttonData: DropDownButtonTemplateDataModel, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxDropDownEditorOptions.onClosed
-     * @extends Action
+     * @docid
+     * @default null
+     * @type_function_param1 e:EventInfo
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClosed?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onClosed?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid dxDropDownEditorOptions.onOpened
-     * @extends Action
+     * @docid
+     * @default null
+     * @type_function_param1 e:EventInfo
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onOpened?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onOpened?: ((e: EventInfo<TComponent>) => void);
     /**
-     * @docid dxDropDownEditorOptions.openOnFieldClick
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     openOnFieldClick?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.opened
-     * @type boolean
+     * @docid
      * @default false
      * @fires dxDropDownEditorOptions.onOpened
      * @fires dxDropDownEditorOptions.onClosed
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     opened?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.showDropDownButton
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
-     * @docid dxDropDownEditorOptions.value
-     * @type any
+     * @docid
+     * @default 'auto'
+     * @public
+     */
+    validationMessagePosition?: Position | Mode;
+    /**
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;
 }
 /**
- * @docid dxDropDownEditor
+ * @docid
  * @inherits dxTextBox
- * @module ui/drop_down_editor/ui.drop_down_editor
- * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
+ * @options dxDropDownEditorOptions
  */
-export default class dxDropDownEditor extends dxTextBox {
-    constructor(element: Element, options?: dxDropDownEditorOptions)
-    constructor(element: JQuery, options?: dxDropDownEditorOptions)
+export default class dxDropDownEditor<TProperties> extends dxTextBox<TProperties> {
     /**
-     * @docid dxDropDownEditorMethods.close
+     * @docid
      * @publicName close()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     close(): void;
     /**
-     * @docid dxDropDownEditorMethods.content
+     * @docid
      * @publicName content()
-     * @return dxElement
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    content(): dxElement;
+    content(): DxElement;
     /**
-     * @docid dxDropDownEditorMethods.field
+     * @docid
      * @publicName field()
-     * @return dxElement
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    field(): dxElement;
+    field(): DxElement;
     /**
-     * @docid dxDropDownEditorMethods.open
+     * @docid
      * @publicName open()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     open(): void;
 }
 
-export type Options = dxDropDownEditorOptions;
-
-/** @deprecated use Options instead */
-export type IOptions = dxDropDownEditorOptions;
+interface DropDownEditorInstance extends dxDropDownEditor<Properties> { }
+type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
+export type Options = Properties;

@@ -1,0 +1,22 @@
+// adduse
+
+.dx-context-menu {
+  &.dx-overlay-content {
+    overflow: inherit;
+    position: absolute;
+  }
+
+  .dx-menu-items-container {
+    padding: 1px;
+  }
+
+  .dx-menu-item .dx-submenu {
+    position: absolute;
+    z-index: 1003;
+  }
+
+  .dx-menu-separator {
+    height: 1px;
+    margin: 5px 0;
+  }
+}

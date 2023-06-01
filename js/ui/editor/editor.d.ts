@@ -1,107 +1,113 @@
-import '../../jquery_augmentation';
-
 import {
-    dxElement
-} from '../../core/element';
-
-import {
-    event
+    NativeEventInfo,
 } from '../../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from '../widget/ui.widget';
 
-export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
+import {
+    EditorStyle,
+    Position,
+    ValidationMessageMode,
+    ValidationStatus,
+} from '../../common';
+
+export interface ValueChangedInfo {
+    readonly previousValue?: any;
+    readonly value?: any;
+}
+
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
+export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
     /**
-     * @docid EditorOptions.isValid
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     isValid?: boolean;
     /**
-     * @docid EditorOptions.onValueChanged
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:object
-     * @type_function_param1_field5 previousValue:object
-     * @type_function_param1_field6 event:event
+     * @type_function_param1_field value:object
+     * @type_function_param1_field previousValue:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
+    onValueChanged?: ((e: NativeEventInfo<TComponent, Event> & ValueChangedInfo) => void);
     /**
-     * @docid EditorOptions.readOnly
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     readOnly?: boolean;
     /**
-     * @docid EditorOptions.validationError
-     * @type object
+     * @docid
      * @ref
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationError?: any;
     /**
-     * @docid EditorOptions.validationErrors
-     * @type Array<object>
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationErrors?: Array<any>;
     /**
-     * @docid EditorOptions.validationMessageMode
-     * @type Enums.ValidationMessageMode
+     * @docid
      * @default "auto"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validationMessageMode?: 'always' | 'auto';
+    validationMessageMode?: ValidationMessageMode;
     /**
-     * @docid EditorOptions.validationStatus
-     * @type Enums.ValidationStatus
+     * @docid
+     * @default "bottom"
+     * @public
+     */
+    validationMessagePosition?: Position;
+    /**
+     * @docid
      * @default "valid"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validationStatus?: 'valid' | 'invalid' | 'pending';
+    validationStatus?: ValidationStatus;
     /**
-     * @docid EditorOptions.value
-     * @type any
+     * @docid
      * @default null
      * @fires EditorOptions.onValueChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;
+    /**
+     * @docid
+     * @default 'outlined'
+     * @hidden
+     */
+    stylingMode?: EditorStyle;
 }
 /**
- * @docid Editor
- * @type object
+ * @docid
  * @inherits Widget
- * @module ui/editor/editor
- * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  */
-export default class Editor extends Widget {
-    constructor(element: Element, options?: EditorOptions)
-    constructor(element: JQuery, options?: EditorOptions)
+export default class Editor<TProperties = Properties> extends Widget<TProperties> {
     /**
-     * @docid EditorMethods.reset
+     * @docid
      * @publicName reset()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;
 }
+
+interface EditorInstance extends Editor<Properties> { }
+
+type Properties = EditorOptions<EditorInstance>;

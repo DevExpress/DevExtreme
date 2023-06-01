@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:map";
 
 .dx-icon-plus,
@@ -22,6 +23,7 @@
 .dx-icon-edit,
 .dx-icon-email,
 .dx-icon-event,
+.dx-icon-eventall,
 .dx-icon-favorites,
 .dx-icon-find,
 .dx-icon-folder,
@@ -103,7 +105,9 @@
 .dx-icon-addcolumnleft,
 .dx-icon-addcolumnright,
 .dx-icon-addtable,
-.dx-icon-removetable {
+.dx-icon-removetable,
+.dx-icon-bell,
+.dx-icon-to {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -119,7 +123,7 @@
 @mixin dx-icon-sizing($icon-size, $container-size: $icon-size, $borders-size: 0) {
   $icon-paddings-dirty: $container-size - $icon-size;
   $icon-paddings: $icon-paddings-dirty - $borders-size;
-  $icon-padding: floor($icon-paddings / 2);
+  $icon-padding: floor(math.div($icon-paddings, 2));
 
   // Geometry
   width: $container-size;
@@ -138,22 +142,33 @@
   line-height: $container-size - $icon-paddings-dirty;
 }
 
-@mixin dx-icon-font-centered-sizing($icon-size) {
+@mixin dx-icon-font-centered-sizing($icon-size, $position: absolute) {
   font-size: $icon-size;
   text-align: center;
   line-height: $icon-size;
 
   &::before {
-    position: absolute;
+    position: $position;
     display: block;
     width: $icon-size;
     top: 50%;
-    margin-top: -$icon-size / 2;
+    margin-top: math.div(-$icon-size, 2);
     left: 50%;
-    margin-left: -$icon-size / 2;
+    margin-left: math.div(-$icon-size, 2);
+  }
+
+  @if $position == relative {
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+      &::before {
+        left: 0;
+        margin-left: 0;
+        right: 50%;
+        margin-right: math.div(-$icon-size, 2);
+      }
+    }
   }
 }
-
 
 @mixin dx-icon-margin($size) {
   margin-right: $size;
@@ -178,7 +193,7 @@
 }
 
 @mixin dx-font-icon($glyph) {
-  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
+  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
 
   &::before {
     content: $glyph;
@@ -208,6 +223,7 @@ $icons: (
     "edit": "\f023",
     "email": "\f024",
     "event": "\f026",
+    "eventall": "\f043",
     "favorites": "\f025",
     "find": "\f027",
     "filter": "\f050",
@@ -391,7 +407,39 @@ $icons: (
     "insertcolumnleft": "\f133",
     "insertcolumnright": "\f132",
     "inserttable": "\f130",
-    "deletetable": "\f131"
+    "deletetable": "\f131",
+    "edittableheader": "\f142",
+    "addtableheader": "\f143",
+    "pasteplaintext": "\f144",
+    "importselected": "\f145",
+    "import": "\f146",
+    "textdocument": "\f147",
+    "jpgfile": "\f148",
+    "bmpfile": "\f149",
+    "svgfile": "\f150",
+    "attach": "\f151",
+    "return": "\f152",
+    "indeterminatestate": "\f153",
+    "lock": "\f154",
+    "unlock": "\f155",
+    "imgarlock": "\f156",
+    "imgarunlock": "\f157",
+    "bell": "\f158",
+    "sun": '\f159',
+    "send": '\f160',
+    "pinmap": '\f161',
+    "photooutline": '\f162',
+    "panelright": '\f163',
+    "panelleft": '\f164',
+    "optionsgear": '\f165',
+    "moon": '\f166',
+    "login": '\f167',
+    "eyeopen": '\f168',
+    "eyeclose": '\f169',
+    "expandform": '\f170',
+    "description": '\f171',
+    "belloutline": '\f172',
+    "to": '\f173',
 );
 
 // stylelint-enable

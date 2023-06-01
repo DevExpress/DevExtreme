@@ -1,44 +1,37 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot, Template,
-} from 'devextreme-generator/component_declaration/common';
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
+  Slot,
+} from '@devextreme-generator/declarations';
 import { getGroupCellClasses } from '../utils';
-import { ContentTemplateProps } from '../types.d';
+import { ContentTemplateProps } from '../types';
 
-export const viewFunction = (viewModel: CellBase): JSX.Element => {
-  const ContentTemplate = viewModel.props.contentTemplate;
-
-  return (
-    <td
-    // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
-      className={viewModel.classes}
-    >
-      {!ContentTemplate && viewModel.props.children}
-      {ContentTemplate && (
-        <ContentTemplate
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          {...viewModel.props.contentTemplateProps!}
-        />
-      )}
-    </td>
-  );
-};
+export const viewFunction = (viewModel: CellBase): JSX.Element => (
+  <td
+    className={viewModel.classes}
+    aria-label={viewModel.props.ariaLabel}
+  >
+    {viewModel.props.children}
+  </td>
+);
 
 @ComponentBindings()
 export class CellBaseProps {
-  @OneWay() className? = '';
+  @OneWay() className = '';
 
   @OneWay() isFirstGroupCell? = false;
 
   @OneWay() isLastGroupCell? = false;
 
-  @OneWay() startDate?: Date = new Date();
+  @OneWay() startDate = new Date();
 
-  @OneWay() endDate?: Date = new Date();
+  @OneWay() endDate = new Date();
 
   @OneWay() allDay?: boolean = false;
 
-  @OneWay() groups?: object;
+  @OneWay() groups?: Record<string, unknown>;
 
   @OneWay() groupIndex?: number;
 
@@ -46,11 +39,14 @@ export class CellBaseProps {
 
   @OneWay() index = 0;
 
-  @OneWay() contentTemplateProps?: ContentTemplateProps;
+  @OneWay() contentTemplateProps: ContentTemplateProps = {
+    data: {},
+    index: 0,
+  };
 
-  @Template() contentTemplate?: any;
+  @OneWay() ariaLabel?: string;
 
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 }
 
 @Component({

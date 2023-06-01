@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.IO;
 using System.Threading;
 using System.Net.Http;
+using Runner.Tools;
 using Directory = System.IO.Directory;
 using Path = System.IO.Path;
 using IOFile = System.IO.File;
@@ -25,6 +27,7 @@ namespace Runner.Controllers
 
         private static readonly string PathToNode;
 
+        static readonly HttpClient HTTP = new HttpClient();
         static readonly object SYNC = new object();
         static NodeServerContext NodeServerContextInstance;
 
@@ -41,11 +44,12 @@ namespace Runner.Controllers
             }
         }
 
-        IHostingEnvironment _env;
+        IWebHostEnvironment _env;
 
-        public TestVectorMapDataController(IHostingEnvironment env)
+        public TestVectorMapDataController(IWebHostEnvironment env)
         {
             _env = env;
+            ConsoleHelper.Logger.SetWorkingFolder(env.ContentRootPath);
         }
 
         private string ReadTextFile(string path)
@@ -155,17 +159,17 @@ namespace Runner.Controllers
             StartNodeServer();
             try
             {
-                using (var client = new HttpClient())
                 {
                     var startedAt = DateTime.Now;
                     while (true)
                     {
                         try
                         {
-                            using (var message = client.GetAsync(string.Format("http://127.0.0.1:{0}/{1}/{2}", Ports.Get("vectormap-utils-tester"), action, arg)).Result)
+                            var req = new HttpRequestMessage(HttpMethod.Get, string.Format("http://127.0.0.1:{0}/{1}/{2}", Ports.Get("vectormap-utils-tester"), action, arg));
+                            using (var message = HTTP.Send(req))
+                            using (var reader = new StreamReader(message.Content.ReadAsStream()))
                             {
-                                var data = message.Content.ReadAsStringAsync().Result;
-                                return Content(data, "application/json");
+                                return Content(reader.ReadToEnd(), "application/json");
                             }
                         }
                         catch (Exception)

@@ -1,0 +1,17 @@
+// adduse
+
+.dx-searchbox {
+  .dx-icon-search {
+    display: block;
+    position: relative;
+    pointer-events: none;
+
+    &::before {
+      display: inline-block;
+      overflow: hidden;
+      box-sizing: content-box;
+      position: static;
+      text-indent: 0;
+    }
+  }
+}

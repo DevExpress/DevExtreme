@@ -15,29 +15,29 @@ $generic-pager-pagesize-padding-left: null !default;
 $generic-pager-pagesize-padding-right: null !default;
 
 @if $size == "default" {
-  $generic-pager-paddings: 9px;
-  $generic-pager-separator-paddings: 8px;
-  $generic-pager-page-padding-left-right: 9px;
-  $generic-pager-page-padding-top: 7px;
-  $generic-pager-page-padding-bottom: 8px;
-  $generic-pager-navbutton-paddings: $generic-pager-paddings 13px;
-  $generic-pager-navbutton-height: 17px;
-  $generic-pager-pagesize-padding-top: 7px;
-  $generic-pager-pagesize-padding-bottom: 8px;
-  $generic-pager-pagesize-padding-left: 10px;
-  $generic-pager-pagesize-padding-right: 9px;
+  $generic-pager-paddings: 9px !default;
+  $generic-pager-separator-paddings: 8px !default;
+  $generic-pager-page-padding-left-right: 9px !default;
+  $generic-pager-page-padding-top: 7px !default;
+  $generic-pager-page-padding-bottom: 8px !default;
+  $generic-pager-navbutton-paddings: $generic-pager-paddings 13px !default;
+  $generic-pager-navbutton-height: 17px !default;
+  $generic-pager-pagesize-padding-top: 7px !default;
+  $generic-pager-pagesize-padding-bottom: 8px !default;
+  $generic-pager-pagesize-padding-left: 10px !default;
+  $generic-pager-pagesize-padding-right: 9px !default;
 }
 
 @else if $size == "compact" {
-  $generic-pager-paddings: 5px;
-  $generic-pager-page-padding-left-right: 6px;
-  $generic-pager-page-padding-top: 4px;
-  $generic-pager-page-padding-bottom: 5px;
-  $generic-pager-separator-paddings: 4px;
-  $generic-pager-navbutton-paddings: $generic-pager-paddings 7px;
-  $generic-pager-navbutton-height: 16px;
-  $generic-pager-pagesize-padding-top: 4px;
-  $generic-pager-pagesize-padding-bottom: 5px;
-  $generic-pager-pagesize-padding-left: 8px;
-  $generic-pager-pagesize-padding-right: 6px;
+  $generic-pager-paddings: 5px !default;
+  $generic-pager-page-padding-left-right: 6px !default;
+  $generic-pager-page-padding-top: 4px !default;
+  $generic-pager-page-padding-bottom: 5px !default;
+  $generic-pager-separator-paddings: 4px !default;
+  $generic-pager-navbutton-paddings: $generic-pager-paddings 7px !default;
+  $generic-pager-navbutton-height: 16px !default;
+  $generic-pager-pagesize-padding-top: 4px !default;
+  $generic-pager-pagesize-padding-bottom: 5px !default;
+  $generic-pager-pagesize-padding-left: 8px !default;
+  $generic-pager-pagesize-padding-right: 6px !default;
 }

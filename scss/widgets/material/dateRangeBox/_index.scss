@@ -1,0 +1,211 @@
+@use "sass:math";
+@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as *;
+@use "../dateBox/mixins" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "colors" as *;
+@use "../colors" as *;
+@use "../../base/dateRangeBox/mixins" as *;
+@use "../../base/dateRangeBox";
+@use "../../base/icons" as *;
+@use "../textEditor" as *;
+
+// adduse
+
+$material-editor-custom-button-margin: 5px;
+$material-filled-texteditor-input-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 4px;
+$material-filled-texteditor-spin-button-horizontal-padding: $material-filled-texteditor-input-horizontal-padding - 8px;
+
+@include dx-outlined-mixin(
+  $base-bg,
+  4px,
+  $material-texteditor-label-font-size,
+  math.div($material-texteditor-label-font-size, 2),
+  $material-texteditor-label-font-size + 1px,
+  $material-texteditor-label-font-size,
+  2.5px,
+  0,
+);
+@include dx-underlined-mixin(
+  $material-texteditor-label-font-size,
+  $material-texteditor-label-font-size,
+  $material-texteditor-label-font-size);
+@include dx-filled-mixin(
+  floor(math.div($material-filled-texteditor-input-top-padding, 2)),
+  $material-texteditor-label-font-size,
+  $material-texteditor-label-font-size,
+  $material-texteditor-label-font-size,
+);
+
+.dx-daterangebox {
+  @include dx-dropdowneditor-button-icon-styling(eventall);
+
+  .dx-editor-outlined {
+    &::before {
+      display: block;
+      bottom: 1px;
+    }
+  }
+
+  .dx-editor-outlined,
+  .dx-editor-filled {
+    &::before {
+      width: calc(100% - 2 * $material-daterangebox-active-bar-horizontal-margin);
+      margin: 0 $material-daterangebox-active-bar-horizontal-margin;
+    }
+  }
+
+  &.dx-editor-underlined,
+  &.dx-editor-filled {
+    &::before {
+      border-bottom-width: 1px;
+      transition: none;
+    }
+
+    &.dx-state-hover {
+      &::after {
+        border-bottom-width: 1px;
+        transition: none;
+      }
+    }
+
+    &.dx-state-focused {
+      &.dx-invalid {
+        &::before {
+          border-bottom-width: 1px;
+          transition: none;
+        }
+      }
+    }
+
+    .dx-datebox {
+      &::before {
+        bottom: 1px;
+      }
+
+      &::after {
+        border-color: transparent;
+        bottom: 1px;
+      }
+    }
+  }
+
+  &.dx-editor-underlined {
+    .dx-daterangebox-separator {
+      padding-right: $material-filled-texteditor-input-horizontal-padding;
+    }
+  }
+
+  &.dx-editor-outlined,
+  &.dx-editor-filled,
+  &.dx-editor-underlined {
+    > .dx-texteditor-buttons-container {
+      > .dx-button,
+      > .dx-clear-button-area {
+        margin-left: $material-editor-custom-button-margin;
+        margin-right: $material-editor-custom-button-margin;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:last-child {
+          margin-right: $material-editor-custom-button-margin * 2;
+        }
+      }
+
+      > .dx-dropdowneditor-button:last-child {
+        margin-right: $material-filled-texteditor-spin-button-horizontal-padding;
+      }
+
+      > .dx-clear-button-area:last-child,
+      > .dx-clear-button-area + div:empty:last-child {
+        margin-right: $material-filled-texteditor-input-button-horizontal-padding;
+      }
+    }
+
+    &.dx-rtl {
+      > .dx-texteditor-buttons-container {
+        > .dx-button,
+        > .dx-clear-button-area {
+          &:first-child {
+            margin-left: $material-editor-custom-button-margin;
+            margin-right: 0;
+          }
+
+          &:last-child {
+            margin-left: $material-editor-custom-button-margin * 2;
+            margin-right: $material-editor-custom-button-margin;
+          }
+        }
+
+        > .dx-dropdowneditor-button:last-child {
+          margin-left: $material-filled-texteditor-spin-button-horizontal-padding;
+          margin-right: 0;
+        }
+
+        > .dx-clear-button-area:last-child {
+          margin-left: $material-filled-texteditor-input-button-horizontal-padding;
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+  .dx-datebox {
+    &.dx-start-datebox {
+      &.dx-editor-outlined,
+      &.dx-editor-filled,
+      &.dx-editor-underlined {
+        .dx-texteditor-input {
+          padding-right: $material-filled-texteditor-input-horizontal-padding;
+        }
+
+        &.dx-rtl {
+          .dx-texteditor-input {
+            padding-left: $material-filled-texteditor-input-horizontal-padding;
+          }
+        }
+      }
+    }
+
+    &.dx-end-datebox {
+      &.dx-editor-outlined,
+      &.dx-editor-underlined,
+      &.dx-editor-filled {
+        &.dx-invalid {
+          .dx-texteditor-input {
+            padding-right: $material-texteditor-invalid-badge-size;
+          }
+
+          &.dx-rtl {
+            .dx-texteditor-input {
+              padding-right: $material-filled-texteditor-input-horizontal-padding;
+              padding-left: $material-texteditor-invalid-badge-size;
+            }
+          }
+        }
+      }
+
+      &.dx-editor-underlined {
+        &.dx-invalid {
+          &.dx-rtl {
+            .dx-texteditor-input {
+              padding-right: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.dx-daterangebox-separator {
+  padding-left: $material-filled-texteditor-input-horizontal-padding;
+  color: $texteditor-label-color;
+
+  .dx-icon {
+    @include dx-icon-sizing($material-base-icon-size);
+  }
+}

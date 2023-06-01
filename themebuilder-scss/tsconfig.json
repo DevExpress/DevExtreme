@@ -1,28 +1,13 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "target": "es6",
-        "noImplicitAny": true,
-        "allowJs": true,
-        "resolveJsonModule": true,
-        "moduleResolution": "node",
-        "outDir": "dist",
-        "baseUrl": ".",
-        "paths": {
-            "sass": [
-                "node_modules/@types/node-sass"
-            ],
-            "*": [
-                "node_modules/*",
-                "src/types/*"
-            ]
-        }
-    },
-    "include": [
-        "src/modules/*",
-        "src/data/**/*",
-        "src/types/*",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "types": [
+      "node"
     ]
+  },
+  "include": [
+    "src/modules/*",
+    "src/data/**/*",
+    "src/types/*"
+  ]
 }

@@ -1,501 +1,733 @@
+import { DataSourceLike } from '../data/data_source';
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
-
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
+import {
+    EditorStyle,
+    ToolbarItemLocation,
+} from '../common';
+
 import Editor, {
-    EditorOptions
+    ValueChangedInfo,
+    EditorOptions,
 } from './editor/editor';
 
 import {
-    dxToolbarItem
+  MenuBasePlainItem,
+} from './menu';
+
+import {
+    Item as dxToolbarItem,
 } from './toolbar';
 
+import { Properties as fileUploaderProperties } from './file_uploader';
+
+export {
+    EditorStyle,
+    ToolbarItemLocation,
+};
+
+/** @public */
+export type HtmlEditorFormat = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block';
+/** @public */
+export type HtmlEditorImageUploadMode = 'base64' | 'server' | 'both';
+/** @public */
+export type HtmlEditorImageUploadTab = 'url' | 'file';
+/** @public */
+export type HtmlEditorPredefinedContextMenuItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'cellProperties' | 'tableProperties';
+/** @public */
+export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
+/** @public */
+export type MarkupType = 'html' | 'markdown';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxHtmlEditor>;
+
+/** @public */
+export type FocusInEvent = NativeEventInfo<dxHtmlEditor, FocusEvent>;
+
+/** @public */
+export type FocusOutEvent = NativeEventInfo<dxHtmlEditor, FocusEvent>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxHtmlEditor>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxHtmlEditor> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxHtmlEditor, KeyboardEvent | ClipboardEvent | Event> & ValueChangedInfo;
+
+/** @public */
+export interface MentionTemplateData {
+    readonly marker: string;
+    readonly id?: string | number;
+    readonly value?: any;
+}
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
-     * @docid dxHtmlEditorOptions.customizeModules
-     * @type function
-     * @type_function_param1 config:object
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @default false
      * @public
      */
-    customizeModules?: ((config: any) => any);
+    allowSoftLineBreak?: boolean;
     /**
-     * @docid dxHtmlEditorOptions.focusStateEnabled
-     * @type boolean
+     * @docid
+     * @type_function_param1 config:object
+     * @public
+     */
+    customizeModules?: ((config: any) => void);
+    /**
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxHtmlEditorOptions.mediaResizing
-     * @type dxHtmlEditorMediaResizing
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     mediaResizing?: dxHtmlEditorMediaResizing;
     /**
-     * @docid dxHtmlEditorOptions.mentions
-     * @type Array<dxHtmlEditorMention>
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    tableResizing?: dxHtmlEditorTableResizing;
+    /**
+     * @docid
+     * @default null
      * @public
      */
     mentions?: Array<dxHtmlEditorMention>;
     /**
-     * @docid dxHtmlEditorOptions.name
-     * @type string
+     * @docid
+     * @default null
+     * @public
+     */
+    tableContextMenu?: dxHtmlEditorTableContextMenu;
+    /**
+     * @docid
+     * @default { tabs: ["url"], fileUploadMode: 'base64', uploadUrl: undefined, uploadDirectory: undefined }
+     * @public
+     */
+    imageUpload?: dxHtmlEditorImageUpload;
+    /**
+     * @docid
      * @hidden false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
-     * @docid dxHtmlEditorOptions.onFocusIn
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxHtmlEditor
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusIn?: ((e: { component?: dxHtmlEditor, element?: dxElement, model?: any, event?: event }) => any);
+    onFocusIn?: ((e: FocusInEvent) => void);
     /**
-     * @docid dxHtmlEditorOptions.onFocusOut
-     * @extends Action
-     * @type function(e)
+     * @docid
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxHtmlEditor
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusOut?: ((e: { component?: dxHtmlEditor, element?: dxElement, model?: any, event?: event }) => any);
+    onFocusOut?: ((e: FocusOutEvent) => void);
     /**
-     * @docid dxHtmlEditorOptions.placeholder
-     * @type string
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     placeholder?: string;
     /**
-     * @docid dxHtmlEditorOptions.toolbar
-     * @type dxHtmlEditorToolbar
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     toolbar?: dxHtmlEditorToolbar;
     /**
-     * @docid dxHtmlEditorOptions.valueType
-     * @type Enums.HtmlEditorValueType
+     * @docid
      * @default "html"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    valueType?: 'html' | 'markdown';
+    valueType?: MarkupType;
     /**
-     * @docid dxHtmlEditorOptions.variables
-     * @type dxHtmlEditorVariables
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     variables?: dxHtmlEditorVariables;
+    /**
+     * @docid
+     * @default 'outlined'
+     * @public
+     */
+    stylingMode?: EditorStyle;
 }
 /**
- * @docid dxHtmlEditor
+ * @docid
  * @inherits Editor
  * @hasTranscludedContent
  * @isEditor
- * @module ui/html_editor
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxHtmlEditor extends Editor {
-    constructor(element: Element, options?: dxHtmlEditorOptions)
-    constructor(element: JQuery, options?: dxHtmlEditorOptions)
+export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
     /**
-     * @docid dxHtmlEditorMethods.clearHistory
+     * @docid
+     * @publicName blur()
+     * @public
+     */
+    blur(): void;
+    /**
+     * @docid
      * @publicName clearHistory()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     clearHistory(): void;
     /**
-     * @docid dxHtmlEditorMethods.delete
+     * @docid
      * @publicName delete(index, length)
-     * @param1 index:number
-     * @param2 length:number
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     delete(index: number, length: number): void;
     /**
-     * @docid dxHtmlEditorMethods.format
+     * @docid
      * @publicName format(formatName, formatValue)
      * @param1 formatName:Enums.HtmlEditorFormat|string
-     * @param2 formatValue:any
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    format(formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
+    format(formatName: HtmlEditorFormat | string, formatValue: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatLine
+     * @docid
      * @publicName formatLine(index, length, formatName, formatValue)
-     * @param1 index:number
-     * @param2 length:number
      * @param3 formatName:Enums.HtmlEditorFormat|string
-     * @param4 formatValue:any
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    formatLine(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
+    formatLine(index: number, length: number, formatName: HtmlEditorFormat | string, formatValue: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatLine
+     * @docid
      * @publicName formatLine(index, length, formats)
-     * @param1 index:number
-     * @param2 length:number
      * @param3 formats:object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     formatLine(index: number, length: number, formats: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatText
+     * @docid
      * @publicName formatText(index, length, formatName, formatValue)
-     * @param1 index:number
-     * @param2 length:number
      * @param3 formatName:Enums.HtmlEditorFormat|string
-     * @param4 formatValue:any
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    formatText(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
+    formatText(index: number, length: number, formatName: HtmlEditorFormat | string, formatValue: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatText
+     * @docid
      * @publicName formatText(index, length, formats)
-     * @param1 index:number
-     * @param2 length:number
      * @param3 formats:object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     formatText(index: number, length: number, formats: any): void;
     /**
-     * @docid dxHtmlEditorMethods.get
+     * @docid
      * @publicName get(componentPath)
-     * @param1 componentPath:string
      * @return Object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     get(componentPath: string): any;
     /**
-     * @docid dxHtmlEditorMethods.getFormat
-     * @publicName getFormat(index, length)
-     * @param1 index:number
-     * @param2 length:number
+     * @docid
+     * @publicName getBounds(index, length)
      * @return Object
-     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getBounds(index: number, length: number): any;
+    /**
+     * @docid
+     * @publicName getFormat()
+     * @return Object
+     * @public
+     */
+    getFormat(): any;
+    /**
+     * @docid
+     * @publicName getFormat(index, length)
+     * @return Object
      * @public
      */
     getFormat(index: number, length: number): any;
     /**
-     * @docid dxHtmlEditorMethods.getLength
+     * @docid
      * @publicName getLength()
-     * @return number
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getLength(): number;
     /**
-     * @docid dxHtmlEditorMethods.getModule
+     * @docid
      * @publicName getModule(moduleName)
-     * @param1 moduleName:string
      * @return Object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getModule(moduleName: string): any;
     /**
-     * @docid dxHtmlEditorMethods.getQuillInstance
+     * @docid
      * @publicName getQuillInstance()
      * @return Object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     getQuillInstance(): any;
     /**
-     * @docid dxHtmlEditorMethods.getSelection
+     * @docid
      * @publicName getSelection()
      * @return Object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelection(): any;
+    getSelection(focus?: boolean | undefined): any;
     /**
-     * @docid dxHtmlEditorMethods.insertEmbed
+     * @docid
+     * @publicName getText(index, length)
+     * @public
+     */
+    getText(index: number, length: number): string;
+    /**
+     * @docid
      * @publicName insertEmbed(index, type, config)
-     * @param1 index:number
-     * @param2 type:string
-     * @param3 config:any
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     insertEmbed(index: number, type: string, config: any): void;
     /**
-     * @docid dxHtmlEditorMethods.insertText
+     * @docid
+     * @publicName insertText(index, text, formatName, formatValue)
+     * @param3 formatName:Enums.HtmlEditorFormat|string
+     * @public
+     */
+    insertText(index: number, text: string, formatName: HtmlEditorFormat | string, formatValue: any): void;
+    /**
+     * @docid
      * @publicName insertText(index, text, formats)
-     * @param1 index:number
-     * @param2 text:string
      * @param3 formats:object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     insertText(index: number, text: string, formats: any): void;
     /**
-     * @docid dxHtmlEditorMethods.redo
+     * @docid
      * @publicName redo()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     redo(): void;
     /**
-     * @docid dxHtmlEditorMethods.register
+     * @docid
      * @publicName register(components)
      * @param1 modules:Object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     register(modules: any): void;
     /**
-     * @docid dxHtmlEditorMethods.removeFormat
+     * @docid
      * @publicName removeFormat(index, length)
-     * @param1 index:number
-     * @param2 length:number
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     removeFormat(index: number, length: number): void;
     /**
-     * @docid dxHtmlEditorMethods.setSelection
+     * @docid
      * @publicName setSelection(index, length)
-     * @param1 index:number
-     * @param2 length:number
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     setSelection(index: number, length: number): void;
     /**
-     * @docid dxHtmlEditorMethods.undo
+     * @docid
      * @publicName undo()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     undo(): void;
 }
 
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
 export interface dxHtmlEditorMediaResizing {
     /**
-     * @docid dxHtmlEditorMediaResizing.allowedTargets
-     * @type Array<string>
+     * @docid
      * @default ["image"]
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowedTargets?: Array<string>;
     /**
-     * @docid dxHtmlEditorMediaResizing.enabled
-     * @type boolean
+     * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     enabled?: boolean;
 }
 
-export interface dxHtmlEditorMention {
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxHtmlEditorTableResizing {
+ /**
+  * @docid
+  * @default 40
+  * @public
+  */
+  minColumnWidth?: number;
+ /**
+  * @docid
+  * @default 24
+  * @public
+  */
+ minRowHeight?: number;
+ /**
+  * @docid
+  * @default false
+  * @public
+  */
+ enabled?: boolean;
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxHtmlEditorImageUpload {
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  uploadUrl?: string;
+  /**
+   * @docid
+   * @default undefined
+   * @public
+   */
+  uploadDirectory?: string;
+  /**
+   * @docid
+   * @default 'base64'
+   * @public
+   */
+   fileUploadMode?: HtmlEditorImageUploadMode;
+     /**
+   * @docid
+   * @default ["url"]
+   * @type Array<dxHtmlEditorImageUploadTabItem, Enums.HtmlEditorImageUploadTab>
+   * @public
+   */
+    tabs?: Array<ImageUploadTab | HtmlEditorImageUploadTab>;
     /**
-     * @docid dxHtmlEditorMention.dataSource
-     * @type Array<string>|DataSource|DataSourceOptions
-     * @default null
-     * @prevFileNamespace DevExpress.ui
+    * @docid
+    * @default null
+    * @type dxFileUploaderOptions
+    * @public
+    */
+    fileUploaderOptions?: fileUploaderProperties;
+ }
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
+
+ /**
+  * @deprecated Use ImageUploadTab instead
+  * @namespace DevExpress.ui
+  */
+export interface dxHtmlEditorImageUploadTabItem {
+    /**
+     * @docid
+     * @default undefined
      * @public
      */
-    dataSource?: Array<string> | DataSource | DataSourceOptions;
+    name?: HtmlEditorImageUploadTab;
+ }
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxHtmlEditorTableContextMenu {
     /**
-     * @docid dxHtmlEditorMention.displayExpr
-     * @type string|function(item)
+     * @docid
+     * @default false
+     * @public
+     */
+    enabled?: boolean;
+    /**
+     * @docid
+     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorPredefinedContextMenuItem>
+     * @public
+     */
+    items?: Array<ContextMenuItem | HtmlEditorPredefinedContextMenuItem>;
+}
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
+
+/**
+ * @deprecated Use ContextMenuItem instead
+ * @namespace DevExpress.ui
+ */
+export interface dxHtmlEditorTableContextMenuItem extends MenuBasePlainItem {
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    name?: HtmlEditorPredefinedContextMenuItem;
+    /**
+     * @docid
+     * @public
+     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorPredefinedContextMenuItem>
+     */
+    items?: Array<ContextMenuItem | HtmlEditorPredefinedContextMenuItem>;
+}
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxHtmlEditorMention {
+    /**
+     * @docid
+     * @default null
+     * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
+     */
+    dataSource?: DataSourceLike<string> | null;
+    /**
+     * @docid
      * @default "this"
      * @type_function_param1 item:object
-     * @type_function_return string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     displayExpr?: string | ((item: any) => string);
     /**
-     * @docid dxHtmlEditorMention.itemTemplate
-     * @type template|function
+     * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxHtmlEditorMention.marker
-     * @type string
+     * @docid
      * @default "@"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     marker?: string;
     /**
-     * @docid dxHtmlEditorMention.minSearchLength
-     * @type number
+     * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minSearchLength?: number;
     /**
-     * @docid dxHtmlEditorMention.searchExpr
+     * @docid
      * @type getter|Array<getter>
      * @default "this"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchExpr?: string | Function | Array<string | Function>;
     /**
-     * @docid dxHtmlEditorMention.searchTimeout
-     * @type number
+     * @docid
      * @default 500
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchTimeout?: number;
     /**
-     * @docid dxHtmlEditorMention.template
-     * @type template|function
+     * @docid
      * @default null
      * @type_function_param1 mentionData:object
-     * @type_function_param1_field1 marker:string
-     * @type_function_param1_field2 id:string|number
-     * @type_function_param1_field3 value:any
-     * @type_function_param2 contentElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((mentionData: { marker?: string, id?: string | number, value?: any }, contentElement: dxElement) => string | Element | JQuery);
+    template?: template | ((mentionData: MentionTemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
-     * @docid dxHtmlEditorMention.valueExpr
-     * @type string|function
+     * @docid
      * @default "this"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     valueExpr?: string | Function;
 }
 
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
 export interface dxHtmlEditorToolbar {
     /**
-     * @docid dxHtmlEditorToolbar.container
-     * @type string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    container?: string | Element | JQuery;
+    container?: string | UserDefinedElement;
     /**
-     * @docid dxHtmlEditorToolbar.items
-     * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorPredefinedToolbarItem>
      * @public
      */
-    items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
+    items?: Array<ToolbarItem | HtmlEditorPredefinedToolbarItem>;
     /**
-     * @docid dxHtmlEditorToolbar.multiline
-     * @type boolean
+     * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     multiline?: boolean;
 }
 
+/**
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export type ToolbarItem = dxHtmlEditorToolbarItem;
+
+/**
+ * @deprecated Use ToolbarItem instead
+ * @namespace DevExpress.ui
+ */
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
-     * @docid dxHtmlEditorToolbarItem.formatName
-     * @type Enums.HtmlEditorToolbarItem|string
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
+    name?: HtmlEditorPredefinedToolbarItem | string;
     /**
-     * @docid dxHtmlEditorToolbarItem.formatValues
-     * @type Array<string,number,boolean>
-     * @prevFileNamespace DevExpress.ui
+     * @docid
+     * @deprecated dxHtmlEditorToolbarItem.name
+     */
+    formatName?: HtmlEditorPredefinedToolbarItem | string;
+    /**
+     * @docid
      * @public
+     */
+    acceptedValues?: Array<string | number | boolean>;
+    /**
+     * @docid
+     * @deprecated dxHtmlEditorToolbarItem.acceptedValues
      */
     formatValues?: Array<string | number | boolean>;
     /**
-     * @docid dxHtmlEditorToolbarItem.location
+     * @docid
      * @default "before"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
 }
 
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
 export interface dxHtmlEditorVariables {
     /**
-     * @docid dxHtmlEditorVariables.dataSource
-     * @type string|Array<string>|DataSource|DataSourceOptions
+     * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<string>|null
      */
-    dataSource?: string | Array<string> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string> | null;
     /**
-     * @docid dxHtmlEditorVariables.escapeChar
-     * @type string|Array<string>
+     * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     escapeChar?: string | Array<string>;
 }
 
-declare global {
-interface JQuery {
-    dxHtmlEditor(): JQuery;
-    dxHtmlEditor(options: "instance"): dxHtmlEditor;
-    dxHtmlEditor(options: string): any;
-    dxHtmlEditor(options: string, ...params: any[]): any;
-    dxHtmlEditor(options: dxHtmlEditorOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxHtmlEditorOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxHtmlEditorOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxHtmlEditorOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onContentReady
+ * @type_function_param1 e:{ui/html_editor:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onDisposing
+ * @type_function_param1 e:{ui/html_editor:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onFocusIn
+ * @type_function_param1 e:{ui/html_editor:FocusInEvent}
+ */
+onFocusIn?: ((e: FocusInEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onFocusOut
+ * @type_function_param1 e:{ui/html_editor:FocusOutEvent}
+ */
+onFocusOut?: ((e: FocusOutEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onInitialized
+ * @type_function_param1 e:{ui/html_editor:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onOptionChanged
+ * @type_function_param1 e:{ui/html_editor:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxHtmlEditorOptions.onValueChanged
+ * @type_function_param1 e:{ui/html_editor:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

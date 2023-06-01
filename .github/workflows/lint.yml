@@ -1,0 +1,248 @@
+name: Lint
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches: [23_1]
+
+jobs:
+  Renovation:
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Compile renovation
+      run: |
+        npm i cheerio@1.0.0-rc.10
+        npm run compile:r
+# Remove package install after upgrade to TypeScript >= 4.6
+
+    - name: Lint renovation
+      run: npm run lint-renovation
+
+  TS:
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Run npm install TS testing
+      run: |
+        pushd testing/typescript
+        npm install --no-audit --no-fund
+        popd
+
+    - name: Build
+      run: npm run build
+
+    - name: Lint TS
+      env:
+        DEBUG: eslint:cli-engine
+      run: npm run lint-ts
+
+    - name: Lint .d.ts
+      env:
+        DEBUG: eslint:cli-engine
+      run: npm run lint-dts
+
+  JS:
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Build
+      run: npm run build
+
+    - name: Lint JS
+      env:
+        DEBUG: eslint:cli-engine
+      run: npm run lint-js
+
+  texts:
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Check texts
+      run: npm run lint-texts
+
+  CSS:
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Lint CSS
+      run: npm run lint-css
+
+  package_lock_npm_6:
+    runs-on: devextreme-shr2
+    timeout-minutes: 10
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js 14
+      uses: actions/setup-node@v3
+      with:
+#       This version contains npm v6
+        node-version: '14'
+
+    - name: Check package-lock
+      run: |
+        node -v
+        npm -v
+        npm install --no-audit --no-fund
+
+    - name: Check build
+      run: npm run build:dev
+
+  package_lock:
+    runs-on: devextreme-shr2
+    timeout-minutes: 10
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Check package-lock
+      run: |
+        node -v
+        npm -v
+        npm install --no-audit --no-fund --ignore-scripts
+        git diff --exit-code package-lock.json
+
+  component_exports:
+    runs-on: devextreme-shr2
+    timeout-minutes: 10
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Check generated component reexports
+      run: |
+        node -v
+        npm -v
+        npm install --no-audit --no-fund --ignore-scripts
+
+        npm run update-ts-reexports
+
+        git add . -N
+
+        if git diff --exit-code ; then
+          echo "Generated component reexports are up-to-date"
+        else
+            echo "Generated component reexports are outdated. Execute 'npm run update-ts-reexports' and commit changes."
+            exit 1
+        fi
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [Renovation, TS, JS, CSS, texts, package_lock, package_lock_npm_6, component_exports]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DevExpress/github-actions/send-teams-notification@main
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 23_1

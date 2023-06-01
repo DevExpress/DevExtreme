@@ -252,7 +252,16 @@ QUnit.module('Aggregation methods', {
             },
             calculateInterval: function() {
                 return 1;
-            }
+            },
+            getOptions() {
+                return {
+                    type: 'continuous'
+                };
+            },
+            getVisualRangeCenter({ minVisible, maxVisible }) {
+                return (minVisible + maxVisible) / 2;
+            },
+            aggregatedPointBetweenTicks: sinon.stub()
         };
 
         this.createSeries = function(method, type, options) {
@@ -295,6 +304,13 @@ QUnit.module('Aggregation methods', {
     }
 });
 
+// T983625
+QUnit.test('length as argumentField', function(assert) {
+    const points = this.aggregateData('avg', [{ length: 1, val: 1 }, { length: 2, val: 2 }], 'line', { argumentField: 'length' });
+
+    assert.strictEqual(points.length, 1);
+});
+
 QUnit.test('Aggregation is disabled', function(assert) {
     const points = this.aggregateData('unknown', this.data, 'line', { aggregation: { enabled: false } });
     assert.equal(points.length, 5);
@@ -313,49 +329,56 @@ QUnit.test('Pass aggregationInfo into point', function(assert) {
 QUnit.test('Avg', function(assert) {
     const points = this.aggregateData('avg', this.data);
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 500);
 });
 
+QUnit.test('Aggregation with aggregatedPointsPosition', function(assert) {
+    this.argumentAxis.aggregatedPointBetweenTicks.returns(true);
+    const points = this.aggregateData('avg', this.data);
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 500);
+});
 QUnit.test('Sum', function(assert) {
     const points = this.aggregateData('sum', this.data);
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 2500);
 });
 
 QUnit.test('Count', function(assert) {
     const points = this.aggregateData('count', this.data);
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 5);
 });
 
 QUnit.test('Min', function(assert) {
     const points = this.aggregateData('min', this.data);
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 100);
 });
 
 QUnit.test('Max', function(assert) {
     const points = this.aggregateData('Max', this.data);
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 900);
 });
 
 QUnit.test('Default aggregation method is avg', function(assert) {
     const points = this.aggregateData('unknown', this.data);
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 500);
 });
 
 QUnit.test('Default aggregation method is sum, for bar series', function(assert) {
     const points = this.aggregateData('unknown', this.data, 'bar');
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 2500);
 });
 
@@ -561,7 +584,7 @@ QUnit.test('ohlc. Financial series', function(assert) {
     ], 'stock');
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].openValue, 2);
     assert.equal(points[0].closeValue, 5);
     assert.equal(points[0].lowValue, 0);
@@ -578,7 +601,7 @@ QUnit.test('ohlc with null high values. Financial series', function(assert) {
     ], 'stock');
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].openValue, 2);
     assert.equal(points[0].closeValue, 5);
     assert.equal(points[0].lowValue, 0);
@@ -595,7 +618,7 @@ QUnit.test('ohlc with null low values. Financial series', function(assert) {
     ], 'stock');
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].openValue, 2);
     assert.equal(points[0].closeValue, 5);
     assert.equal(points[0].lowValue, null);
@@ -612,7 +635,7 @@ QUnit.test('Range. range series', function(assert) {
     ], 'rangebar');
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].minValue, 1);
     assert.equal(points[0].value, 9);
 });
@@ -627,7 +650,7 @@ QUnit.test('Range. range series. skip null points', function(assert) {
     ], 'rangebar');
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].minValue, 2);
     assert.equal(points[0].value, 8);
 });
@@ -642,7 +665,7 @@ QUnit.test('Use avg method for value and size in Bubble series', function(assert
     ], 'bubble');
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].size, 6.6);
     assert.equal(points[0].value, 3.6);
 });
@@ -663,7 +686,7 @@ QUnit.test('Avg. Calculate error bars', function(assert) {
     });
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 500);
     assert.equal(points[0].lowError, 445);
     assert.equal(points[0].highError, 532.5);
@@ -705,7 +728,7 @@ QUnit.test('Avg. With fixed error bars', function(assert) {
     });
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 500);
     assert.equal(points[0].lowError, 499);
     assert.equal(points[0].highError, 501);
@@ -727,7 +750,7 @@ QUnit.test('Sum. Calculate error bars', function(assert) {
     });
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 2500);
     assert.equal(points[0].lowError, 2260);
     assert.equal(points[0].highError, 2650);
@@ -749,7 +772,7 @@ QUnit.test('Min. Calculate error bars', function(assert) {
     });
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 100);
     assert.strictEqual(points[0].lowError, null);
     assert.equal(points[0].highError, 120);
@@ -771,7 +794,7 @@ QUnit.test('Max. Calculate error bars', function(assert) {
     });
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 900);
     assert.strictEqual(points[0].lowError, 850);
     assert.equal(points[0].highError, 960);
@@ -793,7 +816,7 @@ QUnit.test('Count. Do not calculate error bars', function(assert) {
     });
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 5);
     assert.equal(points[0].value, 5);
     assert.strictEqual(points[0].lowError, undefined);
     assert.strictEqual(points[0].highError, undefined);
@@ -803,11 +826,11 @@ QUnit.test('Points grouping by intervals', function(assert) {
     this.argumentAxis.getAggregationInfo = () => { return { interval: 5, ticks: [0, 6, 8, 10] }; };
     const points = this.aggregateData('avg', this.data);
     assert.equal(points.length, 3);
-    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].argument, 3);
     assert.equal(points[0].value, 300);
-    assert.equal(points[1].argument, 6);
+    assert.equal(points[1].argument, 7);
     assert.equal(points[1].value, 700);
-    assert.equal(points[2].argument, 8);
+    assert.equal(points[2].argument, 9);
     assert.equal(points[2].value, 900);
 });
 
@@ -845,7 +868,7 @@ QUnit.test('Aggregation with empty interval, Count should create a point', funct
     const points = this.aggregateData('count', this.data);
 
     assert.equal(points.length, 1);
-    assert.equal(points[0].argument, 10);
+    assert.equal(points[0].argument, 12.5);
     assert.equal(points[0].value, 0);
 });
 
@@ -995,6 +1018,7 @@ QUnit.test('Aggregation methods when all points values are undefined', function(
 
 QUnit.test('Aggregate by category', function(assert) {
     this.getBusinessRange = () => { return { categories: ['A', 'B', 'C'] }; };
+    this.argumentAxis.getOptions = () => { return { type: 'discrete' }; };
     this.argumentAxis.getAggregationInfo = sinon.spy(() => {
         return { aggregateByCategory: true };
     });
@@ -1017,6 +1041,7 @@ QUnit.test('Aggregate by category', function(assert) {
 QUnit.test('Discrete datetime aggregation', function(assert) {
     const date = '2020-08-31T12:45:00Z';
     this.getBusinessRange = () => { return { categories: [new Date(date)] }; };
+    this.argumentAxis.getOptions = () => { return { type: 'discrete' }; };
     this.argumentAxis.getAggregationInfo = sinon.spy(() => {
         return { aggregateByCategory: true };
     });
@@ -1032,6 +1057,7 @@ QUnit.test('Discrete datetime aggregation', function(assert) {
 
 QUnit.test('Aggregate by category. Check aggregation info', function(assert) {
     this.getBusinessRange = () => { return { categories: ['A', 'B'] }; };
+    this.argumentAxis.getOptions = () => { return { type: 'discrete' }; };
     this.argumentAxis.getAggregationInfo = sinon.spy(() => {
         return { aggregateByCategory: true };
     });
@@ -1062,4 +1088,31 @@ QUnit.test('Aggregate by category. Check aggregation info', function(assert) {
         intervalEnd: 'B',
         intervalStart: 'B'
     });
+});
+
+QUnit.test('Single datetime interval aggregation (T1060164)', function(assert) {
+    const date = '2022-01-31T12:00:00Z';
+
+    this.getBusinessRange = () => {
+        return {
+            min: new Date(date),
+            max: new Date(date),
+            minVisible: new Date(date),
+            maxVisible: new Date(date)
+        };
+    };
+    this.argumentAxis.getAggregationInfo = () => {
+        return {
+            interval: undefined,
+            ticks: [new Date(date)]
+        };
+    };
+
+    const points = this.aggregateData('sum', [
+        { val: 60.00, arg: new Date(date) },
+        { val: 30.00, arg: new Date(date) }
+    ], 'bar', {}, false, 'continuous');
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].value, 90);
 });

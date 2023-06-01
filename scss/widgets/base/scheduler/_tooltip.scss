@@ -1,4 +1,8 @@
+@use "./mixins" as *;
+
 $scheduler-appointment-base-color: null !default;
+$scheduler-tooltip-appointment-text-color: null !default;
+$scheduler-appointment-overlay-bg: null !default;
 
 .dx-popup-wrapper.dx-scheduler-appointment-tooltip-wrapper,
 .dx-scheduler-overlay-panel {
@@ -18,19 +22,19 @@ $scheduler-appointment-base-color: null !default;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
   }
 
-  .dx-tooltip-appointment-item-marker-body {
-    background: $scheduler-appointment-base-color;
-  }
-
   .dx-tooltip-appointment-item {
     display: flex;
 
     .dx-tooltip-appointment-item-marker-body {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
       margin-top: 7px;
       margin-left: 5px;
+      background: $scheduler-appointment-base-color;
+
+      @include use-colored-marker(20);
+    }
+
+    .dx-tooltip-appointment-item-delete-button .dx-icon {
+      color: $scheduler-tooltip-appointment-text-color;
     }
 
     .dx-tooltip-appointment-item-content {
@@ -39,6 +43,7 @@ $scheduler-appointment-base-color: null !default;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      color: $scheduler-tooltip-appointment-text-color;
 
       .dx-tooltip-appointment-item-content-subject {
         text-align: left;
@@ -63,6 +68,6 @@ $scheduler-appointment-base-color: null !default;
 .dx-scheduler-overlay-panel {
   .dx-overlay-content {
     position: relative;
-    background: #fff;
+    background: $scheduler-appointment-overlay-bg;
   }
 }

@@ -9,6 +9,7 @@ const scssDir = join(rootDir, 'tests', 'data', 'scss');
 describe('MetadataCollector', () => {
   const expectedFileList: string[] = [
     join('bundles', 'dx.light.scss'),
+    join('bundles', 'dx.material.blue.light.scss'),
     join('widgets', 'generic', 'accordion', '_colors.scss'),
     join('widgets', 'generic', 'accordion', '_index.scss'),
     join('widgets', 'generic', 'accordion', '_sizes.scss'),
@@ -17,6 +18,7 @@ describe('MetadataCollector', () => {
     join('widgets', 'generic', '_index.scss'),
     join('widgets', 'generic', '_sizes.scss'),
     join('widgets', 'generic', '_variables.scss'),
+    join('widgets', 'material', '_index.scss'),
   ];
 
   promises.mkdir = jest.fn();
@@ -65,11 +67,11 @@ describe('MetadataCollector', () => {
     const expectedDestinationPath = resolve(join(destinationPath, relativePath));
     const expectedDestinationDir = dirname(expectedDestinationPath);
 
-    async function getTestFiles(): Promise<FileInfo[]> {
+    function getTestFiles(): FileInfo[] {
       return [{ path: relativePath, content: fileContent }];
     }
 
-    await MetadataCollector.saveScssFiles(getTestFiles(), destinationPath);
+    await MetadataCollector.saveScssFiles(Promise.resolve(getTestFiles()), destinationPath);
 
     expect(promises.mkdir).toHaveBeenCalledTimes(1);
     expect(promises.mkdir).toHaveBeenCalledWith(expectedDestinationDir, { recursive: true });
@@ -81,9 +83,7 @@ describe('MetadataCollector', () => {
     const collector = new MetadataCollector();
     const version = '1.1.1';
     const fileName = join('metadata', 'dx-theme-builder-metadata.ts');
-    const jsonFileName = join('metadata', 'dx-theme-builder-metadata.json');
     const expectedFileName = resolve(fileName);
-    const expectedJsonFileName = resolve(jsonFileName);
     const expectedDirName = dirname(expectedFileName);
     const meta: ThemesMetadata = { generic: [{ Key: '$var', Value: '\'ON\'' }], material: [] };
 
@@ -94,14 +94,11 @@ describe('MetadataCollector', () => {
     metaContent += 'export const browsersList: Array<string> = [];\n';
     metaContent += 'export const dependencies: FlatStylesDependencies = {};\n';
 
-    const jsonMetaContent = JSON.stringify(meta);
+    await collector.saveMetadata(fileName, version, [], {});
 
-    await collector.saveMetadata(fileName, jsonFileName, version, [], {});
-
-    expect(promises.mkdir).toHaveBeenCalledTimes(2);
+    expect(promises.mkdir).toHaveBeenCalledTimes(1);
     expect(promises.mkdir).toHaveBeenCalledWith(expectedDirName, { recursive: true });
-    expect(promises.writeFile).toHaveBeenCalledTimes(2);
+    expect(promises.writeFile).toHaveBeenCalledTimes(1);
     expect(promises.writeFile).toHaveBeenCalledWith(expectedFileName, metaContent);
-    expect(promises.writeFile).toHaveBeenCalledWith(expectedJsonFileName, jsonMetaContent);
   });
 });

@@ -1,112 +1,238 @@
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
+import {
+    Mode,
+} from '../common';
+
+type ItemLike<TKey> = string | Item<TKey> | any;
+
+export {
+    Mode,
+};
+
+/** @public */
+export type Distribution = 'center' | 'end' | 'space-around' | 'space-between' | 'start';
+/** @public */
+export type CrosswiseDistribution = 'center' | 'end' | 'start' | 'stretch';
+/** @public */
+export type BoxDirection = 'col' | 'row';
+
+/** @public */
+export type ContentReadyEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxBox<TItem, TKey>>;
+
+/** @public */
+export type DisposingEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxBox<TItem, TKey>>;
+
+/** @public */
+export type InitializedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = InitializedEventInfo<dxBox<TItem, TKey>>;
+
+/** @public */
+export type ItemClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxBox<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxBox<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemHoldEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxBox<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemRenderedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxBox<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxBox<TItem, TKey>> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ * @docid
+ */
+export interface dxBoxOptions<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxBox<TItem, TKey>, TItem, TKey> {
     /**
-     * @docid dxBoxOptions.align
-     * @type Enums.BoxAlign
+     * @docid
      * @default 'start'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    align?: 'center' | 'end' | 'space-around' | 'space-between' | 'start';
+    align?: Distribution;
     /**
-     * @docid dxBoxOptions.crossAlign
-     * @type Enums.BoxCrossAlign
+     * @docid
      * @default 'start'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    crossAlign?: 'center' | 'end' | 'start' | 'stretch';
+    crossAlign?: CrosswiseDistribution;
     /**
-     * @docid dxBoxOptions.dataSource
-     * @type string|Array<string,dxBoxItem,object>|DataSource|DataSourceOptions
+     * @docid
+     * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxBoxItem | any> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid dxBoxOptions.direction
-     * @type Enums.BoxDirection
+     * @docid
      * @default 'row'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    direction?: 'col' | 'row';
+    direction?: BoxDirection;
     /**
-     * @docid dxBoxOptions.items
-     * @type Array<string, dxBoxItem, object>
+     * @docid
+     * @type Array<string | dxBoxItem | any>
      * @fires dxBoxOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxBoxItem | any>;
+    items?: Array<TItem>;
 }
 /**
- * @docid dxBox
+ * @docid
  * @inherits CollectionWidget
- * @module ui/box
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxBox extends CollectionWidget {
-    constructor(element: Element, options?: dxBoxOptions)
-    constructor(element: JQuery, options?: dxBoxOptions)
-}
+export default class dxBox<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> extends CollectionWidget<dxBoxOptions<TItem, TKey>, TItem, TKey> { }
 
-export interface dxBoxItem extends CollectionWidgetItem {
+/**
+ * @public
+ * @namespace DevExpress.ui.dxBox
+ */
+export type Item<TKey = any> = dxBoxItem<TKey>;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
+ */
+export interface dxBoxItem<TKey = any> extends CollectionWidgetItem {
     /**
-     * @docid dxBoxItem.baseSize
-     * @type number | Enums.Mode
+     * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    baseSize?: number | 'auto';
+    baseSize?: number | Mode;
     /**
-     * @docid dxBoxItem.box
-     * @type dxBoxOptions
+     * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @type dxBoxOptions
      */
-    box?: dxBoxOptions;
+    box?: dxBoxOptions<any, TKey>;
     /**
-     * @docid dxBoxItem.ratio
-     * @type number
+     * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     ratio?: number;
     /**
-     * @docid dxBoxItem.shrink
-     * @type number
+     * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     shrink?: number;
 }
 
-declare global {
-interface JQuery {
-    dxBox(): JQuery;
-    dxBox(options: "instance"): dxBox;
-    dxBox(options: string): any;
-    dxBox(options: string, ...params: any[]): any;
-    dxBox(options: dxBoxOptions): JQuery;
-}
-}
-export type Options = dxBoxOptions;
+/** @public */
+export type ExplicitTypes<
+    TItem extends ItemLike<TKey>,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+};
 
-/** @deprecated use Options instead */
-export type IOptions = dxBoxOptions;
+/** @public */
+export type Properties<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> = dxBoxOptions<TItem, TKey>;
+
+/** @deprecated use Properties instead */
+export type Options<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered' | 'onSelectionChanged'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxBoxOptions.onContentReady
+ * @type_function_param1 e:{ui/box:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxBoxOptions.onDisposing
+ * @type_function_param1 e:{ui/box:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxBoxOptions.onInitialized
+ * @type_function_param1 e:{ui/box:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxBoxOptions.onItemClick
+ * @type_function_param1 e:{ui/box:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxBoxOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/box:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxBoxOptions.onItemHold
+ * @type_function_param1 e:{ui/box:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxBoxOptions.onItemRendered
+ * @type_function_param1 e:{ui/box:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxBoxOptions.onOptionChanged
+ * @type_function_param1 e:{ui/box:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

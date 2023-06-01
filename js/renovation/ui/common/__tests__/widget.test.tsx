@@ -2,22 +2,26 @@ import React, { createRef } from 'react';
 // Should be before component import
 import { mount } from 'enzyme';
 // import { create as mount } from 'react-test-renderer';
-import each from 'jest-each';
-import { DisposeEffectReturn } from '../../../utils/effect_return.d';
+import { RefObject } from '@devextreme-generator/declarations';
+import { DisposeEffectReturn } from '../../../utils/effect_return';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,
 } from '../../../test_utils/events_mock';
 import { Widget, viewFunction, WidgetProps } from '../widget';
-import { isFakeClickEvent } from '../../../../events/utils/index';
-import config from '../../../../core/config';
-import { ConfigProvider } from '../config_provider';
+import { ConfigProvider } from '../../../common/config_provider';
+import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
+import resizeCallbacks from '../../../../core/utils/resize_callbacks';
+import errors from '../../../../core/errors';
+import domAdapter from '../../../../core/dom_adapter';
 
 jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),
-  isFakeClickEvent: jest.fn(),
 }));
-jest.mock('../config_provider', () => ({ ConfigProvider: () => null }));
+jest.mock('../../../common/config_provider', () => ({ ConfigProvider: () => null }));
+jest.mock('../../../utils/resolve_rtl');
+jest.mock('../../../../core/utils/resize_callbacks');
+jest.mock('../../../../core/errors');
 
 describe('Widget', () => {
   describe('Render', () => {
@@ -37,7 +41,6 @@ describe('Widget', () => {
         attributes: 'attributes',
         style: { display: 'none' },
         className: 'cssClasses',
-        hidden: false,
         title: 'hint',
         tabIndex: 10,
       });
@@ -50,7 +53,7 @@ describe('Widget', () => {
         visible: true,
       };
       mount(viewFunction({
-        widgetRef: mockRef,
+        widgetElementRef: mockRef,
         props,
         cssClasses: 'cssClasses',
       } as any) as any);
@@ -66,7 +69,7 @@ describe('Widget', () => {
         children: <div className="child" />,
       };
       const widget = mount(viewFunction({
-        widgetRef: mockRef,
+        widgetElementRef: mockRef,
         props,
         cssClasses: 'cssClasses',
       } as any) as any);
@@ -96,112 +99,113 @@ describe('Widget', () => {
     });
 
     describe('Effects', () => {
-      describe('accessKeyEffect', () => {
-        const e = { ...defaultEvent, stopImmediatePropagation: jest.fn() };
-
-        beforeEach(() => {
-          (isFakeClickEvent as any).mockImplementation(() => true);
+      describe('applyCssTextEffect', () => {
+        it('should apply cssText value to the main element', () => {
+          const widget = new Widget({ cssText: 'background-color: red;' });
+          widget.widgetElementRef = { current: { style: {} } } as any;
+          widget.applyCssTextEffect();
+          expect(widget.widgetElementRef.current!.style.cssText).toStrictEqual('background-color: red;');
         });
 
-        it('should subscribe to click event', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(true);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(1);
-        });
-
-        it('should not change state if click event is not fake', () => {
-          (isFakeClickEvent as any).mockImplementation(() => false);
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should return unsubscribe callback', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-
-          const detach = widget.accessKeyEffect() as DisposeEffectReturn;
-
-          expect(getEventHandlers(EVENT.dxClick).length).toBe(1);
-          detach();
-          expect(getEventHandlers(EVENT.dxClick).length).toBe(0);
-        });
-
-        it('should not subscribe if widget is disabled', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: true });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should not subscribe if widget is not focusable', () => {
-          const widget = new Widget({ accessKey: 'c', focusStateEnabled: false, disabled: false });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
-        });
-
-        it('should not subscribe if widget does not have accessKey', () => {
-          const widget = new Widget({ focusStateEnabled: true, disabled: false });
-
-          widget.accessKeyEffect();
-          emit(EVENT.dxClick, e);
-
-          expect(widget.focused).toBe(false);
-          expect(e.stopImmediatePropagation).toBeCalledTimes(0);
+        it('should ignore empty cssText value', () => {
+          const widget = new Widget({ cssText: '' });
+          widget.widgetElementRef = { current: { style: {} } } as any;
+          widget.applyCssTextEffect();
+          expect(widget.widgetElementRef.current!.style.cssText).toStrictEqual(undefined);
         });
       });
 
       describe('activeEffect', () => {
         const onActive = jest.fn();
-        const onInactive = jest.fn();
 
         it('should subscribe to active event', () => {
           const e = { ...defaultEvent };
           const widget = new Widget({
-            activeStateEnabled: true, disabled: false, onActive, onInactive,
+            activeStateEnabled: true, disabled: false, onActive,
           });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.activeEffect();
 
           emit(EVENT.active, e);
           expect(widget.active).toBe(true);
+
+          expect(onActive).toHaveBeenCalledTimes(1);
+          expect(onActive).toHaveBeenCalledWith(e);
+        });
+
+        it('should work without errors if onActive is not defined', () => {
+          const e = { ...defaultEvent };
+          const widget = new Widget({
+            activeStateEnabled: true, disabled: false, onActive: undefined,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.activeEffect();
+
+          emit(EVENT.active, e);
+          expect(widget.active).toBe(true);
+        });
+
+        it('should return unsubscribe callback', () => {
+          const widget = new Widget({ activeStateEnabled: true, disabled: false });
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
+
+          const detachActive = widget.activeEffect() as DisposeEffectReturn;
+
+          expect(getEventHandlers(EVENT.active).length).toBe(1);
+          detachActive();
+          expect(getEventHandlers(EVENT.active).length).toBe(0);
+        });
+
+        it('should not subscribe to active event if widget is disabled', () => {
+          const widget = new Widget({
+            activeStateEnabled: true, disabled: true, onActive,
+          });
+          widget.activeEffect();
+
+          emit(EVENT.active);
+          expect(widget.active).toBe(false);
+          expect(onActive).toHaveBeenCalledTimes(0);
+        });
+
+        it('should not subscribe to active event if activeStateEnabled is false', () => {
+          const widget = new Widget({
+            activeStateEnabled: false, disabled: false, onActive,
+          });
+          widget.activeEffect();
+
+          emit(EVENT.active);
+          expect(widget.active).toBe(false);
+          expect(onActive).toHaveBeenCalledTimes(0);
+        });
+      });
+
+      describe('inactiveEffect', () => {
+        const onInactive = jest.fn();
+
+        it('should subscribe to inactive event', () => {
+          const e = { ...defaultEvent };
+          const widget = new Widget({
+            activeStateEnabled: true, disabled: false, onInactive,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.active = true;
+          widget.inactiveEffect();
 
           emit(EVENT.inactive, e);
           expect(widget.active).toBe(false);
 
-          expect(onActive).toHaveBeenCalledTimes(1);
-          expect(onActive).toHaveBeenCalledWith(e);
           expect(onInactive).toHaveBeenCalledTimes(1);
           expect(onInactive).toHaveBeenCalledWith(e);
         });
 
-        it('should woork without errors if onActive and onInactive are not defined', () => {
+        it('should work without errors if onInactive is not defined', () => {
           const e = { ...defaultEvent };
           const widget = new Widget({
-            activeStateEnabled: true, disabled: false, onActive: undefined, onInactive: undefined,
+            activeStateEnabled: true, disabled: false, onInactive: undefined,
           });
-          widget.widgetRef = {} as any;
-          widget.activeEffect();
-
-          emit(EVENT.active, e);
-          expect(widget.active).toBe(true);
+          widget.widgetElementRef = {} as any;
+          widget.active = true;
+          widget.inactiveEffect();
 
           emit(EVENT.inactive, e);
           expect(widget.active).toBe(false);
@@ -209,49 +213,48 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ activeStateEnabled: true, disabled: false });
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
 
-          const detach = widget.activeEffect() as DisposeEffectReturn;
+          const detachInactive = widget.inactiveEffect() as DisposeEffectReturn;
 
-          expect(getEventHandlers(EVENT.active).length).toBe(1);
           expect(getEventHandlers(EVENT.inactive).length).toBe(1);
-          detach();
-          expect(getEventHandlers(EVENT.active).length).toBe(0);
+          detachInactive();
           expect(getEventHandlers(EVENT.inactive).length).toBe(0);
         });
 
-        it('should not subscribe if widget is disabled', () => {
+        it('should call inactive event handler if widget is active', () => {
           const widget = new Widget({
-            activeStateEnabled: true, disabled: true, onActive, onInactive,
+            activeStateEnabled: true, onInactive,
           });
-          widget.activeEffect();
-          widget.active = false;
-
-          emit(EVENT.active);
-          expect(widget.active).toBe(false);
-
+          widget.widgetElementRef = {} as any;
+          widget.inactiveEffect();
           widget.active = true;
-          emit(EVENT.inactive);
-          expect(widget.active).toBe(true);
 
-          expect(onActive).toHaveBeenCalledTimes(0);
+          emit(EVENT.inactive);
+          expect(widget.active).toBe(false);
+          expect(onInactive).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not call inactive event handler if widget is not active', () => {
+          const widget = new Widget({
+            activeStateEnabled: true, onInactive,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.inactiveEffect();
+
+          emit(EVENT.inactive);
           expect(onInactive).toHaveBeenCalledTimes(0);
         });
 
-        it('should not subscribe if widget is not focusable', () => {
+        it('should not subscribe to inactive event if activeStateEnabled is false', () => {
           const widget = new Widget({
-            activeStateEnabled: false, disabled: false, onActive, onInactive,
+            activeStateEnabled: false, disabled: false, onInactive,
           });
-          widget.activeEffect();
-          widget.active = false;
-
-          emit(EVENT.active);
-          expect(widget.active).toBe(false);
-
+          widget.inactiveEffect();
           widget.active = true;
+
           emit(EVENT.inactive);
           expect(widget.active).toBe(true);
-
-          expect(onActive).toHaveBeenCalledTimes(0);
           expect(onInactive).toHaveBeenCalledTimes(0);
         });
       });
@@ -261,6 +264,7 @@ describe('Widget', () => {
           const e = { ...defaultEvent };
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
 
           widget.clickEffect();
           emit(EVENT.dxClick, e);
@@ -272,6 +276,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
 
           const detach = widget.clickEffect() as DisposeEffectReturn;
           detach();
@@ -289,68 +294,49 @@ describe('Widget', () => {
         });
       });
 
-      describe('focusEffect', () => {
+      describe('focusInEffect', () => {
         const e = { ...defaultEvent, isDefaultPrevented: jest.fn() };
+        const onFocusIn = jest.fn();
 
-        it('should subscribe to focus event', () => {
-          const onFocusIn = jest.fn();
-          const onFocusOut = jest.fn();
+        it('should subscribe to focusin event', () => {
           const widget = new Widget({
-            focusStateEnabled: true, disabled: false, onFocusIn, onFocusOut,
+            focusStateEnabled: true, disabled: false, onFocusIn,
           });
-          widget.widgetRef = {} as any;
-
-          widget.focusEffect();
+          widget.widgetElementRef = {} as any;
+          widget.focusInEffect();
 
           emit(EVENT.focus, e);
           expect(widget.focused).toBe(true);
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
           expect(onFocusIn).toHaveBeenCalledTimes(1);
-
-          emit(EVENT.blur, e);
-          expect(widget.focused).toBe(false);
-          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
-          expect(onFocusOut).toHaveBeenCalledTimes(1);
+          expect(onFocusIn).toHaveBeenCalledWith(e);
         });
 
-        it('should not raise any error if onFocusIn or onFocusOut is undefined', () => {
+        it('should not raise any error if onFocusIn is undefined', () => {
           const widget = new Widget({
-            focusStateEnabled: true, disabled: false, onFocusIn: undefined, onFocusOut: undefined,
+            focusStateEnabled: true, disabled: false, onFocusIn: undefined,
           });
-          widget.widgetRef = {} as any;
-
-          widget.focusEffect();
+          widget.widgetElementRef = {} as any;
+          widget.focusInEffect();
 
           emit(EVENT.focus, e);
           expect(widget.focused).toBe(true);
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
-
-          emit(EVENT.blur, e);
-          expect(widget.focused).toBe(false);
-          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
         });
 
-        it('should not raise onFocusIn/onFocusOut if event is prevented', () => {
+        it('should not raise onFocusIn if event is prevented', () => {
           try {
             e.isDefaultPrevented = jest.fn(() => true);
-            const onFocusIn = jest.fn();
-            const onFocusOut = jest.fn();
             const widget = new Widget({
-              focusStateEnabled: true, disabled: false, onFocusIn, onFocusOut,
+              focusStateEnabled: true, disabled: false, onFocusIn,
             });
-            widget.widgetRef = {} as any;
-
-            widget.focusEffect();
+            widget.widgetElementRef = {} as any;
+            widget.focusInEffect();
 
             emit(EVENT.focus, e);
             expect(widget.focused).toBe(false);
             expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
             expect(onFocusIn).not.toHaveBeenCalled();
-
-            emit(EVENT.blur, e);
-            expect(widget.focused).toBe(false);
-            expect(e.isDefaultPrevented).toHaveBeenCalledTimes(2);
-            expect(onFocusOut).not.toHaveBeenCalled();
           } finally {
             e.isDefaultPrevented = jest.fn();
           }
@@ -358,36 +344,30 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: false });
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
 
-          const detach = widget.focusEffect() as DisposeEffectReturn;
+          const detach = widget.focusInEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.focus).length).toBe(1);
-          expect(getEventHandlers(EVENT.blur).length).toBe(1);
           detach();
           expect(getEventHandlers(EVENT.focus).length).toBe(0);
-          expect(getEventHandlers(EVENT.blur).length).toBe(0);
         });
 
-        it('should subscribe if widget is disabled', () => {
+        it('should subscribe to focusIn event if widget is disabled', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: true });
-          widget.widgetRef = {} as any;
-          widget.focused = false;
-
-          widget.focusEffect();
+          widget.widgetElementRef = {} as any;
+          widget.focusInEffect();
 
           emit(EVENT.focus, e);
           expect(widget.focused).toBe(false);
           expect(e.isDefaultPrevented).toHaveBeenCalledTimes(0);
         });
 
-        it('should subscribe is widget is not focusable', () => {
-          const onFocusIn = jest.fn();
-
+        it('should not subscribe to focusin event is widget is not focusable', () => {
           const widget = new Widget({ focusStateEnabled: false, disabled: false, onFocusIn });
-          widget.widgetRef = {} as any;
-          widget.focused = false;
+          widget.widgetElementRef = {} as any;
 
-          widget.focusEffect();
+          widget.focusInEffect();
 
           emit(EVENT.focus, e);
           expect(widget.focused).toBe(false);
@@ -396,65 +376,243 @@ describe('Widget', () => {
         });
       });
 
-      describe('hoverEffect', () => {
-        it('should subscribe to hover event', () => {
-          const widget = new Widget({ hoverStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-          widget.active = false;
-          widget.hoverEffect();
+      describe('focusOutEffect', () => {
+        const e = { ...defaultEvent, isDefaultPrevented: jest.fn() };
+        const onFocusOut = jest.fn();
+
+        it('should subscribe to focusout event', () => {
+          const widget = new Widget({
+            focusStateEnabled: true, disabled: false, onFocusOut,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.focusOutEffect();
+          widget.focused = true;
+
+          emit(EVENT.blur, e);
+          expect(widget.focused).toBe(false);
+          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
+          expect(onFocusOut).toHaveBeenCalledTimes(1);
+          expect(onFocusOut).toHaveBeenCalledWith(e);
+        });
+
+        it('should not raise any error if onFocusOut is undefined', () => {
+          const widget = new Widget({
+            focusStateEnabled: true, disabled: false, onFocusOut: undefined,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.focused = true;
+          widget.focusOutEffect();
+
+          emit(EVENT.blur, e);
+          expect(widget.focused).toBe(false);
+          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not raise onFocusOut if event is prevented', () => {
+          try {
+            e.isDefaultPrevented = jest.fn(() => true);
+            const widget = new Widget({
+              focusStateEnabled: true, disabled: false, onFocusOut,
+            });
+            widget.widgetElementRef = {} as any;
+            widget.focused = true;
+            widget.focusOutEffect();
+
+            emit(EVENT.blur, e);
+            expect(widget.focused).toBe(true);
+            expect(e.isDefaultPrevented).toHaveBeenCalledTimes(1);
+            expect(onFocusOut).not.toHaveBeenCalled();
+          } finally {
+            e.isDefaultPrevented = jest.fn();
+          }
+        });
+
+        it('should return unsubscribe callback', () => {
+          const widget = new Widget({ focusStateEnabled: true, disabled: false });
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
+
+          const detach = widget.focusOutEffect() as DisposeEffectReturn;
+
+          expect(getEventHandlers(EVENT.blur).length).toBe(1);
+          detach();
+          expect(getEventHandlers(EVENT.blur).length).toBe(0);
+        });
+
+        it('should call focusOut event handler if widget is focused', () => {
+          const widget = new Widget({
+            focusStateEnabled: true, onFocusOut,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.focusOutEffect();
+          widget.focused = true;
+
+          emit(EVENT.blur);
+          expect(widget.focused).toBe(false);
+          expect(onFocusOut).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not call focusOut event handler if widget is not focused', () => {
+          const widget = new Widget({
+            focusStateEnabled: true, onFocusOut,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.focusOutEffect();
+
+          emit(EVENT.blur);
+          expect(onFocusOut).toHaveBeenCalledTimes(0);
+        });
+
+        it('should not subscribe to focusout event is widget is not focusable', () => {
+          const widget = new Widget({ focusStateEnabled: false, disabled: false, onFocusOut });
+          widget.widgetElementRef = {} as any;
+          widget.focused = true;
+          widget.focusOutEffect();
+
+          emit(EVENT.blur, e);
+          expect(widget.focused).toBe(true);
+          expect(e.isDefaultPrevented).toHaveBeenCalledTimes(0);
+          expect(onFocusOut).toHaveBeenCalledTimes(0);
+        });
+      });
+
+      describe('hoverStartEffect', () => {
+        const onHoverStart = jest.fn();
+
+        it('should subscribe to hoverStart event', () => {
+          const widget = new Widget({
+            hoverStateEnabled: true, disabled: false, onHoverStart,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.hoverStartEffect();
 
           emit(EVENT.hoverStart);
           expect(widget.hovered).toBe(true);
+          expect(onHoverStart).toHaveBeenCalledTimes(1);
+          expect(onHoverStart).toHaveBeenCalledWith(defaultEvent);
+        });
+
+        it('should return unsubscribe callback', () => {
+          const widget = new Widget({ hoverStateEnabled: true, disabled: false });
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
+          const detach = widget.hoverStartEffect() as DisposeEffectReturn;
+
+          expect(getEventHandlers(EVENT.hoverStart).length).toBe(1);
+          detach();
+          expect(getEventHandlers(EVENT.hoverStart).length).toBe(0);
+        });
+
+        it('should change hover state if widget is not active', () => {
+          const widget = new Widget({ hoverStateEnabled: true, disabled: false });
+          widget.widgetElementRef = {} as any;
+          widget.hoverStartEffect();
+
+          emit(EVENT.hoverStart);
+          expect(widget.hovered).toBe(true);
+        });
+
+        it('should not change hover state if widget is active', () => {
+          const widget = new Widget({ hoverStateEnabled: true, disabled: false });
+          widget.widgetElementRef = {} as any;
+          widget.active = true;
+          widget.hoverStartEffect();
+
+          emit(EVENT.hoverStart);
+          expect(widget.hovered).toBe(false);
+        });
+
+        it('should not subscribe to hoverstart if widget is disabled', () => {
+          const widget = new Widget({ hoverStateEnabled: true, disabled: true });
+          widget.widgetElementRef = {} as any;
+          widget.hoverStartEffect();
+
+          emit(EVENT.hoverStart);
+          expect(widget.hovered).toBe(false);
+        });
+
+        it('should not subscribe if widget is not hoverStateEnabled', () => {
+          const widget = new Widget({ hoverStateEnabled: false, disabled: false, onHoverStart });
+          widget.widgetElementRef = {} as any;
+          widget.hoverStartEffect();
+
+          emit(EVENT.hoverStart);
+          expect(widget.hovered).toBe(false);
+          expect(onHoverStart).toHaveBeenCalledTimes(0);
+        });
+      });
+
+      describe('hoverEndEffect', () => {
+        const onHoverEnd = jest.fn();
+
+        it('should subscribe to hoverEnd event', () => {
+          const widget = new Widget({
+            hoverStateEnabled: true, disabled: false, onHoverEnd,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.hovered = true;
+          widget.hoverEndEffect();
 
           emit(EVENT.hoverEnd);
+          expect(widget.hovered).toBe(false);
+          expect(onHoverEnd).toHaveBeenCalledTimes(1);
+          expect(onHoverEnd).toHaveBeenCalledWith(defaultEvent);
+        });
+
+        it('should work without errors if onHoverEnd is not defined', () => {
+          const e = { ...defaultEvent };
+          const widget = new Widget({
+            hoverStateEnabled: true, disabled: false, onHoverEnd: undefined,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.hovered = true;
+          widget.hoverEndEffect();
+
+          emit(EVENT.hoverEnd, e);
           expect(widget.hovered).toBe(false);
         });
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ hoverStateEnabled: true, disabled: false });
-          widget.active = false;
-          const detach = widget.hoverEffect() as DisposeEffectReturn;
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
+          const detach = widget.hoverEndEffect() as DisposeEffectReturn;
 
-          expect(getEventHandlers(EVENT.hoverStart).length).toBe(1);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(1);
           detach();
-          expect(getEventHandlers(EVENT.hoverStart).length).toBe(0);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(0);
         });
 
-        it('should change hover state if widget is not active', () => {
-          const widget = new Widget({ hoverStateEnabled: true, disabled: false });
-          widget.widgetRef = {} as any;
-          widget.active = true;
-          widget.hoverEffect();
-
-          emit(EVENT.hoverStart);
-          expect(widget.hovered).toBe(false);
+        it('should call hoverEnd event handler if widget is hovered', () => {
+          const widget = new Widget({
+            hoverStateEnabled: true, onHoverEnd,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.hoverEndEffect();
+          widget.hovered = true;
 
           emit(EVENT.hoverEnd);
           expect(widget.hovered).toBe(false);
+          expect(onHoverEnd).toHaveBeenCalledTimes(1);
         });
 
-        it('should subscribe if widget is disabled', () => {
-          const widget = new Widget({ hoverStateEnabled: true, disabled: true });
-          widget.widgetRef = {} as any;
-          widget.active = false;
-          widget.hoverEffect();
+        it('should not call hoverEnd event handler if widget is not hovered', () => {
+          const widget = new Widget({
+            hoverStateEnabled: true, onHoverEnd,
+          });
+          widget.widgetElementRef = {} as any;
+          widget.hoverEndEffect();
 
-          expect(widget.hovered).toBe(false);
-          emit(EVENT.hoverStart);
-          expect(widget.hovered).toBe(false);
+          emit(EVENT.hoverEnd);
+          expect(onHoverEnd).toHaveBeenCalledTimes(0);
         });
 
-        it('should subscribe if widget is not hovered', () => {
-          const widget = new Widget({ hoverStateEnabled: false, disabled: false });
-          widget.widgetRef = {} as any;
-          widget.active = false;
-          widget.hoverEffect();
+        it('should not subscribe if widget is not hoverStateEnabled', () => {
+          const widget = new Widget({ hoverStateEnabled: false, disabled: false, onHoverEnd });
+          widget.widgetElementRef = {} as any;
+          widget.hovered = true;
+          widget.hoverEndEffect();
 
-          expect(widget.hovered).toBe(false);
-          emit(EVENT.hoverStart);
-          expect(widget.hovered).toBe(false);
+          emit(EVENT.hoverEnd);
+          expect(widget.hovered).toBe(true);
+          expect(onHoverEnd).toHaveBeenCalledTimes(0);
         });
       });
 
@@ -463,7 +621,7 @@ describe('Widget', () => {
 
         it('should subscribe to keyboard event', () => {
           const widget = new Widget({ focusStateEnabled: true, onKeyDown });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.keyboardEffect();
 
           emitKeyboard(KEY.enter);
@@ -474,7 +632,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, onKeyDown });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           const detach = widget.keyboardEffect() as DisposeEffectReturn;
 
           emitKeyboard(KEY.enter);
@@ -486,13 +644,13 @@ describe('Widget', () => {
           expect(onKeyDown).toHaveBeenCalledTimes(1);
         });
 
-        it('should subscribe without focusable', () => {
+        it('should not subscribe if focusStateEnabled is "false"', () => {
           const widget = new Widget({ focusStateEnabled: false, onKeyDown });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.keyboardEffect();
 
           emitKeyboard(KEY.enter);
-          expect(onKeyDown).toHaveBeenCalledTimes(1);
+          expect(onKeyDown).toHaveBeenCalledTimes(0);
         });
 
         it('should return nothing if widget does not have event and is not focusable', () => {
@@ -509,7 +667,7 @@ describe('Widget', () => {
         it('should subscribe to resize event', () => {
           const e = { ...defaultEvent };
           const widget = new Widget({ onDimensionChanged });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.resizeEffect();
 
           emit(EVENT.resize, e);
@@ -519,6 +677,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ onDimensionChanged });
+          widget.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
           const detach = widget.resizeEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.resize).length).toBe(1);
@@ -535,12 +694,52 @@ describe('Widget', () => {
         });
       });
 
+      describe('windowResizeEffect', () => {
+        afterEach(() => {
+          jest.clearAllMocks();
+        });
+
+        it('should subscribe on window.onresize event', () => {
+          const onDimensionChanged = jest.fn();
+          const widget = new Widget({ onDimensionChanged });
+
+          const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
+
+          expect(resizeCallbacks.add).toBeCalledTimes(1);
+          expect(resizeCallbacks.add).toHaveBeenCalledWith(onDimensionChanged);
+          expect(resizeCallbacks.remove).toBeCalledTimes(0);
+
+          dispose?.();
+        });
+
+        it('should return window.onresize unsubscribe callback', () => {
+          const onDimensionChanged = jest.fn();
+          const widget = new Widget({ onDimensionChanged });
+
+          const dispose = widget.windowResizeEffect() as DisposeEffectReturn;
+
+          dispose?.();
+
+          expect(resizeCallbacks.remove).toBeCalledTimes(1);
+          expect(resizeCallbacks.remove).toHaveBeenCalledWith(onDimensionChanged);
+        });
+
+        it('should not subscribe on window.onresize event if onDimensionChanged callback does not defined', () => {
+          const widget = new Widget({ });
+          const dispose = widget.windowResizeEffect();
+
+          expect(resizeCallbacks.add).toBeCalledTimes(0);
+          expect(resizeCallbacks.remove).toBeCalledTimes(0);
+          expect(dispose).toBe(undefined);
+        });
+      });
+
       describe('visibilityEffect', () => {
         const onVisibilityChange = jest.fn();
 
         it('should subscribe to visible events', () => {
           const widget = new Widget({ onVisibilityChange });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           widget.visibilityEffect();
 
           emit(EVENT.shown);
@@ -554,7 +753,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ onVisibilityChange });
-          widget.widgetRef = {} as any;
+          widget.widgetElementRef = {} as any;
           const detach = widget.visibilityEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.shown).length).toBe(1);
@@ -575,37 +774,129 @@ describe('Widget', () => {
 
       describe('setRootElementRef', () => {
         it('set rootElementRef to div ref', () => {
-          const widgetRef = {} as HTMLDivElement;
+          const widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
           const component = new Widget({
             rootElementRef: {},
           } as WidgetProps);
-          component.widgetRef = widgetRef;
+          component.widgetElementRef = widgetElementRef;
           component.setRootElementRef();
 
-          expect(component.props.rootElementRef).toBe(component.widgetRef);
+          expect(component.props.rootElementRef?.current).toBe(component.widgetElementRef.current);
         });
 
         it('hasnt rootElementRef', () => {
           const component = new Widget({ });
-          component.widgetRef = {} as HTMLDivElement;
+          component.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
           component.setRootElementRef();
-          expect(component.props.rootElementRef).toBeUndefined();
+          expect(component.props.rootElementRef?.current).toBeUndefined();
+        });
+
+        it('calls onRootElementRendered handler', () => {
+          const onRootElementRendered = jest.fn();
+          const component = new Widget({ onRootElementRendered });
+          component.widgetElementRef = { current: {} } as RefObject<HTMLDivElement>;
+
+          component.setRootElementRef();
+
+          expect(onRootElementRendered).toBeCalledTimes(1);
+          expect(onRootElementRendered).toBeCalledWith(component.widgetElementRef.current);
+        });
+
+        it('does not raise any error if onRootElementRendered is not passed', () => {
+          const component = new Widget({});
+
+          expect(() => { component.setRootElementRef(); }).not.toThrow();
+        });
+      });
+
+      describe('checkDeprecation', () => {
+        it('check deprecation error', () => {
+          const component = new Widget({
+            width: () => {},
+            height: () => {},
+          } as WidgetProps);
+          component.checkDeprecation();
+          expect(errors.log).toBeCalledTimes(2);
+          expect(errors.log).toHaveBeenNthCalledWith(1, 'W0017', 'width');
+          expect(errors.log).toHaveBeenNthCalledWith(2, 'W0017', 'height');
+        });
+
+        it('no deprecation error', () => {
+          const component = new Widget({
+            width: '100px',
+            height: '100px',
+          } as WidgetProps);
+          component.checkDeprecation();
+          expect(errors.log).toBeCalledTimes(0);
         });
       });
     });
 
     describe('Methods', () => {
+      describe('activate', () => {
+        it('should switch active state to "true"', () => {
+          const widget = new Widget({ activeStateEnabled: true });
+          expect(widget.active).toBe(false);
+          widget.activate();
+          expect(widget.active).toBe(true);
+        });
+      });
+
+      describe('deactivate', () => {
+        it('should switch active state to "false"', () => {
+          const widget = new Widget({ activeStateEnabled: true });
+          widget.activate();
+          expect(widget.active).toBe(true);
+          widget.deactivate();
+          expect(widget.active).toBe(false);
+        });
+      });
+
       describe('focus', () => {
         it('should trigger focus at element', () => {
           const widget = new Widget({ focusStateEnabled: true });
           const mockRef = jest.fn();
-          widget.widgetRef = mockRef as any;
+          widget.widgetElementRef = mockRef as any;
 
-          widget.focusEffect();
+          widget.focusInEffect();
 
           expect(widget.focused).toBe(false);
           widget.focus();
           expect(widget.focused).toBe(true);
+        });
+      });
+
+      describe('blur', () => {
+        it('should trigger blur at root element if it is active element', () => {
+          const widget = new Widget({ focusStateEnabled: true });
+          const mockRef = { current: { blur: jest.fn() } };
+          widget.widgetElementRef = mockRef as any;
+
+          const { getActiveElement } = domAdapter;
+          try {
+            domAdapter.getActiveElement = () => mockRef.current as unknown as HTMLDivElement;
+            widget.focusInEffect();
+            widget.focusOutEffect();
+            widget.focus();
+            widget.blur();
+
+            expect(widget.widgetElementRef.current?.blur).toHaveBeenCalledTimes(1);
+          } finally {
+            domAdapter.getActiveElement = getActiveElement;
+          }
+        });
+
+        it('should not trigger blur at root element if it is not active element', () => {
+          const widget = new Widget({ focusStateEnabled: true });
+          const mockRef = { current: { blur: jest.fn() } };
+          widget.widgetElementRef = mockRef as any;
+
+          widget.focusInEffect();
+          widget.focusOutEffect();
+          widget.focus();
+          widget.blur();
+
+          expect(widget.widgetElementRef.current?.blur).not.toBeCalled();
         });
       });
     });
@@ -613,12 +904,26 @@ describe('Widget', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
+      beforeEach(() => {
+        jest.resetAllMocks();
+      });
+
       describe('attributes', () => {
         it('should return ARIA labels', () => {
-          const widget = new Widget({ visible: false, aria: { id: 10, role: 'button', level: 100 } });
+          const widget = new Widget({ visible: false, aria: { id: '10', role: 'button', level: '100' } });
 
           expect(widget.attributes).toEqual({
             'aria-hidden': 'true', id: '10', role: 'button', 'aria-level': '100', 'rest-attributes': 'restAttributes',
+          });
+        });
+
+        it('rest attributes should have more priority than aria property (T1115877)', () => {
+          const widget = new Widget({ visible: false, aria: { label: 'default' } });
+          widget.restAttributes = { 'aria-label': 'custom', 'aria-hidden': 'false' };
+
+          expect(widget.attributes).toEqual({
+            'aria-hidden': 'false',
+            'aria-label': 'custom',
           });
         });
 
@@ -680,44 +985,63 @@ describe('Widget', () => {
       });
 
       describe('cssClasses', () => {
+        it('should not add any classes', () => {
+          const widget = new Widget({ visible: true });
+
+          expect(widget.cssClasses).toEqual('');
+        });
+
+        it('should add widget class', () => {
+          const widget = new Widget({ addWidgetClass: true, visible: true });
+
+          expect(widget.cssClasses).toEqual('dx-widget');
+        });
+
         it('should add invisible class', () => {
           const widget = new Widget({ visible: false });
 
-          expect(widget.cssClasses).toEqual('dx-widget dx-state-invisible');
+          expect(widget.cssClasses).toEqual('dx-state-invisible');
         });
 
         it('should add className property', () => {
           const widget = new Widget({ className: 'custom-class', visible: true });
 
-          expect(widget.cssClasses).toEqual('dx-widget custom-class');
+          expect(widget.cssClasses).toEqual('custom-class');
         });
 
         it('should add class from classes property', () => {
           const widget = new Widget({ classes: 'custom-classes', visible: true });
 
-          expect(widget.cssClasses).toEqual('dx-widget custom-classes');
+          expect(widget.cssClasses).toEqual('custom-classes');
         });
 
         it('should add disabled class', () => {
           const widget = new Widget({ disabled: true, visible: true });
 
-          expect(widget.cssClasses).toEqual('dx-widget dx-state-disabled');
+          expect(widget.cssClasses).toEqual('dx-state-disabled');
         });
 
         it('should add focused class', () => {
           const widget = new Widget({ visible: true, focusStateEnabled: true, disabled: false });
 
-          expect(widget.cssClasses).toEqual('dx-widget');
+          expect(widget.cssClasses).toEqual('');
 
           widget.focused = true;
-          expect(widget.cssClasses).toEqual('dx-widget dx-state-focused');
+          expect(widget.cssClasses).toEqual('dx-state-focused');
         });
 
         it('should add active class', () => {
-          const widget = new Widget({ visible: true });
+          const widget = new Widget({ visible: true, activeStateEnabled: true });
           widget.active = true;
 
-          expect(widget.cssClasses).toEqual('dx-widget dx-state-active');
+          expect(widget.cssClasses).toEqual('dx-state-active');
+        });
+
+        it('should not add active class if widget is disabled', () => {
+          const widget = new Widget({ visible: true, activeStateEnabled: true, disabled: true });
+          widget.active = true;
+
+          expect(widget.cssClasses).toEqual('dx-state-disabled');
         });
 
         it('should add hovered class', () => {
@@ -725,19 +1049,21 @@ describe('Widget', () => {
 
           widget.active = false;
           widget.hovered = true;
-          expect(widget.cssClasses).toEqual('dx-widget dx-state-hover');
+          expect(widget.cssClasses).toEqual('dx-state-hover');
         });
 
         it('should add RTL class', () => {
-          const widget = new Widget({ visible: true, rtlEnabled: true });
+          (resolveRtlEnabled as jest.Mock).mockReturnValue(true);
+          const widget = new Widget({ visible: true });
 
-          expect(widget.cssClasses).toEqual('dx-widget dx-rtl');
+          expect(widget.cssClasses).toEqual('dx-rtl');
+          (resolveRtlEnabled as jest.Mock).mockReturnValue(false);
         });
 
         it('should add visibility handler class', () => {
           const widget = new Widget({ visible: true, onVisibilityChange: () => undefined });
 
-          expect(widget.cssClasses).toEqual('dx-widget dx-visibility-change-handler');
+          expect(widget.cssClasses).toEqual('dx-visibility-change-handler');
         });
       });
 
@@ -761,54 +1087,25 @@ describe('Widget', () => {
         });
       });
 
-      each`
-      global       | rtlEnabled   | parentRtlEnabled | expected
-      ${true}      | ${true}      | ${true}          | ${false}
-      ${undefined} | ${undefined} | ${undefined}     | ${false}
-      ${true}      | ${true}      | ${undefined}     | ${true}
-      ${true}      | ${false}     | ${undefined}     | ${true}
-      ${true}      | ${true}      | ${false}         | ${true}
-      ${true}      | ${false}     | ${true}          | ${true}
-      ${true}      | ${undefined} | ${undefined}     | ${true}
-      ${true}      | ${undefined} | ${true}          | ${false}
-      ${true}      | ${undefined} | ${false}         | ${false}
-      ${true}      | ${true}      | ${true}          | ${false}
-      `
-        .describe('shouldRenderConfigProvider', ({
-          global, rtlEnabled, parentRtlEnabled, expected,
-        }) => {
-          const name = `${JSON.stringify({
-            global, rtlEnabled, parentRtlEnabled, expected,
-          })}`;
+      describe('shouldRenderConfigProvider', () => {
+        it('should call utils method resolveRtlEnabledDefinition', () => {
+          (resolveRtlEnabledDefinition as jest.Mock).mockReturnValue(true);
+          const widget = new Widget({ });
+          const { shouldRenderConfigProvider } = widget;
 
-          it(name, () => {
-            config().rtlEnabled = global;
-            const widget = new Widget({ rtlEnabled });
-            widget.config = { rtlEnabled: parentRtlEnabled };
-            expect(widget.shouldRenderConfigProvider).toBe(expected);
-          });
+          expect(shouldRenderConfigProvider).toBe(true);
+          expect(resolveRtlEnabledDefinition).toHaveBeenCalledTimes(1);
         });
+      });
 
       describe('rtlEnabled', () => {
-        it('should return value from props if props has value', () => {
-          const widget = new Widget({ rtlEnabled: false });
-          // emulate context
-          widget.config = { rtlEnabled: true };
-
-          expect(widget.rtlEnabled).toBe(false);
-        });
-
-        it('should return value from parent rtlEnabled context if props isnt defined', () => {
+        it('should call utils method resolveRtlEnabled', () => {
+          (resolveRtlEnabled as jest.Mock).mockReturnValue(false);
           const widget = new Widget({ });
-          // emulate context
-          widget.config = { rtlEnabled: true };
-          expect(widget.rtlEnabled).toBe(true);
-        });
+          const { rtlEnabled } = widget;
 
-        it('should return value from config if any other props isnt defined', () => {
-          config().rtlEnabled = true;
-          const widget = new Widget({ });
-          expect(widget.rtlEnabled).toBe(true);
+          expect(rtlEnabled).toBe(false);
+          expect(resolveRtlEnabled).toHaveBeenCalledTimes(1);
         });
       });
     });
@@ -819,16 +1116,16 @@ describe('Widget', () => {
       const defaultProps = new WidgetProps();
 
       expect(defaultProps).toEqual({
-        accessKey: null,
+        addWidgetClass: true,
         activeStateEnabled: false,
         disabled: false,
         focusStateEnabled: false,
         hoverStateEnabled: false,
-        onContentReady: expect.any(Function),
         tabIndex: 0,
         visible: true,
         _feedbackHideTimeout: 400,
         _feedbackShowTimeout: 30,
+        cssText: '',
         aria: {},
         classes: '',
         className: '',

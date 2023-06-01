@@ -70,7 +70,6 @@ $list-item-ghost-border-color: $base-accent !default;
 $list-item-ghost-shadow-color: $base-shadow-color !default;
 $list-icon-color: $base-icon-color !default;
 $list-item-chevron-icon-color: $base-spin-icon-color !default;
-$list-item-icon-toggle-delete-bg: null !default;
 
 @if $mode == "light" {
   $list-group-color: $base-text-color !default;
@@ -78,7 +77,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-selected-hover-bg: color.change(#000, $alpha: 0.14) !default;
   $list-item-focused-selected-bg: color.change(#000, $alpha: 0.18) !default;
   $list-item-active-bg: darken($base-bg, 20%) !default;
-  $list-item-icon-toggle-delete-bg: data-uri('images/widgets/material/color-schemes/light/list/delete.png') !default;
 }
 
 @if $mode == "dark" {
@@ -87,6 +85,5 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-item-selected-hover-bg: color.change(#6e6e80, $alpha: 0.35) !default;
   $list-item-focused-selected-bg: color.change(#6e6e80, $alpha: 0.4) !default;
   $list-item-active-bg: lighten($base-bg, 20%) !default;
-  $list-item-icon-toggle-delete-bg: data-uri('images/widgets/material/color-schemes/dark/list/delete.png') !default;
 }
 

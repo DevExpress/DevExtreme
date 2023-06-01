@@ -4,7 +4,7 @@ import Button from './button';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
-import { isDefined } from '../core/utils/type';
+import { isDefined, isFunction } from '../core/utils/type';
 import { BindableTemplate } from '../core/templates/bindable_template';
 
 // STYLE buttonGroup
@@ -21,20 +21,16 @@ const ButtonCollection = CollectionWidget.inherit({
     _initTemplates() {
         this.callBase();
         /**
-         * @name dxButtonGroupItem
-         * @inherits CollectionWidgetItem
-         * @type object
-         */
-        /**
          * @name dxButtonGroupItem.html
          * @hidden
          */
         this._templateManager.addDefaultTemplates({
             item: new BindableTemplate((($container, data, model) => {
                 this._prepareItemStyles($container);
+                const template = this.option('buttonTemplate');
                 this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {
-                    _templateData: model,
-                    template: model.template || this.option('buttonTemplate')
+                    _templateData: this._hasCustomTemplate(template) ? model : {},
+                    template: model.template || template
                 }));
             }), ['text', 'type', 'icon', 'disabled', 'visible', 'hint'], this.option('integrationOptions.watchMethod'))
         });
@@ -56,6 +52,10 @@ const ButtonCollection = CollectionWidget.inherit({
         });
     },
 
+    _hasCustomTemplate(template) {
+        return isFunction(template) || this.option('integrationOptions.templates')[template];
+    },
+
     _prepareItemStyles($item) {
         const itemIndex = $item.data('dxItemIndex');
         itemIndex === 0 && $item.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
@@ -69,6 +69,10 @@ const ButtonCollection = CollectionWidget.inherit({
     _renderItemContent(args) {
         args.container = $(args.container).parent();
         return this.callBase(args);
+    },
+
+    _setAriaSelectionAttribute: function($target, value) {
+        this.setAria('pressed', value, $target);
     },
 
     _renderItemContentByNode: function(args, $node) {
@@ -237,3 +241,10 @@ const ButtonGroup = Widget.inherit({
 registerComponent('dxButtonGroup', ButtonGroup);
 
 export default ButtonGroup;
+
+
+/**
+ * @name dxButtonGroupItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

@@ -9,6 +9,7 @@ import pointerEvents from '../../events/pointer';
 import { addNamespace } from '../../events/utils/index';
 import { isDefined } from '../../core/utils/type';
 import { noop as _noop } from '../../core/utils/common';
+import errors from '../../core/errors';
 const _floor = Math.floor;
 const eventsConsts = consts.events;
 const statesConsts = consts.states;
@@ -56,8 +57,15 @@ function getData(event, dataKey, tryCheckParent) {
     return data;
 }
 
-function eventCanceled(event, target) {
-    return event.cancel || !target.getOptions();
+function eventCanceled({ event, cancel }, target, clickTarget) {
+    const deprecatedCancel = event.cancel; // DEPRECATED_22_1
+    const eventCanceled = cancel || deprecatedCancel;
+
+    if(deprecatedCancel) {
+        errors.log('W0003', `${clickTarget}Click handler argument`, 'event.cancel', '22.1', 'Use the \'cancel\' field instead');
+    }
+
+    return eventCanceled || !target.getOptions();
 }
 
 function correctLegendHoverMode(mode) {
@@ -109,7 +117,7 @@ const baseTrackerPrototype = {
 
         if(noHoveredSeries) {
             that._clean();
-            that._renderer.initHatching();
+            that._renderer.initDefsElements();
         }
 
         if(resetDecorations) {
@@ -144,12 +152,12 @@ const baseTrackerPrototype = {
         this._hoveredPoint = point;
     },
 
-    _releaseHoveredPoint: function() {
+    _releaseHoveredPoint: function(isPointerOut) {
         if(this._hoveredPoint && this._hoveredPoint.getOptions()) {
             this._hoveredPoint.clearHover();
             this._hoveredPoint = null;
             if(this._tooltip.isEnabled()) {
-                this._hideTooltip(this._hoveredPoint);
+                this._hideTooltip(this._hoveredPoint, false, isPointerOut);
             }
         }
     },
@@ -183,13 +191,13 @@ const baseTrackerPrototype = {
         that._hideTooltip(that.pointAtShownTooltip);
     },
 
-    clearHover: function() {
+    clearHover: function(isPointerOut) {
         this._resetHoveredArgument();
         this._releaseHoveredSeries();
-        this._releaseHoveredPoint();
+        this._releaseHoveredPoint(isPointerOut);
     },
 
-    _hideTooltip: function(point, silent) {
+    _hideTooltip: function(point, silent, isPointerOut) {
         const that = this;
         if(!that._tooltip || (point && that.pointAtShownTooltip !== point)) {
             return;
@@ -197,7 +205,7 @@ const baseTrackerPrototype = {
         if(!silent && that.pointAtShownTooltip) {
             that.pointAtShownTooltip = null;
         }
-        that._tooltip.hide();
+        that._tooltip.hide(!!isPointerOut);
     },
 
     _showTooltip: function(point) {
@@ -233,7 +241,7 @@ const baseTrackerPrototype = {
     },
 
     _hidePointTooltip: function(event, point) {
-        event.data.tracker._hideTooltip(point);
+        event.data.tracker._hideTooltip(point, false, true);
     },
 
     _enableOutHandler: function() {
@@ -245,7 +253,7 @@ const baseTrackerPrototype = {
             const rootOffset = that._renderer.getRootOffset();
             const x = _floor(e.pageX - rootOffset.left);
             const y = _floor(e.pageY - rootOffset.top);
-            if(!inCanvas(that._mainCanvas, x, y)) {
+            if(!inCanvas(that._mainCanvas, x, y) && !that._isCursorOnTooltip(e)) {
                 that._pointerOut();
                 that._disableOutHandler();
             }
@@ -253,6 +261,10 @@ const baseTrackerPrototype = {
 
         eventsEngine.on(domAdapter.getDocument(), POINTER_ACTION, handler);
         this._outHandler = handler;
+    },
+
+    _isCursorOnTooltip: function(e) {
+        return this._tooltip.isEnabled() && this._tooltip.isCursorOnTooltip(e.pageX, e.pageY);
     },
 
     _disableOutHandler: function() {
@@ -265,15 +277,15 @@ const baseTrackerPrototype = {
     },
 
     _pointerOut: function(force) {
-        this.clearHover();
-        (force || this._tooltip.isEnabled()) && this._hideTooltip(this.pointAtShownTooltip);
+        this.clearHover(true);
+        (force || this._tooltip.isEnabled()) && this._hideTooltip(this.pointAtShownTooltip, false, true);
     },
 
     _triggerLegendClick: function(eventArgs, elementClick) {
         const eventTrigger = this._eventTrigger;
 
         eventTrigger(LEGEND_CLICK, eventArgs, function() {
-            !eventCanceled(eventArgs.event, eventArgs.target) && eventTrigger(elementClick, eventArgs);
+            !eventCanceled(eventArgs, eventArgs.target, 'legend') && eventTrigger(elementClick, eventArgs);
         });
     },
 
@@ -482,9 +494,10 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         const that = this;
         const eventTrigger = that._eventTrigger;
         const series = point.series;
+        const eventArgs = { target: point, event: event };
 
-        eventTrigger(POINT_CLICK, { target: point, event: event }, function() {
-            !eventCanceled(event, series) && eventTrigger(SERIES_CLICK, { target: series, event: event });
+        eventTrigger(POINT_CLICK, eventArgs, function() {
+            !eventCanceled(eventArgs, series, 'point') && eventTrigger(SERIES_CLICK, { target: series, event: event });
         });
     },
     ///#DEBUG

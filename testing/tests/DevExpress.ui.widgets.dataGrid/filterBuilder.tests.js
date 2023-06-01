@@ -1,4 +1,4 @@
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
@@ -322,7 +322,7 @@ QUnit.module('Real dataGrid', {
         });
 
         $('.dx-popup-content .dx-filterbuilder-item-value-text').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $('.dx-header-filter-menu.dx-popup').dxPopup('instance').hide();
 
         // assert
@@ -330,17 +330,17 @@ QUnit.module('Real dataGrid', {
     });
 
     // T657917
-    QUnit.test('The value for the \'Is any of\' operation is changed when filterBuilderPopup has closeOnOutsideClick=true', function(assert) {
+    QUnit.test('The value for the \'Is any of\' operation is changed when filterBuilderPopup has hideOnOutsideClick=true', function(assert) {
         this.initDataGrid({
             columns: [{ dataField: 'field', dataType: 'string', defaultFilterOperations: ['anyof'] }],
             filterBuilderPopup: {
                 visible: true,
-                closeOnOutsideClick: true
+                hideOnOutsideClick: true
             },
             filterValue: ['field', 'anyof', ['text']],
         });
         $('.dx-popup-content .dx-filterbuilder-item-value-text').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         $('.dx-header-filter-menu.dx-popup').dxPopup('instance').hide();
 
         // assert
@@ -351,7 +351,7 @@ QUnit.module('Real dataGrid', {
     QUnit.test('the \'any of\' doesn\'t throw exception when column is lookup', function(assert) {
         // arrange, act
         this.initDataGrid({
-            dataSource: [{ field: 1 }],
+            dataSource: [{ field: 1 }, { field: 2 }],
             loadingTimeout: null,
             columns: [{ dataField: 'field',
                 lookup: {

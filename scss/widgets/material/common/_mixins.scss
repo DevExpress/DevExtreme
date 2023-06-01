@@ -1,5 +1,4 @@
-
-
+@use "sass:math";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
@@ -28,7 +27,7 @@ $badge-invalid-bg: $base-invalid-color;
   pointer-events: none;
   position: absolute;
   top: 50%;
-  margin-top: -$material-invalid-badge-size / 2;
+  margin-top: math.div(-$material-invalid-badge-size, 2);
   width: $material-invalid-badge-size;
   height: $material-invalid-badge-size;
   text-align: center;
@@ -85,10 +84,6 @@ $badge-invalid-bg: $base-invalid-color;
   .dx-list {
     height: 100%;
     min-height: $material-list-item-height;
-
-    &:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
-      padding: $material-list-item-vertical-padding $material-list-item-horizontal-padding - 1px;
-    }
   }
 
   .dx-list-select-all {

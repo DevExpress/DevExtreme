@@ -5,9 +5,9 @@ const fx = require('animation/fx');
 const keyboardMock = require('../../helpers/keyboardMock.js');
 const dataUtils = require('core/element_data');
 
-require('common.css!');
 require('generic_light.css!');
 require('ui/scheduler/ui.scheduler');
+require('ui/drop_down_button');
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler"></div>');

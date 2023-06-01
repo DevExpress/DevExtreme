@@ -1,0 +1,116 @@
+@use "./mixins" as *;
+
+// adduse
+
+.dx-drawer {
+  height: 100%;
+  width: 100%;
+}
+
+.dx-drawer-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.dx-drawer-panel-content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.dx-drawer-right .dx-drawer-panel-content {
+  right: 0;
+}
+
+.dx-drawer-left .dx-drawer-panel-content {
+  left: 0;
+}
+
+.dx-drawer-panel-content-push-top-or-bottom {
+  width: 100%;
+}
+
+.dx-drawer-content {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+
+.dx-drawer-shader {
+  z-index: $overlay-zindex;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.dx-drawer-push {
+  &.dx-drawer-bottom {
+    .dx-drawer-panel-content {
+      top: auto;
+    }
+  }
+}
+
+.dx-drawer-shrink {
+  .dx-drawer-panel-content {
+    position: relative;
+    overflow: hidden;
+    flex: 0 0 auto;
+    height: 100%;
+  }
+
+  .dx-drawer-wrapper {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .dx-drawer-content {
+    position: relative;
+    flex: 1 1 auto;
+  }
+
+  &.dx-drawer-top,
+  &.dx-drawer-bottom {
+    .dx-drawer-wrapper {
+      flex-direction: column;
+    }
+  }
+}
+
+.dx-drawer-overlap {
+  .dx-drawer-panel-content {
+    overflow: visible;
+
+    &.dx-overlay-wrapper {
+      right: auto;
+      left: auto;
+    }
+  }
+
+  &.dx-drawer-left,
+  &.dx-drawer-right {
+    .dx-drawer-wrapper {
+      overflow-y: visible;
+    }
+  }
+
+  &.dx-drawer-top,
+  &.dx-drawer-bottom {
+    .dx-drawer-wrapper {
+      overflow-x: visible;
+    }
+  }
+
+
+  &.dx-drawer-right.dx-drawer-expand > .dx-drawer-wrapper > .dx-overlay > .dx-overlay-wrapper > .dx-overlay-content {
+    right: 0;
+  }
+
+  &.dx-drawer-right.dx-drawer-slide > .dx-drawer-wrapper > .dx-overlay > .dx-overlay-wrapper > .dx-overlay-content {
+    right: 0;
+  }
+}

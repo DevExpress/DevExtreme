@@ -19,17 +19,17 @@ class ValidationGroup extends DOMComponent {
         */
 
         /**
-        * @name dxValidationGroupMethods.beginUpdate
+        * @name dxValidationGroup.beginUpdate
         * @publicName beginUpdate()
         * @hidden
         */
         /**
-        * @name dxValidationGroupMethods.defaultOptions
+        * @name dxValidationGroup.defaultOptions
         * @publicName defaultOptions(rule)
         * @hidden
         */
         /**
-        * @name dxValidationGroupMethods.endUpdate
+        * @name dxValidationGroup.endUpdate
         * @publicName endUpdate()
         * @hidden
         */
@@ -47,7 +47,7 @@ class ValidationGroup extends DOMComponent {
             Validator.getInstance($(validatorContainer))._initGroupRegistration();
         });
         $element.find(`.${VALIDATION_SUMMARY_CLASS}`).each(function(_, summaryContainer) {
-            ValidationSummary.getInstance($(summaryContainer))._initGroupRegistration();
+            ValidationSummary.getInstance($(summaryContainer)).refreshValidationGroup();
         });
         super._initMarkup();
     }

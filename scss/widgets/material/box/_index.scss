@@ -3,8 +3,10 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/box";
 
 // adduse
+
 .dx-box-item-content {
   font-size: $material-base-font-size;
 }

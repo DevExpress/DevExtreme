@@ -3,7 +3,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
 const loadingIndicatorModule = require('viz/core/loading_indicator');
 const titleModule = require('viz/core/title');
 const projectionEnginesModule = require('viz/vector_map/projection');
-const controlBarModule = require('viz/vector_map/control_bar');
+const controlBarModule = require('viz/vector_map/control_bar/control_bar');
 const legendModule = require('viz/vector_map/legend');
 const tooltipModule = require('viz/core/tooltip');
 const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
@@ -13,7 +13,12 @@ const rendererModule = require('viz/core/renderers/renderer');
 
 require('viz/vector_map/vector_map');
 
-$('#qunit-fixture').append('<div id="container" style="width: 1200px; height: 600px;"></div>');
+$('#qunit-fixture').append('<div id="container"></div>');
+
+$('#container').css({
+    width: '1200px',
+    height: '600px'
+});
 
 titleModule.DEBUG_set_title(vizMocks.stubClass(titleModule.Title, { }));
 tooltipModule.DEBUG_set_tooltip(vizMocks.stubClass(tooltipModule.Tooltip));
@@ -570,7 +575,7 @@ QUnit.test('getDataSource method', function(assert) {
     assert.ok(map.getLayers()[0].getDataSource() instanceof DataSource);
 });
 
-QUnit.test('Bounds calculation', function(assert) {
+QUnit.test('Bounds calculation. polygon', function(assert) {
     const map = this.createLayers({
         dataSource: createData('Polygon', [
             [
@@ -587,4 +592,21 @@ QUnit.test('Bounds calculation', function(assert) {
     const bounds = map.getLayers()[0].getBounds();
 
     assert.deepEqual(bounds, [0, 0, 400, 300]);
+});
+
+QUnit.test('Bounds calculation. multipolygon', function(assert) {
+    const map = this.createLayers({
+        dataSource: createData('MultiPolygon', [
+            [[
+                [
+                    [50, 0],
+                    [3, 10]
+                ]
+            ]]
+        ])
+    });
+
+    const bounds = map.getLayers()[0].getBounds();
+
+    assert.deepEqual(bounds, [3, 0, 50, 10]);
 });

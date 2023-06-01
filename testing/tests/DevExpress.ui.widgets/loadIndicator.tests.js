@@ -1,8 +1,9 @@
 import $ from 'jquery';
 import support from 'core/utils/support';
 
-import 'common.css!';
 import 'ui/load_indicator';
+
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =

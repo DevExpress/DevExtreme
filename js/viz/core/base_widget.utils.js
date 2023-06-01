@@ -1,7 +1,10 @@
-import version from '../../core/version';
+import { version } from '../../core/version';
 import { format as _stringFormat } from '../../core/utils/string';
 import warnings from './errors_warnings';
 import { each } from '../../core/utils/iterator';
+import _windowResizeCallbacks from '../../core/utils/resize_callbacks';
+import resizeObserverSingleton from '../../core/resize_observer';
+import { normalizeEnum } from './utils';
 
 const ERROR_MESSAGES = warnings.ERROR_MESSAGES;
 
@@ -38,7 +41,7 @@ export function createEventTrigger(eventsMap, callbackGetter) {
     function createEvent(name) {
         const eventInfo = eventsMap[name];
 
-        triggers[eventInfo.name] = callbackGetter(name);
+        triggers[eventInfo.name] = callbackGetter(name, eventInfo.actionSettings);
     }
 
     function triggerEvent(name, arg, complete) {
@@ -62,19 +65,48 @@ export let createIncidentOccurred = function(widgetName, eventTrigger) {
     };
 };
 
-export function createResizeHandler(callback) {
+function getResizeManager(resizeCallback) {
+    return (observe, unsubscribe) => {
+        const { handler, dispose } = createDeferredHandler(resizeCallback, unsubscribe);
+
+        observe(handler);
+        return dispose;
+    };
+}
+
+function createDeferredHandler(callback, unsubscribe) {
     let timeout;
+
     const handler = function() {
         clearTimeout(timeout);
         timeout = setTimeout(callback, 100);
     };
 
-    handler.dispose = function() {
-        clearTimeout(timeout);
-        return this;
+    return {
+        handler,
+        dispose() {
+            clearTimeout(timeout);
+            unsubscribe(handler);
+        }
     };
+}
 
-    return handler;
+export function createResizeHandler(contentElement, redrawOnResize, resize) {
+    let disposeHandler;
+    const resizeManager = getResizeManager(resize);
+
+    if(normalizeEnum(redrawOnResize) === 'windowonly') {
+        disposeHandler = resizeManager(
+            (handler)=> _windowResizeCallbacks.add(handler),
+            (handler) => _windowResizeCallbacks.remove(handler)
+        );
+    } else if(redrawOnResize === true) {
+        disposeHandler = resizeManager(
+            (handler) => resizeObserverSingleton.observe(contentElement, handler),
+            () => resizeObserverSingleton.unobserve(contentElement)
+        );
+    }
+    return disposeHandler;
 }
 
 ///#DEBUG

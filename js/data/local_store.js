@@ -4,7 +4,7 @@ import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import Class from '../core/class';
 const abstract = Class.abstract;
-import errorsUtils from './errors';
+import { errors } from './errors';
 import ArrayStore from './array_store';
 
 const LocalStoreBackend = Class.inherit({
@@ -57,7 +57,7 @@ const DomLocalStoreBackend = LocalStoreBackend.inherit({
     ctor: function(store, storeOptions) {
         const name = storeOptions.name;
         if(!name) {
-            throw errorsUtils.errors.Error('E4013');
+            throw errors.Error('E4013');
         }
         this._key = 'dx-data-localStore-' + name;
 
@@ -66,6 +66,7 @@ const DomLocalStoreBackend = LocalStoreBackend.inherit({
 
     _loadImpl: function() {
         const raw = window.localStorage.getItem(this._key);
+
         if(raw) {
             return JSON.parse(raw);
         }
@@ -99,6 +100,10 @@ const LocalStore = ArrayStore.inherit({
         this.callBase(options);
 
         this._backend = new localStoreBackends[options.backend || 'dom'](this, options);
+        this._backend.load();
+    },
+
+    _clearCache() {
         this._backend.load();
     },
 

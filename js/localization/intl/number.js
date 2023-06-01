@@ -4,6 +4,9 @@ import localizationCoreUtils from '../core';
 import openXmlCurrencyFormat from '../open_xml_currency_format';
 import accountingFormats from '../cldr-data/accounting_formats';
 
+const CURRENCY_STYLES = ['standard', 'accounting'];
+const MAX_FRACTION_DIGITS = 20;
+
 const detectCurrencySymbolRegex = /([^\s0]+)?(\s*)0*[.,]*0*(\s*)([^\s0]+)?/;
 const formattersCache = {};
 const getFormatter = format => {
@@ -33,10 +36,11 @@ export default {
         let config;
 
         if(format === 'decimal') {
+            const fractionDigits = String(value).split('.')[1];
             config = {
                 minimumIntegerDigits: formatConfig.precision || undefined,
                 useGrouping: false,
-                maximumFractionDigits: String(value).length,
+                maximumFractionDigits: fractionDigits && fractionDigits.length,
                 round: value < 0 ? 'ceil' : 'floor'
             };
         } else {
@@ -46,8 +50,10 @@ export default {
         if(format === 'percent') {
             config.style = 'percent';
         } else if(format === 'currency') {
+            const useAccountingStyle = formatConfig.useCurrencyAccountingStyle ?? dxConfig().defaultUseCurrencyAccountingStyle;
             config.style = 'currency';
             config.currency = formatConfig.currency || dxConfig().defaultCurrency;
+            config.currencySign = CURRENCY_STYLES[+useAccountingStyle];
         }
 
         return config;
@@ -58,7 +64,7 @@ export default {
         if(precision === null) {
             config = {
                 minimumFractionDigits: 0,
-                maximumFractionDigits: 20
+                maximumFractionDigits: MAX_FRACTION_DIGITS
             };
         } else {
             config = {

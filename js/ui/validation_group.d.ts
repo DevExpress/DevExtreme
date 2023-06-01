@@ -1,8 +1,16 @@
-import '../jquery_augmentation';
-
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
+
+import {
+    DxPromise,
+} from '../core/utils/deferred';
+
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
 
 import {
     AsyncRule,
@@ -13,88 +21,124 @@ import {
     PatternRule,
     RangeRule,
     RequiredRule,
-    StringLengthRule
-} from './validation_engine';
+    StringLengthRule,
+    ValidationStatus,
+} from '../common';
 
+export {
+    ValidationStatus,
+};
+
+/** @public */
+export type DisposingEvent = EventInfo<dxValidationGroup>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxValidationGroup>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxValidationGroup> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }
 /**
- * @docid dxValidationGroup
+ * @docid
  * @inherits DOMComponent
  * @hasTranscludedContent
- * @module ui/validation_group
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxValidationGroup extends DOMComponent {
-    constructor(element: Element, options?: dxValidationGroupOptions)
-    constructor(element: JQuery, options?: dxValidationGroupOptions)
+export default class dxValidationGroup extends DOMComponent<dxValidationGroupOptions> {
     /**
-     * @docid dxValidationGroupMethods.reset
+     * @docid
      * @publicName reset()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;
     /**
-     * @docid dxValidationGroupMethods.validate
+     * @docid
      * @publicName validate()
-     * @return dxValidationGroupResult
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @return dxValidationGroupResult
      */
-    validate(): dxValidationGroupResult;
+    validate(): ValidationResult;
 }
 
+/** @public */
+export type ValidationResult = dxValidationGroupResult;
+
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ * @deprecated {ui/validation_group.ValidationResult}
+ */
 export interface dxValidationGroupResult {
     /**
-     * @docid dxValidationGroupResult.brokenRules
-     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     /**
-     * @docid dxValidationGroupResult.complete
+     * @docid
      * @type Promise<dxValidationGroupResult>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    complete?: Promise<dxValidationGroupResult> | JQueryPromise<dxValidationGroupResult>;
+    complete?: DxPromise<dxValidationGroupResult>;
     /**
-     * @docid dxValidationGroupResult.isValid
-     * @type boolean
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     isValid?: boolean;
     /**
-     * @docid dxValidationGroupResult.status
-     * @type Enums.ValidationStatus
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
-    status?: 'valid' | 'invalid' | 'pending';
+    status?: ValidationStatus;
     /**
-     * @docid dxValidationGroupResult.validators
-     * @type Array<Object>
-     * @prevFileNamespace DevExpress.ui
+     * @docid
      * @public
      */
     validators?: Array<any>;
 }
 
-declare global {
-interface JQuery {
-    dxValidationGroup(): JQuery;
-    dxValidationGroup(options: "instance"): dxValidationGroup;
-    dxValidationGroup(options: string): any;
-    dxValidationGroup(options: string, ...params: any[]): any;
-    dxValidationGroup(options: dxValidationGroupOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxValidationGroupOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxValidationGroupOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxValidationGroupOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxValidationGroupOptions.onDisposing
+ * @type_function_param1 e:{ui/validation_group:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxValidationGroupOptions.onInitialized
+ * @type_function_param1 e:{ui/validation_group:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxValidationGroupOptions.onOptionChanged
+ * @type_function_param1 e:{ui/validation_group:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

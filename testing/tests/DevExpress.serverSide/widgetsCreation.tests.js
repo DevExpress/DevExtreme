@@ -15,6 +15,11 @@ QUnit.module('Widget creation', {
 
 Object.keys(widgets).forEach(function(widget) {
     QUnit.test(widget + ' creating and optionChanged', function(assert) {
+        if(widget === 'Scheduler' && widgets[widget].IS_RENOVATED_WIDGET) {
+            assert.ok('Renovated scheduler doesn`t support server-side rendering');
+            return;
+        }
+
         this.instance = new widgets[widget](this.element);
 
         assert.ok(true, 'it\'s possible to create ' + widget);
@@ -33,7 +38,7 @@ Object.keys(widgets).forEach(function(widget) {
             if(optionName === 'dataSource') {
                 // NOTE: dxResponsiveBox supports only plain object in items
                 let item = widget === 'ResponsiveBox' ? { text: 1 } : 1;
-                item = widget === 'dxScheduler' ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
+                item = widget === 'Scheduler' ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
 
                 newValue = new DataSource([item]);
                 options[optionName] = newValue;
@@ -63,4 +68,3 @@ Object.keys(widgets).forEach(function(widget) {
         }
     });
 });
-

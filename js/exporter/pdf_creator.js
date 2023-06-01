@@ -1,7 +1,7 @@
-import VERSION from '../core/version';
+import { version } from '../core/version';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
-import { imageCreator } from './image_creator';
+import { imageCreator, calcScaledInfo } from './image_creator';
 import { isFunction } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 
@@ -19,15 +19,20 @@ const pad = function(str, len) {
 
 let composePdfString = function(imageString, options, curDate) {
     const margin = (options.margin || 0) * 2;
-    const width = options.width + margin;
-    const height = options.height + margin;
+
+    let { width, height } = calcScaledInfo(options.width, options.height);
+    width += margin;
+    height += margin;
+
     const widthPt = (width * 0.75).toFixed(2);
     const heightPt = (height * 0.75).toFixed(2);
+    const flooredWidth = Math.floor(width);
+    const flooredHeight = Math.floor(height);
 
     const mainPage = mainPageTemplate.replace('_width_', widthPt).replace('_height_', heightPt);
     const content = contentTemplate.replace('_width_', widthPt).replace('_height_', heightPt);
-    const info = infoTemplate.replace('_date_', curDate).replace('_version_', VERSION);
-    const image = imageStartTemplate.replace('_width_', width).replace('_height_', height).replace('_length_', imageString.length) + imageString + imageEndTemplate;
+    const info = infoTemplate.replace('_date_', curDate).replace('_version_', version);
+    const image = imageStartTemplate.replace('_width_', flooredWidth).replace('_height_', flooredHeight).replace('_length_', imageString.length) + imageString + imageEndTemplate;
     const xref = getXref(mainPage.length, content.length, info.length);
 
     const mainContent = mainPage + content + info + image;
@@ -61,9 +66,31 @@ let getBase64 = function(binaryData) {
     return window.btoa(binaryData);
 };
 
+function getTwoDigitValue(value) {
+    const stringValue = value.toString();
+
+    if(stringValue.length === 1) {
+        return `0${value}`;
+    }
+    return value;
+}
+
+function convertToPdfDateFormat(date) {
+    const dateUnits = [
+        date.getUTCFullYear(),
+        getTwoDigitValue(date.getUTCMonth()),
+        getTwoDigitValue(date.getUTCDate()),
+        getTwoDigitValue(date.getUTCHours()),
+        getTwoDigitValue(date.getUTCMinutes()),
+        getTwoDigitValue(date.getUTCSeconds())
+    ];
+
+    return `(D:${dateUnits.join('')}Z00'00')`;
+}
+
 export function getData(data, options) {
     return imageCreator.getImageData(data, extend({}, options, { format: 'JPEG' })).then(imageString => {
-        const binaryData = composePdfString(imageString, options, getCurDate());
+        const binaryData = composePdfString(imageString, options, convertToPdfDateFormat(getCurDate()));
         const pdfData = isFunction(window.Blob) ?
             getBlob(binaryData) :
             getBase64(binaryData);
