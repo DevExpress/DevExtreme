@@ -199,13 +199,8 @@ const transpileCommonJSFile = (source, pathToFile) => {
 };
 
 const buildJsonModule = (body) => `
-SystemJS.register([], function(_exports) {
-    return {
-        setters: [],
-        execute: function() {
-            _exports("default", ${body});
-        }
-    };
+define(function(require, exports, module) {
+    module.exports = ${body};
 });
 `;
 
