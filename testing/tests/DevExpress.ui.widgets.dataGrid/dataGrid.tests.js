@@ -3834,6 +3834,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('watch in cellPrepared should works after push', function(assert) {
+        const activeRowKey = 1;
+
         // arrange
         const dataGrid = createDataGrid({
             dataSource: {
@@ -3871,7 +3873,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // act
-        const activeRowKey = 1;
         dataGrid.refresh(true);
 
         // assert
