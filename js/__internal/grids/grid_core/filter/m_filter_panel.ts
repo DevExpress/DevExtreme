@@ -30,6 +30,8 @@ const FilterPanelView = modules.View.inherit({
 
   init() {
     this.getController('data').dataSourceChanged.add(() => this.render());
+
+    this._columnsController = this.component.getController('columns');
   },
 
   _renderCore() {
@@ -43,14 +45,18 @@ const FilterPanelView = modules.View.inherit({
       .addClass(that.addWidgetPrefix(FILTER_PANEL_LEFT_CONTAINER))
       .appendTo($element);
 
-    if (that.option('filterValue') || that._filterValueBuffer) {
-      $leftContainer.append(that._getCheckElement())
-        .append(that._getFilterElement())
-        .append(that._getTextElement());
-      $element.append(that._getRemoveButtonElement());
-    } else {
-      $leftContainer.append(that._getFilterElement())
-        .append(that._getTextElement());
+    const isColumnsDefined = this._columnsController.isDataSourceApplied() || this._columnsController.isAllDataTypesDefined();
+
+    if (isColumnsDefined) {
+      if (that.option('filterValue') || that._filterValueBuffer) {
+        $leftContainer.append(that._getCheckElement())
+          .append(that._getFilterElement())
+          .append(that._getTextElement());
+        $element.append(that._getRemoveButtonElement());
+      } else {
+        $leftContainer.append(that._getFilterElement())
+          .append(that._getTextElement());
+      }
     }
   },
 
@@ -193,6 +199,8 @@ const FilterPanelView = modules.View.inherit({
   },
 
   getConditionText(filterValue, options) {
+    console.log('getConditionText', arguments);
+
     const that = this;
     const operation = filterValue[1];
     // @ts-expect-error
