@@ -111,13 +111,13 @@ const setWindowWidth = width => {
 };
 
 const resetWindowWidth = () => {
-    document.documentElement.clientWidth = null;
+    delete document.documentElement.clientWidth;
 
     const wasVisualViewportUsed = hasVisualViewport();
 
     if(wasVisualViewportUsed) {
-        window.innerWidth = null;
-        window.visualViewport.width = null;
+        delete window.innerWidth;
+        delete window.visualViewport.width;
     }
 };
 
