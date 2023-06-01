@@ -3570,6 +3570,28 @@ testModule('preventScrollEvents', () => {
             assert.strictEqual(stub.callCount, 1, 'error.log.callCount');
             stub.restore();
         });
+
+        [true, false].forEach(function(_ignorePreventScrollEventsDeprecation) {
+            test(`"preventScrollEvents" deprecation warning should not be logged if "_ignorePreventScrollEventsDeprecation" option value is ${_ignorePreventScrollEventsDeprecation}`, function(assert) {
+                assert.expect(_ignorePreventScrollEventsDeprecation ? 0 : 1);
+
+                const stub = sinon.stub(errors, 'log', () => {
+                    assert.deepEqual(errors.log.lastCall.args, [
+                        'W0001',
+                        'dxOverlay',
+                        'preventScrollEvents',
+                        '23.1',
+                        'If you enable this option, end-users may experience scrolling issues.'
+                    ], 'args of the log method');
+                });
+
+                $('#overlay').dxOverlay({
+                    preventScrollEvents,
+                    _ignorePreventScrollEventsDeprecation,
+                });
+                stub.restore();
+            });
+        });
     });
 });
 

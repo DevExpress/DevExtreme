@@ -1632,14 +1632,12 @@ function() {
                 'dxPager-prevPage': 'test Previous Page',
                 'dxPager-nextPage': 'test Next Page',
             },
-            'ru': {
-                /* eslint-disable i18n/no-russian-character */
-                'dxPager-pageSize': 'test Количество элементов на странице: {0}',
-                'dxPager-pageSizesAllText': 'test Все',
-                'dxPager-page': 'test Страница {0}',
-                'dxPager-prevPage': 'test Предыдущая Страница',
-                'dxPager-nextPage': 'test Следующая Страница',
-                /* eslint-enable */
+            'fr': {
+                'dxPager-pageSize': 'test Nombre d\'éléments par page: {0}',
+                'dxPager-pageSizesAllText': 'test Tous',
+                'dxPager-page': 'test Page {0}',
+                'dxPager-prevPage': 'test Page précédente',
+                'dxPager-nextPage': 'test Page suivante',
             }
         };
         localization.loadMessages(dictionary);
@@ -1661,7 +1659,7 @@ function() {
         assert.equal(buttonNext.attr('aria-label'), dictionary['en']['dxPager-nextPage'], 'correct aria-label for next page on initial render');
         assert.equal(buttonPrev.attr('aria-label'), dictionary['en']['dxPager-prevPage'], 'correct aria-label for prev page on initial render');
 
-        localization.locale('ru');
+        localization.locale('fr');
         pagerElement.dxPager('instance').repaint();
 
         pageSize = pagerElement.find('.dx-page-size');
@@ -1669,10 +1667,10 @@ function() {
         buttonPrev = pagerElement.find('.dx-prev-button');
         page = pagerElement.find('.dx-page');
 
-        assert.equal(pageSize.attr('aria-label'), dictionary['ru']['dxPager-pageSize'].replace('{0}', dictionary['ru']['dxPager-pageSizesAllText']), 'correct aria-label for page size on locale change');
-        assert.equal(page.attr('aria-label'), dictionary['ru']['dxPager-page'].replace('{0}', '1'), 'correct aria-label for page on locale change');
-        assert.equal(buttonNext.attr('aria-label'), dictionary['ru']['dxPager-nextPage'], 'correct aria-label for next page on locale change');
-        assert.equal(buttonPrev.attr('aria-label'), dictionary['ru']['dxPager-prevPage'], 'correct aria-label for prev page on locale change');
+        assert.equal(pageSize.attr('aria-label'), dictionary['fr']['dxPager-pageSize'].replace('{0}', dictionary['fr']['dxPager-pageSizesAllText']), 'correct aria-label for page size on locale change');
+        assert.equal(page.attr('aria-label'), dictionary['fr']['dxPager-page'].replace('{0}', '1'), 'correct aria-label for page on locale change');
+        assert.equal(buttonNext.attr('aria-label'), dictionary['fr']['dxPager-nextPage'], 'correct aria-label for next page on locale change');
+        assert.equal(buttonPrev.attr('aria-label'), dictionary['fr']['dxPager-prevPage'], 'correct aria-label for prev page on locale change');
 
         localization.locale(locale);
     });
