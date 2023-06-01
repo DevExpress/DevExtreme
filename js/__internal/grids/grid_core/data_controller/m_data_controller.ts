@@ -354,24 +354,27 @@ export class DataController extends ControllerWithDataMixin {
   }
 
   combinedFilter(filter, returnDataField?) {
-    const that = this;
-    const dataSource = that._dataSource;
-    const columnsController = that._columnsController;
+    const dataSource = this._dataSource;
+    const columnsController = this._columnsController;
 
     if (dataSource) {
       if (filter === undefined) {
         filter = dataSource.filter();
       }
 
-      const additionalFilter = that._calculateAdditionalFilter();
-      if (additionalFilter) {
-        if (columnsController.isDataSourceApplied() || columnsController.isAllDataTypesDefined()) {
+      const isColumnsDefined = columnsController.isDataSourceApplied() || columnsController.isAllDataTypesDefined();
+
+      if (isColumnsDefined) {
+        const additionalFilter = this._calculateAdditionalFilter();
+
+        if (additionalFilter) {
           filter = gridCoreUtils.combineFilters([additionalFilter, filter]);
         }
       }
 
       filter = columnsController.updateFilter(filter, returnDataField || dataSource.remoteOperations().filtering);
     }
+
     return filter;
   }
 
@@ -493,7 +496,7 @@ export class DataController extends ControllerWithDataMixin {
     let isAsyncDataSourceApplying = false;
 
     this._useSortingGroupingFromColumns = false;
-
+    console.log('_handleDataChanged', e);
     if (dataSource && !that._isDataSourceApplying) {
       that._isDataSourceApplying = true;
 
