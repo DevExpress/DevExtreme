@@ -588,7 +588,7 @@ QUnit.module('keyboard navigation', {
         assert.expect(4);
 
         this.instance.focus();
-        $(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1).trigger('dxpointerup');
+        $(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1).trigger('dxpointerdown');
         this.clock.tick(10);
 
         const multiViewFocusedIndex = $(this.instance.option('focusedElement')).index();
