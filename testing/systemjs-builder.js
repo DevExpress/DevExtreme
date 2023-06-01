@@ -331,7 +331,11 @@ const transpileFileWithBuilder = async(Builder, filePath, sourceFolder, destFold
         return;
     }
 
-    if(filePath.includes('ui.widgets/fileManagerParts')) {
+    if(
+        filePath.includes('ui.widgets/fileManagerParts')
+        || filePath.includes('ui.widgets.dataGrid/')
+        || filePath.includes('ui.widgets.editors/')
+    ) {
         await transpileWithBabel(sourceCode, destPath);
     } else {
         try {
