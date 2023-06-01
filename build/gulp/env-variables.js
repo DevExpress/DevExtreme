@@ -1,7 +1,7 @@
 'use strict';
 
 function readFlag(variableName) {
-    return String(process.env[variableName]).toLowerCase() ==='true'
+    return String(process.env[variableName]).toLowerCase() === 'true';
 }
 
 module.exports = {
@@ -9,5 +9,6 @@ module.exports = {
     BUILD_ESM_PACKAGE: readFlag('BUILD_ESM_PACKAGE') && !readFlag('DEVEXTREME_TEST_CI'),
     SKIP_THEMEBUILDER: readFlag('SKIP_THEMEBUILDER'),
     BUILD_INPROGRESS_RENOVATION: readFlag('BUILD_INPROGRESS_RENOVATION'),
-    BUILD_TESTCAFE: readFlag('BUILD_TESTCAFE')
+    BUILD_TESTCAFE: readFlag('BUILD_TESTCAFE'),
+    BUILD_SYSTEMJS: readFlag('BUILD_SYSTEMJS'),
 };

@@ -72,6 +72,11 @@ function createDefaultBatch(dev) {
     tasks.push('localization');
     tasks.push(dev ? 'generate-components-dev' : 'generate-components');
     tasks.push('transpile');
+
+    if(env.BUILD_SYSTEMJS) {
+        tasks.push('transpile-systemjs');
+    }
+
     tasks.push('version-replace');
     tasks.push(dev && !env.BUILD_TESTCAFE ? 'main-batch-dev' : 'main-batch');
     if(!env.TEST_CI && !dev && !env.BUILD_TESTCAFE) {
@@ -85,7 +90,9 @@ function createDefaultBatch(dev) {
         tasks.push('discover-declarations');
     }
 
-    return gulp.series(tasks);
+    return env.BUILD_SYSTEMJS
+        ? gulp.parallel([gulp.series(tasks), 'systemjs-testing'])
+        : gulp.series(tasks);
 }
 
 gulp.task('discover-declarations', shell.task('npm run discover-declarations'));
