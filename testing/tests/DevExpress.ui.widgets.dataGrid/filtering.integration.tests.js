@@ -396,9 +396,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }]
         });
 
-        assert.equal(calculateFilterExpressionCallCount, 6, 'calculateFilterExpression call count');
+        assert.equal(calculateFilterExpressionCallCount, 5, 'calculateFilterExpression call count');
         assert.ok(grid.getCombinedFilter(), 'combined filter');
-        assert.equal(calculateFilterExpressionCallCount, 7, 'calculateFilterExpression call count');
+        assert.equal(calculateFilterExpressionCallCount, 6, 'calculateFilterExpression call count');
     });
 
     function createRemoteDataSourceWithGroupPaging(arrayStore, key) {
