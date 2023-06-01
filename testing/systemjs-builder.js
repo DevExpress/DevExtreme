@@ -379,7 +379,11 @@ const transpileTesting = async(Builder) => {
 
     // eslint-disable-next-line no-restricted-syntax
     for(const filePath of listFiles) {
-        await transpileFileWithBuilder(Builder, filePath, '/testing/', '/artifacts/transpiled-testing/');
+        if(filePath.endsWith('.js')) {
+            await transpileFile(filePath, filePath.replace('/testing/', '/artifacts/transpiled-testing/'));
+        } else {
+            await transpileFileWithBuilder(Builder, filePath, '/testing/', '/artifacts/transpiled-testing/');
+        }
     }
 };
 
