@@ -301,14 +301,6 @@ const transpileJsVendors = async(Builder) => {
             filePath: path.join(root, 'node_modules/angular/index.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/angular.js'),
         },
-        {
-            filePath: path.join(root, 'node_modules/intl/index.js'),
-            destPath: path.join(root, 'artifacts/js-systemjs/intl.js'),
-        },
-        {
-            filePath: path.join(root, 'node_modules/knockout/build/output/knockout-latest.debug.js'),
-            destPath: path.join(root, 'artifacts/js-systemjs/knockout.js'),
-        },
     ];
 
     [].concat(
@@ -408,7 +400,7 @@ const updateBuilder = () => {
         case 'builder':
             return updateBuilder();
         case 'modules':
-            return await transpileModules(Builder);
+            return await transpileModules();
         case 'modules-renovation':
             return transpileRenovationModules();
         case 'testing':
