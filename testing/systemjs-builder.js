@@ -209,6 +209,19 @@ SystemJS.register([], function(_exports) {
 });
 `;
 
+const buildSystemJSModule = (body, pre = '') => `
+SystemJS.register([], function(_exports) {
+    ${pre}
+
+    return {
+        setters: [],
+        execute: function() {
+            ${body}
+        }
+    };
+});
+`;
+
 const transpileFile = async(sourcePath, targetPath) => {
     const code = fs.readFileSync(sourcePath).toString().replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/');
     const dirPath = path.dirname(targetPath);
@@ -217,7 +230,12 @@ const transpileFile = async(sourcePath, targetPath) => {
         fs.mkdirSync(dirPath, { recursive: true });
     }
 
-    if(/(^|\s)System(JS)?\./gm.test(code) || /(^|\s)define\(/gm.test(code)) {
+    if(sourcePath.includes('testing/helpers/includeThemesLinks.js')) {
+        fs.writeFileSync(targetPath, buildSystemJSModule('', code.replaceAll('\n', '    ')));
+        return;
+    }
+
+    if(/(^|\s)System(JS)?\.register/gm.test(code) || /(^|\s)define\(/gm.test(code)) {
         fs.writeFileSync(targetPath, code);
     } else if(/(\(|\s|^)require\(/.test(code) || /(module\.)?exports(\.\w+)?\s?=/.test(code)) {
         transpileCommonJSFile(code, targetPath);
