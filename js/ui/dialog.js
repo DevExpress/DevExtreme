@@ -156,8 +156,13 @@ export const custom = function(options) {
 
     function show() {
         if(devices.real().deviceType === 'phone') {
-            const isPortrait = getHeight(window) > getWidth(window);
+            const windowHeight = getHeight(window);
+            const windowWidth = getWidth(window);
+
+            const isPortrait = windowHeight > windowWidth;
+
             const width = isPortrait ? '90%' : '60%';
+
             popupInstance.option({ width });
         }
 
@@ -171,8 +176,8 @@ export const custom = function(options) {
     }
 
     return {
-        show: show,
-        hide: hide
+        show,
+        hide,
     };
 };
 

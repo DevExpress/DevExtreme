@@ -427,6 +427,8 @@ const Overlay = Widget.inherit({
             return false;
         }
 
+        const window = getWindow();
+
         const $visualContainer = this._positionController.$visualContainer;
         const windowInnerHeight = window.innerHeight;
         const visualViewportHeight = getHeight($visualContainer);

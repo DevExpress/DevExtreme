@@ -8,6 +8,7 @@ import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { value as viewPort } from 'core/utils/view_port';
 import domAdapter from 'core/dom_adapter';
+import windowUtils from 'core/utils/window';
 
 const { module, test, testInActiveWindow } = QUnit;
 
@@ -434,26 +435,41 @@ QUnit.module('width on phone', {
         devices.real({ deviceType: 'phone' });
 
         this.dialog = custom();
+
         this.documentStub = sinon.stub(domAdapter, 'getDocumentElement');
+        this.windowStub = sinon.stub(windowUtils, 'getWindow');
+
+        this.setStubReturnsOptions = ({ width, height }) => {
+            this.documentStub.returns({ clientWidth: width, clientHeight: height });
+            this.windowStub.returns({ innerWidth: width, innerHeight: height, visualViewport: null });
+        };
         this.getDialogElement = () => $(`.${DIALOG_WRAPPER_CLASS} .dx-overlay-content`);
     },
     afterEach: function() {
         devices.real(this.realDevice);
+
         this.documentStub.restore();
+        this.windowStub.restore();
+
         fx.off = false;
     }
 }, () => {
     QUnit.test('should be 90% for portrait orientation', function(assert) {
-        this.documentStub.returns({ clientWidth: 200, clientHeight: 500 });
+        const sizes = { width: 200, height: 500 };
+
+        this.setStubReturnsOptions(sizes);
 
         this.dialog.show();
 
         const $dialog = this.getDialogElement();
+
         assert.strictEqual($dialog.width(), 180, 'width is correct');
     });
 
     QUnit.test('should be 60% for landscape orientation', function(assert) {
-        this.documentStub.returns({ clientWidth: 600, clientHeight: 500 });
+        const sizes = { width: 600, height: 500 };
+
+        this.setStubReturnsOptions(sizes);
 
         this.dialog.show();
 
