@@ -91,7 +91,7 @@ function createDefaultBatch(dev) {
     }
 
     return env.BUILD_SYSTEMJS
-        ? gulp.parallel([gulp.series(tasks), 'transpile-systemjs-testing'])
+        ? gulp.parallel([gulp.series(tasks), 'systemjs-testing'])
         : gulp.series(tasks);
 }
 
