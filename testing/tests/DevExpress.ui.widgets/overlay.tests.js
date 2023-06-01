@@ -3978,14 +3978,19 @@ testModule('overlay utils', moduleConfig, () => {
 testModule('renderGeometry', {
     beforeEach: function() {
         fx.off = true;
+
         this.timeToWaitResize = 50;
         this.overlayInstance = $('#overlay').dxOverlay({
             deferRendering: false,
         }).dxOverlay('instance');
+
         this.renderGeometrySpy = sinon.spy(this.overlayInstance, '_renderGeometry');
+        this.renderVisibilityAnimateSpy = sinon.spy(this.overlayInstance, '_renderVisibilityAnimate');
+
         this.checkNoExcessResizeHandle = (assert) => {
             const done = assert.async();
             const renderGeometryInitialCallCount = this.renderGeometrySpy.callCount;
+
             setTimeout(() => {
                 assert.strictEqual(
                     this.renderGeometrySpy.callCount,
@@ -4021,7 +4026,7 @@ testModule('renderGeometry', {
 
         setTimeout(() => {
             resizeCallbacks.fire();
-            assert.strictEqual(this.renderGeometrySpy.callCount, 2);
+            assert.strictEqual(this.renderVisibilityAnimateSpy.callCount, 1);
             showingResizeHandled();
         }, this.timeToWaitResize);
     });
