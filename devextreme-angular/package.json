@@ -39,7 +39,7 @@
     "del": "^2.2.2",
     "devextreme": "23.1-next",
     "devextreme-angular-generator": "^2.1.0",
-    "devextreme-internal-tools": "^10.0.0-beta.12",
+    "devextreme-internal-tools": "^10.0.0-beta.13",
     "gulp": "^4.0.2",
     "gulp-header": "^1.8.12",
     "gulp-replace": "^0.6.1",
