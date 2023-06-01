@@ -8,13 +8,17 @@ const _max = Math.max;
 import registerComponent from '../../core/component_registrator';
 import { clone } from '../../core/utils/object';
 import { noop } from '../../core/utils/common';
+import { overlapping } from '../chart_components/base_chart';
 import { extend } from '../../core/utils/extend';
-import { normalizeEnum as _normalizeEnum, convertAngleToRendererSpace, getCosAndSin, patchFontOptions } from '../core/utils';
+import { normalizeEnum as _normalizeEnum, convertAngleToRendererSpace, getCosAndSin, patchFontOptions, getVerticallyShiftedAngularCoords, normalizeArcParams, normalizeAngle } from '../core/utils';
 import { BaseGauge, getSampleText, formatValue, compareArrays } from './base_gauge';
+import dxCircularGauge from './circular_gauge';
+import { plugin as pluginLegend } from '../components/legend';
+import { plugins as centerTemplatePlugins } from '../core/center_template';
+import { roundFloatPart } from '../../core/utils/math';
 const _getSampleText = getSampleText;
 const _formatValue = formatValue;
 const _compareArrays = compareArrays;
-import dxCircularGauge from './circular_gauge';
 const _isArray = Array.isArray;
 const _convertAngleToRendererSpace = convertAngleToRendererSpace;
 const _getCosAndSin = getCosAndSin;
@@ -23,8 +27,9 @@ const _Number = Number;
 const _isFinite = isFinite;
 const _noop = noop;
 const _extend = extend;
-import { plugin as pluginLegend } from '../components/legend';
 
+
+const ARC_COORD_PREC = 5;
 const OPTION_VALUES = 'values';
 let BarWrapper;
 
@@ -242,6 +247,10 @@ export const dxBarGauge = BaseGauge.inherit({
         }
     },
 
+    _getCenter: function() {
+        return { x: this._context.x, y: this._context.y };
+    },
+
     _updateBars: function() {
         this._bars.forEach(bar => bar.applyValue());
         this._checkOverlap();
@@ -249,17 +258,139 @@ export const dxBarGauge = BaseGauge.inherit({
 
     _checkOverlap: function() {
         const that = this;
-        const bars = that._bars;
         const overlapStrategy = _normalizeEnum(that._getOption('resolveLabelOverlapping', true));
+
+        function shiftFunction(box, length) {
+            return getVerticallyShiftedAngularCoords(box, -length, that._context);
+        }
 
         if(overlapStrategy === 'none') {
             return;
         }
+        if(overlapStrategy === 'shift') {
+            const newBars = that._dividePoints();
+            overlapping.resolveLabelOverlappingInOneDirection(newBars.left, that._canvas, false, false, shiftFunction);
+            overlapping.resolveLabelOverlappingInOneDirection(newBars.right, that._canvas, false, false, shiftFunction);
+            that._clearLabelsCrossTitle();
+            that._drawConnector();
+        } else {
+            that._clearOverlappingLabels();
+        }
+    },
 
-        const sortedBars = bars.concat().sort((a, b) => a.getValue() - b.getValue());
+    _drawConnector() {
+        const that = this;
+        const bars = that._bars;
+        const { connectorWidth } = that._getOption('label');
 
+        bars.forEach((bar) => {
+            if(!bar._isLabelShifted) {
+                return;
+            }
+
+            const x = bar._bar.attr('x');
+            const y = bar._bar.attr('y');
+            const innerRadius = bar._bar.attr('innerRadius');
+            const outerRadius = bar._bar.attr('outerRadius');
+            const startAngle = bar._bar.attr('startAngle');
+            const endAngle = bar._bar.attr('endAngle');
+            const coordStart = getStartCoordsArc.apply(null, normalizeArcParams(x, y, innerRadius, outerRadius, startAngle, endAngle));
+            const { cos, sin } = _getCosAndSin(bar._angle);
+            const xStart = coordStart.x - (sin * connectorWidth / 2) - cos;
+            const yStart = coordStart.y - (cos * connectorWidth / 2) + sin;
+            const box = bar._text.getBBox();
+            const lastCoords = bar._text._lastCoords;
+            const indentFromLabel = that._context.textWidth / 2;
+            const originalXLabelCoord = box.x + box.width / 2 + lastCoords.x;
+            const originalPoints = [
+                xStart,
+                yStart,
+                originalXLabelCoord,
+                box.y + lastCoords.y
+            ];
+
+            if(bar._angle > 90) {
+                originalPoints[2] += indentFromLabel;
+            } else {
+                originalPoints[2] -= indentFromLabel;
+            }
+
+            if(bar._angle <= 180 && bar._angle > 0) {
+                originalPoints[3] += box.height;
+            }
+
+            if(connectorWidth % 2) {
+                const xDeviation = -sin / 2;
+                const yDeviation = -cos / 2;
+
+                if(bar._angle > 180) {
+                    originalPoints[0] -= xDeviation;
+                    originalPoints[1] -= yDeviation;
+                } else if(bar._angle > 0 && bar._angle <= 90) {
+                    originalPoints[0] += xDeviation;
+                    originalPoints[1] += yDeviation;
+                }
+            }
+
+            const points = originalPoints.map(coordinate => roundFloatPart(coordinate, 4));
+            bar._line.attr({ points });
+            bar._line.rotate(0);
+            bar._isLabelShifted = false;
+        });
+    },
+
+    _dividePoints() {
+        const that = this;
+        const bars = that._bars;
+        return bars.reduce(function(stackBars, bar) {
+            const angle = normalizeAngle(bar._angle);
+            const isRightSide = angle <= 90 || angle >= 270;
+            bar._text._lastCoords = { x: 0, y: 0 };
+            const barToExtend = isRightSide ? stackBars.right : stackBars.left;
+
+            barToExtend
+                .push({
+                    series: {
+                        isStackedSeries: () => false,
+                        isFullStackedSeries: () => false
+                    },
+                    getLabels: () => [{
+                        isVisible: () => true,
+                        getBoundingRect: () => {
+                            const { height, width, x, y } = bar._text.getBBox();
+                            const lastCoords = bar._text._lastCoords;
+
+                            return {
+                                x: x + lastCoords.x,
+                                y: y + lastCoords.y,
+                                width,
+                                height,
+                            };
+                        },
+                        shift: (x, y) => {
+                            const box = bar._text.getBBox();
+
+                            bar._text._lastCoords = { x: x - box.x, y: y - box.y };
+                            bar._text.attr({ translateX: x - box.x, translateY: y - box.y });
+                            bar._isLabelShifted = true;
+                        },
+                        draw: () => bar.hideLabel(),
+                        getData: () => { return { value: bar.getValue() }; },
+                        hideInsideLabel: ()=> false,
+                    }]
+                }
+                );
+            return stackBars;
+        }, { left: [], right: [] });
+    },
+
+    _clearOverlappingLabels() {
+        const that = this;
+        const bars = that._bars;
         let currentIndex = 0;
         let nextIndex = 1;
+        const sortedBars = bars.concat().sort((a, b) => a.getValue() - b.getValue());
+
         while(currentIndex < sortedBars.length && nextIndex < sortedBars.length) {
             const current = sortedBars[currentIndex];
             const next = sortedBars[nextIndex];
@@ -272,6 +403,22 @@ export const dxBarGauge = BaseGauge.inherit({
                 nextIndex = currentIndex + 1;
             }
         }
+    },
+
+    _clearLabelsCrossTitle() {
+        const that = this;
+        const bars = that._bars;
+        const titleCoords = that._title.getLayoutOptions() || { x: 0, y: 0, height: 0, width: 0 };
+        const minY = titleCoords.y + titleCoords.height;
+
+        bars.forEach(bar => {
+            const box = bar._text.getBBox();
+            const lastCoords = bar._text._lastCoords;
+
+            if(minY > box.y + lastCoords.y) {
+                bar.hideLabel();
+            }
+        });
     },
 
     _animateBars: function() {
@@ -333,7 +480,7 @@ export const dxBarGauge = BaseGauge.inherit({
         that._values.length = ii;
         for(i = 0; i < ii; ++i) {
             value = list[i];
-            that._values[i] = value = _Number(_isFinite(value) ? value : that._values[i]);
+            that._values[i] = _Number(_isFinite(value) ? value : that._values[i]);
         }
 
         if(!that._resizing) {
@@ -644,9 +791,17 @@ function compareFloats(value1, value2) {
     return _abs(value1 - value2) < 0.0001;
 }
 
+function getStartCoordsArc(x, y, innerR, outerR, startAngleCos, startAngleSin) {
+    return {
+        x: (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC),
+        y: (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC)
+    };
+}
+
 registerComponent('dxBarGauge', dxBarGauge);
 
 dxBarGauge.addPlugin(pluginLegend);
+dxBarGauge.addPlugin(centerTemplatePlugins.gauge);
 
 ///#DEBUG
 const __BarWrapper = BarWrapper;

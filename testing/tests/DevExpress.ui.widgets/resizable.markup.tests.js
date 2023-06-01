@@ -1,13 +1,18 @@
 import $ from 'jquery';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/resizable';
 
 QUnit.testStart(function() {
-    const markup = '<div id="resizable" style="height: 50px; width: 50px; position: absolute"></div>';
+    const markup = '<div id="resizable"></div>';
     $('#qunit-fixture').html(markup);
+
+    $('#resizable').css({
+        height: '50px',
+        width: '50px',
+        position: 'absolute'
+    });
 });
 
 const RESIZABLE_CLASS = 'dx-resizable';

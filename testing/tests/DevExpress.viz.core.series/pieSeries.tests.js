@@ -60,7 +60,13 @@ const createPoint = function(series, data) {
 
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {
-        stubFunc && stubFunc.reset && stubFunc.reset();
+        if(stubFunc) {
+            if(stubFunc.resetHistory) {
+                stubFunc.resetHistory();
+            } else if(stubFunc.reset) {
+                stubFunc.reset();
+            }
+        }
     });
 }
 
@@ -69,7 +75,7 @@ const environment = {
     beforeEach: function() {
         this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
         let mockPointIndex = 0;
-        this.createPoint = sinon.stub(pointModule, 'Point', function(series, data) {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(series, data) {
             const stub = mockPoints[mockPointIndex++];
 
             stub.argument = data.argument || 1;
@@ -543,6 +549,7 @@ const checkTwoGroups = function(assert, series) {
                 },
                 hoverStyle: {
                     color: 'h-color',
+                    highlight: true,
                     border: {
                         visible: true,
                         color: 'h-b-color',
@@ -552,6 +559,7 @@ const checkTwoGroups = function(assert, series) {
                 },
                 selectionStyle: {
                     color: 's-color',
+                    highlight: true,
                     border: {
                         visible: true,
                         color: 's-b-color',
@@ -571,39 +579,46 @@ const checkTwoGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(this.createPoint.firstCall.args[2].styles, {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 stroke: 'h-b-color',
                 'stroke-width': 'h-b-width',
                 dashStyle: 'h-b-dashStyle',
-                hatching: 'h-hatching'
+                hatching: 'h-hatching',
+                filter: true
             },
             normal: {
                 fill: 'n-color',
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
                 dashStyle: 'n-b-dashStyle',
-                hatching: undefined
+                hatching: undefined,
+                filter: undefined
             },
             selection: {
                 fill: 's-color',
                 stroke: 's-b-color',
                 'stroke-width': 's-b-width',
                 dashStyle: 's-b-dashStyle',
-                hatching: 's-hatching'
+                hatching: 's-hatching',
+                filter: true
             },
             legendStyles: {
                 'hover': {
                     'fill': 'h-color',
-                    hatching: 'h-hatching'
+                    hatching: 'h-hatching',
+                    filter: true
                 },
                 'normal': {
                     'fill': 'n-color',
-                    hatching: undefined
+                    hatching: undefined,
+                    filter: undefined
                 },
                 'selection': {
                     'fill': 's-color',
-                    hatching: 's-hatching'
+                    hatching: 's-hatching',
+                    filter: true
                 }
             }
         });
@@ -636,7 +651,8 @@ const checkTwoGroups = function(assert, series) {
             stroke: 'h-b-color',
             'stroke-width': 'h-b-width',
             dashStyle: 'h-b-dashStyle',
-            hatching: 'h-hatching'
+            hatching: 'h-hatching',
+            filter: true
         }, 'hover styles');
 
         assert.deepEqual(styles.normal, {
@@ -644,7 +660,8 @@ const checkTwoGroups = function(assert, series) {
             stroke: 'n-b-color',
             'stroke-width': 'n-b-width',
             dashStyle: 'n-b-dashStyle',
-            hatching: undefined
+            hatching: undefined,
+            filter: undefined
         }, 'normal styles');
 
         assert.deepEqual(styles.selection, {
@@ -652,7 +669,120 @@ const checkTwoGroups = function(assert, series) {
             stroke: 's-b-color',
             'stroke-width': 's-b-width',
             dashStyle: 's-b-dashStyle',
-            hatching: 's-hatching'
+            hatching: 's-hatching',
+            filter: true
+        }, 'selection styles');
+    });
+
+    QUnit.test('custom styles are defined', function(assert) {
+        const series = createSeries({
+            type: seriesType,
+            color: { base: 'seriesColor', fillId: 'id_color_1' },
+            border: {
+                visible: true,
+            },
+            hoverStyle: {
+                color: { fillId: 'id_color_2' },
+                highlight: true,
+                hatching: { direction: 'left' },
+                border: {
+                    visible: true,
+                }
+            },
+            selectionStyle: {
+                color: { fillId: 'id_color_3' },
+                highlight: true,
+                hatching: { direction: 'left' },
+                border: {
+                    visible: true,
+                }
+            }
+        });
+
+        series.updateData(this.data);
+        series.createPoints();
+        const styles = series._getPointOptions().styles;
+
+        assert.deepEqual(styles.hover, {
+            fill: 'id_color_2',
+            stroke: 'seriesColor',
+            'stroke-width': undefined,
+            dashStyle: 'solid',
+            hatching: { direction: 'none' },
+            filter: true
+        }, 'hover styles');
+
+        assert.deepEqual(styles.normal, {
+            fill: 'id_color_1',
+            stroke: 'seriesColor',
+            'stroke-width': undefined,
+            dashStyle: 'solid',
+            hatching: undefined,
+            filter: undefined
+        }, 'normal styles');
+
+        assert.deepEqual(styles.selection, {
+            fill: 'id_color_3',
+            stroke: 'seriesColor',
+            'stroke-width': undefined,
+            dashStyle: 'solid',
+            hatching: { direction: 'none' },
+            filter: true
+        }, 'selection styles');
+    });
+
+    QUnit.test('custom styles set in main color', function(assert) {
+        const series = createSeries({
+            type: seriesType,
+            color: { base: 'seriesColor', fillId: 'id_color_1' },
+            border: {
+                visible: true,
+            },
+            hoverStyle: {
+                highlight: true,
+                hatching: { direction: 'left' },
+                border: {
+                    visible: true,
+                }
+            },
+            selectionStyle: {
+                highlight: true,
+                hatching: { direction: 'left' },
+                border: {
+                    visible: true,
+                }
+            }
+        });
+
+        series.updateData(this.data);
+        series.createPoints();
+        const styles = series._getPointOptions().styles;
+
+        assert.deepEqual(styles.hover, {
+            fill: 'id_color_1',
+            stroke: 'seriesColor',
+            'stroke-width': undefined,
+            dashStyle: 'solid',
+            hatching: { direction: 'none' },
+            filter: true
+        }, 'hover styles');
+
+        assert.deepEqual(styles.normal, {
+            fill: 'id_color_1',
+            stroke: 'seriesColor',
+            'stroke-width': undefined,
+            dashStyle: 'solid',
+            hatching: undefined,
+            filter: undefined
+        }, 'normal styles');
+
+        assert.deepEqual(styles.selection, {
+            fill: 'id_color_1',
+            stroke: 'seriesColor',
+            'stroke-width': undefined,
+            dashStyle: 'solid',
+            hatching: { direction: 'none' },
+            filter: true
         }, 'selection styles');
     });
 

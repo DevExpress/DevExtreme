@@ -2,36 +2,40 @@ import $ from 'jquery';
 import dataUtils from 'core/element_data';
 
 QUnit.testStart(function() {
-    const markup =
-'\
-<style>\
-    .qunit-fixture-static {\
-         position: absolute !important;\
-         left: 0 !important;\
-         top: 0 !important;\
-        ;\
-    }\
-\
-     .dx-scrollable-native-ios .dx-scrollable-content {\
-         padding: 0 !important;\
-        ;\
-    }\
-\
-</style>\
-<div>\
-    <div class="dx-datagrid">\
-        <div id="container"></div>\
-    </div>\
-</div>';
+    const markup = `
+        <style nonce="qunit-test">
+            .qunit-fixture-static {
+                 position: absolute !important;
+                 left: 0 !important;
+                 top: 0 !important;
+            }
+             .dx-scrollable-native-ios .dx-scrollable-content {
+                 padding: 0 !important;
+            }
+        </style>
+        <div>
+            <div class="dx-datagrid">
+                <div id="container"></div>
+            </div>
+        </div>
+    `;
 
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
+import 'ui/autocomplete';
+import 'ui/calendar';
+import 'ui/color_box';
+import 'ui/drop_down_box';
+import 'ui/html_editor';
 import 'ui/lookup';
+import 'ui/radio_group';
+import 'ui/range_slider';
+import 'ui/slider';
 import 'ui/switch';
+import 'ui/tag_box';
 import TextArea from 'ui/text_area';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
@@ -42,6 +46,7 @@ import SelectBox from 'ui/select_box';
 import { MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
+import { noop } from 'core/utils/common';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -58,6 +63,39 @@ QUnit.module('Editor Factory', {
         this.dispose();
     }
 }, () => {
+
+    ['dxAutocomplete', 'dxCalendar', 'dxCheckBox', 'dxColorBox', 'dxDateBox', 'dxDropDownBox', 'dxHtmlEditor', 'dxLookup', 'dxNumberBox', 'dxRadioGroup', 'dxRangeSlider', 'dxSelectBox', 'dxSlider', 'dxSwitch', 'dxTagBox', 'dxTextArea', 'dxTextBox'].forEach((editorType) => {
+        QUnit.test(`Prepare editor based on editorType: ${editorType}`, function(assert) {
+            // arrange
+            const $container = $('#container');
+            const editorOptions = {
+                editorType,
+                dataType: 'string'
+            };
+
+            if(editorType === 'dxDateBox') {
+                editorOptions.dataType = 'date';
+            } else if(editorType === 'dxRangeSlider') {
+                editorOptions.value = [];
+            }
+
+            this.options.onEditorPreparing = function(options) {
+                // assert
+                assert.strictEqual(options.editorName, editorType, `editorName is set correctly: ${editorType}`);
+                if(['dxSelectBox', 'dxLookup'].includes(editorType)) { // T1145047
+                    assert.strictEqual(options.editorOptions.valueChangeEvent, undefined, `Prepare ${editorType} without the 'valueChangeEvent' option`);
+                }
+            };
+            this.editorFactoryController.init();
+
+            // act
+            this.editorFactoryController.createEditor($container, editorOptions);
+            const editor = $container[editorType]('instance');
+
+            // assert
+            assert.ok(editor, 'editor created');
+        });
+    });
 
     QUnit.test('Text editor', function(assert) {
         const $container = $('#container');
@@ -76,6 +114,8 @@ QUnit.module('Editor Factory', {
         // assert
         assert.ok(textBox, 'dxTextBox created');
         assert.equal(textBox.option('value'), 'A', 'text editor value');
+        assert.ok(textBox._supportedKeys().enter, 'enter handler is defined'); // T1013643
+        assert.notEqual(textBox._supportedKeys().enter, noop, 'enter handler is not noop'); // T1013643
 
         // act
         textBox.option('value', 'B');
@@ -149,116 +189,6 @@ QUnit.module('Editor Factory', {
         devices.real(originalDevice);
     });
 
-    if(browser.msie) {
-        QUnit.test('Enter does not change the text editor value in IE, EDGE (T305674, T336478, T635192)', function(assert) {
-            const $container = $('#container');
-            let value = 'A';
-            let setValueCallCount = 0;
-
-            // act
-            this.editorFactoryController.createEditor($container, {
-                value: value,
-                setValue: function(newValue) {
-                    setValueCallCount++;
-                    value = newValue;
-                }
-            });
-            const textBox = $container.dxTextBox('instance');
-
-            // assert
-            assert.ok(textBox, 'dxTextBox created');
-            assert.equal(textBox.option('value'), 'A', 'text editor value');
-
-            // mock for real blur
-            $($container.find('input')).get(0).blur = function() {
-                $container.find('input').trigger('change');
-            };
-
-            // act
-            $container.find('input').focus();
-            $container.find('input').val('AB');
-            $container.find('input').trigger($.Event('keydown', { key: 'Enter' }));
-
-            this.clock.tick();
-
-            // assert
-            assert.equal(value, 'AB', 'value after enter key');
-            assert.equal(setValueCallCount, 1, 'setValue call count');
-        });
-
-        // T426951
-        QUnit.test('DateBox editor enter work in IE', function(assert) {
-            const $container = $('#container');
-            let value = new Date(2015, 10, 5);
-            // act
-            this.editorFactoryController.createEditor($container, {
-                dataType: 'date',
-                value: value,
-                setValue: function(newValue) {
-                    value = newValue;
-                }
-            });
-            const dateBox = $container.dxDateBox('instance');
-
-            const methods = [];
-
-            if(dateBox.focus) {
-                dateBox.focus = function() {
-                    methods.push('focus');
-                };
-            }
-
-            if(dateBox.blur) {
-                dateBox.blur = function() {
-                    methods.push('blur');
-                };
-            }
-
-            assert.ok(dateBox, 'dxTextBox created');
-
-            // act
-            $container.find('input').trigger($.Event('keydown', { key: 'Enter' }));
-
-            // assert
-            assert.deepEqual(methods, ['blur', 'focus'], 'blur and focus called');
-        });
-
-        // T305674
-        QUnit.test('Text editor value on lost focus', function(assert) {
-            const $container = $('#container');
-            let value = 'A';
-            let setValueCallCount = 0;
-
-            // act
-            this.editorFactoryController.createEditor($container, {
-                value: value,
-                setValue: function(newValue) {
-                    setValueCallCount++;
-                    value = newValue;
-                }
-            });
-            const textBox = $container.dxTextBox('instance');
-
-            // assert
-            assert.ok(textBox, 'dxTextBox created');
-            assert.equal(textBox.option('value'), 'A', 'text editor value');
-
-            // act
-            textBox.focus();
-            $container.find('input').val('AB');
-            $container.find('input').trigger($.Event('keyup'));
-            $(window).trigger('focus');
-            // mock change on focus change
-            $container.find('input').trigger('change');
-
-            this.clock.tick();
-            // assert
-            assert.equal(textBox.option('valueChangeEvent'), 'change', 'valueChangeEvent');
-            assert.equal(textBox.option('value'), 'AB', 'value');
-            assert.equal(setValueCallCount, 1, 'setValue call count');
-        });
-    }
-
     QUnit.test('Text editor with set onEditorPreparing', function(assert) {
     // arrange
         const $container = $('#container');
@@ -290,10 +220,9 @@ QUnit.module('Editor Factory', {
         assert.ok(!textBox, 'dxTextBox not created');
 
         // arrange
-        this.options.onEditorPreparing = function(options) {
+        this.editorFactoryController.option('onEditorPreparing', (options) => {
             options.cancel = false;
-        };
-        this.editorFactoryController.optionChanged({ name: 'onEditorPreparing' });
+        });
 
         // act
         this.editorFactoryController.createEditor($container, {
@@ -1333,7 +1262,7 @@ QUnit.module('Focus', {
         ];
 
         that.setupDataGrid = function() {
-            setupDataGridModules(that, ['data', 'rows', 'columns', 'editorFactory', 'editing', 'validating', 'masterDetail'], {
+            setupDataGridModules(that, ['data', 'rows', 'columns', 'editorFactory', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'validating', 'masterDetail'], {
                 initViews: true,
                 controllers: {
                     columns: new MockColumnsController(that.columns),
@@ -1415,7 +1344,7 @@ QUnit.module('Focus', {
         };
 
         testElement.trigger($.Event('keydown.dxDataGridEditorFactory', { key: 'Tab' }));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(isFocused, 'cell is focused');
@@ -1429,7 +1358,7 @@ QUnit.module('Focus', {
 
         // act
         this.editorFactoryController.focus(testElement);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editorFactoryController.focus(), testElement, 'focused element');
@@ -1545,10 +1474,10 @@ QUnit.module('Focus', {
         };
 
         that.$element = function() {
-            return $('#qunit-fixture');
+            return $('.dx-datagrid').parent();
         };
 
-        setupDataGridModules(that, ['data', 'columns', 'rows', 'columnHeaders', 'filterRow', 'editorFactory', 'editing', 'keyboardNavigation'], {
+        setupDataGridModules(that, ['data', 'columns', 'rows', 'columnHeaders', 'filterRow', 'editorFactory', 'editing', 'editingCellBased', 'keyboardNavigation'], {
             initViews: true
         });
 
@@ -1558,7 +1487,7 @@ QUnit.module('Focus', {
         // act
         $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(1).children().eq(1).trigger('dxpointerdown');
         $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(1).children().eq(1).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $cell = $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(1).children().eq(1);
@@ -1569,7 +1498,7 @@ QUnit.module('Focus', {
         $testElement.find('.dx-datagrid-filter-row input').eq(1).trigger('focus');
         $testElement.find('.dx-datagrid-filter-row input').eq(1).trigger('dxpointerdown');
         $testElement.find('.dx-datagrid-filter-row input').eq(1).trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $cell = $testElement.find('.dx-datagrid-filter-row > td').eq(1);
@@ -1607,10 +1536,10 @@ QUnit.module('Focus', {
         };
 
         that.$element = function() {
-            return $('#qunit-fixture');
+            return $('.dx-datagrid').parent();
         };
 
-        setupDataGridModules(that, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'keyboardNavigation'], {
+        setupDataGridModules(that, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'editingCellBased', 'keyboardNavigation'], {
             initViews: true
         });
 
@@ -1620,7 +1549,7 @@ QUnit.module('Focus', {
         $cell = $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(0).children().eq(0);
         $cell.trigger('dxpointerdown');
         $cell.trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $cell = $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(0).children().eq(0);
@@ -1654,10 +1583,10 @@ QUnit.module('Focus', {
         };
 
         that.$element = function() {
-            return $('#qunit-fixture');
+            return $('.dx-datagrid').parent();
         };
 
-        setupDataGridModules(that, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'keyboardNavigation'], {
+        setupDataGridModules(that, ['data', 'columns', 'rows', 'editorFactory', 'editing', 'editingCellBased', 'keyboardNavigation'], {
             initViews: true
         });
 
@@ -1667,7 +1596,7 @@ QUnit.module('Focus', {
         $cell = $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(0).children().eq(0);
         $cell.trigger('dxpointerdown');
         $cell.trigger('dxclick');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         $cell = $testElement.find('.dx-datagrid-rowsview tbody > tr').eq(0).children().eq(0);

@@ -1,20 +1,23 @@
 import {
-    Device
+    Device,
 } from '../devices';
 
-export declare type Rule<T> = {
-    device: () => boolean | Device | Device[];
-    options: Partial<T>;
-};
+import {
+    DefaultOptionsRule,
+} from '../options';
 
-export declare function convertRulesToOptions<T>(rules: Rule<T>[]): T;
+export {
+    DefaultOptionsRule,
+} from '../options';
 
-export declare function normalizeOptions(options: string | object, value): { [name: string]: string };
+export function convertRulesToOptions<T>(rules: DefaultOptionsRule<T>[]): T;
 
-export declare function deviceMatch(device: Device, filter): boolean;
+export function normalizeOptions(options: string | object, value: any): { [name: string]: string };
 
-export declare function getFieldName(fullName: string): string;
+export function deviceMatch(device: Device, filter: any): boolean;
 
-export declare function getParentName(fullName: string): string;
+export function getFieldName(fullName: string): string;
 
-export function createDefaultOptionRules<T>(options?: Rule<T>[]): Rule<T>[];
+export function getParentName(fullName: string): string;
+
+export function createDefaultOptionRules<T>(options?: DefaultOptionsRule<T>[]): DefaultOptionsRule<T>[];

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import devices from 'core/devices';
 import { DataSource } from 'data/data_source/data_source';
+import errors from 'core/errors';
 
 import 'viz/chart';
 import 'viz/polar_chart';
@@ -218,6 +219,34 @@ QUnit.test('Legend\'s title as string', function(assert) {
     });
 
     assert.strictEqual(drawn.callCount, 1);
+});
+
+// T999609
+QUnit.test('Value axis range ajusting after resetVisualRange', function(assert) {
+    const dataSource = [];
+
+    for(let i = 0; i < 10; i++) {
+        dataSource.push({ arg: i, val: i });
+    }
+
+    const chart = $('#chart').dxChart({
+        dataSource,
+        argumentAxis: {
+            visualRange: {
+                startValue: 8
+            }
+        },
+        legend: { visible: false },
+        series: {
+            aggregation: {
+                enabled: true
+            }
+        }
+    }).dxChart('instance');
+
+    chart.resetVisualRange();
+
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 0, endValue: 9 });
 });
 
 QUnit.module('series API', {
@@ -701,4 +730,86 @@ QUnit.test('two stub axis', function(assert) {
 
     assert.equal(verticalAxes[1].getOptions().grid.visible, false, 'second axis grid isn\'t visible');
     assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, 'second axis grid isn\'t visible');
+});
+
+QUnit.module('Resizing (T1156890)', {
+    beforeEach() {
+        this.$container = $('#chart');
+    },
+    createChart(options) {
+        return this.$container.dxChart(options).dxChart('instance');
+    }
+}, () => {
+    [-1, 1].forEach(sign => {
+        ['height', 'width'].forEach(dimension => {
+            QUnit.test(`Chart should not re-render when ${dimension} ${sign > 0 ? 'increased' : 'decreased'} on value less threshold`, function(assert) {
+                const initialSize = {
+                    height: 200,
+                    width: 200
+                };
+                const drawnHandler = sinon.spy();
+
+                const chart = this.createChart({
+                    size: initialSize,
+                    onDrawn: drawnHandler
+                });
+
+                drawnHandler.reset();
+
+                chart.option(`size.${dimension}`, initialSize[dimension] + sign * 0.098);
+
+                assert.strictEqual(drawnHandler.callCount, 0);
+            });
+        });
+    });
+});
+
+QUnit.module('Deprecated options', {
+    beforeEach() {
+        sinon.spy(errors, 'log');
+    },
+    afterEach() {
+        errors.log.restore();
+    },
+    createChart(options) {
+        return $('#chart').dxChart(options).dxChart('instance');
+    }
+}, () => {
+    QUnit.test('Should show warning if deprecated "shift" value sets to "valueAxis.visualRangeUpdateMode" option', function(assert) {
+        this.createChart({
+            valueAxis: {
+                visualRangeUpdateMode: 'shift'
+            }
+        });
+
+        assert.strictEqual(errors.log.callCount, 1);
+        assert.deepEqual(errors.log.lastCall.args,
+            [
+                'W0016',
+                'valueAxis.visualRangeUpdateMode',
+                'shift',
+                '23.1',
+                'Specify another value'
+            ]);
+    });
+
+    QUnit.test('Should show one warning when to "valueAxis.visualRangeUpdateMode" option passed deprecated "shift" on options update', function(assert) {
+        const chart = this.createChart({});
+
+        chart.option({
+            valueAxis: {
+                visualRangeUpdateMode: 'shift'
+            }
+        });
+
+        assert.strictEqual(errors.log.callCount, 1);
+        assert.deepEqual(errors.log.lastCall.args,
+            [
+                'W0016',
+                'valueAxis.visualRangeUpdateMode',
+                'shift',
+                '23.1',
+                'Specify another value'
+            ]);
+    });
 });

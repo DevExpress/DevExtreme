@@ -28,7 +28,7 @@ const environment = {
 
         this.renderer = new vizMocks.Renderer();
 
-        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator', function() {
+        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
             return sinon.spy(function() {
                 return {
                     ticks: that.generatedTicks || [],
@@ -63,7 +63,7 @@ const environment = {
         };
         this.renderSettings = {
             stripsGroup: this.renderer.g(),
-            labelAxesGroup: this.renderer.g(),
+            stripLabelAxesGroup: this.renderer.g(),
             constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup: this.renderer.g(),
             gridGroup: this.renderer.g(),
@@ -92,7 +92,7 @@ const environment = {
         br.isEmpty.returns(true);
         this.translator.getBusinessRange.returns(br);
 
-        sinon.stub(translator2DModule, 'Translator2D', function() {
+        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return that.translator;
         });
     },
@@ -821,7 +821,7 @@ QUnit.test('create strips with label', function(assert) {
     assert.ok(this.renderer.text.called);
     assert.deepEqual(this.renderer.text.getCall(0).args, ['strip label', 30, 53]);
     assert.equal(this.renderer.text.getCall(0).returnValue.attr.firstCall.args[0].align, 'center');
-    assert.equal(this.renderer.text.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.labelAxesGroup.children[0], 'Created element attached to the group');
+    assert.equal(this.renderer.text.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.stripLabelAxesGroup.children[0], 'Created element attached to the group');
 });
 
 QUnit.test('create strips with label, option \'startAngle\' > 0', function(assert) {
@@ -1028,9 +1028,14 @@ QUnit.test('shift', function(assert) {
     const axis = this.createSimpleAxis(this.renderer);
     axis.shift({ right: 10, bottom: 30 });
 
-    const args = this.renderer.g.getCall(6).returnValue.attr.lastCall.args[0];
-    assert.equal(args.translateX, 10, 'translateX');
-    assert.equal(args.translateY, 30, 'translateY');
+    const argsForMainGroup = this.renderer.g.getCall(6).returnValue.attr.lastCall.args[0];
+    const argsForLabelsGroup = this.renderer.g.getCall(9).returnValue.attr.lastCall.args[0];
+
+    assert.equal(argsForMainGroup.translateX, 10, 'translateX');
+    assert.equal(argsForMainGroup.translateY, 30, 'translateY');
+
+    assert.equal(argsForLabelsGroup.translateX, 10, 'translateX');
+    assert.equal(argsForLabelsGroup.translateY, 30, 'translateY');
 });
 
 QUnit.test('Value margins are not applied for circular axis', function(assert) {
@@ -1151,7 +1156,7 @@ QUnit.test('create strip with label', function(assert) {
     assert.ok(this.renderer.arc.called);
     assert.equal(this.renderer.text.callCount, 1);
     assert.deepEqual(this.renderer.text.getCall(0).args, ['strip label', 20, 35]);
-    assert.equal(this.renderer.text.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.labelAxesGroup.children[0], 'created element attached to the group');
+    assert.equal(this.renderer.text.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.stripLabelAxesGroup.children[0], 'created element attached to the group');
 });
 
 QUnit.test('create constant line', function(assert) {
@@ -1274,8 +1279,7 @@ QUnit.test('Update grid on second draw. Remove grid element if its value out of 
     assert.deepEqual(grid.remove.callCount, 1);
 });
 
-
-QUnit.test('Update grid on second draw. Remove grid element if its value out of range', function(assert) {
+QUnit.test('Update grid on second draw. Remove grid element if its value out of range. linearSpider', function(assert) {
     this.generatedTicks = [500];
     this.renderSettings.drawingType = 'linearSpider';
     const axis = this.createSimpleAxis({ grid: { visible: true, color: 'black', width: 1, opacity: 1 }, label: { overlappingBehavior: 'ignore' } });

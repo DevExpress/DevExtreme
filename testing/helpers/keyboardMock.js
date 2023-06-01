@@ -4,13 +4,13 @@ let focused;
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             focused = require('ui/widget/selectors').focused;
-            root.keyboardMock = module.exports = factory(require('jquery'));
+            root.keyboardMock = module.exports = factory(require('jquery'), require('inferno'));
         });
     } else {
         focused = DevExpress.require('ui/widget/selectors').focused;
         root.keyboardMock = factory(root.jQuery);
     }
-}(window, function($) {
+}(window, function($, inferno) {
     let $element;
 
     let caret;
@@ -57,8 +57,7 @@ let focused;
                 try {
                     start = input.selectionStart;
                     end = input.selectionEnd;
-                } catch(e) {
-                }
+                } catch(e) {}
             }
             return { start: start, end: end };
         },
@@ -260,6 +259,9 @@ let focused;
 
 
                 this.triggerEvent('keydown', $.extend({ key: key }, options));
+
+                // eslint-disable-next-line spellcheck/spell-checker
+                inferno.rerender();
                 return this;
             },
 

@@ -1,9 +1,15 @@
-import * as Preact from 'preact';
+import { render } from 'inferno';
+import { createElement } from 'inferno-create-element';
+import type { dxElementWrapper } from '../../core/renderer';
 
-export function renderTemplate(template: string, props, container): void {
+export function renderTemplate(
+  template: string,
+  props: Record<string, unknown>,
+  container: dxElementWrapper,
+): void {
   setTimeout(() => {
-    Preact.render(
-      Preact.h(template, props), container?.get(0),
+    render(
+      createElement(template, props), container?.get(0),
     );
   }, 0);
 }

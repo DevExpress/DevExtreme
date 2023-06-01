@@ -2,10 +2,12 @@ import $ from 'jquery';
 import devices from 'core/devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import CustomStore from 'data/custom_store';
 import { DataSource } from 'data/data_source/data_source';
 import { deferUpdate } from 'core/utils/common';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import errors from 'ui/widget/ui.errors';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/radio_group';
 
@@ -331,14 +333,13 @@ module('value', moduleConfig, () => {
         assert.notOk(isItemChecked(2));
     });
 
-    QUnit.test('null item should be selectable', function(assert) {
+    test('null item should be selectable', function(assert) {
         const radioGroupInstance = getInstance(
             createRadioGroup({
                 items: [
                     { id: null, name: 'null' },
                     { id: false, name: 'false' },
-                    { id: 0, name: '0' },
-                    { id: undefined, name: 'undefined' }
+                    { id: 0, name: '0' }
                 ],
                 valueExpr: 'id',
                 displayExpr: 'name'
@@ -354,9 +355,6 @@ module('value', moduleConfig, () => {
 
         radioGroupInstance.option('value', 0);
         assert.ok($radioButtons.eq(2).hasClass('dx-radiobutton-checked'), '0 item is selected');
-
-        radioGroupInstance.option('value', undefined);
-        assert.ok($radioButtons.eq(3).hasClass('dx-radiobutton-checked'), 'undefined item is selected');
     });
 
     test('repaint of widget shouldn\'t reset value option', function(assert) {
@@ -407,23 +405,6 @@ module('value', moduleConfig, () => {
         assert.strictEqual(e.value, 1, 'itemData is correct');
     });
 
-    test('onValueChanged option should get jQuery event as a parameter', function(assert) {
-        let jQueryEvent;
-        const $radioGroup = createRadioGroup({
-            items: [1, 2, 3],
-            onValueChanged: function(e) {
-                jQueryEvent = e.event;
-            }
-        });
-        const radioGroup = getInstance($radioGroup);
-
-        $(radioGroup.itemElements()).first().trigger('dxclick');
-        assert.ok(jQueryEvent, 'jQuery event is defined when click used');
-
-        radioGroup.option('value', 2);
-        assert.notOk(jQueryEvent, 'jQuery event is not defined when api used');
-    });
-
     test('widget changes the selection correctly when using the dataSource with the key', function(assert) {
         assert.expect(2);
         const items = [
@@ -448,6 +429,83 @@ module('value', moduleConfig, () => {
         $firstItem.trigger('dxclick');
 
         assert.ok($firstItem.hasClass('dx-item-selected'), 'first item is selected');
+    });
+
+    test('widget should not try to load value if value=undefined and valueExpr is specified (T1006909)', function(assert) {
+        const loadStub = sinon.stub();
+        createRadioGroup({
+            dataSource: {
+                load: loadStub
+            },
+            valueExpr: 'id',
+            value: undefined
+        });
+
+        assert.ok(loadStub.calledOnce, 'load method was called only once');
+    });
+
+    test('widget should not try to load value if it is set to undefined on runtime and valueExpr is specified', function(assert) {
+        const loadStub = sinon.stub();
+        const radioGroup = createRadioGroup({
+            dataSource: { load: loadStub },
+            valueExpr: 'id'
+        }).dxRadioGroup('instance');
+
+
+        assert.strictEqual(loadStub.callCount, 2, 'load method was called to load items and "null" selected value');
+        radioGroup.option('value', undefined);
+
+        assert.strictEqual(loadStub.callCount, 2, 'no additional call to load "undefined" value');
+    });
+
+    QUnit.module('valueChanged handler should receive correct event parameter', {
+        beforeEach: function() {
+            this.valueChangedHandler = sinon.stub();
+            this.$element = createRadioGroup({
+                items: [1, 2],
+                onValueChanged: this.valueChangedHandler,
+                focusStateEnabled: true
+            });
+            this.instance = getInstance(this.$element);
+            this.keyboard = keyboardMock(this.$element);
+            this.$firstItem = $(this.instance.itemElements().first());
+
+            this.testProgramChange = (assert) => {
+                this.instance.option('value', 2);
+
+                const callCount = this.valueChangedHandler.callCount - 1;
+                const event = this.valueChangedHandler.getCall(callCount).args[0].event;
+                assert.strictEqual(event, undefined, 'event is undefined');
+            };
+            this.checkEvent = (assert, type, target, key) => {
+                const event = this.valueChangedHandler.getCall(0).args[0].event;
+                assert.strictEqual(event.type, type, 'event type is correct');
+                assert.strictEqual(event.target, target.get(0), 'event target is correct');
+                if(type === 'keydown') {
+                    assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+                }
+            };
+        }
+    }, () => {
+        QUnit.test('after click', function(assert) {
+            this.$firstItem.trigger('dxclick');
+
+            this.checkEvent(assert, 'dxclick', this.$firstItem);
+            this.testProgramChange(assert);
+        });
+
+        ['space', 'enter'].forEach(key => {
+            QUnit.test(`after ${key} press`, function(assert) {
+                this.keyboard.press(key);
+
+                this.checkEvent(assert, 'keydown', this.$firstItem, key);
+                this.testProgramChange(assert);
+            });
+        });
+
+        QUnit.test('after runtime change', function(assert) {
+            this.testProgramChange(assert);
+        });
     });
 });
 
@@ -826,5 +884,55 @@ module('option changed', () => {
         const $radioButtons = instance.$element().find('.dx-radiobutton');
 
         assert.ok($radioButtons.eq(0).hasClass('dx-radiobutton-checked'), 'correct item is selected');
+    });
+
+    test('There is no error on updating async CustomStore (T9011779)', function(assert) {
+        const done = assert.async();
+
+        let items = [
+            { id: 1, value: 't1' },
+            { id: 2, value: 't2' },
+            { id: 3, value: 't3' }
+        ];
+        const storeOptions = {
+            key: 'id',
+            loadMode: 'processed',
+            load(loadOptions) {
+                return new Promise((resolve) => {
+                    resolve(items);
+                });
+            }
+        };
+
+        const options = {
+            dataSource: new DataSource({ store: new CustomStore(storeOptions) }),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            value: null
+        };
+
+        const radioGroup = $('#radioGroup')
+            .dxRadioGroup(options)
+            .dxRadioGroup('instance');
+
+        setTimeout(() => {
+            const newValue2 = 2;
+
+            options.value = newValue2;
+            radioGroup.option(options);
+
+            items = [
+                { id: 1, value: 't1' },
+                { id: 2, value: 't2' }
+            ];
+            options.dataSource = new DataSource({ store: new CustomStore(storeOptions) });
+            options.value = newValue2;
+            radioGroup.option(options);
+
+            setTimeout(() => {
+                assert.ok(true);
+                done();
+            });
+        });
     });
 });

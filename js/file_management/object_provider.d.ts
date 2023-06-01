@@ -1,23 +1,28 @@
 import FileSystemProviderBase, {
-    FileSystemProviderBaseOptions
+    FileSystemProviderBaseOptions,
 } from './provider_base';
 
+/** @public */
+export type Options = ObjectFileSystemProviderOptions;
+
+/**
+ * @deprecated Use Options instead
+ * @namespace DevExpress.fileManagement
+ * @docid
+ */
 export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseOptions<ObjectFileSystemProvider> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     contentExpr?: string | Function;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     data?: Array<any>;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     itemsExpr?: string | Function;
@@ -25,12 +30,10 @@ export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseO
 /**
  * @docid
  * @inherits FileSystemProviderBase
- * @module file_management/object_provider
  * @namespace DevExpress.fileManagement
- * @export default
- * @prevFileNamespace DevExpress.fileManagement
  * @public
+ * @options ObjectFileSystemProviderOptions
  */
 export default class ObjectFileSystemProvider extends FileSystemProviderBase {
-    constructor(options?: ObjectFileSystemProviderOptions)
+    constructor(options?: Options);
 }

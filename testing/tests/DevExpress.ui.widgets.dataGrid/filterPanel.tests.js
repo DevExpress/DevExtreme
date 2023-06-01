@@ -1,10 +1,11 @@
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import ArrayStore from 'data/array_store';
+import errors from 'ui/widget/ui.errors';
 
 const FILTER_PANEL_CLASS = 'dx-datagrid-filter-panel';
 const FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + '-text';
@@ -13,11 +14,11 @@ const FILTER_PANEL_CHECKBOX_CLASS = FILTER_PANEL_CLASS + '-checkbox';
 
 QUnit.testStart(function() {
     const markup =
-    '<div>\
-        <div class="dx-datagrid">\
-            <div id="container"></div>\
-        </div>\
-    </div>';
+    `<div>
+        <div class="dx-datagrid">
+            <div id="container"></div>
+        </div>
+    </div>`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -260,9 +261,139 @@ QUnit.module('Filter Panel', {
         assert.expect(3);
         this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
             assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
-            assert.equal(loadingSpy.callCount, 2, 'loadingSpy.callCount');
+            assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
             const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
-            assert.deepEqual(loadingFilters, [['key', '=', 1], ['key', '=', 2]]);
+            assert.deepEqual(loadingFilters, [[['key', '=', 1], 'or', ['key', '=', 2]]]);
+        });
+    });
+
+    QUnit.test('load all items once from headerFilte.dataSource for anyof operation and key is not defined (T1030763)', function(assert) {
+        // arrange
+        const filter = ['field', 'anyof', [1, 2]];
+        const lookupDataStore = new ArrayStore({
+            data: [
+                { key: 1, text: 'Text 1', value: 1 },
+                { key: 2, text: 'Text 2', value: 2 },
+                { key: 3, text: 'Text 3', value: 3 }
+            ]
+        });
+        this.initFilterPanelView({
+            filterValue: filter,
+            headerFilter: {
+                texts: {}
+            },
+            columns: [{
+                dataField: 'field',
+                headerFilter: { dataSource: lookupDataStore },
+                lookup: {
+                    dataSource: lookupDataStore,
+                    valueExpr: 'key',
+                    displayExpr: 'text'
+                }
+            }]
+        });
+        const loadingSpy = sinon.spy();
+        lookupDataStore.on('loading', loadingSpy);
+
+        // act
+        assert.expect(3);
+        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+            assert.equal(loadingSpy.callCount, 1, 'loadingSpy.callCount');
+            const loadingFilters = loadingSpy.getCalls().map(i => i.args[0].filter);
+            assert.deepEqual(loadingFilters, [undefined]);
+        });
+    });
+
+    ['key', undefined].forEach(key => {
+        QUnit.test(`W1017 warning: key = '${key}' and no calculateDisplayValue`, function(assert) {
+            // arrange
+            sinon.spy(errors, 'log');
+            const filter = ['field', 'anyof', [1, 2]];
+            const lookupDataStore = new ArrayStore({
+                key,
+                data: [
+                    { key: 1, text: 'Text 1', value: 1 },
+                    { key: 2, text: 'Text 2', value: 2 },
+                    { key: 3, text: 'Text 3', value: 3 }
+                ]
+            });
+            this.initFilterPanelView({
+                filterValue: filter,
+                headerFilter: {
+                    texts: {}
+                },
+                columns: [{
+                    dataField: 'field',
+                    dataType: 'string',
+                    headerFilter: { dataSource: lookupDataStore },
+                    lookup: {
+                        dataSource: lookupDataStore,
+                        valueExpr: 'key',
+                        displayExpr: 'text'
+                    }
+                }]
+            });
+            const loadingSpy = sinon.spy();
+            lookupDataStore.on('loading', loadingSpy);
+
+            // act
+            assert.expect(2);
+            this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+                assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+                assert.equal(errors.log.callCount, 0, 'no warnings');
+            }).always(() => {
+                errors.log.restore();
+            });
+        });
+
+        QUnit.test(`W1017 warning: key = '${key}' and calculateDisplayValue = 'text'`, function(assert) {
+            // arrange
+            sinon.spy(errors, 'log');
+            const filter = ['field', 'anyof', [1, 2]];
+            const lookupDataStore = new ArrayStore({
+                key,
+                data: [
+                    { key: 1, text: 'Text 1', value: 1 },
+                    { key: 2, text: 'Text 2', value: 2 },
+                    { key: 3, text: 'Text 3', value: 3 }
+                ]
+            });
+            this.initFilterPanelView({
+                filterValue: filter,
+                headerFilter: {
+                    texts: {}
+                },
+                columns: [{
+                    dataField: 'field',
+                    dataType: 'string',
+                    headerFilter: { dataSource: lookupDataStore },
+                    lookup: {
+                        dataSource: lookupDataStore,
+                        valueExpr: 'key',
+                        displayExpr: 'text'
+                    },
+                    calculateDisplayValue: 'text'
+                }]
+            });
+            const loadingSpy = sinon.spy();
+            lookupDataStore.on('loading', loadingSpy);
+
+            // act
+            assert.expect(key ? 2 : 4);
+            this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+                assert.equal(result, '[Field] Is any of(\'Text 1\', \'Text 2\')');
+                if(!key) {
+                    assert.equal(errors.log.callCount, 2, 'four warnings');
+                    errors.log.getCalls().forEach(call => {
+                        assert.equal(call.args[0], 'W1017', 'warning code');
+                    });
+                } else {
+                    assert.equal(errors.log.callCount, 0, 'no warnings');
+                }
+            }).always(() => {
+                errors.log.restore();
+            });
         });
     });
 
@@ -533,7 +664,7 @@ QUnit.module('Filter Panel', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.notOk(this.option('filterPanel.filterEnabled'));
@@ -554,10 +685,10 @@ QUnit.module('Filter Panel', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         this.option('filterPanel.filterEnabled', false);
         this.dataController.changed.fire();
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.notOk(customSaveSpy.lastCall.args[0].filterPanel.filterEnabled);
     });

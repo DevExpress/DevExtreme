@@ -29,31 +29,15 @@ QUnit.module('Touch events detection', () => {
 });
 
 QUnit.module('Pointer event detection', () => {
-    QUnit.test('pointerEvent isn\'t defined when \'PointerEvent\' exists (Surface pro, edge 17+, latest IE11)', function(assert) {
+    QUnit.test('pointerEvent defined when \'PointerEvent\' exists (Surface pro, edge 17+, latest IE11)', function(assert) {
         const hasWindowProperty = createHasPropertyMock('PointerEvent');
-        const pointerEnabled = undefined;
 
-        assert.ok(detectPointerEvent(hasWindowProperty, pointerEnabled), 'PointerEvent detected');
+        assert.ok(detectPointerEvent(hasWindowProperty), 'PointerEvent detected');
     });
 
-    QUnit.test('pointerEvent = true when \'pointerEnabled\' not exists (surface with old IE11)', function(assert) {
+    QUnit.test('pointerEvent = false when \'PointerEvent\' not exists', function(assert) {
         const hasWindowProperty = createHasPropertyMock();
-        const pointerEnabled = true;
 
-        assert.ok(detectPointerEvent(hasWindowProperty, pointerEnabled), 'PointerEvent detected');
-    });
-
-    QUnit.test('pointerEvent = false when \'pointerEnabled\' exists (WebBrowser control)', function(assert) {
-        const hasWindowProperty = createHasPropertyMock('PointerEvent');
-        const pointerEnabled = false;
-
-        assert.notOk(detectPointerEvent(hasWindowProperty, pointerEnabled), 'PointerEvent isn\'t detected');
-    });
-
-    QUnit.test('pointerEvent = false when \'pointerEnabled\' or \'PointerEvent\' not exists', function(assert) {
-        const hasWindowProperty = createHasPropertyMock();
-        const pointerEnabled = undefined;
-
-        assert.notOk(detectPointerEvent(hasWindowProperty, pointerEnabled), 'PointerEvent isn\'t detected');
+        assert.notOk(detectPointerEvent(hasWindowProperty), 'PointerEvent isn\'t detected');
     });
 });

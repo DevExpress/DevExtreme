@@ -1,5 +1,6 @@
-// adduse
+@use "sass:math";
 
+// adduse
 
 $list-style: decimal lower-alpha lower-roman;
 $list-style-width: 1.2em;
@@ -8,8 +9,8 @@ $list-style-outer-width: $list-style-margin + $list-style-width;
 $max-indent: 9;
 $resize-handle-size: 11px;
 $touch-resize-handle-size: 15px;
-$half-resize-handle-size: $resize-handle-size / 2;
-$half-touch-resize-handle-size: $touch-resize-handle-size / 2;
+$half-resize-handle-size: math.div($resize-handle-size, 2);
+$half-touch-resize-handle-size: math.div($touch-resize-handle-size, 2);
 
 $transparent-border: 1px solid transparent;
 
@@ -60,7 +61,7 @@ $transparent-border: 1px solid transparent;
     ol li[data-list=ordered].ql-indent-#{$counter} {
       counter-increment: list-#{$counter};
 
-      & > .ql-ui::before { // stylelint-disable-line selector-class-pattern
+      &::before {
         content: counter(list-#{$counter}, nth($list-style, ($counter % 3) + 1)) ". ";
       }
     }
@@ -75,12 +76,50 @@ $transparent-border: 1px solid transparent;
   border: $transparent-border;
 
   &:not(.dx-state-disabled) {
-    li[data-list=checked],
-    li[data-list=unchecked] {
-      > .ql-ui { // stylelint-disable-line selector-class-pattern
-        cursor: pointer;
+    li[data-list="checked"],
+    li[data-list="unchecked"] {
+      cursor: pointer;
+    }
+  }
+}
+
+.dx-htmleditor-add-image-popup-with-tabs > .dx-overlay-content > .dx-popup-content {
+  padding: 0;
+}
+
+.dx-htmleditor-hidden-content {
+  display: none;
+}
+
+.dx-htmleditor-add-image-popup > .dx-overlay-content {
+  > .dx-popup-content {
+    .dx-multiview-wrapper {
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+    }
+
+    .dx-fix-ratio-container {
+      .dx-textbox {
+        display: inline-block;
+      }
+
+      .dx-buttongroup {
+        vertical-align: top;
       }
     }
+
+    .dx-fileuploader-wrapper {
+      padding: 0;
+    }
+
+    .dx-fileuploader-upload-button {
+      display: none;
+    }
+  }
+
+  .dx-popup-title {
+    border-bottom: 0;
   }
 }
 
@@ -160,7 +199,8 @@ $transparent-border: 1px solid transparent;
     border-collapse: collapse;
   }
 
-  td {
+  td,
+  th {
     border: 1px solid #000;
     padding: 2px 5px;
   }
@@ -180,20 +220,19 @@ $transparent-border: 1px solid transparent;
     padding-left: $list-style-outer-width;
     position: relative;
 
-    // stylelint-disable selector-class-pattern
-    &[data-list=bullet] > .ql-ui::before {
+    &[data-list="bullet"]::before {
       content: '\2022';
     }
 
-    &[data-list=checked] > .ql-ui::before {
+    &[data-list="checked"]::before {
       content: '\2611';
     }
 
-    &[data-list=unchecked] > .ql-ui::before {
+    &[data-list="unchecked"]::before {
       content: '\2610';
     }
 
-    & > .ql-ui::before {
+    &::before {
       display: inline-block;
       margin-left: -1 * $list-style-outer-width;
       margin-right: $list-style-margin;
@@ -202,25 +241,34 @@ $transparent-border: 1px solid transparent;
       width: $list-style-width;
     }
 
+    > .ql-ui { // stylelint-disable-line selector-class-pattern
+      visibility: hidden;
+    }
+
+    &[data-list="unchecked"],
+    &[data-list="checked"] {
+      > .ql-ui { // stylelint-disable-line selector-class-pattern
+        visibility: visible;
+      }
+    }
+
     .dx-rtl & {
       padding-left: 0;
       padding-right: $list-style-outer-width;
 
-      & > .ql-ui::before {
+      &::before {
         margin-left: $list-style-margin;
         margin-right: -1 * $list-style-outer-width;
         text-align: left;
       }
     }
-
-    // stylelint-enable selector-class-pattern
   }
 
-  li[data-list=ordered] {  // stylelint-disable-line no-duplicate-selectors
+  li[data-list="ordered"] {
     counter-reset: add-counter-reset($max-indent);
     counter-increment: list-0;
 
-    & > .ql-ui::before {  // stylelint-disable-line no-duplicate-selectors, selector-class-pattern
+    &::before {
       content: counter(list-0, nth($list-style, 1)) ". ";
     }
   }
@@ -231,7 +279,7 @@ $transparent-border: 1px solid transparent;
   .dx-rtl & li { // stylelint-disable-line no-duplicate-selectors
     padding-right: $list-style-outer-width;
 
-    & > .ql-ui::before { // stylelint-disable-line no-duplicate-selectors, selector-class-pattern
+    &::before { // stylelint-disable-line no-duplicate-selectors
       margin-left: $list-style-margin;
       margin-right: -1 * $list-style-outer-width;
       text-align: left;
@@ -242,7 +290,8 @@ $transparent-border: 1px solid transparent;
     table-layout: fixed;
     width: 100%;
 
-    td {
+    td,
+    th {
       outline: none;
     }
   }
@@ -250,6 +299,11 @@ $transparent-border: 1px solid transparent;
   // stylelint-disable selector-class-pattern
   .ql-code-block-container {
     font-family: monospace;
+  }
+
+  code,
+  .ql-code-block-container {
+    background-color: rgba(191, 191, 191, 0.15);
   }
 
   .ql-video {
@@ -266,11 +320,11 @@ $transparent-border: 1px solid transparent;
   }
 
   .ql-font-serif {
-    font-family: Georgia, Times New Roman, serif;
+    font-family: "Georgia", "Times New Roman", serif;
   }
 
   .ql-font-monospace {
-    font-family: Monaco, Courier New, monospace;
+    font-family: "Monaco", "Courier New", monospace;
   }
 
   .ql-direction-rtl {
@@ -294,14 +348,13 @@ $transparent-border: 1px solid transparent;
       z-index: -1;
       visibility: hidden;
     }
+
+    &[data-placeholder] > p {
+      height: 0.1px;
+    }
   }
 
   // stylelint-enable selector-class-pattern
-
-  pre {
-    white-space: pre-wrap;
-    background-color: rgba(191, 191, 191, 0.15);
-  }
 
   blockquote {
     padding-left: 12px;
@@ -343,16 +396,20 @@ $transparent-border: 1px solid transparent;
   min-width: 360px;
 }
 
+.dx-overlay-content {
+  &.dx-popup-fullscreen {
+    .dx-formdialog-form {
+      min-width: 240px;
+    }
+  }
+}
+
 .dx-formdialog-field-target .dx-field-item-content {
   text-align: right;
 
   .dx-rtl & {
     text-align: left;
   }
-}
-
-.dx-htmleditor-toolbar-wrapper {
-  padding: 5px;
 }
 
 .dx-color-format,
@@ -380,6 +437,11 @@ $transparent-border: 1px solid transparent;
   position: absolute;
   box-sizing: content-box;
   border: 1px dashed lightslategrey;
+  pointer-events: none;
+
+  .dx-resizable-handle {
+    pointer-events: auto;
+  }
 
   .dx-resizable-handle-corner-top-right,
   .dx-resizable-handle-corner-top-left,
@@ -516,5 +578,42 @@ $transparent-border: 1px solid transparent;
 
   & > span {
     margin: 0 2px;
+  }
+}
+
+.dx-table-resize-frame {
+  position: absolute;
+  pointer-events: none;
+
+  > div {
+    position: absolute;
+    pointer-events: auto;
+    background-color: transparent;
+  }
+
+  .dx-htmleditor-column-resizer {
+    width: 5px;
+    top: 0;
+    height: 100%;
+    cursor: col-resize;
+  }
+
+  .dx-htmleditor-highlighted-column {
+    width: 3px;
+    top: 0;
+    height: 100%;
+  }
+
+  .dx-htmleditor-row-resizer {
+    height: 5px;
+    left: 0;
+    width: 100%;
+    cursor: row-resize;
+  }
+
+  .dx-htmleditor-highlighted-row {
+    height: 3px;
+    left: 0;
+    width: 100%;
   }
 }

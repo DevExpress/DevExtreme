@@ -1,5 +1,7 @@
 // adduse
 
+$colorbox-input-left-padding: 40px;
+
 .dx-colorbox-input-container {
   &.dx-colorbox-color-is-not-defined {
     .dx-colorbox-color-result-preview {
@@ -7,7 +9,7 @@
     }
   }
 
-  .dx-placeholder::before {
+  .dx-placeholder {
     max-width: calc(100% - 25px);
   }
 }
@@ -34,6 +36,16 @@
       }
     }
   }
+
+  &.dx-editor-outlined,
+  &.dx-editor-underlined,
+  &.dx-editor-filled {
+    .dx-texteditor-label {
+      .dx-label-before {
+        min-width: $colorbox-input-left-padding;
+      }
+    }
+  }
 }
 
 .dx-colorbox-color-result-preview {
@@ -49,7 +61,7 @@
 
 .dx-colorbox-input-container .dx-colorbox-input.dx-texteditor-input {
   -webkit-appearance: none; // stylelint-disable-line property-no-vendor-prefix
-  padding-left: 40px;
+  padding-left: $colorbox-input-left-padding;
 }
 
 .dx-colorbox-overlay {
@@ -84,7 +96,7 @@
       .dx-colorbox-input.dx-texteditor-input {
         direction: ltr;
         text-align: end;
-        padding-right: 40px;
+        padding-right: $colorbox-input-left-padding;
       }
 
       .dx-colorbox-color-result-preview {

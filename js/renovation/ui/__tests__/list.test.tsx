@@ -10,16 +10,14 @@ jest.mock('../../../ui/list', () => jest.fn());
 describe('List', () => {
   describe('View', () => {
     it('default render', () => {
-      const rootElementRef = { } as HTMLDivElement;
       const componentProps = new ListProps();
       const props = {
-        props: { ...componentProps, rootElementRef },
+        componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<List>;
       const tree = shallow(<ListView {...props as any} /> as any);
 
       expect(tree.find(DomComponentWrapper).props()).toMatchObject({
-        rootElementRef: {},
         componentProps,
         componentType: LegacyList,
         'rest-attributes': 'true',

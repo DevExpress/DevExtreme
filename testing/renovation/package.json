@@ -1,0 +1,44 @@
+{
+  "private": true,
+  "name": "tests",
+  "version": "1.1.0",
+  "scripts": {
+    "test": "nyc mocha -r ts-node/register -r tsconfig-paths/register ./unit-tests/*.test.ts --timeout 30000",
+    "test:with-reporters": "nyc --reporter cobertura mocha -r ts-node/register -r tsconfig-paths/register ./unit-tests/*.test.ts --timeout 30000 --reporter mocha-junit-reporter --reporter-options mochaFile=./report/test-result.xml",
+    "test:with-replace": "nyc mocha -r ts-node/register -r tsconfig-paths/register ./unit-tests/*.test.ts --timeout 30000 --replace",
+    "test:testcafe": "npm run clear:screenshots && start-server-and-test testcafe:start-test-servers \"3000|3001\" testcafe",
+    "test:testcafe-headless": "start-server-and-test testcafe:start-test-servers \"3000|3001\" 'testcafe chrome:headless'",
+    "test:compile-check": "gulp compile-check",
+    "testcafe:start-test-servers": "cross-env NODE_ENV=development node ./e2e/start-servers.js",
+    "clear:screenshots": "shx rm -rf ./e2e/tests/etalon && shx rm -rf ./e2e/tests/temp"
+  },
+  "author": "Developer Express Inc.",
+  "dependencies": {
+    "@angular/cdk": "^11.2.13",
+    "@angular/common": "^11.2.14",
+    "@angular/compiler": "^11.2.14",
+    "@angular/core": "^11.2.14",
+    "@angular/forms": "^11.2.14",
+    "@angular/platform-browser": "^11.2.14",
+    "@angular/platform-browser-dynamic": "^11.2.14",
+    "angular2-template-loader": "^0.6.2",
+    "core-js": "^3.19.1",
+    "inferno": "^7.4.6",
+    "inferno-compat": "^7.4.6",
+    "inferno-create-element": "^7.4.6",
+    "inferno-hydrate": "^7.4.6",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "rxjs": "^6.5.4",
+    "vue": "^2.6.11",
+    "zone.js": "^0.11.5"
+  },
+  "devDependencies": {
+    "babel-preset-react-app": "10.0.1",
+    "html-loader": "2.1.2",
+    "raw-loader": "4.0.2",
+    "ts-loader": "9.4.2",
+    "vue-loader": "17.0.1",
+    "vue-template-compiler": "2.7.14"
+  }
+}

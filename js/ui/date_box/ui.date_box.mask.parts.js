@@ -101,7 +101,7 @@ export const renderDateParts = (text, regExpInfo) => {
             caret: { start: start, end: end },
             pattern: pattern,
             text: result[i],
-            limits: getLimits.bind(this, pattern[0]),
+            limits: (...args) => getLimits(pattern[0], ...args),
             setter: PATTERN_SETTERS[pattern[0]] || noop,
             getter: getter
         });
@@ -122,7 +122,7 @@ const getLimits = (pattern, date, forcedPattern) => {
         },
         E: { min: 0, max: 6 },
         H: { min: 0, max: 23 },
-        h: { min: 0, max: 23 },
+        h: { min: 0, max: 12 },
         m: { min: 0, max: 59 },
         s: { min: 0, max: 59 },
         S: { min: 0, max: 999 },

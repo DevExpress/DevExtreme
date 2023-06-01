@@ -12,17 +12,17 @@
     "vue": "^2.6.11"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
-    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "@babel/preset-env": "^7.9.6",
-    "@vue/cli-plugin-babel": "~4.3.0",
-    "@vue/cli-service": "~4.3.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "sass": "^1.26.5",
-    "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11"
+    "@babel/plugin-proposal-nullish-coalescing-operator": "7.18.6",
+    "@babel/plugin-proposal-optional-chaining": "7.20.7",
+    "@babel/preset-env": "7.20.2",
+    "@vue/cli-plugin-babel": "4.5.19",
+    "@vue/cli-service": "4.5.19",
+    "babel-eslint": "10.1.0",
+    "eslint": "6.8.0",
+    "eslint-plugin-vue": "6.2.2",
+    "sass": "1.57.1",
+    "sass-loader": "8.0.2",
+    "vue-template-compiler": "2.7.14"
   },
   "browserslist": [
     "> 1%",

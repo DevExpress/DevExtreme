@@ -1,8 +1,11 @@
 import $ from '../../core/renderer';
 import registerComponent from '../../core/component_registrator';
 import searchBoxMixin from '../widget/ui.search_box_mixin';
+import TextBox from '../text_box';
 import { extend } from '../../core/utils/extend';
 import TreeViewBase from './ui.tree_view.base';
+
+searchBoxMixin.setEditorClass(TextBox);
 
 // STYLE treeView
 
@@ -24,6 +27,7 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
                 this._initDataAdapter();
                 this._updateSearch();
                 this._repaintContainer();
+                this.option('focusedElement', null);
                 break;
             case 'searchExpr':
                 this._initDataAdapter();
@@ -54,6 +58,10 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         });
     },
 
+    _getNodeContainer: function() {
+        return this.$element().find(`.${NODE_CONTAINER_CLASS}`).first();
+    },
+
     _updateSearch: function() {
         if(this._searchEditor) {
             const editorOptions = this._getSearchEditorOptions();
@@ -62,7 +70,7 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     },
 
     _repaintContainer: function() {
-        const $container = this.$element().find(`.${NODE_CONTAINER_CLASS}`).first();
+        const $container = this._getNodeContainer();
         let rootNodes;
 
         if($container.length) {
@@ -74,9 +82,21 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         }
     },
 
+    _focusTarget: function() {
+        return this._itemContainer(this.option('searchEnabled'));
+    },
+
+    _cleanItemContainer: function() {
+        this.$element().empty();
+    },
+
     _itemContainer: function(isSearchMode) {
-        if(this._scrollableContainer && isSearchMode) {
-            return $(this._scrollableContainer.content());
+        if(this._selectAllEnabled()) {
+            return this._getNodeContainer();
+        }
+
+        if(this._scrollable && isSearchMode) {
+            return $(this._scrollable.content());
         }
 
         return this.callBase();

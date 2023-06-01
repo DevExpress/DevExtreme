@@ -1,12 +1,3 @@
-import DataSourceAdapter from '../grid_core/ui.grid_core.data_source_adapter';
-
-let dataSourceAdapterType = DataSourceAdapter;
-
-export default {
-    extend: function(extender) {
-        dataSourceAdapterType = dataSourceAdapterType.inherit(extender);
-    },
-    create: function(component) {
-        return new dataSourceAdapterType(component);
-    }
-};
+import DataSourceAdapter from '../../__internal/grids/data_grid/module_data_source_adapter';
+// deprecated
+export default DataSourceAdapter;

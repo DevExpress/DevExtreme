@@ -1,6 +1,5 @@
 import eventsEngine from '../core/events_engine';
-
-const REMOVE_EVENT_NAME = 'dxremove';
+import { removeEvent } from '../remove';
 
 function nodesByEvent(event) {
     return event && [
@@ -12,9 +11,9 @@ function nodesByEvent(event) {
 }
 
 export const subscribeNodesDisposing = (event, callback) => {
-    eventsEngine.one(nodesByEvent(event), REMOVE_EVENT_NAME, callback);
+    eventsEngine.one(nodesByEvent(event), removeEvent, callback);
 };
 
 export const unsubscribeNodesDisposing = (event, callback) => {
-    eventsEngine.off(nodesByEvent(event), REMOVE_EVENT_NAME, callback);
+    eventsEngine.off(nodesByEvent(event), removeEvent, callback);
 };

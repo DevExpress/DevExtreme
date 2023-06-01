@@ -1,8 +1,7 @@
 import $ from '../../core/renderer';
 import caretUtils from './utils.caret';
-import { isInputEventsL2Supported } from './utils.support';
 import { each } from '../../core/utils/iterator';
-import { addNamespace, createEvent, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, createEvent, isCommandKeyPressed, normalizeKeyName } from '../../events/utils/index';
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import { focused } from '../widget/selectors';
@@ -13,8 +12,7 @@ import { isEmpty } from '../../core/utils/string';
 import { name as wheelEventName } from '../../events/core/wheel';
 import { EmptyMaskRule, StubMaskRule, MaskRule } from './ui.text_editor.mask.rule';
 import TextEditorBase from './ui.text_editor.base';
-import DefaultMaskStrategy from './ui.text_editor.mask.strategy.default';
-import InputEventsMaskStrategy from './ui.text_editor.mask.strategy.input_events';
+import MaskStrategy from './ui.text_editor.mask.strategy';
 
 const stubCaret = function() {
     return {};
@@ -84,7 +82,6 @@ const TextEditorMask = TextEditorBase.inherit({
         const that = this;
 
         const keyHandlerMap = {
-            backspace: that._maskStrategy.getHandler('backspace'),
             del: that._maskStrategy.getHandler('del'),
             enter: that._changeHandler
         };
@@ -112,10 +109,7 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _initMaskStrategy: function() {
-        this._maskStrategy = isInputEventsL2Supported() ?
-            new InputEventsMaskStrategy(this) :
-            // FF, old Safari and desktop Chrome (https://bugs.chromium.org/p/chromium/issues/detail?id=947408)
-            new DefaultMaskStrategy(this);
+        this._maskStrategy = new MaskStrategy(this);
     },
 
     _initMarkup: function() {
@@ -133,12 +127,12 @@ const TextEditorMask = TextEditorBase.inherit({
         const input = this._input();
         const eventName = addNamespace(wheelEventName, this.NAME);
         const mouseWheelAction = this._createAction((function(e) {
-            if(focused(input)) {
-                const dxEvent = e.event;
+            const { event } = e;
 
-                this._onMouseWheel(dxEvent);
-                dxEvent.preventDefault();
-                dxEvent.stopPropagation();
+            if(focused(input) && !isCommandKeyPressed(event)) {
+                this._onMouseWheel(event);
+                event.preventDefault();
+                event.stopPropagation();
             }
         }).bind(this));
 
@@ -309,18 +303,22 @@ const TextEditorMask = TextEditorBase.inherit({
 
     _renderValue: function() {
         if(this._maskRulesChain) {
-            const text = this._maskRulesChain.text();
-
             this._showMaskPlaceholder();
 
             if(this._$hiddenElement) {
                 const value = this._maskRulesChain.value();
-                const hiddenElementValue = this._isMaskedValueMode() ? text : value;
+                const submitElementValue = !isEmpty(value) ?
+                    this._getPreparedValue() :
+                    '';
 
-                this._$hiddenElement.val(!isEmpty(value) ? hiddenElementValue : '');
+                this._$hiddenElement.val(submitElementValue);
             }
         }
         return this.callBase();
+    },
+
+    _getPreparedValue: function() {
+        return this._convertToValue().replace(/\s+$/, '');
     },
 
     _valueChangeEventHandler: function(e) {
@@ -331,12 +329,11 @@ const TextEditorMask = TextEditorBase.inherit({
 
         this._saveValueChangeEvent(e);
 
-        this.option('value', this._convertToValue().replace(/\s+$/, ''));
+        this.option('value', this._getPreparedValue());
     },
 
     _isControlKeyFired: function(e) {
-        return this._isControlKey(normalizeKeyName(e)) || e.ctrlKey // NOTE: FF fires control keys on keypress
-                || e.metaKey; // NOTE: Safari fires keys with ctrl modifier on keypress
+        return this._isControlKey(normalizeKeyName(e)) || isCommandKeyPressed(e);
     },
 
     _handleChain: function(args) {
@@ -380,9 +377,7 @@ const TextEditorMask = TextEditorBase.inherit({
         const previousText = this._input().val();
         const raiseInputEvent = () => {
             if(previousText !== this._input().val()) {
-                this._maskStrategy.runWithoutEventProcessing(
-                    () => eventsEngine.trigger(this._input(), 'input')
-                );
+                eventsEngine.trigger(this._input(), 'input');
             }
         };
 
@@ -433,7 +428,10 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _adjustCaret: function(char) {
-        const caret = this._maskRulesChain.adjustedCaret(this._caret().start, this.isForwardDirection(), char);
+        const caretStart = this._caret().start;
+        const isForwardDirection = this.isForwardDirection();
+
+        const caret = this._maskRulesChain.adjustedCaret(caretStart, isForwardDirection, char);
         this._caret({ start: caret, end: caret });
     },
 
@@ -448,7 +446,7 @@ const TextEditorMask = TextEditorBase.inherit({
         this._caret({ start: caret, end: caret });
     },
 
-    _caret: function(position) {
+    _caret: function(position, force) {
         const $input = this._input();
 
         if(!$input.length) {
@@ -458,7 +456,7 @@ const TextEditorMask = TextEditorBase.inherit({
         if(!arguments.length) {
             return caret($input);
         }
-        caret($input, position);
+        caret($input, position, force);
     },
 
     _hasSelection: function() {

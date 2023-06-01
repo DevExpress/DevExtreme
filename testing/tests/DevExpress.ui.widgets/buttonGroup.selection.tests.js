@@ -2,7 +2,8 @@ import $ from 'jquery';
 import 'ui/button';
 import 'ui/button_group';
 import eventsEngine from 'events/core/events_engine';
-import 'common.css!';
+
+import 'generic_light.css!';
 
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item';
@@ -488,6 +489,263 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
                 }
             });
         });
+    });
+});
+
+QUnit.module('selectionMode', () => {
+    QUnit.test('selectionMode=multiple, selectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'multiple',
+            selectedItemKeys: [1, 2, 3],
+            items: [
+                { id: 1, text: 'button 1' },
+                { id: 2, text: 'button 2' },
+                { id: 3, text: 'button 3' },
+            ],
+        }).dxButtonGroup('instance');
+
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), [1, 2, 3]);
+    });
+
+    QUnit.test('selectionMode=multiple, selectedItems=[item1,Item2,Item3] -> getSelectedKeys', function(assert) {
+        const items = [
+            { id: 1, text: 'button 1' },
+            { id: 2, text: 'button 2' },
+            { id: 3, text: 'button 3' },
+        ];
+
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'multiple',
+            items: items,
+            selectedItems: [items[0], items[1], items[2]]
+        }).dxButtonGroup('instance');
+
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), [1, 2, 3]);
+    });
+
+    QUnit.test('selectionMode=multiple -> setSelectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'multiple',
+            items: [
+                { id: 1, text: 'button 1' },
+                { id: 2, text: 'button 2' },
+                { id: 3, text: 'button 3' },
+            ],
+        }).dxButtonGroup('instance');
+
+        buttonGroup.option('selectedItemKeys', [1, 2, 3]);
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), [1, 2, 3]);
+    });
+
+    QUnit.test('selectionMode=multiple -> setSelectedItems=[item1,Item2,Item3] -> getSelectedKeys', function(assert) {
+        const items = [
+            { id: 1, text: 'button 1' },
+            { id: 2, text: 'button 2' },
+            { id: 3, text: 'button 3' },
+        ];
+
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'multiple',
+            items: items,
+        }).dxButtonGroup('instance');
+
+        buttonGroup.option('selectedItems', [items[0], items[1], items[2]]);
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), [1, 2, 3]);
+    });
+
+    QUnit.test('selectionMode=single, selectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'single',
+            selectedItemKeys: [1, 2, 3],
+            items: [
+                { id: 1, text: 'button 1' },
+                { id: 2, text: 'button 2' },
+                { id: 3, text: 'button 3' },
+            ],
+        }).dxButtonGroup('instance');
+
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), [1]);
+    });
+
+    QUnit.test('selectionMode=single, selectedItems=[item1,Item2,Item3] -> getSelectedKeys', function(assert) {
+        const items = [
+            { id: 1, text: 'button 1' },
+            { id: 2, text: 'button 2' },
+            { id: 3, text: 'button 3' },
+        ];
+
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'single',
+            items: items,
+            selectedItems: [items[0], items[1], items[2]]
+        }).dxButtonGroup('instance');
+
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), [1]);
+    });
+
+    QUnit.test('selectionMode=single -> setSelectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'single',
+            items: [
+                { id: 1, text: 'button 1' },
+                { id: 2, text: 'button 2' },
+                { id: 3, text: 'button 3' },
+            ],
+        }).dxButtonGroup('instance');
+
+        buttonGroup.option('selectedItemKeys', [1, 2, 3]);
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), [1]);
+    });
+
+    QUnit.test('selectionMode=single -> setSelectedItems=[item1,Item2,Item3] -> getSelectedKeys', function(assert) {
+        const items = [
+            { id: 1, text: 'button 1' },
+            { id: 2, text: 'button 2' },
+            { id: 3, text: 'button 3' },
+        ];
+
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'single',
+            items: items,
+        }).dxButtonGroup('instance');
+
+        buttonGroup.option('selectedItems', [items[0], items[1], items[2]]);
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), [1]);
+    });
+
+    QUnit.test('selectionMode=none, selectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'none',
+            selectedItemKeys: [1, 2, 3],
+            items: [
+                { id: 1, text: 'button 1' },
+                { id: 2, text: 'button 2' },
+                { id: 3, text: 'button 3' },
+            ],
+        }).dxButtonGroup('instance');
+
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), []);
+    });
+
+    QUnit.test('selectionMode=none, selectedItems=[item1,Item2,Item3] -> getSelectedItems', function(assert) {
+        const items = [
+            { id: 1, text: 'button 1' },
+            { id: 2, text: 'button 2' },
+            { id: 3, text: 'button 3' },
+        ];
+
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'none',
+            items: items,
+            selectedItems: [items[0], items[1], items[2]]
+        }).dxButtonGroup('instance');
+
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), []);
+    });
+
+    QUnit.test('selectionMode=none -> setSelectedKeys=[1,2,3] -> getSelectedKeys', function(assert) {
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'none',
+            items: [
+                { id: 1, text: 'button 1' },
+                { id: 2, text: 'button 2' },
+                { id: 3, text: 'button 3' },
+            ],
+        }).dxButtonGroup('instance');
+
+        buttonGroup.option('selectedItemKeys', [1, 2, 3]);
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), []);
+    });
+
+    QUnit.test('selectionMode=none -> setSelectedItems=[item1,Item2,Item3] -> getSelectedKeys', function(assert) {
+        const items = [
+            { id: 1, text: 'button 1' },
+            { id: 2, text: 'button 2' },
+            { id: 3, text: 'button 3' },
+        ];
+
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'none',
+            items: items,
+        }).dxButtonGroup('instance');
+
+        buttonGroup.option('selectedItems', [items[0], items[1], items[2]]);
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), []);
+    });
+
+    QUnit.test('selectionMode=multiple -> clickByItem1, clickByItem2, clickByItem3 -> getSelectedKeys', function(assert) {
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'multiple',
+            items: [
+                { id: 1, text: 'button 1' },
+                { id: 2, text: 'button 2' },
+                { id: 3, text: 'button 3' },
+            ],
+        }).dxButtonGroup('instance');
+
+        const clickByButton = (button) => $(buttonGroup.$element()
+            .find('[aria-label="' + button + '"]'))
+            .trigger('dxclick');
+
+        clickByButton('button 1');
+        clickByButton('button 2');
+        clickByButton('button 3');
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), [1, 2, 3]);
+    });
+
+    QUnit.test('selectionMode=single -> clickByItem1, clickByItem2, clickByItem3 -> getSelectedKeys', function(assert) {
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'single',
+            items: [
+                { id: 1, text: 'button 1' },
+                { id: 2, text: 'button 2' },
+                { id: 3, text: 'button 3' },
+            ],
+        }).dxButtonGroup('instance');
+
+        const clickByButton = (button) => $(buttonGroup.$element()
+            .find('[aria-label="' + button + '"]'))
+            .trigger('dxclick');
+
+        clickByButton('button 1');
+        clickByButton('button 2');
+        clickByButton('button 3');
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), [3]);
+    });
+
+    QUnit.test('selectionMode=none -> clickByItem1, clickByItem2, clickByItem3 -> getSelectedKeys', function(assert) {
+        const buttonGroup = $('#widget').dxButtonGroup({
+            keyExpr: 'id',
+            selectionMode: 'none',
+            items: [
+                { id: 1, text: 'button 1' },
+                { id: 2, text: 'button 2' },
+                { id: 3, text: 'button 3' },
+            ],
+        }).dxButtonGroup('instance');
+
+        const clickByButton = (button) => $(buttonGroup.$element()
+            .find('[aria-label="' + button + '"]'))
+            .trigger('dxclick');
+
+        clickByButton('button 1');
+        clickByButton('button 2');
+        clickByButton('button 3');
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), []);
     });
 });
 

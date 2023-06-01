@@ -1,5 +1,5 @@
 import consts from './components/consts';
-import { normalizeAngle, getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords, patchFontOptions } from './core/utils';
+import { normalizeAngle, getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords } from './core/utils';
 import { extend as _extend } from '../core/utils/extend';
 import { isNumeric } from '../core/utils/type';
 import { each as _each } from '../core/utils/iterator';
@@ -8,6 +8,9 @@ import registerComponent from '../core/component_registrator';
 import { BaseChart, overlapping } from './chart_components/base_chart';
 import { noop as _noop } from '../core/utils/common';
 import { Translator1D } from './translators/translator1d';
+
+import { plugins as annotationsPlugins } from './core/annotations';
+import { plugins as centerTemplatePlugins } from './core/center_template';
 
 const { states } = consts;
 const seriesSpacing = consts.pieSeriesSpacing;
@@ -108,7 +111,7 @@ const dxPieChart = BaseChart.inherit({
     _optionChangesMap: {
         diameter: 'REINIT',
         minDiameter: 'REINIT',
-        sizeGroup: 'REINIT'
+        sizeGroup: 'REINIT',
     },
 
     _disposeCore: function() {
@@ -314,34 +317,8 @@ const dxPieChart = BaseChart.inherit({
         this._renderSeriesElements(drawOptions, isLegendInside);
     },
 
-    _renderExtraElements() {
-        let template = this.option('centerTemplate');
-
-        if(this._centerTemplateGroup) {
-            this._centerTemplateGroup.clear();
-        }
-
-        if(!template) {
-            return;
-        }
-
-        if(!this._centerTemplateGroup) {
-            this._centerTemplateGroup = this._renderer.g().attr({ class: 'dxc-hole-template' }).css(patchFontOptions(this._themeManager._font));
-        }
-        this._centerTemplateGroup.attr({ visibility: 'hidden' }).append(this._renderer.root);
-
-        template = this._getTemplate(template);
-
-        template.render({
-            model: this,
-            container: this._centerTemplateGroup.element,
-            onRendered: ()=>{
-                const group = this._centerTemplateGroup;
-                const bBox = group.getBBox();
-                group.move(this._center.x - (bBox.x + bBox.width / 2), this._center.y - (bBox.y + bBox.height / 2));
-                group.attr({ visibility: 'visible' });
-            }
-        });
+    _getCenter() {
+        return this._center;
     },
 
     getInnerRadius() {
@@ -434,8 +411,8 @@ const dxPieChart = BaseChart.inherit({
                 points.right.reverse();
             }
 
-            overlapped = overlapping.resolveLabelOverlappingInOneDirection(points.left, that._canvas, false, shiftCallback);
-            return overlapping.resolveLabelOverlappingInOneDirection(points.right, that._canvas, false, shiftCallback) || overlapped;
+            overlapped = overlapping.resolveLabelOverlappingInOneDirection(points.left, that._canvas, false, false, shiftCallback);
+            return overlapping.resolveLabelOverlappingInOneDirection(points.right, that._canvas, false, false, shiftCallback) || overlapped;
         }
 
         function shiftFunction(box, length) {
@@ -514,10 +491,9 @@ _each(OPTIONS_FOR_REFRESH_SERIES, function(_, name) {
     dxPieChart.prototype._optionChangesMap[name] = 'REFRESH_SERIES_DATA_INIT';
 });
 
-import { plugins } from './core/annotations';
-
-dxPieChart.addPlugin(plugins.core);
-dxPieChart.addPlugin(plugins.pieChart);
+dxPieChart.addPlugin(centerTemplatePlugins.pieChart);
+dxPieChart.addPlugin(annotationsPlugins.core);
+dxPieChart.addPlugin(annotationsPlugins.pieChart);
 
 registerComponent('dxPieChart', dxPieChart);
 

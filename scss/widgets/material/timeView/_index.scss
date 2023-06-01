@@ -1,54 +1,30 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../textEditor/sizes" as *;
+@use "../../base/timeView/mixins" as *;
+@use "../../base/timeView";
 
 // adduse
 
+@include clock-action-icons-mixin($base-accent, $base-bg, $clock-digits-color);
 
 .dx-timeview {
   height: auto;
   width: auto;
-  background-color: $timeview-bg;
-}
 
-.dx-timeview-clock {
-  min-height: $material-timeview-clock-min-size + $material-timeview-clock-additional-size;
-  min-width: $material-timeview-clock-min-size + $material-timeview-clock-additional-size;
-  background: $timeview-clock-bg no-repeat 50% 50%;
-  background-size: $material-timeview-clock-image-min-size;
-}
-
-.dx-timeview-hourarrow {
-  background-image: $timeview-hourarrow-bg;
-  background-size: 5px 57px - $material-timeview-arrow-height-reduce;
-}
-
-.dx-timeview-minutearrow {
-  background-image: $timeview-minutearrow-bg;
-  background-size: 5px 79px - $material-timeview-arrow-height-reduce / 2;
-}
-
-.dx-timeview-format12 {
-  width: $material-timeview-format12-width;
-  margin-left: $material-timeview-time-separator-margin;
-  margin-right: auto;
-
-  &.dx-rtl,
-  .dx-rtl & {
-    margin-left: auto;
-    margin-right: $material-timeview-time-separator-margin;
-  }
-
-  &.dx-dropdowneditor-button-visible {
+  .dx-texteditor {
     .dx-texteditor-container {
       .dx-texteditor-input {
         padding-right: 0;
+        padding-left: 12px;
 
         .dx-rtl & {
           padding-left: 0;
+          padding-right: 12px;
         }
       }
 
@@ -61,18 +37,22 @@
         }
       }
     }
+  }
+}
 
-    &.dx-editor-filled,
-    &.dx-editor-outlined {
-      .dx-texteditor-container {
-        .dx-texteditor-input {
-          @at-root #{selector-append(".dx-rtl", &)},
-          .dx-rtl & {
-            padding-right: $material-filled-texteditor-input-horizontal-padding;
-          }
-        }
-      }
-    }
+.dx-timeview-clock {
+  margin-bottom: 10px;
+}
+
+.dx-timeview-format12 {
+  width: $material-timeview-format12-width;
+  margin-left: $material-timeview-time-separator-margin;
+  margin-right: auto;
+
+  &.dx-rtl,
+  .dx-rtl & {
+    margin-left: auto;
+    margin-right: $material-timeview-time-separator-margin;
   }
 }
 
@@ -85,9 +65,9 @@
 }
 
 .dx-timeview-field .dx-numberbox {
-  width: $material-timeview-format12-width - $material-timeview-field-numberbox-reduce;
+  width: $material-timeview-format12-width;
 
   &.dx-numberbox-spin-touch-friendly {
-    width: 110px - $material-timeview-field-numberbox-reduce;
+    width: 110px;
   }
 }

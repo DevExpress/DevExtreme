@@ -1,18 +1,14 @@
-import '../jquery_augmentation';
-
 import {
-    dxValidationGroupResult
+    ValidationResult,
 } from './validation_group';
 
 /**
  * @docid
  * @section Core
  * @namespace DevExpress
- * @module ui/validation_engine
- * @export default
- * @prevFileNamespace DevExpress.ui
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class validationEngine {
     /**
      * @docid
@@ -20,7 +16,6 @@ export default class validationEngine {
      * @publicName getGroupConfig()
      * @return object
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static getGroupConfig(): any;
@@ -31,7 +26,6 @@ export default class validationEngine {
      * @param1 group:string|object
      * @return object
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static getGroupConfig(group: string | any): any;
@@ -40,7 +34,6 @@ export default class validationEngine {
      * @publicName registerModelForValidation(model)
      * @param1 model:object
      * @static
-     * @prevFileNamespace DevExpress.integration
      * @public
      */
     static registerModelForValidation(model: any): void;
@@ -49,7 +42,6 @@ export default class validationEngine {
      * @section Core
      * @publicName resetGroup()
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static resetGroup(): void;
@@ -59,7 +51,6 @@ export default class validationEngine {
      * @publicName resetGroup(group)
      * @param1 group:string|object
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     static resetGroup(group: string | any): void;
@@ -68,7 +59,6 @@ export default class validationEngine {
      * @publicName unregisterModelForValidation(model)
      * @param1 model:object
      * @static
-     * @prevFileNamespace DevExpress.integration
      * @public
      */
     static unregisterModelForValidation(model: any): void;
@@ -76,30 +66,27 @@ export default class validationEngine {
      * @docid
      * @section Core
      * @publicName validateGroup()
-     * @return dxValidationGroupResult
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @return dxValidationGroupResult
      */
-    static validateGroup(): dxValidationGroupResult;
+    static validateGroup(): ValidationResult;
     /**
      * @docid
      * @section Core
      * @publicName validateGroup(group)
      * @param1 group:string|object
-     * @return dxValidationGroupResult
      * @static
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @return dxValidationGroupResult
      */
-    static validateGroup(group: string | any): dxValidationGroupResult;
+    static validateGroup(group: string | any): ValidationResult;
     /**
      * @docid
      * @publicName validateModel(model)
      * @param1 model:object
      * @return object
      * @static
-     * @prevFileNamespace DevExpress.integration
      * @public
      */
     static validateModel(model: any): any;

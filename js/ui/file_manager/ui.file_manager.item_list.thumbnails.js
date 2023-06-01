@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
@@ -9,6 +10,7 @@ import messageLocalization from '../../localization/message';
 
 import FileManagerThumbnailListBox from './ui.file_manager.items_list.thumbnails.list_box';
 import FileManagerItemListBase from './ui.file_manager.item_list';
+import { OPERATIONS } from './file_items_controller';
 
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS = 'dx-filemanager-thumbnails';
 const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = 'dx-filemanager-thumbnails-item';
@@ -45,12 +47,14 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             itemThumbnailTemplate: this._getItemThumbnailContainer.bind(this),
             getTooltipText: this._getTooltipText.bind(this),
             onSelectionChanged: this._onItemListSelectionChanged.bind(this),
-            onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this)
+            onFocusedItemChanged: this._onItemListFocusedItemChanged.bind(this),
+            onContentReady: this._onContentReady.bind(this)
         });
     }
 
     _onContextMenu(e) {
         e.preventDefault();
+        e.stopPropagation();
         if(!this._isDesktop()) {
             return;
         }
@@ -63,7 +67,11 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
             items = this._getFileItemsForContextMenu(targetItem);
         }
 
-        this._showContextMenu(items, e.target, e, targetItem);
+        const target = {
+            itemData: targetItem,
+            itemElement: targetItemElement.length ? targetItemElement : undefined
+        };
+        this._showContextMenu(items, e.target, e, target);
     }
 
     _getItemThumbnailCssClass() {
@@ -145,6 +153,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         });
     }
 
+    _getScrollable() {
+        return this._itemList.getScrollable();
+    }
+
     _setSelectedItemKeys(itemKeys) {
         this._itemList.option('selectedItemKeys', itemKeys);
     }
@@ -153,7 +165,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._itemList.option('focusedItemKey', itemKey);
     }
 
-    refresh(options) {
+    refresh(options, operation) {
         const actualOptions = {
             dataSource: this._createDataSource()
         };
@@ -161,8 +173,17 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         if(options && Object.prototype.hasOwnProperty.call(options, 'focusedItemKey')) {
             actualOptions.focusedItemKey = options.focusedItemKey;
         }
+        if(options && Object.prototype.hasOwnProperty.call(options, 'selectedItemKeys')) {
+            actualOptions.selectedItemKeys = options.selectedItemKeys;
+        }
 
+        if(!isDefined(actualOptions.focusedItemKey) && operation === OPERATIONS.NAVIGATION) {
+            this._needResetScrollPosition = true;
+        }
         this._itemList.option(actualOptions);
+
+        this._refreshDeferred = new Deferred();
+        return this._refreshDeferred.promise();
     }
 
     _deselectItem(item) {

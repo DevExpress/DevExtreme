@@ -1,7 +1,14 @@
+import {
+    UserDefinedElement,
+} from '../element';
+
+/**
+ * @docid
+ * @type object
+ */
 export interface dxTemplateOptions {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     name?: string;
@@ -10,18 +17,19 @@ export interface dxTemplateOptions {
  * @docid
  * @section uiWidgetMarkupComponents
  * @type object
- * @prevFileNamespace DevExpress.core
  * @public
+ * @options dxTemplateOptions
  */
 export type dxTemplate = Template;
+
+ // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class Template {
-    constructor(options?: dxTemplateOptions)
+    constructor(options?: dxTemplateOptions);
 }
 
 /**
  * @docid
  * @section Common
- * @prevFileNamespace DevExpress.core
  * @public
  */
-export type template = string | Function | Element | JQuery;
+export type template = string | Function | UserDefinedElement;

@@ -1,10 +1,13 @@
 import $ from 'jquery';
 import { locate } from 'animation/translator';
 import devices from 'core/devices';
+import pointerMock from '../../helpers/pointerMock.js';
+import dataUtils from 'core/element_data';
+import Color from 'color';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
+import 'ui/drop_down_button';
 
 export const TOOLBAR_TOP_LOCATION = 'top';
 export const TOOLBAR_BOTTOM_LOCATION = 'bottom';
@@ -15,31 +18,61 @@ const TEST_ROOT_ELEMENT_ID = 'qunit-fixture';
 export const CLASSES = {
     root: '.dx-scheduler',
 
+    button: '.dx-button',
+    selected: '.dx-item-selected',
+
     header: '.dx-scheduler-header-panel',
     navigator: '.dx-scheduler-navigator',
     navigatorCaption: '.dx-scheduler-navigator-caption',
     navigatorPrevButton: '.dx-scheduler-navigator-previous',
     navigatorNextButton: '.dx-scheduler-navigator-next',
     navigatorPopover: '.dx-scheduler-navigator-calendar-popover',
-    navigatorPopoverContent: '.dx-scheduler-navigator-calendar-popover > .dx-overlay-content',
     scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
     schedulerSmall: '.dx-scheduler-small',
+    viewSwitcher: '.dx-scheduler-view-switcher',
+    viewSwitcherDropDownButton: '.dx-scheduler-view-switcher-dropdown-button',
+    viewSwitcherDropDownButtonContent: '.dx-scheduler-view-switcher-dropdown-button-content',
 
-    calendar: 'dx-scheduler-navigator-calendar',
+    calendar: '.dx-scheduler-navigator-calendar',
     calendarToday: '.dx-calendar-today',
     calendarSelected: '.dx-calendar-selected-date',
 
     dateTableCell: '.dx-scheduler-date-table-cell',
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
+    timePanelCell: '.dx-scheduler-time-panel-cell',
+    headerPanelCell: '.dx-scheduler-header-panel-cell',
+    weekHeaderPanelCell: '.dx-scheduler-header-panel-week-cell',
+    currentTimeCell: '.dx-scheduler-time-panel-current-time-cell',
+    headerPanelCurrentTimeCell: '.dx-scheduler-header-panel-current-time-cell',
+    selectedCell: '.dx-state-focused',
+    focusedCell: '.dx-scheduler-focused-cell',
+    virtualCell: '.dx-scheduler-virtual-cell',
+
+    allDayTitle: '.dx-scheduler-all-day-title',
+    verticalGroupPanel: '.dx-scheduler-work-space-vertical-group-table',
+
+    shader: '.dx-scheduler-date-time-shader',
 
     appointment: '.dx-scheduler-appointment',
+    appointmentDate: '.dx-scheduler-appointment-content-date',
     appointmentDragSource: '.dx-scheduler-appointment-drag-source',
+
+    appointmentTitle: '.dx-scheduler-appointment-title',
+
+    appointmentMarker: '.dx-scheduler-agenda-appointment-marker',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
         right: '.dx-resizable-handle-right'
-    }
+    },
+
+    dialog: '.dx-dialog',
+    popup: '.dx-popup',
 };
+
+export const supportedScrollingModes = ['standard', 'virtual'];
+
+export const supportedViews = ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 
 export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
 
@@ -69,49 +102,185 @@ export const asyncWrapper = (assert, callback) => {
         .then(done);
 };
 
-export const execAsync = (promise, beforeAsyncCallback, asyncCallback, timeout) => {
+export const execAsync = (assert, promise, beforeAssertCallback, assertCallback, timeout) => {
+    let timerId;
+
     return promise.then(() => {
+
         return new Promise((resolve, reject) => {
-            const execCallback = func => {
+
+            const execCallback = (func) => {
                 try {
                     func();
                 } catch(e) {
-                    reject(e);
+                    assert.ok(false, e.message);
+                    reject();
                 }
             };
 
-            beforeAsyncCallback && execCallback(beforeAsyncCallback);
+            beforeAssertCallback && execCallback(beforeAssertCallback);
 
-            setTimeout(() => {
-                execCallback(asyncCallback);
+            timerId = setTimeout(() => {
+                execCallback(assertCallback);
                 resolve();
             }, timeout);
         });
+    }).catch(() => {
+        clearTimeout(timerId);
     });
 };
 
-export const asyncScrollTest = (promise, beforeAsyncCallback, asyncCallback) => {
-    const scrollTimeout = 20;
-    return execAsync(promise, beforeAsyncCallback, asyncCallback, scrollTimeout);
+export const asyncScrollTest = (assert, promise, assertCallback, scrollable, offset, scrollTimeout = 100) => {
+    const wrapper = () => {
+        return execAsync(
+            assert,
+            promise,
+            () => scrollable.scrollTo(offset),
+            assertCallback,
+            scrollTimeout
+        ).catch(() => wrapper());
+    };
+
+    return wrapper();
+};
+
+export const asyncAssert = (assert, assertCallback, timeout) => {
+    return asyncWrapper(assert, promise => {
+
+        execAsync(assert, promise, null, assertCallback, timeout); // TODO shoud return promise from the execAsync
+
+        return promise;
+    });
 };
 
 class ElementWrapper {
-    constructor(selector, parent) {
+    constructor(selector, parent, index = 0) {
         this.selector = selector;
         this.parent = parent;
+        this.index = index;
     }
 
     getElement() {
         if(this.parent) {
-            return this.parent.find(this.selector);
+            return this.parent.find(this.selector).eq(this.index);
         }
-        return $(this.selector);
+        return $(this.selector).eq(this.index);
+    }
+
+    getText() {
+        return this.getElement().text();
+    }
+
+    hasClass(className) {
+        return this.getElement().hasClass(className);
     }
 }
-
 class ClickElementWrapper extends ElementWrapper {
     click() {
         this.getElement().trigger('dxclick');
+    }
+
+    isDisabled() {
+        return this.hasClass('dx-state-disabled');
+    }
+}
+
+class AppointmentTitle extends ElementWrapper {
+    constructor(parent) {
+        super(CLASSES.appointmentTitle, parent, 0);
+    }
+
+    get text() {
+        return this.getElement().text();
+    }
+}
+
+class AppointmentMarker extends ElementWrapper {
+    constructor(parent) {
+        super(CLASSES.appointmentMarker, parent, 0);
+    }
+
+    get color() {
+        return new Color(this.getElement().css('backgroundColor')).toHex();
+    }
+}
+
+class Appointment extends ClickElementWrapper {
+    constructor(parent, index) {
+        super(CLASSES.appointment, parent, index);
+    }
+
+    get rectangle() {
+        const elementRect = this.getElement().get(0).getBoundingClientRect();
+
+        return {
+            x: elementRect.left,
+            y: elementRect.top
+        };
+    }
+
+    get position() {
+        return this.getElement().position();
+    }
+
+    get date() { // TODO
+        return this.getElement().find(CLASSES.appointmentDate).text();
+    }
+
+    get title() {
+        return new AppointmentTitle(this.getElement());
+    }
+
+    get backgroundColor() {
+        return new Color(this.getElement().css('backgroundColor')).toHex();
+    }
+
+    get marker() {
+        return new AppointmentMarker(this.getElement());
+    }
+
+    get data() {
+        const currentAppointment = this.getElement().get(0);
+        return dataUtils.data(currentAppointment, 'dxItemData');
+    }
+
+    get drag() {
+        return {
+            toCell: cellNumber => {
+                const cell = $(CLASSES.dateTableCell).eq(cellNumber).get(0);
+                const cellRect = cell.getBoundingClientRect();
+                const elementRect = this.getElement().get(0).getBoundingClientRect();
+
+                const appointmentPos = {
+                    x: elementRect.left + elementRect.width / 2,
+                    y: elementRect.top + elementRect.height / 2
+                };
+
+                const cellPos = {
+                    x: cellRect.left + cellRect.width / 2,
+                    y: cellRect.top + cellRect.height / 2
+                };
+
+                const pointer = pointerMock(this.getElement()).start();
+                pointer.down(appointmentPos.x, appointmentPos.y)
+                    .move(cellPos.x - appointmentPos.x, cellPos.y - appointmentPos.y);
+                pointer.up();
+            }
+        };
+    }
+
+    click() {
+        const clock = sinon.useFakeTimers();
+        this.getElement().trigger('dxclick');
+        clock.tick(300);
+        clock.restore();
+    }
+
+    dbClick() {
+        // const clock = sinon.useFakeTimers();
+        this.getElement().trigger('dxdblclick');
+        // clock.tick(300);
+        // clock.restore();
     }
 }
 
@@ -147,19 +316,15 @@ class Calendar extends ElementWrapper {
 
 class NavigatorPopover extends ElementWrapper {
     get isVisible() {
-        return this.content.getElement().is(':visible');
+        return this.getElement().is(':visible');
     }
 
     get calendar() {
         return new Calendar();
     }
 
-    get content() {
-        return new ElementWrapper(CLASSES.navigatorPopoverContent);
-    }
-
     get hasScroll() {
-        return this.content.getElement().find('.dx-scrollable').length > 0;
+        return $('.dx-scrollable').find('.dx-scheduler-navigator-calendar').length > 0;
     }
 }
 
@@ -176,12 +341,52 @@ class NavigatorWrapper extends ElementWrapper {
         return new ClickElementWrapper(CLASSES.navigatorPrevButton);
     }
 
+    get calendarButton() {
+        return new ClickElementWrapper(CLASSES.navigatorCaption);
+    }
+
     get nextButton() {
         return new ClickElementWrapper(CLASSES.navigatorNextButton);
     }
 
     get popover() {
         return new NavigatorPopover(CLASSES.navigatorPopover);
+    }
+}
+
+class ViewSwitcherWrapper extends ElementWrapper {
+    constructor() {
+        super(CLASSES.viewSwitcher);
+    }
+
+    get dropDownButton() {
+        const dropDown = new ClickElementWrapper(CLASSES.viewSwitcherDropDownButton);
+
+        return new ClickElementWrapper(CLASSES.button, dropDown.getElement());
+    }
+
+    get selectedButton() {
+        return new ClickElementWrapper(CLASSES.selected);
+    }
+
+    click(name) {
+        this.getButton(name).click();
+    }
+
+    getButton(name) {
+        const parent = this.getElement();
+
+        const buttons = parent.find('.dx-button');
+
+        let result;
+        buttons.each((index, button) => {
+            if($(button).text() === name) {
+                result = new ClickElementWrapper(CLASSES.button, parent, index);
+                return false;
+            }
+        });
+
+        return result;
     }
 }
 
@@ -192,6 +397,10 @@ class HeaderWrapper extends ElementWrapper {
 
     get navigator() {
         return new NavigatorWrapper();
+    }
+
+    get viewSwitcher() {
+        return new ViewSwitcherWrapper();
     }
 }
 
@@ -285,11 +494,19 @@ export class SchedulerTestWrapper extends ElementWrapper {
                     .filter((index, element) => $(element).find('.dx-scheduler-appointment-title').text() === text);
             },
 
-            click: (index = 0) => {
-                this.clock = sinon.useFakeTimers();
-                this.appointments.getAppointment(index).trigger('dxclick');
-                this.clock.tick(300);
-                this.clock.restore();
+            click: (index = 0, isAsync = false) => {
+                const click = () => this.appointments.getAppointment(index).trigger('dxclick');
+
+                if(isAsync) {
+                    click();
+                } else {
+                    const clock = sinon.useFakeTimers();
+
+                    click();
+
+                    clock.tick(300);
+                    clock.restore();
+                }
             },
 
             dblclick: (index = 0) => {
@@ -330,12 +547,13 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
 
             dialog: {
-                clickEditSeries: () => $('.dx-dialog').find('.dx-dialog-button').eq(0).trigger('dxclick'),
-                clickEditAppointment: () => $('.dx-dialog').find('.dx-dialog-button').eq(1).trigger('dxclick'),
-                hide: () => $('.dx-dialog').find('.dx-closebutton.dx-button').trigger('dxclick')
+                clickEditSeries: () => $(CLASSES.dialog).find('.dx-dialog-button').eq(0).trigger('dxclick'),
+                clickEditAppointment: () => $(CLASSES.dialog).find('.dx-dialog-button').eq(1).trigger('dxclick'),
+                hide: () => $(CLASSES.dialog).find('.dx-closebutton.dx-button').trigger('dxclick')
             },
 
             getPopup: () => $('.dx-overlay-wrapper.dx-scheduler-appointment-popup'),
+            getRecurrenceDialog: () => $(`${CLASSES.dialog}${CLASSES.popup}`),
             getPopupTitleElement: () => this.appointmentPopup.getPopup().find('.dx-popup-title'),
             hasVerticalScroll: () => {
                 const scrollableContainer = this.appointmentPopup.getPopup().find('.dx-scrollable-container').get(0);
@@ -359,7 +577,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
             getCancelButton: () => this.appointmentPopup.getPopup().find('.dx-popup-cancel'),
             clickCancelButton: () => this.appointmentPopup.getCancelButton().trigger('dxclick'),
-            saveAppointmentData: () => this.instance._appointmentPopup.saveEditData.call(this.instance._appointmentPopup),
+            saveAppointmentData: () => this.instance._appointmentPopup.saveEditDataAsync.call(this.instance._appointmentPopup),
 
             hasLoadPanel: () => this.appointmentPopup.getPopup().find('.dx-loadpanel').length !== 0,
 
@@ -399,8 +617,8 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getRowCount: () => $('.dx-scheduler-date-table-row').length,
             getRows: (index = 0) => $('.dx-scheduler-date-table-row').eq(index),
             getCells: () => $(CLASSES.dateTableCell),
-            getSelectedCells: () => this.workSpace.getCells().filter('.dx-state-focused'),
-            getFocusedCell: () => this.workSpace.getCells().filter('.dx-scheduler-focused-cell'),
+            getSelectedCells: () => this.workSpace.getCells().filter(CLASSES.selectedCell),
+            getFocusedCell: () => this.workSpace.getCells().filter(CLASSES.focusedCell),
             getCell: (rowIndex, cellIndex) => {
                 if(cellIndex !== undefined) {
                     return $('.dx-scheduler-date-table-row').eq(rowIndex).find(CLASSES.dateTableCell).eq(cellIndex);
@@ -418,7 +636,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 rect.height = cell.outerHeight();
                 rect.width = cell.outerWidth();
 
-                if(this.instance.option('currentView') === 'month') {
+                if(this.instance.currentView === 'month') {
                     const monthNum = cell.find('div').eq(0);
                     if(monthNum.length > 0) {
                         rect.top += monthNum.outerHeight();
@@ -430,12 +648,20 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
             getAllDayCells: () => $('.dx-scheduler-all-day-table-cell'),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
+            getTimePanelCells: () => $(CLASSES.timePanelCell),
+            getVirtualCells: () => $(CLASSES.virtualCell),
+            getOrdinaryHeaderPanelCells: () => $(`${CLASSES.headerPanelCell}:not(${CLASSES.weekHeaderPanelCell})`),
+            getWeekDayHeaderPanelCells: () => $(`${CLASSES.weekHeaderPanelCell}`),
+            getTimePanelCurrentTimeCells: () => $(CLASSES.currentTimeCell),
+            getHeaderPanelCurrentTimeCells: () => $(CLASSES.headerPanelCurrentTimeCell),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
             getCellHeight: () => this.workSpace.getCells().eq(0).outerHeight(),
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $('.dx-scheduler-date-time-indicator'),
+            getCurrentTimeIndicatorCount: () => this.workSpace.getCurrentTimeIndicator().length,
             getAllDayPanel: () => $('.dx-scheduler-all-day-panel'),
+            getAllDayTitle: () => $(CLASSES.allDayTitle),
 
             getDataTableScrollableContainer: () => this.workSpace.getDateTableScrollable().find('.dx-scrollable-container'),
             getScrollPosition: () => {
@@ -448,23 +674,29 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 getGroup: (index = 0) => $('.dx-scheduler-group-row').eq(index),
                 getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find('.dx-scheduler-group-header'),
                 getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
+                getVerticalGroupPanel: () => $(CLASSES.verticalGroupPanel),
             },
-            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick')
+            clickCell: (rowIndex, cellIndex) => this.workSpace.getCell(rowIndex, cellIndex).trigger('dxclick'),
+
+            selectCells: (firstCellIndex, lastCellIndex) => {
+                const firstCell = this.workSpace.getCell(firstCellIndex);
+                const secondCell = this.workSpace.getCell(lastCellIndex);
+
+                const { x: firstCellLeft, y: firstCellTop } = firstCell.offset();
+                const { x: secondCellLeft, y: secondCellTop } = secondCell.offset();
+
+                pointerMock(firstCell)
+                    .start()
+                    .down(firstCellLeft, firstCellTop);
+                pointerMock(secondCell)
+                    .move(secondCellLeft - firstCellLeft, secondCellTop - firstCellTop)
+                    .up();
+            },
+
+            getShader: () => $(CLASSES.shader),
         };
 
         this.viewSwitcher = {
-            getElement: () => $('.dx-dropdownmenu-popup-wrapper.dx-position-bottom'),
-            show: () => {
-                $('.dx-scheduler-view-switcher').trigger('dxclick');
-            },
-            click: (name) => {
-                this.viewSwitcher.getElement().find('.dx-list-item').filter((index, element) => {
-                    return $(element).find('.dx-dropdownmenu-item-text').text() === name;
-                }).trigger('dxclick');
-            },
-            getSelectedViewName: () => {
-                return this.viewSwitcher.getElement().find('.dx-list-item-selected .dx-dropdownmenu-item-text').text();
-            },
             getLabel: () => $('.dx-scheduler-view-switcher-label')
         },
 
@@ -483,6 +715,17 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
     get header() {
         return new HeaderWrapper();
+    }
+
+    get appointmentList() {
+        const result = [];
+        const length = this.getElement().find(CLASSES.appointment).length;
+
+        for(let i = 0; i < length; i++) {
+            result.push(new Appointment(this.getElement(), i));
+        }
+
+        return result;
     }
 
     option(name, value) {

@@ -1,0 +1,124 @@
+$scheduler-base-border: null !default;
+
+.dx-scheduler-work-space-day {
+  &:not(.dx-scheduler-work-space-count) {
+    &:not(.dx-scheduler-work-space-grouped) {
+      &:not(.dx-scheduler-work-space-all-day) {
+        .dx-scheduler-header-panel-container {
+          display: none;
+        }
+      }
+
+      .dx-scheduler-header-panel-empty-cell {
+        border: none;
+      }
+
+      .dx-scheduler-date-table-cell {
+        border-right: none;
+        border-left: none;
+      }
+
+      .dx-scheduler-all-day-table-cell {
+        border-top: none;
+        border-left: none;
+      }
+
+      .dx-scheduler-time-panel {
+        border: none;
+      }
+    }
+
+    &.dx-scheduler-work-space-vertical-grouped {
+      .dx-scheduler-header-panel-container {
+        display: none;
+      }
+    }
+
+    .dx-scheduler-header-panel-empty-cell {
+      margin-top: 0;
+    }
+  }
+
+  &:not(.dx-scheduler-work-space-grouped) {
+    .dx-scheduler-header-panel {
+      margin-top: 1px;
+    }
+  }
+
+  .dx-scheduler-header-panel-cell,
+  .dx-scheduler-date-table-cell,
+  .dx-scheduler-all-day-table-cell {
+    border-right: none;
+
+    .dx-rtl & {
+      border-left: none;
+    }
+  }
+
+  &.dx-scheduler-work-space-both-scrollbar {
+    .dx-scheduler-header-panel {
+      width: 100%;
+    }
+
+    &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
+      .dx-scheduler-time-panel,
+      .dx-scheduler-header-panel-empty-cell {
+        border-right: $scheduler-base-border;
+      }
+    }
+  }
+
+  &.dx-scheduler-work-space-vertical-grouped {
+    .dx-scheduler-all-day-table-cell {
+      border-top: $scheduler-base-border;
+    }
+  }
+
+  &.dx-scheduler-work-space-count:not(.dx-scheduler-work-space-grouped) {
+    .dx-scheduler-date-table-cell,
+    .dx-scheduler-all-day-table-cell,
+    .dx-scheduler-header-panel-cell {
+      border-left: $scheduler-base-border;
+      border-right: $scheduler-base-border;
+
+      &:first-child {
+        border-left: none;
+      }
+    }
+  }
+}
+
+.dx-rtl {
+  .dx-scheduler-work-space-day {
+    &:not(.dx-scheduler-work-space-count) {
+      &:not(.dx-scheduler-work-space-grouped) {
+        .dx-scheduler-header-panel-empty-cell {
+          border-left: none;
+        }
+
+        .dx-scheduler-time-panel {
+          border: none;
+        }
+
+        &.dx-scheduler-work-space-both-scrollbar {
+          .dx-scheduler-time-panel,
+          .dx-scheduler-header-panel-empty-cell {
+            border-left: $scheduler-base-border;
+            border-right: none;
+          }
+        }
+      }
+    }
+
+    &.dx-scheduler-work-space-count:not(.dx-scheduler-work-space-grouped) {
+      .dx-scheduler-date-table-cell,
+      .dx-scheduler-all-day-table-cell,
+      .dx-scheduler-header-panel-cell {
+        &:first-child {
+          border-left: $scheduler-base-border;
+          border-right: none;
+        }
+      }
+    }
+  }
+}

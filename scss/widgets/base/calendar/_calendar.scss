@@ -1,0 +1,143 @@
+@use "../mixins" as *;
+
+// adduse
+
+
+.dx-calendar {
+  @include user-select(none);
+
+  position: relative;
+  display: flex;
+  direction: ltr;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid transparent;
+
+  &.dx-rtl {
+    direction: rtl;
+  }
+}
+
+.dx-calendar-views-wrapper {
+  position: relative;
+  display: flex;
+  flex: auto;
+}
+
+.dx-calendar-navigator {
+  display: flex;
+  justify-content: space-between;
+
+  .dx-calendar-caption-button {
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  .dx-button {
+    .dx-button-text {
+      text-transform: none;
+    }
+
+    &.dx-state-disabled {
+      opacity: 1;
+
+      .dx-button-content {
+        opacity: 0.5;
+      }
+    }
+
+    &.dx-state-active,
+    &.dx-state-hover {
+      z-index: 1;
+    }
+  }
+}
+
+.dx-calendar-body {
+  overflow: hidden;
+  display: flex;
+  flex: 1 1 auto;
+
+  .dx-widget {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  table {
+    width: 100%;
+    height: 100%;
+    table-layout: fixed;
+    border-spacing: 0;
+    line-height: normal;
+  }
+
+  td,
+  th {
+    padding: 0;
+  }
+
+  thead th {
+    font-weight: 500;
+    font-size: 10px;
+
+    @include dx-overflow();
+  }
+}
+
+.dx-calendar-week-number-cell {
+  position: relative;
+
+  span {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 2em;
+    inset: 0;
+  }
+}
+
+.dx-calendar-cell {
+  cursor: pointer;
+  position: relative;
+  text-align: center;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+}
+
+.dx-calendar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dx-calendar-multiview {
+  .dx-calendar-caption-button {
+    .dx-button-content {
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dx-button-text {
+      width: 50%;
+    }
+  }
+
+  .dx-calendar-body {
+    .dx-widget {
+      width: 50%;
+    }
+
+    table {
+      padding: 0 10px;
+    }
+  }
+}

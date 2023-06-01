@@ -1426,6 +1426,15 @@ QUnit.module('Discrete translator', {
     }
 });
 
+QUnit.test('Translate null/undefined values (T801302)', function(assert) {
+    const translator = this.createTranslator({});
+
+    assert.equal(translator.translate(null), null);
+    assert.equal(translator.translate(undefined), null);
+    assert.deepEqual(translator.to(null), NaN);
+    assert.deepEqual(translator.to(undefined), NaN);
+});
+
 QUnit.test('Translate. Invert = false. Stick = false.', function(assert) {
     const translator = this.createTranslator({});
 
@@ -3297,35 +3306,53 @@ QUnit.test('min bar size more visible area', function(assert) {
     assert.equal(translator.getMinBarSize(2000), 160);
 });
 
-QUnit.test('Simple use (logarithmic translator)', function(assert) {
+QUnit.test('Should return correct minBarSize if axis is logarithmic', function(assert) {
     const range = $.extend({}, logarithmicRange, { min: 1, max: 1000, minVisible: 1, maxVisible: 1000, invert: false });
     const canvas = $.extend({}, canvasTemplate);
     const translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
-    assert.equal(adjust(translator.getMinBarSize(110)), 10);
-    assert.equal(adjust(translator.getMinBarSize(330)), 1000);
+    assert.strictEqual(adjust(translator.getMinBarSize(110)), 10);
+    assert.strictEqual(adjust(translator.getMinBarSize(330)), 1000);
 });
 
-QUnit.test('Simple use (logarithmic translator, negative exponent)', function(assert) {
-    const range = $.extend({}, logarithmicRange, { min: 0.01, max: 10, minVisible: 0.01, maxVisible: 10, invert: false });
+QUnit.test('Should return correct minBarSize if axis is logarithmic and inverted', function(assert) {
+    const range = $.extend({}, logarithmicRange, { min: 1, max: 1000, minVisible: 1, maxVisible: 1000, invert: true });
     const canvas = $.extend({}, canvasTemplate);
     const translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
-    assert.equal(adjust(translator.getMinBarSize(110)), 0.1);
-    assert.equal(adjust(translator.getMinBarSize(330)), 10);
+    assert.strictEqual(adjust(translator.getMinBarSize(110)), 10);
+    assert.strictEqual(adjust(translator.getMinBarSize(330)), 1000);
+});
+
+QUnit.test('Should return correct minBarSize if axis is logarithmic and horizontal', function(assert) {
+    const range = $.extend({}, logarithmicRange, { min: 1, max: 1000, minVisible: 1, maxVisible: 1000, invert: false });
+    const canvas = $.extend({}, canvasTemplate);
+    const translator = this.createTranslator(range, canvas, { isHorizontal: true });
+
+    assert.strictEqual(adjust(translator.getMinBarSize(170)), 10);
+    assert.strictEqual(adjust(translator.getMinBarSize(510)), 1000);
 });
 
 QUnit.module('checkMinBarSize', environment);
 
-QUnit.test('Simple use (logarithmic translator)', function(assert) {
+QUnit.test('Should return correct minBarSize for series with stack', function(assert) {
     const range = $.extend({}, logarithmicRange, { min: 1, max: 1000, minVisible: 1, maxVisible: 1000, invert: false });
     const canvas = $.extend({}, canvasTemplate);
     const translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
-    assert.equal(adjust(translator.checkMinBarSize(5, 2, 5)), 5);
-    assert.equal(adjust(translator.checkMinBarSize(5, 7, 5)), 7);
-    assert.equal(adjust(translator.checkMinBarSize(5, 2, 8)), 5);
-    assert.equal(adjust(translator.checkMinBarSize(5, 7, 12)), 42);
+    assert.strictEqual(adjust(translator.checkMinBarSize(5, 2, 5)), 5);
+    assert.strictEqual(adjust(translator.checkMinBarSize(5, 7, 5)), 7);
+    assert.strictEqual(adjust(translator.checkMinBarSize(5, 2, 8)), 5);
+    assert.strictEqual(adjust(translator.checkMinBarSize(5, 7, 12)), 42);
+});
+
+QUnit.test('Should return correct minBarSize for series without stack', function(assert) {
+    const range = $.extend({}, logarithmicRange, { min: 1, max: 1000, minVisible: 1, maxVisible: 1000, invert: false });
+    const canvas = $.extend({}, canvasTemplate);
+    const translator = this.createTranslator(range, canvas, { isHorizontal: false });
+
+    assert.strictEqual(adjust(translator.checkMinBarSize(5, 2)), 5);
+    assert.strictEqual(adjust(translator.checkMinBarSize(5, 7)), 7);
 });
 
 QUnit.module('Change translator type on the fly', environment);

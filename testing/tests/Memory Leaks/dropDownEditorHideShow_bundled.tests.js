@@ -3,7 +3,7 @@ const DropDownEditor = require('ui/drop_down_editor/ui.drop_down_editor');
 const GoogleProvider = require('ui/map/provider.dynamic.google');
 const memoryLeaksHelper = require('../../helpers/memoryLeaksHelper.js');
 
-require('bundles/modules/parts/widgets-all');
+require('bundles/modules/parts/widgets-web');
 
 GoogleProvider.remapConstant('http://fakeUrl');
 

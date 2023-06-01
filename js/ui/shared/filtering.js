@@ -1,5 +1,4 @@
 import { isDate, isDefined } from '../../core/utils/type';
-import { inArray } from '../../core/utils/array';
 import { map } from '../../core/utils/iterator';
 
 const DEFAULT_DATE_INTERVAL = ['year', 'month', 'day'];
@@ -18,7 +17,7 @@ const getGroupInterval = function(column) {
 
     if(isDateType(column.dataType) && groupInterval !== null) {
         result = column.dataType === 'datetime' ? DEFAULT_DATETIME_INTERVAL : DEFAULT_DATE_INTERVAL;
-        index = inArray(interval, dateIntervals);
+        index = dateIntervals.indexOf(interval);
 
         if(index >= 0) {
             result = dateIntervals.slice(0, index);
@@ -177,7 +176,7 @@ export default (function() {
                 return getFilterExpressionForDate.apply(column, arguments);
             } else if(dataType === 'number') {
                 return getFilterExpressionForNumber.apply(column, arguments);
-            } else if(dataType !== 'object') {
+            } else {
                 filter = [selector, selectedFilterOperation || '=', filterValue];
             }
 

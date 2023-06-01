@@ -2503,6 +2503,19 @@ QUnit.test('Translate when value = minValue', function(assert) {
     assert.equal(pt.minY, 555);
 });
 
+// T1123669
+QUnit.test('Value & minValue translation. Translate method args', function(assert) {
+    const getMockTranslator = () => ({ translate: sinon.spy() });
+    this.translators = { arg: getMockTranslator(), val: getMockTranslator() };
+    const point = createPoint(this.series, { argument: 1, value: 5, minValue: 3 }, this.opt);
+
+    point.translate();
+
+    assert.strictEqual(this.translators.val.translate.callCount, 3);
+    assert.deepEqual(this.translators.val.translate.firstCall.args, [5, 1], 'value translation');
+    assert.deepEqual(this.translators.val.translate.secondCall.args, [3, -1], 'minValue translation');
+});
+
 QUnit.test('Translate when minValue = null', function(assert) {
     this.setContinuousTranslators();
     const pt = createPoint(this.series, { argument: 1, value: 5 }, this.opt);

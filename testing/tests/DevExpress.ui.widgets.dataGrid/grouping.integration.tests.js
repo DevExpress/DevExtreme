@@ -12,9 +12,14 @@ const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
 QUnit.testStart(function() {
     const markup = `
+        <style nonce="qunit-test">
+            #dataGridWithStyle {
+                width: 500px;
+            }
+        </style>
         <div id="container">
             <div id="dataGrid"></div>
-            <div id="dataGridWithStyle" style="width: 500px;"></div>
+            <div id="dataGridWithStyle"></div>
         </div>
     `;
 
@@ -30,7 +35,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Cells in group row should not have \'dx-col-fixed\' class (T852898)', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [
                     { id: 1, value: 'value 1' }
@@ -116,17 +121,17 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 autoExpandAll: false
             }
         }).dxDataGrid('instance');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow([0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.expandRow([0, 0]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         dataGrid.columnOption('cityId', 'groupIndex', undefined);
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
 
@@ -148,7 +153,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }];
 
         $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: loadResult,
             keyExpr: 'ID',
             showBorders: true,
@@ -185,7 +190,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Check grouping context menu operability', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             grouping: {
                 contextMenuEnabled: true
             },
@@ -241,16 +246,16 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         }).dxDataGrid('instance');
         const $dataGrid = $(dataGrid.element());
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal($dataGrid.find('.dx-toolbar-item-invisible').length, 4, '4 toolbar items are hidden, group panel has a long message');
 
         dataGrid.columnOption('field2', 'groupIndex', 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($dataGrid.find('.dx-toolbar-item-invisible').length, 0, 'all toolbar items are visible, group panel has a group with short name');
 
         dataGrid.clearGrouping();
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal($dataGrid.find('.dx-toolbar-item-invisible').length, 4, '4 toolbar items are hidden after clear grouping');
     });
 
@@ -260,7 +265,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             sorting: {
                 mode: 'none'
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             allowGrouping: true,
             grouping: {
                 contextMenuEnabled: true
@@ -288,7 +293,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Ungroup one column via group row context menu', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', { dataField: 'field2', groupIndex: 1, showWhenGrouped: true }, { dataField: 'field3', groupIndex: 0, showWhenGrouped: true }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             sorting: {
                 mode: 'none'
             },
@@ -321,7 +326,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Ungroup all columns via group row context menu', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', { dataField: 'field2', groupIndex: 1, showWhenGrouped: true }, { dataField: 'field3', groupIndex: 0, showWhenGrouped: true }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             allowGrouping: true,
             grouping: {
                 contextMenuEnabled: true
@@ -349,7 +354,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Grouping with context menu - check custom texts', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2', { dataField: 'field3', showWhenGrouped: true }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             grouping: {
                 contextMenuEnabled: true,
                 texts: {
@@ -378,7 +383,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Context menu does not have grouping items when \'contextMenuEnabled\' is false', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2', 'field3'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             allowGrouping: false,
             grouping: {
                 contextMenuEnabled: false
@@ -405,7 +410,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $('#container').width(600);
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ firstName: 'Blablabla', lastName: 'Psy', age: 40 }],
             columns: [{ dataField: 'firstName', hidingPriority: 0, groupIndex: 0 }, { dataField: 'lastName', hidingPriority: 1 }, { dataField: 'age', hidingPriority: 2 }]
         });
@@ -413,7 +418,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const adaptiveColumnsController = instance.getController('adaptiveColumns');
         let $visibleColumns;
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $visibleColumns = $(instance.$element().find('.dx-header-row td:not(.dx-datagrid-group-space)'));
 
@@ -425,7 +430,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         $('#container').width(150);
         instance.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
         $visibleColumns = $(instance.$element().find('.dx-header-row td:not(.dx-datagrid-group-space)'));
 
         // assert
@@ -444,7 +449,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, act
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{}],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             scrolling: {
                 columnRenderingMode: 'virtual'
             },
@@ -485,7 +490,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const columnController = dataGrid.getController('columns');
 
@@ -517,14 +522,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }, 'field2']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const columnController = dataGrid.getController('columns');
 
         // act
         columnController.moveColumn(0, 1, 'group', 'headers');
         cellTemplateCallCount = 0;
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(cellTemplateCallCount, 2, 'cellTemplate call count');
@@ -535,7 +540,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         let loadResult = $.Deferred().resolve([{}]);
         const dataGrid = createDataGrid({
             columns: ['field1', 'field2', { dataField: 'field3', fixed: true, fixedPosition: 'right' }],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             cacheEnabled: false,
             dataSource: {
                 load: function() {
@@ -561,7 +566,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         let isRowClicked = false;
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             onRowPrepared: function(args) {
                 assert.equal(typeUtils.isRenderer(args.rowElement), !!config().useJQuery, 'rowElement is correct');
                 if(args.rowType === 'group') {
@@ -592,7 +597,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Default context menu shown when click on header panel items', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 allowAdding: true
             },
@@ -615,7 +620,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Default context menu shown when click on command column', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             editing: {
                 mode: 'row',
                 allowUpdating: true,
@@ -641,7 +646,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Default context menu shown when click on rows', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', 'field2'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             grouping: {
                 contextMenuEnabled: true
             },
@@ -661,7 +666,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     QUnit.test('Show contextMenu for hidden adaptive columns', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             grouping: {
                 contextMenuEnabled: true
             },
@@ -690,6 +695,149 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getController('data')._dataSource.group(), [{ selector: 'field3', desc: false, isExpanded: true }], 'datasource grouping is up to date');
         assert.equal(dataGrid.columnOption('field3', 'groupIndex'), 0, 'Group by field3');
     });
+
+    QUnit.test('Expand cell of a group row should not be re-rendered when repaintChangesOnly is enabled (T1039699)', function(assert) {
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: {
+                store: new ArrayStore({
+                    key: 'ID',
+                    data: [{
+                        ID: 1,
+                        Count: 0,
+                        Name: 'Name 1',
+                        Category: 'Category 1'
+                    }]
+                }),
+                reshapeOnPush: true
+            },
+            repaintChangesOnly: true,
+            columns: [
+                { dataField: 'Category', groupIndex: 0 },
+                { dataField: 'Name', groupIndex: 1, autoExpandGroup: false },
+                'Count'
+            ],
+            summary: {
+                groupItems: [{
+                    summaryType: 'sum',
+                    displayFormat: '{0}',
+                    column: 'Count'
+                }]
+            },
+        }).dxDataGrid('instance');
+
+        this.clock.tick(10);
+
+        const cell0_0 = $(dataGrid.getCellElement(0, 0)).get(0);
+        const cell1_1 = $(dataGrid.getCellElement(1, 1)).get(0);
+
+        // act
+        dataGrid.getDataSource().store().push([
+            { type: 'update', key: 1, data: { Count: 100 } }
+        ]);
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual($(dataGrid.getCellElement(0, 0)).get(0), cell0_0, 'expand cell in the first row is not re-rendered');
+        assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), 'Category: Category 1 (100)', 'first group row text');
+        assert.strictEqual($(dataGrid.getCellElement(1, 1)).get(0), cell1_1, 'expand cell in the second row is not re-rendered');
+        assert.strictEqual($(dataGrid.getCellElement(1, 2)).text(), 'Name: Name 1 (100)', 'second group row text');
+    });
+
+    QUnit.test('Load options should contain the \'langParams\' parameter after expanding groups', function(assert) {
+        // arrange
+        const arrayStore = new ArrayStore({
+            key: 'id',
+            data: [
+                { id: 0, text1: 'izmir', text2: 'test', groupId: 0 },
+                { id: 1, text1: 'İzmi̇r', text2: 'test', groupId: 0 },
+                { id: 2, text1: 'İZMİR', text2: 'iz', groupId: 0 },
+                { id: 3, text1: 'İZMİR', text2: 'İz', groupId: 0 },
+                { id: 4, text1: 'İZMİR', text2: 'İZ', groupId: 0 },
+                { id: 5, text1: 'Test', text2: 'test', groupId: 1 },
+            ]
+        });
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: {
+                key: 'id',
+                sort: 'text2',
+                langParams: {
+                    locale: 'tr',
+                    collatorOptions: { caseFirst: 'upper' }
+                },
+                load: function(options) {
+                    const d = $.Deferred();
+
+                    // assert
+                    assert.notEqual(options.langParams, undefined, 'loadOptions.langParams is defined');
+
+                    setTimeout(function() {
+                        const result = {};
+                        arrayStore.load(options).done(function(data) {
+                            result.data = data;
+
+                            if(options.group) {
+                                data.forEach(item => {
+                                    item.count = item.items.length;
+                                    item.items = null;
+                                });
+                            }
+                        });
+                        if(options.requireGroupCount) {
+                            arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
+                                result.groupCount = groupedData.length;
+                            });
+                        }
+                        if(options.requireTotalCount) {
+                            arrayStore.totalCount(options).done(function(totalCount) {
+                                result.totalCount = totalCount;
+                            });
+                        }
+
+                        d.resolve(result);
+                    });
+
+                    return d;
+                },
+                group: [{
+                    selector: 'groupId',
+                    isExpanded: false
+                }, {
+                    selector: 'text1',
+                    isExpanded: false
+                }]
+            },
+            remoteOperations: {
+                groupPaging: true
+            },
+            groupPanel: {
+                visible: true
+            },
+            grouping: {
+                autoExpandAll: false
+            }
+        }).dxDataGrid('instance');
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows().length, 2, 'row count');
+        assert.deepEqual(dataGrid.getVisibleRows().map((row) => row.data.key), [0, 1], 'visible rows');
+
+        // act
+        dataGrid.expandRow([0]);
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows().length, 5, 'row count');
+        assert.deepEqual(dataGrid.getVisibleRows().map((row) => row.data.key), [0, 'İZMİR', 'izmir', 'İzmi̇r', 1], 'visible rows');
+
+        dataGrid.expandRow([0, 'İZMİR']);
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows().length, 8, 'row count');
+        assert.deepEqual(dataGrid.getVisibleRows().map((row) => row.rowType === 'group' ? row.data.key : row.data.text2), [0, 'İZMİR', 'İZ', 'İz', 'iz', 'izmir', 'İzmi̇r', 1], 'visible rows');
+    });
 });
 
 
@@ -706,7 +854,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
 
         const dataGrid = createDataGrid(options);
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         options.dataSource.store().on('loading', loadingSpy);
 
@@ -717,7 +865,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         options.paging = {};
 
         dataGrid.option(options);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(loadingSpy.callCount, 1, 'loading called once');
@@ -735,12 +883,12 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             columns: [{ dataField: 'field1', showWhenGrouped: true }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         $dataGrid.dxDataGrid('instance').columnOption('field1', 'groupIndex', 0);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const cols = $dataGrid.find('colgroup').first().children();
@@ -757,7 +905,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         dataGrid.option('dataSource', [{ a: 1, b: 2 }]);
         dataGrid.option('columns', ['a', { dataField: 'b', groupIndex: 0 }]);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getVisibleRows()[0].rowType, 'group', 'first row type is group');
@@ -774,11 +922,11 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.columnOption(0, { groupIndex: 0 });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $groupPanelItems = $('#dataGrid').find('.dx-group-panel-item');
@@ -802,12 +950,12 @@ QUnit.module('Assign options', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const toolbar = dataGrid.$element().find('.dx-toolbar').dxToolbar('instance');
         toolbar.option('items', toolbar.option('items'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const $groupPanelItems = $('#dataGrid').find('.dx-toolbar .dx-datagrid-drag-action');
@@ -820,7 +968,7 @@ QUnit.module('Assign options', baseModuleConfig, () => {
     QUnit.test('Hide group panel and search panel when calculateDisplayValue is defined', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [
                 { field1: 1, field2: 'test1', field3: 'test2' },
                 { field1: 2, field2: 'test3', field3: 'test4' }
@@ -847,6 +995,31 @@ QUnit.module('Assign options', baseModuleConfig, () => {
         assert.strictEqual(visibleColumns[1].dataField, 'field2', 'dataField of the second column');
         assert.strictEqual(visibleColumns[1].groupIndex, 1, 'groupIndex of the second column');
     });
+
+    QUnit.test('Changing grouping.autoExpandAll after column\'s groupIndex', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: ['field1', 'field2'],
+            groupPanel: { visible: true },
+            grouping: {
+                autoExpandAll: true
+            },
+            dataSource: [{ field1: '1', field2: '2' }, { field1: '3', field2: '4' }, { field1: '5', field2: '6' }]
+        }).dxDataGrid('instance');
+
+        this.clock.tick(10);
+
+        // act
+        dataGrid.columnOption(0, { groupIndex: 0 });
+        dataGrid.option('grouping.autoExpandAll', false);
+        this.clock.tick(10);
+
+        // assert
+        const $groupPanelItems = $('#dataGrid').find('.dx-group-panel-item');
+
+        assert.equal($groupPanelItems.length, 1, 'count of group panel items');
+    });
+
 });
 
 
@@ -856,7 +1029,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         const dataGrid = createDataGrid({
             rtlEnabled: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [{ field1: '1', field2: '2', field3: '3', field4: '4', field5: '5' }]
             },
@@ -897,17 +1070,17 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const dataGrid = $dataGrid.dxDataGrid('instance');
         const columnController = dataGrid.getController('columns');
 
-        this.clock.tick();
+        this.clock.tick(10);
         // act
         const gridInitialWidth = $dataGrid.outerWidth();
 
         columnController.moveColumn(2, 0, 'headers', 'group');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const gridWidthAfterGrouping = $dataGrid.outerWidth();
 
         columnController.moveColumn(0, 1, 'group', 'headers');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const gridWidthAfterUngrouping = $dataGrid.outerWidth();
 
@@ -927,12 +1100,12 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 'test1', field2: 'test2' }, { field1: 'test3', field2: 'test4' }]
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
         calculateCellValue.reset();
 
         // act
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(calculateCellValue.getCall(0).args[0], { field1: 'test1', field2: 'test2' }, 'calculateCellValue - first call arguments');
@@ -946,11 +1119,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 'test1', field2: 'test2' }, { field1: 'test3', field2: 'test4' }]
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.columnOption(0, 'groupIndex'), 0, 'groupIndex was not reset');
@@ -964,17 +1137,17 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 'test1', field2: 'test2' }, { field1: 'test3', field2: 'test4' }]
         });
 
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.columnOption(0, 'groupIndex', undefined);
         dataGrid.columnOption(1, 'sortOrder', undefined);
 
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.columnOption(0, 'groupIndex'), 0, 'groupIndex was returned to default');
@@ -990,7 +1163,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 { id: 2, col1: '2 1', col2: '2 2', col3: '2 3' },
                 { id: 3, col1: '3 1', col2: '3 2', col3: '3 3' }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             paging: {
                 pageSize: 2
             },
@@ -1025,7 +1198,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     QUnit.test('Column widths should be updated after expand group row if repaintChangesOnly is true', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             dataSource: [
                 { id: 1, group: 'group1' },
@@ -1078,7 +1251,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 assert.step(`rowExpanded rowCount: ${info.rowCount}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
             }
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         dataGrid.expandRow(['value1']).done(() => {
@@ -1086,12 +1259,43 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
             assert.step(`done rowCount: ${info.rowCount}, groupRow: ${info.groupRow}, dataRow: ${info.dataRow}`);
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.verifySteps([
             'rowExpanded rowCount: 2, groupRow: true, dataRow: true',
             'done rowCount: 2, groupRow: true, dataRow: true'
         ]);
+    });
+
+    QUnit.test('Grid repaint should not result in extra toolbar items (T1138904)', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [],
+            keyExpr: 'ID',
+            columns: ['a', 'b', 'c', 'd', 'e'],
+            showBorders: true,
+            toolbar: {
+                items: [{
+                    location: 'before',
+                    locateInMenu: 'never',
+                    name: 'groupPanel'
+                }, {
+                    location: 'after',
+                    locateInMenu: 'always',
+                    name: 'columnChooserButton'
+                }]
+            },
+            groupPanel: { visible: true },
+            columnChooser: { enabled: true }
+        });
+        this.clock.tick(10);
+        // assert
+        const toolbarItems = $('.dx-toolbar-button').length;
+        // act
+        dataGrid.repaint();
+        this.clock.tick(10);
+        // assert
+        assert.equal($('.dx-toolbar-button').length, toolbarItems);
     });
 });
 
@@ -1113,7 +1317,7 @@ QUnit.module('columnWidth auto option', {
 
         // act
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columnAutoWidth: true,
             columns: [{
@@ -1134,7 +1338,7 @@ QUnit.module('columnWidth auto option', {
     // T661361
     QUnit.test('Group space cells should have correct width if data rows are not visible', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ group1: 1, group2: 1, id: 1 }],
             grouping: {
                 autoExpandAll: false
@@ -1157,6 +1361,50 @@ QUnit.module('columnWidth auto option', {
         assert.equal($groupSpaceCells.length, 2, 'two group space cells in second row');
         assert.equal($groupSpaceCells.eq(0).width(), $groupSpaceCells.eq(1).width(), 'group space cell widths are equals');
     });
+
+    QUnit.test('Group row should have correct widths via setColumnWidths', function(assert) {
+        // arrange
+        $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ value0: 0, value1: 1, value2: 2 }],
+            columnAutoWidth: true,
+            width: 400,
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'always',
+            },
+            columns: [
+                {
+                    dataField: 'value0',
+                    groupIndex: 0
+                }, {
+                    dataField: 'value1',
+                    width: 100,
+                }, {
+                    dataField: 'value2',
+                    width: 100,
+                }, {
+                    dataField: 'value3',
+                    width: 100,
+                }
+            ],
+            summary: {
+                groupItems: [{
+                    column: 'value3',
+                    alignByColumn: true,
+                }]
+            },
+        });
+
+        // assert
+        const widths = $('.dx-group-row td').toArray().map(el => el.style.width);
+        assert.deepEqual(widths, [
+            '', // select column, no width
+            '', // expand column, no width
+            '', // group column, no width
+            '100px', // summary column, has width
+        ]);
+    });
 });
 
 
@@ -1165,7 +1413,7 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
         // arrange
         const headerPanelWrapper = dataGridWrapper.headerPanel;
         createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ field1: 1, field2: 2, field3: 3 }],
             groupPanel: {
                 visible: true

@@ -1,10 +1,11 @@
 @use "../sizes" as *;
 @use "../button/colors" as *;
+@use "../toolbar/sizes" as *;
 
 // adduse
 
 $material-scheduler-workspace-date-table-cell-height: null !default;
-$material-scheduler-header-height: null !default;
+$material-scheduler-toolbar-item-offset: null !default;
 $material-scheduler-navigator-height: null !default;
 $material-scheduler-header-panel-day-font-size: null !default;
 $material-scheduler-appointment-tooltip-title-font-size: null !default;
@@ -22,11 +23,11 @@ $material-scheduler-appointment-tooltip-title-margin-top: null !default;
 $material-scheduler-appointment-tooltip-remove-padding-top: null !default;
 
 $scheduler-left-column-width: 65px !default;
+$material-scheduler-timeline-date-table-cell-height: 50px !default;
 $material-scheduler-navigator-border-radius: $button-border-radius !default;
 $material-scheduler-navigation-buttons-padding: 6px !default;
+$material-scheduler-navigator-icon-font-size: $material-base-icon-size;
 $material-scheduler-appointment-month-text-size: 12px !default;
-$material-scheduler-appointment-title-text-size: 12px !default;
-$material-scheduler-appointment-date-text-size: 10px !default;
 $material-scheduler-workspace-info-text-size: 16px !default;
 $material-scheduler-all-day-title-font-size: 12px !default;
 $material-scheduler-time-panel-font-size: 12px !default;
@@ -40,10 +41,16 @@ $material-scheduler-appointment-tooltip-width: 300px !default;
 $material-scheduler-workspace-month-header-height: 22px !default;
 $material-scheduler-workspace-month-timeline--time-height: 34px !default;
 
+$agenda-appointment-title-font-size: null !default;
+$material-scheduler-header-height: $material-toolbar-height + 2px !default;
+
+$scheduler-timeline-cell-height: 50px !default;
+
+
 @if $size == "default" {
   $material-scheduler-workspace-date-table-cell-height: 38px !default;
 
-  $material-scheduler-header-height: 64px !default;
+  $material-scheduler-toolbar-item-offset: 0 16px !default;
   $material-scheduler-navigator-height: 36px !default;
   $material-scheduler-header-panel-day-font-size: 30px !default;
 
@@ -63,12 +70,14 @@ $material-scheduler-workspace-month-timeline--time-height: 34px !default;
   $material-tooltip-marker-dimension: 24px !default;
   $material-scheduler-appointment-tooltip-title-margin-top: 4px !default;
   $material-scheduler-appointment-tooltip-remove-padding-top: 1px !default;
+
+  $agenda-appointment-title-font-size: 14px;
 }
 
 @else if $size == "compact" {
   $material-scheduler-workspace-date-table-cell-height: 28px !default;
 
-  $material-scheduler-header-height: 48px !default;
+  $material-scheduler-toolbar-item-offset: 0 11px !default;
   $material-scheduler-navigator-height: 28px !default;
   $material-scheduler-header-panel-day-font-size: 20px !default;
 
@@ -88,4 +97,6 @@ $material-scheduler-workspace-month-timeline--time-height: 34px !default;
   $material-tooltip-marker-dimension: 18px !default;
   $material-scheduler-appointment-tooltip-title-margin-top: 3px !default;
   $material-scheduler-appointment-tooltip-remove-padding-top: 2px !default;
+
+  $agenda-appointment-title-font-size: 13px;
 }

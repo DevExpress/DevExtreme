@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$material-daterangebox-active-bar-horizontal-margin: null !default;
+
+@if $size == "default" {
+  $material-daterangebox-active-bar-horizontal-margin: 15px !default;
+}
+
+@else if $size == "compact" {
+  $material-daterangebox-active-bar-horizontal-margin: 11px !default;
+}

@@ -1,4 +1,0 @@
-name: my_project
-dev_dependencies:
-  sass: ^1.26.10
-  path: ^1.7.0

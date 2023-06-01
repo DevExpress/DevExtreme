@@ -1,12 +1,11 @@
 import errorUtils from '../core/utils/error';
 import coreErrors from '../core/errors';
-let handlers = {};
 
 /**
 * @docid
 * @name ErrorsData
 */
-const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
+export const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
 
     /**
     * @name ErrorsData.E4000
@@ -149,31 +148,14 @@ const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     W4002: 'Data loading has failed for some cells due to the following error: {0}'
 });
 
-// todo: add some logic
-function handleError(error) {
-    let id = 'E4000';
-    if(error && '__id' in error) {
-        id = error.__id;
-    }
-
-    errors.log(id, error);
-}
-
-const errorHandler = null;
-const _errorHandler = function(error) {
+export let errorHandler = null;
+export const handleError = function(error) {
     ///#DEBUG
-    handleError(error);
+    const id = error && '__id' in error ? error.__id : 'E4000';
+    errors.log(id, error);
     ///#ENDDEBUG
 
-    if(handlers.errorHandler) {
-        handlers.errorHandler(error);
-    }
+    errorHandler?.(error);
 };
 
-handlers = {
-    errors: errors,
-    errorHandler: errorHandler,
-    _errorHandler: _errorHandler
-};
-
-export default handlers;
+export const setErrorHandler = (handler) => errorHandler = handler;

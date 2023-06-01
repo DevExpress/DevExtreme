@@ -14,6 +14,10 @@ export default class ItemOptionAction {
         return this._itemsRunTimeInfo.findItemContainerByItem(this._options.item);
     }
 
+    findPreparedItem() {
+        return this._itemsRunTimeInfo.findPreparedItemByItem(this._options.item);
+    }
+
     tryExecute() {
         Class.abstract();
     }

@@ -1,8 +1,7 @@
 artifacts/*
 js/viz/docs/*
 node_modules/*
-testing/helpers/sinon/*
-*.d.ts
+build/*
 *.j.tsx
 playground/*
 themebuilder/data/metadata/*
@@ -11,3 +10,6 @@ themebuilder-scss/coverage/*
 themebuilder-scss/src/data/metadata/*
 js/bundles/dx.custom.js
 testing/jest/utils/transformers/*
+ts/
+js/localization/cldr-data/*
+js/localization/default_messages.js

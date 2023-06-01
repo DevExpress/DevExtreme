@@ -7,6 +7,7 @@ $generic-scheduler-workspace-date-table-cell-height: null !default;
 $generic-scheduler-timeline-date-table-cell-height: null !default;
 $generic-scheduler-header-panel-top-gap: null !default;
 $generic-scheduler-header-height: null !default;
+$generic-scheduler-toolbar-item-offset: null !default;
 $generic-scheduler-navigator-height: null !default;
 $generic-scheduler-navigation-buttons-padding: null !default;
 $generic-scheduler-appointment-month-text-size: null !default;
@@ -21,6 +22,9 @@ $generic-scheduler-appointment-transparent-left-border: null !default;
 $generic-scheduler-appointment-transparent-right-border: null !default;
 $generic-scheduler-appointment-collector-height: null !default;
 
+$agenda-appointment-title-font-size: null !default;
+$scheduler-timeline-cell-height: null !default;
+
 $scheduler-left-column-width: 100px !default;
 $generic-scheduler-navigator-border-radius: $button-border-radius !default;
 $generic-scheduler-group-header-agenda-font-size: 14px !default;
@@ -32,6 +36,7 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-header-panel-top-gap: 10px !default;
 
   $generic-scheduler-header-height: 56px !default;
+  $generic-scheduler-toolbar-item-offset: 9px !default;
   $generic-scheduler-navigator-height: 36px !default;
   $generic-scheduler-navigation-buttons-padding: 6px !default;
 
@@ -49,6 +54,10 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-appointment-transparent-right-border: 2px solid transparent !default;
 
   $generic-scheduler-appointment-collector-height: 20px !default;
+
+  $agenda-appointment-title-font-size: 16px;
+
+  $scheduler-timeline-cell-height: 78px !default;
 }
 
 @else if $size == "compact" {
@@ -58,6 +67,7 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-header-panel-top-gap: 5px !default;
 
   $generic-scheduler-header-height: 39px !default;
+  $generic-scheduler-toolbar-item-offset: 5px !default;
   $generic-scheduler-navigator-height: 25px !default;
   $generic-scheduler-navigation-buttons-padding: 4px !default;
 
@@ -75,4 +85,8 @@ $generic-scheduler-group-header-agenda-font-size: 14px !default;
   $generic-scheduler-appointment-transparent-right-border: 1px solid transparent !default;
 
   $generic-scheduler-appointment-collector-height: 17px !default;
+
+  $agenda-appointment-title-font-size: 16px;
+
+  $scheduler-timeline-cell-height: 50px !default;
 }

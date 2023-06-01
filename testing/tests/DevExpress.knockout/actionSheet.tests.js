@@ -5,6 +5,12 @@ const ko = require('knockout');
 require('ui/action_sheet');
 require('integration/knockout');
 
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('actionSheet');
+} else {
+    QUnit.module.skip('actionSheet');
+}
+
 QUnit.testStart(function() {
     const markup =
         '<div id="testItemTemplate">\

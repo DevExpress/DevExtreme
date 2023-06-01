@@ -5,7 +5,6 @@ import 'ui/scroll_view/ui.scrollable';
 import 'ui/box';
 import 'ui/responsive_box';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const SCROLLABLE_ID = 'my_scrollable';
@@ -14,10 +13,15 @@ const PLACEMENT_INSIDE_BOX = 'insideBox';
 const PLACEMENT_INSIDE_RESPONSIVE_BOX = 'insideResponsiveBox';
 
 function appendScrollableTo(appendTo, id, nestedElementWidth, nestedElementHeight, useNativeScrolling, width, height) {
-    const $scrollable = $(`
-        <div id="${id}" style="background-color: orange">
-            <div style="width: ${nestedElementWidth}px; height: ${nestedElementHeight}px; background-color: green"></div>
-        </div>`);
+    const $scrollable = $(`<div id="${id}"></div>`)
+        .css('background-color', 'orange')
+        .append(
+            $('<div>').css({
+                width: `${nestedElementWidth}px`,
+                height: `${nestedElementHeight}px`,
+                backgroundColor: 'green'
+            })
+        );
 
     $(appendTo).append($scrollable);
 
@@ -31,7 +35,7 @@ function appendScrollableTo(appendTo, id, nestedElementWidth, nestedElementHeigh
 
 QUnit.module('Size of one scrollable standalone/inside Box/inside ResponsiveBox', {
     beforeEach: function() {
-        this.$container = $('<div style="background-color: blue"></div>');
+        this.$container = $('<div>').css('background-color', 'blue');
         $('#qunit-fixture').append(this.$container);
     },
     afterEach: function() {
@@ -47,7 +51,6 @@ QUnit.module('Size of one scrollable standalone/inside Box/inside ResponsiveBox'
             function appendOneScrollable($appendTo, { id, width, height, nestedElementWidth, nestedElementHeight }) {
                 if(placement === PLACEMENT_INSIDE_RESPONSIVE_BOX) {
                     $appendTo.dxResponsiveBox({
-                        _layoutStrategy: 'flex',
                         width,
                         height,
                         dataSource: [{
@@ -59,7 +62,6 @@ QUnit.module('Size of one scrollable standalone/inside Box/inside ResponsiveBox'
                     });
                 } else if(placement === PLACEMENT_INSIDE_BOX) {
                     $appendTo.dxBox({
-                        _layoutStrategy: 'flex',
                         width,
                         height,
                         direction: 'row',
@@ -178,7 +180,7 @@ QUnit.module('Size of one scrollable standalone/inside Box/inside ResponsiveBox'
 
 QUnit.module('Size of two scrollables inside Box/Responsive', {
     beforeEach: function() {
-        this.$container = $('<div style="background-color: blue"></div>');
+        this.$container = $('<div>').css('background-color', 'blue');
         $('#qunit-fixture').append(this.$container);
     },
     afterEach: function() {
@@ -193,7 +195,6 @@ QUnit.module('Size of two scrollables inside Box/Responsive', {
             const testContext = `[useNativeScrolling: ${useNativeScrolling}, placement: ${placement}]`;
 
             function appendToResponsiveBox($responsiveBox, responsiveBoxConfig) {
-                responsiveBoxConfig._layoutStrategy = 'flex';
                 responsiveBoxConfig.itemTemplate = function(data, index, element) {
                     appendScrollableTo(element, SCROLLABLE_ID + index, responsiveBoxConfig.nestedElementWidth, responsiveBoxConfig.nestedElementHeight, useNativeScrolling);
                 };
@@ -202,7 +203,6 @@ QUnit.module('Size of two scrollables inside Box/Responsive', {
             }
 
             function appendToBox($box, boxConfig) {
-                boxConfig._layoutStrategy = 'flex';
                 boxConfig.items = [{ ratio: 1 }, { ratio: 1 }];
                 boxConfig.itemTemplate = function(data, index, element) {
                     appendScrollableTo(element, SCROLLABLE_ID + index, boxConfig.nestedElementWidth, boxConfig.nestedElementHeight, useNativeScrolling);

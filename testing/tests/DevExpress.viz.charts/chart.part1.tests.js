@@ -80,6 +80,21 @@ QUnit.test('Clear hover after series updating', function(assert) {
     assert.equal(commons.getTrackerStub().stub('clearHover').callCount, 1);
 });
 
+// T1004608
+QUnit.test('Refresh chart when series hovered', function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+
+    const chart = this.createChart({ series: [{ name: 'series1' }] });
+
+    commons.getTrackerStub().stub('clearHover').reset();
+
+    // act
+    chart.refresh();
+
+    assert.equal(commons.getTrackerStub().stub('clearHover').callCount, 0);
+});
+
 QUnit.test('Create Tracker.', function(assert) {
     this.themeManager.getOptions.withArgs('pointSelectionMode').returns('pointSelectionModeWithTheme');
     this.themeManager.getOptions.withArgs('seriesSelectionMode').returns('serieSelectionModeWithTheme');
@@ -547,7 +562,8 @@ QUnit.test('Loading indicator is kept shown when data source is not defined', fu
 QUnit.test('Stop all animations on resize callback when container is resized', function(assert) {
     // arrange
     const chart = this.createChart({
-        dataSource: [{}]
+        dataSource: [{}],
+        redrawOnResize: 'windowOnly'
     });
     chart._renderer.stopAllAnimations.reset();
     this.$container.width(500);
@@ -945,7 +961,7 @@ QUnit.test('handle render complete after any option changed', function(assert) {
 QUnit.module('drawn', $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.call(this);
-        sinon.stub(BaseChart.prototype, '_drawn', sinon.spy());
+        sinon.stub(BaseChart.prototype, '_drawn').callsFake(sinon.spy());
     },
     afterEach: function() {
         commons.environment.afterEach.call(this);

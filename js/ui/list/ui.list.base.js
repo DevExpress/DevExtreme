@@ -1,7 +1,8 @@
+import { getHeight, getOuterHeight, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { ensureDefined, noop } from '../../core/utils/common';
-import { isPlainObject } from '../../core/utils/type';
+import { isDefined, isPlainObject } from '../../core/utils/type';
 import { getImageContainer } from '../../core/utils/icon';
 import { getPublicElement } from '../../core/element';
 import { each } from '../../core/utils/iterator';
@@ -25,6 +26,8 @@ import CollectionWidget from '../collection/ui.collection_widget.live_update';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 import { Deferred } from '../../core/utils/deferred';
 import DataConverterMixin from '../shared/grouped_data_converter_mixin';
+import { getElementMargin } from '../../renovation/ui/scroll_view/utils/get_element_style';
+import Guid from '../../core/guid';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -71,7 +74,7 @@ export const ListBase = CollectionWidget.inherit({
 
         function getEdgeVisibleItem(direction) {
             const scrollTop = that.scrollTop();
-            const containerHeight = that.$element().height();
+            const containerHeight = getHeight(that.$element());
 
             let $item = $(that.option('focusedElement'));
             let isItemVisible = true;
@@ -87,7 +90,7 @@ export const ListBase = CollectionWidget.inherit({
                     break;
                 }
 
-                const nextItemLocation = $nextItem.position().top + $nextItem.outerHeight() / 2;
+                const nextItemLocation = $nextItem.position().top + getOuterHeight($nextItem) / 2;
                 isItemVisible = nextItemLocation < containerHeight + scrollTop && nextItemLocation > scrollTop;
 
                 if(isItemVisible) {
@@ -102,7 +105,7 @@ export const ListBase = CollectionWidget.inherit({
             let resultPosition = $item.position().top;
 
             if(direction === 'prev') {
-                resultPosition = $item.position().top - that.$element().height() + $item.outerHeight();
+                resultPosition = $item.position().top - getHeight(that.$element()) + getOuterHeight($item);
             }
 
             that.scrollTo(resultPosition);
@@ -125,12 +128,13 @@ export const ListBase = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-
             hoverStateEnabled: true,
 
             pullRefreshEnabled: false,
 
             scrollingEnabled: true,
+
+            selectByClick: true,
 
             showScrollbar: 'onScroll',
 
@@ -187,15 +191,12 @@ export const ListBase = CollectionWidget.inherit({
             activeStateEnabled: true,
 
             _itemAttributes: { 'role': 'option' },
-            _listAttributes: { 'role': 'listbox' },
 
             useInkRipple: false,
 
             wrapItemText: false,
 
             _swipeEnabled: true,
-
-            _revertPageOnEmptyLoad: false,
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
@@ -319,25 +320,16 @@ export const ListBase = CollectionWidget.inherit({
             return;
         }
 
-        this.callBase(e);
+        return this.callBase(e);
     },
 
     _allowDynamicItemsAppend: function() {
         return true;
     },
 
-    _resetDataSourcePageIndex: function() {
-        const currentDataSource = this.getDataSource();
-
-        if(currentDataSource && currentDataSource.pageIndex() !== 0) {
-            currentDataSource.pageIndex(0);
-            currentDataSource.load();
-        }
-    },
-
     _init: function() {
         this.callBase();
-        this._resetDataSourcePageIndex();
+        this._dataController.resetDataSourcePageIndex();
         this._$container = this.$element();
 
         this._initScrollView();
@@ -367,6 +359,10 @@ export const ListBase = CollectionWidget.inherit({
         return this.option('grouped');
     },
 
+    _getGroupContainerByIndex: function(groupIndex) {
+        return this._itemContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex).find(`.${LIST_GROUP_BODY_CLASS}`);
+    },
+
     _dataSourceFromUrlLoadMode: function() {
         return 'raw';
     },
@@ -374,9 +370,11 @@ export const ListBase = CollectionWidget.inherit({
     _initScrollView: function() {
         const scrollingEnabled = this.option('scrollingEnabled');
         const pullRefreshEnabled = scrollingEnabled && this.option('pullRefreshEnabled');
-        const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataSource;
+        const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataController.getDataSource();
 
         this._scrollView = this._createComponent(this.$element(), getScrollView(), {
+            height: this.option('height'),
+            width: this.option('width'),
             disabled: this.option('disabled') || !scrollingEnabled,
             onScroll: this._scrollHandler.bind(this),
             onPullDown: pullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
@@ -390,7 +388,7 @@ export const ListBase = CollectionWidget.inherit({
             pulledDownText: this.option('pulledDownText'),
             refreshingText: this.option('refreshingText'),
             reachBottomText: this.option('pageLoadingText'),
-            useKeyboard: false
+            useKeyboard: false,
         });
 
         this._$container = $(this._scrollView.content());
@@ -445,22 +443,28 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _updateLoadingState: function(tryLoadMore) {
-        const isDataLoaded = !tryLoadMore || this._isLastPage();
-        const scrollBottomMode = this._scrollBottomMode();
-        const stopLoading = isDataLoaded || !scrollBottomMode;
-        const hideLoadIndicator = stopLoading && !this._isDataSourceLoading();
+        const dataController = this._dataController;
+        const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && !dataController.isLoading() && !this._isLastPage();
 
-        if(stopLoading || this._scrollViewIsFull()) {
-            this._scrollView.release(hideLoadIndicator);
+        if(this._shouldContinueLoading(shouldLoadNextPage)) {
+            this._infiniteDataLoading();
+        } else {
+            this._scrollView.release(!shouldLoadNextPage && !dataController.isLoading());
             this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
             this._loadIndicationSuppressed(false);
-        } else {
-            this._infiniteDataLoading();
         }
     },
 
     _shouldRenderNextButton: function() {
-        return this._nextButtonMode() && this._dataSource && this._dataSource.isLoaded();
+        return this._nextButtonMode() && this._dataController.isLoaded();
+    },
+
+    _isDataSourceFirstLoadCompleted: function(newValue) {
+        if(isDefined(newValue)) {
+            this._isFirstLoadCompleted = newValue;
+        }
+
+        return this._isFirstLoadCompleted;
     },
 
     _dataSourceLoadingChangedHandler: function(isLoading) {
@@ -471,22 +475,28 @@ export const ListBase = CollectionWidget.inherit({
         if(isLoading && this.option('indicateLoading')) {
             this._showLoadingIndicatorTimer = setTimeout((function() {
                 const isEmpty = !this._itemElements().length;
-                if(this._scrollView && !isEmpty) {
-                    this._scrollView.startLoading();
+                const shouldIndicateLoading = !isEmpty || this._isDataSourceFirstLoadCompleted();
+                if(shouldIndicateLoading) {
+                    this._scrollView?.startLoading();
                 }
             }).bind(this));
         } else {
             clearTimeout(this._showLoadingIndicatorTimer);
             this._scrollView && this._scrollView.finishLoading();
         }
+        if(!isLoading) {
+            this._isDataSourceFirstLoadCompleted(false);
+        }
     },
 
-    _dataSourceChangedHandler: function(newItems) {
+    _dataSourceChangedHandler: function() {
         if(!this._shouldAppendItems() && hasWindow()) {
             this._scrollView && this._scrollView.scrollTo(0);
         }
 
         this.callBase.apply(this, arguments);
+
+        this._isDataSourceFirstLoadCompleted(true);
     },
 
     _refreshContent: function() {
@@ -508,48 +518,46 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _scrollViewIsFull: function() {
-        return !this._scrollView || this._scrollView.isFull();
+        const scrollView = this._scrollView;
+        return !scrollView || getHeight(scrollView.content()) > getHeight(scrollView.container());
     },
 
     _pullDownHandler: function(e) {
         this._pullRefreshAction(e);
+        const dataController = this._dataController;
 
-        if(this._dataSource && !this._isDataSourceLoading()) {
+        if(dataController.getDataSource() && !dataController.isLoading()) {
             this._clearSelectedItems();
-            this._dataSource.pageIndex(0);
-            this._dataSource.reload();
+            dataController.pageIndex(0);
+            dataController.reload();
         } else {
             this._updateLoadingState();
         }
     },
 
+    _shouldContinueLoading: function(shouldLoadNextPage) {
+        const isBottomReached = getHeight(this._scrollView.content()) - getHeight(this._scrollView.container()) < (this._scrollView.scrollOffset()?.top ?? 0);
+
+        return shouldLoadNextPage && (!this._scrollViewIsFull() || isBottomReached);
+    },
+
     _infiniteDataLoading: function() {
         const isElementVisible = this.$element().is(':visible');
 
-        if(isElementVisible && !this._scrollViewIsFull() && !this._isDataSourceLoading() && !this._isLastPage()) {
+        if(isElementVisible) {
             clearTimeout(this._loadNextPageTimer);
+
             this._loadNextPageTimer = setTimeout(() => {
-                this._loadNextPage().done(this._setPreviousPageIfNewIsEmpty.bind(this));
+                this._loadNextPage();
             });
-        }
-    },
-
-    _setPreviousPageIfNewIsEmpty: function(result) {
-        if(this.option('_revertPageOnEmptyLoad')) {
-            const dataSource = this.getDataSource();
-            const pageIndex = dataSource?.pageIndex();
-
-            if(result?.length === 0 && pageIndex > 0) {
-                this._fireContentReadyAction();
-                dataSource.pageIndex(pageIndex - 1);
-            }
         }
     },
 
     _scrollBottomHandler: function(e) {
         this._pageLoadingAction(e);
+        const dataController = this._dataController;
 
-        if(!this._isDataSourceLoading() && !this._isLastPage()) {
+        if(!dataController.isLoading() && !this._isLastPage()) {
             this._loadNextPage();
         } else {
             this._updateLoadingState();
@@ -608,8 +616,12 @@ export const ListBase = CollectionWidget.inherit({
 
         const $groupBody = $group.children('.' + LIST_GROUP_BODY_CLASS);
 
-        const startHeight = $groupBody.outerHeight();
-        const endHeight = startHeight === 0 ? $groupBody.height('auto').outerHeight() : 0;
+        const startHeight = getOuterHeight($groupBody);
+        let endHeight = 0;
+        if(startHeight === 0) {
+            setHeight($groupBody, 'auto');
+            endHeight = getOuterHeight($groupBody);
+        }
 
         $group.toggleClass(LIST_GROUP_COLLAPSED_CLASS, toggle);
 
@@ -644,7 +656,31 @@ export const ListBase = CollectionWidget.inherit({
         this.callBase();
         this.option('useInkRipple') && this._renderInkRipple();
 
-        this.setAria('role', this.option('_listAttributes').role);
+        const elementAria = {
+            'role': 'group',
+            'roledescription': 'list',
+        };
+        this.setAria(elementAria, this.$element());
+
+        this._setListAria();
+    },
+
+    _setListAria() {
+        const { items } = this.option();
+
+        const listArea = items?.length ? {
+            role: 'listbox',
+            label: 'Items'
+        } : {
+            role: undefined,
+            label: undefined
+        };
+
+        this.setAria(listArea);
+    },
+
+    _focusTarget: function() {
+        return this._itemContainer();
     },
 
     _renderInkRipple: function() {
@@ -702,8 +738,8 @@ export const ListBase = CollectionWidget.inherit({
     _nextButtonHandler: function(e) {
         this._pageLoadingAction(e);
 
-        const source = this._dataSource;
-        if(source && !source.isLoading()) {
+        const dataController = this._dataController;
+        if(dataController.getDataSource() && !dataController.isLoading()) {
             this._scrollView.toggleLoading(true);
             this._$nextButton.detach();
             this._loadIndicationSuppressed(true);
@@ -716,8 +752,17 @@ export const ListBase = CollectionWidget.inherit({
             .addClass(LIST_GROUP_CLASS)
             .appendTo(this._itemContainer());
 
+        const id = `dx-${new Guid().toString()}`;
+        const groupAria = {
+            role: 'group',
+            'labelledby': id,
+        };
+
+        this.setAria(groupAria, $groupElement);
+
         const $groupHeaderElement = $('<div>')
             .addClass(LIST_GROUP_HEADER_CLASS)
+            .attr('id', id)
             .appendTo($groupElement);
 
         const groupTemplateName = this.option('groupTemplate');
@@ -742,8 +787,8 @@ export const ListBase = CollectionWidget.inherit({
             .addClass(LIST_GROUP_BODY_CLASS)
             .appendTo($groupElement);
 
-        each(groupItemsGetter(group) || [], (function(index, item) {
-            this._renderItem(index, item, $groupBody);
+        each(groupItemsGetter(group) || [], (function(itemIndex, item) {
+            this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
         }).bind(this));
 
         this._groupRenderAction({
@@ -788,11 +833,11 @@ export const ListBase = CollectionWidget.inherit({
             this._$nextButton.remove();
             this._$nextButton = null;
         }
-        delete this._inkRipple;
         this.callBase.apply(this, arguments);
     },
 
     _dispose: function() {
+        this._isDataSourceFirstLoadCompleted(false);
         clearTimeout(this._holdTimer);
         clearTimeout(this._loadNextPageTimer);
         clearTimeout(this._showLoadingIndicatorTimer);
@@ -805,12 +850,12 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _toggleNextButton: function(value) {
-        const dataSource = this._dataSource;
+        const dataController = this._dataController;
         const $nextButton = this._getNextButton();
 
         this.$element().toggleClass(LIST_HAS_NEXT_CLASS, value);
 
-        if(value && dataSource && dataSource.isLoaded()) {
+        if(value && dataController.isLoaded()) {
             $nextButton.appendTo(this._itemContainer());
         }
 
@@ -866,6 +911,11 @@ export const ListBase = CollectionWidget.inherit({
             case 'dataSource':
                 this.callBase(args);
                 this._initScrollView();
+                this._isDataSourceFirstLoadCompleted(false);
+                break;
+            case 'items':
+                this.callBase(args);
+                this._isDataSourceFirstLoadCompleted(false);
                 break;
             case 'pullingDownText':
             case 'pulledDownText':
@@ -905,6 +955,7 @@ export const ListBase = CollectionWidget.inherit({
             case 'width':
             case 'height':
                 this.callBase(args);
+                this._scrollView.option(args.name, args.value);
                 this._scrollView.update();
                 break;
             case 'indicateLoading':
@@ -923,9 +974,8 @@ export const ListBase = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case '_swipeEnabled':
-            case '_revertPageOnEmptyLoad':
                 break;
-            case '_listAttributes':
+            case 'selectByClick':
                 break;
             default:
                 this.callBase(args);
@@ -1019,7 +1069,12 @@ export const ListBase = CollectionWidget.inherit({
     scrollToItem: function(itemElement) {
         const $item = this._editStrategy.getItemElement(itemElement);
 
-        this._scrollView.scrollToElement($item);
+        const item = $item?.get(0);
+        this._scrollView.scrollToElement(item, { bottom: getElementMargin(item, 'bottom') });
+    },
+
+    _dimensionChanged: function() {
+        this.updateDimensions();
     }
 
 }).include(DataConverterMixin);

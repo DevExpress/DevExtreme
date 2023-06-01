@@ -3,7 +3,6 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const webpackVersion = require('webpack/package.json').version;
 
 const outputDir = process.cwd();
 const sourcesDir = path.join(__dirname, '..');
@@ -15,15 +14,7 @@ const baseConfig = require('./webpack.config.js'); // eslint-disable-line node/n
 const createConfig = function(outputFile, mode) {
     const config = Object.assign({}, baseConfig);
 
-    if(webpackVersion.split('.')[0] >= 4) {
-        config.mode = mode;
-    } else if(mode === 'production') {
-        config.plugins = (config.plugins || []).concat([
-            new webpack.optimize.UglifyJsPlugin({
-                compress: { warnings: false }
-            })
-        ]);
-    }
+    config.mode = mode;
     config.context = process.cwd();
     config.entry = './' + bundle + '.config.js';
     config.output = {
@@ -34,7 +25,8 @@ const createConfig = function(outputFile, mode) {
     config.resolve = {
         alias: {
             'devextreme': sourcesDir
-        }
+        },
+        mainFields: ['main']
     };
 
     return config;

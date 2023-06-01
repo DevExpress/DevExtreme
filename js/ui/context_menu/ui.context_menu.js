@@ -8,16 +8,17 @@ import { isObject, isRenderer, isWindow, isFunction, isPlainObject, isDefined } 
 import { contains } from '../../core/utils/dom';
 import { getPublicElement } from '../../core/element';
 import { each } from '../../core/utils/iterator';
-import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
-import { hasWindow } from '../../core/utils/window';
+import { hasWindow, getWindow } from '../../core/utils/window';
 import fx from '../../animation/fx';
 import animationPosition from '../../animation/position';
 import devices from '../../core/devices';
 import { addNamespace } from '../../events/utils/index';
-import Overlay from '../overlay';
+import Overlay from '../overlay/ui.overlay';
 import MenuBase from './ui.menu_base';
 import { Deferred } from '../../core/utils/deferred';
+import { name as contextMenuEventName } from '../../events/contextmenu';
+import holdEvent from '../../events/hold';
 
 // STYLE contextMenu
 
@@ -34,6 +35,8 @@ const DX_STATE_DISABLED_CLASS = 'dx-state-disabled';
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+
 const FOCUS_UP = 'up';
 const FOCUS_DOWN = 'down';
 const FOCUS_LEFT = 'left';
@@ -48,6 +51,8 @@ const ACTIONS = [
 ];
 const LOCAL_SUBMENU_DIRECTIONS = [FOCUS_UP, FOCUS_DOWN, FOCUS_FIRST, FOCUS_LAST];
 const DEFAULT_SHOW_EVENT = 'dxcontextmenu';
+
+const window = getWindow();
 
 class ContextMenu extends MenuBase {
     getShowEvent(showEventOption) {
@@ -72,7 +77,7 @@ class ContextMenu extends MenuBase {
         return extend(super._getDefaultOptions(), {
             showEvent: DEFAULT_SHOW_EVENT,
 
-            closeOnOutsideClick: true,
+            hideOnOutsideClick: true,
 
             position: {
                 at: 'top left',
@@ -126,6 +131,13 @@ class ContextMenu extends MenuBase {
                 animation: null
             }
         }]);
+    }
+
+    _setDeprecatedOptions() {
+        super._setDeprecatedOptions();
+        extend(this._deprecatedOptions, {
+            'closeOnOutsideClick': { since: '22.2', alias: 'hideOnOutsideClick' }
+        });
     }
 
     _initActions() {
@@ -249,7 +261,7 @@ class ContextMenu extends MenuBase {
         const $activeItem = this._getActiveItem(true);
         let $items;
 
-        if(inArray(location, LOCAL_SUBMENU_DIRECTIONS) >= 0) {
+        if(LOCAL_SUBMENU_DIRECTIONS.includes(location)) {
             $items = $activeItem
                 .closest(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`)
                 .children()
@@ -353,6 +365,18 @@ class ContextMenu extends MenuBase {
         this._attachContextMenuEvent();
     }
 
+    preventShowingDefaultContextMenuAboveOverlay() {
+        const $itemContainer = this._itemContainer();
+        const eventName = addNamespace(contextMenuEventName, this.NAME);
+
+        eventsEngine.off($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`);
+        eventsEngine.on($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`, ((e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            eventsEngine.off($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`);
+        }).bind(this));
+    }
+
     _itemContextMenuHandler(e) {
         super._itemContextMenuHandler(e);
         e.stopPropagation();
@@ -429,6 +453,10 @@ class ContextMenu extends MenuBase {
             .addClass(DX_SUBMENU_CLASS)
             .css('visibility', submenuContainer ? 'hidden' : 'visible');
 
+        if(!$wrapper.parent().hasClass(OVERLAY_CONTENT_CLASS)) {
+            this._addCustomCssClass($wrapper);
+        }
+
         const $itemsContainer = super._renderContainer($wrapper);
 
         if(submenuContainer) {
@@ -461,9 +489,9 @@ class ContextMenu extends MenuBase {
             focusStateEnabled: this.option('focusStateEnabled'),
             animation: this.option('animation'),
             innerOverlay: true,
-            closeOnOutsideClick: this._closeOnOutsideClickHandler.bind(this),
+            hideOnOutsideClick: (e) => this._hideOnOutsideClickHandler(e),
             propagateOutsideClick: true,
-            closeOnTargetScroll: true,
+            hideOnParentScroll: true,
             deferRendering: false,
             position: {
                 at: position.at,
@@ -477,7 +505,8 @@ class ContextMenu extends MenuBase {
             width: 'auto',
             onShown: this._overlayShownActionHandler.bind(this),
             onHiding: this._overlayHidingActionHandler.bind(this),
-            onHidden: this._overlayHiddenActionHandler.bind(this)
+            onHidden: this._overlayHiddenActionHandler.bind(this),
+            visualContainer: window
         };
 
         return overlayOptions;
@@ -499,14 +528,20 @@ class ContextMenu extends MenuBase {
         this._actions.onHidden(arg);
     }
 
-    _closeOnOutsideClickHandler(e) {
-        const closeOnOutsideClick = this.option('closeOnOutsideClick');
+    _shouldHideOnOutsideClick(e) {
+        const { closeOnOutsideClick, hideOnOutsideClick } = this.option();
 
-        if(isFunction(closeOnOutsideClick)) {
+        if(isFunction(hideOnOutsideClick)) {
+            return hideOnOutsideClick(e);
+        } else if(isFunction(closeOnOutsideClick)) {
             return closeOnOutsideClick(e);
+        } else {
+            return hideOnOutsideClick || closeOnOutsideClick;
         }
+    }
 
-        if(!closeOnOutsideClick) {
+    _hideOnOutsideClickHandler(e) {
+        if(!this._shouldHideOnOutsideClick(e)) {
             return false;
         }
 
@@ -535,7 +570,7 @@ class ContextMenu extends MenuBase {
     }
 
     _getItemsContainers() {
-        return this._overlay._$content.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+        return this._overlay.$content().find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
     }
 
     _searchActiveItem(target) {
@@ -620,7 +655,7 @@ class ContextMenu extends MenuBase {
                 this._shownSubmenus = [];
             }
 
-            if(inArray($submenu, this._shownSubmenus)) {
+            if(!this._shownSubmenus.includes($submenu)) {
                 this._shownSubmenus.push($submenu);
             }
 
@@ -698,13 +733,13 @@ class ContextMenu extends MenuBase {
             return;
         }
 
+        this._updateSelectedItemOnClick(actionArgs);
+
         // T238943. Give the workaround with e.cancel and remove this hack
         const notCloseMenuOnItemClick = itemData && itemData.closeMenuOnClick === false;
         if(!itemData || itemData.disabled || notCloseMenuOnItemClick) {
             return;
         }
-
-        this._updateSelectedItemOnClick(actionArgs);
 
         if($submenu.length === 0) {
             const $prevSubmenu = $($itemElement.parents(`.${DX_SUBMENU_CLASS}`)[0]);
@@ -735,7 +770,7 @@ class ContextMenu extends MenuBase {
     }
 
     _hideSubmenuCore($submenu) {
-        const index = inArray($submenu, this._shownSubmenus);
+        const index = this._shownSubmenus.indexOf($submenu);
         const animation = this.option('animation') ? this.option('animation').hide : null;
 
         if(index >= 0) {
@@ -769,7 +804,7 @@ class ContextMenu extends MenuBase {
     }
 
     _optionChanged(args) {
-        if(inArray(args.name, ACTIONS) > -1) {
+        if(ACTIONS.includes(args.name)) {
             this._initActions();
             return;
         }
@@ -788,6 +823,7 @@ class ContextMenu extends MenuBase {
                 this._invalidate();
                 break;
             case 'closeOnOutsideClick':
+            case 'hideOnOutsideClick':
                 break;
             default:
                 super._optionChanged(args);
@@ -828,6 +864,11 @@ class ContextMenu extends MenuBase {
             event && event.stopPropagation();
 
             this._setAriaAttributes();
+
+            // T983617. Prevent the browser's context menu appears on desktop touch screens.
+            if(event?.originalEvent?.type === holdEvent.name) {
+                this.preventShowingDefaultContextMenuAboveOverlay();
+            }
         }
 
         return promise;
@@ -856,7 +897,7 @@ class ContextMenu extends MenuBase {
     _positionContextMenu(jQEvent) {
         let position = this._getContextMenuPosition();
         const isInitialPosition = this._isInitialOptionValue('position');
-        const positioningAction = this._createActionByOption('onPositioning', actionArgs);
+        const positioningAction = this._createActionByOption('onPositioning');
 
         if(jQEvent && jQEvent.preventDefault && isInitialPosition) {
             position.of = jQEvent;

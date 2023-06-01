@@ -4,11 +4,6 @@ import { hasWindow } from './window';
 import callOnce from './call_once';
 let callbacks = [];
 
-const isReady = () => {
-    // NOTE: we can't use document.readyState === "interactive" because of ie9/ie10 support
-    return domAdapter.getReadyState() === 'complete' || (domAdapter.getReadyState() !== 'loading' && !domAdapter.getDocumentElement().doScroll);
-};
-
 const subscribeReady = callOnce(() => {
     const removeListener = domAdapter.listen(domAdapter.getDocument(), 'DOMContentLoaded', () => {
         readyCallbacks.fire();
@@ -19,8 +14,7 @@ const subscribeReady = callOnce(() => {
 const readyCallbacks = {
     add: callback => {
         const windowExists = hasWindow();
-
-        if(windowExists && isReady()) {
+        if(windowExists && domAdapter.getReadyState() !== 'loading') {
             callback();
         } else {
             callbacks.push(callback);

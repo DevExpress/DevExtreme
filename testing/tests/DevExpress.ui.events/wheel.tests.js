@@ -72,8 +72,8 @@ QUnit.test('normalize delta for deltaMode LINE and PAGE', function(assert) {
 
     $element.on(wheelEvent.name, wheelHandler);
 
-    mouse.wheel(DELTA, false, LINE_MODE);
-    mouse.wheel(DELTA, false, PAGE_MODE);
+    mouse.wheel(DELTA, { deltaMode: LINE_MODE });
+    mouse.wheel(DELTA, { deltaMode: PAGE_MODE });
 
     assert.strictEqual(wheelHandler.callCount, 2);
     assert.strictEqual(wheelHandler.firstCall.args[0].delta, DELTA * DELTA_MULTIPLIER);

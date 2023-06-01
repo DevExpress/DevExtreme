@@ -3,13 +3,12 @@ import domAdapter from './dom_adapter';
 import { getWindow } from './utils/window';
 import { isObject, isWindow, isPlainObject, isString, isNumeric, isDefined, isFunction, type } from './utils/type';
 import { styleProp, normalizeStyleProp } from './utils/style';
-import { getSize, getElementBoxParams } from './utils/size';
+import { getOffset, getWindowByElement } from './utils/size';
 import { parseHTML, isTablePart } from './utils/html_parser';
 
 const window = getWindow();
 
 let renderer;
-
 const initRender = function(selector, context) {
     if(!selector) {
         this.length = 0;
@@ -59,7 +58,7 @@ const repeatMethod = function(methodName, args) {
 };
 
 const setAttributeValue = function(element, attrName, value) {
-    if(value !== undefined && value !== null) {
+    if(value !== undefined && value !== null && value !== false) {
         domAdapter.setAttribute(element, attrName, value);
     } else {
         domAdapter.removeAttribute(element, attrName);
@@ -164,76 +163,6 @@ initRender.prototype.toggleClass = function(className, value) {
     }
     return this;
 };
-
-['width', 'height', 'outerWidth', 'outerHeight', 'innerWidth', 'innerHeight'].forEach(function(methodName) {
-    const partialName = methodName.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
-    const propName = partialName.toLowerCase();
-    const isOuter = methodName.indexOf('outer') === 0;
-    const isInner = methodName.indexOf('inner') === 0;
-
-    initRender.prototype[methodName] = function(value) {
-        if(this.length > 1 && arguments.length > 0) {
-            return repeatMethod.call(this, methodName, arguments);
-        }
-
-        const element = this[0];
-
-        if(!element) {
-            return;
-        }
-
-        if(isWindow(element)) {
-            return isOuter ? element['inner' + partialName] : domAdapter.getDocumentElement()['client' + partialName];
-        }
-
-        if(domAdapter.isDocument(element)) {
-            const documentElement = domAdapter.getDocumentElement();
-            const body = domAdapter.getBody();
-
-            return Math.max(
-                body['scroll' + partialName],
-                body['offset' + partialName],
-                documentElement['scroll' + partialName],
-                documentElement['offset' + partialName],
-                documentElement['client' + partialName]
-            );
-        }
-
-        if(arguments.length === 0 || typeof value === 'boolean') {
-            const include = {
-                paddings: isInner || isOuter,
-                borders: isOuter,
-                margins: value
-            };
-
-            return getSize(element, propName, include);
-        }
-
-        if(value === undefined || value === null) {
-            return this;
-        }
-
-        if(isNumeric(value)) {
-            const elementStyles = window.getComputedStyle(element);
-            const sizeAdjustment = getElementBoxParams(propName, elementStyles);
-            const isBorderBox = elementStyles.boxSizing === 'border-box';
-            value = Number(value);
-
-            if(isOuter) {
-                value -= isBorderBox ? 0 : (sizeAdjustment.border + sizeAdjustment.padding);
-            } else if(isInner) {
-                value += isBorderBox ? sizeAdjustment.border : -sizeAdjustment.padding;
-            } else if(isBorderBox) {
-                value += sizeAdjustment.border + sizeAdjustment.padding;
-            }
-        }
-        value += isNumeric(value) ? 'px' : '';
-
-        domAdapter.setStyle(element, propName, value);
-
-        return this;
-    };
-});
 
 initRender.prototype.html = function(value) {
     if(!arguments.length) {
@@ -516,7 +445,7 @@ initRender.prototype.find = function(selector) {
                 const querySelector = queryId + selector.replace(/([^\\])(,)/g, '$1, ' + queryId);
                 nodes.push.apply(nodes, domAdapter.querySelectorAll(element, querySelector));
                 setAttributeValue(element, 'id', elementId);
-            } else if(domAdapter.isDocument(element)) {
+            } else if(domAdapter.isDocument(element) || domAdapter.isDocumentFragment(element)) {
                 nodes.push.apply(nodes, domAdapter.querySelectorAll(element, selector));
             }
         }
@@ -533,6 +462,8 @@ initRender.prototype.find = function(selector) {
 };
 
 const isVisible = function(_, element) {
+    element = element.host ?? element;
+
     if(!element.nodeType) return true;
     return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
 };
@@ -653,6 +584,14 @@ initRender.prototype.last = function() {
     return this.eq(-1);
 };
 
+initRender.prototype.select = function() {
+    for(let i = 0; i < this.length; i += 1) {
+        this[i].select && this[i].select();
+    }
+
+    return this;
+};
+
 initRender.prototype.parent = function(selector) {
     if(!this[0]) return renderer();
     const result = renderer(this[0].parentNode);
@@ -665,7 +604,7 @@ initRender.prototype.parents = function(selector) {
 
     while(parent && parent[0] && !domAdapter.isDocument(parent[0])) {
         if(domAdapter.isElementNode(parent[0])) {
-            if(!selector || (selector && parent.is(selector))) {
+            if(!selector || parent.is(selector)) {
                 result.push(parent.get(0));
             }
         }
@@ -733,28 +672,10 @@ initRender.prototype.toArray = function() {
     return emptyArray.slice.call(this);
 };
 
-const getWindowByElement = function(element) {
-    return isWindow(element) ? element : element.defaultView;
-};
-
 initRender.prototype.offset = function() {
     if(!this[0]) return;
 
-    if(!this[0].getClientRects().length) {
-        return {
-            top: 0,
-            left: 0
-        };
-    }
-
-    const rect = this[0].getBoundingClientRect();
-    const win = getWindowByElement(this[0].ownerDocument);
-    const docElem = this[0].ownerDocument.documentElement;
-
-    return {
-        top: rect.top + win.pageYOffset - docElem.clientTop,
-        left: rect.left + win.pageXOffset - docElem.clientLeft
-    };
+    return getOffset(this[0]);
 };
 
 initRender.prototype.offsetParent = function() {

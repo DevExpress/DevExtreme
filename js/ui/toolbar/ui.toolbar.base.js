@@ -1,19 +1,17 @@
+import { getWidth, getOuterWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { isMaterial, waitWebFont } from '../themes';
-import { noop } from '../../core/utils/common';
-import { isPlainObject } from '../../core/utils/type';
+import { isPlainObject, isDefined } from '../../core/utils/type';
 import registerComponent from '../../core/component_registrator';
-import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { getBoundingRect } from '../../core/utils/position';
 import AsyncCollectionWidget from '../collection/ui.collection_widget.async';
-import Promise from '../../core/polyfills/promise';
 import { BindableTemplate } from '../../core/templates/bindable_template';
-import errors from '../../core/errors';
 import fx from '../../animation/fx';
 
-const TOOLBAR_CLASS = 'dx-toolbar';
+import { TOOLBAR_CLASS } from './constants';
+
 const TOOLBAR_BEFORE_CLASS = 'dx-toolbar-before';
 const TOOLBAR_CENTER_CLASS = 'dx-toolbar-center';
 const TOOLBAR_AFTER_CLASS = 'dx-toolbar-after';
@@ -24,51 +22,52 @@ const TOOLBAR_BUTTON_CLASS = 'dx-toolbar-button';
 const TOOLBAR_ITEMS_CONTAINER_CLASS = 'dx-toolbar-items-container';
 const TOOLBAR_GROUP_CLASS = 'dx-toolbar-group';
 const TOOLBAR_COMPACT_CLASS = 'dx-toolbar-compact';
-const TOOLBAR_LABEL_SELECTOR = '.' + TOOLBAR_LABEL_CLASS;
-const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TEXT_BUTTON_MODE = 'text';
+
 const DEFAULT_BUTTON_TYPE = 'default';
+const DEFAULT_DROPDOWNBUTTON_STYLING_MODE = 'contained';
 
 const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
+const ANIMATION_TIMEOUT = 15;
 
-const ToolbarBase = AsyncCollectionWidget.inherit({
-    compactMode: false,
+class ToolbarBase extends AsyncCollectionWidget {
+    _getSynchronizableOptionsForCreateComponent() {
+        return super._getSynchronizableOptionsForCreateComponent().filter(item => item !== 'disabled');
+    }
 
-    ctor: function(element, options) {
-        this._userOptions = options || {};
-
-        this.callBase(element, options);
-
-        if('height' in this._userOptions) {
-            errors.log('W0001', this.NAME, 'height', '20.1', 'Functionality associated with this option is not intended for the Toolbar widget.');
-        }
-    },
-
-    _getSynchronizableOptionsForCreateComponent: function() {
-        return this.callBase().filter(item => item !== 'disabled');
-    },
-
-    _initTemplates: function() {
-        this.callBase();
+    _initTemplates() {
+        super._initTemplates();
         const template = new BindableTemplate(function($container, data, rawModel) {
             if(isPlainObject(data)) {
-                if(data.text) {
-                    $container.text(data.text).wrapInner('<div>');
+                const { text, html, widget } = data;
+
+                if(text) {
+                    $container.text(text).wrapInner('<div>');
                 }
 
-                if(data.html) {
-                    $container.html(data.html);
+                if(html) {
+                    $container.html(html);
                 }
 
-                if(data.widget === 'dxButton') {
+                if(widget === 'dxDropDownButton') {
+                    data.options = data.options ?? {};
+
+                    if(!isDefined(data.options.stylingMode)) {
+                        data.options.stylingMode = this.option('useFlatButtons')
+                            ? TEXT_BUTTON_MODE
+                            : DEFAULT_DROPDOWNBUTTON_STYLING_MODE;
+                    }
+                }
+
+                if(widget === 'dxButton') {
                     if(this.option('useFlatButtons')) {
-                        data.options = data.options || {};
-                        data.options.stylingMode = data.options.stylingMode || TEXT_BUTTON_MODE;
+                        data.options = data.options ?? {};
+                        data.options.stylingMode = data.options.stylingMode ?? TEXT_BUTTON_MODE;
                     }
 
                     if(this.option('useDefaultButtons')) {
-                        data.options = data.options || {};
-                        data.options.type = data.options.type || DEFAULT_BUTTON_TYPE;
+                        data.options = data.options ?? {};
+                        data.options.type = data.options.type ?? DEFAULT_BUTTON_TYPE;
                     }
                 }
             } else {
@@ -86,22 +85,19 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
             item: template,
             menuItem: template,
         });
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             renderAs: 'topToolbar',
-
             grouped: false,
-
             useFlatButtons: false,
             useDefaultButtons: false,
-            multiline: false
         });
-    },
+    }
 
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
+    _defaultOptionsRules() {
+        return super._defaultOptionsRules().concat([
             {
                 device: function() {
                     return isMaterial();
@@ -111,121 +107,79 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
                 }
             }
         ]);
-    },
+    }
 
-    _itemContainer: function() {
+    _itemContainer() {
         return this._$toolbarItemsContainer.find([
-            '.' + TOOLBAR_BEFORE_CLASS,
-            '.' + TOOLBAR_CENTER_CLASS,
-            '.' + TOOLBAR_AFTER_CLASS
+            `.${TOOLBAR_BEFORE_CLASS}`,
+            `.${TOOLBAR_CENTER_CLASS}`,
+            `.${TOOLBAR_AFTER_CLASS}`,
         ].join(','));
-    },
+    }
 
-    _itemClass: function() {
+    _itemClass() {
         return TOOLBAR_ITEM_CLASS;
-    },
+    }
 
-    _itemDataKey: function() {
+    _itemDataKey() {
         return TOOLBAR_ITEM_DATA_KEY;
-    },
+    }
 
-    _buttonClass: function() {
-        return TOOLBAR_BUTTON_CLASS;
-    },
+    _dimensionChanged() {
+        if(this._disposed) {
+            return;
+        }
 
-    _dimensionChanged: function() {
         this._arrangeItems();
         this._applyCompactMode();
-    },
+    }
 
-    _initMarkup: function() {
+    _initMarkup() {
         this._renderToolbar();
         this._renderSections();
 
-        this.callBase();
+        super._initMarkup();
+    }
 
-        this.setAria('role', 'toolbar');
-    },
-
-    _waitParentAnimationFinished: function() {
-        const $element = this.$element();
-        const timeout = 15;
-        return new Promise(resolve => {
-            const check = () => {
-                let readyToResolve = true;
-                $element.parents().each((_, parent) => {
-                    if(fx.isAnimating($(parent))) {
-                        readyToResolve = false;
-                        return false;
-                    }
-                });
-                if(readyToResolve) {
-                    resolve();
-                }
-                return readyToResolve;
-            };
-            const runCheck = () => {
-                clearTimeout(this._waitParentAnimationTimeout);
-                this._waitParentAnimationTimeout = setTimeout(() => check() || runCheck(), timeout);
-            };
-            runCheck();
-        });
-    },
-
-    _render: function() {
-        this.callBase();
+    _render() {
+        super._render();
         this._renderItemsAsync();
 
-        if(isMaterial()) {
-            Promise.all([
-                this._waitParentAnimationFinished(),
-                this._checkWebFontForLabelsLoaded()
-            ]).then(this._dimensionChanged.bind(this));
-        }
-    },
+        this._updateDimensionsInMaterial();
+    }
 
-    _postProcessRenderItems: function() {
+    _postProcessRenderItems() {
         this._arrangeItems();
-    },
+    }
 
-    _renderToolbar: function() {
+    _renderToolbar() {
         this.$element()
-            .addClass(TOOLBAR_CLASS)
-            .toggleClass(TOOLBAR_MULTILINE_CLASS, this.option('multiline'));
+            .addClass(TOOLBAR_CLASS);
 
         this._$toolbarItemsContainer = $('<div>')
             .addClass(TOOLBAR_ITEMS_CONTAINER_CLASS)
             .appendTo(this.$element());
-    },
 
-    _renderSections: function() {
+        this.setAria('role', 'toolbar');
+    }
+
+    _renderSections() {
         const $container = this._$toolbarItemsContainer;
-        const that = this;
-        each(['before', 'center', 'after'], function() {
-            const sectionClass = 'dx-toolbar-' + this;
-            let $section = $container.find('.' + sectionClass);
+
+        each(['before', 'center', 'after'], (_, section) => {
+            const sectionClass = `dx-toolbar-${section}`;
+            const $section = $container.find(`.${sectionClass}`);
 
             if(!$section.length) {
-                that['_$' + this + 'Section'] = $section = $('<div>')
+                this[`_$${section}Section`] = $('<div>')
                     .addClass(sectionClass)
                     .appendTo($container);
             }
         });
-    },
+    }
 
-    _checkWebFontForLabelsLoaded: function() {
-        const $labels = this.$element().find(TOOLBAR_LABEL_SELECTOR);
-        const promises = [];
-        $labels.each((_, label) => {
-            const text = $(label).text();
-            const fontWeight = $(label).css('fontWeight');
-            promises.push(waitWebFont(text, fontWeight));
-        });
-        return Promise.all(promises);
-    },
-
-    _arrangeItems: function(elementWidth) {
-        elementWidth = elementWidth || this.$element().width();
+    _arrangeItems(elementWidth) {
+        elementWidth = elementWidth ?? getWidth(this.$element());
 
         this._$centerSection.css({
             margin: '0 auto',
@@ -237,7 +191,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
 
         this._alignCenterSection(beforeRect, afterRect, elementWidth);
 
-        const $label = this._$toolbarItemsContainer.find(TOOLBAR_LABEL_SELECTOR).eq(0);
+        const $label = this._$toolbarItemsContainer.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0);
         const $section = $label.parent();
 
         if(!$label.length) {
@@ -249,8 +203,8 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         const widthAfterSection = $section.hasClass(TOOLBAR_AFTER_CLASS) ? 0 : afterRect.width;
         let elemsAtSectionWidth = 0;
 
-        $section.children().not(TOOLBAR_LABEL_SELECTOR).each(function() {
-            elemsAtSectionWidth += $(this).outerWidth();
+        $section.children().not(`.${TOOLBAR_LABEL_CLASS}`).each(function() {
+            elemsAtSectionWidth += getOuterWidth(this);
         });
 
         const freeSpace = elementWidth - elemsAtSectionWidth;
@@ -259,12 +213,12 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         if($section.hasClass(TOOLBAR_BEFORE_CLASS)) {
             this._alignSection(this._$beforeSection, sectionMaxWidth);
         } else {
-            const labelPaddings = $label.outerWidth() - $label.width();
+            const labelPaddings = getOuterWidth($label) - getWidth($label);
             $label.css('maxWidth', sectionMaxWidth - labelPaddings);
         }
-    },
+    }
 
-    _alignCenterSection: function(beforeRect, afterRect, elementWidth) {
+    _alignCenterSection(beforeRect, afterRect, elementWidth) {
         this._alignSection(this._$centerSection, elementWidth - beforeRect.width - afterRect.width);
 
         const isRTL = this.option('rtlEnabled');
@@ -279,10 +233,10 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
                 float: leftRect.width > rightRect.width ? 'none' : 'right'
             });
         }
-    },
+    }
 
-    _alignSection: function($section, maxWidth) {
-        const $labels = $section.find(TOOLBAR_LABEL_SELECTOR);
+    _alignSection($section, maxWidth) {
+        const $labels = $section.find(`.${TOOLBAR_LABEL_CLASS}`);
         let labels = $labels.toArray();
 
         maxWidth = maxWidth - this._getCurrentLabelsPaddings(labels);
@@ -296,9 +250,9 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         } else {
             this._alignSectionLabels(labels, difference, true);
         }
-    },
+    }
 
-    _alignSectionLabels: function(labels, difference, expanding) {
+    _alignSectionLabels(labels, difference, expanding) {
         const getRealLabelWidth = function(label) { return getBoundingRect(label).width; };
 
         for(let i = 0; i < labels.length; i++) {
@@ -323,81 +277,79 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
 
             $label.css('maxWidth', labelMaxWidth);
         }
-    },
+    }
 
-    _applyCompactMode: function() {
+    _applyCompactMode() {
         const $element = this.$element();
         $element.removeClass(TOOLBAR_COMPACT_CLASS);
 
-        if(this.option('compactMode') && this._getSummaryItemsWidth(this.itemElements(), true) > $element.width()) {
+        if(this.option('compactMode') && this._getSummaryItemsWidth(this.itemElements(), true) > getWidth($element)) {
             $element.addClass(TOOLBAR_COMPACT_CLASS);
         }
-    },
+    }
 
-    _getCurrentLabelsWidth: function(labels) {
+    _getCurrentLabelsWidth(labels) {
         let width = 0;
 
         labels.forEach(function(label, index) {
-            width += $(label).outerWidth();
+            width += getOuterWidth(label);
         });
 
         return width;
-    },
+    }
 
-    _getCurrentLabelsPaddings: function(labels) {
+    _getCurrentLabelsPaddings(labels) {
         let padding = 0;
 
         labels.forEach(function(label, index) {
-            padding += ($(label).outerWidth() - $(label).width());
+            padding += (getOuterWidth(label) - getWidth(label));
         });
 
         return padding;
-    },
+    }
 
-    _renderItem: function(index, item, itemContainer, $after) {
-        const location = item.location || 'center';
-        const container = itemContainer || this['_$' + location + 'Section'];
-        const itemHasText = !!(item.text || item.html);
-        const itemElement = this.callBase(index, item, container, $after);
+    _renderItem(index, item, itemContainer, $after) {
+        const location = item.location ?? 'center';
+        const container = itemContainer ?? this[`_$${location}Section`];
+        const itemHasText = !!(item.text ?? item.html);
+        const itemElement = super._renderItem(index, item, container, $after);
 
         itemElement
-            .toggleClass(this._buttonClass(), !itemHasText)
+            .toggleClass(TOOLBAR_BUTTON_CLASS, !itemHasText)
             .toggleClass(TOOLBAR_LABEL_CLASS, itemHasText)
             .addClass(item.cssClass);
 
         return itemElement;
-    },
+    }
 
-    _renderGroupedItems: function() {
-        const that = this;
-
-        each(this.option('items'), function(groupIndex, group) {
+    _renderGroupedItems() {
+        each(this.option('items'), (groupIndex, group) => {
             const groupItems = group.items;
             const $container = $('<div>').addClass(TOOLBAR_GROUP_CLASS);
-            const location = group.location || 'center';
+            const location = group.location ?? 'center';
 
             if(!groupItems || !groupItems.length) {
                 return;
             }
 
-            each(groupItems, function(itemIndex, item) {
-                that._renderItem(itemIndex, item, $container, null);
+            each(groupItems, (itemIndex, item) => {
+                this._renderItem(itemIndex, item, $container, null);
             });
 
-            that._$toolbarItemsContainer.find('.dx-toolbar-' + location).append($container);
+            this._$toolbarItemsContainer.find(`.dx-toolbar-${location}`).append($container);
         });
-    },
+    }
 
-    _renderItems: function(items) {
+    _renderItems(items) {
         const grouped = this.option('grouped') && items.length && items[0].items;
-        grouped ? this._renderGroupedItems() : this.callBase(items);
-    },
+        grouped ? this._renderGroupedItems() : super._renderItems(items);
+    }
 
-    _getToolbarItems: function() {
-        return this.option('items') || [];
-    },
+    _getToolbarItems() {
+        return this.option('items') ?? [];
+    }
 
-    _renderContentImpl: function() {
+    _renderContentImpl() {
         const items = this._getToolbarItems();
 
         this.$element().toggleClass(TOOLBAR_MINI_CLASS, items.length === 0);
@@ -409,44 +361,43 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         }
 
         this._applyCompactMode();
-    },
+    }
 
-    _renderEmptyMessage: noop,
+    _renderEmptyMessage() {}
 
-    _clean: function() {
+    _clean() {
         this._$toolbarItemsContainer.children().empty();
         this.$element().empty();
-    },
 
-    _visibilityChanged: function(visible) {
+        delete this._$beforeSection;
+        delete this._$centerSection;
+        delete this._$afterSection;
+    }
+
+    _visibilityChanged(visible) {
         if(visible) {
             this._arrangeItems();
         }
-    },
+    }
 
-    _isVisible: function() {
-        return this.$element().width() > 0 && this.$element().height() > 0;
-    },
+    _isVisible() {
+        return getWidth(this.$element()) > 0 && getHeight(this.$element()) > 0;
+    }
 
-    _getIndexByItem: function(item) {
-        return inArray(item, this._getToolbarItems());
-    },
+    _getIndexByItem(item) {
+        return this._getToolbarItems().indexOf(item);
+    }
 
-    _itemOptionChanged: function(item, property, value) {
-        this.callBase.apply(this, [item, property, value]);
+    _itemOptionChanged(item, property, value) {
+        super._itemOptionChanged.apply(this, [item, property, value]);
         this._arrangeItems();
-    },
+    }
 
-    _optionChanged: function(args) {
-        const name = args.name;
-
+    _optionChanged({ name, value }) {
         switch(name) {
             case 'width':
-                this.callBase.apply(this, arguments);
+                super._optionChanged.apply(this, arguments);
                 this._dimensionChanged();
-                break;
-            case 'multiline':
-                this.$element().toggleClass(TOOLBAR_MULTILINE_CLASS, args.value);
                 break;
             case 'renderAs':
             case 'useFlatButtons':
@@ -459,17 +410,58 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
             case 'grouped':
                 break;
             default:
-                this.callBase.apply(this, arguments);
+                super._optionChanged.apply(this, arguments);
         }
-    },
+    }
 
-    _dispose: function() {
-        this.callBase();
+    _dispose() {
+        super._dispose();
         clearTimeout(this._waitParentAnimationTimeout);
-    },
+    }
 
+    _updateDimensionsInMaterial() {
+        if(isMaterial()) {
+            const _waitParentAnimationFinished = () => {
+                return new Promise(resolve => {
+                    const check = () => {
+                        let readyToResolve = true;
+                        this.$element().parents().each((_, parent) => {
+                            if(fx.isAnimating($(parent))) {
+                                readyToResolve = false;
+                                return false;
+                            }
+                        });
+                        if(readyToResolve) {
+                            resolve();
+                        }
+                        return readyToResolve;
+                    };
+                    const runCheck = () => {
+                        clearTimeout(this._waitParentAnimationTimeout);
+                        this._waitParentAnimationTimeout = setTimeout(() => check() || runCheck(), ANIMATION_TIMEOUT);
+                    };
+                    runCheck();
+                });
+            };
 
-});
+            const _checkWebFontForLabelsLoaded = () => {
+                const $labels = this.$element().find(`.${TOOLBAR_LABEL_CLASS}`);
+                const promises = [];
+                $labels.each((_, label) => {
+                    const text = $(label).text();
+                    const fontWeight = $(label).css('fontWeight');
+                    promises.push(waitWebFont(text, fontWeight));
+                });
+                return Promise.all(promises);
+            };
+
+            Promise.all([
+                _waitParentAnimationFinished(),
+                _checkWebFontForLabelsLoaded(),
+            ]).then(() => { this._dimensionChanged(); });
+        }
+    }
+}
 
 registerComponent('dxToolbarBase', ToolbarBase);
 

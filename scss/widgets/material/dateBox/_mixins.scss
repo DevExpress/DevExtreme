@@ -1,0 +1,17 @@
+@use "../../base/icons" as *;
+@use "../dropDownEditor" as *;
+@use "../textEditor" as *;
+
+@mixin dx-dropdowneditor-button-icon-styling($icon) {
+  .dx-dropdowneditor-icon {
+    @include dx-icon($icon);
+    @include dx-dropdowneditor-button-icon();
+  }
+
+  &.dx-dropdowneditor-active {
+    .dx-dropdowneditor-icon {
+      @include dx-icon($icon);
+      @include dx-dropdowneditor-button-icon();
+    }
+  }
+}

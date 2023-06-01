@@ -3,8 +3,9 @@ import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from 'core/devices';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import { parseHeight } from 'core/utils/size.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/text_area';
 import 'ui/scroll_view/ui.scrollable';
@@ -13,18 +14,25 @@ QUnit.testStart(() => {
     const markup =
         '<div id="textarea"></div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="widthRootStyle"></div>\
         <div id="container">\
             <div id="withContainer"></div>\
         </div>\
         <div id="scrollable">\
-            <div id="content" style="width: 300px; height: 300px;">\
-                <div id="textAreaInScrollable" style="margin: 50px;">\
+            <div id="content">\
+                <div id="textAreaInScrollable">\
                 </div>\
             </div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
+
+    $('#content')
+        .css('width', '300px')
+        .css('height', '300px');
+
+    $('#textAreaInScrollable').css('margin', '50px;');
 });
 
 
@@ -32,8 +40,7 @@ const TEXTAREA_CLASS = 'dx-textarea';
 const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const AUTO_RESIZE_CLASS = 'dx-texteditor-input-auto-resize';
-
-const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 QUnit.module('rendering', () => {
     QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
@@ -232,19 +239,20 @@ QUnit.module('widget sizing render', () => {
         assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
     });
 
-    QUnit.test('widget renders correctly when minHeight and maxHeight is specified in pixels', function(assert) {
-        const minHeight = 100;
-        const $element = $('#widget').dxTextArea({
-            minHeight: minHeight + 'px',
-            autoResizeEnabled: true
+    [true, false].forEach(autoResizeEnabled => {
+        [100, '100px', '50%', '20vh', '10em'].forEach(minHeight => {
+            QUnit.test(`input should have correct size when autoResizeEnabled is ${autoResizeEnabled} and minHeight equals ${minHeight}`, function(assert) {
+                const $element = $('#widget').dxTextArea({ minHeight, autoResizeEnabled });
+                const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                const inputHeight = $input.outerHeight();
+                const borderHeight = parseInt($element.css('borderTopWidth'));
+                const parsedMinHeight = typeof minHeight === 'number' ? minHeight : parseHeight(minHeight, $element.get(0).parentNode, $element.get(0));
+
+                assert.strictEqual(inputHeight + 2 * borderHeight, parsedMinHeight, 'height is ok');
+            });
         });
-
-        const $input = $element.find('.dx-texteditor-input');
-        const inputHeight = $input.outerHeight();
-        const borderHeight = parseInt($element.css('borderTopWidth'));
-
-        assert.strictEqual(inputHeight + 2 * borderHeight, minHeight, 'height is ok');
     });
+
 });
 
 QUnit.module('the \'autoResizeEnabled\' option', () => {
@@ -253,7 +261,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             autoResizeEnabled: true
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const inputHeight = $input.outerHeight();
         $input.height(0);
@@ -266,7 +274,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             autoResizeEnabled: true
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $($input).trigger('focus');
         keyboardMock($input).type('\n\n');
@@ -284,7 +292,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         });
 
         const instance = $element.dxTextArea('instance');
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         instance.option('value', '\n\n');
 
@@ -299,7 +307,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             autoResizeEnabled: true
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input
             .val('\n\n')
@@ -333,7 +341,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             maxHeight: boundaryHeight
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const elementHeight = $element.outerHeight();
         const inputHeight = $input.outerHeight();
 
@@ -387,7 +395,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             minHeight: boundaryHeight
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const elementHeight = $element.outerHeight();
         const inputHeight = $input.outerHeight();
 
@@ -468,7 +476,7 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
             valueChangeEvent: 'keyup'
         });
 
-        const $input = $element.find('.dx-texteditor-input');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $($input).trigger('focus');
         keyboardMock($input).type('\n\n');
@@ -480,6 +488,22 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
         keyboardMock($input).type('\n\n');
         assert.strictEqual(container.scrollTop(), 20);
     });
+
+    QUnit.test('widget is resized on window dimension changed', function(assert) {
+        const $element = $('#textarea').dxTextArea({
+            autoResizeEnabled: true
+        });
+
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        $input.val('\n\n');
+        resizeCallbacks.fire();
+
+        const inputHeight = $input.outerHeight();
+        $input.height(0);
+
+        assert.equal(inputHeight, $input[0].scrollHeight, 'widget height is correct');
+    });
 });
 
 QUnit.module('TextArea in simulated scrollable', () => {
@@ -489,7 +513,7 @@ QUnit.module('TextArea in simulated scrollable', () => {
                 constructor(direction) {
                     this._direction = direction;
                     this._isVerticalDirection = this._direction === 'vertical';
-                    this.$scrollable = this._getScrollable();
+                    this.scrollable = this._getScrollable();
                     this.$textArea = this._getTextArea();
                     this.$textAreaInput = this.$textArea.find(`.${INPUT_CLASS}`);
                     if(!this._isVerticalDirection) {
@@ -505,7 +529,7 @@ QUnit.module('TextArea in simulated scrollable', () => {
                         useNative: false,
                         direction: this._direction,
                         showScrollbar: 'always',
-                    });
+                    }).dxScrollable('instance');
                 }
 
                 _getTextArea() {
@@ -520,16 +544,12 @@ QUnit.module('TextArea in simulated scrollable', () => {
                     return this.$textAreaInput.get(0)[`scroll${prop}`] - this.$textAreaInput.get(0)[`client${prop}`];
                 }
 
-                getScrollableContainer() {
-                    return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
-                }
-
-                setPosition($element, scrollPosition) {
-                    this._isVerticalDirection ? $element.scrollTop(scrollPosition) : $element.scrollLeft(scrollPosition);
+                setTextAreaScrollPosition(scrollPosition) {
+                    this.$textAreaInput.get(0)[this._isVerticalDirection ? 'scrollTop' : 'scrollLeft'] = scrollPosition;
                 }
 
                 checkAsserts(assert, expectedOffset) {
-                    const $container = this.getScrollableContainer();
+                    const $container = $(this.scrollable.container());
 
                     if(this._isVerticalDirection) {
                         assert.strictEqual($container.scrollTop(), expectedOffset, 'scrollTop()');
@@ -545,52 +565,47 @@ QUnit.module('TextArea in simulated scrollable', () => {
 
             QUnit.test(`mousewheel: textArea (scrollPosition - MIN) - wheel -> up -> down - scrollable direction: ${direction}`, function(assert) {
                 const helper = new TextAreaInScrollableTestHelper(direction);
-                const $container = helper.getScrollableContainer();
 
-                helper.setPosition($container, 100);
+                helper.scrollable.scrollTo(100);
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
-                pointer.start().wheel(20, helper.isShift());
+                pointer.start().wheel(20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 80);
 
-                pointer.start().wheel(-20, helper.isShift());
+                pointer.start().wheel(-20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 80);
             });
 
             QUnit.test(`mousewheel: textArea (scrollPosition - MAX) - wheel -> down -> up - scrollable direction: ${direction}`, function(assert) {
                 const helper = new TextAreaInScrollableTestHelper(direction);
-                const $container = helper.getScrollableContainer();
 
-                helper.setPosition($container, 50);
-                helper.setPosition(helper.$textAreaInput, helper.maxScrollValue);
+                helper.scrollable.scrollTo(50);
+                helper.setTextAreaScrollPosition(helper.maxScrollValue);
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
-                pointer.start().wheel(-20, helper.isShift());
+                pointer.start().wheel(-20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 70);
 
-                pointer.start().wheel(20, helper.isShift());
+                pointer.start().wheel(20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 70);
             });
 
             QUnit.test(`mousewheel: textArea (scrollPosition - MIDDLE) - wheel -> down -> up - scrollable direction: ${direction}`, function(assert) {
                 const helper = new TextAreaInScrollableTestHelper(direction);
-                const $container = helper.getScrollableContainer();
 
-                helper.setPosition($container, 100);
-                helper.setPosition(helper.$textAreaInput, helper.maxScrollValue / 2);
+                helper.scrollable.scrollTo(100);
+                helper.setTextAreaScrollPosition(helper.maxScrollValue / 2);
 
                 const pointer = nativePointerMock(helper.$textAreaInput);
 
-                pointer.start().wheel(-20, helper.isShift());
+                pointer.start().wheel(-20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 100);
 
-                pointer.start().wheel(20, helper.isShift());
+                pointer.start().wheel(20, { shiftKey: helper.isShift() });
                 helper.checkAsserts(assert, 100);
             });
-
         });
     }
 });
-

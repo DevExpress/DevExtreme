@@ -1,73 +1,81 @@
-import Component, {
-    ComponentOptions
+import {
+    Component,
+    ComponentOptions,
 } from './component';
 
 import {
-    Device
-} from './devices';
+    UserDefinedElement,
+    DxElement,
+} from './element';
 
 import {
-    dxElement
-} from './element';
+    ChangedOptionInfo,
+    EventInfo,
+    InitializedEventInfo,
+} from '../events/index';
 
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
+import { DefaultOptionsRule } from './options';
 
-export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
+type OptionChangedEventInfo<TComponent> = EventInfo<TComponent> & ChangedOptionInfo;
+
+/* eslint-disable no-underscore-dangle */
+
+/**
+ * @namespace DevExpress
+ * @docid
+ * @hidden
+ */
+export interface DOMComponentOptions<TComponent> extends ComponentOptions<
+    EventInfo<TComponent>,
+    InitializedEventInfo<TComponent>,
+    OptionChangedEventInfo<TComponent>
+> {
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.integration
      * @public
      */
-    bindingOptions?: any;
+    bindingOptions?: { [key: string]: any };
     /**
      * @docid
      * @default {}
-     * @prevFileNamespace DevExpress.core
      * @public
      */
-    elementAttr?: any;
+    elementAttr?: { [key: string]: any };
     /**
      * @docid
      * @default undefined
-     * @type_function_return number|string
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @action
-     * @extends Action
-     * @prevFileNamespace DevExpress.core
+     * @default null
+     * @type_function_param1 e:EventInfo
      * @public
      */
-    onDisposing?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onDisposing?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 name:string
-     * @type_function_param1_field5 fullName:string
-     * @type_function_param1_field6 value:any
      * @action
-     * @extends Action
-     * @prevFileNamespace DevExpress.core
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:<DOMComponent>
      * @public
      */
-    onOptionChanged?: ((e: { component?: T, element?: dxElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
+    onOptionChanged?: ((e: OptionChangedEventInfo<TComponent>) => void);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     rtlEnabled?: boolean;
     /**
      * @docid
      * @default undefined
-     * @type_function_return number|string
-     * @prevFileNamespace DevExpress.core
      * @public
      */
     width?: number | string | (() => number | string);
@@ -77,40 +85,15 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
  * @section uiWidgets
  * @inherits Component
  * @namespace DevExpress
- * @module core/dom_component
- * @export default
  * @hidden
- * @prevFileNamespace DevExpress.core
  */
-export default class DOMComponent extends Component {
-    constructor(element: Element | JQuery, options?: DOMComponentOptions);
-    /**
-     * @docid
-     * @static
-     * @section uiWidgets
-     * @publicName defaultOptions(rule)
-     * @param1 rule:Object
-     * @param1_field1 device:Device|Array<Device>|function
-     * @param1_field2 options:Object
-     * @prevFileNamespace DevExpress.core
-     * @public
-     */
-    static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
-    /**
-     * @docid
-     * @publicName dispose()
-     * @prevFileNamespace DevExpress.core
-     * @public
-     */
-    dispose(): void;
-    /**
-     * @docid
-     * @publicName element()
-     * @return dxElement
-     * @prevFileNamespace DevExpress.core
-     * @public
-     */
-    element(): dxElement;
+export default class DOMComponent<TProperties = Properties> extends Component<TProperties> {
+    _templateManager: TemplateManager;
+
+    _cancelOptionChange?: string;
+
+    constructor(element: UserDefinedElement, options?: TProperties);
+
     /**
      * @docid
      * @static
@@ -118,19 +101,51 @@ export default class DOMComponent extends Component {
      * @publicName getInstance(element)
      * @param1 element:Element|JQuery
      * @return DOMComponent
-     * @prevFileNamespace DevExpress.core
      * @public
      */
-    static getInstance(element: Element | JQuery): DOMComponent;
+    static getInstance(element: UserDefinedElement): DOMComponent<Properties>;
 
-    $element(): Element | JQuery;
+    /**
+     * @docid
+     * @static
+     * @section uiWidgets
+     * @publicName defaultOptions(rule)
+     * @param1 rule:Object
+     * @param1_field device:Device|function
+     * @param1_field options:Object
+     * @public
+     */
+    static defaultOptions<TProperties = Properties>(rule: DefaultOptionsRule<TProperties>): void;
+
+    /**
+     * @docid
+     * @publicName dispose()
+     * @public
+     */
+    dispose(): void;
+    /**
+     * @docid
+     * @publicName element()
+     * @public
+     */
+    element(): DxElement;
+
+    $element(): UserDefinedElement;
     _getTemplate(template: unknown): FunctionTemplate;
     _invalidate(): void;
     _refresh(): void;
-    _templateManager: TemplateManager;
+    _notifyOptionChanged(fullName: string, value: unknown, previousValue: unknown): void;
+    _createElement(element: HTMLElement): void;
 }
 
-export type Options = DOMComponentOptions;
+export type ComponentClass<TProperties> = {
+    new(element: HTMLDivElement, options?: TProperties): DOMComponent<TProperties>;
+    getInstance(widgetRef: HTMLDivElement): DOMComponent<TProperties>;
+};
 
-/** @deprecated use Options instead */
-export type IOptions = DOMComponentOptions;
+interface DOMComponentInstance extends DOMComponent<Properties> { }
+
+type Properties = DOMComponentOptions<DOMComponentInstance>;
+
+/** @deprecated use Properties instead */
+export type Options = Properties;

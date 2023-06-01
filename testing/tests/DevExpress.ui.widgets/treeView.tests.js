@@ -4,7 +4,6 @@ import $ from 'jquery';
 import CustomStore from 'data/custom_store';
 import ArrayStore from 'data/array_store';
 
-import 'common.css!';
 import 'ui/tree_view';
 
 const { testStart } = QUnit;
@@ -23,7 +22,9 @@ window.internals = {
     ITEM_WITH_CHECKBOX_CLASS: 'dx-treeview-item-with-checkbox',
     IS_LEAF: 'dx-treeview-node-is-leaf',
     TOGGLE_ITEM_VISIBILITY_CLASS: 'dx-treeview-toggle-item-visibility',
-    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened'
+    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened',
+    CUSTOM_COLLAPSE_ICON_CLASS: 'dx-treeview-custom-collapse-icon',
+    CUSTOM_EXPAND_ICON_CLASS: 'dx-treeview-custom-expand-icon'
 };
 
 window.DATA = (function() {

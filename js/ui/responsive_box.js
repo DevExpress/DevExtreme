@@ -1,10 +1,9 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
-import eventsEngine from '../events/core/events_engine';
 import { grep, noop } from '../core/utils/common';
 import { isDefined, isPlainObject, isEmptyObject } from '../core/utils/type';
 import errors from './widget/ui.errors';
 import { getWindow, defaultScreenFactorFunc, hasWindow } from '../core/utils/window';
-const window = getWindow();
 import { each, map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import registerComponent from '../core/component_registrator';
@@ -21,18 +20,13 @@ const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
 const HD_SCREEN_WIDTH = 1920;
 
 const ResponsiveBox = CollectionWidget.inherit({
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             rows: [],
             cols: [],
-
             screenByWidth: null,
-
             singleColumnScreen: '',
-
             height: '100%',
-
             width: '100%',
 
             /**
@@ -46,14 +40,12 @@ const ResponsiveBox = CollectionWidget.inherit({
             * @hidden
             */
             focusStateEnabled: false,
-
             onItemStateChanged: undefined,
 
             /**
             * @name dxResponsiveBoxOptions.accessKey
             * @hidden
             */
-
             /**
             * @name dxResponsiveBoxOptions.hint
             * @hidden
@@ -94,7 +86,6 @@ const ResponsiveBox = CollectionWidget.inherit({
 
             onLayoutChanged: null,
             currentScreenFactor: undefined,
-            _layoutStrategy: undefined
         });
     },
 
@@ -124,19 +115,6 @@ const ResponsiveBox = CollectionWidget.inherit({
     _initMarkup: function() {
         this.callBase();
         this.$element().addClass(RESPONSIVE_BOX_CLASS);
-
-        // NOTE: Fallback box strategy
-        this._updateRootBox();
-    },
-
-    _updateRootBox: function() {
-        clearTimeout(this._updateTimer);
-
-        this._updateTimer = setTimeout((function() {
-            if(this._$root) {
-                eventsEngine.triggerHandler(this._$root, 'dxupdate');
-            }
-        }).bind(this));
     },
 
     _renderItems: function() {
@@ -280,7 +258,7 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _screenWidth: function() {
-        return hasWindow() ? $(window).width() : HD_SCREEN_WIDTH;
+        return hasWindow() ? getWidth(getWindow()) : HD_SCREEN_WIDTH;
     },
 
     _createEmptyCell: function() {
@@ -401,7 +379,7 @@ const ResponsiveBox = CollectionWidget.inherit({
             this._needApplyAutoBaseSize(item) && extend(item, { baseSize: 'auto' });
         }).bind(this));
 
-        return extend({
+        return {
             width: '100%',
             height: '100%',
             items: rootItems,
@@ -411,7 +389,7 @@ const ResponsiveBox = CollectionWidget.inherit({
             onItemClick: this._createActionByOption('onItemClick'),
             onItemContextMenu: this._createActionByOption('onItemContextMenu'),
             onItemRendered: this._createActionByOption('onItemRendered')
-        }, { _layoutStrategy: this.option('_layoutStrategy') });
+        };
     },
 
     _needApplyAutoBaseSize: function(item) {
@@ -568,7 +546,6 @@ const ResponsiveBox = CollectionWidget.inherit({
         }
 
         this._layoutChangedAction();
-        this._updateRootBox();
     },
 
     _saveAssistantRoot: function($root) {
@@ -577,7 +554,6 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _dispose: function() {
-        clearTimeout(this._updateTimer);
         this._clearItemNodeTemplates();
         this._cleanUnusedRoots();
         this.callBase.apply(this, arguments);
@@ -599,13 +575,6 @@ const ResponsiveBox = CollectionWidget.inherit({
         });
     },
 
-    _toggleVisibility: function(visible) {
-        this.callBase(visible);
-        if(visible) {
-            this._updateRootBox();
-        }
-    },
-
     _attachClickEvent: noop,
 
     _optionChanged: function(args) {
@@ -613,7 +582,6 @@ const ResponsiveBox = CollectionWidget.inherit({
             case 'rows':
             case 'cols':
             case 'screenByWidth':
-            case '_layoutStrategy':
             case 'singleColumnScreen':
                 this._clearItemNodeTemplates();
                 this._invalidate();
@@ -652,7 +620,6 @@ const ResponsiveBox = CollectionWidget.inherit({
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
-
     /**
     * @name dxResponsiveBox.focus
     * @publicName focus()
@@ -663,3 +630,9 @@ const ResponsiveBox = CollectionWidget.inherit({
 registerComponent('dxResponsiveBox', ResponsiveBox);
 
 export default ResponsiveBox;
+
+/**
+ * @name dxResponsiveBoxItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

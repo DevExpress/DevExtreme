@@ -1,9 +1,7 @@
 import path from 'path';
-import * as sass from 'sass';
 import { metadata } from '../data/metadata';
 import noModificationsResult from '../data/compilation-results/no-changes-css';
 import noModificationsMeta from '../data/compilation-results/no-changes-meta';
-import PostCompiler from '../../src/modules/post-compiler';
 
 import CompileManager from '../../src/modules/compile-manager';
 
@@ -11,9 +9,18 @@ const dataPath = path.join(path.resolve(), 'tests', 'data');
 
 jest.mock('../../src/modules/bundle-resolver', () => ({
   __esModule: true,
-  default: (): sass.SyncOptions => ({
-    file: path.join(dataPath, 'scss', 'bundles', 'dx.light.scss'),
-    includePaths: [path.join(dataPath, 'scss', 'widgets', 'generic')],
+  default: (theme: string): BundleResolver<'async'> => ({
+    file: path.join(
+      dataPath,
+      'scss',
+      'bundles',
+      theme === 'material'
+        ? 'dx.material.blue.light.scss'
+        : 'dx.light.scss',
+    ),
+    options: {
+      loadPaths: [path.join(dataPath, 'scss', 'widgets', 'generic')],
+    },
   }),
 }));
 
@@ -22,12 +29,14 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
   metadata,
 }));
 
-jest.mock('fibers', () => undefined);
-
-PostCompiler.addInfoHeader = (css: string): string => css;
+jest.mock('../../src/modules/post-compiler', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  ...jest.requireActual('../../src/modules/post-compiler') as Record<string, unknown>,
+  addInfoHeader: (css: string): string => css,
+}));
 
 describe('Compile manager - integration test on test sass', () => {
-  test('compile test bundle without swatch', () => {
+  test('compile test bundle without swatch', async () => {
     const manager = new CompileManager();
     return manager.compile({}).then((result) => {
       expect(result.css).toBe(noModificationsResult);
@@ -35,14 +44,14 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with swatch', () => {
+  test('compile test bundle with swatch', async () => {
     const manager = new CompileManager();
     return manager.compile({
       makeSwatch: true,
       outColorScheme: 'test-theme',
     }).then((result) => {
       expect(result.css).toBe(`.dx-swatch-test-theme .dx-accordion {
-  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
+  background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
@@ -54,13 +63,13 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with assetsBasePath', () => {
+  test('compile test bundle with assetsBasePath', async () => {
     const manager = new CompileManager();
     return manager.compile({
       assetsBasePath: 'base-path',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
+  background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
   color: #337ab7;
   background-image: url(base-path/icons/icons.woff2);
 }
@@ -72,20 +81,20 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with widgets option', () => {
+  test('compile test bundle with widgets option', async () => {
     const manager = new CompileManager();
     return manager.compile({
       widgets: ['datebox'],
     }).then((result) => {
       expect(result.css).toBe('');
       expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '"Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif',
+        '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
         '$base-accent': '#337ab7',
       });
     });
   });
 
-  test('compile test bundle using bootstrap (3) file as input', () => {
+  test('compile test bundle using bootstrap (3) file as input', async () => {
     const manager = new CompileManager();
     return manager.compile({
       isBootstrap: true,
@@ -93,7 +102,7 @@ describe('Compile manager - integration test on test sass', () => {
       data: '@brand-primary: red;',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif;
+  background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -103,23 +112,23 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '"Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif',
-        '$base-accent': 'red',
-        '$accordion-title-color': 'red',
+        '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
+        '$base-accent': '#ff0000',
+        '$accordion-title-color': '#ff0000',
         '$accordion-item-title-opened-bg': 'transparent',
       });
     });
   });
 
-  test('compile test bundle using bootstrap (4) file as input', () => {
+  test('compile test bundle using bootstrap (4) file as input', async () => {
     const manager = new CompileManager();
     return manager.compile({
       isBootstrap: true,
       bootstrapVersion: 4,
-      data: '$primary: red;',
+      data: '$primary: red;$font-family-sans-serif: sans-serif;',
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  background-color: sans-serif;
   color: red;
   background-image: url(icons/icons.woff2);
 }
@@ -129,21 +138,21 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
-        '$base-accent': 'red',
-        '$accordion-title-color': 'red',
+        '$base-font-family': 'sans-serif',
+        '$base-accent': '#ff0000',
+        '$accordion-title-color': '#ff0000',
         '$accordion-item-title-opened-bg': 'transparent',
       });
     });
   });
 
-  test('compile test bundle with noClean option', () => {
+  test('compile test bundle with noClean option', async () => {
     const manager = new CompileManager();
     return manager.compile({
       noClean: true,
     }).then((result) => {
       expect(result.css).toBe(`.dx-accordion {
-  background-color: "Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif;
+  background-color: "Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif;
   color: #337ab7;
   background-image: url(icons/icons.woff2);
 }
@@ -155,11 +164,22 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle with error', () => {
+  test('compile test bundle with error', async () => {
     const manager = new CompileManager();
     return expect(manager.compile({
       makeSwatch: true,
       outColorScheme: 'error for sass compiler :)',
-    })).rejects.toBeInstanceOf(Error);
+    })).rejects.toThrowError(Error);
+  });
+
+  test('compile test bundle with removeExternalResources option', async () => {
+    const manager = new CompileManager();
+    return manager.compile({
+      themeName: 'material',
+      removeExternalResources: true,
+    }).then((result) => {
+      expect(result.css).toBe('');
+      expect(result.compiledMetadata).toEqual({});
+    });
   });
 });

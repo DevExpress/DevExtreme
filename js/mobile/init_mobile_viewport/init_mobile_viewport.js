@@ -1,3 +1,4 @@
+import { getWidth, setWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import { getWindow } from '../../core/utils/window';
@@ -73,8 +74,8 @@ export const initMobileViewport = function(options) {
         if(!isPhoneGap) {
             // NOTE: fix app size after device rotation in Safari when keyboard was shown
             resizeCallbacks.add(function() {
-                const windowWidth = $(window).width();
-                $('body').width(windowWidth);
+                const windowWidth = getWidth(window);
+                setWidth($('body'), windowWidth);
             });
         }
     }

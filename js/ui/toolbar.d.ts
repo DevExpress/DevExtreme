@@ -1,139 +1,257 @@
+import { DataSourceLike } from '../data/data_source';
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
+
+import {
+    ToolbarItemLocation,
+    ToolbarItemComponent,
+} from '../common';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
+type ItemLike = string | Item | any;
+
+/** @public */
+export type LocateInMenuMode = 'always' | 'auto' | 'never';
+/** @public */
+export type ShowTextMode = 'always' | 'inMenu';
+
+export {
+    ToolbarItemLocation,
+    ToolbarItemComponent as ToolbarItemWidget,
+};
+
+/** @public */
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>>;
+
+/** @public */
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>>;
+
+/** @public */
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxToolbar<TItem, TKey>>;
+
+/** @public */
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxToolbar<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxToolbar<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxToolbar<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ * @docid
+ */
+export interface dxToolbarOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxToolbar<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
+     * @type string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxToolbarItem | any> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
+     * @type Array<string | dxToolbarItem | any>
      * @fires dxToolbarOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxToolbarItem | any>;
+    items?: Array<TItem>;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    multiline?: boolean;
     /**
      * @docid
      * @default "menuItem"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
-    /**
-     * @docid
-     * @deprecated
-     * @default undefined
-     * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    height?: number | string | (() => number | string);
+    menuItemTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
 }
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/toolbar
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxToolbar extends CollectionWidget {
-    constructor(element: Element, options?: dxToolbarOptions)
-    constructor(element: JQuery, options?: dxToolbarOptions)
-}
-
+export default class dxToolbar<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidget<dxToolbarOptions<TItem, TKey>, TItem, TKey> { }
 
 /**
-* @docid
-* @inherits CollectionWidgetItem
-* @type object
-*/
+ * @public
+ * @namespace DevExpress.ui.dxToolbar
+ * */
+export type Item = dxToolbarItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
+ */
 export interface dxToolbarItem extends CollectionWidgetItem {
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cssClass?: string;
     /**
      * @docid
-     * @type Enums.ToolbarItemLocateInMenuMode
      * @default 'never'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    locateInMenu?: 'always' | 'auto' | 'never';
+    locateInMenu?: LocateInMenuMode;
     /**
      * @docid
-     * @type Enums.ToolbarItemLocation
      * @default 'center'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    location?: 'after' | 'before' | 'center';
+    location?: ToolbarItemLocation;
     /**
      * @docid
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItemTemplate?: template | (() => string | Element | JQuery);
+    menuItemTemplate?: template | (() => string | UserDefinedElement);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     options?: any;
     /**
      * @docid
-     * @type Enums.ToolbarItemShowTextMode
      * @default 'always'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showText?: 'always' | 'inMenu';
+    showText?: ShowTextMode;
     /**
      * @docid
-     * @type Enums.ToolbarItemWidget
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
+    widget?: ToolbarItemComponent;
 }
 
-declare global {
-interface JQuery {
-    dxToolbar(): JQuery;
-    dxToolbar(options: "instance"): dxToolbar;
-    dxToolbar(options: string): any;
-    dxToolbar(options: string, ...params: any[]): any;
-    dxToolbar(options: dxToolbarOptions): JQuery;
-}
-}
-export type Options = dxToolbarOptions;
+/** @public */
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+};
 
-/** @deprecated use Options instead */
-export type IOptions = dxToolbarOptions;
+/** @public */
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxToolbarOptions<TItem, TKey>;
+
+/** @deprecated use Properties instead */
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered' | 'onSelectionChanged'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxToolbarOptions.onContentReady
+ * @type_function_param1 e:{ui/toolbar:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxToolbarOptions.onDisposing
+ * @type_function_param1 e:{ui/toolbar:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxToolbarOptions.onInitialized
+ * @type_function_param1 e:{ui/toolbar:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxToolbarOptions.onItemClick
+ * @type_function_param1 e:{ui/toolbar:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxToolbarOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/toolbar:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxToolbarOptions.onItemHold
+ * @type_function_param1 e:{ui/toolbar:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxToolbarOptions.onItemRendered
+ * @type_function_param1 e:{ui/toolbar:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxToolbarOptions.onOptionChanged
+ * @type_function_param1 e:{ui/toolbar:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

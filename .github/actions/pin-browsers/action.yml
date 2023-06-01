@@ -1,0 +1,35 @@
+name: "Pin Browsers"
+description: "Install and setup Chrome and Firefox"
+
+inputs:
+  chrome-version:
+    description: "Chrome version to install"
+    default: "latest"
+  firefox-version:
+    description: "Firefox version to install"
+    default: "latest"
+
+runs:
+  using: composite
+  steps:
+    - uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: ${{ inputs.chrome-version }}
+      id: setup-chrome
+    - shell: bash
+      run: |
+        echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
+        ${{ steps.setup-chrome.outputs.chrome-path }} --version
+    - shell: bash
+      run: |
+        echo Installed chromium version: ${{ inputs.chrome-version }}
+        google-chrome-stable --version
+    - name: "Setup Firefox"
+      id: setup-firefox
+      uses: browser-actions/setup-firefox@v1
+      with:
+        firefox-version: ${{ inputs.firefox-version }}
+    - shell: bash
+      run: |
+        echo Installed firefox versions: ${{ steps.setup-firefox.outputs.firefox-version }}
+        firefox --version

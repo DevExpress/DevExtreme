@@ -1,6 +1,7 @@
-import 'ui/pivot_grid/ui.pivot_grid';
 import $ from 'jquery';
 import windowUtils from 'core/utils/window';
+
+import '__internal/grids/pivot_grid/module_widget';
 
 QUnit.module('PivotGrid markup tests', () => {
 
@@ -75,7 +76,7 @@ QUnit.module('PivotGrid markup tests', () => {
             }
         });
 
-        clock.tick();
+        clock.tick(10);
 
         // assert
         assert.ok(pivotGrid.$element().hasClass('dx-pivotgrid'), 'has dx-pivotgrid class');

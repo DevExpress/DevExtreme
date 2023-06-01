@@ -1,56 +1,85 @@
 import {
-    dxElement
-} from '../core/element';
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
 
 import {
-    dxSliderBaseOptions
+    ValueChangedInfo,
+} from './editor/editor';
+
+import {
+    dxSliderBaseOptions,
 } from './slider';
 
 import dxTrackBar from './track_bar';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxRangeSlider>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxRangeSlider>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxRangeSlider>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxRangeSlider> & ChangedOptionInfo;
+
+/**
+ * @docid _ui_range_slider_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo, ValueChangedInfo
+ */
+export type ValueChangedEvent = NativeEventInfo<dxRangeSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo & {
+    readonly start?: number;
+    readonly end?: number;
+    readonly value?: Array<number>;
+};
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
      * @docid
      * @default 60
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     end?: number;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     endName?: string;
     /**
      * @docid
+     * @type_function_param1 e:_ui_range_slider_ValueChangedEvent
      * @action
-     * @extends Action
-     * @type_function_param1_field4 start:number
-     * @type_function_param1_field5 end:number
-     * @type_function_param1_field6 value:array<number>
-     * @prevFileNamespace DevExpress.ui
+     * @default null
      * @public
      */
-    onValueChanged?: ((e: { component?: dxRangeSlider, element?: dxElement, model?: any, start?: number, end?: number, value?: Array<number> }) => any);
+    onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
      * @default 40
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     start?: number;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     startName?: string;
     /**
      * @docid
      * @default [40, 60]
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: Array<number>;
@@ -59,26 +88,52 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
  * @docid
  * @isEditor
  * @inherits dxSliderBase
- * @module ui/range_slider
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxRangeSlider extends dxTrackBar {
-    constructor(element: Element, options?: dxRangeSliderOptions)
-    constructor(element: JQuery, options?: dxRangeSliderOptions)
-}
+export default class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> { }
 
-declare global {
-interface JQuery {
-    dxRangeSlider(): JQuery;
-    dxRangeSlider(options: "instance"): dxRangeSlider;
-    dxRangeSlider(options: string): any;
-    dxRangeSlider(options: string, ...params: any[]): any;
-    dxRangeSlider(options: dxRangeSliderOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxRangeSliderOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxRangeSliderOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxRangeSliderOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onValueChanged'>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxRangeSliderOptions.onContentReady
+ * @type_function_param1 e:{ui/range_slider:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxRangeSliderOptions.onDisposing
+ * @type_function_param1 e:{ui/range_slider:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxRangeSliderOptions.onInitialized
+ * @type_function_param1 e:{ui/range_slider:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxRangeSliderOptions.onOptionChanged
+ * @type_function_param1 e:{ui/range_slider:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

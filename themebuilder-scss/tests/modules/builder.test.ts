@@ -2,7 +2,6 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { buildTheme } from '../../src/modules/builder';
 import commands from '../../src/modules/commands';
-// eslint-disable-next-line import/extensions
 import { version, metadata } from '../../src/data/metadata/dx-theme-builder-metadata';
 
 const buildTimeout = 150000;
@@ -12,10 +11,8 @@ const normalizeCss = (css: string): string => css
   .replace(/\s*\/\*[\s\S]*?\*\/\s*/g, '')
   .trim();
 
-jest.mock('fibers', () => undefined);
-
 describe('Builder integration tests', () => {
-  test('Build theme without parameters', () => {
+  test('Build theme without parameters', async () => {
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
       outputColorScheme: 'custom-scheme',
@@ -31,7 +28,7 @@ describe('Builder integration tests', () => {
     });
   }, buildTimeout);
 
-  test('Build base theme with swatch', () => {
+  test('Build base theme with swatch', async () => {
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
       makeSwatch: true,
@@ -44,7 +41,7 @@ describe('Builder integration tests', () => {
     });
   }, buildTimeout);
 
-  test('Build theme according to bootstrap', () => {
+  test('Build theme according to bootstrap', async () => {
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
       inputFile: 'some.less',
@@ -57,7 +54,21 @@ describe('Builder integration tests', () => {
     });
   }, buildTimeout);
 
-  test('Build theme with changed color constants (generic)', () => {
+  test('Build bootstrap 5 theme', async () => {
+    const config: ConfigSettings = {
+      command: commands.BUILD_THEME,
+      inputFile: 'bootstrap5.scss',
+      bootstrapVersion: 5,
+      data: '',
+      outputColorScheme: 'custom-scheme',
+    };
+
+    return buildTheme(config).then((result) => {
+      expect(result.css).not.toBe('');
+    });
+  }, buildTimeout);
+
+  test('Build theme with changed color constants (generic)', async () => {
     const allChangedVariables = metadata.generic.map((item) => ({
       key: item.Key,
       value: item.Type === 'color' ? '#abcdef' : '10px',
@@ -77,7 +88,7 @@ describe('Builder integration tests', () => {
     });
   }, buildTimeout);
 
-  test('Build theme with changed color constants (material)', () => {
+  test('Build theme with changed color constants (material)', async () => {
     const allChangedVariables = metadata.material.map((item) => ({
       key: item.Key,
       value: item.Type === 'color' ? '#abcdef' : '10px',
@@ -96,7 +107,7 @@ describe('Builder integration tests', () => {
     });
   }, buildTimeout);
 
-  test('Theme built without parameters is the same that in distribution (generic)', () => {
+  test('Theme built without parameters is the same that in distribution (generic)', async () => {
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
       outputColorScheme: 'custom-scheme',
@@ -110,7 +121,7 @@ describe('Builder integration tests', () => {
     });
   }, buildTimeout);
 
-  test('Theme built without parameters is the same that in distribution (material)', () => {
+  test('Theme built without parameters is the same that in distribution (material)', async () => {
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
       outputColorScheme: 'custom-scheme',

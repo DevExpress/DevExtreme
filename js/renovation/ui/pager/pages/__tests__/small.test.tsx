@@ -1,17 +1,18 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import { mount } from 'enzyme';
+import { RefObject } from '@devextreme-generator/declarations';
 import { PagesSmall, viewFunction as PagesSmallComponent } from '../small';
-import getElementComputedStyle from '../../utils/get_computed_style';
+import getElementComputedStyle from '../../../../utils/get_computed_style';
 import messageLocalization from '../../../../../localization/message';
+import { createTestRef } from '../../../../test_utils/create_ref';
 
-jest.mock('../../utils/get_computed_style');
-jest.mock('../../../number_box', () => ({ NumberBox: React.forwardRef(() => null) }));
+jest.mock('../../../../utils/get_computed_style');
+jest.mock('../../../editors/number_box', () => ({ NumberBox: React.forwardRef(() => null) }));
 jest.mock('../../../../../localization/message', () => ({
-  getFormatter: jest.fn(),
+  getFormatter: jest.fn().mockReturnValue(() => jest.fn),
 }));
 
 describe('Small pager pages', () => {
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const render = (props) => {
     const tree = mount<Element>(<PagesSmallComponent {...props} /> as any).childAt(0);
     const pageIndexNumberBox = tree.childAt(0);
@@ -27,13 +28,13 @@ describe('Small pager pages', () => {
   };
 
   it('View', () => {
-    const pageIndexRef = createRef();
+    const pageIndexRef = createTestRef();
     const props = { pageCount: 100 } as Partial<PagesSmall['props']>;
     const viewProps = {
       valueChange: jest.fn(),
       width: 40,
       value: 3,
-      pageIndexRef: pageIndexRef as unknown as HTMLDivElement,
+      pageIndexRef,
       selectLastPageIndex: jest.fn(),
       pagesCountText: 'of',
       props,
@@ -42,8 +43,6 @@ describe('Small pager pages', () => {
       tree, pageIndexNumberBox, span, maxPage,
     } = render(viewProps);
     expect(tree.props().className).toBe('dx-light-pages');
-
-    expect(pageIndexNumberBox.instance()).toBe(pageIndexRef.current);
     expect(pageIndexNumberBox.props()).toMatchObject({
       className: 'dx-page-index', max: 100, min: 1, value: 3, valueChange: viewProps.valueChange, width: 40,
     });
@@ -56,9 +55,13 @@ describe('Small pager pages', () => {
   describe('Behaviour', () => {
     it('updateWidth effect', () => {
       (getElementComputedStyle as jest.Mock).mockReturnValue({ minWidth: '19px' });
-      const component = new PagesSmall({ pageCount: 100 });
-      const numberBoxElement = {};
-      component.pageIndexRef = numberBoxElement as HTMLDivElement;
+      const component = new PagesSmall({
+        pageCount: 100,
+        pageIndexChange: jest.fn(),
+      });
+      const numberBoxElement = { };
+      const rootElement = { querySelector: () => numberBoxElement } as unknown as HTMLDivElement;
+      component.pageIndexRef = { current: rootElement } as RefObject<HTMLDivElement>;
       component.updateWidth();
       expect(getElementComputedStyle).toBeCalledWith(numberBoxElement);
       expect(component.width).toBe(19 + 10 * 3);
@@ -66,7 +69,10 @@ describe('Small pager pages', () => {
 
     it('Effect updateWidth default width', () => {
       (getElementComputedStyle as jest.Mock).mockReturnValue(null);
-      const component = new PagesSmall({ pageCount: 100 });
+      const component = new PagesSmall({
+        pageCount: 100,
+        pageIndexChange: jest.fn(),
+      });
       const numberBoxElement = {};
       component.pageIndexRef = { getHtmlElement: () => numberBoxElement } as any;
       component.updateWidth();
@@ -78,6 +84,7 @@ describe('Small pager pages', () => {
       const component = new PagesSmall({
         pageCount: 3,
         pageIndex: 2,
+        pageIndexChange: jest.fn(),
       });
       expect(() => component.selectLastPageIndex()).not.toThrow();
       component.props.pageIndexChange = pageIndexChangeHandler;
@@ -85,21 +92,33 @@ describe('Small pager pages', () => {
       expect(pageIndexChangeHandler).toBeCalledWith(2);
     });
 
-    it('pagesCountText', () => {
+    it('pagesCountText if appropriate property is not specified', () => {
       (messageLocalization.getFormatter as jest.Mock).mockReturnValue(() => 'of');
-      const component = new PagesSmall({ pageCount: 100 });
+      const component = new PagesSmall({
+        pageCount: 100,
+        pageIndexChange: jest.fn(),
+      });
       expect(component.pagesCountText).toBe('of');
       expect(messageLocalization.getFormatter).toBeCalledWith('dxPager-pagesCountText');
+    });
+
+    it('pagesCountText', () => {
+      const component = new PagesSmall({
+        pageCount: 100,
+        pagesCountText: 'from',
+        pageIndexChange: jest.fn(),
+      });
+      expect(component.pagesCountText).toBe('from');
     });
 
     it('valueChange', () => {
       const component = new PagesSmall({
         pageCount: 3,
         pageIndex: 2,
-
+        pageIndexChange: jest.fn(),
       });
       component.valueChange(1);
-      expect(component.props.pageIndex).toBe(0);
+      expect(component.props.pageIndexChange).toBeCalledWith(0);
     });
 
     it('get value', () => {

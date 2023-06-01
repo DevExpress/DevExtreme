@@ -1,6 +1,5 @@
 const $ = require('jquery');
 
-require('common.css!');
 require('ui/scroll_view');
 
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
@@ -11,18 +10,22 @@ const SCROLLVIEW_LOADPANEL_CLASS = 'dx-scrollview-loadpanel';
 
 QUnit.testStart(function() {
     const markup = '\
-        <div id="scrollView" style="height: 50px; width: 50px;">\
+        <div id="scrollView"">\
             <div class="content1">ScrollView content</div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#scrollView').css({
+        height: '50px',
+        width: '50px'
+    });
 });
 
 QUnit.module('ScrollView server markup');
 
 QUnit.test('pockets should not be rendered in scrollView on server', function(assert) {
     const $scrollView = $('#scrollView').dxScrollView();
-    const $scrollableContent = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $scrollableContent = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $topPocket = $scrollableContent.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
     const $bottomPocket = $scrollableContent.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
 
@@ -45,12 +48,11 @@ QUnit.test('loadPanel should not be rendered in scrollView on server', function(
 });
 
 QUnit.test('scrollView content should be rendered on server', function(assert) {
-    const $scrollView = $('#scrollView').dxScrollView();
-    const $scrollableContent = $scrollView.find('.' + SCROLLABLE_CONTENT_CLASS);
-    const $content = $scrollableContent.children().eq(0);
+    const scrollView = $('#scrollView').dxScrollView().dxScrollView('instance');
+    const $content = $(scrollView.content());
 
     assert.equal($content.length, 1, 'scrollView has content on server');
-    assert.equal($content.text(), 'ScrollView content', 'scrollView content has right text');
+    assert.equal($content.text().trim(), 'ScrollView content', 'scrollView content has right text');
 });
 
 QUnit.test('root with custom size', function(assert) {

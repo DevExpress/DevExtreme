@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "name": "tests",
+  "version": "1.1.0",
+  "author": "Developer Express Inc.",
+  "dependencies": {
+    "@angular/common": "^11.2.14"
+  },
+  "devDependencies": {
+    "jquery": "3.6.3",
+    "@types/jquery": "3.5.16"
+  }
+}

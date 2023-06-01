@@ -1,3 +1,5 @@
+@use "sass:math";
+
 // stylelint-disable selector-class-pattern
 
 @mixin dx-clearfix-mixin() {
@@ -83,8 +85,7 @@
     flex-direction: column;
     height: 0;
 
-    > .dx-scrollable-wrapper,
-    > div > .dx-scrollable-wrapper {
+    > .dx-scrollable-wrapper {
       display: flex;
       flex-grow: 1;
       flex-direction: column;
@@ -128,9 +129,10 @@
   pointer-events: none;
   position: absolute;
   top: 50%;
-  margin-top: -$indicator-size / 2;
+  margin-top: math.div(-$indicator-size, 2);
   width: $indicator-size;
   height: $indicator-size;
 }
 
 $overlay-zindex: 1000;
+$max-integer: 2147483647;

@@ -6,7 +6,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/tree_list/ui.tree_list';
 
@@ -16,7 +15,7 @@ import renderer from 'core/renderer';
 
 function setupTreeList(that, $treeListContainer) {
     that.$element = function() {
-        return $treeListContainer ? $treeListContainer : renderer('.dx-treelist');
+        return $treeListContainer ? $treeListContainer : renderer($('.dx-treelist'));
     };
 
     if(that.columns !== null) {
@@ -48,7 +47,7 @@ function setupTreeList(that, $treeListContainer) {
         initViews: true
     };
 
-    treeListMocks.setupTreeListModules(that, ['data', 'columns', 'rows', 'columnHeaders', 'masterDetail', 'editing', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'gridView'], that.setupOptions);
+    treeListMocks.setupTreeListModules(that, ['data', 'columns', 'rows', 'columnHeaders', 'masterDetail', 'editing', 'editingRowBased', 'editingCellBased', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'gridView'], that.setupOptions);
 }
 
 QUnit.module('API', {
@@ -67,11 +66,11 @@ QUnit.module('API', {
         setupTreeList(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const rows = this.getVisibleRows();

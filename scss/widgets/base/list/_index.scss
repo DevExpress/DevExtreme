@@ -15,8 +15,11 @@ $list-searchbox-margin-bottom: 5px;
   }
 }
 
-.dx-wrap-item-text > .dx-list-item > .dx-list-item-content {
-  white-space: normal;
+.dx-wrap-item-text,
+.dx-wrap-item-text > .dx-list-group > .dx-list-group-body {
+  & > .dx-list-item > .dx-list-item-content {
+    white-space: normal;
+  }
 }
 
 .dx-empty-collection .dx-list-select-all {
@@ -186,10 +189,6 @@ $list-searchbox-margin-bottom: 5px;
 .dx-list-switchable-menu-shield-positioning {
   position: relative;
   transform: translateZ(0);
-
-  .dx-device-android-4 & {
-    transform: none;
-  }
 }
 
 .dx-list-switchable-delete-top-shield,
@@ -262,7 +261,7 @@ $list-searchbox-margin-bottom: 5px;
   overflow: hidden;
 
   .dx-device-ios & {
-    -webkit-mask-image: -webkit-radial-gradient(white, black); // stylelint-disable-line property-no-vendor-prefix
+    -webkit-mask-image: -webkit-radial-gradient(white, black); // stylelint-disable-line property-no-vendor-prefix, value-no-vendor-prefix
   }
 }
 

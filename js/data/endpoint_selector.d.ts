@@ -1,9 +1,6 @@
 /**
  * @docid
  * @namespace DevExpress
- * @module data/endpoint_selector
- * @export default
- * @prevFileNamespace DevExpress.data
  * @public
  */
 export default class EndpointSelector {
@@ -11,9 +8,6 @@ export default class EndpointSelector {
     /**
      * @docid
      * @publicName urlFor(key)
-     * @param1 key:string
-     * @return string
-     * @prevFileNamespace DevExpress.data
      * @public
      */
     urlFor(key: string): string;

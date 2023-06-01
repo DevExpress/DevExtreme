@@ -15,11 +15,3 @@
   @include dx-base-typography();
 }
 
-.dx-popup-wrapper {
-  .dx-state-focused {
-    &.dx-overlay-content {
-
-      // TODO focused state of popup
-    }
-  }
-}

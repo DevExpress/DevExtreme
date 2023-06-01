@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight, getWidth, getHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 
 import { splitPair, pairToObject } from '../core/utils/common';
@@ -5,7 +6,7 @@ import { each } from '../core/utils/iterator';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import domAdapter from '../core/dom_adapter';
-import { isWindow } from '../core/utils/type';
+import { isWindow, isDefined } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { getBoundingRect } from '../core/utils/position';
 import browser from '../core/utils/browser';
@@ -16,7 +17,7 @@ import devices from '../core/devices';
 const horzRe = /left|right/;
 const vertRe = /top|bottom/;
 const collisionRe = /fit|flip|none/;
-const scaleRe = /scale(.+)/;
+const scaleRe = /scale\(.+?\)/;
 const IS_SAFARI = browser.safari;
 
 const normalizeAlign = function(raw) {
@@ -223,7 +224,7 @@ const calculatePosition = function(what, options) {
     const boundaryOffset = normalizeOffset(options.boundaryOffset);
 
     const h = {
-        mySize: $what.outerWidth(),
+        mySize: getOuterWidth($what),
         myAlign: my.h,
         atAlign: at.h,
         offset: offset.h,
@@ -232,7 +233,7 @@ const calculatePosition = function(what, options) {
     };
 
     const v = {
-        mySize: $what.outerHeight(),
+        mySize: getOuterHeight($what),
         myAlign: my.v,
         atAlign: at.v,
         offset: offset.v,
@@ -256,21 +257,21 @@ const calculatePosition = function(what, options) {
                 h.atSize = of[0].visualViewport.width;
                 v.atSize = of[0].visualViewport.height;
             } else {
-                h.atSize = of[0].innerWidth > of[0].outerWidth ? of[0].innerWidth : of.width();
-                v.atSize = of[0].innerHeight > of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : of.height();
+                h.atSize = of[0].innerWidth > of[0].outerWidth ? of[0].innerWidth : getWidth(of);
+                v.atSize = of[0].innerHeight > of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : getHeight(of);
             }
         } else if(of[0].nodeType === 9) {
             h.atLocation = 0;
             v.atLocation = 0;
-            h.atSize = of.width();
-            v.atSize = of.height();
+            h.atSize = getWidth(of);
+            v.atSize = getHeight(of);
         } else {
             const ofRect = getBoundingRect(of.get(0));
             const o = getOffsetWithoutScale(of);
             h.atLocation = o.left;
             v.atLocation = o.top;
-            h.atSize = Math.max(ofRect.width, of.outerWidth());
-            v.atSize = Math.max(ofRect.height, of.outerHeight());
+            h.atSize = Math.max(ofRect.width, getOuterWidth(of));
+            v.atSize = Math.max(ofRect.height, getOuterHeight(of));
         }
     }
 
@@ -279,8 +280,8 @@ const calculatePosition = function(what, options) {
 
     const bounds = (function() {
         const win = $(window);
-        const windowWidth = win.width();
-        const windowHeight = win.height();
+        const windowWidth = getWidth(win);
+        const windowHeight = getHeight(win);
         let left = win.scrollLeft();
         let top = win.scrollTop();
         const documentElement = domAdapter.getDocumentElement();
@@ -294,15 +295,15 @@ const calculatePosition = function(what, options) {
         let boundaryWidth = windowWidth;
         let boundaryHeight = windowHeight;
 
-        if(boundary) {
+        if(boundary && !isWindow(boundary)) {
             const $boundary = $(boundary);
             const boundaryPosition = $boundary.offset();
 
             left = boundaryPosition.left;
             top = boundaryPosition.top;
 
-            boundaryWidth = $boundary.width();
-            boundaryHeight = $boundary.height();
+            boundaryWidth = getWidth($boundary);
+            boundaryHeight = getHeight($boundary);
         }
 
         return {
@@ -344,6 +345,19 @@ const calculatePosition = function(what, options) {
     return result;
 };
 
+// NOTE: Setting the 'element.style.transform.scale' requires the inline style when both of the conditions met:
+//       - a form contains an input with the name property set to "style";
+//       - a form contains a dx-validator (or other popup widget).
+//       T941581
+const setScaleProperty = function(element, scale, transformProp, styleAttr, isEmpty) {
+    const stylePropIsValid = isDefined(element.style) && !domAdapter.isNode(element.style);
+    if(stylePropIsValid) {
+        element.style.transform = isEmpty ? transformProp.replace(scale, '') : transformProp;
+    } else {
+        element.setAttribute('style', isEmpty ? styleAttr.replace(scale, '') : styleAttr);
+    }
+};
+
 const getOffsetWithoutScale = function($startElement, $currentElement = $startElement) {
     const currentElement = $currentElement.get(0);
     if(!currentElement) {
@@ -351,13 +365,14 @@ const getOffsetWithoutScale = function($startElement, $currentElement = $startEl
     }
 
     const style = currentElement.getAttribute?.('style') || '';
+    const transform = currentElement.style?.transform;
     const scale = style.match(scaleRe)?.[0];
     let offset;
 
     if(scale) {
-        currentElement.setAttribute('style', style.replace(scale, ''));
+        setScaleProperty(currentElement, scale, transform, style, true);
         offset = getOffsetWithoutScale($startElement, $currentElement.parent());
-        currentElement.setAttribute('style', style);
+        setScaleProperty(currentElement, scale, transform, style, false);
     } else {
         offset = getOffsetWithoutScale($startElement, $currentElement.parent());
     }

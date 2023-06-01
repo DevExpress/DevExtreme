@@ -2,7 +2,7 @@ const $ = require('jquery');
 const Widget = require('ui/widget/ui.widget');
 const registerComponent = require('core/component_registrator');
 
-require('common.css!');
+require('generic_light.css!');
 
 (function() {
 
@@ -14,13 +14,16 @@ require('common.css!');
 
 
     QUnit.testStart(function() {
-        const markup = '\
-            <div id="widget"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
-            <div id="widthRootStylePercent" style="width: 50%;"></div>\
-            </div>';
+        const markup = `
+            <div id="widget"></div>
+            <div id="widthRootStyle"></div>
+            <div id="widthRootStylePercent"></div>
+            </div>
+        `;
 
         $('#qunit-fixture').html(markup);
+        $('#widthRootStyle').css('width', '300px');
+        $('#widthRootStylePercent').css('width', '50%');
     });
 
     QUnit.module('Widget markup');

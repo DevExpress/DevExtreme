@@ -1,0 +1,68 @@
+{
+    "extends": [
+        "config:js-lib"
+    ],
+    "prConcurrentLimit": 2,
+    "semanticCommits": "enabled",
+    "baseBranches": [
+        "23_1",
+        "22_2"
+    ],
+    "labels": [
+        "dependencies"
+    ],
+    "vulnerabilityAlerts": {
+        "enabled": true,
+        "automerge": true
+    },
+    "packageRules": [
+        {
+            "matchPackagePrefixes": [ "cldr-" ],
+            "groupName": "CLDR"
+        },
+        {
+            "matchPackagePatterns": [
+                "^@devextreme-generator/"
+            ],
+            "enabled": false
+        },
+        {
+            "matchPackageNames": [
+                "@devextreme/runtime",
+                "devexpress-gantt",
+                "devexpress-diagram",
+                "eslint-config-devextreme",
+                "rrule",
+                "sass-embedded",
+                "sinon",
+                "systemjs"
+            ],
+            "enabled": false
+        },
+        {
+            "matchPackageNames": [ "typescript", "typescript-min" ],
+            "matchUpdateTypes": [ "major", "minor" ],
+            "enabled": false
+        },
+        {
+            "matchPackagePatterns": [ "*" ],
+            "matchUpdateTypes": [ "minor", "patch" ],
+            "automerge": true
+        },
+        {
+            "matchPackagePatterns": [ "*" ],
+            "excludePackagePrefixes": [ "cldr-" ],
+            "matchUpdateTypes": [ "major" ],
+            "enabled": false
+        }
+    ],
+    "reviewers": [
+        "team:devextreme-devops"
+    ],
+    "ignorePaths": [
+        ".github"
+    ],
+    "constraints": {
+        "node": "^16.3.0"
+    }
+}

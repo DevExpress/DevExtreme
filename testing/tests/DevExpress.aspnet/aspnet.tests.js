@@ -21,8 +21,7 @@
                 require('core/templates/template_engine_registry').setTemplateEngine,
                 aspnet,
                 function() { return require('ui/widget/ui.errors'); },
-                function() { return require('../../helpers/ajaxMock.js'); },
-                require('core/utils/console')
+                function() { return require('../../helpers/ajaxMock.js'); }
             );
         });
     } else {
@@ -31,11 +30,10 @@
             DevExpress.setTemplateEngine,
             DevExpress.aspnet,
             function() { return window.DevExpress_ui_widget_errors; },
-            function() { return window.ajaxMock; },
-            DevExpress.utils.console
+            function() { return window.ajaxMock; }
         );
     }
-}(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor, console) {
+}(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor) {
 
     if(QUnit.urlParams['nojquery']) {
         return;
@@ -156,43 +154,43 @@
                 $('#qunit-fixture').html(
                     '<div id="button"></div>\
                     \
-                    <script id="templateWithCreateComponent" type="text/html">\
+                    <script id="templateWithCreateComponent" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <div id="inner-button"></div>\
                         <% DevExpress.aspnet.createComponent("dxButton", { text: "text" }, "inner-button"); %>\
                     </div>\
                     </script>\
-                    <script id="simpleTemplate" type="text/html">\
+                    <script id="simpleTemplate" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton") %>\
                     </div>\
                     </script>\
                     \
-                    <script id="templateWithOptions" type="text/html">\
+                    <script id="templateWithOptions" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton", { text: "text" }) %>\
                     </div>\
                     </script>\
                     \
-                    <script id="templateWithID" type="text/html">\
+                    <script id="templateWithID" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton", { }, "test-id") %>\
                     </div>\
                     </script>\
                     \
-                    <script id="templateWithExoticId" type="text/html">\
+                    <script id="templateWithExoticId" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton", { }, "id-_1α♠!#$%&()*+,./:;<=>?@[\\\\]^`{|}~") %>\
                     </div>\
                     </script>\
                     \
-                    <script id="templateWithValidator" type="text/html">\
+                    <script id="templateWithValidator" type="text/html" nonce="wIkO6u">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxTextBox", { }, "test-id", { validationGroup: "my-group" }) %>\
                     </div>\
                     </script>\
                     \
-                    <div id="buttonWithInnerTemplate"><script>// DevExpress.aspnet.setTemplateEngine();</script>BUTTON_CONTENT</div>'
+                    <div id="buttonWithInnerTemplate"><script nonce="wIkO6u">// DevExpress.aspnet.setTemplateEngine();</script>BUTTON_CONTENT</div>'
                 );
 
                 aspnet.setTemplateEngine();
@@ -258,7 +256,7 @@
         beforeEach: function() {
             $('#qunit-fixture').html(
                 '<div id="button"></div>\
-                <script id="simpleTemplate" type="text/html"></script>'
+                <script id="simpleTemplate" type="text/html" nonce="wIkO6u"></script>'
             );
             aspnet.setTemplateEngine();
         },
@@ -266,21 +264,16 @@
             setTemplateEngine('default');
         }
     }, function() {
-        const testTemplate = function(name, templateSource, expected, enableAlternativeTemplateTags) {
+        const testTemplate = function(name, templateSource, expected) {
             QUnit.test(name, function(assert) {
                 const $template = $('#simpleTemplate');
 
                 $template.text(templateSource);
 
-                aspnet.enableAlternativeTemplateTags(enableAlternativeTemplateTags !== false);
-                try {
-                    $('#button').dxButton({
-                        text: 'Test button',
-                        template: $template
-                    });
-                } finally {
-                    aspnet.enableAlternativeTemplateTags(true);
-                }
+                $('#button').dxButton({
+                    text: 'Test button',
+                    template: $template
+                });
 
                 assert.equal($('.dx-button-content').text(), expected);
             });
@@ -327,16 +320,28 @@
         );
 
         testTemplate('Html encode: stored in variable',
-            '<% var a = \'<script>alert(1)</script>\'; %><%- a %>',
-            '<script>alert(1)</script>'
+            '<% var a = \'<script nonce="wIkO6u">alert(1)</script>\'; %><%- a %>',
+            '<script nonce="wIkO6u">alert(1)</script>'
         );
 
         testTemplate('obj', '<%- obj.text %>', 'Test button');
 
-        QUnit.module('Alternative syntax (T831170)', function() {
-            testTemplate('enabled', 'a [%= \'b\' %] c', 'a b c');
-            testTemplate('disabled', '[%= 123 %]', '[%= 123 %]', false);
-        });
+        testTemplate('null', '<% var a = null; %><%- a %>', '');
+        testTemplate('undefined', '<% var a = undefined; %><%- a %>', '');
+        testTemplate('empty', '<%-%>', 'undefined');
+        testTemplate('space', '<%- %>', 'undefined');
+        testTemplate('tab', '<%-\t%>', 'undefined');
+        testTemplate('new line', '<%-\n%>', 'undefined');
+        testTemplate('return', '<%-\r%>', 'undefined');
+        testTemplate('two spaces', '<%-  %>', 'undefined');
+        testTemplate('empty string', '<%- \'\' %>', '');
+        testTemplate('nonempty string', '<%- \'a\' %>', 'a');
+        testTemplate('WA from T954324, null', '<% var value = null; %><%- (value != null ? value : \'\') %>', '');
+        testTemplate('WA from T954324, undefined', '<% var value = undefined; %><%- (value != null ? value : \'\') %>', '');
+        testTemplate('WA from T954324, nempty string', '<% var value = \'\'; %><%- (value != null ? value : \'\') %>', '');
+        testTemplate('WA from T954324, nonempty string', '<% var value = \'a\'; %><%- (value != null ? value : \'\') %>', 'a');
+
+        testTemplate('Alternative syntax (T831170)', 'a [%= \'b\' %] c', 'a b c');
     });
 
     QUnit.test('Transcluded content (T691770, T693379)', function(assert) {
@@ -350,7 +355,7 @@
             $('#qunit-fixture').html('\
                 <div id=test-button>\
                     <div id=test-button-inner></div>\
-                    <script>\
+                    <script nonce="wIkO6u">\
                         testCounters.innerEval++;\
                         $(\'#test-button-inner\')\
                             .append(\'test-button-inner-text\')\
@@ -373,13 +378,14 @@
         }
     });
 
-    QUnit.test('T744904 - MVCx extension in template', function(assert) {
+    const testNoCSP = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+    testNoCSP('T744904 - MVCx extension in template', function(assert) {
         aspnet.setTemplateEngine();
         window['MVCx'] = { };
         try {
             $('#qunit-fixture').html(
                 '<div id="test-widget"></div>' +
-                '<script id="test-template" type="text/html">' +
+                '<script id="test-template" type="text/html" nonce="wIkO6u">' +
                 '  <script id="dxss_123456789" type="text/javascript"></<% %>script>' +
                 '</script>'
             );
@@ -397,6 +403,33 @@
         } finally {
             setTemplateEngine('default');
             delete window['MVCx'];
+        }
+    });
+
+    QUnit.test('T1146301 - NamedTemplate with expression inside Content RazorBlock', function(assert) {
+        aspnet.setTemplateEngine();
+        try {
+            $('#qunit-fixture').html(
+                '<div id="template-holder-widget"></div>' +
+                '<script nonce="wIkO6u">var rawJsStringWithHtmlTags = "<b>Encoded</b>";</script>' +
+                '<script id="template-nested-func" type="text/html" nonce="wIkO6u">' +
+                '<%!function(){%>\
+                   <div id="<%=arguments[0]%>">\
+                     <div id="nested-function-expr"><%- rawJsStringWithHtmlTags %></div>\
+                   </div>\
+                   <%DevExpress.aspnet.createComponent("dxScrollView",{},arguments[0])%>\
+                 <%}("dx-data-guid")%>' +
+                '</script>'
+            );
+
+            const widgetElement = $('#template-holder-widget');
+            widgetElement.dxButton({
+                template: $('#template-nested-func')
+            });
+
+            assert.equal($('#nested-function-expr').html(), '&lt;b&gt;Encoded&lt;/b&gt;');
+        } finally {
+            setTemplateEngine('default');
         }
     });
 
@@ -436,12 +469,12 @@
                 '<div id="popup1">' +
                 '</div>' +
 
-                '<script id="popup1_contentTemplate" type="text/html">' +
+                '<script id="popup1_contentTemplate" type="text/html" nonce="wIkO6u">' +
                 '  <div id=' + formID + '></div>' +
                 '  <% __createForm() %>' +
                 '</script>' +
 
-                '<script id="popup1_form_fieldTempalte" type="text/html">' +
+                '<script id="popup1_form_fieldTempalte" type="text/html" nonce="wIkO6u">' +
                 '  <div id=' + textBoxID + '></div>' +
                 '  <% __createTextBox(obj) %>' +
                 '</script>'
@@ -481,7 +514,7 @@
         try {
             $('#qunit-fixture').html(
                 '<div id="popup1"></div>' +
-                '<script id="popup1_contentTemplate" type="text/html">' +
+                '<script id="popup1_contentTemplate" type="text/html" nonce="wIkO6u">' +
                 '  <div id="b1"></div><% __createButton("b1") %>' +
                 '  <div id="b2"></div><% __createButton("b2") %>' +
                 '</script>'
@@ -507,7 +540,7 @@
         try {
             $('#qunit-fixture').html(
                 '<div id=list1></div>' +
-                '<script id="list1_itemTemplate" type="text/html">' +
+                '<script id="list1_itemTemplate" type="text/html" nonce="wIkO6u">' +
                 '  <div id="<%= key %>"></div><% DevExpress.aspnet.createComponent("dxTextBox", { }, key) %>' +
                 '</script>'
             );
@@ -536,7 +569,7 @@
         try {
             $('#qunit-fixture').html(
                 '<div id=toolbar1></div>' +
-                '<script id=template1 type=text/html>' +
+                '<script id=template1 type=text/html nonce="wIkO6u">' +
                 '  <div id=checkBox1></div><% __createCheckBox("checkBox1") %>' +
                 '</script>'
             );
@@ -558,28 +591,6 @@
         } finally {
             setTemplateEngine('default');
             delete window.__createCheckBox;
-        }
-    });
-
-    QUnit.test('Warn https://github.com/dotnet/aspnetcore/issues/17028', function(assert) {
-        aspnet.setTemplateEngine();
-        const spy = sinon.spy(console.logger, 'warn');
-        try {
-            aspnet.warnBug17028();
-
-            $('#qunit-fixture').html(`
-                <div id=widget1></div>
-                <div id=widget2></div>
-                <script id=template1 type=text/html><%= %></script>
-            `);
-
-            [1, 2].forEach(i => $('#widget' + i).dxButton({ template: $('#template1') }));
-
-            assert.equal(spy.callCount, 1);
-            assert.ok(spy.args[0][0].indexOf('alternative template syntax') > -1);
-        } finally {
-            setTemplateEngine('default');
-            spy.restore();
         }
     });
 

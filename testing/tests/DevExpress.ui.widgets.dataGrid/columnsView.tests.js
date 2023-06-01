@@ -1,14 +1,9 @@
 import $ from 'jquery';
 import dataUtils from 'core/element_data';
+import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
-QUnit.testStart(function() {
-    const markup = '<div><div id="container" class="dx-datagrid"></div></div>';
-    $('#qunit-fixture').html(markup);
-});
-
-import 'common.css!';
 import 'generic_light.css!';
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import browser from 'core/utils/browser';
 import columnsView from 'ui/grid_core/ui.grid_core.columns_view';
@@ -18,6 +13,12 @@ import dataGridMocks from '../../helpers/dataGridMocks.js';
 const MockColumnsController = dataGridMocks.MockColumnsController;
 const setupDataGridModules = dataGridMocks.setupDataGridModules;
 
+QUnit.testStart(function() {
+    const markup = '<div><div id="container" class="dx-datagrid"></div></div>';
+    $('#qunit-fixture').html(markup);
+
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('API methods', {
     beforeEach: function() {
@@ -71,7 +72,7 @@ QUnit.module('API methods', {
         const that = this;
 
         // act
-        fx.animate('#container', {
+        fx.animate($('#container'), {
             type: 'pop',
             duration: 50,
             complete: function() {
@@ -95,6 +96,14 @@ QUnit.module('API methods', {
     QUnit.test('Get column widths with detail row (editForm)', function(assert) {
         // arrange
         this.columnsView.element().find('table').prepend($('<tr class="dx-master-detail-row"><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr>'));
+
+        // act, assert
+        assert.deepEqual(this.columnsView.getColumnWidths(), this.widths);
+    });
+
+    QUnit.test('Get column widths with error row (editForm) (T1058684)', function(assert) {
+        // arrange
+        this.columnsView.element().find('table').prepend($('<tr class="dx-error-row"><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr>'));
 
         // act, assert
         assert.deepEqual(this.columnsView.getColumnWidths(), this.widths);
@@ -160,8 +169,18 @@ QUnit.module('API methods', {
         that.columns.push({ caption: 'Column 1', width: 100 });
         that.columns.push({ caption: 'Column 2', width: 100 });
 
-        const $table = $(that.columnsView._createTable());
-        $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
+        const $table = $(that.columnsView._createTable()).append(
+            $(`
+                <tr class="dx-row">
+                    <td>Test</td>
+                    <td>Test Test Test Test Test</td>
+                </tr>
+            `)
+        );
+
+        $container.html(
+            $('<div class="dx-datagrid-rowsview dx-datagrid-nowrap" />').append($table)
+        );
 
         // act
         const firstCellElement = $table.find('td').first();
@@ -190,7 +209,20 @@ QUnit.module('API methods', {
         that.columns.push({ caption: 'Column 2', width: 100 });
 
         const $table = $(that.columnsView._createTable());
-        $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
+
+        $container.html(
+            $('<div class="dx-datagrid-rowsview dx-datagrid-nowrap" />').append(
+                $table.append(
+                    that.columnsView._createColGroup(that.columns),
+                    $(`
+                        <tr class = "dx-row">
+                            <td>Test</td>
+                            <td>Test Test Test Test Test</td>
+                        </tr>
+                    `)
+                )
+            )
+        );
 
         // act
         const firstCellElement = $table.find('td').first();
@@ -391,6 +423,28 @@ QUnit.module('API methods', {
         assert.strictEqual(lastCellElement.attr('title'), undefined, 'not has attribute title in last cell');
     });
 
+    // T1117557
+    QUnit.test('Not set title attribute when cell is editing', function(assert) {
+        // arrange
+        const that = this;
+        const $container = $('#container').width(200);
+
+        that.option('cellHintEnabled', true);
+
+        that.columns.length = 0;
+        that.columns.push({ caption: 'Column 2', width: 100, showEditorAlways: true });
+
+        const $table = $(that.columnsView._createTable());
+        $container.html($('<div class = \'dx-datagrid-headers dx-datagrid-nowrap\' />').append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td><div class="dx-datagrid-text-content">Test Test Test Test Test</div></td></tr>'))));
+
+        // act
+        const firstCellElement = $table.find('td').first();
+        firstCellElement.trigger('mousemove');
+
+        // assert
+        assert.strictEqual(firstCellElement.attr('title'), undefined, 'not has attribute title in cell');
+    });
+
     QUnit.test('Invalidate instead of render for options', function(assert) {
         // arrange
         let renderCounter = 0;
@@ -484,12 +538,85 @@ QUnit.module('API methods', {
 
         this.option('cellHintEnabled', true);
         const $table = $(this.columnsView._createTable());
-        $container.html($('<div class = \'dx-datagrid-rowsview dx-datagrid-nowrap\' />').append($table.append(this.columnsView._createColGroup(this.columns), '<tr class="dx-row dx-master-detail-row"><td><div id="content" style="overflow: hidden;"><div style="width: 600px; height: 30px;">Test</div></div></td></tr>')));
+
+        $container.html(
+            $('<div class="dx-datagrid-rowsview dx-datagrid-nowrap" />').append(
+                $table.append(
+                    this.columnsView._createColGroup(this.columns),
+                    `<tr class="dx-row dx-master-detail-row">
+                        <td>
+                            <div id="content">
+                                <div>Test</div>
+                            </div>
+                        </td>
+                    </tr>`
+                )
+            )
+        );
+
+        $container.find('#content').css('overflow', 'hidden');
+
+        $container.find('#content > div').css({
+            width: '600px',
+            height: '30px'
+        });
 
         // act
         $('#content').trigger('mousemove');
 
         // assert
         assert.strictEqual($('#content').attr('title'), undefined, 'not has attribute title');
+    });
+
+    QUnit.test('waitAsyncTemplates with async templates', function(assert) {
+        // arrange
+        const deferred = $.Deferred();
+
+        this.options.renderAsync = false;
+        this.options.templatesRenderAsynchronously = true;
+        this.columnsView._templateDeferreds.add(deferred);
+
+        // assert
+        assert.strictEqual(this.columnsView.waitAsyncTemplates().state(), 'pending', 'promise state');
+
+        // act
+        this.columnsView._templateDeferreds.delete(deferred);
+        deferred.resolve();
+
+        // assert
+        assert.strictEqual(this.columnsView.waitAsyncTemplates().state(), 'resolved', 'promise state');
+    });
+
+    QUnit.test('waitAsyncTemplates with dynamic addition of async templates', function(assert) {
+        // arrange
+        const deferreds = [$.Deferred(), $.Deferred()];
+
+        this.options.renderAsync = false;
+        this.options.templatesRenderAsynchronously = true;
+        this.columnsView._templateDeferreds.add(deferreds[0]);
+
+        // assert
+        const promise1 = this.columnsView.waitAsyncTemplates();
+        assert.strictEqual(promise1.state(), 'pending', 'promise1 is pending');
+
+        // arrange
+        this.columnsView._templateDeferreds.add(deferreds[1]);
+
+        // act
+        this.columnsView._templateDeferreds.delete(deferreds[0]);
+        deferreds[0].resolve();
+
+        // assert
+        const promise2 = this.columnsView.waitAsyncTemplates();
+        assert.strictEqual(promise1.state(), 'pending', 'promise1 is pending');
+        assert.strictEqual(promise2.state(), 'pending', 'promise2 is pending');
+
+        // act
+        this.columnsView._templateDeferreds.delete(deferreds[1]);
+        deferreds[1].resolve();
+
+        // assert
+        assert.strictEqual(promise1.state(), 'resolved', 'promise1 is resolved');
+        assert.strictEqual(promise2.state(), 'resolved', 'promise2 is resolved');
     });
 });

@@ -4,7 +4,12 @@ const $ = require('jquery');
 const vizMocks = require('../../helpers/vizMocks.js');
 const titleModule = require('viz/core/title');
 
-$('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
+$('#qunit-fixture').append('<div id="test-container"></div>');
+
+$('#test-container').css({
+    width: '600px',
+    height: '400px'
+});
 
 QUnit.module('Title', {
     beforeEach: function() {
@@ -49,7 +54,7 @@ QUnit.test('Options and canvas', function(assert) {
 
 QUnit.test('Depends on theme', function(assert) {
     const widget = this.createWidget();
-    this.title.update.reset();
+    this.title.update.resetHistory();
 
     widget.option('theme', 'test-theme');
 
@@ -63,7 +68,7 @@ QUnit.test('title / size is changed', function(assert) {
         title: 'title-options'
     });
     this.title.stub('update').returns(true);
-    this.title.measure.reset();
+    this.title.measure.resetHistory();
 
     widget.option({ title: 'new-title-options' });
 
@@ -78,7 +83,7 @@ QUnit.test('title / size is not changed', function(assert) {
         title: 'title-options'
     });
     this.title.stub('update').returns(false);
-    this.title.measure.reset();
+    this.title.measure.resetHistory();
 
     widget.option({ title: 'new-title-options' });
 

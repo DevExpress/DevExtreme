@@ -1,6 +1,5 @@
-import 'common.css!';
 import 'generic_light.css!';
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
@@ -29,7 +28,17 @@ QUnit.module('Column chooser', {
             columnChooser: {
                 enabled: true,
                 width: 300,
-                height: 350
+                height: 350,
+                search: {
+                    enabled: false,
+                    editorOptions: {},
+                    timeout: 500
+                },
+                selection: {
+                    allowSelectAll: false,
+                    recursive: false,
+                    selectItemByClick: false,
+                }
             }
         };
 
@@ -101,8 +110,8 @@ QUnit.module('Column chooser', {
         // act
         this.renderColumnChooser();
         this.columnChooserView._popupContainer.option('visible', true);
-        this.clock.tick();
-        const $overlayWrapper = this.columnChooserView._popupContainer._wrapper();
+        this.clock.tick(10);
+        const $overlayWrapper = this.columnChooserView._popupContainer.$wrapper();
 
         // assert
         assert.ok($overlayWrapper.hasClass('dx-datagrid-column-chooser'), 'has column chooser');
@@ -122,8 +131,8 @@ QUnit.module('Column chooser', {
         // act
         this.renderColumnChooser();
         this.columnChooserView._popupContainer.option('visible', true);
-        this.clock.tick();
-        const $overlayWrapper = this.columnChooserView._popupContainer._wrapper();
+        this.clock.tick(10);
+        const $overlayWrapper = this.columnChooserView._popupContainer.$wrapper();
 
         // assert
         assert.ok($overlayWrapper.hasClass('dx-datagrid-column-chooser'), 'has column chooser');
@@ -213,7 +222,7 @@ QUnit.module('Column chooser', {
         assert.equal(items.length, 2, 'treeView has 2 items');
 
         assert.ok(items[0].selected, '1st item selected');
-        assert.notOk(items[0].disabled, '1st item enabled');
+        assert.ok(items[0].disabled, '1st item is disabled');
         assert.ok($checkBoxElements.eq(0).hasClass('dx-state-disabled'), '1st item\'s checkbox disabled');
 
         assert.notOk(items[1].selected, '2nd item not selected');
@@ -272,31 +281,6 @@ QUnit.module('Column chooser', {
         assert.deepEqual(this.columns[0], { caption: 'Column 1', index: 0, visible: false }, 'First column is hidden now');
     });
 
-    QUnit.test('Prevent hiding the last column via column chooser when select mode is using', function(assert) {
-        // arrange
-        const testElement = $('#container');
-
-        this.options.columnChooser.mode = 'select';
-        $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true }]);
-        this.setTestElement(testElement);
-
-        this.renderColumnChooser();
-
-        // act
-        this.columnChooserView._popupContainer.option('visible', true);
-
-        const $columnChooser = $('body').children('.dx-datagrid-column-chooser');
-        const $treeViewItem = $columnChooser.find('.dx-checkbox').first();
-
-        // act
-        $($treeViewItem).trigger('dxclick');
-        this.clock.tick(500);
-
-        // assert
-        assert.deepEqual(this.columns[0], { caption: 'Column 1', index: 0, visible: true }, 'First column is stay visible');
-        assert.ok($columnChooser.find('.dx-checkbox').first().hasClass('dx-checkbox-checked'), 'The treeview\'s checkbox is stay checked');
-    });
-
     QUnit.test('Show column via column chooser (select mode)', function(assert) {
         // arrange
         const testElement = $('#container');
@@ -342,6 +326,9 @@ QUnit.module('Column chooser', {
 
         assert.equal($toolbarButtons.length, 2, 'there are 2 buttons in toolbar');
         assert.ok($toolbarButtons.eq(1).hasClass('dx-datagrid-column-chooser-button'), 'second button is column chooser');
+
+        // T1109671
+        assert.equal($toolbarButtons.eq(1).attr('aria-haspopup'), 'dialog', 'column chooser button has aria-haspopup="dialog" attribute');
 
         // T102389
         assert.ok($toolbarButtons.eq(0).hasClass('dx-edit-button'), 'first element is edit (insert) button');
@@ -521,14 +508,14 @@ QUnit.module('Column chooser', {
 
         this.setTestElement(testElement);
 
-        this.options.columnChooser.allowSearch = true;
-        this.options.columnChooser.searchTimeout = 300;
+        this.options.columnChooser.search.enabled = true;
+        this.options.columnChooser.search.timeout = 300;
 
         // act
         this.renderColumnChooser();
         this.columnChooserView._popupContainer.option('visible', true);
-        this.clock.tick();
-        const $overlayWrapper = this.columnChooserView._popupContainer._wrapper();
+        this.clock.tick(10);
+        const $overlayWrapper = this.columnChooserView._popupContainer.$wrapper();
 
         // assert
         const treeView = $overlayWrapper.find('.dx-treeview').dxTreeView('instance');
@@ -541,12 +528,12 @@ QUnit.module('Column chooser', {
 
         this.setTestElement($('#container'));
 
-        this.options.columnChooser.allowSearch = true;
+        this.options.columnChooser.search.enabled = true;
 
         // act
         this.renderColumnChooser();
         this.columnChooserView._popupContainer.option('visible', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(searchBoxWrapper.getEditorInput().attr('aria-label'), messageLocalization.format('Search'), 'Search box input aria-label attribute');
@@ -610,116 +597,6 @@ QUnit.module('Column chooser', {
         assert.ok(!$('.dx-button-text').length, 'cancel button is hidden');
 
         themes.isMaterial = origIsMaterial;
-    });
-
-
-    QUnit.test('Add non touch class when column chooser is shown on win phone', function(assert) {
-        // arrange
-        const testElement = $('#container');
-
-        this.setTestElement(testElement);
-
-        this.columnChooserView._isWinDevice = function() {
-            return true;
-        };
-
-        this.renderColumnChooser();
-
-        this.clock.tick(1000);
-        this.columnChooserController.renderShowColumnChooserButton(testElement);
-        testElement.find('.dx-datagrid-column-chooser-button').trigger('dxclick'); // show
-
-        assert.ok($(document.body).hasClass('dx-datagrid-notouch-action'), 'no touch css class');
-    });
-
-    QUnit.skip('Use simulated scrolling on win phone', function(assert) {
-        // arrange
-        const testElement = $('#container');
-
-        this.setTestElement(testElement);
-
-        this.columnChooserView._isWinDevice = function() {
-            return true;
-        };
-
-        this.renderColumnChooser();
-
-        this.clock.tick(1000);
-        this.columnChooserController.renderShowColumnChooserButton(testElement);
-        testElement.find('.dx-datagrid-column-chooser-button').trigger('dxclick'); // show
-
-        const treeView = $('.dx-datagrid-column-chooser-list').first().dxTreeView('instance');
-
-        assert.ok(!treeView.option('useNativeScrolling'), 'use simulated scrolling');
-    });
-
-    QUnit.skip('Use simulated scrolling is not force enabled on not win phone', function(assert) {
-        // arrange
-        const testElement = $('#container');
-        const supportNativeScrolling = supportUtils.nativeScrolling;
-
-        supportUtils.nativeScrolling = true;
-        this.columnChooserView._isWinDevice = function() {
-            return false;
-        };
-
-        this.setTestElement(testElement);
-
-        this.renderColumnChooser();
-
-        this.clock.tick(1000);
-        this.columnChooserController.renderShowColumnChooserButton(testElement);
-        testElement.find('.dx-datagrid-column-chooser-button').trigger('dxclick'); // show
-
-        const treeView = $('.dx-datagrid-column-chooser-list').first().dxTreeView('instance');
-
-        assert.equal(treeView.option('useNativeScrolling'), true, 'use native scrolling');
-        supportUtils.nativeScrolling = supportNativeScrolling;
-    });
-
-    QUnit.test('Non touch class is not added when column chooser is shown on not win phone', function(assert) {
-        // arrange
-        $(document.body).removeClass('dx-datagrid-notouch-action');
-
-        const testElement = $('#container');
-
-        this.setTestElement(testElement);
-
-        this.columnChooserView._isWinDevice = function() {
-            return false;
-        };
-
-        this.renderColumnChooser();
-
-        this.clock.tick(1000);
-        this.columnChooserController.renderShowColumnChooserButton(testElement);
-        testElement.find('.dx-datagrid-column-chooser-button').trigger('dxclick'); // show
-
-        assert.ok(!$(document.body).hasClass('dx-datagrid-notouch-action'), 'no touch css class');
-    });
-
-    QUnit.test('Remove non touch class when column chooser is hidden on win phone', function(assert) {
-        // arrange
-        const testElement = $('#container');
-
-        this.setTestElement(testElement);
-
-        this.columnChooserView._isWinDevice = function() {
-            return true;
-        };
-
-        this.renderColumnChooser();
-
-        this.clock.tick(1000);
-        this.columnChooserController.renderShowColumnChooserButton(testElement);
-        testElement.find('.dx-datagrid-column-chooser-button').trigger('dxclick'); // show
-
-        const columnChooser = $('body').children('.dx-datagrid-column-chooser');
-        columnChooser.find('.dx-closebutton').first().trigger('dxclick'); // hide
-        this.clock.tick(500);
-
-        // act
-        assert.notOk($(document.body).hasClass('dx-datagrid-notouch-action'), 'no touch css class');
     });
 
     QUnit.test('Show column chooser via api method when it is disabled_T102451', function(assert) {
@@ -856,10 +733,15 @@ QUnit.module('Column chooser', {
                 return;
             }
 
-            // assert
-            assert.equal(columnIndex, 0, 'column index');
             assert.strictEqual(optionName, 'visible', 'option name is \'visible\'');
-            assert.ok(!value, 'value of the option');
+
+            // assert
+            if(columnIndex === 0) {
+                assert.notOk(value, 'first column is hidden');
+            } else {
+                assert.ok(value, 'second column is visible');
+            }
+
             this.columnsChanged.fire({ optionNames: {}, changeTypes: {} });
         };
         columnChooserView._popupContainer.option('visible', true);
@@ -875,27 +757,27 @@ QUnit.module('Column chooser', {
         assert.ok(!callRenderColumnChooser, 'not update treeview');
     });
 
-    QUnit.test('CheckBox mode - update treeview when changed the column option is showInColumnChooser', function(assert) {
+    QUnit.test('CheckBox mode - update treeview items when changed the column option is showInColumnChooser', function(assert) {
         // arrange
         const $testElement = $('#container');
         let callRenderColumnChooser;
         const columnChooserView = this.columnChooserView;
 
         this.options.columnChooser.mode = 'select';
-        $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true }, { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }]);
+        $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: false }, { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }]);
         this.setTestElement($testElement);
 
         this.renderColumnChooser();
         columnChooserView._popupContainer.option('visible', true);
-        columnChooserView._renderTreeView = function() {
+        columnChooserView._updateItems = function() {
             callRenderColumnChooser = true;
         };
 
         // act
-        columnChooserView._columnsController.columnsChanged.fire({ optionNames: { showInColumnChooser: true } });
+        columnChooserView._columnsController.columnsChanged.fire({ columnIndices: [0], optionNames: { showInColumnChooser: true } });
 
         // assert
-        assert.ok(callRenderColumnChooser, 'not update treeview');
+        assert.ok(callRenderColumnChooser, 'update treeview items');
     });
 
     QUnit.test('CheckBox mode - column chooser with hidden band column', function(assert) {
@@ -925,31 +807,30 @@ QUnit.module('Column chooser', {
 
     QUnit.test('CheckBox mode - check hidden band column', function(assert) {
         // arrange
-        const that = this;
         const $testElement = $('#container');
         const columnChooserView = this.columnChooserView;
 
         this.options.columnChooser.mode = 'select';
-        $.extend(this.columns, [{ caption: 'Band Column', index: 0, visible: false, showInColumnChooser: true }, { caption: 'Column 1', index: 1, visible: true, showInColumnChooser: true, ownerBand: 0 }, { caption: 'Column 2', index: 2, visible: false, showInColumnChooser: true, ownerBand: 0 }]);
+        $.extend(this.columns, [
+            { caption: 'Band Column', index: 0, visible: false, showInColumnChooser: true },
+            { caption: 'Column 1', index: 1, visible: true, showInColumnChooser: true, ownerBand: 0 },
+            { caption: 'Column 2', index: 2, visible: false, showInColumnChooser: true, ownerBand: 0 }
+        ]);
         this.setTestElement($testElement);
-
-        columnChooserView._columnsController.isParentColumnVisible = function(columnIndex) {
-            return that.columns[0].visible;
-        };
 
         // act
         this.renderColumnChooser();
+
         columnChooserView._popupContainer.option('visible', true);
 
         $(columnChooserView._popupContainer.$content().find('.dx-checkbox').first()).trigger('dxclick');
-
 
         // assert
         const $checkBoxElements = columnChooserView._popupContainer.$content().find('.dx-checkbox');
         assert.equal($checkBoxElements.length, 3, 'count checkbox');
         assert.ok($checkBoxElements.eq(0).hasClass('dx-checkbox-checked'), 'checkbox is checked');
         assert.ok($checkBoxElements.eq(1).hasClass('dx-checkbox-checked'), 'checkbox is checked');
-        assert.ok(!$checkBoxElements.eq(2).hasClass('dx-checkbox-checked'), 'checkbox isn\'t checked');
+        assert.notOk($checkBoxElements.eq(2).hasClass('dx-checkbox-checked'), 'checkbox isn\'t checked');
     });
 
     QUnit.test('CheckBox mode - Update a selection state when column visibility is changed via API', function(assert) {
@@ -1078,7 +959,7 @@ QUnit.module('Column chooser', {
 
 
     // T535738
-    QUnit.test('CheckBox mode - update treeview when changing the column options', function(assert) {
+    QUnit.test('CheckBox mode - update treeview items when changing the column options', function(assert) {
         // arrange
         const $testElement = $('#container');
 
@@ -1089,13 +970,13 @@ QUnit.module('Column chooser', {
         this.showColumnChooser();
         this.clock.tick(1000);
 
-        sinon.spy(this.columnChooserView, '_renderTreeView');
+        sinon.spy(this.columnChooserView, '_updateItems');
 
         // act
-        this.columnsController.columnsChanged.fire({ optionNames: { all: true }, changeTypes: { columns: true } });
+        this.columnsController.columnsChanged.fire({ optionNames: { all: true }, columnIndices: [0, 1], changeTypes: { columns: true } });
 
         // assert
-        assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, 'update treeview');
+        assert.strictEqual(this.columnChooserView._updateItems.callCount, 1, 'update treeview item');
     });
 
 
@@ -1108,13 +989,13 @@ QUnit.module('Column chooser', {
             { caption: 'Column 1', index: 0, visible: false },
             { caption: 'Column 2', index: 1, visible: false }
         ]);
-        this.options.columnChooser.allowSearch = true;
+        this.options.columnChooser.search.enabled = true;
         this.setTestElement($testElement);
         this.renderColumnChooser();
 
         const popupInstance = this.columnChooserView._popupContainer;
         popupInstance.option('visible', true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($(popupInstance.content()).find('.dx-column-chooser-item').length, 2, 'hidden column count');
@@ -1127,8 +1008,7 @@ QUnit.module('Column chooser', {
         assert.strictEqual($(popupInstance.content()).find('.dx-column-chooser-item').length, 0, 'hidden column count');
 
         // act
-        this.options.columnChooser.allowSearch = false;
-        this.columnChooserView.optionChanged({ name: 'columnChooser' });
+        this.option('columnChooser.search.enabled', false);
 
         // assert
         assert.strictEqual($(popupInstance.content()).find('.dx-column-chooser-item').length, 2, 'hidden column count');
@@ -1148,9 +1028,8 @@ QUnit.module('Column chooser', {
         assert.strictEqual(popupInstance.option('height'), 350, 'default height');
 
         // act
-        this.options.columnChooser.width = 500;
-        this.options.columnChooser.height = 600;
-        this.columnChooserView.optionChanged({ name: 'columnChooser' });
+        this.option('columnChooser.width', 500);
+        this.option('columnChooser.height', 600);
 
         // asert
         assert.strictEqual(popupInstance.option('width'), 500, 'changed width');
@@ -1164,7 +1043,10 @@ QUnit.module('Column chooser', {
             const $testElement = $('#container');
 
             this.options.columnChooser.mode = 'select';
-            $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true }, { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }]);
+            $.extend(this.columns, [
+                { caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true },
+                { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }
+            ]);
             this.setTestElement($testElement);
 
             sinon.spy(this.columnChooserView, '_renderTreeView');
@@ -1173,8 +1055,13 @@ QUnit.module('Column chooser', {
             this.columnChooserView.showColumnChooser();
             this.clock.tick(1000);
 
+            // assert
             assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, 'treeview is rendered');
 
+            // arrange
+            sinon.spy(this.columnChooserView, '_updateItems');
+
+            // act
             const optionNames = {
                 caption: true,
                 length: 1
@@ -1187,7 +1074,8 @@ QUnit.module('Column chooser', {
                 }
                 this.endUpdate();
                 this.columnsController.columnsChanged.fire({
-                    optionNames
+                    optionNames,
+                    columnIndices: [0, 1]
                 });
             } else {
                 for(let i = 0; i < 2; i++) {
@@ -1202,12 +1090,84 @@ QUnit.module('Column chooser', {
             // assert
             const $treeViewItems = $('.dx-treeview-item');
 
-            assert.strictEqual(this.columnChooserView._renderTreeView.callCount, useBeginEndUpdate ? 2 : 3, 'treeview render count');
+            assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, 'treeview rendered only one time');
+            assert.strictEqual(this.columnChooserView._updateItems.callCount, useBeginEndUpdate ? 1 : 2, 'treeview items update count');
             assert.equal($treeViewItems.eq(0).text(), 'new caption', 'caption was changed');
             assert.equal($treeViewItems.eq(1).text(), 'new caption', 'caption was changed');
 
             this.columnChooserView.hideColumnChooser();
         });
+    });
+
+    ['showInColumnChooser', 'caption', 'allowHiding', 'visible', 'cssClass', 'ownerBand'].forEach(optionName => {
+        QUnit.test(`ColumnChooser should update items when column option '${optionName}' was changed`, function(assert) {
+            // arrange
+            const $testElement = $('#container');
+
+            this.options.columnChooser.mode = 'select';
+            $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true }]);
+
+            this.setTestElement($testElement);
+
+            // act
+            this.columnChooserView.showColumnChooser();
+
+            // arrange
+            sinon.spy(this.columnChooserView, '_updateItemsSelection');
+            sinon.spy(this.columnChooserView, '_updateItems');
+
+            // act
+            this.columnsController.columnsChanged.fire({
+                columnIndex: 0,
+                optionNames: { [optionName]: true, length: 1 },
+            });
+
+            assert.strictEqual(this.columnChooserView._updateItemsSelection.callCount, 1, 'update selection state');
+            assert.strictEqual(this.columnChooserView._updateItems.callCount, optionName === 'visible' ? 0 : 1, 'treeview items update count');
+
+            this.columnChooserView.hideColumnChooser();
+        });
+    });
+
+    QUnit.test('ColumnChooser should not update items if column was hidden via chooser', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        $.extend(this.columns, [
+            { caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true },
+        ]);
+        this.options.columnChooser.mode = 'select';
+
+        this.setTestElement($testElement);
+
+        // act
+        this.columnChooserView.showColumnChooser();
+
+        // arrange
+        let updateItemSelectionCalled = false;
+        let updateItemsCalled = false;
+
+        this.columnChooserView._updateItemSelection = () => updateItemSelectionCalled = true;
+        this.columnChooserView._updateItems = () => updateItemsCalled = true;
+
+        this.columnChooserView._columnsController.columnOption = function(columnIndex, optionName, value) {
+            if(optionName === 'visible' && !typeUtils.isDefined(value)) {
+                return;
+            }
+
+            this.columnsChanged.fire({ columnIndex, optionNames: { visible: true } });
+        };
+
+        // act
+        const treeView = $('.dx-treeview').dxTreeView('instance');
+
+        treeView.unselectItem(0);
+
+        this.clock.tick(500);
+
+        assert.notOk(updateItemSelectionCalled, 'updateItemSelection called');
+        assert.notOk(updateItemsCalled, 'updateItems called');
+
+        this.columnChooserView.hideColumnChooser();
     });
 });
 

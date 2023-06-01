@@ -12,12 +12,19 @@ import { FIELD_ITEM_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FORM_GROUP_CAPTION_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS } from 'ui/form/constants';
+} from 'ui/form/constants';
+
+import {
+    FIELD_ITEM_HELP_TEXT_CLASS,
+    TOGGLE_CONTROLS_PADDING_CLASS
+} from 'ui/form/components/field_item';
+
 import ValidationEngine from 'ui/validation_engine';
 
 import 'ui/text_area';
+import 'ui/radio_group';
+import 'ui/switch';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
@@ -25,6 +32,8 @@ const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
 const VALIDATOR_CLASS = 'dx-validator';
+const READONLY_STATE_CLASS = 'dx-state-readonly';
+const TEXTEDITOR_CLASS = 'dx-texteditor';
 
 const { test } = QUnit;
 
@@ -42,7 +51,7 @@ QUnit.testStart(() => {
 
 QUnit.module('Form', () => {
     test('Invalidate after option changed', function(assert) {
-        const testingOptions = ['formData', 'items', 'colCount', 'onFieldDataChanged', 'labelLocation',
+        const testingOptions = ['formData', 'items', 'colCount', 'labelLocation',
             'alignItemLabels', 'showColonAfterLabel', 'customizeItem', 'minColWidth', 'alignItemLabelsInAllGroups', 'onEditorEnterKey', 'scrollingEnabled', 'formID'];
         const form = $('#form').dxForm().dxForm('instance');
         let i;
@@ -77,7 +86,8 @@ QUnit.module('Form', () => {
                     editorType: 'dxTextBox'
                 }
             ]
-        }).dxForm('instance'); const invalidateStub = sinon.stub(form, '_invalidate');
+        }).dxForm('instance');
+        const invalidateStub = sinon.stub(form, '_invalidate');
 
         form.option('formData', {
             name: 'test'
@@ -180,7 +190,7 @@ QUnit.module('Form', () => {
             ]
         });
 
-        assert.ok($formContainer.find('.' + FIELD_ITEM_CLASS + ' .dx-texteditor').hasClass('dx-state-readonly'), 'editor is read only');
+        assert.ok($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass('dx-state-readonly'), 'editor is read only');
     });
 
     test('Render form with colspan', function(assert) {
@@ -218,11 +228,27 @@ QUnit.module('Form', () => {
             ]
         });
 
-        assert.notOk($formContainer.find('.' + FIELD_ITEM_CLASS + ' .dx-texteditor').hasClass('dx-state-readonly'), 'editor isn\'t read only');
+        assert.notOk($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass(READONLY_STATE_CLASS), 'editor isn\'t read only');
 
         $formContainer.dxForm('instance').option('readOnly', true);
 
-        assert.ok($formContainer.find('.' + FIELD_ITEM_CLASS + ' .dx-texteditor').hasClass('dx-state-readonly'), 'editor is read only');
+        assert.ok($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass(READONLY_STATE_CLASS), 'editor is read only');
+    });
+
+    test('editor should not change readonly state after form readOnly option change if editorOptions.readOnly was updated before', function(assert) {
+        const $testContainer = $('#container').dxForm({
+            items: [{
+                dataField: 'dxTextBox',
+                editorType: 'dxTextBox',
+            }]
+        });
+        const instance = $testContainer.dxForm('instance');
+
+        instance.option('items[0].editorOptions.readOnly', true);
+        instance.option('readOnly', true);
+        instance.option('readOnly', false);
+
+        assert.ok($testContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass(READONLY_STATE_CLASS), 'editor is read only');
     });
 
     test('\'disable\' is changed in inner components on optionChanged', function(assert) {
@@ -236,11 +262,11 @@ QUnit.module('Form', () => {
             disabled: true
         });
 
-        assert.ok($formContainer.find('.' + FIELD_ITEM_CLASS + ' .dx-texteditor').hasClass('dx-state-disabled'), 'editor is disabled');
+        assert.ok($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass('dx-state-disabled'), 'editor is disabled');
 
         $formContainer.dxForm('instance').option('disabled', false);
 
-        assert.notOk($formContainer.find('.' + FIELD_ITEM_CLASS + ' .dx-texteditor').hasClass('dx-state-disabled'), 'editor isn\'t disabled');
+        assert.notOk($formContainer.find(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_CLASS}`).hasClass('dx-state-disabled'), 'editor isn\'t disabled');
     });
 
     test('Customize item event', function(assert) {
@@ -768,6 +794,185 @@ QUnit.module('Form', () => {
     });
 });
 
+QUnit.module(`"${TOGGLE_CONTROLS_PADDING_CLASS}" class`, ()=>{
+    ['dxCheckBox', 'dxSwitch', 'dxRadioGroup'].forEach(editorType => {
+        const componentName = editorType.split('dx')[1].toLowerCase();
+
+        ['left', undefined].forEach(alignment => {
+            test(`${editorType} should have class when labelLocation=top, label.alignment=${alignment}, label.visible=true (T1126956)`, function(assert) {
+                const $form = $('#form').dxForm({
+                    labelLocation: 'top',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            itemType: 'group',
+                            items: [{
+                                dataField: editorType,
+                                label: { visible: true, alignment },
+                                editorType,
+                            }]
+                        }]
+                    }]
+                });
+                const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+                assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), true);
+            });
+        });
+
+        test(`${editorType} should have class after visibility change to true (labelLocation=top, label.alignment=left)`, function(assert) {
+            const $formContainer = $('#form').dxForm({
+                labelLocation: 'top',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            dataField: editorType,
+                            label: { visible: false },
+                            editorType,
+                        }]
+                    }]
+                }]
+            });
+            const labelVisibleOptionName = 'items[0].items[0].items[0].label.visible';
+
+            $formContainer
+                .dxForm('instance')
+                .option(labelVisibleOptionName, true);
+
+            const $componentWrapper = $formContainer.find(`.dx-${componentName}`).parent();
+
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), true);
+        });
+
+        test(`${editorType} should not have class after visibility change to false (labelLocation=top, label.alignment=left)`, function(assert) {
+            const $formContainer = $('#form').dxForm({
+                labelLocation: 'top',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            dataField: editorType,
+                            label: { visible: true },
+                            editorType,
+                        }]
+                    }]
+                }]
+            });
+            const labelVisibleOptionName = 'items[0].items[0].items[0].label.visible';
+
+            $formContainer
+                .dxForm('instance')
+                .option(labelVisibleOptionName, false);
+
+            const $componentWrapper = $formContainer.find(`.dx-${componentName}`).parent();
+
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+        });
+
+        test(`${editorType} should not have class when label.visible=false`, function(assert) {
+            const $form = $('#form').dxForm({
+                labelLocation: 'top',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            dataField: editorType,
+                            label: { visible: false },
+                            editorType,
+                        }]
+                    }]
+                }]
+            });
+            const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+        });
+
+        test(`${editorType} should not have class when items have template`, function(assert) {
+            const $form = $('#form').dxForm({
+                items: [{
+                    editorType,
+                    label: { visible: true, alignment: 'left' },
+                    dataField: 'field',
+                    template: function() {
+                        return $('<div/>');
+                    }
+                }]
+            });
+            const $componentWrapper = $form.find(`.${FIELD_ITEM_CONTENT_CLASS}`).parent();
+
+            assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+        });
+
+        ['left', 'right'].forEach(labelLocation => {
+            test(`${editorType} should not have class when the labelLocation=${labelLocation}`, function(assert) {
+                const $form = $('#form').dxForm({
+                    labelLocation,
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            itemType: 'group',
+                            items: [{
+                                dataField: editorType,
+                                label: { visible: true },
+                                editorType,
+                            }]
+                        }]
+                    }]
+                });
+                const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+                assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+            });
+        });
+
+        ['center', 'right'].forEach(alignment => {
+            test(`${editorType} should not have class when label.alignment=${alignment}`, function(assert) {
+                const $form = $('#form').dxForm({
+                    labelLocation: 'top',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            itemType: 'group',
+                            items: [{
+                                dataField: editorType,
+                                label: { visible: true, alignment },
+                                editorType,
+                            }]
+                        }]
+                    }]
+                });
+                const $componentWrapper = $form.find(`.dx-${componentName}`).parent();
+
+                assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+            });
+        });
+    });
+
+    test('editor should not have class if it is not CheckBox, Switch or RadioGroup', function(assert) {
+        const $form = $('#form').dxForm({
+            labelLocation: 'top',
+            items: [{
+                itemType: 'group',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        dataField: 'default',
+                        label: { visible: true, alignment: 'left' },
+                    }]
+                }]
+            }]
+        });
+        const $componentWrapper = $form.find(`.${FIELD_ITEM_CONTENT_CLASS}`);
+
+        assert.strictEqual($componentWrapper.hasClass(TOGGLE_CONTROLS_PADDING_CLASS), false);
+    });
+});
+
 QUnit.module('Validation group', () => {
     const createFormInsideContainer = options => {
         const $container = $('#container').empty();
@@ -1127,6 +1332,41 @@ QUnit.module('Grouping', () => {
         assert.equal($groups.eq(1).find('.template-biography').text(), 'bla-bla-bla', 'Template\'s content has correct data');
     });
 
+    test('Simple Item labelTemplate', function(assert) {
+        const labelClass = 'label-template';
+
+        const $formContainer = $('#form').dxForm({
+            formData: {
+                firstName: 'John',
+            },
+            items: [
+                {
+                    itemType: 'group',
+                    caption: 'Personal info',
+                    items: [
+                        {
+                            dataField: 'firstName',
+                            label: {
+                                template: (data, container) => {
+                                    assert.deepEqual(isRenderer(container), !!config().useJQuery, 'container is correct');
+
+                                    $('<div>')
+                                        .text(data.text + ' ?')
+                                        .addClass(labelClass)
+                                        .appendTo(container);
+                                }
+                            }
+                        }
+                    ]
+                }]
+        });
+        const $groups = $formContainer.find(`.${FIELD_ITEM_CLASS}`);
+
+        assert.strictEqual($groups.length, 2, '2 groups rendered');
+        assert.strictEqual($groups.eq(0).find(`.${labelClass}`).length, 1, 'label template content');
+        assert.strictEqual($groups.eq(0).find(`.${labelClass}`).text(), 'First Name: ?', 'Labels\'s content has correct data');
+    });
+
     test('Template has correct component instance', function(assert) {
         let templateOwnerComponent;
 
@@ -1190,42 +1430,42 @@ QUnit.module('Grouping', () => {
         const items = form._testResultItems;
 
         items[0].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 1');
         template.empty();
 
         items[0].items[0].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 1 internal group 1');
         template.empty();
 
         items[0].items[1].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 1 internal group 2');
         template.empty();
 
         items[1].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 1');
         template.empty();
 
         items[1].items[0].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 2 internal group 1');
         template.empty();
 
         items[1].items[1].template.render({
-            model: {},
+            model: { editorOptions: { inputAttr: {} } },
             container: template
         });
         assert.equal(template.find('> .' + FORM_GROUP_CLASS).length, 1, 'external group 2 internal group 2');
@@ -1288,6 +1528,39 @@ QUnit.module('Grouping', () => {
             assert.notOk($layoutManager.children().length, 'layout manager content is empty');
             assert.notOk(form.getEditor('field'), 'editor is not created');
         });
+    });
+
+    test('Group should have aria-labelledby attribute equal to caption id', function(assert) {
+        const $formContainer = $('#form').dxForm({
+            formData: {
+                firstName: 'John',
+                lastName: 'Dow',
+                biography: 'bla-bla-bla',
+                photo: 'test photo',
+            },
+            items: [{
+                itemType: 'group',
+                caption: 'Personal Info',
+                items: ['firstName', 'lastName'],
+            },
+            {
+                itemType: 'group',
+                caption: 'Description',
+                items: ['biography', 'photo'],
+            }],
+        });
+
+        const $groups = $formContainer.find(`.${FORM_GROUP_CLASS}`);
+        const $firstCaption = $groups.eq(0).find(`.${FORM_GROUP_CAPTION_CLASS}`);
+        const $secondCaption = $groups.eq(1).find(`.${FORM_GROUP_CAPTION_CLASS}`);
+
+        assert.strictEqual($groups.length, 2, '2 groups rendered');
+
+        assert.ok($groups.get(0).hasAttribute('aria-labelledby'), 'first group has aria-labelledby attribute');
+        assert.strictEqual($groups.eq(0).attr('aria-labelledby'), $firstCaption.eq(0).attr('id'), 'aria-labelledby and id of caption are equal');
+
+        assert.ok($groups.get(1).hasAttribute('aria-labelledby'), 'second group has aria-labelledby attribute');
+        assert.strictEqual($groups.eq(1).attr('aria-labelledby'), $secondCaption.eq(0).attr('id'), 'aria-labelledby and id of caption are equal');
     });
 });
 

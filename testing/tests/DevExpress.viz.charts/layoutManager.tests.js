@@ -134,30 +134,6 @@ QUnit.test('Simple pie - vertical canvas. width and height odd ', function(asser
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test('Simple donut - innerRadius less then 0.2', function(assert) {
-    const series = getStubSeries('donut', 0);
-    const layoutManager = createLayoutManager();
-    const inner = 33;
-    const outer = 165;
-
-    canvas.width = canvasTemplate.height;
-    canvas.height = canvasTemplate.width;
-
-    checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
-});
-
-QUnit.test('Simple donut - innerRadius more then 0.8', function(assert) {
-    const series = getStubSeries('donut', 10);
-    const layoutManager = createLayoutManager();
-    const inner = 132;
-    const outer = 165;
-
-    canvas.width = canvasTemplate.height;
-    canvas.height = canvasTemplate.width;
-
-    checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
-});
-
 QUnit.test('Simple donut - innerRadius is not number', function(assert) {
     const series = getStubSeries('donut', 'str');
     const layoutManager = createLayoutManager();

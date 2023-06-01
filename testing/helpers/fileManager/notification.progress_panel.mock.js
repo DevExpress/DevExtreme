@@ -96,23 +96,11 @@ export default class FileManagerProgressPanelMock extends FileManagerProgressPan
         super.addOperationDetailsError(info, index, errorText);
     }
 
-    renderError($container, $target, errorText) {
-        this._logEvent('renderError', {
+    _renderError($container, $target, errorText) {
+        this._logEvent('_renderError', {
             errorText
         });
-        super.renderError($container, $target, errorText);
-    }
-
-    createErrorDetailsProgressBox($container, item, errorText) {
-        const itemInfo = {
-            commonText: item.commonText,
-            imageUrl: item.imageUrl
-        };
-        this._logEvent('createErrorDetailsProgressBox', {
-            item: itemInfo,
-            errorText
-        });
-        super.createErrorDetailsProgressBox($container, item, errorText);
+        super._renderError($container, $target, errorText);
     }
 
     getStoredInfos() {

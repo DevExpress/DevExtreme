@@ -19,7 +19,10 @@ const COMMANDS = {
     zoomOut: 9,
     fullScreen: 10,
     collapseAll: 11,
-    expandAll: 12
+    expandAll: 12,
+    resourceManager: 13,
+    toggleResources: 14,
+    toggleDependencies: 15
 };
 
 class Bar {
@@ -57,12 +60,17 @@ class Bar {
             case 'expandall': return this._createDefaultItem(COMMANDS.expandAll, messageLocalization.format('dxGantt-expandAll'), this._getIcon('expand'));
             case 'collapseall': return this._createDefaultItem(COMMANDS.collapseAll, messageLocalization.format('dxGantt-collapseAll'), this._getIcon('collapse'));
             case 'addtask': return this._createDefaultItem(COMMANDS.createTask, messageLocalization.format('dxGantt-addNewTask'), this._getIcon('add'));
+            case 'addsubtask': return this._createDefaultItem(COMMANDS.createSubTask, messageLocalization.format('dxGantt-contextMenuNewSubtask'), this._getIcon('add-sub-task'));
             case 'deletetask': return this._createDefaultItem(COMMANDS.removeTask, messageLocalization.format('dxGantt-deleteSelectedTask'), this._getIcon('delete'));
             case 'deletedependency': return this._createDefaultItem(COMMANDS.removeDependency, messageLocalization.format('dxGantt-contextMenuDeleteDependency'), this._getIcon('delete-dependency'));
             case 'zoomin': return this._createDefaultItem(COMMANDS.zoomIn, messageLocalization.format('dxGantt-zoomIn'), this._getIcon('zoom-in'));
             case 'zoomout': return this._createDefaultItem(COMMANDS.zoomOut, messageLocalization.format('dxGantt-zoomOut'), this._getIcon('zoom-out'));
             case 'fullscreen': return this._createDefaultItem(COMMANDS.fullScreen, messageLocalization.format('dxGantt-fullScreen'), this._getIcon('full-screen'));
             case 'taskdetails': return this._createDefaultItem(COMMANDS.taskInformation, messageLocalization.format('dxGantt-dialogTaskDetailsTitle') + '...', this._getIcon('task-details'));
+            case 'resourcemanager': return this._createDefaultItem(COMMANDS.resourceManager, messageLocalization.format('dxGantt-dialogResourceManagerTitle'), this._getIcon('resource-manager'));
+            case 'showresources': return this._createDefaultItem(COMMANDS.toggleResources, messageLocalization.format('dxGantt-showResources'), this._getIcon('toggle-resources'));
+            case 'showdependencies': return this._createDefaultItem(COMMANDS.toggleDependencies, messageLocalization.format('dxGantt-showDependencies'), this._getIcon('toggle-dependencies'));
+
             default: return extend(this._getDefaultItemOptions(), { options: { text: text } });
         }
     }
@@ -136,10 +144,23 @@ export class GanttToolbar extends Bar {
             onItemClick: (e) => {
                 const commandId = e.itemData.commandId;
                 if(commandId !== undefined) {
-                    this._owner._executeCoreCommand(e.itemData.commandId);
+                    this._executeCommand(e.itemData.commandId);
                 }
             }
         });
+    }
+
+    _executeCommand(commandId) {
+        switch(commandId) {
+            case COMMANDS.toggleResources:
+                this._owner.option('showResources', !this._owner.option('showResources'));
+                break;
+            case COMMANDS.toggleDependencies:
+                this._owner.option('showDependencies', !this._owner.option('showDependencies'));
+                break;
+            default:
+                this._owner._executeCoreCommand(commandId);
+        }
     }
 
     _createDefaultItem(commandId, hint, icon) {
@@ -185,7 +206,7 @@ export class GanttContextMenuBar extends Bar {
                     this._owner._executeCoreCommand(e.itemData.commandId);
                 } else {
                     if(e.itemData.name !== undefined) {
-                        this._owner._raiseCustomCommand(e.itemData.name);
+                        this._owner._actionsManager.raiseCustomCommand(e.itemData.name);
                     }
                 }
             }
@@ -224,7 +245,12 @@ export class GanttContextMenuBar extends Bar {
     show(point, items) {
         this._menu.option('items', items || this._items);
         this._menu.option('position.offset', { x: point.x, y: point.y });
+        this._menu.option('position.collision', 'fit');
         this._menu.show();
+    }
+
+    hide() {
+        this._menu.hide();
     }
 
     // IBar

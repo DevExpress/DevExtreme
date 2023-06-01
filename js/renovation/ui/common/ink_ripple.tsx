@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, Method,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { initConfig, showWave, hideWave } from '../../../ui/widget/utils.ink_ripple';
 
 // TODO: remake old ink ripple in new JSX component
@@ -34,13 +34,13 @@ export class InkRippleProps {
 })
 export class InkRipple extends JSXComponent(InkRippleProps) {
   @Method()
-  hideWave(event): void {
-    hideWave(this.getConfig, event);
+  hideWave(opts: { element?: HTMLElement; event: Event }): void {
+    hideWave(this.getConfig, opts);
   }
 
   @Method()
-  showWave(event): void {
-    showWave(this.getConfig, event);
+  showWave(opts: { element?: HTMLElement; event: Event; wave?: number }): void {
+    showWave(this.getConfig, opts);
   }
 
   get getConfig(): InkRippleConfig {

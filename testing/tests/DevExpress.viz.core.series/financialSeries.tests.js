@@ -26,7 +26,7 @@ const environment = {
         this.data = [
             { date: 'arg1', high: 'high1', low: 'low1', open: 'open1', close: 'close1' }
         ];
-        this.createPoint = sinon.stub(pointModule, 'Point', function() {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -616,6 +616,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(this.createPoint.getCall(0).args[2].styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'mainSeriesColor',
                 stroke: 'mainSeriesColor',
@@ -752,6 +753,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'mainSeriesColor',
                 stroke: 'mainSeriesColor',
@@ -821,6 +823,99 @@ const checkGroups = function(assert, series) {
         });
     });
 
+    QUnit.test('Custom styles should not apply', function(assert) {
+        const series = createSeries({
+            mainSeriesColor: 'mainSeriesColor',
+            type: seriesType,
+            argumentField: 'date',
+            openValueField: 'o',
+            highValueField: 'h',
+            lowValueField: 'l',
+            closeValueField: 'c',
+            hoverStyle: {
+                color: { base: 'color_1', fillId: 'id_color' },
+            },
+            selectionStyle: {
+                color: { base: 'color_2', fillId: 'id_color' },
+            },
+            color: { base: 'color', fillId: 'id_color' },
+            reduction: { color: 'reduction', level: 'high' },
+            innerColor: 'innerColor'
+        });
+        series.updateData(this.data);
+        series.createPoints();
+
+        const styles = series._getPointOptions().styles;
+
+        assert.strictEqual(styles.labelColor, 'innerColor', 'label color');
+
+        assert.deepEqual(styles.hover, {
+            fill: 'color_1',
+            stroke: 'color_1',
+            'stroke-width': undefined
+        }, 'hover style');
+
+        assert.deepEqual(styles.normal, {
+            fill: 'color',
+            stroke: 'color',
+            'stroke-width': undefined
+        }, 'normal style');
+
+        assert.deepEqual(styles.selection, {
+            fill: 'color_2',
+            'stroke-width': undefined,
+            stroke: 'color_2'
+        }, 'selection style');
+
+        assert.deepEqual(styles.positive, {
+            hover: {
+                fill: 'innerColor',
+                stroke: 'color_1',
+            },
+            normal: {
+                fill: 'innerColor',
+                stroke: 'color',
+            },
+            selection: {
+                fill: 'innerColor',
+                stroke: 'color_2'
+            }
+        }, 'positive style');
+
+        assert.deepEqual(styles.reductionPositive, {
+            hover: {
+                fill: 'innerColor',
+                stroke: 'color_1'
+            },
+            normal: {
+                fill: 'innerColor',
+                stroke: 'reduction'
+            },
+            selection: {
+                fill: 'innerColor',
+                stroke: 'color_2'
+            }
+        }, 'reduction positive style');
+
+        assert.deepEqual(styles.reduction, {
+            hover: {
+                fill: 'color_1',
+                stroke: 'color_1',
+                'stroke-width': undefined
+            },
+            normal: {
+                fill: 'reduction',
+                stroke: 'reduction',
+                'stroke-width': undefined
+            },
+            selection: {
+                fill: 'color_2',
+                'stroke-width': undefined,
+                stroke: 'color_2'
+            }
+        }, 'redusction style');
+    });
+
     QUnit.test('Create Point styles. with defined series color', function(assert) {
         const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
@@ -843,6 +938,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'seriesColor',
                 stroke: 'seriesColor',
@@ -938,6 +1034,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'seriesColor',
                 stroke: 'seriesColor',
@@ -1032,6 +1129,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'h-color',
                 stroke: 'h-color',
@@ -1145,6 +1243,7 @@ const checkGroups = function(assert, series) {
         assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
             usePointCustomOptions: true,
             useLabelCustomOptions: undefined,
+            labelColor: 'innerColor',
             hover: {
                 fill: 'c-h-color',
                 stroke: 'c-h-color',
@@ -1820,6 +1919,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(this.createPoint.getCall(0).args[2].styles, {
+            labelColor: 'innerColor',
             hover: {
                 fill: 'mainSeriesColor',
                 stroke: 'mainSeriesColor',
@@ -2158,6 +2258,7 @@ const checkGroups = function(assert, series) {
         assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
             usePointCustomOptions: true,
             useLabelCustomOptions: undefined,
+            labelColor: 'innerColor',
             hover: {
                 fill: 'c-h-color',
                 stroke: 'c-h-color',

@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { Deferred, when } from '../../core/utils/deferred';
-import errorsUtils from '../../data/errors';
+import { errors as dataErrors } from '../../data/errors';
 import { isDefined, isFunction } from '../../core/utils/type';
 import { compileGetter } from '../../core/utils/data';
 import errors from '../widget/ui.errors';
@@ -142,7 +142,7 @@ function getCriteriaOperation(criteria) {
         const item = criteria[i];
         if(!Array.isArray(item)) {
             if(value && value !== item) {
-                throw new errorsUtils.errors.Error('E4019');
+                throw new dataErrors.Error('E4019');
             }
             if(item !== '!') {
                 value = item;
@@ -257,7 +257,10 @@ export function removeItem(group, item) {
 }
 
 export function createEmptyGroup(value) {
-    return value.indexOf('not') !== -1 ? ['!', [value.substring(3).toLowerCase()]] : [value];
+    const isNegation = isNegationGroupOperation(value);
+    const groupOperation = isNegation ? getGroupOperationFromNegationOperation(value) : value;
+
+    return isNegation ? ['!', [groupOperation]] : [groupOperation];
 }
 
 export function isEmptyGroup(group) {
@@ -317,21 +320,22 @@ export function isCondition(criteria) {
     return criteria.length > 1 && !Array.isArray(criteria[0]) && !Array.isArray(criteria[1]);
 }
 
-function convertToInnerGroup(group, customOperations) {
-    const groupOperation = getCriteriaOperation(group).toLowerCase() || AND_GROUP_OPERATION;
-    const innerGroup = [];
+function convertToInnerGroup(group, customOperations, defaultGroupOperation) {
+    defaultGroupOperation = defaultGroupOperation || AND_GROUP_OPERATION;
+    const groupOperation = getCriteriaOperation(group).toLowerCase() || defaultGroupOperation;
+    let innerGroup = [];
     for(let i = 0; i < group.length; i++) {
         if(isGroup(group[i])) {
-            innerGroup.push(convertToInnerStructure(group[i], customOperations));
-            innerGroup.push(groupOperation);
+            innerGroup.push(convertToInnerStructure(group[i], customOperations, defaultGroupOperation));
+            innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
         } else if(isCondition(group[i])) {
             innerGroup.push(convertToInnerCondition(group[i], customOperations));
-            innerGroup.push(groupOperation);
+            innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
         }
     }
 
     if(innerGroup.length === 0) {
-        innerGroup.push(groupOperation);
+        innerGroup = appendGroupOperationToGroup(innerGroup, groupOperation);
     }
 
     return innerGroup;
@@ -354,22 +358,53 @@ function convertToInnerCondition(condition, customOperations) {
     return condition;
 }
 
-export function convertToInnerStructure(value, customOperations) {
+function isNegationGroupOperation(operation) {
+    return operation.indexOf('not') !== -1;
+}
+
+function getGroupOperationFromNegationOperation(operation) {
+    return operation.substring(3).toLowerCase();
+}
+
+function appendGroupOperationToCriteria(criteria, groupOperation) {
+    const isNegation = isNegationGroupOperation(groupOperation);
+    groupOperation = isNegation ? getGroupOperationFromNegationOperation(groupOperation) : groupOperation;
+
+    return isNegation ? ['!', criteria, groupOperation] : [criteria, groupOperation];
+}
+
+function appendGroupOperationToGroup(group, groupOperation) {
+    const isNegation = isNegationGroupOperation(groupOperation);
+
+    groupOperation = isNegation ? getGroupOperationFromNegationOperation(groupOperation) : groupOperation;
+    group.push(groupOperation);
+
+    let result = group;
+
+    if(isNegation) {
+        result = ['!', result];
+    }
+
+    return result;
+}
+
+export function convertToInnerStructure(value, customOperations, defaultGroupOperation) {
+    defaultGroupOperation = defaultGroupOperation || AND_GROUP_OPERATION;
     if(!value) {
-        return [AND_GROUP_OPERATION];
+        return createEmptyGroup(defaultGroupOperation);
     }
 
     value = extend(true, [], value);
 
     if(isCondition(value)) {
-        return [convertToInnerCondition(value, customOperations), AND_GROUP_OPERATION];
+        return appendGroupOperationToCriteria(convertToInnerCondition(value, customOperations), defaultGroupOperation);
     }
     if(isNegationGroup(value)) {
         return ['!', isCondition(value[1])
-            ? [convertToInnerCondition(value[1], customOperations), AND_GROUP_OPERATION]
-            : isNegationGroup(value[1]) ? [convertToInnerStructure(value[1], customOperations), AND_GROUP_OPERATION] : convertToInnerGroup(value[1], customOperations)];
+            ? appendGroupOperationToCriteria(convertToInnerCondition(value[1], customOperations), defaultGroupOperation)
+            : isNegationGroup(value[1]) ? appendGroupOperationToCriteria(convertToInnerStructure(value[1], customOperations), defaultGroupOperation) : convertToInnerGroup(value[1], customOperations, defaultGroupOperation)];
     }
-    return convertToInnerGroup(value, customOperations);
+    return convertToInnerGroup(value, customOperations, defaultGroupOperation);
 }
 
 export function getNormalizedFields(fields) {
@@ -510,14 +545,27 @@ export function getCurrentLookupValueText(field, value, handler) {
         const lookupDataSource = isFunction(lookup.dataSource) ? lookup.dataSource({}) : lookup.dataSource;
         const dataSource = new DataSource(lookupDataSource);
         dataSource.loadSingle(lookup.valueExpr, value).done(function(result) {
-            result ? handler(lookup.displayExpr ? compileGetter(lookup.displayExpr)(result) : result) : handler('');
+            let valueText = '';
+
+            if(result) {
+                valueText = lookup.displayExpr ? compileGetter(lookup.displayExpr)(result) : result;
+            }
+
+            if(field.customizeText) {
+                valueText = field.customizeText({
+                    value,
+                    valueText
+                });
+            }
+
+            handler(valueText);
         }).fail(function() {
             handler('');
         });
     }
 }
 
-function getPrimitiveValueText(field, value, customOperation, target) {
+function getPrimitiveValueText(field, value, customOperation, target, options) {
     let valueText;
     if(value === true) {
         valueText = field.trueText || messageLocalization.format('dxDataGrid-trueText');
@@ -539,13 +587,14 @@ function getPrimitiveValueText(field, value, customOperation, target) {
             valueText: valueText,
             field: field,
             target: target
-        });
+        }, options);
     }
     return valueText;
 }
 
 function getArrayValueText(field, value, customOperation, target) {
-    return value.map(v => getPrimitiveValueText(field, v, customOperation, target));
+    const options = { values: value };
+    return value.map(v => getPrimitiveValueText(field, v, customOperation, target, options));
 }
 
 function checkDefaultValue(value) {

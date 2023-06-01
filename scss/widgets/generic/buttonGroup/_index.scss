@@ -5,9 +5,9 @@
 @use "../sizes" as *;
 @use "../button/colors" as *;
 @use "../button/sizes" as *;
+@use "../../base/buttonGroup";
 
 // adduse
-
 
 .dx-button-mode-outlined,
 .dx-button-mode-contained {
@@ -166,6 +166,11 @@
           background-color: $button-group-normal-selected-bg;
 
           @include dx-buttongroup-item-states($button-group-normal-selected-bg-hover, $button-group-normal-selected-bg-focused);
+
+          &,
+          & .dx-icon {
+            color: $button-group-normal-selected-color;
+          }
         }
 
         &.dx-button-success {

@@ -1,123 +1,155 @@
-import '../jquery_augmentation';
+import { DataSourceLike } from '../data/data_source';
+import {
+    DxPromise,
+} from '../core/utils/deferred';
 
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
+type ItemLike = string | Item | any;
+
+/** @public */
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxGallery<TItem, TKey>>;
+
+/** @public */
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxGallery<TItem, TKey>>;
+
+/** @public */
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxGallery<TItem, TKey>>;
+
+/** @public */
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxGallery<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxGallery<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxGallery<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxGallery<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxGallery<TItem, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxGallery<TItem, TKey>> & SelectionChangedInfo<TItem>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ * @docid
+ */
+export interface dxGalleryOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxGallery<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @default 400
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationDuration?: number;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationEnabled?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxGalleryItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxGalleryItem | any> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     indicatorEnabled?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     initialItemWidth?: number;
     /**
      * @docid
+     * @type Array<string | dxGalleryItem | any>
      * @fires dxGalleryOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxGalleryItem | any>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     loop?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     noDataText?: string;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showIndicator?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showNavButtons?: boolean;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     slideshowDelay?: number;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     stretchImages?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     swipeEnabled?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     wrapAround?: boolean;
@@ -125,74 +157,154 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/gallery
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxGallery extends CollectionWidget {
-    constructor(element: Element, options?: dxGalleryOptions)
-    constructor(element: JQuery, options?: dxGalleryOptions)
+export default class dxGallery<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidget<dxGalleryOptions<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @publicName goToItem(itemIndex, animation)
      * @param1 itemIndex:numeric
-     * @param2 animation:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    goToItem(itemIndex: number, animation: boolean): Promise<void> & JQueryPromise<void>;
+    goToItem(itemIndex: number, animation: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName nextItem(animation)
-     * @param1 animation:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    nextItem(animation: boolean): Promise<void> & JQueryPromise<void>;
+    nextItem(animation: boolean): DxPromise<void>;
     /**
      * @docid
      * @publicName prevItem(animation)
-     * @param1 animation:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    prevItem(animation: boolean): Promise<void> & JQueryPromise<void>;
+    prevItem(animation: boolean): DxPromise<void>;
 }
 
 /**
- * @docid
- * @type object
- * @inherits CollectionWidgetItem
+ * @public
+ * @namespace DevExpress.ui.dxGallery
+ */
+export type Item = dxGalleryItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
  */
 export interface dxGalleryItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     imageAlt?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     imageSrc?: string;
 }
 
-declare global {
-interface JQuery {
-    dxGallery(): JQuery;
-    dxGallery(options: "instance"): dxGallery;
-    dxGallery(options: string): any;
-    dxGallery(options: string, ...params: any[]): any;
-    dxGallery(options: dxGalleryOptions): JQuery;
-}
-}
-export type Options = dxGalleryOptions;
+/** @public */
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+};
 
-/** @deprecated use Options instead */
-export type IOptions = dxGalleryOptions;
+/** @public */
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxGalleryOptions<TItem, TKey>;
+
+/** @deprecated use Properties instead */
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxGalleryOptions.onContentReady
+ * @type_function_param1 e:{ui/gallery:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onDisposing
+ * @type_function_param1 e:{ui/gallery:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onInitialized
+ * @type_function_param1 e:{ui/gallery:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onItemClick
+ * @type_function_param1 e:{ui/gallery:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/gallery:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onItemHold
+ * @type_function_param1 e:{ui/gallery:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onItemRendered
+ * @type_function_param1 e:{ui/gallery:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onOptionChanged
+ * @type_function_param1 e:{ui/gallery:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxGalleryOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/gallery:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+};
+///#ENDDEBUG

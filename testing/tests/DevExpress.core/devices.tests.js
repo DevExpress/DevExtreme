@@ -1,7 +1,6 @@
-window.includeThemesLinks();
+import '../../helpers/includeThemesLinks.js';
 
 import $ from 'jquery';
-import renderer from 'core/renderer';
 import domAdapter from 'core/dom_adapter';
 import themes from 'ui/themes';
 import devices from 'core/devices';
@@ -11,18 +10,17 @@ const viewPortChanged = viewPort.changeCallback;
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import readyCallbacks from 'core/utils/ready_callbacks';
 import config from 'core/config';
+import { implementationsMap } from 'core/utils/size';
 
 const userAgents = {
     iphone_12: 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1',
     ipad_10: 'Mozilla/5.0 (iPad; CPU OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.0 Mobile/14G60 Safari/602.1',
     android_9: 'Mozilla/5.0 (Linux; Android 9; Mi A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.143 Mobile Safari/537.36',
-    android_4_3_4: 'Mozilla/5.0 (Linux; Android 4.3.4; Galaxy Nexus Build/IMM76B)AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19',
-    android_4_4_0: 'Mozilla/5.0 (Linux; Android 4.4.0; Galaxy Nexus Build/IMM76B)AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19',
     android_tablet_7_1_1: 'Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Safari/537.36',
     win_phone_10: 'Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; NOKIA; Lumia 920) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Mobile Safari/537.36 Edge/12.0',
-    win_arm_8: 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; ARM; Tablet PC; Trident/6.0)',
-    win8_1_ie11: 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; .NET4.0E; .NET4.0C; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729; Tablet PC 2.0; rv:11.0) like Gecko'
 };
+
+themes.setDefaultTimeout(0);
 
 QUnit.module('devices', {
     beforeEach: function() {
@@ -50,21 +48,7 @@ QUnit.test('ios by userAgent', function(assert) {
 });
 
 QUnit.test('android by userAgent', function(assert) {
-    let device = fromUA(userAgents.android_4_3_4);
-
-    assert.equal(device.platform, 'android', 'platform is android');
-    assert.equal(device.version.toString(), '4,3,4', 'correct version');
-    assert.equal(device.deviceType, 'phone', 'deviceType is phone');
-    assert.equal(device.grade, 'B', 'grade is B');
-
-    device = fromUA(userAgents.android_4_4_0);
-
-    assert.equal(device.platform, 'android', 'platform is android');
-    assert.equal(device.version.toString(), '4,4,0', 'correct version');
-    assert.equal(device.deviceType, 'phone', 'deviceType is phone');
-    assert.equal(device.grade, 'A', 'grade is A');
-
-    device = fromUA(userAgents.android_tablet_7_1_1);
+    let device = fromUA(userAgents.android_tablet_7_1_1);
 
     assert.equal(device.platform, 'android', 'platform is android');
     assert.equal(device.version.toString(), '7,1,1', 'correct version');
@@ -75,20 +59,6 @@ QUnit.test('android by userAgent', function(assert) {
     assert.equal(device.platform, 'android', 'platform is android');
     assert.equal(device.version.toString(), '9,0,0', 'correct version');
     assert.equal(device.deviceType, 'phone', 'deviceType is phone');
-});
-
-QUnit.test('win8 tablet by userAgent', function(assert) {
-    const device = fromUA(userAgents.win_arm_8);
-
-    assert.equal(device.platform, 'generic', 'platform is generic');
-    assert.equal(device.deviceType, 'tablet', 'deviceType is tablet');
-});
-
-QUnit.test('win8.1 IE11 by userAgent', function(assert) {
-    const device = fromUA(userAgents.win8_1_ie11);
-
-    assert.equal(device.platform, 'generic', 'platform is generic');
-    assert.equal(device.deviceType, 'desktop', 'deviceType is desktop');
 });
 
 QUnit.test('iphone by device name', function(assert) {
@@ -426,20 +396,20 @@ QUnit.module('orientation', {
 
         that.currentWidth = 100;
         that.currentHeight = 200;
-        that.originalWidth = renderer.fn.width;
-        that.originalHeight = renderer.fn.height;
+        that.originalWidth = implementationsMap.getWidth;
+        that.originalHeight = implementationsMap.getHeight;
 
         // NOTE: using renderer.height() and renderer.width() for correct window size detecting on WP8
-        renderer.fn.width = function() {
+        implementationsMap.getWidth = function() {
             return that.currentWidth;
         };
-        renderer.fn.height = function() {
+        implementationsMap.getHeight = function() {
             return that.currentHeight;
         };
     },
     afterEach: function() {
-        renderer.fn.width = this.originalWidth;
-        renderer.fn.height = this.originalHeight;
+        implementationsMap.getWidth = this.originalWidth;
+        implementationsMap.getHeight = this.originalHeight;
     }
 });
 

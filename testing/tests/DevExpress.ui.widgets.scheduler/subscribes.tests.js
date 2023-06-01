@@ -1,22 +1,21 @@
-import 'common.css!';
 import 'generic_light.css!';
-import 'ui/scheduler/ui.scheduler.subscribes';
+import 'ui/scheduler/subscribes';
 import 'ui/scheduler/ui.scheduler';
 import {
-    AppointmentSettingsGeneratorBaseStrategy,
-    AppointmentSettingsGeneratorVirtualStrategy
-} from 'ui/scheduler/appointmentSettingsGenerator';
+    DateGeneratorBaseStrategy,
+    DateGeneratorVirtualStrategy
+} from 'ui/scheduler/appointments/settingsGenerator';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
 import dateUtils from 'core/utils/date';
 import config from 'core/config';
 
-import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
-function getTimezoneDifference(date, timeZone) {
-    return date.getTimezoneOffset() * dateUtils.dateToMilliseconds('minute') + timeZone * dateUtils.dateToMilliseconds('hour');
-}
+import { getAppointmentColor, createExpressions } from 'ui/scheduler/resources/utils';
+import { getAppointmentTakesSeveralDays } from 'ui/scheduler/appointments/dataProvider/utils';
 
 const {
     module,
@@ -31,8 +30,9 @@ testStart(function() {
 module('Subscribes', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+        this.createInstance = (options) => {
+            this.scheduler = createWrapper(options);
+            this.instance = this.scheduler.instance;
         };
         fx.off = true;
     },
@@ -41,42 +41,7 @@ module('Subscribes', {
         this.clock.restore();
     }
 }, function() {
-    test('\'replaceWrongEndDate\' should process endDate correctly', function(assert) {
-        this.createInstance({
-            currentView: 'week'
-        });
-
-        [
-            {
-                data: {
-                    startDate: new Date(2019, 4, 3, 12),
-                    allDay: false
-                },
-                expectedEndDate: new Date(2019, 4, 3, 12, 30)
-            },
-            {
-                data: {
-                    startDate: new Date(2019, 4, 3, 12),
-                    allDay: false,
-                    endDate: new Date('string')
-                },
-                expectedEndDate: new Date(2019, 4, 3, 12, 30)
-            },
-            {
-                data: {
-                    startDate: new Date(2019, 4, 3, 12),
-                    allDay: true
-                },
-                expectedEndDate: new Date(2019, 4, 3, 23, 59)
-            }
-        ].forEach(testCase => {
-            this.instance.fire('replaceWrongEndDate', testCase.data, new Date(2019, 4, 3, 12), testCase.data.endDate);
-            assert.equal(testCase.data.endDate.getHours(), testCase.expectedEndDate.getHours(), 'replaced endDate is ok');
-            assert.equal(testCase.data.endDate.getMinutes(), testCase.expectedEndDate.getMinutes(), 'replaced endDate is ok');
-        });
-    });
-
-    test('\'getTargetedAppointmentData\' should return correct data for recurrence appointments (T660901)', function(assert) {
+    test('"getTargetedAppointmentData" should return correct data for recurrence appointments (T660901)', function(assert) {
         const appointmentData = {
             startDate: new Date(2015, 1, 1, 5, 11),
             endDate: new Date(2015, 1, 1, 6),
@@ -98,14 +63,14 @@ module('Subscribes', {
     [
         {
             scrollingMode: 'standard',
-            expectedType: AppointmentSettingsGeneratorBaseStrategy
+            expectedType: DateGeneratorBaseStrategy
         },
         {
             scrollingMode: 'virtual',
-            expectedType: AppointmentSettingsGeneratorVirtualStrategy
+            expectedType: DateGeneratorVirtualStrategy
         }
     ].forEach(option => {
-        test(`Appointment settings generator strategy should be created with correct type if scrolling.mode: ${option.scrollingMode}`, function(assert) {
+        test(`Appointment dates generator strategy should has correct type if scrolling.mode: ${option.scrollingMode}`, function(assert) {
             this.createInstance({
                 currentView: 'day',
                 scrolling: {
@@ -113,9 +78,11 @@ module('Subscribes', {
                 }
             });
 
-            const { settingsStrategy } = this.instance._getAppointmentSettingsGenerator();
+            const layoutManager = this.instance.getLayoutManager();
+            const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
+            const { dateSettingsStrategy } = appointmentRenderingStrategy.getAppointmentSettingsGenerator();
 
-            assert.ok(settingsStrategy instanceof option.expectedType, 'Appointment settings type is correct');
+            assert.ok(dateSettingsStrategy instanceof option.expectedType, 'Type of the appointment dates generator is correct');
         });
     });
 
@@ -128,7 +95,7 @@ module('Subscribes', {
         try {
             this.instance.fire('setCellDataCacheAlias', {
                 rowIndex: 1,
-                cellIndex: 2,
+                columnIndex: 2,
                 groupIndex: 3,
                 left: 4,
                 top: 5
@@ -140,7 +107,7 @@ module('Subscribes', {
             assert.ok(setCacheAliasStub.calledOnce, 'setCellDataCacheAlias workSpace method called once');
             assert.deepEqual(setCacheAliasStub.getCall(0).args[0], {
                 rowIndex: 1,
-                cellIndex: 2,
+                columnIndex: 2,
                 groupIndex: 3,
                 left: 4,
                 top: 5
@@ -162,9 +129,11 @@ module('Subscribes', {
             currentDate: 1425416400000
         });
 
-        const coordinate = this.instance.fire('createAppointmentSettings', {
-            'startDate': new Date(2015, 2, 3, 22),
-            'endDate': new Date(2015, 2, 17, 10, 30)
+        const layoutManager = this.instance.getLayoutManager();
+        const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
+        const coordinate = appointmentRenderingStrategy.generateAppointmentSettings({
+            startDate: new Date(2015, 2, 3, 22),
+            endDate: new Date(2015, 2, 17, 10, 30)
         });
         assert.roughEqual(coordinate[0].top, 0, 1.001, 'Top coordinate is OK');
     });
@@ -225,61 +194,77 @@ module('Subscribes', {
         assert.ok(needRecalculate, 'Resizable area should be recalculated');
     });
 
-    test('\'createAppointmentSettings\' should return correct count of coordinates for allDay recurrence appointment', function(assert) {
+    test('"createAppointmentSettings" should return correct count of coordinates for allDay recurrence appointment', function(assert) {
         this.createInstance();
         this.instance.option({
             currentView: 'week',
             startDayHour: 2,
             endDayHour: 10,
             currentDate: new Date(2015, 2, 2, 0),
-            firstDayOfWeek: 1
+            firstDayOfWeek: 1,
+            dataSource: [{
+                startDate: new Date(2015, 2, 2, 0),
+                endDate: new Date(2015, 2, 3, 0),
+                recurrenceRule: 'FREQ=DAILY'
+            }]
         });
 
-        const result = this.instance.fire('createAppointmentSettings', {
-            'startDate': new Date(2015, 2, 2, 0),
-            'endDate': new Date(2015, 2, 3, 0),
-            'recurrenceRule': 'FREQ=DAILY'
-        });
-        assert.equal(result.length, 7, 'count is OK');
+        const layoutManager = this.instance.getLayoutManager();
+        const { _positionMap } = layoutManager;
+
+        assert.equal(_positionMap[0].length, 7, 'count is OK');
     });
 
-    test('\'createAppointmentSettings\' should return correct count of coordinates for allDay recurrence appointment, allDay = true', function(assert) {
+    test('"createAppointmentSettings" should return correct count of coordinates for allDay recurrence appointment, allDay = true', function(assert) {
         this.createInstance();
         this.instance.option({
             currentView: 'week',
             startDayHour: 2,
             endDayHour: 10,
             currentDate: new Date(2015, 2, 2, 0),
-            firstDayOfWeek: 1
+            firstDayOfWeek: 1,
+            dataSource: [{
+                'startDate': new Date(2015, 2, 2, 0),
+                'endDate': new Date(2015, 2, 3, 0),
+                'recurrenceRule': 'FREQ=DAILY',
+                allDay: true
+            }]
         });
 
-        const result = this.instance.fire('createAppointmentSettings', {
-            'startDate': new Date(2015, 2, 2, 0),
-            'endDate': new Date(2015, 2, 3, 0),
-            'recurrenceRule': 'FREQ=DAILY',
-            allDay: true
-        });
-        assert.equal(result.length, 7, 'count is OK');
+        const layoutManager = this.instance.getLayoutManager();
+        const { _positionMap } = layoutManager;
+
+        assert.equal(_positionMap[0].length, 7, 'count is OK');
     });
 
-    test('\'createAppointmentSettings\' should not change dateRange', function(assert) {
+    test('"createAppointmentSettings" should not change dateRange', function(assert) {
         this.createInstance({
             currentView: 'week',
             startDayHour: 2,
             endDayHour: 10,
             currentDate: new Date(2015, 2, 2, 0),
-            firstDayOfWeek: 1
+            firstDayOfWeek: 1,
+            dataSource: [{
+                'startDate': new Date(2015, 2, 2, 0),
+                'endDate': new Date(2015, 2, 3, 0),
+                'recurrenceRule': 'FREQ=DAILY',
+                allDay: true
+            }]
         });
 
         const instance = this.instance;
         const dateRange = instance._workSpace.getDateRange();
 
-        instance.fire('createAppointmentSettings', {
-            'startDate': new Date(2015, 2, 2, 0),
-            'endDate': new Date(2015, 2, 3, 0),
+        const layoutManager = this.instance.getLayoutManager();
+        const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
+
+        appointmentRenderingStrategy.generateAppointmentSettings({
+            'startDate': new Date(2015, 2, 2, 1),
+            'endDate': new Date(2015, 2, 3, 1),
             'recurrenceRule': 'FREQ=DAILY',
             allDay: true
         });
+
         assert.deepEqual(dateRange, instance._workSpace.getDateRange(), 'Date range wasn\'t changed');
     });
 
@@ -287,44 +272,23 @@ module('Subscribes', {
         this.createInstance({
             currentView: 'timelineDay',
             views: ['timelineDay'],
-            currentDate: new Date(2015, 2, 3)
+            currentDate: new Date(2015, 2, 3),
+            dataSource: [{
+                'startDate': new Date(2015, 2, 3, 0, 30),
+                'endDate': new Date(2015, 2, 5, 15, 30)
+            }]
         });
+
+        const layoutManager = this.instance.getLayoutManager();
+        const { _positionMap } = layoutManager;
 
         const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(1);
         const expectedLeftCoordinate = $expectedCell.position().left;
 
-        const coordinate = this.instance.fire('createAppointmentSettings', {
-            'startDate': new Date(2015, 2, 3, 0, 30),
-            'endDate': new Date(2015, 2, 5, 15, 30)
-        });
-        assert.equal(coordinate[0].left, expectedLeftCoordinate, 'left coordinate is OK');
+        assert.equal(_positionMap[0][0].left, expectedLeftCoordinate, 'left coordinate is OK');
     });
 
-    test('\'createAppointmentSettings\' should work correct with custom data fields', function(assert) {
-        this.createInstance({
-            currentView: 'week',
-            currentDate: new Date(2015, 2, 2, 0),
-            firstDayOfWeek: 1,
-            startDateExpr: 'Start'
-        });
-
-        const result = this.instance.fire('createAppointmentSettings', {
-            Start: new Date(2015, 2, 2, 0)
-        });
-        assert.equal(result.length, 1, 'Coordinates are OK');
-    });
-
-    test('\'updateAppointmentStartDate\' should work correct with custom data fields', function(assert) {
-        this.createInstance({
-            startDateExpr: 'Start'
-        });
-
-        assert.ok(this.instance.fire('updateAppointmentStartDate', {
-            startDate: new Date(2015, 2, 2, 0),
-        }));
-    });
-
-    test('\'mapAppointmentFields\' should call getTargetedAppointment', function(assert) {
+    test('"mapAppointmentFields" should call getTargetedAppointment', function(assert) {
         this.createInstance();
 
         const stub = sinon.stub(this.instance, 'getTargetedAppointment');
@@ -346,7 +310,7 @@ module('Subscribes', {
         }, 'Appointment data is OK');
     });
 
-    test('\'showAddAppointmentPopup\' should update appointment data if there is some custom data fields', function(assert) {
+    test('"showAddAppointmentPopup" should update appointment data if there is some custom data fields', function(assert) {
         this.createInstance();
         const stub = sinon.stub(this.instance, 'showAppointmentPopup');
 
@@ -356,7 +320,7 @@ module('Subscribes', {
             allDayExpr: 'AllDay'
         });
 
-        this.instance.fire('showAddAppointmentPopup', {
+        this.instance.showAddAppointmentPopup({
             startDate: new Date(2015, 1, 1),
             endDate: new Date(2015, 1, 1, 1),
             allDay: true
@@ -371,35 +335,35 @@ module('Subscribes', {
         }, 'Appointment data is OK');
     });
 
-    test('check the \'getField\' method with date field', function(assert) {
+    test('check the "getField" method with date field', function(assert) {
         const defaultForceIsoDateParsing = config().forceIsoDateParsing;
         config().forceIsoDateParsing = true;
         try {
             this.createInstance();
-            const startDate = this.instance.fire('getField', 'startDate', { startDate: '2017-02-08' });
-            assert.deepEqual(startDate, new Date(2017, 1, 8), 'the \'getField\' method works fine');
+            const startDate = ExpressionUtils.getField(this.instance._dataAccessors, 'startDate', { startDate: '2017-02-08' });
+            assert.deepEqual(startDate, new Date(2017, 1, 8), 'the "getField" method works fine');
 
-            const endDate = this.instance.fire('getField', 'endDate', { endDate: '2017-02-09' });
-            assert.deepEqual(endDate, new Date(2017, 1, 9), 'the \'getField\' method works fine');
+            const endDate = ExpressionUtils.getField(this.instance._dataAccessors, 'endDate', { endDate: '2017-02-09' });
+            assert.deepEqual(endDate, new Date(2017, 1, 9), 'the "getField" method works fine');
         } finally {
             config().forceIsoDateParsing = defaultForceIsoDateParsing;
         }
     });
 
-    test('check the \'setField\' method with date field and auto detect of serialization format', function(assert) {
+    test('check the "setField" method with date field and auto detect of serialization format', function(assert) {
         const defaultForceIsoDateParsing = config().forceIsoDateParsing;
         config().forceIsoDateParsing = true;
         try {
             this.createInstance();
             const obj = { startDate: '2017-02-07', endDate: '2017-02-08' };
 
-            this.instance.fire('getField', 'startDate', obj);
+            ExpressionUtils.getField(this.instance._dataAccessors, 'startDate', obj);
 
-            this.instance.fire('setField', 'startDate', obj, new Date(2017, 1, 8));
-            assert.equal(obj.startDate, '2017-02-08', 'the \'setField\' method works fine');
+            ExpressionUtils.setField(this.instance._dataAccessors, 'startDate', obj, new Date(2017, 1, 8));
+            assert.equal(obj.startDate, '2017-02-08', 'the "setField" method works fine');
 
-            this.instance.fire('setField', 'endDate', obj, new Date(2017, 1, 10));
-            assert.equal(obj.endDate, '2017-02-10', 'the \'setField\' method works fine');
+            ExpressionUtils.setField(this.instance._dataAccessors, 'endDate', obj, new Date(2017, 1, 10));
+            assert.equal(obj.endDate, '2017-02-10', 'the "setField" method works fine');
         } finally {
             config().forceIsoDateParsing = defaultForceIsoDateParsing;
         }
@@ -413,7 +377,7 @@ module('Subscribes', {
             const obj = { startDate: new Date(2017, 2, 7) };
 
             assert.strictEqual(this.instance.option('dateSerializationFormat'), undefined);
-            this.instance.fire('getField', 'startDate', obj);
+            ExpressionUtils.getField(this.instance._dataAccessors, 'startDate', obj);
 
             assert.strictEqual(this.instance.option('dateSerializationFormat'), undefined);
         } finally {
@@ -427,17 +391,17 @@ module('Subscribes', {
         });
         const obj = { startDate: '2017-02-07', endDate: '2017-02-08' };
 
-        this.instance.fire('setField', 'startDate', obj, new Date(Date.UTC(2017, 1, 8, 1)));
+        ExpressionUtils.setField(this.instance._dataAccessors, 'startDate', obj, new Date(Date.UTC(2017, 1, 8, 1)));
         assert.equal(obj.startDate, '2017-02-08T01:00:00Z', 'the \'setField\' method works fine');
 
-        this.instance.fire('setField', 'endDate', obj, new Date(Date.UTC(2017, 1, 10, 1)));
+        ExpressionUtils.setField(this.instance._dataAccessors, 'endDate', obj, new Date(Date.UTC(2017, 1, 10, 1)));
         assert.equal(obj.endDate, '2017-02-10T01:00:00Z', 'the \'setField\' method works fine');
     });
 
-    test('check the \'getField\' method', function(assert) {
+    test('check the "getField" method', function(assert) {
         this.createInstance();
-        const text = this.instance.fire('getField', 'text', { text: 1 });
-        assert.equal(text, 1, 'the \'getField\' method works fine');
+        const text = ExpressionUtils.getField(this.instance._dataAccessors, 'text', { text: 1 });
+        assert.equal(text, 1, 'the "getField" method works fine');
     });
 
     test('check the \'getField - recurrenceRule\' method, if recurrenceRuleExpr = null', function(assert) {
@@ -445,8 +409,8 @@ module('Subscribes', {
             recurrenceRuleExpr: null
         });
 
-        const recurrenceRule = this.instance.fire('getField', 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
-        assert.strictEqual(recurrenceRule, undefined, 'the \'getField\' method works fine');
+        const recurrenceRule = ExpressionUtils.getField(this.instance._dataAccessors, 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
+        assert.strictEqual(recurrenceRule, undefined, 'the "getField" method works fine');
     });
 
     test('check the \'getField - recurrenceRule\' method, if recurrenceRuleExpr was set as null after option changed', function(assert) {
@@ -456,8 +420,8 @@ module('Subscribes', {
             recurrenceRuleExpr: null
         });
 
-        const recurrenceRule = this.instance.fire('getField', 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
-        assert.strictEqual(recurrenceRule, undefined, 'the \'getField\' method works fine');
+        const recurrenceRule = ExpressionUtils.getField(this.instance._dataAccessors, 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
+        assert.strictEqual(recurrenceRule, undefined, 'the "getField" method works fine');
     });
 
     test('check the \'getField - recurrenceRule\' method, if recurrenceRuleExpr was set as value after option changed', function(assert) {
@@ -469,22 +433,22 @@ module('Subscribes', {
             recurrenceRuleExpr: 'recurrenceRule'
         });
 
-        const recurrenceRule = this.instance.fire('getField', 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
-        assert.equal(recurrenceRule, 'FREQ=daily', 'the \'getField\' method works fine');
+        const recurrenceRule = ExpressionUtils.getField(this.instance._dataAccessors, 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
+        assert.equal(recurrenceRule, 'FREQ=daily', 'the "getField" method works fine');
     });
 
     test('check the \'setField\' method', function(assert) {
         this.createInstance();
         const obj = { text: 1 };
 
-        this.instance.fire('setField', 'text', obj, 2);
+        ExpressionUtils.setField(this.instance._dataAccessors, 'text', obj, 2);
         assert.equal(obj.text, 2, 'the \'setField\' method works fine');
     });
 
     test('check the \'setField\' method with multi-dotted string', function(assert) {
         this.createInstance({ textExpr: 'a.b.text' });
-        const obj = this.instance.fire('setField', 'text', {}, 2);
-        const obj1 = this.instance.fire('setField', 'text', { c: 'just field' }, 2);
+        const obj = ExpressionUtils.setField(this.instance._dataAccessors, 'text', {}, 2);
+        const obj1 = ExpressionUtils.setField(this.instance._dataAccessors, 'text', { c: 'just field' }, 2);
 
         assert.deepEqual(obj, { a: { b: { text: 2 } } }, 'the \'setField\' method works fine');
         assert.deepEqual(obj1, { c: 'just field', a: { b: { text: 2 } } }, 'the \'setField\' method works fine');
@@ -497,7 +461,7 @@ module('Subscribes', {
 
         const obj = { recurrenceRule: 'FREQ=DAILY' };
 
-        this.instance.fire('setField', 'recurrenceRule', obj, 'FREQ=WEEKLY');
+        ExpressionUtils.setField(this.instance._dataAccessors, 'recurrenceRule', obj, 'FREQ=WEEKLY');
         assert.equal(obj.recurrenceRule, 'FREQ=DAILY', 'the \'setField\' method works fine');
     });
 
@@ -510,7 +474,7 @@ module('Subscribes', {
 
         const obj = { recurrenceRule: 'FREQ=DAILY' };
 
-        this.instance.fire('setField', 'recurrenceRule', obj, 'FREQ=WEEKLY');
+        ExpressionUtils.setField(this.instance._dataAccessors, 'recurrenceRule', obj, 'FREQ=WEEKLY');
         assert.equal(obj.recurrenceRule, 'FREQ=DAILY', 'the \'setField\' method works fine');
     });
 
@@ -525,46 +489,8 @@ module('Subscribes', {
 
         const obj = { recurrenceRule: 'FREQ=DAILY' };
 
-        this.instance.fire('setField', 'recurrenceRule', obj, 'FREQ=WEEKLY');
+        ExpressionUtils.setField(this.instance._dataAccessors, 'recurrenceRule', obj, 'FREQ=WEEKLY');
         assert.equal(obj.recurrenceRule, 'FREQ=WEEKLY', 'the \'setField\' method works fine');
-    });
-
-    test('UpdateAppointmentStartDate should return corrected startDate', function(assert) {
-        this.createInstance();
-        this.instance.option({
-            currentView: 'week',
-            currentDate: new Date(2016, 1, 1),
-            startDayHour: 5
-        });
-
-        const appointment = {
-            startDate: new Date(2016, 1, 2, 2),
-            endDate: new Date(2016, 1, 2, 7)
-        };
-
-        const result = this.instance.fire('updateAppointmentStartDate', {
-            startDate: appointment.startDate,
-        });
-        assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Updated date is correct');
-    });
-
-    test('UpdateAppointmentStartDate should return corrected startDate when appointment is short', function(assert) {
-        this.createInstance();
-        this.instance.option({
-            currentView: 'week',
-            currentDate: new Date(2016, 1, 1),
-            startDayHour: 9
-        });
-
-        const appointment = {
-            startDate: new Date(2016, 1, 2, 8, 30),
-            endDate: new Date(2016, 1, 2, 9, 1)
-        };
-
-        const result = this.instance.fire('updateAppointmentStartDate', {
-            startDate: appointment.startDate,
-        });
-        assert.deepEqual(result, new Date(2016, 1, 2, 9, 0), 'Updated date is correct');
     });
 
     test('appointmentTakesSeveralDays should return true, if startDate and endDate is different days', function(assert) {
@@ -585,29 +511,16 @@ module('Subscribes', {
             }
         ];
 
-        assert.ok(this.instance.fire('appointmentTakesSeveralDays', appointments[0]), 'appointmentTakesSeveralDays works correctly');
-        assert.notOk(this.instance.fire('appointmentTakesSeveralDays', appointments[1]), 'appointmentTakesSeveralDays works correctly');
-    });
-
-    test('UpdateAppointmentStartDate should return corrected startDate for long appointments', function(assert) {
-        this.createInstance();
-
-        this.instance.option({
-            currentView: 'week',
-            currentDate: new Date(2016, 1, 1),
-            startDayHour: 5
-        });
-
-        const appointment = {
-            startDate: new Date(2016, 1, 2, 2),
-            endDate: new Date(2016, 1, 4, 7)
-        };
-
-        const result = this.instance.fire('updateAppointmentStartDate', {
-            startDate: appointment.startDate,
-            appointment: appointment,
-        });
-        assert.deepEqual(result, new Date(2016, 1, 2, 5), 'Date is correct');
+        assert.ok(getAppointmentTakesSeveralDays(
+            appointments[0],
+            this.instance._dataAccessors,
+            this.instance.timeZoneCalculator,
+        ), 'appointmentTakesSeveralDays works correctly');
+        assert.notOk(getAppointmentTakesSeveralDays(
+            appointments[1],
+            this.instance._dataAccessors,
+            this.instance.timeZoneCalculator,
+        ), 'appointmentTakesSeveralDays works correctly');
     });
 
     test('UpdateAppointmentEndDate should return corrected endDate', function(assert) {
@@ -676,64 +589,19 @@ module('Subscribes', {
         assert.deepEqual(result, new Date(2015, 2, 3, 18), 'Updated date is correct');
     });
 
-    test('\'convertDateByTimezone\' should return date according to the custom timeZone', function(assert) {
-        const timezoneValue = 5;
-        this.createInstance();
-        this.instance.option({
-            timeZone: timezoneValue
-        });
-
-        const date = new Date(2015, 6, 3, 3);
-        const timezoneDifference = getTimezoneDifference(date, timezoneValue);
-
-        const convertedDate = this.instance.fire('convertDateByTimezone', date);
-
-        assert.deepEqual(convertedDate, new Date(date.getTime() + timezoneDifference), '\'convertDateByTimezone\' works fine');
-    });
-
-    test('\'convertDateByTimezone\' should return date according to the custom timeZone as string', function(assert) {
-        const timezone = { id: 'Asia/Ashkhabad', value: 5 };
+    test('"getAppointmentDurationInMs" should return visible appointment duration', function(assert) {
         this.createInstance();
 
-        this.instance.option({
-            timeZone: timezone.id
-        });
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 8),
+            new Date(2015, 2, 2, 20)
+        );
 
-        const date = new Date(2015, 6, 3, 3);
-        const timezoneDifference = getTimezoneDifference(date, timezone.value);
-
-        const convertedDate = this.instance.fire('convertDateByTimezone', date);
-
-        assert.deepEqual(convertedDate, new Date(date.getTime() + timezoneDifference), '\'convertDateByTimezone\' works fine');
+        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '"getAppointmentDurationInMs" works fine');
     });
 
-    test('\'convertDateByTimezone\' should return date according to the custom timeZone with non-integer number', function(assert) {
-        const timezone = { id: 'Australia/Broken_Hill', value: 9.5 };
-        this.createInstance();
-
-        this.instance.option({
-            timeZone: timezone.id
-        });
-
-        const date = new Date(2015, 6, 3, 3);
-        const timezoneDifference = getTimezoneDifference(date, timezone.value);
-
-        const convertedDate = this.instance.fire('convertDateByTimezone', date);
-
-        assert.deepEqual(convertedDate, new Date(date.getTime() + timezoneDifference), '\'convertDateByTimezone\' works fine');
-    });
-
-    test('\'getAppointmentDurationInMs\' should return visible appointment duration', function(assert) {
-        this.createInstance();
-
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 8),
-            endDate: new Date(2015, 2, 2, 20),
-        });
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
-    });
-
-    test('\'getAppointmentDurationInMs\' should return visible appointment duration considering startDayHour and endDayHour', function(assert) {
+    test('"getAppointmentDurationInMs" should return visible appointment duration considering startDayHour and endDayHour', function(assert) {
         this.createInstance();
 
         this.instance.option({
@@ -741,14 +609,16 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 8),
-            endDate: new Date(2015, 2, 4, 20),
-        });
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 8),
+            new Date(2015, 2, 4, 20)
+        );
+
+        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '"getAppointmentDurationInMs" works fine');
     });
 
-    test('\'getAppointmentDurationInMs\' should return visible appointment duration considering startDayHour and endDayHour for stricly allDay appointment without allDay field', function(assert) {
+    test('"getAppointmentDurationInMs" should return visible appointment duration considering startDayHour and endDayHour for stricly allDay appointment without allDay field', function(assert) {
         this.createInstance();
 
         this.instance.option({
@@ -756,14 +626,15 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 8),
-            endDate: new Date(2015, 2, 3, 0),
-        });
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '\'getAppointmentDurationInMs\' works fine');
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 8),
+            new Date(2015, 2, 3, 0)
+        );
+        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12, '"getAppointmentDurationInMs" works fine');
     });
 
-    test('\'getAppointmentDurationInMs\' should return visible appointment duration considering hours of startDate and endDate', function(assert) {
+    test('"getAppointmentDurationInMs" should return visible appointment duration considering hours of startDate and endDate', function(assert) {
         this.createInstance();
 
         this.instance.option({
@@ -771,14 +642,15 @@ module('Subscribes', {
             endDayHour: 22
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 4, 25, 21),
-            endDate: new Date(2015, 4, 26, 3),
-        });
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 3, '\'getAppointmentDurationInMs\' works fine');
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 4, 25, 21),
+            new Date(2015, 4, 26, 3)
+        );
+        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 3, '"getAppointmentDurationInMs" works fine');
     });
 
-    test('\'getAppointmentDurationInMs\' should return visible long appointment duration considering hours of startDate and endDate', function(assert) {
+    test('"getAppointmentDurationInMs" should return visible long appointment duration considering hours of startDate and endDate', function(assert) {
         this.createInstance();
 
         this.instance.option({
@@ -786,14 +658,15 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 10),
-            endDate: new Date(2015, 2, 4, 17),
-        });
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 31, '\'getAppointmentDurationInMs\' works fine');
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 10),
+            new Date(2015, 2, 4, 17)
+        );
+        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 31, '"getAppointmentDurationInMs" works fine');
     });
 
-    test('\'getAppointmentDurationInMs\' should return visible appointment duration considering hours of ultraboundary startDate and endDate', function(assert) {
+    test('"getAppointmentDurationInMs" should return visible appointment duration considering hours of ultraboundary startDate and endDate', function(assert) {
         this.createInstance();
 
         this.instance.option({
@@ -801,14 +674,15 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 7),
-            endDate: new Date(2015, 2, 4, 21),
-        });
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 7),
+            new Date(2015, 2, 4, 21),
+        );
+        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '"getAppointmentDurationInMs" works fine');
     });
 
-    test('\'getAppointmentDurationInMs\' should return visible allDay appointment duration', function(assert) {
+    test('"getAppointmentDurationInMs" should return visible allDay appointment duration', function(assert) {
         this.createInstance();
 
         this.instance.option({
@@ -816,15 +690,17 @@ module('Subscribes', {
             endDayHour: 20
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 7),
-            endDate: new Date(2015, 2, 4, 21),
-            allDay: true,
-        });
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '\'getAppointmentDurationInMs\' works fine');
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 7),
+            new Date(2015, 2, 4, 21),
+            true,
+        );
+
+        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 12 * 3, '"getAppointmentDurationInMs" works fine');
     });
 
-    test('\'getAppointmentDurationInMs\' should return visible appointment duration if last cell has small duration (T664073)', function(assert) {
+    test('"getAppointmentDurationInMs" should return visible appointment duration if last cell has small duration (T664073)', function(assert) {
         this.createInstance();
 
         this.instance.option({
@@ -833,15 +709,17 @@ module('Subscribes', {
             cellDuration: 61
         });
 
-        const result = this.instance.fire('getAppointmentDurationInMs', {
-            startDate: new Date(2015, 2, 2, 7),
-            endDate: new Date(2015, 2, 4, 21),
-            allDay: true,
-        });
-        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 48.8, '\'getAppointmentDurationInMs\' works fine');
+        const renderingStrategy = this.instance.getRenderingStrategyInstance();
+        const result = renderingStrategy.getAppointmentDurationInMs(
+            new Date(2015, 2, 2, 7),
+            new Date(2015, 2, 4, 21),
+            true,
+        );
+
+        assert.equal(result / dateUtils.dateToMilliseconds('hour'), 48.8, '"getAppointmentDurationInMs" works fine');
     });
 
-    test('\'getAppointmentColor\' by certain group', function(assert) {
+    test('"getAppointmentColor" by certain group', function(assert) {
         let appointmentColor;
 
         this.createInstance({
@@ -862,13 +740,24 @@ module('Subscribes', {
             ]
         });
 
-        const result = this.instance.fire('getAppointmentColor', {
+        const groups = this.instance._getCurrentViewOption('groups');
+
+        const config = {
+            resources: this.instance.option('resources'),
+            dataAccessors: createExpressions(this.instance.option('resources')),
+            loadedResources: this.instance.option('loadedResources'),
+            resourceLoaderMap: this.instance.option('resourceLoaderMap')
+        };
+
+        const result = getAppointmentColor(config, {
             itemData: {
                 typeId: 1,
                 priorityId: 1
             },
             groupIndex: 0,
+            groups,
         });
+
         result.done(function(color) {
             appointmentColor = color;
         });
@@ -876,7 +765,7 @@ module('Subscribes', {
         assert.strictEqual(appointmentColor, 'red', 'appointment color');
     });
 
-    test('\'getAppointmentColor\' with fieldExpr for complex resource', function(assert) {
+    test('"getAppointmentColor" with fieldExpr for complex resource', function(assert) {
         let appointmentColor;
 
         this.createInstance({
@@ -909,7 +798,16 @@ module('Subscribes', {
             }]
         });
 
-        const result = this.instance.fire('getAppointmentColor', {
+        const groups = this.instance._getCurrentViewOption('groups');
+
+        const config = {
+            resources: this.instance.option('resources'),
+            dataAccessors: createExpressions(this.instance.option('resources')),
+            loadedResources: this.instance.option('loadedResources'),
+            resourceLoaderMap: this.instance.option('resourceLoaderMap')
+        };
+
+        const result = getAppointmentColor(config, {
             itemData: {
                 'Price': 10,
                 'startDate': new Date(2015, 4, 24, 9, 10, 0, 0),
@@ -920,6 +818,7 @@ module('Subscribes', {
                 'TheatreId': 1
             },
             groupIndex: 0,
+            groups
         });
 
         result.done(function(color) {
@@ -929,19 +828,7 @@ module('Subscribes', {
         assert.strictEqual(appointmentColor, 'red', 'appointment color is OK');
     });
 
-    test('\'getHeaderHeight\' should return correct value', function(assert) {
-        this.createInstance({
-            views: ['day'],
-            currentView: 'day',
-            dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
-        });
-
-        const headerHeight = this.instance.fire('getHeaderHeight');
-
-        assert.equal(headerHeight, 56, 'Header height is OK');
-    });
-
-    test('\'getMaxAppointmentsPerCell\' should return correct value in accordance with scheduler configuration', function(assert) {
+    test('"maxAppointmentsPerCell" should return correct value in accordance with scheduler configuration', function(assert) {
         this.createInstance({
             views: [{
                 name: 'DAY',
@@ -955,18 +842,18 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        let countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
 
-        countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 'auto', 'overlappingMode is OK');
     });
 
-    test('\'getMaxAppointmentsPerCell\' should return correct value in accordance with view configuration', function(assert) {
+    test('"maxAppointmentsPerCell" should return correct value in accordance with view configuration', function(assert) {
         this.createInstance({
             views: [{
                 name: 'DAY',
@@ -981,13 +868,13 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        let countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
 
-        countPerCell = this.instance.fire('getMaxAppointmentsPerCell');
+        countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 'unlimited', 'overlappingMode is OK');
     });
@@ -1155,16 +1042,18 @@ module('Subscribes', {
     [undefined, 'FREQ=DAILY'].forEach(recurrenceRule => {
         test(`Appointments should not contains groupIndex if recurrenceRule: ${recurrenceRule}`, function(assert) {
             this.createInstance({
-                currentDate: new Date(2015, 2, 2)
+                currentDate: new Date(2015, 2, 2),
+                dataSource: [{
+                    startDate: new Date(2015, 2, 2, 0),
+                    endDate: new Date(2015, 2, 3, 0),
+                    recurrenceRule: undefined
+                }]
             });
 
-            const settings = this.instance.fire('createAppointmentSettings', {
-                startDate: new Date(2015, 2, 2, 0),
-                endDate: new Date(2015, 2, 3, 0),
-                recurrenceRule
-            });
+            const layoutManager = this.instance.getLayoutManager();
+            const { _positionMap } = layoutManager;
 
-            assert.notOk(settings[0].groupIndex, 'no groupIndex');
+            assert.notOk(_positionMap[0][0].groupIndex, 'no groupIndex');
         });
     });
 });
@@ -1172,8 +1061,8 @@ module('Subscribes', {
 module('Grouping By Date', {
     beforeEach: function() {
         this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-            this.scheduler = new SchedulerTestWrapper(this.instance);
+            this.scheduler = createWrapper(options);
+            this.instance = this.scheduler.instance;
         };
         fx.off = true;
     },
@@ -1181,325 +1070,252 @@ module('Grouping By Date', {
         fx.off = false;
     },
 
-    checkNeedCoordinatesResult: (assert, result, cellIndex, rowIndex, top, left, epsilon) => {
-        assert.equal(result.cellIndex, cellIndex, 'cellIndex is correct');
+    checkNeedCoordinatesResult: (assert, result, columnIndex, rowIndex, top, left, epsilon) => {
+        assert.equal(result.columnIndex, columnIndex, 'columnIndex is correct');
         assert.equal(result.rowIndex, rowIndex, 'rowIndex is correct');
         assert.equal(result.top, top, 'top is correct');
         assert.roughEqual(result.left, left, epsilon, 'left is correct');
     }
 }, function() {
-    test('\'isGroupedByDate\' should be true only for horizontal grouped workspace with groups', function(assert) {
-        this.createInstance({
-            views: [{
-                name: 'DAY',
-                type: 'day',
-                groupOrientation: 'horizontal'
-            }, {
-                name: 'WEEK',
-                type: 'week',
-                groupOrientation: 'vertical'
-            }],
-            currentView: 'DAY',
-            dataSource: [],
-            groupByDate: true,
-            groups: ['priorityId'],
-            resources: [{
-                field: 'typeId',
-                dataSource: [{ id: 1, color: 'red' }]
-            },
-            {
-                field: 'priorityId',
-                dataSource: [{ id: 1, color: 'black' }]
-            }
-            ]
+    [true, false].forEach((isRenovatedRender) => {
+        test(`'isGroupedByDate' should be true only for horizontal grouped workspace with groups when renovateRender is ${isRenovatedRender}`, function(assert) {
+            this.createInstance({
+                views: [{
+                    name: 'DAY',
+                    type: 'day',
+                    groupOrientation: 'horizontal'
+                }, {
+                    name: 'WEEK',
+                    type: 'week',
+                    groupOrientation: 'vertical'
+                }],
+                currentView: 'DAY',
+                dataSource: [],
+                groupByDate: true,
+                groups: ['priorityId'],
+                resources: [{
+                    field: 'typeId',
+                    dataSource: [{ id: 1, color: 'red' }]
+                }, {
+                    field: 'priorityId',
+                    dataSource: [{ id: 1, color: 'black' }]
+                }],
+                renovateRender: isRenovatedRender,
+            });
+
+            assert.equal(this.instance.fire('isGroupedByDate'), true, 'Workspace is grouped by date');
+
+            this.instance.option('currentView', 'WEEK');
+            assert.equal(this.instance.fire('isGroupedByDate'), false, 'Workspace isn\'t grouped by date');
+
+            this.instance.option('groups', []);
+            this.instance.option('currentView', 'DAY');
+            assert.equal(this.instance.fire('isGroupedByDate'), false, 'Workspace isn\'t grouped by date');
         });
 
-        assert.equal(this.instance.fire('isGroupedByDate'), true, 'Workspace is grouped by date');
-
-        this.instance.option('currentView', 'WEEK');
-        assert.equal(this.instance.fire('isGroupedByDate'), false, 'Workspace isn\'t grouped by date');
-
-        this.instance.option('groups', []);
-        this.instance.option('currentView', 'DAY');
-        assert.equal(this.instance.fire('isGroupedByDate'), false, 'Workspace isn\'t grouped by date');
-    });
-
-    test('\'createAppointmentSettings\' should work correct when groupByDate = true, Day view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'day',
-            views: [{
-                type: 'day',
-                name: 'day',
-                intervalCount: 2
-            }],
-            currentDate: new Date(2018, 4, 21, 9, 0),
-            groupByDate: true,
-            startDayHour: 9,
-            groups: ['priorityId'],
-            resources: [
+        test(`"createAppointmentSettings" should work correct for allDay appointment when groupByDate = true, Week view when renovateRender is ${isRenovatedRender}`, function(assert) {
+            const priorityData = [
                 {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff'
+                }, {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747'
                 }
-            ],
+            ];
+            this.createInstance({
+                currentView: 'week',
+                views: [{
+                    type: 'week',
+                    name: 'week',
+                    intervalCount: 2
+                }],
+                currentDate: new Date(2018, 4, 21, 9, 0),
+                groupByDate: true,
+                startDayHour: 9,
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: priorityData,
+                        label: 'Priority'
+                    }
+                ],
+                renovateRender: isRenovatedRender,
+                dataSource: [{
+                    startDate: new Date(2018, 4, 21, 9, 0),
+                    endDate: new Date(2018, 4, 23, 9, 0),
+                    priorityId: 2,
+                    allDay: true
+                }]
+            });
+
+            const layoutManager = this.instance.getLayoutManager();
+            const results = layoutManager._positionMap[0];
+
+            assert.equal(results.length, 3, 'Result length is OK');
+            this.checkNeedCoordinatesResult(assert, results[0], 3, 0, 0, 96, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[1], 5, 0, 0, 160, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[2], 7, 0, 0, 224, 1.1);
         });
 
-        this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 21, 9, 0),
-            priorityId: 2
-        })[0], 0, 0, 0, 324, 1.1);
-
-
-        this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 22, 9, 0),
-            priorityId: 1
-        })[0], 1, 0, 0, 548, 1.1);
-    });
-
-    test('\'createAppointmentSettings\' should work correct for allDay appointment when groupByDate = true, Week view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'week',
-            views: [{
-                type: 'week',
-                name: 'week',
-                intervalCount: 2
-            }],
-            currentDate: new Date(2018, 4, 21, 9, 0),
-            groupByDate: true,
-            startDayHour: 9,
-            groups: ['priorityId'],
-            resources: [
+        test(`"createAppointmentSettings" should work correct when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, function(assert) {
+            const priorityData = [
                 {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff'
+                }, {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747'
                 }
-            ],
+            ];
+            this.createInstance({
+                currentView: 'month',
+                views: [{
+                    type: 'month',
+                    name: 'month',
+                    groupOrientation: 'horizontal'
+                }],
+                currentDate: new Date(2018, 4, 21, 9, 0),
+                groupByDate: true,
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: priorityData,
+                        label: 'Priority'
+                    }
+                ],
+                renovateRender: isRenovatedRender,
+                dataSource: [{
+                    startDate: new Date(2018, 4, 22, 10, 0),
+                    endDate: new Date(2018, 4, 24),
+                    priorityId: 2
+                }]
+            });
+
+            const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0);
+            const cellWidth = $cell.getBoundingClientRect().width;
+            const cellHeight = $cell.getBoundingClientRect().height;
+
+            const layoutManager = this.instance.getLayoutManager();
+            const results = layoutManager._positionMap[0];
+
+            assert.equal(results.length, 2, 'Coordinates count is ok');
+            this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], 7, 3, cellHeight * 3, cellWidth * 7, 1.5);
         });
 
-        const results = this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 21, 9, 0),
-            endDate: new Date(2018, 4, 23, 9, 0),
-            priorityId: 2,
-            allDay: true
-        });
-
-        assert.equal(results.length, 3, 'Result length is OK');
-        this.checkNeedCoordinatesResult(assert, results[0], 1, 0, 0, 196, 1.1);
-        this.checkNeedCoordinatesResult(assert, results[1], 2, 0, 0, 260, 1.1);
-        this.checkNeedCoordinatesResult(assert, results[2], 3, 0, 0, 324, 1.1);
-    });
-
-    test('\'createAppointmentSettings\' should work correct when groupByDate = true, Week view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'week',
-            views: ['week'],
-            currentDate: new Date(2018, 4, 21, 9, 0),
-            groupByDate: true,
-            startDayHour: 9,
-            groups: ['priorityId'],
-            resources: [
+        test(`createAppointmentSettings' should work correct for recurrenceAppointment when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, function(assert) {
+            const priorityData = [
                 {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff'
+                }, {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747'
                 }
-            ],
+            ];
+            this.createInstance({
+                currentView: 'month',
+                views: [{
+                    type: 'month',
+                    name: 'month',
+                    groupOrientation: 'horizontal'
+                }],
+                currentDate: new Date(2018, 4, 21, 9, 0),
+                groupByDate: true,
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: priorityData,
+                        label: 'Priority'
+                    }
+                ],
+                renovateRender: isRenovatedRender,
+                dataSource: [{
+                    startDate: new Date(2018, 4, 22, 10, 0),
+                    endDate: new Date(2018, 4, 23, 12),
+                    priorityId: 2,
+                    recurrenceRule: 'FREQ=DAILY;COUNT=3'
+                }]
+            });
+
+            const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0);
+            const cellWidth = $cell.getBoundingClientRect().width;
+            const cellHeight = $cell.getBoundingClientRect().height;
+
+            const layoutManager = this.instance.getLayoutManager();
+            const results = layoutManager._positionMap[0];
+
+            assert.equal(results.length, 6, 'Coordinates count is ok');
+            this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], 7, 3, cellHeight * 3, cellWidth * 7, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[2], 7, 3, cellHeight * 3, cellWidth * 7, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[3], 9, 3, cellHeight * 3, cellWidth * 9, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[4], 9, 3, cellHeight * 3, cellWidth * 9, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[5], 11, 3, cellHeight * 3, cellWidth * 11, 1.5);
         });
 
-        this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 22, 10, 0),
-            priorityId: 2
-        })[0], 2, 2, 100, 420, 1.5);
-
-        this.checkNeedCoordinatesResult(assert, this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 25, 11, 0),
-            priorityId: 1
-        })[0], 5, 4, 200, 740, 1.5);
-    });
-
-
-    test('\'createAppointmentSettings\' should work correct when groupByDate = true, Month view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'month',
-            views: [{
-                type: 'month',
-                name: 'month',
-                groupOrientation: 'horizontal'
-            }],
-            currentDate: new Date(2018, 4, 21, 9, 0),
-            groupByDate: true,
-            groups: ['priorityId'],
-            resources: [
+        test(`'createAppointmentSettings' should work correct when groupByDate = true, Timeline view when renovateRender is ${isRenovatedRender}`, function(assert) {
+            const priorityData = [
                 {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff'
+                }, {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747'
                 }
-            ],
+            ];
+            this.createInstance({
+                currentView: 'timelineWeek',
+                views: [{
+                    type: 'timelineWeek',
+                    name: 'timelineWeek',
+                    groupOrientation: 'horizontal'
+                }],
+                currentDate: new Date(2018, 4, 21),
+                cellDuration: 60,
+                groupByDate: true,
+                startDayHour: 10,
+                endDayHour: 12,
+                groups: ['priorityId'],
+                resources: [
+                    {
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: priorityData,
+                        label: 'Priority'
+                    }
+                ],
+                renovateRender: isRenovatedRender,
+                dataSource: [{
+                    startDate: new Date(2018, 4, 21, 10, 0),
+                    endDate: new Date(2018, 4, 21, 12, 0),
+                    priorityId: 2
+                }]
+            });
+
+            const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().width;
+
+            const layoutManager = this.instance.getLayoutManager();
+            const results = layoutManager._positionMap[0];
+
+            this.checkNeedCoordinatesResult(assert, results[0], 5, 0, 0, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], 7, 0, 0, cellWidth * 7, 1.5);
         });
-
-        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0);
-        const cellWidth = $cell.getBoundingClientRect().width;
-        const cellHeight = $cell.getBoundingClientRect().height;
-
-        const results = this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 22, 10, 0),
-            endDate: new Date(2018, 4, 24),
-            priorityId: 2
-        });
-
-        assert.equal(results.length, 2, 'Coordinates count is ok');
-        this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3, cellWidth * 5, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
-    });
-
-    test('\'createAppointmentSettings\' should work correct for recurrenceAppointment when groupByDate = true, Month view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'month',
-            views: [{
-                type: 'month',
-                name: 'month',
-                groupOrientation: 'horizontal'
-            }],
-            currentDate: new Date(2018, 4, 21, 9, 0),
-            groupByDate: true,
-            groups: ['priorityId'],
-            resources: [
-                {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
-                }
-            ],
-        });
-
-        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0);
-        const cellWidth = $cell.getBoundingClientRect().width;
-        const cellHeight = $cell.getBoundingClientRect().height;
-
-        const results = this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 22, 10, 0),
-            endDate: new Date(2018, 4, 23, 12),
-            priorityId: 2,
-            recurrenceRule: 'FREQ=DAILY;COUNT=3'
-        });
-
-        assert.equal(results.length, 6, 'Coordinates count is ok');
-        this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3, cellWidth * 5, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[2], 3, 3, cellHeight * 3, cellWidth * 7, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[3], 4, 3, cellHeight * 3, cellWidth * 9, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[4], 4, 3, cellHeight * 3, cellWidth * 9, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[5], 5, 3, cellHeight * 3, cellWidth * 11, 1.5);
-    });
-
-    test('\'createAppointmentSettings\' should work correct when groupByDate = true, Timeline view', function(assert) {
-        const priorityData = [
-            {
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff'
-            }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747'
-            }
-        ];
-        this.createInstance({
-            currentView: 'timelineWeek',
-            views: [{
-                type: 'timelineWeek',
-                name: 'timelineWeek',
-                groupOrientation: 'horizontal'
-            }],
-            currentDate: new Date(2018, 4, 21),
-            cellDuration: 60,
-            groupByDate: true,
-            startDayHour: 10,
-            endDayHour: 12,
-            groups: ['priorityId'],
-            resources: [
-                {
-                    fieldExpr: 'priorityId',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority'
-                }
-            ],
-        });
-
-        const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().width;
-
-        const results = this.instance.fire('createAppointmentSettings', {
-            startDate: new Date(2018, 4, 21, 10, 0),
-            endDate: new Date(2018, 4, 21, 12, 0),
-            priorityId: 2
-        });
-
-        this.checkNeedCoordinatesResult(assert, results[0], 2, 0, 0, cellWidth * 5, 1.5);
-        this.checkNeedCoordinatesResult(assert, results[1], 3, 0, 0, cellWidth * 7, 1.5);
     });
 
     test('\'getResizableAppointmentArea\' should return correct area when groupByDate = true, Month view', function(assert) {
@@ -1604,7 +1420,7 @@ module('Grouping By Date', {
         const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
         const cellWidth = $cell.get(0).getBoundingClientRect().width;
 
-        assert.roughEqual(this.instance.fire('getResizableStep'), cellWidth * 3, 3, 'Step is OK');
+        assert.roughEqual(this.instance.getWorkSpace().positionHelper.getResizableStep(), cellWidth * 3, 3, 'Step is OK');
     });
 
     test('Appointment is rendered in allDay panel if endDate is out of view, groupByDate = true (T742932)', function(assert) {

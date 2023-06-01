@@ -4,11 +4,13 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+@use "../../base/checkBox";
 
 // adduse
 
 
 $generic-checkbox-disable-opacity: 0.4;
+$icon-position: relative;
 
 .dx-checkbox {
   line-height: 0;
@@ -51,26 +53,24 @@ $generic-checkbox-disable-opacity: 0.4;
 
     color: $checkbox-checked-color;
 
-    @include dx-icon-font-centered-sizing($generic-checkbox-arrow-icon-size);
+    @include dx-icon-font-centered-sizing($generic-checkbox-arrow-icon-size, $icon-position);
+
+    font-size: $generic-checkbox-arrow-font-size;
   }
 
   .dx-checkbox-indeterminate & {
-    @include dx-icon(square);
-
     color: $checkbox-indeterminate-bg;
 
-    @include dx-icon-font-centered-sizing($generic-checkbox-intermidiate-icon-size);
-  }
-}
+    @include dx-icon-font-centered-sizing($generic-checkbox-indeterminate-icon-size, $icon-position);
 
-.dx-checkbox-text {
-  margin-left: -$generic-checkbox-size;
-  padding-left: $generic-checkbox-size + 5px;
+    font-size: $generic-checkbox-indeterminate-font-size;
 
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    margin-right: -$generic-checkbox-size;
-    padding-right: $generic-checkbox-size + 5px;
+    &::before {
+      content: '';
+      background-color: $checkbox-checked-color;
+      border-radius: 2px;
+      height: $generic-checkbox-indeterminate-icon-size;
+    }
   }
 }
 

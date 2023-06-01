@@ -1,14 +1,19 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import Color from 'color';
-import Browser from 'core/utils/browser';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
+import { normalizeKeyName } from 'events/utils/index';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
+const COLORVIEW_PALETTE_SELECTOR = '.dx-colorview-palette';
+const COLORVIEW_HUE_SCALE_SELECTOR = '.dx-colorview-hue-scale';
+const COLORVIEW_ALPHA_CHANNEL_SCALE_SELECTOR = '.dx-colorview-alpha-channel-scale';
+const COLORVIEW_PALETTE_HANDLE_SELECTOR = '.dx-colorview-palette-handle';
+const COLORVIEW_LABEL_HEX_SELECTOR = '.dx-colorview-label-hex';
+const TEXTBOX_SELECTOR = '.dx-textbox';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/color_box/color_view';
 
@@ -441,6 +446,14 @@ QUnit.module('ColorView', {
         this.checkColor({ r: 0, g: 100, b: 50, hex: '#006432', alpha: 1 }, assert);
     });
 
+    QUnit.test('ColorView should apply a black color when an invalid value is passed (T1127428)', function(assert) {
+        showColorView.call(this, {
+            value: [ 'red', 'green' ],
+        });
+
+        this.checkColor({ r: 0, g: 0, b: 0, hex: '#000000', alpha: 1 }, assert);
+    });
+
     QUnit.test('Validate a too large value', function(assert) {
         showColorView.call(this, {
             value: '#646432',
@@ -678,11 +691,6 @@ QUnit.module('ColorView', {
     });
 
     QUnit.test('Markup should be updated when value was changed', function(assert) {
-        if(Browser.msie && Browser.version <= 9) {
-            assert.ok(true);
-            return;
-        }
-
         const colorView = showColorView.call(this, {
             value: 'rgba(94, 169, 219, 0.62)',
             editAlphaChannel: true
@@ -771,6 +779,11 @@ QUnit.module('keyboard navigation', {
         this.ctrlRight = $.Event('keydown', { key: 'ArrowRight', ctrlKey: true });
         this.ctrlDown = $.Event('keydown', { key: 'ArrowDown', ctrlKey: true });
 
+        this.commandLeft = $.Event('keydown', { key: 'ArrowLeft', metaKey: true });
+        this.commandUp = $.Event('keydown', { key: 'ArrowUp', metaKey: true });
+        this.commandRight = $.Event('keydown', { key: 'ArrowRight', metaKey: true });
+        this.commandDown = $.Event('keydown', { key: 'ArrowDown', metaKey: true });
+
         this.shiftLeft = $.Event('keydown', { key: 'ArrowLeft', shiftKey: true });
         this.shiftUp = $.Event('keydown', { key: 'ArrowUp', shiftKey: true });
         this.shiftRight = $.Event('keydown', { key: 'ArrowRight', shiftKey: true });
@@ -780,6 +793,11 @@ QUnit.module('keyboard navigation', {
         this.ctrlShiftUp = $.Event('keydown', { key: 'ArrowUp', ctrlKey: true, shiftKey: true });
         this.ctrlShiftRight = $.Event('keydown', { key: 'ArrowRight', ctrlKey: true, shiftKey: true });
         this.ctrlShiftDown = $.Event('keydown', { key: 'ArrowDown', ctrlKey: true, shiftKey: true });
+
+        this.commandShiftLeft = $.Event('keydown', { key: 'ArrowLeft', ctrlKey: true, shiftKey: true });
+        this.commandShiftUp = $.Event('keydown', { key: 'ArrowUp', ctrlKey: true, shiftKey: true });
+        this.commandShiftRight = $.Event('keydown', { key: 'ArrowRight', ctrlKey: true, shiftKey: true });
+        this.commandShiftDown = $.Event('keydown', { key: 'ArrowDown', ctrlKey: true, shiftKey: true });
     },
     afterEach: function() {
         this.clock.restore();
@@ -839,10 +857,22 @@ QUnit.module('keyboard navigation', {
         assert.equal(this.instance.option('value'), 'rgba(50, 99, 99, 0.37)', 'value was changed correctly when \'ctrl+up\' was pressed');
     });
 
+    QUnit.test('\'commandUp\' key test', function(assert) {
+        this.$element.trigger(this.commandUp);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 99, 99, 0.37)', 'value was changed correctly when \'command+up\' was pressed');
+    });
+
     QUnit.test('\'ctrlShiftUp\' key test', function(assert) {
         this.$element.trigger(this.ctrlShiftUp);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 89, 99, 0.37)', 'value was changed correctly when \'ctrl+shift+up\' was pressed');
+    });
+
+    QUnit.test('\'commandShiftUp\' key test', function(assert) {
+        this.$element.trigger(this.commandShiftUp);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 89, 99, 0.37)', 'value was changed correctly when \'command+shift+up\' was pressed');
     });
 
     QUnit.test('\'ctrlDown\' key test', function(assert) {
@@ -851,16 +881,34 @@ QUnit.module('keyboard navigation', {
         assert.equal(this.instance.option('value'), 'rgba(50, 99, 99, 0.37)', 'value was changed correctly when \'ctrl+down\' was pressed');
     });
 
+    QUnit.test('\'commandDown\' key test', function(assert) {
+        this.$element.trigger(this.commandDown);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 99, 99, 0.37)', 'value was changed correctly when \'command+down\' was pressed');
+    });
+
     QUnit.test('\'ctrlShiftDown\' key test', function(assert) {
         this.$element.trigger(this.ctrlShiftDown);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 99, 89, 0.37)', 'value was changed correctly when \'ctrl+shift+down\' was pressed');
     });
 
+    QUnit.test('\'commandShiftDown\' key test', function(assert) {
+        this.$element.trigger(this.commandShiftDown);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 99, 89, 0.37)', 'value was changed correctly when \'command+shift+down\' was pressed');
+    });
+
     QUnit.test('\'ctrlRight\' key test', function(assert) {
         this.$element.trigger(this.ctrlRight);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'ctrl+right\' was pressed');
+    });
+
+    QUnit.test('\'commandRight\' key test', function(assert) {
+        this.$element.trigger(this.commandRight);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'command+right\' was pressed');
     });
 
     QUnit.test('\'ctrlShiftRight\' key test', function(assert) {
@@ -870,16 +918,35 @@ QUnit.module('keyboard navigation', {
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'ctrl+shift+right\' was pressed');
     });
 
+    QUnit.test('\'commandShiftRight\' key test', function(assert) {
+        this.instance.option('value', 'rgba(50, 100, 100, 0.4)');
+        this.$element.trigger(this.commandShiftRight);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'command+shift+right\' was pressed');
+    });
+
     QUnit.test('\'ctrlLeft\' key test', function(assert) {
         this.$element.trigger(this.ctrlLeft);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.38)', 'value was changed correctly when \'ctrl+left\' was pressed');
     });
 
+    QUnit.test('\'commandLeft\' key test', function(assert) {
+        this.$element.trigger(this.commandLeft);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.38)', 'value was changed correctly when \'command+left\' was pressed');
+    });
+
     QUnit.test('\'ctrlShiftLeft\' key test', function(assert) {
         this.$element.trigger(this.ctrlShiftLeft);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.41)', 'value was changed correctly when \'ctrl+shift+left\' was pressed');
+    });
+
+    QUnit.test('\'commandShiftLeft\' key test', function(assert) {
+        this.$element.trigger(this.commandShiftLeft);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.41)', 'value was changed correctly when \'command+shift+left\' was pressed');
     });
 
     QUnit.test('\'ctrlRight\' key test, rtl mode', function(assert) {
@@ -889,11 +956,25 @@ QUnit.module('keyboard navigation', {
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.38)', 'value was changed correctly when \'ctrl+right\' was pressed');
     });
 
+    QUnit.test('\'commandRight\' key test, rtl mode', function(assert) {
+        this.$element.dxColorView('instance').option('rtlEnabled', true);
+        this.$element.trigger(this.commandRight);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.38)', 'value was changed correctly when \'command+right\' was pressed');
+    });
+
     QUnit.test('\'ctrlLeft\' key test, rtl mode', function(assert) {
         this.$element.dxColorView('instance').option('rtlEnabled', true);
         this.$element.trigger(this.ctrlLeft);
 
         assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'ctrl+left\' was pressed');
+    });
+
+    QUnit.test('\'commandLeft\' key test, rtl mode', function(assert) {
+        this.$element.dxColorView('instance').option('rtlEnabled', true);
+        this.$element.trigger(this.commandLeft);
+
+        assert.equal(this.instance.option('value'), 'rgba(50, 100, 100, 0.36)', 'value was changed correctly when \'command+left\' was pressed');
     });
 
     QUnit.test('setting hueHandler to top position by keybord navigation change color to rgb(255,0,0)', function(assert) {
@@ -1067,5 +1148,193 @@ QUnit.module('aria accessibility', () => {
         assert.equal($alpha.attr('aria-label'), 'Transparency', 'alpha label is correct');
         assert.equal($code.attr('aria-label'), 'Color code', 'hex label is correct');
     });
+
+    QUnit.test('handle should have role="application" and id', function(assert) {
+        const $element = $('#color-view').dxColorView({
+            ariaId: 'ariaId'
+        });
+
+        const $handle = $element.find(COLORVIEW_PALETTE_HANDLE_SELECTOR);
+
+        assert.strictEqual($handle.attr('role'), 'application');
+        assert.strictEqual($handle.attr('id'), 'ariaId');
+    });
+
+    QUnit.test('hex input should have id equal to aria-labelledby of handle', function(assert) {
+        const $element = $('#color-view').dxColorView();
+
+        const $handle = $element.find(COLORVIEW_PALETTE_HANDLE_SELECTOR);
+        const $code = $element.find(`${COLORVIEW_LABEL_HEX_SELECTOR} ${TEXTBOX_SELECTOR}`);
+
+        assert.strictEqual($handle.attr('labelledby'), $code.attr('id'));
+    });
 });
 
+QUnit.module('valueChanged handler should receive correct event', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+
+        this.valueChangedHandler = sinon.stub();
+        const initialOptions = {
+            onValueChanged: this.valueChangedHandler,
+            editAlphaChannel: true,
+            focusStateEnabled: true
+        };
+        this.init = (options) => {
+            this.$element = $('#color-view').dxColorView(options);
+            this.instance = this.$element.dxColorView('instance');
+            this.keyboard = keyboardMock(this.$element);
+            this.$palette = this.$element.find(COLORVIEW_PALETTE_SELECTOR);
+            this.$hueScale = this.$element.find(COLORVIEW_HUE_SCALE_SELECTOR);
+            this.$alphaChannelScale = this.$element.find(COLORVIEW_ALPHA_CHANNEL_SCALE_SELECTOR);
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init($.extend({}, initialOptions, options));
+        };
+
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', '#704f4f');
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+
+        this.aliases = ['red', 'green', 'blue', 'hex', 'alpha'];
+        this._getColorInput = function(inputAlias) {
+            const inputIndex = $.inArray(inputAlias, this.aliases);
+            return this.$element
+                .find(`label ${TEXTEDITOR_INPUT_SELECTOR}`)
+                .eq(inputIndex);
+        };
+        this.updateColorInput = function(inputAlias, value) {
+            const $input = this._getColorInput(inputAlias);
+            $input.val(value);
+            $input.trigger('change');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+
+        this.init(initialOptions);
+    },
+    afterEach: function() {
+        fx.off = true;
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('on runtime change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on palette', function(assert) {
+        click(this.$palette, {
+            left: 170,
+            top: 170
+        });
+
+        this.checkEvent(assert, 'dxpointerdown', this.$palette);
+        this.testProgramChange(assert);
+    });
+
+    ['upArrow', 'downArrow'].forEach(key => {
+        QUnit.test(`on ${key} press`, function(assert) {
+            this.reinit({ value: 'rgba(15, 14, 14, 1)' });
+
+            this.keyboard.press(key);
+
+            this.checkEvent(assert, 'keydown', this.$element, key);
+            this.testProgramChange(assert);
+        });
+    });
+
+    ['upArrow', 'downArrow'].forEach(key => {
+        QUnit.test(`on ${key}+ctrl press`, function(assert) {
+            this.reinit({ value: 'rgba(14, 15, 14, 1)' });
+
+            for(let i = 0; i < 13; ++i) {
+                this.keyboard.keyDown(key, { ctrlKey: true });
+            }
+
+            this.checkEvent(assert, 'keydown', this.$element, key);
+            this.testProgramChange(assert);
+        });
+    });
+
+    ['leftArrow', 'rightArrow'].forEach(key => {
+        QUnit.test(`on ${key}+ctrl press`, function(assert) {
+            this.reinit({ value: 'rgba(14, 15, 14, 0.65)' });
+
+            this.keyboard.keyDown(key, { ctrlKey: true });
+
+            this.checkEvent(assert, 'keydown', this.$element, key);
+            this.testProgramChange(assert);
+        });
+    });
+
+    ['leftArrow', 'rightArrow'].forEach(key => {
+        QUnit.test(`on ${key} press`, function(assert) {
+            this.reinit({ value: 'rgba(15, 14, 14, 1)' });
+
+            for(let i = 0; i < 6; ++i) {
+                this.keyboard.press(key);
+            }
+
+            this.checkEvent(assert, 'keydown', this.$element, key);
+            this.testProgramChange(assert);
+        });
+    });
+
+    QUnit.test('on click on hue scale', function(assert) {
+        click(this.$hueScale, {
+            left: 170,
+            top: 170
+        });
+
+        this.checkEvent(assert, 'dxpointerdown', this.$hueScale);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on alpha channel scale', function(assert) {
+        click(this.$alphaChannelScale, {
+            left: 88,
+            top: 0
+        });
+
+        this.checkEvent(assert, 'dxpointerdown', this.$alphaChannelScale);
+        this.testProgramChange(assert);
+    });
+
+    ['red', 'green', 'blue'].forEach(inputAlias => {
+        QUnit.test(`on ${inputAlias} text input change`, function(assert) {
+            this.updateColorInput(inputAlias, 100);
+
+            const $input = this._getColorInput(inputAlias);
+            this.checkEvent(assert, 'change', $input);
+            this.testProgramChange(assert);
+        });
+    });
+
+    QUnit.test('on hex text input change', function(assert) {
+        this.updateColorInput('hex', '551414');
+
+        const $input = this._getColorInput('hex');
+        this.checkEvent(assert, 'change', $input);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on alpha text input change', function(assert) {
+        this.updateColorInput('alpha', 0.5);
+
+        const $input = this._getColorInput('alpha');
+        this.checkEvent(assert, 'change', $input);
+        this.testProgramChange(assert);
+    });
+});

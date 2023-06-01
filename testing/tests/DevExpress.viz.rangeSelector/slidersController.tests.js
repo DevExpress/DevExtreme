@@ -999,9 +999,9 @@ QUnit.test('Categories', function(assert) {
     assert.deepEqual(this.notifications, [['c', 'd', { isEvent: true }]], 'notification');
 });
 
-QUnit.test('Notifications on moving, callValueChanged', function(assert) {
+QUnit.test('Notifications on moving, valueChangeMode', function(assert) {
     this.update({
-        behavior: { callValueChanged: 'OnMoving', snapToTicks: true },
+        behavior: { valueChangeMode: 'onHandleMove', snapToTicks: true },
         fullTicks: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
     });
     this.setRange(11, 15);
@@ -1103,9 +1103,9 @@ QUnit.test('Categories and snapping to axis ticks', function(assert) {
     this.check(assert, ['P', 'F'], [1400, 3000]);
 });
 
-QUnit.test('Notifications on moving, callValueChanged option', function(assert) {
+QUnit.test('Notifications on moving, valueChangeMode option', function(assert) {
     this.update({
-        behavior: { callValueChanged: 'OnMoving', snapToTicks: true },
+        behavior: { valueChangeMode: 'onHandleMove', snapToTicks: true },
         fullTicks: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
     });
     this.setRange(11, 15);
@@ -1272,9 +1272,9 @@ QUnit.test('Categories 2', function(assert) {
     this.check(assert, ['b', 'd'], [1400, 2600]);
 });
 
-QUnit.test('Notifications on moving, callValueChanged option', function(assert) {
+QUnit.test('Notifications on moving, valueChangeMode option', function(assert) {
     this.update({
-        behavior: { callValueChanged: 'OnMoving', snapToTicks: true },
+        behavior: { valueChangeMode: 'onHandleMove', snapToTicks: true },
         fullTicks: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
     });
     this.setRange(11, 13);

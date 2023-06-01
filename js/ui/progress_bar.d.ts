@@ -1,76 +1,132 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
-} from '../core/element';
-
-import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
+import {
+    ValueChangedInfo,
+} from './editor/editor';
+
 import dxTrackBar, {
-    dxTrackBarOptions
+    dxTrackBarOptions,
 } from './track_bar';
 
+/** @public */
+export type CompleteEvent = NativeEventInfo<dxProgressBar>;
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxProgressBar>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxProgressBar>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxProgressBar>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxProgressBar> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxProgressBar> & ValueChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:dxProgressBar
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onComplete?: ((e: { component?: dxProgressBar, element?: dxElement, model?: any, event?: event }) => any);
+    onComplete?: ((e: CompleteEvent) => void);
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showStatus?: boolean;
     /**
      * @docid
      * @default function(ratio, value) { return "Progress: " + Math.round(ratio * 100) + "%" }
-     * @type_function_param1 ratio:number
-     * @type_function_param2 value:number
-     * @type_function_return string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     statusFormat?: string | ((ratio: number, value: number) => string);
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    value?: number;
+    value?: number | false;
 }
 /**
  * @docid
  * @inherits dxTrackBar
- * @module ui/progress_bar
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxProgressBar extends dxTrackBar {
-    constructor(element: Element, options?: dxProgressBarOptions)
-    constructor(element: JQuery, options?: dxProgressBarOptions)
-}
+export default class dxProgressBar extends dxTrackBar<dxProgressBarOptions> { }
 
-declare global {
-interface JQuery {
-    dxProgressBar(): JQuery;
-    dxProgressBar(options: "instance"): dxProgressBar;
-    dxProgressBar(options: string): any;
-    dxProgressBar(options: string, ...params: any[]): any;
-    dxProgressBar(options: dxProgressBarOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxProgressBarOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxProgressBarOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxProgressBarOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onComplete
+ * @type_function_param1 e:{ui/progress_bar:CompleteEvent}
+ */
+onComplete?: ((e: CompleteEvent) => void);
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onContentReady
+ * @type_function_param1 e:{ui/progress_bar:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onDisposing
+ * @type_function_param1 e:{ui/progress_bar:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onInitialized
+ * @type_function_param1 e:{ui/progress_bar:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onOptionChanged
+ * @type_function_param1 e:{ui/progress_bar:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxProgressBarOptions.onValueChanged
+ * @type_function_param1 e:{ui/progress_bar:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

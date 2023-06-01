@@ -1,24 +1,22 @@
 import $ from '../core/renderer';
-import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
-import { noop } from '../core/utils/common';
 import { hasWindow } from '../core/utils/window';
 import { dasherize } from '../core/utils/inflector';
 import { isDefined } from '../core/utils/type';
 import { normalizeStyleProp, styleProp, stylePropPrefix } from '../core/utils/style';
 import { each } from '../core/utils/iterator';
-import browser from '../core/utils/browser';
 import CollectionWidgetItem from './collection/item';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 
 // STYLE box
 
 const BOX_CLASS = 'dx-box';
-const BOX_SELECTOR = '.dx-box';
+const BOX_FLEX_CLASS = 'dx-box-flex';
 const BOX_ITEM_CLASS = 'dx-box-item';
 const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
 
+const SHRINK = 1;
 const MINSIZE_MAP = {
     'row': 'minWidth',
     'col': 'minHeight'
@@ -27,9 +25,6 @@ const MAXSIZE_MAP = {
     'row': 'maxWidth',
     'col': 'maxHeight'
 };
-const SHRINK = 1;
-
-// NEW FLEXBOX STRATEGY
 const FLEX_JUSTIFY_CONTENT_MAP = {
     'start': 'flex-start',
     'end': 'flex-end',
@@ -48,7 +43,6 @@ const FLEX_DIRECTION_MAP = {
     'col': 'column'
 };
 
-// FALLBACK STRATEGY FOR IE
 const setFlexProp = (element, prop, value) => {
     // NOTE: workaround for jQuery version < 1.11.1 (T181692)
     value = normalizeStyleProp(prop, value);
@@ -70,42 +64,6 @@ const setFlexProp = (element, prop, value) => {
         }
     }
 };
-const BOX_EVENTNAMESPACE = 'dxBox';
-const UPDATE_EVENT = 'dxupdate.' + BOX_EVENTNAMESPACE;
-
-const FALLBACK_BOX_ITEM = 'dx-box-fallback-item';
-const FALLBACK_WRAP_MAP = {
-    'row': 'nowrap',
-    'col': 'normal'
-};
-const FALLBACK_MAIN_SIZE_MAP = {
-    'row': 'width',
-    'col': 'height'
-};
-const FALLBACK_CROSS_SIZE_MAP = {
-    'row': 'height',
-    'col': 'width'
-};
-const FALLBACK_PRE_MARGIN_MAP = {
-    'row': 'marginLeft',
-    'col': 'marginTop'
-};
-const FALLBACK_POST_MARGIN_MAP = {
-    'row': 'marginRight',
-    'col': 'marginBottom'
-};
-const FALLBACK_CROSS_PRE_MARGIN_MAP = {
-    'row': 'marginTop',
-    'col': 'marginLeft'
-};
-const FALLBACK_CROSS_POST_MARGIN_MAP = {
-    'row': 'marginBottom',
-    'col': 'marginRight'
-};
-const MARGINS_RTL_FLIP_MAP = {
-    'marginLeft': 'marginRight',
-    'marginRight': 'marginLeft'
-};
 
 class BoxItem extends CollectionWidgetItem {
     _renderVisible(value, oldValue) {
@@ -120,12 +78,10 @@ class BoxItem extends CollectionWidgetItem {
     }
 }
 
-class FlexLayoutStrategy {
+class LayoutStrategy {
     constructor($element, option) {
         this._$element = $element;
         this._option = option;
-        this.initSize = noop;
-        this.update = noop;
     }
 
     renderBox() {
@@ -188,243 +144,6 @@ class FlexLayoutStrategy {
     }
 }
 
-// Deprecated in 19.2 (T823974)
-class FallbackLayoutStrategy {
-    constructor($element, option) {
-        this._$element = $element;
-        this._option = option;
-    }
-
-    renderBox() {
-        this._$element.css({
-            fontSize: 0,
-            whiteSpace: FALLBACK_WRAP_MAP[this._option('direction')],
-            verticalAlign: 'top'
-        });
-
-        eventsEngine.off(this._$element, UPDATE_EVENT);
-        eventsEngine.on(this._$element, UPDATE_EVENT, this.update.bind(this));
-    }
-
-    renderAlign() {
-        const $items = this._$items;
-
-        if(!$items) {
-            return;
-        }
-
-        const align = this._option('align');
-        const totalItemSize = this.totalItemSize;
-        const direction = this._option('direction');
-        const boxSize = this._$element[FALLBACK_MAIN_SIZE_MAP[direction]]();
-        const freeSpace = boxSize - totalItemSize;
-
-        let shift = 0;
-
-        // NOTE: clear margins
-        this._setItemsMargins($items, direction, 0);
-
-        switch(align) {
-            case 'start':
-                break;
-            case 'end':
-                shift = freeSpace;
-                $items.first().css(this._chooseMarginSide(FALLBACK_PRE_MARGIN_MAP[direction]), shift);
-                break;
-            case 'center':
-                shift = 0.5 * freeSpace;
-                $items.first().css(this._chooseMarginSide(FALLBACK_PRE_MARGIN_MAP[direction]), shift);
-                $items.last().css(this._chooseMarginSide(FALLBACK_POST_MARGIN_MAP[direction]), shift);
-                break;
-            case 'space-between':
-                shift = 0.5 * freeSpace / ($items.length - 1);
-                this._setItemsMargins($items, direction, shift);
-                $items.first().css(this._chooseMarginSide(FALLBACK_PRE_MARGIN_MAP[direction]), 0);
-                $items.last().css(this._chooseMarginSide(FALLBACK_POST_MARGIN_MAP[direction]), 0);
-                break;
-            case 'space-around':
-                shift = 0.5 * freeSpace / $items.length;
-                this._setItemsMargins($items, direction, shift);
-                break;
-        }
-    }
-
-    _setItemsMargins($items, direction, shift) {
-        $items
-            .css(this._chooseMarginSide(FALLBACK_PRE_MARGIN_MAP[direction]), shift)
-            .css(this._chooseMarginSide(FALLBACK_POST_MARGIN_MAP[direction]), shift);
-    }
-
-    renderCrossAlign() {
-        const $items = this._$items;
-
-        if(!$items) {
-            return;
-        }
-
-        const crossAlign = this._option('crossAlign');
-        const direction = this._option('direction');
-        const size = this._$element[FALLBACK_CROSS_SIZE_MAP[direction]]();
-
-        const that = this;
-
-        switch(crossAlign) {
-            case 'start':
-                break;
-            case 'end':
-                each($items, function() {
-                    const $item = $(this);
-                    const itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]]();
-                    const shift = size - itemSize;
-                    $item.css(that._chooseMarginSide(FALLBACK_CROSS_PRE_MARGIN_MAP[direction]), shift);
-                });
-                break;
-            case 'center':
-                each($items, function() {
-                    const $item = $(this);
-                    const itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]]();
-                    const shift = 0.5 * (size - itemSize);
-                    $item
-                        .css(that._chooseMarginSide(FALLBACK_CROSS_PRE_MARGIN_MAP[direction]), shift)
-                        .css(that._chooseMarginSide(FALLBACK_CROSS_POST_MARGIN_MAP[direction]), shift);
-                });
-                break;
-            case 'stretch':
-                $items
-                    .css(that._chooseMarginSide(FALLBACK_CROSS_PRE_MARGIN_MAP[direction]), 0)
-                    .css(that._chooseMarginSide(FALLBACK_CROSS_POST_MARGIN_MAP[direction]), 0)
-                    .css(FALLBACK_CROSS_SIZE_MAP[direction], '100%');
-                break;
-        }
-    }
-
-    _chooseMarginSide(value) {
-        if(!this._option('rtlEnabled')) {
-            return value;
-        }
-
-        return MARGINS_RTL_FLIP_MAP[value] || value;
-    }
-
-    renderItems($items) {
-        this._$items = $items;
-
-        const direction = this._option('direction');
-
-        let totalRatio = 0;
-        let totalWeightedShrink = 0;
-        let totalBaseSize = 0;
-
-        each($items, (_, item) => {
-            const $item = $(item);
-
-            $item.css({
-                display: 'inline-block',
-                verticalAlign: 'top'
-            });
-
-            $item[FALLBACK_MAIN_SIZE_MAP[direction]]('auto');
-
-            $item.removeClass(FALLBACK_BOX_ITEM);
-
-            const itemData = $item.data(BOX_ITEM_DATA_KEY);
-            const ratio = itemData.ratio || 0;
-            const size = this._baseSize($item);
-            const shrink = isDefined(itemData.shrink) ? itemData.shrink : SHRINK;
-
-            totalRatio += ratio;
-            totalWeightedShrink += shrink * size;
-            totalBaseSize += size;
-        });
-
-        const freeSpaceSize = this._boxSize() - totalBaseSize;
-        const itemSize = $item => {
-            const itemData = $item.data(BOX_ITEM_DATA_KEY);
-            const size = this._baseSize($item);
-            const factor = (freeSpaceSize >= 0) ? itemData.ratio || 0 : (isDefined(itemData.shrink) ? itemData.shrink : SHRINK) * size;
-            const totalFactor = (freeSpaceSize >= 0) ? totalRatio : totalWeightedShrink;
-            const shift = totalFactor ? Math.round(freeSpaceSize * factor / totalFactor) : 0;
-
-            return size + shift;
-        };
-
-        let totalItemSize = 0;
-        each($items, (_, item) => {
-            const $item = $(item);
-            const itemData = $(item).data(BOX_ITEM_DATA_KEY);
-            const size = itemSize($item);
-
-            totalItemSize += size;
-
-            $item
-                .css(MAXSIZE_MAP[direction], itemData.maxSize || 'none')
-                .css(MINSIZE_MAP[direction], itemData.minSize || '0')
-                .css(FALLBACK_MAIN_SIZE_MAP[direction], size);
-
-            $item.addClass(FALLBACK_BOX_ITEM);
-        });
-
-        this.totalItemSize = totalItemSize;
-    }
-
-    _baseSize(item) {
-        const itemData = $(item).data(BOX_ITEM_DATA_KEY);
-        return itemData.baseSize == null ? 0 : (itemData.baseSize === 'auto' ? this._contentSize(item) : this._parseSize(itemData.baseSize));
-    }
-
-    _contentSize(item) {
-        return $(item)[FALLBACK_MAIN_SIZE_MAP[this._option('direction')]]();
-    }
-
-    _parseSize(size) {
-        return String(size).match(/.+%$/) ? 0.01 * parseFloat(size) * this._boxSizeValue : size;
-    }
-
-    _boxSize(value) {
-        if(!arguments.length) {
-            this._boxSizeValue = this._boxSizeValue || this._totalBaseSize();
-            return this._boxSizeValue;
-        }
-
-        this._boxSizeValue = value;
-    }
-
-    _totalBaseSize() {
-        let result = 0;
-        each(this._$items, (_, item) => {
-            result += this._baseSize(item);
-        });
-
-        return result;
-    }
-
-    initSize() {
-        this._boxSize(this._$element[FALLBACK_MAIN_SIZE_MAP[this._option('direction')]]());
-    }
-
-    update() {
-        if(!this._$items || this._$element.is(':hidden')) {
-            return;
-        }
-
-        this._$items.detach();
-        this.initSize();
-        this._$element.append(this._$items);
-
-        this.renderItems(this._$items);
-        this.renderAlign();
-        this.renderCrossAlign();
-
-        const element = this._$element.get(0);
-
-        this._$items.find(BOX_SELECTOR).each(function() {
-            if(element === $(this).parent().closest(BOX_SELECTOR).get(0)) {
-                eventsEngine.triggerHandler(this, UPDATE_EVENT);
-            }
-        });
-    }
-}
-
 class Box extends CollectionWidget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
@@ -447,8 +166,6 @@ class Box extends CollectionWidget {
             focusStateEnabled: false,
 
             onItemStateChanged: undefined,
-
-            _layoutStrategy: 'flex',
 
             _queue: undefined
 
@@ -493,22 +210,7 @@ class Box extends CollectionWidget {
             * @name dxBoxOptions.accessKey
             * @hidden
             */
-
-
         });
-    }
-
-    _defaultOptionsRules() {
-        return super._defaultOptionsRules().concat([
-            {
-                device: function() {
-                    return browser['msie'];
-                },
-                options: {
-                    _layoutStrategy: 'fallback'
-                }
-            }
-        ]);
     }
 
     _itemClass() {
@@ -525,15 +227,13 @@ class Box extends CollectionWidget {
 
     _init() {
         super._init();
-        this.$element().addClass(`${BOX_CLASS}-${this.option('_layoutStrategy')}`);
+        this.$element().addClass(BOX_FLEX_CLASS);
         this._initLayout();
         this._initBoxQueue();
     }
 
     _initLayout() {
-        this._layout = (this.option('_layoutStrategy') === 'fallback') ?
-            new FallbackLayoutStrategy(this.$element(), this.option.bind(this)) :
-            new FlexLayoutStrategy(this.$element(), this.option.bind(this));
+        this._layout = new LayoutStrategy(this.$element(), this.option.bind(this));
     }
 
     _initBoxQueue() {
@@ -570,13 +270,11 @@ class Box extends CollectionWidget {
     }
 
     _renderItems(items) {
-        this._layout.initSize();
         super._renderItems(items);
 
         while(this._queueIsNotEmpty()) {
             const item = this._shiftItemFromQueue();
             this._createComponent(item.$item, Box, extend({
-                _layoutStrategy: this.option('_layoutStrategy'),
                 itemTemplate: this.option('itemTemplate'),
                 itemHoldTimeout: this.option('itemHoldTimeout'),
                 onItemHold: this.option('onItemHold'),
@@ -588,16 +286,6 @@ class Box extends CollectionWidget {
         }
 
         this._layout.renderItems(this._itemElements());
-
-        clearTimeout(this._updateTimer);
-
-        this._updateTimer = setTimeout(() => {
-            if(!this._isUpdated) {
-                this._layout.update();
-            }
-            this._isUpdated = false;
-            this._updateTimer = null;
-        });
     }
 
     _renderItemContent(args) {
@@ -625,26 +313,6 @@ class Box extends CollectionWidget {
         return super._createItemByTemplate(itemTemplate, args);
     }
 
-    _visibilityChanged(visible) {
-        if(visible) {
-            this._dimensionChanged();
-        }
-    }
-
-    _dimensionChanged() {
-        if(this._updateTimer) {
-            return;
-        }
-
-        this._isUpdated = true;
-        this._layout.update();
-    }
-
-    _dispose() {
-        clearTimeout(this._updateTimer);
-        super._dispose.apply(this, arguments);
-    }
-
     _itemOptionChanged(item, property, value, oldValue) {
         if(property === 'visible') {
             this._onItemStateChanged({
@@ -658,7 +326,6 @@ class Box extends CollectionWidget {
 
     _optionChanged(args) {
         switch(args.name) {
-            case '_layoutStrategy':
             case '_queue':
             case 'direction':
                 this._invalidate();
@@ -684,10 +351,6 @@ class Box extends CollectionWidget {
         return options;
     }
 
-    repaint() {
-        this._dimensionChanged();
-    }
-
     /**
     * @name dxBox.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
@@ -706,3 +369,9 @@ Box.ItemClass = BoxItem;
 registerComponent('dxBox', Box);
 
 export default Box;
+
+/**
+ * @name dxBoxItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

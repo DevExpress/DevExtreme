@@ -1,3 +1,4 @@
+import { getOuterHeight, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { noop } from '../../core/utils/common';
@@ -83,15 +84,15 @@ const SwitchableEditDecorator = EditDecorator.inherit({
         const $list = this._list.$element();
 
         const listTopOffset = $list.offset().top;
-        const listHeight = $list.outerHeight();
+        const listHeight = getOuterHeight($list);
         const itemTopOffset = $itemElement.offset().top;
-        const itemHeight = $itemElement.outerHeight();
+        const itemHeight = getOuterHeight($itemElement);
 
         const dirtyTopShieldHeight = itemTopOffset - listTopOffset;
         const dirtyBottomShieldHeight = listHeight - itemHeight - dirtyTopShieldHeight;
 
-        this._$topShield.height(Math.max(dirtyTopShieldHeight, 0));
-        this._$bottomShield.height(Math.max(dirtyBottomShieldHeight, 0));
+        setHeight(this._$topShield, Math.max(dirtyTopShieldHeight, 0));
+        setHeight(this._$bottomShield, Math.max(dirtyBottomShieldHeight, 0));
     },
 
     _toggleContentShield: function($itemElement, enabled) {

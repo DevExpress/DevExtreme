@@ -1,10 +1,13 @@
 const variableWrapper = require('core/utils/variable_wrapper');
+const { logger } = require('core/utils/console');
 
 QUnit.test('Base wrapper methods', function(assert) {
     assert.strictEqual(variableWrapper.isWrapped(3), false, 'isWrapped method');
     assert.strictEqual(variableWrapper.wrap(3), 3, 'wrap method');
     assert.strictEqual(variableWrapper.unwrap(3), 3, 'unwrap method');
-    assert.throws(variableWrapper.assign({}, 3), 'assign method');
+    const loggerErrorSpy = sinon.spy(logger, 'error');
+    variableWrapper.assign({}, 3);
+    assert.strictEqual(loggerErrorSpy.callCount, 1, 'assign method');
 });
 
 QUnit.test('Custom wrapper methods', function(assert) {

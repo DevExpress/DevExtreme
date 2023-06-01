@@ -1,5 +1,4 @@
 import dependencyInjector from '../core/utils/dependency_injector';
-import { inArray, find } from '../core/utils/array';
 import { escapeRegExp } from '../core/utils/common';
 import { each } from '../core/utils/iterator';
 import { isPlainObject } from '../core/utils/type';
@@ -46,7 +45,7 @@ const numberLocalization = dependencyInjector({
 
         const formatList = formatType.toLowerCase().split(' ');
         each(formatList, (index, value) => {
-            if(inArray(value, NUMERIC_FORMATS) > -1) {
+            if(NUMERIC_FORMATS.includes(value)) {
                 formatObject.formatType = value;
             } else if(value in LargeNumberFormatPowers) {
                 formatObject.power = LargeNumberFormatPowers[value];
@@ -242,19 +241,19 @@ const numberLocalization = dependencyInjector({
 
         let negativeEtalon = this.format(-1, format).replace(digitalRegExp, '1');
         specialCharacters.forEach(char => {
-            negativeEtalon = negativeEtalon.replace(char, `\\${char}`);
+            negativeEtalon = negativeEtalon.replace(new RegExp(`\\${char}`, 'g'), `\\${char}`);
         });
-        negativeEtalon = negativeEtalon.replace(' ', '\\s');
-        negativeEtalon = negativeEtalon.replace('1', '.+');
 
+        negativeEtalon = negativeEtalon.replace(/ /g, '\\s');
+        negativeEtalon = negativeEtalon.replace(/1/g, '.*');
         return new RegExp(negativeEtalon, 'g');
     },
 
     getSign: function(text, format) {
-        if(text.replace(/[^0-9-]/g, '').charAt(0) === '-') {
-            return -1;
-        }
         if(!format) {
+            if(text.replace(/[^0-9-]/g, '').charAt(0) === '-') {
+                return -1;
+            }
             return 1;
         }
 
@@ -306,6 +305,7 @@ const numberLocalization = dependencyInjector({
         text = this.convertDigits(text, true);
 
         if(format && typeof format !== 'string') {
+            // Current parser functionality provided as-is and is independent of the most of capabilities of formatter.
             errors.log('W0011');
         }
 
@@ -335,8 +335,9 @@ const numberLocalization = dependencyInjector({
             if(power === 'auto') {
                 const match = text.match(/\d(K|M|B|T)/);
                 if(match) {
-                    power = find(Object.keys(LargeNumberFormatPostfixes),
-                        power => LargeNumberFormatPostfixes[power] === match[1]);
+                    power = Object.keys(LargeNumberFormatPostfixes).find(power => {
+                        return LargeNumberFormatPostfixes[power] === match[1];
+                    });
                 }
             }
             parsed = parsed * Math.pow(10, (3 * power));

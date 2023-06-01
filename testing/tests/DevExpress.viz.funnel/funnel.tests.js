@@ -16,6 +16,7 @@ QUnit.module('Events');
 
 QUnit.test('Fire tooltipHidden event on hide tooltip', function(assert) {
     const hidden = sinon.spy();
+    $('#qunit-fixture').css({ top: 8, left: 8, width: 400 });
     const widget = $('#qunit-fixture').dxFunnel({
         dataSource: [{ value: 1 }, { value: 2 }],
         valueField: 'value',

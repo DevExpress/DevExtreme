@@ -4,7 +4,6 @@ import 'ui/file_manager';
 import fx from 'animation/fx';
 import windowUtils from 'core/utils/window';
 import { FileManagerWrapper, createTestFileSystem, Consts, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
-import 'common.css!';
 import 'generic_light.css!';
 
 const getDefaultConfig = () => {
@@ -204,27 +203,6 @@ QUnit.module('Markup rendering', moduleConfig, () => {
         }
         const buttonTop = $button[0].offsetTop;
         assert.ok(buttonTop < textBottom, 'text and button on the same line');
-    });
-
-    test('active area switches on itemView and dirsPanel click', function(assert) {
-        prepareFileManager(this);
-        const dirsPanel = this.wrapper.getDirsPanel();
-        const itemsView = this.wrapper.getItemsView();
-
-        assert.notOk(dirsPanel.hasClass(Consts.INACTIVE_AREA_CLASS), 'dirsPanel is active');
-        assert.ok(itemsView.hasClass(Consts.INACTIVE_AREA_CLASS), 'itemsView is inactive');
-
-        itemsView.trigger('click');
-        this.clock.tick(400);
-
-        assert.ok(dirsPanel.hasClass(Consts.INACTIVE_AREA_CLASS), 'dirsPanel is inactive');
-        assert.notOk(itemsView.hasClass(Consts.INACTIVE_AREA_CLASS), 'itemsView is active');
-
-        this.wrapper.getDirsTree().trigger('click');
-        this.clock.tick(400);
-
-        assert.notOk(dirsPanel.hasClass(Consts.INACTIVE_AREA_CLASS), 'dirsPanel is active');
-        assert.ok(itemsView.hasClass(Consts.INACTIVE_AREA_CLASS), 'itemsView is inactive');
     });
 
 });

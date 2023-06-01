@@ -6,24 +6,14 @@ describe('AllDayPanelTitle', () => {
     const render = (viewModel) => shallow(TitleView({
       ...viewModel,
       props: { ...viewModel.props },
-    } as any) as any);
-
-    it('should spread restAttributes', () => {
-      const title = render({ restAttributes: { customAttribute: 'customAttribute' } });
-
-      expect(title.prop('customAttribute'))
-        .toBe('customAttribute');
-    });
+    }) as any);
 
     it('should render correctly', () => {
       const title = render({
-        classes: 'test-class',
         text: 'some text',
       });
 
-      expect(title.hasClass('test-class'))
-        .toBe(true);
-      expect(title.hasClass('test-class'))
+      expect(title.hasClass('dx-scheduler-all-day-title'))
         .toBe(true);
       expect(title.text())
         .toEqual('some text');
@@ -37,35 +27,6 @@ describe('AllDayPanelTitle', () => {
 
         expect(title.text)
           .toEqual('All day');
-      });
-
-      describe('classes', () => {
-        it('if visible', () => {
-          const title = new AllDayPanelTitle({
-            className: 'some-class',
-            visible: true,
-          });
-
-          expect(title.classes.split(' '))
-            .toEqual([
-              'dx-scheduler-all-day-title',
-              'some-class',
-            ]);
-        });
-
-        it('if invisible', () => {
-          const title = new AllDayPanelTitle({
-            className: 'some-class',
-            visible: false,
-          });
-
-          expect(title.classes.split(' '))
-            .toEqual([
-              'dx-scheduler-all-day-title',
-              'dx-scheduler-all-day-title-hidden',
-              'some-class',
-            ]);
-        });
       });
     });
   });

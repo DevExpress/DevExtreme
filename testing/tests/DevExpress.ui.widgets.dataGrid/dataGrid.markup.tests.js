@@ -3,9 +3,7 @@ import windowUtils from 'core/utils/window';
 
 import 'ui/data_grid';
 
-import 'common.css!';
 import 'generic_light.css!';
-
 
 QUnit.testStart(function() {
     const markup =
@@ -118,12 +116,16 @@ QUnit.module('DataGrid markup', {
     });
 
     QUnit.test('markup with virtual scrolling', function(assert) {
+        const items = [];
+        for(let i = 0; i < 30; i++) {
+            items.push({});
+        }
         const $element = $('#dataGrid').dxDataGrid({
             height: 100,
             paging: { pageSize: 4 },
             scrolling: { mode: 'virtual' },
             columns: ['id'],
-            dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+            dataSource: items
         });
 
         this.clock.tick(300);
@@ -188,12 +190,13 @@ QUnit.module('DataGrid markup', {
         });
 
         this.clock.tick(30);
+        const hasWindow = windowUtils.hasWindow();
         const $pagerView = $element.find('.dx-datagrid-pager');
         assert.equal($pagerView.length, 1, 'pager view is rendered');
         assert.ok($pagerView.hasClass('dx-pager'), 'pager is rendered');
-        assert.equal($pagerView.children().length, windowUtils.hasWindow() ? 2 : 1, 'pager content is rendered');
-        assert.equal($pagerView.find('.dx-pages .dx-page').length, windowUtils.hasWindow() ? 2 : 1, 'page size count');
-        assert.equal($pagerView.find('.dx-pages .dx-page').eq(0).text(), windowUtils.hasWindow() ? '1' : '', 'page size text');
+        assert.equal($pagerView.children().length, hasWindow ? 2 : 1, 'pager content is rendered');
+        assert.equal($pagerView.find('.dx-pages .dx-page').length, hasWindow ? 2 : 1, 'page size count');
+        assert.equal($pagerView.find('.dx-pages .dx-page').eq(0).text(), hasWindow ? '1' : '', 'page size text');
     });
 
     QUnit.test('markup with virtual columns', function(assert) {

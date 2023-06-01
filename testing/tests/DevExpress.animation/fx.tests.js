@@ -9,32 +9,56 @@ const positionUtils = require('animation/position');
 
 QUnit.testStart(function() {
     const markup =
-        '<style>\
-            .my-animation {\
-                -moz-transition-property: all;\
-                -o-transition-property: all;\
-                -webkit-transition-property: all;\
-                transition-property: all;\
-                -moz-transform: translate3d(0px,0px,0px);\
-                -o-transform: translate3d(0px,0px,0px);\
-                -webkit-transform: translate3d(0px,0px,0px);\
-                transform: translate3d(0px,0px,0px);\
-            }\
-            .my-animation.my-animation-active {\
-                -moz-transform: translate3d(1000px,0px,0px);\
-                -o-transform: translate3d(1000px,0px,0px);\
-                -webkit-transform: translate3d(1000px,0px,0px);\
-                transform: translate3d(1000px,0px,0px);\
-            }\
-        </style>\
-        \
-        <div id="qunit-fixture" class="qunit-fixture-visible">\
-            <div id="container" style="position: relative;">\
-                <div id="test" style="position: absolute; top:0; left:0; width: 50px; height: 50px; background: yellow;"></div>\
-                <div id="transitionPropTest" style="position: absolute; top:0; left:0; width: 50px; height: 50px; background: red;"></div>\
-                <div id="staticTest" style="width: 50px; height: 50px; background: green;"></div>\
-            </div>\
-        </div>';
+        `<style nonce="qunit-test">
+            .my-animation {
+                -moz-transition-property: all;
+                -o-transition-property: all;
+                -webkit-transition-property: all;
+                transition-property: all;
+                -moz-transform: translate3d(0px,0px,0px);
+                -o-transform: translate3d(0px,0px,0px);
+                -webkit-transform: translate3d(0px,0px,0px);
+                transform: translate3d(0px,0px,0px);
+            }
+            .my-animation.my-animation-active {
+                -moz-transform: translate3d(1000px,0px,0px);
+                -o-transform: translate3d(1000px,0px,0px);
+                -webkit-transform: translate3d(1000px,0px,0px);
+                transform: translate3d(1000px,0px,0px);
+            }
+            #container {
+                position: relative;
+            }
+            #test {
+                position: absolute;
+                top:0;
+                left:0;
+                width: 50px;
+                height: 50px;
+                background: yellow;
+            }
+            #transitionPropTest {
+                position: absolute;
+                top:0;
+                left:0;
+                width: 50px;
+                height: 50px;
+                background: red;
+            }
+            #staticTest {
+                width: 50px;
+                height: 50px;
+                background: green;
+            }
+        </style>
+
+        <div id="qunit-fixture" class="qunit-fixture-visible">
+            <div id="container">
+                <div id="test"></div>
+                <div id="transitionPropTest"></div>
+                <div id="staticTest"></div>
+            </div>
+        </div>`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -403,6 +427,23 @@ QUnit.test('animation of \'translate\' prop', function(assert) {
         duration: 50,
         complete: function() {
             assert.equal($element.css('transform'), 'matrix(1, 0, 0, 1, 10, 20)');
+            done();
+        }
+    }));
+
+    this.clock.tick(50);
+});
+
+QUnit.test('animation should correctly handle incorrect transform string', function(assert) {
+    const done = assert.async();
+    const $element = $('#test');
+
+    $.when(this.animate($element, {
+        from: { transform: 'translate(0, 0)' },
+        to: { transform: '0000000000000000000000000000000000000000000000' },
+        duration: 50,
+        complete: function() {
+            assert.ok(true, 'animation completed');
             done();
         }
     }));
@@ -1164,6 +1205,84 @@ QUnit.test('fade', function(assert) {
     });
 });
 
+QUnit.test('fade - using AnimationState object', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test');
+
+    fx.animate($element, {
+        type: 'fade',
+        to: {
+            opacity: 0.5
+        },
+        duration: 100,
+        complete: function() {
+            assert.strictEqual($element.css('opacity'), '0.5');
+            done();
+        }
+    });
+});
+
+QUnit.test('fade - using AnimationState object - opacity fallback to 1', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test');
+
+    fx.animate($element, {
+        type: 'fade',
+        to: { },
+        duration: 100,
+        complete: function() {
+            assert.strictEqual($element.css('opacity'), '1');
+            done();
+        }
+    });
+});
+QUnit.test('fade - using AnimationState object - skipElementInitialStyles', function(assert) {
+    assert.expect(2);
+
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 0.5);
+
+    fx.animate($element, {
+        type: 'fade',
+        skipElementInitialStyles: true,
+        from: {
+            opacity: 0.7
+        },
+        duration: 100,
+        start: function() {
+            assert.equal($element.css('opacity'), 0.7, 'starts from zero not from element\'s opacity');
+        },
+        complete: function() {
+            assert.strictEqual($element.css('opacity'), '1');
+            done();
+        }
+    });
+});
+
+QUnit.test('fade with skipElementInitialStyles: to={opacity:0} opacity should be regarded as specified', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 0.5);
+
+    fx.animate($element, {
+        type: 'fade',
+        skipElementInitialStyles: true,
+        to: {
+            opacity: 0
+        },
+        duration: 100,
+        complete: function() {
+            assert.strictEqual($element.css('opacity'), '0', 'ends on 0');
+            done();
+        }
+    });
+});
+
 QUnit.test('fadeIn', function(assert) {
     assert.expect(2);
 
@@ -1233,6 +1352,43 @@ QUnit.test('fadeOut', function(assert) {
         duration: 100,
         complete: function() {
             assert.strictEqual($element.css('opacity'), '0');
+            done();
+        }
+    });
+});
+
+QUnit.test('fadeOut skipElementInitialStyles', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 0.5);
+
+    fx.animate($element, {
+        type: 'fadeOut',
+        skipElementInitialStyles: true,
+        duration: 100,
+        start: function() {
+            assert.strictEqual($element.css('opacity'), '1', 'starts from 1 not from element\'s opacity');
+            done();
+        }
+    });
+});
+
+QUnit.test('fadeOut with skipElementInitialStyles: from={opacity:0} opacity should be regarded as specified', function(assert) {
+    assert.expect(1);
+
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 0.5);
+
+    fx.animate($element, {
+        type: 'fadeOut',
+        skipElementInitialStyles: true,
+        from: {
+            opacity: 0
+        },
+        duration: 100,
+        start: function() {
+            assert.strictEqual($element.css('opacity'), '0', 'start from 0');
             done();
         }
     });

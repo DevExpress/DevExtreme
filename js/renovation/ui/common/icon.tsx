@@ -1,18 +1,19 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment,
-} from 'devextreme-generator/component_declaration/common';
+  Component, ComponentBindings, JSXComponent, OneWay, Fragment, Template,
+} from '@devextreme-generator/declarations';
 import { getImageSourceType } from '../../../core/utils/icon';
+import { combineClasses } from '../../utils/combine_classes';
 
 export const viewFunction = ({
   sourceType,
-  cssClass,
-  props: { source },
+  iconClassName,
+  props: { source, iconTemplate: IconTemplate },
 }: Icon): JSX.Element => (
   <Fragment>
-    {sourceType === 'dxIcon' && <i className={`dx-icon dx-icon-${source} ${cssClass}`} />}
-    {sourceType === 'fontIcon' && <i className={`dx-icon ${source} ${cssClass}`} />}
-    {sourceType === 'image' && <img alt="" src={source} className={`dx-icon ${cssClass}`} />}
-    {sourceType === 'svg' && <i className={`dx-icon dx-svg-icon ${cssClass}`}>{source}</i>}
+    {sourceType === 'dxIcon' && (<i className={iconClassName} />)}
+    {sourceType === 'fontIcon' && (<i className={iconClassName} />)}
+    {sourceType === 'image' && (<img className={iconClassName} alt="" src={source} />)}
+    {IconTemplate && (<i className={iconClassName}><IconTemplate /></i>)}
   </Fragment>
 );
 
@@ -21,6 +22,8 @@ export class IconProps {
   @OneWay() position?: string = 'left';
 
   @OneWay() source?: string = '';
+
+  @Template() iconTemplate?: (props) => JSX.Element;
 }
 
 @Component({
@@ -34,5 +37,27 @@ export class Icon extends JSXComponent(IconProps) {
 
   get cssClass(): string {
     return this.props.position !== 'left' ? 'dx-icon-right' : '';
+  }
+
+  get iconClassName(): string {
+    const generalClasses = {
+      'dx-icon': true,
+      [this.cssClass]: !!this.cssClass,
+    };
+    const { source } = this.props;
+
+    if (this.sourceType === 'dxIcon') {
+      return combineClasses({ ...generalClasses, [`dx-icon-${source}`]: true });
+    }
+    if (this.sourceType === 'fontIcon') {
+      return combineClasses({ ...generalClasses, [String(source)]: !!source });
+    }
+    if (this.sourceType === 'image') {
+      return combineClasses(generalClasses);
+    }
+    if (this.sourceType === 'svg') {
+      return combineClasses({ ...generalClasses, 'dx-svg-icon': true });
+    }
+    return '';
   }
 }

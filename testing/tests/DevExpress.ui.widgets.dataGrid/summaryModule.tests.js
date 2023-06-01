@@ -1,22 +1,22 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div id="container" class="dx-datagrid"></div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-
-import 'common.css!';
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import $ from 'jquery';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 import summaryModule from 'ui/data_grid/ui.data_grid.summary';
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 function getFooterOptions(cellsByColumns, cellsCount) {
     const cells = [];
@@ -90,9 +90,11 @@ QUnit.module('Summary footer', {
         // act
         footerView.render($('#container'));
         const $summary = $('.dx-datagrid-summary-item');
-        const $cells = $('.dx-row td');
+        const $footerRow = $('.dx-row');
+        const $cells = $footerRow.children();
 
         // assert
+        assert.ok($footerRow.hasClass('dx-footer-row'), 'footer row');
         assert.equal($('col').length, 5, 'col elements count');
         assert.equal($('.dx-datagrid-total-footer').length, 1, 'footer element');
         assert.equal($('.dx-datagrid-scroll-container').length, 1, 'scroll container');
@@ -693,7 +695,7 @@ QUnit.module('Footer with real dataController and columnController', {
         ];
 
         this.setupDataGridModules = function(userOptions) {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'columnFixing', 'grouping', 'summary', 'pager', 'editing'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'columnFixing', 'grouping', 'summary', 'pager', 'editing', 'editingRowBased'], {
                 initViews: true,
                 initDefaultOptions: true,
                 options: $.extend(true, {
@@ -1180,7 +1182,7 @@ QUnit.module('Footer with virtual scroll', {
 
         // act
         that.rowsView.render($testElement);
-        that.rowsView.height(200);
+        that.rowsView.height(205);
         that.rowsView.resize();
 
         // assert

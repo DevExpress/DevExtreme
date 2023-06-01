@@ -1,7 +1,7 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { viewFunction as TableView, Table } from '../table';
-import { VirtualRow } from '../virtual-row';
+import { VirtualRow } from '../virtual_row';
 
 describe('LayoutBase', () => {
   describe('Render', () => {
@@ -11,13 +11,6 @@ describe('LayoutBase', () => {
         ...viewModel.props,
       },
     }) as any);
-
-    it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(layout.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
 
     it('render should be correct', () => {
       const layout = render({
@@ -70,57 +63,96 @@ describe('LayoutBase', () => {
         });
       });
     });
+
+    it('should correctly set virtual cells width', () => {
+      const table = render({
+        hasTopVirtualRow: true,
+        hasBottomVirtualRow: true,
+        props: {
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 150,
+          leftVirtualCellCount: 32,
+          rightVirtualCellCount: 42,
+        },
+      });
+
+      const virtualRows = table.find(VirtualRow);
+
+      expect(virtualRows)
+        .toHaveLength(2);
+
+      virtualRows
+        .forEach((row) => {
+          expect(row.props())
+            .toMatchObject({
+              leftVirtualCellWidth: 100,
+              rightVirtualCellWidth: 150,
+              leftVirtualCellCount: 32,
+              rightVirtualCellCount: 42,
+            });
+        });
+    });
+
+    it('should pass ref to the root', () => {
+      const ref = React.createRef();
+      mount(TableView({
+        props: {
+          tableRef: ref,
+        },
+      } as any));
+
+      expect(ref.current)
+        .not.toBe(null);
+    });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
       it('style', () => {
-        const layout = new Table({ height: 100 });
+        const layout = new Table({ height: 100, width: 300 });
 
         expect(layout.style)
-          .toStrictEqual({ height: '100px' });
+          .toStrictEqual({ height: '100px', width: '300px' });
       });
 
-      describe('Virtual Rows', () => {
-        [true, false].forEach((isVirtual) => {
-          it(`should return "hasTopVirtualRow" as false if "isVirtual" is ${isVirtual} and "topVirtualRowHeight" is undefined`, () => {
+      describe('hasTopVirtualRow,  hasBottomVirtualRow', () => {
+        [{
+          topVirtualRowHeight: undefined,
+          hasTopVirtualRow: false,
+        }, {
+          topVirtualRowHeight: 0,
+          hasTopVirtualRow: false,
+        }, {
+          topVirtualRowHeight: 100,
+          hasTopVirtualRow: true,
+        }].forEach(({ topVirtualRowHeight, hasTopVirtualRow }) => {
+          it(`should return correct "hasTopVirtualRow" value if "topVirtualRowHeight" is ${topVirtualRowHeight}`, () => {
             const layout = new Table({
-              isVirtual,
-              topVirtualRowHeight: undefined,
+              topVirtualRowHeight,
             });
 
             expect(layout.hasTopVirtualRow)
-              .toBe(false);
+              .toBe(hasTopVirtualRow);
           });
+        });
 
-          it(`should return "hasTopVirtualRow" as ${isVirtual} if "isVirtual" is ${isVirtual} and "topVirtualRowHeight" is defined`, () => {
+        [{
+          bottomVirtualRowHeight: undefined,
+          hasBottomVirtualRow: false,
+        }, {
+          bottomVirtualRowHeight: 0,
+          hasBottomVirtualRow: false,
+        }, {
+          bottomVirtualRowHeight: 100,
+          hasBottomVirtualRow: true,
+        }].forEach(({ bottomVirtualRowHeight, hasBottomVirtualRow }) => {
+          it(`should return correct "hasBottomVirtualRow" value if "bottomVirtualRowHeight" is ${bottomVirtualRowHeight}`, () => {
             const layout = new Table({
-              isVirtual,
-              topVirtualRowHeight: 500,
-            });
-
-            expect(layout.hasTopVirtualRow)
-              .toBe(isVirtual);
-          });
-
-          it(`should return "hasTopVirtualRow" as false if "isVirtual" is ${isVirtual} and "bottomVirtualRowHeight" is undefined`, () => {
-            const layout = new Table({
-              isVirtual,
-              bottomVirtualRowHeight: undefined,
-            });
-
-            expect(layout.hasBottomVirtualRow)
-              .toBe(false);
-          });
-
-          it(`should return "hasTopVirtualRow" as ${isVirtual} if "isVirtual" is ${isVirtual} and "bottomVirtualRowHeight" is defined`, () => {
-            const layout = new Table({
-              isVirtual,
-              bottomVirtualRowHeight: 500,
+              bottomVirtualRowHeight,
             });
 
             expect(layout.hasBottomVirtualRow)
-              .toBe(isVirtual);
+              .toBe(hasBottomVirtualRow);
           });
         });
       });

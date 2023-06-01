@@ -3,10 +3,9 @@ const GoogleStaticProvider = require('ui/map/provider.google_static');
 const fx = require('animation/fx');
 const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 
-require('common.css!');
 require('generic_light.css!');
 
-require('bundles/modules/parts/widgets-all');
+require('bundles/modules/parts/widgets-web');
 
 GoogleStaticProvider.remapConstant('/mapURL?');
 

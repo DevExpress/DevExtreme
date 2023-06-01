@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -7,7 +8,6 @@
 @use "../../base/fileUploader";
 
 // adduse
-
 
 $material-fileuploader-file-wrapper-border-size: 3px;
 
@@ -45,22 +45,24 @@ $material-fileuploader-file-wrapper-border-size: 3px;
 
   .dx-fileuploader-input-container {
     display: block;
-    border: $material-fileuploader-file-wrapper-border-size dashed $fileuploader-border-color;
     width: 100%;
   }
 
   .dx-fileuploader-input {
     display: block;
     width: 100%;
-    padding: $material-fileuploader-vertical-padding * 2 $material-fileuploader-file-wrapper-border-size;
+    padding-top: $material-fileuploader-vertical-padding * 2 + $material-fileuploader-file-wrapper-border-size;
+    padding-right: $material-fileuploader-file-wrapper-border-size;
 
-    // NOTE: height of the widget should be the same in default and drag over states
-    margin-bottom: 1px;
+    // NOTE: height of the widget should be the same in default and drag over states, but not with margin help
+    padding-bottom: $material-fileuploader-vertical-padding * 2 + $material-fileuploader-file-wrapper-border-size + 1px;
+    padding-left: $material-fileuploader-file-wrapper-border-size;
     box-sizing: content-box;
   }
 
   .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
     padding: $material-fileuploader-vertical-padding * 2 $material-fileuploader-vertical-padding + 2px;
+    border: $material-fileuploader-file-wrapper-border-size dashed $fileuploader-border-color;
   }
 }
 
@@ -74,7 +76,7 @@ $material-fileuploader-file-wrapper-border-size: 3px;
 }
 
 .dx-fileuploader-input-label {
-  padding: $material-fileuploader-vertical-padding + ($material-base-font-size / 2 - $material-fileuploader-vertical-padding) / 2 + 1px $material-fileuploader-vertical-padding + 2px;
+  padding: $material-fileuploader-vertical-padding + math.div(math.div($material-base-font-size, 2) - $material-fileuploader-vertical-padding, 2) + 1px $material-fileuploader-vertical-padding + 2px;
   color: $fileuploader-filename-color;
 
   @include dx-overflow();
@@ -132,13 +134,13 @@ $material-fileuploader-file-wrapper-border-size: 3px;
 }
 
 .dx-fileuploader-file-name {
-  padding-bottom: $material-fileuploader-vertical-padding / 2;
+  padding-bottom: math.div($material-fileuploader-vertical-padding, 2);
   color: $fileuploader-filename-color;
   font-weight: 500;
 }
 
 .dx-fileuploader-file-size {
-  padding-bottom: $material-fileuploader-vertical-padding / 2;
+  padding-bottom: math.div($material-fileuploader-vertical-padding, 2);
 }
 
 .dx-fileuploader-invalid {

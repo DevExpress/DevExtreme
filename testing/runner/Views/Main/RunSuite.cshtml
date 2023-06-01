@@ -6,57 +6,71 @@
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
-    var npmModule = Model.Renovation
-        ? "transpiled-renovation"
-        : "transpiled";
+
+    var renovationPart = Model.NoRenovation ? "" : "-renovation";
+    var cspPart = Model.NoCsp ? "" : "-systemjs";
+    var npmModule = "transpiled" + renovationPart + cspPart;
+    var testingBasePath = Model.NoCsp ? "~/testing/" : "~/artifacts/transpiled-testing/";
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
-            return Url.Content("~/testing/helpers/noJQuery.js");
+            return Url.Content(testingBasePath + "helpers/noJQuery.js");
 
-        switch(Model.JQueryVersion) {
-            case "1": return Url.Content("~/node_modules/jquery.1/node_modules/jquery/dist/jquery.js");
-            case "2": return Url.Content("~/node_modules/jquery.2/node_modules/jquery/dist/jquery.js");
-        }
         return Url.Content("~/artifacts/js/jquery.js");
+    }
+
+    string GetTestUrl() {
+        return Model.NoCsp
+            ? Url.Content(Model.ScriptVirtualPath)
+            : Url.Content(Model.ScriptVirtualPath.Replace("/testing/", "/artifacts/transpiled-testing/"));
     }
 
     IEnumerable<string> GetJQueryIntegrationImports() {
         if(!isSelfSufficientTest) {
             if(Model.NoJQuery || isNoJQueryTest || isServerSideTest) {
-
-                yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
-                yield return Url.Content("~/testing/helpers/argumentsValidator.js");
-                yield return Url.Content("~/testing/helpers/dataPatch.js");
+                yield return Url.Content(testingBasePath + "helpers/jQueryEventsPatch.js");
+                yield return Url.Content(testingBasePath + "helpers/argumentsValidator.js");
+                yield return Url.Content(testingBasePath + "helpers/dataPatch.js");
                 yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery/component_registrator.js");
             } else {
                 yield return Url.Content("~/artifacts/" + npmModule + "/integration/jquery.js");
             }
         }
         if(isServerSideTest) {
-            yield return Url.Content("~/testing/helpers/ssrEmulator.js");
+            yield return Url.Content(testingBasePath + "helpers/ssrEmulator.js");
         }
-
-        yield return Url.Content("~/testing/helpers/noIntl.js");
     }
 }
 <!DOCTYPE html>
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=@Model.IEMode">
+    @if(!Model.NoCsp) {
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="
+                default-src 'self';
+                script-src 'self' 'nonce-M5H5tE' 'nonce-TEiwcJ' 'nonce-IpCks6' 'nonce-Z27qXj' 'nonce-wIkO6u';
+                style-src 'self' about: https://fonts.googleapis.com 'nonce-tYGMxb' 'nonce-qunit-test' 'nonce-qunit-extension';
+                img-src 'self' data:;
+                font-src 'self' https://fonts.gstatic.com;
+                connect-src 'self' https://js.devexpress.com http://dashboard-sql19.corp.devexpress.com;
+            "
+        />
+    }
     <title>@Model.Title - QUnit test page</title>
-    <link rel="stylesheet" href="@Url.ContentWithCacheBuster("~/node_modules/qunitjs/qunit/qunit.css")" />
-    <script src="@Url.ContentWithCacheBuster("~/node_modules/qunitjs/qunit/qunit.js")"></script>
+    <link rel="stylesheet" href="@Url.ContentWithCacheBuster("~/node_modules/qunit/qunit/qunit.css")" />
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/qunit/qunit/qunit.js")"></script>
 
-    <script>
+    <script nonce="M5H5tE">
         window.ROOT_URL = "@Url.Content("~/")";
         window.farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration));
         window.INTRANET = @Html.Raw(Json.Serialize(Model.IsIntranet));
 
         QUnit.config.autostart = false;
+        QUnit.config.failOnZeroTests = false;
     </script>
     <script src="@Url.ContentWithCacheBuster("~/testing/helpers/qunitExtensions.js")"></script>
 
-    <style>
+    <style nonce="tYGMxb">
         #qunit-fixture.qunit-fixture-visible {
             position: fixed !important;
             left: 0 !important;
@@ -67,6 +81,8 @@
         #qunit-fixture.qunit-fixture-visible * {
             pointer-events: auto;
         }
+
+
 
         a.up {
             width: 30px;
@@ -79,7 +95,7 @@
         }
     </style>
 
-    <script>
+    <script nonce="TEiwcJ">
         (function() {
             var doneCount = 0,
                 parentWindow = window.opener || window.parent;
@@ -113,25 +129,21 @@
             });
 
             QUnit.config.urlConfig.push({
-                id: "jquery",
-                label: "jQuery",
-                tooltip: "Select jQuery version.",
-                value: {
-                    "2": "2.x",
-                    "1": "1.x"
-                }
-            });
-
-            QUnit.config.urlConfig.push({
                 id: "nojquery",
                 label: "No jQuery",
                 tooltip: "Don't use jQuery for widget rendering"
             });
 
             QUnit.config.urlConfig.push({
-                id: "renovation",
-                label: "Renovation",
-                tooltip: "Use renovation components with old tests",
+                id: "norenovation",
+                label: "No Renovation",
+                tooltip: "Use norenovation components with old tests",
+            });
+
+            QUnit.config.urlConfig.push({
+                id: "nocsp",
+                label: "No CSP",
+                tooltip: "Use noscp components without CSP checks",
             });
 
             function notifyExtraDoneCall() {
@@ -146,16 +158,19 @@
         })();
     </script>
 
-    <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery.2/node_modules/jquery/dist/jquery.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery/dist/jquery.js")"></script>
 
-    <script src="@Url.ContentWithCacheBuster("~/testing/helpers/sinon/sinon.js")"></script>
-    <script src="@Url.ContentWithCacheBuster("~/testing/helpers/sinon/sinon-timers-ie.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/sinon/pkg/sinon.js")"></script>
 
-    <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
-    <script>
+    @if (Model.NoCsp) {
+        <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
+    } else {
+        <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system-csp-production.js")"></script>
+    }
+
+    <script nonce="IpCks6">
         (function() {
             jQuery.noConflict();
-            window.Intl = undefined;
 
             var cacheBuster = '@Url.CacheBuster()';
             if(cacheBuster.length) {
@@ -167,12 +182,39 @@
                 }
             }
 
-            var baseURL = QUnit.urlParams.renovation
-                ? '@Url.Content("~/artifacts/transpiled-renovation")'
-                : '@Url.Content("~/artifacts/transpiled")';
+            const cspMap = '@Model.NoCsp' !== 'True'
+                ? {
+                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/inferno-create-element.js")',
+                    'angular': '@Url.Content("~/artifacts/js-systemjs/angular.js")',
+                    'intl': '@Url.Content("~/artifacts/js-systemjs/intl.js")',
+                    'knockout': '@Url.Content("~/artifacts/js-systemjs/knockout.js")',
+
+                    'css': '@Url.Content("~/artifacts/css-systemjs/css.js")',
+                    'generic_light.css': '@Url.Content("~/artifacts/css-systemjs/dx.light.css")',
+                    'material_blue_light.css': '@Url.Content("~/artifacts/css-systemjs/dx.material.blue.light.css")',
+
+                    'devextreme-cldr-data': '@Url.Content("~/artifacts/js-systemjs/devextreme-cldr-data")',
+                    'cldr-core': '@Url.Content("~/artifacts/js-systemjs/cldr-core")',
+
+                    'json': '@Url.Content("~/artifacts/css-systemjs/json.js")',
+                    'hogan.js': '@Url.Content("~/node_modules/hogan.js/dist/hogan-3.0.2.amd.js")'
+                }
+                : {
+                    'devextreme-cldr-data': '@Url.Content("~/node_modules/devextreme-cldr-data")',
+                    'cldr-core': '@Url.Content("~/node_modules/cldr-core")',
+
+                    'hogan.js': '@Url.Content("~/node_modules/hogan.js/dist/hogan-3.0.2.js")'
+                };
+
+            const cspPackages = '@Model.NoCsp' !== 'True' ? {
+                '@@devextreme/runtime/inferno': {
+                    main: '../../../../artifacts/transpiled-systemjs/runtime/inferno/index.js',
+                    defaultExtension: 'js'
+                },
+            } : {};
 
             SystemJS.config({
-                baseURL: baseURL,
+                baseURL: "@Url.Content("~/artifacts/" + npmModule)",
                 transpiler: 'plugin-babel',
                 map: {
                     // Deps
@@ -182,24 +224,36 @@
                     'jquery': '@GetJQueryUrl()',
                     'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'angular': '@Url.Content("~/artifacts/js/angular.js")',
-                    'preact': '@Url.Content("~/node_modules/preact/dist/preact.js")',
-                    'preact/hooks': '@Url.Content("~/node_modules/preact/hooks/dist/hooks.js")',
-                    'preact/compat': '@Url.Content("~/node_modules/preact/compat/dist/compat.js")',
-                    'preact/test-utils': '@Url.Content("~/node_modules/preact/test-utils/dist/testUtils.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
+                    'underscore': '@Url.Content("~/node_modules/underscore/underscore-min.js")',
+                    '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
+                    '@@devextreme/runtime/common': '@Url.Content("~/node_modules/@devextreme/runtime/common")',
+                    '@@devextreme/runtime/inferno': '@Url.Content("~/node_modules/@devextreme/runtime/inferno")',
+                    '@@devextreme/runtime/declarations': '@Url.Content("~/node_modules/@devextreme/runtime/declarations")',
+                    '@@devextreme/runtime/angular': '@Url.Content("~/node_modules/@devextreme/runtime/angular")',
+                    '@@devextreme/runtime/vue': '@Url.Content("~/node_modules/@devextreme/runtime/vue")',
+                    '@@devextreme/runtime/react': '@Url.Content("~/node_modules/@devextreme/runtime/react")',
                     'devextreme-quill': '@Url.Content("~/node_modules/devextreme-quill/dist/dx-quill.js")',
                     'devexpress-diagram': '@Url.Content("~/artifacts/js/dx-diagram.js")',
                     'devexpress-gantt': '@Url.Content("~/artifacts/js/dx-gantt.js")',
                     'exceljs': '@Url.Content("~/node_modules/exceljs/dist/exceljs.js")',
-                    'jspdf': '@Url.Content("~/node_modules/jspdf/dist/jspdf.es.js")',
+                    'fflate': '@Url.Content("~/node_modules/fflate/esm/browser.js")',
+                    'jspdf': '@Url.Content("~/node_modules/jspdf/dist/jspdf.umd.js")',
                     'jspdf-autotable': '@Url.Content("~/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js")',
                     'turndown': '@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")',
-                    'showdown': '@Url.Content("~/node_modules/showdown/dist/showdown.js")',
+                    'devextreme-showdown': '@Url.Content("~/node_modules/devextreme-showdown/dist/showdown.js")',
                     'rrule': '@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")',
 
-                    // Global CSS
-                    'common.css': '@Url.Content("~/artifacts/css/dx.common.css")',
+                    // Inferno
+                    'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
+                    'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
+                    'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
+                    'inferno-clone-vnode': '@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
+                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")',
+                    'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
+                    'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
 
+                    // Global CSS
                     'generic_light.css': '@Url.Content("~/artifacts/css/dx.light.css")',
                     'material_blue_light.css': '@Url.Content("~/artifacts/css/dx.material.blue.light.css")',
 
@@ -208,9 +262,40 @@
                     'text': '@Url.Content("~/node_modules/systemjs-plugin-text/text.js")',
                     'json': '@Url.Content("~/node_modules/systemjs-plugin-json/json.js")',
                     'plugin-babel': '@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")',
-                    'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
+                    'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")',
+                    ...cspMap,
                 },
                 packages: {
+                    '@@devextreme/runtime/common': {
+                        main: '../cjs/common/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/inferno': {
+                        main: '../cjs/inferno/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/angular': {
+                        main: '../cjs/angular/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/react': {
+                        main: '../cjs/react/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/vue': {
+                        main: '../cjs/vue/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/declarations': {
+                        main: '../cjs/declarations/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
                     '': {
                         defaultExtension: 'js'
                     },
@@ -223,8 +308,19 @@
                     'cldr': {
                         main: '../cldr.js',
                         defaultExtension: 'js'
-                    }
+                    },
+                    'events/utils': {
+                        main: 'index'
+                    },
+                    'events': {
+                        main: 'index'
+                    },
+
+                    ...cspPackages,
                 },
+                packageConfigPaths: [
+                    "@@devextreme/*/package.json",
+                ],
                 meta: {
                     '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")': {
                         format: 'global',
@@ -246,14 +342,10 @@
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
 
-<script>
+<script nonce="Z27qXj">
     (function() {
-        // IE11 hack for promises error (http://stackoverflow.com/questions/35651193/ie11-promise-strange-behaviour)
-        jQuery.each([1, 2, 3, 5, 8, 13, 20, 40, 100], function(_, timeout) {
-            new Promise(function (resolve) {
-                window.setTimeout(resolve, timeout * 1000);
-            });
-        });
+        // It is required to avoid calling eval in exceljs lib
+        window.regeneratorRuntime = null;
 
         var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
 
@@ -267,14 +359,13 @@
 
         Promise.all(imports)
         .then(function() {
-            var isNotWebkitBrowser = window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0,
-                isOldJQuery = !!@Json.Serialize(Model.JQueryVersion);
+            var isNotWebkitBrowser = window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0;
 
-            if(@Json.Serialize(isServerSideTest) && (isNotWebkitBrowser || isOldJQuery)) {
+            if(@Json.Serialize(isServerSideTest) && isNotWebkitBrowser) {
                 return;
             }
 
-            return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
+            return SystemJS.import("@GetTestUrl()");
         })
         .then(function() {
             QUnit.start();
@@ -285,6 +376,5 @@
                 throw err;
             });
         });
-
     })();
 </script>

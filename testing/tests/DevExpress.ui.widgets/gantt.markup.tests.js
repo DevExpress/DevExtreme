@@ -1,13 +1,13 @@
 import $ from 'jquery';
 import 'ui/gantt';
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =
         '<div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+        <div id="widthRootStyle"></div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const GANTT_CLASS = 'dx-gantt';
@@ -16,9 +16,11 @@ const GANTT_VIEW_CLASS = GANTT_CLASS + '-view';
 QUnit.module('rendering', {
     beforeEach: function() {
         this.element = $('<div></div>').appendTo('body');
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         this.element.remove();
+        this.clock.restore();
     }
 }, () => {
     QUnit.test('base elements should be rendered correctly', function(assert) {

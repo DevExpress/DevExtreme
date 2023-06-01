@@ -1,4 +1,3 @@
-import 'common.css!';
 import 'generic_light.css!';
 import { extend } from 'core/utils/extend';
 import { DataSource } from 'data/data_source/data_source';
@@ -9,11 +8,12 @@ import 'ui/responsive_box';
 import 'ui/tabs';
 import pointerMock from '../../helpers/pointerMock.js';
 import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
-
+import { getScrollLeftMax } from 'renovation/ui/scroll_view/utils/get_scroll_left_max';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 QUnit.testStart(function() {
     const markup =
-        `<style>
+        `<style nonce="qunit-test">
             #scrollableTabs .dx-tab {
                 display: table-cell;
                 padding: 35px;
@@ -22,10 +22,14 @@ QUnit.testStart(function() {
             .bigtab.dx-tabs-expanded .dx-tab {
                 width: 1000px;
             }
+
+            #widthRootStyle {
+                width: 300px;
+            }
         </style>
         <div id="tabs"></div>
         <div id="widget"></div>
-        <div id="widthRootStyle" style="width: 300px;"></div>
+        <div id="widthRootStyle"></div>
         <div id="scrollableTabs"></div>`;
 
     $('#qunit-fixture').html(markup);
@@ -39,6 +43,8 @@ const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
 const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
 const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const FOCUSED_NEXT_TAB_CLASS = 'dx-focused-next-tab';
 const BUTTON_NEXT_ICON = 'chevronnext';
 const BUTTON_PREV_ICON = 'chevronprev';
 const TAB_OFFSET = 30;
@@ -119,6 +125,28 @@ QUnit.module('General', () => {
         assert.equal(tabsInstance.option('selectedIndex'), 2);
     });
 
+    QUnit.test('dxpointerup event should call changing active tab', function(assert) {
+        const clock = sinon.useFakeTimers();
+
+        const $tabs = $('#tabs').dxTabs({
+            focusStateEnabled: true,
+            items: [1, 2],
+        });
+        const $secondTab = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+
+        try {
+            $secondTab.trigger('dxpointerdown');
+            clock.tick(10);
+            assert.strictEqual($secondTab.hasClass(TAB_SELECTED_CLASS), false);
+
+            $secondTab.trigger('dxpointerup');
+            clock.tick(10);
+            assert.strictEqual($secondTab.hasClass(TAB_SELECTED_CLASS), true);
+        } finally {
+            clock.restore();
+        }
+    });
+
     QUnit.test('regression: wrong selectedIndex in tab mouseup handler', function(assert) {
         let selectedIndex;
 
@@ -152,6 +180,24 @@ QUnit.module('General', () => {
 
         tabsEl.find('.dx-tab').eq(1).trigger('dxclick');
         assert.equal(selectedIndex, undefined);
+    });
+
+    QUnit.testInActiveWindow('specific class should be set to the selected item when next item the has focused and disabled states', function(assert) {
+        const $element = $('#tabs').dxTabs({
+            items: [
+                { text: '0' },
+                { text: '1', disabled: true },
+            ],
+            focusStateEnabled: true,
+        });
+        const $item = $element.find(`.${DISABLED_STATE_CLASS}`).eq(0);
+        const keyboard = keyboardMock($element);
+
+        keyboard.press('right');
+        assert.ok($($item).hasClass(FOCUSED_NEXT_TAB_CLASS), 'The first item has specific class');
+
+        keyboard.press('left');
+        assert.ok($($item).hasClass(FOCUSED_NEXT_TAB_CLASS), 'The first item does not have specific class');
     });
 });
 
@@ -259,7 +305,6 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('tabs should be wrapped into scrollable if scrollingEnabled=true', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-            wordWrap: false,
             scrollingEnabled: true,
             width: 100
         });
@@ -294,7 +339,6 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('scrollable should have correct option scrollByContent', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-            wordWrap: false,
             scrollingEnabled: true,
             scrollByContent: true,
             width: 100
@@ -309,10 +353,9 @@ QUnit.module('Horizontal scrolling', () => {
         assert.ok(!scrollable.option('scrollByContent'), 'scrollByContent was set');
     });
 
-    QUnit.test('tabs should not crash in IE and Firefox after creation', function(assert) {
+    QUnit.test('tabs should not crash in Firefox after creation', function(assert) {
         $('#tabs').addClass('bigtab').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-            wordWrap: false,
             scrollingEnabled: true,
             showNavButtons: true
         });
@@ -323,7 +366,6 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('nav buttons class should be added if showNavButtons=true', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-            wordWrap: false,
             showNavButtons: true,
             width: 100
         });
@@ -343,7 +385,6 @@ QUnit.module('Horizontal scrolling', () => {
                     { text: 'search' },
                     { text: 'favorites' }
                 ],
-                wordWrap: false,
                 scrollingEnabled: true,
                 showNavButtons: true,
                 width: 100
@@ -361,7 +402,6 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('right nav button should be rendered if showNavButtons=true and possible to scroll right', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-            wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
             width: 100
@@ -375,7 +415,6 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('click on right nav button should scroll tabs to right', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-            wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
             width: 100
@@ -391,7 +430,6 @@ QUnit.module('Horizontal scrolling', () => {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' },
                 { text: 'item 5' }],
-            wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
             width: 100
@@ -413,7 +451,6 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('left nav button should be rendered if showNavButtons=true and possible to scroll left', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-            wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
             width: 100
@@ -427,7 +464,6 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('click on left nav button should scroll tabs to left', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-            wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
             width: 100
@@ -445,7 +481,6 @@ QUnit.module('Horizontal scrolling', () => {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' },
                 { text: 'item 5' }, { text: 'item 6' }, { text: 'item 7' }, { text: 'item 8' }],
-            wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
             width: 100
@@ -472,7 +507,6 @@ QUnit.module('Horizontal scrolling', () => {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
             selectedIndex: 0,
-            wordWrap: false,
             scrollingEnabled: true,
             width: 100
         });
@@ -488,7 +522,6 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('tabs should not be wrapped into scrollable if all items are visible', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2' }],
-            wordWrap: false,
             scrollingEnabled: true,
             width: 250
         });
@@ -500,7 +533,6 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('left button should be disabled if scrollPosition == 0', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
-            wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
             width: 100
@@ -520,7 +552,6 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('right button should be disabled if scrollPosition == scrollWidth', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
-            wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
             width: 100
@@ -538,10 +569,76 @@ QUnit.module('Horizontal scrolling', () => {
         assert.ok(!$button.dxButton('instance').option('disabled'));
     });
 
+    QUnit.module('Disabled state of navigation buttons', () => {
+        [0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.2, 1.25, 1.34, 1.5, 1.875, 2.25, 2.65].forEach((browserZoom) => {
+            [true, false].forEach((rtlEnabled) => {
+                const cssStyles = {
+                    transform: `scale(${browserZoom})`,
+                    transformOrigin: '0 0',
+                };
+                // T1037332
+                QUnit.test(`Left button should be disabled in boundary value: ${JSON.stringify(cssStyles)}, rtlEnabled: ${rtlEnabled}`, function(assert) {
+                    assert.expect(6);
+
+                    $('#tabs').css(cssStyles);
+                    const $element = $('#tabs').dxTabs({
+                        items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
+                        showNavButtons: true,
+                        scrollingEnabled: true,
+                        rtlEnabled,
+                        width: 100
+                    });
+                    const leftButton = $element.find(`.${TABS_LEFT_NAV_BUTTON_CLASS}`).dxButton('instance');
+                    const rightButton = $element.find(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`).dxButton('instance');
+                    const scrollable = $element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
+
+                    assert.strictEqual(leftButton.option('disabled'), rtlEnabled ? false : true);
+                    assert.strictEqual(rightButton.option('disabled'), rtlEnabled ? true : false);
+
+                    scrollable.scrollTo({ left: 10 });
+                    assert.strictEqual(leftButton.option('disabled'), false);
+                    assert.strictEqual(rightButton.option('disabled'), false);
+
+                    scrollable.scrollTo({ left: 0 });
+                    assert.strictEqual(leftButton.option('disabled'), true);
+                    assert.strictEqual(rightButton.option('disabled'), false);
+                });
+
+                QUnit.test(`Right button should be disabled in boundary value: ${JSON.stringify(cssStyles)}, rtlEnabled: ${rtlEnabled}`, function(assert) {
+                    assert.expect(6);
+
+                    $('#tabs').css(cssStyles);
+                    const $element = $('#tabs').dxTabs({
+                        items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
+                        showNavButtons: true,
+                        scrollingEnabled: true,
+                        rtlEnabled,
+                        width: 100
+                    });
+                    const leftButton = $element.find(`.${TABS_LEFT_NAV_BUTTON_CLASS}`).dxButton('instance');
+                    const rightButton = $element.find(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`).dxButton('instance');
+                    const scrollable = $element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
+
+                    assert.strictEqual(leftButton.option('disabled'), rtlEnabled ? false : true);
+                    assert.strictEqual(rightButton.option('disabled'), rtlEnabled ? true : false);
+
+                    const maxLeftOffset = getScrollLeftMax($(scrollable.container()).get(0));
+                    scrollable.scrollTo({ left: maxLeftOffset });
+
+                    assert.strictEqual(leftButton.option('disabled'), false);
+                    assert.strictEqual(rightButton.option('disabled'), true);
+
+                    scrollable.scrollTo({ left: 10 });
+                    assert.strictEqual(leftButton.option('disabled'), false);
+                    assert.strictEqual(rightButton.option('disabled'), false);
+                });
+            });
+        });
+    });
+
     QUnit.test('button should update disabled state after dxresize', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
-            wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
             width: 100
@@ -597,10 +694,36 @@ QUnit.module('Horizontal scrolling', () => {
             width: 200
         });
 
-        const $item = $element.find('.' + TABS_ITEM_CLASS).eq(3); const itemOffset = Math.round($item.offset().left); const contentLeft = Math.round($element.offset().left); const contentRight = Math.round(contentLeft + $element.outerWidth());
+        const $item = $element.find('.' + TABS_ITEM_CLASS).eq(3);
+        const itemOffset = Math.round($item.offset().left);
+        const contentLeft = Math.round($element.offset().left);
+        const contentRight = Math.round(contentLeft + $element.outerWidth());
+        const rightBoundary = Math.round(contentRight - $item.outerWidth());
 
-        assert.ok(itemOffset <= contentRight - $item.outerWidth(), 'item offset is lower than right boundary');
-        assert.ok(itemOffset > contentLeft, 'item offset is greater than left boundary');
+        assert.ok(itemOffset <= rightBoundary, `item offset ${itemOffset} is lower than right boundary ${rightBoundary}`);
+        assert.ok(itemOffset > contentLeft, `item offset ${itemOffset} is greater than left boundary ${contentLeft}`);
+    });
+
+    QUnit.test('tabs should scroll to the disabled item when it have focus', function(assert) {
+        const items = [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3', disabled: true }];
+        const $element = $('#scrollableTabs').dxTabs({
+            items,
+            width: 200,
+            showNavButtons: false,
+            focusStateEnabled: true,
+        });
+        const $item = $element.find(`.${DISABLED_STATE_CLASS}`).eq(0);
+        const keyboard = keyboardMock($element);
+
+        keyboard.press('right');
+        keyboard.press('right');
+
+        const contentLeft = $element.offset().left;
+        const contentRight = contentLeft + $element.outerWidth();
+        const itemLeft = $item.offset().left;
+        const itemRight = itemLeft + $item.outerWidth();
+
+        assert.roughEqual(itemRight, contentRight, 1, 'focused disabled item is in view');
     });
 });
 
@@ -609,7 +732,6 @@ QUnit.module('RTL', () => {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
             showNavButtons: true,
-            wordWrap: false,
             scrollingEnabled: true,
             rtlEnabled: true,
             width: 100
@@ -626,7 +748,6 @@ QUnit.module('RTL', () => {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
             showNavButtons: true,
-            wordWrap: false,
             scrollingEnabled: true,
             rtlEnabled: true,
             width: 100
@@ -645,7 +766,6 @@ QUnit.module('RTL', () => {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
             showNavButtons: true,
-            wordWrap: false,
             scrollingEnabled: true,
             rtlEnabled: true,
             width: 100
@@ -866,7 +986,7 @@ QUnit.module('Async templates', {
 }, () => {
     QUnit.test('render tabs', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290 });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
     });
@@ -878,7 +998,7 @@ QUnit.module('Async templates', {
             itemTemplate: null
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
     });
@@ -891,7 +1011,7 @@ QUnit.module('Async templates', {
             itemTemplate: null
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(false);
     });
@@ -904,28 +1024,28 @@ QUnit.module('Async templates', {
             itemTemplate: null
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
     });
 
     QUnit.test('render tabs with scrollable', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: false });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(false);
     });
 
     QUnit.test('render tabs with scrollable and navigation buttons', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: true });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
     });
 
     QUnit.test('Add scrollable when width is changed from large to small', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 220, showNavButtons: false });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.width = 150;
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(false);
@@ -933,7 +1053,7 @@ QUnit.module('Async templates', {
 
     QUnit.test('Add scrollable and navigation buttons when width is changed from large to small', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 220, showNavButtons: true });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.width = 150;
         testWrapper.checkTabsWithScrollable();
         testWrapper.checkNavigationButtons(true);
@@ -941,7 +1061,7 @@ QUnit.module('Async templates', {
 
     QUnit.test('Remove scrollable when width is changed from small to large', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: false });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.width = 290;
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
@@ -949,7 +1069,7 @@ QUnit.module('Async templates', {
 
     QUnit.test('Remove scrollable and navigation buttons when width is changed from small to large', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: true });
-        this.clock.tick();
+        this.clock.tick(10);
         testWrapper.width = 290;
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
@@ -959,9 +1079,9 @@ QUnit.module('Async templates', {
         QUnit.test(`Add scrollable when items are changed from 5 to 10, repaintChangesOnly: ${repaintChangesOnly}`, function() {
             const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: false, repaintChangesOnly });
 
-            this.clock.tick();
+            this.clock.tick(10);
             testWrapper.setItemsByCount(10);
-            this.clock.tick();
+            this.clock.tick(10);
 
             testWrapper.checkTabsWithScrollable();
             testWrapper.checkNavigationButtons(false);
@@ -970,9 +1090,9 @@ QUnit.module('Async templates', {
         QUnit.test(`Add scrollable and navigation buttons when items are changed from 5 to 10, repaintChangesOnly: ${repaintChangesOnly}`, function() {
             const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: true, repaintChangesOnly });
 
-            this.clock.tick();
+            this.clock.tick(10);
             testWrapper.setItemsByCount(10);
-            this.clock.tick();
+            this.clock.tick(10);
 
             testWrapper.checkTabsWithScrollable();
             testWrapper.checkNavigationButtons(true);
@@ -981,9 +1101,9 @@ QUnit.module('Async templates', {
         QUnit.test(`Remove scrollable when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
             const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: false, repaintChangesOnly, itemsCount: 10 });
 
-            this.clock.tick();
+            this.clock.tick(10);
             testWrapper.setItemsByCount(5);
-            this.clock.tick();
+            this.clock.tick(10);
 
             testWrapper.checkTabsWithoutScrollable();
             testWrapper.checkNavigationButtons(false);
@@ -992,9 +1112,9 @@ QUnit.module('Async templates', {
         QUnit.test(`Remove scrollable and navigation buttons when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
             const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: true, repaintChangesOnly, itemsCount: 10 });
 
-            this.clock.tick();
+            this.clock.tick(10);
             testWrapper.setItemsByCount(5);
-            this.clock.tick();
+            this.clock.tick(10);
 
             testWrapper.checkTabsWithoutScrollable();
             testWrapper.checkNavigationButtons(false);
@@ -1006,7 +1126,6 @@ QUnit.module('Render in the ResponsiveBox. Flex strategy', () => {
     const itemTemplate = () => $('<div>').width(150).height(150).css('border', '1px solid black');
     const createResponsiveBox = ({ cols, rows, items }) => $('#widget').dxResponsiveBox({
         width: 300,
-        _layoutStrategy: 'flex',
         cols,
         rows,
         itemTemplate,

@@ -1,4 +1,4 @@
-import { addNamespace, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, normalizeKeyName, isCommandKeyPressed } from '../../events/utils/index';
 import { isFunction, isString, isDate, isDefined } from '../../core/utils/type';
 import { clipboardText } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
@@ -64,8 +64,8 @@ const DateBoxMask = DateBoxBase.inherit({
                 });
             },
             enter: (e) => {
-                return applyHandler(e, (event) => {
-                    this._enterHandler(event);
+                return applyHandler(e, () => {
+                    this._enterHandler();
                 });
             },
             leftArrow: (e) => {
@@ -122,9 +122,9 @@ const DateBoxMask = DateBoxBase.inherit({
         });
     },
 
-    _isSingleCharKey(e) {
-        const key = e.originalEvent.data || e.originalEvent.key;
-        return typeof key === 'string' && key.length === 1 && !e.ctrl && !e.alt;
+    _isSingleCharKey({ originalEvent, alt }) {
+        const key = originalEvent.data || originalEvent.key;
+        return typeof key === 'string' && key.length === 1 && !alt && !isCommandKeyPressed(originalEvent);
     },
 
     _isSingleDigitKey(e) {
@@ -133,8 +133,15 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _useBeforeInputEvent: function() {
-        const device = devices.real();
-        return device.android && device.version[0] > 4;
+        return devices.real().android;
+    },
+
+    _keyInputHandler(e, key) {
+        const oldInputValue = this._input().val();
+        this._processInputKey(key);
+        e.preventDefault();
+        const isValueChanged = oldInputValue !== this._input().val();
+        isValueChanged && eventsEngine.trigger(this._input(), 'input');
     },
 
     _keyboardHandler(e) {
@@ -153,8 +160,7 @@ const DateBoxMask = DateBoxBase.inherit({
                 this._renderSelectedPart();
             };
         } else if(this._isSingleCharKey(e)) {
-            this._processInputKey(key);
-            e.originalEvent.preventDefault();
+            this._keyInputHandler(e.originalEvent, key);
         }
 
         return result;
@@ -186,8 +192,8 @@ const DateBoxMask = DateBoxBase.inherit({
         }
 
         const key = e.originalEvent.data;
-        this._processInputKey(key);
-        e.preventDefault();
+        this._keyInputHandler(e, key);
+
         return true;
     },
 
@@ -325,10 +331,20 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _prepareRegExpInfo() {
         this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
-        const regExp = this._regExpInfo.regexp;
-        const flags = regExp.flags;
-        const convertedRegExp = numberLocalization.convertDigits(this._regExpInfo.regexp.source, false);
-        this._regExpInfo.regexp = RegExp(convertedRegExp, flags);
+        const regexp = this._regExpInfo.regexp;
+        const source = regexp.source;
+        const flags = regexp.flags;
+        const quantifierRegexp = new RegExp(/(\{[0-9]+,?[0-9]*\})/);
+
+        const convertedSource = source
+            .split(quantifierRegexp)
+            .map((sourcePart) => {
+                return quantifierRegexp.test(sourcePart) ?
+                    sourcePart :
+                    numberLocalization.convertDigits(sourcePart, false);
+            })
+            .join('');
+        this._regExpInfo.regexp = new RegExp(convertedSource, flags);
     },
 
     _initMaskState() {
@@ -359,7 +375,9 @@ const DateBoxMask = DateBoxBase.inherit({
 
         if(text) {
             this._dateParts = renderDateParts(text, this._regExpInfo);
-            this._isFocused() && this._selectNextPart();
+            if(!this._input().is(':hidden')) {
+                this._selectNextPart();
+            }
         }
     },
 
@@ -538,30 +556,27 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _maskClickHandler() {
+        this._loadMaskValue(this._maskValue);
         if(this.option('text')) {
             this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
 
-            if(isDefined(this._activePartIndex)) {
-                this._caret(this._getActivePartProp('caret'));
-            } else {
-                this._selectLastPart();
+            if(!this._isAllSelected()) {
+                if(isDefined(this._activePartIndex)) {
+                    this._caret(this._getActivePartProp('caret'));
+                } else {
+                    this._selectLastPart();
+                }
             }
         }
     },
 
     _maskCompositionEndHandler(e) {
-        if(browser.msie && this._isSingleDigitKey(e)) {
-            const key = e.originalEvent.data;
-            this._processInputKey(key);
+        this._input().val(this._getDisplayedText(this._maskValue));
+        this._selectNextPart();
 
-        } else {
-            this._input().val(this._getDisplayedText(this._maskValue));
-            this._selectNextPart();
-
-            this._maskInputHandler = () => {
-                this._renderSelectedPart();
-            };
-        }
+        this._maskInputHandler = () => {
+            this._renderSelectedPart();
+        };
     },
 
     _maskPasteHandler(e) {
@@ -595,17 +610,20 @@ const DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _enterHandler(e) {
+    _enterHandler() {
         this._fireChangeEvent();
         this._selectNextPart(FORWARD);
-        e.preventDefault();
     },
 
     _focusOutHandler(e) {
-        this.callBase(e);
-        if(this._useMaskBehavior() && !e.isDefaultPrevented()) {
+        const shouldFireChangeEvent = this._useMaskBehavior() && !e.isDefaultPrevented();
+
+        if(shouldFireChangeEvent) {
             this._fireChangeEvent();
+            this.callBase(e);
             this._selectFirstPart(e);
+        } else {
+            this.callBase(e);
         }
     },
 
@@ -655,9 +673,10 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     reset() {
-        this.callBase();
         this._clearMaskState();
         this._activePartIndex = 0;
+
+        this.callBase();
     },
 
     _clean() {

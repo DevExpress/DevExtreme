@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from './utils/size';
 import $ from '../core/renderer';
 import { getWindow, getNavigator, hasWindow } from './utils/window';
 import { extend } from './utils/extend';
@@ -9,7 +10,7 @@ import readyCallbacks from './utils/ready_callbacks';
 import resizeCallbacks from './utils/resize_callbacks';
 import { EventsStrategy } from './events_strategy';
 import { sessionStorage as SessionStorage } from './utils/storage';
-import { changeCallback } from './utils/view_port';
+import { changeCallback, value as viewPort } from './utils/view_port';
 import Config from './config';
 
 const navigator = getNavigator();
@@ -310,7 +311,7 @@ class Devices {
 
     _changeOrientation() {
         const $window = $(this._window);
-        const orientation = $window.height() > $window.width() ? 'portrait' : 'landscape';
+        const orientation = getHeight($window) > getWidth($window) ? 'portrait' : 'landscape';
 
         if(this._currentOrientation === orientation) {
             return;
@@ -324,7 +325,7 @@ class Devices {
     }
 
     _recalculateOrientation() {
-        const windowWidth = $(this._window).width();
+        const windowWidth = getWidth(this._window);
 
         if(this._currentWidth === windowWidth) {
             return;
@@ -347,6 +348,11 @@ class Devices {
 }
 
 const devices = new Devices();
+
+const viewPortElement = viewPort();
+if(viewPortElement) {
+    devices.attachCssClasses(viewPortElement);
+}
 
 changeCallback.add((viewPort, prevViewport) => {
     devices.detachCssClasses(prevViewport);

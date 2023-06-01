@@ -1,9 +1,8 @@
 import { extend as _extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { each as _each } from '../../core/utils/iterator';
 import rangeCalculator from './helpers/range_data_calculator';
 import { isDefined as _isDefined, isString as _isString } from '../../core/utils/type';
-import { map as _map, normalizeEnum as _normalizeEnum, convertXYToPolar } from '../core/utils';
+import { map as _map, normalizeEnum as _normalizeEnum, convertXYToPolar, extractColor } from '../core/utils';
 import { noop as _noop } from '../../core/utils/common';
 const math = Math;
 const _abs = math.abs;
@@ -41,7 +40,7 @@ function sum(array) {
 function isErrorBarTypeCorrect(type) {
     // TODO why UNDEFINED is here
     // return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR, UNDEFINED]) !== -1;
-    return inArray(type, [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR]) !== -1;
+    return [FIXED, PERCENT, VARIANCE, STANDARD_DEVIATION, STANDARD_ERROR].includes(type);
 }
 
 function variance(array, expectedValue) {
@@ -158,10 +157,12 @@ const baseScatterMethods = {
 
     _createLegendState: function(styleOptions, defaultColor) {
         return {
-            fill: styleOptions.color || defaultColor,
+            fill: extractColor(styleOptions.color, true) || defaultColor,
             hatching: styleOptions.hatching ? _extend({}, styleOptions.hatching, { direction: 'right' }) : undefined
         };
     },
+
+    _getColorId: _noop,
 
     _applyElementsClipRect: function(settings) {
         settings['clip-path'] = this._paneClipRectID;
@@ -285,7 +286,7 @@ const baseScatterMethods = {
         const border = style.border || {};
         const sizeValue = style.size !== undefined ? style.size : defaultSize;
         return {
-            fill: style.color || defaultColor,
+            fill: extractColor(style.color, true) || defaultColor,
             stroke: border.color || defaultBorderColor,
             'stroke-width': border.visible ? border.width : 0,
             r: sizeValue / 2 + (border.visible && sizeValue !== 0 ? ~~(border.width / 2) || 0 : 0)
@@ -294,13 +295,14 @@ const baseScatterMethods = {
 
     _createPointStyles: function(pointOptions) {
         const that = this;
-        const mainPointColor = pointOptions.color || that._options.mainSeriesColor;
+        const mainPointColor = extractColor(pointOptions.color, true) || that._options.mainSeriesColor;
         const containerColor = that._options.containerBackgroundColor;
         const normalStyle = that._parsePointStyle(pointOptions, mainPointColor, mainPointColor);
 
         normalStyle.visibility = pointOptions.visible ? 'visible' : 'hidden';
 
         return {
+            labelColor: mainPointColor,
             normal: normalStyle,
             hover: that._parsePointStyle(pointOptions.hoverStyle, containerColor, mainPointColor, pointOptions.size),
             selection: that._parsePointStyle(pointOptions.selectionStyle, containerColor, mainPointColor, pointOptions.size)
@@ -399,8 +401,13 @@ const baseScatterMethods = {
 
     _getIntervalCenter(intervalStart, intervalEnd) {
         const argAxis = this.getArgumentAxis();
+        const axisOptions = argAxis.getOptions();
 
-        return argAxis.getOptions().type !== 'discrete'
+        if(argAxis.aggregatedPointBetweenTicks()) {
+            return intervalStart;
+        }
+
+        return axisOptions.type !== 'discrete'
             ? argAxis.getVisualRangeCenter({ minVisible: intervalStart, maxVisible: intervalEnd }, true)
             : intervalStart;
     },
@@ -632,7 +639,7 @@ chart = _extend({}, baseScatterMethods, {
     },
 
     checkSeriesViewportCoord(axis, coord) {
-        return true;
+        return this.getPoints().length && this.isVisible();
     },
 
     getSeriesPairCoord(coord, isArgument) {

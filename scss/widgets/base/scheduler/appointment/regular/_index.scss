@@ -1,0 +1,161 @@
+@use "../../mixins" as *;
+@use "../../../mixins" as *;
+@use "../../../icons" as *;
+
+$transparent-top-border: null !default;
+$appointment-base-color: null !default;
+$appointment-text-color: null !default;
+$vertical-appointment-shadow: null !default;
+$appointment-min-size: null !default;
+$vertical-appointment-resizing-shadow: null !default;
+$vertical-appointment-hovering-shadow: null !default;
+$vertical-appointment-resizable-hovering-shadow: null !default;
+$hovered-appointment-top-shadow-size: null !default;
+
+$fill-focused-appointment: null !default;
+$appointment-start-color: null !default;
+
+$appointment-dragging-shadow: null !default;
+
+$reduced-icon-offset: null !default;
+
+
+@mixin dx-scheduler-appointment-focused-mixin() {
+  &.dx-state-focused,
+  .dx-scheduler-appointment {
+    box-shadow: none;
+
+    // T314382
+    @if $fill-focused-appointment {
+      background-color: $appointment-start-color;
+    }
+
+    &:not(.dx-scheduler-appointment-drag-source)::before {
+      pointer-events: none;
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      // T314382
+      @if not $fill-focused-appointment {
+        background-color: $appointment-start-color;
+        opacity: 0.98;
+      }
+    }
+  }
+}
+
+.dx-scheduler-appointment-content-date {
+  opacity: 0.7;
+  display: inline-block;
+  white-space: pre-wrap;
+}
+
+.dx-scheduler-appointment-content-details {
+  margin-top: 2px;
+}
+
+.dx-scheduler-appointment-content-allday {
+  display: none;
+}
+
+.dx-scheduler-appointment {
+  border-bottom: $transparent-top-border;
+  background-clip: padding-box;
+  position: absolute;
+  cursor: default;
+
+  @include user-select(none);
+
+  background-color: $appointment-base-color;
+  color: $appointment-text-color;
+  box-shadow: $vertical-appointment-shadow;
+  left: 0;
+  min-width: $appointment-min-size;
+  min-height: $appointment-min-size;
+
+  &.dx-state-active,
+  &.dx-resizable-resizing {
+    box-shadow: $vertical-appointment-resizing-shadow;
+  }
+
+  @include dx-scheduler-appointment-focused-mixin();
+
+  &.dx-state-hover {
+    box-shadow: $vertical-appointment-hovering-shadow;
+
+    &.dx-resizable {
+      box-shadow: $vertical-appointment-resizable-hovering-shadow;
+    }
+
+    .dx-resizable-handle-top {
+      height: $hovered-appointment-top-shadow-size;
+    }
+
+    .dx-resizable-handle-left {
+      width: $hovered-appointment-top-shadow-size;
+    }
+  }
+
+  &.dx-resizable-resizing {
+    z-index: 1000;
+    opacity: 0.7;
+  }
+
+  .dx-resizable-handle-left {
+    left: -1px;
+  }
+
+  .dx-scheduler-appointment-reduced-icon {
+    position: absolute;
+    top: 3px;
+    right: $reduced-icon-offset;
+
+    @include dx-icon(arrowright);
+
+    .dx-rtl & {
+      right: auto;
+      left: 3px;
+
+      @include dx-icon(arrowleft);
+    }
+  }
+
+  &.dx-scheduler-appointment-empty,
+  &.dx-scheduler-appointment-tail {
+    .dx-scheduler-appointment-reduced-icon {
+      display: none;
+    }
+  }
+
+  &.dx-state-disabled {
+    cursor: default;
+    opacity: 0.6;
+    pointer-events: auto;
+  }
+
+  &.dx-scheduler-appointment-drag-source {
+    opacity: 0.7;
+  }
+}
+
+.dx-scheduler-fixed-appointments {
+  z-index: 100;
+  position: absolute;
+
+  .dx-draggable-dragging {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+
+    @include dx-scheduler-appointment-focused-mixin();
+
+    .dx-scheduler-appointment {
+      box-shadow: $appointment-dragging-shadow, $vertical-appointment-resizing-shadow;
+    }
+  }
+}

@@ -4,17 +4,20 @@ import { isDefined, isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import windowUtils from 'core/utils/window';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/calendar';
 
 const CALENDAR_CLASS = 'dx-calendar';
+const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
+const CALENDAR_WEEK_NUMBER_HEADER_CLASS = 'dx-week-number-header';
 const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
 const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
 const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
 const CALENDAR_FOOTER_CLASS = 'dx-calendar-footer';
 const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
+const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
+const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
 
 const toSelector = function(className) {
     return '.' + className;
@@ -43,12 +46,38 @@ QUnit.module('Calendar markup', {
         assert.equal(this.$element.find(toSelector(CALENDAR_NAVIGATOR_CLASS)).length, 1, 'navigator is rendered');
     });
 
-    QUnit.test('views are rendered', function(assert) {
-        if(windowUtils.hasWindow()) {
-            assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, 3, 'all views are rendered');
-        } else {
-            assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, 1, 'only one view is rendered');
+    [1, 2].forEach((viewsCount) => {
+        QUnit.test(`rendered views amount is correct when viewsCount option equals ${viewsCount}`, function(assert) {
+            this.calendar.option('viewsCount', viewsCount);
+            if(windowUtils.hasWindow()) {
+                const hiddenViews = 2;
+                assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, viewsCount + hiddenViews, 'all views are rendered');
+            } else {
+                assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, viewsCount, 'only one view is rendered');
+            }
+        });
+    });
+
+    QUnit.module('multiview', {
+        beforeEach: function() {
+            this.calendar.option('viewsCount', 2);
+            this.viewWidth = this.calendar._viewWidth();
+            this.getViews = () => this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS} .dx-widget`);
         }
+    }, () => {
+        QUnit.test('calendar should have width equals viewsCount * view width', function(assert) {
+            const elementWidth = $(this.calendar.$element()).width();
+
+            assert.strictEqual(elementWidth, this.viewWidth * 2);
+        });
+
+        QUnit.test('calendar should not have inline width after multiview runtime disable', function(assert) {
+            this.calendar.option('viewsCount', 1);
+
+            const elementWidth = this.$element[0].style.width;
+
+            assert.strictEqual(elementWidth, '');
+        });
     });
 
     QUnit.test('Calendar must render with dx-rtl class', function(assert) {
@@ -136,6 +165,12 @@ QUnit.module('Navigator', {
         const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
         assert.equal(navigatorCaption.text(), 'June 2015');
     });
+
+    QUnit.test('Calendar with two views should display 2 months', function(assert) {
+        this.calendar.option('viewsCount', 2);
+        const navigatorCaption = this.$element.find(toSelector(CALENDAR_CAPTION_BUTTON_CLASS));
+        assert.equal(navigatorCaption.text(), 'June 2015July 2015');
+    });
 });
 
 QUnit.module('Calendar footer', {
@@ -162,6 +197,88 @@ QUnit.module('Calendar footer', {
             showTodayButton: false
         }).dxCalendar('instance');
         assert.equal($element.find(toSelector(CALENDAR_FOOTER_CLASS)).length, 0, 'footer doesn\'t exist');
+    });
+});
+
+QUnit.module('showWeekNumbers', {
+    beforeEach: function(assert) {
+        this.$element = $('<div>').appendTo('#qunit-fixture');
+        this.calendar = this.$element.dxCalendar().dxCalendar('instance');
+
+        this.reinit = (options) => {
+            this.$element.remove();
+            this.$element = $('<div>').appendTo('#qunit-fixture');
+            this.calendar = this.$element.dxCalendar(options).dxCalendar('instance');
+        };
+
+        this.cacheTableElements = () => {
+            this.$table = this.$element.find('table').eq(0);
+            this.$headerRow = this.$table.find('thead').eq(0).children().eq(0);
+            this.$firstBodyRow = this.$table.find('tbody').eq(0).children().eq(0);
+        };
+
+        this.checkColumnCount = (expectedColumnCount) => {
+            this.cacheTableElements();
+
+            assert.strictEqual(this.$headerRow.children().length, expectedColumnCount);
+            assert.strictEqual(this.$firstBodyRow.children().length, expectedColumnCount);
+        };
+    },
+    afterEach: function() {
+        this.$element.remove();
+    }
+}, () => {
+    QUnit.test('table should have additional column if showWeekNumbers=true', function() {
+        this.reinit({ showWeekNumbers: true });
+
+        this.checkColumnCount(8);
+    });
+
+    QUnit.test('table should not have additional column if showWeekNumbers=false', function() {
+        this.reinit({ showWeekNumbers: false });
+
+        this.checkColumnCount(7);
+    });
+
+    QUnit.test('table should be rerendered with additional column after runtime change of showWeekNumbers', function(assert) {
+        this.reinit({});
+
+        this.checkColumnCount(7);
+
+        this.calendar.option('showWeekNumbers', true);
+
+        this.checkColumnCount(8);
+    });
+
+    QUnit.test('first header cell should have "dx-week-number-header" class when showWeekNumbers=true', function(assert) {
+        this.reinit({ showWeekNumbers: true });
+        this.cacheTableElements();
+        const $firstHeaderCell = this.$headerRow.children().eq(0);
+
+        assert.ok($firstHeaderCell.hasClass(CALENDAR_WEEK_NUMBER_HEADER_CLASS));
+    });
+
+    QUnit.test('first cell in tbody should have "dx-calendar-week-number-cell" class when showWeekNumbers=true', function(assert) {
+        this.reinit({ showWeekNumbers: true });
+        this.cacheTableElements();
+        const $firstBodyCell = this.$firstBodyRow.children().eq(0);
+
+        assert.ok($firstBodyCell.hasClass(CALENDAR_WEEK_NUMBER_CELL_CLASS));
+    });
+
+    QUnit.test('calendar with zoomLevel!=="month" and showWeekNumbers=true should not have additional column', function(assert) {
+        this.reinit({ showWeekNumbers: true, zoomLevel: 'year' });
+        this.cacheTableElements();
+
+        assert.strictEqual(this.$firstBodyRow.children().length, 4);
+    });
+
+    QUnit.test('calendar with zoomLevel="month" and showWeekNumbers=true should not have additional column after zoomLevel runtime change', function(assert) {
+        this.reinit({ showWeekNumbers: true });
+        this.calendar.option('zoomLevel', 'year');
+        this.cacheTableElements();
+
+        assert.strictEqual(this.$firstBodyRow.children().length, 4);
     });
 });
 
@@ -229,6 +346,69 @@ QUnit.module('CellTemplate option', {
             });
         }).bind(this));
     });
+
+    QUnit.test('calendar should not have multiview class name if viewsCount = 1', function(assert) {
+        this.reinit({
+            viewsCount: 1
+        });
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), false);
+    });
+
+    QUnit.test('calendar should have multiview class name if viewsCount > 1', function(assert) {
+        this.reinit({
+            viewsCount: 2
+        });
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), true);
+    });
+
+
+    QUnit.test('calendar should toggle multiview class name after change viewsCount option value', function(assert) {
+        this.reinit({
+            viewsCount: 1
+        });
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), false, 'calendar element has not multiview class');
+
+        this.calendar.option('viewsCount', 2);
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), true, 'calendar element has multiview class');
+
+        this.calendar.option('viewsCount', 1);
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_MULTIVIEW_CLASS), false, 'calendar element has not multiview class');
+    });
+
+    QUnit.test('calendar should have range class if selectionMode is range', function(assert) {
+        this.reinit({
+            selectionMode: 'range'
+        });
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), true);
+    });
+
+    QUnit.test('calendar should toggle range class after change selectionMode option value in runtime', function(assert) {
+        this.reinit({});
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), false);
+
+        this.calendar.option('selectionMode', 'range');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), true);
+
+        this.calendar.option('selectionMode', 'multiple');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), false);
+
+        this.calendar.option('selectionMode', 'single');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), false);
+
+        this.calendar.option('selectionMode', 'range');
+
+        assert.strictEqual(this.$element.hasClass(CALENDAR_RANGE_CLASS), true);
+    });
 });
 
 QUnit.module('Aria accessibility', {
@@ -239,17 +419,36 @@ QUnit.module('Aria accessibility', {
         this.$element.remove();
     }
 }, () => {
-    QUnit.test('role for calendar widget', function(assert) {
+    QUnit.test('table should have a role "grid"', function(assert) {
         this.$element.dxCalendar();
 
         const $tables = this.$element.find('table');
 
         $tables.each((index, tableElement) => {
             const role = tableElement.getAttribute('role');
-            const label = tableElement.getAttribute('aria-label');
 
             assert.strictEqual(role, 'grid', 'role is correct');
-            assert.equal(label, 'Calendar', 'label is correct');
+        });
+    });
+
+    QUnit.test('table should have an aria-label describing specific hotkeys (T1158729)', function(assert) {
+        this.$element.dxCalendar();
+
+        const $tables = this.$element.find('table');
+
+        $tables.each((index, tableElement) => {
+            const label = tableElement.getAttribute('aria-label');
+            const expectedLabel = `
+                Calendar.
+                To navigate between views, press Control, and then Left Arrow or Right Arrow.
+                To zoom in on a view, press Control, and then Down Arrow.
+                To zoom out, press Control, and then Up Arrow.
+            `
+                .replace(/(\r\n|\n|\r)/gm, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            assert.strictEqual(label, expectedLabel, 'label is correct');
         });
     });
 });

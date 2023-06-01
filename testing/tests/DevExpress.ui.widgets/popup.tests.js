@@ -1,44 +1,79 @@
+import {
+    getOuterHeight,
+    getOuterWidth,
+    setWidth,
+    getHeight,
+    getInnerHeight,
+    getInnerWidth,
+    getWidth,
+} from 'core/utils/size';
+
 import $ from 'jquery';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
 import pointerMock from '../../helpers/pointerMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import config from 'core/config';
 import { isRenderer } from 'core/utils/type';
 import browser from 'core/utils/browser';
 import { compare as compareVersions } from 'core/utils/version';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import windowUtils from 'core/utils/window';
+import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import visibilityChangeUtils from 'events/visibility_change';
+import domAdapter from 'core/dom_adapter';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/popup';
 import 'ui/tab_panel';
+import 'ui/scroll_view';
+import 'ui/date_box';
 
-const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
 const IS_SAFARI = !!browser.safari;
+const IS_IOS_DEVICE = devices.real().platform === 'ios';
 const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
+const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
+
+const POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
 
 themes.setDefaultTimeout(0);
 
 QUnit.testStart(function() {
-    const markup =
-        '<style>\
-            html, body {\
-                height: 100%;\
-                margin: 0;\
+    viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
+
+    let style = '<style nonce="qunit-test">\
+        html, body {\
+            height: 100%;\
+            margin: 0;\
+        }\
+        \
+        #qunit-fixture {\
+            width: 100%;\
+            height: 100%;\
+        }';
+
+    const fixtureRoot = $('#qunit-fixture').get(0);
+
+    if(fixtureRoot.getRootNode().host) {
+        style += '\
+            :scope div.shadow-container {\
+                width: 100% !important;\
+                height: 100% !important;\
             }\
-            \
-            #qunit-fixture {\
+            :host {\
                 width: 100%;\
                 height: 100%;\
-            }\
-        </style>\
-        \
-        <div id="popup"></div>\
+            }';
+    }
+
+    style += '</style>';
+
+    const markup = style +
+        '<div id="popup"></div>\
+        <div id="secondPopup"></div>\
         <div id="container"></div>\
         \
         <div id="popupWithAnonymousTmpl">\
@@ -77,8 +112,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-viewPort($('#qunit-fixture').addClass('dx-viewport'));
-
 executeAsyncMock.setup();
 
 const POPUP_CLASS = 'dx-popup';
@@ -90,18 +123,21 @@ const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
 const POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen';
 const POPUP_TITLE_CLASS = 'dx-popup-title';
 const POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
+const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
-const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
+const POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-bottom-right';
+const POPUP_TOP_LEFT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-top-left';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
-const viewport = function() { return $('.dx-viewport'); };
+const VIEWPORT_CLASS = 'dx-viewport';
 
-const toSelector = function(cssClass) {
-    return '.' + cssClass;
-};
+const viewport = function() { return $(toSelector(VIEWPORT_CLASS)); };
+
+const toSelector = (cssClass) => `.${cssClass}`;
 
 
 QUnit.module('basic', () => {
@@ -111,7 +147,7 @@ QUnit.module('basic', () => {
 
         $element.dxPopup('show');
 
-        const $container = viewport().find(toSelector(POPUP_WRAPPER_CLASS)).children();
+        const $container = viewport().find(`.${POPUP_WRAPPER_CLASS}`).children();
         assert.ok($container.hasClass(OVERLAY_CONTENT_CLASS));
         assert.ok($container.children(':eq(0)').hasClass(POPUP_TITLE_CLASS));
         assert.ok($container.children(':eq(1)').hasClass(POPUP_CONTENT_CLASS));
@@ -122,7 +158,15 @@ QUnit.module('basic', () => {
             visible: true
         }).dxPopup('instance');
 
-        assert.equal(instance.$content().get(0), viewport().find(toSelector(POPUP_WRAPPER_CLASS)).find(toSelector(POPUP_CONTENT_CLASS)).get(0));
+        assert.equal(instance.$content().get(0), viewport().find(`.${POPUP_WRAPPER_CLASS}`).find(`.${POPUP_CONTENT_CLASS}`).get(0));
+    });
+
+    QUnit.test('role="dialog" attribute should be set', function(assert) {
+        const instance = $('#popup').dxPopup().dxPopup('instance');
+
+        const $overlayContent = instance.$content().parent();
+
+        assert.strictEqual($overlayContent.attr('role'), 'dialog');
     });
 
     QUnit.test('popup wrapper should have \'fixed\' or \'absolute\' position in fullscreen', function(assert) {
@@ -138,8 +182,8 @@ QUnit.module('basic', () => {
 
         const $wrapper = $('.' + POPUP_WRAPPER_CLASS);
 
-        assert.equal($wrapper.outerHeight(), $(document.body).outerHeight(), 'height is 100%');
-        assert.equal($wrapper.outerWidth(), $(document.body).outerWidth(), 'width is 100%');
+        assert.equal(getOuterHeight($wrapper), getOuterHeight($('#qunit-fixture')), 'height is 100%');
+        assert.equal(getOuterWidth($wrapper), getOuterWidth($('#qunit-fixture')), 'width is 100%');
     });
 
     QUnit.test('default options', function(assert) {
@@ -169,7 +213,7 @@ QUnit.module('basic', () => {
     QUnit.test('title and content template', function(assert) {
         const $popup = $('#popupWithTitleAndContentTmpl').dxPopup({ visible: true });
         const instance = $popup.dxPopup('instance');
-        const $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+        const $title = $(`.${POPUP_TITLE_CLASS}`, viewport());
         const $content = instance.$content();
 
         assert.equal($title.children().length, 1);
@@ -184,7 +228,7 @@ QUnit.module('basic', () => {
     QUnit.test('custom titleTemplate option', function(assert) {
         $('#popupWithTitleTemplate').dxPopup({ titleTemplate: 'customTitle', visible: true });
 
-        const $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+        const $title = $(`.${POPUP_TITLE_CLASS}`, viewport());
         assert.equal($.trim($title.text()), 'testTitle', 'title text is correct');
     });
 
@@ -221,7 +265,7 @@ QUnit.module('basic', () => {
         const instance = $popup.dxPopup('instance');
         const $popupBottom = instance.$content().parent().find('.dx-popup-bottom');
 
-        $popupBottom.dxToolbarBase('repaint');
+        $popupBottom.dxToolbar('repaint');
         assert.equal($popupBottom.text(), 'TodayOKCancel', 'buttons order is correct');
         devices.current(devices.real());
     });
@@ -231,14 +275,14 @@ QUnit.module('basic', () => {
         const instance = $popup.dxPopup('instance');
 
         assert.equal(instance.option('title'), 'test', 'title is test');
-        assert.equal($(toSelector(POPUP_TITLE_CLASS), viewport()).length, 1, 'there can be only one title');
+        assert.equal($(`.${POPUP_TITLE_CLASS}`, viewport()).length, 1, 'there can be only one title');
 
         instance.option('visible', false);
         instance.option('title', 'test2');
         instance.option('visible', true);
 
         assert.equal(instance.option('title'), 'test2', 'title is test2');
-        assert.equal($(toSelector(POPUP_TITLE_CLASS), viewport()).length, 1, 'there can be only one title');
+        assert.equal($(`.${POPUP_TITLE_CLASS}`, viewport()).length, 1, 'there can be only one title');
     });
 
     QUnit.test('close button is not shown when title is not displayed', function(assert) {
@@ -249,9 +293,16 @@ QUnit.module('basic', () => {
     });
 
     QUnit.test('close button is shown when title changes', function(assert) {
-        const popup = $('#popup').dxPopup({ visible: true, showTitle: true, showCloseButton: true }).dxPopup('instance');
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            showTitle: true,
+            showCloseButton: true
+        }).dxPopup('instance');
+
         popup.option('title', 'new title');
-        assert.ok($('.' + POPUP_TITLE_CLOSEBUTTON_CLASS, popup._$title).length);
+
+        const $titleToolbar = popup.$wrapper().find(`.${POPUP_TITLE_CLASS}`);
+        assert.ok($(`.${POPUP_TITLE_CLOSEBUTTON_CLASS}`, $titleToolbar).length);
     });
 
     QUnit.test('popup top toolbar rendering', function(assert) {
@@ -278,6 +329,20 @@ QUnit.module('basic', () => {
 
         assert.ok($bottomToolbar.hasClass('dx-toolbar'), 'bottom toolbar is present');
         assert.equal($bottomToolbar.text(), 'bottom text', 'bottom toolbar has correct content');
+    });
+
+    QUnit.test(`top toolbar has specific ${POPUP_HAS_CLOSE_BUTTON_CLASS} class`, function(assert) {
+        $('#popup').dxPopup({ visible: true, showCloseButton: true, showTitle: true });
+        const $titleToolbar = $('.' + POPUP_TITLE_CLASS);
+
+        assert.ok($titleToolbar.hasClass(POPUP_HAS_CLOSE_BUTTON_CLASS));
+    });
+
+    QUnit.test(`top toolbar has no specific ${POPUP_HAS_CLOSE_BUTTON_CLASS} class if popup has no close button`, function(assert) {
+        $('#popup').dxPopup({ visible: true, showCloseButton: true, showTitle: false });
+        const $titleToolbar = $('.' + POPUP_TITLE_CLASS);
+
+        assert.notOk($titleToolbar.hasClass(POPUP_HAS_CLOSE_BUTTON_CLASS));
     });
 
     QUnit.test('buttons rendering when aliases are specified', function(assert) {
@@ -331,7 +396,7 @@ QUnit.module('basic', () => {
 
         });
         const instance = $popup.dxPopup('instance');
-        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbarBase('instance');
+        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbar('instance');
 
         assert.ok(toolbarInstance.option('rtlEnabled'), 'toolbar\'s \'rtlEnabled\' option is true');
     });
@@ -350,7 +415,7 @@ QUnit.module('basic', () => {
         const instance = $popup.dxPopup('instance');
 
         instance.option('rtlEnabled', false);
-        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbarBase('instance');
+        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbar('instance');
 
         assert.notOk(toolbarInstance.option('rtlEnabled'), 'toolbar\'s \'rtlEnabled\' option is false');
     });
@@ -399,6 +464,139 @@ QUnit.module('basic', () => {
         assert.ok(toolbarButtons.eq(1).hasClass('dx-button-mode-text'), 'button has dx-button-mode-text class');
         devices.current(devices.real());
     });
+
+    QUnit.test('disabled=true should add "dx-state-disabled" class to popup content (T1046427)', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            disabled: true
+        }).dxPopup('instance');
+
+        assert.ok(popup.$content().hasClass(DISABLED_STATE_CLASS));
+
+        popup.option('disabled', false);
+        assert.notOk(popup.$content().hasClass(DISABLED_STATE_CLASS), 'class is removed after runtime change to false');
+    });
+
+    QUnit.test('disabled=true should pass disabled to toolbars', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            disabled: true,
+            toolbarItems: [{
+                location: 'before',
+                name: 'topButton',
+                visible: true,
+                widget: 'dxButton'
+            }, {
+                location: 'after',
+                toolbar: 'bottom',
+                name: 'bottomButton',
+                visible: true,
+                widget: 'dxButton'
+            }]
+        }).dxPopup('instance');
+
+        assert.ok(popup.topToolbar().hasClass(DISABLED_STATE_CLASS), 'top toolbar has disabled class');
+        assert.ok(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'bottom toolbar has disabled class');
+
+        popup.option('disabled', false);
+        assert.notOk(popup.topToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from top toolbar');
+        assert.notOk(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from bottom toolbar');
+    });
+
+    QUnit.test('popup should update zIndex on focus', function(assert) {
+        const firstPopup = $('#popup').dxPopup({ visible: true, focusStateEnabled: true }).dxPopup('instance');
+        const secondPopup = $('#secondPopup').dxPopup({ visible: true, focusStateEnabled: true }).dxPopup('instance');
+        const baseZIndex = 1501;
+
+        firstPopup.focus();
+
+        const firstPopupZIndex = parseInt(firstPopup.$wrapper().css('zIndex'), 10);
+
+        secondPopup.focus();
+
+        const secondPopupZIndex = parseInt(secondPopup.$wrapper().css('zIndex'), 10);
+
+        assert.strictEqual(firstPopupZIndex, baseZIndex + 2);
+        assert.strictEqual(secondPopupZIndex, baseZIndex + 3);
+    });
+
+    QUnit.test('popup should not update z-index if it is already a biggest one', function(assert) {
+        const popup = $('#popup').dxPopup({ visible: true, focusStateEnabled: true }).dxPopup('instance');
+        const expectedZIndex = 1501;
+
+        popup.focus();
+
+        const ZIndex = parseInt(popup.$wrapper().css('zIndex'), 10);
+
+        assert.strictEqual(ZIndex, expectedZIndex);
+    });
+
+    ['outlined', 'underlined', 'filled'].forEach((stylingMode) => {
+        QUnit.test(`popup content should not be scrollable with datebox in stylingMode: ${stylingMode} (T1100188)`, function(assert) {
+            const popupContent = $(
+                `<div id="scrollView">
+                    <div id="dateBox"></div>
+                </div>'`
+            );
+            popupContent.appendTo($('#popup'));
+
+            $('#popup').dxPopup({
+                height: 'auto',
+                visible: true,
+            });
+
+            const scrollView = $('#scrollView').dxScrollView({
+                scrollByContent: true,
+                showScrollbar: 'always'
+            }).dxScrollView('instance');
+
+            $('#dateBox').dxDateBox({
+                label: 'Hello',
+                stylingMode,
+                displayFormat: 'dd.MM.yyyy'
+            });
+
+            scrollView.scrollTo(100);
+
+            assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, 'scroll position does not changed');
+        });
+    });
+
+    QUnit.module('Breaking change t1123711 - warning W1021', () => {
+        QUnit.test('should be logged if container is invalid', function(assert) {
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                $('#popup').dxPopup({
+                    container: 'invalid',
+                    visible: true
+                });
+
+                assert.ok(uiErrors.log.calledOnce, 'only one warning is logged');
+                assert.deepEqual(uiErrors.log.lastCall.args, [
+                    'W1021',
+                    'dxPopup',
+                ], 'args of the log method');
+            } finally {
+                uiErrors.log.restore();
+            }
+        });
+
+        QUnit.test('should not not be logged if container is valid', function(assert) {
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                $('#popup').dxPopup({
+                    container: 'body',
+                    visible: true
+                });
+
+                assert.ok(uiErrors.log.notCalled, 'no warning is logged');
+            } finally {
+                uiErrors.log.restore();
+            }
+        });
+    });
 });
 
 QUnit.module('dimensions', {
@@ -420,7 +618,7 @@ QUnit.module('dimensions', {
         const $popupContent = instance.$content();
         const $popupBottom = $popupContent.parent().find('.dx-popup-bottom');
 
-        assert.equal($popupContent.offset().top + $popupContent.outerHeight(), $popupBottom.offset().top, 'content doesn\'t overlap bottom buttons');
+        assert.roughEqual($popupContent.offset().top + getOuterHeight($popupContent), $popupBottom.offset().top, 0.1, 'content doesn\'t overlap bottom buttons');
         devices.current(devices.real());
     });
 
@@ -434,15 +632,15 @@ QUnit.module('dimensions', {
             }
         }).dxPopup('instance').$content();
 
-        const popupContentHeight = $content.height();
+        const popupContentHeight = getHeight($content);
         const addedContent = $('<div>').width(200).height(200);
         $content.append(addedContent);
 
-        assert.equal($content.height(), popupContentHeight + addedContent.height());
+        assert.equal(getHeight($content), popupContentHeight + getHeight(addedContent));
     });
 
     QUnit.test('dxPopup should render custom template with render function that returns dom node', function(assert) {
-        const $content = $('#popup').dxPopup({
+        const popup = $('#popup').dxPopup({
             visible: true,
             width: 'auto',
             height: 'auto',
@@ -459,9 +657,9 @@ QUnit.module('dimensions', {
                     }
                 }
             }
-        });
+        }).dxPopup('instance');
 
-        assert.equal($content.text(), 'text', 'container is correct');
+        assert.equal(popup.$overlayContent().text(), 'text', 'container is correct');
     });
 
     QUnit.test('dimensions should be shrunk correctly with floating heights', function(assert) {
@@ -482,7 +680,7 @@ QUnit.module('dimensions', {
             bottomTemplate: floatingTemplate
         }).dxPopup('instance').$content();
 
-        const contentPaddings = $content.outerHeight() - $content.height();
+        const contentPaddings = getOuterHeight($content) - getHeight($content);
         const computedContentHeight = $content.get(0).getBoundingClientRect().height - contentPaddings;
 
         const realContentHeight = floatingTemplate().appendTo('#qunit-fixture').get(0).getBoundingClientRect().height;
@@ -501,7 +699,7 @@ QUnit.module('dimensions', {
 
         $popupContent.append($contentElement);
         instance.option('height', 'auto');
-        assert.notEqual($overlayContent.height(), 100, 'auto height option');
+        assert.notEqual(getHeight($overlayContent), 100, 'auto height option');
     });
 
     ['minWidth', 'maxWidth', 'minHeight', 'maxHeight'].forEach((option) => {
@@ -547,8 +745,8 @@ QUnit.module('dimensions', {
         const $popupBottom = $overlayContent.find('.dx-popup-bottom');
 
         assert.equal(
-            $popupContent.outerHeight(true) + $popupTitle.outerHeight(true) + $popupBottom.outerHeight(true),
-            $overlayContent.height()
+            getOuterHeight($popupContent, true) + getOuterHeight($popupTitle, true) + getOuterHeight($popupBottom, true),
+            getHeight($overlayContent)
         );
     });
 
@@ -570,38 +768,103 @@ QUnit.module('dimensions', {
         const $popupBottom = $overlayContent.find('.dx-popup-bottom');
 
         assert.equal(
-            $popupContent.outerHeight(true) + $popupTitle.outerHeight(true) + $popupBottom.outerHeight(true),
-            $overlayContent.height()
+            getOuterHeight($popupContent, true) + getOuterHeight($popupTitle, true) + getOuterHeight($popupBottom, true),
+            getHeight($overlayContent)
         );
     });
 
-    QUnit.test('Popup should keep nested scroll position on dimension changed', function(assert) {
-        const SCROLLABLE_CONTAINER_CLASS = 'test-scroll';
+    QUnit.module('Popup should keep nested scroll position on geometry rerendering', {
+        beforeEach: function() {
+            const SCROLLABLE_CONTAINER_CLASS = 'test-scroll';
+            this.instance = $('#popup').dxPopup({
+                visible: true,
+                resizeEnabled: true,
+                width: 'auto',
+                contentTemplate: () => {
+                    const $content = $('<div>').height(3000);
+                    const $wrapper = $('<div>');
 
-        $('#popup').dxPopup({
-            visible: true,
-            contentTemplate: function($container) {
-                const $content = $('<div>').height(3000);
-                const $wrapper = $('<div>');
+                    return $wrapper
+                        .addClass(SCROLLABLE_CONTAINER_CLASS)
+                        .css({
+                            height: '100%',
+                            width: 50,
+                            overflow: 'auto'
+                        })
+                        .append($content);
+                }
+            }).dxPopup('instance');
+            this.$scrollableContainer = $(`.${SCROLLABLE_CONTAINER_CLASS}`);
+            this.$scrollableContainer.scrollTop(300);
+        }
+    }, () => {
+        QUnit.test('on window resize', function(assert) {
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is set');
 
-                $wrapper
-                    .addClass(SCROLLABLE_CONTAINER_CLASS)
-                    .css({
-                        height: '100%',
-                        overflow: 'auto'
-                    })
-                    .append($content)
-                    .appendTo($container);
-            }
+            resizeCallbacks.fire();
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
         });
 
-        const $scrollableContainer = $(`.${SCROLLABLE_CONTAINER_CLASS}`);
+        QUnit.test('on dimension option change', function(assert) {
+            this.instance.option('width', 100);
 
-        $scrollableContainer.scrollTop(100);
-        assert.strictEqual($scrollableContainer.scrollTop(), 100, 'scroll position changed');
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
+        });
 
-        resizeCallbacks.fire();
-        assert.strictEqual($scrollableContainer.scrollTop(), 100, 'scroll position still the same');
+        QUnit.test('on content dimension change', function(assert) {
+            const showingObserved = assert.async();
+            const contentResizingObserved = assert.async();
+            setTimeout(() => {
+                setWidth(this.$scrollableContainer, 300);
+                setTimeout(() => {
+                    assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
+                    contentResizingObserved();
+                }, 100);
+                showingObserved();
+            });
+        });
+
+        QUnit.test('on resize', function(assert) {
+            const $overlayContent = this.instance.$overlayContent();
+            const $handle = $overlayContent.find('.dx-resizable-handle-right');
+            const pointer = pointerMock($handle);
+
+            pointer.start().dragStart().drag(100).dragEnd();
+
+            assert.strictEqual(this.$scrollableContainer.scrollTop(), 300, 'scroll position is not changed');
+        });
+    });
+
+    QUnit.module('popup should be repositioned correctly after change height', {
+        beforeEach: function() {
+            this.getCenterY = (rect) => {
+                return (rect.bottom + rect.top) / 2;
+            };
+            this.popup = $('#popup').dxPopup({
+                visible: true,
+                height: 500,
+                contentTemplate: function($container) {
+                    return $('<div>').height(100);
+                }
+            }).dxPopup('instance');
+
+            this.contentElement = this.popup.$content().get(0);
+            this.initialContentRect = this.contentElement.getBoundingClientRect();
+        }
+    }, () => {
+        QUnit.test('from static to "auto"', function(assert) {
+            this.popup.option('height', 'auto');
+
+            const contentRect = this.contentElement.getBoundingClientRect();
+            assert.roughEqual(this.getCenterY(contentRect), this.getCenterY(this.initialContentRect), 0.51, 'popup is repositioned correctly');
+        });
+
+        QUnit.test('from static to function which returns "auto"', function(assert) {
+            this.popup.option('height', () => 'auto');
+
+            const contentRect = this.contentElement.getBoundingClientRect();
+            assert.roughEqual(this.getCenterY(contentRect), this.getCenterY(this.initialContentRect), 0.51, 'popup is repositioned correctly');
+        });
     });
 });
 
@@ -628,10 +891,10 @@ QUnit.module('options changed callbacks', {
         const $overlayContent = instance.$content().parent();
 
         instance.option('width', 345);
-        assert.equal($overlayContent.outerWidth(), 345);
+        assert.equal(getOuterWidth($overlayContent), 345);
 
         instance.option('height', 567);
-        assert.equal($overlayContent.outerHeight(), 567);
+        assert.equal(getOuterHeight($overlayContent), 567);
     });
 
     QUnit.test('popup height can be changed according to the content if height = auto', function(assert) {
@@ -647,29 +910,29 @@ QUnit.module('options changed callbacks', {
             minHeight: minHeight
         }).dxPopup('instance');
 
-        const $popup = $(popup.content()).parent(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
-        const popupHeight = $popup.height();
+        const $popup = popup.$content().parent(`.${OVERLAY_CONTENT_CLASS}`).eq(0);
+        const popupHeight = getHeight($popup);
 
         $('<div>').height(50).appendTo($content);
-        assert.strictEqual($popup.height(), (popupHeight + 50), 'popup height has been changed (except IE11)');
+        assert.strictEqual(getHeight($popup), (popupHeight + 50), 'popup height has been changed');
 
         $('<div>').height(450).appendTo($content);
-        assert.strictEqual($popup.outerHeight(), 400, 'popup height has been changed, it is equal to the maxHeight');
+        assert.strictEqual(getOuterHeight($popup), 400, 'popup height has been changed, it is equal to the maxHeight');
 
         $content.empty();
-        assert.strictEqual($popup.outerHeight(), minHeight, 'popup height has been changed, it is equal to the minHeight');
+        assert.strictEqual(getOuterHeight($popup), minHeight, 'popup height has been changed, it is equal to the minHeight');
 
         popup.option('autoResizeEnabled', false);
         $('<div>').height(450).appendTo($content);
-        assert.strictEqual($popup.outerHeight(), minHeight, 'popup height does not change if autoResizeEnabled = false');
+        assert.strictEqual(getOuterHeight($popup), minHeight, 'popup height does not change if autoResizeEnabled = false');
 
         popup.option('autoResizeEnabled', true);
-        assert.strictEqual($popup.outerHeight(), 400, 'popup height has been changed after \'autoResizeEnabled\' change');
+        assert.strictEqual(getOuterHeight($popup), 400, 'popup height has been changed after \'autoResizeEnabled\' change');
 
         popup.option('width', 'auto');
         $content.empty();
 
-        assert.strictEqual($popup.outerHeight(), (IS_IE11 ? 400 : minHeight), 'popup with auto width can change height (except IE11)');
+        assert.strictEqual(getOuterHeight($popup), minHeight, 'popup with auto width can change height');
     });
 
     QUnit.test('popup height should support top and bottom toolbars if height = auto', function(assert) {
@@ -689,23 +952,23 @@ QUnit.module('options changed callbacks', {
 
         const $popup = popup.$content().parent();
         const $popupContent = popup.$content();
-        const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).outerHeight();
-        const bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).outerHeight();
-        const popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
+        const topToolbarHeight = getOuterHeight($popup.find(`.${POPUP_TITLE_CLASS}`).eq(0));
+        const bottomToolbarHeight = getOuterHeight($popup.find(`.${POPUP_BOTTOM_CLASS}`).eq(0));
+        const popupContentPadding = getOuterHeight($popupContent) - getHeight($popupContent);
         const popupBordersHeight = parseInt($popup.css('borderTopWidth')) + parseInt($popup.css('borderBottomWidth'));
 
-        let popupContentHeight = $popupContent.outerHeight();
+        let popupContentHeight = getOuterHeight($popupContent);
 
-        assert.strictEqual($popup.outerHeight(), minHeight, 'popup has max height');
+        assert.strictEqual(getOuterHeight($popup), minHeight, 'popup has max height');
         assert.strictEqual(popupContentHeight, minHeight - topToolbarHeight - bottomToolbarHeight - popupBordersHeight, 'popup has minimum content height');
 
         $('<div>').height(150).appendTo($content);
-        popupContentHeight = $popupContent.innerHeight();
+        popupContentHeight = getInnerHeight($popupContent);
         assert.strictEqual(popupContentHeight, 150 + popupContentPadding, 'popup has right height');
 
         $('<div>').height(300).appendTo($content);
-        popupContentHeight = $popupContent.innerHeight();
-        assert.strictEqual($popup.outerHeight(), maxHeight, 'popup has max height');
+        popupContentHeight = getInnerHeight($popupContent);
+        assert.strictEqual(getOuterHeight($popup), maxHeight, 'popup has max height');
         assert.strictEqual(popupContentHeight, maxHeight - topToolbarHeight - bottomToolbarHeight - popupBordersHeight, 'popup has maximum content height');
     });
 
@@ -723,22 +986,22 @@ QUnit.module('options changed callbacks', {
         }).dxPopup('instance');
 
         const $popup = popup.$content().parent();
-        const windowHeight = $(window).innerHeight();
+        const windowHeight = getInnerHeight($(window));
         const $popupContent = popup.$content();
-        const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).outerHeight();
-        const popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
+        const topToolbarHeight = getOuterHeight($popup.find(`.${POPUP_TITLE_CLASS}`).eq(0));
+        const popupContentPadding = getOuterHeight($popupContent) - getHeight($popupContent);
 
-        assert.roughEqual($popup.outerHeight(), windowHeight * 0.5, 1, 'minimum popup height in percentages');
+        assert.roughEqual(getOuterHeight($popup), windowHeight * 0.5, 1, 'minimum popup height in percentages');
 
         $('<div>').height(windowHeight).appendTo($content);
-        assert.roughEqual($popup.outerHeight(), windowHeight * 0.9, 1, 'maximum popup height in percentages');
+        assert.roughEqual(getOuterHeight($popup), windowHeight * 0.9, 1, 'maximum popup height in percentages');
 
         popup.option('maxHeight', 'none');
-        assert.roughEqual($popup.height(), windowHeight + popupContentPadding + topToolbarHeight, 1, 'popup maxHeight: none');
+        assert.roughEqual(getHeight($popup), windowHeight + popupContentPadding + topToolbarHeight, 1, 'popup maxHeight: none');
 
         $content.empty();
         popup.option('minHeight', 'auto');
-        assert.strictEqual($popup.height(), $popup.find(toSelector(POPUP_TITLE_CLASS)).outerHeight() + popupContentPadding, 'popup minHeight: auto');
+        assert.strictEqual(getHeight($popup), getOuterHeight($popup.find(`.${POPUP_TITLE_CLASS}`)) + popupContentPadding, 'popup minHeight: auto');
         devices.current(devices.real());
     });
 
@@ -760,16 +1023,9 @@ QUnit.module('options changed callbacks', {
             assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with fixed width');
         }
 
-
         popup.option('width', 'auto');
 
-        if(IS_IE11) {
-            assert.notOk($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has no POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width for IE11');
-            assert.notOk($popup.hasClass(POPUP_CONTENT_FLEX_HEIGHT_CLASS), 'has no POPUP_CONTENT_FLEX_HEIGHT_CLASS with auto width for IE11');
-        } else {
-            assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width');
-        }
-
+        assert.ok($popup.hasClass(POPUP_CONTENT_INHERIT_HEIGHT_CLASS), 'has POPUP_CONTENT_INHERIT_HEIGHT_CLASS with auto width');
     });
 
 
@@ -779,13 +1035,12 @@ QUnit.module('options changed callbacks', {
             return;
         }
 
-        const $content = $(
-            '<div class="dx-treeview">\
-            <div style="height: 30px;"></div>\
-            <div class="dx-scrollable" style="height: calc(100% - 30px)">\
-                <div style="height: 100px;"></div>\
-            </div>\
-        </div>');
+        const $content = $('<div class="dx-treeview"></div>').append(
+            $('<div>').css('height', '30px'),
+            $('<div class="dx-scrollable"></div>')
+                .css('height', 'calc(100% - 30px)')
+                .append($('<div>').css('height', '100px'))
+        );
 
         $('#popup').dxPopup({
             visible: true,
@@ -796,8 +1051,8 @@ QUnit.module('options changed callbacks', {
         });
 
         let treeviewContentHeight = 0;
-        $content.children().each(function(_, item) { treeviewContentHeight += $(item).height(); });
-        assert.roughEqual($content.height(), treeviewContentHeight, 1, 'treeview content can not be heighter than container');
+        $content.children().each(function(_, item) { treeviewContentHeight += getHeight($(item)); });
+        assert.roughEqual(getHeight($content), treeviewContentHeight, 1, 'treeview content can not be heighter than container');
     });
 
     QUnit.test('Set right content height if window.innerHeight was changed only (T834502)', function(assert) {
@@ -811,8 +1066,8 @@ QUnit.module('options changed callbacks', {
 
         const $popup = instance.$content().parent();
         const $popupContent = instance.$content();
-        const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).outerHeight() || 0;
-        const bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).outerHeight() || 0;
+        const topToolbarHeight = getOuterHeight($popup.find(`.${POPUP_TITLE_CLASS}`).eq(0)) || 0;
+        const bottomToolbarHeight = getOuterHeight($popup.find(`.${POPUP_BOTTOM_CLASS}`).eq(0)) || 0;
         const popupBordersHeight = parseInt($popup.css('borderTopWidth')) + parseInt($popup.css('borderBottomWidth'));
 
         try {
@@ -820,7 +1075,7 @@ QUnit.module('options changed callbacks', {
 
             resizeCallbacks.fire();
 
-            assert.roughEqual($popupContent.outerHeight() + topToolbarHeight + bottomToolbarHeight + popupBordersHeight, 100, 1);
+            assert.roughEqual(getOuterHeight($popupContent) + topToolbarHeight + bottomToolbarHeight + popupBordersHeight, 100, 1);
         } finally {
             windowUtils.getWindow.restore();
         }
@@ -837,15 +1092,15 @@ QUnit.module('options changed callbacks', {
 
         const $overlayContent = this.instance.$content().parent();
 
-        assert.equal($overlayContent.outerWidth(), $(document.body).outerWidth(), 'wrapper has 100% width');
-        assert.equal($overlayContent.outerHeight(), $(document.body).outerHeight(), 'wrapper has 100% height');
+        assert.equal(getOuterWidth($overlayContent), getOuterWidth($('#qunit-fixture')), 'wrapper has 100% width');
+        assert.equal(getOuterHeight($overlayContent), getOuterHeight($('#qunit-fixture')), 'wrapper has 100% height');
 
         assert.ok($overlayContent.hasClass(POPUP_FULL_SCREEN_CLASS), 'fullscreen class added');
         assert.ok(!$overlayContent.hasClass(POPUP_NORMAL_CLASS), 'normal class is removed');
 
         this.instance.option('fullScreen', false);
-        assert.equal($overlayContent.outerWidth(), 345);
-        assert.equal($overlayContent.outerHeight(), 567);
+        assert.equal(getOuterWidth($overlayContent), 345);
+        assert.equal(getOuterHeight($overlayContent), 567);
         assert.ok(!$overlayContent.hasClass(POPUP_FULL_SCREEN_CLASS), 'fullscreen class deleted');
         assert.ok($overlayContent.hasClass(POPUP_NORMAL_CLASS), 'normal class is added');
     });
@@ -859,41 +1114,13 @@ QUnit.module('options changed callbacks', {
         $('#popup').dxPopup({
             fullScreen: true,
             visible: true,
-            container: '#container'
+            container: $('#container')
         });
 
-        const $overlayWrapper = $(toSelector(OVERLAY_WRAPPER_CLASS));
+        const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
 
-        assert.equal($overlayWrapper.outerWidth(), $(window).innerWidth(), 'wrapper has correct width');
-        assert.equal($overlayWrapper.outerHeight(), $(window).innerHeight(), 'wrapper has correct height');
-    });
-
-    QUnit.test('has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in safari (T714801)', function(assert) {
-        this.instance.option({
-            fullScreen: true,
-            visible: true
-        });
-
-        const $body = $('body');
-        const $wrapper = this.instance.$content().parent().parent();
-
-        assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI);
-        assert.strictEqual($wrapper.css('position'), 'fixed', 'popup wrapper position type is correct');
-
-        this.instance.hide();
-        assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class removed from body after popup hiding');
-
-        this.instance.show();
-        this.instance.option('fullScreen', false);
-
-        assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class removed from body if fullScreen is changed to \'false\' at runtime');
-        assert.strictEqual($wrapper.css('position') === 'fixed', !IS_SAFARI, 'popup wrapper position type is correct if fullScreen is changed to \'false\' at runtime');
-
-        this.instance.option('fullScreen', true);
-
-        assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI, 'class added to the body if fullScreen is changed to \'true\' at runtime');
-        assert.strictEqual($wrapper.css('position'), 'fixed', 'popup wrapper position type is correct if fullScreen is changed to \'true\' at runtime');
-        this.instance.hide();
+        assert.equal(getOuterWidth($overlayWrapper), getInnerWidth($(window)), 'wrapper has correct width');
+        assert.equal(getOuterHeight($overlayWrapper), getInnerHeight($(window)), 'wrapper has correct height');
     });
 
     QUnit.test('start scroll position is saved after full screen popup hiding', function(assert) {
@@ -918,43 +1145,6 @@ QUnit.module('options changed callbacks', {
         }
     });
 
-    QUnit.test('works correctly with PREVENT_SAFARI_SCROLLING_CLASS class if fullScreen option is changed on showing event in safari (T825004)', function(assert) {
-        if(!IS_SAFARI) {
-            assert.expect(0);
-            return;
-        }
-        let $additionalElement;
-
-        try {
-            const $body = $('body');
-            $additionalElement = $('<div>').height(2000).appendTo($body);
-
-            this.instance.option({
-                fullScreen: false,
-                visible: false,
-                onShowing(e) {
-                    e.component.option('fullScreen', true);
-                }
-            });
-
-            const $wrapper = this.instance.$content().parent();
-
-            window.scrollTo(0, 200);
-            this.instance.show();
-            this.clock.tick(500);
-
-            assert.ok($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
-            assert.strictEqual($wrapper.css('transform').split(',')[5], ' 0)', 'popup has translateY: 0');
-            this.instance.hide();
-
-            assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class removed from body after popup hiding');
-            assert.strictEqual(window.pageYOffset, 200, 'scroll position is saved');
-        } finally {
-            window.scrollTo(0, 0);
-            $additionalElement.remove();
-        }
-    });
-
     QUnit.test('PopupContent doesn\'t disappear while fullScreen option changing', function(assert) {
         this.instance.option({
             fullScreen: false,
@@ -967,7 +1157,7 @@ QUnit.module('options changed callbacks', {
 
         $('<iframe>').attr('src', 'about:blank').appendTo(popupContent);
 
-        const iFrame = document.getElementsByTagName('iframe')[0];
+        const iFrame = $('iframe').get(0);
         const iFrameDoc = iFrame.contentWindow.document;
         const element = document.createElement('div');
 
@@ -993,17 +1183,16 @@ QUnit.module('options changed callbacks', {
             visible: true
         });
 
-        const $overlayContent = this.instance.$content().parent();
-        const $wrapper = $overlayContent.parent().get(0);
+        const wrapper = this.instance.$wrapper().get(0);
 
-        assert.equal(parseInt(getComputedStyle($wrapper).width), $(window).width(), 'wrappers width specified');
-        assert.equal(parseInt(getComputedStyle($wrapper).height), $(window).height(), 'wrappers height specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).width), getWidth($(window)), 'wrappers width specified');
+        assert.equal(parseInt(getComputedStyle(wrapper).height), getHeight($(window)), 'wrappers height specified');
     });
 
     QUnit.test('title', function(assert) {
         this.instance.option('visible', 'true');
         this.instance.option('title', 'new title');
-        assert.equal($(toSelector(POPUP_WRAPPER_CLASS), viewport()).text(), 'new title');
+        assert.equal($(`.${POPUP_WRAPPER_CLASS}`, viewport()).text(), 'new title');
     });
 
     QUnit.test('showTitle option', function(assert) {
@@ -1013,11 +1202,11 @@ QUnit.module('options changed callbacks', {
             opened: true
         });
 
-        let $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+        let $title = $(`.${POPUP_TITLE_CLASS}`, viewport());
         assert.ok(!!$title.length, 'show title by default');
 
         this.instance.option('showTitle', false);
-        $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+        $title = $(`.${POPUP_TITLE_CLASS}`, viewport());
 
         assert.ok(!$title.length, 'hide title');
     });
@@ -1037,11 +1226,11 @@ QUnit.module('options changed callbacks', {
             this.instance.option('toolbarItems', [{ shortcut: buttonType }]);
             this.instance.show();
 
-            const $bottomBar = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find('.' + POPUP_BOTTOM_CLASS);
-            const $button = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find('.dx-button.dx-popup-' + buttonType);
+            const $bottomBar = $(`.${POPUP_WRAPPER_CLASS}`, viewport()).find('.' + POPUP_BOTTOM_CLASS);
+            const $button = $(`.${POPUP_WRAPPER_CLASS}`, viewport()).find('.dx-button.dx-popup-' + buttonType);
 
             assert.equal($bottomBar.length, 1, 'Bottom bar rendered');
-            assert.ok($(toSelector(POPUP_WRAPPER_CLASS), viewport()).hasClass('dx-popup-' + buttonType + '-visible'), 'popup has according class');
+            assert.ok($(`.${POPUP_WRAPPER_CLASS}`, viewport()).hasClass('dx-popup-' + buttonType + '-visible'), 'popup has according class');
             assert.ok($bottomBar.hasClass('dx-popup-' + buttonType), 'Bottom bar has class \'dx-popup-' + buttonType + '\'');
             assert.equal($button.length, 1, buttonType + ' button rendered');
         });
@@ -1050,8 +1239,8 @@ QUnit.module('options changed callbacks', {
     QUnit.test('buttons close button', function(assert) {
         const $popup = $('#popup').dxPopup({ visible: true, showCloseButton: true });
         const instance = $popup.dxPopup('instance');
-        const $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
-        const $closeButton = $(toSelector(POPUP_TITLE_CLOSEBUTTON_CLASS), viewport());
+        const $title = $(`.${POPUP_TITLE_CLASS}`, viewport());
+        const $closeButton = $(`.${POPUP_TITLE_CLOSEBUTTON_CLASS}`, viewport());
 
         assert.equal($title.find('.dx-button').length, 1, 'title has close button');
         assert.equal($closeButton.length, 1, 'close button element');
@@ -1060,19 +1249,29 @@ QUnit.module('options changed callbacks', {
         assert.equal($title.find('.dx-button').length, 0, 'close button is removed');
     });
 
+    QUnit.test('close button options', function(assert) {
+        $('#popup').dxPopup({ visible: true, showCloseButton: true });
+        const $closeButton = $(`.${POPUP_TITLE_CLOSEBUTTON_CLASS}`, viewport());
+        const { stylingMode, icon, onClick } = $closeButton.dxButton('instance').option();
+
+        assert.equal(stylingMode, 'text', 'close button has correct styling mode');
+        assert.equal(icon, 'close', 'close button has correct icon');
+        assert.ok(!!onClick, 'close button has onclick handler');
+    });
+
     QUnit.test('showCloseButton option', function(assert) {
         const $popup = $('#popup').dxPopup({ visible: true, toolbarItems: [] });
         const instance = $popup.dxPopup('instance');
-        let $closeButton = $popup.find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
+        let $closeButton = $('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
         assert.ok($closeButton.length, 'Need to show close button by default');
 
         instance.option('showCloseButton', true);
-        $closeButton = $popup.find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
+        $closeButton = $('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
         assert.ok($closeButton.length, 'Close button appears when we set option to the true through api');
 
         instance.option('toolbarItems', [{ shortcut: 'close' }]);
         instance.option('showCloseButton', false);
-        $closeButton = $popup.find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
+        $closeButton = $('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
         assert.ok(!$closeButton.length, 'Close button is independent from the \'buttons\' option');
     });
 
@@ -1080,7 +1279,7 @@ QUnit.module('options changed callbacks', {
         this.instance.option('visible', 'true');
         this.instance.option('showCloseButton', true);
 
-        const $closeButton = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
+        const $closeButton = $(`.${POPUP_WRAPPER_CLASS}`, viewport()).find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
         let isHideCalled = 0;
 
         this.instance.hide = function() {
@@ -1102,7 +1301,7 @@ QUnit.module('options changed callbacks', {
             };
             this.instance.show();
 
-            const $button = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find('.dx-button.dx-popup-' + buttonType);
+            const $button = $(`.${POPUP_WRAPPER_CLASS}`, viewport()).find('.dx-button.dx-popup-' + buttonType);
 
             $button.trigger('dxclick');
             assert.equal(buttonClickFired, 1, 'button click action fired');
@@ -1170,42 +1369,6 @@ QUnit.module('options changed callbacks', {
         assert.equal($toolbarItems.length, 0, 'no items are rendered inside top toolbar');
     });
 
-    QUnit.test('toolBar should not update geometry after toolbarItems visibility option change', function(assert) {
-        const renderGeometrySpy = sinon.spy(this.instance, '_renderGeometry');
-
-        this.instance.option('toolbarItems[0].visible', true);
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called for visibility option');
-
-        this.instance.option('toolbarItems', [{
-            widget: 'dxButton',
-            options: { text: 'Supprimer', type: 'danger' }
-        }]);
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option fully change');
-
-        this.instance.option('toolbarItems[0]', {
-            widget: 'dxButton',
-            options: { text: 'Supprimer', type: 'danger' }
-        });
-
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option partial change');
-    });
-
-
-    QUnit.test('toolBar should not update geometry after partial update of its items', function(assert) {
-        this.instance.option({
-            visible: true,
-            toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
-        });
-
-        const renderGeometrySpy = sinon.spy(this.instance, '_renderGeometry');
-
-        this.instance.option('toolbarItems[0].options', { text: 'test', disabled: true });
-        assert.ok(renderGeometrySpy.notCalled, 'renderGeometry is not called on partial update of a widget');
-
-        this.instance.option('toolbarItems[0].toolbar', 'top');
-        assert.ok(renderGeometrySpy.calledOnce, 'renderGeometry is called on item location changing');
-    });
-
     QUnit.test('toolbarItems option change should trigger resize event for content correct geometry rendering (T934380)', function(assert) {
         const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
 
@@ -1250,75 +1413,677 @@ QUnit.module('options changed callbacks', {
             resizeEventSpy.restore();
         }
     });
+
+    QUnit.module('enableBodyScroll on desktop', {
+        beforeEach: function() {
+            fx.off = true;
+
+            this.getBodyStyle = (property) => {
+                return this.$body.get(0).style[property];
+            };
+
+            this.getBodyStyleAttr = () => {
+                return this.$body.get(0).getAttribute('style');
+            };
+
+            this.$body = $('body');
+            this.$body.get(0).removeAttribute('style');
+
+            this.createPopup = (options) => {
+                return $('#popup').dxPopup(options).dxPopup('instance');
+            };
+
+            this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
+
+            this.scrollbarWidth = window.innerWidth - domAdapter.getDocument().documentElement.clientWidth;
+        },
+        afterEach: function() {
+            this.instance.dispose();
+            window.scrollTo(0, 0);
+            this.$additionalElement.remove();
+            fx.off = false;
+        }
+    }, () => {
+        if(IS_IOS_DEVICE) {
+            return;
+        }
+
+        QUnit.test('body should not have overflow styles after showing with enableBodyScroll is true', function(assert) {
+            window.scrollTo(200, 200);
+
+            this.createPopup({
+                visible: true,
+                enableBodyScroll: true
+            });
+
+            const { overflow, paddingRight } = this.$body.get(0).style;
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+            assert.strictEqual(overflow, '', 'body overflow style');
+            assert.strictEqual(paddingRight, '', 'body padding right style');
+        });
+
+        QUnit.test('body should have overflow styles after showing and restore them after hidden, enableBodyScroll is false', function(assert) {
+            window.scrollTo(200, 200);
+
+            assert.strictEqual(this.getBodyStyleAttr(), null, 'body style attribute');
+
+            const popup = this.createPopup({
+                visible: true,
+                enableBodyScroll: false
+            });
+
+            assert.strictEqual(this.getBodyStyleAttr(), this.scrollbarWidth ? `padding-right: ${this.scrollbarWidth}px; overflow: hidden;` : 'overflow: hidden;', 'body style attribute');
+            assert.strictEqual(this.getBodyStyle('overflow'), 'hidden', 'body overflow style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), this.scrollbarWidth ? `${this.scrollbarWidth}px` : '', 'body padding right style');
+
+            popup.hide();
+
+            assert.strictEqual(this.getBodyStyleAttr(), '', 'body style attribute');
+            assert.strictEqual(this.getBodyStyle('overflow'), '', 'body overflow style');
+            assert.strictEqual(this.getBodyStyle('paddingRight'), '', 'body padding right style');
+        });
+
+        ['overflow', 'overflowX', 'overflowY'].forEach((overflow) => {
+            QUnit.test(`body with ${overflow} inline style should have overflow styles after showing and restore them after hidden, enableBodyScroll is false`, function(assert) {
+                window.scrollTo(200, 200);
+
+                const bodyPaddingValue = 10;
+                const propertyInKebabCase = overflow.replace(/(X)|(Y)/, (symbol) => `-${symbol.toLowerCase()}`);
+
+                $('body').get(0).style[overflow] = 'scroll';
+                $('body').get(0).style.paddingRight = `${bodyPaddingValue}px`;
+
+                assert.strictEqual(this.getBodyStyleAttr(), `${propertyInKebabCase}: scroll; padding-right: ${bodyPaddingValue}px;`, 'body style attribute');
+
+                const popup = this.createPopup({
+                    visible: true,
+                    enableBodyScroll: false
+                });
+
+                assert.strictEqual(this.getBodyStyle('overflow'), 'hidden', 'body overflow style');
+                assert.strictEqual(this.getBodyStyle('paddingRight'), `${this.scrollbarWidth + bodyPaddingValue}px`, 'body padding right style');
+
+                popup.hide();
+
+                if(overflow === 'overflow') {
+                    assert.strictEqual(this.getBodyStyleAttr(), `${propertyInKebabCase}: scroll; padding-right: ${bodyPaddingValue}px;`, 'body style attribute');
+                } else {
+                    assert.strictEqual(this.getBodyStyleAttr(), `padding-right: ${bodyPaddingValue}px; ${propertyInKebabCase}: scroll;`, 'body style attribute');
+                }
+
+                assert.strictEqual(this.getBodyStyle(overflow), 'scroll', 'body overflow style');
+                assert.strictEqual(this.getBodyStyle('paddingRight'), `${bodyPaddingValue}px`, 'body padding right style');
+            });
+        });
+    });
+
+    QUnit.module('enableBodyScroll on Ios devices', {
+        beforeEach: function() {
+            fx.off = true;
+            this.originalDevice = {
+                platform: devices.real().platform,
+                deviceType: devices.real().deviceType
+            };
+            this.instance = $('#popup').dxPopup().dxPopup('instance');
+            devices.real({ platform: 'ios', deviceType: 'phone' });
+            this.$body = $('body');
+            this.$body.get(0).style.overflow = 'auto';
+            this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
+        },
+        afterEach: function() {
+            this.instance.dispose();
+            devices.real(this.originalDevice);
+            window.scrollTo(0, 0);
+            this.$additionalElement.remove();
+            fx.off = false;
+        }
+    }, () => {
+        QUnit.test('body should not have PREVENT_SAFARI_SCROLLING_CLASS if container is window and shading is enabled on popup init, enableBodyScroll: false', function(assert) {
+            this.instance.dispose();
+            $('#popup').dxPopup({ visible: true, enableBodyScroll: false });
+
+            assert.strictEqual(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), false);
+        });
+
+        QUnit.test('body should have position fixed after showing if enableBodyScroll: false', function(assert) {
+            this.instance.dispose();
+            window.scrollTo(0, 200);
+            const popup = $('#popup').dxPopup({ visible: true, enableBodyScroll: false }).dxPopup('instance');
+
+            assert.strictEqual(this.$body.get(0).style.position, 'fixed');
+            assert.strictEqual(this.$body.get(0).style.top, '-200px');
+            assert.strictEqual(this.$body.get(0).style.left, '0px');
+
+            popup.hide();
+
+            assert.strictEqual(this.$body.get(0).style.position, '');
+            assert.strictEqual(this.$body.get(0).style.top, '');
+            assert.strictEqual(this.$body.get(0).style.left, '');
+        });
+
+        QUnit.test('body should change the fixed position after change of enableBodyScroll option in runtime', function(assert) {
+            this.instance.dispose();
+            window.scrollTo(0, 200);
+
+            const popup = $('#popup').dxPopup({
+                visible: true,
+                shading: false
+            }).dxPopup('instance');
+
+            assert.strictEqual(this.$body.get(0).style.position, '');
+            assert.strictEqual(this.$body.get(0).style.top, '');
+            assert.strictEqual(this.$body.get(0).style.left, '');
+
+            popup.option('enableBodyScroll', false);
+
+            assert.strictEqual(this.$body.get(0).style.position, 'fixed');
+            assert.strictEqual(this.$body.get(0).style.top, '-200px');
+            assert.strictEqual(this.$body.get(0).style.left, '0px');
+
+            popup.option('enableBodyScroll', true);
+
+            assert.strictEqual(this.$body.get(0).style.position, '');
+            assert.strictEqual(this.$body.get(0).style.top, '');
+            assert.strictEqual(this.$body.get(0).style.left, '');
+        });
+    });
+
+    QUnit.module('prevent safari scrolling on ios devices', {
+        beforeEach: function() {
+            this.originalDevice = {
+                platform: devices.real().platform,
+                deviceType: devices.real().deviceType
+            };
+            devices.real({ platform: 'ios', deviceType: 'phone' });
+            this.$body = $('body');
+            this.$additionalElement = $('<div>').height(2000).appendTo(this.$body);
+        },
+        afterEach: function() {
+            this.instance.dispose();
+            devices.real(this.originalDevice);
+            window.scrollTo(0, 0);
+            this.$additionalElement.remove();
+        }
+    }, () => {
+        QUnit.test('body should have PREVENT_SAFARI_SCROLLING_CLASS for is popup is in fullScreen mode on init', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.dispose();
+            $('#popup').dxPopup({
+                fullScreen: true,
+                visible: true,
+                shading: false
+            });
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+        });
+
+        QUnit.test('body should have PREVENT_SAFARI_SCROLLING_CLASS for fullScreen popup in safari (T714801)', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                fullScreen: true,
+                visible: true,
+                shading: false
+            });
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+        });
+
+        QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be toggled on "fullScreen" option change', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                shading: false,
+                visible: true
+            });
+            this.instance.option('fullScreen', true);
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "fullScreen" is enabled');
+
+            this.instance.option('fullScreen', false);
+            assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed when "fullScreen" is disabled');
+        });
+
+        QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be added to the body if fullScreen option is set to "true" on showing event in safari (T825004)', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                shading: false,
+                onShowing(e) {
+                    e.component.option('fullScreen', true);
+                }
+            });
+            const $wrapper = this.instance.$wrapper();
+
+            window.scrollTo(0, 200);
+            this.instance.show();
+
+            assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS));
+            assert.strictEqual($wrapper.css('transform').split(',')[5], ' 0)', 'popup has translateY: 0');
+        });
+
+        QUnit.test('PREVENT_SAFARI_SCROLLING_CLASS should be removed from body if fullScreen option is set to "false" on showing event in safari (T825004)', function(assert) {
+            if(!IS_SAFARI) {
+                assert.expect(0);
+                return;
+            }
+
+            this.instance.option({
+                fullScreen: true,
+                shading: false,
+                onShowing(e) {
+                    e.component.option('fullScreen', false);
+                }
+            });
+
+            window.scrollTo(0, 200);
+            this.instance.show();
+
+            assert.notOk(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is removed from body on fullScreen disable');
+            assert.strictEqual(window.pageYOffset, 200, 'scroll position is correct');
+        });
+    });
+});
+
+QUnit.module('drag', {
+    beforeEach: function() {
+        const initialOptions = {
+            animation: null,
+            dragEnabled: true,
+            visible: true
+        };
+        this.init = (options) => {
+            this.element = $('#popup');
+            this.popup = this.element
+                .dxPopup($.extend({}, initialOptions, options))
+                .dxPopup('instance');
+            this.$overlayContent = this.popup.$content().parent();
+            this.$title = this.popup.topToolbar();
+        };
+        this.reinit = (options) => {
+            this.popup.dispose();
+
+            this.init(options);
+        };
+
+        this.init();
+    }
+}, () => {
+    QUnit.test('class should be added if drag is enabled', function(assert) {
+        assert.ok(this.$overlayContent.hasClass(POPUP_DRAGGABLE_CLASS), 'class was added');
+
+        this.popup.option('dragEnabled', false);
+
+        assert.ok(!this.$overlayContent.hasClass(POPUP_DRAGGABLE_CLASS), 'class was added');
+    });
+
+    QUnit.test('popup should be dragged by title', function(assert) {
+        const pointer = pointerMock(this.$title);
+        const position = this.$overlayContent.position();
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assert.deepEqual(this.$overlayContent.position(), {
+            top: position.top + 50,
+            left: position.left + 50
+        }, 'popup was moved');
+    });
+
+    QUnit.test('popup shouldn\'t be dragged by content', function(assert) {
+        const pointer = pointerMock(this.popup.$content());
+        const position = this.$overlayContent.position();
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assert.deepEqual(this.$overlayContent.position(), {
+            top: position.top,
+            left: position.left
+        }, 'popup was not moved');
+    });
+
+    QUnit.test('popup should be dragged if title was changed', function(assert) {
+        const position = this.$overlayContent.position();
+        this.popup.option('title', 'newTitle');
+
+        const $title = this.popup.topToolbar();
+        const pointer = pointerMock($title);
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assert.deepEqual(this.$overlayContent.position(), {
+            top: position.top + 50,
+            left: position.left + 50
+        }, 'popup was moved');
+    });
+
+    QUnit.test('overlay should not be dragged if dragEnabled is false', function(assert) {
+        this.reinit({ dragEnabled: false });
+        const pointer = pointerMock(this.$title);
+        const position = this.$overlayContent.position();
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assert.deepEqual(this.$overlayContent.position(), {
+            top: position.top,
+            left: position.left
+        }, 'popup was not moved');
+    });
+
+    QUnit.test('popup should not be dragged if dragEnabled is changed dynamically', function(assert) {
+        const pointer = pointerMock(this.$title);
+        const position = this.$overlayContent.position();
+
+        this.popup.option('dragEnabled', false);
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assert.deepEqual(this.$overlayContent.position(), {
+            top: position.top,
+            left: position.left
+        }, 'popup was not moved');
+    });
+
+    QUnit.test('dragged popup should save position after dimensions change', function(assert) {
+        this.reinit({ width: 1,
+            height: 1,
+            position: { of: viewPort() }
+        });
+        const pointer = pointerMock(this.$title);
+
+        pointer.start().dragStart().drag(-10).dragEnd();
+        let prevPosition = this.$overlayContent.position().left;
+        resizeCallbacks.fire();
+        assert.strictEqual(this.$overlayContent.position().left, prevPosition, 'correct position after first move');
+
+        pointer.start().dragStart().drag(-10).dragEnd();
+        prevPosition = this.$overlayContent.position().left;
+        resizeCallbacks.fire();
+        assert.strictEqual(this.$overlayContent.position().left, prevPosition, 'correct position after next move');
+    });
+
+    QUnit.test('popup should not be dragged out of target', function(assert) {
+        this.reinit({
+            width: 2,
+            height: 2,
+            position: { of: viewPort() },
+            visualContainer: viewport()
+        });
+        const $container = viewPort();
+        const pointer = pointerMock(this.$title);
+
+        $container.css({ padding: '10px' });
+
+        const viewWidth = getOuterWidth($container);
+        const viewHeight = getOuterHeight($container);
+        const position = this.$overlayContent.position();
+        const startEvent = pointer.start().dragStart().lastEvent();
+
+        $container.css({ padding: 0 });
+
+        assert.strictEqual(position.left - startEvent.maxLeftOffset, 0, 'popup should not be dragged left of target');
+        assert.strictEqual(position.left + startEvent.maxRightOffset, viewWidth - getOuterWidth(this.$overlayContent), 'popup should not be dragged right of target');
+        assert.strictEqual(position.top - startEvent.maxTopOffset, 0, 'popup should not be dragged above the target');
+        assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent), 'popup should not be dragged below than target');
+    });
+
+    QUnit.test('popup can be dragged out of target if viewport and container is not specified', function(assert) {
+        try {
+            viewPort(null);
+
+            this.reinit({
+                width: 2,
+                height: 2,
+            });
+            const pointer = pointerMock(this.$title);
+
+            viewPort().attr('style', 'width: 100px; height: 100px');
+
+            const $container = $(window);
+            const viewWidth = Math.max(document.body.clientWidth, getOuterWidth($container));
+            const viewHeight = Math.max(document.body.clientHeight, getOuterHeight($container));
+            const position = this.$overlayContent.position();
+
+            const startEvent = pointer.start().dragStart().lastEvent();
+
+            assert.strictEqual(position.left + startEvent.maxRightOffset, viewWidth - getOuterWidth(this.$overlayContent), 'popup should not be dragged right of target');
+            assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent), 'popup should not be dragged below than target');
+        } finally {
+            viewPort().removeAttr('style');
+            viewPort(toSelector(VIEWPORT_CLASS));
+        }
+    });
+
+    QUnit.test('popup should not be dragged when container size less than overlay content', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(0).width(20);
+        this.reinit({
+            height: 10,
+            width: 10,
+            container: $container
+        });
+
+        const pointer = pointerMock(this.$title);
+        const startEvent = pointer.start().dragStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxTopOffset, 0, 'popup should not be dragged vertically');
+        assert.strictEqual(startEvent.maxBottomOffset, 0, 'popup should not be dragged vertically');
+        assert.strictEqual(startEvent.maxLeftOffset, 0, 'popup should not be dragged horizontally');
+        assert.strictEqual(startEvent.maxRightOffset, 0, 'popup should not be dragged horizontally');
+    });
+
+    QUnit.test('popup can be dragged when container size less than overlay content and outsideDragFactor is enabled', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(10).width(10);
+        this.reinit({
+            height: 10,
+            width: 10,
+            container: $container,
+            position: { of: $container },
+            outsideDragFactor: 1
+        });
+
+        const pointer = pointerMock(this.$title);
+        const startEvent = pointer.start().dragStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxTopOffset, 10, 'popup can dragged vertically');
+        assert.strictEqual(startEvent.maxBottomOffset, 10, 'popup can be dragged vertically');
+        assert.strictEqual(startEvent.maxLeftOffset, 10, 'popup can be dragged horizontally');
+        assert.strictEqual(startEvent.maxRightOffset, 10, 'popup can be dragged horizontally');
+    });
+
+    QUnit.test('popup should be dragged correctly when position.of and shading (T534551)', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(0).width(200);
+        $container.css('margin-left', '200px');
+        $container.css('margin-top', '200px');
+
+        this.reinit({
+            shading: true,
+            height: 20,
+            width: 20,
+            position: { of: $container },
+            visualContainer: $container
+        });
+
+        const overlayPosition = this.$overlayContent.position();
+        const containerPosition = $container.position();
+        const viewWidth = getOuterWidth(viewport());
+        const viewHeight = getOuterHeight(viewport());
+
+        const pointer = pointerMock(this.$title);
+        const startEvent = pointer.start().dragStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxRightOffset, viewWidth - getOuterWidth(this.$overlayContent) - overlayPosition.left - 200, 'popup should be dragged right');
+        assert.strictEqual(startEvent.maxLeftOffset, 200 + overlayPosition.left, 'popup should be dragged left');
+        assert.roughEqual(startEvent.maxTopOffset, 200 + overlayPosition.top + containerPosition.top, 1, 'popup should be dragged top');
+        assert.roughEqual(startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent) - containerPosition.top - overlayPosition.top - 200, 1, 'popup should be dragged bottom');
+    });
+
+    QUnit.test('popup changes position after dragging', function(assert) {
+        this.reinit({ position: { my: 'top', at: 'top', of: viewport(), offset: '0 0' }, visualContainer: viewport() });
+        const pointer = pointerMock(this.$title);
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+        assert.strictEqual(this.$overlayContent.position().top, 50, 'overlay positioned correctly after dragging');
+
+        this.popup.option('position.offset', '0 20');
+
+        assert.strictEqual(this.$overlayContent.position().top, 20, 'overlay positioned correctly after change the \'position\' option');
+    });
+
+    QUnit.test('popup should reposition after dragging if position is outside of drag area', function(assert) {
+        const startOverlayPosition = this.$overlayContent.position().left;
+        const pointer = pointerMock(this.$title);
+
+        pointer.start().down().move(10, 10).move(-10, -10).up();
+        const newOverlayPosition = this.$overlayContent.position().left;
+
+        assert.notStrictEqual(startOverlayPosition, newOverlayPosition, 'overlay repositioned after dragging');
+        assert.ok(newOverlayPosition < -9000, 'overlay now is positioned in viewport');
+    });
+
+    QUnit.test('dragged popup should have default dimensions after toggle visibility', function(assert) {
+        this.reinit({
+            width: 'auto',
+            height: 'auto'
+        });
+
+        const pointer = pointerMock(this.$title);
+
+        pointer.start().dragStart().drag(-10).dragEnd();
+
+        this.popup.hide();
+        this.popup.show();
+
+        assert.deepEqual([this.$overlayContent[0].style.width, this.$overlayContent[0].style.height], ['auto', 'auto'], 'correct size');
+    });
 });
 
 QUnit.module('resize', {
     beforeEach: function() {
-        fx.off = true;
-    },
-    afterEach: function() {
-        fx.off = false;
+        const initialOptions = {
+            animation: null,
+            resizeEnabled: true,
+            visible: true,
+            width: 200,
+            height: 200
+        };
+        this.init = (options) => {
+            this.element = $('#popup');
+            this.popup = this.element
+                .dxPopup($.extend({}, initialOptions, options))
+                .dxPopup('instance');
+            this.$overlayContent = this.popup.$content().parent();
+            this.$handle = this.$overlayContent.find(toSelector(POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS));
+        };
+        this.reinit = (options) => {
+            this.popup && this.popup.dispose();
+
+            this.init(options);
+        };
+
+        this.init();
     }
 }, () => {
-    QUnit.test('popup content should update height after resize', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            resizeEnabled: true,
-            showTitle: false,
-            visible: true,
-            showCloseButton: false,
-            toolbarItems: []
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
-        const $handle = $overlayContent.find('.dx-resizable-handle-corner-bottom-right');
-        const pointer = pointerMock($handle).start();
-
-        pointer.dragStart().drag(-100, -100);
-        assert.roughEqual(popup.$content().outerHeight(), $overlayContent.height(), 0.1, 'size of popup and overlay is equal');
+    QUnit.test('popup should have resizable component on overlay content', function(assert) {
+        assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'all', 'direction specified correctly');
     });
 
-    QUnit.test('popup content position should be reset after show/hide', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            resizeEnabled: true,
-            height: 'auto'
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
+    QUnit.test('popup shouldn\'t have resizable component on overlay content if resizeEnabled is false', function(assert) {
+        this.reinit({ resizeEnabled: false });
 
-        popup.$content().append($('<div>').height(10));
-        popup.show();
-        const $handle = $overlayContent.find('.dx-resizable-handle-corner-bottom-right');
-        const pointer = pointerMock($handle);
-        const position = $overlayContent.offset();
-        pointer.start().dragStart().drag(-100, -100).dragEnd();
+        assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'none', 'direction specified correctly');
+    });
 
-        popup.hide();
-        popup.show();
-        assert.deepEqual($overlayContent.offset(), position, 'position is same');
+    QUnit.test('popup shouldn\'t have resizable component on overlay content if resizeEnabled is changed dynamically', function(assert) {
+        this.popup.option('resizeEnabled', false);
+        assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'none', 'direction specified correctly');
+    });
+
+    QUnit.test('resized popup should save dimensions after dimensions change', function(assert) {
+        const pointer = pointerMock(this.$handle);
+
+        pointer.start().dragStart().drag(10, 10).dragEnd();
+
+        assert.deepEqual([this.popup.option('width'), this.popup.option('height')], [210, 210], 'correct size');
+
+        pointer.start().dragStart().drag(-20, -20).dragEnd();
+
+        assert.deepEqual([this.popup.option('width'), this.popup.option('height')], [190, 190], 'correct size');
+    });
+
+    QUnit.test('resized popup should not save dimensions after height changed', function(assert) {
+        const pointer = pointerMock(this.$handle);
+
+        pointer.start().dragStart().drag(10, 10).dragEnd();
+
+        this.popup.option('width', 300);
+        assert.deepEqual([this.popup.option('width'), this.popup.option('height')], [300, 210], 'correct size');
+    });
+
+    QUnit.test('resized popup should save dimension for the side which was not resized', function(assert) {
+        this.reinit({ height: '70%' });
+
+        const pointer = pointerMock(this.$handle);
+
+        pointer.start().dragStart().drag(10, 0).dragEnd();
+
+        assert.deepEqual([this.popup.option('width'), this.popup.option('height')], [210, '70%'], 'correct size');
+    });
+
+    QUnit.test('resized popup should not have default dimensions after toggle visibility', function(assert) {
+        const pointer = pointerMock(this.$handle);
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        this.popup.hide();
+        this.popup.show();
+
+        assert.deepEqual([this.popup.option('width'), this.popup.option('height')], [250, 250], 'correct size');
     });
 
     QUnit.test('resize callbacks', function(assert) {
-        const onResizeStartStub = sinon.stub();
-        const onResizeStub = sinon.stub();
-        const onResizeEndStub = sinon.stub();
+        const onResizeStartFired = sinon.stub();
+        const onResizeFired = sinon.stub();
+        const onResizeEndFired = sinon.stub();
+        const checkExtraFields = (args, eventType) => {
+            ['event', 'height', 'width'].forEach((field) => {
+                assert.ok(field in args, `${field} field is existed`);
+            });
+            assert.strictEqual(args.event.type, eventType, 'correct event type');
+        };
 
-        const instance = $('#popup').dxPopup({
-            resizeEnabled: true,
-            visible: true,
-            onResizeStart: onResizeStartStub,
-            onResize: onResizeStub,
-            onResizeEnd: onResizeEndStub
-        }).dxPopup('instance');
+        this.reinit({
+            onResizeStart: onResizeStartFired,
+            onResize: onResizeFired,
+            onResizeEnd: onResizeEndFired
+        });
 
-        const $content = instance.overlayContent();
-        const $handle = $content.find('.dx-resizable-handle-top');
-        const pointer = pointerMock($handle);
+        const pointer = pointerMock(this.$handle);
 
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
-        assert.ok(onResizeStartStub.calledOnce, 'onResizeStart fired');
-        assert.ok(onResizeStub.calledOnce, 'onResize fired');
-        assert.ok(onResizeEndStub.calledOnce, 'onResizeEnd fired');
+        assert.strictEqual(onResizeStartFired.callCount, 1, 'onResizeStart fired');
+        assert.strictEqual(onResizeStartFired.getCall(0).args.length, 1, 'event is passed');
+        checkExtraFields(onResizeStartFired.lastCall.args[0], 'dxdragstart');
+
+        assert.strictEqual(onResizeFired.callCount, 1, 'onResize fired');
+        assert.strictEqual(onResizeFired.getCall(0).args.length, 1, 'event is passed');
+        checkExtraFields(onResizeFired.lastCall.args[0], 'dxdrag');
+
+        assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
+        assert.strictEqual(onResizeEndFired.getCall(0).args.length, 1, 'event is passed');
+        checkExtraFields(onResizeEndFired.lastCall.args[0], 'dxdragend');
     });
 
     QUnit.test('resize event handlers should correctly added via "on" method', function(assert) {
@@ -1326,18 +2091,12 @@ QUnit.module('resize', {
         const onResizeStub = sinon.stub();
         const onResizeEndStub = sinon.stub();
 
-        const instance = $('#popup').dxPopup({
-            resizeEnabled: true
-        }).dxPopup('instance');
+        this.popup.on('resize', onResizeStub);
+        this.popup.on('resizeStart', onResizeStartStub);
+        this.popup.on('resizeEnd', onResizeEndStub);
+        this.popup.show();
 
-        instance.on('resize', onResizeStub);
-        instance.on('resizeStart', onResizeStartStub);
-        instance.on('resizeEnd', onResizeEndStub);
-        instance.show();
-
-        const $content = instance.overlayContent();
-        const $handle = $content.find('.dx-resizable-handle-top');
-        const pointer = pointerMock($handle);
+        const pointer = pointerMock(this.$handle);
 
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
@@ -1345,87 +2104,193 @@ QUnit.module('resize', {
         assert.ok(onResizeStub.calledOnce, 'onResize fired');
         assert.ok(onResizeEndStub.calledOnce, 'onResizeEnd fired');
     });
+
+    QUnit.test('popup should have correct resizable area if viewport and container is not specified', function(assert) {
+        try {
+            viewPort(null);
+
+            this.reinit({ width: 2, height: 2 });
+            const resizable = this.$overlayContent.dxResizable('instance');
+
+            assert.ok($.isWindow(resizable.option('area').get(0)), 'window is the area of the resizable');
+        } finally {
+            viewPort(toSelector(VIEWPORT_CLASS));
+        }
+    });
+
+    QUnit.module('popup should set resize area', {
+        beforeEach: function() {
+            this.$container = $('#container');
+            this.initialOptions = {
+                resizeEnabled: true,
+                visible: true,
+            };
+            this.reinit = (options) => {
+                this.init(options);
+
+                this.getResizableArea = () => this.popup._resizable.option('area');
+            };
+
+            this.reinit({});
+        }
+    }, () => {
+        QUnit.test('after dragAndResizeArea option set on init', function(assert) {
+            this.reinit({ dragAndResizeArea: this.$container });
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was configured');
+        });
+
+        QUnit.test('after container option set on init', function(assert) {
+            this.reinit({ container: this.$container });
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was configured');
+        });
+
+        QUnit.test('after dragAndResizeArea option runtime change', function(assert) {
+            this.popup.option('dragAndResizeArea', this.$container);
+
+            assert.equal(this.getResizableArea().get(0), this.$container.get(0), 'resize container was changed');
+        });
+
+        QUnit.test('after container option runtime change', function(assert) {
+            this.popup.option('container', this.$container);
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was changed');
+        });
+    });
+
+    QUnit.module('resizeObserver integration', {
+        beforeEach: function() {
+            this.timeToWaitResize = 50;
+        }
+    }, () => {
+        QUnit.testInActiveWindow('overlay content dimensions should be updated during resize', function(assert) {
+            const resizeOnOpeningDone = assert.async();
+            const resizeOnDraggingDone = assert.async();
+            const pointer = pointerMock(this.$handle);
+
+            setTimeout(() => {
+                pointer.start().dragStart().drag(10);
+                setTimeout(() => {
+                    assert.strictEqual(getWidth(this.$overlayContent), 208, 'width was changed before pointerdown');
+                    resizeOnDraggingDone();
+                }, this.timeToWaitResize);
+                resizeOnOpeningDone();
+            }, this.timeToWaitResize);
+        });
+    });
 });
 
-QUnit.module('drag popup by title', {
+QUnit.module('keyboard navigation', {
     beforeEach: function() {
-        fx.off = true;
-    },
-    afterEach: function() {
-        fx.off = false;
+        const initialOptions = {
+            animation: null,
+            focusStateEnabled: true,
+            dragEnabled: true,
+            visible: true,
+            width: 1,
+            height: 1,
+            position: { of: viewPort() },
+            visualContainer: viewPort()
+        };
+        this.init = (options) => {
+            this.element = $('#popup');
+            this.popup = this.element
+                .dxPopup($.extend({}, initialOptions, options))
+                .dxPopup('instance');
+            this.$overlayContent = this.popup.$content().parent();
+            this.position = this.$overlayContent.position();
+            this.keyboard = keyboardMock(this.$overlayContent);
+        };
     }
 }, () => {
-    QUnit.test('class should be added if drag is enabled', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            dragEnabled: true,
-            visible: true
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
+    QUnit.test('arrows handling', function(assert) {
+        this.init();
 
-        assert.ok($overlayContent.hasClass(POPUP_DRAGGABLE_CLASS), 'class was added');
+        const offset = 5;
 
-        popup.option('dragEnabled', false);
-        assert.ok(!$overlayContent.hasClass(POPUP_DRAGGABLE_CLASS), 'class was added');
+        this.keyboard.keyDown('left');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left - offset, 'popup position was change after pressing left arrow');
+        this.position = this.$overlayContent.position();
+
+        this.keyboard.keyDown('down');
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top + offset, 'popup position was change after pressing down arrow');
+        this.position = this.$overlayContent.position();
+
+        this.keyboard.keyDown('right');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left + offset, 'popup position was change after pressing right arrow');
+        this.position = this.$overlayContent.position();
+
+        this.keyboard.keyDown('up');
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top - offset, 'popup position was change after pressing up arrow');
     });
 
-    QUnit.test('popup should be dragged by title', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            dragEnabled: true,
-            visible: true
+    QUnit.test('popup should not be dragged when container size is less than overlay content size', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(14).width(14);
+        this.init({
+            height: 10,
+            width: 10,
+            container: $container,
+            position: { my: 'center center', at: 'center center', of: $container },
+            visualContainer: $container
         });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
-        const $title = $overlayContent.children(toSelector(POPUP_TITLE_CLASS));
-        const pointer = pointerMock($title);
-        const position = $overlayContent.position();
 
-        pointer.start().dragStart().drag(50, 50).dragEnd();
+        const $overlayContent = this.$overlayContent;
+        const keyboard = keyboardMock($overlayContent);
 
-        assert.deepEqual($overlayContent.position(), {
-            top: position.top + 50,
-            left: position.left + 50
-        }, 'popup was moved');
+        keyboard.keyDown('left');
+        assert.strictEqual($overlayContent.position().left, 0, 'popup should not be dragged left of target');
+
+        keyboard.keyDown('right');
+        assert.strictEqual($overlayContent.position().left, getWidth($container) - getOuterWidth($overlayContent), 'popup should not be dragged right of target');
+
+        keyboard.keyDown('up');
+        assert.strictEqual($overlayContent.position().top, 0, 'popup should not be dragged above the target');
+
+        keyboard.keyDown('down');
+        assert.strictEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 'popup should not be dragged below than target');
     });
 
-    QUnit.test('popup shouldn\'t be dragged by content', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            dragEnabled: true,
-            visible: true
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
-        const pointer = pointerMock(popup.$content());
-        const position = $overlayContent.position();
+    QUnit.test('arrows handling for rtl', function(assert) {
+        this.init({ rtlEnabled: true });
+        const offset = 5;
 
-        pointer.start().dragStart().drag(50, 50).dragEnd();
+        this.keyboard.keyDown('left');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left - offset, 'popup position was change after pressing left arrow');
+        this.position = this.$overlayContent.position();
 
-        assert.deepEqual($overlayContent.position(), {
-            top: position.top,
-            left: position.left
-        }, 'popup was not moved');
+        this.keyboard.keyDown('right');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left + offset, 'popup position was change after pressing right arrow');
     });
 
-    QUnit.test('popup should be dragged if title was changed', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            dragEnabled: true,
-            visible: true
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
-        const position = $overlayContent.position();
+    QUnit.test('arrows handling with dragEnabled = false', function(assert) {
+        this.init({ dragEnabled: false });
 
-        popup.option('title', 'newTitle');
+        this.keyboard.keyDown('left');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'popup position was not changed after pressing left arrow');
 
-        const $title = $overlayContent.children(toSelector(POPUP_TITLE_CLASS));
-        const pointer = pointerMock($title);
+        this.keyboard.keyDown('down');
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'popup position was not changed after pressing down arrow');
 
-        pointer.start().dragStart().drag(50, 50).dragEnd();
+        this.keyboard.keyDown('right');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'popup position was not changed after pressing right arrow');
 
-        assert.deepEqual($overlayContent.position(), {
-            top: position.top + 50,
-            left: position.left + 50
-        }, 'popup was moved');
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'popup position was not changed after pressing up arrow');
+    });
+
+    QUnit.test('arrows handling should not throw an error', function(assert) {
+        this.init({ dragEnabled: false, title: null, showTitle: false });
+        let isOk = true;
+        try {
+            this.keyboard.keyDown('left');
+            this.keyboard.keyDown('right');
+            this.keyboard.keyDown('up');
+            this.keyboard.keyDown('down');
+        } catch(e) {
+            isOk = false;
+        }
+
+        assert.ok(isOk, 'arrows handling should not throw an error');
     });
 });
 
@@ -1475,7 +2340,7 @@ QUnit.module('rendering', {
             opened: true
         });
 
-        const $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+        const $title = $(`.${POPUP_TITLE_CLASS}`, viewport());
 
         assert.equal($title.length, 1, 'title toolbar is rendered');
         assert.equal($title.find('.dx-toolbar-button').length, 1, 'button is rendered in title toolbar');
@@ -1496,12 +2361,12 @@ QUnit.module('rendering', {
 
 
     QUnit.test('dx-popup-fullscreen-width class should be attached when width is equal to screen width', function(assert) {
-        this.instance.option('width', function() { return $(window).width(); });
+        this.instance.option('width', function() { return getWidth($(window)); });
         this.instance.show();
-        assert.ok(this.instance.overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is attached');
+        assert.ok(this.instance.$overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is attached');
 
-        this.instance.option('width', function() { return $(window).width() - 1; });
-        assert.ok(!this.instance.overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is detached');
+        this.instance.option('width', function() { return getWidth($(window)) - 1; });
+        assert.ok(!this.instance.$overlayContent().hasClass('dx-popup-fullscreen-width'), 'fullscreen width class is detached');
     });
 
     QUnit.test('popup with toolbar should have compactMode option for the bottom toolbar', function(assert) {
@@ -1517,7 +2382,21 @@ QUnit.module('rendering', {
 
         popup.show();
 
-        assert.ok($('.' + POPUP_BOTTOM_CLASS).dxToolbarBase('instance').option('compactMode'), 'bottom toolbar has the compact option');
+        assert.ok($('.' + POPUP_BOTTOM_CLASS).dxToolbar('instance').option('compactMode'), 'bottom toolbar has the compact option');
+    });
+
+    QUnit.test('dx-popup-content-scrollable class should be attached when preventScrollEvents is used', function(assert) {
+        this.instance.show();
+
+        const $popupContent = this.instance.$content();
+
+        assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_SCROLLABLE_CLASS), true, 'scrollable class is attached');
+
+        this.instance.option('preventScrollEvents', true);
+        assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_SCROLLABLE_CLASS), false, 'scrollable class is detached');
+
+        this.instance.option('preventScrollEvents', false);
+        assert.strictEqual($popupContent.hasClass(POPUP_CONTENT_SCROLLABLE_CLASS), true, 'scrollable class is attached');
     });
 });
 
@@ -1540,7 +2419,7 @@ QUnit.module('templates', () => {
         const instance = $element.dxPopup('instance');
         const $popupContent = instance.$content().parent();
 
-        assert.equal($popupContent.find(toSelector('test-title-renderer')).length, 1, 'option \'titleTemplate\'  was set successfully');
+        assert.equal($popupContent.find(`.${'test-title-renderer'}`).length, 1, 'option \'titleTemplate\'  was set successfully');
 
         instance.option('onTitleRendered', function(e) {
             assert.equal(e.element, e.component.element(), 'element is correct');
@@ -1557,7 +2436,7 @@ QUnit.module('templates', () => {
             return result;
         });
 
-        assert.equal($popupContent.find(toSelector('changed-test-title-renderer')).length, 1, 'option \'titleTemplate\' successfully passed to the popup widget');
+        assert.equal($popupContent.find(`.${'changed-test-title-renderer'}`).length, 1, 'option \'titleTemplate\' successfully passed to the popup widget');
     });
 
     QUnit.test('titleRendered event should be fired if was set thought method', function(assert) {
@@ -1592,7 +2471,7 @@ QUnit.module('templates', () => {
         const instance = $element.dxPopup('instance');
         const $popupContent = instance.$content().parent();
 
-        assert.equal($popupContent.find(toSelector('test-bottom-renderer')).length, 1, 'option \'bottomTemplate\'  was set successfully');
+        assert.equal($popupContent.find('.test-bottom-renderer').length, 1, 'option \'bottomTemplate\'  was set successfully');
 
         instance.option('bottomTemplate', function(titleElement) {
             assert.equal($(titleElement).get(0), $popupContent.find('.' + POPUP_BOTTOM_CLASS).get(0));
@@ -1604,7 +2483,7 @@ QUnit.module('templates', () => {
             return result;
         });
 
-        assert.equal($popupContent.find(toSelector('changed-test-bottom-renderer')).length, 1, 'option \'bottomTemplate\' successfully passed to the popup widget');
+        assert.equal($popupContent.find('.changed-test-bottom-renderer').length, 1, 'option \'bottomTemplate\' successfully passed to the popup widget');
     });
 
     QUnit.test('title should be rendered if custom \'titleTemplate\' is specified and \'title\' is not set', function(assert) {
@@ -1615,7 +2494,7 @@ QUnit.module('templates', () => {
             showCloseButton: false
         });
 
-        const $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+        const $title = $(`.${POPUP_TITLE_CLASS}`, viewport());
         assert.equal($title.length, 1, 'title is rendered');
         assert.equal($title.text(), 'testTitle', 'title template is rendered correctly');
     });
@@ -1672,7 +2551,7 @@ QUnit.module('templates', () => {
             }
         }).dxPopup('instance');
 
-        const toolbarItemText = popup.$element().find('.dx-toolbar-item').text();
+        const toolbarItemText = popup.$overlayContent().find('.dx-toolbar-item').text();
         assert.strictEqual(toolbarItemText, text, 'Custom template rendered');
     });
 
@@ -1708,21 +2587,70 @@ QUnit.module('templates', () => {
             }
         }).dxPopup('instance');
 
-        const toolbarButtonText = popup.$element().find('.dx-popup-bottom .dx-button').text();
-        const toolbarTabTitleText = popup.$element().find('.dx-popup-bottom .dx-tab').text();
+        const toolbarButtonText = popup.$overlayContent().find('.dx-popup-bottom .dx-button').text();
+        const toolbarTabTitleText = popup.$overlayContent().find('.dx-popup-bottom .dx-tab').text();
 
         assert.strictEqual(toolbarButtonText, buttonText, 'default content template rendered');
         assert.strictEqual(toolbarTabTitleText, titleText, 'default title template rendered');
     });
 });
 
-QUnit.module('renderGeometry', () => {
+QUnit.module('renderGeometry', {
+    beforeEach: function() {
+        const initialOptions = {
+            visible: true,
+            resizeEnabled: false,
+        };
+        this.init = (options) => {
+            this.popup = $('#popup')
+                .dxPopup($.extend({}, initialOptions, options))
+                .dxPopup('instance');
+            this.renderGeometrySpy = sinon.spy(this.popup, '_renderGeometry');
+        };
+        this.reinit = (options) => {
+            this.renderGeometrySpy.restore();
+            this.init(options);
+        };
+
+        this.init();
+
+    }
+}, () => {
+    QUnit.test('toolBar should not update geometry after toolbarItems visibility option change', function(assert) {
+        this.popup.option('toolbarItems[0].visible', true);
+        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for visibility option');
+
+        this.popup.option('toolbarItems', [{
+            widget: 'dxButton',
+            options: { text: 'Supprimer', type: 'danger' }
+        }]);
+        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option fully change');
+
+        this.popup.option('toolbarItems[0]', {
+            widget: 'dxButton',
+            options: { text: 'Supprimer', type: 'danger' }
+        });
+
+        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option partial change');
+    });
+
+    QUnit.test('toolBar should not update geometry after partial update of its items', function(assert) {
+        this.reinit({
+            visible: true,
+            toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
+        });
+
+        this.popup.option('toolbarItems[0].options', { text: 'test', disabled: true });
+        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called on partial update of a widget');
+
+        this.popup.option('toolbarItems[0].toolbar', 'top');
+        assert.ok(this.renderGeometrySpy.calledOnce, 'renderGeometry is called on item location changing');
+    });
+
     QUnit.test('option change', function(assert) {
-        const instance = $('#popup').dxPopup({
-            visible: true
-        }).dxPopup('instance');
-        const options = instance.option();
+        const options = this.popup.option();
         const newOptions = {
+            resizeEnabled: true,
             fullScreen: !options.fullScreen,
             autoResizeEnabled: !options.autoResizeEnabled,
             showTitle: !options.showTitle,
@@ -1732,18 +2660,361 @@ QUnit.module('renderGeometry', () => {
             useDefaultToolbarButtons: !options.useDefaultToolbarButtons,
             useFlatToolbarButtons: !options.useFlatToolbarButtons
         };
-        const renderGeometrySpy = sinon.spy(instance, '_renderGeometry');
 
         for(const optionName in newOptions) {
-            const initialCallCount = renderGeometrySpy.callCount;
+            const initialCallCount = this.renderGeometrySpy.callCount;
 
-            instance.option(optionName, newOptions[optionName]);
+            this.popup.option(optionName, newOptions[optionName]);
 
-            const isDimensionChanged = !!renderGeometrySpy.lastCall.args[0];
-            assert.ok(initialCallCount < renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
-            assert.notOk(isDimensionChanged);
+            assert.ok(initialCallCount < this.renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
         }
+    });
 
-        instance.hide();
+    QUnit.test('dimension change should not reset content height to not restore inner scroll position (T1113123)', function(assert) {
+        const $scrollView = $('<div>');
+        $('#popup').dxPopup({
+            height: 'auto',
+            maxHeight: 200,
+            visible: true,
+            contentTemplate: () => $scrollView.append($('<div>').height(400))
+        });
+        const scrollView = $scrollView.dxScrollView({ height: '100%' }).dxScrollView('instance');
+        const scrollTop = 100;
+
+        scrollView.scrollTo(scrollTop);
+
+        resizeCallbacks.fire();
+
+        assert.strictEqual(scrollView.scrollTop(), scrollTop, 'content scroll position is not reset');
+    });
+});
+
+QUnit.module('positioning', {
+    beforeEach: function() {
+        const initialOptions = {
+            width: 100,
+            height: 100,
+            visible: true,
+            animation: null,
+            position: { my: 'top left', at: 'center', of: window }
+        };
+
+        this.init = (options = {}) => {
+            this.$popup = $('#popup').dxPopup($.extend({}, initialOptions, options));
+            this.popup = this.$popup.dxPopup('instance');
+
+            this.$overlayContent = this.popup.$overlayContent();
+            this.getPosition = () => this.$overlayContent.position();
+        };
+        this.reinit = (options) => {
+            this.popup.dispose();
+            this.init(options);
+        };
+
+        this.init();
+    }
+}, () => {
+    QUnit.module('after fullScreen option change', () => {
+        QUnit.test('popup should render on initial position if it is first render', function(assert) {
+            const $target = $('#container');
+            this.reinit({
+                fullScreen: true,
+                visible: false,
+                position: {
+                    my: 'top left',
+                    at: 'top left',
+                    of: $target
+                },
+                visualContainer: $target,
+                restorePosition: false
+            });
+            this.popup.option('fullScreen', false);
+
+            this.popup.show();
+
+            const visualPosition = this.getPosition();
+            const expectedPosition = $target.position();
+
+            assert.deepEqual(visualPosition, expectedPosition, 'position is correct');
+        });
+
+        QUnit.test('popup should not restore position after fullScreen disable', function(assert) {
+            const visualPositionBeforeFullScreen = this.getPosition();
+
+            this.popup.option('fullScreen', true);
+            this.popup.option('position', { of: '#container' });
+            this.popup.option('fullScreen', false);
+
+            const visualPositionAfterFullScreen = this.getPosition();
+            assert.deepEqual(visualPositionAfterFullScreen, visualPositionBeforeFullScreen, 'visual position was not changed');
+        });
+
+        QUnit.test('popup should not restore position on rerender after fullScreen changed to false', function(assert) {
+            const visualPositionBeforeFullScreen = this.getPosition();
+
+            this.popup.option('fullScreen', true);
+            this.popup.option('position', { of: '#container' });
+            this.popup.option('fullScreen', false);
+
+            this.popup.option('height', 'auto');
+            const visualPositionAfterFullScreen = this.getPosition();
+
+            assert.deepEqual(visualPositionAfterFullScreen, visualPositionBeforeFullScreen, 'visual position was not changed');
+        });
+
+        QUnit.test('fullScreen option change to true should trigger visualPositionChanged event', function(assert) {
+            const visualPositionChangedHandlerStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedHandlerStub);
+
+            this.popup.option('fullScreen', true);
+
+            assert.ok(visualPositionChangedHandlerStub.calledOnce, 'visualPositionChanged event is raised');
+            assert.deepEqual(visualPositionChangedHandlerStub.getCall(0).args[0].position, { top: 0, left: 0 }, 'parameter is correct');
+        });
+    });
+
+    QUnit.module('drag and resize', {
+        beforeEach: function() {
+            const baseInit = this.init;
+            const initialOptions = {
+                dragEnabled: true,
+                resizeEnabled: true,
+                dragAndResizeArea: window,
+            };
+            this.init = (options = {}) => {
+                baseInit($.extend(initialOptions, options));
+                this.$title = this.$overlayContent.children(`.${POPUP_TITLE_CLASS}`);
+                this.$resizeHandle = this.$overlayContent.find(`.${POPUP_TOP_LEFT_RESIZE_HANDLE_CLASS}`);
+
+                this.dragPointer = pointerMock(this.$title);
+                this.resizePointer = pointerMock(this.$resizeHandle);
+
+                this.getPosition = () => this.$overlayContent.position();
+                this.drag = () => { this.dragPointer.start().down().move(100, 100).up(); };
+                this.resize = () => { this.resizePointer.start().down().move(-100, -100).up(); };
+            };
+
+            this.init();
+        }
+    }, () => {
+        QUnit.test('popup should not restore position on rerender after fullScreen changed to false', function(assert) {
+            this.popup.option('fullScreen', true);
+            this.popup.option('fullScreen', false);
+            this.drag();
+
+            const expectedPosition = this.getPosition();
+            this.popup.option('height', 'auto');
+
+            const position = this.getPosition();
+            assert.deepEqual(position, expectedPosition, 'visual position was not changed');
+        });
+
+        QUnit.test('dragEnd should trigger positioned event with correct parameters', function(assert) {
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
+
+            this.drag();
+            const { left, top } = this.getPosition();
+
+            assert.ok(visualPositionChangedStub.calledOnce, 'visualPositionChanged event was raised');
+
+            const args = visualPositionChangedStub.getCall(0).args[0];
+            assert.deepEqual(args.position, { top, left }, 'position parameter is correct');
+            assert.strictEqual(args.event.type, 'dxdragend', 'event parameter is correct');
+        });
+
+        QUnit.test('drag using kbn should raise visualPositionChanged event with correct parameters', function(assert) {
+            const isDesktop = devices.real().deviceType === 'desktop';
+            if(!isDesktop) {
+                assert.ok(true, 'test is actual only for desktop');
+                return;
+            }
+
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
+
+            this.keyboard = keyboardMock(this.$overlayContent);
+            this.keyboard.press('down');
+            const { left, top } = this.getPosition();
+
+            assert.ok(visualPositionChangedStub.calledOnce, 'visualPositionChanged event was raised');
+
+            const args = visualPositionChangedStub.getCall(0).args[0];
+            assert.deepEqual(args.position, { top, left }, 'position parameter is correct');
+            assert.strictEqual(args.event.type, 'keydown', 'event parameter is correct');
+        });
+
+        QUnit.test('resizeEnd should trigger visualPositionChanged event with correct parameters', function(assert) {
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
+
+            this.resize();
+            const { left, top } = this.getPosition();
+
+            assert.ok(visualPositionChangedStub.calledOnce, 'visualPositionChanged event was raised');
+
+            const args = visualPositionChangedStub.getCall(0).args[0];
+            assert.deepEqual(args.position, { top, left }, 'position parameter is correct');
+            assert.strictEqual(args.event.type, 'dxdragend', 'event parameter type is correct');
+            assert.strictEqual(args.event.target, this.$resizeHandle.get(0), 'event parameter target is correct');
+        });
+
+        QUnit.test('fullScrren change after drag should trigger visualPositionChanged event with correct parameters', function(assert) {
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
+
+            this.drag();
+            const { left, top } = this.getPosition();
+
+            this.popup.option('fullScreen', true);
+            assert.deepEqual(visualPositionChangedStub.getCall(1).args[0].position, { top: 0, left: 0 }, 'position parameter is correct after change to true');
+
+            this.popup.option('fullScreen', false);
+            assert.deepEqual(visualPositionChangedStub.getCall(2).args[0].position, { top, left }, 'position parameter is correct after change to false');
+        });
+
+        QUnit.test('position change should not trigger visualPositionChanged event if fullScreen=true', function(assert) {
+            this.popup.option('fullScreen', true);
+
+            const visualPositionChangedStub = sinon.stub();
+            this.popup.on('visualPositionChanged', visualPositionChangedStub);
+
+            this.popup.option('position', { of: '#container' });
+            assert.ok(visualPositionChangedStub.notCalled, 'visualPositionChanged event is not called');
+        });
+
+        QUnit.test('restorePosition option runtime change', function(assert) {
+            this.popup.option('restorePosition', false);
+
+            this.drag();
+            const expectedPosition = this.getPosition();
+
+            this.popup.hide();
+            this.popup.show();
+
+            const newPosition = this.getPosition();
+            assert.deepEqual(newPosition, expectedPosition, 'position is not restored after runtime change to false');
+        });
+
+        QUnit.module('position after', () => {
+            QUnit.test('resize should not be restored to initial', function(assert) {
+                const position = this.getPosition();
+
+                this.resize();
+
+                const newPosition = this.getPosition();
+                assert.strictEqual(newPosition.left, position.left - 100, 'left coordinate is correct');
+                assert.strictEqual(newPosition.top, position.top - 100, 'top coordinate is correct');
+            });
+
+            ['drag', 'resize'].forEach(moveMethodName => {
+                QUnit.module(moveMethodName, () => {
+                    QUnit.test('should not be changed after fullScreen is enabled and disabled', function(assert) {
+                        this[moveMethodName]();
+                        const position = this.getPosition();
+
+                        this.popup.option('fullScreen', true);
+                        this.popup.option('fullScreen', false);
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                    });
+
+                    QUnit.test('should not be changed after width or height change', function(assert) {
+                        this[moveMethodName]();
+                        const position = this.getPosition();
+
+                        this.popup.option('width', 200);
+                        this.popup.option('height', 200);
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                    });
+
+                    QUnit.test('should not be changed after content dimension change', function(assert) {
+                        const done = assert.async();
+
+                        this.popup.option({
+                            width: 'auto',
+                            height: 'auto',
+                            contentTemplate: () => {
+                                return $('<div>')
+                                    .attr('id', 'content')
+                                    .width(100)
+                                    .height(100);
+                            }
+                        });
+
+                        this[moveMethodName]();
+                        const position = this.getPosition();
+
+                        $('#content')
+                            .width(300)
+                            .height(300);
+
+                        setTimeout(() => {
+                            const newPosition = this.getPosition();
+                            assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                            assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+
+                            done();
+                        }, 250);
+                    });
+
+                    QUnit.test('should be restored to position from option after repaint', function(assert) {
+                        const position = this.getPosition();
+
+                        this[moveMethodName]();
+
+                        this.popup.repaint();
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                    });
+
+                    QUnit.test('should be change after position option change', function(assert) {
+                        const position = this.getPosition();
+
+                        this[moveMethodName]();
+
+                        this.popup.option('position.offset', '100 100');
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, position.left + 100, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, position.top + 100, 'top coordinate is correct');
+                    });
+
+                    QUnit.test('should be restored to position from option after reopening', function(assert) {
+                        const position = this.getPosition();
+
+                        this[moveMethodName]();
+
+                        this.popup.hide();
+                        this.popup.show();
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+                    });
+
+                    QUnit.test('should not be restored to position from option after reopening if restorePosition=false', function(assert) {
+                        this.reinit({ restorePosition: false });
+
+                        this[moveMethodName]();
+
+                        const visualPosition = this.getPosition();
+                        this.popup.hide();
+                        this.popup.show();
+
+                        const newPosition = this.getPosition();
+                        assert.strictEqual(newPosition.left, visualPosition.left, 'left coordinate is correct');
+                        assert.strictEqual(newPosition.top, visualPosition.top, 'top coordinate is correct');
+                    });
+                });
+            });
+        });
     });
 });

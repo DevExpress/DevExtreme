@@ -10,11 +10,11 @@ import dblclickEvent from 'events/dblclick';
 import TreeView from 'ui/tree_view';
 import eventsEngine from 'events/core/events_engine';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import LoadIndicator from 'ui/load_indicator';
 
 const { module, test, assert } = QUnit;
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const NODE_LOAD_INDICATOR_CLASS = 'dx-treeview-node-loadindicator';
@@ -197,6 +197,20 @@ QUnit.test('Remove toggle icon after expand childless item', function(assert) {
 
     const $icons = this.$element.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
     assert.equal($icons.length, 2);
+});
+
+QUnit.test('No custom expander icons should be visible after expand childless item', function(assert) {
+    const treeView = new TreeView(this.$element, {
+        dataSource: $.extend(true, [], data2),
+        dataStructure: 'plain',
+        expandIcon: 'add',
+        collapseIcon: 'minus',
+        virtualModeEnabled: true
+    });
+
+    treeView.expandItem(16);
+
+    assert.notOk($(`.${internals.CUSTOM_COLLAPSE_ICON_CLASS}`).eq(2).is(':visible'));
 });
 
 QUnit.test('Remove loadindicator after expand childless item', function(assert) {
@@ -577,7 +591,7 @@ QUnit.test('\'Expanded aria\' attr should be added when all items were rendered'
 
     let $firstNode = this.$element.find('.dx-treeview-node').first();
 
-    assert.strictEqual($firstNode.attr('aria-expanded'), 'false');
+    assert.strictEqual($firstNode.attr('aria-expanded'), undefined);
 
     this.clock.tick(300);
 
@@ -597,7 +611,7 @@ QUnit.test('\'Expanded aria\' attr should not be added when item does not contai
     this.clock.tick(300);
 
     const $firstNode = this.$element.find('.dx-treeview-node').first();
-    assert.strictEqual($firstNode.attr('aria-expanded'), 'false');
+    assert.strictEqual($firstNode.attr('aria-expanded'), undefined);
 });
 
 QUnit.test('Expanded event should be fired when item contain children', function(assert) {
@@ -1226,6 +1240,29 @@ QUnit.test('widget should support resolving promise if it is returned from the c
     assert.deepEqual(treeView.option('items'), [item], 'nodes were added after deferred is resolved');
 });
 
+QUnit.test('expandItem promise should be resolved if return value is empty array (T1114997)', function(assert) {
+    const done = assert.async();
+    assert.expect(1);
+
+    const treeView = $('#treeView').dxTreeView({
+        dataStructure: 'plain',
+        displayExpr: 'name',
+        createChildren: (parent) => {
+            if(!parent) {
+                return [{ id: 1, name: 'root item', expanded: false }];
+            }
+
+            return [];
+        }
+    }).dxTreeView('instance');
+
+    treeView.expandItem(1).then(() => {
+        assert.ok(true, 'promise was resolved');
+
+        done();
+    });
+});
+
 QUnit.test('load indicator should be rendered on node expansion if the \'createChildren\' callback is specified', function(assert) {
     const $treeView = $('#treeView').dxTreeView({
         dataStructure: 'plain',
@@ -1243,6 +1280,34 @@ QUnit.test('load indicator should be rendered on node expansion if the \'createC
 
     deferred.resolve([{ id: 2, text: 'Two', parentId: 1 }]);
     assert.ok($treeView.find('.dx-treeview-node-loadindicator').is(':hidden'), 'load indicator is removed after data is fetched');
+});
+
+QUnit.test('should not fire any errors after promise was resolved on demand (T1114072)', function(assert) {
+    const treeView = $('#treeView').dxTreeView({
+        dataStructure: 'plain',
+        items: [{ id: 1, text: 'One' }],
+        expandNodesRecursive: false,
+    }).dxTreeView('instance');
+
+    const deferred = $.Deferred();
+
+    treeView.option('createChildren', function() {
+        return deferred.promise();
+    });
+
+    treeView.expandItem(1);
+
+    try {
+        const stub = sinon.stub(LoadIndicator, 'getInstance', () => {
+            stub.restore();
+            return undefined;
+        });
+        deferred.resolve([{ id: 2, text: 'Two', parentId: 1 }]);
+    } catch(e) {
+        assert.notOk(true, `Error has been raised: ${e}`);
+    } finally {
+        assert.ok(true);
+    }
 });
 
 QUnit.test('fetched nodes should be rendered after asynchronous load via \'createChildren\' is finished', function(assert) {

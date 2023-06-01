@@ -1,10 +1,11 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
-import TextBox from '../text_box';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
+import { stubComponent } from '../../core/utils/stubs';
 
+let EditorClass = stubComponent('TextBox');
 
 export default {
     _getDefaultOptions: function() {
@@ -46,7 +47,7 @@ export default {
         } else {
             $element.addClass(rootElementClassName);
             this._$searchEditorElement = $('<div>').addClass(searchBoxClassName).prependTo($element);
-            this._searchEditor = this._createComponent(this._$searchEditorElement, TextBox, editorOptions);
+            this._searchEditor = this._createComponent(this._$searchEditorElement, EditorClass, editorOptions);
         }
     },
 
@@ -94,7 +95,7 @@ export default {
         if(this.option('searchEnabled')) {
             return this._itemContainer(true);
         }
-        return this.$element();
+        return this.callBase();
     },
 
     _focusTarget: function() {
@@ -116,19 +117,10 @@ export default {
         return searchMode === 'equals' ? '=' : searchMode;
     },
 
-    _cleanAria: function($target) {
-        this.setAria({
-            'role': null,
-            'activedescendant': null
-        }, $target);
-        $target.attr('tabIndex', null);
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case 'searchEnabled':
             case 'searchEditorOptions':
-                this._cleanAria(this.option('searchEnabled') ? this.$element() : this._itemContainer());
                 this._invalidate();
                 break;
             case 'searchExpr':
@@ -161,11 +153,31 @@ export default {
         this.callBase();
     },
 
+    _cleanAria: function() {
+        const $element = this.$element();
+
+        this.setAria({
+            'role': null,
+            'activedescendant': null
+        }, $element);
+
+        $element.attr('tabIndex', null);
+    },
+
+    _clean() {
+        this.callBase();
+        this._cleanAria();
+    },
+
     _refresh: function() {
         if(this._valueChangeDeferred) {
             this._valueChangeDeferred.resolve();
         }
 
         this.callBase();
+    },
+
+    setEditorClass: function(value) {
+        EditorClass = value;
     }
 };

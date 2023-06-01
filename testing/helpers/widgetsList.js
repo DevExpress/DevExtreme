@@ -14,6 +14,7 @@ const widgetsList = {
     ContextMenu: require('ui/context_menu'),
     DataGrid: require('ui/data_grid'),
     DateBox: require('ui/date_box'),
+    DateRangeBox: require('ui/date_range_box'),
     DeferRendering: require('ui/defer_rendering'),
     Drawer: require('ui/drawer'),
     DropDownBox: require('ui/drop_down_box'),
@@ -33,7 +34,6 @@ const widgetsList = {
     Map: require('ui/map'),
     Menu: require('ui/menu'),
     MultiView: require('ui/multi_view'),
-    NavBar: require('ui/nav_bar'),
     NumberBox: require('ui/number_box'),
     PieChart: require('viz/pie_chart'),
     PivotGrid: require('ui/pivot_grid'),
@@ -51,8 +51,6 @@ const widgetsList = {
     Scheduler: require('ui/scheduler'),
     ScrollView: require('ui/scroll_view'),
     SelectBox: require('ui/select_box'),
-    SlideOut: require('ui/slide_out'),
-    SlideOutView: require('ui/slide_out_view'),
     Slider: require('ui/slider'),
     Sparkline: require('viz/sparkline'),
     Switch: require('ui/switch'),
@@ -73,4 +71,18 @@ const widgetsList = {
     VectorMap: require('viz/vector_map')
 };
 
+const dropDownEditorsList = {
+    dxAutocomplete: require('ui/autocomplete'),
+    dxColorBox: require('ui/color_box'),
+    dxDateBox: require('ui/date_box'),
+    dxDateRangeBox: require('ui/date_range_box'),
+    dxDropDownBox: require('ui/drop_down_box'),
+    dxDropDownButton: require('ui/drop_down_button'),
+    dxSelectBox: require('ui/select_box'),
+    dxTagBox: require('ui/tag_box'),
+    dxDropDownEditor: require('ui/drop_down_editor/ui.drop_down_editor.js'),
+    dxDropDownList: require('ui/drop_down_editor/ui.drop_down_list.js'),
+};
+
 exports.widgetsList = widgetsList;
+exports.dropDownEditorsList = dropDownEditorsList;

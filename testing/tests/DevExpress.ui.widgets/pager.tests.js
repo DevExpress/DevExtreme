@@ -1,16 +1,19 @@
+import { setWidth, getWidth, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
-import 'common.css!';
 import 'generic_light.css!';
 import Pager from 'ui/pager';
+import localization from 'localization';
 
 const PAGER_LIGHT_MODE_WIDTH = 200;
 
 QUnit.testStart(function() {
     const markup = '<div id="container"></div>';
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 function getText(element) {
@@ -49,7 +52,7 @@ QUnit.module('Pager', {
 function() {
     const isRenovation = !!Pager.IS_RENOVATED_WIDGET;
     const getPagesElement = function(rootElement) {
-        return rootElement.find('.dx-pages')[0].childNodes;
+        return rootElement.find(isRenovation ? '.dx-page-indexes' : '.dx-pages')[0].childNodes;
     };
     QUnit.test('Default options init', function(assert) {
         const $pager = $('#container').dxPager();
@@ -93,7 +96,7 @@ function() {
         assert.equal($pageSizeButton.attr('role'), 'button', 'Page size element has correct role');
         assert.equal($pageNumberButton.attr('role'), 'button', 'Page number element has correct role');
 
-        assert.equal($pageSizeButton.attr('aria-label'), 'Display 5 items on page', 'Page size element has correct aria-label');
+        assert.equal($pageSizeButton.attr('aria-label'), 'Items per page: 5', 'Page size element has correct aria-label');
         assert.equal($pageNumberButton.attr('aria-label'), 'Page 3', 'Page number element has correct aria-label');
     });
 
@@ -584,6 +587,32 @@ function() {
         assert.equal(instance._pages[1].value(), 2, 'second page value');
     });
 
+    // T966318
+    QUnit.test('Pager does not display duplicated page numbers', function(assert) {
+        const $pager = $('#container').dxPager({
+            pageSizes: [10, 20, 50],
+            pageSize: 50,
+            pageCount: 2000,
+        });
+        const instance = $pager.dxPager('instance');
+        instance.option('pageIndex', 1999);
+
+        instance.option('pageCount', 10000);
+        instance.option('pageSize', 10);
+
+        instance.option('pageCount', 2000);
+        instance.option('pageSize', 50);
+        const pageCount = instance._pages.length;
+        if(!isRenovation) {
+            assert.equal(pageCount, 5, 'length 5');
+        } else {
+            assert.equal(pageCount, 6, 'length 6');
+        }
+        assert.equal(instance.selectedPage.index, pageCount - 2, 'index selected page');
+        assert.equal(instance._pages[pageCount - 2].value(), 1999, 'second last page value');
+        assert.equal(instance._pages[pageCount - 1].value(), 2000, 'lastpage page value');
+    });
+
     QUnit.test('Selected page is not reset_B237051', function(assert) {
         const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 15, pageIndex: 1 });
         const instance = $pager.dxPager('instance');
@@ -659,7 +688,7 @@ function() {
 
     QUnit.test('Focus selected page', function(assert) {
         const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true });
-        const $pages = $pager.find('.dx-pages > .dx-page');
+        const $pages = $pager.find('.dx-pages .dx-page');
 
         for(let i = 0; i < $pages.length; ++i) {
             assert.equal($($pages[i]).attr('tabindex'), 0, 'page tabindex');
@@ -1232,7 +1261,7 @@ function() {
     });
 
     QUnit.test('Apply light mode when width equal optimal pager\'s width', function(assert) {
-        const $pager = $('#container').dxPager({
+        const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
             pageSizes: [5, 10, 20],
@@ -1245,12 +1274,39 @@ function() {
 
         const pager = $pager.dxPager('instance');
 
-        const optimalPagerWidth = pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() - pager._pages[pager._pages.length - 1]._$page.width();
+        const optimalPagerWidth = getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) - getWidth(pager._pages[pager._pages.length - 1]._$page);
 
-        $('#container').width(optimalPagerWidth - pager._$info.outerWidth(true) - 1);
+        $pager.width(optimalPagerWidth - getOuterWidth(pager._$info, true) - 1);
+
         pager._dimensionChanged();
-
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
+    });
+
+    // T962160
+    QUnit.test('Show info after pagesizes change', function(assert) {
+        const $pager = $('#container').width(1000).dxPager({
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 200,
+            infoText: 'Page {0} of {1} ({2} items)',
+        });
+
+        const pager = $pager.dxPager('instance');
+
+        const optimalPagerWidth = getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) + 20;
+        $pager.width(optimalPagerWidth);
+        pager._dimensionChanged();
+        assert.ok(pager._$info.length === 1 && pager._$info.css('display') !== 'none', 'info element is visible');
+
+        $(pager._pages[4]._$page).trigger('dxclick');
+        pager._dimensionChanged();
+        assert.ok(pager._$info.length === 0 || pager._$info.css('display') === 'none', 'info element is hidden');
+
+        $(pager._pages[0]._$page).trigger('dxclick');
+        pager._dimensionChanged();
+        assert.ok(pager._$info.length === 1 && pager._$info.css('display') !== 'none', 'info element is visible');
     });
 
     QUnit.test('Apply light mode when pager is first rendered', function(assert) {
@@ -1269,27 +1325,26 @@ function() {
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
     });
 
-    if(!isRenovation) {
-        QUnit.test('Pager is rendered in a normal view after light mode when pageCount is changed', function(assert) {
-            const $pager = $('#container').width(460).dxPager({
-                maxPagesCount: 10,
-                pageCount: 5,
-                pageSize: 8,
-                pageSizes: [5, 8, 15, 30],
-                showInfo: true,
-                totalCount: 40,
-                infoText: 'Page {0} of {1} ({2} items)',
-                pagesCountText: 'of',
-                showNavigationButtons: true
-            });
-            const pager = $pager.dxPager('instance');
-
-            pager.option({ pageCount: 10, pageIndexChanged: commonUtils.noop });
-            pager.option({ pageCount: 5, pageIndexChanged: commonUtils.noop });
-
-            assert.ok(!isLightMode(pager), 'pager is not displayed in the light mode');
+    QUnit.test('Pager is rendered in a normal view after light mode when pageCount is changed', function(assert) {
+        const $pager = $('#container').width(460).dxPager({
+            maxPagesCount: 10,
+            pageCount: 5,
+            pageSize: 8,
+            pageSizes: [5, 8, 15, 30],
+            showInfo: true,
+            totalCount: 40,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of',
+            showNavigationButtons: true
         });
-    }
+        const pager = $pager.dxPager('instance');
+
+        pager.option({ pageCount: 10, pageIndexChanged: commonUtils.noop });
+        pager.option({ pageCount: 5, pageIndexChanged: commonUtils.noop });
+
+        assert.strictEqual(isLightMode(pager), isRenovation, `pager is ${isRenovation ? '' : 'not'} displayed in the light mode for pager`);
+    });
+
     QUnit.test('Light mode is applied only one', function(assert) {
         const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
@@ -1407,7 +1462,7 @@ function() {
         });
         const pager = $pager.dxPager('instance');
 
-        $pager.width(pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() - 50);
+        $pager.width(getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) - 50);
         pager._dimensionChanged();
 
         assert.ok(!isLightMode(pager), 'lightModeEnabled');
@@ -1425,12 +1480,18 @@ function() {
             pagesCountText: 'of'
         });
         const pager = $pager.dxPager('instance');
-        const infoWidth = pager._$info.width();
+        const infoWidth = getWidth(pager._$info);
 
-        $pager.width(pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() - 50);
+        setWidth(
+            $pager,
+            getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) - 50
+        );
         pager._dimensionChanged();
 
-        $pager.width(pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() + infoWidth + 50);
+        setWidth(
+            $pager,
+            getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) + infoWidth + 50
+        );
         pager._dimensionChanged();
 
         assert.ok(!isLightMode(pager), 'lightModeEnabled');
@@ -1547,17 +1608,70 @@ function() {
 
         rtlTestSample = {
             pageSizes: pagerElement.find('.dx-page-size').text(),
-            pages: $(pagerElement.find('.dx-pages div').get().reverse()).text()
+            pages: $(Array.prototype.slice.call(getPagesElement(pagerElement)).reverse()).text()
         };
 
         pagerInstance.option('rtlEnabled', false);
 
         ltrTestSample = {
             pageSizes: pagerElement.find('.dx-page-size').text(),
-            pages: pagerElement.find('.dx-pages div').text()
+            pages: $(getPagesElement(pagerElement)).text()
         };
 
         assert.equal(rtlTestSample.pageSizes, ltrTestSample.pageSizes, 'check that page sizes in LTR are equal to page sizes in RTL');
         assert.equal(rtlTestSample.pages, ltrTestSample.pages, 'check that pages in LTR are equal to reversed pages in RTL');
+    });
+
+    QUnit.test('dxPager has locale appropriate aria-labels (T1102800)(T1104028)', function(assert) {
+        const locale = localization.locale();
+        const dictionary = {
+            'en': {
+                'dxPager-pageSize': 'test Items per page: {0}',
+                'dxPager-pageSizesAllText': 'test All',
+                'dxPager-page': 'test Page {0}',
+                'dxPager-prevPage': 'test Previous Page',
+                'dxPager-nextPage': 'test Next Page',
+            },
+            'fr': {
+                'dxPager-pageSize': 'test Nombre d\'éléments par page: {0}',
+                'dxPager-pageSizesAllText': 'test Tous',
+                'dxPager-page': 'test Page {0}',
+                'dxPager-prevPage': 'test Page précédente',
+                'dxPager-nextPage': 'test Page suivante',
+            }
+        };
+        localization.loadMessages(dictionary);
+        localization.locale('en');
+
+        const pagerElement = $('#container').dxPager({
+            pageSizes: ['all'],
+            showNavigationButtons: true,
+            showInfo: true
+        });
+
+        let pageSize = pagerElement.find('.dx-page-size');
+        let buttonNext = pagerElement.find('.dx-next-button');
+        let buttonPrev = pagerElement.find('.dx-prev-button');
+        let page = pagerElement.find('.dx-page');
+
+        assert.equal(pageSize.attr('aria-label'), dictionary['en']['dxPager-pageSize'].replace('{0}', dictionary['en']['dxPager-pageSizesAllText']), 'correct aria-label for page size on initial render');
+        assert.equal(page.attr('aria-label'), dictionary['en']['dxPager-page'].replace('{0}', '1'), 'correct aria-label for page on initial render');
+        assert.equal(buttonNext.attr('aria-label'), dictionary['en']['dxPager-nextPage'], 'correct aria-label for next page on initial render');
+        assert.equal(buttonPrev.attr('aria-label'), dictionary['en']['dxPager-prevPage'], 'correct aria-label for prev page on initial render');
+
+        localization.locale('fr');
+        pagerElement.dxPager('instance').repaint();
+
+        pageSize = pagerElement.find('.dx-page-size');
+        buttonNext = pagerElement.find('.dx-next-button');
+        buttonPrev = pagerElement.find('.dx-prev-button');
+        page = pagerElement.find('.dx-page');
+
+        assert.equal(pageSize.attr('aria-label'), dictionary['fr']['dxPager-pageSize'].replace('{0}', dictionary['fr']['dxPager-pageSizesAllText']), 'correct aria-label for page size on locale change');
+        assert.equal(page.attr('aria-label'), dictionary['fr']['dxPager-page'].replace('{0}', '1'), 'correct aria-label for page on locale change');
+        assert.equal(buttonNext.attr('aria-label'), dictionary['fr']['dxPager-nextPage'], 'correct aria-label for next page on locale change');
+        assert.equal(buttonPrev.attr('aria-label'), dictionary['fr']['dxPager-prevPage'], 'correct aria-label for prev page on locale change');
+
+        localization.locale(locale);
     });
 });

@@ -1,4 +1,2 @@
-import gridCore from './ui.data_grid.core';
-import editorFactoryModule from '../grid_core/ui.grid_core.editor_factory';
-
-gridCore.registerModule('editorFactory', editorFactoryModule);
+// deprecated
+export * from '../../__internal/grids/data_grid/module_not_extended/editor_factory';

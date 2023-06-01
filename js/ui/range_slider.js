@@ -1,3 +1,4 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import Slider from './slider';
@@ -157,7 +158,7 @@ const RangeSlider = Slider.inherit({
     _startHandler: function(args) {
         const e = args.event;
         const $range = this._$range;
-        const rangeWidth = $range.width();
+        const rangeWidth = getWidth($range);
         const eventOffsetX = eventData(e).x - this._$bar.offset().left;
         const startHandleX = $range.position().left;
         const endHandleX = $range.position().left + rangeWidth;
@@ -194,8 +195,8 @@ const RangeSlider = Slider.inherit({
 
         this._changeValueOnSwipe(newRatio);
 
-        const startValue = this.option('start');
-        const endValue = this.option('end');
+        const [startValue, endValue] = this._getActualValue();
+
         let $nextHandle;
 
         if(startValue === endValue) {
@@ -235,8 +236,7 @@ const RangeSlider = Slider.inherit({
 
     _setValueOnSwipe: function(value) {
         const option = this._capturedHandle === this._$handleStart ? 'start' : 'end';
-        let start = this.option('start');
-        let end = this.option('end');
+        let [start, end] = this._getActualValue();
         const max = this.option('max');
         const min = this.option('min');
 
@@ -249,12 +249,17 @@ const RangeSlider = Slider.inherit({
             end = value < start ? start : value;
         }
 
-        this.option('value', [start, end]);
+
+        if(this.option('valueChangeMode') === 'onHandleMove') {
+            this.option('value', [start, end]);
+        } else {
+            this._actualValue = [start, end];
+            this._renderValue();
+        }
     },
 
     _renderValue: function() {
-        let valStart = this.option('start');
-        let valEnd = this.option('end');
+        let [valStart, valEnd] = this._getActualValue();
         const min = this.option('min');
         const max = this.option('max');
         const rtlEnabled = this.option('rtlEnabled');
@@ -262,9 +267,12 @@ const RangeSlider = Slider.inherit({
         valStart = Math.max(min, Math.min(valStart, max));
         valEnd = Math.max(valStart, Math.min(valEnd, max));
 
-        this._setOptionWithoutOptionChange('start', valStart);
-        this._setOptionWithoutOptionChange('end', valEnd);
-        this._setOptionWithoutOptionChange('value', [valStart, valEnd]);
+        if(this.option('valueChangeMode') === 'onHandleMove') {
+            this._setOptionWithoutOptionChange('start', valStart);
+            this._setOptionWithoutOptionChange('end', valEnd);
+            this._setOptionWithoutOptionChange('value', [valStart, valEnd]);
+        }
+
 
         this._$submitStartElement.val(applyServerDecimalSeparator(valStart));
         this._$submitEndElement.val(applyServerDecimalSeparator(valEnd));
@@ -317,7 +325,8 @@ const RangeSlider = Slider.inherit({
                     start: start,
                     end: end,
                     value: [start, end],
-                    event: this._valueChangeEventInstance
+                    event: this._valueChangeEventInstance,
+                    previousValue: args.previousValue
                 });
 
                 this.validationRequest.fire({

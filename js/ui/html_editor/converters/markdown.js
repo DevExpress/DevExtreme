@@ -1,6 +1,6 @@
 
 import TurnDown from 'turndown';
-import ShowDown from 'showdown';
+import ShowDown from 'devextreme-showdown';
 
 import { getWindow } from '../../../core/utils/window';
 import Errors from '../../widget/ui.errors';
@@ -17,7 +17,7 @@ class MarkdownConverter {
         }
 
         if(!showdown) {
-            throw Errors.Error('E1041', 'Showdown');
+            throw Errors.Error('E1041', 'DevExtreme-Showdown');
         }
 
         this._html2Markdown = new turndown();
@@ -31,11 +31,13 @@ class MarkdownConverter {
                     return '<br>';
                 }
             });
+            this._html2Markdown.keep(['table']);
         }
 
         this._markdown2Html = new showdown.Converter({
             simpleLineBreaks: true,
-            strikethrough: true
+            strikethrough: true,
+            tables: true
         });
     }
 

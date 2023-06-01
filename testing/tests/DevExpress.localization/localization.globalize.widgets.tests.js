@@ -1,12 +1,12 @@
-const likelySubtags = require('../../../node_modules/cldr-core/supplemental/likelySubtags.json!');
-const numberingSystems = require('../../../node_modules/cldr-core/supplemental/numberingSystems.json!');
+const likelySubtags = require('cldr-core/supplemental/likelySubtags.json!');
+const numberingSystems = require('cldr-core/supplemental/numberingSystems.json!');
 const Globalize = require('globalize');
 
 const cldrData = [
-    require('../../../node_modules/devextreme-cldr-data/fa.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/mr.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/ar.json!json'),
-    require('../../../node_modules/devextreme-cldr-data/de.json!json')
+    require('devextreme-cldr-data/fa.json!json'),
+    require('devextreme-cldr-data/mr.json!json'),
+    require('devextreme-cldr-data/ar.json!json'),
+    require('devextreme-cldr-data/de.json!json'),
 ];
 
 Globalize.load(likelySubtags);
@@ -27,7 +27,8 @@ const dateLocalization = require('localization/date');
 
 require('ui/date_box');
 require('viz/chart');
-const excelCreator = require('exporter').excel;
+
+const ExcelExport = require('exporter/exceljs/export_format');
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 const DATEVIEW_ITEM_SELECTOR = '.dx-dateview-item';
@@ -37,15 +38,18 @@ const DATEVIEW_DAYS_SELECTOR = DATEVIEW_ROLLER_DAY_SELECTOR + ' ' + DATEVIEW_ITE
 const DATEVIEW_YEARS_SELECTOR = DATEVIEW_ROLLER_YEAR_SELECTOR + ' ' + DATEVIEW_ITEM_SELECTOR;
 const CALENDAR_NAVIGATOR_TEXT_SELECTOR = '.dx-calendar-caption-button';
 const CALENDAR_CELL_SELECTOR = '.dx-calendar-cell';
+const CLEAR_BUTTON_CLASS = 'dx-clear-button-area';
 const commonEnvironment = {
     beforeEach: function() {
         const markup =
-                '<div id="dateBox"></div>\
-                <div id="dateBoxWithPicker"></div>\
-                <div id="widthRootStyle" style="width: 300px;"></div>\
-                <div id="calendar"></div>';
+                `<div id="dateBox"></div>
+                <div id="numberBox"></div>
+                <div id="dateBoxWithPicker"></div>
+                <div id="widthRootStyle"></div>
+                <div id="calendar"></div>`;
 
         $('#qunit-fixture').html(markup);
+        $('#widthRootStyle').css({ width: '300px' });
     },
 
     afterEach: function() {
@@ -150,6 +154,53 @@ QUnit.module('DateBox', commonEnvironment, () => {
         }
     });
 
+    ['h:mm aaa', 'h:mm aaaa', 'h:mm aaaaa'].forEach(displayFormat => {
+        QUnit.test(`DateBox should not raise error when displayFormat="${displayFormat}" and arabic locale is used (T1162346)`, function(assert) {
+            const originalCulture = Globalize.locale().locale;
+
+            try {
+                Globalize.locale('ar');
+
+                const $dateBox = $('#dateBox').dxDateBox({
+                    value: new Date(2015, 10, 10),
+                    displayFormat,
+                    type: 'time',
+                    pickerType: 'calendar',
+                    useMaskBehavior: true
+                });
+
+                const date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
+                assert.strictEqual(date, '١٢:٠٠ ص', 'date is localized');
+            } catch(e) {
+                assert.ok(false, 'Error occured: ' + e.message);
+            } finally {
+                Globalize.locale(originalCulture);
+            }
+        });
+    });
+
+    QUnit.test('DateBox should not raise error when digits are not default arabic digits and Fractional Seconds in the "displayFormat"', function(assert) {
+        const originalCulture = Globalize.locale().locale;
+
+        try {
+            Globalize.locale('ar');
+
+            const dateBox = $('#dateBox').dxDateBox({
+                value: new Date('2014-09-08T08:02:17.12'),
+                useMaskBehavior: true,
+                type: 'date',
+                pickerType: 'calendar',
+                displayFormat: 'HH:mm:ss.SS'
+            }).dxDateBox('instance');
+
+            assert.strictEqual(dateBox.option('text'), '٠٨:٠٢:١٧.١٢', 'date is localized');
+        } catch(e) {
+            assert.ok(false, `Error occured: ${e.message}`);
+        } finally {
+            Globalize.locale(originalCulture);
+        }
+    });
+
     QUnit.test('DateBox should not raise error when digits are Farsi digits', function(assert) {
         const originalCulture = Globalize.locale().locale;
 
@@ -174,6 +225,7 @@ QUnit.module('DateBox', commonEnvironment, () => {
 
     QUnit.test('dxDateBox rollers localize years and days', function(assert) {
         const originalCulture = Globalize.locale().locale;
+        const clock = sinon.useFakeTimers();
 
         try {
             Globalize.locale('ar');
@@ -193,6 +245,7 @@ QUnit.module('DateBox', commonEnvironment, () => {
             assert.equal(yearText, '١٩٠٠', 'Year localized');
         } finally {
             Globalize.locale(originalCulture);
+            clock.restore();
         }
     });
 
@@ -203,14 +256,15 @@ QUnit.module('DateBox', commonEnvironment, () => {
             Globalize.locale('ar');
 
             const $calendar = $('#calendar').dxCalendar({
-                value: new Date(2015, 10, 10)
+                value: new Date(2015, 10, 11)
             });
 
             const navigatorText = $calendar.find(CALENDAR_NAVIGATOR_TEXT_SELECTOR).text();
             const cellText = $calendar.find(CALENDAR_CELL_SELECTOR).first().text();
 
             assert.equal(navigatorText, 'نوفمبر ٢٠١٥', 'Navigator localized');
-            assert.equal(cellText, '٢٦', 'Cell localized');
+
+            assert.equal(cellText, '٣١', 'Cell localized');
         } finally {
             Globalize.locale(originalCulture);
         }
@@ -304,6 +358,26 @@ QUnit.module('DateBox', commonEnvironment, () => {
     });
 });
 
+QUnit.module('NumberBox', commonEnvironment, () => {
+    QUnit.test('click on clear button should not raise any errors (T1028426)', function(assert) {
+        try {
+            const $numberBox = $('#numberBox').dxNumberBox({
+                format: Globalize.currencyFormatter('EUR', { minimumFractionDigits: 0 }),
+                value: 10,
+                showClearButton: true,
+            });
+            const $clearButton = $numberBox.find(`.${CLEAR_BUTTON_CLASS}`);
+
+            $clearButton.click();
+
+        } catch(e) {
+            assert.ok(false, e);
+        } finally {
+            assert.ok(true, 'no errors has been raised');
+        }
+    });
+});
+
 QUnit.module('Chart', commonEnvironment, () => {
     QUnit.test('Chart', function(assert) {
         $('#widthRootStyle').dxChart({
@@ -333,7 +407,7 @@ QUnit.module('Excel creator', commonEnvironment, () => {
             Globalize.locale('ar');
 
             const convertDate = function(formatter) {
-                return excelCreator.formatConverter.convertFormat(formatter, null, 'date');
+                return ExcelExport.ExportFormat.convertFormat(formatter, null, 'date');
             };
 
             const pattern = '[$-2010001]d\\/M\\/yyyy';

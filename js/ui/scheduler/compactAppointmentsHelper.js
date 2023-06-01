@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Button from '../button';
-import { move } from '../../animation/translator';
+import { move, locate } from '../../animation/translator';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import { when } from '../../core/utils/deferred';
@@ -8,7 +8,8 @@ import { extendFromObject } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { LIST_ITEM_DATA_KEY, LIST_ITEM_CLASS } from './constants';
-
+import { createAppointmentAdapter } from './appointmentAdapter';
+import { getOverflowIndicatorColor } from '../../renovation/ui/scheduler/appointment/overflow_indicator/utils';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-compact';
@@ -49,7 +50,11 @@ export class CompactAppointmentsHelper {
 
     _createTooltipInfos(items) {
         return items.data.map((appointment, index) => {
-            const targetedAdapter = this.instance.createAppointmentAdapter(appointment).clone();
+            const targetedAdapter = createAppointmentAdapter(
+                appointment,
+                this.instance._dataAccessors,
+                this.instance.timeZoneCalculator,
+            ).clone();
 
             if(items.settings?.length > 0) {
                 const { info } = items.settings[index];
@@ -66,15 +71,15 @@ export class CompactAppointmentsHelper {
         this.instance.showAppointmentTooltipCore(
             $button,
             $button.data('items'),
-            this._getExtraOptionsForTooltip(options)
+            this._getExtraOptionsForTooltip(options, $button)
         );
     }
 
-    _getExtraOptionsForTooltip(options) {
+    _getExtraOptionsForTooltip(options, $appointmentCollector) {
         return {
             clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
-            dragBehavior: options.allowDrag && this._createTooltipDragBehavior().bind(this),
-            dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // deprecated option
+            dragBehavior: options.allowDrag && this._createTooltipDragBehavior($appointmentCollector).bind(this),
+            dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // TODO deprecated option
             isButtonClick: true
         };
     }
@@ -95,19 +100,27 @@ export class CompactAppointmentsHelper {
         };
     }
 
-    _createTooltipDragBehavior() {
+    _createTooltipDragBehavior($appointmentCollector) {
         return (e) => {
             const $element = $(e.element);
+            const $schedulerElement = $(this.instance.element());
             const workSpace = this.instance.getWorkSpace();
 
             const getItemData = (itemElement) => $(itemElement).data(LIST_ITEM_DATA_KEY)?.appointment;
-            const getItemSettings = (_, event) => event.itemSettings;
+            const getItemSettings = (_, event) => {
+                return event.itemSettings;
+            };
+            const initialPosition = locate($appointmentCollector);
+
             const options = {
                 filter: `.${LIST_ITEM_CLASS}`,
                 isSetCursorOffset: true,
+                initialPosition,
+                getItemData,
+                getItemSettings,
             };
 
-            workSpace._createDragBehaviorBase($element, getItemData, getItemSettings, options);
+            workSpace._createDragBehaviorBase($element, $schedulerElement, options);
         };
     }
 
@@ -116,7 +129,9 @@ export class CompactAppointmentsHelper {
     }
 
     _getCollectorRightOffset() {
-        return this.instance.getRenderingStrategyInstance()._isCompactTheme() ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET : WEEK_VIEW_COLLECTOR_OFFSET;
+        return this.instance.getRenderingStrategyInstance()._isCompactTheme()
+            ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET
+            : WEEK_VIEW_COLLECTOR_OFFSET;
     }
 
     _makeBackgroundDarker(button) {
@@ -125,28 +140,17 @@ export class CompactAppointmentsHelper {
 
     _makeBackgroundColor($button, colors, color) {
         when.apply(null, colors).done(function() {
-            this._makeBackgroundColorCore($button, color, arguments);
+            this._makeBackgroundColorCore($button, color, [...arguments]);
         }.bind(this));
     }
 
-    _makeBackgroundColorCore($button, color, itemsColors) {
-        let paintButton = true;
-        let currentItemColor;
-
-        color && color.done(function(color) {
-            if(itemsColors.length) {
-                currentItemColor = itemsColors[0];
-
-                for(let i = 1; i < itemsColors.length; i++) {
-                    if(currentItemColor !== itemsColors[i]) {
-                        paintButton = false;
-                        break;
-                    }
-                    currentItemColor = color;
-                }
+    _makeBackgroundColorCore($button, color, itemColors) {
+        color && color.done((color) => {
+            const backgroundColor = getOverflowIndicatorColor(color, itemColors);
+            if(backgroundColor) {
+                $button.css('backgroundColor', backgroundColor);
             }
-            color && paintButton && $button.css('backgroundColor', color);
-        }.bind(this));
+        });
     }
 
     _setPosition(element, position) {
@@ -168,14 +172,13 @@ export class CompactAppointmentsHelper {
         });
     }
 
-    _createCompactButtonElement({ isCompact, $container, width, coordinates, applyOffset, cellWidth }) {
+    _createCompactButtonElement({ isCompact, $container, coordinates }) {
         const result = $('<div>')
             .addClass(APPOINTMENT_COLLECTOR_CLASS)
             .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
             .appendTo($container);
 
-        const offset = applyOffset ? this._getCollectorOffset(width, cellWidth) : 0;
-        this._setPosition(result, { top: coordinates.top, left: coordinates.left + offset });
+        this._setPosition(result, coordinates);
 
         return result;
     }

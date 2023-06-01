@@ -33,6 +33,27 @@ $generic-lookup-field-padding-rtl:
   &.dx-editor-underlined {
     background: $texteditor-underlined-bg;
   }
+
+  &.dx-texteditor-with-floating-label,
+  &.dx-texteditor-with-label {
+    &.dx-editor-underlined {
+      .dx-texteditor-label {
+        .dx-label {
+          padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
+        }
+      }
+
+      .dx-rtl &,
+      &.dx-rtl {
+        .dx-texteditor-label {
+          .dx-label {
+            padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
 }
 
 .dx-lookup-field {

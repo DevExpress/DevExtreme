@@ -5,16 +5,17 @@
 import { copy, readJson, outputJson } from 'fs-extra';
 import { version } from '../data/metadata/dx-theme-builder-metadata';
 
-try {
-  readJson('package.json').then((json) => {
+const copyResources = async (): Promise<void> => {
+  await readJson('package.json').then(async (json) => {
     const packageConfig = json;
     packageConfig.version = version;
-    outputJson('dist/package.json', packageConfig, { spaces: 2 });
+    await outputJson('dist/package.json', packageConfig, { spaces: 2 });
   });
-  copy('src/data/scss', 'dist/data/scss');
-  copy('dart-compiler', 'dist/dart-compiler');
-  copy('README.md', 'dist/README.md');
-} catch (e) {
+  await copy('src/data/scss', 'dist/data/scss');
+  await copy('README.md', 'dist/README.md');
+};
+
+copyResources().catch((e) => {
   console.error(e);
   process.exit(1);
-}
+});

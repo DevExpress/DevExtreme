@@ -162,6 +162,30 @@ QUnit.test('Color for value', function(assert) {
     assert.strictEqual(this.rangeContainer.getColorForValue(100), 'color-b', '100');
 });
 
+QUnit.test('Custom colors', function(assert) {
+    this.translator.setDomain(0, 100);
+    this.rangeContainer.render({
+        width: 1,
+        backgroundColor: { fillId: 'id_color_0' },
+        ranges: [
+            { startValue: 10, endValue: 20, color: { fillId: 'id_color_1' } },
+            { startValue: 30, endValue: 50, color: { fillId: 'id_color_2' } },
+            { startValue: 50, endValue: 80, color: { fillId: 'id_color_3' } }
+        ]
+    });
+
+    assert.strictEqual(this.rangeContainer.getColorForValue(0), 'id_color_0', '0');
+    assert.strictEqual(this.rangeContainer.getColorForValue(10), 'id_color_1', '10');
+    assert.strictEqual(this.rangeContainer.getColorForValue(15), 'id_color_1', '15');
+    assert.strictEqual(this.rangeContainer.getColorForValue(20), 'id_color_1', '20');
+    assert.strictEqual(this.rangeContainer.getColorForValue(25), 'id_color_0', '25');
+    assert.strictEqual(this.rangeContainer.getColorForValue(30), 'id_color_2', '30');
+    assert.strictEqual(this.rangeContainer.getColorForValue(50), 'id_color_2', '50');
+    assert.strictEqual(this.rangeContainer.getColorForValue(70), 'id_color_3', '70');
+    assert.strictEqual(this.rangeContainer.getColorForValue(80), 'id_color_3', '80');
+    assert.strictEqual(this.rangeContainer.getColorForValue(100), 'id_color_0', '100');
+});
+
 QUnit.module('BaseRangeContainer - ranges ', $.extend({}, environment, {
     checkRanges: function(assert, ranges, expected) {
         const translatorAsc = new Translator1D(-50, 150, 300, 500);
@@ -313,6 +337,20 @@ QUnit.test('ranges are not valid - wrong order', function(assert) {
         { start: 10, end: 20, color: 'c1', className: 0 },
         { start: -50, end: 10, color: 'bcolor' },
         { start: 20, end: 150, color: 'bcolor' }
+    ]);
+});
+
+QUnit.test('ranges are empty, without custom color (T961251)', function(assert) {
+    this.checkRanges(assert, [
+        { startValue: 10, endValue: 10 },
+        { startValue: 50, endValue: 50 },
+        { startValue: 10, endValue: 50 }
+    ], [
+        { start: 10, end: 10, color: '#97c95c', className: 0 },
+        { start: 50, end: 50, color: '#ffc720', className: 1 },
+        { start: 10, end: 50, color: '#f5564a', className: 2 },
+        { start: -50, end: 10, color: 'bcolor' },
+        { start: 50, end: 150, color: 'bcolor' },
     ]);
 });
 

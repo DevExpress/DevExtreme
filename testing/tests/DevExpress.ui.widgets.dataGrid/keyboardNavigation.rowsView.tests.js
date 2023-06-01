@@ -1,17 +1,7 @@
-QUnit.testStart(function() {
-    const markup = `
-        <div>
-            <div id="container" class="dx-datagrid"></div>
-        </div>`;
-
-    $('#qunit-fixture').html(markup);
-});
-
-import 'common.css!';
 import 'generic_light.css!';
 
 import $ from 'jquery';
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import commonUtils from 'core/utils/common';
 import { createEvent } from 'events/utils/index';
 import typeUtils from 'core/utils/type';
@@ -26,6 +16,15 @@ import {
     CLICK_EVENT,
     setupModules
 } from '../../helpers/grid/keyboardNavigationHelper.js';
+
+QUnit.testStart(function() {
+    const markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Rows view', {
     beforeEach: function() {
@@ -124,7 +123,7 @@ QUnit.module('Rows view', {
         this.keyboardNavigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 0 };
         this.keyboardNavigationController._focus(this.gridView.element().find('td').eq(4));
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.keyboardNavigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 0 };
         this.keyboardNavigationController._focus = function() {
@@ -132,7 +131,7 @@ QUnit.module('Rows view', {
         };
         this.rowsView.renderCompleted.fire();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!isCellFocused);
@@ -159,12 +158,12 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
 
         rowsView.render(testElement);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $focusable = testElement.find('[tabIndex]').first();
         $focusable.focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($focusable.is('td'), 'focusable is cell');

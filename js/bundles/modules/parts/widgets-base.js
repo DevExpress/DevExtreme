@@ -16,6 +16,7 @@ ui.setTemplateEngine = require('../../../core/templates/template_engine_registry
 ui.dialog = require('../../../ui/dialog');
 ui.notify = require('../../../ui/notify');
 ui.repaintFloatingActionButton = require('../../../ui/speed_dial_action/repaint_floating_action_button');
+ui.hideToasts = require('../../../ui/toast/hide_toasts');
 
 /* Base widgets (dx.module-widgets-base.js) */
 
@@ -29,10 +30,10 @@ ui.dxCalendar = require('../../../ui/calendar');
 ui.dxCheckBox = require('../../../ui/check_box');
 ui.dxColorBox = require('../../../ui/color_box');
 ui.dxDateBox = require('../../../ui/date_box');
+ui.dxDateRangeBox = require('../../../ui/date_range_box');
 ui.dxDrawer = require('../../../ui/drawer');
 ui.dxDeferRendering = require('../../../ui/defer_rendering');
 ui.dxDropDownBox = require('../../../ui/drop_down_box');
-ui.dxDropDownMenu = require('../../../ui/drop_down_menu');
 ui.dxFileUploader = require('../../../ui/file_uploader');
 ui.dxForm = require('../../../ui/form');
 ui.dxGallery = require('../../../ui/gallery');
@@ -43,9 +44,8 @@ ui.dxLoadPanel = require('../../../ui/load_panel');
 ui.dxLookup = require('../../../ui/lookup');
 ui.dxMap = require('../../../ui/map');
 ui.dxMultiView = require('../../../ui/multi_view');
-ui.dxNavBar = require('../../../ui/nav_bar');
 ui.dxNumberBox = require('../../../ui/number_box');
-ui.dxOverlay = require('../../../ui/overlay');
+ui.dxOverlay = require('../../../ui/overlay/ui.overlay');
 ui.dxPopover = require('../../../ui/popover');
 ui.dxPopup = require('../../../ui/popup');
 ui.dxProgressBar = require('../../../ui/progress_bar');

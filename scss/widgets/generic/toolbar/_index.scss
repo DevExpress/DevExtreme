@@ -25,15 +25,6 @@
     $generic-toolbar-item-spacing
   );
 
-  .dx-device-mobile & {
-    @include dx-toolbar-sizing(
-      $generic-mobile-toolbar-height,
-      $generic-mobile-toolbar-padding,
-      $generic-mobile-toolbar-label-font-size,
-      $generic-mobile-toolbar-item-spacing
-    );
-  }
-
   &.dx-state-disabled {
     opacity: 1;
   }
@@ -49,12 +40,6 @@
   .dx-toolbar-item {
     @include dx-toolbar-item-padding($generic-toolbar-item-spacing);
   }
-
-  .dx-device-mobile & {
-    .dx-toolbar-item {
-      @include dx-toolbar-item-padding($generic-mobile-toolbar-item-spacing);
-    }
-  }
 }
 
 .dx-toolbar-background {
@@ -64,19 +49,45 @@
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
 
-  .dx-toolbar-hidden-button,
+  .dx-list-item-content,
   .dx-toolbar-item-auto-hide {
-    .dx-button-content {
-      padding: 0;
+    padding: $generic-list-item-vertical-padding;
+  }
+
+  .dx-toolbar-hidden-button,
+  .dx-toolbar-hidden-button-group {
+    .dx-button {
+      .dx-button-content {
+        padding: $generic-list-item-vertical-padding;
+      }
+    }
+
+    .dx-button-mode-contained,
+    .dx-button-mode-outlined,
+    .dx-button-mode-text {
+      &.dx-button {
+        border-radius: 0;
+      }
+
+      @include dx-button-mode-text-styling();
     }
   }
 
-  .dx-button-content {
-    padding: 4px;
+  .dx-toolbar-hidden-button-group {
+    margin-top: $generic-toolbar-item-spacing;
+    margin-bottom: $generic-toolbar-item-spacing;
   }
 
-  .dx-toolbar-item-auto-hide {
-    padding: $generic-toolbar-item-spacing $generic-toolbar-item-spacing * 2;
+  .dx-button-mode-contained {
+    @include dx-button-mode-contained-styling();
+  }
+
+  .dx-button-mode-outlined {
+    @include dx-button-mode-outlined-styling();
+  }
+
+  .dx-button-mode-text {
+    @include dx-button-mode-text-styling();
   }
 }
 
@@ -85,7 +96,7 @@
 }
 
 .dx-toolbar .dx-tab {
-  padding: 4px;
+  padding: 5px 4px;
 }
 
 .dx-toolbar-button {
@@ -102,19 +113,6 @@
         .dx-menu-item-text {
           line-height: normal;
         }
-      }
-    }
-  }
-}
-
-.dx-toolbar-hidden-button-group {
-  margin-top: $generic-toolbar-item-spacing;
-  margin-bottom: $generic-toolbar-item-spacing;
-
-  .dx-buttongroup-wrapper {
-    .dx-buttongroup-item.dx-button {
-      .dx-button-content {
-        padding: $generic-toolbar-item-spacing 2 * $generic-toolbar-item-spacing;
       }
     }
   }

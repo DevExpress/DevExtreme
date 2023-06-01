@@ -1,3 +1,4 @@
+import { setHeight, setWidth } from '../../../core/utils/size';
 import $ from '../../../core/renderer';
 import CurrentTimeShader from '../shaders/ui.scheduler.current_time_shader';
 
@@ -15,7 +16,7 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
             shaderHeight = maxHeight;
         }
 
-        this._$shader.height(shaderHeight);
+        setHeight(this._$shader, shaderHeight);
         const groupCount = this._workSpace._getGroupCount() || 1;
 
         if(this._workSpace.isGroupedByDate()) {
@@ -54,7 +55,12 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
 
     _renderTopShader($shader, height, width, i) {
         this._$topShader = $('<div>').addClass(DATE_TIME_SHADER_TOP_CLASS);
-        width && this._$topShader.width(width) && this._$topShader.height(height);
+        if(width) {
+            setWidth(this._$topShader, width);
+        }
+        if(height) {
+            setHeight(this._$topShader, height);
+        }
 
         this._$topShader.css('marginTop', this._getShaderTopOffset(i));
         this._$topShader.css('left', this._getShaderOffset(i, width));
@@ -68,7 +74,8 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
         const shaderWidth = height < 0 ? width : width - this._workSpace.getCellWidth();
         const shaderHeight = height < 0 ? maxHeight : maxHeight - height;
 
-        this._$bottomShader.width(shaderWidth) && this._$bottomShader.height(shaderHeight);
+        setWidth(this._$bottomShader, shaderWidth);
+        setHeight(this._$bottomShader, shaderHeight);
 
         this._$bottomShader.css('left', this._getShaderOffset(i, width - this._workSpace.getCellWidth()));
 
@@ -78,8 +85,8 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
     _renderAllDayShader(shaderWidth, i) {
         if(this._workSpace.option('showAllDayPanel')) {
             this._$allDayIndicator = $('<div>').addClass(DATE_TIME_SHADER_ALL_DAY_CLASS);
-            this._$allDayIndicator.height(this._workSpace.getAllDayHeight());
-            this._$allDayIndicator.width(shaderWidth);
+            setHeight(this._$allDayIndicator, this._workSpace.getAllDayHeight());
+            setWidth(this._$allDayIndicator, shaderWidth);
             this._$allDayIndicator.css('left', this._getShaderOffset(i, shaderWidth));
 
             this._workSpace._$allDayPanel.prepend(this._$allDayIndicator);

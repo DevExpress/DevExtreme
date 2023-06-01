@@ -11,6 +11,7 @@ import { plugin as exportPlugin } from '../core/export';
 import { plugin as titlePlugin } from '../core/title';
 import { plugin as tooltipPlugin } from '../core/tooltip';
 import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
+import { noop } from '../../core/utils/common';
 
 const _format = formatHelper.format;
 export const BaseGauge = BaseWidget.inherit({
@@ -97,6 +98,7 @@ export const BaseGauge = BaseWidget.inherit({
         if(!that._isValidDomain) return;
 
         that._renderContent();
+        that._renderGraphicObjects();
         that._tracker.setTooltipState(that._tooltip.isEnabled());
         that._tracker.activate();
         that._noAnimation = false;
@@ -157,6 +159,8 @@ export const BaseGauge = BaseWidget.inherit({
     _change_MOSTLY_TOTAL: function() {
         this._applyMostlyTotalChange();
     },
+
+    _updateExtraElements: noop,
 
     _setupDomain: function() {
         const that = this;
@@ -225,6 +229,9 @@ export const BaseGauge = BaseWidget.inherit({
 
 //  TODO: find a better place for it
 export const formatValue = function(value, options, extra) {
+    if(Object.is(value, -0)) {
+        value = 0;
+    }
     options = options || {};
     const text = _format(value, options.format);
     let formatObject;

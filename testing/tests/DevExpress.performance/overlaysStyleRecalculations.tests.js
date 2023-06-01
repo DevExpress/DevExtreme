@@ -1,16 +1,11 @@
 require('../../helpers/qunitPerformanceExtension.js');
-require('ui/overlay');
+require('ui/overlay/ui.overlay');
 require('ui/popup');
 
-require('common.css!');
 require('generic_light.css!');
 
 const $ = require('jquery');
 const positionUtils = require('animation/position');
-
-// TODO - remove it after update Docker image
-const browser = require('core/utils/browser');
-const isChrome85OrNewer = browser.chrome && parseInt(browser.version) >= 85;
 
 positionUtils.calculateScrollbarWidth();
 
@@ -46,25 +41,27 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             $('#element').dxOverlay({
                 shading,
                 visible: true,
-                animation: null
+                animation: null,
+                useResizeObserver: false
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, 10);
+        assert.measureStyleRecalculation(measureFunction, 11);
     });
 
     QUnit.performanceTest(`showing dxOverlay with shading=${shading} should be with minimum count of relayouts`, function(assert) {
         const overlay = $('#element').dxOverlay({
             shading,
             visible: false,
-            animation: null
+            animation: null,
+            useResizeObserver: false
         }).dxOverlay('instance');
 
         const measureFunction = function() {
             overlay.show();
         };
 
-        assert.measureStyleRecalculation(measureFunction, 8);
+        assert.measureStyleRecalculation(measureFunction, 9);
     });
 
 
@@ -73,14 +70,58 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             $('#element').dxPopup({
                 shading,
                 visible: true,
-                animation: null
+                animation: null,
+                useResizeObserver: false
             });
         };
 
-        if(isChrome85OrNewer) {
-            assert.measureStyleRecalculation(measureFunction, shading ? 16 : 15);
-        } else {
-            assert.measureStyleRecalculation(measureFunction, 16);
-        }
+        assert.measureStyleRecalculation(measureFunction, shading ? 18 : 17);
+    });
+
+    [true, false].forEach(enableBodyScroll => {
+        QUnit.performanceTest(`Popup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be shown with minimum count of relayouts`, function(assert) {
+            const $additionalElement = $('<div>').height(2000).appendTo($('body'));
+
+            try {
+                const popup = $('#element').dxPopup({
+                    shading,
+                    enableBodyScroll,
+                    visible: false,
+                    animation: null,
+                    useResizeObserver: false
+                }).dxPopup('instance');
+
+                const measureFunction = function() {
+                    popup.show();
+                };
+
+                assert.measureStyleRecalculation(measureFunction, shading ? 16 : 15);
+            } finally {
+                $additionalElement.remove();
+            }
+        });
+
+        QUnit.performanceTest(`Popup with shading=${shading} & enableBodyScroll=${enableBodyScroll} should be hidden with minimum count of relayouts`, function(assert) {
+
+            const $additionalElement = $('<div>').height(2000).appendTo($('body'));
+
+            try {
+                const popup = $('#element').dxPopup({
+                    shading,
+                    enableBodyScroll,
+                    visible: true,
+                    animation: null,
+                    useResizeObserver: false
+                }).dxPopup('instance');
+
+                const measureFunction = function() {
+                    popup.hide();
+                };
+
+                assert.measureStyleRecalculation(measureFunction, shading || !enableBodyScroll ? 3 : 2);
+            } finally {
+                $additionalElement.remove();
+            }
+        });
     });
 });

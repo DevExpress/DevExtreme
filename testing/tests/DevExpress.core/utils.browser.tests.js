@@ -1,11 +1,8 @@
 const browser = require('core/utils/browser');
 
 const userAgents = {
-    win_phone_8_1_update: 'Mozilla/5.0 (Mobile; Windows Phone 8.1; Android 4.0; ARM; Trident/7.0; Touch; rv:11.0; IEMobile/11.0; NOKIA; Lumia 520) like iPhone OS 7_0_3 Mac OS X AppleWebKit/537 (KHTML, like Gecko) Mobile Safari/537',
     webkit: 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Custom/43.0.2357.124',
     mozilla: 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0',
-    ie11: 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; .NET4.0E; .NET4.0C; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729; rv:11.0) like Gecko',
-    ie: 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)',
     msEdge: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.0',
     safari: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14',
     chrome: 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
@@ -16,26 +13,6 @@ const userAgents = {
 };
 
 QUnit.module('browser');
-
-QUnit.test('on windows phone devices browser is msie', function(assert) {
-    assert.ok(browser._fromUA(userAgents.win_phone_8_1_update).msie, 'on widows phone browser is IE');
-});
-
-QUnit.test('MSEdge is IE', function(assert) {
-    assert.ok(browser._fromUA(userAgents.msEdge).msie, 'ie detected');
-});
-
-QUnit.test('browser is IE', function(assert) {
-    const browserObject = browser._fromUA(userAgents.ie);
-    assert.ok(browserObject.msie, 'ie detected');
-    assert.equal(browserObject.version, '9.0', 'version was detect correctly');
-});
-
-QUnit.test('browser is IE11', function(assert) {
-    const browserObject = browser._fromUA(userAgents.ie11);
-    assert.ok(browserObject.msie, 'ie11 detected');
-    assert.equal(browserObject.version, '11.0', 'version was detect correctly');
-});
 
 QUnit.test('browser is generic webkit', function(assert) {
     const browserObject = browser._fromUA(userAgents.webkit);

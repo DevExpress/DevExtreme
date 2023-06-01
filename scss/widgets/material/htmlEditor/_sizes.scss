@@ -1,4 +1,21 @@
 @use "../sizes" as *;
+@use "../toolbar/sizes" as *;
 
 // adduse
 
+$material-toolbar-size-editor-width: null !default;
+$material-html-editor-horizontal-padding: 15px !default;
+$material-htmleditor-toolbar-padding: null !default;
+$material-html-editor-add-image-dialog-fileuploader-padding: null !default;
+
+@if $size == "default" {
+  $material-toolbar-size-editor-width: 120px !default;
+  $material-htmleditor-toolbar-padding: 16px !default;
+  $material-html-editor-add-image-dialog-fileuploader-padding: 50px 40px;
+}
+
+@else if $size == "compact" {
+  $material-toolbar-size-editor-width: 90px !default;
+  $material-htmleditor-toolbar-padding: 11px !default;
+  $material-html-editor-add-image-dialog-fileuploader-padding: 40px 30px;
+}

@@ -9,10 +9,8 @@
 // adduse
 @use "../overlay";
 
-$generic-main-fa-button-label-padding: 0 16px 0 8px;
 $generic-fa-button-size: 30px;
-$generic-fa-button-label-height: 26px;
-$generic-fa-button-label-padding: 0 10px;
+$generic-fa-button-label-padding: 5px 10px;
 $generic-fa-button-label-offset: 10px;
 $generic-fa-button-label-shadow: $speed-dial-action-label-shadow;
 
@@ -20,8 +18,7 @@ $generic-fa-button-label-shadow: $speed-dial-action-label-shadow;
   $generic-main-fa-button-size,
   $generic-fa-button-size,
   $generic-base-icon-size,
-  $generic-base-font-size,
-  $generic-fa-button-label-height,
+  $generic-fa-button-label-font-size,
   $generic-fa-button-label-padding,
   $generic-fa-button-label-offset,
   $speed-dial-action-color,

@@ -1,0 +1,48 @@
+// adduse
+
+.dx-multiview-wrapper {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  touch-action: pinch-zoom pan-y;
+}
+
+.dx-multiview-item-container {
+  position: relative;
+  overflow: visible;
+  width: 100%;
+  height: 100%;
+
+  .dx-empty-message {
+    text-align: center;
+  }
+}
+
+.dx-multiview-item {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  &.dx-item-selected {
+    position: relative;
+  }
+}
+
+.dx-multiview-item-content {
+  width: 100%;
+  height: 100%;
+}
+
+.dx-multiview-item-hidden {
+  top: -9999px;
+  left: -9999px;
+  visibility: hidden;
+
+  .dx-accordion-item-opened .dx-accordion-item-body {
+    visibility: hidden;
+  }
+}

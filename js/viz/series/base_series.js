@@ -107,7 +107,8 @@ function getLabelOptions(labelOptions, defaultColor) {
         rotationAngle: opt.rotationAngle,
         wordWrap: opt.wordWrap,
         textOverflow: opt.textOverflow,
-        cssClass: opt.cssClass
+        cssClass: opt.cssClass,
+        displayFormat: opt.displayFormat
     };
 }
 
@@ -184,14 +185,23 @@ Series.prototype = {
     _createStyles: function(options) {
         const that = this;
         const mainSeriesColor = options.mainSeriesColor;
+        const colorId = this._getColorId(options);
+        const hoverStyle = options.hoverStyle || {};
+        const selectionStyle = options.selectionStyle || {};
+
+        if(colorId) {
+            that._turnOffHatching(hoverStyle, selectionStyle);
+        }
+
         that._styles = {
+            labelColor: mainSeriesColor,
             normal: that._parseStyle(options, mainSeriesColor, mainSeriesColor),
-            hover: that._parseStyle(options.hoverStyle || {}, mainSeriesColor, mainSeriesColor),
-            selection: that._parseStyle(options.selectionStyle || {}, mainSeriesColor, mainSeriesColor),
+            hover: that._parseStyle(hoverStyle, colorId || mainSeriesColor, mainSeriesColor),
+            selection: that._parseStyle(selectionStyle, colorId || mainSeriesColor, mainSeriesColor),
             legendStyles: {
-                normal: that._createLegendState(options, mainSeriesColor),
-                hover: that._createLegendState(options.hoverStyle || {}, mainSeriesColor),
-                selection: that._createLegendState(options.selectionStyle || {}, mainSeriesColor)
+                normal: that._createLegendState(options, colorId || mainSeriesColor),
+                hover: that._createLegendState(hoverStyle, colorId || mainSeriesColor),
+                selection: that._createLegendState(selectionStyle, colorId || mainSeriesColor)
             }
         };
     },
@@ -414,7 +424,10 @@ Series.prototype = {
         let data = this._data || [];
 
         if(this.useAggregation()) {
-            data = this._resample(this.getArgumentAxis().getAggregationInfo(this._useAllAggregatedPoints, this.argumentAxisType !== DISCRETE ? this.getArgumentRange() : {}), data);
+            const argumentRange = this.argumentAxisType !== DISCRETE ? this.getArgumentRange() : {};
+            const aggregationInfo = this.getArgumentAxis().getAggregationInfo(this._useAllAggregatedPoints, argumentRange);
+
+            data = this._resample(aggregationInfo, data);
         }
 
         return data;
@@ -484,10 +497,32 @@ Series.prototype = {
         }
     },
 
-    _drawElements: function(animationEnabled, firstDrawing, translateAllPoints) {
+    _prepareSegmentsPosition() {
+        const points = this._points || [];
+        const isCloseSegment = points[0] && points[0].hasValue() && this._options.closed;
+        const segments = points.reduce(function(segments, p) {
+            const segment = segments.at(-1);
+
+            if(!p.translated) {
+                p.setDefaultCoords();
+            }
+
+            if(p.hasValue() && p.hasCoords()) {
+                segment.push(p);
+            } else if(!p.hasValue() && segment.length) {
+                segments.push([]);
+            }
+
+            return segments;
+        }, [[]]);
+
+        this._drawSegments(segments, isCloseSegment, false);
+    },
+
+    _drawElements(animationEnabled, firstDrawing) {
         const that = this;
         const points = that._points || [];
-        const closeSegment = points[0] && points[0].hasValue() && that._options.closed;
+        const isCloseSegment = points[0] && points[0].hasValue() && that._options.closed;
         const groupForPoint = {
             markers: that._markersGroup,
             errorBars: that._errorBarGroup
@@ -498,14 +533,10 @@ Series.prototype = {
         that._segments = [];
 
         const segments = points.reduce(function(segments, p) {
-            const segment = segments[segments.length - 1];
+            const segment = segments.at(-1);
 
-            if(!p.translated || translateAllPoints) {
-                p.translate();
-                !translateAllPoints && p.setDefaultCoords();
-            }
             if(p.hasValue() && p.hasCoords()) {
-                translateAllPoints && that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing });
+                that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing });
                 segment.push(p);
             } else if(!p.hasValue()) {
                 segment.length && segments.push([]);
@@ -516,39 +547,42 @@ Series.prototype = {
             return segments;
         }, [[]]);
 
-        segments.forEach(function(segment, index) {
-            if(segment.length) {
-                that._drawSegment(segment, animationEnabled, index, closeSegment && index === this.length - 1);
-            }
-        }, segments);
-
+        that._drawSegments(segments, isCloseSegment, animationEnabled);
         that._firstDrawing = !points.length;
-
         that._removeOldSegments();
-
         animationEnabled && that._animate(firstDrawing);
     },
 
-    draw: function(animationEnabled, hideLayoutLabels, legendCallback) {
+    _drawSegments(segments, closeSegment, animationEnabled) {
+        segments.forEach((segment, index) => {
+            if(segment.length) {
+                const lastSegment = closeSegment && index === segments.length - 1;
+
+                this._drawSegment(segment, animationEnabled, index, lastSegment);
+            }
+        });
+    },
+
+    draw(animationEnabled, hideLayoutLabels, legendCallback) {
         const that = this;
         const firstDrawing = that._firstDrawing;
 
         that._legendCallback = legendCallback || that._legendCallback;
 
         if(!that._visible) {
-            animationEnabled = false;
             that._group.remove();
             return;
         }
 
         that._appendInGroup();
 
-        that._applyVisibleArea();
+        if(!that._isAllPointsTranslated) {
+            that.prepareCoordinatesForPoints();
+        }
+
         that._setGroupsSettings(animationEnabled, firstDrawing);
-
-        !firstDrawing && !that._resetApplyingAnimation && that._drawElements(false, firstDrawing, false);
-        that._drawElements(animationEnabled, firstDrawing, true);
-
+        !firstDrawing && !that._resetApplyingAnimation && that._prepareSegmentsPosition();
+        that._drawElements(animationEnabled, firstDrawing);
         hideLayoutLabels && that.hideLabels();
 
         if(that.isSelected()) {
@@ -558,7 +592,22 @@ Series.prototype = {
         } else {
             that._applyStyle(that._styles.normal);
         }
+        that._isAllPointsTranslated = false;
         that._resetApplyingAnimation = false;
+    },
+
+    _translatePoints() {
+        const points = this._points ?? [];
+
+        points.forEach(p => {
+            p.translate();
+        });
+    },
+
+    prepareCoordinatesForPoints() {
+        this._applyVisibleArea();
+        this._translatePoints();
+        this._isAllPointsTranslated = true;
     },
 
     _setLabelGroupSettings: function(animationEnabled) {
@@ -787,6 +836,15 @@ Series.prototype = {
         });
     },
 
+    _turnOffHatching(hoverStyle, selectionStyle) {
+        if(hoverStyle.hatching) {
+            hoverStyle.hatching.direction = 'none';
+        }
+        if(selectionStyle.hatching) {
+            selectionStyle.hatching.direction = 'none';
+        }
+    },
+
     _parsePointOptions: function(pointOptions, labelOptions, data, point) {
         const that = this;
         const options = that._options;
@@ -799,7 +857,7 @@ Series.prototype = {
             visibilityChanged: options.visibilityChanged
         });
 
-        parsedOptions.label = getLabelOptions(labelOptions, styles.normal.fill);
+        parsedOptions.label = getLabelOptions(labelOptions, styles.labelColor);
 
         if(that.areErrorBarsVisible()) {
             parsedOptions.errorBars = options.valueErrorBar;
@@ -851,7 +909,7 @@ Series.prototype = {
                 }
             };
 
-            if(data.length) {
+            if(Array.isArray(data)) {
                 data.forEach(processData);
             } else {
                 processData(data);
@@ -899,23 +957,33 @@ Series.prototype = {
 
         const aggregatedData = [];
 
-        for(let i = 1; i < ticks.length; i++) {
-            const intervalEnd = ticks[i];
-            const intervalStart = ticks[i - 1];
-            const dataInInterval = [];
-            while(data[dataIndex] && data[dataIndex].argument < intervalEnd) {
-                if(data[dataIndex].argument >= intervalStart) {
-                    dataInInterval.push(data[dataIndex]);
-                }
-                dataIndex++;
-            }
+        if(ticks.length === 1) {
             const aggregationInfo = {
-                intervalStart,
-                intervalEnd,
-                aggregationInterval: interval,
-                data: dataInInterval.map(getData)
+                intervalStart: ticks[0],
+                intervalEnd: ticks[0],
+                aggregationInterval: null,
+                data: data.map(getData)
             };
             addAggregatedData(aggregatedData, aggregationMethod(aggregationInfo, that), aggregationInfo);
+        } else {
+            for(let i = 1; i < ticks.length; i++) {
+                const intervalEnd = ticks[i];
+                const intervalStart = ticks[i - 1];
+                const dataInInterval = [];
+                while(data[dataIndex] && data[dataIndex].argument < intervalEnd) {
+                    if(data[dataIndex].argument >= intervalStart) {
+                        dataInInterval.push(data[dataIndex]);
+                    }
+                    dataIndex++;
+                }
+                const aggregationInfo = {
+                    intervalStart,
+                    intervalEnd,
+                    aggregationInterval: interval,
+                    data: dataInInterval.map(getData)
+                };
+                addAggregatedData(aggregatedData, aggregationMethod(aggregationInfo, that), aggregationInfo);
+            }
         }
 
         that._endUpdateData();
@@ -1214,6 +1282,8 @@ Series.prototype = {
 
     areErrorBarsVisible: _noop,
 
+    _getColorId: _noop,
+
     getMarginOptions: function() {
         return this._patchMarginOptions({
             percentStick: this.isFullStackedSeries()
@@ -1255,6 +1325,33 @@ Series.prototype = {
 
     getRenderer() {
         return this._renderer;
+    },
+
+    removePointElements() {
+        if(this._markersGroup) {
+            _each(this._points, (_, p) => p.deleteMarker());
+            this._markersGroup.dispose();
+            this._markersGroup = null;
+        }
+    },
+
+    removeGraphicElements() {
+        const that = this;
+        if(that._elementsGroup) {
+            that._elementsGroup.dispose();
+            that._elementsGroup = null;
+        }
+        _each(that._graphics || [], (_, elem) => {
+            that._removeElement(elem);
+        });
+        that._graphics = null;
+    },
+
+    removeBordersGroup() {
+        if(this._bordersGroup) {
+            this._bordersGroup.dispose();
+            this._bordersGroup = null;
+        }
     }
 };
 

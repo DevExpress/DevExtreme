@@ -7,7 +7,6 @@ import injector from '../../core/utils/dependency_injector';
 import { isWindow, isFunction, isString } from '../../core/utils/type';
 import Callbacks from '../../core/utils/callbacks';
 import errors from '../../core/errors';
-import WeakMap from '../../core/polyfills/weak_map';
 import hookTouchProps from '../../events/core/hook_touch_props';
 import callOnce from '../../core/utils/call_once';
 
@@ -25,6 +24,36 @@ const NATIVE_EVENTS_TO_TRIGGER = {
 const NO_BUBBLE_EVENTS = ['blur', 'focus', 'load'];
 
 const forcePassiveFalseEventNames = ['touchmove', 'wheel', 'mousewheel', 'touchstart'];
+
+const EVENT_PROPERTIES = [
+    'target',
+    'relatedTarget',
+    'delegateTarget',
+    'altKey',
+    'bubbles',
+    'cancelable',
+    'changedTouches',
+    'ctrlKey',
+    'detail',
+    'eventPhase',
+    'metaKey',
+    'shiftKey',
+    'view',
+    'char',
+    'code',
+    'charCode',
+    'key',
+    'keyCode',
+    'button',
+    'buttons',
+    'offsetX',
+    'offsetY',
+    'pointerId',
+    'pointerType',
+    'targetTouches',
+    'toElement',
+    'touches'
+];
 
 function matchesSafe(target, selector) {
     return !isWindow(target) && target.nodeName !== '#document' && domAdapter.elementMatches(target, selector);
@@ -84,7 +113,7 @@ const eventsEngine = injector({
         if(!noBubble) {
             const parents = [];
             const getParents = function(element) {
-                const parent = element.parentNode;
+                const parent = element.parentNode ?? element.host;
                 if(parent) {
                     parents.push(parent);
                     getParents(parent);
@@ -430,7 +459,7 @@ function normalizeTriggerArguments(callback) {
 }
 
 function normalizeEventArguments(callback) {
-    return function(src, config) {
+    eventsEngine.Event = function(src, config) {
         if(!(this instanceof eventsEngine.Event)) {
             return new eventsEngine.Event(src, config);
         }
@@ -451,6 +480,35 @@ function normalizeEventArguments(callback) {
 
         callback.call(this, src, config);
     };
+    Object.assign(eventsEngine.Event.prototype, {
+        _propagationStopped: false,
+        _immediatePropagationStopped: false,
+        _defaultPrevented: false,
+        isPropagationStopped: function() {
+            return !!(this._propagationStopped || this.originalEvent && this.originalEvent.propagationStopped);
+        },
+        stopPropagation: function() {
+            this._propagationStopped = true;
+            this.originalEvent && this.originalEvent.stopPropagation();
+        },
+        isImmediatePropagationStopped: function() {
+            return this._immediatePropagationStopped;
+        },
+        stopImmediatePropagation: function() {
+            this.stopPropagation();
+            this._immediatePropagationStopped = true;
+            this.originalEvent && this.originalEvent.stopImmediatePropagation();
+        },
+        isDefaultPrevented: function() {
+            return !!(this._defaultPrevented || this.originalEvent && this.originalEvent.defaultPrevented);
+        },
+        preventDefault: function() {
+            this._defaultPrevented = true;
+            this.originalEvent && this.originalEvent.preventDefault();
+        }
+
+    });
+    return eventsEngine.Event;
 }
 
 function iterate(callback) {
@@ -527,55 +585,32 @@ function initEvent(EventClass) {
 }
 
 initEvent(normalizeEventArguments(function(src, config) {
-    const that = this;
-    let propagationStopped = false;
-    let immediatePropagationStopped = false;
-    let defaultPrevented = false;
+    const srcIsEvent = src instanceof eventsEngine.Event
+        || (hasWindow() && src instanceof window.Event)
+        || (src.view?.Event && src instanceof src.view.Event);
 
-    extend(that, src);
-
-    if(src instanceof eventsEngine.Event || (hasWindow() && src instanceof window.Event)) {
-        that.originalEvent = src;
-        that.currentTarget = undefined;
+    if(srcIsEvent) {
+        this.originalEvent = src;
+        this.type = src.type;
+        this.currentTarget = undefined;
+        if(Object.prototype.hasOwnProperty.call(src, 'isTrusted')) {
+            this.isTrusted = src.isTrusted;
+        }
+        this.timeStamp = src.timeStamp || Date.now();
+    } else {
+        Object.assign(this, src);
     }
 
-    if(!(src instanceof eventsEngine.Event)) {
-        extend(that, {
-            isPropagationStopped: function() {
-                return !!(propagationStopped || that.originalEvent && that.originalEvent.propagationStopped);
-            },
-            stopPropagation: function() {
-                propagationStopped = true;
-                that.originalEvent && that.originalEvent.stopPropagation();
-            },
-            isImmediatePropagationStopped: function() {
-                return immediatePropagationStopped;
-            },
-            stopImmediatePropagation: function() {
-                this.stopPropagation();
-                immediatePropagationStopped = true;
-                that.originalEvent && that.originalEvent.stopImmediatePropagation();
-            },
-            isDefaultPrevented: function() {
-                return !!(defaultPrevented || that.originalEvent && that.originalEvent.defaultPrevented);
-            },
-            preventDefault: function() {
-                defaultPrevented = true;
-                that.originalEvent && that.originalEvent.preventDefault();
-            }
-        });
-    }
-
-    addProperty('which', calculateWhich, that);
+    addProperty('which', calculateWhich, this);
 
     if(src.type.indexOf('touch') === 0) {
         delete config.pageX;
         delete config.pageY;
     }
 
-    extend(that, config);
+    Object.assign(this, config);
 
-    that.guid = ++guid;
+    this.guid = ++guid;
 }));
 
 function addProperty(propName, hook, eventInstance) {
@@ -598,6 +633,7 @@ function addProperty(propName, hook, eventInstance) {
     });
 }
 
+EVENT_PROPERTIES.forEach(prop => addProperty(prop, (event) => (event[prop])));
 hookTouchProps(addProperty);
 
 const beforeSetStrategy = Callbacks();

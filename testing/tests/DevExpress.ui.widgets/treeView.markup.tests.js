@@ -19,6 +19,12 @@ const ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
 const ITEM_WITHOUT_CHECKBOX_CLASS = 'dx-treeview-item-without-checkbox';
 const IS_LEAF = 'dx-treeview-node-is-leaf';
 const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
+
+const CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-collapse-icon';
+const CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-expand-icon';
+const CUSTOM_EXPAND_ICON_CLASS_SELECTOR = `.${CUSTOM_EXPAND_ICON_CLASS}`;
+const CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR = `.${CUSTOM_COLLAPSE_ICON_CLASS}`;
+
 const SELECT_ALL_ITEM_CLASS = 'dx-treeview-select-all-item';
 
 const initTree = (options) => $('#treeView').dxTreeView(options);
@@ -56,7 +62,8 @@ QUnit.module('aria accessibility', {
     });
 
     QUnit.test('aria label for items', function(assert) {
-        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0); const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
+        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0);
+        const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
 
         assert.equal($node1.attr('aria-label'), 'Item 1', 'label for 1st item is correct');
         assert.equal($node2.attr('aria-label'), 'Item 11', 'label for 2nd ite is correct');
@@ -74,7 +81,8 @@ QUnit.module('aria accessibility', {
     });
 
     QUnit.test('aria level for items', function(assert) {
-        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0); const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
+        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0);
+        const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
 
         assert.equal($node1.attr('aria-level'), '1', 'level set correct');
         assert.equal($node2.attr('aria-level'), '2', 'level set correct');
@@ -120,8 +128,110 @@ QUnit.module('markup', {
             },
             { key: 2, text: 'Item 2' }
         ];
+    },
+    isVisible($element) {
+        return $element.length && !$element.hasClass('dx-state-invisible');
     }
 }, () => {
+    QUnit.test('expand icon should be able to change at runtime', function(assert) {
+        const $treeView = initTree({
+            items: this.treeItems,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+
+        treeView.option('expandIcon', 'activefolder');
+
+        assert.ok($(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).hasClass('dx-icon-activefolder'));
+    });
+
+    QUnit.test('collapse icon should be able to change at runtime', function(assert) {
+        const $treeView = initTree({
+            items: this.treeItems,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+
+        treeView.option('collapseIcon', 'minus');
+
+        assert.ok($(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).hasClass('dx-icon-minus'));
+    });
+
+    QUnit.test('default icons should be rendered if both custom expander icons are not specified', function(assert) {
+        const data = this.treeItems;
+        data[0].expanded = true;
+        data[0].items[1].expanded = true;
+
+        const $treeView = initTree({
+            items: data,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+        const treeView = $treeView.dxTreeView('instance');
+
+        treeView.option('expandIcon', null);
+        treeView.option('collapseIcon', null);
+
+        assert.equal($(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).length, 2);
+    });
+
+    QUnit.test('icons should not be rendered if plain items are used', function(assert) {
+        initTree({
+            items: this.plainItems,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+
+        assert.equal($(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).length, 0);
+        assert.equal($(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).length, 0);
+    });
+
+    QUnit.test('expand icon should be shown if node is collapsed', function(assert) {
+        initTree({
+            items: this.treeItems,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+        const $expandIcon = $(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).eq(0);
+
+        assert.ok(this.isVisible($expandIcon));
+    });
+
+    QUnit.test('collapse icon should be shown if node is expanded', function(assert) {
+        const data = this.treeItems;
+        data[0].expanded = true;
+        initTree({
+            items: data,
+            expandIcon: 'add',
+            collapseIcon: 'add',
+        });
+        const $collapseIcon = $(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).eq(0);
+
+        assert.ok(this.isVisible($collapseIcon));
+    });
+
+    QUnit.test('collapseIcon value should be used for an expand icon if an expandIcon is not specified', function(assert) {
+        initTree({
+            items: this.treeItems,
+            collapseIcon: 'minus',
+        });
+        const $expandIcon = $(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).eq(0);
+
+        assert.ok($expandIcon.hasClass('dx-icon-minus'));
+    });
+
+    QUnit.test('expandIcon value should be used for a collapse icon if collapseIcon is not specified', function(assert) {
+        initTree({
+            items: this.treeItems,
+            expandIcon: 'add',
+        });
+        const $collapseIcon = $(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).eq(0);
+
+        assert.ok($collapseIcon.hasClass('dx-icon-add'));
+    });
+
     QUnit.test('TreeView should render correctly without items', function(assert) {
         const $treeView = initTree({
             items: undefined
@@ -159,7 +269,9 @@ QUnit.module('markup', {
             parentIdExpr: 'parent'
         });
 
-        const $node = $treeView.find('.' + NODE_CLASS).eq(0); const $nodeContainer = $node.children('.' + NODE_CONTAINER_CLASS).eq(0); const $item = $node.children('.' + ITEM_CLASS).eq(0);
+        const $node = $treeView.find('.' + NODE_CLASS).eq(0);
+        const $nodeContainer = $node.children('.' + NODE_CONTAINER_CLASS).eq(0);
+        const $item = $node.children('.' + ITEM_CLASS).eq(0);
 
         assert.equal($node.data('item-id'), '2', 'keyExpr works');
         assert.equal($item.text(), 'Item 1', 'displayExpr works');
@@ -207,7 +319,9 @@ QUnit.module('markup', {
             items: this.plainItems,
             keyExpr: 'key'
         });
-        const $itemContainer = $treeView.find('.' + NODE_CONTAINER_CLASS); const $nodes = $itemContainer.find('.' + NODE_CLASS); const $items = $nodes.find('.' + ITEM_CLASS);
+        const $itemContainer = $treeView.find('.' + NODE_CONTAINER_CLASS);
+        const $nodes = $itemContainer.find('.' + NODE_CLASS);
+        const $items = $nodes.find('.' + ITEM_CLASS);
 
         assert.equal($items.length, 16);
         assert.equal($($items[0]).find('span').text(), 'Animals');
@@ -233,7 +347,10 @@ QUnit.module('markup', {
             keyExpr: 'key'
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'); const $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0); const $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1); const $firstNestedNode = $rootNodeFirstItem.find('> .' + NODE_CONTAINER_CLASS);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child');
+        const $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0);
+        const $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1);
+        const $firstNestedNode = $rootNodeFirstItem.find('> .' + NODE_CONTAINER_CLASS);
 
         assert.ok(!$rootNodeFirstItem.hasClass(IS_LEAF));
         assert.ok($rootNodeSecondItem.hasClass(IS_LEAF));
@@ -251,7 +368,9 @@ QUnit.module('markup', {
             items: this.treeItems,
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'); const $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0); const $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child');
+        const $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0);
+        const $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1);
 
         assert.equal($rootNodeFirstItem.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).length, 1);
         assert.equal($rootNodeSecondItem.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).length, 0);
@@ -267,7 +386,8 @@ QUnit.module('markup', {
             }]
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'); const $icon = $rootNode.find('.' + NODE_CLASS).eq(0).children('.' + TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child');
+        const $icon = $rootNode.find('.' + NODE_CLASS).eq(0).children('.' + TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
 
         assert.ok($icon.hasClass('dx-state-disabled'));
     });
@@ -298,7 +418,8 @@ QUnit.module('markup', {
             parentIdExpr: 'parentId'
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first'); const $rootNodeItems = $rootNode.find(' > .' + NODE_CLASS);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first');
+        const $rootNodeItems = $rootNode.find(' > .' + NODE_CLASS);
 
         assert.equal($treeView.find('.' + NODE_CONTAINER_CLASS).length, 5);
         assert.equal($rootNodeItems.length, 3);
@@ -316,7 +437,9 @@ QUnit.module('markup', {
             }
         });
 
-        const $rootNodeContainer = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first'); const $firstRootNode = $rootNodeContainer.find('li').first(); const $firstItem = $firstRootNode.find('> .' + ITEM_CLASS);
+        const $rootNodeContainer = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first');
+        const $firstRootNode = $rootNodeContainer.find('li').first();
+        const $firstItem = $firstRootNode.find('> .' + ITEM_CLASS);
 
         assert.equal($firstItem.length, 1);
         assert.equal($firstItem.text(), 'Item 1');
@@ -327,7 +450,7 @@ QUnit.module('markup', {
             items: this.treeItems,
         }).dxTreeView('instance');
 
-        assert.equal(treeView._scrollableContainer.option('direction'), 'vertical');
+        assert.equal(treeView.getScrollable().option('direction'), 'vertical');
     });
 
     QUnit.test('custom scroll direction', function(assert) {
@@ -336,7 +459,7 @@ QUnit.module('markup', {
             scrollDirection: 'both'
         }).dxTreeView('instance');
 
-        assert.equal(treeView._scrollableContainer.option('direction'), 'both');
+        assert.equal(treeView.getScrollable().option('direction'), 'both');
     });
 
     QUnit.test('Disabled class is added when disabledExpr is used', function(assert) {

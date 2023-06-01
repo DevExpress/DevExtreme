@@ -13,16 +13,14 @@
   "repository": "https://github.com/DevExpress/DevExtreme",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "@types/clean-css": "^4.2.2",
-    "@types/fibers": "^3.1.0",
-    "autoprefixer": "^9.8.0",
-    "bootstrap": "^4.3.1",
-    "clean-css": "^4.2.3",
-    "fibers": "^5.0.0",
-    "less": "^3.9.0",
-    "postcss": "^7.0.31",
-    "sass": "^1.26.3",
-    "semver": "^5.6.0"
+    "autoprefixer": "^10.4.7",
+    "bootstrap4": "npm:bootstrap@^4.6.0",
+    "bootstrap5": "npm:bootstrap@^5.2.1",
+    "clean-css": "^5.3.0",
+    "less": "^3.13.1",
+    "postcss": "^8.2.6",
+    "sass-embedded": "1.62.0",
+    "semver": "^5.7.1"
   },
   "scripts": {
     "test": "jest --coverage --verbose --runInBand",
@@ -32,21 +30,22 @@
     "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources"
   },
   "devDependencies": {
-    "@types/autoprefixer": "^9.7.2",
-    "@types/dependency-tree": "^7.2.0",
-    "@types/filing-cabinet": "^2.5.0",
-    "@types/fs-extra": "^9.0.1",
-    "@types/jest": "^26.0.15",
-    "@types/less": "^3.0.1",
-    "@types/node-sass": "^4.11.0",
-    "express": "^4.16.4",
-    "filing-cabinet": "^2.5.1",
-    "fs-extra": "^9.0.0",
-    "jest": "^26.6.1",
-    "precinct": "^6.3.1",
-    "sinon": "^9.0.2",
-    "ts-jest": "^25.5.0",
-    "ts-node": "^8.10.1",
-    "typescript": "^3.8.3"
+    "@types/clean-css": "4.2.6",
+    "@types/dependency-tree": "7.2.0",
+    "@types/filing-cabinet": "2.5.1",
+    "@types/fs-extra": "9.0.13",
+    "@types/jest": "26.0.24",
+    "@types/less": "3.0.3",
+    "@types/node": "^18.14.2",
+    "express": "4.18.2",
+    "filing-cabinet": "2.6.0",
+    "fs-extra": "9.1.0",
+    "immutable": "4.2.1",
+    "jest": "26.6.3",
+    "precinct": "8.3.1",
+    "sinon": "9.2.4",
+    "ts-jest": "26.5.6",
+    "ts-node": "8.10.2",
+    "typescript": "4.7.4"
   }
 }

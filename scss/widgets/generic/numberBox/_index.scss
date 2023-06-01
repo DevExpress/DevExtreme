@@ -6,6 +6,7 @@
 @use "../../base/icons" as *;
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
+@use "../../base/numberBox";
 
 // adduse
 @use "../textEditor" as *;
@@ -87,7 +88,7 @@
 
   &.dx-numberbox-spin {
     .dx-texteditor-input {
-      padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
+      padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
     }
   }
 }

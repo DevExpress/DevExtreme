@@ -1,129 +1,268 @@
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
+import {
+    SingleOrMultiple,
+} from '../common';
+
+export type ItemLike = string | Item | any;
+
+export {
+    SingleOrMultiple,
+};
+
+/** @public */
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
+
+/** @public */
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
+
+/** @public */
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<TabsInstance<TItem, TKey>>;
+
+/** @public */
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & SelectionChangedInfo<TItem>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ * @docid
+ */
+export interface dxTabsOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends Properties<TItem, TKey> {}
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid dxTabsOptions
+ */
+export interface dxTabsBaseOptions<
+    TComponent extends dxTabs<any, TItem, TKey> = dxTabs<any, any, any>,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
-     * @docid
+     * @docid dxTabsOptions.dataSource
+     * @type string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxTabsItem | any> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
-     * @docid
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @docid dxTabsOptions.focusStateEnabled
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.hoverStateEnabled
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.items
+     * @type Array<string | dxTabsItem | any>
      * @fires dxTabsOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxTabsItem | any>;
+    items?: Array<TItem>;
     /**
-     * @docid
+     * @docid dxTabsOptions.repaintChangesOnly
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.scrollByContent
      * @default true
-     * @default false [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default false &for(desktop)
      * @public
      */
     scrollByContent?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.scrollingEnabled
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollingEnabled?: boolean;
     /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    selectedItems?: Array<string | number | any>;
-    /**
-     * @docid
-     * @type Enums.NavSelectionMode
+     * @docid dxTabsOptions.selectionMode
      * @default 'single'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: SingleOrMultiple;
     /**
-     * @docid
+     * @docid dxTabsOptions.showNavButtons
      * @default true
-     * @default false [for](mobile_devices)
-     * @prevFileNamespace DevExpress.ui
+     * @default false &for(mobile_devices)
      * @public
      */
     showNavButtons?: boolean;
 }
-/**
- * @docid
- * @inherits CollectionWidget
- * @module ui/tabs
- * @export default
- * @prevFileNamespace DevExpress.ui
- * @public
- */
-export default class dxTabs extends CollectionWidget {
-    constructor(element: Element, options?: dxTabsOptions)
-    constructor(element: JQuery, options?: dxTabsOptions)
-}
 
 /**
  * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @inherits CollectionWidget
+ * @namespace DevExpress.ui
+ * @public
+ */
+export default class dxTabs<
+    TProperties extends dxTabsOptions<TItem, TKey> = dxTabsOptions<any, any>,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidget<TProperties, TItem, TKey> { }
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxTabs
+ */
+export type Item = dxTabsItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
  */
 export interface dxTabsItem extends CollectionWidgetItem {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     badge?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
 }
 
-declare global {
-interface JQuery {
-    dxTabs(): JQuery;
-    dxTabs(options: "instance"): dxTabs;
-    dxTabs(options: string): any;
-    dxTabs(options: string, ...params: any[]): any;
-    dxTabs(options: dxTabsOptions): JQuery;
-}
-}
-export type Options = dxTabsOptions;
+/** @public */
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+};
 
-/** @deprecated use Options instead */
-export type IOptions = dxTabsOptions;
+interface TabsInstance<TItem, TKey> extends dxTabs<Properties<TItem, TKey>, TItem, TKey> { }
+
+/** @public */
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxTabsBaseOptions<TabsInstance<TItem, TKey>, TItem, TKey>;
+
+/** @deprecated use Properties instead */
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxTabsOptions.onContentReady
+ * @type_function_param1 e:{ui/tabs:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onDisposing
+ * @type_function_param1 e:{ui/tabs:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onInitialized
+ * @type_function_param1 e:{ui/tabs:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onItemClick
+ * @type_function_param1 e:{ui/tabs:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/tabs:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onItemHold
+ * @type_function_param1 e:{ui/tabs:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onItemRendered
+ * @type_function_param1 e:{ui/tabs:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onOptionChanged
+ * @type_function_param1 e:{ui/tabs:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTabsOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/tabs:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+};
+///#ENDDEBUG

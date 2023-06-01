@@ -6,6 +6,7 @@ import dateLocalization from '../../localization/date';
 import { isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { format } from '../../core/utils/string';
+import coreLocalization from '../../localization/core';
 
 
 export class GanttView extends Widget {
@@ -13,29 +14,40 @@ export class GanttView extends Widget {
         super._init();
 
         this._onSelectionChanged = this._createActionByOption('onSelectionChanged');
+        this._onViewTypeChanged = this._createActionByOption('onViewTypeChanged');
         this._onScroll = this._createActionByOption('onScroll');
         this._onDialogShowing = this._createActionByOption('onDialogShowing');
         this._onPopupMenuShowing = this._createActionByOption('onPopupMenuShowing');
+        this._onPopupMenuHiding = this._createActionByOption('onPopupMenuHiding');
         this._expandAll = this._createActionByOption('onExpandAll');
         this._collapseAll = this._createActionByOption('onCollapseAll');
         this._taskClick = this._createActionByOption('onTaskClick');
         this._taskDblClick = this._createActionByOption('onTaskDblClick');
+        this._onAdjustControl = this._createActionByOption('onAdjustControl');
     }
     _initMarkup() {
         const GanttView = getGanttViewCore();
         this._ganttViewCore = new GanttView(this.$element().get(0), this, {
             showResources: this.option('showResources'),
+            showDependencies: this.option('showDependencies'),
             taskTitlePosition: this._getTaskTitlePosition(this.option('taskTitlePosition')),
             firstDayOfWeek: this._getFirstDayOfWeek(this.option('firstDayOfWeek')),
             allowSelectTask: this.option('allowSelection'),
+            startDateRange: this.option('startDateRange'),
+            endDateRange: this.option('endDateRange'),
             editing: this._parseEditingSettings(this.option('editing')),
             validation: this.option('validation'),
             stripLines: { stripLines: this.option('stripLines') },
             areHorizontalBordersEnabled: this.option('showRowLines'),
             areAlternateRowsEnabled: false,
             viewType: this._getViewTypeByScaleType(this.option('scaleType')),
+            viewTypeRange: this._parseViewTypeRangeSettings(this.option('scaleTypeRange')),
             cultureInfo: this._getCultureInfo(),
-            taskTooltipContentTemplate: this.option('taskTooltipContentTemplate')
+            taskTooltipContentTemplate: this.option('taskTooltipContentTemplate'),
+            taskProgressTooltipContentTemplate: this.option('taskProgressTooltipContentTemplate'),
+            taskTimeTooltipContentTemplate: this.option('taskTimeTooltipContentTemplate'),
+            taskContentTemplate: this.option('taskContentTemplate'),
+            sieve: this.option('sieve')
         });
         this._selectTask(this.option('selectedRowKey'));
         this.updateBarItemsState();
@@ -44,13 +56,13 @@ export class GanttView extends Widget {
         return isDefined(value) ? value : dateLocalization.firstDayOfWeekIndex();
     }
     getTaskAreaContainer() {
-        return this._ganttViewCore.taskAreaContainer;
+        return this._ganttViewCore.getTaskAreaContainer();
     }
     getBarManager() {
         return this._ganttViewCore.barManager;
     }
     executeCoreCommand(id) {
-        const command = this._ganttViewCore.commandManager.getCommand(id);
+        const command = this._ganttViewCore.getCommandByKey(id);
         if(command) {
             command.execute();
         }
@@ -59,7 +71,7 @@ export class GanttView extends Widget {
         this._ganttViewCore.changeTaskExpanded(id, value);
     }
     updateView() {
-        this._ganttViewCore.updateView();
+        this._ganttViewCore?.updateView();
     }
     updateBarItemsState() {
         this._ganttViewCore.barManager.updateItemsState([]);
@@ -67,13 +79,15 @@ export class GanttView extends Widget {
     setWidth(value) {
         this._ganttViewCore.setWidth(value);
     }
+    _onDimensionChanged() {
+        this._ganttViewCore.onBrowserWindowResize();
+    }
 
     _selectTask(id) {
         this._ganttViewCore.selectTaskById(id);
     }
-    _update() {
-        this._ganttViewCore.loadOptionsFromGanttOwner();
-        this._ganttViewCore.resetAndUpdate();
+    _update(keepExpandState) {
+        this._ganttViewCore?.updateWithDataReload(keepExpandState);
     }
 
     _getCultureInfo() {
@@ -83,9 +97,23 @@ export class GanttView extends Widget {
             abbrMonthNames: dateLocalization.getMonthNames('abbreviated'),
             abbrDayNames: dateLocalization.getDayNames('abbreviated'),
             quarterNames: this._getQuarterNames(),
-            amText: dateLocalization.getPeriodNames()[0],
-            pmText: dateLocalization.getPeriodNames()[1]
+            amText: this._getAmText(),
+            pmText: this._getPmText(),
+            start: messageLocalization.format('dxGantt-dialogStartTitle'),
+            end: messageLocalization.format('dxGantt-dialogEndTitle'),
+            progress: messageLocalization.format('dxGantt-dialogProgressTitle')
         };
+    }
+    _getAmText() {
+        return this._hasAmPM() ? dateLocalization.getPeriodNames()[0] : '';
+    }
+    _getPmText() {
+        return this._hasAmPM() ? dateLocalization.getPeriodNames()[1] : '';
+    }
+    _hasAmPM() {
+        const date = new Date(Date.UTC(2012, 11, 12, 3, 0, 0));
+        const dateString = date.toLocaleTimeString(coreLocalization.locale());
+        return dateString.match(/am|pm/i) || date.toString().match(/am|pm/i);
     }
     _getQuarterNames() {
         const quarterFormat = messageLocalization.format('dxGantt-quarter');
@@ -115,6 +143,8 @@ export class GanttView extends Widget {
                 return 0;
             case 'hours':
                 return 1;
+            case 'sixHours':
+                return 2;
             case 'days':
                 return 3;
             case 'weeks':
@@ -144,6 +174,13 @@ export class GanttView extends Widget {
         };
     }
 
+    _parseViewTypeRangeSettings(value) {
+        return {
+            min: this._getViewTypeByScaleType(value.min),
+            max: this._getViewTypeByScaleType(value.max)
+        };
+    }
+
     _optionChanged(args) {
         switch(args.name) {
             case 'width':
@@ -157,16 +194,26 @@ export class GanttView extends Widget {
             case 'dependencies':
             case 'resources':
             case 'resourceAssignments':
-                this._update();
+                this._sieveOptions = undefined;
+                this._update(true);
                 break;
             case 'showResources':
                 this._ganttViewCore.setShowResources(args.value);
+                break;
+            case 'showDependencies':
+                this._ganttViewCore.setShowDependencies(args.value);
                 break;
             case 'taskTitlePosition':
                 this._ganttViewCore.setTaskTitlePosition(this._getTaskTitlePosition(args.value));
                 break;
             case 'firstDayOfWeek':
                 this._ganttViewCore.setFirstDayOfWeek(this._getFirstDayOfWeek(args.value));
+                break;
+            case 'startDateRange':
+                this._ganttViewCore.setStartDateRange(args.value);
+                break;
+            case 'endDateRange':
+                this._ganttViewCore.setEndDateRange(args.value);
                 break;
             case 'allowSelection':
                 this._ganttViewCore.setAllowSelection(args.value);
@@ -179,7 +226,7 @@ export class GanttView extends Widget {
                 break;
             case 'validation':
                 this._ganttViewCore.setValidationSettings(args.value);
-                this._update();
+                this._update(true);
                 break;
             case 'showRowLines':
                 this._ganttViewCore.setRowLinesVisible(args.value);
@@ -187,11 +234,26 @@ export class GanttView extends Widget {
             case 'scaleType':
                 this._ganttViewCore.setViewType(this._getViewTypeByScaleType(args.value));
                 break;
+            case 'scaleTypeRange':
+                this._ganttViewCore.setViewTypeRange(this._getViewTypeByScaleType(args.value.min), this._getViewTypeByScaleType(args.value.max));
+                break;
             case 'stripLines':
                 this._ganttViewCore.setStripLines({ stripLines: args.value });
                 break;
             case 'taskTooltipContentTemplate':
                 this._ganttViewCore.setTaskTooltipContentTemplate(args.value);
+                break;
+            case 'taskProgressTooltipContentTemplate':
+                this._ganttViewCore.setTaskProgressTooltipContentTemplate(args.value);
+                break;
+            case 'taskTimeTooltipContentTemplate':
+                this._ganttViewCore.setTaskTimeTooltipContentTemplate(args.value);
+                break;
+            case 'taskContentTemplate':
+                this._ganttViewCore.setTaskContentTemplate(args.value);
+                break;
+            case 'sieve':
+                this._sortAndFilter(args.value);
                 break;
             default:
                 super._optionChanged(args);
@@ -209,7 +271,22 @@ export class GanttView extends Widget {
         return this.option('headerHeight');
     }
     getGanttTasksData() {
-        return this.option('tasks');
+        const tasks = this.option('tasks');
+        const sieveOptions = this.getSieveOptions();
+        if(sieveOptions?.sievedItems && sieveOptions?.sieveColumn) {
+            return sieveOptions.sievedItems;
+        }
+        return tasks;
+    }
+    _sortAndFilter(args) {
+        this._sieveOptions = args;
+        this._update(!args?.expandTasks);
+        const selectedRowKey = this.option('selectedRowKey');
+        this._selectTask(selectedRowKey);
+    }
+
+    getSieveOptions() {
+        return this._sieveOptions;
     }
     getGanttDependenciesData() {
         return this.option('dependencies');
@@ -221,13 +298,18 @@ export class GanttView extends Widget {
         return this.option('resourceAssignments');
     }
     getGanttWorkTimeRules() {
-        return {};
+        return null;
     }
     getExternalTaskAreaContainer(element) {
         if(!this._taskAreaContainer) {
             this._taskAreaContainer = new TaskAreaContainer(element, this);
         }
         return this._taskAreaContainer;
+    }
+    prepareExternalTaskAreaContainer(element, info) {
+        if(info?.height) {
+            this._taskAreaContainer._scrollView.option('height', info.height);
+        }
     }
     changeGanttTaskSelection(id, selected) {
         this._onSelectionChanged({ id: id, selected: selected });
@@ -246,13 +328,21 @@ export class GanttView extends Widget {
     getModelChangesListener() {
         return this.option('modelChangesListener');
     }
+    getExportInfo() {
+        return this.option('exportInfo');
+    }
     showPopupMenu(info) {
         this._onPopupMenuShowing(info);
+    }
+    hidePopupMenu(info) {
+        this._onPopupMenuHiding(info);
     }
     getMainElement() {
         return this.option('mainElement').get(0);
     }
-    adjustControl() {}
+    adjustControl() {
+        this._onAdjustControl();
+    }
     getRequireFirstLoadParentAutoCalc() {
         return this.option('validation.autoUpdateParentTasks');
     }
@@ -276,12 +366,46 @@ export class GanttView extends Widget {
         let result = '';
         if(date) {
             const datePart = dateLocalization.format(date, 'shortDate');
-            const timePart = dateLocalization.format(date, 'hh:mm');
+            const timeFormat = this._hasAmPM() ? 'hh:mm a' : 'HH:mm';
+            const timePart = dateLocalization.format(date, timeFormat);
             result = datePart + ' ' + timePart;
         }
         return result;
     }
     destroyTemplate(container) {
         $(container).empty();
+    }
+    onTaskAreaSizeChanged(info) {
+        const scrollView = this._taskAreaContainer._scrollView;
+        if(isDefined(info?.height)) {
+            const direction = info?.height > this._taskAreaContainer.getHeight() ? 'both' : 'horizontal';
+            scrollView.option('direction', direction);
+        }
+    }
+    updateGanttViewType(type) {
+        this._onViewTypeChanged({ type: type });
+    }
+    // export
+    getTreeListTableStyle() {
+        return this.callExportHelperMethod('getTreeListTableStyle');
+    }
+    getTreeListColCount() {
+        return this.callExportHelperMethod('getTreeListColCount');
+    }
+    getTreeListHeaderInfo(colIndex) {
+        return this.callExportHelperMethod('getTreeListHeaderInfo', colIndex);
+    }
+    getTreeListCellInfo(rowIndex, colIndex, key) {
+        return this.callExportHelperMethod('getTreeListCellInfo', key, colIndex);
+    }
+    getTreeListEmptyDataCellInfo() {
+        return this.callExportHelperMethod('getTreeListEmptyDataCellInfo');
+    }
+    callExportHelperMethod(methodName, ...args) {
+        const helper = this.option('exportHelper');
+        return helper[methodName](...args);
+    }
+    applyTasksExpandedState(state) {
+        this._ganttViewCore?.applyTasksExpandedState(state);
     }
 }

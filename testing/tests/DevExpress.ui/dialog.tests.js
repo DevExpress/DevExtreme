@@ -1,16 +1,24 @@
 import $ from 'jquery';
 import config from 'core/config';
 import devices from 'core/devices';
-import dialog from 'ui/dialog';
+import { alert, confirm, custom } from 'ui/dialog';
 import domUtils from 'core/utils/dom';
 import errors from 'ui/widget/ui.errors';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { value as viewPort } from 'core/utils/view_port';
+import domAdapter from 'core/dom_adapter';
 
 const { module, test, testInActiveWindow } = QUnit;
 
-module('dialog tests', {
+const ANIMATION_TIMEOUT = 500;
+
+const DIALOG_WRAPPER_CLASS = 'dx-dialog-wrapper';
+const DIALOG_CLASS = 'dx-dialog';
+const POPUP_CLASS = 'dx-popup';
+const DIALOG_BUTTON_CLASS = 'dx-dialog-button';
+
+module('dialog', {
     beforeEach: function() {
         viewPort('#qunit-fixture');
 
@@ -18,8 +26,9 @@ module('dialog tests', {
 
         this.title = 'Title here';
         this.messageHtml = '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>';
+        this.getDialogElement = () => $(`.${DIALOG_CLASS}`);
         this.dialog = () => {
-            return $('.dx-dialog-wrapper');
+            return $(`.${DIALOG_WRAPPER_CLASS}`);
         };
         this.thereIsDialog = () => {
             return this.dialog().length === 1;
@@ -30,25 +39,107 @@ module('dialog tests', {
         this.clickButton = (index) => {
             index = index || 0;
             this.dialog()
-                .find('.dx-dialog-button')
+                .find(`.${DIALOG_BUTTON_CLASS}`)
                 .eq(index)
                 .trigger('dxclick');
         };
-        this.isPopupDraggable = () => $('.dx-popup').dxPopup('instance').option('dragEnabled');
+        this.isPopupDraggable = () => $(`.${POPUP_CLASS}`).dxPopup('instance').option('dragEnabled');
     },
     afterEach: function() {
         fx.off = false;
     }
 }, () => {
+    test('should remove its markup after hiding by escape (T1154325)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
+        custom({
+            messageHtml: 'text',
+            buttons: [{ type: 'default', text: 'Ok' }]
+        }).show();
+
+        const dialogButton = this
+            .dialog()
+            .find(`.${DIALOG_BUTTON_CLASS}`);
+
+        const keyboard = keyboardMock(dialogButton);
+        keyboard.keyDown('esc');
+
+        const $dialog = this.getDialogElement();
+        assert.strictEqual($dialog.length, 0, 'dialog markup is removed');
+    });
+
+    test('should remove its markup after hide method call', function(assert) {
+        const { show, hide } = custom({
+            messageHtml: 'text'
+        });
+
+        show();
+        hide();
+
+        const $dialog = this.getDialogElement();
+        assert.strictEqual($dialog.length, 0, 'dialog markup is removed');
+    });
+
+    module('with animation', {
+        beforeEach: function() {
+            fx.off = false;
+            this.clock = sinon.useFakeTimers();
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    }, () => {
+        test('should remove its markup after hiding by escape only after hiding animation is finished', function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'desktop specific test');
+                return;
+            }
+
+            custom({
+                messageHtml: 'text',
+                buttons: [{ type: 'default', text: 'Ok' }],
+            }).show();
+
+            const dialogButton = this
+                .dialog()
+                .find(`.${DIALOG_BUTTON_CLASS}`);
+            const keyboard = keyboardMock(dialogButton);
+
+            keyboard.keyDown('esc');
+
+            assert.strictEqual(this.getDialogElement().length, 1, 'dialog markup is not removed immediately');
+
+            this.clock.tick(ANIMATION_TIMEOUT);
+            assert.strictEqual(this.getDialogElement().length, 0, 'dialog markup is removed after animation is finished');
+        });
+
+        test('should remove its markup after hide method call only after hiding animation is finished', function(assert) {
+            const { show, hide } = custom({
+                messageHtml: 'text',
+            });
+
+            show();
+            hide();
+
+            assert.strictEqual(this.getDialogElement().length, 1, 'dialog markup is not removed immediately');
+
+            this.clock.tick(ANIMATION_TIMEOUT);
+            assert.strictEqual(this.getDialogElement().length, 0, 'dialog markup is removed after animation is finished');
+        });
+    });
+
     test('dialog show/hide by Escape (T686065)', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'desktop specific test');
             return;
         }
 
-        dialog.alert();
+        alert();
         assert.ok(this.thereIsDialog());
-        keyboardMock(this.dialog().find('.dx-overlay-content').get(0)).keyDown('esc');
+        keyboardMock(this.dialog().find(`.${DIALOG_BUTTON_CLASS}`).get(0)).keyDown('esc');
         assert.ok(this.thereIsNoDialog());
     });
 
@@ -67,14 +158,14 @@ module('dialog tests', {
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
 
         // by 'hide' calling
-        instance = dialog.custom(options);
+        instance = custom(options);
         instance.show().done(afterHide);
         assert.ok(this.thereIsDialog(), 'Dialog is shown.');
         instance.hide(result);
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown after \'hide\' was called.');
 
         // by clicking button
-        instance = dialog.custom(options);
+        instance = custom(options);
         instance.show();
         assert.ok(this.thereIsDialog(), 'Dialog is shown.');
         this.clickButton();
@@ -86,38 +177,22 @@ module('dialog tests', {
             assert.ok(true, 'focus is absent on mobile devices');
             return;
         }
-        dialog.alert('Sample message', 'Alert');
+        alert('Sample message', 'Alert');
 
         assert.equal($('.dx-dialog-wrapper').find('.dx-state-focused').length, 1, 'button obtained focus');
     });
 
     test('dialog content', function(assert) {
-        let instance;
-        let options = {
+        const options = {
             title: this.title,
             messageHtml: this.messageHtml
         };
 
-        instance = dialog.custom(options);
+        const instance = custom(options);
         instance.show();
 
         assert.equal(this.dialog().find('.dx-popup-title').text(), this.title, 'Actual title is equal to expected.');
         assert.equal((this.dialog().find('.dx-dialog-message').html() || '').toLowerCase(), this.messageHtml.toLowerCase(), 'Actual message is equal to expected.');
-        instance.hide();
-
-        assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
-
-        options = {
-            messageHtml: this.messageHtml
-        };
-        assert.equal(instance.title, undefined, 'dialog.title value isn\'t set.');
-
-        dialog.DEBUG_set_title(this.title);
-        instance = dialog.custom(options);
-        instance.show();
-
-        assert.equal(this.dialog().find('.dx-popup-title').text(), this.title, 'Dialog default title is used.');
-
         instance.hide();
 
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
@@ -129,7 +204,7 @@ module('dialog tests', {
             messageHtml: this.messageHtml,
             showTitle: false
         };
-        const instance = dialog.custom(options);
+        const instance = custom(options);
 
         instance.show();
 
@@ -143,7 +218,7 @@ module('dialog tests', {
                 messageHtml: this.messageHtml,
                 dragEnabled: dialogDragEnabled
             };
-            const instance = dialog.custom(options);
+            const instance = custom(options);
 
             instance.show();
 
@@ -158,7 +233,7 @@ module('dialog tests', {
 
     test('alert dialog without title should not be draggable', function(assert) {
         const testPopupDrag = (showTitle, expectedPopupDragEnabled, message) => {
-            dialog.alert(this.messageHtml, 'alert title', showTitle);
+            alert(this.messageHtml, 'alert title', showTitle);
 
             assert.equal(this.isPopupDraggable(), expectedPopupDragEnabled, message);
 
@@ -172,7 +247,7 @@ module('dialog tests', {
 
     test('confirm dialog without title should not be draggable', function(assert) {
         const testPopupDrag = (showTitle, expectedPopupDragEnabled, message) => {
-            dialog.confirm(this.messageHtml, 'confirm title', showTitle);
+            confirm(this.messageHtml, 'confirm title', showTitle);
 
             assert.equal(this.isPopupDraggable(), expectedPopupDragEnabled, message);
 
@@ -205,11 +280,11 @@ module('dialog tests', {
 
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
 
-        const instance = dialog.custom(options);
+        const instance = custom(options);
         instance.show().done((value) => actual = value);
 
         assert.ok(this.thereIsDialog(), 'Dialog is shown.');
-        assert.equal(this.dialog().find('.dx-dialog-button').length, 2, 'There are two custom buttons.');
+        assert.equal(this.dialog().find(`.${DIALOG_BUTTON_CLASS}`).length, 2, 'There are two custom buttons.');
 
         this.clickButton(1);
 
@@ -220,8 +295,7 @@ module('dialog tests', {
     test('alert dialog', function(assert) {
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
 
-        dialog.DEBUG_set_title(this.title);
-        dialog.alert(this.messageHtml);
+        alert(this.messageHtml, this.title);
 
         assert.ok(this.thereIsDialog(), 'Dialog is shown.');
         assert.equal(this.dialog().find('.dx-popup-title').text(), this.title, 'Dialog default title is used.');
@@ -241,7 +315,7 @@ module('dialog tests', {
 
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
 
-        dialog.confirm(this.messageHtml, this.title).done((value) => actual = value);
+        confirm(this.messageHtml, this.title).done((value) => actual = value);
 
         this.clickButton();
 
@@ -252,7 +326,7 @@ module('dialog tests', {
     test('dialog overlay content has \'dx-rtl\' class when RTL is enabled', function(assert) {
         config({ rtlEnabled: true });
 
-        dialog.confirm(this.messageHtml, this.title);
+        confirm(this.messageHtml, this.title);
 
         assert.ok($('.dx-overlay-content').hasClass('dx-rtl'), '\'dx-rlt\' class is present');
 
@@ -266,7 +340,7 @@ module('dialog tests', {
         errors.log = (loggedWarning) => warning = loggedWarning;
 
         try {
-            dialog.custom({ message: 'message' });
+            custom({ message: 'message' });
             assert.strictEqual(warning, 'W1013');
         } finally {
             errors.log = originalLog;
@@ -281,7 +355,7 @@ module('dialog tests', {
         const resetActiveElementStub = sinon.stub(domUtils, 'resetActiveElement');
 
         try {
-            const instance = dialog.custom(options);
+            const instance = custom(options);
             instance.show();
             assert.equal(resetActiveElementStub.callCount, 1);
             instance.hide();
@@ -291,7 +365,7 @@ module('dialog tests', {
     });
 
     test('it should be possible to redefine popup option in the dialog', function(assert) {
-        dialog.custom({
+        custom({
             title: 'Test Title',
             popupOptions: {
                 customOption: 'Test',
@@ -300,7 +374,7 @@ module('dialog tests', {
             }
         }).show();
 
-        const popup = $('.dx-popup').dxPopup('instance');
+        const popup = $(`.${POPUP_CLASS}`).dxPopup('instance');
 
         assert.equal(popup.option('customOption'), 'Test', 'custom option is defined');
         assert.equal(popup.option('title'), 'Popup title', 'user option is redefined');
@@ -310,7 +384,7 @@ module('dialog tests', {
     test('it should apply correct arguments to the button \'onClick\' handler', function(assert) {
         const clickStub = sinon.stub();
 
-        dialog.custom({
+        custom({
             buttons: [{
                 text: 'Test',
                 onClick: clickStub
@@ -324,5 +398,66 @@ module('dialog tests', {
         assert.ok(Object.prototype.hasOwnProperty.call(clickArgs, 'component'));
         assert.ok(Object.prototype.hasOwnProperty.call(clickArgs, 'event'));
         assert.strictEqual(clickArgs.component.NAME, 'dxButton');
+    });
+
+    test('dragAndResizeContainer should be window by default (T1120202)', function(assert) {
+        custom({
+            title: 'title',
+            messageHtml: 'message',
+            showTitle: true,
+        }).show();
+
+        const popup = $(`.${POPUP_CLASS}`).dxPopup('instance');
+        const { dragAndResizeArea } = popup.option();
+        assert.strictEqual(dragAndResizeArea, window, 'dragAndResizeArea is not specified');
+    });
+
+    test('container should be equal to the root element by default', function(assert) {
+        custom({
+            title: 'title',
+            messageHtml: 'message',
+            showTitle: true,
+        }).show();
+
+        const popup = $(`.${POPUP_CLASS}`).dxPopup('instance');
+        const { container } = popup.option();
+        assert.strictEqual(container.get(0), $(`.${DIALOG_CLASS}`).get(0), 'container is a root element');
+    });
+});
+
+QUnit.module('width on phone', {
+    beforeEach: function() {
+        viewPort('#qunit-fixture');
+        fx.off = true;
+        this.realDevice = devices.real();
+
+        devices.real({ deviceType: 'phone' });
+
+        this.dialog = custom();
+        this.documentStub = sinon.stub(domAdapter, 'getDocumentElement');
+        this.getDialogElement = () => $(`.${DIALOG_WRAPPER_CLASS} .dx-overlay-content`);
+    },
+    afterEach: function() {
+        devices.real(this.realDevice);
+        this.documentStub.restore();
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('should be 90% for portrait orientation', function(assert) {
+        this.documentStub.returns({ clientWidth: 200, clientHeight: 500 });
+
+        this.dialog.show();
+
+        const $dialog = this.getDialogElement();
+        assert.strictEqual($dialog.width(), 180, 'width is correct');
+    });
+
+    QUnit.test('should be 60% for landscape orientation', function(assert) {
+        this.documentStub.returns({ clientWidth: 600, clientHeight: 500 });
+
+        this.dialog.show();
+
+        const $dialog = this.getDialogElement();
+        assert.strictEqual($dialog.width(), 360, 'width is correct');
     });
 });

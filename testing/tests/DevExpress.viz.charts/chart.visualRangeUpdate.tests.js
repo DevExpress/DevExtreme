@@ -4,7 +4,13 @@ import dxChart from 'viz/chart';
 const moduleSetup = {
     createChart(options) {
         const onOptionChanged = sinon.spy();
-        const chart = new dxChart($('<div style="width: 100px;height:100px;"></div>').prependTo('#qunit-fixture'),
+        const $element = $('<div>')
+            .css({
+                width: '100px',
+                height: '100px'
+            })
+            .prependTo('#qunit-fixture');
+        const chart = new dxChart($element,
             $.extend({
                 dataSource: [],
                 commonAxisSettings: {
@@ -197,6 +203,43 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 2, endValue: 4 }, 'Case 5');
     assert.deepEqual(onOptionChanged.getCall(2).args[0].fullName, 'valueAxis.visualRange', 'Case 5');
     assert.deepEqual(onOptionChanged.getCall(2).args[0].value, { startValue: 20, endValue: 40 }, 'Case 5');
+});
+
+// T1032216
+QUnit.test('No data -> set constant line with extendedAxis option -> set data - reset visual range', function(assert) {
+    const dataSource = [
+        { arg: 1, val: 10 },
+        { arg: 2, val: 20 },
+        { arg: 3, val: 30 },
+        { arg: 4, val: 40 },
+        { arg: 5, val: 50 }
+    ];
+
+    const [chart] = this.createChart({
+        valueAxis: {
+            constantLines: [{
+                value: 100,
+                extendAxis: true
+            }, {
+                value: 120,
+                extendAxis: true
+            }],
+        },
+        argumentAxis: {
+            constantLines: [{
+                value: 10,
+                extendAxis: true
+            }, {
+                value: 12,
+                extendAxis: true
+            }],
+        }
+    });
+
+    chart.option({ dataSource });
+
+    assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 10, endValue: 120 });
+    assert.deepEqual(chart.option('argumentAxis.visualRange'), { startValue: 1, endValue: 12 });
 });
 
 QUnit.test('No data -> set visualRange < wholeRange -> set data - keep visual range', function(assert) {
@@ -2743,6 +2786,37 @@ QUnit.test('Data -> set value visualRange -> set argument VisualRange - keep val
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [10, 30], 'Case 4');
 });
 
+QUnit.test('Update visualRange with the name of the automatic created value axes (T972285)', function(assert) {
+    const [chart] = this.createChart({
+        series: [{ axis: 'axis1' }, { axis: 'axis2' }],
+        valueAxis: [{}, { name: 'axis3' }]
+    });
+
+    assert.deepEqual(chart.option('valueAxis'), [
+        {
+            visualRange: {
+                endValue: undefined,
+                startValue: undefined
+            }
+        },
+        {
+            name: 'axis3',
+            visualRange: {
+                endValue: undefined,
+                startValue: undefined
+            }
+        },
+        {
+            name: 'axis1',
+            visualRange: {}
+        },
+        {
+            name: 'axis2',
+            visualRange: {}
+        }
+    ]);
+});
+
 QUnit.module('Visual range on updates. Value axis without visualRange. Auto mode', moduleSetup);
 
 QUnit.test('AdjustOnZoom true - show adjusted value range for every argument range case', function(assert) {
@@ -4398,4 +4472,24 @@ QUnit.test('Value Axis with visualRange. Hide and show series - do not update vi
 
     assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: -10, endValue: 3000 }, 'Case 2');
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: -10, endValue: 3000 }, 'Case 2');
+});
+
+QUnit.test('No Data. Argument axis with constant lines after change visual range (T1102487)', function(assert) {
+    const [chart] = this.createChart({
+        dataSource: [],
+        argumentAxis: {
+            constantLines: [{
+                value: 10,
+                extendAxis: true
+            }, {
+                value: 12,
+                extendAxis: true
+            }],
+        }
+    });
+
+    chart.getArgumentAxis().visualRange([10.5, 11.5]);
+    const businessRange = chart.getArgumentAxis().getTranslator().getBusinessRange();
+    assert.equal(businessRange.min, 10);
+    assert.equal(businessRange.max, 12);
 });

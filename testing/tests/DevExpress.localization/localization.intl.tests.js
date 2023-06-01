@@ -1,3 +1,4 @@
+import '../../helpers/noIntl.js';
 import Intl from 'intl';
 import sharedTests from './sharedParts/localization.shared.js';
 import dateLocalization from 'localization/date';

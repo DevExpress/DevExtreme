@@ -1,3 +1,4 @@
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import { locate } from '../animation/translator';
 import { _translator, animation } from './multi_view/ui.multi_view.animation';
@@ -72,7 +73,7 @@ const MultiView = CollectionWidget.inherit({
             selectOnFocus: true,
             selectionMode: 'single',
             selectionRequired: true,
-            selectionByClick: false
+            selectByClick: false
         });
     },
 
@@ -107,7 +108,7 @@ const MultiView = CollectionWidget.inherit({
 
     _itemWidth: function() {
         if(!this._itemWidthValue) {
-            this._itemWidthValue = this._$wrapper.width();
+            this._itemWidthValue = getWidth(this._$wrapper);
         }
 
         return this._itemWidthValue;
@@ -152,6 +153,7 @@ const MultiView = CollectionWidget.inherit({
         this._$itemContainer.appendTo(this._$wrapper);
 
         this.option('loopItemFocus', this.option('loop'));
+        this._findBoundaryIndices();
 
         this._initSwipeable();
     },
@@ -266,7 +268,7 @@ const MultiView = CollectionWidget.inherit({
         this._updateItemsVisibility(this.option('selectedIndex'));
     },
 
-    _setAriaSelected: noop,
+    _setAriaSelectionAttribute: noop,
 
     _updateSelection: function(addedSelection, removedSelection) {
         const newIndex = addedSelection[0];
@@ -283,7 +285,7 @@ const MultiView = CollectionWidget.inherit({
             this._updateItems(newIndex);
 
             // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713)
-            this._$itemContainer.width();
+            getWidth(this._$itemContainer);
         }).bind(this));
     },
 
@@ -318,16 +320,39 @@ const MultiView = CollectionWidget.inherit({
         });
     },
 
+    _findBoundaryIndices() {
+        const items = this.option('items');
+
+        let firstIndex;
+        let lastIndex;
+
+        items.forEach((item, index) => {
+            const isDisabled = Boolean(item?.disabled);
+
+            if(!isDisabled) {
+                firstIndex ??= index;
+                lastIndex = index;
+            }
+        });
+
+        this._boundaryIndices = {
+            firstIndex: firstIndex ?? 0,
+            lastIndex: lastIndex ?? items.length - 1,
+        };
+    },
+
     _swipeStartHandler: function(e) {
         animation.complete(this._$itemContainer);
 
         const selectedIndex = this.option('selectedIndex');
         const loop = this.option('loop');
-        const lastIndex = this._itemsCount() - 1;
+
+        const { firstIndex, lastIndex } = this._boundaryIndices;
+
         const rtl = this.option('rtlEnabled');
 
-        e.maxLeftOffset = toNumber(loop || (rtl ? selectedIndex > 0 : selectedIndex < lastIndex));
-        e.maxRightOffset = toNumber(loop || (rtl ? selectedIndex < lastIndex : selectedIndex > 0));
+        e.maxLeftOffset = toNumber(loop || (rtl ? selectedIndex > firstIndex : selectedIndex < lastIndex));
+        e.maxRightOffset = toNumber(loop || (rtl ? selectedIndex < lastIndex : selectedIndex > firstIndex));
 
         this._swipeDirection = null;
     },
@@ -348,10 +373,36 @@ const MultiView = CollectionWidget.inherit({
         }
     },
 
+    _findNextAvailableIndex(index, offset) {
+        const { items, loop } = this.option();
+        const { firstIndex, lastIndex } = this._boundaryIndices;
+
+        if(loop) {
+            if(index === firstIndex) {
+                return lastIndex;
+            } else if(index === lastIndex) {
+                return firstIndex;
+            }
+        }
+
+        for(let i = index + offset; i >= firstIndex && i <= lastIndex; i += offset) {
+            const isDisabled = Boolean(items[i].disabled);
+
+            if(!isDisabled) {
+                return i;
+            }
+        }
+
+        return index;
+    },
+
     _swipeEndHandler: function(e) {
         const targetOffset = e.targetOffset * this._getRTLSignCorrection();
+
         if(targetOffset) {
-            this.option('selectedIndex', this._normalizeIndex(this.option('selectedIndex') - targetOffset));
+            const newSelectedIndex = this._findNextAvailableIndex(this.option('selectedIndex'), -targetOffset);
+            this.option('selectedIndex', newSelectedIndex);
+
             // TODO: change focusedElement on focusedItem
             const $selectedElement = this.itemElements().filter('.dx-item-selected');
             this.option('focusStateEnabled') && this.option('focusedElement', getPublicElement($selectedElement));
@@ -401,6 +452,11 @@ const MultiView = CollectionWidget.inherit({
         Swipeable.getInstance(this.$element()).option('disabled', disabled);
     },
 
+    _dispose: function() {
+        delete this._boundaryIndices;
+        this.callBase();
+    },
+
     _optionChanged: function(args) {
         const value = args.value;
 
@@ -418,6 +474,7 @@ const MultiView = CollectionWidget.inherit({
                 break;
             case 'items':
                 this._updateSwipeDisabledState();
+                this._findBoundaryIndices();
                 this.callBase(args);
                 break;
             default:
@@ -434,3 +491,9 @@ const MultiView = CollectionWidget.inherit({
 registerComponent('dxMultiView', MultiView);
 
 export default MultiView;
+
+/**
+ * @name dxMultiViewItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

@@ -2,65 +2,18 @@ import openXmlCurrencyFormat from '../open_xml_currency_format';
 import './core';
 import './number';
 import '../currency';
-// eslint-disable-next-line no-restricted-imports
+// eslint-disable-next-line no-restricted-imports, import/no-unresolved
 import 'globalize/currency';
-
-const enCurrencyUSD = {
-    'main': {
-        'en': {
-            'identity': {
-                'version': {
-                    '_cldrVersion': '28',
-                    '_number': '$Revision: 11972 $'
-                },
-                'language': 'en'
-            },
-            'numbers': {
-                'currencies': {
-                    'USD': {
-                        'displayName': 'US Dollar',
-                        'displayName-count-one': 'US dollar',
-                        'displayName-count-other': 'US dollars',
-                        'symbol': '$',
-                        'symbol-alt-narrow': '$'
-                    }
-                }
-            }
-        }
-    }
-};
-
-const currencyData = {
-    'supplemental': {
-        'version': {
-            '_cldrVersion': '28',
-            '_unicodeVersion': '8.0.0',
-            '_number': '$Revision: 11969 $'
-        },
-        'currencyData': {
-            'fractions': {
-                'DEFAULT': {
-                    '_rounding': '0',
-                    '_digits': '2'
-                }
-            }
-        }
-    }
-};
-
 // eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
 import config from '../../core/config';
 import numberLocalization from '../number';
 
+const CURRENCY_STYLES = ['symbol', 'accounting'];
+
 if(Globalize && Globalize.formatCurrency) {
 
     if(Globalize.locale().locale === 'en') {
-        Globalize.load(
-            enCurrencyUSD,
-            currencyData
-        );
-
         Globalize.locale('en');
     }
 
@@ -93,13 +46,14 @@ if(Globalize && Globalize.formatCurrency) {
             return this.callBase.apply(this, arguments);
         },
         _normalizeFormatConfig: function(format, formatConfig, value) {
-            const config = this.callBase(format, formatConfig, value);
+            const normalizedConfig = this.callBase(format, formatConfig, value);
 
             if(format === 'currency') {
-                config.style = 'accounting';
+                const useAccountingStyle = formatConfig.useCurrencyAccountingStyle ?? config().defaultUseCurrencyAccountingStyle;
+                normalizedConfig.style = CURRENCY_STYLES[+useAccountingStyle];
             }
 
-            return config;
+            return normalizedConfig;
         },
         format: function(value, format) {
             if(typeof value !== 'number') {

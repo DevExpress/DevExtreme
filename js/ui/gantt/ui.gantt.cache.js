@@ -26,6 +26,9 @@ export class GanttDataCache {
     hasData(key) {
         return !!this._cache[key];
     }
+    resetCache(key) {
+        this._onKeyExpired(key);
+    }
     _getCache(key, forceCreate) {
         if(!this._cache[key] && forceCreate) {
             this._cache[key] = { };
@@ -43,7 +46,7 @@ export class GanttDataCache {
         this._clearTimer(key);
     }
     _clearCache(key) {
-        this._cache[key];
+        delete this._cache[key];
     }
     _clearTimer(key) {
         const timers = this._timers;

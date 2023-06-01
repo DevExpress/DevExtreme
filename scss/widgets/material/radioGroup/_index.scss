@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/radioGroup";
 
 // adduse
 @use "../radioButton";
@@ -14,7 +15,7 @@
 
 .dx-radiogroup {
   .dx-radiobutton {
-    margin: 2px 0;
+    margin: $material-radio-button-margin 0;
   }
 }
 

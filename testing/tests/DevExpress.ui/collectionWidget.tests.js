@@ -23,6 +23,7 @@ const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 const COLLECTION_CLASS = 'dx-collection';
 const FOCUSED_ITEM_CLASS = 'dx-state-focused';
 const ACTIVE_ITEM_CLASS = 'dx-state-active';
+const ITEM_CUSTOM_CLASS = 'item';
 
 const { module, test, testInActiveWindow } = QUnit;
 
@@ -33,7 +34,7 @@ class TestComponent extends CollectionWidget {
         this._activeStateUnit = '.item';
     }
 
-    _itemClass() { return 'item'; }
+    _itemClass() { return ITEM_CUSTOM_CLASS; }
     _itemDataKey() { return '123'; }
     _itemContainer() { return this.$element(); }
     _allowDynamicItemsAppend() { return true; }
@@ -232,26 +233,26 @@ module('render', {
         assert.equal($.trim($item.text()), 'First Template', 'item has correct template');
     });
 
-    test('showItemDataTitle as primitive', function(assert) {
+    test('useItemTextAsTitle as primitive', function(assert) {
         const $element = $('#cmp-with-template');
         const instance = new TestComponent(
             $element, {
-                showItemDataTitle: true,
+                useItemTextAsTitle: true,
                 items: [1]
             });
 
         const $item = instance.itemElements().eq(0);
         assert.strictEqual($item.attr('title'), '1', 'title is correct');
 
-        instance.option('showItemDataTitle', false);
+        instance.option('useItemTextAsTitle', false);
         assert.strictEqual(instance.itemElements().eq(0).attr('title'), undefined, 'title was removed');
     });
 
-    test('showItemDataTitle as object', function(assert) {
+    test('useItemTextAsTitle as object', function(assert) {
         const $element = $('#cmp-with-template');
         const instance = new TestComponent(
             $element, {
-                showItemDataTitle: true,
+                useItemTextAsTitle: true,
                 items: [{ name: 'Test', id: 1 }],
                 displayExpr: 'name'
             });
@@ -540,6 +541,37 @@ module('render', {
         assert.equal(component.$element().find('.' + EMPTY_MESSAGE_CLASS).text(), noDataText);
     });
 
+    test('No data text message - custom value with link, encodeNoDataText: false', function(assert) {
+        let noDataText = '<a href="javascript:alert(1)">link</a>';
+
+        const component = new TestComponent('#cmp', {
+            noDataText,
+            encodeNoDataText: false,
+        });
+
+        assert.strictEqual(component.$element().find('.' + EMPTY_MESSAGE_CLASS).html(), noDataText);
+
+        noDataText = noDataText + 'no data';
+        component.option({ noDataText });
+        assert.strictEqual(component.$element().find('.' + EMPTY_MESSAGE_CLASS).html(), noDataText);
+    });
+
+    test('No data text message - custom value with link, encodeNoDataText: true', function(assert) {
+        let noDataText = '<a href="javascript:alert(1)">link</a>';
+        const encodedNoDataText = '&lt;a href="javascript:alert(1)"&gt;link&lt;/a&gt;';
+
+        const component = new TestComponent('#cmp', {
+            noDataText,
+            encodeNoDataText: true,
+        });
+
+        assert.strictEqual(component.$element().find('.' + EMPTY_MESSAGE_CLASS).html(), encodedNoDataText);
+
+        noDataText = noDataText + 'no data';
+        component.option({ noDataText });
+        assert.strictEqual(component.$element().find('.' + EMPTY_MESSAGE_CLASS).html(), encodedNoDataText + 'no data');
+    });
+
     test('message element is not rendered if no data text is null, \'\', false', function(assert) {
         const component = new TestComponent('#cmp', {
             noDataText: null
@@ -714,8 +746,8 @@ module('render', {
     test('_getSummaryItemsWidth function returns right values', function(assert) {
         const instance = new TestComponent('#cmp', {
             items: [
-                { html: '<div class="test-width" style="width: 20px; padding-left: 7px"></div>' },
-                { html: '<div class="test-width" style="width: 10px; margin-left: 5px"></div>' }
+                { template: $('<div class="test-width">').css('width', '20px').css('padding-left', '7px') },
+                { template: $('<div class="test-width">').css('width', '10px').css('margin-left', '5px') },
             ]
         });
 
@@ -796,7 +828,7 @@ module('events', {
         assert.ok(!$item.hasClass(ACTIVE_ITEM_CLASS), 'active state was not toggled for disabled item');
     });
 
-    test('item should not have focus-state class after focusin, if it is disabled', function(assert) {
+    test('item should not have focus-state class after focusin by mousedown event, if it is disabled', function(assert) {
         const $element = $('#cmp');
 
         new TestComponent($element, {
@@ -1052,6 +1084,21 @@ module('events', {
         assert.ok(args.event, 'jQuery event provided');
         assert.ok(args.itemElement, 'item element provided');
     });
+
+    QUnit.test('dxpointerdown event should call changing focused item', function(assert) {
+        const $element = $('#cmp');
+
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: [1, 2],
+        });
+
+        const $secondItem = $element.find(`.${ITEM_CUSTOM_CLASS}`).eq(1);
+
+        $secondItem.trigger('dxpointerdown');
+        this.clock.tick(10);
+        assert.strictEqual($secondItem.hasClass(FOCUSED_ITEM_CLASS), true);
+    });
 });
 
 module('option change', () => {
@@ -1194,6 +1241,24 @@ module('keyboard navigation', {
 
         keyboard.keyDown('space');
         assert.equal(itemClicked, 2, 'press space on item call item click action');
+    }),
+
+    test('enter press should replace event target and currentTarget properties with item native element', function(assert) {
+        const handler = sinon.stub();
+        const $element = $('#cmp');
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ['0'],
+            onItemClick: handler
+        });
+
+        const $item = $element.find('.item').eq(0);
+        const keyboard = keyboardMock($element);
+
+        keyboard.press('enter');
+        const event = handler.getCall(0).args[0].event;
+        assert.strictEqual(event.target, $item.get(0), 'event target is correct');
+        assert.strictEqual(event.currentTarget, $item.get(0), 'event target is correct');
     }),
 
     test('default page scroll should be prevented for space key', function(assert) {
@@ -1561,7 +1626,7 @@ module('keyboard navigation', {
         const $element = $('#cmp');
 
         const instance = new TestComponent($element, {
-            items: [0, { disabled: true, text: 1 }, { disabled: true, text: 2 }, 3],
+            items: [0, { disabled: true, text: 1 }, 2],
             focusStateEnabled: true,
             selectOnFocus: true,
             loopItemFocus: true,
@@ -1575,10 +1640,13 @@ module('keyboard navigation', {
 
         $element.focusin();
         $item.trigger('dxpointerdown');
+
         this.clock.tick();
+
         keyboard.keyDown('right');
-        assert.equal(instance.option('selectedIndex'), 3, 'selectedIndex is correctly');
-        $item = $($items.get(3));
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is correct');
+
+        $item = $($items.get(1));
         assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), 'correct item has an focused-state');
     });
 
@@ -1608,6 +1676,36 @@ module('keyboard navigation', {
         this.clock.tick();
         keyboard.keyDown('right');
         assert.ok($lastItem.hasClass(FOCUSED_ITEM_CLASS), 'Last item must stay focused when we press \'right\' button on the keyboard');
+    });
+
+    [false, true].forEach((ctrlKey) => {
+        [false, true].forEach((metaKey) => {
+            ['up', 'down', 'left', 'right', 'pageup', 'pagedown', 'home', 'end'].forEach((key) => {
+                const commandKeyPressed = ctrlKey || metaKey;
+                test(`focused item is ${commandKeyPressed ? 'not' : ''} changed after pressing ${key} key with command key (metaKey: ${metaKey}, ctrlKey: ${ctrlKey})`, function(assert) {
+                    const $element = $('#cmp');
+                    const isSameItemFocused = commandKeyPressed;
+                    new TestComponent($element, {
+                        focusStateEnabled: true,
+                        items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                        selectedIndex: 3
+                    });
+
+                    const $items = $element.find('.item');
+                    const $item = $items.eq(3);
+                    const keyboard = keyboardMock($element);
+
+                    $element.trigger('focusin');
+                    $element.find('.item').eq(3).trigger('dxpointerdown');
+                    this.clock.tick();
+
+                    keyboard.keyDown(key, { ctrlKey, metaKey });
+                    assert.strictEqual($item.hasClass(FOCUSED_ITEM_CLASS), isSameItemFocused, `${isSameItemFocused ? 'same' : 'another'} item focused`);
+                    assert.strictEqual(keyboard.event.isDefaultPrevented(), !isSameItemFocused, `event is ${isSameItemFocused ? 'not' : ''} prevented`);
+                    assert.strictEqual(keyboard.event.isPropagationStopped(), !isSameItemFocused, `propogation is ${isSameItemFocused ? 'not' : ''} stopped`);
+                });
+            });
+        });
     });
 });
 
@@ -1946,14 +2044,14 @@ QUnit.module('Aria accessibility', {
     test('Attributes on initialize', function() {
         helper.createWidget({ items: [] });
 
-        helper.checkAttributes(helper.$widget, { tabindex: '0', 'aria-label': 'No data to display' });
+        helper.checkAttributes(helper.$widget, { tabindex: '0' });
         helper.checkItemsAttributes([], { });
     });
 
     test('Items[] -> Items[\'Item_1\', \'Item_2\', \'Item_3\' ]', function(assert) {
         helper.createWidget({ items: [] });
 
-        helper.checkAttributes(helper.$widget, { tabindex: '0', 'aria-label': 'No data to display' });
+        helper.checkAttributes(helper.$widget, { tabindex: '0' });
         helper.checkItemsAttributes([], { });
 
         helper.widget.option('items', this.items);
@@ -2176,5 +2274,35 @@ module('selection', {
             assert.ok(isOK, 'selectedItemKeys === null handled correctly');
             assert.deepEqual(selectedItemKeys, [2], 'after selection \'selectedItemKeys\' container correct item key');
         });
+    });
+
+    test('selection totalCount should return correct value if items are grouped (T1053754)', function(assert) {
+        const dataSource = new DataSource({
+            store: [{
+                group: 1,
+                key: 1,
+                name: '1'
+            }, {
+                group: 1,
+                key: 2,
+                name: '2'
+            }, {
+                group: 2,
+                key: 3,
+                name: '3'
+            }, {
+                group: 2,
+                key: 4,
+                name: '4'
+            }],
+            group: 'group',
+            key: 'id'
+        });
+        const instance = this.createWidget({
+            dataSource,
+            grouped: true
+        });
+
+        assert.strictEqual(instance._selection.options.totalCount(), 4, 'total count is correct');
     });
 });

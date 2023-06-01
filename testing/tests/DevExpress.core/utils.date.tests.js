@@ -1,5 +1,7 @@
 const dateUtils = require('core/utils/date');
 
+const WEEK_DAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
 QUnit.module('normalizeDate', {
     beforeEach: function() {
         this.normalizeDate = dateUtils.normalizeDate;
@@ -599,15 +601,987 @@ QUnit.test('the getDatesBetween method should return array of dates', function(a
     assert.deepEqual(dates[4], new Date(2018, 8, 4, 12, 13, 0), 'Date in interval is correct');
 });
 
-QUnit.module('Dates creation');
 
-QUnit.test('createDate', function(assert) {
-    const expectedDate = new Date(18, 7, 31, 12, 13, 23);
-    expectedDate.setFullYear(18);
-    const testDate = dateUtils.createDate(expectedDate);
+QUnit.module('week numbers: fullWeek', () => {
+    const expectedWeekNumberCases = [
+        [51, 51, 51, 51, 52, 52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2],
+        [51, 51, 51, 52, 52, 52, 52, 52, 52, 52, 53, 53, 53, 53, 53, 53, 53, 1, 1, 1, 1, 1],
+        [50, 50, 51, 51, 51, 51, 51, 51, 51, 52, 52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1],
+        [50, 51, 51, 51, 51, 51, 51, 51, 52, 52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1],
+        [51, 51, 51, 51, 51, 51, 51, 52, 52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1, 2],
+        [51, 51, 51, 51, 51, 51, 52, 52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1, 2, 2],
+        [51, 51, 51, 51, 51, 52, 52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2],
+        [51, 51, 52, 52, 52, 52, 52, 52, 52, 53, 53, 53, 53, 53, 53, 53, 1, 1, 1, 1, 1, 1],
+    ];
 
-    assert.deepEqual(testDate, expectedDate, 'correct date is created');
+    const checkWeekNumbers = (assert, year, firstDayOfWeek, expectedWeekNumbers) => {
+        for(let i = 0; i < 22; i++) {
+            assert.strictEqual(dateUtils.getWeekNumber(new Date(year - 1, 11, 21 + i), firstDayOfWeek, 'fullWeek'), expectedWeekNumbers[i]);
+        }
+    };
+
+    for(let firstDayOfWeek = 0; firstDayOfWeek < 7; firstDayOfWeek++) {
+        QUnit.module(`firstDayOfWeek is ${WEEK_DAYS[firstDayOfWeek]}`, () => {
+            for(let year = 2000; year < 2200; year++) {
+                const firsDayOfYear = new Date(year, 0, 1).getDay();
+
+                const offset = firsDayOfYear - firstDayOfWeek < 0 ? firsDayOfYear - firstDayOfWeek + 7 : firsDayOfYear - firstDayOfWeek;
+
+                QUnit.test(`weeks years starting ${WEEK_DAYS[firsDayOfYear]}, year: ${year}, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
+                    if(
+                        (firsDayOfYear === 0 && [2017, 2045, 2073, 2113, 2141, 2169, 2197, 2209, 2237, 2265, 2293].includes(year) && firstDayOfWeek === 5)
+                        || (firsDayOfYear === 1 && [2001, 2029, 2057, 2085, 2125, 2153, 2181, 2221, 2249, 2277].includes(year) && firstDayOfWeek === 6)
+                        || (firsDayOfYear === 2 && [2013, 2041, 2069, 2097, 2109, 2137, 2165, 2193, 2293, 2205, 2233, 2261, 2289].includes(year) && firstDayOfWeek === 0)
+                        || (firsDayOfYear === 3 && [2025, 2053, 2081, 2121, 2149, 2177, 2217, 2245, 2273].includes(year) && firstDayOfWeek === 1)
+                        || (firsDayOfYear === 4 && [2009, 2037, 2065, 2093, 2105, 2133, 2161, 2189, 2229, 2257, 2285].includes(year) && firstDayOfWeek === 2)
+                        || (firsDayOfYear === 5 && [2021, 2049, 2077, 2117, 2145, 2173, 2213, 2241, 2269, 2297].includes(year) && firstDayOfWeek === 3)
+                        || (firsDayOfYear === 6 && [2005, 2033, 2061, 2089, 2129, 2157, 2185, 2225, 2253, 2281].includes(year) && firstDayOfWeek === 4)
+                    ) {
+                        checkWeekNumbers(assert, year, firstDayOfWeek, expectedWeekNumberCases[7]);
+                    } else {
+                        checkWeekNumbers(assert, year, firstDayOfWeek, expectedWeekNumberCases[offset]);
+                    }
+                });
+            }
+        });
+    }
+
 });
+
+QUnit.module('week numbers: firstDay (american format)', () => {
+    for(let firstDayOfWeek = 0; firstDayOfWeek < 7; firstDayOfWeek++) {
+        QUnit.module(`firstDayOfWeek is ${WEEK_DAYS[firstDayOfWeek]}`, () => {
+            const expectedWeekNumberCases = [
+                [52, 52, 52, 52, 53, 53, 53, 53, 53, 53, 53, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2],
+                [51, 51, 51, 52, 52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2],
+                [51, 51, 52, 52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2],
+                [51, 52, 52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2],
+                [52, 52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3],
+                [52, 52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3],
+                [52, 52, 52, 52, 52, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3],
+                [52, 52, 52, 53, 53, 53, 53, 53, 53, 53, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2],
+            ];
+
+            const checkWeekNumbers = (assert, year, firstDayOfWeek, expectedWeekNumbers) => {
+                for(let i = 0; i < 22; i++) {
+                    assert.strictEqual(dateUtils.getWeekNumber(new Date(year - 1, 11, 21 + i), firstDayOfWeek, 'firstDay'), expectedWeekNumbers[i]);
+                }
+            };
+
+            for(let year = 2000; year < 2200; year++) {
+                const firsDayOfYear = new Date(year, 0, 1).getDay();
+
+                const offset = firsDayOfYear - firstDayOfWeek < 0 ? firsDayOfYear - firstDayOfWeek + 7 : firsDayOfYear - firstDayOfWeek;
+
+                QUnit.test(`weeks years starting ${WEEK_DAYS[firsDayOfYear]}, year: ${year}, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
+                    if(
+                        (firsDayOfYear === 0 && [2017, 2045, 2073, 2113, 2141, 2169, 2197, 2209, 2237, 2265, 2293].includes(year) && firstDayOfWeek === 6)
+                        || (firsDayOfYear === 1 && [2001, 2029, 2057, 2085, 2125, 2153, 2181, 2221, 2249, 2277].includes(year) && firstDayOfWeek === 0)
+                        || (firsDayOfYear === 2 && [2013, 2041, 2069, 2097, 2109, 2137, 2165, 2193, 2293, 2205, 2233, 2261, 2289].includes(year) && firstDayOfWeek === 1)
+                        || (firsDayOfYear === 3 && [2025, 2053, 2081, 2121, 2149, 2177, 2217, 2245, 2273].includes(year) && firstDayOfWeek === 2)
+                        || (firsDayOfYear === 4 && [2009, 2037, 2065, 2093, 2105, 2133, 2161, 2189, 2229, 2257, 2285].includes(year) && firstDayOfWeek === 3)
+                        || (firsDayOfYear === 5 && [2021, 2049, 2077, 2117, 2145, 2173, 2213, 2241, 2269, 2297].includes(year) && firstDayOfWeek === 4)
+                        || (firsDayOfYear === 6 && [2005, 2033, 2061, 2089, 2129, 2157, 2185, 2225, 2253, 2281].includes(year) && firstDayOfWeek === 5)
+                    ) {
+                        checkWeekNumbers(assert, year, firstDayOfWeek, expectedWeekNumberCases[7]);
+                    } else {
+                        checkWeekNumbers(assert, year, firstDayOfWeek, expectedWeekNumberCases[offset]);
+                    }
+                });
+            }
+        });
+    }
+
+});
+
+QUnit.module('week numbers: firstFourDays (ISO8601)', {
+    beforeEach: function() {
+        this.getWeekNumber = (...args) => dateUtils.getWeekNumber(...args, 'firstFourDays');
+    }
+}, () => {
+    QUnit.module('iso weeks years, firstDayOfWeek is Sunday', () => {
+        QUnit.test('iso weeks years starting sunday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 24), 0), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 25), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 26), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 27), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 28), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 29), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 30), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 31), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 1), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 2), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 3), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 7), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 8), 0), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 9), 0), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 10), 0), 2);
+        });
+
+        QUnit.test('iso weeks years starting monday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 11, 28), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 11, 29), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 11, 30), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 11, 31), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 1), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 2), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 5), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 6), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 7), 0), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 13), 0), 2);
+        });
+
+        QUnit.test('iso weeks years starting tuesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 28), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 29), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 30), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 31), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 1), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 2), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 3), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 4), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 5), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 6), 0), 2);
+        });
+
+        QUnit.test('iso weeks years starting wednesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 11, 28), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 11, 29), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 11, 30), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 11, 31), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 0, 1), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 0, 2), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 0, 3), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 0, 4), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 0, 5), 0), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 0, 6), 0), 2);
+        });
+
+        QUnit.test('iso weeks years starting thursday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 27), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 28), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 29), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 30), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 31), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 1), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 2), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 3), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 4), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 10), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 11), 0), 2);
+        });
+
+        QUnit.test('iso weeks years starting friday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 27), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 28), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 29), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 30), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 31), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 1), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 2), 0), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 3), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 9), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 10), 0), 2);
+        });
+
+        QUnit.test('iso weeks years starting saturday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 26), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 27), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 28), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 29), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 30), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 31), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 1), 0), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 2), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 3), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 8), 0), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 9), 0), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 10), 0), 2);
+        });
+    });
+
+    QUnit.module('iso weeks years, firstDayOfWeek is Monday', () => {
+        QUnit.test('iso weeks years starting sunday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2012, 0, 1), 1), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2012, 0, 2), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2012, 0, 8), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2012, 0, 9), 1), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2012, 0, 15), 1), 2);
+        });
+
+        QUnit.test('iso weeks years starting monday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2007, 0, 1), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2007, 0, 7), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2007, 0, 8), 1), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2007, 0, 14), 1), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2007, 0, 15), 1), 3);
+        });
+
+        QUnit.test('iso weeks years starting tuesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2007, 11, 31), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2008, 0, 1), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2008, 0, 6), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2008, 0, 7), 1), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2008, 0, 13), 1), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2008, 0, 14), 1), 3);
+        });
+
+        QUnit.test('iso weeks years starting wednesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2002, 11, 30), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2003, 0, 1), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2003, 0, 5), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2003, 0, 6), 1), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2003, 0, 12), 1), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2003, 0, 13), 1), 3);
+        });
+
+        QUnit.test('iso weeks years starting thursday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2008, 11, 29), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2009, 0, 1), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2009, 0, 4), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2009, 0, 5), 1), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2009, 0, 11), 1), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2009, 0, 13), 1), 3);
+        });
+
+        QUnit.test('iso weeks years starting friday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2009, 11, 28), 1), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2010, 0, 1), 1), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2010, 0, 3), 1), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2010, 0, 4), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2010, 0, 10), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2010, 0, 11), 1), 2);
+        });
+
+        QUnit.test('iso weeks years starting saturday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2010, 11, 27), 1), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2011, 0, 1), 1), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2011, 0, 2), 1), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2011, 0, 3), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2011, 0, 9), 1), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2011, 0, 10), 1), 2);
+        });
+
+        QUnit.test('years with iso week 53', function(assert) {
+            assert.equal(this.getWeekNumber(new Date(2004, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2009, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2015, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2020, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2026, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2032, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2037, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2043, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2048, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2054, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2060, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2065, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2071, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2076, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2082, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2088, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2093, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2099, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2105, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2111, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2116, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2122, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2128, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2133, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2139, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2144, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2150, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2156, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2161, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2167, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2172, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2178, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2184, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2189, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2195, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2201, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2207, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2212, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2218, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2224, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2229, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2235, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2240, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2246, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2252, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2257, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2263, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2268, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2274, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2280, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2285, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2291, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2296, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2303, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2308, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2314, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2320, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2325, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2331, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2336, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2342, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2348, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2353, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2359, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2364, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2370, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2376, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2381, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2387, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2392, 11, 31), 1), 53);
+            assert.equal(this.getWeekNumber(new Date(2398, 11, 31), 1), 53);
+        });
+    });
+
+    QUnit.module('iso weeks years, firstDayOfWeek is Tuesday', () => {
+        QUnit.test('iso weeks years starting sunday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 24), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 25), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 26), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 27), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 28), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 29), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 30), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 31), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 1), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 2), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 3), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 4), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 9), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 10), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 11), 3), 2);
+        });
+
+        QUnit.test('iso weeks years starting monday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 11, 22), 2), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 11, 23), 2), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 11, 24), 2), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 11, 25), 2), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 11, 26), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 11, 27), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 11, 28), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 11, 29), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 11, 30), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 11, 31), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 0, 1), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 0, 2), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 0, 5), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 0, 6), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 0, 7), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 0, 8), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 0, 9), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 0, 10), 2), 2);
+        });
+
+        QUnit.test('iso weeks years starting tuesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 24), 2), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 25), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 26), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 27), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 28), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 29), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 30), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 31), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 1), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 2), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 3), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 7), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 8), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 9), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 10), 2), 2);
+        });
+
+        QUnit.test('iso weeks years starting wednesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 22), 2), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 23), 2), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 24), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 25), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 26), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 27), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 28), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 29), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 30), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 31), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 1), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 2), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 5), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 6), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 7), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 8), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 9), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 10), 2), 2);
+        });
+
+        QUnit.test('iso weeks years starting thursday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 11, 22), 2), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 11, 23), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 11, 24), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 11, 25), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 11, 26), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 11, 27), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 11, 28), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 11, 29), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 11, 30), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 11, 31), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 0, 1), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 0, 2), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 0, 5), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 0, 6), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 0, 8), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 0, 9), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 0, 10), 2), 2);
+        });
+
+        QUnit.test('iso weeks years starting friday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2043, 11, 28), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2043, 11, 29), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2043, 11, 30), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2043, 11, 31), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2044, 0, 1), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2044, 0, 2), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2044, 0, 4), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2044, 0, 5), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2044, 0, 7), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2044, 0, 11), 2), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2044, 0, 12), 2), 3);
+        });
+
+        QUnit.test('iso weeks years starting saturday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 11, 24), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 11, 25), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 11, 26), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 11, 27), 2), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 11, 28), 2), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 11, 29), 2), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 11, 30), 2), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 11, 31), 2), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 0, 1), 2), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 0, 2), 2), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 0, 3), 2), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 0, 4), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 0, 9), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 0, 10), 2), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 0, 11), 2), 2);
+        });
+    });
+
+    QUnit.module('iso weeks years, firstDayOfWeek is Wednesday', () => {
+        QUnit.test('iso weeks years starting sunday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 24), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 25), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 26), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 27), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 28), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 29), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 30), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2033, 11, 31), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 1), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 2), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 3), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 4), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 9), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 10), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2034, 0, 11), 3), 2);
+        });
+
+        QUnit.test('iso weeks years starting monday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 22), 3), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 23), 3), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 24), 3), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 25), 3), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 26), 3), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 27), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 28), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 29), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 30), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 31), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 1), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 2), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 3), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 5), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 6), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 8), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 9), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 10), 3), 2);
+        });
+
+        QUnit.test('iso weeks years starting tuesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 24), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 25), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 26), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 27), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 28), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 29), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 30), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 31), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 1), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 2), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 3), 3), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 4), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 9), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 10), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 11), 3), 2);
+        });
+
+        QUnit.test('iso weeks years starting wednesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 24), 3), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 25), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 26), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 27), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 28), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 29), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 30), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 31), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 1), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 2), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 3), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 7), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 8), 3), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 9), 3), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 10), 3), 2);
+        });
+
+        QUnit.test('iso weeks years starting thursday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 22), 3), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 23), 3), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 24), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 25), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 26), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 27), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 28), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 29), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 30), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 31), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 1), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 2), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 5), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 6), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 7), 3), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 8), 3), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 9), 3), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 10), 3), 2);
+        });
+
+        QUnit.test('iso weeks years starting friday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 22), 3), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 23), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 24), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 25), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 26), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 27), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 28), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 29), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 30), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 31), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 1), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 2), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 5), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 6), 3), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 8), 3), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 9), 3), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 10), 3), 2);
+        });
+
+        QUnit.test('iso weeks years starting saturday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 28), 3), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 29), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 30), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 31), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 1), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 2), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 4), 3), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 5), 3), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 7), 3), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 11), 3), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 12), 3), 3);
+        });
+    });
+
+    QUnit.module('iso weeks years, firstDayOfWeek is Thursday', () => {
+        QUnit.test('iso weeks years starting sunday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 22), 4), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 23), 4), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 24), 4), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 25), 4), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 26), 4), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 27), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 28), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 29), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 30), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 31), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 1), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 2), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 3), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 5), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 6), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 8), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 9), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 10), 4), 2);
+        });
+
+        QUnit.test('iso weeks years starting monday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 24), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 25), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 26), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 27), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 28), 4), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 29), 4), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 30), 4), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 31), 4), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 1), 4), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 2), 4), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 3), 4), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 4), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 9), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 10), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 11), 4), 2);
+        });
+
+        QUnit.test('iso weeks years starting tuesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 28), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 29), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 30), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 31), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 1), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 2), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 4), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 5), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 7), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 11), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 12), 4), 3);
+        });
+
+        QUnit.test('iso weeks years starting wednesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 22), 4), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 23), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 24), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 25), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 26), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 27), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 28), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 29), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 30), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 11, 31), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 1), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 2), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 5), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 6), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 8), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 9), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 0, 10), 4), 2);
+        });
+
+        QUnit.test('iso weeks years starting thursday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 24), 4), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 25), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 26), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 27), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 28), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 29), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 30), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2025, 11, 31), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 1), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 2), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 3), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 7), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 8), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 9), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2026, 0, 10), 4), 2);
+        });
+
+        QUnit.test('iso weeks years starting friday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 24), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 25), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 26), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 27), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 28), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 29), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 30), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 31), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 1), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 2), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 3), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 7), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 8), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 9), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 10), 4), 2);
+        });
+
+        QUnit.test('iso weeks years starting saturday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 22), 4), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 23), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 24), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 25), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 26), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 27), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 28), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 29), 4), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 30), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 31), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 1), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 2), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 5), 4), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 6), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 8), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 9), 4), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 10), 4), 2);
+        });
+    });
+
+    QUnit.module('iso weeks years, firstDayOfWeek is Friday', () => {
+        QUnit.test('iso weeks years starting sunday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 22), 5), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 23), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 24), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 25), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 26), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 27), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 28), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 29), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 30), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2022, 11, 31), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 1), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 2), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 5), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 6), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 8), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 9), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 10), 5), 2);
+        });
+
+        QUnit.test('iso weeks years starting monday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 28), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 29), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 30), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 11, 31), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 1), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 2), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 4), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 5), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 7), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 11), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2024, 0, 12), 5), 3);
+        });
+
+        QUnit.test('iso weeks years starting tuesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 26), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 27), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 28), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 29), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 30), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2035, 11, 31), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 1), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 2), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 3), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 4), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 5), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 10), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2036, 0, 11), 5), 2);
+        });
+
+        QUnit.test('iso weeks years starting wednesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 26), 5), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 27), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 28), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 29), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 30), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2019, 11, 31), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 1), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 2), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 3), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 4), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 5), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 9), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 10), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 0, 11), 5), 2);
+        });
+
+        QUnit.test('iso weeks years starting thursday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 24), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 25), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 26), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 27), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 28), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 29), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 30), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 11, 31), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 1), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 2), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 3), 5), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 4), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 9), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 10), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2030, 0, 11), 5), 2);
+        });
+
+        QUnit.test('iso weeks years starting friday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 24), 5), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 25), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 26), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 27), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 28), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 29), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 30), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2020, 11, 31), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 1), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 2), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 3), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 4), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 7), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 8), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 9), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2021, 0, 10), 5), 2);
+        });
+
+        QUnit.test('iso weeks years starting saturday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 24), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 25), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 26), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 27), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 28), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 29), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 30), 5), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 31), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 1), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 2), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 3), 5), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 7), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 8), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 9), 5), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 10), 5), 2);
+        });
+    });
+
+    QUnit.module('iso weeks years, firstDayOfWeek is Saturday', () => {
+        QUnit.test('iso weeks years starting sunday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 11, 23), 6), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 11, 24), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 11, 25), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 11, 26), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 11, 27), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 11, 28), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 11, 29), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 11, 30), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2039, 11, 31), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 1), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 2), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 3), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 7), 6), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 8), 6), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 9), 6), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2023, 0, 10), 6), 2);
+        });
+
+        QUnit.test('iso weeks years starting monday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 11, 28), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 11, 29), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 11, 30), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 11, 31), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 1), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 2), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 5), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 6), 6), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 7), 6), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2029, 0, 13), 6), 3);
+        });
+
+        QUnit.test('iso weeks years starting tuesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2040, 11, 28), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2040, 11, 29), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2040, 11, 30), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2040, 11, 31), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 0, 1), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 0, 2), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 0, 3), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 0, 4), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 0, 5), 6), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 0, 6), 6), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 0, 11), 6), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 0, 12), 6), 3);
+        });
+
+        QUnit.test('iso weeks years starting wednesday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 27), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 28), 6), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 29), 6), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 30), 6), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2041, 11, 31), 6), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 1), 6), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 2), 6), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 3), 6), 53);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 4), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 5), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 6), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 10), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 0, 11), 6), 2);
+        });
+
+        QUnit.test('iso weeks years starting thursday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 11, 26), 6), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 11, 27), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 11, 28), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 11, 29), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 11, 30), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2042, 11, 31), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2043, 0, 1), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2043, 0, 2), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2043, 0, 3), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2043, 0, 4), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2043, 0, 9), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2043, 0, 10), 6), 2);
+        });
+
+        QUnit.test('iso weeks years starting friday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 11, 25), 6), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 11, 26), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 11, 27), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 11, 28), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 11, 29), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 11, 30), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2037, 11, 31), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 0, 1), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 0, 2), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 0, 3), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 0, 8), 8), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 0, 9), 6), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2038, 0, 10), 6), 2);
+        });
+
+        QUnit.test('iso weeks years starting saturday', function(assert) {
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 24), 6), 51);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 25), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 26), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 27), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 28), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 29), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 30), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2027, 11, 31), 6), 52);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 1), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 2), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 3), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 7), 6), 1);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 8), 6), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 9), 6), 2);
+            assert.strictEqual(this.getWeekNumber(new Date(2028, 0, 10), 6), 2);
+        });
+    });
+
+    [0, 1, 2, 3, 4, 5, 6].forEach((firstDayOfWeek) => {
+        QUnit.test(`count years with iso week 53, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
+            let count = 0;
+            for(let i = 0; i < 400; i++) {
+                count += this.getWeekNumber(new Date(2000 + i, 11, 31), firstDayOfWeek) === 53 ? 1 : 0;
+            }
+            assert.equal(count, 71, 'Should have 71 years with iso week 53');
+        });
+    });
+});
+
+QUnit.module('Dates creation');
 
 QUnit.test('createDateWithFullYear', function(assert) {
     const testDate = dateUtils.createDateWithFullYear(18, 7, 31, 12, 13, 23);
@@ -615,4 +1589,87 @@ QUnit.test('createDateWithFullYear', function(assert) {
     expectedDate.setFullYear(18);
 
     assert.deepEqual(testDate, expectedDate, 'correct date is created');
+});
+
+QUnit.module('intervalsOverlap', () => {
+    QUnit.test('Check if intervals overlaps from the Left', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 10),
+            firstMax: new Date(2021, 2, 4, 13),
+            secondMin: new Date(2021, 2, 4, 11),
+            secondMax: new Date(2021, 2, 4, 14)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check if intervals overlaps from the Right', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 10),
+            firstMax: new Date(2021, 2, 4, 13),
+            secondMin: new Date(2021, 2, 4, 9),
+            secondMax: new Date(2021, 2, 4, 11)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check if first interval include the second', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 10),
+            firstMax: new Date(2021, 2, 4, 13),
+            secondMin: new Date(2021, 2, 4, 11),
+            secondMax: new Date(2021, 2, 4, 12)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check if second interval include the first', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 11),
+            firstMax: new Date(2021, 2, 4, 12),
+            secondMin: new Date(2021, 2, 4, 10),
+            secondMax: new Date(2021, 2, 4, 13)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check the same intervals', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 11),
+            firstMax: new Date(2021, 2, 4, 12),
+            secondMin: new Date(2021, 2, 4, 11),
+            secondMax: new Date(2021, 2, 4, 12)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check if leftMin < rightMin and leftMax < rightMax', function(assert) {
+        assert.notOk(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 11),
+            firstMax: new Date(2021, 2, 4, 12),
+            secondMin: new Date(2021, 2, 4, 13),
+            secondMax: new Date(2021, 2, 4, 14)
+        }), 'Intervals not overlaps');
+    });
+
+    QUnit.test('Check if leftMin > rightMin and leftMax < rightMax', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 11),
+            firstMax: new Date(2021, 2, 4, 13),
+            secondMin: new Date(2021, 2, 4, 12),
+            secondMax: new Date(2021, 2, 4, 14)
+        }), 'Intervals overlaps');
+    });
+
+    QUnit.test('Check if leftMin > rightMin and leftMax > rightMax', function(assert) {
+        assert.notOk(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 13),
+            firstMax: new Date(2021, 2, 4, 14),
+            secondMin: new Date(2021, 2, 4, 11),
+            secondMax: new Date(2021, 2, 4, 12)
+        }), 'Intervals not overlaps');
+    });
+
+    QUnit.test('Check if leftMin < rightMin and leftMax > rightMin', function(assert) {
+        assert.ok(dateUtils.intervalsOverlap({
+            firstMin: new Date(2021, 2, 4, 11),
+            firstMax: new Date(2021, 2, 4, 13),
+            secondMin: new Date(2021, 2, 4, 12),
+            secondMax: new Date(2021, 2, 4, 15)
+        }), 'Intervals overlaps');
+    });
 });

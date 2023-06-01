@@ -9,19 +9,15 @@
 // adduse
 @use "../overlay";
 
-$material-main-fa-button-label-padding: 0 20px 0 12px;
 $material-fa-button-size: 40px;
 $material-fa-button-label-offset: 16px;
-$material-fa-button-label-height: 32px;
-$material-fa-button-label-padding: 0 12px;
-
+$material-fa-button-label-padding: 4px 8px;
 
 @include dx-fa-button-mixin(
   $material-main-fa-button-size,
   $material-fa-button-size,
   $material-base-icon-size,
   $material-base-font-size,
-  $material-fa-button-label-height,
   $material-fa-button-label-padding,
   $material-fa-button-label-offset,
   $speed-dial-action-color,

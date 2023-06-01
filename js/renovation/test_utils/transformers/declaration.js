@@ -1,6 +1,6 @@
-const { compileCode } = require('devextreme-generator/component-compiler');
-const { getTsConfig } = require('devextreme-generator/utils/typescript-utils');
-const generator = require('devextreme-generator/preact-generator').default;
+const { compileCode } = require('@devextreme-generator/core');
+const { getTsConfig } = require('@devextreme-generator/build-helpers');
+const generator = require('@devextreme-generator/inferno').default;
 const ts = require('typescript');
 const path = require('path');
 const fs = require('fs');
@@ -10,7 +10,7 @@ const { BASE_GENERATOR_OPTIONS_WITH_JQUERY } = require('../../../../build/gulp/g
 
 const THIS_FILE = fs.readFileSync(__filename);
 const jestTransformer = tsJest.createTransformer();
-const TS_CONFIG_PATH = 'build/gulp/generator/ts-configs/preact.tsconfig.json';
+const TS_CONFIG_PATH = 'build/gulp/generator/ts-configs/jest.tsconfig.json';
 const tsConfig = getTsConfig(TS_CONFIG_PATH);
 
 generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
@@ -33,7 +33,10 @@ module.exports = {
                 return jestTransformer.process(
                     // eslint-disable-next-line spellcheck/spell-checker
                     ts.transpileModule(
-                        `${result[0].code}
+                        // Vitik: jest.tsconfig set jsxFactory to h. Add import for support it.
+                        // In propduction jsx transpaled by babel-plugin-inferno
+                        `import { createElement as h } from "inferno-create-element"; 
+                        ${result[0].code}
                 ${result[1].code
         .replace('export default', 'export ')
         .replace(new RegExp(`\\b${componentName}\\b`, 'g'), `${componentName}Class`)

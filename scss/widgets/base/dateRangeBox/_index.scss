@@ -1,0 +1,83 @@
+// adduse
+
+.dx-daterangebox {
+  display: flex;
+
+  .dx-texteditor-with-label,
+  .dx-texteditor-with-floating-label {
+    margin-top: 0;
+  }
+
+  &.dx-editor-outlined {
+    .dx-datebox {
+      &.dx-start-datebox,
+      &.dx-end-datebox {
+        &.dx-editor-outlined {
+          border: 0;
+          box-shadow: none;
+
+          &.dx-texteditor-with-label,
+          &.dx-texteditor-with-floating-label {
+            .dx-texteditor-label {
+              .dx-label,
+              .dx-label-before,
+              .dx-label-after {
+                margin: 0;
+                border: 0;
+                clip-path: none;
+                box-shadow: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .dx-datebox {
+    width: 100%;
+
+    &.dx-editor-underlined {
+      border-bottom: 0;
+
+      &::before {
+        margin-left: 0;
+      }
+
+      &.dx-rtl {
+        .dx-texteditor-container {
+          .dx-texteditor-input {
+            padding-right: 0;
+          }
+        }
+      }
+    }
+
+    &.dx-editor-filled {
+      background-color: transparent;
+      border: 0;
+
+      &.dx-state-readonly {
+        background-color: transparent;
+
+        &.dx-state-hover {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+
+  &.dx-texteditor-empty .dx-clear-button-area {
+    display: block;
+    visibility: hidden;
+  }
+}
+
+.dx-daterangebox-separator {
+  display: flex;
+  align-items: center;
+
+  .dx-rtl & {
+    transform: scale(-1, 1);
+  }
+}

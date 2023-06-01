@@ -1,33 +1,29 @@
-import { ClientFunction } from 'testcafe';
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
+import { ClientFunction, Selector } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
-import DataGrid from '../../model/dataGrid';
+import createWidget from '../../helpers/createWidget';
+import DataGrid, { CLASS } from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
+import { changeTheme } from '../../helpers/changeTheme';
+import { Overlay } from '../../model/dataGrid/overlay';
+import { getData } from './helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Editing`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(() => disposeWidgets());
+  .page(url(__dirname, '../container.html'));
 
-const getGridConfig = (config) => {
+const getGridConfig = (config): Record<string, unknown> => {
   const defaultConfig = {
     errorRowEnabled: true,
-    dataSource: {
-      asyncLoadEnabled: false,
-      store: [{ name: 'Alex', age: 15, lastName: 'John' }],
-      paginate: true,
-    },
+    dataSource: [{
+      id: 1, name: 'Alex', age: 15, lastName: 'John',
+    }],
+    keyExpr: 'id',
     legacyRendering: false,
   };
 
-  return config ? ({ ...defaultConfig, ...config }) : defaultConfig;
-};
-
-const getElementCount = (gridInstance: DataGrid, elementSelector: string): Promise<number> => {
-  const { getGridInstance } = gridInstance;
-  return ClientFunction(
-    () => (getGridInstance() as any).element().find(elementSelector).length,
-    { dependencies: { getGridInstance, elementSelector } },
-  )();
+  return config ? { ...defaultConfig, ...config } : defaultConfig;
 };
 
 test('Tab key on editor should focus next cell if editing mode is cell', async (t) => {
@@ -37,7 +33,7 @@ test('Tab key on editor should focus next cell if editing mode is cell', async (
     .click(dataGrid.getDataCell(0, 1).element)
     .pressKey('1 tab')
     .expect(dataGrid.getDataCell(1, 1).isFocused).ok();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ name: 'AaAaA', value: 1 }, { name: 'aAaAa', value: 2 }],
   editing: {
     mode: 'cell',
@@ -48,9 +44,9 @@ test('Tab key on editor should focus next cell if editing mode is cell', async (
 
 test('Click should work if a column button set using svg icon (T863635)', async (t) => {
   await t
-    .click('#svg-icon')
+    .click(Selector('.dx-command-edit-with-icons').nth(0))
     .expect(ClientFunction(() => (window as any).onSvgClickCounter)()).eql(1);
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ value: 1 }],
   columns: [{
     type: 'buttons',
@@ -59,8 +55,8 @@ test('Click should work if a column button set using svg icon (T863635)', async 
       {
         hint: 'svg icon',
         icon: '<svg id="svg-icon"><circle cx="15" cy="15" r="14" /> </svg>',
-        onClick: () => {
-          const global = window as any;
+        onClick: (): void => {
+          const global = window as Window & typeof globalThis & { onSvgClickCounter: number };
           if (!global.onSvgClickCounter) {
             global.onSvgClickCounter = 0;
           }
@@ -80,7 +76,7 @@ test('Value change on dataGrid row should be fired after clicking on editor (T82
     .click(selectBox.dropDownButton)
     .expect(dataGrid.getDataCell(0, 0).element.textContent)
     .eql('new_value');
-}).before(() => Promise.all([
+}).before(async () => Promise.all([
   createWidget('dxDataGrid', {
     dataSource: [{ name: 'old_value', value: 1 }],
     editing: {
@@ -90,7 +86,7 @@ test('Value change on dataGrid row should be fired after clicking on editor (T82
       startEditAction: 'click',
     },
   }),
-  createWidget('dxSelectBox', {}, false, '#otherContainer'),
+  createWidget('dxSelectBox', {}, '#otherContainer'),
 ]));
 
 test('Async Validation(Row) - Only valid data is saved in a new row', async (t) => {
@@ -126,7 +122,7 @@ test('Async Validation(Row) - Only valid data is saved in a new row', async (t) 
     .notOk('row is not in editing mode')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'row',
     allowAdding: true,
@@ -135,7 +131,7 @@ test('Async Validation(Row) - Only valid data is saved in a new row', async (t) 
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -178,7 +174,7 @@ test('Async Validation(Row) - Only valid data is saved in a modified row', async
     .notOk('row is not in editing mode')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'row',
     allowUpdating: true,
@@ -187,7 +183,7 @@ test('Async Validation(Row) - Only valid data is saved in a modified row', async
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -240,7 +236,7 @@ test('Async Validation(Row) - Data is not saved when a dependant cell value beco
     .eql('valid')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, 1))
     .eql('invalid');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'row',
     allowUpdating: true,
@@ -249,7 +245,7 @@ test('Async Validation(Row) - Data is not saved when a dependant cell value beco
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -258,7 +254,7 @@ test('Async Validation(Row) - Data is not saved when a dependant cell value beco
         return d.promise();
       },
     }],
-    setCellValue(rowData, value) {
+    setCellValue(rowData, value): void {
       rowData.age = value;
       if (value === 1) {
         rowData.name = '';
@@ -289,7 +285,7 @@ test('Async Validation(Cell) - Only the last cell should be switched to edit mod
     .notOk()
     .expect(cell2.isFocused)
     .ok('the third cell should be focused');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -299,7 +295,7 @@ test('Async Validation(Cell) - Only the last cell should be switched to edit mod
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback() {
+      validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(true);
@@ -342,7 +338,7 @@ test('Async Validation(Cell) - Only valid data is saved in a new row', async (t)
     .notOk('row is not in editing mode')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowAdding: true,
@@ -351,7 +347,7 @@ test('Async Validation(Cell) - Only valid data is saved in a new row', async (t)
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -399,7 +395,7 @@ test('Async Validation(Cell) - Only valid data is saved in a modified cell', asy
     .notOk()
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -408,7 +404,7 @@ test('Async Validation(Cell) - Only valid data is saved in a modified cell', asy
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -469,7 +465,7 @@ test('Async Validation(Cell) - Data is not saved when a dependant cell value bec
     .ok('the first cell is invalid')
     .expect(dataGrid.apiGetCellValidationStatus(0, 1))
     .eql('invalid');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -478,7 +474,7 @@ test('Async Validation(Cell) - Data is not saved when a dependant cell value bec
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -487,7 +483,7 @@ test('Async Validation(Cell) - Data is not saved when a dependant cell value bec
         return d.promise();
       },
     }],
-    setCellValue(rowData, value) {
+    setCellValue(rowData, value): void {
       rowData.age = value;
       if (value === 1) {
         rowData.name = '';
@@ -511,7 +507,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
     .ok()
     .expect(dataGrid.getDataCell(0, 1).element.textContent)
     .eql('testb');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -519,7 +515,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
   },
   columns: [{
     dataField: 'age',
-    setCellValue: (rowData, value) => {
+    setCellValue: (rowData, value): void => {
       rowData.age = value;
       rowData.name = 'testb';
     },
@@ -527,7 +523,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
     dataField: 'name',
     validationRules: [{
       type: 'async',
-      validationCallback() {
+      validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(false);
@@ -550,7 +546,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
     .ok()
     .expect(dataGrid.getDataCell(0, 1).element.textContent)
     .eql('testb');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -558,7 +554,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
   },
   columns: [{
     dataField: 'age',
-    setCellValue: (rowData, value) => {
+    setCellValue: (rowData, value): void => {
       rowData.age = value;
       rowData.name = 'testb';
     },
@@ -566,7 +562,7 @@ test('Cell mode(setCellValue) with async validation - The value of an invalid de
     dataField: 'name',
     validationRules: [{
       type: 'async',
-      validationCallback() {
+      validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(false);
@@ -589,7 +585,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     .ok()
     .expect(dataGrid.getDataCell(0, 1).element.textContent)
     .eql('123b');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -599,10 +595,10 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData) => (rowData.age ? `${rowData.age}b` : undefined),
+    calculateCellValue: (rowData): string | undefined => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
-      validationCallback() {
+      validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(false);
@@ -616,6 +612,8 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
 test('Cell mode(calculateCellValue) with async validation - The value of an invalid dependent cell should be updated in a modified row(T872751)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.apiEditCell(0, 0);
 
   await t
@@ -625,7 +623,7 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     .ok()
     .expect(dataGrid.getDataCell(0, 1).element.textContent)
     .eql('15123b');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -635,10 +633,10 @@ test('Cell mode(calculateCellValue) with async validation - The value of an inva
     dataField: 'age',
   }, {
     dataField: 'name',
-    calculateCellValue: (rowData) => (rowData.age ? `${rowData.age}b` : undefined),
+    calculateCellValue: (rowData): string | undefined => (rowData.age ? `${rowData.age}b` : undefined),
     validationRules: [{
       type: 'async',
-      validationCallback() {
+      validationCallback(): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(false);
@@ -691,7 +689,7 @@ test('Async Validation(Batch) - Only valid data is saved in a new row', async (t
     .notOk('row is not in editing mode')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'batch',
     allowAdding: true,
@@ -700,7 +698,7 @@ test('Async Validation(Batch) - Only valid data is saved in a new row', async (t
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -756,7 +754,7 @@ test('Async Validation(Batch) - Only valid data is saved in a modified cell', as
     .notOk()
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, columnIndex))
     .notOk('the first cell does not have cached validation result');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'batch',
     allowUpdating: true,
@@ -765,7 +763,7 @@ test('Async Validation(Batch) - Only valid data is saved in a modified cell', as
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -841,7 +839,7 @@ test('Async Validation(Batch) - Data is not saved when a dependant cell value be
     .ok('the first cell is invalid')
     .expect(dataGrid.apiGetCellValidationStatus(rowIndex, 1))
     .eql('invalid');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'batch',
     allowUpdating: true,
@@ -850,7 +848,7 @@ test('Async Validation(Batch) - Data is not saved when a dependant cell value be
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -859,7 +857,7 @@ test('Async Validation(Batch) - Data is not saved when a dependant cell value be
         return d.promise();
       },
     }],
-    setCellValue(rowData, value) {
+    setCellValue(rowData, value): void {
       rowData.age = value;
       if (value === 1) {
         rowData.name = '';
@@ -903,7 +901,7 @@ test('Async Validation(Batch) - Data is not saved when a cell with async setCell
     .ok()
     .expect(dataRow.isInserted)
     .ok('row is in editing mode');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'batch',
     allowAdding: true,
@@ -912,7 +910,7 @@ test('Async Validation(Batch) - Data is not saved when a cell with async setCell
     dataField: 'age',
     validationRules: [{
       type: 'async',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           if (params.value === 1) d.resolve(true);
@@ -921,7 +919,7 @@ test('Async Validation(Batch) - Data is not saved when a cell with async setCell
         return d.promise();
       },
     }],
-    setCellValue(rowData, value) {
+    setCellValue(rowData, value): JQueryPromise<unknown> {
       const d = $.Deferred();
       setTimeout(() => {
         rowData.age = value;
@@ -975,7 +973,7 @@ test('Validation(Row) - Unmodified data cell should be marked as invalid when a 
     .ok('the second cell is marked as invalid')
     .expect(dataRow.isEdited)
     .ok('row is still in editing mode');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'row',
     allowUpdating: true,
@@ -984,7 +982,7 @@ test('Validation(Row) - Unmodified data cell should be marked as invalid when a 
     dataField: 'name',
     validationRules: [{
       type: 'custom',
-      validationCallback(params) {
+      validationCallback(params): boolean {
         return params.data.age >= 10;
       },
     }],
@@ -1029,7 +1027,7 @@ test('Validation(Row) - Unmodified data cell should be marked as invalid when a 
     .notOk('cell is not marked as invalid')
     .expect(dataRow.isEdited)
     .notOk('row is not in editing mode');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'row',
     allowUpdating: true,
@@ -1039,7 +1037,7 @@ test('Validation(Row) - Unmodified data cell should be marked as invalid when a 
     validationRules: [{
       type: 'custom',
       reevaluate: true,
-      validationCallback(params) {
+      validationCallback(params): boolean {
         return params.data.age >= 10;
       },
     }],
@@ -1079,7 +1077,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
     .ok('the second cell is still invalid')
     .expect(cell0.isEditCell)
     .ok('the first cell is still in editing mode');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -1088,7 +1086,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
     dataField: 'name',
     validationRules: [{
       type: 'custom',
-      validationCallback(params) {
+      validationCallback(params): boolean {
         return params.data.age >= 10;
       },
     }],
@@ -1128,7 +1126,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
     .notOk('the second cell is notmarked as invalid')
     .expect(cell0.isEditCell)
     .notOk('the first cell is not in editing mode');
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   editing: {
     mode: 'cell',
     allowUpdating: true,
@@ -1138,7 +1136,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
     validationRules: [{
       type: 'custom',
       reevaluate: true,
-      validationCallback(params) {
+      validationCallback(params): boolean {
         return params.data.age >= 10;
       },
     }],
@@ -1201,7 +1199,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
       .notOk('the first cell is not marked as modified')
       .expect(cell0.isEditCell)
       .notOk('the first cell is not in editing mode');
-  }).before(() => createWidget('dxDataGrid', getGridConfig({
+  }).before(async () => createWidget('dxDataGrid', getGridConfig({
     editing: {
       mode: 'batch',
       allowUpdating: true,
@@ -1211,7 +1209,7 @@ test('Validation(Cell) - Unmodified data cell should be marked as invalid when a
       validationRules: [{
         type: 'custom',
         reevaluate,
-        validationCallback(params) {
+        validationCallback(params): boolean {
           return params.data.age >= 10;
         },
       }],
@@ -1275,7 +1273,7 @@ test('Validation(Batch) - Unmodified data cell with enabled showEditorAlways sho
     .ok()
     .expect(cell10.isModified)
     .ok();
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   keyExpr: 'id',
   dataSource: [
     { id: 1, name: '', lastName: '' },
@@ -1291,7 +1289,7 @@ test('Validation(Batch) - Unmodified data cell with enabled showEditorAlways sho
     validationRules: [{
       type: 'custom',
       reevaluate: true,
-      validationCallback: (params) => params.data.name.length <= 0,
+      validationCallback: (params): boolean => params.data.name.length <= 0,
     }],
   }],
 })));
@@ -1372,7 +1370,7 @@ test('Async Validation(Batch) - Validation frame should be rendered when a neigh
     .ok()
     .expect(cell1.isInvalid)
     .notOk();
-}).before(() => createWidget('dxDataGrid', getGridConfig({
+}).before(async () => createWidget('dxDataGrid', getGridConfig({
   dataSource: [{ id: 1, name: '', lastName: '' }],
   keyExpr: 'id',
   repaintChangesOnly: true,
@@ -1388,7 +1386,7 @@ test('Async Validation(Batch) - Validation frame should be rendered when a neigh
     validationRules: [{
       type: 'async',
       message: 'Invalid value',
-      validationCallback(params) {
+      validationCallback(params): JQueryPromise<unknown> {
         const d = $.Deferred();
         setTimeout(() => {
           d.resolve(params.data.name.length < 2);
@@ -1404,13 +1402,13 @@ test('Rollback changes on a click on a revert button  when startEditAction is db
   const dataGrid = new DataGrid('#container');
   const dataRow = dataGrid.getDataRow(0);
   const cell0 = dataRow.getDataCell(1);
-  const $revertButton = cell0.getRevertButton();
+  const $revertButton = dataGrid.getRevertButton();
 
   await t
     .doubleClick(cell0.element)
     .expect(cell0.isEditCell)
     .ok()
-    .click(cell0.element.find('.dx-checkbox'))
+    .click(cell0.getCheckbox())
     .expect($revertButton.exists)
     .ok()
     .click($revertButton)
@@ -1420,7 +1418,7 @@ test('Rollback changes on a click on a revert button  when startEditAction is db
     .notOk()
     .expect(dataGrid.apiGetCellValue(0, 1))
     .notOk();
-}).before(() => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ name: 'test', test: false }],
   editing: {
     mode: 'cell',
@@ -1439,6 +1437,7 @@ test('Rollback changes on a click on a revert button  when startEditAction is db
 test('Row - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const detailGrid = new DataGrid('#detailContainer');
+  const overlay = dataGrid.getOverlay();
 
   // act
   await t
@@ -1449,7 +1448,7 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1);
 
   // act
   await t
@@ -1457,7 +1456,7 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1);
 
   // act
   await t
@@ -1465,14 +1464,14 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
-}).before(() => createWidget('dxDataGrid', {
+    .expect(overlay.getInvalidMessage().count).eql(1);
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
-  loadingTimeout: undefined,
+  loadingTimeout: null,
   masterDetail: {
     enabled: true,
-    template() {
+    template(): any {
       return ($('<div id="detailContainer">') as any).dxDataGrid({
         dataSource: [],
         keyExpr: 'id',
@@ -1503,6 +1502,7 @@ test('Row - Redundant validation messages should not be rendered in a detail gri
 test('Cell - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const detailGrid = new DataGrid('#detailContainer');
+  const overlay = dataGrid.getOverlay();
 
   // act
   await t
@@ -1512,8 +1512,8 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1)
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-datagrid-revert-tooltip')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1)
+    .expect(overlay.getRevertTooltip().count).eql(1);
 
   // act
   await t
@@ -1521,8 +1521,8 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1)
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-datagrid-revert-tooltip')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1)
+    .expect(overlay.getRevertTooltip().count).eql(1);
 
   // act
   await t
@@ -1530,15 +1530,15 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1)
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-datagrid-revert-tooltip')).eql(1);
-}).before(() => createWidget('dxDataGrid', {
+    .expect(overlay.getInvalidMessage().count).eql(1)
+    .expect(overlay.getRevertTooltip().count).eql(1);
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
-  loadingTimeout: undefined,
+  loadingTimeout: null,
   masterDetail: {
     enabled: true,
-    template() {
+    template(): any {
       return ($('<div id="detailContainer">') as any).dxDataGrid({
         dataSource: [],
         keyExpr: 'id',
@@ -1569,6 +1569,7 @@ test('Cell - Redundant validation messages should not be rendered in a detail gr
 test('Batch - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const detailGrid = new DataGrid('#detailContainer');
+  const overlay = dataGrid.getOverlay();
 
   // act
   await t
@@ -1579,7 +1580,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1);
 
   // act
   await t
@@ -1587,7 +1588,7 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
+    .expect(overlay.getInvalidMessage().count).eql(1);
 
   // act
   await t
@@ -1595,14 +1596,14 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
 
   // assert
   await t
-    .expect(await getElementCount(dataGrid, '.dx-overlay-wrapper.dx-invalid-message')).eql(1);
-}).before(() => createWidget('dxDataGrid', {
+    .expect(overlay.getInvalidMessage().count).eql(1);
+}).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ id: 1, field: 'field' }],
   keyExpr: 'id',
-  loadingTimeout: undefined,
+  loadingTimeout: null,
   masterDetail: {
     enabled: true,
-    template() {
+    template(): any {
       return ($('<div id="detailContainer">') as any).dxDataGrid({
         dataSource: [],
         keyExpr: 'id',
@@ -1629,3 +1630,664 @@ test('Batch - Redundant validation messages should not be rendered in a detail g
     },
   },
 }));
+
+test('Checkbox has ink ripple in material theme inside editing popup (T977287)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const overlay = new Overlay();
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0))
+    .wait(1000)
+    .click(overlay.getPopupCheckbox());
+
+  // assert
+  await t
+    .expect(await takeScreenshot('grid-popup-editing-checkbox.png', overlay.content))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme('material.blue.light');
+  return createWidget('dxDataGrid', {
+    dataSource: [{
+      ID: 1,
+      LastName: 'Heart',
+    }],
+    keyExpr: 'ID',
+    editing: {
+      allowUpdating: true,
+      mode: 'popup',
+      form: {
+        items: [{
+          dataField: 'checkbox',
+          editorType: 'dxCheckBox',
+        }],
+      },
+    },
+    columns: ['LastName'],
+  });
+}).after(async () => {
+  await changeTheme('generic.light');
+});
+
+test('DataGrid inside editing popup should have synchronized columns (T1059401)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
+  // act
+
+  await t
+    .click(Selector('body'), { offsetY: dataGridOffsetBottom + 10 });
+
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(1).getButton(0));
+
+  const overlay = new Overlay();
+
+  const popupDataGridSelector = overlay.content.find(`.${CLASS.dataGrid}`);
+  const popupDataGrid = new DataGrid(popupDataGridSelector);
+
+  await t
+    .expect(popupDataGrid.getDataRow(0).element.exists)
+    .ok();
+
+  await t.debug();
+  // assert
+  await t
+    .expect(await takeScreenshot('grid-popup-editing-grid.png', overlay.content))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme('material.blue.light');
+
+  return createWidget('dxDataGrid', {
+    dataSource: [{
+      ID: 1,
+    }],
+    keyExpr: 'ID',
+    editing: {
+      allowUpdating: true,
+      mode: 'popup',
+      form: {
+        colCount: 1,
+        items: [{
+          template() {
+            return ($('<div>') as any).dxDataGrid({
+              showColumnLines: true,
+              dataSource: [{
+                ID: 1,
+                FirstName: 'John',
+                LastName: 'Heart',
+              }],
+              height: 200,
+              editing: {
+                allowUpdating: true,
+                allowDeleting: true,
+              },
+            });
+          },
+        }],
+      },
+    },
+  });
+}).after(async () => {
+  await changeTheme('generic.light');
+});
+
+test('DataGrid adaptive text should have correct paddings (T1062084)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton());
+
+  await t
+    .click(dataGrid.getFormItemElement(0));
+
+  await t
+    .typeText(dataGrid.getFormItemEditor(0), '1');
+
+  await t
+    .pressKey('enter');
+
+  await t
+    .click(dataGrid.getFormItemElement(2));
+
+  await t
+    .typeText(dataGrid.getFormItemEditor(2), '0');
+
+  await t
+    .pressKey('enter');
+
+  // assert
+  await t
+    .expect(await takeScreenshot('grid-adaptive-item-text.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme('material.blue.light');
+  return createWidget('dxDataGrid', {
+    width: 400,
+    dataSource: [{
+      OrderNumber: 35703,
+      SaleAmount: 11800,
+      OrderDate: '2014/04/10',
+      Employee: 'Harv Mudd',
+    }],
+    keyExpr: 'OrderNumber',
+    columnHidingEnabled: true,
+    editing: {
+      allowUpdating: true,
+      mode: 'batch',
+    },
+    columns: [{
+      dataField: 'OrderNumber',
+      caption: 'Invoice Number',
+      width: 300,
+    }, {
+      dataField: 'Employee',
+    }, {
+      dataField: 'OrderDate',
+      dataType: 'date',
+    }, {
+      dataField: 'SaleAmount',
+      validationRules: [{ type: 'range', max: 100000 }],
+      format: 'currency',
+    }],
+  });
+}).after(async () => {
+  await changeTheme('generic.light');
+});
+
+test('DataGrid checkboxes should have correct outline in adaptive row', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(4).getAdaptiveButton())
+    .click(dataGrid.getFormItemElement(2));
+
+  await t
+    .expect(await takeScreenshot('grid-adaptive-checkbox.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme('material.blue.light');
+  return createWidget('dxDataGrid', {
+    width: 400,
+    dataSource: [{
+      OrderNumber: 35703,
+      Employee: 'Sam',
+      OrderDate: '2014/04/10',
+      Checkbox: true,
+    }],
+    keyExpr: 'OrderNumber',
+    columnHidingEnabled: true,
+    editing: {
+      allowUpdating: true,
+      mode: 'cell',
+    },
+    columns: [{
+      dataField: 'OrderNumber',
+      caption: 'Invoice Number',
+      width: 300,
+    }, {
+      dataField: 'Employee',
+    }, {
+      dataField: 'OrderDate',
+      dataType: 'date',
+    }, {
+      dataField: 'Checkbox',
+      dataType: 'boolean',
+    }],
+  });
+}).after(async () => {
+  await changeTheme('generic.light');
+});
+
+test('DataGrid cell with checkbox should have outline on focused', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .expect(dataGrid.getDataCell(0, 0).isFocused).ok()
+    .pressKey('enter')
+    .pressKey('tab');
+
+  await t
+    .expect(await takeScreenshot('grid-checkbox-outline.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  height: 150,
+  width: 200,
+  dataSource: [{
+    Id: 0,
+    Checkbox: true,
+  }],
+  keyExpr: 'Id',
+  editing: {
+    allowUpdating: true,
+    mode: 'cell',
+  },
+  columns: ['Id', 'Checkbox'],
+}));
+
+test('The "Cannot read property "brokenRules" of undefined" error occurs T978286', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const lastName0 = dataGrid.getDataCell(0, 1);
+  const active1 = dataGrid.getDataCell(1, 2);
+  await t
+    .click(lastName0.element)
+    .typeText(lastName0.getEditor().element, '1')
+    .click(active1.element)
+    .click(lastName0.element);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    ID: 1,
+    LastName: 'Heart',
+    Active: false,
+  }, {
+    ID: 1,
+    LastName: 'Broken',
+    Active: false,
+  }],
+  keyExpr: 'ID',
+  editing: {
+    allowUpdating: true,
+    mode: 'cell',
+  },
+}));
+
+['Cell', 'Batch'].forEach((editMode) => {
+  test(`${editMode} - Edit cell should be focused correclty when showEditorAlways is enabled (T976141)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+
+    // direct order
+    for (let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
+      for (let colIndex = 0; colIndex < 2; colIndex += 1) {
+        const currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        // act
+        await t
+          .click(currentCell.getEditor().element);
+
+        // assert
+        await t
+          .expect(currentCell.isFocused).ok()
+          .expect(currentCell.getEditor().element.focused).ok();
+      }
+    }
+
+    // reverse order
+    for (let rowIndex = 2; rowIndex >= 0; rowIndex -= 1) {
+      for (let colIndex = 1; colIndex >= 0; colIndex -= 1) {
+        const currentCell = dataGrid.getDataCell(rowIndex, colIndex);
+        // act
+        await t
+          .click(currentCell.getEditor().element);
+
+        // assert
+        await t
+          .expect(currentCell.isFocused).ok()
+          .expect(currentCell.getEditor().element.focused).ok();
+      }
+    }
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, field: 'field' },
+      { id: 2, field: 'field' },
+      { id: 3, field: 'field' },
+    ],
+    keyExpr: 'id',
+    editing: {
+      mode: editMode.toLowerCase(),
+      allowUpdating: true,
+    },
+    loadingTimeout: null,
+    customizeColumns(columns) {
+      columns.forEach((col) => {
+        col.showEditorAlways = true;
+      });
+    },
+  }));
+});
+
+['Batch', 'Cell'].forEach((editMode) => {
+  test(`${editMode} - Cell value should not be reset when a checkbox in a neigboring cell is clicked (T1023809)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const firstCell = dataGrid.getDataCell(0, 0);
+    const secondCell = dataGrid.getDataCell(0, 1);
+
+    // act
+    await t
+      .click(firstCell.element);
+
+    // assert
+    await t
+      .expect(firstCell.isEditCell).ok()
+      .expect(firstCell.isFocused).ok()
+      .expect(firstCell.getEditor().element.focused)
+      .ok();
+
+    // act
+    await t
+      .typeText(firstCell.getEditor().element, '123', { replace: true })
+      .click(secondCell.getEditor().element);
+
+    // assert
+    await t
+      .expect(dataGrid.apiGetCellValue(0, 0)).eql('123');
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, field1: 'test', field2: true },
+    ],
+    keyExpr: 'id',
+    columns: ['field1', 'field2'],
+    editing: {
+      mode: editMode.toLowerCase(),
+      allowUpdating: true,
+    },
+  }));
+});
+
+test('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '1')
+    .click(dataGrid.getDataCell(1, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(0, 0))
+    .eql('Name 11')
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
+    .click(dataGrid.getDataCell(2, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(1, 0))
+    .eql('Name 22')
+    .expect(dataGrid.getDataCell(2, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(2, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(2, 0).getEditor().element, '3')
+    .click(dataGrid.getDataCell(1, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(2, 0))
+    .eql('Name 33')
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
+    .click(dataGrid.getDataCell(0, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(1, 0))
+    .eql('Name 222')
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).getEditor().element.focused)
+    .ok();
+}).before(async () => {
+  const initStore = ClientFunction(() => {
+    (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+      key: 'ID',
+      data: [
+        { ID: 1, Name: 'Name 1' },
+        { ID: 2, Name: 'Name 2' },
+        { ID: 3, Name: 'Name 3' },
+      ],
+    });
+  });
+
+  await initStore();
+
+  return createWidget('dxDataGrid', {
+    dataSource: {
+      key: 'ID',
+      load(loadOptions) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            (window as any).myStore.load(loadOptions).done((data) => {
+              resolve(data);
+            });
+          }, 100);
+        });
+      },
+      update(key, values) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            (window as any).myStore.update(key, values).done(() => {
+              resolve(key);
+            });
+          }, 100);
+        });
+      },
+      totalCount(loadOptions) {
+        return (window as any).myStore.totalCount(loadOptions);
+      },
+    },
+    keyExpr: 'ID',
+    editing: {
+      mode: 'cell',
+      allowUpdating: true,
+    },
+    columns: [{
+      dataField: 'Name',
+      showEditorAlways: true,
+    }],
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).myStore;
+  })();
+});
+
+// T1130497
+([
+  ['first', 0, 'standard', 0],
+  ['last', 20, 'standard', 0],
+  ['pageBottom', 20, 'standard', 0],
+  ['pageTop', 0, 'standard', 0],
+  ['pageBottom', 8, 'virtual', 0],
+  ['pageTop', 0, 'virtual', 0],
+  ['viewportBottom', 8, 'standard', 0],
+  ['viewportBottom', 13, 'standard', 162],
+  ['viewportTop', 0, 'standard', 0],
+  ['viewportTop', 5, 'standard', 162],
+  ['viewportBottom', 8, 'virtual', 0],
+  ['viewportBottom', 13, 'virtual', 162],
+  ['viewportTop', 0, 'virtual', 0],
+  ['viewportTop', 5, 'virtual', 162],
+] as [string, number, string, number][])
+  .forEach(([newRowPosition, insertedRowNumber, scrollMode, scrollTop]) => {
+    test(`The first cell of the new row should be focused when
+      newRowPosition = ${newRowPosition}
+      and editing.mode = cell
+      and ${scrollMode} scroll mode
+      and scrollTop is ${scrollTop}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      const dataGrid = new DataGrid('#container');
+      const headerPanel = dataGrid.getHeaderPanel();
+
+      const scrollTo = async (y) => {
+        await dataGrid.scrollTo({ y });
+        return dataGrid.isReady();
+      };
+
+      const screenshotName = `grid-new-row_position-${newRowPosition}_scroll-mode-${scrollMode}_top-${scrollTop}.png`;
+
+      await t
+        .expect(await scrollTo(scrollTop))
+        .ok(`scrollTo ${scrollTop}`)
+        .click(headerPanel.getAddRowButton())
+        // act
+        .expect(await takeScreenshot(screenshotName, dataGrid.element))
+        .ok()
+        // assert
+        .expect(dataGrid.getDataRow(insertedRowNumber).isInserted)
+        .ok('row is inserted')
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => createWidget('dxDataGrid', {
+      dataSource: getData(20, 3),
+      height: 400,
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        allowAdding: true,
+        newRowPosition,
+      },
+      scrolling: {
+        mode: scrollMode,
+      },
+    }));
+  });
+
+test('Popup EditForm screenshot', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const commandCellRow0 = dataGrid.getDataCell(0, 2);
+
+  await t
+    .click(commandCellRow0.getLinkEdit())
+    // act
+    .expect(await takeScreenshot('popup-edit-form.png', dataGrid.element))
+    .ok()
+    // assert
+    .expect(dataGrid.getPopupEditForm().element.exists)
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 2),
+  height: 400,
+  showBorders: true,
+  editing: {
+    mode: 'popup',
+    allowUpdating: true,
+  },
+}));
+
+// T1165529
+[
+  true,
+  false,
+].forEach((remoteOperations) => {
+  test.only(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      // act
+      .click(dataGrid.getHeaderPanel().getSaveButton())
+
+      // assert
+      .expect(dataGrid.dataRows.count)
+      .eql(remoteOperations ? 5 : 6)
+
+      .expect(dataGrid.getDataCell(0, 0).element.textContent)
+      .eql(remoteOperations ? 'val_0_0' : 'val_5_0');
+  }).before(async () => {
+    const data = getData(10, 4);
+
+    await createWidget('dxDataGrid', {
+      dataSource: data,
+      keyExpr: 'field_0',
+      paging: {
+        pageSize: 5,
+      },
+      remoteOperations,
+      editing: {
+        allowUpdating: true,
+        mode: 'batch',
+      },
+      columns: [
+        {
+          dataField: 'field_0',
+          validationRules: [
+            {
+              type: 'custom',
+              validationCallback: (options) => options.value !== 'val_5_0',
+            },
+          ],
+        },
+        'field_1',
+        'field_2',
+        'field_3',
+      ],
+    });
+
+    await ClientFunction(() => {
+      const keys = data.map((e) => e.field_0);
+      const columnToModify = 'field_1';
+      const gridName = 'dxDataGrid';
+
+      const grid = $('#container')[gridName]('instance');
+      const changes = grid.option('editing.changes');
+      keys.forEach((key) => {
+        const editData = changes.find(
+          (change) => change.type === 'update' && change.key === key,
+        );
+        if (editData) {
+          editData.data[columnToModify] = 'EEEEEE';
+        } else {
+          const changingData = {};
+          changingData[columnToModify] = 'EEEEEE';
+
+          changes.push({
+            type: 'update',
+            key,
+            data: changingData,
+          });
+        }
+      });
+      grid.option('editing.changes', changes);
+    }, {
+      dependencies: {
+        data,
+      },
+    })();
+  });
+});

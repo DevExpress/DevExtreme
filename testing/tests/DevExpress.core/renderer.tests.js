@@ -1,3 +1,4 @@
+const { setHeight, setWidth, implementationsMap } = require('core/utils/size');
 const renderer = require('core/renderer');
 
 QUnit.module('renderer');
@@ -211,8 +212,8 @@ QUnit.test('width and height should take into consideration borders and paddings
     $element.css('padding', '3px 4px');
     $element.css('border', '4px solid');
 
-    $element.height(80);
-    $element.width(80);
+    setHeight($element, 80);
+    setWidth($element, 80);
 
     assert.equal($element.get(0).style.height, '94px');
     assert.equal($element.get(0).style.width, '96px');
@@ -226,8 +227,8 @@ QUnit.test('string value should be set correctly', function(assert) {
     $element.css('padding', '3px 4px');
     $element.css('border', '4px solid');
 
-    $element.height('80');
-    $element.width('80');
+    setHeight($element, '80');
+    setWidth($element, '80');
 
     assert.equal($element.get(0).style.height, '94px');
     assert.equal($element.get(0).style.width, '96px');
@@ -253,6 +254,9 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
     const outerPropName = 'outer' + propName;
     const innerPropName = 'inner' + propName;
     propName = propName.toLocaleLowerCase();
+    const setter = function(target, $el, value) {
+        return implementationsMap['set' + target[0].toUpperCase() + target.slice(1)](...[...arguments].slice(1));
+    };
 
     QUnit.test(propName + ' shouldn\'t take into consideration borders and paddings if box-sizing isn\'t border-box', function(assert) {
         const $element = renderer('<div>');
@@ -261,7 +265,7 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
         $element.css('padding', 3);
         $element.css('border', '4px solid');
 
-        $element[propName](80);
+        setter(propName, $element, 80);
 
         assert.equal($element.get(0).style[propName], '80px');
     });
@@ -274,7 +278,7 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
         $element.css('padding', 3);
         $element.css('border', '4px solid');
 
-        $element[outerPropName](80);
+        setter(outerPropName, $element, 80);
 
         assert.equal($element.get(0).style[propName], '80px');
     });
@@ -286,7 +290,7 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
         $element.css('padding', 3);
         $element.css('border', '4px solid');
 
-        $element[outerPropName](80);
+        setter(outerPropName, $element, 80);
 
         assert.equal($element.get(0).style[propName], '66px');
     });
@@ -299,7 +303,7 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
         $element.css('padding', 3);
         $element.css('border', '4px solid');
 
-        $element[innerPropName](80);
+        setter(innerPropName, $element, 80);
 
         assert.equal($element.get(0).style[propName], '88px');
     });
@@ -311,7 +315,7 @@ QUnit.test('null and NaN values should not be set in .css()', function(assert) {
         $element.css('padding', 3);
         $element.css('border', '4px solid');
 
-        $element[innerPropName](80);
+        setter(innerPropName, $element, 80);
 
         assert.equal($element.get(0).style[propName], '74px');
     });
@@ -353,3 +357,21 @@ QUnit.test('Should not remove content when replacing the same content', function
     assert.equal(fixture.childElementCount, 1, 'element still exist');
     assert.equal($element.is($result), true, 'returned value the same element');
 });
+
+QUnit.module('attr method');
+// T1108190
+QUnit.test('Add/remove atribute', function(assert) {
+    const $element = renderer('<div>');
+
+    $element.attr('data-test', 'test');
+    $element.attr('readonly', true);
+    const fixture = document.getElementById('qunit-fixture');
+
+    fixture.appendChild($element.get(0));
+    assert.equal($element.get(0).getAttribute('data-test'), 'test', 'element data-test attribute');
+    assert.equal(!!$element.get(0).getAttribute('readonly'), true, 'element readOnly attribute');
+    $element.attr('readonly', false);
+    assert.equal($element.get(0).getAttribute('readonly'), undefined, 'element readOnly attribute');
+
+});
+

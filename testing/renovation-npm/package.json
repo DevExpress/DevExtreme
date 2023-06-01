@@ -1,0 +1,35 @@
+{
+  "name": "renovation-npm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:devextreme": "gulp build-devextreme --framework",
+    "build:renovation": "gulp build-devextreme-renovation --framework",
+    "build": "gulp build-all --framework",
+    "pack:devextreme": "gulp pack-devextreme --framework",
+    "pack:renovation": "gulp pack-devextreme-renovation --framework",
+    "pack": "gulp pack-all --framework",
+    "install:devextreme": "gulp install-devextreme --framework",
+    "install:renovation": "gulp install-devextreme-renovation --framework",
+    "install-all": "gulp install-all --framework",
+    "start": "gulp start --framework",
+    "cleanup": "gulp cleanup --framework",
+    "prepare-all": "gulp prepare-all --framework",
+    "test:react": "cross-env framework=react testcafe",
+    "test:angular": "cross-env framework=angular testcafe"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "7.0.3",
+    "del": "6.1.1",
+    "devextreme-screenshot-comparer": "2.0.14",
+    "eslint-plugin-testcafe": "0.2.1",
+    "glob": "7.2.3",
+    "gulp": "4.0.2",
+    "testcafe": "1.20.1",
+    "yargs": "17.6.2"
+  }
+}

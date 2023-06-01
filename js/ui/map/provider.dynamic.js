@@ -1,4 +1,3 @@
-import Promise from '../../core/polyfills/promise';
 import { extend } from '../../core/utils/extend';
 import { each, map } from '../../core/utils/iterator';
 import Provider from './provider';

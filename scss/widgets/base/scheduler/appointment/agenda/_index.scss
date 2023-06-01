@@ -1,0 +1,111 @@
+@use "../../mixins" as *;
+
+$marker-base-color: null !default;
+$text-color: null !default;
+$recurrence-icon-color: null !default;
+$hover-bg: null !default;
+$active-bg: null !default;
+$active-color: null !default;
+$title-font-size: null !default;
+
+.dx-scheduler-agenda {
+  .dx-scheduler-appointment {
+    box-shadow: none;
+    background-color: transparent;
+    color: $text-color;
+    padding: 10px;
+    border-radius: 5px;
+
+    &.dx-state-hover {
+      background-color: $hover-bg;
+    }
+
+    &.dx-state-focused {
+      color: $text-color;
+      background-color: $active-bg;
+      box-shadow: none;
+
+      &::before {
+        background: transparent;
+      }
+    }
+  }
+
+  .dx-scheduler-appointment-recurrence-icon {
+    position: static;
+    color: $recurrence-icon-color;
+  }
+
+  .dx-scheduler-agenda-appointment-left-layout {
+    overflow: visible;
+  }
+
+  .dx-scheduler-agenda-appointment-right-layout {
+    margin-left: 10px;
+  }
+
+  .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content,
+  .dx-scheduler-appointment-content {
+    padding: 0;
+  }
+
+  .dx-scheduler-appointment-content {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .dx-scheduler-appointment-content-date {
+    opacity: 1;
+    white-space: nowrap;
+  }
+
+  .dx-scheduler-appointment-title {
+    @include use-text-overflow-ellipsis();
+
+    font-weight: 700;
+    font-size: $title-font-size;
+  }
+
+  .dx-scheduler-appointment-content-details {
+    display: flex;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  .dx-scheduler-appointment-content-allday {
+    display: flex;
+    padding-right: 5px;
+  }
+
+  .dx-scheduler-appointment-resource-list,
+  .dx-scheduler-appointment-resource-item {
+    display: flex;
+  }
+
+  .dx-scheduler-appointment-resource-item {
+    margin-left: 15px;
+  }
+
+  .dx-scheduler-appointment-resource-item-value {
+    margin-left: 3px;
+  }
+
+  .dx-scheduler-agenda-appointment-marker {
+    @include use-colored-marker(32);
+    @include use-flex-center();
+
+    background-color: $marker-base-color;
+  }
+
+  .dx-rtl {
+    .dx-scheduler-agenda-appointment-right-layout {
+      margin-left: 0;
+      margin-right: 10px;
+    }
+
+    .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content,
+    .dx-scheduler-appointment-content {
+      padding: 0;
+    }
+  }
+}

@@ -1,19 +1,22 @@
 import Editor, {
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
-export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
+export interface dxTrackBarOptions<TComponent> extends EditorOptions<TComponent> {
     /**
      * @docid
      * @default 100
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     max?: number;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     min?: number;
@@ -22,9 +25,7 @@ export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
  * @docid
  * @inherits Editor
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
+ * @options dxTrackBarOptions
  */
-export default class dxTrackBar extends Editor {
-    constructor(element: Element, options?: dxTrackBarOptions)
-    constructor(element: JQuery, options?: dxTrackBarOptions)
-}
+export default class dxTrackBar<TProperties> extends Editor<TProperties> { }

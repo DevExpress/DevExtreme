@@ -4,17 +4,40 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/validation" as *;
+@use "../textEditor/sizes" as *;
 
 // adduse
 @use "../overlay";
-
-
 @include dx-base-validation($validation-summary-color, $validation-message-color, $validation-message-background-color);
 
 .dx-invalid-message > .dx-overlay-content {
   background-color: transparent;
   color: $validation-message-background-color;
-  padding: $material-validation-message-padding 0 0;
+
+  .dx-invalid-message-top &,
+  .dx-invalid-message-bottom & {
+    .dx-editor-filled &,
+    .dx-editor-outlined {
+      padding-left: $material-filled-texteditor-input-horizontal-padding;
+      padding-right: $material-filled-texteditor-input-horizontal-padding;
+    }
+  }
+
+  .dx-invalid-message-top & {
+    padding: 0 0 $material-validation-message-padding 0;
+  }
+
+  .dx-invalid-message-right & {
+    padding: 0 0 0 $material-validation-message-padding;
+  }
+
+  .dx-invalid-message-bottom & {
+    padding: $material-validation-message-padding 0 0 0;
+  }
+
+  .dx-invalid-message-left & {
+    padding: 0 $material-validation-message-padding 0 0;
+  }
 }
 
 .dx-validationsummary > .dx-validationsummary-item:not(:last-child) {

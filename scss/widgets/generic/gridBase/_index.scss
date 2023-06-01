@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -19,7 +20,6 @@
 @use "../overlay";
 @use "../pager";
 
-
 $generic-grid-base-border-hidden: 1px solid transparent;
 $generic-grid-base-row-border: 1px solid transparent;
 $generic-grid-base-border-color: $datagrid-border-color;
@@ -27,6 +27,9 @@ $generic-grid-base-drag-header-border: 1px solid $datagrid-drag-header-border-co
 $generic-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
 $generic-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
 $generic-grid-base-checkbox-icon-size: 16px;
+$generic-grid-base-checkbox-indeterminate-icon-size: 6px;
+$grid-masterdetail-padding: 20px;
+
 
 @mixin dx-set-checkbox-border-color-as-background() {
   @if $generic-color-postfix == ".contrast" {
@@ -118,15 +121,15 @@ $generic-grid-base-checkbox-icon-size: 16px;
       & > td,
       & > tr > td {
         background-color: $datagrid-row-alternation-bg;
-
-        // T838734
-        border-top: 1px solid $datagrid-row-alternation-bg;
-        border-bottom: 1px solid $datagrid-row-alternation-bg;
       }
 
       &.dx-row:not(.dx-row-removed) {
         border-bottom-color: transparent;
       }
+
+      // T838734
+      border-top: 1px solid $datagrid-row-alternation-bg;
+      border-bottom: 1px solid $datagrid-row-alternation-bg;
     }
 
     .dx-link {
@@ -177,7 +180,7 @@ $generic-grid-base-checkbox-icon-size: 16px;
       }
     }
 
-    .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
+    .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]::before {
       background-position-y: 34px;
     }
 
@@ -272,7 +275,7 @@ $generic-grid-base-checkbox-icon-size: 16px;
   }
 
   .dx-#{$widget-name}-checkbox-size {
-    line-height: 1em;
+    padding-bottom: $generic-grid-base-checkbox-padding-bottom;
 
     &.dx-checkbox-checked .dx-checkbox-icon {
       font-size: $generic-grid-base-checkbox-fontsize;
@@ -285,12 +288,15 @@ $generic-grid-base-checkbox-icon-size: 16px;
 
     &.dx-checkbox-indeterminate {
       .dx-checkbox-icon {
-        font-size: 6px;
+        font-size: $generic-grid-base-checkbox-indeterminate-icon-size;
+
+        &::before {
+          border-radius: 0;
+        }
       }
     }
   }
 
-  .dx-device-mobile .dx-#{$widget-name}-column-chooser-list,
   .dx-#{$widget-name}-column-chooser-list {
     .dx-empty-message {
       color: $datagrid-columnchooser-message-color;
@@ -384,6 +390,14 @@ $generic-grid-base-checkbox-icon-size: 16px;
       .dx-command-edit {
         width: $generic-grid-base-command-edit-column-width;
         min-width: $generic-grid-base-command-edit-column-width;
+
+        .dx-link.dx-state-disabled {
+          opacity: $datagrid-text-link-disabled-opacity;
+
+          &.dx-link-icon {
+            opacity: $datagrid-icon-link-disabled-opacity;
+          }
+        }
       }
 
       .dx-command-expand {
@@ -616,31 +630,24 @@ $generic-grid-base-checkbox-icon-size: 16px;
     }
   }
 
-  .dx-#{$widget-name}-export-button {
-    .dx-icon-export-to {
-      @include dx-icon(export);
-      @include dx-icon-sizing($generic-base-icon-size);
-    }
-
-    .dx-icon-export-excel-button {
-      @include dx-icon(xlsxfile);
-      @include dx-icon-sizing($generic-base-icon-size);
-    }
-  }
-
   .dx-#{$widget-name}-adaptive-more {
     @include dx-icon-sizing($generic-base-more-adaptive-icon-size);
   }
 
   .dx-#{$widget-name}-rowsview {
     .dx-#{$widget-name}-borders &,
-    .dx-#{$widget-name}-headers + & {
+    .dx-#{$widget-name}-headers + &,
+    &.dx-#{$widget-name}-after-headers {
       border-top: $datagrid-border;
     }
 
     .dx-row {
       border-top: $generic-grid-base-row-border;
       border-bottom: $generic-grid-base-row-border;
+
+      &:focus {
+        outline: none;
+      }
 
       &.dx-edit-row:first-child > td {
         border-top-width: 0;
@@ -658,10 +665,17 @@ $generic-grid-base-checkbox-icon-size: 16px;
     }
 
     .dx-master-detail-row {
+      > .dx-master-detail-cell {
+        padding: $grid-masterdetail-padding;
+      }
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell {
         border-top: $datagrid-border;
         border-bottom: $datagrid-border;
+      }
+
+      .dx-texteditor-input {
+        padding-right: 0;
       }
     }
 
@@ -709,8 +723,9 @@ $generic-grid-base-checkbox-icon-size: 16px;
 
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
-      border-top: 1px solid $datagrid-cell-modified-border-color;
-      border-bottom: 1px solid $datagrid-cell-modified-border-color;
+      border-top: 1px solid $datagrid-cell-removed-border-color;
+      border-bottom: 1px solid $datagrid-cell-removed-border-color;
+      color: $datagrid-cell-removed-text-color;
     }
 
     @include dx-set-checkbox-border-color-as-background();
@@ -745,10 +760,6 @@ $generic-grid-base-checkbox-icon-size: 16px;
     }
 
     .dx-row-focused {
-      &:focus {
-        outline: none;
-      }
-
       &.dx-data-row {
         & > td:not(.dx-focused),
         & > tr > td:not(.dx-focused),
@@ -914,14 +925,11 @@ $generic-grid-base-checkbox-icon-size: 16px;
 
   .dx-#{$widget-name}-bottom-load-panel {
     border-top: $datagrid-border;
+    background-color: $datagrid-base-background-color;
   }
 
   .dx-#{$widget-name}-pager {
-    border-top: 3px double $datagrid-border-color;
-
-    &.dx-widget {
-      color: $datagrid-base-color;
-    }
+    border-top: 1px solid $datagrid-border-color;
 
     .dx-page,
     .dx-page-size,

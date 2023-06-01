@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -11,15 +12,38 @@
 // adduse
 @use "../textEditor" as *;
 
+$textbox-search-icon-right-padding: math.div($material-filled-texteditor-input-horizontal-padding, 2);
+$textbox-standard-search-icon-size:
+  $material-texteditor-icon-container-size +
+  $material-base-standard-texteditor-input-horizontal-padding +
+  $textbox-search-icon-right-padding;
+$textbox-filled-search-icon-size:
+  $material-texteditor-icon-container-size +
+  $material-filled-texteditor-input-horizontal-padding +
+  $textbox-search-icon-right-padding;
+
+@mixin dx-texteditor-search-icon($texteditor-icon-size, $texteditor-padding) {
+  position: absolute;
+  top: 50%;
+  margin-top: math.div(-($texteditor-icon-size), 2);
+
+  @include dx-icon-sizing($material-texteditor-icon-container-size, $texteditor-icon-size);
+
+  padding-left: $texteditor-padding;
+  padding-right: $textbox-search-icon-right-padding;
+
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    padding-right: $texteditor-padding;
+    padding-left: $textbox-search-icon-right-padding;
+  }
+}
 
 .dx-searchbox {
   .dx-icon-search {
     @include dx-icon(search);
-    @include dx-texteditor-icon();
 
     &::before {
-      position: static;
-      text-indent: 0;
       color: $textbox-search-icon-color;
     }
 
@@ -28,23 +52,17 @@
 
   &.dx-editor-underlined {
     .dx-icon-search {
-      left: $material-base-standard-texteditor-input-horizontal-padding;
-
-      @at-root #{selector-append(".dx-rtl", &)},
-      .dx-rtl & {
-        left: initial;
-        right: $material-base-standard-texteditor-input-horizontal-padding;
-      }
+      @include dx-texteditor-search-icon($textbox-standard-search-icon-size, $material-base-standard-texteditor-input-horizontal-padding);
     }
 
     .dx-texteditor-input,
     .dx-placeholder::before {
-      padding-left: $material-texteditor-icon-container-size + $material-base-standard-texteditor-input-horizontal-padding;
+      padding-left: $textbox-standard-search-icon-size;
 
       @at-root #{selector-append(".dx-rtl", &)},
       .dx-rtl & {
         padding-left: $material-base-standard-texteditor-input-horizontal-padding;
-        padding-right: $material-texteditor-icon-container-size + $material-base-standard-texteditor-input-horizontal-padding;
+        padding-right: $textbox-standard-search-icon-size;
       }
     }
   }
@@ -52,23 +70,17 @@
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-icon-search {
-      left: $material-filled-texteditor-input-horizontal-padding;
-
-      @at-root #{selector-append(".dx-rtl", &)},
-      .dx-rtl & {
-        left: initial;
-        right: $material-filled-texteditor-input-horizontal-padding;
-      }
+      @include dx-texteditor-search-icon($textbox-filled-search-icon-size, $material-filled-texteditor-input-horizontal-padding);
     }
 
     .dx-texteditor-input,
     .dx-placeholder::before {
-      padding-left: $material-texteditor-icon-container-size + $material-filled-texteditor-input-horizontal-padding;
+      padding-left: $textbox-filled-search-icon-size;
 
       @at-root #{selector-append(".dx-rtl", &)},
       .dx-rtl & {
         padding-left: $material-filled-texteditor-input-horizontal-padding;
-        padding-right: $material-texteditor-icon-container-size + $material-filled-texteditor-input-horizontal-padding;
+        padding-right: $textbox-filled-search-icon-size;
       }
     }
   }

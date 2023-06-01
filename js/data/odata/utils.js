@@ -6,8 +6,8 @@ import ajax from '../../core/utils/ajax';
 import Guid from '../../core/guid';
 import { grep } from '../../core/utils/common';
 import { Deferred } from '../../core/utils/deferred';
-import errorsUtils from '../errors';
-import Utils from '../utils';
+import { errors } from '../errors';
+import { errorMessageFromXhr, XHR_ERROR_UNLOAD } from '../utils';
 import { format as stringFormat } from '../../core/utils/string';
 
 const GUID_REGEX = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
@@ -87,7 +87,7 @@ const parseISO8601 = (isoString) => {
     return result;
 };
 
-const isAbsoluteUrl = (url) => /^(?:[a-z]+:)?\/\//i.test(url);
+const isAbsoluteUrl = (url) => /^(?:[a-z]+:)?\/{2,2}/i.test(url);
 
 const stripParams = (url) => {
     const index = url.indexOf('?');
@@ -141,7 +141,7 @@ const ajaxOptionsForRequest = (protocolVersion, request, options = {}) => {
             case 4:
                 return value;
 
-            default: throw errorsUtils.errors.Error('E4002');
+            default: throw errors.Error('E4002');
         }
     });
 
@@ -215,7 +215,7 @@ export const sendRequest = (protocolVersion, request, options) => {
         let { nextUrl } = tuple;
 
         if(error) {
-            if(error.message !== Utils.XHR_ERROR_UNLOAD) {
+            if(error.message !== XHR_ERROR_UNLOAD) {
                 d.reject(error);
             }
         } else if(countOnly) {
@@ -223,7 +223,7 @@ export const sendRequest = (protocolVersion, request, options) => {
             if(isFinite(count)) {
                 d.resolve(count);
             } else {
-                d.reject(new errorsUtils.errors.Error('E4018'));
+                d.reject(new errors.Error('E4018'));
             }
 
         } else if(nextUrl && !isPaged) {
@@ -246,13 +246,15 @@ export const sendRequest = (protocolVersion, request, options) => {
 
 const formatDotNetError = (errorObj) => {
     let message;
+    let currentMessage;
     let currentError = errorObj;
 
     if('message' in errorObj) {
         message = errorObj.message?.value || errorObj.message;
     }
     while((currentError = (currentError['innererror'] || currentError['internalexception']))) {
-        message = currentError.message;
+        currentMessage = currentError.message;
+        message = currentMessage ?? message;
         if(currentError['internalexception'] && (message.indexOf('inner exception') === -1)) {
             break;
         }
@@ -277,7 +279,7 @@ const errorFromResponse = (obj, textStatus, ajaxOptions) => {
         const { status, responseText } = obj;
 
         httpStatus = status;
-        message = Utils.errorMessageFromXhr(obj, textStatus);
+        message = errorMessageFromXhr(obj, textStatus);
         try {
             response = JSON.parse(responseText);
         } catch(x) {
@@ -322,8 +324,8 @@ const interpretJsonFormat = (obj, textStatus, transformOptions, ajaxOptions) => 
     }
 
     const value = 'd' in obj && (Array.isArray(obj.d) || isObject(obj.d))
-        ? interpretVerboseJsonFormat(obj, textStatus)
-        : interpretLightJsonFormat(obj, textStatus);
+        ? interpretVerboseJsonFormat(obj)
+        : interpretLightJsonFormat(obj);
 
     transformTypes(value, transformOptions);
 
@@ -439,7 +441,7 @@ export const serializeValue = (value, protocolVersion) => {
             return serializeValueV2(value);
         case 4:
             return serializeValueV4(value);
-        default: throw errorsUtils.errors.Error('E4002');
+        default: throw errors.Error('E4002');
     }
 };
 
@@ -473,7 +475,7 @@ export const convertPrimitiveValue = (type, value) => {
     if(value === null) return null;
     const converter = keyConverters[type];
     if(!converter) {
-        throw errorsUtils.errors.Error('E4014', type);
+        throw errors.Error('E4014', type);
     }
     return converter(value);
 };

@@ -1,0 +1,32 @@
+// adduse
+
+.dx-dropdownmenu-popup-wrapper {
+  .dx-dropdownmenu-list {
+    min-height: 0;
+    min-width: 100px;
+    border-radius: 8px;
+
+    .dx-list-item {
+      display: block;
+
+      &:last-of-type {
+        border-bottom: none;
+      }
+    }
+
+    .dx-list-item-content {
+      display: block;
+    }
+  }
+
+  .dx-overlay-content {
+    .dx-popup-content {
+      padding: 1px;
+    }
+  }
+
+  .dx-list-item {
+    display: block;
+    border-top: 0;
+  }
+}

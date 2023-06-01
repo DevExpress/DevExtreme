@@ -1,6 +1,5 @@
 import $ from 'jquery';
 const { test } = QUnit;
-import 'common.css!';
 import 'ui/diagram';
 
 import DataSource from 'data/data_source';
@@ -76,12 +75,6 @@ QUnit.module('DataBinding', {
                             text: 'text3'
                         }
                     ],
-                    children: [
-                        {
-                            id: '4',
-                            text: 'text4'
-                        }
-                    ]
                 },
                 {
                     id: '2',
@@ -105,7 +98,6 @@ QUnit.module('DataBinding', {
         assert.equal(this.instance._nodesOption._getIndexByKey('1'), 0);
         assert.equal(this.instance._nodesOption._getIndexByKey('2'), 1);
         assert.equal(this.instance._nodesOption._getIndexByKey('3'), 2);
-        assert.equal(this.instance._nodesOption._getIndexByKey('4'), 3);
 
         store.insert({
             id: '5',
@@ -116,7 +108,6 @@ QUnit.module('DataBinding', {
         assert.equal(this.instance._nodesOption._getIndexByKey('1'), 0);
         assert.equal(this.instance._nodesOption._getIndexByKey('2'), 1);
         assert.equal(this.instance._nodesOption._getIndexByKey('3'), 3);
-        assert.equal(this.instance._nodesOption._getIndexByKey('4'), 4);
         assert.equal(this.instance._nodesOption._getIndexByKey('5'), 2);
     });
 
@@ -201,6 +192,92 @@ QUnit.module('DataBinding', {
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle, 'font-family: Arial Black');
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[1].textStyle, 'font-family: Arial Black');
         assert.equal(this.instance._diagramInstance.documentDataSource.edgeDataSource[0].textStyle, 'font-family: Arial Black');
+    });
+
+    test('values on the updating data store\'s event should not be changed and should be changed on the updated event (complex properties)', function(assert) {
+        const nodes = [
+            {
+                id: '1',
+                text: 'text1',
+                textStyle: { cssText: 'font-family: Courier' }
+            },
+            {
+                id: '2',
+                text: 'text2',
+                textStyle: { cssText: 'font-family: Courier' }
+            }
+        ];
+        const nodeStore = new ArrayStore({
+            key: 'id',
+            data: nodes,
+            onUpdating: (key, values) => {
+                const index = key === '1' ? 0 : 1;
+                assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[index].textStyle.cssText, 'font-family: Arial Black');
+                assert.equal(values.textStyle.cssText, 'font-family: Arial Black');
+                assert.equal(nodes[index].textStyle.cssText, 'font-family: Courier');
+            },
+            onUpdated: (key, values) => {
+                const index = key === '1' ? 0 : 1;
+                assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[index].textStyle.cssText, 'font-family: Arial Black');
+                assert.equal(values.textStyle.cssText, 'font-family: Arial Black');
+                assert.equal(nodes[index].textStyle.cssText, 'font-family: Arial Black');
+            }
+        });
+        const edges = [
+            {
+                id: '3',
+                from: '1',
+                to: '2',
+                textStyle: { cssText: 'font-family: Courier' }
+            }
+        ];
+        const edgeStore = new ArrayStore({
+            key: 'id',
+            data: edges,
+            onUpdating: (key, values) => {
+                assert.equal(this.instance._diagramInstance.documentDataSource.edgeDataSource[0].textStyle.cssText, 'font-family: Arial Black');
+                assert.equal(values.textStyle.cssText, 'font-family: Arial Black');
+                assert.equal(edges[0].textStyle.cssText, 'font-family: Courier');
+            },
+            onUpdated: (key, values) => {
+                assert.equal(this.instance._diagramInstance.documentDataSource.edgeDataSource[0].textStyle.cssText, 'font-family: Arial Black');
+                assert.equal(values.textStyle.cssText, 'font-family: Arial Black');
+                assert.equal(edges[0].textStyle.cssText, 'font-family: Arial Black');
+            }
+        });
+
+        this.instance.option({
+            nodes: {
+                dataSource: nodeStore,
+                textStyleExpr: 'textStyle.cssText'
+            },
+            edges: {
+                dataSource: edgeStore,
+                textStyleExpr: 'textStyle.cssText'
+            }
+        });
+
+        assert.equal(this.instance._diagramInstance.model.items.length, 3);
+        assert.equal(this.instance._diagramInstance.model.items[0].styleText['font-family'], 'Courier');
+        assert.equal(this.instance._diagramInstance.model.items[1].styleText['font-family'], 'Courier');
+        assert.equal(this.instance._diagramInstance.model.items[2].styleText['font-family'], 'Courier');
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle.cssText, 'font-family: Courier');
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[1].textStyle.cssText, 'font-family: Courier');
+        assert.equal(this.instance._diagramInstance.documentDataSource.edgeDataSource[0].textStyle.cssText, 'font-family: Courier');
+
+        this.instance._diagramInstance.selection.set(['0', '1', '2']);
+        const fontSelectBox = this.$element.find(Consts.MAIN_TOOLBAR_SELECTOR).find('.dx-selectbox').eq(0).dxSelectBox('instance');
+        fontSelectBox.option('value', 'Arial Black');
+        assert.equal(this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.FontName).getState().value, 'Arial Black');
+
+        this.clock.tick(100);
+        assert.equal(this.instance._diagramInstance.model.items.length, 3);
+        assert.equal(this.instance._diagramInstance.model.items[0].styleText['font-family'], 'Arial Black');
+        assert.equal(this.instance._diagramInstance.model.items[1].styleText['font-family'], 'Arial Black');
+        assert.equal(this.instance._diagramInstance.model.items[2].styleText['font-family'], 'Arial Black');
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle.cssText, 'font-family: Arial Black');
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[1].textStyle.cssText, 'font-family: Arial Black');
+        assert.equal(this.instance._diagramInstance.documentDataSource.edgeDataSource[0].textStyle.cssText, 'font-family: Arial Black');
     });
 
     test('items on the removing data store\'s event should not be changed and should be changed on the removed event', function(assert) {
@@ -378,6 +455,42 @@ QUnit.module('DataBinding', {
         assert.equal(nodes[1].parentId, null);
     });
 
+    test('reloadContent should not add wrong historyitem for internal update', function(assert) {
+        const nodes = [
+            {
+                id: '1',
+                text: 'text1'
+            },
+            {
+                id: '2',
+                text: 'text1',
+                parentId: '1'
+            }
+        ];
+        const nodeStore = new ArrayStore({
+            key: 'id',
+            data: nodes,
+            onRemoved: (key) => {
+                assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource.length, 1);
+                assert.equal(key, '1');
+            }
+        });
+
+        this.instance.option({
+            nodes: {
+                dataSource: nodeStore,
+                parentKeyExpr: 'parentId'
+            }
+        });
+        assert.equal(this.instance._diagramInstance.model.items.length, 3);
+
+        this.instance._diagramInstance.selection.set(['0']);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Delete).execute();
+        this.clock.tick(200); // because ArrayStore is "async"
+
+        assert.equal(this.instance._diagramInstance.history.historyItems.length, 1);
+    });
+
     test('reloadContent should call onRequestLayoutUpdate (update on events)', function(assert) {
         const onRequestLayoutUpdate = sinon.spy();
         const nodes = [
@@ -416,7 +529,7 @@ QUnit.module('DataBinding', {
     test('reloadContent should update data correctly (external update)', function(assert) {
         const nodes = [
             {
-                id: '1',
+                id: 0,
                 text: 'text1'
             }
         ];
@@ -436,7 +549,7 @@ QUnit.module('DataBinding', {
         assert.equal(this.instance._diagramInstance.model.items[0].styleText['font-family'], 'Arial');
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle, undefined);
 
-        nodeStore.push([{ type: 'update', key: '1', data: { 'textStyle': 'font-family: Arial Black' } }]);
+        nodeStore.push([{ type: 'update', key: 0, data: { 'textStyle': 'font-family: Arial Black' } }]);
         this.clock.tick(100);
         assert.equal(this.instance._diagramInstance.model.items[0].styleText['font-family'], 'Arial Black');
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle, 'font-family: Arial Black');

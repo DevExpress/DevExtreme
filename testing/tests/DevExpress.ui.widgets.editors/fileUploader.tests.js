@@ -4,8 +4,8 @@ import devices from 'core/devices';
 import { Deferred } from 'core/utils/deferred';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
+import { getFileChunkCount } from '../../helpers/fileManagerHelpers.js';
 import '../../helpers/xmlHttpRequestMock.js';
-import 'common.css!';
 import 'generic_light.css!';
 
 const { test } = QUnit;
@@ -114,6 +114,16 @@ const getUploadChunkArgumentsSummary = (file, chunksInfo) => {
         blobSize: chunksInfo.chunkBlob.size,
         chunkIndex: chunksInfo.chunkIndex
     };
+};
+
+const triggerDragEvent = function($element, eventType, dataTransfer = { types: ['Files'] }) {
+    $element = $($element);
+    const offset = eventType === 'dragenter' ? 1 : -1;
+    $element.trigger($.Event(eventType, {
+        clientX: $element.offset().left + offset,
+        clientY: $element.offset().top + offset,
+        originalEvent: $.Event(eventType, { dataTransfer })
+    }));
 };
 
 
@@ -845,7 +855,7 @@ QUnit.module('custom uploading', moduleConfig, () => {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'useButtons',
             multiple: true,
-            dropZone: '.drop'
+            dropZone: $('.drop')
         });
         const files = [fakeFile, fakeFile1];
         const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
@@ -906,7 +916,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         });
         const instance = $fileUploader.dxFileUploader('instance');
         simulateFileChoose($fileUploader, [fakeContentFile]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         const expectedCallsCount = Math.ceil(fakeContentFile.size / instance.option('chunkSize'));
         assert.equal(index, expectedCallsCount, 'count of calls onProgress event is valid');
@@ -962,7 +972,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
             }
         });
         simulateFileChoose($fileUploader, files);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(fileUploadedCount, files.length, 'Count uploaded files is correct');
         for(let i = 0; i < files.length; i++) {
@@ -983,7 +993,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
 
         const files = [createBlobFile('fake1.png', 100023), createBlobFile('fake2.png', 5000)];
         simulateFileChoose($fileUploader, files);
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(uploadedFiles.length, files.length, 'count uploaded files is valid');
         for(let i = 0; i < files.length; i++) {
@@ -996,7 +1006,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         const fileSize = 100023;
         const chunkSize = 20000;
         const files = [createBlobFile('fake1.png', fileSize)];
-        const chunkCount = Math.ceil(fileSize / chunkSize);
+        const chunkCount = getFileChunkCount(files[0], chunkSize);
 
         const progressSpy = sinon.spy();
 
@@ -1009,8 +1019,103 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         simulateFileChoose($fileUploader, files);
         assert.strictEqual(progressSpy.callCount, 1, 'only one chunk sent');
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
+    });
+    test('abortUpload callback should not rise for not uploading files', function(assert) {
+        const abortUploadSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            chunkSize: 20000,
+            abortUpload: abortUploadSpy
+        });
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+        this.clock.tick(200);
+
+        $fileUploader.dxFileUploader('instance').reset();
+        this.clock.tick(200);
+
+        assert.strictEqual(abortUploadSpy.callCount, 0, '\'abortUpload\' callback was not rised');
+    });
+    test('onUploadError raised after no connection established during upload (T1047868)', function(assert) {
+        const xhrMock = { status: 0 };
+
+        const uploadErrorSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            chunkSize: 20000,
+            onUploadError: uploadErrorSpy
+        });
+        this.clock.tick(200);
+
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+        fileUploader._uploadStrategy._sendChunkCore = () => {
+            const deferred = new Deferred();
+            setTimeout(() => deferred.reject(xhrMock), 200);
+            return deferred.promise();
+        };
+
+        simulateFileChoose($fileUploader, [fakeFile]);
+        this.clock.tick(400);
+
+        assert.ok(uploadErrorSpy.calledOnce, 'onUploadError raised');
+        assert.strictEqual(uploadErrorSpy.args[0][0].error.status, 0, 'xhr passed as an argument');
+    });
+    test('an empty file needs one chunk to load - T1122867', function(assert) {
+        this.xhrMock.startSeries();
+
+        const fileSize = 0;
+        const chunkSize = 20000;
+        const files = [createBlobFile('fake1.png', fileSize)];
+        const chunkCount = 1;
+
+        const progressSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            chunkSize,
+            onProgress: progressSpy
+        });
+
+        simulateFileChoose($fileUploader, files);
+        assert.strictEqual(progressSpy.callCount, 1, 'only one chunk sent');
+
+        this.clock.tick(10);
+        assert.strictEqual(progressSpy.callCount, chunkCount, 'all chunks are sent');
+        assert.strictEqual($fileUploader.dxFileUploader('option', 'progress'), 100, 'progress is 100%');
+    });
+    test('uploading multiple empty files and regular file keeps total progress = 0 until all files are uploaded and completes with 100% of total progress - T1122867', function(assert) {
+        this.xhrMock.startSeries();
+
+        const fileSize = 0;
+        const chunkSize = 20000;
+        const files = [createBlobFile('fake1.png', fileSize), createBlobFile('fake2.png', fileSize)];
+        let chunkIndex = 0;
+        const defaultTimeout = 200;
+        const progressSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            chunkSize,
+            onProgress: progressSpy
+        });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+        fileUploader._uploadStrategy._sendChunkCore = () => {
+            const deferred = new Deferred();
+            const timeout = chunkIndex++ < 1 ? defaultTimeout : defaultTimeout * 2;
+            setTimeout(() => deferred.resolve(this.xhrMock), timeout);
+            return deferred.promise();
+        };
+        simulateFileChoose($fileUploader, files);
+
+        this.clock.tick(defaultTimeout + 1);
+        assert.strictEqual(progressSpy.callCount, 1, 'only one chunk sent');
+        assert.strictEqual(fileUploader.option('progress'), 0, 'progress is 0%');
+
+        this.clock.tick(defaultTimeout + 1);
+        assert.strictEqual(progressSpy.callCount, 2, 'all chunks are sent');
+        assert.strictEqual(fileUploader.option('progress'), 100, 'progress is 100%');
     });
 });
 
@@ -1247,10 +1352,10 @@ QUnit.module('files rendering', moduleConfig, () => {
         });
         const $inputWrapper = $fileUploader.find('.dx-fileuploader-input-wrapper');
 
-        $fileUploader.trigger('dragenter');
+        triggerDragEvent($fileUploader, 'dragenter');
         assert.ok(!$fileUploader.hasClass('dx-fileuploader-dragover'), 'drag event was not handled for fileuploader element');
 
-        $inputWrapper.trigger('dragenter');
+        triggerDragEvent($inputWrapper, 'dragenter');
         assert.ok($fileUploader.hasClass('dx-fileuploader-dragover'), 'drag event was handled for input wrapper element');
     });
 
@@ -1912,6 +2017,83 @@ QUnit.module('option change', moduleConfig, () => {
         const $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
         assert.equal($fileInput.val(), fakeFile.name, 'value was not set to empty string');
     });
+    QUnit.test('event subscriptions should be removed before widget is disposed of (T1016127)', function(assert) {
+        const customDropZone = $('<div>').addClass('dropZone').appendTo('#qunit-fixture');
+        const customDialogTrigger = $('<div>').addClass('trigger').appendTo('#qunit-fixture');
+        const instance = $('#fileuploader').dxFileUploader().dxFileUploader('instance');
+        sinon.stub(instance, '_attachSelectFileDialogHandler');
+        sinon.stub(instance, '_detachSelectFileDialogHandler');
+        sinon.stub(instance, '_attachDragEventHandlers');
+        sinon.stub(instance, '_detachDragEventHandlers');
+
+        instance.option({
+            uploadMode: 'useButtons',
+            dialogTrigger: '.trigger',
+            dropZone: '.dropZone'
+        });
+        this.clock.tick(100);
+        instance._detachSelectFileDialogHandler.reset();
+        instance._detachDragEventHandlers.reset();
+
+        assert.ok(instance._attachSelectFileDialogHandler.callCount >= 1, '_attachSelectFileDialogHandler method called');
+        let items = instance._attachSelectFileDialogHandler.args[0];
+        assert.strictEqual(items.length, 1, '_attachSelectFileDialogHandler args is valid');
+        assert.strictEqual(items[0], '.trigger', '_attachSelectFileDialogHandler args is valid');
+
+        assert.ok(instance._attachDragEventHandlers.callCount >= 1, '_attachDragEventHandlers method called');
+        items = instance._attachDragEventHandlers.args[0];
+        assert.strictEqual(items.length, 1, '_attachDragEventHandlers args is valid');
+        assert.strictEqual(items[0], '.dropZone', '_attachDragEventHandlers args is valid');
+
+        instance.dispose();
+
+        assert.strictEqual(instance._detachSelectFileDialogHandler.callCount, 1, '_detachSelectFileDialogHandler method called');
+        items = instance._detachSelectFileDialogHandler.args[0] || [];
+        assert.strictEqual(items.length, 1, '_detachSelectFileDialogHandler args is valid');
+        assert.strictEqual(items[0], '.trigger', '_detachSelectFileDialogHandler args is valid');
+
+        assert.strictEqual(instance._detachDragEventHandlers.callCount, 1, '_detachDragEventHandlers method called');
+        items = instance._detachDragEventHandlers.args[0] || [];
+        assert.strictEqual(items.length, 1, '_detachDragEventHandlers args is valid');
+        assert.strictEqual(items[0], '.dropZone', '_detachDragEventHandlers args is valid');
+
+        instance._attachSelectFileDialogHandler.restore();
+        instance._detachSelectFileDialogHandler.restore();
+        instance._attachDragEventHandlers.restore();
+        instance._detachDragEventHandlers.restore();
+        customDropZone.remove();
+        customDialogTrigger.remove();
+    });
+    QUnit.test('uploader must change hoverStateEnabled option of all buttons by general hoverStateEnabled change', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons'
+        });
+        simulateFileChoose($fileUploader, fakeFile);
+        this.clock.tick(100);
+
+        let buttonElements = $fileUploader.find('.' + FILEUPLOADER_BUTTON_CLASS);
+        assert.strictEqual(buttonElements.length, 4, 'all buttons found');
+        buttonElements.each((index, button) => {
+            const buttonElem = $(button);
+            buttonElem.trigger('dxpointerenter');
+            assert.ok(buttonElem.hasClass('dx-state-hover'));
+            buttonElem.trigger('dxpointerleave');
+        });
+
+        $fileUploader.dxFileUploader({
+            hoverStateEnabled: false
+        });
+        this.clock.tick(100);
+
+        buttonElements = $fileUploader.find('.' + FILEUPLOADER_BUTTON_CLASS);
+        assert.strictEqual(buttonElements.length, 4, 'all buttons found');
+        buttonElements.each((index, button) => {
+            const buttonElem = $(button);
+            buttonElem.trigger('dxpointerenter');
+            assert.notOk(buttonElem.hasClass('dx-state-hover'));
+            buttonElem.trigger('dxpointerleave');
+        });
+    });
 });
 
 QUnit.module('file uploading', moduleConfig, () => {
@@ -2236,6 +2418,26 @@ QUnit.module('file uploading', moduleConfig, () => {
 
         assert.strictEqual(onUploadedSpy.callCount, 1, 'onUploaded event raised');
         assert.ok($fileUploader.empty(), 'widget container empty');
+    });
+
+    test('whole file instantly upload can be cancelled with abortUpload (T990523)', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'instantly',
+            onUploadStarted: function({ component, file }) {
+                if(component.option('value').length > 2) {
+                    component.abortUpload(file);
+                }
+            }
+        });
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        simulateFileChoose($fileUploader, [fakeFile, fakeFile1, fakeFile2]);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        $($fileUploader.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS)).each(function(i, message) {
+            assert.equal($(message).text(), instance.option('uploadAbortedMessage'), 'has uploadAbortedMessage');
+        });
     });
 });
 
@@ -3084,6 +3286,22 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.strictEqual($fileStatusMessage.text(), customMessage, 'message was applied');
     });
 
+    QUnit.test('bytesTotal argument of the onProgress event must not be undefined when using custom uploadFile callback (T1081131)', function(assert) {
+        const progressSpy = sinon.spy();
+        const files = [fakeFile];
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            uploadFile: (file, progressCallback) => progressCallback(1337),
+            onProgress: progressSpy
+        });
+
+        simulateFileChoose($element, files);
+        this.clock.tick(this.xhrMock.PROGRESS_INTERVAL);
+        assert.strictEqual(progressSpy.callCount, 1, 'the \'onProgress\' callback is called once');
+        assert.strictEqual(progressSpy.args[0][0].bytesLoaded, 1337, 'the bytesLoaded argument value is correct');
+        assert.strictEqual(progressSpy.args[0][0].bytesTotal, 100023, 'the bytesTotal argument value is correct');
+    });
+
 });
 
 QUnit.module('keyboard navigation', moduleConfig, () => {
@@ -3128,7 +3346,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         $selectButton.trigger('focusin');
         keyboard.keyDown('enter');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(stub.calledOnce, 'press on select button leads to input click');
     });
@@ -3267,7 +3485,19 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
 
         $inputWrapper.trigger(event);
-        assert.deepEqual(fileUploader.option('value'), [], 'value is empty');
+        assert.equal(fileUploader.option('value').length, 1, 'files count is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, fakeFile.name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 0, 'No valid files');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, fakeFile.name, fakeFile.name + ' is invalid file');
+        assert.strictEqual($fileStatus.text(), 'File type is not allowed', 'file status message is correct');
     });
 
     QUnit.test('the \'accept\' option is case insensitive (T570224)', function(assert) {
@@ -3311,7 +3541,19 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
 
         $inputWrapper.trigger(event);
-        assert.deepEqual(fileUploader.option('value'), [], 'value is empty');
+        assert.equal(fileUploader.option('value').length, 1, 'files count is correct');
+        assert.equal(fileUploader.option('value[0]').name, files[0].name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 0, 'No valid files');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, files[0].name, files[0].name + ' is invalid file');
+        assert.strictEqual($fileStatus.text(), 'File type is not allowed', 'file status message is correct');
     });
 
     QUnit.test('the \'accept\' option with multiple types should work correctly on drag&drop', function(assert) {
@@ -3345,7 +3587,19 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
         files = [fakeFile1];
         triggerDrop(files);
-        assert.deepEqual(fileUploader.option('value'), [], 'file of other type is not chosen');
+        assert.equal($fileUploader.dxFileUploader('option', 'value').length, 1, 'files count is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, fakeFile1.name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 0, 'No valid files');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, fakeFile1.name, fakeFile1.name + ' is invalid file');
+        assert.strictEqual($fileStatus.text(), 'File type is not allowed', 'file status message is correct');
     });
 
     QUnit.test('error should not be thrown for the \'*\' accept (T386887)', function(assert) {
@@ -3384,39 +3638,122 @@ QUnit.module('Drag and drop', moduleConfig, () => {
             dataTransfer: { files: [firstFile, secondFile] }
         })));
 
-        assert.equal($fileUploader.dxFileUploader('option', 'value').length, 1, 'files count is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value').length, 2, 'files count is correct');
         assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, firstFile.name, 'added file is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[1]').name, secondFile.name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 1, 'One file is valid');
+
+        const validFileName = $validFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $validFileStatus = $validFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(validFileName, firstFile.name, firstFile.name + ' is valid file');
+        assert.strictEqual($validFileStatus.text(), 'Ready to upload', 'file status message is correct');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $invalidFileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, secondFile.name, secondFile.name + ' is invalid file');
+        assert.strictEqual($invalidFileStatus.text(), 'File type is not allowed', 'file status message is correct');
     });
 
     QUnit.test('dropZoneEnter and dropZoneLeave events should fire once on correspondent interactions in a custom drop zone', function(assert) {
-        const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
-        const dropZoneChild = $('<div>').appendTo(customDropZone);
+        const customDropZone = $('<div>')
+            .addClass('drop')
+            .css({
+                width: '5px',
+                height: '5px',
+                position: 'relative'
+            })
+            .appendTo('#qunit-fixture');
+        const dropZoneChild = $('<div>')
+            .css({
+                width: '2px',
+                height: '2px',
+                position: 'absolute',
+                top: '2px',
+                left: '2px'
+            })
+            .appendTo(customDropZone);
         const onDropZoneEnterSpy = sinon.spy();
         const onDropZoneLeaveSpy = sinon.spy();
         $('#fileuploader').dxFileUploader({
             uploadMode: 'useButtons',
-            dropZone: '.drop',
+            dropZone: $('.drop'),
             onDropZoneEnter: onDropZoneEnterSpy,
             onDropZoneLeave: onDropZoneLeaveSpy
         });
 
-        customDropZone.trigger('dragenter');
+        triggerDragEvent(customDropZone, 'dragenter');
         assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called once');
         assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
 
-        dropZoneChild.trigger('dragenter');
+        triggerDragEvent(dropZoneChild, 'dragenter');
         assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter not called');
         assert.strictEqual(onDropZoneEnterSpy.args[1], undefined, 'dropZoneEnter not called');
 
-        dropZoneChild.trigger('dragleave');
+        triggerDragEvent(dropZoneChild, 'dragleave');
         assert.ok(onDropZoneLeaveSpy.notCalled, 'dropZoneLeave not called');
         assert.strictEqual(onDropZoneLeaveSpy.args[0], undefined, 'dropZoneLeave not called');
 
-        customDropZone.trigger('dragleave');
+        triggerDragEvent(customDropZone, 'dragleave');
         assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called once');
         assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
 
         customDropZone.remove();
+    });
+
+    QUnit.test('dropZoneEnter and dropZoneLeave events should fire if there are several custom drop zones on the page', function(assert) {
+        const customDropZone1 = $('<div>')
+            .addClass('drop')
+            .css({
+                width: '5px',
+                height: '5px',
+                position: 'relative',
+                margin: '5px'
+            })
+            .appendTo('#qunit-fixture');
+        const customDropZone2 = $('<div>')
+            .addClass('drop')
+            .css({
+                width: '5px',
+                height: '5px',
+                position: 'relative',
+                margin: '5px'
+            })
+            .appendTo('#qunit-fixture');
+        const onDropZoneEnterSpy = sinon.spy();
+        const onDropZoneLeaveSpy = sinon.spy();
+        $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            dropZone: $('.drop'),
+            onDropZoneEnter: onDropZoneEnterSpy,
+            onDropZoneLeave: onDropZoneLeaveSpy
+        });
+
+        triggerDragEvent(customDropZone1, 'dragenter');
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called on first dropZone');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone1[0], 'dropZone argument is correct');
+
+        triggerDragEvent(customDropZone1, 'dragleave');
+        assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called on first dropZone');
+        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone1[0], 'dropZone argument is correct');
+
+        onDropZoneEnterSpy.reset();
+        onDropZoneLeaveSpy.reset();
+
+        triggerDragEvent(customDropZone2, 'dragenter');
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called on second dropZone');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone2[0], 'dropZone argument is correct');
+
+        triggerDragEvent(customDropZone2, 'dragleave');
+        assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called on second dropZone');
+        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone2[0], 'dropZone argument is correct');
+
+        customDropZone1.remove();
+        customDropZone2.remove();
     });
 
     QUnit.test('dropZoneEnter and dropZoneLeave events should fire once on correspondent interactions in the deafult drop zone', function(assert) {
@@ -3429,18 +3766,47 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         });
         const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
 
-        $inputWrapper.trigger('dragenter');
+        triggerDragEvent($inputWrapper, 'dragenter');
         assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called once');
         assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
 
-        $inputWrapper.trigger('dragenter');
+        triggerDragEvent($inputWrapper, 'dragenter');
         assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter not called');
         assert.strictEqual(onDropZoneEnterSpy.args[1], undefined, 'dropZoneEnter not called');
 
-        $inputWrapper.trigger('dragleave');
+        triggerDragEvent($inputWrapper, 'dragleave');
         assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called once');
         assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
+    });
 
+    QUnit.test('dropZoneEnter and dropZoneLeave events should not fire if dragged item is not file', function(assert) {
+        const onDropZoneEnterSpy = sinon.spy();
+        const onDropZoneLeaveSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            onDropZoneEnter: onDropZoneEnterSpy,
+            onDropZoneLeave: onDropZoneLeaveSpy
+        });
+        const $inputWrapper = $fileUploader.find(`.${FILEUPLOADER_INPUT_WRAPPER_CLASS}`);
+
+        triggerDragEvent($inputWrapper, 'dragenter', { types: ['text/plain'] });
+        assert.notOk(onDropZoneEnterSpy.called);
+
+        triggerDragEvent($inputWrapper, 'dragleave', { types: ['text/plain'] });
+        assert.notOk(onDropZoneLeaveSpy.called);
+    });
+
+    QUnit.test('onValueChanged event should not fire if dragged item is not file', function(assert) {
+        const onValueChangedSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            onValueChanged: onValueChangedSpy,
+        });
+
+        const $inputWrapper = $fileUploader.find(`.${FILEUPLOADER_INPUT_WRAPPER_CLASS}`);
+
+        triggerDragEvent($inputWrapper, 'drop', { files: [] });
+        assert.notOk(onValueChangedSpy.called);
     });
 
     QUnit.test('Custom label text must be shown anyway, enven if upload mode is useForm and native drop is not supported (T936087)', function(assert) {
@@ -3460,7 +3826,7 @@ QUnit.module('Drag and drop', moduleConfig, () => {
     });
 
     QUnit.test('Default label text must be shown if upload mode is useForm and native drop is supported (T936087)', function(assert) {
-        const defaultLabelText = 'or Drop file here';
+        const defaultLabelText = 'or Drop a file here';
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'useForm',
             nativeDropSupported: true
@@ -3472,6 +3838,117 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         assert.ok($inputContainer.is(':visible'), 'input container is visible');
         assert.strictEqual($inputLabel.text(), defaultLabelText, 'label has default text');
         assert.strictEqual(fileUploader.option('labelText'), defaultLabelText, 'labelText option has default text');
+    });
+
+    QUnit.test('invalid files should be added with error on dnd - instantly mode (T1061979)', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            useDragOver: true,
+            uploadMode: 'instantly',
+            accept: 'image/jpeg',
+            allowedFileExtensions: ['.jpeg']
+        });
+        const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+
+        const firstFile = $.extend({}, fakeFile, {
+            name: 'firstFile.txt',
+            type: 'text/plain'
+        });
+
+        $inputWrapper.trigger($.Event($.Event('drop', {
+            dataTransfer: { files: [firstFile] }
+        })));
+
+        assert.equal($fileUploader.dxFileUploader('option', 'value').length, 1, 'files count is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, firstFile.name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 0, 'No valid files');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, firstFile.name, firstFile.name + ' is invalid file');
+        assert.strictEqual($fileStatus.text(), 'File type is not allowed', 'file status message is correct');
+
+        const request = this.xhrMock.getInstanceAt();
+        assert.notOk(!!request, 'xhr is not created');
+    });
+
+    QUnit.test('invalid files should be added with error on dnd - useButtons mode (T1061979)', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            useDragOver: true,
+            uploadMode: 'useButtons',
+            accept: 'image/jpeg',
+            allowedFileExtensions: ['.jpeg']
+        });
+        const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+
+        const firstFile = $.extend({}, fakeFile, {
+            name: 'firstFile.txt',
+            type: 'text/plain'
+        });
+
+        $inputWrapper.trigger($.Event($.Event('drop', {
+            dataTransfer: { files: [firstFile] }
+        })));
+
+        assert.equal($fileUploader.dxFileUploader('option', 'value').length, 1, 'files count is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, firstFile.name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 0, 'No valid files');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $fileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, firstFile.name, firstFile.name + ' is invalid file');
+        assert.strictEqual($fileStatus.text(), 'File type is not allowed', 'file status message is correct');
+    });
+    QUnit.test('file can be marked as invalid based on accept option only (T1061979)', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            useDragOver: true,
+            uploadMode: 'useButtons',
+            accept: 'image/jpeg',
+            multiple: true
+        });
+        const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+
+        const firstFile = $.extend({}, fakeFile, {
+            name: 'firstFile.txt',
+            type: 'text/plain'
+        });
+        const secondFile = $.extend({}, fakeFile1, {
+            name: 'secondFile.jpeg',
+            type: 'image/jpeg'
+        });
+
+        $inputWrapper.trigger($.Event($.Event('drop', {
+            dataTransfer: { files: [firstFile, secondFile] }
+        })));
+
+        assert.equal($fileUploader.dxFileUploader('option', 'value').length, 2, 'files count is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, firstFile.name, 'added file is correct');
+        assert.equal($fileUploader.dxFileUploader('option', 'value[1]').name, secondFile.name, 'added file is correct');
+
+        const $filesContainer = $fileUploader.find(`.${FILEUPLOADER_FILES_CONTAINER_CLASS}`);
+        const $invalidFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}.${FILEUPLOADER_INVALID_CLASS}`);
+        const $validFiles = $filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).not(`.${FILEUPLOADER_INVALID_CLASS}`);
+        assert.equal($invalidFiles.length, 1, 'One file is invalid');
+        assert.equal($validFiles.length, 1, 'One file is valid');
+
+        const validFileName = $validFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $validFileStatus = $validFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(validFileName, secondFile.name, secondFile.name + ' is valid file');
+        assert.strictEqual($validFileStatus.text(), 'Ready to upload', 'file status message is correct');
+
+        const invalidFileName = $invalidFiles.find('.' + FILEUPLOADER_FILE_NAME_CLASS).text();
+        const $invalidFileStatus = $invalidFiles.find(`.${FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS}`);
+        assert.equal(invalidFileName, firstFile.name, firstFile.name + ' is invalid file');
+        assert.strictEqual($invalidFileStatus.text(), 'File type is not allowed', 'file status message is correct');
     });
 });
 
@@ -3541,6 +4018,36 @@ QUnit.module('files selection', moduleConfig, () => {
 
         assert.equal($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 1, 'only one file is in list');
     });
+
+    QUnit.test('the file list should not remove duplicates (T969288)', function(assert) {
+        const uploadedSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            chunkSize: 200000,
+            uploadChunk: () => executeAfterDelay(null, this.xhrMock.LOAD_TIMEOUT),
+            onUploaded: uploadedSpy
+        });
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        const files = [createBlobFile('fake1.png', 100023), createBlobFile('fake2.png', 5000)];
+        simulateFileChoose($fileUploader, files);
+        instance.upload();
+
+        assert.strictEqual($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 2, 'two files are in the list');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        assert.ok(uploadedSpy.calledTwice, 'two files are loaded');
+
+        uploadedSpy.reset();
+        simulateFileChoose($fileUploader, files);
+        instance.upload();
+
+        assert.strictEqual($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 4, 'four files are in the list');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        assert.ok(uploadedSpy.calledTwice, 'two files are loaded again');
+    });
 });
 
 QUnit.module('disabled option', () => {
@@ -3558,12 +4065,30 @@ QUnit.module('disabled option', () => {
         $fileUploader.dxFileUploader('option', 'disabled', true);
         assert.equal($fileInput.css('display'), 'none', 'input is hidden');
     });
+
+    QUnit.test('label text must be visible when disabled option changed dynamically', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            disabled: true,
+            useDragOver: true,
+            nativeDropSupported: true,
+            uploadMode: 'useForm'
+        });
+        const $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
+        const $inputLabel = $inputContainer.find('.' + FILEUPLOADER_INPUT_LABEL_CLASS);
+
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), '', 'label has no text');
+
+        $fileUploader.dxFileUploader('option', 'disabled', false);
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), 'or Drop a file here', 'label has default text');
+    });
 });
 
 QUnit.module('readOnly option', moduleConfig, () => {
     QUnit.test('file input container should be shown but text empty', function(assert) {
         // behavior changed beacause of T936087
-        const defaultLabelText = 'or Drop file here';
+        const defaultLabelText = 'or Drop a file here';
         const $fileUploader = $('#fileuploader').dxFileUploader({
             readOnly: false,
             useDragOver: true,

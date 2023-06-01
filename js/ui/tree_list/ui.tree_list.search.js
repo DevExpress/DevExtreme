@@ -1,4 +1,1 @@
-import core from './ui.tree_list.core';
-import searchModule from '../grid_core/ui.grid_core.search';
-
-core.registerModule('search', searchModule);
+import '../../__internal/grids/tree_list/module_not_extended/search';

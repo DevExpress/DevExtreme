@@ -1,35 +1,60 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot,
-} from 'devextreme-generator/component_declaration/common';
-import { addHeightToStyle } from '../utils';
-import { VirtualRow } from './virtual-row';
+  Component,
+  ComponentBindings,
+  CSSAttributes,
+  ForwardRef,
+  JSXComponent,
+  OneWay,
+  Ref,
+  RefObject,
+  Slot,
+} from '@devextreme-generator/declarations';
+import { addHeightToStyle, addWidthToStyle } from '../utils';
+import { VirtualRow } from './virtual_row';
 
 export const viewFunction = ({
   hasBottomVirtualRow,
   hasTopVirtualRow,
   style,
-  restAttributes,
   props: {
     virtualCellsCount,
     className,
     children,
     topVirtualRowHeight,
     bottomVirtualRowHeight,
+    leftVirtualCellWidth,
+    rightVirtualCellWidth,
+    leftVirtualCellCount,
+    rightVirtualCellCount,
+    tableRef,
   },
 }: Table): JSX.Element => (
   <table
-        // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     className={className}
     style={style}
+    ref={tableRef}
   >
     <tbody>
       {hasTopVirtualRow && (
-        <VirtualRow height={topVirtualRowHeight} cellsCount={virtualCellsCount} />
+        <VirtualRow
+          height={topVirtualRowHeight}
+          cellsCount={virtualCellsCount}
+          leftVirtualCellWidth={leftVirtualCellWidth}
+          rightVirtualCellWidth={rightVirtualCellWidth}
+          leftVirtualCellCount={leftVirtualCellCount}
+          rightVirtualCellCount={rightVirtualCellCount}
+        />
       )}
       {children}
       {hasBottomVirtualRow && (
-        <VirtualRow height={bottomVirtualRowHeight} cellsCount={virtualCellsCount} />
+        <VirtualRow
+          height={bottomVirtualRowHeight}
+          cellsCount={virtualCellsCount}
+          leftVirtualCellWidth={leftVirtualCellWidth}
+          rightVirtualCellWidth={rightVirtualCellWidth}
+          leftVirtualCellCount={leftVirtualCellCount}
+          rightVirtualCellCount={rightVirtualCellCount}
+        />
       )}
     </tbody>
   </table>
@@ -43,13 +68,23 @@ export class TableProps {
 
   @OneWay() bottomVirtualRowHeight = 0;
 
-  @OneWay() virtualCellsCount = 0;
+  @OneWay() leftVirtualCellWidth = 0;
 
-  @OneWay() isVirtual?: boolean = false;
+  @OneWay() rightVirtualCellWidth = 0;
+
+  @OneWay() leftVirtualCellCount?: number;
+
+  @OneWay() rightVirtualCellCount?: number;
+
+  @OneWay() virtualCellsCount = 0;
 
   @OneWay() height?: number;
 
+  @OneWay() width?: number;
+
   @Slot() children?: JSX.Element | JSX.Element[];
+
+  @ForwardRef() tableRef?: RefObject<HTMLTableElement>;
 }
 
 @Component({
@@ -57,22 +92,27 @@ export class TableProps {
   view: viewFunction,
 })
 export class Table extends JSXComponent(TableProps) {
-  get style(): { [key: string]: string | number | undefined } {
-    const { height } = this.props;
+  @Ref()
+  elementRef!: RefObject<HTMLTableElement>;
+
+  get style(): CSSAttributes {
+    const { height, width } = this.props;
     const { style } = this.restAttributes;
 
-    return addHeightToStyle(height, style);
+    const heightAdded = addHeightToStyle(height, style);
+
+    return addWidthToStyle(width, heightAdded);
   }
 
   get hasTopVirtualRow(): boolean {
-    const { isVirtual, topVirtualRowHeight } = this.props;
+    const { topVirtualRowHeight } = this.props;
 
-    return !!isVirtual && !!topVirtualRowHeight;
+    return !!topVirtualRowHeight;
   }
 
   get hasBottomVirtualRow(): boolean {
-    const { isVirtual, bottomVirtualRowHeight } = this.props;
+    const { bottomVirtualRowHeight } = this.props;
 
-    return !!isVirtual && !!bottomVirtualRowHeight;
+    return !!bottomVirtualRowHeight;
   }
 }

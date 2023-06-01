@@ -5,11 +5,12 @@ import viewPort from 'core/utils/view_port';
 import GestureEmitter from 'events/gesture/emitter.gesture.js';
 import animationFrame from 'animation/frame';
 import translator from 'animation/translator';
-
-import 'common.css!';
+import fx from 'animation/fx';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import 'generic_light.css!';
 import 'ui/draggable';
 import 'ui/scroll_view';
+import 'ui/overlay';
 
 $('body').css({
     minHeight: '800px',
@@ -20,24 +21,80 @@ $('body').css({
 
 QUnit.testStart(function() {
     const markup =
-        '<style>.fixedPosition.dx-draggable-dragging { position: fixed; }</style>\
-        <div id="area" style="width: 300px; height: 250px; position: relative; background: green;">\
-            <div style="width: 30px; height: 50px; background: yellow;" id="draggable"></div>\
-            <div style="width: 100px; height: 100px; background: grey;" id="draggableWithHandle">\
-                <div id="handle" style="width: 30px; height: 30px; background: grey;"></div>\
-            </div>\
-        </div>\
-        <div id="items" style="width: 300px; height: 250px; position: relative; background: grey;">\
-            <div id="item1" class="draggable" style="width: 30px; height: 50px; background: yellow;"></div>\
-            <div id="item2" class="draggable" style="width: 30px; height: 50px; background: red;"></div>\
-            <div id="item3" class="draggable" style="width: 30px; height: 50px; background: blue;"></div>\
-        </div>\
-        <div id="other"></div>\
-        <div id="scrollable" style="display: none; width: 250px; height: 250px; overflow: auto; position: absolute; left: 0; top: 0;">\
-            <div id="scrollable-container" style="width: 500px; height: 500px;">\
-                <div id="scrollableItem" class="draggable" style="width: 30px; height: 50px; background: black;"></div>\
-            </div>\
-        </div>';
+        `<style nonce="qunit-test">
+            .fixedPosition.dx-draggable-dragging {
+                position: fixed;
+            }
+            #area {
+                width: 300px;
+                height: 250px;
+                position: relative;
+                background: green;
+            }
+            #draggable {
+                width: 30px;
+                height: 50px;
+                background: yellow;
+            }
+            #draggableWithHandle {
+                width: 100px;
+                height: 100px;
+                background: grey;
+            }
+            #handle {
+                width: 30px;
+                height: 30px;
+                background: grey;
+            }
+            #items {
+                width: 300px;
+                height: 250px;
+                position: relative;
+                background: grey;
+            }
+            #items .draggable {
+                width: 30px;
+                height: 50px;
+            }
+            #item1 { background: yellow; }
+            #item2 { background: red; }
+            #item3 { background: blue; }
+            #scrollable {
+                display: none;
+                width: 250px;
+                height: 250px;
+                overflow: auto;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            #scrollable-container {
+                width: 500px;
+                height: 500px;
+            }
+            #scrollableItem {
+                width: 30px;
+                height: 50px;
+                background: black;
+            }
+        </style>
+        <div id="area">
+            <div id="draggable"></div>
+            <div id="draggableWithHandle">
+                <div id="handle"></div>
+            </div>
+        </div>
+        <div id="items">
+            <div id="item1" class="draggable"></div>
+            <div id="item2" class="draggable"></div>
+            <div id="item3" class="draggable"></div>
+        </div>
+        <div id="other"></div>
+        <div id="scrollable">
+            <div id="scrollable-container">
+                <div id="scrollableItem" class="draggable"></div>
+            </div>
+        </div>`;
 
     $('#qunit-fixture').html(markup);
 });
@@ -121,6 +178,49 @@ QUnit.module('Events', moduleConfig, () => {
         assert.strictEqual(options.onDragEnd.getCall(0).args[0].fromComponent, myComponent, 'onDragEnd fromComponent');
         assert.strictEqual(options.onDragEnd.getCall(0).args[0].toComponent, myComponent, 'onDragEnd toComponent');
         assert.strictEqual(options.onDragEnd.getCall(0).args[0].element, myComponent.element(), 'onDragEnd element');
+    });
+
+    QUnit.test('onCancelByEsc option changing', function(assert) {
+        // arrange
+        this.$element.prop('tabindex', 0);
+        const keyboard = keyboardMock(this.$element);
+        const initialPosition = translator.locate(this.$element);
+
+        this.createDraggable({
+            onCancelByEsc: true
+        });
+
+        // act
+        this.pointer.down().move(0, 40);
+        keyboard.keyDown('esc');
+        this.pointer.move(0, 80).up();
+
+        // assert
+        assert.deepEqual(translator.locate(this.$element), initialPosition, 'element position');
+
+        this.$element.prop('tabindex', undefined);
+    });
+
+    QUnit.test('onDragCancel option called if drag canceled', function(assert) {
+        // arrange
+        const onDragCancelSpy = sinon.spy();
+        this.$element.prop('tabindex', 0);
+        const keyboard = keyboardMock(this.$element);
+
+        this.createDraggable({
+            onCancelByEsc: true,
+            onDragCancel: onDragCancelSpy
+        });
+
+        // act
+        this.pointer.down().move(0, 40);
+        keyboard.keyDown('esc');
+        this.pointer.move(0, 80).up();
+
+        // assert
+        assert.ok(onDragCancelSpy.calledOnce, 'event fired');
+
+        this.$element.prop('tabindex', undefined);
     });
 
     QUnit.test('onDragStart - check args', function(assert) {
@@ -745,6 +845,32 @@ QUnit.module('Events', moduleConfig, () => {
         assert.deepEqual(onDragLeaveSpy.getCall(0).args[0].fromComponent, draggable1, 'fromComponent');
         assert.deepEqual(onDragLeaveSpy.getCall(0).args[0].toComponent, draggable2, 'toComponent');
     });
+
+    // T1082538
+    QUnit.test('onDraggableElementShown - check args', function(assert) {
+        // arrange
+        const onDraggableElementShownSpy = sinon.spy();
+        const itemData = { test: true };
+
+        const draggable = this.createDraggable({
+            onDraggableElementShown: onDraggableElementShownSpy,
+            itemData,
+            data: itemData
+        });
+
+        // act
+        this.pointer.down().move(0, 20);
+
+        // assert
+        assert.ok(onDraggableElementShownSpy.calledOnce, 'event fired');
+
+        const args = onDraggableElementShownSpy.getCall(0).args[0];
+        assert.deepEqual($(args.itemElement).get(0), this.$element.get(0), 'itemElement');
+        assert.deepEqual(args.component, draggable, 'component');
+        assert.deepEqual(args.itemData, itemData, 'itemData');
+        assert.deepEqual(args.fromData, itemData, 'fromData');
+        assert.deepEqual($(args.dragElement).get(0), $('.dx-draggable-dragging').get(0), 'dragElement');
+    });
 });
 
 QUnit.module('\'dragDirection\' option', moduleConfig, () => {
@@ -823,7 +949,7 @@ QUnit.module('bounds', moduleConfig, () => {
         const areaHeight = $area.height();
 
         this.createDraggable({
-            boundary: '#area'
+            boundary: $('#area')
         });
 
         this.pointer.down().move(areaWidth + 150, areaHeight + 150).up();
@@ -1283,14 +1409,14 @@ QUnit.module('container', moduleConfig, () => {
     // arrange
         this.createDraggable({
             clone: true,
-            container: '#other'
+            container: $('#other')
         });
 
         // act
         this.pointer.down().move(10, 10);
 
         // assert
-        assert.strictEqual($('body').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
+        assert.strictEqual($('#qunit-fixture').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
         assert.strictEqual($('#other').children('.dx-draggable-dragging').children('#draggable').length, 1, 'there is a cloned element');
     });
 
@@ -1309,7 +1435,7 @@ QUnit.module('container', moduleConfig, () => {
 
         this.createDraggable({
             clone: true,
-            container: '#other'
+            container: $('#other')
         });
 
         // act
@@ -1323,20 +1449,20 @@ QUnit.module('container', moduleConfig, () => {
     // arrange
         this.createDraggable({
             clone: true,
-            container: '#other'
+            container: $('#other')
         });
 
         this.pointer.down().move(10, 10);
 
         // assert
-        assert.strictEqual($('body').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
+        assert.strictEqual($('#qunit-fixture').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
         assert.strictEqual($('#other').children('.dx-draggable-dragging').children('#draggable').length, 1, 'there is a cloned element');
 
         // act
         this.pointer.up();
 
         // assert
-        assert.strictEqual($('body').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
+        assert.strictEqual($('#qunit-fixture').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
         assert.strictEqual($('#other').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
     });
 
@@ -1344,20 +1470,20 @@ QUnit.module('container', moduleConfig, () => {
     // arrange
         this.createDraggable({
             clone: true,
-            container: '#other'
+            container: $('#other')
         });
 
         this.pointer.down().move(10, 10);
 
         // assert
-        assert.strictEqual($('body').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
+        assert.strictEqual($('#qunit-fixture').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
         assert.strictEqual($('#other').children('.dx-draggable-dragging').children('#draggable').length, 1, 'there is a cloned element');
 
         // act
         this.draggableInstance.dispose();
 
         // assert
-        assert.strictEqual($('body').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
+        assert.strictEqual($('#qunit-fixture').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
         assert.strictEqual($('#other').children('.dx-draggable-dragging').children('#draggable').length, 0, 'there isn\'t a cloned element');
     });
 });
@@ -1574,47 +1700,47 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
         });
 
         // act, assert
-        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop #1');
 
         this.pointer.down().move(0, 240);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop #2');
 
         this.pointer.move(0, 1);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 1, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 1, 'scrollTop #3');
 
         this.pointer.down().move(0, 4);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 6, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 6, 'scrollTop #4');
 
         this.pointer.down().move(0, 4);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 23, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 23, 'scrollTop #5');
 
         this.pointer.move(0, -239);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 23, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 23, 'scrollTop #6');
 
         this.pointer.move(0, -1);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 22, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 22, 'scrollTop #7');
 
         this.pointer.down().move(0, -4);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 17, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 17, 'scrollTop #8');
 
         this.pointer.down().move(0, -4);
         this.clock.tick(10);
 
-        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop');
+        assert.equal($('#scrollable').scrollTop(), 0, 'scrollTop #9');
     });
 
     QUnit.test('onDragMove should be fired during scrolling', function(assert) {
@@ -1788,32 +1914,37 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
         assert.equal($('#scrollable').scrollLeft(), 0, 'scrollLeft');
     });
 
-    QUnit.test('Scrolling with scrollView', function(assert) {
-    // arrange
-        const scrollView = $('#scrollable').dxScrollView({
-            direction: 'both',
-            useNative: false
-        }).dxScrollView('instance');
+    [false, true].forEach((isOverlay) => {
+        QUnit.test(`Scrolling with scrollView${isOverlay ? ' inside overlay' : ''}`, function(assert) {
+            // arrange
+            $('body').toggleClass('dx-overlay-content', isOverlay); // T1015060
+            const scrollView = $('#scrollable').dxScrollView({
+                direction: 'both',
+                useNative: false
+            }).dxScrollView('instance');
 
-        this.createDraggable({
-            scrollSensitivity: 10,
-            scrollSpeed: 20
+            this.createDraggable({
+                scrollSensitivity: 10,
+                scrollSpeed: 20
+            });
+
+            // act, assert
+            assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, 'scrollOffset');
+
+            this.pointer.down().move(240, 240);
+
+            this.pointer.move(1, 1);
+            this.clock.tick(10);
+
+            assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
+
+            this.pointer.move(-1, -1);
+            this.clock.tick(10);
+
+            assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
+
+            $('body').removeClass('dx-overlay-content');
         });
-
-        // act, assert
-        assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, 'scrollOffset');
-
-        this.pointer.down().move(240, 240);
-
-        this.pointer.move(1, 1);
-        this.clock.tick(10);
-
-        assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
-
-        this.pointer.move(-1, -1);
-        this.clock.tick(10);
-
-        assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
     });
 
     QUnit.test('Autoscroll should work fine if element was dropped and dragged again', function(assert) {
@@ -1856,6 +1987,118 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
 
         assert.equal($('#scrollable').scrollLeft(), 1, 'scrollLeft');
         assert.equal($('#scrollable').scrollTop(), 1, 'scrollTop');
+    });
+
+    // T1003319
+    QUnit.test('Autoscroll should not work when draggable element over Overlay content', function(assert) {
+        // arrange
+        fx.off = true;
+
+        try {
+            $('#other').show().dxOverlay({
+                width: 150,
+                height: 250,
+                visible: true,
+                position: {
+                    my: 'left top',
+                    at: 'left top',
+                    of: 'body'
+                },
+                contentTemplate: (container) => {
+                    const $dragElement = $('<div id=\'myDraggable\'/>')
+                        .css({
+                            width: '50px',
+                            height: '50px'
+                        });
+
+                    this.createDraggable({
+                        scrollSensitivity: 10,
+                        scrollSpeed: 20
+                    }, $dragElement);
+
+                    return $dragElement;
+                }
+            });
+
+            // assert
+            assert.strictEqual($('#scrollable').scrollTop(), 0, 'scrollTop');
+
+            // arrange
+            const pointer = pointerMock($('#myDraggable')).start();
+
+            // act
+            pointer.down().move(0, 240);
+            this.clock.tick(10);
+            pointer.down().move(0, 1);
+            this.clock.tick(10);
+
+            // assert
+            assert.strictEqual($('#scrollable').scrollTop(), 0, 'scrollTop');
+        } finally {
+            fx.off = false;
+        }
+    });
+
+    // T1003319
+    [true, false].forEach((shading) => {
+        QUnit.test(`Autoscroll should ${shading ? 'not' : ''} work when draggable element over Overlay wrapper with shading = ${shading}`, function(assert) {
+            // arrange
+            fx.off = true;
+
+            const origViewPort = viewPort.value();
+            const fixtureRoot = $('#qunit-fixture').get(0);
+
+            if(fixtureRoot.getRootNode().host) {
+                viewPort.value(fixtureRoot);
+            }
+
+            try {
+                $('#other').show().dxOverlay({
+                    width: 150,
+                    height: 250,
+                    visible: true,
+                    shading: shading,
+                    position: {
+                        my: 'left top',
+                        at: 'left top',
+                        of: 'body'
+                    },
+                    contentTemplate: (container) => {
+                        const $dragElement = $('<div id=\'myDraggable\'/>')
+                            .css({
+                                width: '50px',
+                                height: '50px'
+                            });
+
+                        this.createDraggable({
+                            scrollSensitivity: 10,
+                            scrollSpeed: 20
+                        }, $dragElement);
+
+                        return $dragElement;
+                    }
+                });
+
+                // assert
+                assert.strictEqual($('#scrollable').scrollTop(), 0, 'scrollTop');
+
+                // arrange
+                const pointer = pointerMock($('#myDraggable')).start();
+
+                // act
+                pointer.down().move(200, 240);
+                this.clock.tick(10);
+                pointer.down().move(0, 1);
+                this.clock.tick(10);
+
+                // assert
+                assert.strictEqual($('#scrollable').scrollTop(), shading ? 0 : 1, 'scrollTop');
+            } finally {
+                fx.off = false;
+
+                viewPort.value(origViewPort);
+            }
+        });
     });
 });
 

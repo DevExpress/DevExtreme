@@ -4,7 +4,7 @@ import { isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
 import Widget from '../widget/ui.widget';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 
 const FILE_MANAGER_DIALOG_CONTENT = 'dx-filemanager-dialog';
 const FILE_MANAGER_DIALOG_POPUP = 'dx-filemanager-dialog-popup';
@@ -18,19 +18,13 @@ class FileManagerDialogBase extends Widget {
 
         const options = this._getDialogOptions();
 
-        const $popup = $('<div>')
-            .addClass(FILE_MANAGER_DIALOG_POPUP)
-            .appendTo(this.$element());
-
-        if(options.popupCssClass) {
-            $popup.addClass(options.popupCssClass);
-        }
+        const $popup = $('<div>').appendTo(this.$element());
 
         const popupOptions = {
             showTitle: true,
             title: options.title,
             visible: false,
-            closeOnOutsideClick: true,
+            hideOnOutsideClick: true,
             contentTemplate: this._createContentTemplate.bind(this),
             toolbarItems: [
                 {
@@ -56,7 +50,8 @@ class FileManagerDialogBase extends Widget {
                 component.registerKeyHandler('enter', this._applyDialogChanges.bind(this));
             },
             onHidden: this._onPopupHidden.bind(this),
-            onShown: this._onPopupShown.bind(this)
+            onShown: this._onPopupShown.bind(this),
+            _wrapperClassExternal: `${FILE_MANAGER_DIALOG_POPUP} ${options.popupCssClass ?? ''}`
         };
         if(isDefined(options.height)) {
             popupOptions.height = options.height;
@@ -101,7 +96,7 @@ class FileManagerDialogBase extends Widget {
         const result = this._getDialogResult();
         if(result) {
             this._dialogResult = result;
-            this._popup.hide();
+            this._closeDialog();
         }
     }
 
@@ -124,8 +119,8 @@ class FileManagerDialogBase extends Widget {
         this._popup.option('title', newTitle);
     }
 
-    _setButtonText(newText) {
-        this._popup.option('toolbarItems[0].options.text', newText);
+    _setApplyButtonOptions(options) {
+        this._popup.option('toolbarItems[0].options', options);
     }
 
     _getDefaultOptions() {

@@ -34,26 +34,9 @@ const TimeView = Editor.inherit({
             value: new Date(Date.now()),
             use24HourFormat: true,
             _showClock: true,
-            _arrowOffset: 0,
+            _arrowOffset: 5,
             stylingMode: undefined
         });
-    },
-
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: { platform: 'android' },
-                options: {
-                    _arrowOffset: 15
-                }
-            },
-            {
-                device: { platform: 'generic' },
-                options: {
-                    _arrowOffset: 5
-                }
-            }
-        ]);
     },
 
     _getValue: function() {
@@ -89,7 +72,7 @@ const TimeView = Editor.inherit({
         items.push({
             ratio: 0,
             shrink: 0,
-            baseSize: 50,
+            baseSize: 'auto',
             template: this._renderField.bind(this)
         });
 
@@ -155,7 +138,7 @@ const TimeView = Editor.inherit({
     _renderField: function() {
         const is12HourFormat = !this.option('use24HourFormat');
 
-        this._createHourBox();
+        this._createHourBox(is12HourFormat);
         this._createMinuteBox();
 
         if(is12HourFormat) {
@@ -170,10 +153,10 @@ const TimeView = Editor.inherit({
         }).$element();
     },
 
-    _createHourBox: function() {
+    _createHourBox: function(is12HourFormat) {
         const editor = this._hourBox = this._createComponent($('<div>'), NumberBox, extend({
             min: -1,
-            max: 24,
+            max: is12HourFormat ? 13 : 24,
             value: this._getValue().getHours(),
             onValueChanged: this._onHourBoxValueChanged.bind(this),
             onKeyboardHandled: opts => this._keyboardHandler(opts)
@@ -186,10 +169,12 @@ const TimeView = Editor.inherit({
         return !this.option('use24HourFormat') && this._format12.option('value') === 1;
     },
 
-    _onHourBoxValueChanged: function(args) {
+    _onHourBoxValueChanged: function({ value, component }) {
         const currentValue = this._getValue();
         const newValue = new Date(currentValue);
-        let newHours = this._convertMaxHourToMin(args.value);
+        let newHours = this._convertMaxHourToMin(value);
+
+        component.option('value', newHours);
 
         if(this._isPM()) {
             newHours += 12;

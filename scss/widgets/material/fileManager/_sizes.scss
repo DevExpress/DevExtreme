@@ -1,6 +1,7 @@
 @use "../sizes" as *;
 
 // adduse
+@use "../toolbar/sizes" as *;
 
 $filemanager-toolbar-separator-height: null !default;
 $filemanager-toolbar-viewmode-width: null !default;
@@ -15,6 +16,8 @@ $filemanager-contextmenu-text-item-left-margin: null !default;
 $filemanager-large-icon-size: null !default;
 $filemanager-progress-panel-title-padding: null !default;
 $filemanager-progress-box-button-close-margin-top: null !default;
+
+$filemanager-toolbar-height: $material-toolbar-height;
 
 @if $size == "default" {
   $filemanager-toolbar-separator-height: 36px !default;

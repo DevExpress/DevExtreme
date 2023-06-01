@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { noop } from '../../core/utils/common';
@@ -31,7 +32,7 @@ const EditDecorator = Class.inherit({
         const swipeConfig = {
             itemSizeFunc: (function() {
                 if(this._clearSwipeCache) {
-                    this._itemWidthCache = this._list.$element().width();
+                    this._itemWidthCache = getWidth(this._list.$element());
                     this._clearSwipeCache = false;
                 }
                 return this._itemWidthCache;

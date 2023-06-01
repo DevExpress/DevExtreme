@@ -114,7 +114,8 @@ const DateView = Editor.inherit({
             that._rollers[that._rollerConfigs[name].type] = that._createComponent($roller, DateViewRoller, {
                 items: that._rollerConfigs[name].displayItems,
                 selectedIndex: that._rollerConfigs[name].selectedIndex,
-                showScrollbar: false,
+                showScrollbar: 'never',
+                scrollByContent: true,
                 onStart: function(e) {
                     const roller = e.component;
                     roller._toggleActive(true);
@@ -273,7 +274,6 @@ const DateView = Editor.inherit({
         let startValue = componentInfo.startValue;
         let endValue = componentInfo.endValue;
 
-        // TODO: think about these exceptions for 'year' and 'day'
         if(componentName === ROLLER_TYPE.year) {
             startValue = minDate.getFullYear();
             endValue = maxDate.getFullYear();

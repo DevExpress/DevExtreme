@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { VirtualRow, viewFunction as RowView } from '../virtual-row';
+import { VirtualRow, viewFunction as RowView } from '../virtual_row';
 import { addHeightToStyle } from '../../utils';
-import { VirtualCell } from '../virtual-cell';
+import { VirtualCell } from '../virtual_cell';
 
 jest.mock('../../utils', () => ({
   addHeightToStyle: jest.fn(() => 'style'),
@@ -28,15 +28,8 @@ describe('VirtualRow', () => {
 
       expect(row.is('.custom-class'))
         .toBe(true);
-      expect(row.prop('style'))
+      expect(row.prop('styles'))
         .toBe('style');
-    });
-
-    it('should spread restAttributes', () => {
-      const row = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(row.prop('custom-attribute'))
-        .toBe('customAttribute');
     });
 
     it('should render virtual cells', () => {
@@ -50,6 +43,25 @@ describe('VirtualRow', () => {
         .toBe('0');
       expect(virtualCells.at(1).key())
         .toBe('1');
+    });
+
+    it('should correctly set virtual cells width', () => {
+      const row = render({
+        props: {
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 150,
+          leftVirtualCellCount: 10,
+          rightVirtualCellCount: 15,
+        },
+      });
+
+      expect(row.props())
+        .toMatchObject({
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 150,
+          leftVirtualCellCount: 10,
+          rightVirtualCellCount: 15,
+        });
     });
   });
 
@@ -70,7 +82,7 @@ describe('VirtualRow', () => {
       });
 
       describe('classes', () => {
-        it('should correctly combine classes if isVirtual', () => {
+        it('should correctly combine classes', () => {
           const row = new VirtualRow({ className: 'some-class' });
 
           expect(row.classes)

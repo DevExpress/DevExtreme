@@ -1,5 +1,5 @@
 /* eslint no-console: 0 */
-import Logger from '../../src/modules/logger';
+import { log } from '../../src/modules/logger';
 
 describe('Logger tests', () => {
   const realLog = console.log;
@@ -20,14 +20,14 @@ describe('Logger tests', () => {
 
   test('No logging when THEMEBUILDER_DEBUG is not defined', () => {
     console.log = jest.fn();
-    Logger.log('test message');
+    log('test message');
     expect(console.log).not.toBeCalled();
   });
 
   test('Logging when THEMEBUILDER_DEBUG is defined', () => {
     process.env.THEMEBUILDER_DEBUG = '';
 
-    Logger.log('test message');
+    log('test message');
     expect(console.log).toBeCalled();
     expect(console.log).toBeCalledWith('1985-12-03T00:00:00.000Z: test message');
   });
@@ -35,7 +35,7 @@ describe('Logger tests', () => {
   test('Logging with additional info', () => {
     process.env.THEMEBUILDER_DEBUG = '';
 
-    Logger.log('test message', { data: '123' });
+    log('test message', { data: '123' });
     expect(console.log).toBeCalled();
     expect(console.log).toBeCalledWith('1985-12-03T00:00:00.000Z: test message: {\n  "data": "123"\n}');
   });

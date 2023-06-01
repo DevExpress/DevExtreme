@@ -1,15 +1,16 @@
 const $ = require('jquery');
 
-require('common.css!');
-
-
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 const TOOLTIP_CLASS = 'dx-tooltip';
 
 QUnit.testStart(function() {
-    const markup = '<div id="texteditor"></div>';
+    const markup = `
+        <div id="slider"></div>
+        <div id="widget"></div>
+        <div id="widthRootStyle"></div>`;
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 QUnit.test('there is no tooltip in markup on server', function(assert) {
@@ -17,8 +18,7 @@ QUnit.test('there is no tooltip in markup on server', function(assert) {
         tooltip: {
             enabled: true,
             showMode: 'always'
-        },
-        useInkRipple: false
+        }
     });
 
     const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);

@@ -3,7 +3,6 @@ import eventsEngine from '../../events/core/events_engine';
 import { isDefined as _isDefined, isFunction } from '../../core/utils/type';
 import { each as _each, reverseEach as _reverseEach } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { isTouchEvent, isPointerEvent } from '../../events/utils/index';
 import BaseWidget from '../core/base_widget';
 import { Legend } from '../components/legend';
@@ -105,13 +104,14 @@ function checkStackOverlap(rollingStocks) {
     return overlap;
 }
 
-function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftFunction, customSorting = () => 0) {
+function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, isInverted, shiftFunction, customSorting = () => 0) {
     const rollingStocks = [];
     const stubCanvas = {
         start: isRotated ? canvas.left : canvas.top,
         end: isRotated ? canvas.width - canvas.right : canvas.height - canvas.bottom
     };
     let hasStackedSeries = false;
+    let sortRollingStocks;
 
     points.forEach(function(p) {
         if(!p) return;
@@ -123,21 +123,23 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
     });
 
     if(hasStackedSeries) {
-        !isRotated && rollingStocks.reverse();
+        (!isRotated ^ isInverted) && rollingStocks.reverse();
+
+        sortRollingStocks = !isInverted ? sortRollingStocksByValue(rollingStocks) : rollingStocks;
     } else {
         const rollingStocksTmp = rollingStocks.slice();
-        rollingStocks.sort(function(a, b) {
+        sortRollingStocks = rollingStocks.sort(function(a, b) {
             return customSorting(a, b) || (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocksTmp.indexOf(a) - rollingStocksTmp.indexOf(b));
         });
     }
 
-    if(!checkStackOverlap(rollingStocks)) return false;
-    checkHeightRollingStock(rollingStocks, stubCanvas);
+    if(!checkStackOverlap(sortRollingStocks)) return false;
+    checkHeightRollingStock(sortRollingStocks, stubCanvas);
 
-    prepareOverlapStacks(rollingStocks);
+    prepareOverlapStacks(sortRollingStocks);
 
-    rollingStocks.reverse();
-    moveRollingStock(rollingStocks, stubCanvas);
+    sortRollingStocks.reverse();
+    moveRollingStock(sortRollingStocks, stubCanvas);
     return true;
 }
 
@@ -147,7 +149,23 @@ function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides) {
     const secondRect = secondRolling.getBoundingRect();
     const oppositeOverlapping = inTwoSides ? ((firstRect.oppositeStart <= secondRect.oppositeStart && firstRect.oppositeEnd > secondRect.oppositeStart) ||
             (secondRect.oppositeStart <= firstRect.oppositeStart && secondRect.oppositeEnd > firstRect.oppositeStart)) : true;
+
     return firstRect.end > secondRect.start && oppositeOverlapping;
+}
+
+function sortRollingStocksByValue(rollingStocks) {
+    const positiveRollingStocks = [];
+    const negativeRollingStocks = [];
+
+    rollingStocks.forEach((stock) => {
+        if(stock.value() > 0) {
+            positiveRollingStocks.push(stock);
+        } else {
+            negativeRollingStocks.unshift(stock);
+        }
+    });
+
+    return positiveRollingStocks.concat(negativeRollingStocks);
 }
 
 function prepareOverlapStacks(rollingStocks) {
@@ -314,7 +332,7 @@ export const BaseChart = BaseWidget.inherit({
         onPointSelectionChanged: { name: 'pointSelectionChanged' },
         onSeriesHoverChanged: { name: 'seriesHoverChanged' },
         onPointHoverChanged: { name: 'pointHoverChanged' },
-        onDone: { name: 'done' },
+        onDone: { name: 'done', actionSettings: { excludeValidators: ['disabled'] } },
         onZoomStart: { name: 'zoomStart' },
         onZoomEnd: { name: 'zoomEnd' }
     },
@@ -421,6 +439,11 @@ export const BaseChart = BaseWidget.inherit({
                 this.above.linkAppend();
             }
         };
+        that._labelsAxesGroup = renderer.g().attr({ 'class': 'dxc-elements-axes-group' });
+
+        const appendLabelsAxesGroup = () => {
+            that._labelsAxesGroup.linkOn(root, 'elements');
+        };
 
         that._backgroundRect = renderer.rect().attr({ fill: 'gray', opacity: 0.0001 }).append(root);
         that._panesBackgroundGroup = renderer.g().attr({ 'class': 'dxc-background' }).append(root);
@@ -429,9 +452,11 @@ export const BaseChart = BaseWidget.inherit({
         that._gridGroup = renderer.g().attr({ 'class': 'dxc-grids-group' }).linkOn(root, 'grids'); // TODO: Must be created in the same place where used (advanced chart)
         that._panesBorderGroup = renderer.g().attr({ 'class': 'dxc-border' }).linkOn(root, 'border'); // TODO: Must be created in the same place where used (chart)
         that._axesGroup = renderer.g().attr({ 'class': 'dxc-axes-group' }).linkOn(root, 'axes'); // TODO: Must be created in the same place where used (advanced chart)
-        that._labelAxesGroup = renderer.g().attr({ 'class': 'dxc-strips-labels-group' }).linkOn(root, 'strips-labels'); // TODO: Must be created in the same place where used (advanced chart)
+        that._executeAppendBeforeSeries(appendLabelsAxesGroup);
+        that._stripLabelAxesGroup = renderer.g().attr({ 'class': 'dxc-strips-labels-group' }).linkOn(root, 'strips-labels'); // TODO: Must be created in the same place where used (advanced chart)
         that._constantLinesGroup.under = createConstantLinesGroup();
         that._seriesGroup = renderer.g().attr({ 'class': 'dxc-series-group' }).linkOn(root, 'series');
+        that._executeAppendAfterSeries(appendLabelsAxesGroup);
         that._constantLinesGroup.above = createConstantLinesGroup();
         that._scaleBreaksGroup = renderer.g().attr({ 'class': 'dxc-scale-breaks' }).linkOn(root, 'scale-breaks');
         that._labelsGroup = renderer.g().attr({ 'class': 'dxc-labels-group' }).linkOn(root, 'labels');
@@ -439,6 +464,10 @@ export const BaseChart = BaseWidget.inherit({
         that._legendGroup = renderer.g().attr({ 'class': 'dxc-legend', 'clip-path': that._getCanvasClipRectID() }).linkOn(root, 'legend').linkAppend(root).enableLinks();
         that._scrollBarGroup = renderer.g().attr({ 'class': 'dxc-scroll-bar' }).linkOn(root, 'scroll-bar');
     },
+
+    _executeAppendBeforeSeries() {},
+
+    _executeAppendAfterSeries() {},
 
     _disposeObjectsInArray: function(propName, fieldNames) {
         _each(this[propName] || [], function(_, item) {
@@ -485,7 +514,7 @@ export const BaseChart = BaseWidget.inherit({
 
         unlinkGroup('_constantLinesGroup');
 
-        unlinkGroup('_labelAxesGroup');
+        unlinkGroup('_stripLabelAxesGroup');
         unlinkGroup('_panesBorderGroup');
         unlinkGroup('_seriesGroup');
         unlinkGroup('_labelsGroup');
@@ -504,7 +533,7 @@ export const BaseChart = BaseWidget.inherit({
 
         disposeObject('_constantLinesGroup');
 
-        disposeObject('_labelAxesGroup');
+        disposeObject('_stripLabelAxesGroup');
         disposeObject('_panesBorderGroup');
         disposeObject('_seriesGroup');
         disposeObject('_labelsGroup');
@@ -552,6 +581,7 @@ export const BaseChart = BaseWidget.inherit({
     _createTracker: function() {
         const that = this;
 
+        // eslint-disable-next-line import/namespace
         that._tracker = new trackerModule[that._trackerType]({
             seriesGroup: that._seriesGroup,
             renderer: that._renderer,
@@ -666,7 +696,7 @@ export const BaseChart = BaseWidget.inherit({
         const layoutTargets = that._getLayoutTargets();
 
         this._layoutAxes((needSpace) => {
-            const axisDrawOptions = needSpace ? extend({}, drawOptions, { animate: false }) : drawOptions;
+            const axisDrawOptions = needSpace ? extend({}, drawOptions, { animate: false, recreateCanvas: true }) : drawOptions;
             const canvas = that._renderAxes(axisDrawOptions, preparedOptions);
             that._shrinkAxes(needSpace, canvas);
         });
@@ -701,6 +731,8 @@ export const BaseChart = BaseWidget.inherit({
         that._updateLegendPosition(drawOptions, isLegendInside);
         that._applyPointMarkersAutoHiding();
         that._renderSeries(drawOptions, isRotated, isLegendInside);
+
+        that._renderGraphicObjects();
 
         that._renderer.unlock();
     },
@@ -750,22 +782,21 @@ export const BaseChart = BaseWidget.inherit({
 
     _renderSeriesElements: function(drawOptions, isLegendInside) {
         const that = this;
-        let i;
         const series = that.series;
-        let singleSeries;
-        const seriesLength = series.length;
         const resolveLabelOverlapping = that._themeManager.getOptions('resolveLabelOverlapping');
-
         const pointsToAnimation = that._getPointsToAnimation(series);
-        for(i = 0; i < seriesLength; i++) {
-            singleSeries = series[i];
-            that._applyExtraSettings(singleSeries, drawOptions);
 
-            singleSeries.draw(drawOptions.animate && pointsToAnimation[i] <= drawOptions.animationPointsLimit && that._renderer.animationEnabled(),
+        series.forEach((singleSeries, index) =>{
+            that._applyExtraSettings(singleSeries, drawOptions);
+            const animationEnabled = drawOptions.animate
+                && pointsToAnimation[index] <= drawOptions.animationPointsLimit
+                && that._renderer.animationEnabled();
+
+            singleSeries.draw(animationEnabled,
                 drawOptions.hideLayoutLabels,
                 that._getLegendCallBack(singleSeries)
             );
-        }
+        });
 
         if(resolveLabelOverlapping === 'none') {
             that._adjustSeriesLabels(false);
@@ -864,8 +895,8 @@ export const BaseChart = BaseWidget.inherit({
         that._stripsGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._gridGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._axesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
-        that._constantLinesGroup.above.clear(); // TODO: Must be removed in the same place where appended (advanced chart)
-        that._labelAxesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
+        that._constantLinesGroup.clear(); // TODO: Must be removed in the same place where appended (advanced chart)
+        that._stripLabelAxesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         // that._seriesGroup.linkRemove().clear();
         that._labelsGroup.linkRemove().clear();
         that._crosshairCursorGroup.linkRemove().clear();
@@ -928,8 +959,8 @@ export const BaseChart = BaseWidget.inherit({
     },
 
     _processRefreshData: function(newRefreshAction) {
-        const currentRefreshActionPosition = inArray(this._currentRefreshData, ACTIONS_BY_PRIORITY);
-        const newRefreshActionPosition = inArray(newRefreshAction, ACTIONS_BY_PRIORITY);
+        const currentRefreshActionPosition = ACTIONS_BY_PRIORITY.indexOf(this._currentRefreshData);
+        const newRefreshActionPosition = ACTIONS_BY_PRIORITY.indexOf(newRefreshAction);
         if(!this._currentRefreshData || (currentRefreshActionPosition >= 0 && newRefreshActionPosition < currentRefreshActionPosition)) {
             this._currentRefreshData = newRefreshAction;
             // this._invalidate();
@@ -1035,7 +1066,7 @@ export const BaseChart = BaseWidget.inherit({
         scrollBar: 'SCROLL_BAR'
     },
 
-    _optionChangesOrder: ['ROTATED', 'PALETTE', 'REFRESH_SERIES_REINIT', 'AXES_AND_PANES', 'INIT', 'REINIT', 'DATA_SOURCE', 'REFRESH_SERIES_DATA_INIT', 'DATA_INIT', 'FORCE_DATA_INIT', 'REFRESH_AXES', 'CORRECT_AXIS'],
+    _optionChangesOrder: ['ROTATED', 'PALETTE', 'REFRESH_SERIES_REINIT', 'USE_SPIDER_WEB', 'AXES_AND_PANES', 'INIT', 'REINIT', 'DATA_SOURCE', 'REFRESH_SERIES_DATA_INIT', 'DATA_INIT', 'FORCE_DATA_INIT', 'REFRESH_AXES', 'CORRECT_AXIS'],
 
     _customChangesOrder: ['ANIMATION', 'REFRESH_SERIES_FAMILIES', 'FORCE_FIRST_DRAWING', 'FORCE_DRAWING',
         'FORCE_RENDER', 'VISUAL_RANGE', 'SCROLL_BAR', 'REINIT', 'REFRESH', 'FULL_RENDER'],
@@ -1308,7 +1339,7 @@ export const BaseChart = BaseWidget.inherit({
             }
         });
 
-        that._tracker.clearHover();
+        (that.series?.length !== 0) && that._tracker.clearHover();
 
         _reverseEach(that.series, (index, series) => {
             if(!seriesBasis.some(s => series === s.series)) {
@@ -1330,9 +1361,10 @@ export const BaseChart = BaseWidget.inherit({
 
         _each(seriesBasis, (_, basis) => {
             const seriesTheme = basis.options;
+            const argumentAxis = that._argumentAxes?.filter(a => a.pane === seriesTheme.pane)[0] ?? that.getArgumentAxis();
             const renderSettings = {
                 commonSeriesModes: that._getSelectionModes(),
-                argumentAxis: that.getArgumentAxis(),
+                argumentAxis,
                 valueAxis: that._getValueAxis(seriesTheme.pane, seriesTheme.axis)
             };
             if(basis.series) {

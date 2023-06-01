@@ -1,3 +1,4 @@
+import { getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { ensureDefined, deferRenderer, noop } from '../../core/utils/common';
@@ -7,12 +8,11 @@ import domAdapter from '../../core/dom_adapter';
 import { isPlainObject, isFunction, isDefined } from '../../core/utils/type';
 import { when } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
 import Action from '../../core/action';
 import Guid from '../../core/guid';
 import Widget from '../widget/ui.widget';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import DataHelperMixin from '../../data_helper';
 import CollectionWidgetItem from './item';
@@ -54,30 +54,20 @@ const CollectionWidget = Widget.inherit({
     _activeStateUnit: '.' + ITEM_CLASS,
 
     _supportedKeys: function() {
-        const enter = function(e) {
-            const $itemElement = $(this.option('focusedElement'));
-
-            if(!$itemElement.length) {
-                return;
-            }
-
-            this._itemClickHandler(extend({}, e, {
-                target: $itemElement,
-                currentTarget: $itemElement
-            }));
-        };
         const space = function(e) {
             e.preventDefault();
-            enter.call(this, e);
+            this._enterKeyHandler(e);
         };
         const move = function(location, e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this._moveFocus(location, e);
+            if(!isCommandKeyPressed(e)) {
+                e.preventDefault();
+                e.stopPropagation();
+                this._moveFocus(location, e);
+            }
         };
         return extend(this.callBase(), {
             space: space,
-            enter: enter,
+            enter: this._enterKeyHandler,
             leftArrow: move.bind(this, FOCUS_LEFT),
             rightArrow: move.bind(this, FOCUS_RIGHT),
             upArrow: move.bind(this, FOCUS_UP),
@@ -87,6 +77,26 @@ const CollectionWidget = Widget.inherit({
             home: move.bind(this, FOCUS_FIRST),
             end: move.bind(this, FOCUS_LAST)
         });
+    },
+
+    _enterKeyHandler: function(e) {
+        const $itemElement = $(this.option('focusedElement'));
+
+        if(!$itemElement.length) {
+            return;
+        }
+
+        const itemData = this._getItemData($itemElement);
+        if(itemData?.onClick) {
+            this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
+                event: e
+            });
+        }
+
+        this._itemClickHandler(extend({}, e, {
+            target: $itemElement.get(0),
+            currentTarget: $itemElement.get(0)
+        }));
     },
 
     _getDefaultOptions: function() {
@@ -123,14 +133,17 @@ const CollectionWidget = Widget.inherit({
 
             noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
+            encodeNoDataText: false,
+
             dataSource: null,
+            _dataController: null,
 
             _itemAttributes: {},
             itemTemplateProperty: 'template',
             focusOnSelectedItem: true,
             /**
             * @name CollectionWidgetOptions.focusedElement
-            * @type dxElement
+            * @type DxElement
             * @default null
             * @hidden
             */
@@ -145,6 +158,7 @@ const CollectionWidget = Widget.inherit({
 
     _init: function() {
         this._compileDisplayGetter();
+        this._initDataController();
         this.callBase();
 
         this._cleanRenderedItems();
@@ -253,7 +267,7 @@ const CollectionWidget = Widget.inherit({
     _focusInHandler: function(e) {
         this.callBase.apply(this, arguments);
 
-        if(inArray(e.target, this._focusTarget()) === -1) {
+        if(!this._isFocusTarget(e.target)) {
             return;
         }
 
@@ -274,6 +288,10 @@ const CollectionWidget = Widget.inherit({
         const $target = $(this.option('focusedElement'));
 
         this._updateFocusedItemState($target, false);
+    },
+
+    _findActiveTarget($element) {
+        return $element.find(this._activeStateUnit);
     },
 
     _getActiveItem: function(last) {
@@ -335,7 +353,7 @@ const CollectionWidget = Widget.inherit({
     },
 
     _getAvailableItems: function($itemElements) {
-        return this._getVisibleItems($itemElements).not('.dx-state-disabled');
+        return this._getVisibleItems($itemElements);
     },
 
     _prevItem: function($items) {
@@ -394,6 +412,10 @@ const CollectionWidget = Widget.inherit({
         }
     },
 
+    _isDisabled($element) {
+        return $element && $($element).attr('aria-disabled') === 'true';
+    },
+
     _setFocusedItem: function($target) {
         if(!$target || !$target.length) {
             return;
@@ -402,7 +424,10 @@ const CollectionWidget = Widget.inherit({
         this._updateFocusedItemState($target, true);
         this.onFocusedItemChanged(this.getFocusedItemId());
 
-        if(this.option('selectOnFocus')) {
+        const { selectOnFocus } = this.option();
+        const isTargetDisabled = this._isDisabled($target);
+
+        if(selectOnFocus && !isTargetDisabled) {
             this._selectFocusedItem($target);
         }
     },
@@ -474,7 +499,7 @@ const CollectionWidget = Widget.inherit({
             case 'items':
             case '_itemAttributes':
             case 'itemTemplateProperty':
-            case 'showItemDataTitle':
+            case 'useItemTextAsTitle':
                 this._cleanRenderedItems();
                 this._invalidate();
                 break;
@@ -483,6 +508,7 @@ const CollectionWidget = Widget.inherit({
                 this._renderEmptyMessage();
                 break;
             case 'noDataText':
+            case 'encodeNoDataText':
                 this._renderEmptyMessage();
                 break;
             case 'itemTemplate':
@@ -532,12 +558,9 @@ const CollectionWidget = Widget.inherit({
     },
 
     _loadNextPage: function() {
-        const dataSource = this._dataSource;
-
         this._expectNextPageLoading();
-        dataSource.pageIndex(1 + dataSource.pageIndex());
 
-        return dataSource.load();
+        return this._dataController.loadNextPage();
     },
 
     _expectNextPageLoading: function() {
@@ -588,6 +611,8 @@ const CollectionWidget = Widget.inherit({
     _clean: function() {
         this._cleanFocusState();
         this._cleanItemContainer();
+        this._inkRipple && delete this._inkRipple;
+        this._resetActiveState();
     },
 
     _cleanItemContainer: function() {
@@ -666,26 +691,35 @@ const CollectionWidget = Widget.inherit({
         this._attachContextMenuEvent();
     },
 
-    _attachClickEvent: function() {
-        const itemSelector = this._itemSelector();
-        const clickEventNamespace = addNamespace(clickEventName, this.NAME);
-        const pointerDownEventNamespace = addNamespace(pointerEvents.down, this.NAME);
-        const that = this;
+    _getPointerEvent() {
+        return pointerEvents.down;
+    },
 
-        const pointerDownAction = new Action(function(args) {
-            const event = args.event;
-            that._itemPointerDownHandler(event);
+    _attachClickEvent() {
+        const itemSelector = this._itemSelector();
+        const pointerEvent = this._getPointerEvent();
+
+        const clickEventNamespace = addNamespace(clickEventName, this.NAME);
+        const pointerEventNamespace = addNamespace(pointerEvent, this.NAME);
+
+        const pointerAction = new Action((args) => {
+            const { event } = args;
+
+            this._itemPointerDownHandler(event);
         });
+
+        const clickEventCallback = (e) => this._itemClickHandler(e);
+        const pointerEventCallback = (e) => {
+            pointerAction.execute({
+                element: $(e.target),
+                event: e,
+            });
+        };
 
         eventsEngine.off(this._itemContainer(), clickEventNamespace, itemSelector);
-        eventsEngine.off(this._itemContainer(), pointerDownEventNamespace, itemSelector);
-        eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, (function(e) { this._itemClickHandler(e); }).bind(this));
-        eventsEngine.on(this._itemContainer(), pointerDownEventNamespace, itemSelector, function(e) {
-            pointerDownAction.execute({
-                element: $(e.target),
-                event: e
-            });
-        });
+        eventsEngine.off(this._itemContainer(), pointerEventNamespace, itemSelector);
+        eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, clickEventCallback);
+        eventsEngine.on(this._itemContainer(), pointerEventNamespace, itemSelector, pointerEventCallback);
     },
 
     _itemClickHandler: function(e, args, config) {
@@ -709,7 +743,7 @@ const CollectionWidget = Widget.inherit({
             const $closestItem = $target.closest(this._itemElements());
             const $closestFocusable = this._closestFocusable($target);
 
-            if($closestItem.length && $closestFocusable && inArray($closestFocusable.get(0), this._focusTarget()) !== -1) {
+            if($closestItem.length && this._isFocusTarget($closestFocusable?.get(0))) {
                 this.option('focusedElement', getPublicElement($closestItem));
             }
         }.bind(this);
@@ -723,7 +757,7 @@ const CollectionWidget = Widget.inherit({
         } else {
             $target = $target.parent();
 
-            while($target.length && !domAdapter.isDocument($target.get(0))) {
+            while($target.length && !domAdapter.isDocument($target.get(0)) && !domAdapter.isDocumentFragment($target.get(0))) {
                 if($target.is(focusable)) {
                     return $target;
                 }
@@ -808,15 +842,16 @@ const CollectionWidget = Widget.inherit({
     },
 
     _renderItem: function(index, itemData, $container, $itemToReplace) {
+        const itemIndex = index?.item ?? index;
         $container = $container || this._itemContainer();
-        const $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
-        this._setElementData($itemFrame, itemData, index);
+        const $itemFrame = this._renderItemFrame(itemIndex, itemData, $container, $itemToReplace);
+        this._setElementData($itemFrame, itemData, itemIndex);
         $itemFrame.attr(this.option('_itemAttributes'));
         this._attachItemClickEvent(itemData, $itemFrame);
         const $itemContent = this._getItemContent($itemFrame);
 
         const renderContentPromise = this._renderItemContent({
-            index: index,
+            index: itemIndex,
             itemData: itemData,
             container: getPublicElement($itemContent),
             contentClass: this._itemContentClass(),
@@ -829,7 +864,7 @@ const CollectionWidget = Widget.inherit({
                 itemElement: $itemFrame,
                 itemContent: $itemContent,
                 itemData: itemData,
-                itemIndex: index
+                itemIndex: itemIndex
             });
 
             that._executeItemRenderAction(index, itemData, getPublicElement($itemFrame));
@@ -900,7 +935,7 @@ const CollectionWidget = Widget.inherit({
             this._appendItemToContainer.call(this, $container, $itemFrame, index);
         }
 
-        if(this.option('showItemDataTitle')) {
+        if(this.option('useItemTextAsTitle')) {
             const displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
             $itemFrame.attr('title', displayValue);
         }
@@ -965,8 +1000,13 @@ const CollectionWidget = Widget.inherit({
         return itemTemplate.render({
             model: renderArgs.itemData,
             container: renderArgs.container,
-            index: renderArgs.index
+            index: renderArgs.index,
+            onRendered: this._onItemTemplateRendered(itemTemplate, renderArgs)
         });
+    },
+
+    _onItemTemplateRendered: function() {
+        return noop;
     },
 
     _emptyMessageContainer: function() {
@@ -976,7 +1016,7 @@ const CollectionWidget = Widget.inherit({
     _renderEmptyMessage: function(items) {
         items = items || this.option('items');
         const noDataText = this.option('noDataText');
-        const hideNoData = !noDataText || (items && items.length) || this._isDataSourceLoading();
+        const hideNoData = !noDataText || (items && items.length) || this._dataController.isLoading();
 
         if(hideNoData && this._$noData) {
             this._$noData.remove();
@@ -986,10 +1026,13 @@ const CollectionWidget = Widget.inherit({
 
         if(!hideNoData) {
             this._$noData = this._$noData || $('<div>').addClass('dx-empty-message');
-            this._$noData
-                .appendTo(this._emptyMessageContainer())
-                .html(noDataText);
-            this.setAria('label', noDataText);
+            this._$noData.appendTo(this._emptyMessageContainer());
+
+            if(this.option('encodeNoDataText')) {
+                this._$noData.text(noDataText);
+            } else {
+                this._$noData.html(noDataText);
+            }
         }
         this.$element().toggleClass(EMPTY_COLLECTION, !hideNoData);
     },
@@ -1042,7 +1085,7 @@ const CollectionWidget = Widget.inherit({
 
         if(items) {
             each(items, function(_, item) {
-                result += $(item).outerWidth(includeMargin || false);
+                result += getOuterWidth(item, includeMargin || false);
             });
         }
 

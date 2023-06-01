@@ -1,18 +1,22 @@
 import {
   Component, ComponentBindings, JSXComponent,
-  OneWay, Template, Event,
-} from 'devextreme-generator/component_declaration/common';
-import noop from '../../../utils/noop';
+  OneWay, Template, Event, JSXTemplate,
+} from '@devextreme-generator/declarations';
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../../ui/scheduler';
 import {
-  AppointmentItem, FormattedContent, GetTextAndFormatDateFn, CheckAndDeleteAppointmentFn,
-} from './types.d';
+  AppointmentItem,
+  FormattedContent,
+  GetTextAndFormatDateFn,
+  CheckAndDeleteAppointmentFn,
+  AppointmentTooltipTemplate,
+} from './types';
 import { Marker } from './marker';
 import { Button } from '../../button';
 import { TooltipItemContent } from './item_content';
 import getCurrentAppointment from './utils/get_current_appointment';
 import { defaultGetTextAndFormatDate } from './utils/default_functions';
+import { EventCallback } from '../../common/event_callback';
 
 export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => {
   const ItemContentTemplate = viewModel.props.itemContentTemplate;
@@ -31,7 +35,7 @@ export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => {
           // eslint-disable-next-line react/jsx-props-no-spreading
       {...viewModel.restAttributes}
     >
-      <Marker color={viewModel.props.item.color} />
+      <Marker />
       <TooltipItemContent
         text={viewModel.formattedContent.text}
         formattedDate={viewModel.formattedContent.formatDate}
@@ -60,11 +64,11 @@ export class TooltipItemLayoutProps {
 
   @OneWay() showDeleteButton?: boolean = true;
 
-  @Template() itemContentTemplate?: any;
+  @Template() itemContentTemplate?: JSXTemplate<AppointmentTooltipTemplate>;
 
-  @Event() onDelete: CheckAndDeleteAppointmentFn = noop;
+  @Event() onDelete?: CheckAndDeleteAppointmentFn;
 
-  @Event() onHide: () => void = noop;
+  @Event() onHide?: EventCallback;
 
   @OneWay() getTextAndFormatDate: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
 
@@ -88,9 +92,9 @@ export class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
     } = this.props;
 
     return (e: { event: Event }): void => {
-      onHide();
+      onHide?.();
       e.event.stopPropagation();
-      onDelete(item.data, singleAppointment);
+      onDelete?.(item.data, singleAppointment);
     };
   }
 

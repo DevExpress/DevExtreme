@@ -1,0 +1,117 @@
+name: TS Declarations
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches: [23_1]
+
+jobs:
+  check-ts-bundle:
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Check dx.all.d.ts is up-to-date
+      run: |
+        target=./ts/dx.all.d.ts
+        cp $target $target.current
+
+        npm run update-ts
+
+        if ! diff $target.current $target -U 5 > $target.diff; then
+            echo "FAIL: $target is outdated:"
+            cat $target.diff | sed "1,2d"
+            echo "Execute 'npm run update-ts' to update dx.all.d.ts"
+            exit 1
+        else
+            echo "TS is up-to-date"
+        fi
+
+  validate-declarations:
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Validate declarations
+      run: npm run validate-declarations
+
+  check-ts-compilation:
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Check sources compilation
+      run: npm run validate-ts
+
+    - name: Check test cases
+      run: npm run test-typescript
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [check-ts-bundle, validate-declarations, check-ts-compilation]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DevExpress/github-actions/send-teams-notification@main
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 23_1

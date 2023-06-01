@@ -2,10 +2,14 @@ const types = {
     '[object Array]': 'array',
     '[object Date]': 'date',
     '[object Object]': 'object',
-    '[object String]': 'string',
-    '[object Null]': 'null' };
+    '[object String]': 'string'
+};
 
 const type = function(object) {
+    if(object === null) {
+        return 'null';
+    }
+
     const typeOfObject = Object.prototype.toString.call(object);
 
     return typeof object === 'object' ?
@@ -55,10 +59,15 @@ const isEmptyObject = function(object) {
 };
 
 const isPlainObject = function(object) {
-    if(!object || Object.prototype.toString.call(object) !== '[object Object]') {
+    if(!object || type(object) !== 'object') {
         return false;
     }
     const proto = Object.getPrototypeOf(object);
+
+    if(!proto) {
+        return true;
+    }
+
     const ctor = Object.hasOwnProperty.call(proto, 'constructor') && proto.constructor;
 
     return typeof ctor === 'function'
@@ -74,15 +83,15 @@ const isWindow = function(object) {
 };
 
 const isRenderer = function(object) {
-    return !!(object.jquery || object.dxRenderer);
+    return !!object && !!(object.jquery || object.dxRenderer);
 };
 
 const isPromise = function(object) {
-    return object && isFunction(object.then);
+    return !!object && isFunction(object.then);
 };
 
 const isDeferred = function(object) {
-    return object && isFunction(object.done) && isFunction(object.fail);
+    return !!object && isFunction(object.done) && isFunction(object.fail);
 };
 
 const isEvent = function(object) {

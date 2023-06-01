@@ -1,4 +1,4 @@
-import 'common.css!';
+import { getOuterWidth } from 'core/utils/size';
 import 'generic_light.css!';
 
 import { triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
@@ -44,7 +44,7 @@ QUnit.module('Tabs width', () => {
         }
 
         setContainerWidth(width) {
-            this.$container[0].setAttribute('style', `width:${width}px`);
+            this.$container[0].style = `width: ${width}px`;
         }
 
         createTabPanel(options) {
@@ -57,15 +57,15 @@ QUnit.module('Tabs width', () => {
 
             this.assert.equal(this.tabPanel.option('width'), this._isOptionApproach() ? options.width : undefined);
             this.assert.equal(tabs.option('width'), undefined);
-            this.assert.equal(tabs.$element().outerWidth(), options.width);
-            this.assert.equal(this.$tabPanel.outerWidth(), options.width);
+            this.assert.equal(getOuterWidth(tabs.$element()), options.width);
+            this.assert.equal(getOuterWidth(this.$tabPanel), options.width);
 
             if(options.width > 250) {
-                this.assert.strictEqual(this._getTabItem(0).outerWidth(), 140, this._getTabItem(0).outerWidth() + ' = 140');
-                this.assert.strictEqual(this._getTabItem(1).outerWidth() > 140, true, this._getTabItem(1).outerWidth() + ' > 140');
+                this.assert.strictEqual(getOuterWidth(this._getTabItem(0)), 140, getOuterWidth(this._getTabItem(0)) + ' = 140');
+                this.assert.strictEqual(getOuterWidth(this._getTabItem(1)) > 140, true, getOuterWidth(this._getTabItem(1)) + ' > 140');
             } else {
-                this.assert.strictEqual(this._getTabItem(0).outerWidth(), 140, this._getTabItem(0).outerWidth() + ' = 140');
-                this.assert.strictEqual(this._getTabItem(1).outerWidth(), 140, this._getTabItem(1).outerWidth() + ' = 140');
+                this.assert.strictEqual(getOuterWidth(this._getTabItem(0)), 140, getOuterWidth(this._getTabItem(0)) + ' = 140');
+                this.assert.strictEqual(getOuterWidth(this._getTabItem(1)), 140, getOuterWidth(this._getTabItem(1)) + ' = 140');
             }
 
             this.assert.equal(this.$tabPanel.find(`.${TABS_NAV_BUTTON_CLASS}`).length, options.expectNavButtons, `${options.expectNavButtons} navigation buttons should be rendered`);

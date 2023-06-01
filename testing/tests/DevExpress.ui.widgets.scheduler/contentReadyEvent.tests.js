@@ -6,7 +6,6 @@ import CustomStore from 'data/custom_store';
 import fx from 'animation/fx';
 
 import 'ui/scheduler/ui.scheduler';
-import 'common.css!';
 import 'generic_light.css!';
 
 initTestMarkup();
@@ -168,7 +167,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
                 assert.equal($workSpace.length, 1, 'Work Space is rendered');
                 assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
                 assert.roughEqual(appointmentPosition.top, 100, 2.001, 'Appointment top is OK');
-                assert.roughEqual(appointmentPosition.left, 299, 1.001, 'Appointment left is OK');
+                assert.roughEqual(appointmentPosition.left, 199, 1.001, 'Appointment left is OK');
                 done();
             }
         });
@@ -188,7 +187,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
 
             assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
             assert.roughEqual(appointmentPosition.top, 100, 2.001, 'Appointment top is OK');
-            assert.roughEqual(appointmentPosition.left, 299, 1.001, 'Appointment left is OK');
+            assert.roughEqual(appointmentPosition.left, 199, 1.001, 'Appointment left is OK');
         });
 
         scheduler.instance.addAppointment({
@@ -216,7 +215,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
 
             assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
             assert.roughEqual(appointmentPosition.top, 150, 2.001, 'Appointment top is OK');
-            assert.roughEqual(appointmentPosition.left, 299, 1.001, 'Appointment left is OK');
+            assert.roughEqual(appointmentPosition.left, 199, 1.001, 'Appointment left is OK');
         });
 
         scheduler.instance.updateAppointment(appointment, {

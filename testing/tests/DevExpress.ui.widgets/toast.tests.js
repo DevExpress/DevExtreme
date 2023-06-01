@@ -1,3 +1,4 @@
+import { getWidth, getHeight, getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
@@ -5,7 +6,7 @@ import { value as setViewPort } from 'core/utils/view_port';
 import Toast from 'ui/toast';
 import devices from 'core/devices.js';
 
-import 'common.css!';
+import 'generic_light.css!';
 
 const TOAST_CLASS = 'dx-toast';
 const TOAST_CLASS_PREFIX = TOAST_CLASS + '-';
@@ -27,11 +28,12 @@ const moduleConfig = {
     }
 };
 
-const viewPort = $('#qunit-fixture').addClass('dx-viewport');
-setViewPort(viewPort);
-
+let viewPort = null;
 
 QUnit.testStart(function() {
+    viewPort = $('#qunit-fixture').addClass('dx-viewport');
+    setViewPort(viewPort);
+
     const markup =
         '<div id="toast"></div>\
         <div id="firstToast"></div>\
@@ -45,13 +47,14 @@ QUnit.module('general', moduleConfig, () => {
         this.instance.show();
 
         const $content = this.instance.$content();
+        const $wrapper = this.instance.$wrapper();
 
         assert.ok(this.$element.hasClass(TOAST_CLASS));
-        assert.ok($content.parent().hasClass(TOAST_WRAPPER_CLASS));
+        assert.ok($wrapper.hasClass(TOAST_WRAPPER_CLASS));
         assert.ok($content.hasClass(TOAST_CONTENT_CLASS));
 
-        assert.ok($content.width() < $(window).width());
-        assert.ok($content.height() < $(window).height());
+        assert.ok(getWidth($content) < getWidth($(window)));
+        assert.ok(getHeight($content) < getHeight($(window)));
     });
 
     QUnit.test('default template', function(assert) {
@@ -80,7 +83,7 @@ QUnit.module('general', moduleConfig, () => {
         this.instance.show();
 
         const $content = this.instance.$content();
-        assert.roughEqual($content.offset().top + $content.outerHeight(), $(window).height(), 1.01);
+        assert.roughEqual($content.offset().top + getOuterHeight($content), getHeight($(window)), 1.01);
     });
 
     QUnit.test('position on mobile devices', function(assert) {
@@ -95,8 +98,8 @@ QUnit.module('general', moduleConfig, () => {
         this.instance = this.$element.dxToast({
             onShown: function(e) {
                 const $content = e.component.$content();
-                assert.roughEqual($content.offset().top + $content.outerHeight(), window.visualViewport.height, 1.01);
-                assert.roughEqual($content.outerWidth(), window.visualViewport.width, 1.01);
+                assert.roughEqual($content.offset().top + getOuterHeight($content), window.visualViewport.height, 1.01);
+                assert.roughEqual(getOuterWidth($content), window.visualViewport.width, 1.01);
 
                 done();
             }
@@ -135,16 +138,42 @@ QUnit.module('general', moduleConfig, () => {
         assert.equal(hidden, 1);
     });
 
-    QUnit.test('T179647 - only one toast is visible at the same time', function(assert) {
-        const $first = $('#firstToast'); const $second = $('#secondToast'); const first = $first.dxToast().dxToast('instance'); const second = $second.dxToast().dxToast('instance');
+    QUnit.test('should not hide previous Toasts on new Toast showing (T1153204)', function(assert) {
+        const $first = $('#firstToast');
+        const $second = $('#secondToast');
+        const first = $first.dxToast().dxToast('instance');
+        const second = $second.dxToast().dxToast('instance');
 
         first.show();
 
-        assert.equal($('.dx-toast-content:visible').length, 1, 'the first toast is visible');
+        assert.equal($('.dx-toast-content').filter(':visible').length, 1, 'the first toast is visible');
 
         second.show();
 
-        assert.equal($('.dx-toast-content:visible').length, 1, 'only the second toast is visible');
+        assert.equal($('.dx-toast-content').filter(':visible').length, 2, 'both toasts are visible');
+    });
+
+    QUnit.test('toast should repeat trying to close after hiding is cancelled (T1156504)', function(assert) {
+        let hidingCallCount = 0;
+        const displayTime = 500;
+        this.instance.option({
+            displayTime,
+            onHiding: (e) => {
+                if(hidingCallCount === 0) {
+                    e.cancel = true;
+                }
+                hidingCallCount += 1;
+            }
+        });
+        this.instance.show();
+
+        this.clock.tick(displayTime);
+        assert.strictEqual(hidingCallCount, 1, 'toast tried to close after displayTime');
+        assert.strictEqual(this.instance.option('visible'), true, 'hiding was cancelled');
+
+        this.clock.tick(displayTime);
+        assert.strictEqual(hidingCallCount, 2, 'toast tried to close after displayTime repeatedly');
+        assert.strictEqual(this.instance.option('visible'), false, 'toast was hidden');
     });
 });
 
@@ -232,29 +261,31 @@ QUnit.module('regression', moduleConfig, () => {
 });
 
 QUnit.module('overlay integration', moduleConfig, () => {
-    QUnit.test('toast should be closed on outside click if closeOnOutsideClick is true', function(assert) {
-        this.instance.option('closeOnOutsideClick', true);
-        this.instance.show();
+    ['closeOnOutsideClick', 'hideOnOutsideClick'].forEach(closeOnOutsideClickOptionName => {
+        QUnit.test(`toast should be closed on outside click if ${closeOnOutsideClickOptionName} is true`, function(assert) {
+            this.instance.option(closeOnOutsideClickOptionName, true);
+            this.instance.show();
 
-        $('#qunit-fixture').trigger('dxpointerdown');
+            $('#qunit-fixture').trigger('dxpointerdown');
 
-        assert.equal(this.instance.option('visible'), false, 'toast was hidden should be hiding');
-    });
+            assert.equal(this.instance.option('visible'), false, 'toast was hidden should be hiding');
+        });
 
-    QUnit.test('toast does not prevent closeOnOutsideClick handler of other overlays', function(assert) {
-        const $overlay = $('<div>').appendTo(viewPort);
+        QUnit.test(`toast does not prevent ${closeOnOutsideClickOptionName} handler of other overlays`, function(assert) {
+            const $overlay = $('<div>').appendTo(viewPort);
 
-        const overlay = $overlay.dxOverlay({
-            closeOnOutsideClick: true
-        }).dxOverlay('instance');
+            const overlay = $overlay.dxOverlay({
+                [closeOnOutsideClickOptionName]: true
+            }).dxOverlay('instance');
 
 
-        overlay.show();
-        this.instance.show();
+            overlay.show();
+            this.instance.show();
 
-        $('#qunit-fixture').trigger('dxpointerdown');
+            $('#qunit-fixture').trigger('dxpointerdown');
 
-        assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
+            assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
+        });
     });
 
     QUnit.test('it should be possible to select a message in the toast by the mouse', function(assert) {
@@ -288,7 +319,7 @@ QUnit.module('overlay integration', moduleConfig, () => {
             return $('<div>');
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(hideSpy.callCount, 0, 'Toast didn\'t hide');
     });
 });
@@ -305,7 +336,9 @@ QUnit.module('base z-index', () => {
 
 QUnit.module('close events handling', () => {
     QUnit.test('closeOnSwipe option', function(assert) {
-        const $element = $('#toast').dxToast({ visible: true }); const instance = $element.dxToast('instance'); const pointer = pointerMock($element.find('.dx-toast-content'));
+        const $element = $('#toast').dxToast({ visible: true });
+        const instance = $element.dxToast('instance');
+        const pointer = pointerMock($('.dx-toast-content'));
 
         pointer.start().swipe(-0.5);
         assert.ok(!instance.option('visible'), 'toast should hide on swipe');
@@ -318,7 +351,9 @@ QUnit.module('close events handling', () => {
     });
 
     QUnit.test('closeOnClick option', function(assert) {
-        const $element = $('#toast').dxToast({ visible: true }); const instance = $element.dxToast('instance'); const $content = $element.find('.dx-toast-content');
+        const $element = $('#toast').dxToast({ visible: true });
+        const instance = $element.dxToast('instance');
+        const $content = $('.dx-toast-content');
 
         $($content).trigger('dxclick');
         assert.ok(instance.option('visible'), 'toast should not hide on click if option is false');

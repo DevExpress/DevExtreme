@@ -50,7 +50,7 @@ describe('TooltipItemLayout', () => {
         {...defaultViewModel}
         {...viewModel}
         props={{ ...defaultProps, ...viewModel.props }}
-      /> as any,
+      />,
     );
 
     it('should combine `className` with predefined classes', () => {
@@ -85,15 +85,6 @@ describe('TooltipItemLayout', () => {
       const buttonContainer = tooltipItemLayout.childAt(2);
       expect(buttonContainer.is('.dx-tooltip-appointment-item-delete-button-container'))
         .toBe(true);
-    });
-
-    it('should pass correct props to Marker', () => {
-      const marker = render({}).find(Marker);
-
-      expect(marker.props())
-        .toMatchObject({
-          color: defaultProps.item!.color,
-        });
     });
 
     it('should pass correct props to DeleteButton', () => {
@@ -133,7 +124,7 @@ describe('TooltipItemLayout', () => {
       const renderWithTemplate = () => shallow(
         <TooltipItemLayoutView
           props={{ ...defaultProps, itemContentTemplate: template }}
-          {...defaultViewModel}
+          {...defaultViewModel as any}
           currentAppointment={currentAppointment}
         />,
       );
@@ -162,7 +153,7 @@ describe('TooltipItemLayout', () => {
         const tooltipItemLayout = shallow(
           <TooltipItemLayoutView
             props={{ ...defaultProps }}
-            {...defaultViewModel}
+            {...defaultViewModel as any}
           />,
         );
 
@@ -260,7 +251,7 @@ describe('TooltipItemLayout', () => {
           expect(onDeleteButtonClick)
             .toEqual(expect.any(Function));
 
-          const event = { event: { stopPropagation } };
+          const event = { event: { stopPropagation } } as any;
           onDeleteButtonClick(event);
 
           expect(onHide)
@@ -272,6 +263,28 @@ describe('TooltipItemLayout', () => {
           expect(stopPropagation)
             .toHaveBeenCalledTimes(1);
         });
+      });
+
+      it('should correctly react if onHide or onDelete arent defined', () => {
+        const stopPropagation = jest.fn();
+        const appointmentItem = {
+          data: { text: 'data' },
+          currentData: { text: 'currentData' },
+        };
+        const singleAppointment = { text: 'singleAppointmentData' };
+
+        const tooltipItemLayout = new TooltipItemLayout({
+          item: appointmentItem, singleAppointment,
+        });
+        const { onDeleteButtonClick } = tooltipItemLayout;
+
+        expect(onDeleteButtonClick)
+          .toEqual(expect.any(Function));
+
+        const event = { event: { stopPropagation } } as any;
+        onDeleteButtonClick(event);
+        expect(stopPropagation)
+          .toHaveBeenCalledTimes(1);
       });
 
       describe('formattedContent', () => {

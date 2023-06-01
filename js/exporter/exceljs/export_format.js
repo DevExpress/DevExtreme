@@ -1,7 +1,7 @@
 import { format as stringFormat } from '../../core/utils/string';
 import numberFormatter from '../../localization/number';
 import dateLocalization from '../../localization/date';
-import { isDefined, isString, isObject } from '../../core/utils/type';
+import { isDefined, isString, isObject, isNumeric } from '../../core/utils/type';
 import { getFormat } from '../../localization/ldml/date.format';
 import { getLanguageId } from '../../localization/language_codes';
 import { extend } from '../../core/utils/extend';
@@ -24,9 +24,6 @@ const DAY_REGEXP = /E/g;
 const DO_REGEXP = /dE+/g;
 const STANDALONE_MONTH_REGEXP = /L/g;
 const HOUR_REGEXP = /h/g;
-const SLASH_REGEXP = /\//g;
-const SQUARE_OPEN_BRACKET_REGEXP = /\[/g;
-const SQUARE_CLOSE_BRACKET_REGEXP = /]/g;
 const ANY_REGEXP = /./g;
 
 function _applyPrecision(format, precision) {
@@ -86,7 +83,7 @@ function _getLanguageInfo(defaultPattern) {
 }
 
 function _convertDateFormatToOpenXml(format) {
-    return format.replace(SLASH_REGEXP, '\\/').split('\'').map(function(datePart, index) {
+    return format.split('/').join('\\/').split('\'').map(function(datePart, index) {
         if(index % 2 === 0) {
             return datePart
                 .replace(PERIOD_REGEXP, 'AM/PM')
@@ -94,8 +91,8 @@ function _convertDateFormatToOpenXml(format) {
                 .replace(DAY_REGEXP, 'd')
                 .replace(STANDALONE_MONTH_REGEXP, 'M')
                 .replace(HOUR_REGEXP, 'H')
-                .replace(SQUARE_OPEN_BRACKET_REGEXP, '\\[')
-                .replace(SQUARE_CLOSE_BRACKET_REGEXP, '\\]');
+                .split('[').join('\\[')
+                .split(']').join('\\]');
         } if(datePart) {
             return datePart.replace(ANY_REGEXP, '\\$&');
         }
@@ -120,8 +117,41 @@ function _convertNumberFormat(format, precision, currency) {
     return result;
 }
 
+function _hasCSVInjection(value) {
+    if(!value || value.length < 2) { return false; }
+
+    return _includesCSVExpression(value);
+}
+
+function _hasCSVQuotedInjection(value, textQualifier) {
+    if(!value || value.length < 4 || value[0] !== textQualifier) {
+        return false;
+    }
+
+    return _includesCSVExpression(value.substring(1, value.length - 1));
+}
+
+function _includesCSVExpression(value) {
+    const injectionPrefix = /^[@=\t\r]/;
+    const possibleInjectionPrefix = /^[+-]/;
+
+    if(!value) {
+        return false;
+    }
+
+    if(injectionPrefix.test(value)) {
+        return true;
+    }
+
+    if(!possibleInjectionPrefix.test(value)) {
+        return false;
+    }
+
+    return !isNumeric(value);
+}
+
 export const ExportFormat = {
-    formatObjectConverter: function(format, dataType) {
+    formatObjectConverter(format, dataType) {
         const result = {
             format: format,
             precision: format && format.precision,
@@ -138,7 +168,7 @@ export const ExportFormat = {
         return result;
     },
 
-    convertFormat: function(format, precision, type, currency) {
+    convertFormat(format, precision, type, currency) {
         if(isDefined(format)) {
             if(type === 'date') {
                 return _convertDateFormat(format);
@@ -148,5 +178,26 @@ export const ExportFormat = {
                 }
             }
         }
-    }
+    },
+
+    encode(value) {
+        const textQualifier = '"';
+
+        let escaped = false;
+
+        if(_hasCSVInjection(value)) {
+            escaped = true;
+        } else if(_hasCSVQuotedInjection(value, textQualifier)) {
+            value = value.substring(1, value.length - 1);
+            escaped = true;
+        }
+
+        if(escaped) {
+            const singleTextQualifier = textQualifier;
+            const escapedTextQualifier = `${textQualifier}${textQualifier}`;
+            return textQualifier + '\'' + value.replaceAll(singleTextQualifier, escapedTextQualifier) + textQualifier;
+        }
+
+        return value;
+    },
 };

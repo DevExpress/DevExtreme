@@ -1,11 +1,11 @@
+import { getOuterWidth, getOuterHeight, getInnerWidth, getInnerHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { find } from '../../core/utils/array';
 import { isDefined } from '../../core/utils/type';
 import { Deferred, when } from '../../core/utils/deferred';
 
 import holdEvent from '../../events/hold';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace, isCommandKeyPressed } from '../../events/utils/index';
 import eventsEngine from '../../events/core/events_engine';
 
 import { BindableTemplate } from '../../core/templates/bindable_template';
@@ -83,6 +83,10 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         }
     }
 
+    getScrollable() {
+        return this._scrollView;
+    }
+
     _renderItemsContainer() {
         if(!this._$itemContainer) {
             this._$itemContainer = $('<div>')
@@ -135,7 +139,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
             },
             A(e) {
                 this._beforeKeyProcessing(e);
-                if(e.ctrlKey || e.metaKey) {
+                if(isCommandKeyPressed(e)) {
                     this.selectAll();
                 }
             }
@@ -250,7 +254,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         let options = {};
         if(this.option('selectionMode') === 'multiple') {
             if(!this._isPreserveSelectionMode) {
-                this._isPreserveSelectionMode = e.ctrlKey || e.metaKey || e.shiftKey;
+                this._isPreserveSelectionMode = isCommandKeyPressed(e) || e.shiftKey;
             }
             options = {
                 control: this._isPreserveSelectionMode,
@@ -382,7 +386,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         const focusedItemKey = this.option('focusedItemKey');
         if(isDefined(focusedItemKey)) {
             const items = this.option('items');
-            const focusedItem = find(items, item => this.keyOf(item) === focusedItemKey);
+            const focusedItem = items.find(item => this.keyOf(item) === focusedItemKey);
             if(focusedItem) {
                 this._focusItem(focusedItem, true);
                 deferred.resolve();
@@ -525,15 +529,15 @@ class ListBoxLayoutUtils {
             return null;
         }
 
-        const itemWidth = this._$item.outerWidth(true);
+        const itemWidth = getOuterWidth(this._$item, true);
         if(itemWidth === 0) {
             return null;
         }
 
-        const itemHeight = this._$item.outerHeight(true);
+        const itemHeight = getOuterHeight(this._$item, true);
 
-        const viewPortWidth = this._$itemContainer.innerWidth();
-        const viewPortHeight = this._$viewPort.innerHeight();
+        const viewPortWidth = getInnerWidth(this._$itemContainer);
+        const viewPortHeight = getInnerHeight(this._$viewPort);
         const viewPortScrollTop = this._scrollView.scrollTop();
         const viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
 

@@ -2,8 +2,9 @@ import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture`Resize appointments in the Scheduler basic views`
+fixture.disablePageReloads`Resize appointments in the Scheduler basic views`
   .page(url(__dirname, '../../container.html'));
 
 ['timelineDay', 'timelineWeek', 'timelineWorkWeek'].forEach((view) => test(`Resize in the "${view}" view`, async (t) => {
@@ -33,7 +34,7 @@ fixture`Resize appointments in the Scheduler basic views`
     .eql('400px')
     .expect(resizableAppointment.date.time)
     .eql('10:00 AM - 11:00 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: [view],
   currentView: view,
   dataSource,
@@ -66,23 +67,22 @@ test('Resize in the "timelineMonth" view', async (t) => {
     .eql('200px')
     .expect(resizableAppointment.date.time)
     .eql('10:00 AM - 11:00 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: ['timelineMonth'],
   currentView: 'timelineMonth',
   dataSource,
 }));
 
-test('Resize appointment on timelineWeek view with custom startDayHour & endDayHour (T804779)', async (t) => {
+safeSizeTest('Resize appointment on timelineWeek view with custom startDayHour & endDayHour (T804779)', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Appointment');
 
   await t
-    .resizeWindow(1400, 800)
     .drag(appointment.resizableHandle.right, -400, 0)
     .expect(appointment.size.width).eql('200px')
     .expect(appointment.date.time)
     .eql('2:00 PM - 3:00 PM');
-}).before(() => createScheduler({
+}, [1400, 800]).before(async () => createScheduler({
   views: [{
     type: 'timelineWeek', startDayHour: 10, endDayHour: 16, cellDuration: 60,
   }],
@@ -105,7 +105,7 @@ test('Resize should work correctly when cell\'s width is not an integer', async 
     .drag(appointment.resizableHandle.right, 100, 0)
     .expect(appointment.date.time)
     .eql('12:00 AM - 4:00 AM');
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   views: [{
     type: 'timelineDay',
     cellDuration: 120,

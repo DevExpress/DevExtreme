@@ -6,12 +6,78 @@ import {
     needSkipEvent,
     addNamespace,
     normalizeKeyName,
-    getChar
+    getChar,
+    isCommandKeyPressed
 } from 'events/utils/index';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 
 const { test, testStart, testInActiveWindow } = QUnit;
+
+const W3CEventProps = [
+    'bubbles',
+    'cancelable',
+    'currentTarget',
+    'eventPhase',
+    'target',
+    'timeStamp',
+    'type',
+    'preventDefault',
+    'stopPropagation'
+];
+
+const W3CUIEventProps = W3CEventProps.concat([
+    'detail',
+    'view'
+]);
+
+const W3CMouseEventProps = W3CUIEventProps.concat([
+    'altKey',
+    'button',
+    'clientX',
+    'clientY',
+    'ctrlKey',
+    'metaKey',
+    'relatedTarget',
+    'screenX',
+    'screenY',
+    'shiftKey'
+]);
+
+const W3CTouchEventProps = W3CUIEventProps.concat([
+    'altKey',
+    'changedTouches',
+    'ctrlKey',
+    'metaKey',
+    'shiftKey',
+    'targetTouches',
+    'touches'
+]);
+
+const additionalProps = [
+    'originalEvent',
+
+    'stopPropagation',
+    'stopImmediatePropagation',
+    'preventDefault',
+
+    'relatedTarget',
+    'delegateTarget',
+
+    'which',
+    'button',
+    'charCode',
+
+    'pageX',
+    'pageY',
+
+    'offsetX',
+    'offsetY',
+    'isTrusted'
+];
+
+const eventOwnProps = ['originalEvent', 'type', 'currentTarget', 'timeStamp'];
+const noJQueryEventOwnProps = ['isTrusted'];
 
 testStart(() => {
     const markup = `
@@ -23,15 +89,40 @@ testStart(() => {
 });
 
 QUnit.module('event utils', () => {
+    if(compare($.fn.jquery, [3]) >= 0) {
+        const allProps = additionalProps.concat(W3CTouchEventProps);
+        $.each(['mousedown', 'mousemove', 'mouseup', 'click', 'keydown', 'keyup'], function(index, eventName) {
+            test(`${eventName} support original event properties`, function(assert) {
+                const targetElement = $('#element');
+                const e = nativePointerMock(targetElement).eventMock(eventName, { delegateTarget: $('#element').get(0) });
+
+                $.each(allProps, function() {
+                    assert.ok(this in e || this in e.originalEvent, 'event has \'' + this + '\' property');
+                });
+                if(!navigator.pointerEnabled && !navigator.msPointerEnabled) {
+                    $.each(eventOwnProps, function(_, propName) {
+                        assert.ok(Object.prototype.hasOwnProperty.call(e, propName), 'property \'' + this + '\' is own property');
+                    });
+                    if(QUnit.urlParams['nojquery']) {
+                        $.each(noJQueryEventOwnProps, function(_, propName) {
+                            assert.ok(Object.prototype.hasOwnProperty.call(e, propName), 'property \'' + this + '\' is own property (no jquery)');
+                        });
+                    }
+                }
+            });
+        });
+    }
+
     test('mouse support methods', function(assert) {
         const time = new Date().valueOf();
-        const e1 = nativePointerMock().eventMock('mousemove', {
+        const targetElement = $('#element');
+        const e1 = nativePointerMock(targetElement).eventMock('mousemove', {
             pageX: 1,
             pageY: 2,
             timeStamp: time,
             which: 2
         });
-        const e2 = nativePointerMock().eventMock('mousemove', {
+        const e2 = nativePointerMock(targetElement).eventMock('mousemove', {
             pageX: 2,
             pageY: 1,
             timeStamp: time + 50,
@@ -55,7 +146,8 @@ QUnit.module('event utils', () => {
 
     if(compare($.fn.jquery, [3]) < 0) {
         test('touch support methods', function(assert) {
-            const e1 = nativePointerMock().eventMock('touchmove', {
+            const targetElement = $('#element');
+            const e1 = nativePointerMock(targetElement).eventMock('touchmove', {
                 touches: [{
                     pageX: 1,
                     pageY: 2
@@ -73,14 +165,15 @@ QUnit.module('event utils', () => {
     }
 
     test('mspointer support methods', function(assert) {
-        const e1 = nativePointerMock().eventMock('MSPointerMove', {
+        const targetElement = $('#element');
+        const e1 = nativePointerMock(targetElement).eventMock('MSPointerMove', {
             pageX: 1,
             pageY: 2,
             timeStamp: new Date().valueOf(),
             pointerType: 2
         });
 
-        nativePointerMock().eventMock('MSPointerMove', {
+        nativePointerMock(targetElement).eventMock('MSPointerMove', {
             pageX: 1,
             pageY: 2
         });
@@ -93,14 +186,15 @@ QUnit.module('event utils', () => {
     });
 
     test('pointer support methods', function(assert) {
-        const e1 = nativePointerMock().eventMock('pointermove', {
+        const targetElement = $('#element');
+        const e1 = nativePointerMock(targetElement).eventMock('pointermove', {
             pageX: 1,
             pageY: 2,
             timeStamp: new Date().valueOf(),
             pointerType: 'touch'
         });
 
-        nativePointerMock().eventMock('pointermove', {
+        nativePointerMock(targetElement).eventMock('pointermove', {
             pageX: 1,
             pageY: 2
         });
@@ -113,14 +207,15 @@ QUnit.module('event utils', () => {
     });
 
     test('dxpointer support methods', function(assert) {
-        const e1 = nativePointerMock().eventMock('dxpointermove', {
+        const targetElement = $('#element');
+        const e1 = nativePointerMock(targetElement).eventMock('dxpointermove', {
             pageX: 1,
             pageY: 2,
             timeStamp: new Date().valueOf(),
             pointerType: 'touch'
         });
 
-        nativePointerMock().eventMock('dxpointermove', {
+        nativePointerMock(targetElement).eventMock('dxpointermove', {
             pageX: 1,
             pageY: 2
         });
@@ -143,41 +238,6 @@ QUnit.module('event utils', () => {
     });
 
     [
-        {
-            testData: { key: 'Up' },
-            expected: 'upArrow',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Left' },
-            expected: 'leftArrow',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Right' },
-            expected: 'rightArrow',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Down' },
-            expected: 'downArrow',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Del' },
-            expected: 'del',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Subtract' },
-            expected: 'minus',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Esc' },
-            expected: 'escape',
-            comment: 'IE11 API'
-        },
         {
             testData: { key: 'Backspace' },
             expected: 'backspace',
@@ -403,6 +463,22 @@ QUnit.module('event utils', () => {
             testData: { which: 18 },
             expected: 'alt',
             comment: '\'which\' attribute used where \'key\' attribute unsupported'
+        },
+        {
+            testData: { key: 'â', which: 65 },
+            expected: 'A',
+            comment: '\'which\' attribute used where \'key\' attribute value is unknown (non-invariant locale)'
+        },
+        {
+            testData: { key: 'ƒ', which: 70 },
+            expected: 'F',
+            comment: '\'which\' attribute used where \'key\' attribute value is unknown (non-invariant locale)'
+        },
+        // T1094718
+        {
+            testData: { key: 'F2', which: 113 },
+            expected: 'F2',
+            comment: '\'key\' attribute is prior'
         }
     ].forEach(({ testData, expected, comment }) => {
         test(`normalizeKeyName(${testData.key || testData.which || 'undefined'}) method should normalize key name based on "key" or "which" field`, function(assert) {
@@ -415,6 +491,17 @@ QUnit.module('event utils', () => {
         assert.strictEqual(getChar({ which: 50 }), '2');
         assert.strictEqual(getChar({ key: 'z', which: 50 }), 'z', '\'key\' attribute is prior');
 
+    });
+
+    [false, true].forEach((metaKey) => {
+        [false, true].forEach((ctrlKey) => {
+            const expectedResult = metaKey || ctrlKey;
+            const event = { ctrlKey, metaKey };
+
+            test(`"isCommandKeyPressed" should return ${expectedResult} (metaKey=${metaKey}, ctrlKey=${ctrlKey})`, function(assert) {
+                assert.strictEqual(isCommandKeyPressed(event), expectedResult, `command key is ${expectedResult ? '' : 'not'} pressed (metaKey=${metaKey}, ctrlKey=${ctrlKey})`);
+            });
+        });
     });
 });
 
@@ -569,11 +656,12 @@ QUnit.module('skip mousewheel event test', () => {
 });
 
 QUnit.module('skip mouse event tests', () => {
-    const needSkipMouseDown = element => {
-        const mouse = nativePointerMock(element);
+    const needSkipMouseDown = (element, selector) => {
+        const target = selector ? element.find(selector).first() : element;
+        const mouse = nativePointerMock(target);
         let needSkip;
 
-        element.on({
+        target.on({
             'mousedown': e => {
                 needSkip = needSkipEvent(e);
             }
@@ -597,19 +685,23 @@ QUnit.module('skip mouse event tests', () => {
         assert.ok(needSkipMouseDown(element));
     });
 
-    test('needSkipEvent returns false for div click', function(assert) {
+    test('needSkipEvent returns true for clicking the contenteditable', function(assert) {
+        const element = $(`
+        <div contenteditable="true">
+            <h1>Test</h1>
+            <div class="text">
+                <b>Bold</b>
+            </div>
+        </div>
+    `);
+        assert.ok(needSkipMouseDown(element, 'h1'));
+        assert.ok(needSkipMouseDown(element, '.text'));
+        assert.ok(needSkipMouseDown(element, 'b'));
+    });
+
+    test('needSkipEvent returns true for div click', function(assert) {
         const element = $('<div />');
         assert.ok(!needSkipMouseDown(element));
-    });
-
-    test('needSkipEvent returns true for .dx-skip-gesture-event click', function(assert) {
-        const element = $('<div class=\'dx-skip-gesture-event\' />');
-        assert.ok(needSkipMouseDown(element));
-    });
-
-    test('needSkipEvent returns true for nested in .dx-skip-gesture-event click', function(assert) {
-        const element = $('<div />').appendTo('<div class=\'dx-skip-gesture-event\' />');
-        assert.ok(needSkipMouseDown(element));
     });
 });
 
@@ -654,60 +746,10 @@ QUnit.module('skip pointer event tests', () => {
         const element = $('<div />');
         assert.ok(!needSkipPointerDown(element));
     });
-
-    test('needSkipEvent returns true for .dx-skip-gesture-event click', function(assert) {
-        const element = $('<div class=\'dx-skip-gesture-event\' />');
-        assert.ok(needSkipPointerDown(element));
-    });
-
-    test('needSkipEvent returns true for nested in .dx-skip-gesture-event click', function(assert) {
-        const element = $('<div />').appendTo('<div class=\'dx-skip-gesture-event\' />');
-        assert.ok(needSkipPointerDown(element));
-    });
 });
 
 if(compare($.fn.jquery, [3]) < 0) {
     QUnit.module('JQuery integration', () => {
-        const W3CEventProps = [
-            'bubbles',
-            'cancelable',
-            'currentTarget',
-            'eventPhase',
-            'target',
-            'timeStamp',
-            'type',
-            'preventDefault',
-            'stopPropagation'
-        ];
-
-        const W3CUIEventProps = W3CEventProps.concat([
-            'detail',
-            'view'
-        ]);
-
-        const W3CMouseEventProps = W3CUIEventProps.concat([
-            'altKey',
-            'button',
-            'clientX',
-            'clientY',
-            'ctrlKey',
-            'metaKey',
-            'relatedTarget',
-            'screenX',
-            'screenY',
-            'shiftKey'
-        ]);
-
-        const W3CTouchEventProps = W3CUIEventProps.concat([
-            'altKey',
-            'changedTouches',
-            'ctrlKey',
-            'metaKey',
-            'shiftKey',
-            'targetTouches',
-            'touches'
-        ]);
-
         const W3CPointerEventProps = W3CMouseEventProps.concat([
             'pointerId',
             'pointerType',

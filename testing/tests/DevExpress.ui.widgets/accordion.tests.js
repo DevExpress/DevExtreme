@@ -1,6 +1,7 @@
 import fx from 'animation/fx';
-import 'common.css!';
+import 'generic_light.css!';
 import config from 'core/config';
+import { getHeight } from 'core/utils/size';
 import { deferUpdate, noop } from 'core/utils/common';
 import { extend } from 'core/utils/extend';
 import { isRenderer } from 'core/utils/type';
@@ -23,7 +24,7 @@ QUnit.testStart(function() {
         </div>\
         \
         <div id="html-template-accordion">\
-            <div style="height: 20px" data-options="dxTemplate: { name: \'title\' }" data-bind="text: title"></div>\
+            <div data-options="dxTemplate: { name: \'title\' }" data-bind="text: title"></div>\
         </div>\
         \
         <div id="templated-accordion">\
@@ -33,6 +34,7 @@ QUnit.testStart(function() {
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#html-template-accordion > div').css('height', '20px');
 });
 
 const ACCORDION_WRAPPER_CLASS = 'dx-accordion-wrapper';
@@ -402,7 +404,8 @@ QUnit.module('widget options', moduleSetup, () => {
             collapsible: false
         });
 
-        const $element = this.$element; const $titles = $element.find('.' + ACCORDION_ITEM_CLASS);
+        const $element = this.$element;
+        const $titles = $element.find('.' + ACCORDION_ITEM_CLASS);
 
         $($titles.eq(1)).trigger('dxclick');
 
@@ -435,12 +438,13 @@ QUnit.module('widget options', moduleSetup, () => {
                 animationDuration: 1000
             });
 
-            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1); const $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
+            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1);
+            const $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
 
             assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), 'content is hidden before animation is started');
 
             $($title).trigger('dxclick');
-            assert.roughEqual($item.height(), $title.outerHeight(), 0.1, 'height of the item is equal to the title height');
+            assert.roughEqual($item.outerHeight(), $title.outerHeight(), 0.1, 'height of the item is equal to the title height');
             this.clock.tick(1000);
 
             assert.ok($item.height() > $title.outerHeight(), 'height is not 0 when animation is complete');
@@ -473,10 +477,10 @@ QUnit.module('widget options', moduleSetup, () => {
         const $element = $('#html-template-accordion');
         const instance = $element.dxAccordion({
             items: [
-                { title: '', html: '<div style="height: 50px">' },
-                { title: '', html: '<div style="height: 100px">' },
-                { title: '', html: '<div style="height: 50px">' },
-                { title: '', html: '<div style="height: 100px">' }
+                { title: '', template: $('<div>').css('height', '50px') },
+                { title: '', template: $('<div>').css('height', '100px') },
+                { title: '', template: $('<div>').css('height', '50px') },
+                { title: '', template: $('<div>').css('height', '100px') }
             ],
             height: 'auto',
             selectedIndex: 0
@@ -492,10 +496,10 @@ QUnit.module('widget options', moduleSetup, () => {
 
     QUnit.test('height option in static mode', function(assert) {
         const items = [
-            { title: '', html: '<div style="height: 50px">' },
-            { title: '', html: '<div style="height: 100px">' },
-            { title: '', html: '<div style="height: 50px">' },
-            { title: '', html: '<div style="height: 100px">' }
+            { title: '', template: $('<div>').css('height', '50px') },
+            { title: '', template: $('<div>').css('height', '100px') },
+            { title: '', template: $('<div>').css('height', '50px') },
+            { title: '', template: $('<div>').css('height', '100px') }
         ];
         const widgetHeight = 500;
         const $element = $('#html-template-accordion');
@@ -519,10 +523,10 @@ QUnit.module('widget options', moduleSetup, () => {
         const $element = $('#html-template-accordion');
         const instance = $element.dxAccordion({
             items: [
-                { title: '', html: '<div style="height: 50px">' },
-                { title: '', html: '<div style="height: 100px">' },
-                { title: '', html: '<div style="height: 50px">' },
-                { title: '', html: '<div style="height: 100px">' }
+                { title: '', template: $('<div>').css('height', '50px') },
+                { title: '', template: $('<div>').css('height', '100px') },
+                { title: '', template: $('<div>').css('height', '50px') },
+                { title: '', template: $('<div>').css('height', '100px') }
             ],
             height: 'auto',
             selectedIndex: 0,
@@ -537,10 +541,10 @@ QUnit.module('widget options', moduleSetup, () => {
 
     QUnit.test('height option in static mode when widget is multiple', function(assert) {
         const items = [
-            { title: '', html: '<div style="height: 50px">' },
-            { title: '', html: '<div style="height: 100px">' },
-            { title: '', html: '<div style="height: 50px">' },
-            { title: '', html: '<div style="height: 100px">' }
+            { title: '', template: $('<div>').css('height', '50px') },
+            { title: '', template: $('<div>').css('height', '100px') },
+            { title: '', template: $('<div>').css('height', '50px') },
+            { title: '', template: $('<div>').css('height', '100px') }
         ];
         const widgetHeight = 500;
         const $element = $('#html-template-accordion');
@@ -670,6 +674,55 @@ QUnit.module('widget options changed', moduleSetup, () => {
         assert.equal($item.text(), 'Changed: ' + this.items[0].title, 'text in rendered element is correct');
     });
 
+    QUnit.test('item title templates should be applied', function(assert) {
+        this.$element.dxAccordion({
+            items: [{ titleTemplate: '<div>Test1</div>' }, { titleTemplate: '<div>Test2</div>' }],
+            selectedIndex: 1,
+            deferRendering: false
+        });
+
+        const $items = this.$element.find(`.${ACCORDION_ITEM_TITLE_CLASS}`);
+
+        assert.strictEqual($items.eq(0).text(), 'Test1', 'element has correct content');
+        assert.strictEqual($items.eq(1).text(), 'Test2', 'element has correct content');
+    });
+
+    QUnit.test('container argument of items.template option is correct', function(assert) {
+        this.$element.dxAccordion({
+            items: [
+                {
+                    template: function(e, index, container) {
+                        assert.equal(isRenderer(container), !!config().useJQuery, 'container is correct');
+                    },
+                    titleTemplate: function(e, index, container) {
+                        assert.equal(isRenderer(container), !!config().useJQuery, 'container is correct');
+                    }
+                }
+            ]
+        });
+    });
+
+    QUnit.test('should render custom template with render function passed from integrationOptions', function(assert) {
+        this.$element.dxAccordion({
+            items: [{
+                titleTemplate: 'custom'
+            }],
+            integrationOptions: {
+                templates: {
+                    'custom': {
+                        render: function(args) {
+                            $('<div>Test1</div>').appendTo(args.container);
+                        }
+                    }
+                }
+            }
+        });
+
+        const $items = this.$element.find(`.${ACCORDION_ITEM_TITLE_CLASS}`);
+        assert.strictEqual($items.length, 1, 'items.length');
+        assert.strictEqual($items.eq(0).text(), 'Test1', 'Custom title template rendered');
+    });
+
     QUnit.test('itemTemplate option changed (function)', function(assert) {
         const instance = this.$element.dxAccordion({
             items: this.items,
@@ -718,12 +771,13 @@ QUnit.module('widget options changed', moduleSetup, () => {
         try {
             instance.option('animationDuration', 1000);
 
-            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1); const $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
+            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1);
+            const $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
 
             assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), 'content is hidden before animation is started');
 
             $($title).trigger('dxclick');
-            assert.roughEqual($item.height(), $title.outerHeight(), 0.1, 'height of the item is equal to the title height');
+            assert.roughEqual($item.outerHeight(), $title.outerHeight(), 0.1, 'height of the item is equal to the title height');
             this.clock.tick(1000);
 
             assert.ok($item.height() > $title.outerHeight(), 'height is not 0 when animation is complete');
@@ -958,11 +1012,11 @@ QUnit.module('update method', () => {
             height: '100%'
         });
         const $item = $accordion.dxAccordion('itemElements').eq(0);
-        const height = $item.height();
+        const height = getHeight($item);
 
         $container.height(200);
         $accordion.dxAccordion('updateDimensions').done(function() {
-            assert.equal($item.height(), height + 100, 'height was recalculated');
+            assert.equal(getHeight($item), height + 100, 'height was recalculated');
             done();
         });
     });
@@ -1348,7 +1402,7 @@ QUnit.module('optionChanged', moduleSetup, () => {
 
         QUnit.test(config.message + 'item1.display: false -> accordion.option(items[1].visible, true) -> accordion.option(items[1].visible, false) (T869114)', function(assert) {
             const $element = this.$element.dxAccordion(extend(config, {
-                items: [ { id: 0, title: 'item0' }, { id: 1, title: 'item1', visible: false } ]
+                items: [ { id: 0, title: 'item0', text: 'Any text' }, { id: 1, title: 'item1', text: 'Any text', visible: false } ],
             }));
             const instance = $element.dxAccordion('instance');
             const item1GetterFunc = () => $element.find(`.${ACCORDION_ITEM_CLASS}`).eq(1);
@@ -1359,12 +1413,68 @@ QUnit.module('optionChanged', moduleSetup, () => {
             instance.option('items[1].visible', true);
             item1 = item1GetterFunc();
             assert.strictEqual(item1.hasClass(HIDDEN_CLASS), false, 'item1 is visible');
-            assert.roughEqual(item1.height(), 21, 1.001, 'item1 has valid height');
+            assert.roughEqual(item1.outerHeight(), 43, 1.001, 'item1 has valid height');
 
             instance.option('items[1].visible', false);
             item1 = item1GetterFunc();
             assert.strictEqual(item1.hasClass(HIDDEN_CLASS), true, 'item1 is hidden');
-            assert.strictEqual(item1.height(), 0, 'item1 has zero height');
+            assert.strictEqual(item1.outerHeight(), 0, 'item1 has zero height');
+        });
+
+        function checkItems_T992552($accordion, assert) {
+            const $items = $accordion.find(`.${ACCORDION_ITEM_CLASS}`);
+            assert.strictEqual($items.length, 2, '$items.length');
+
+            const item1 = $items.eq(0);
+            assert.roughEqual(item1.outerHeight(), 93, 1.001, 'items(0) has valid height');
+            assert.strictEqual(item1.is('.' + [ACCORDION_ITEM_OPENED_CLASS, SELECTED_ITEM_CLASS].join('.')), true, 'items(0) should have each of these classes');
+            assert.strictEqual(!item1.is('.' + [HIDDEN_CLASS, ACCORDION_ITEM_CLOSED_CLASS].join(', .')), true, 'items(0) should not have no one of these classes');
+            assert.strictEqual(item1.attr('aria-selected'), 'true', 'items(0) should have aria-selected=true');
+
+            const item2 = $items.eq(1);
+            assert.roughEqual(item2.outerHeight(), 43, 1.001, 'items(1) has valid height');
+            assert.strictEqual(item2.is('.' + [ACCORDION_ITEM_CLOSED_CLASS].join('.')), true, 'items(1) should have each of these classes');
+            assert.strictEqual(!item2.is('.' + [HIDDEN_CLASS, ACCORDION_ITEM_OPENED_CLASS, SELECTED_ITEM_CLASS].join(', .')), true, 'items(1) should not have no one of these classes');
+            assert.strictEqual(item2.attr('aria-selected'), 'false', 'items(1) should have aria-selected=false');
+
+            const $bodyItems = $accordion.find(`.${ACCORDION_ITEM_BODY_CLASS}`);
+            assert.strictEqual($bodyItems.eq(0).attr('aria-hidden'), 'false', 'bodyItems(0) should have aria-hidden=false');
+
+            if(config.deferRendering) {
+                assert.strictEqual($bodyItems.length, 1, '$bodyItems.length');
+            } else {
+                assert.strictEqual($bodyItems.length, 2, '$bodyItems.length');
+                assert.strictEqual($bodyItems.eq(0).attr('aria-hidden'), 'false', 'bodyItems(0) should  have aria-hidden=false');
+                assert.strictEqual($bodyItems.eq(1).attr('aria-hidden'), 'true', 'bodyItems(1) should have aria-hidden=true');
+            }
+        }
+
+        QUnit.test(config.message + 'accordion.selectedItem=item1 (T992552)', function(assert) {
+            const items = [ { title: 'item0', text: 'Any text' }, { title: 'item1', text: 'Any text' } ];
+            const $element = this.$element.dxAccordion(extend(config, { items, selectedItems: [items[0]] }));
+            checkItems_T992552($element, assert);
+        });
+
+        QUnit.test(config.message + 'accordion.selectedItem=item1 -> accordion.items=[item1, newItem2] (T992552)', function(assert) {
+            const items = [ { title: 'item0', text: 'Any text' }, { title: 'item1', text: 'Any text' } ];
+            const $element = this.$element.dxAccordion(extend(config, { items, selectedItems: [items[0]] }));
+            const instance = $element.dxAccordion('instance');
+
+            items[1] = { title: 'new title', text: 'new text' };
+            instance.option('items', items);
+
+            checkItems_T992552($element, assert);
+        });
+
+        QUnit.test(config.message + 'accordion.selectedItem=item1 -> items.push(newItem2) (T992552)', function(assert) {
+            const items = [ { title: 'item0', text: 'Any text' }];
+            const $element = this.$element.dxAccordion(extend(config, { items, selectedItems: [items[0]] }));
+            const instance = $element.dxAccordion('instance');
+
+            items[1] = { title: 'new title', text: 'new text' };
+            instance.option('items', items);
+
+            checkItems_T992552($element, assert);
         });
     });
 });

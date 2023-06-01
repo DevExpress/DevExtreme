@@ -1,0 +1,56 @@
+# General d.ts files
+
+*.d.ts                   @DevExpress/devextreme-apireviewers @DevExpress/devextreme-techwriters
+/ts/**                   @DevExpress/devextreme-apireviewers
+
+# Grids
+
+## grid_core
+
+/js/__internal/grids/**                 @DevExpress/devextreme-grids
+/js/ui/grid_core/**                     @DevExpress/devextreme-grids
+/js/ui/shared/**                        @DevExpress/devextreme-grids
+/js/common/grids.d.ts                   @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers @DevExpress/devextreme-techwriters
+/scss/widgets/base/_gridBase.scss       @DevExpress/devextreme-grids
+/scss/widgets/generic/gridBase/**       @DevExpress/devextreme-grids
+/scss/widgets/material/gridBase/**      @DevExpress/devextreme-grids
+
+## data_grid
+
+/js/ui/data_grid.d.ts                   @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers @DevExpress/devextreme-techwriters
+/js/ui/data_grid.js                     @DevExpress/devextreme-grids
+/js/ui/data_grid/**                     @DevExpress/devextreme-grids
+/scss/widgets/base/dataGrid/**          @DevExpress/devextreme-grids
+/scss/widgets/generic/dataGrid/**       @DevExpress/devextreme-grids
+/scss/widgets/material/dataGrid/**      @DevExpress/devextreme-grids
+/testing/tests/DevExpress.ui.widgets.dataGrid/**    @DevExpress/devextreme-grids
+/testing/testcafe/model/dataGrid/**     @DevExpress/devextreme-grids
+/testing/testcafe/tests/dataGrid/**     @DevExpress/devextreme-grids
+
+## tree_list
+
+/js/ui/tree_list.d.ts                   @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers @DevExpress/devextreme-techwriters
+/js/ui/tree_list.js                     @DevExpress/devextreme-grids
+/js/ui/tree_list/**                     @DevExpress/devextreme-grids
+/scss/widgets/base/treeList/**          @DevExpress/devextreme-grids
+/scss/widgets/generic/treeList/**       @DevExpress/devextreme-grids
+/scss/widgets/material/treeList/**      @DevExpress/devextreme-grids
+/testing/tests/DevExpress.ui.widgets.treeList/**    @DevExpress/devextreme-grids
+/testing/testcafe/model/treeList.ts     @DevExpress/devextreme-grids
+/testing/testcafe/tests/treeList/**     @DevExpress/devextreme-grids
+
+## pivot_grid
+
+/js/ui/pivot_grid.d.ts                  @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers @DevExpress/devextreme-techwriters
+/js/ui/pivot_grid.js                    @DevExpress/devextreme-grids
+/js/ui/pivot_grid/**                    @DevExpress/devextreme-grids
+/scss/widgets/base/pivotGrid/**         @DevExpress/devextreme-grids
+/scss/widgets/generic/pivotGrid/**      @DevExpress/devextreme-grids
+/scss/widgets/material/pivotGrid/**     @DevExpress/devextreme-grids
+/testing/tests/DevExpress.ui.widgets.pivotGrid/**   @DevExpress/devextreme-grids
+/testing/testcafe/model/pivotGrid/**    @DevExpress/devextreme-grids
+/testing/testcafe/tests/pivotGrid/**    @DevExpress/devextreme-grids
+
+# DevOps
+
+/.github/**             @DevExpress/devextreme-devops

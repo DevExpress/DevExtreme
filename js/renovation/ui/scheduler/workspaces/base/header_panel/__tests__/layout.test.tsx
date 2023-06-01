@@ -1,142 +1,156 @@
 import { shallow } from 'enzyme';
-import { viewFunction as LayoutView, HeaderPanelLayout } from '../layout';
-import { Row } from '../../row';
+import {
+  viewFunction as LayoutView,
+  HeaderPanelLayout,
+  HeaderPanelLayoutProps,
+} from '../layout';
 import * as utilsModule from '../../../utils';
-import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
+import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
+import { GroupPanel } from '../../group_panel/group_panel';
+import { DateHeaderLayout } from '../date_header/layout';
+import { TimelineDateHeaderLayout } from '../../../timeline/header_panel/date_header/layout';
+import { DateHeaderData } from '../../../types';
 
-const isVerticalGroupOrientation = jest.spyOn(utilsModule, 'isVerticalGroupOrientation');
+const isHorizontalGroupingApplied = jest.spyOn(utilsModule, 'isHorizontalGroupingApplied');
 
-describe('HeaderPanelLayoutBase', () => {
+describe('HeaderPanelLayoutLayout', () => {
+  const dateHeaderData: DateHeaderData = {
+    dataMap: [[]],
+    leftVirtualCellCount: 0,
+    rightVirtualCellCount: 0,
+    leftVirtualCellWidth: 0,
+    rightVirtualCellWidth: 0,
+  };
+
   describe('Render', () => {
-    const cellTemplate = () => null;
-    const viewCellsData = [[{
-      startDate: new Date(2020, 6, 9),
-      endDate: new Date(2020, 6, 10),
-      today: true,
-      groups: { id: 1 },
-      groupIndex: 1,
-      index: 0,
-      key: '0',
-    }, {
-      startDate: new Date(2020, 6, 10),
-      endDate: new Date(2020, 6, 11),
-      today: false,
-      groups: { id: 1 },
-      groupIndex: 1,
-      index: 1,
-      key: '1',
-    }]];
     const render = (viewModel) => shallow(LayoutView({
+      isHorizontalGrouping: false,
       ...viewModel,
-      props: { cellTemplate, ...viewModel.props, viewCellsData },
+      props: {
+        ...new HeaderPanelLayoutProps(),
+        dateHeaderData,
+        groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
+        groups: [],
+        ...viewModel.props,
+      },
     }) as any);
 
-    it('should combine `className` with predefined classes', () => {
-      const layout = render({ props: { className: 'custom-class' } });
-
-      expect(layout.hasClass('dx-scheduler-header-panel'))
-        .toBe(true);
-      expect(layout.hasClass('custom-class'))
-        .toBe(true);
-    });
-
-    it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(layout.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
-    it('should render components correctly', () => {
-      const layout = render({});
-
-      expect(layout.find('table').exists())
-        .toBe(true);
-      expect(layout.find('thead').exists())
-        .toBe(true);
-
-      const row = layout.find(Row);
-      expect(row.exists())
-        .toBe(true);
-      expect(row)
-        .toHaveLength(1);
-      expect(row.children())
-        .toHaveLength(2);
-    });
-
-    it('should render cells and pass correct props to them in basic case', () => {
+    it('should render DateHeader and should not render GroupPanel in basic case', () => {
       const dateCellTemplate = () => null;
+      const timeCellTemplate = () => null;
       const layout = render({
-        props: { dateCellTemplate },
+        props: {
+          dateCellTemplate,
+          timeCellTemplate,
+        },
       });
 
-      const cells = layout.find(cellTemplate);
-      expect(cells)
-        .toHaveLength(2);
+      const groupPanel = layout.find(GroupPanel);
+      expect(groupPanel.exists())
+        .toBe(false);
 
-      const firstCell = cells.at(0);
-      expect(firstCell.props())
-        .toMatchObject({
-          startDate: viewCellsData[0][0].startDate,
-          endDate: viewCellsData[0][0].endDate,
-          today: viewCellsData[0][0].today,
-          groups: viewCellsData[0][0].groups,
-          groupIndex: viewCellsData[0][0].groupIndex,
-          index: viewCellsData[0][0].index,
-          // dateCellTemplate,
-        });
-      expect(firstCell.key())
-        .toBe(viewCellsData[0][0].key);
+      const dateHeader = layout.find(DateHeaderLayout);
+      expect(dateHeader.exists())
+        .toBe(true);
 
-      const secondCell = cells.at(1);
-      expect(secondCell.props())
-        .toMatchObject({
-          startDate: viewCellsData[0][1].startDate,
-          endDate: viewCellsData[0][1].endDate,
-          today: viewCellsData[0][1].today,
-          groups: viewCellsData[0][1].groups,
-          groupIndex: viewCellsData[0][1].groupIndex,
-          index: viewCellsData[0][1].index,
-          // dateCellTemplate,
+      expect(dateHeader.props())
+        .toEqual({
+          dateHeaderData,
+          dateCellTemplate,
+          timeCellTemplate,
+          groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
+          groups: [],
+          groupByDate: false,
         });
-      expect(secondCell.key())
-        .toBe(viewCellsData[0][1].key);
     });
 
-    it('should not pass groups and groupInex to cells in case of Vertical Gruping', () => {
+    it('should not render DateHeader if "isRenderDateHeader" is false', () => {
+      const layout = render({ props: { isRenderDateHeader: false } });
+
+      const dateHeader = layout.find(DateHeaderLayout);
+      expect(dateHeader.exists())
+        .toBe(false);
+    });
+
+    it('should render DateHeader after GroupPanel in case of horizontal grouping', () => {
+      const layout = render({ isHorizontalGrouping: true });
+
+      expect(layout.children())
+        .toHaveLength(2);
+      expect(layout.childAt(0).is(GroupPanel))
+        .toBe(true);
+      expect(layout.childAt(1).is(DateHeaderLayout))
+        .toBe(true);
+    });
+
+    it('should render DateHeader before GroupPanel in case of grouping by date', () => {
+      const layout = render({ isHorizontalGrouping: true, props: { groupByDate: true } });
+
+      expect(layout.children())
+        .toHaveLength(2);
+      expect(layout.childAt(0).is(DateHeaderLayout))
+        .toBe(true);
+      expect(layout.childAt(1).is(GroupPanel))
+        .toBe(true);
+    });
+
+    it('should pass correct props to GroupPanel', () => {
+      const resourceCellTemplate = () => null;
+      const groupPanelProps = {
+        groupByDate: false,
+        groups: [],
+        resourceCellTemplate,
+        groupPanelData: {
+          groupPanelItems: [],
+          baseColSpan: 34,
+        },
+      };
+
       const layout = render({
-        isVerticalGroupOrientation: true,
+        isHorizontalGrouping: true,
+        props: groupPanelProps,
       });
 
-      const cells = layout.find(cellTemplate);
-      expect(cells)
-        .toHaveLength(2);
+      const groupPanel = layout.find(GroupPanel);
 
-      expect(cells.at(0).props())
-        .toMatchObject({
-          groups: undefined,
-          groupIndex: undefined,
+      expect(groupPanel.props())
+        .toEqual({
+          groupByDate: false,
+          groups: [],
+          resourceCellTemplate,
+          groupOrientation: HORIZONTAL_GROUP_ORIENTATION,
+          groupPanelData: {
+            groupPanelItems: [],
+            baseColSpan: 34,
+          },
         });
-      expect(cells.at(1).props())
-        .toMatchObject({
-          groups: undefined,
-          groupIndex: undefined,
-        });
+    });
+
+    it('should render correct Date Header', () => {
+      const layout = render({ props: { dateHeaderTemplate: TimelineDateHeaderLayout } });
+
+      expect(layout.find(TimelineDateHeaderLayout).exists())
+        .toBe(true);
     });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
-      it('should calculate isVerticalGroupOrientation correctly', () => {
-        const layout = new HeaderPanelLayout({
-          groupOrientation: VERTICAL_GROUP_ORIENTATION,
+      describe('isHorizontalGrouping', () => {
+        it('should call "isHorizontalGroupingApplied" with correct parameters', () => {
+          const groups = [];
+          const layout = new HeaderPanelLayout({
+            groupOrientation: VERTICAL_GROUP_ORIENTATION,
+            groups,
+            dateHeaderData,
+          });
+
+          expect(layout.isHorizontalGrouping)
+            .toBe(false);
+
+          expect(isHorizontalGroupingApplied)
+            .toHaveBeenCalledWith(groups, VERTICAL_GROUP_ORIENTATION);
         });
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        layout.isVerticalGroupOrientation;
-
-        expect(isVerticalGroupOrientation)
-          .toHaveBeenCalledWith(VERTICAL_GROUP_ORIENTATION);
       });
     });
   });

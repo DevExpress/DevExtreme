@@ -1,10 +1,16 @@
 import Class from '../core/class';
-import { isFunction, isDefined } from '../core/utils/type';
+import { isFunction, isDefined, isString } from '../core/utils/type';
 import { each, map } from '../core/utils/iterator';
 import { compileGetter, toComparable } from '../core/utils/data';
 import { Deferred } from '../core/utils/deferred';
-import errorsModule from './errors';
-import dataUtils from './utils';
+import { errors, handleError as handleDataError } from './errors';
+import {
+    aggregators,
+    isGroupCriterion,
+    isUnaryOperation,
+    normalizeBinaryCriterion,
+    isConjunctiveOperator as isConjunctiveOperatorChecker
+} from './utils';
 
 const Iterator = Class.inherit({
 
@@ -92,9 +98,15 @@ const MapIterator = WrappedIterator.inherit({
     }
 });
 
-const defaultCompare = function(xValue, yValue) {
-    xValue = toComparable(xValue);
-    yValue = toComparable(yValue);
+const defaultCompare = function(xValue, yValue, options) {
+    if(isString(xValue) && isString(yValue) && (options?.locale || options?.collatorOptions)) {
+
+        /* eslint-disable-next-line no-undef */
+        return new Intl.Collator(options?.locale || undefined, options?.collatorOptions || undefined).compare(xValue, yValue);
+    }
+
+    xValue = toComparable(xValue, false, options);
+    yValue = toComparable(yValue, false, options);
 
     if(xValue === null && yValue !== null) {
         return -1;
@@ -124,13 +136,16 @@ const defaultCompare = function(xValue, yValue) {
 };
 
 const SortIterator = Iterator.inherit({
-
     ctor: function(iter, getter, desc, compare) {
+        this.langParams = iter.langParams;
+
         if(!(iter instanceof MapIterator)) {
             iter = new MapIterator(iter, this._wrap);
+            iter.langParams = this.langParams;
         }
         this.iter = iter;
-        this.rules = [{ getter: getter, desc: desc, compare: compare }];
+
+        this.rules = [{ getter: getter, desc: desc, compare: compare, langParams: this.langParams }];
     },
 
     thenBy: function(getter, desc, compare) {
@@ -192,6 +207,9 @@ const SortIterator = Iterator.inherit({
     _unwrap: function(wrappedItem) {
         return wrappedItem.value;
     },
+    _getDefaultCompare(langParams) {
+        return ((xValue, yValue) => defaultCompare(xValue, yValue, langParams));
+    },
     _compare: function(x, y) {
         const xIndex = x.index;
         const yIndex = y.index;
@@ -207,7 +225,7 @@ const SortIterator = Iterator.inherit({
             const rule = this.rules[i];
             const xValue = rule.getter(x);
             const yValue = rule.getter(y);
-            const compare = rule.compare || defaultCompare;
+            const compare = rule.compare || this._getDefaultCompare(rule.langParams);
             const compareResult = compare(xValue, yValue);
 
             if(compareResult) {
@@ -221,6 +239,9 @@ const SortIterator = Iterator.inherit({
 
 
 const compileCriteria = (function() {
+    let langParams = {};
+
+    const _toComparable = (value) => toComparable(value, false, langParams);
 
     const compileGroup = function(crit) {
         const ops = [];
@@ -231,15 +252,15 @@ const compileCriteria = (function() {
         each(crit, function() {
             if(Array.isArray(this) || isFunction(this)) {
                 if(ops.length > 1 && isConjunctiveOperator !== isConjunctiveNextOperator) {
-                    throw new errorsModule.errors.Error('E4019');
+                    throw new errors.Error('E4019');
                 }
 
-                ops.push(compileCriteria(this));
+                ops.push(compileCriteria(this, langParams));
 
                 isConjunctiveOperator = isConjunctiveNextOperator;
                 isConjunctiveNextOperator = true;
             } else {
-                isConjunctiveNextOperator = dataUtils.isConjunctiveOperator(this);
+                isConjunctiveNextOperator = isConjunctiveOperatorChecker(this);
             }
         });
 
@@ -258,16 +279,23 @@ const compileCriteria = (function() {
     };
 
     const toString = function(value) {
-        return isDefined(value) ? value.toString() : '';
+        return isDefined(value) ?
+            langParams?.locale ? value.toLocaleString(langParams.locale) : value.toString()
+            : '';
     };
 
     const compileBinary = function(crit) {
-        crit = dataUtils.normalizeBinaryCriterion(crit);
+        crit = normalizeBinaryCriterion(crit);
         const getter = compileGetter(crit[0]);
         const op = crit[1];
         let value = crit[2];
 
-        value = toComparable(value);
+        value = _toComparable(value);
+
+        const compare = (obj, operatorFn) => {
+            obj = _toComparable(getter(obj));
+            return (value == null || obj == null) && value !== obj ? false : operatorFn(obj, value);
+        };
 
         switch(op.toLowerCase()) {
             case '=':
@@ -275,38 +303,39 @@ const compileCriteria = (function() {
             case '<>':
                 return compileEquals(getter, value, true);
             case '>':
-                return function(obj) { return toComparable(getter(obj)) > value; };
+                return (obj) => compare(obj, (a, b) => a > b);
             case '<':
-                return function(obj) { return toComparable(getter(obj)) < value; };
+                return (obj) => compare(obj, (a, b) => a < b);
             case '>=':
-                return function(obj) { return toComparable(getter(obj)) >= value; };
+                return (obj) => compare(obj, (a, b) => a >= b);
             case '<=':
-                return function(obj) { return toComparable(getter(obj)) <= value; };
+                return (obj) => compare(obj, (a, b) => a <= b);
             case 'startswith':
-                return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) === 0; };
+                return function(obj) { return _toComparable(toString(getter(obj))).indexOf(value) === 0; };
             case 'endswith':
                 return function(obj) {
-                    const getterValue = toComparable(toString(getter(obj)));
+                    const getterValue = _toComparable(toString(getter(obj)));
                     const searchValue = toString(value);
 
                     if(getterValue.length < searchValue.length) {
                         return false;
                     }
 
-                    return getterValue.lastIndexOf(value) === getterValue.length - value.length;
+                    const index = getterValue.lastIndexOf(value);
+                    return index !== -1 && index === getterValue.length - value.length;
                 };
             case 'contains':
-                return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) > -1; };
+                return function(obj) { return _toComparable(toString(getter(obj))).indexOf(value) > -1; };
             case 'notcontains':
-                return function(obj) { return toComparable(toString(getter(obj))).indexOf(value) === -1; };
+                return function(obj) { return _toComparable(toString(getter(obj))).indexOf(value) === -1; };
         }
 
-        throw errorsModule.errors.Error('E4003', op);
+        throw errors.Error('E4003', op);
     };
 
     function compileEquals(getter, value, negate) {
         return function(obj) {
-            obj = toComparable(getter(obj));
+            obj = _toComparable(getter(obj));
             // eslint-disable-next-line eqeqeq
             let result = useStrictComparison(value) ? obj === value : obj == value;
             if(negate) {
@@ -322,23 +351,25 @@ const compileCriteria = (function() {
 
     function compileUnary(crit) {
         const op = crit[0];
-        const criteria = compileCriteria(crit[1]);
+        const criteria = compileCriteria(crit[1], langParams);
 
         if(op === '!') {
             return function(obj) { return !criteria(obj); };
         }
 
-        throw errorsModule.errors.Error('E4003', op);
+        throw errors.Error('E4003', op);
     }
 
-    return function(crit) {
+    return function(crit, options) {
+        langParams = options || {};
+
         if(isFunction(crit)) {
             return crit;
         }
-        if(dataUtils.isGroupCriterion(crit)) {
+        if(isGroupCriterion(crit)) {
             return compileGroup(crit);
         }
-        if(dataUtils.isUnaryOperation(crit)) {
+        if(isUnaryOperation(crit)) {
             return compileUnary(crit);
         }
         return compileBinary(crit);
@@ -350,7 +381,8 @@ const FilterIterator = WrappedIterator.inherit({
 
     ctor: function(iter, criteria) {
         this.callBase(iter);
-        this.criteria = compileCriteria(criteria);
+        this.langParams = iter.langParams;
+        this.criteria = compileCriteria(criteria, this.langParams);
     },
 
     next: function() {
@@ -490,13 +522,17 @@ const arrayQueryImpl = function(iter, queryOptions) {
         iter = new ArrayIterator(iter);
     }
 
+    if(queryOptions.langParams) {
+        iter.langParams = queryOptions.langParams;
+    }
+
     const handleError = function(error) {
         const handler = queryOptions.errorHandler;
         if(handler) {
             handler(error);
         }
 
-        errorsModule._errorHandler(error);
+        handleDataError(error);
     };
 
     const aggregateCore = function(aggregator) {
@@ -537,7 +573,7 @@ const arrayQueryImpl = function(iter, queryOptions) {
     };
 
     const standardAggregate = function(name) {
-        return aggregateCore(dataUtils.aggregators[name]);
+        return aggregateCore(aggregators[name]);
     };
 
     const select = function(getter) {
@@ -573,6 +609,10 @@ const arrayQueryImpl = function(iter, queryOptions) {
             return d.promise();
         },
 
+        setLangParams(options) {
+            iter.langParams = options;
+        },
+
         sortBy: function(getter, desc, compare) {
             return chainQuery(new SortIterator(iter, getter, desc, compare));
         },
@@ -582,7 +622,7 @@ const arrayQueryImpl = function(iter, queryOptions) {
                 return chainQuery(iter.thenBy(getter, desc, compare));
             }
 
-            throw errorsModule.errors.Error('E4004');
+            throw errors.Error('E4004');
         },
 
         filter: function(criteria) {

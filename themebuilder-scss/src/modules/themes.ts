@@ -49,6 +49,12 @@ const themes: Theme[] = [
     themeId: 22, name: 'generic', colorScheme: 'greenmist-compact', text: 'Green Mist', group: 'Generic Compact',
   },
   {
+    themeId: 43, name: 'generic', colorScheme: 'contrast', text: 'Contrast', group: 'Generic',
+  },
+  {
+    themeId: 44, name: 'generic', colorScheme: 'contrast-compact', text: 'Contrast Compact', group: 'Generic Compact',
+  },
+  {
     themeId: 23, name: 'material', colorScheme: 'blue-light', text: 'Blue Light', group: 'Material Design',
   },
   {

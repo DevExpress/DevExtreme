@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import Toolbar from 'ui/toolbar';
-import DropDownMenu from 'ui/drop_down_menu';
-import 'ui/button';
 
 const BUTTON_CLASS = 'dx-button';
 const BUTTON_CONTENT_CLASS = 'dx-button-content';
@@ -41,11 +39,11 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                         widget: 'dxButton',
                         locateInMenu: config.locateInMenu,
                         showText: config.showText,
-                        options: { icon: 'plus', text: `text(${config.locateInMenu})` }
+                        options: { icon: 'home', text: `text(${config.locateInMenu})` }
                     }]
                 };
 
-                const toolbarElement = document.getElementById('toolbar');
+                const toolbarElement = $('#toolbar').get(0);
                 new Toolbar(toolbarElement, {
                     ...toolbarOptions,
                     width: 50,
@@ -56,10 +54,9 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
                 if(config.locateInMenu === 'never') {
                     assert.strictEqual(dropDownMenuElement, null, 'dropDownMenuElement not rendered in menu');
                 } else {
-                    const dropDown = DropDownMenu.getInstance(dropDownMenuElement);
-                    dropDown.open();
+                    $(dropDownMenuElement).trigger('dxclick');
 
-                    const dropDownMenuListElement = document.querySelector(`.${DROP_DOWN_MENU_LIST_CLASS}`);
+                    const dropDownMenuListElement = $(`.${DROP_DOWN_MENU_LIST_CLASS}`).get(0);
                     const dropDownMenuRect = dropDownMenuListElement.getBoundingClientRect();
                     const menuButtonElement = dropDownMenuListElement.querySelector(`.${BUTTON_CLASS}`);
 
@@ -67,7 +64,7 @@ export const runThemesSharedTests = function(moduleNamePostfix) {
 
                     const buttonRect = menuButtonElement.getBoundingClientRect();
                     assert.strictEqual(buttonRect.width, expectedItemWidth, `button.width ${expectedItemWidth}`);
-                    assert.strictEqual(window.getComputedStyle(menuButtonElement.querySelector(`.${BUTTON_CONTENT_CLASS}`)).textAlign, config.rtlEnabled ? 'right' : 'left', 'buttonContent.textAlign');
+                    assert.strictEqual(window.getComputedStyle(menuButtonElement.querySelector(`.${BUTTON_CONTENT_CLASS}`)).justifyContent, config.rtlEnabled ? 'right' : 'left', 'buttonContent.textAlign');
                 }
             });
         });

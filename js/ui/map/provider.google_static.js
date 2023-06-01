@@ -1,6 +1,6 @@
+import { getWidth, getHeight } from '../../core/utils/size';
 import { each } from '../../core/utils/iterator';
 import eventsEngine from '../../events/core/events_engine';
-import Promise from '../../core/polyfills/promise';
 import Provider from './provider';
 import Color from '../../color';
 import { name as clickEventName } from '../../events/click';
@@ -115,7 +115,7 @@ const GoogleStaticProvider = Provider.inherit({
 
         const requestOptions = [
             'sensor=false',
-            'size=' + Math.round($container.width()) + 'x' + Math.round($container.height()),
+            'size=' + Math.round(getWidth($container)) + 'x' + Math.round(getHeight($container)),
             'maptype=' + this._option('type'),
             'center=' + this._locationToString(this._option('center')),
             'zoom=' + this._option('zoom'),

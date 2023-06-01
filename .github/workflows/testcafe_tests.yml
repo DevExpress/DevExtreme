@@ -1,46 +1,171 @@
 name: TestCafe tests
 
-on: [push, pull_request]
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches: [23_1]
 
 jobs:
-  testcafe:
+  build:
+    name: build
     strategy:
-      matrix:
-        ARGS: [ --componentFolder=dataGrid --quarantineMode=true, --componentFolder=scheduler --quarantineMode=true, --componentFolder=editors, --componentFolder=navigation ]
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
+      fail-fast: false
+
+    runs-on: devextreme-shr2
+    timeout-minutes: 15
 
     steps:
     - name: Get sources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
 
     - name: Restore npm cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ./node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Build
-      env:
-        DEVEXTREME_TEST_CI: "true"
-      run: npm run build
+      run: npm run build:testcafe
+
+    - name: Zip artifacts
+      run: |
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: devextreme-artifacts
+        path: artifacts.zip
+        retention-days: 1
+
+  testcafe:
+    name: ${{ matrix.ARGS.name }}
+    needs: [build]
+    strategy:
+      fail-fast: false
+      matrix:
+        ARGS: [
+          { componentFolder: "common", name: "common" },
+          { componentFolder: "common", name: "common - material", theme: 'material.blue.light' },
+          { componentFolder: "treeList", name: "treeList", concurrency: 1 },
+          { componentFolder: "dataGrid", name: "dataGrid (1/2)", indices: "1/2" },
+          { componentFolder: "dataGrid", name: "dataGrid (2/2)", indices: "2/2" },
+          { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
+          { componentFolder: "pivotGrid", name: "pivotGrid - material", theme: 'material.blue.light', concurrency: 1 },
+          { componentFolder: "scheduler", name: "scheduler (1/5)", indices: "1/5" },
+          { componentFolder: "scheduler", name: "scheduler (2/5)", indices: "2/5" },
+          { componentFolder: "scheduler", name: "scheduler (3/5)", indices: "3/5" },
+          { componentFolder: "scheduler", name: "scheduler (4/5)", indices: "4/5" },
+          { componentFolder: "scheduler", name: "scheduler (5/5)", indices: "5/5" },
+          { componentFolder: "form", name: "form" },
+          { componentFolder: "editors", name: "editors" },
+          { componentFolder: "navigation", name: "navigation" },
+          { componentFolder: "htmlEditor", name: "htmlEditor", concurrency: 1 },
+          { componentFolder: "form", name: "form - material", theme: 'material.blue.light' },
+          { componentFolder: "editors", name: "editors - material", theme: 'material.blue.light' },
+          { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
+          { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
+          { componentFolder: "renovation", name: "renovation (jquery)", platform: "jquery" },
+          { componentFolder: "renovation", name: "renovation (react)", platform: "react" },
+        ]
+    runs-on: devextreme-shr2
+    timeout-minutes: 90
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - uses: ./.github/actions/pin-browsers
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: devextreme-artifacts
+
+    - name: Prepare localization
+      if: matrix.ARGS.componentFolder == 'renovation'
+      run: npx gulp localization
+
+    - name: Unpack artifacts
+      run: 7z x artifacts.zip -aoa
+
+    - name: Prepare renovation playground
+      if: matrix.ARGS.componentFolder == 'renovation'
+      run: |
+        pushd testing/renovation
+        npm install --no-audit --no-fund --legacy-peer-deps
+        popd
+        npm run build:react
+        npx gulp build-renovation-testing
 
     - name: Run TestCafe tests
-      env:
-        ARGS: ${{ matrix.ARGS }}
       run: |
-        all_args="--concurrency 2 --browsers=chrome:headless ${ARGS}"
+        [ "${{ matrix.ARGS.theme }}" == "material.blue.light" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
+        [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
+        [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
+        [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
+        export TESTCAFE_DASHBOARD_LAYOUT_TESTING_ENABLED=true
+        export TESTCAFE_DASHBOARD_DEVEXTREME_TOKEN=eyJwcm9qZWN0SWQiOiI1Zjc4MTc1Ny01NGU0LTQ5ODAtYjhkNi1iMDY1OTM1NGIwYjMiLCJ0b2tlblNlY3JldCI6Ik9wSEhzZG1OVFdxUkdoWWJjY3Z0NWl0ZHd4aDZ2VURUSUVyRjNFUk92Z2FCb2RvQkZLMlNGQlY2L21NM3JIVnQvNHY4UnlqOXoxOW1YR0s4UzhVSzdueWhXb3kxdXZGZ1RWUk9HUkt5MDVUNkw2cTlIcnQrT1pFcjFZcnR3RU1ZTzErWDduQzNxcWI2cGFlL1pmSCtKZHlqZ2NSTG4rMGlOYjROSDdMcjhOTE5UeFQ0Q2tSaWI3dy82cXl0b04yTHBhcFhialJkbG1JejhMTlpEcjFVVXVtUVNuOFVSL2JjQ2NuRnBFcFc0R3BPaWRsa3l3WklCTHN5NHVNZDUxaHNrb1ZGQjJuK1IwZTBiMDVEdTdmZnJKcVByTEdTZHlLVXR1YzRaTFlLZlJlaGkrQmpOTzAyUDlzamdEQ040U0pvbS96SzhUVjRaeEdneVFaQW0yQ2YyZz09In0=
+        export TESTCAFE_DASHBOARD_DEVEXTREME_URL=https://devextreme.resolve.sh
+        export TESTCAFE_DASHBOARD_BUILD_ID=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME"
         echo "$all_args"
         npm run test-testcafe -- $all_args
-    - name: Copy screenshots artifacts
+
+    - name: Copy compared screenshot artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
-        name: screenshots
-        path: ${{ github.workspace }}/testing/testcafe/artifacts/**/*
+        name: compared-screenshots
+        path: ${{ github.workspace }}/testing/testcafe/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
+    - name: Copy failed test artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: failed-tests
+        path: ${{ github.workspace }}/testing/testcafe/artifacts/failedtests/**/*
+        if-no-files-found: ignore
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [build, testcafe]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DevExpress/github-actions/send-teams-notification@main
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 23_1

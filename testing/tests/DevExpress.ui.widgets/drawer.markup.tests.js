@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
-import 'common.css!';
+import 'generic_light.css!';
 import 'ui/drawer';
 
 const DRAWER_CLASS = 'dx-drawer';
@@ -14,7 +14,7 @@ const OPENED_STATE_CLASS = 'dx-drawer-opened';
 
 QUnit.testStart(() => {
     const markup = '\
-    <style>\
+    <style nonce="qunit-test">\
         .dx-drawer-panel-content {\
             width: 200px;\
         }\

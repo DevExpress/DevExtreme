@@ -4,6 +4,9 @@ import {
   MonthDateTableCell as Cell,
   viewFunction as CellView,
 } from '../cell';
+import * as combineClassesModule from '../../../../../../utils/combine_classes';
+
+const combineClasses = jest.spyOn(combineClassesModule, 'combineClasses');
 
 jest.mock('../../../base/date_table/cell', () => ({
   ...jest.requireActual('../../../base/date_table/cell'),
@@ -14,12 +17,15 @@ describe('MonthDateTableCell', () => {
   describe('Render', () => {
     const startDate = new Date(2020, 6, 9);
     const endDate = new Date(2020, 6, 10);
+    const text = 'test text';
+
     const render = (viewModel) => shallow(CellView({
       ...viewModel,
       props: {
         ...viewModel.props,
         startDate,
         endDate,
+        text,
       },
     }) as any);
 
@@ -30,59 +36,98 @@ describe('MonthDateTableCell', () => {
         .toBe(true);
     });
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(cell.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
-    it('should render day correctly', () => {
+    it('should render text correctly', () => {
       const cell = render({});
 
       expect(cell.children())
         .toHaveLength(1);
       expect(cell.childAt(0).text())
-        .toBe(startDate.getDate().toString());
+        .toBe(text);
+    });
+
+    it('should pass correct props to the base cell', () => {
+      const groups = { id: 1 };
+      const groupIndex = 234;
+      const index = 123;
+      const isFirstGroupCell = true;
+      const isLastGroupCell = false;
+      const dataCellTemplate = () => null;
+      const contentTemplateProps = { data: 'test' };
+
+      const cell = render({
+        props: {
+          groups,
+          groupIndex,
+          index,
+          isFirstGroupCell,
+          isLastGroupCell,
+          dataCellTemplate,
+          isFocused: true,
+          isSelected: true,
+        },
+        contentTemplateProps,
+      });
+
+      expect(cell.props())
+        .toEqual({
+          groups,
+          groupIndex,
+          index,
+          isFirstGroupCell,
+          isLastGroupCell,
+          dataCellTemplate,
+          startDate,
+          endDate,
+          text,
+          contentTemplateProps,
+          isFocused: true,
+          isSelected: true,
+          children: expect.anything(),
+          className: undefined,
+        });
     });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
       describe('classes', () => {
-        it('should return undefined in basic case', () => {
-          const cell = new Cell({});
+        it('should call "combineClasses" with correct parameters', () => {
+          const cell = new Cell({
+            otherMonth: true,
+            firstDayOfMonth: true,
+            today: true,
+            className: 'custom-class',
+          });
 
-          expect(cell.classes)
-            .toBeUndefined();
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          cell.classes;
+
+          expect(combineClasses)
+            .toHaveBeenCalledTimes(1);
+          expect(combineClasses)
+            .toHaveBeenCalledWith({
+              'custom-class': true,
+              'dx-scheduler-date-table-current-date': true,
+              'dx-scheduler-date-table-first-of-month': true,
+              'dx-scheduler-date-table-other-month': true,
+            });
         });
+      });
 
-        it('should return "other-month" class if otherMotnh is "true"', () => {
-          const cell = new Cell({ otherMonth: true });
+      describe('contentTemplateProps', () => {
+        it('should add text to contentTemplateProps', () => {
+          const cell = new Cell({
+            text: 'Custom text',
+            index: 0,
+          });
 
-          expect(cell.classes)
-            .toBe('dx-scheduler-date-table-other-month');
-        });
+          const props = cell.contentTemplateProps;
 
-        it('should return "today" class if today is "true"', () => {
-          const cell = new Cell({ today: true });
-
-          expect(cell.classes)
-            .toBe('dx-scheduler-date-table-current-date');
-        });
-
-        it('should combine "today" and "othermonth" classes', () => {
-          const cell = new Cell({ otherMonth: true, today: true });
-
-          expect(cell.classes)
-            .toBe('dx-scheduler-date-table-other-month dx-scheduler-date-table-current-date');
-        });
-
-        it('should combine basic classes with custom className', () => {
-          const cell = new Cell({ otherMonth: true, today: true, className: 'custom-class' });
-
-          expect(cell.classes)
-            .toBe('dx-scheduler-date-table-other-month dx-scheduler-date-table-current-date custom-class');
+          expect(props)
+            .toEqual({
+              data: { text: 'Custom text' },
+              index: 0,
+            });
         });
       });
     });

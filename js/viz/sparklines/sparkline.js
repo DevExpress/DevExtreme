@@ -177,6 +177,10 @@ const dxSparkline = BaseSparkline.inherit({
         this._seriesLabelGroup.remove();
         this._seriesGroup.clear();
         this._seriesLabelGroup.clear();
+
+        this._series.removeGraphicElements();
+        this._series.removePointElements();
+        this._series.removeBordersGroup();
     },
 
     _drawWidgetElements: function() {
@@ -227,7 +231,8 @@ const dxSparkline = BaseSparkline.inherit({
             labelsGroup: this._seriesLabelGroup,
 
             argumentAxis: this._argumentAxis,
-            valueAxis: this._valueAxis
+            valueAxis: this._valueAxis,
+            incidentOccurred: this._incidentOccurred
         }, {
             widgetType: 'chart',
             type: 'line'
@@ -304,6 +309,7 @@ const dxSparkline = BaseSparkline.inherit({
             color: options.lineColor,
             width: options.lineWidth,
             widgetType: 'chart',
+            name: '',
             type: type,
             opacity: type.indexOf('area') !== -1 ? that._allOptions.areaOpacity : undefined,
             point: {

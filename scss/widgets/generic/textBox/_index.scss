@@ -20,8 +20,6 @@
     font-size: $generic-texteditor-icon-size - 1;
 
     &::before {
-      position: static;
-      text-indent: 0;
       color: $textbox-search-icon-color;
     }
 
@@ -35,15 +33,29 @@
     @at-root #{selector-append(".dx-rtl", &)},
     .dx-rtl & {
       padding-right: $generic-texteditor-icon-container-size;
+      padding-left: 0;
     }
   }
 
   &.dx-editor-underlined {
-    .dx-texteditor-input,
-    .dx-placeholder::before {
+    .dx-texteditor-buttons-container + .dx-texteditor-input-container .dx-texteditor-input,
+    .dx-texteditor-input {
+      padding-left: $generic-texteditor-icon-container-size;
+
       @at-root #{selector-append(".dx-rtl", &)},
       .dx-rtl & {
-        padding-right: 0;
+        padding-right: $generic-texteditor-icon-container-size;
+        padding-left: 0;
+      }
+    }
+  }
+
+  &.dx-editor-filled,
+  &.dx-editor-outlined,
+  &.dx-editor-underlined {
+    .dx-texteditor-label {
+      .dx-label-before {
+        min-width: 0;
       }
     }
   }

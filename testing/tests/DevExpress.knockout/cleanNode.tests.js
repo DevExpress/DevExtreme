@@ -4,11 +4,14 @@ const $ = require('jquery');
 const ko = require('knockout');
 const dataUtils = require('core/element_data');
 
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 const FIXTURE_ELEMENT = $('#qunit-fixture');
 
 const setTestData = function($element) {
     dataUtils.data($element.get(0), '__test_key__', { key: 'value' });
     ko.utils.domData.set($element.get(0), '__test_key__', { key: 'value ' });
+    dataUtils.data($element.get(0), 'dxKoCreation', true);
 };
 
 const hasKOTestData = function($element) {
@@ -24,7 +27,7 @@ const checkHasNoTestData = function($element, assert) {
     assert.ok(!hasJQueryTestData($element), 'element has no $ data');
 };
 
-QUnit.module('clean data on node removing', {
+moduleWithoutCsp('clean data on node removing', {
     beforeEach: function() {
         this.$element = $('<div>').appendTo(FIXTURE_ELEMENT);
     },
@@ -90,6 +93,7 @@ if($.fn.jquery[0] !== '1') {
                 '</div>' +
             '</div>'
         ).appendTo(this.$element);
+        setTestData(this.$element);
 
         markup.find('*').addBack().each(function() {
             dataUtils.data(this, 'dxTestData', true);
@@ -136,12 +140,12 @@ if($.fn.jquery[0] !== '1') {
                 '</div>' +
             '</div>'
         ).appendTo(this.$element);
+        setTestData(this.$element);
 
         markup.find('*').addBack().each(function() {
             dataUtils.data($(this)[0], 'dxTestData', true);
             ko.utils.domData.set(this, 'dxTestData', true);
         });
-
         const cleanDataLog = [];
         const dataUtilsStrategy = dataUtils.getDataStrategy();
         const originalCleanData = dataUtilsStrategy.cleanData;
@@ -180,6 +184,7 @@ QUnit.test('by $.remove - second dom element removing should lead to data dispos
         .data('test1', true)
         .remove()
         .appendTo(FIXTURE_ELEMENT);
+    setTestData(this.$element);
 
     $element.data('test2', true);
     ko.utils.domData.set($element.get(0), 'test2', true);
@@ -192,6 +197,7 @@ QUnit.test('by $.remove - second dom element removing should lead to data dispos
 
 QUnit.test('by ko.removeNode - second dom element removing should lead to data disposing', function(assert) {
     const $element = this.$element.data('test1', true);
+    setTestData(this.$element);
 
     ko.utils.domData.set($element.get(0), 'test1', true);
     ko.removeNode($element.get(0));

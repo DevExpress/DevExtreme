@@ -5,7 +5,7 @@ import { isFunction, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import errors from '../../ui/widget/ui.errors';
 import uiSearchBoxMixin from '../../ui/widget/ui.search_box_mixin';
-import { inArray } from '../../core/utils/array';
+import TextBox from '../../ui/text_box';
 import query from '../../data/query';
 import storeHelper from '../../data/store_helper';
 import HierarchicalDataConverter from './ui.data_converter';
@@ -13,6 +13,8 @@ import HierarchicalDataConverter from './ui.data_converter';
 const EXPANDED = 'expanded';
 const SELECTED = 'selected';
 const DISABLED = 'disabled';
+
+uiSearchBoxMixin.setEditorClass(TextBox);
 
 const DataAdapter = Class.inherit({
 
@@ -367,7 +369,7 @@ const DataAdapter = Class.inherit({
     },
 
     getChildrenNodes: function(parentKey) {
-        return query(this._dataStructure).filter(['internalFields.parentKey', parentKey]).toArray();
+        return query(this._dataStructure, { langParams: this.options.langParams }).filter(['internalFields.parentKey', parentKey]).toArray();
     },
 
     getIndexByKey: function(key) {
@@ -471,7 +473,7 @@ const DataAdapter = Class.inherit({
 
         dataStructure = dataStructure || this._initialDataStructure;
 
-        return query(dataStructure).filter(criteria).toArray();
+        return query(dataStructure, { langParams: this.options.langParams }).filter(criteria).toArray();
     },
 
     search: function(searchValue) {
@@ -503,7 +505,7 @@ const DataAdapter = Class.inherit({
                     that._setFieldState(parent, EXPANDED, true);
                 }
 
-                if(inArray(parent, matches) > -1) {
+                if(matches.includes(parent)) {
                     index++;
                     continue;
                 }
@@ -517,7 +519,7 @@ const DataAdapter = Class.inherit({
 
         if(this.options.sort) {
             matches = storeHelper
-                .queryByOptions(query(matches), { sort: this.options.sort })
+                .queryByOptions(query(matches), { sort: this.options.sort, langParams: this.options.langParams })
                 .toArray();
         }
 

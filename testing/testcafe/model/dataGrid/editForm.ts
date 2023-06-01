@@ -21,7 +21,7 @@ export default class EditForm extends FocusableElement {
     this.cancelButton = buttons.nth(1);
   }
 
-  getItem(id): Selector {
+  getItem(id: string): Selector {
     return this.form.find(`.${CLASS.textEditorInput}[id*=_${id}], .dx-checkbox[id*=_${id}]`);
   }
 

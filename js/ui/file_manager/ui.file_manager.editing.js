@@ -3,6 +3,7 @@ import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
 import { each } from '../../core/utils/iterator';
 import { format } from '../../core/utils/string';
+import { isDefined } from '../../core/utils/type';
 
 import messageLocalization from '../../localization/message';
 
@@ -10,7 +11,7 @@ import Widget from '../widget/ui.widget';
 
 import FileManagerDialogManager from './ui.file_manager.dialog_manager';
 import FileManagerFileUploader from './ui.file_manager.file_uploader';
-import { FileManagerMessages } from './ui.file_manager.messages';
+import { ErrorCode, FileManagerMessages } from './ui.file_manager.messages';
 
 class FileManagerEditingControl extends Widget {
 
@@ -36,10 +37,15 @@ class FileManagerEditingControl extends Widget {
                 getDirectories: this._controller.getDirectories.bind(this._controller),
                 getCurrentDirectory: this._controller.getCurrentDirectory.bind(this._controller),
             },
+            rtlEnabled: this.option('rtlEnabled'),
             onDialogClosed: this._onDialogClosed.bind(this)
         });
 
         this._fileUploader = this._createFileUploader();
+        const notificationControl = this.option('notificationControl');
+        if(notificationControl) {
+            this._initNotificationControl(notificationControl);
+        }
 
         this._createMetadataMap();
     }
@@ -62,12 +68,17 @@ class FileManagerEditingControl extends Widget {
             getController: this._getFileUploaderController.bind(this),
             dropZonePlaceholderContainer: this.option('uploadDropZonePlaceholderContainer'),
             onUploadSessionStarted: e => this._onUploadSessionStarted(e),
-            onUploadProgress: e => this._onUploadProgress(e)
+            onUploadProgress: e => this._onUploadProgress(e),
+            onUploadFinished: e => this._onUploadFinished(e)
         });
     }
 
     setUploaderDropZone($element) {
         this._fileUploader.option('dropZone', $element);
+    }
+
+    setUploaderSplitterElement(element) {
+        this._fileUploader.option('splitterElement', element);
     }
 
     _getFileUploaderController() {
@@ -146,7 +157,11 @@ class FileManagerEditingControl extends Widget {
             },
 
             download: {
-                action: arg => this._download(arg)
+                action: arg => this._download(arg),
+                singleItemProcessingMessage: '',
+                multipleItemsProcessingMessage: '',
+                singleItemErrorMessage: messageLocalization.format('dxFileManager-editingDownloadSingleItemErrorMessage'),
+                multipleItemsErrorMessage: messageLocalization.format('dxFileManager-editingDownloadMultipleItemsErrorMessage'),
             },
 
             getItemContent: {
@@ -188,8 +203,14 @@ class FileManagerEditingControl extends Widget {
     }
 
     _onUploadProgress({ sessionId, fileIndex, commonValue, fileValue }) {
-        const operationInfo = this._uploadOperationInfoMap[sessionId];
+        const { operationInfo } = this._uploadOperationInfoMap[sessionId];
         this._notificationControl.updateOperationItemProgress(operationInfo, fileIndex, fileValue * 100, commonValue * 100);
+    }
+
+    _onUploadFinished({ sessionId, commonValue }) {
+        const { operationInfo } = this._uploadOperationInfoMap[sessionId];
+        this._notificationControl.finishOperation(operationInfo, commonValue * 100);
+        this._scheduleUploadSessionDisposal(sessionId, 'uploader');
     }
 
     _onUploadSessionStarted({ sessionInfo }) {
@@ -207,7 +228,7 @@ class FileManagerEditingControl extends Widget {
                 {
                     const sessionId = actionInfo.customData.sessionInfo.sessionId;
                     operationInfo.uploadSessionId = sessionId;
-                    this._uploadOperationInfoMap[sessionId] = operationInfo;
+                    this._uploadOperationInfoMap[sessionId] = { operationInfo };
                 }
                 break;
             case 'rename':
@@ -250,7 +271,15 @@ class FileManagerEditingControl extends Widget {
         this._completeAction(operationInfo, context);
 
         if(actionInfo.name === 'upload') {
-            delete this._uploadOperationInfoMap[actionInfo.customData.sessionInfo.sessionId];
+            this._scheduleUploadSessionDisposal(actionInfo.customData.sessionInfo.sessionId, 'controller');
+        }
+    }
+
+    _scheduleUploadSessionDisposal(sessionId, requester) {
+        if(isDefined(this._uploadOperationInfoMap[sessionId].requester) && this._uploadOperationInfoMap[sessionId].requester !== requester) {
+            delete this._uploadOperationInfoMap[sessionId];
+        } else {
+            this._uploadOperationInfoMap[sessionId].requester = requester;
         }
     }
 
@@ -263,12 +292,18 @@ class FileManagerEditingControl extends Widget {
 
     _tryRename(itemInfos) {
         const itemInfo = itemInfos && itemInfos[0] || this._model.getMultipleSelectedItems()[0];
+        if(!itemInfo) {
+            return new Deferred().reject().promise();
+        }
         return this._showDialog(this._dialogManager.getRenameItemDialog(), itemInfo.fileItem.name)
             .then(({ name }) => this._controller.renameItem(itemInfo, name));
     }
 
     _tryDelete(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         const itemName = itemInfos[0].fileItem.name;
         const itemCount = itemInfos.length;
         return this._showDialog(this._dialogManager.getDeleteItemDialog(), { itemName, itemCount })
@@ -277,12 +312,18 @@ class FileManagerEditingControl extends Widget {
 
     _tryMove(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         return this._showDialog(this._dialogManager.getMoveDialog(itemInfos))
             .then(({ folder }) => this._controller.moveItems(itemInfos, folder));
     }
 
     _tryCopy(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         return this._showDialog(this._dialogManager.getCopyDialog(itemInfos))
             .then(({ folder }) => this._controller.copyItems(itemInfos, folder));
     }
@@ -294,6 +335,9 @@ class FileManagerEditingControl extends Widget {
 
     _download(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        if(itemInfos.length === 0) {
+            return new Deferred().reject().promise();
+        }
         return this._controller.downloadItems(itemInfos);
     }
 
@@ -322,7 +366,7 @@ class FileManagerEditingControl extends Widget {
 
     _handleSingleRequestActionError(operationInfo, context, errorInfo) {
         const itemInfo = context.getItemForSingleRequestError();
-        const itemName = context.itemNewName;
+        const itemName = context.getItemName(errorInfo.errorCode);
         const errorText = this._getErrorText(errorInfo, itemInfo, itemName);
 
         context.processSingleRequestError(errorText);
@@ -336,7 +380,8 @@ class FileManagerEditingControl extends Widget {
 
     _handleMultipleRequestActionError(operationInfo, context, errorInfo) {
         const itemInfo = context.getItemForMultipleRequestError(errorInfo.index);
-        const errorText = this._getErrorText(errorInfo, itemInfo);
+        const itemName = context.getItemName(errorInfo.errorCode, errorInfo.index);
+        const errorText = this._getErrorText(errorInfo, itemInfo, itemName);
 
         context.processMultipleRequestError(errorInfo.index, errorText);
         const operationErrorInfo = this._getOperationErrorInfo(context);
@@ -354,12 +399,11 @@ class FileManagerEditingControl extends Widget {
     }
 
     _getErrorText(errorInfo, itemInfo, itemName) {
-        itemName = itemName || itemInfo?.fileItem.name;
-        const errorText = errorInfo.errorText || FileManagerMessages.get(errorInfo.errorId, itemName);
+        const errorText = errorInfo.errorText || FileManagerMessages.get(errorInfo.errorCode, itemName);
 
         const errorArgs = {
             fileSystemItem: itemInfo?.fileItem,
-            errorCode: errorInfo.errorId,
+            errorCode: errorInfo.errorCode,
             errorText
         };
         this._raiseOnError(errorArgs);
@@ -389,6 +433,10 @@ class FileManagerEditingControl extends Widget {
         }
     }
 
+    updateDialogRtl(value) {
+        this._dialogManager.updateDialogRtl(value);
+    }
+
     _getItemThumbnail(item) {
         const itemThumbnailGetter = this.option('getItemThumbnail');
         if(!itemThumbnailGetter) {
@@ -402,7 +450,6 @@ class FileManagerEditingControl extends Widget {
         this._actions = {
             onSuccess: this._createActionByOption('onSuccess'),
             onError: this._createActionByOption('onError'),
-            onCreating: this._createActionByOption('onCreating'),
         };
     }
 
@@ -414,8 +461,7 @@ class FileManagerEditingControl extends Widget {
             notificationControl: null,
             getItemThumbnail: null,
             onSuccess: null,
-            onError: null,
-            onCreating: null
+            onError: null
         });
     }
 
@@ -436,7 +482,6 @@ class FileManagerEditingControl extends Widget {
                 break;
             case 'onSuccess':
             case 'onError':
-            case 'onCreating':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -524,6 +569,21 @@ class FileManagerActionContext {
 
     getItemForMultipleRequestError(itemIndex) {
         return this._itemInfos[itemIndex];
+    }
+
+    getItemName(errorCode, itemIndex) {
+        const itemInfo = this.singleRequest
+            ? this.getItemForSingleRequestError()
+            : this.getItemForMultipleRequestError(itemIndex);
+        let result = itemInfo?.fileItem.name;
+        if(this.itemNewName && this._isItemExistsErrorCode(errorCode)) {
+            result = this.itemNewName;
+        }
+        return result;
+    }
+
+    _isItemExistsErrorCode(errorCode) {
+        return errorCode === ErrorCode.DirectoryExists || errorCode === ErrorCode.FileExists;
     }
 
     _setCurrentDetailError(itemIndex, itemInfo, errorText) {

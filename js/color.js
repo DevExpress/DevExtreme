@@ -25,6 +25,7 @@ const standardColorNames = {
     'darkgoldenrod': 'b8860b',
     'darkgray': 'a9a9a9',
     'darkgreen': '006400',
+    'darkgrey': 'a9a9a9',
     'darkkhaki': 'bdb76b',
     'darkmagenta': '8b008b',
     'darkolivegreen': '556b2f',
@@ -35,11 +36,13 @@ const standardColorNames = {
     'darkseagreen': '8fbc8f',
     'darkslateblue': '483d8b',
     'darkslategray': '2f4f4f',
+    'darkslategrey': '2f4f4f',
     'darkturquoise': '00ced1',
     'darkviolet': '9400d3',
     'deeppink': 'ff1493',
     'deepskyblue': '00bfff',
     'dimgray': '696969',
+    'dimgrey': '696969',
     'dodgerblue': '1e90ff',
     'feldspar': 'd19275',
     'firebrick': 'b22222',
@@ -53,6 +56,7 @@ const standardColorNames = {
     'gray': '808080',
     'green': '008000',
     'greenyellow': 'adff2f',
+    'grey': '808080',
     'honeydew': 'f0fff0',
     'hotpink': 'ff69b4',
     'indianred': 'cd5c5c',
@@ -67,14 +71,16 @@ const standardColorNames = {
     'lightcoral': 'f08080',
     'lightcyan': 'e0ffff',
     'lightgoldenrodyellow': 'fafad2',
-    'lightgrey': 'd3d3d3',
+    'lightgray': 'd3d3d3',
     'lightgreen': '90ee90',
+    'lightgrey': 'd3d3d3',
     'lightpink': 'ffb6c1',
     'lightsalmon': 'ffa07a',
     'lightseagreen': '20b2aa',
     'lightskyblue': '87cefa',
     'lightslateblue': '8470ff',
     'lightslategray': '778899',
+    'lightslategrey': '778899',
     'lightsteelblue': 'b0c4de',
     'lightyellow': 'ffffe0',
     'lime': '00ff00',
@@ -128,6 +134,7 @@ const standardColorNames = {
     'skyblue': '87ceeb',
     'slateblue': '6a5acd',
     'slategray': '708090',
+    'slategrey': '708090',
     'snow': 'fffafa',
     'springgreen': '00ff7f',
     'steelblue': '4682b4',
@@ -176,6 +183,28 @@ const standardColorTypes = [
                 parseInt(colorString[1], 16),
                 parseInt(colorString[2], 16),
                 parseInt(colorString[3], 16)
+            ];
+        }
+    },
+    {
+        re: /^#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/,
+        process: function(colorString) {
+            return [
+                parseInt(colorString[1], 16),
+                parseInt(colorString[2], 16),
+                parseInt(colorString[3], 16),
+                Number((parseInt(colorString[4], 16) / 255).toFixed(2))
+            ];
+        }
+    },
+    {
+        re: /^#([a-f0-9]{1})([a-f0-9]{1})([a-f0-9]{1})([a-f0-9]{1})$/,
+        process: function(colorString) {
+            return [
+                parseInt(colorString[1] + colorString[1], 16),
+                parseInt(colorString[2] + colorString[2], 16),
+                parseInt(colorString[3] + colorString[3], 16),
+                Number((parseInt(colorString[4] + colorString[4], 16) / 255).toFixed(2))
             ];
         }
     },

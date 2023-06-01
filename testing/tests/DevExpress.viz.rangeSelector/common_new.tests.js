@@ -1,17 +1,23 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const rendererModule = require('viz/core/renderers/renderer');
-const axisModule = require('viz/axes/base_axis');
-const translator2DModule = require('viz/translators/translator2d');
-const StubAxis = vizMocks.stubClass(axisModule.Axis);
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import axisModule from 'viz/axes/base_axis';
+import translator2DModule from 'viz/translators/translator2d';
+import errors from 'core/errors.js';
+import 'viz/range_selector/range_selector';
 
-require('viz/range_selector/range_selector');
+const StubAxis = vizMocks.stubClass(axisModule.Axis);
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="test-container" style="width: 400px; height: 300px;"></div>';
+        '<div id="test-container"></div>';
 
     $('#qunit-fixture').html(markup);
+
+    $('#test-container').css({
+        width: '400px',
+        height: '300px'
+    });
 });
 
 QUnit.module('RangeSelector', {
@@ -22,7 +28,7 @@ QUnit.module('RangeSelector', {
         rendererModule.Renderer = function() { return renderer; };
         this.axis = new StubAxis();
         this.axis.stub('getVisibleArea').returns([]);
-        sinon.stub(axisModule, 'Axis', function() {
+        sinon.stub(axisModule, 'Axis').callsFake(function() {
             return that.axis;
         });
 
@@ -90,4 +96,74 @@ QUnit.test('There is no error when \'dataSource\' is an empty array and scale is
 
     assert.deepEqual(this.$container.dxRangeSelector('instance').getValue(), [undefined, undefined]);
     assert.strictEqual(this.axis.setBusinessRange.lastCall.args[0].isEmpty(), true);
+});
+
+QUnit.test('RangeSelector should have default value of the aggregatebycategory = true', function(assert) {
+    this.$container.dxRangeSelector();
+    const axisOptions = this.axis.updateOptions.getCall(1).args[0];
+
+    assert.strictEqual(axisOptions.aggregateByCategory, true);
+});
+
+QUnit.test('RangeSelector should be able to change the aggregatebycategory setting', function(assert) {
+    this.$container.dxRangeSelector({
+        scale: {
+            aggregateByCategory: false
+        }
+    });
+    const axisOptions = this.axis.updateOptions.getCall(1).args[0];
+
+    assert.strictEqual(axisOptions.aggregateByCategory, false);
+});
+
+QUnit.test('RangeSelector should change the aggregatebycategory value when the value was updated', function(assert) {
+    const rangeSelector = this.$container.dxRangeSelector({}).dxRangeSelector('instance');
+
+    rangeSelector.option('scale', { aggregateByCategory: false });
+
+    const axisOptions = this.axis.updateOptions.getCall(3).args[0];
+
+    assert.strictEqual(axisOptions.aggregateByCategory, false);
+});
+
+QUnit.test('Should show warning if deprecated "behavior.callValueChanged" property is used', function(assert) {
+    sinon.spy(errors, 'log');
+
+    try {
+        this.$container.dxRangeSelector({
+            behavior: {
+                callValueChanged: 'onMoving'
+            }
+        });
+        assert.deepEqual(errors.log.lastCall.args, [
+            'W0001',
+            'dxRangeSelector',
+            'behavior.callValueChanged',
+            '23.1',
+            'Use the "behavior.valueChangeMode" property instead'
+        ]);
+    } finally {
+        errors.log.restore();
+    }
+});
+
+QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory" property is used', function(assert) {
+    sinon.spy(errors, 'log');
+
+    try {
+        this.$container.dxRangeSelector({
+            scale: {
+                aggregateByCategory: 'onMoving'
+            }
+        });
+        assert.deepEqual(errors.log.lastCall.args, [
+            'W0001',
+            'dxRangeSelector',
+            'scale.aggregateByCategory',
+            '23.1',
+            'Use the aggregation.enabled property'
+        ]);
+    } finally {
+        errors.log.restore();
+    }
 });

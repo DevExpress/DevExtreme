@@ -4,6 +4,7 @@ import { WrapperLayoutElement } from '../core/layout_element';
 const { floor, sqrt } = Math;
 const _min = Math.min;
 const _max = Math.max;
+const DEFAULT_INNER_RADIUS = 0.5;
 
 const RADIAL_LABEL_INDENT = consts.radialLabelIndent;
 
@@ -99,16 +100,8 @@ function getLengthFromCenter(x, y, paneCenterX, paneCenterY) {
     return sqrt((x - paneCenterX) * (x - paneCenterX) + (y - paneCenterY) * (y - paneCenterY));
 }
 
-function getInnerRadius(series) {
-    let innerRadius;
-    if(series.type === 'pie') {
-        innerRadius = 0;
-    } else {
-        innerRadius = _isNumber(series.innerRadius) ? Number(series.innerRadius) : 0.5;
-        innerRadius = innerRadius < 0.2 ? 0.2 : innerRadius;
-        innerRadius = innerRadius > 0.8 ? 0.8 : innerRadius;
-    }
-    return innerRadius;
+function getInnerRadius({ type, innerRadius }) {
+    return type === 'pie' ? 0 : (_isNumber(innerRadius) ? Number(innerRadius) : DEFAULT_INNER_RADIUS);
 }
 
 function LayoutManager() {

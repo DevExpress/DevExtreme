@@ -6,6 +6,7 @@ import { ERROR_MESSAGES as dxErrors } from 'viz/core/errors_warnings';
 import seriesModule from 'viz/series/base_series';
 import dataValidatorModule from 'viz/components/data_validator';
 import { MockSeries, categories, seriesMockData, MockTranslator } from '../../helpers/chartMocks.js';
+import graphicObjects from 'common/charts';
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
@@ -748,7 +749,7 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
             commons.environment.afterEach.call(this);
         },
         mockValidateData: function() {
-            this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
+            this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
                 return { x: data || [] };
             });
         },
@@ -1625,6 +1626,24 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         this.checkLabelPosition(assert, this.labels[5], [5, 90]);
     });
 
+    // T1093233
+    QUnit.test('Overlapping labels if there are labels with negative value', function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 5, y: 0, width: 10, height: 10, value: 11 },
+            { x: 5, y: 5, width: 10, height: 10, value: -12 },
+            { x: 5, y: 7, width: 10, height: 10, value: -9 },
+            { x: 5, y: 8, width: 10, height: 10, value: 10 }]);
+
+        this.createChart({
+            resolveLabelOverlapping: 'stack',
+            series: [{ type: 'stackedBar' }]
+        });
+
+        assert.ok(!this.labels[3].shift.called);
+        this.checkLabelPosition(assert, this.labels[0], [5, 18]);
+        this.checkLabelPosition(assert, this.labels[1], [5, 28]);
+        this.checkLabelPosition(assert, this.labels[2], [5, 38]);
+    });
+
     QUnit.test('kill labels', function(assert) {
         this.createFakeSeriesWithLabels([{ x: 5, y: 0, width: 10, height: 60, value: 10 },
             { x: 5, y: 50, width: 10, height: 60, value: 0 }]);
@@ -1909,6 +1928,43 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.ok(!this.labels[1].shift.called);
     });
 
+    QUnit.test('Three overlapping labels, inverted value axis, T1021956', function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 5, y: 20, width: 10, height: 30 },
+            { x: 5, y: 40, width: 10, height: 30 },
+            { x: 5, y: 60, width: 10, height: 30 }]);
+
+        this.createChart({
+            resolveLabelOverlapping: 'stack',
+            series: [{ type: 'stackedbar' }],
+            valueAxis: {
+                inverted: true
+            }
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        this.checkLabelPosition(assert, this.labels[1], [5, 50]);
+        this.checkLabelPosition(assert, this.labels[2], [5, 80]);
+    });
+
+    QUnit.test('Three overlapping labels, inverted value axis, rotated, T1021956', function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 5, y: 60, width: 30, height: 10 },
+            { x: 25, y: 60, width: 30, height: 10 },
+            { x: 55, y: 60, width: 30, height: 10 }], { argument: 10 });
+
+        this.createChart({
+            rotated: true,
+            resolveLabelOverlapping: 'stack',
+            series: [{ type: 'stackedbar' }],
+            valueAxis: {
+                inverted: true
+            }
+        });
+
+        this.checkLabelPosition(assert, this.labels[0], [115, 60]);
+        this.checkLabelPosition(assert, this.labels[1], [85, 60]);
+        assert.ok(!this.labels[2].shift.called);
+    });
+
     QUnit.module('resolveLabelOverlapping. stack. range series', $.extend({}, commons.environment, {
         beforeEach: function() {
             commons.environment.beforeEach.apply(this, arguments);
@@ -2030,5 +2086,80 @@ $('<div id="chartContainer">').appendTo('#qunit-fixture');
         assert.strictEqual(this.labels[1].draw.callCount, 0);
         assert.strictEqual(this.labels[2].draw.callCount, 0);
         assert.strictEqual(this.labels[3].draw.callCount, 0);
+    });
+
+    QUnit.module('Graphic objects render', $.extend({}, commons.environment, {
+        beforeEach: function() {
+            commons.environment.beforeEach.call(this);
+            this.clock = sinon.useFakeTimers();
+
+            this.fakeGraphicObjects = sinon.stub(graphicObjects, 'getGraphicObjects').callsFake(function() {
+                return {
+                    'id_1': { type: 'linear', colors: 'colors_1', rotationAngle: 30 },
+                    'id_2': { type: 'radial', colors: 'colors_2' },
+                    'id_3': { type: 'pattern', template: () => {}, width: 20, height: 10 },
+                    'id_4': { type: 'incorrect_type' }
+                };
+            });
+        },
+        afterEach: function() {
+            this.clock.restore();
+            commons.environment.afterEach.call(this);
+            this.fakeGraphicObjects.restore();
+        },
+    }));
+
+    QUnit.test('Should create graphic objects on widget creating', function(assert) {
+        const stubSeries = new MockSeries({});
+        seriesMockData.series.push(stubSeries);
+
+        const chart = this.createChart({
+            series: {}
+        });
+
+        assert.strictEqual(chart._graphicObjects['id_1']._stored_settings.color, 'colors_1');
+        assert.strictEqual(chart._graphicObjects['id_1']._stored_settings.id, 'id_1');
+        assert.strictEqual(chart._graphicObjects['id_1']._stored_settings.rotationAngle, 30);
+
+        assert.strictEqual(chart._graphicObjects['id_2']._stored_settings.color, 'colors_2');
+        assert.strictEqual(chart._graphicObjects['id_2']._stored_settings.id, 'id_2');
+
+        assert.strictEqual(chart._graphicObjects['id_3']._stored_settings.width, 20);
+        assert.strictEqual(chart._graphicObjects['id_3']._stored_settings.height, 10);
+        assert.strictEqual(chart._graphicObjects['id_3']._stored_settings.id, 'id_3');
+        assert.ok(chart._graphicObjects['id_3']._stored_settings.template);
+
+        assert.strictEqual(chart._renderer.linearGradient.callCount, 1);
+        assert.strictEqual(chart._renderer.radialGradient.callCount, 1);
+        assert.strictEqual(chart._renderer.customPattern.callCount, 1);
+    });
+
+    QUnit.test('Should not create more objects after redraw', function(assert) {
+        const stubSeries = new MockSeries({});
+        seriesMockData.series.push(stubSeries);
+
+        const chart = this.createChart({
+            series: {}
+        });
+        chart.render({
+            force: true
+        });
+
+        assert.strictEqual(chart._renderer.linearGradient.callCount, 1);
+        assert.strictEqual(chart._renderer.radialGradient.callCount, 1);
+        assert.strictEqual(chart._renderer.customPattern.callCount, 1);
+    });
+
+    QUnit.test('Should dispose graphic objects on container remove', function(assert) {
+        const stubSeries = new MockSeries({});
+        seriesMockData.series.push(stubSeries);
+
+        const chart = this.createChart({
+            series: {}
+        });
+
+        this.$container.remove();
+
+        assert.strictEqual(chart._graphicObjects, null);
     });
 })();

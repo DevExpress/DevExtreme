@@ -1,16 +1,16 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
+@use "../../base/dateView";
 
 // adduse
 @use "../scrollable";
 
-
-$material-dateview-roller-padding: ($material-dateview-roller-height - $material-dateview-roller-item-height) / 2;
-
+$material-dateview-roller-padding: math.div($material-dateview-roller-height - $material-dateview-roller-item-height, 2);
 
 .dx-dateview-rollers {
   width: auto;

@@ -2,8 +2,11 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'animation/fx';
 import pointerEvents from 'events/pointer';
-import { FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
+import localization from 'localization';
+import messageLocalization from 'localization/message';
+import { FileManagerWrapper, createTestFileSystem, isDesktopDevice, createHugeFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
+import { implementationsMap } from 'core/utils/size';
 
 const { test } = QUnit;
 
@@ -25,13 +28,13 @@ const moduleConfig = {
                 {
                     name: '1.txt',
                     isDirectory: false,
-                    size: 0,
+                    size: 200,
                     owner: 'Admin'
                 },
                 {
                     name: '2.txt',
                     isDirectory: false,
-                    size: 200,
+                    size: 0,
                     owner: 'Admin'
                 },
                 {
@@ -82,8 +85,8 @@ QUnit.module('Details View', moduleConfig, () => {
 
     test('Format file sizes', function(assert) {
         assert.equal(this.wrapper.getDetailsItemSize(0).trim(), '', 'Folder shouldn\'t display own size.');
-        assert.equal(this.wrapper.getDetailsItemSize(1), '0 B', 'Incorrect formating of size column.');
-        assert.equal(this.wrapper.getDetailsItemSize(2), '200 B', 'Incorrect formating of size column.');
+        assert.equal(this.wrapper.getDetailsItemSize(1), '200 B', 'Incorrect formating of size column.');
+        assert.equal(this.wrapper.getDetailsItemSize(2), '0 B', 'Incorrect formating of size column.');
         assert.equal(this.wrapper.getDetailsItemSize(3), '1 KB', 'Incorrect formating of size column.');
         assert.equal(this.wrapper.getDetailsItemSize(4), '1.3 KB', 'Incorrect formating of size column.');
     });
@@ -298,16 +301,14 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection');
 
-        this.wrapper.getRowNameCellInDetailsView(2).trigger(pointerEvents.down);
-        this.wrapper.getRowNameCellInDetailsView(2).trigger('dxclick');
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(2));
         this.clock.tick(400);
 
         assert.notOk(this.wrapper.isDetailsRowSelected(2), 'first directory selected');
         assert.ok(this.wrapper.isDetailsRowFocused(2), 'first directory focused');
         assert.deepEqual(getSelectedItemNames(fileManager), [ 'Folder 1.1' ], 'first directory in selection');
 
-        this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down);
-        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxclick');
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1));
         this.clock.tick(400);
 
         assert.notOk(this.wrapper.isDetailsRowSelected(2), 'first directory is not selected');
@@ -315,7 +316,9 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.notOk(this.wrapper.isDetailsRowSelected(1), 'parent directory item is not selected');
         assert.ok(this.wrapper.isDetailsRowFocused(1), 'parent directory item is focused');
         assert.notOk(this.wrapper.getRowSelectCheckBox(1).length, 'parent directory item check box hidden');
-        assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection');
+        assert.notStrictEqual(fileManager.option('focusedItemKey'), '', 'some focus (option)');
+        assert.deepEqual(fileManager.option('selectedItemKeys'), [], 'no selection (option)');
+        assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection (method)');
     });
 
     test('selectionChanged event ignore parent direcotry item', function(assert) {
@@ -667,5 +670,219 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDetailsCellValue(3, 2), '2.txt', 'file 2 has correct name in correct column');
         assert.strictEqual(this.wrapper.getDetailsCellValue(4, 2), '3.txt', 'file 3 has correct name in correct column');
         assert.strictEqual(this.wrapper.getDetailsCellValue(5, 2), '4.txt', 'file 4 has correct name in correct column');
+    });
+
+    test('localize header captions (T949528)', function(assert) {
+        const captionName = 'TEST';
+        const captionDate = 'TEST1';
+        const captionSize = 'TEST2';
+        const locale = localization.locale();
+        messageLocalization.load({
+            'ja': {
+                'dxFileManager-listDetailsColumnCaptionName': captionName,
+                'dxFileManager-listDetailsColumnCaptionDateModified': captionDate,
+                'dxFileManager-listDetailsColumnCaptionFileSize': captionSize,
+            }
+        });
+        localization.locale('ja');
+
+        this.wrapper.getInstance().repaint();
+        this.clock.tick(600);
+
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(1).text(), captionName, 'first column is Name');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(2).text(), captionDate, 'second column is Date Modified');
+        assert.strictEqual(this.wrapper.getColumnHeaderInDetailsView(3).text(), captionSize, 'third column is File Size');
+        localization.locale(locale);
+    });
+
+    test('columns without hidingPriority auto hide disabled (T950675)', function(assert) {
+        const thumbnailsColumnCaption = 'thumbnailsColumnCaption';
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 500;
+        this.wrapper.getInstance().option({
+            fileSystemProvider: [{
+                name: 'Some_very_very_very_very_very_very_very_very_very_very_very_very_very_very_long_folder',
+                isDirectory: true,
+                hasSubDirectories: false,
+                items: []
+            }],
+            itemView: {
+                mode: 'details',
+                details: {
+                    columns: [{ dataField: 'thumbnail', caption: 'thumbnailsColumnCaption' }, 'name']
+                }
+            },
+            width: '500px'
+        });
+        this.clock.tick(600);
+
+        assert.strictEqual(this.wrapper.getDetailsCell(thumbnailsColumnCaption, 0).outerWidth(), 36, 'thumbnails column width is correct');
+        implementationsMap.getWidth = originalFunc;
+    });
+
+    test('sorting by file size is correct (T962735)', function(assert) {
+        const columnHeader = this.wrapper.getColumnHeaderInDetailsView(3);
+
+        assert.equal(columnHeader.attr('aria-sort'), 'none', 'sorting default');
+
+        columnHeader.trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getDetailsItemName(0), 'Folder 1');
+        assert.equal(this.wrapper.getDetailsItemName(1), '2.txt');
+        assert.equal(this.wrapper.getDetailsItemName(2), '1.txt');
+        assert.equal(this.wrapper.getDetailsItemName(3), '3.txt');
+        assert.equal(this.wrapper.getDetailsItemName(4), '4.txt', 'sorted descending');
+
+        columnHeader.trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getDetailsItemName(0), '4.txt');
+        assert.equal(this.wrapper.getDetailsItemName(1), '3.txt');
+        assert.equal(this.wrapper.getDetailsItemName(2), '1.txt');
+        assert.equal(this.wrapper.getDetailsItemName(3), '2.txt');
+        assert.equal(this.wrapper.getDetailsItemName(4), 'Folder 1', 'sorted ascending');
+
+        columnHeader.trigger($.Event('dxclick', { ctrlKey: true }));
+        this.clock.tick(400);
+
+        assert.equal(columnHeader.attr('aria-sort'), 'none', 'sorting default');
+    });
+
+    test('focus and selection in \'single\' mode must be reseted when the last item is removed (T972613)', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            fileSystemProvider: createTestFileSystem(),
+            currentPath: 'Folder 2',
+            selectionMode: 'single',
+            permissions: { delete: true }
+        });
+        this.clock.tick(400);
+
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1), true);
+        this.clock.tick(400);
+
+        assert.deepEqual(getSelectedItemNames(fileManager), ['File 2-1.jpg'], 'File 2-1.jpg is selected');
+
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 0, 'no files');
+        assert.strictEqual(fileManager.option('focusedItemKey'), undefined, 'no focus (option)');
+        assert.deepEqual(fileManager.option('selectedItemKeys'), [], 'no selection (option)');
+        assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection (method)');
+    });
+
+    test('focus selection in \'multiple\' mode must be reseted when the last item is removed (T972613)', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            fileSystemProvider: createTestFileSystem(),
+            currentPath: 'Folder 2',
+            selectionMode: 'multiple',
+            permissions: { delete: true }
+        });
+        this.clock.tick(400);
+
+        triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1));
+        this.clock.tick(400);
+
+        assert.deepEqual(getSelectedItemNames(fileManager), ['File 2-1.jpg'], 'File 2-1.jpg is selected');
+
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getRowsInDetailsView().length, 0, 'no files');
+        assert.strictEqual(fileManager.option('focusedItemKey'), undefined, 'no focus (option)');
+        assert.deepEqual(fileManager.option('selectedItemKeys'), [], 'no selection (option)');
+        assert.deepEqual(getSelectedItemNames(fileManager), [], 'no selection (method)');
+    });
+
+    test('grid must hide its skeleton loader and render folder contents when current path is changed and some item is focused (T1129252, T1125089, T1125526)', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            width: 500,
+            height: 250,
+            fileSystemProvider: createHugeFileSystem(),
+            itemView: {
+                showParentFolder: true
+            },
+            currentPath: 'Folder 1'
+        });
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
+
+        fileManager.option('focusedItemKey', 'Folder 1/File 99.txt');
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
+        assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 3000, 'scroll position changed');
+
+        fileManager.option('currentPath', 'Folder 2');
+        this.clock.tick(800);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
+    });
+
+    test('grid must hide its skeleton loader and render folder contents when current path is changed and some item is selected (T1129252, T1125089, T1125526)', function(assert) {
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            width: 500,
+            height: 250,
+            fileSystemProvider: createHugeFileSystem(),
+            itemView: {
+                showParentFolder: true
+            },
+            currentPath: 'Folder 1'
+        });
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
+
+        fileManager.option({
+            focusedItemKey: 'Folder 1/File 99.txt',
+            selectedItemKeys: ['Folder 1/File 99.txt']
+        });
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 100), 'File 99.txt', 'focused item is visible');
+        assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 3000, 'scroll position changed');
+
+        fileManager.option('currentPath', 'Folder 2');
+        this.clock.tick(800);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
+        assert.ok(this.wrapper.getRowsInDetailsView().length > 2, 'rows are rendered');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 0), '..', 'parent folder is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 1), 'File 0.txt', 'file "File 0.txt" is in place');
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 2), 'File 1.txt', 'file "File 1.txt" is in place');
     });
 });

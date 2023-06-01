@@ -1,7 +1,11 @@
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 import Form from '../form';
 import '../tag_box';
+import '../radio_group';
+import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
+import '../list_light';
+import '../list/modules/deleting';
 
 export class GanttDialog {
     constructor(owner, $element) {
@@ -15,9 +19,11 @@ export class GanttDialog {
         };
     }
     _apply() {
-        const result = this._dialogInfo.getResult();
-        this._callback(result);
-        this.hide();
+        if(this._dialogInfo.isValidated()) {
+            const result = this._dialogInfo.getResult();
+            this._callback(result);
+            this.hide();
+        }
     }
 
     show(name, parameters, callback, afterClosing, editingOptions) {
@@ -27,6 +33,7 @@ export class GanttDialog {
         if(!this.infoMap[name]) {
             return;
         }
+        const isRefresh = this._popupInstance._isVisible() && this._dialogInfo && this._dialogInfo instanceof this.infoMap[name];
         this._dialogInfo = new this.infoMap[name](parameters, this._apply.bind(this), this.hide.bind(this), editingOptions);
         this._popupInstance.option({
             showTitle: !!this._dialogInfo.getTitle(),
@@ -36,7 +43,12 @@ export class GanttDialog {
             height: this._dialogInfo.getHeight(),
             contentTemplate: this._dialogInfo.getContentTemplate()
         });
-        this._popupInstance.show();
+        if(this._afterClosing) {
+            this._popupInstance.option('onHidden', this._afterClosing);
+        }
+        if(!isRefresh) {
+            this._popupInstance.show();
+        }
     }
     hide() {
         this._popupInstance.hide();
@@ -80,7 +92,6 @@ class DialogInfoBase {
             }
         };
     }
-
     getTitle() { return ''; }
     getToolbarItems() {
         return this._editingOptions.enabled ?
@@ -95,15 +106,23 @@ class DialogInfoBase {
                 items: this._getFormItems(),
                 elementAttr: {
                     class: this._getFormCssClass()
-                }
+                },
+                rtlEnabled: false
             });
             return content;
         };
     }
     getResult() {
-        const formData = this._form && this._form.option('formData');
+        const formData = this.getFormData();
         this._updateParameters(formData);
         return this._parameters;
+    }
+    getFormData() {
+        const formData = this._form && this._form.option('formData');
+        return formData;
+    }
+    isValidated() {
+        return true;
     }
 }
 
@@ -127,7 +146,25 @@ class TaskEditDialogInfo extends DialogInfoBase {
                 width: '100%',
                 readOnly: readOnlyRange || this._isReadOnlyField('start')
             },
-            visible: !this._isHiddenField('start')
+            visible: !this._isHiddenField('start'),
+            validationRules: [{
+                type: 'required',
+                message: messageLocalization.format('validation-required-formatted', messageLocalization.format('dxGantt-dialogStartTitle'))
+            },
+            {
+                type: 'custom',
+                validationCallback: (e) => {
+                    if(this._parameters.isValidationRequired) {
+                        const correctDateRange = this._parameters.getCorrectDateRange(this._parameters.id, e.value, this._parameters.end);
+                        if(correctDateRange.start.getTime() !== e.value.getTime()) {
+                            e.rule.message = this._getValidationMessage(true, correctDateRange.start);
+                            return false;
+                        }
+                    }
+                    return true;
+                },
+            }
+            ]
         }, {
             dataField: 'end',
             editorType: 'dxDateBox',
@@ -137,7 +174,24 @@ class TaskEditDialogInfo extends DialogInfoBase {
                 width: '100%',
                 readOnly: readOnlyRange || this._isReadOnlyField('end')
             },
-            visible: !this._isHiddenField('end')
+            visible: !this._isHiddenField('end'),
+            validationRules: [{
+                type: 'required',
+                message: messageLocalization.format('validation-required-formatted', messageLocalization.format('dxGantt-dialogEndTitle'))
+            },
+            {
+                type: 'custom',
+                validationCallback: (e) => {
+                    if(this._parameters.isValidationRequired) {
+                        const correctDateRange = this._parameters.getCorrectDateRange(this._parameters.id, this._parameters.start, e.value);
+                        if(correctDateRange.end.getTime() !== e.value.getTime()) {
+                            e.rule.message = this._getValidationMessage(false, correctDateRange.end);
+                            return false;
+                        }
+                    }
+                    return true;
+                },
+            }]
         }, {
             dataField: 'progress',
             editorType: 'dxNumberBox',
@@ -175,6 +229,16 @@ class TaskEditDialogInfo extends DialogInfoBase {
             }
         }];
     }
+    _getValidationMessage(isStartDependencies, correctDate) {
+        if(isStartDependencies) {
+            return messageLocalization.format('dxGantt-dialogStartDateValidation', this._getFormattedDateText(correctDate));
+        }
+        return messageLocalization.format('dxGantt-dialogEndDateValidation', this._getFormattedDateText(correctDate));
+
+    }
+    _getFormattedDateText(date) {
+        return date ? dateLocalization.format(date, 'shortDateShortTime') : '';
+    }
     _isReadOnlyField(field) {
         return this._parameters.readOnlyFields.indexOf(field) > -1;
     }
@@ -194,6 +258,10 @@ class TaskEditDialogInfo extends DialogInfoBase {
         this._parameters.end = formData.end;
         this._parameters.progress = formData.progress * 100;
         this._parameters.assigned = formData.assigned;
+    }
+    isValidated() {
+        const validationResult = this._form?.validate();
+        return validationResult?.isValid;
     }
 }
 
@@ -268,17 +336,25 @@ class ConfirmDialogInfo extends DialogInfoBase {
 
 class ConstraintViolationDialogInfo extends DialogInfoBase {
     _getFormItems() {
+        const hasCriticalErrors = this._parameters.hasCriticalErrors;
+        const severalErrors = this._parameters.errorsCount > 1;
         const items = [];
+        const deleteMessage = severalErrors ? 'dxGantt-dialogDeleteDependenciesMessage' : 'dxGantt-dialogDeleteDependencyMessage';
+        const moveMessage = severalErrors ? 'dxGantt-dialogMoveTaskAndKeepDependenciesMessage' : 'dxGantt-dialogMoveTaskAndKeepDependencyMessage';
+        let titleMessage;
+        if(hasCriticalErrors) {
+            titleMessage = severalErrors ? 'dxGantt-dialogConstraintCriticalViolationSeveralTasksMessage' : 'dxGantt-dialogConstraintCriticalViolationMessage';
+        } else {
+            titleMessage = severalErrors ? 'dxGantt-dialogConstraintViolationSeveralTasksMessage' : 'dxGantt-dialogConstraintViolationMessage';
+        }
         items.push({ text: messageLocalization.format('dxGantt-dialogCancelOperationMessage'), value: 0 });
-        items.push({ text: messageLocalization.format('dxGantt-dialogDeleteDependencyMessage'), value: 1 });
-        if(!this._parameters.validationError.critical) {
-            items.push({ text: messageLocalization.format('dxGantt-dialogMoveTaskAndKeepDependencyMessage'), value: 2 });
+        items.push({ text: messageLocalization.format(deleteMessage), value: 1 });
+        if(!hasCriticalErrors) {
+            items.push({ text: messageLocalization.format(moveMessage), value: 2 });
         }
 
         return [{
-            template: this._parameters.validationError.critical ?
-                messageLocalization.format('dxGantt-dialogConstraintCriticalViolationMessage') :
-                messageLocalization.format('dxGantt-dialogConstraintViolationMessage')
+            template: messageLocalization.format(titleMessage)
         }, {
             cssClass: 'dx-cv-dialog-row',
             dataField: 'option',

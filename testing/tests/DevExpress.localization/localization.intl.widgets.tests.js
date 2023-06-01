@@ -4,7 +4,7 @@ import { locale } from 'localization/core';
 
 import $ from 'jquery';
 import 'ui/date_box';
-import { excel as excelCreator } from 'exporter';
+import { ExportFormat } from 'exporter/exceljs/export_format';
 import dateLocalization from 'localization/date';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
@@ -51,6 +51,31 @@ QUnit.module('Intl localization', () => {
             } finally {
                 locale(currentLocale);
             }
+        });
+
+        ['h:mm aaa', 'h:mm aaaa', 'h:mm aaaaa'].forEach(displayFormat => {
+            QUnit.test(`DateBox should not raise error when displayFormat="${displayFormat}" and arabic locale is used`, function(assert) {
+                const currentLocale = locale();
+                try {
+                    locale('ar-u-nu-arab');
+                    const $dateBox = $('#dateBox').dxDateBox({
+                        value: new Date(2015, 10, 10),
+                        displayFormat,
+                        type: 'time',
+                        pickerType: 'calendar',
+                        useMaskBehavior: true
+                    });
+
+                    const $input = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR);
+                    const date = $input.val();
+
+                    assert.strictEqual(date, '١٢:٠٠ ص', 'date is localized');
+                } catch(e) {
+                    assert.ok(false, 'Error occured: ' + e.message);
+                } finally {
+                    locale(currentLocale);
+                }
+            });
         });
 
         QUnit.test('DateBox should not raise error when digits are Farsi digits (T867867)', function(assert) {
@@ -107,6 +132,26 @@ QUnit.module('Intl localization', () => {
                 locale(currentLocale);
             }
         });
+
+        QUnit.test('DateBox should not raise error when digits are not default arabic digits and Fractional Seconds in the "displayFormat"', function(assert) {
+            const currentLocale = locale();
+            try {
+                locale('mr');
+                const dateBox = $('#dateBox').dxDateBox({
+                    value: new Date('2014-09-08T08:02:17.12'),
+                    type: 'date',
+                    pickerType: 'calendar',
+                    useMaskBehavior: true,
+                    displayFormat: 'HH:mm:ss.SS'
+                }).dxDateBox('instance');
+
+                assert.strictEqual(dateBox.option('text'), '०८:०२:१७.१२', 'date is localized');
+            } catch(e) {
+                assert.ok(false, `Error occured: ${e.message}`);
+            } finally {
+                locale(currentLocale);
+            }
+        });
     });
 });
 
@@ -118,7 +163,7 @@ QUnit.module('Excel creator', commonEnvironment, () => {
             locale('ar-u-nu-arab');
 
             const convertDate = function(formatter) {
-                return excelCreator.formatConverter.convertFormat(formatter, null, 'date');
+                return ExportFormat.convertFormat(formatter, null, 'date');
             };
 
             const pattern = '[$-2010000]d\\/M\\/yyyy';

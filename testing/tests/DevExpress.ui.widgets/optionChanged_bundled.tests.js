@@ -1,6 +1,6 @@
 define(function(require) {
     const $ = require('jquery');
-    const Component = require('core/component');
+    const Component = require('core/component').Component;
     const devices = require('core/devices');
     const GoogleStaticProvider = require('ui/map/provider.google_static');
     const fx = require('animation/fx');
@@ -8,7 +8,7 @@ define(function(require) {
     const DataSource = require('data/data_source/data_source').DataSource;
 
     require('../../helpers/ignoreQuillTimers.js');
-    require('bundles/modules/parts/widgets-all');
+    require('bundles/modules/parts/widgets-web');
 
     if(!devices.real().generic) {
         return;
@@ -19,7 +19,10 @@ define(function(require) {
 
     QUnit.module('OptionChanged', {
         beforeEach: function() {
-            this.$element = $('<div />').appendTo('body');
+            // NOTE: workaround for inferno
+            // component can not be rendered as body first-level child
+            const $container = $('<div />').appendTo('#qunit-fixture');
+            this.$element = $('<div />').appendTo($container);
 
             this._originalOptionChanged = Component.prototype._optionChanged;
 
@@ -39,17 +42,26 @@ define(function(require) {
                     name === 'validationMessageOffset' ||
                     name === 'templatesRenderAsynchronously' ||
                     name === 'ignoreChildEvents' ||
+                    name === 'copyRootClassesToWrapper' ||
+                    name === '_ignoreCopyRootClassesToWrapperDeprecation' ||
+                    name === '_dataController' ||
+                    name === '_ignoreElementAttrDeprecation' ||
+                    name === '_ignorePreventScrollEventsDeprecation' ||
                     name === '_checkParentVisibility') {
                     return;
                 }
-                this.QUnitAssert.ok(false, 'Option \'' + name + '\' is not processed after runtime change');
+                // NOTE: workaround for inferno
+                // Internal renovated component call _optionChanged before QUnitAssert initialized
+                if(this.QUnitAssert) {
+                    this.QUnitAssert.ok(false, 'Option \'' + name + '\' is not processed after runtime change');
+                }
             };
 
             executeAsyncMock.setup();
         },
         afterEach: function() {
             Component.prototype._optionChanged = this._originalOptionChanged;
-            this.$element.remove();
+            this.$element.parent().remove();
             executeAsyncMock.teardown();
         }
     }, function() {
@@ -69,12 +81,12 @@ define(function(require) {
         };
 
         $.each(DevExpress.ui, function(componentName, componentConstructor) {
-            if($.inArray(componentName, excludedComponents) !== -1) {
+            if($.inArray(componentName, excludedComponents) !== -1
+                || componentConstructor.IS_RENOVATED_WIDGET) {
                 return;
             }
 
             const widgetName = componentName.replace('dx', '').toLowerCase();
-
             if($.fn[componentName]) {
                 componentConstructor.prototype._defaultOptionsRules = function() {
                     return [];
@@ -84,7 +96,6 @@ define(function(require) {
                     const $element = this.$element;
                     const component = $element[componentName](getDefaultOptions(componentName))[componentName]('instance');
                     const options = component.option();
-                    let optionCount = 0;
 
                     component.QUnitAssert = assert;
 
@@ -122,15 +133,16 @@ define(function(require) {
                             return;
                         }
 
+                        const assertOkSpy = sinon.spy(assert, 'ok');
                         component.beginUpdate();
-
                         component._notifyOptionChanged(option, newValue, prevValue);
                         component.endUpdate();
 
-                        optionCount++;
+                        if(assertOkSpy.notCalled) {
+                            assert.ok(true, option);
+                        }
+                        assertOkSpy.restore();
                     });
-
-                    assert.ok(true, optionCount + ' options was checked');
                 });
             }
         });

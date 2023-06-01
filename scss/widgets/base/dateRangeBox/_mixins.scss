@@ -1,0 +1,133 @@
+@use "sass:math";
+
+@mixin dx-outlined-mixin(
+  $base-bg,
+  $horizontal-padding,
+  $texteditor-label-font-size,
+  $label-offset-y,
+  $label-height,
+  $label-line-height,
+  $label-background-height,
+  $label-background-top,
+) {
+  .dx-daterangebox-with-label,
+  .dx-daterangebox-with-floating-label {
+    &.dx-editor-outlined {
+      margin-top: $label-offset-y;
+
+      .dx-texteditor-label {
+        .dx-label {
+          position: relative;
+
+          &::before {
+            content: '';
+            background-color: $base-bg;
+            width: 100%;
+            position: absolute;
+            height: $label-background-height;
+            top: $label-background-top;
+            margin-left: -$horizontal-padding;
+            margin-right: -$horizontal-padding;
+          }
+        }
+      }
+    }
+  }
+
+  .dx-daterangebox {
+    &.dx-daterangebox-with-floating-label {
+      &.dx-editor-outlined {
+        &.dx-dropdowneditor-active,
+        &.dx-state-focused,
+        &.dx-invalid {
+          .dx-datebox.dx-editor-outlined {
+            .dx-texteditor-label {
+              .dx-label {
+                padding: 0 $horizontal-padding;
+
+                &::before {
+                  background-color: $base-bg;
+                }
+
+                span {
+                  transform: translate(0, -$label-offset-y);
+                  font-size: $texteditor-label-font-size;
+                  margin-top: 0;
+                  top: 0;
+                  height: $label-height;
+                  line-height: $label-line-height;
+                }
+              }
+            }
+          }
+        }
+
+        .dx-datebox {
+          &.dx-texteditor-empty {
+            .dx-texteditor-label {
+              .dx-label {
+                &::before {
+                  background-color: transparent;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin dx-underlined-mixin($texteditor-label-font-size, $label-height, $line-height) {
+  $label-offset-y: math.div($texteditor-label-font-size, 2);
+  $label-transform: translate(0, 0);
+
+  .dx-daterangebox-with-floating-label {
+    &.dx-editor-underlined {
+      .dx-texteditor-label {
+        height: $label-height;
+        line-height: $line-height;
+      }
+
+      &.dx-dropdowneditor-active,
+      &.dx-state-focused,
+      &.dx-invalid {
+        .dx-datebox {
+          .dx-texteditor-label {
+            transform: $label-transform;
+            font-size: $texteditor-label-font-size;
+            height: $label-height;
+            line-height: $line-height;
+            top: 0;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin dx-filled-mixin($label-position-top, $texteditor-label-font-size, $label-height, $line-height) {
+  .dx-daterangebox-with-floating-label {
+    &.dx-editor-filled {
+      .dx-texteditor-label {
+        height: $label-height;
+        line-height: $line-height;
+      }
+
+      &.dx-dropdowneditor-active,
+      &.dx-state-focused,
+      &.dx-invalid {
+        .dx-datebox {
+          .dx-texteditor-label {
+            font-size: $texteditor-label-font-size;
+            height: $label-height;
+            line-height: $line-height;
+            top: $label-position-top;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
+}

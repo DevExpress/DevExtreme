@@ -1,57 +1,51 @@
-import '../jquery_augmentation';
+import {
+    DxPromise,
+} from '../core/utils/deferred';
 
 import {
-    dxButtonOptions
+    dxButtonOptions,
 } from './button';
 
 /**
- * @docid ui.dialog.alert
- * @publicName alert(messageHtml,title)
- * @param1 messageHtml:string
- * @param2 title:string
- * @return Promise<void>
- * @static
- * @module ui/dialog
- * @namespace DevExpress.ui.dialog
- * @export alert
- * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
+export interface CustomDialogOptions {
+    title?: string;
+    messageHtml?: string;
+    buttons?: Array<dxButtonOptions>;
+    showTitle?: boolean;
+    message?: string;
+    dragEnabled?: boolean;
+}
+/**
+ * @docid ui.dialog.alert
+ * @publicName alert(messageHtml,title)
+ * @return Promise<void>
+ * @static
+ * @namespace DevExpress.ui.dialog
+ * @public
+ */
+export function alert(messageHtml: string, title: string): DxPromise<void>;
 
 /**
  * @docid ui.dialog.confirm
  * @publicName confirm(messageHtml,title)
- * @param1 messageHtml:string
- * @param2 title:string
  * @return Promise<boolean>
  * @static
- * @module ui/dialog
  * @namespace DevExpress.ui.dialog
- * @export confirm
- * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
+export function confirm(messageHtml: string, title: string): DxPromise<boolean>;
 
 /**
  * @docid ui.dialog.custom
  * @publicName custom(options)
  * @return Object
  * @param1 options:object
- * @param1_field1 title:String
- * @param1_field2 messageHtml:String
- * @param1_field3 buttons:Array<dxButtonOptions>
- * @param1_field4 showTitle:boolean
- * @param1_field5 message:String:deprecated(messageHtml)
- * @param1_field6 dragEnabled:boolean
+ * @param1_field buttons:Array<dxButtonOptions>
+ * @param1_field message:String:deprecated(messageHtml)
  * @static
- * @module ui/dialog
  * @namespace DevExpress.ui.dialog
- * @export custom
- * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
-
-
+export function custom(options: CustomDialogOptions): any;

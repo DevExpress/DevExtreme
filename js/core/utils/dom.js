@@ -1,25 +1,35 @@
 import domAdapter from '../../core/dom_adapter';
 import $ from '../../core/renderer';
-import { isDefined, isRenderer, isWindow } from './type';
+import { each } from './iterator';
+import { isDefined, isRenderer, isWindow, isString } from './type';
 import { getWindow } from './window';
 
 const window = getWindow();
 
-export const resetActiveElement = function() {
-    const activeElement = domAdapter.getActiveElement();
-    const body = domAdapter.getBody();
+const getRootNodeHost = (element) => {
+    if(!element.getRootNode) {
+        return undefined;
+    }
 
-    // TODO: remove this hack after msie 11 support stopped
-    if(activeElement && activeElement !== body && activeElement.blur) {
-        try {
-            activeElement.blur();
-        } catch(e) {
-            body.blur();
-        }
+    const host = element.getRootNode().host;
+
+    // NOTE: getRootNode().host can return a string if element is detached "a" element
+    if(isString(host)) {
+        return undefined;
+    }
+
+    return host;
+};
+
+export const resetActiveElement = () => {
+    const activeElement = domAdapter.getActiveElement();
+
+    if(activeElement && activeElement !== domAdapter.getBody()) {
+        activeElement.blur?.();
     }
 };
 
-export const clearSelection = function() {
+export const clearSelection = () => {
     const selection = window.getSelection();
     if(!selection) return;
     if(selection.type === 'Caret') return;
@@ -34,7 +44,7 @@ export const clearSelection = function() {
     }
 };
 
-export const closestCommonParent = function(startTarget, endTarget) {
+export const closestCommonParent = (startTarget, endTarget) => {
     const $startTarget = $(startTarget);
     const $endTarget = $(endTarget);
 
@@ -53,7 +63,7 @@ export const closestCommonParent = function(startTarget, endTarget) {
     }
 };
 
-export const extractTemplateMarkup = function(element) {
+export const extractTemplateMarkup = (element) => {
     element = $(element);
 
     const templateTag = element.length && element.filter(function isNotExecutableScript() {
@@ -69,7 +79,7 @@ export const extractTemplateMarkup = function(element) {
     }
 };
 
-export const normalizeTemplateElement = function(element) {
+export const normalizeTemplateElement = (element) => {
     let $element = isDefined(element) && (element.nodeType || isRenderer(element))
         ? $(element)
         : $('<div>').html(element).contents();
@@ -85,39 +95,26 @@ export const normalizeTemplateElement = function(element) {
     return $element;
 };
 
-export const clipboardText = function(event, text) {
+export const clipboardText = (event, text) => {
     const clipboard = (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
-
-    if(arguments.length === 1) {
+    if(!text) {
         return clipboard && clipboard.getData('Text');
     }
 
     clipboard && clipboard.setData('Text', text);
 };
 
-export const contains = function(container, element) {
+export const contains = (container, element) => {
     if(!element) {
         return false;
     }
-
-    if(domAdapter.isTextNode(element)) {
-        element = element.parentNode;
-    }
-
-    if(domAdapter.isDocument(container)) {
-        return container.documentElement.contains(element);
-    }
-
     if(isWindow(container)) {
         return contains(container.document, element);
     }
-
-    return container.contains
-        ? container.contains(element)
-        : !!(element.compareDocumentPosition(container) & element.DOCUMENT_POSITION_CONTAINS);
+    return container.contains(element) || contains(container, getRootNodeHost(element));
 };
 
-export const createTextElementHiddenCopy = function(element, text, options) {
+export const createTextElementHiddenCopy = (element, text, options) => {
     const elementStyles = window.getComputedStyle($(element).get(0));
     const includePaddings = options && options.includePaddings;
 
@@ -138,4 +135,30 @@ export const createTextElementHiddenCopy = function(element, text, options) {
         'position': 'absolute',
         'float': 'left'
     });
+};
+
+export const insertBefore = (element, newElement) => {
+    if(newElement) {
+        domAdapter.insertElement(element.parentNode, newElement, element);
+    }
+    return element;
+};
+
+export const replaceWith = (element, newElement) => {
+    if(!(newElement && newElement[0])) return;
+    if(newElement.is(element)) return element;
+
+    each(newElement, (_, currentElement) => {
+        insertBefore(element[0], currentElement);
+    });
+    element.remove();
+
+    return newElement;
+};
+
+export const isElementInDom = $element => {
+    const element = $element?.get(0);
+    const shadowHost = element?.getRootNode().host;
+
+    return !!$(shadowHost || element).closest(getWindow().document).length;
 };

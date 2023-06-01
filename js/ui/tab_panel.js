@@ -1,3 +1,4 @@
+import { getOuterHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import { touch } from '../core/utils/support';
 import { extend } from '../core/utils/extend';
@@ -20,6 +21,8 @@ const TABPANEL_TABS_CLASS = 'dx-tabpanel-tabs';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
+
+const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
 
 const TabPanel = MultiView.inherit({
 
@@ -173,7 +176,7 @@ const TabPanel = MultiView.inherit({
 
     _updateLayout: function() {
         if(hasWindow()) {
-            const tabsHeight = this._$tabContainer.outerHeight();
+            const tabsHeight = getOuterHeight(this._$tabContainer);
             this._$container.css({
                 'marginTop': -tabsHeight,
                 'paddingTop': tabsHeight
@@ -245,11 +248,33 @@ const TabPanel = MultiView.inherit({
         this._focusTarget().attr('tabIndex', -1);
     },
 
+    _toggleWrapperFocusedClass(isFocused) {
+        this._toggleFocusClass(isFocused, this._$wrapper);
+    },
+
+    _toggleDisabledFocusedClass(isFocused) {
+        this._focusTarget().toggleClass(DISABLED_FOCUSED_TAB_CLASS, isFocused);
+    },
+
     _updateFocusState: function(e, isFocused) {
         this.callBase(e, isFocused);
 
-        if(e.target === this._tabs._focusTarget().get(0)) {
+        const isTabsTarget = e.target === this._tabs._focusTarget().get(0);
+        const isMultiViewTarget = e.target === this._focusTarget().get(0);
+
+        if(isTabsTarget) {
             this._toggleFocusClass(isFocused, this._focusTarget());
+        }
+
+        if(isTabsTarget || isMultiViewTarget) {
+            const isDisabled = this._isDisabled(this.option('focusedElement'));
+
+            this._toggleWrapperFocusedClass(isFocused && !isDisabled);
+            this._toggleDisabledFocusedClass(isFocused && isDisabled);
+        }
+
+        if(isMultiViewTarget) {
+            this._toggleFocusClass(isFocused, this._tabs.option('focusedElement'));
         }
     },
 
@@ -336,6 +361,12 @@ const TabPanel = MultiView.inherit({
                 const id = value ? $(value).index() : value;
                 const newItem = value ? this._tabs._itemElements().eq(id) : value;
                 this._setTabsOption('focusedElement', getPublicElement(newItem));
+
+                const isDisabled = this._isDisabled(value);
+
+                this._toggleWrapperFocusedClass(!isDisabled);
+                this._toggleDisabledFocusedClass(isDisabled);
+
                 this.callBase(args);
                 break;
             }
@@ -377,3 +408,9 @@ TabPanel.ItemClass = TabPanelItem;
 registerComponent('dxTabPanel', TabPanel);
 
 export default TabPanel;
+
+/**
+ * @name dxTabPanelItem
+ * @inherits dxMultiViewItem
+ * @type object
+ */

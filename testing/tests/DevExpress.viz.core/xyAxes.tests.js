@@ -42,11 +42,11 @@ const environment = {
                 breaks: breaks
             };
         });
-        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator', function() {
+        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
             return that.tickGeneratorSpy;
         });
 
-        sinon.stub(translator2DModule, 'Translator2D', function() {
+        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return that.translator;
         });
 
@@ -98,10 +98,11 @@ const environment = {
             discreteAxisDivisionMode: 'crossLabels'
         };
 
+        this.templateRender = sinon.spy();
         this.incidentOccurred = sinon.spy();
         this.renderSettings = {
             stripsGroup: this.renderer.g(),
-            labelAxesGroup: this.renderer.g(),
+            stripLabelAxesGroup: this.renderer.g(),
             constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup: this.renderer.g(),
             gridGroup: this.renderer.g(),
@@ -110,7 +111,11 @@ const environment = {
             drawingType: 'linear',
             incidentOccurred: this.incidentOccurred,
             eventTrigger: () => { },
-            getTemplate() {}
+            getTemplate: sinon.spy(() => {
+                return {
+                    render: this.templateRender
+                };
+            })
         };
         this.range = new rangeModule.Range();
         this.range.min = 0;
@@ -520,7 +525,11 @@ QUnit.module('Axis shift', environment2DTranslator);
 QUnit.test('axis without shifting', function(assert) {
     this.options.isHorizontal = false;
     const axis = this.createDrawnAxis({ position: 'left' });
+
+    const labelsGroup = this.renderer.g.getCall(9);
     assert.deepEqual(axis.getAxisShift(), 0);
+
+    assert.equal(labelsGroup.returnValue.attr.callCount, 1);
 });
 
 QUnit.test('axis shifted', function(assert) {
@@ -528,7 +537,13 @@ QUnit.test('axis shifted', function(assert) {
     const axis = this.createDrawnAxis({ position: 'bottom' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
+
+    const labelsGroup = this.renderer.g.getCall(9);
     assert.deepEqual(axis.getAxisShift(), 40);
+    assert.deepEqual(labelsGroup.returnValue.attr.getCall(1).args[0], {
+        translateX: 0,
+        translateY: 40
+    });
 });
 
 QUnit.test('axis shifted (multipleAxesSpacing)', function(assert) {
@@ -537,7 +552,12 @@ QUnit.test('axis shifted (multipleAxesSpacing)', function(assert) {
     const axis = this.createDrawnAxis({ position: 'top' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
+    const labelsGroup = this.renderer.g.getCall(9);
     assert.deepEqual(axis.getAxisShift(), 20);
+    assert.deepEqual(labelsGroup.returnValue.attr.getCall(1).args[0], {
+        translateX: 0,
+        translateY: -20
+    });
 });
 
 QUnit.module('API methods', environment2DTranslator);
@@ -2811,6 +2831,35 @@ QUnit.module('Coords In', $.extend({}, environment2DTranslator, {
     }
 }));
 
+// T1044231
+QUnit.test('getTemplatesDef. State after remove some labels by resolveOverlapping', function(assert) {
+    const done = assert.async();
+    this.updateOptions({
+        label: { visible: true, template: sinon.spy(), overlappingBehavior: 'hide' }
+    });
+    this.axis.setBusinessRange({
+        addRange: sinon.stub(),
+        min: 0,
+        max: 100
+    });
+
+    this.generatedTicks = [0, 5, 10, 15, 20];
+
+    this.axis.createTicks(this.canvas);
+
+    // act
+    this.axis.draw();
+
+    this.axis.getTemplatesDef().done(function() {
+        assert.ok(true, 'deferred resolved');
+        done();
+    });
+
+    this.templateRender.getCalls().forEach(currentCall => {
+        currentCall.args[0].onRendered();
+    });
+});
+
 QUnit.test('Horizontal axis. bottom position', function(assert) {
     this.updateOptions({
         isHorizontal: true,
@@ -3375,6 +3424,24 @@ QUnit.module('Datetime scale breaks. Weekends and holidays', $.extend({}, enviro
     },
     afterEach: environment2DTranslator.afterEach
 }));
+
+// T976735
+QUnit.test('Breaks generation on empty range', function(assert) {
+    this.range.min = undefined;
+    this.range.max = undefined;
+
+    const axis = this.createSimpleAxis({});
+    axis.updateOptions({
+        label: {},
+        workWeek: [1, 2, 3, 4, 5],
+        dataType: 'datetime',
+        workdaysOnly: true
+    });
+    // act
+    axis.setBusinessRange({});
+
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].userBreaks, []);
+});
 
 QUnit.test('Generate weekend breaks', function(assert) {
     this.updateOptions({
@@ -4996,6 +5063,7 @@ QUnit.module('Custom positioning', {
             indentFromAxis: 5
         };
         this.currentBBox = 0;
+        this.options.crosshairMargin = 0;
 
         that.bBoxes = [];
         for(let i = 0; i < 100; i++) {
@@ -5043,8 +5111,8 @@ QUnit.test('Set predefined axis position by \'position\' option', function(asser
     assert.equal(verticalAxis.getAxisPosition(), 910);
     assert.notOk(horizontalAxis.customPositionIsAvailable());
     assert.notOk(verticalAxis.customPositionIsAvailable());
-    assert.notOk(horizontalAxis.hasCustomPosition());
-    assert.notOk(verticalAxis.hasCustomPosition());
+    assert.notOk(horizontalAxis.hasNonBoundaryPosition());
+    assert.notOk(verticalAxis.hasNonBoundaryPosition());
     assert.equal(horizontalAxis.getResolvedPositionOption(), 'top');
     assert.equal(verticalAxis.getResolvedPositionOption(), 'right');
 
@@ -5063,8 +5131,8 @@ QUnit.test('Set custom position', function(assert) {
     assert.equal(verticalAxis.getAxisPosition(), 688);
     assert.ok(horizontalAxis.customPositionIsAvailable());
     assert.ok(verticalAxis.customPositionIsAvailable());
-    assert.ok(horizontalAxis.hasCustomPosition());
-    assert.ok(verticalAxis.hasCustomPosition());
+    assert.ok(horizontalAxis.hasNonBoundaryPosition());
+    assert.ok(verticalAxis.hasNonBoundaryPosition());
     assert.equal(horizontalAxis.getResolvedPositionOption(), 50);
     assert.equal(verticalAxis.getResolvedPositionOption(), 75);
     assert.notOk(horizontalAxis.customPositionIsBoundary());
@@ -5137,10 +5205,65 @@ QUnit.test('Validate \'customPosition\' option', function(assert) {
 
     assert.equal(horizontalAxis.getAxisPosition(), 600);
     assert.ok(horizontalAxis.customPositionIsAvailable());
-    assert.notOk(horizontalAxis.hasCustomPosition());
+    assert.notOk(horizontalAxis.hasNonBoundaryPosition());
     assert.ok(horizontalAxis.customPositionIsBoundary());
     assert.equal(horizontalAxis.getResolvedBoundaryPosition(), 'bottom');
     assert.ok(horizontalAxis.customPositionEqualsToPredefined());
+});
+
+QUnit.test('Check boundary side margin is equal 0 when the \'customPosition\' option exists and position of axis is not a boundary', function(assert) {
+    const { verticalAxis } = this.drawOrthogonalAxes({},
+        {
+            customPosition: 200
+        });
+    verticalAxis._customBoundaryPosition = 200;
+
+    const margins = verticalAxis.getMargins();
+    assert.equal(margins.left, 0);
+});
+
+QUnit.test('Check boundary side margin is not equal 0 when the \'customPosition\' option exists and position of axis is a boundary', function(assert) {
+    const { verticalAxis } = this.drawOrthogonalAxes({},
+        {
+            customPosition: 200
+        });
+    verticalAxis._customBoundaryPosition = 'left';
+
+    const margins = verticalAxis.getMargins();
+    assert.equal(margins.left, 19);
+});
+
+QUnit.test('Check boundary side margin is cut when the \'offset\' option exists and position of axis is a boundary (position left, offset > 0)', function(assert) {
+    const { verticalAxis } = this.drawOrthogonalAxes({},
+        {
+            offset: 10
+        });
+    verticalAxis._customBoundaryPosition = 'left';
+
+    const margins = verticalAxis.getMargins();
+    assert.equal(margins.left, 9);
+});
+
+QUnit.test('Check boundary side margin is cut when the \'offset\' option exists and position of axis is a boundary (position right, offset < 0)', function(assert) {
+    const { verticalAxis } = this.drawOrthogonalAxes({},
+        {
+            offset: -10
+        });
+    verticalAxis._customBoundaryPosition = 'right';
+
+    const margins = verticalAxis.getMargins();
+    assert.equal(margins.right, 10);
+});
+
+QUnit.test('Check boundary side margin is not cut when the \'offset\' option exists and position of axis is not a boundary', function(assert) {
+    const { verticalAxis } = this.drawOrthogonalAxes({},
+        {
+            offset: 10
+        });
+    verticalAxis._customBoundaryPosition = 100;
+
+    const margins = verticalAxis.getMargins();
+    assert.equal(margins.left, 19);
 });
 
 QUnit.test('Resolve label overlapping by axis (in the middle, labels position by default)', function(assert) {
@@ -5303,4 +5426,18 @@ QUnit.test('Resolve label overlapping by opposite label (other labels position)'
 
     assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateY: 246 });
     assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateX: 439 });
+});
+
+QUnit.module('Axis templates with overlapping behavior', overlappingEnvironment);
+
+QUnit.test('Axis template was removed before rendered', function(assert) {
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', template() {} } });
+
+    // act
+    const count = this.templateRender.callCount;
+    for(let i = 0; i < count; i++) {
+        this.templateRender.getCall(i).args[0].onRendered();
+    }
+
+    assert.ok(true); // no errors
 });

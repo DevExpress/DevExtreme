@@ -15,7 +15,6 @@ const BUNDLE_CONFIG_SOURCES = [
     'js/bundles/modules/parts/core.js',
     'js/bundles/modules/parts/data.js',
     'js/bundles/modules/parts/widgets-base.js',
-    'js/bundles/modules/parts/widgets-mobile.js',
     'js/bundles/modules/parts/widgets-web.js',
     'js/bundles/modules/parts/viz.js',
     'js/bundles/modules/parts/aspnet.js'
@@ -37,7 +36,7 @@ gulp.task('bundler-config', function() {
         .pipe(gulp.dest(`${context.RESULT_NPM_PATH}/${packageDir}/bundles`));
 });
 
-gulp.task('bundler-config-dev', function() {
+gulp.task('bundler-config-watch', function() {
     return gulp
         .watch(BUNDLE_CONFIG_SOURCES, gulp.series('bundler-config'))
         .on('ready', () => console.log(

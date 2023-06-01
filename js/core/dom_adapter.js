@@ -1,10 +1,12 @@
 /* global document */
 import injector from './utils/dependency_injector';
 import { noop } from './utils/common';
+import { getShadowElementsFromPoint } from './utils/shadow_dom';
 
 const ELEMENT_NODE = 1;
 const TEXT_NODE = 3;
 const DOCUMENT_NODE = 9;
+const DOCUMENT_FRAGMENT_NODE = 11;
 
 const nativeDOMAdapterStrategy = {
     querySelectorAll(element, selector) {
@@ -49,7 +51,7 @@ const nativeDOMAdapterStrategy = {
     },
 
     isNode(element) {
-        return typeof element === 'object' && 'nodeType' in element;
+        return element && typeof element === 'object' && 'nodeType' in element && 'nodeName' in element;
     },
 
     isElementNode(element) {
@@ -62,6 +64,10 @@ const nativeDOMAdapterStrategy = {
 
     isDocument(element) {
         return element && element.nodeType === DOCUMENT_NODE;
+    },
+
+    isDocumentFragment(element) {
+        return element && element.nodeType === DOCUMENT_FRAGMENT_NODE;
     },
 
     removeElement(element) {
@@ -86,7 +92,11 @@ const nativeDOMAdapterStrategy = {
     },
 
     setAttribute(element, name, value) {
-        element.setAttribute(name, value);
+        if(name === 'style') {
+            element.style.cssText = value;
+        } else {
+            element.setAttribute(name, value);
+        }
     },
 
     removeAttribute(element, name) {
@@ -105,33 +115,9 @@ const nativeDOMAdapterStrategy = {
 
     setClass(element, className, isAdd) {
         if(element.nodeType === 1 && className) {
-            if(element.classList) {
-                if(isAdd) {
-                    element.classList.add(className);
-                } else {
-                    element.classList.remove(className);
-                }
-            } else { // IE9
-                const classNameSupported = typeof element.className === 'string';
-                const elementClass = classNameSupported ? element.className : (this.getAttribute(element, 'class') || '');
-                const classNames = elementClass.split(' ');
-                const classIndex = classNames.indexOf(className);
-                let resultClassName;
-                if(isAdd && classIndex < 0) {
-                    resultClassName = elementClass ? elementClass + ' ' + className : className;
-                }
-                if(!isAdd && classIndex >= 0) {
-                    classNames.splice(classIndex, 1);
-                    resultClassName = classNames.join(' ');
-                }
-                if(resultClassName !== undefined) {
-                    if(classNameSupported) {
-                        element.className = resultClassName;
-                    } else {
-                        this.setAttribute(element, 'class', resultClassName);
-                    }
-                }
-            }
+            isAdd
+                ? element.classList.add(className)
+                : element.classList.remove(className);
         }
     },
 
@@ -145,8 +131,14 @@ const nativeDOMAdapterStrategy = {
         return this._document;
     },
 
-    getActiveElement() {
-        return this._document.activeElement;
+    getActiveElement(element) {
+        const activeElementHolder = this.getRootNode(element);
+
+        return activeElementHolder.activeElement;
+    },
+
+    getRootNode(element) {
+        return element?.getRootNode?.() ?? this._document;
     },
 
     getBody() {
@@ -191,6 +183,16 @@ const nativeDOMAdapterStrategy = {
         return () => {
             element.removeEventListener(event, callback);
         };
+    },
+
+    elementsFromPoint(x, y, element) {
+        const activeElementHolder = this.getRootNode(element);
+
+        if(activeElementHolder.host) {
+            return getShadowElementsFromPoint(x, y, activeElementHolder);
+        }
+
+        return activeElementHolder.elementsFromPoint(x, y);
     }
 };
 

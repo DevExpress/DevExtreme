@@ -27,7 +27,7 @@ const ListEdit = ListBase.inherit({
             const focusedItemIndex = editStrategy.getNormalizedIndex(focusedElement);
             const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
 
-            if(isLastIndexFocused && this._isDataSourceLoading()) {
+            if(isLastIndexFocused && this._dataController.isLoading()) {
                 return;
             }
 
@@ -49,13 +49,13 @@ const ListEdit = ListBase.inherit({
         };
 
         const enter = function(e) {
-            if(!this._editProvider.handleEnterPressing()) {
+            if(!this._editProvider.handleEnterPressing(e)) {
                 parent.enter.apply(this, arguments);
             }
         };
 
         const space = function(e) {
-            if(!this._editProvider.handleEnterPressing()) {
+            if(!this._editProvider.handleEnterPressing(e)) {
                 parent.space.apply(this, arguments);
             }
         };
@@ -107,12 +107,6 @@ const ListEdit = ListBase.inherit({
 
             onSelectAllValueChanged: null,
 
-            /**
-            * @name dxListOptions.selectAllText
-            * @type string
-            * @default "Select All"
-            * @hidden
-            */
             selectAllText: localizationMessage.format('dxList-selectAll'),
 
             menuItems: [],
@@ -237,6 +231,15 @@ const ListEdit = ListBase.inherit({
         this.callBase(...arguments);
     },
 
+    _getItemContainer: function(changeData) {
+        if(this.option('grouped')) {
+            const groupIndex = this._editStrategy.getIndexByItemData(changeData)?.group;
+            return this._getGroupContainerByIndex(groupIndex);
+        } else {
+            return this.callBase(changeData);
+        }
+    },
+
     _itemContextMenuHandler(e) {
         const $itemElement = $(e.currentTarget);
         if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
@@ -274,8 +277,8 @@ const ListEdit = ListBase.inherit({
         switch(args.name) {
             case 'selectAllMode':
                 this._initDataSource();
-                this._dataSource.pageIndex(0);
-                this._dataSource.load();
+                this._dataController.pageIndex(0);
+                this._dataController.load();
                 break;
             case 'grouped':
                 this._clearSelectedItems();
@@ -346,12 +349,9 @@ const ListEdit = ListBase.inherit({
     * @return object
     * @hidden
     */
-    // TODO: rename & rework because method return itemData but named as itemElement
     getItemByIndex(index) {
         return this._editStrategy.getItemDataByIndex(index);
     }
-
-
 });
 
 export default ListEdit;

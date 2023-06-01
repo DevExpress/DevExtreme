@@ -2,6 +2,8 @@ const $ = require('jquery');
 const ajax = require('core/utils/ajax');
 const compareVersion = require('core/utils/version').compare;
 
+QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+
 QUnit.module('sendRequest', {
     beforeEach: function() {
         this.xhr = sinon.useFakeXMLHttpRequest();
@@ -80,7 +82,7 @@ QUnit.test('responseType arraybuffer', function(assert) {
     xhr.response = buffer;
     xhr.respond();
 
-    assert.equal(result, buffer);
+    assert.deepEqual(result, buffer);
 });
 
 QUnit.test('upload events', function(assert) {
@@ -156,7 +158,7 @@ QUnit.test('Set request header', function(assert) {
 
     assert.equal(xhr.method, 'GET');
     assert.equal(xhr.url, '/some-url');
-    assert.equal(xhr.requestHeaders['Content-Type'], 'text/html');
+    assert.equal(xhr.requestHeaders['Content-Type'], 'text/html;charset=utf-8'); // https://github.com/sinonjs/nise/issues/33
     assert.equal(xhr.requestHeaders['Accept'], 'application/xml');
     assert.equal(xhr.requestHeaders['X-Requested-With'], 'XMLHttpRequest');
 });
@@ -175,7 +177,7 @@ QUnit.test('Set request header and content-type', function(assert) {
 
     assert.equal(xhr.method, 'GET');
     assert.equal(xhr.url, '/some-url');
-    assert.equal(xhr.requestHeaders['Content-Type'], 'text/html');
+    assert.equal(xhr.requestHeaders['Content-Type'], 'text/html;charset=utf-8'); // https://github.com/sinonjs/nise/issues/33
     assert.equal(xhr.requestHeaders['Accept'], '*/*');
 });
 
@@ -219,10 +221,11 @@ QUnit.test('Default Content-Type', function(assert) {
 
     assert.equal(xhr1.method, 'GET');
     assert.equal(xhr1.url, '/some-url');
-    assert.equal(xhr1.requestHeaders['Content-Type'], undefined);
+    // https://chromium.googlesource.com/chromium/src/third_party/+/refs/heads/main/sinonjs/src/sinon.js?autodive=0%2F%2F#3795
+    assert.equal(xhr1.requestHeaders['Content-Type'], 'text/plain;charset=utf-8');
     assert.equal(xhr1.requestHeaders['Accept'], '*/*');
 
-    assert.equal(xhr2.requestHeaders['Content-Type'], undefined);
+    assert.equal(xhr2.requestHeaders['Content-Type'], 'text/plain;charset=utf-8');
 
     assert.equal(xhr3.method, 'POST');
     assert.equal(xhr3.requestHeaders['Content-Type'], 'application/x-www-form-urlencoded;charset=utf-8');

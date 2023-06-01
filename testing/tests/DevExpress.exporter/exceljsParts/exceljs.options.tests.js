@@ -1,6 +1,6 @@
-import messageLocalization from 'localization/message';
 import { runCommonOptionTests } from '../commonParts/options.tests.js';
-import DataGrid from 'ui/data_grid/ui.data_grid';
+import DataGrid from 'ui/data_grid';
+import PivotGrid from 'ui/pivot_grid/ui.pivot_grid';
 
 const ExcelJSOptionTests = {
     runTests(moduleConfig, _getFullOptions, getComponent) {
@@ -42,20 +42,29 @@ const ExcelJSOptionTests = {
                 }
             });
 
+            QUnit.test('encodeExecutableContent', function(assert) {
+                const component = getComponent();
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet }).encodeExecutableContent, false, 'no member');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, encodeExecutableContent: undefined }).encodeExecutableContent, false, 'undefined');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, encodeExecutableContent: null }).encodeExecutableContent, false, 'null');
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, encodeExecutableContent: false }).encodeExecutableContent, false, 'false');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, encodeExecutableContent: true }).encodeExecutableContent, true, 'true');
+            });
+
             QUnit.test('loadPanel', function(assert) {
                 const component = getComponent();
-                const defaultLoadPanel = { enabled: true, text: messageLocalization.format('dxDataGrid-exporting') };
+                const defaultLoadPanel = { enabled: true };
 
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet }).loadPanel, defaultLoadPanel, 'no member');
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: undefined }).loadPanel, defaultLoadPanel, 'undefined');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: null }).loadPanel, defaultLoadPanel, 'undefined');
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: null }).loadPanel, defaultLoadPanel, 'null');
 
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: {} }).loadPanel, { enabled: true, text: defaultLoadPanel.text }, 'loadPanel: {}');
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { enabled: true } }).loadPanel, { enabled: true, text: defaultLoadPanel.text }, '{ enabled: true } }');
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { text: 'my text' } }).loadPanel, { enabled: true, text: 'my text' }, '{ text: my text }');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: {} }).loadPanel, { enabled: true }, 'loadPanel: {}');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { enabled: true } }).loadPanel, { enabled: true }, '{ enabled: true } }');
 
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { enabled: false } }).loadPanel, { enabled: false, text: defaultLoadPanel.text }, '{ enabled: false } }');
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { enabled: false, text: 'my text' } }).loadPanel, { enabled: false, text: 'my text' }, '{ enabled: false, text: my text } }');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { enabled: false } }).loadPanel, { enabled: false }, '{ enabled: false } }');
             });
 
             QUnit.test('autoFilterEnabled', function(assert) {
@@ -72,6 +81,56 @@ const ExcelJSOptionTests = {
 
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: false }).autoFilterEnabled, false, 'false');
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: true }).autoFilterEnabled, true, 'true');
+            });
+
+            QUnit.test('mergeRowFieldValues', function(assert) {
+                if(!(getComponent() instanceof PivotGrid)) {
+                    assert.ok(true, 'The test relevant for PivotGrid widget only');
+                    return;
+                }
+
+                const component = getComponent();
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet }).mergeRowFieldValues, true, 'no member');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeRowFieldValues: undefined }).mergeRowFieldValues, true, 'undefined');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeRowFieldValues: null }).mergeRowFieldValues, true, 'null');
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeRowFieldValues: false }).mergeRowFieldValues, false, 'false');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeRowFieldValues: true }).mergeRowFieldValues, true, 'true');
+            });
+
+            QUnit.test('mergeColumnFieldValues', function(assert) {
+                if(!(getComponent() instanceof PivotGrid)) {
+                    assert.ok(true, 'The test relevant for PivotGrid widget only');
+                    return;
+                }
+
+                const component = getComponent();
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet }).mergeColumnFieldValues, true, 'no member');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeColumnFieldValues: undefined }).mergeColumnFieldValues, true, 'undefined');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeColumnFieldValues: null }).mergeColumnFieldValues, true, 'null');
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeColumnFieldValues: false }).mergeColumnFieldValues, false, 'false');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, mergeColumnFieldValues: true }).mergeColumnFieldValues, true, 'true');
+            });
+
+            ['exportDataFieldHeaders', 'exportRowFieldHeaders', 'exportColumnFieldHeaders', 'exportFilterFieldHeaders'].forEach((optionName) => {
+                QUnit.test(`${optionName}`, function(assert) {
+                    if(!(getComponent() instanceof PivotGrid)) {
+                        assert.ok(true, 'The test relevant for PivotGrid widget only');
+                        return;
+                    }
+
+                    const component = getComponent();
+
+                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet })[optionName], false, `${optionName}: no member`);
+                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, [optionName]: undefined })[optionName], false, `${optionName}:undefined`);
+                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, [optionName]: null })[optionName], false, `${optionName}:null`);
+
+                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, [optionName]: false })[optionName], false, `${optionName}:false`);
+                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, [optionName]: true })[optionName], true, `${optionName}:true`);
+                });
             });
         });
     }
