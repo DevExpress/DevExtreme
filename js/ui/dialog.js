@@ -155,7 +155,9 @@ export const custom = function(options) {
         .addClass(DX_DIALOG_ROOT_CLASSNAME);
 
     function show() {
-        if(devices.real().deviceType === 'phone') {
+        const isPhone = devices.real().deviceType === 'phone';
+
+        if(isPhone) {
             const windowHeight = getHeight(window);
             const windowWidth = getWidth(window);
 
