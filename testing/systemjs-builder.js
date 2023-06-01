@@ -412,7 +412,7 @@ const updateBuilder = () => {
         case 'builder':
             return updateBuilder();
         case 'modules':
-            return await transpileModules(Builder);
+            return await transpileModules();
         case 'modules-renovation':
             return transpileRenovationModules();
         case 'testing':
