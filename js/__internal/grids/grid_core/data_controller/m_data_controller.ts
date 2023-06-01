@@ -496,7 +496,7 @@ export class DataController extends ControllerWithDataMixin {
     let isAsyncDataSourceApplying = false;
 
     this._useSortingGroupingFromColumns = false;
-    console.log('_handleDataChanged', e);
+
     if (dataSource && !that._isDataSourceApplying) {
       that._isDataSourceApplying = true;
 

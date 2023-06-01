@@ -44,7 +44,7 @@ const FilterPanelView = modules.View.inherit({
       .addClass(that.addWidgetPrefix(FILTER_PANEL_LEFT_CONTAINER))
       .appendTo($element);
 
-    const isColumnsDefined = this._columnsController.isDataSourceApplied() || this._columnsController.isAllDataTypesDefined();
+    const isColumnsDefined = !!this._columnsController.getColumns().length;
 
     if (isColumnsDefined) {
       if (that.option('filterValue') || that._filterValueBuffer) {
@@ -198,8 +198,6 @@ const FilterPanelView = modules.View.inherit({
   },
 
   getConditionText(filterValue, options) {
-    console.log('getConditionText', arguments);
-
     const that = this;
     const operation = filterValue[1];
     // @ts-expect-error
