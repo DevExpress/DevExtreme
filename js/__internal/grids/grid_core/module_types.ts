@@ -8,6 +8,9 @@ import Widget from '@js/ui/widget/ui.widget';
 
 type PropertyType<T, TProp extends string> = _PropertyType<T, TProp> | undefined;
 
+// Data types
+export type RowKey = unknown;
+
 // todo: move to upper .d.ts
 type OptionsMethod<TOptions> =
   (() => TOptions) &
