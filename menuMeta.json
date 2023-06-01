@@ -4180,6 +4180,16 @@
         ]
       },
       {
+        "Name": "Date Range Box",
+        "Equivalents": "DateRangeBox, dxDateRangeBox, dx-date-range-box",
+        "Demos": [{
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "DateRangeBox",
+            "Badge": "New"
+        }]
+      },
+      {
         "Name": "Drop Down Box",
         "Breadcrumb": true,
         "Equivalents": "DropDown, DropDownEditor, dxDropDownBox, dx-dropdown-box",
@@ -4419,16 +4429,6 @@
             "DemoType": "Web"
           }
         ]
-      },
-      {
-        "Name": "Date Range Box",
-        "Equivalents": "",
-        "Demos": [{
-            "Title": "Overview",
-            "Name": "Overview",
-            "Widget": "DateRangeBox",
-            "Badge": "New"
-        }]
       }
     ]
   },
