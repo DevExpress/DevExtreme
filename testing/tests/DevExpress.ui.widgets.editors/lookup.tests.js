@@ -8,6 +8,7 @@ import errors from 'core/errors';
 import { isRenderer } from 'core/utils/type';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import { normalizeKeyName } from 'events/utils/index';
+import visualViewport from 'core/utils/visual_viewport';
 
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
@@ -1601,20 +1602,26 @@ QUnit.module('options', {
             assert.ok(true, 'not mobile device');
             return;
         }
-        const initialVisualViewport = window.visualViewport;
+
+        const visualViewportStub = sinon.stub(visualViewport, 'getVisualViewportSizes');
 
         try {
-            window.visualViewport = { height: 510, width: 405 };
+            visualViewportStub.returns({ width: 405, height: 510 });
+
             const $lookup = $('#lookup');
             const instance = $lookup.dxLookup({}).dxLookup('instance');
 
             instance.open();
+
             const popup = $lookup.find(`.${POPUP_CLASS}`).dxPopup('instance');
 
-            assert.equal(popup.option('height')(), 510 * WINDOW_RATIO);
-            assert.equal(popup.option('width')(), 405 * WINDOW_RATIO);
+            const width = popup.option('width')();
+            const height = popup.option('height')();
+
+            assert.strictEqual(width, 405 * WINDOW_RATIO);
+            assert.strictEqual(height, 510 * WINDOW_RATIO);
         } finally {
-            window.visualViewport = initialVisualViewport;
+            visualViewportStub.restore();
         }
     });
 

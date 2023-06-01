@@ -137,7 +137,7 @@ const Lookup = DropDownList.inherit({
                 },
 
                 height: function() {
-                    return getWidth(window) * WINDOW_RATIO;
+                    return getHeight(window) * WINDOW_RATIO;
                 },
 
                 shading: true,
