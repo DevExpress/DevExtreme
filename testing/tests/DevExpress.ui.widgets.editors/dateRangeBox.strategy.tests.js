@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import dataUtils from 'core/element_data';
+import devices from 'core/devices.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/date_range_box';
@@ -511,6 +512,11 @@ QUnit.module('Strategy', moduleConfig, () => {
         });
 
         QUnit.test('startDate should be contoured after moving focus from endDate to startDate', function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
             this.reinit({
                 multiView: true,
                 value: [new Date('2023/06/12'), new Date('2023/11/13')],
@@ -525,7 +531,12 @@ QUnit.module('Strategy', moduleConfig, () => {
             assert.ok($startDateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
         });
 
-        QUnit.test('Calendar should not swipe views on focus endDate when startDate is on main view and endDate is on additional view', function(assert) {
+        QUnit.test('endDate should be contoured after moving focus from startDate to endDate', function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
             this.reinit({
                 multiView: true,
                 value: [new Date('2023/06/12'), new Date('2023/11/13')],
