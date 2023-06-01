@@ -178,7 +178,7 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
         if(this._isInstantlyMode()) {
             if(!this.dateRangeBox.option('disableOutOfRangeSelection')) {
-                if(this._widget.option('_currentSelection') === 'startDate') {
+                if(this._getCalendarCurrentSelection() === 'startDate') {
                     this._dateSelectedCounter = 0;
                 } else {
                     this._dateSelectedCounter = 1;
@@ -200,26 +200,40 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
                 return;
             }
+        } else {
+            if(this._getCalendarCurrentSelection() === 'endDate') {
+                if(value[0] && getDeserializedDate(value[0]) > getDeserializedDate(value[1])) {
+                    return;
+                }
+            }
         }
 
         if(!this._shouldPreventFocusChange) {
-            const targetDateBox = this._widget.option('_currentSelection') === 'startDate'
-                ? this.getDateRangeBox().getEndDateBox()
-                : this.getDateRangeBox().getStartDateBox();
-
-            targetDateBox.focus();
-            eventsEngine.trigger(targetDateBox.field(), 'dxclick');
+            this._moveFocusToNextInput();
         }
 
         this._shouldPreventFocusChange = false;
+    }
+
+    _moveFocusToNextInput() {
+        const targetDateBox = this._getCalendarCurrentSelection() === 'startDate'
+            ? this.getDateRangeBox().getEndDateBox()
+            : this.getDateRangeBox().getStartDateBox();
+
+        targetDateBox.focus();
+        eventsEngine.trigger(targetDateBox.field(), 'dxclick');
     }
 
     getCurrentSelection() {
         return this.dateRangeBox.option('_currentSelection');
     }
 
+    _getCalendarCurrentSelection() {
+        return this._widget.option('_currentSelection');
+    }
+
     _closeDropDownByEnter() {
-        if(this._widget.option('_currentSelection') === 'startDate') {
+        if(this._getCalendarCurrentSelection() === 'startDate') {
             return false;
         } else {
             return true;
