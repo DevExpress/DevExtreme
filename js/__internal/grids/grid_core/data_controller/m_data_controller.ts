@@ -359,9 +359,9 @@ export class DataController extends ControllerWithDataMixin {
         filter = dataSource.filter();
       }
 
-      const isColumnsDefined = columnsController.isDataSourceApplied() || columnsController.isAllDataTypesDefined();
+      const isColumnsTypesDefined = columnsController.isDataSourceApplied() || columnsController.isAllDataTypesDefined();
 
-      if (isColumnsDefined) {
+      if (isColumnsTypesDefined) {
         const additionalFilter = this._calculateAdditionalFilter();
 
         if (additionalFilter) {
