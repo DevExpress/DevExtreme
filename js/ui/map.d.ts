@@ -183,9 +183,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxMap
+     * @type_function_param1 e:{ui/map:ClickEvent}
      * @action
      * @public
      */
