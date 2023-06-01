@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="dx-field">
-        <div class="dx-field-label">LDML pattern</div>
+        <div class="dx-field-label">Locale Data Markup Language (LDML) pattern</div>
         <div class="dx-field-value">
           <DxDateBox
             :show-clear-button="true"

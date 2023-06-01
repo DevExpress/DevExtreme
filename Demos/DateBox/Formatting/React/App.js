@@ -34,7 +34,7 @@ class App extends React.Component {
             </div>
           </div>
           <div className="dx-field">
-            <div className="dx-field-label">LDML pattern</div>
+            <div className="dx-field-label">Locale Data Markup Language (LDML) pattern</div>
             <div className="dx-field-value">
               <DateBox defaultValue={date}
                 placeholder="Tuesday, 16 of Oct, 2018 14:52"
