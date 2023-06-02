@@ -551,8 +551,11 @@ const Calendar = Editor.inherit({
     },
 
     _isAdditionalViewDate(date) {
-        const view = this._additionalView;
-        return view && dateUtils.sameMonthAndYear(date, view.option('date'));
+        if(!this._additionalView) {
+            return false;
+        }
+
+        return date >= this._additionalView._getFirstAvailableDate();
     },
 
     _getActiveView: function(date) {

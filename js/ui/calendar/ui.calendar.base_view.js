@@ -378,7 +378,7 @@ const BaseView = Widget.inherit({
         let date = this.option('date');
         const min = this.option('min');
 
-        date = coreDateUtils.getFirstDateView(this._getViewName(), date);
+        date = coreDateUtils.getViewFirstCellDate(this._getViewName(), date);
         return new Date(min && date < min ? min : date);
     },
 
