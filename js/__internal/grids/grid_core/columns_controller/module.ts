@@ -116,6 +116,8 @@ export class ColumnsController extends modules.Controller {
 
   columnsChanged: any;
 
+  _columnChanges: any;
+
   _getExpandColumnOptions() {
     return {
       type: 'expand',
@@ -765,7 +767,7 @@ export class ColumnsController extends modules.Controller {
     return result;
   }
 
-  getChooserColumns(getAllColumns) {
+  getChooserColumns(getAllColumns?) {
     const columns = getAllColumns ? this.getColumns() : this.getInvisibleColumns();
     const columnChooserColumns = columns.filter((column) => column.showInColumnChooser);
 
