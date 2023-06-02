@@ -22,14 +22,15 @@ import {
   IGNORE_COLUMN_OPTION_NAMES,
   COLUMN_INDEX_OPTIONS,
 } from './const';
+import type { ColumnsController } from './module';
 
 export const setFilterOperationsAsDefaultValues = function (column) {
   column.filterOperations = column.defaultFilterOperations;
 };
 
 let globalColumnId = 1;
-// @ts-expect-error
-export const createColumn = function (that, columnOptions, userStateColumnOptions?, bandColumn?) {
+
+export const createColumn = function (that: ColumnsController, columnOptions, userStateColumnOptions?, bandColumn?): any {
   let commonColumnOptions = {};
 
   if (columnOptions) {
@@ -66,7 +67,7 @@ export const createColumn = function (that, columnOptions, userStateColumnOption
   }
 };
 
-export const createColumnsFromOptions = function (that, columnsOptions, bandColumn?) {
+export const createColumnsFromOptions = function (that: ColumnsController, columnsOptions, bandColumn?) {
   let result: any = [];
 
   if (columnsOptions) {
@@ -124,7 +125,7 @@ export const getChildrenByBandColumn = function (columnIndex, columnChildrenByIn
   return result;
 };
 
-export const getColumnByIndexes = function (that, columnIndexes) {
+export const getColumnByIndexes = function (that: ColumnsController, columnIndexes) {
   let result;
   let columns;
   const bandColumnsCache = that.getBandColumnsCache();
@@ -150,7 +151,7 @@ export const getColumnByIndexes = function (that, columnIndexes) {
   return result;
 };
 
-export const getColumnFullPath = function (that, column) {
+export const getColumnFullPath = function (that: ColumnsController, column) {
   let result: any = [];
   let columns;
   const bandColumnsCache = that.getBandColumnsCache();
@@ -178,7 +179,7 @@ export const getColumnFullPath = function (that, column) {
   return result.join('.');
 };
 
-export const calculateColspan = function (that, columnID) {
+export const calculateColspan = function (that: ColumnsController, columnID) {
   let colspan = 0;
   const columns = that.getChildrenByBandColumn(columnID, true);
 
@@ -194,7 +195,7 @@ export const calculateColspan = function (that, columnID) {
   return colspan;
 };
 
-export const processBandColumns = function (that, columns, bandColumnsCache) {
+export const processBandColumns = function (that: ColumnsController, columns, bandColumnsCache) {
   let rowspan;
 
   for (let i = 0; i < columns.length; i++) {
@@ -296,7 +297,7 @@ export const getCustomizeTextByDataType = function (dataType) {
   }
 };
 
-export const createColumnsFromDataSource = function (that, dataSource) {
+export const createColumnsFromDataSource = function (that: ColumnsController, dataSource) {
   const firstItems = that._getFirstItems(dataSource);
   let fieldName;
   const processedFields = {};
@@ -323,7 +324,7 @@ export const createColumnsFromDataSource = function (that, dataSource) {
   return result;
 };
 
-export const updateColumnIndexes = function (that) {
+export const updateColumnIndexes = function (that: ColumnsController) {
   each(that._columns, (index, column) => {
     column.index = index;
   });
@@ -339,7 +340,7 @@ export const updateColumnIndexes = function (that) {
   });
 };
 
-export const updateColumnGroupIndexes = function (that, currentColumn?) {
+export const updateColumnGroupIndexes = function (that: ColumnsController, currentColumn?) {
   normalizeIndexes(that._columns, 'groupIndex', currentColumn, (column) => {
     const { grouped } = column;
     delete column.grouped;
@@ -347,7 +348,7 @@ export const updateColumnGroupIndexes = function (that, currentColumn?) {
   });
 };
 
-export const updateColumnSortIndexes = function (that, currentColumn) {
+export const updateColumnSortIndexes = function (that: ColumnsController, currentColumn) {
   each(that._columns, (index, column) => {
     if (isDefined(column.sortIndex) && !isSortOrderValid(column.sortOrder)) {
       delete column.sortIndex;
@@ -357,7 +358,7 @@ export const updateColumnSortIndexes = function (that, currentColumn) {
   normalizeIndexes(that._columns, 'sortIndex', currentColumn, (column) => !isDefined(column.groupIndex) && isSortOrderValid(column.sortOrder));
 };
 
-export const updateColumnVisibleIndexes = function (that, currentColumn) {
+export const updateColumnVisibleIndexes = function (that: ColumnsController, currentColumn) {
   let column;
   const result: any = [];
   const bandColumnsCache = that.getBandColumnsCache();
@@ -380,7 +381,7 @@ export const updateColumnVisibleIndexes = function (that, currentColumn) {
   normalizeIndexes(result, 'visibleIndex', currentColumn);
 };
 
-export const getColumnIndexByVisibleIndex = function (that, visibleIndex, location) {
+export const getColumnIndexByVisibleIndex = function (that: ColumnsController, visibleIndex, location) {
   // @ts-expect-error
   const rowIndex = isObject(visibleIndex) ? visibleIndex.rowIndex : null;
   const columns = location === GROUP_LOCATION ? that.getGroupColumns() : location === COLUMN_CHOOSER_LOCATION ? that.getChooserColumns() : that.getVisibleColumns(rowIndex);
@@ -397,7 +398,7 @@ export const getColumnIndexByVisibleIndex = function (that, visibleIndex, locati
   return column && isDefined(column.index) ? column.index : -1;
 };
 
-export const moveColumnToGroup = function (that, column, groupIndex) {
+export const moveColumnToGroup = function (that: ColumnsController, column, groupIndex) {
   const groupColumns = that.getGroupColumns();
   let i;
 
@@ -421,7 +422,7 @@ export function checkUserStateColumn(column, userStateColumn) {
   return column && userStateColumn && (userStateColumn.name === (column.name || column.dataField)) && (userStateColumn.dataField === column.dataField || column.name);
 }
 
-export const applyUserState = function (that) {
+export const applyUserState = function (that: ColumnsController) {
   const columnsUserState = that._columnsUserState;
   const ignoreColumnOptionNames = that._ignoreColumnOptionNames || [];
   const columns = that._columns;
@@ -516,7 +517,7 @@ export const applyUserState = function (that) {
   }
 };
 
-export const updateIndexes = function (that, column?) {
+export const updateIndexes = function (that: ColumnsController, column?) {
   updateColumnIndexes(that);
   updateColumnGroupIndexes(that, column);
   updateColumnSortIndexes(that, column);
@@ -525,7 +526,7 @@ export const updateIndexes = function (that, column?) {
   updateColumnVisibleIndexes(that, column);
 };
 
-export const resetColumnsCache = function (that) {
+export const resetColumnsCache = function (that: ColumnsController) {
   that.resetColumnsCache();
 };
 
@@ -536,7 +537,7 @@ export function assignColumns(that, columns) {
   that.updateColumnDataTypes();
 }
 
-export const updateColumnChanges = function (that, changeType, optionName?, columnIndex?) {
+export const updateColumnChanges = function (that: ColumnsController, changeType, optionName?, columnIndex?) {
   const columnChanges = that._columnChanges || {
     optionNames: { length: 0 },
     changeTypes: { length: 0 },
@@ -568,8 +569,8 @@ export const updateColumnChanges = function (that, changeType, optionName?, colu
   resetColumnsCache(that);
 };
 
-export const fireColumnsChanged = function (that) {
-  const onColumnsChanging = that.option('onColumnsChanging');
+export const fireColumnsChanged = function (that: ColumnsController) {
+  const onColumnsChanging: any = that.option('onColumnsChanging');
   const columnChanges = that._columnChanges;
   const reinitOptionNames = ['dataField', 'lookup', 'dataType', 'columns'];
   const needReinit = (options) => options && reinitOptionNames.some((name) => options[name]);
@@ -591,7 +592,7 @@ export const fireColumnsChanged = function (that) {
   }
 };
 
-export const updateSortOrderWhenGrouping = function (that, column, groupIndex, prevGroupIndex) {
+export const updateSortOrderWhenGrouping = function (that: ColumnsController, column, groupIndex, prevGroupIndex) {
   const columnWasGrouped = prevGroupIndex >= 0;
 
   if (groupIndex >= 0) {
@@ -613,7 +614,7 @@ export const updateSortOrderWhenGrouping = function (that, column, groupIndex, p
   }
 };
 
-export const fireOptionChanged = function (that, options) {
+export const fireOptionChanged = function (that: ColumnsController, options) {
   const { value } = options;
   const { optionName } = options;
   const { prevValue } = options;
@@ -627,7 +628,7 @@ export const fireOptionChanged = function (that, options) {
   }
 };
 
-export const columnOptionCore = function (that, column, optionName, value?, notFireEvent?) {
+export const columnOptionCore = function (that: ColumnsController, column, optionName, value?, notFireEvent?) {
   const optionGetter = compileGetter(optionName);
   const columnIndex = column.index;
   let columns;
@@ -700,7 +701,7 @@ export function isSortOrderValid(sortOrder) {
   return sortOrder === 'asc' || sortOrder === 'desc';
 }
 
-export const addExpandColumn = function (that) {
+export const addExpandColumn = function (that: ColumnsController) {
   const options = that._getExpandColumnOptions();
 
   that.addCommandColumn(options);
@@ -740,7 +741,7 @@ export const getDataColumns = function (columns, rowIndex?, bandColumnID?) {
   return result;
 };
 
-export const getRowCount = function (that) {
+export const getRowCount = function (that: ColumnsController) {
   let rowCount = 1;
   const bandColumnsCache = that.getBandColumnsCache();
   const { columnParentByIndex } = bandColumnsCache;
@@ -757,9 +758,9 @@ export const getRowCount = function (that) {
   return rowCount;
 };
 
-export const isCustomCommandColumn = (that, commandColumn) => !!that._columns.filter((column) => column.type === commandColumn.type).length;
+export const isCustomCommandColumn = (that: ColumnsController, commandColumn) => !!that._columns.filter((column) => column.type === commandColumn.type).length;
 
-export const getFixedPosition = function (that, column) {
+export const getFixedPosition = function (that: ColumnsController, column) {
   const rtlEnabled = that.option('rtlEnabled');
 
   if (column.command && !isCustomCommandColumn(that, column) || !column.fixedPosition) {
@@ -811,7 +812,7 @@ export const numberToString = function (number, digitsCount) {
   return str;
 };
 
-export const mergeColumns = (that, columns, commandColumns, needToExtend?) => {
+export const mergeColumns = (that: ColumnsController, columns, commandColumns, needToExtend?) => {
   let column;
   let commandColumnIndex;
   let result = columns.slice().map((column) => extend({}, column));
@@ -854,7 +855,7 @@ export const mergeColumns = (that, columns, commandColumns, needToExtend?) => {
   return result;
 };
 
-export const isColumnFixed = (that, column) => (isDefined(column.fixed) || !column.type ? column.fixed : that._isColumnFixing());
+export const isColumnFixed = (that: ColumnsController, column) => (isDefined(column.fixed) || !column.type ? column.fixed : that._isColumnFixing());
 
 export const convertOwnerBandToColumnReference = (columns) => {
   columns.forEach((column) => {
@@ -864,7 +865,7 @@ export const convertOwnerBandToColumnReference = (columns) => {
   });
 };
 
-export const resetBandColumnsCache = (that) => {
+export const resetBandColumnsCache = (that: ColumnsController) => {
   that._bandColumnsCache = undefined;
 };
 
