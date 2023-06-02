@@ -47,6 +47,10 @@ interface AppointmentDraggingEvent {
   readonly fromData?: any;
 }
 
+/**
+ * @docid
+ * @hidden
+ */
 interface TargetedAppointmentInfo {
   readonly appointmentData: Appointment;
   readonly targetedAppointmentData?: Appointment;

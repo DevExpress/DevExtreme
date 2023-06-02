@@ -60,6 +60,10 @@ export type ItemDeleteMode = 'context' | 'slideButton' | 'slideItem' | 'static' 
 /** @public */
 export type ListMenuMode = 'context' | 'slide';
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface ScrollInfo {
     readonly scrollOffset?: any;
     readonly reachedLeft: boolean;

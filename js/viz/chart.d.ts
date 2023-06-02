@@ -76,6 +76,10 @@ import {
     ChartsColor,
 } from '../common/charts';
 
+/**
+ * @docid
+ * @hidden
+ */
 interface SeriesInteractionInfo {
     target: chartSeriesObject;
 }

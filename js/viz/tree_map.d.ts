@@ -51,6 +51,10 @@ export type TreeMapLayoutAlgorithm = 'sliceanddice' | 'squarified' | 'strip';
 /** @public */
 export type TreeMapLayoutDirection = 'leftBottomRightTop' | 'leftTopRightBottom' | 'rightBottomLeftTop' | 'rightTopLeftBottom';
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface InteractionInfo {
   readonly node: dxTreeMapNode;
 }

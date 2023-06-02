@@ -13,6 +13,10 @@ import {
 /** @public */
 export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface ResizeInfo {
     readonly width: number;
     readonly height: number;

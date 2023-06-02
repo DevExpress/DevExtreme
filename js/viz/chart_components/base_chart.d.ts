@@ -48,6 +48,10 @@ import {
     SingleOrMultiple,
 } from '../../common';
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface PointInteractionInfo {
     readonly target: basePointObject;
 }

@@ -41,6 +41,10 @@ import {
     ToolbarItemLocation,
 } from '../common';
 
+/**
+ * @docid
+ * @hidden
+ */
 interface ActionEventInfo {
     errorCode?: number;
     errorText: string;

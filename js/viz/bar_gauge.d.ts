@@ -90,6 +90,10 @@ export interface BarGaugeLegendItem extends BaseLegendItem {
     item?: BarGaugeBarInfo;
 }
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface TooltipInfo {
     target?: any;
 }

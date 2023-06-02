@@ -32,6 +32,10 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface CustomItemCreatingInfo {
     readonly text?: string;
     customItem?: string | any | PromiseLike<any>;

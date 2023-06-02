@@ -34,15 +34,27 @@ import {
     WordWrap,
 } from '../../common/charts';
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface ExportInfo {
   readonly fileName: string;
   readonly format: string;
 }
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface IncidentInfo {
   readonly target: any;
 }
 
+/**
+ * @docid
+ * @hidden
+ */
 export type FileSavingEventInfo<T> = Cancelable & {
   readonly component: T;
   readonly element: DxElement;

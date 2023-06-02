@@ -19,6 +19,10 @@ import {
     ScrollDirection,
 } from '../../common';
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface ScrollEventInfo<T> extends NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
     readonly scrollOffset?: any;
     readonly reachedLeft?: boolean;

@@ -72,6 +72,8 @@ import {
 import { PositionConfig } from '../animation/position';
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export type AdaptiveDetailRowPreparingInfo = {
@@ -786,6 +788,8 @@ export type DataChangeInfo<TRowData = any, TKey = any> = {
 export type DataChangeType = 'insert' | 'update' | 'remove';
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export type DataErrorOccurredInfo = {
@@ -2328,6 +2332,8 @@ export type KeyboardNavigation = {
 };
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export type KeyDownInfo = {
@@ -2893,6 +2899,8 @@ export interface SelectionBase {
 }
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface SelectionChangedInfo<TRowData = any, TKey = any> {
@@ -3000,6 +3008,8 @@ export type StateStoring = {
 export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface ToolbarPreparingInfo {
