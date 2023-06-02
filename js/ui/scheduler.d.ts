@@ -1128,9 +1128,9 @@ export interface dxSchedulerScrolling {
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onAppointmentAdded' | 'onAppointmentAdding' | 'onAppointmentClick' | 'onAppointmentContextMenu' | 'onAppointmentDblClick' | 'onAppointmentDeleted' | 'onAppointmentDeleting' | 'onAppointmentFormOpening' | 'onAppointmentRendered' | 'onAppointmentTooltipShowing' | 'onAppointmentUpdated' | 'onAppointmentUpdating' | 'onCellClick' | 'onCellContextMenu'>;
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAppointmentAdded', 'onAppointmentAdding', 'onAppointmentClick', 'onAppointmentContextMenu', 'onAppointmentDblClick', 'onAppointmentDeleted', 'onAppointmentDeleting', 'onAppointmentFormOpening', 'onAppointmentRendered', 'onAppointmentTooltipShowing', 'onAppointmentUpdated', 'onAppointmentUpdating', 'onCellClick', 'onCellContextMenu'>;
 
 /**
 * @hidden

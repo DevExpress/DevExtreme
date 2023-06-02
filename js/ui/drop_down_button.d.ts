@@ -316,9 +316,9 @@ export type Options = dxDropDownButtonOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onButtonClick' | 'onItemClick' | 'onSelectionChanged'>;
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onButtonClick', 'onItemClick', 'onSelectionChanged'>;
 
 /**
 * @hidden

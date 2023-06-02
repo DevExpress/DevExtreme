@@ -339,9 +339,9 @@ export type Options = dxMapOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut' | 'onClick' | 'onMarkerAdded' | 'onMarkerRemoved' | 'onReady' | 'onRouteAdded' | 'onRouteRemoved'>;
+type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onClick', 'onMarkerAdded', 'onMarkerRemoved', 'onReady', 'onRouteAdded', 'onRouteRemoved'>;
 
 /**
 * @hidden

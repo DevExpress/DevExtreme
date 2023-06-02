@@ -636,9 +636,9 @@ export type Options<TKey = any> = Properties<TKey>;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered' | 'onItemClick' | 'onItemCollapsed' | 'onItemContextMenu' | 'onItemExpanded' | 'onItemHold' | 'onItemRendered' | 'onItemSelectionChanged' | 'onSelectAllValueChanged' | 'onSelectionChanged'>;
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onItemClick', 'onItemCollapsed', 'onItemContextMenu', 'onItemExpanded', 'onItemHold', 'onItemRendered', 'onItemSelectionChanged', 'onSelectAllValueChanged', 'onSelectionChanged'>;
 
 /**
 * @hidden

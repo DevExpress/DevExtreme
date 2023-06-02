@@ -1578,9 +1578,9 @@ export type Options = dxDiagramOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onCustomCommand' | 'onItemClick' | 'onItemDblClick' | 'onRequestEditOperation' | 'onRequestLayoutUpdate' | 'onSelectionChanged'>;
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCustomCommand', 'onItemClick', 'onItemDblClick', 'onRequestEditOperation', 'onRequestLayoutUpdate', 'onSelectionChanged'>;
 
 /**
 * @hidden

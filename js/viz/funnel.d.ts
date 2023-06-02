@@ -702,9 +702,7 @@ export type Options = dxFunnelOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onHoverChanged' | 'onItemClick' | 'onLegendClick' | 'onSelectionChanged'>;
-
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onHoverChanged', 'onItemClick', 'onLegendClick', 'onSelectionChanged'>;
 
 /**
 * @hidden

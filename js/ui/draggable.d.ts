@@ -218,9 +218,9 @@ export type Options = dxDraggableOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onDrop' | 'onDragEnd' | 'onDragMove' | 'onDragStart'>;
+type FilterOutHidden<T> = Omit<T, 'onDrop'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onDragEnd', 'onDragMove', 'onDragStart'>;
 
 /**
 * @hidden
