@@ -19,6 +19,7 @@ type BaseGroupDescriptor<T> = {
  * @docid
  * @public
  * @type object
+ * @skip
  */
 export type GroupDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
     desc?: boolean;
@@ -28,6 +29,7 @@ export type GroupDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
  * @docid
  * @public
  * @type object
+ * @skip
  */
 export type SortDescriptor<T> = GroupDescriptor<T>;
 
@@ -35,6 +37,7 @@ export type SortDescriptor<T> = GroupDescriptor<T>;
  * @docid
  * @public
  * @type object
+ * @skip
  */
 export type SelectDescriptor<T> = string | Array<string> | ((source: T) => any);
 /**
@@ -110,7 +113,7 @@ export interface LoadOptions<T = any> {
     /**
      * @docid
      * @public
-     * @type object
+     * @type SummaryDescriptor | Array<SummaryDescriptor>
      */
     groupSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
     /**
@@ -169,7 +172,7 @@ export interface LoadOptions<T = any> {
     /**
      * @docid
      * @public
-     * @type object
+     * @type SummaryDescriptor | Array<SummaryDescriptor>
      */
     totalSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
     /**
