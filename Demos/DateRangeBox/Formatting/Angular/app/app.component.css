@@ -1,3 +1,7 @@
+::ng-deep .demo-container {
+  height: 610px;
+}
+
 ::ng-deep .dx-fieldset {
   min-height: 500px;
 }

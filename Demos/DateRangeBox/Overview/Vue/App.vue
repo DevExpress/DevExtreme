@@ -112,6 +112,10 @@ export default {
 };
 </script>
 <style scoped>
+.demo-container {
+  height: 650px;
+}
+
 .dx-field {
   padding: 8px;
 }
