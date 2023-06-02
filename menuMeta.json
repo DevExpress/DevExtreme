@@ -4182,11 +4182,18 @@
       {
         "Name": "Date Range Box",
         "Equivalents": "DateRangeBox, dxDateRangeBox, dx-date-range-box",
+        "Breadcrumb": true,
         "Demos": [{
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "DateRangeBox",
             "Badge": "New"
+        },
+        {
+          "Title": "Formatting",
+          "Name": "Formatting",
+          "Widget": "DateRangeBox",
+          "Badge": "New"
         }]
       },
       {
