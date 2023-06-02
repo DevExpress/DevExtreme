@@ -1,175 +1,279 @@
 import {
-    animationConfig
+    AnimationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    PositionConfig,
 } from '../animation/position';
 
-import '../jquery_augmentation';
+import {
+    UserDefinedElement,
+} from '../core/element';
 
 import {
-    event
+    DxPromise,
+} from '../core/utils/deferred';
+
+import {
+    DxEvent,
+    Cancelable,
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxPopup, {
     dxPopupAnimation,
-    dxPopupOptions
+    dxPopupOptions,
+    TitleRenderedInfo,
 } from './popup';
 
-export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
+import {
+    Position,
+} from '../common';
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxPopover>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxPopover>;
+
+/** @public */
+export type HidingEvent = Cancelable & EventInfo<dxPopover>;
+
+/** @public */
+export type HiddenEvent = EventInfo<dxPopover>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxPopover>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxPopover> & ChangedOptionInfo;
+
+/** @public */
+export type ShowingEvent = Cancelable & EventInfo<dxPopover>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxPopover>;
+
+/** @public */
+export type TitleRenderedEvent = EventInfo<dxPopover> & TitleRenderedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
+export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent> {
     /**
      * @docid
-     * @default { show: { type: "fade", from: 0, to: 1 }, hide: { type: "fade", to: 0 } }
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
     animation?: dxPopoverAnimation;
     /**
      * @docid
+     * @deprecated dxPopoverOptions.hideOnOutsideClick
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: event) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @default "auto"
-     * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hideEvent?: {
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
-     * @type Enums.Position|positionConfig
-     * @default 'bottom'
-     * @prevFileNamespace DevExpress.ui
+     * @type boolean | function
+     * @type_function_param1 event:event
+     * @default true
      * @public
      */
-    position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
+    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    hideOnParentScroll?: boolean;
+    /**
+     * @docid
+     * @default { my: 'top center', at: 'bottom center', collision: 'fit flip' }
+     * @public
+     */
+    position?: Position | PositionConfig;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     shading?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showEvent?: {
       /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
-      delay?: number,
-    /**
+      delay?: number;
+      /**
        * @docid
-       * @prevFileNamespace DevExpress.ui
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showTitle?: boolean;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
+     * @default undefined
      * @public
      */
-    target?: string | Element | JQuery;
+    target?: string | UserDefinedElement;
     /**
      * @docid
      * @default "auto"
-     * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     width?: number | string | (() => number | string);
 }
+/**
+ * @docid
+ * @namespace DevExpress.ui
+ */
 export interface dxPopoverAnimation extends dxPopupAnimation {
     /**
      * @docid dxPopoverOptions.animation.hide
      * @default { type: "fade", to: 0 }
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hide?: animationConfig;
+    hide?: AnimationConfig;
     /**
      * @docid dxPopoverOptions.animation.show
      * @default { type: "fade", from: 0, to: 1 }
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show?: animationConfig;
+    show?: AnimationConfig;
 }
 /**
  * @docid
  * @inherits dxPopup
  * @hasTranscludedContent
- * @module ui/popover
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxPopover extends dxPopup {
-    constructor(element: Element, options?: dxPopoverOptions)
-    constructor(element: JQuery, options?: dxPopoverOptions)
-    show(): Promise<boolean> & JQueryPromise<boolean>;
+export default class dxPopover<TProperties = Properties> extends dxPopup<TProperties> {
+    show(): DxPromise<boolean>;
     /**
      * @docid
      * @publicName show(target)
      * @param1 target:string|Element|jQuery
      * @return Promise<boolean>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    show(target: string | Element | JQuery): Promise<boolean> & JQueryPromise<boolean>;
+    show(target: string | UserDefinedElement): DxPromise<boolean>;
 }
 
-declare global {
-interface JQuery {
-    dxPopover(): JQuery;
-    dxPopover(options: "instance"): dxPopover;
-    dxPopover(options: string): any;
-    dxPopover(options: string, ...params: any[]): any;
-    dxPopover(options: dxPopoverOptions): JQuery;
-}
-}
-export type Options = dxPopoverOptions;
+interface PopoverInstance extends dxPopover<Properties> { }
 
-/** @deprecated use Options instead */
-export type IOptions = dxPopoverOptions;
+/** @public */
+export type Properties = dxPopoverOptions<PopoverInstance>;
+
+/** @deprecated use Properties instead */
+export type Options = Properties;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onResize' | 'onResizeEnd' | 'onResizeStart'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxPopoverOptions.onContentReady
+ * @type_function_param1 e:{ui/popover:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onDisposing
+ * @type_function_param1 e:{ui/popover:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onHidden
+ * @type_function_param1 e:{ui/popover:HiddenEvent}
+ */
+onHidden?: ((e: HiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onHiding
+ * @type_function_param1 e:{ui/popover:HidingEvent}
+ */
+onHiding?: ((e: HidingEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onInitialized
+ * @type_function_param1 e:{ui/popover:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onOptionChanged
+ * @type_function_param1 e:{ui/popover:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onShowing
+ * @type_function_param1 e:{ui/popover:ShowingEvent}
+ */
+onShowing?: ((e: ShowingEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onShown
+ * @type_function_param1 e:{ui/popover:ShownEvent}
+ */
+onShown?: ((e: ShownEvent) => void);
+/**
+ * @skip
+ * @docid dxPopoverOptions.onTitleRendered
+ * @type_function_param1 e:{ui/popover:TitleRenderedEvent}
+ */
+onTitleRendered?: ((e: TitleRenderedEvent) => void);
+};
+///#ENDDEBUG

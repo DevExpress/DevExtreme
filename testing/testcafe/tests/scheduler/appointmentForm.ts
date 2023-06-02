@@ -3,7 +3,7 @@ import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
 
-fixture`Appointment popup form`
+fixture.disablePageReloads`Appointment popup form`
   .page(url(__dirname, '../container.html'));
 
 test('Subject and description fields should be empty after showing popup on empty cell', async (t) => {
@@ -26,7 +26,7 @@ test('Subject and description fields should be empty after showing popup on empt
 
     .expect(appointmentPopup.descriptionElement.value)
     .eql('');
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   views: ['month'],
   currentView: 'month',
   currentDate: new Date(2017, 4, 22),
@@ -39,7 +39,7 @@ test('Subject and description fields should be empty after showing popup on empt
       endDate: new Date(2017, 4, 22, 11, 30),
     },
   ],
-}, true));
+}));
 
 test('Custom form shouldn\'t throw exception, after second show appointment form(T812654)', async (t) => {
   const APPOINTMENT_TEXT = 'Website Re-Design Plan';
@@ -50,7 +50,7 @@ test('Custom form shouldn\'t throw exception, after second show appointment form
 
   await t
     .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element, {
-      speed: 0.1,
+      speed: 0.5,
     })
     .click(CHECKBOX_CLASS)
 
@@ -64,7 +64,7 @@ test('Custom form shouldn\'t throw exception, after second show appointment form
 
     .expect(Selector(TEXT_EDITOR_CLASS).exists)
     .eql(false);
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   views: ['month'],
   currentView: 'month',
   currentDate: new Date(2017, 4, 22),
@@ -77,7 +77,7 @@ test('Custom form shouldn\'t throw exception, after second show appointment form
       editorType: 'dxCheckBox',
       editorOptions: {
         type: 'boolean',
-        onValueChanged: (args) => e.form.itemOption('text1', 'visible', args.value),
+        onValueChanged: (args): boolean => e.form.itemOption('text1', 'visible', args.value),
       },
     }, {
       name: 'text1',
@@ -96,7 +96,7 @@ test('Custom form shouldn\'t throw exception, after second show appointment form
       endDate: new Date(2017, 4, 22, 11, 30),
     },
   ],
-}, true));
+}));
 
 test('Appointment should have correct form data on consecutive shows (T832711)', async (t) => {
   const APPOINTMENT_TEXT = 'Google AdWords Strategy';
@@ -105,7 +105,7 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
   const { appointmentPopup } = scheduler;
 
   await t
-    .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element, { speed: 0.1 })
+    .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
     .expect(appointmentPopup.element.exists)
     .ok()
     .expect(appointmentPopup.isVisible())
@@ -116,15 +116,16 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
     .click(appointmentPopup.allDayElement)
     .click(appointmentPopup.cancelButton)
     .expect(appointmentPopup.isVisible())
-    .notOk()
+    .notOk();
 
-    .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element, { speed: 0.1 })
+  await t
+    .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
     .expect(appointmentPopup.isVisible())
     .ok()
 
     .expect(appointmentPopup.endDateElement.value)
     .eql('5/5/2017');
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   views: ['month'],
   currentView: 'month',
   currentDate: new Date(2017, 4, 25),
@@ -136,7 +137,7 @@ test('Appointment should have correct form data on consecutive shows (T832711)',
     allDay: true,
   }],
   height: 580,
-}, true));
+}));
 
 test('From elements for disabled appointments should be read only (T835731)', async (t) => {
   const APPOINTMENT_TEXT = 'Install New Router in Dev Room';
@@ -160,7 +161,7 @@ test('From elements for disabled appointments should be read only (T835731)', as
     .click(appointmentPopup.allDayElement)
     .expect(appointmentPopup.startDateElement.value)
     .eql('5/22/2017, 2:30 PM');
-}).before(() => createWidget('dxScheduler', {
+}).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Install New Router in Dev Room',
     startDate: new Date(2017, 4, 22, 14, 30),
@@ -173,4 +174,25 @@ test('From elements for disabled appointments should be read only (T835731)', as
   currentDate: new Date(2017, 4, 25),
   startDayHour: 9,
   height: 600,
+}));
+
+test('AppointmentForm should display correct dates in work-week when firstDayOfWeek is used', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { appointmentPopup } = scheduler;
+
+  await t
+    .doubleClick(scheduler.getDateTableCell(2, 4))
+
+    .expect(appointmentPopup.startDateElement.value)
+    .eql('6/28/2021, 6:00 AM')
+
+    .expect(appointmentPopup.endDateElement.value)
+    .eql('6/28/2021, 6:30 AM');
+}).before(async () => createWidget('dxScheduler', {
+  views: ['workWeek'],
+  currentView: 'workWeek',
+  currentDate: new Date(2021, 5, 28),
+  startDayHour: 5,
+  height: 600,
+  firstDayOfWeek: 2,
 }));

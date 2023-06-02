@@ -1,73 +1,71 @@
+import { Format } from '../../localization';
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../../core/dom_component';
 
 import {
-    dxElement
-} from '../../core/element';
+    EventInfo,
+} from '../../events/index';
 
-export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @type object
+ */
+export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponent> {
     /**
      * @docid
-     * @default null
-     * @prevFileNamespace DevExpress.ui
+     * @default undefined
      * @public
      */
     accessKey?: string;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabled?: boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hint?: string;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
+     * @type_function_param1 e:EventInfo
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContentReady?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
+    onContentReady?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     tabIndex?: number;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     visible?: boolean;
@@ -75,34 +73,26 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
 /**
  * @docid
  * @inherits DOMComponent
- * @module ui/widget/ui.widget
- * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
+ * @options WidgetOptions
  */
-export default class Widget extends DOMComponent {
-    constructor(element: Element, options?: WidgetOptions)
-    constructor(element: JQuery, options?: WidgetOptions)
+export default class Widget<TProperties> extends DOMComponent<TProperties> {
     /**
      * @docid
      * @publicName focus()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     focus(): void;
     /**
      * @docid
      * @publicName registerKeyHandler(key, handler)
-     * @param1 key:string
-     * @param2 handler:function
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     registerKeyHandler(key: string, handler: Function): void;
     /**
      * @docid
      * @publicName repaint()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaint(): void;
@@ -111,50 +101,14 @@ export default class Widget extends DOMComponent {
 /**
  * @const dxItem
  * @section uiWidgetMarkupComponents
- * @prevFileNamespace DevExpress.ui
  * @public
+ * @namespace DevExpress.ui
  */
+// eslint-disable-next-line vars-on-top, import/no-mutable-exports, no-var, @typescript-eslint/init-declarations, @typescript-eslint/no-explicit-any
 export var dxItem: any;
 
 /**
  * @docid
- * @type Enums.Format|string|function|Object
- * @type_function_param1 value:number|date
- * @type_function_return string
- * @default undefined
- * @section Common
- * @prevFileNamespace DevExpress.ui
- * @public
+ * @deprecated
  */
-export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | {
-  /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  */
-  currency?: string,
-  /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  * @type_function_param1 value:number|date
-  * @type_function_return string
-  */
-  formatter?: ((value: number | Date) => string),
-  /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  * @type_function_param1 value:string
-  * @type_function_return number|date
-  */
-  parser?: ((value: string) => number | Date),
-  /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  */
-  precision?: number,
-  /**
-  * @docid
-  * @prevFileNamespace DevExpress.ui
-  * @type Enums.Format
-  */
-  type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime'
-};
+export type format = Format;

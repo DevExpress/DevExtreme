@@ -109,13 +109,22 @@ module('Basic markup', () => {
         deferred.resolve();
     });
 
-    test('"placeholder" attribute should be defined for iOS device (T898735)', function(assert) {
-        const $editor = $('#texteditor').dxTextEditor();
-        const { ios: isIos } = devices.real();
-        const expectedPlaceholder = isIos ? ' ' : '';
-        const placeholder = $editor.find(`.${INPUT_CLASS}`).attr('placeholder') || '';
+    [true, false].forEach(isMac => {
+        test(`"placeholder" attribute should be defined for iOS and mac devices (T898735,T964073). IsMac = ${isMac}`, function(assert) {
+            const realDevice = devices.real();
 
-        assert.strictEqual(placeholder, expectedPlaceholder, 'input has placeholder with space at iOS device');
+            try {
+                devices.real({ ios: realDevice.ios, mac: isMac });
+                const $editor = $('#texteditor').dxTextEditor();
+                const { ios: isIos } = devices.real();
+                const expectedPlaceholder = (isIos || isMac) ? ' ' : '';
+                const placeholder = $editor.find(`.${INPUT_CLASS}`).attr('placeholder') || '';
+
+                assert.strictEqual(placeholder, expectedPlaceholder, 'input has placeholder with space at iOS and mac device');
+            } finally {
+                devices.real(realDevice);
+            }
+        });
     });
 });
 

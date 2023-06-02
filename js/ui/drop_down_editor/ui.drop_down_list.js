@@ -1,3 +1,4 @@
+import { getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -7,9 +8,8 @@ import registerComponent from '../../core/component_registrator';
 import { noop, ensureDefined, grep } from '../../core/utils/common';
 import { isWindow, isDefined, isObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import DropDownEditor from './ui.drop_down_editor';
-import List from '../list';
+import List from '../list_light';
 import errors from '../widget/ui.errors';
 import { addNamespace } from '../../events/utils/index';
 import devices from '../../core/devices';
@@ -25,10 +25,11 @@ const LIST_ITEM_SELECTOR = '.dx-list-item';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const DROPDOWNLIST_POPUP_WRAPPER_CLASS = 'dx-dropdownlist-popup-wrapper';
 
-const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
 const SEARCH_EVENT = 'input';
 
 const SEARCH_MODES = ['startswith', 'contains', 'endwith', 'notcontains'];
+
+const useCompositionEvents = devices.real().platform !== 'android';
 
 const DropDownList = DropDownEditor.inherit({
 
@@ -84,6 +85,8 @@ const DropDownList = DropDownEditor.inherit({
 
             noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
+            encodeNoDataText: false,
+
             onSelectionChanged: null,
 
             onItemClick: noop,
@@ -103,19 +106,13 @@ const DropDownList = DropDownEditor.inherit({
 
             wrapItemText: false,
 
+            useItemTextAsTitle: false,
 
             /**
             * @name dxDropDownListOptions.fieldTemplate
             * @hidden
             */
-            /**
-            * @name dxDropDownListOptions.fieldRender
-            * @hidden
-            */
-            /**
-            * @name dxDropDownListOptions.contentRender
-            * @hidden
-            */
+
             /**
             * @name dxDropDownListOptions.applyValueMode
             * @hidden
@@ -201,6 +198,10 @@ const DropDownList = DropDownEditor.inherit({
         });
     },
 
+    _isEditable: function() {
+        return this.callBase() || this.option('searchEnabled');
+    },
+
     _saveFocusOnWidget: function(e) {
         if(this._list && this._list.initialOption('focusStateEnabled')) {
             this._focusInput();
@@ -248,21 +249,11 @@ const DropDownList = DropDownEditor.inherit({
     _createPopup: function() {
         this.callBase();
         this._updateCustomBoundaryContainer();
-        this._popup._wrapper().addClass(this._popupWrapperClass());
+        this._popup.$wrapper().addClass(this._popupWrapperClass());
 
         const $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, 'mouseup');
         eventsEngine.on($popupContent, 'mouseup', this._saveFocusOnWidget.bind(this));
-
-        const that = this;
-        this._popup.on({
-            'shown': function() {
-                that.$element().addClass(SKIP_GESTURE_EVENT_CLASS);
-            },
-            'hidden': function() {
-                that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
-            }
-        });
     },
 
     _updateCustomBoundaryContainer: function() {
@@ -290,6 +281,7 @@ const DropDownList = DropDownEditor.inherit({
 
     _renderInputValue: function() {
         const value = this._getCurrentValue();
+        this._rejectValueLoading();
 
         return this._loadInputValue(value, this._setSelectedItem.bind(this))
             .always(this.callBase.bind(this, value));
@@ -406,7 +398,7 @@ const DropDownList = DropDownEditor.inherit({
         const searchMode = this.option('searchMode');
         const normalizedSearchMode = searchMode.toLowerCase();
 
-        if(inArray(normalizedSearchMode, SEARCH_MODES) < 0) {
+        if(!SEARCH_MODES.includes(normalizedSearchMode)) {
             throw errors.Error('E1019', searchMode);
         }
     },
@@ -416,6 +408,8 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _processDataSourceChanging: function() {
+        this._initDataController();
+        this._setListOption('_dataController', this._dataController);
         this._setListDataSource();
 
         this._renderInputValue().fail((function() {
@@ -435,7 +429,6 @@ const DropDownList = DropDownEditor.inherit({
 
         this._clearFilter();
         this._clearSelectedItem();
-        this._preventFiltering = true;
     },
 
     _listItemElements: function() {
@@ -461,45 +454,37 @@ const DropDownList = DropDownEditor.inherit({
         return this.callBase().concat([!canListHaveFocus && this._list]);
     },
 
-    _fireContentReadyAction: noop,
-
-    _setAriaTargetForList: function() {
-        this._list._getAriaTarget = this._getAriaTarget.bind(this);
-    },
-
     _renderList: function() {
         this._listId = 'dx-' + new Guid()._value;
 
-        const $list = this._$list = $('<div>').attr('id', this._listId)
+        const $list = $('<div>')
+            .attr('id', this._listId)
             .appendTo(this._popup.$content());
+        this._$list = $list;
 
         this._list = this._createComponent($list, List, this._listConfig());
         this._refreshList();
 
-        this._setAriaTargetForList();
-        this._list.option('_listAttributes', { 'role': 'combobox' });
-
-        this._renderPreventBlur(this._$list);
+        this._renderPreventBlurOnListClick();
         this._setListFocusedElementOptionChange();
     },
 
-    _renderPreventBlur: function($target) {
+    _renderPreventBlurOnListClick: function() {
         const eventName = addNamespace('mousedown', 'dxDropDownList');
 
-        eventsEngine.off($target, eventName);
-        eventsEngine.on($target, eventName, function(e) {
-            e.preventDefault();
-        }.bind(this));
+        eventsEngine.off(this._$list, eventName);
+        eventsEngine.on(this._$list, eventName, (e) => e.preventDefault());
+    },
+
+    _getControlsAria() {
+        return this._list && this._listId;
     },
 
     _renderOpenedState: function() {
         this.callBase();
 
         this._list && this._updateActiveDescendant();
-        this.setAria({
-            'controls': this._list && this._listId,
-            'owns': this._popup && this._popupContentId
-        });
+        this.setAria('owns', this._popup && this._popupContentId);
     },
 
     _setDefaultAria: function() {
@@ -531,8 +516,10 @@ const DropDownList = DropDownEditor.inherit({
             _templates: this.option('_templates'),
             templateProvider: this.option('templateProvider'),
             noDataText: this.option('noDataText'),
+            encodeNoDataText: this.option('encodeNoDataText'),
             grouped: this.option('grouped'),
             wrapItemText: this.option('wrapItemText'),
+            useItemTextAsTitle: this.option('useItemTextAsTitle'),
             onContentReady: this._listContentReadyHandler.bind(this),
             itemTemplate: this.option('itemTemplate'),
             indicateLoading: false,
@@ -541,7 +528,7 @@ const DropDownList = DropDownEditor.inherit({
             groupTemplate: this.option('groupTemplate'),
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
-            _revertPageOnEmptyLoad: true,
+            _dataController: this._dataController,
             hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
             focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false
         };
@@ -580,7 +567,9 @@ const DropDownList = DropDownEditor.inherit({
             this._refreshSelected();
         }
 
-        this._dimensionChanged();
+        this._updatePopupWidth();
+        this._updateListDimensions();
+
         this._contentReadyAction();
     },
 
@@ -621,7 +610,7 @@ const DropDownList = DropDownEditor.inherit({
 
     _canKeepDataSource: function() {
         const isMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
-        return this._dataSource?.isLoaded() &&
+        return this._dataController.isLoaded() &&
             this.option('showDataBeforeSearch') &&
             this.option('minSearchLength') &&
             !isMinSearchLengthExceeded &&
@@ -636,16 +625,31 @@ const DropDownList = DropDownEditor.inherit({
         return addNamespace(SEARCH_EVENT, this.NAME + 'Search');
     },
 
+    _getCompositionStartEvent: function() {
+        return addNamespace('compositionstart', this.NAME + 'CompositionStart');
+    },
+
+    _getCompositionEndEvent: function() {
+        return addNamespace('compositionend', this.NAME + 'CompositionEnd');
+    },
+
     _getSetFocusPolicyEvent: function() {
         return addNamespace('input', this.NAME + 'FocusPolicy');
     },
 
     _renderEvents: function() {
         this.callBase();
-        eventsEngine.on(this._input(), this._getSetFocusPolicyEvent(), this._setFocusPolicy.bind(this));
+        eventsEngine.on(this._input(), this._getSetFocusPolicyEvent(), () => { this._setFocusPolicy(); });
 
         if(this._shouldRenderSearchEvent()) {
-            eventsEngine.on(this._input(), this._getSearchEvent(), this._searchHandler.bind(this));
+            eventsEngine.on(this._input(), this._getSearchEvent(), (e) => { this._searchHandler(e); });
+            if(useCompositionEvents) {
+                eventsEngine.on(this._input(), this._getCompositionStartEvent(), () => { this._isTextCompositionInProgress(true); });
+                eventsEngine.on(this._input(), this._getCompositionEndEvent(), (e) => {
+                    this._isTextCompositionInProgress(undefined);
+                    this._searchHandler(e, this._searchValue());
+                });
+            }
         }
     },
 
@@ -656,11 +660,27 @@ const DropDownList = DropDownEditor.inherit({
     _refreshEvents: function() {
         eventsEngine.off(this._input(), this._getSearchEvent());
         eventsEngine.off(this._input(), this._getSetFocusPolicyEvent());
+        if(useCompositionEvents) {
+            eventsEngine.off(this._input(), this._getCompositionStartEvent());
+            eventsEngine.off(this._input(), this._getCompositionEndEvent());
+        }
 
         this.callBase();
     },
 
-    _searchHandler: function() {
+    _isTextCompositionInProgress: function(value) {
+        if(arguments.length) {
+            this._isTextComposition = value;
+        } else {
+            return this._isTextComposition;
+        }
+    },
+
+    _searchHandler: function(e, searchValue) {
+        if(this._isTextCompositionInProgress()) {
+            return;
+        }
+
         if(!this._isMinSearchLengthExceeded()) {
             this._searchCanceled();
             return;
@@ -670,9 +690,12 @@ const DropDownList = DropDownEditor.inherit({
 
         if(searchTimeout) {
             this._clearSearchTimer();
-            this._searchTimer = setTimeout(this._searchDataSource.bind(this), searchTimeout);
+            this._searchTimer = setTimeout(
+                () => { this._searchDataSource(searchValue); },
+                searchTimeout
+            );
         } else {
-            this._searchDataSource();
+            this._searchDataSource(searchValue);
         }
     },
 
@@ -684,25 +707,24 @@ const DropDownList = DropDownEditor.inherit({
         this._refreshList();
     },
 
-    _searchDataSource: function() {
-        this._filterDataSource(this._searchValue());
+    _searchDataSource: function(searchValue = this._searchValue()) {
+        this._filterDataSource(searchValue);
     },
 
     _filterDataSource: function(searchValue) {
         this._clearSearchTimer();
 
-        const dataSource = this._dataSource;
-        if(dataSource) {
-            dataSource.searchExpr(this.option('searchExpr') || this._displayGetterExpr());
-            dataSource.searchOperation(this.option('searchMode'));
-            dataSource.searchValue(searchValue);
-            dataSource.load().done(this._dataSourceFiltered.bind(this, searchValue));
-        }
+        const dataController = this._dataController;
+
+        dataController.searchExpr(this.option('searchExpr') || this._displayGetterExpr());
+        dataController.searchOperation(this.option('searchMode'));
+        dataController.searchValue(searchValue);
+        dataController.load().done(this._dataSourceFiltered.bind(this, searchValue));
     },
 
     _clearFilter: function() {
-        const dataSource = this._dataSource;
-        dataSource && dataSource.searchValue() && dataSource.searchValue(null);
+        const dataController = this._dataController;
+        dataController.searchValue() && dataController.searchValue(null);
     },
 
     _dataSourceFiltered: function() {
@@ -729,12 +751,13 @@ const DropDownList = DropDownEditor.inherit({
         this.option('opened', shouldOpenPopup);
 
         if(shouldOpenPopup) {
-            this._dimensionChanged();
+            this._updatePopupWidth();
+            this._updateListDimensions();
         }
     },
 
     _dataSourceChangedHandler: function(newItems) {
-        if(this._dataSource.pageIndex() === 0) {
+        if(this._dataController.pageIndex() === 0) {
             this.option().items = newItems;
         } else {
             this.option().items = this.option().items.concat(newItems);
@@ -742,7 +765,8 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _hasItemsToShow: function() {
-        const resultItems = this._dataSource && this._dataSource.items() || [];
+        const dataController = this._dataController;
+        const resultItems = dataController.items() || [];
         const resultAmount = resultItems.length;
         const isMinSearchLengthExceeded = this._needPassDataSourceToList();
 
@@ -755,29 +779,31 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _popupShowingHandler: function() {
-        this._dimensionChanged();
+        this._updatePopupWidth();
+        this._updateListDimensions();
     },
 
     _dimensionChanged: function() {
-        this.callBase(arguments);
+        this.callBase();
 
-        this._popup && this._updatePopupDimensions();
+        this._updateListDimensions();
     },
 
     _needPopupRepaint: function() {
-        if(!this._dataSource) {
-            return false;
-        }
-
-        const currentPageIndex = this._dataSource.pageIndex();
-        const needRepaint = isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
+        const dataController = this._dataController;
+        const currentPageIndex = dataController.pageIndex();
+        const needRepaint = (isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex) || (dataController.isLastPage() && !this._list._scrollViewIsFull());
 
         this._pageIndex = currentPageIndex;
 
         return needRepaint;
     },
 
-    _updatePopupDimensions: function() {
+    _updateListDimensions: function() {
+        if(!this._popup) {
+            return;
+        }
+
         if(this._needPopupRepaint()) {
             this._popup.repaint();
         }
@@ -789,9 +815,9 @@ const DropDownList = DropDownEditor.inherit({
         const $element = this.$element();
         const $customBoundaryContainer = this._$customBoundaryContainer;
         const offsetTop = $element.offset().top - ($customBoundaryContainer ? $customBoundaryContainer.offset().top : 0);
-        const windowHeight = $(window).outerHeight();
-        const containerHeight = $customBoundaryContainer ? Math.min($customBoundaryContainer.outerHeight(), windowHeight) : windowHeight;
-        const maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
+        const windowHeight = getOuterHeight(window);
+        const containerHeight = $customBoundaryContainer ? Math.min(getOuterHeight($customBoundaryContainer), windowHeight) : windowHeight;
+        const maxHeight = Math.max(offsetTop, containerHeight - offsetTop - getOuterHeight($element));
 
         return Math.min(containerHeight * 0.5, maxHeight);
     },
@@ -872,6 +898,8 @@ const DropDownList = DropDownEditor.inherit({
             case 'groupTemplate':
             case 'wrapItemText':
             case 'noDataText':
+            case 'encodeNoDataText':
+            case 'useItemTextAsTitle':
                 this._setListOption(args.name);
                 break;
             case 'displayValue':

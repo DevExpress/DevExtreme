@@ -1,0 +1,46 @@
+@use "sass:string";
+@use "../string" as *;
+
+@mixin clock-colored-image($data-uri, $accent-color, $background-color, $digit-color) {
+  $uri: replace("#{$data-uri}", escape("$accent-color"), escape("#{$accent-color}"));
+  $uri: replace($uri, escape("$background-color"), escape("#{$background-color}")); // stylelint-disable-line scss/no-duplicate-dollar-variables
+  $uri: replace($uri, escape("$digit-color"), escape("#{$digit-color}")); // stylelint-disable-line scss/no-duplicate-dollar-variables
+
+  background-image: string.unquote($uri);
+}
+
+@mixin clock-action-icons-mixin($accent-color, $background-color, $digit-color) {
+  .dx-timeview-clock {
+    @include clock-colored-image(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/timeView/clock-bg.svg'), $accent-color, $background-color, $digit-color);
+
+    $clock-size: 182px;
+
+    min-width: $clock-size;
+    min-height: $clock-size;
+    max-height: $clock-size;
+    background-size: $clock-size;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+  }
+
+  .dx-timeview-hourarrow,
+  .dx-timeview-minutearrow {
+    position: absolute;
+    left: 50%;
+    width: 10px;
+    margin-left: -5px;
+    height: 50%;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    transform-origin: 50% 100%;
+    backface-visibility: hidden;
+  }
+
+  .dx-timeview-hourarrow {
+    @include clock-colored-image(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/timeView/hour-arrow.svg'), $accent-color, $background-color, $digit-color);
+  }
+
+  .dx-timeview-minutearrow {
+    @include clock-colored-image(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/timeView/min-arrow.svg'), $accent-color, $background-color, $digit-color);
+  }
+}

@@ -90,7 +90,7 @@ QUnit.begin(function() {
         return $.extend({}, environment, {
             beforeEach: function() {
                 environment.beforeEach.apply(this, arguments);
-                this.validateData = sinon.stub(dataValidatorModule, 'validateData', function() {
+                this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function() {
                     return {
                         arg: [{
                             argument: 1,
@@ -278,7 +278,7 @@ QUnit.begin(function() {
 
     // T124801
     QUnit.test('Create canvas when container size is not defined', function(assert) {
-        const container = $('<div style="width: 100px">').appendTo(this.$container);
+        const container = $('<div>').css('width', '100px').appendTo(this.$container);
 
         this.createSparkline({ dataSource: [1], pointSize: 0 }, container);
 
@@ -637,42 +637,42 @@ QUnit.begin(function() {
 
     QUnit.module('Prepare series options', environment);
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (unknown)', function(assert) {
         this.createSparkline({ type: 'abc' });
 
         const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (not applicable)', function(assert) {
         this.createSparkline({ dataSource: [3], type: 'pie' });
 
         const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (camel case)', function(assert) {
         this.createSparkline({ dataSource: [3], type: 'stepLine' });
 
         const options = this.getSeriesOptions();
         assert.equal(options.type, 'stepline', 'Series type should be correct');
     });
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (number)', function(assert) {
         this.createSparkline({ dataSource: [3], type: 111 });
 
         const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (null)', function(assert) {
         this.createSparkline({ dataSource: [3], type: null });
 
         const options = this.getSeriesOptions();
         assert.equal(options.type, 'line', 'Series type should be correct');
     });
 
-    QUnit.test('Prepare series options when type is incorrect', function(assert) {
+    QUnit.test('Prepare series options when type is incorrect (NaN)', function(assert) {
         this.createSparkline({ dataSource: [3], type: NaN });
 
         const options = this.getSeriesOptions();
@@ -1553,6 +1553,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'line',
             valueField: 'val',
             visible: true,
@@ -1598,6 +1599,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'line',
             valueField: 'val',
             visible: true,
@@ -1706,6 +1708,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'area',
             valueField: 'val',
             visible: true,
@@ -1751,6 +1754,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'area',
             valueField: 'val',
             visible: true,
@@ -1816,6 +1820,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'bar',
             valueField: 'val',
             visible: true,
@@ -1859,6 +1864,7 @@ QUnit.begin(function() {
                 symbol: 'circle',
                 visible: false
             },
+            name: '',
             type: 'bar',
             valueField: 'val',
             visible: true,
@@ -1962,6 +1968,18 @@ QUnit.begin(function() {
 
         assert.equal(this.getSeriesOptions().type, 'bar');
         assert.ok(seriesModule.Series.calledOnce);
+    });
+
+    QUnit.test('Dispose series stored svg-elements when type changed (T1028256)', function(assert) {
+        const sparkline = this.createSparkline({
+            dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4]
+        });
+
+        sparkline.option('type', 'bar');
+
+        assert.ok(this.series.removePointElements.calledTwice);
+        assert.ok(this.series.removeGraphicElements.calledTwice);
+        assert.ok(this.series.removeBordersGroup.calledTwice);
     });
 
     QUnit.test('Change size - B239871', function(assert) {
@@ -2128,7 +2146,7 @@ QUnit.begin(function() {
 
     QUnit.test('isReady with not loaded dataSource', function(assert) {
         const data = new DataSource();
-        sinon.stub(data, 'isLoaded', function() { return false; });
+        sinon.stub(data, 'isLoaded').callsFake(function() { return false; });
 
         const sparkline = this.createSparkline({ dataSource: data });
 
@@ -2150,6 +2168,16 @@ QUnit.begin(function() {
         this.forceTimeout();
 
         assert.ok(incSpy.called);
+    });
+
+    QUnit.test('check incidentOccurred passed to the series', function(assert) {
+        const incSpy = function(info) {
+            assert.equal(info.target.text, 'The  series cannot be drawn because the val data field is missing');
+        };
+        this.createSparkline({ onIncidentOccurred: incSpy });
+        assert.ok(seriesModule.Series.lastCall.args[0].incidentOccurred);
+
+        seriesModule.Series.lastCall.args[0].incidentOccurred('W2002', ['', 'val']);
     });
 
     QUnit.module('dataSource integration', environment);

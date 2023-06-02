@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../_sizes" as *;
 @use "../../base/treeView" as *;
 @use "../../base/icons" as *;
 @use "../checkBox/colors" as *;
@@ -24,12 +25,18 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
   &.dx-rtl {
     @include dx-treeview-make-rtl($generic-treeview-container-with-border-offset, $generic-treeview-node-offset, $generic-treeview-item-with-checkbox-offset, $generic-treeview-checkbox-offset, $generic-select-all-text-offset, $generic-select-all-item-left-padding, $generic-treeview-border-padding);
 
-    .dx-treeview-toggle-item-visibility {
+    .dx-treeview-toggle-item-visibility,
+    .dx-treeview-custom-expand-icon,
+    .dx-treeview-custom-collapse-icon {
       right: $generic-treeview-toggle-item-visibility-offset;
     }
 
     .dx-treeview-item-with-checkbox .dx-checkbox {
       overflow: visible;
+    }
+
+    .dx-treeview-custom-expander-icon-item-container {
+      padding-right: -$generic-treeview-toggle-item-visibility-offset;
     }
   }
 }
@@ -78,6 +85,18 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
 }
 
 .dx-treeview-item-with-checkbox {
+  &.dx-treeview-item-with-custom-expander-icon {
+    padding-left: $generic-treeview-custom-expander-icon-offset;
+
+    .dx-checkbox {
+      padding-left: 10px;
+    }
+
+    .dx-treeview-item {
+      padding-left: $generic-treeview-item-with-checkbox-offset + $generic-treeview-item-side-padding;
+    }
+  }
+
   .dx-treeview-item {
     color: $base-text-color;
     padding-left: $generic-treeview-item-with-checkbox-offset;
@@ -96,6 +115,14 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
 }
 
 .dx-treeview-item-without-checkbox {
+  &.dx-treeview-item-with-custom-expander-icon {
+    padding-left: $generic-treeview-custom-expander-icon-offset;
+  }
+
+  &.dx-treeview-item-with-custom-expander-icon > .dx-treeview-item {
+    padding-left: $generic-treeview-item-side-padding * 2;
+  }
+
   &.dx-state-selected {
     > .dx-treeview-item {
       color: $treeview-item-selected-color;
@@ -131,6 +158,13 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
     background-color: $treeview-hover-bg;
     color: $treeview-item-hover-color;
   }
+}
+
+.dx-treeview-custom-expand-icon,
+.dx-treeview-custom-collapse-icon {
+  @include dx-icon-sizing($generic-base-icon-size);
+
+  top: 7px;
 }
 
 .dx-treeview-toggle-item-visibility {

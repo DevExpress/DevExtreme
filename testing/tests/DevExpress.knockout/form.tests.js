@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import ko from 'knockout';
-import { FIELD_ITEM_CONTENT_CLASS, FIELD_ITEM_LABEL_LOCATION_CLASS, FIELD_ITEM_CONTENT_LOCATION_CLASS } from 'ui/form/constants';
+import { FIELD_ITEM_CONTENT_CLASS } from 'ui/form/constants';
+import { FIELD_ITEM_CONTENT_LOCATION_CLASS } from 'ui/form/components/field_item';
+import { FIELD_ITEM_LABEL_LOCATION_CLASS } from 'ui/form/components/label';
+
 import fx from 'animation/fx';
 
 import 'ui/form';
@@ -8,6 +11,8 @@ import 'ui/text_area';
 import 'ui/select_box';
 import 'ui/tag_box';
 import 'integration/knockout';
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(() => {
     const markup =
@@ -48,7 +53,7 @@ const moduleSetup = {
     }
 };
 
-QUnit.module('Knockout integration', moduleSetup);
+moduleWithoutCsp('Knockout integration', moduleSetup);
 
 QUnit.test('Generate items from layoutData with unacceptable data', function(assert) {
     const viewModel = {
@@ -517,7 +522,7 @@ QUnit.test('Editor doesn\'t update the field data if it\'s already up to date', 
 });
 
 
-QUnit.module('Templates');
+moduleWithoutCsp('Templates');
 
 QUnit.test('Render template', function(assert) {
     const viewModel = {

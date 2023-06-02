@@ -1,5 +1,5 @@
+import '../../helpers/noIntl.js';
 import sharedTests from './sharedParts/localization.shared.js';
-
 import localization from 'localization';
 import numberLocalization from 'localization/number';
 import dateLocalization from 'localization/date';

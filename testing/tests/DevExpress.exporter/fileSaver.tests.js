@@ -1,6 +1,4 @@
 import $ from 'jquery';
-import eventsEngine from 'events/core/events_engine';
-import browser from 'core/utils/browser';
 import { fileSaver } from 'exporter';
 import errors from 'ui/widget/ui.errors';
 import typeUtils from 'core/utils/type';
@@ -96,21 +94,8 @@ QUnit.test('saveAs - check revokeObjectURL', function(assert) {
     }
 });
 
-QUnit.test('Proxy Url exportForm generate', function(assert) {
-    const originalTrigger = eventsEngine.trigger;
-    eventsEngine.trigger = $.noop;
-    const testForm = fileSaver._saveByProxy('#', 'testFile.xlsx', 'EXCEL', 'testData');
-
-    assert.equal(testForm.attr('action'), '#', 'Set proxy as form action');
-    assert.equal(testForm.children('input[name=contentType]').eq(0).val(), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'Set contentType in form Post data');
-    assert.equal(testForm.children('input[name=fileName]').eq(0).val(), 'testFile.xlsx', 'Set fileName in form Post data');
-    assert.equal(testForm.children('input[name=data]').eq(0).val(), 'testData', 'Set data in form Post data');
-
-    eventsEngine.trigger = originalTrigger;
-});
-
 QUnit.test('Save blob by _winJSBlobSave on winJS devices', function(assert) {
-    if(!browser.msie && typeUtils.isFunction(window.Blob)) {
+    if(typeUtils.isFunction(window.Blob)) {
         const _winJSBlobSave = fileSaver._winJSBlobSave;
         let isCalled = false;
         try {
@@ -124,17 +109,11 @@ QUnit.test('Save blob by _winJSBlobSave on winJS devices', function(assert) {
             delete window.WinJS;
             fileSaver._winJSBlobSave = _winJSBlobSave;
         }
-    } else {
-        assert.ok(true, 'This test is for not IE browsers');
     }
 });
 
 QUnit.test('Save base 64 for Safari', function(assert) {
     if(!typeUtils.isFunction(window.Blob)) {
-        if(browser.msie) {
-            assert.ok(true, 'This test not for IE browsers');
-            return;
-        }
         let exportLinkElementClicked = false;
         const _linkDownloader = fileSaver._linkDownloader;
 
@@ -181,27 +160,6 @@ QUnit.test('No E1034 on iPad', function(assert) {
     }
 });
 
-QUnit.test('Blob is saved via msSaveOrOpenBlob method', function(assert) {
-    if(browser.msie && parseInt(browser.version) > 9) {
-        let isCalled;
-        const _msSaveOrOpenBlob = navigator.msSaveOrOpenBlob;
-
-        navigator.msSaveOrOpenBlob = function(data, fileName) {
-            isCalled = true;
-        };
-
-        fileSaver._saveBlobAs('test', 'EXCEL', new Blob([], { type: 'test/plain' }));
-
-        assert.ok(fileSaver._blobSaved, 'blob is saved');
-        assert.ok(isCalled, 'msSaveOrOpenBlob method is called');
-
-        navigator.msSaveOrOpenBlob = _msSaveOrOpenBlob;
-    } else {
-        assert.ok(true, 'This test for ie10+ browsers');
-        return;
-    }
-});
-
 QUnit.test('SaveBlobAs is called after saveAs', function(assert) {
     if(!typeUtils.isFunction(window.Blob)) {
         assert.ok(true, 'This browser doesn\'t support Blob function');
@@ -219,29 +177,4 @@ QUnit.test('SaveBlobAs is called after saveAs', function(assert) {
     fileSaver._saveBlobAs = saveBlobAs;
 
     assert.ok(isSaveBlobAs);
-});
-
-QUnit.test('Force using proxy', function(assert) {
-    sinon.stub(eventsEngine, 'trigger');
-    try {
-        fileSaver.saveAs('test', 'EXCEl', undefined, 'http://localhost/', true);
-
-        assert.deepEqual(eventsEngine.trigger.lastCall.args[1], 'submit');
-    } finally {
-        eventsEngine.trigger.restore();
-    }
-});
-
-QUnit.test('Using proxyUrl is now deprecated', function(assert) {
-    sinon.stub(eventsEngine, 'trigger');
-    sinon.stub(errors, 'log');
-    try {
-        fileSaver.saveAs('test', 'EXCEl', undefined, 'http://localhost/', true);
-
-        assert.equal(errors.log.callCount, 1);
-        assert.equal(errors.log.getCall(0).args[0], 'W0001');
-    } finally {
-        eventsEngine.trigger.restore();
-        errors.log.restore();
-    }
 });

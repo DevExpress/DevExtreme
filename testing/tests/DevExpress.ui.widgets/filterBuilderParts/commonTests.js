@@ -39,6 +39,7 @@ import {
     selectMenuItem,
     clickByButtonAndSelectMenuItem
 } from './helpers.js';
+import { implementationsMap } from 'core/utils/size';
 
 QUnit.module('Rendering', function() {
     QUnit.test('field menu test', function(assert) {
@@ -248,7 +249,7 @@ QUnit.module('Rendering', function() {
         });
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100);
-        const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(300);
+        const windowHeight = sinon.stub(implementationsMap, 'getInnerHeight').returns(300);
         const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
 
         const $operationButton = container.find('.' + FILTER_BUILDER_ITEM_OPERATION_CLASS);
@@ -409,6 +410,25 @@ QUnit.module('Rendering', function() {
 
         // assert
         assert.notOk($container.find('.' + FILTER_BUILDER_OVERLAY_CLASS).dxPopup('instance').option('target'), 'popup target shoud not be set');
+    });
+
+    QUnit.test('Menu wrapper has filter builder overlay class', function(assert) {
+        // arrange
+        const $container = $('#container');
+
+        $container.dxFilterBuilder({
+            value: ['Weight', '=', 3.14],
+            fields: [{
+                dataField: 'Weight',
+                dataType: 'number'
+            }]
+        });
+
+        // act
+        $('.' + FILTER_BUILDER_GROUP_OPERATION_CLASS).trigger('dxclick');
+
+        // assert
+        assert.ok($('.dx-overlay-wrapper').hasClass(FILTER_BUILDER_OVERLAY_CLASS), 'overlay wrapper class');
     });
 });
 
@@ -636,6 +656,77 @@ QUnit.module('Filter value', function() {
 
         assert.equal($container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), 'PivotGrid');
         assert.deepEqual(instance.option('value'), ['Product', '=', 2]);
+    });
+
+    // T982743
+    QUnit.testInActiveWindow('change filter value in selectbox with customizeText', function(assert) {
+        const $container = $('#container');
+        const customizeText = sinon.spy(e => {
+            return 'customized ' + e.valueText;
+        });
+        const instance = $container.dxFilterBuilder({
+            allowHierarchicalFields: true,
+            value: ['test', '=', 'first'],
+            fields: [{
+                dataField: 'test',
+                lookup: {
+                    dataSource: ['first', 'second']
+                },
+                customizeText: customizeText
+            }]
+        }).dxFilterBuilder('instance');
+
+        assert.equal($container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), 'customized first');
+
+        const $valueButton = $container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.trigger('dxclick');
+
+        const selectBoxInstance = $container.find('.dx-selectbox').dxSelectBox('instance');
+        selectBoxInstance.open();
+        $('.dx-list-item').eq(1).trigger('dxclick');
+        clickByOutside();
+
+        assert.equal($container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), 'customized second');
+        assert.deepEqual(instance.option('value'), ['test', '=', 'second']);
+        assert.equal(customizeText.callCount, 2);
+        assert.deepEqual(customizeText.firstCall.args[0], { value: 'first', valueText: 'first' });
+        assert.deepEqual(customizeText.secondCall.args[0], { value: 'second', valueText: 'second' });
+    });
+
+    // T982743
+    QUnit.testInActiveWindow('change filter value in selectbox with customizeText and displayExpr', function(assert) {
+        const $container = $('#container');
+        const customizeText = sinon.spy(e => {
+            return 'customized ' + e.valueText;
+        });
+        const instance = $container.dxFilterBuilder({
+            value: ['test', '=', 1],
+            fields: [{
+                dataField: 'test',
+                lookup: {
+                    dataSource: [{ id: 1, text: 'first' }, { id: 2, text: 'second' }],
+                    valueExpr: 'id',
+                    displayExpr: 'text'
+                },
+                customizeText: customizeText
+            }]
+        }).dxFilterBuilder('instance');
+
+        assert.equal($container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), 'customized first');
+
+        const $valueButton = $container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.trigger('dxclick');
+
+        const selectBoxInstance = $container.find('.dx-selectbox').dxSelectBox('instance');
+        selectBoxInstance.open();
+        $('.dx-list-item').eq(1).trigger('dxclick');
+        clickByOutside();
+
+        assert.equal($container.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), 'customized second');
+        assert.deepEqual(instance.option('value'), ['test', '=', 2]);
+        assert.equal(customizeText.callCount, 2);
+        assert.deepEqual(customizeText.firstCall.args[0], { value: 1, valueText: 'first' });
+        assert.deepEqual(customizeText.secondCall.args[0], { value: 2, valueText: 'second' });
     });
 
     QUnit.testInActiveWindow('check default value for number', function(assert) {
@@ -1205,7 +1296,7 @@ QUnit.module('on value changed', function() {
         const popupInstance = container.children('.dx-filterbuilder-overlay').dxPopup('instance');
 
         // assert
-        assert.equal(popupInstance.option('closeOnTargetScroll'), true, 'popup\'s closeOnTargetScroll');
+        assert.equal(popupInstance.option('hideOnParentScroll'), true, 'popup\'s hideOnParentScroll');
     });
 
     // T804262

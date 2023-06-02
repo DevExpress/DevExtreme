@@ -14,6 +14,7 @@ import consts from '../../components/consts';
 const RADIAL_LABEL_INDENT = consts.radialLabelIndent;
 
 const ERROR_BARS_ANGLE_OFFSET = 90;
+const CANVAS_POSITION_START = 'canvas_position_start';
 const CANVAS_POSITION_END = 'canvas_position_end';
 const CANVAS_POSITION_DEFAULT = 'canvas_position_default';
 
@@ -62,7 +63,8 @@ export const polarSymbolPoint = _extend({}, symbolPoint, {
         const that = this;
         const center = that.series.getValueAxis().getCenter();
         const coord = that._getCoords(that.argument, that.value);
-        const maxRadius = that._getValTranslator().translate(CANVAS_POSITION_END);
+        const translator = that._getValTranslator();
+        const maxRadius = translator.isInverted() ? translator.translate(CANVAS_POSITION_START) : translator.translate(CANVAS_POSITION_END);
         const normalizedRadius = isDefined(coord.radius) && coord.radius >= 0 ? coord.radius : null;
 
         that.vx = normalizeAngle(coord.angle);
@@ -170,7 +172,7 @@ export const polarBarPoint = _extend({}, barPoint, {
         const that = this;
         const translator = that._getValTranslator();
         const businessRange = translator.getBusinessRange();
-        const maxRadius = translator.translate(CANVAS_POSITION_END);
+        const maxRadius = translator.isInverted() ? translator.translate(CANVAS_POSITION_START) : translator.translate(CANVAS_POSITION_END);
 
         that.radiusInner = translator.translate(that.minValue);
 

@@ -1,10 +1,12 @@
 import { noop } from '../../core/utils/common';
 import { plugin as pluginTooltip } from '../core/tooltip';
 
-function getCoords(figureCoords, renderer) {
+function getCoords(coords, figureCoords, renderer) {
     const offset = renderer.getRootOffset();
 
-    return [(figureCoords[0] + figureCoords[2]) / 2 + offset.left, (figureCoords[1] + figureCoords[5]) / 2 + offset.top];
+    return coords || (
+        figureCoords && [(figureCoords[0] + figureCoords[2]) / 2 + offset.left, (figureCoords[1] + figureCoords[5]) / 2 + offset.top]
+    ) || [-1000, -1000];
 }
 
 export const plugin = {
@@ -33,8 +35,7 @@ export const plugin = {
         },
 
         _moveTooltip: function(item, coords) {
-            const xy = coords || (item.coords && getCoords(item.coords, this._renderer)) || [-1000, -1000];
-
+            const xy = getCoords(coords, item.coords, this._renderer);
             this._tooltip.move(xy[0], xy[1], 0);
         },
 
@@ -52,21 +53,19 @@ export const plugin = {
                 if(result === undefined) {
                     return;
                 }
-                if(result) {
-                    that._moveTooltip(item, coords);
-                } else {
+                if(!result) {
                     tooltip.hide();
                 }
                 that._tooltipIndex = result ? index : -1;
             };
-
+            const xy = getCoords(coords, item.coords, this._renderer);
             callback(tooltip.show({
                 value: item.value,
                 valueText: tooltip.formatValue(item.value),
                 percentText: tooltip.formatValue(item.percent, 'percent'),
                 percent: item.percent,
                 item: item
-            }, { x: 0, y: 0, offset: 0 }, { item: item }, undefined, callback));
+            }, { x: xy[0], y: xy[1], offset: 0 }, { item: item }, undefined, callback));
         }
     },
     customize: function(constructor) {

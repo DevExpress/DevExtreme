@@ -1,10 +1,8 @@
 import * as support from '../core/utils/support';
 import { each } from '../core/utils/iterator';
-import browser from '../core/utils/browser';
 import devices from '../core/devices';
 import registerEvent from './core/event_registrator';
 import TouchStrategy from './pointer/touch';
-import MsPointerStrategy from './pointer/mspointer';
 import MouseStrategy from './pointer/mouse';
 import MouseAndTouchStrategy from './pointer/mouse_and_touch';
 
@@ -65,11 +63,7 @@ import MouseAndTouchStrategy from './pointer/mouse_and_touch';
   * @module events/pointer
 */
 
-const getStrategy = (support, device, browser) => {
-    if(support.pointerEvents && browser.msie) {
-        return MsPointerStrategy;
-    }
-
+const getStrategy = (support, device) => {
     const { tablet, phone } = device;
     if(support.touch && !(tablet || phone)) {
         return MouseAndTouchStrategy;
@@ -82,7 +76,7 @@ const getStrategy = (support, device, browser) => {
     return MouseStrategy;
 };
 
-const EventStrategy = getStrategy(support, devices.real(), browser);
+const EventStrategy = getStrategy(support, devices.real());
 
 each(EventStrategy.map, (pointerEvent, originalEvents) => {
     registerEvent(pointerEvent, new EventStrategy(pointerEvent, originalEvents));

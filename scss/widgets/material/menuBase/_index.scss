@@ -11,12 +11,14 @@
 
 // adduse
 
-
 $material-menu-arrow-image-size: 7px;
-$material-menu-horizontal-padding: 16px;
 
 .dx-menu-item {
   color: $menu-color;
+
+  a {
+    color: $typography-link-color;
+  }
 
   &.dx-state-hover {
     background-color: $menu-item-hover-bg;

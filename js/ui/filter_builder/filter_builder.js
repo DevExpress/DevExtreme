@@ -9,7 +9,7 @@ import messageLocalization from '../../localization/message';
 import { when } from '../../core/utils/deferred';
 import { isDefined } from '../../core/utils/type';
 import TreeView from '../tree_view';
-import Popup from '../popup';
+import Popup from '../popup/ui.popup';
 import { getElementMaxHeightByWindow } from '../overlay/utils';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
 import { normalizeKeyName } from '../../events/utils/index';
@@ -86,17 +86,9 @@ const FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderField.defaultFilterOperation
-             * @type Enums.FilterBuilderFieldFilterOperations | string
+             * @type Enums.FilterBuilderOperation | string
              * @hidden
              */
-
-            /**
-            * @name dxFilterBuilderOptions.defaultGroupOperation
-            * @type string
-            * @default "and"
-            * @hidden
-            */
-            defaultGroupOperation: 'and',
 
             groupOperations: ['and', 'or', 'notAnd', 'notOr'],
 
@@ -149,7 +141,6 @@ const FilterBuilder = Widget.inherit({
                 this._invalidate();
                 break;
             case 'fields':
-            case 'defaultGroupOperation':
             case 'maxGroupLevel':
             case 'groupOperations':
             case 'allowHierarchicalFields':
@@ -215,8 +206,12 @@ const FilterBuilder = Widget.inherit({
         this._customOperations = getMergedOperations(this.option('customOperations'), this.option('filterOperationDescriptions.between'), this);
     },
 
+    _getDefaultGroupOperation: function() {
+        return this.option('groupOperations')?.[0] ?? OPERATORS.and;
+    },
+
     _getModel: function(value) {
-        return convertToInnerStructure(value, this._customOperations);
+        return convertToInnerStructure(value, this._customOperations, this._getDefaultGroupOperation());
     },
 
     _initModel: function() {
@@ -261,10 +256,10 @@ const FilterBuilder = Widget.inherit({
         for(let i = 0; i < groupCriteria.length; i++) {
             const innerCriteria = groupCriteria[i];
             if(isGroup(innerCriteria)) {
-                this._createGroupElementByCriteria(innerCriteria, groupCriteria, groupLevel + 1)
+                this._createGroupElementByCriteria(innerCriteria, criteria, groupLevel + 1)
                     .appendTo($groupContent);
             } else if(isCondition(innerCriteria)) {
-                this._createConditionElement(innerCriteria, groupCriteria)
+                this._createConditionElement(innerCriteria, criteria)
                     .appendTo($groupContent);
             }
         }
@@ -287,7 +282,7 @@ const FilterBuilder = Widget.inherit({
         this._createGroupOperationButton(criteria).appendTo($groupItem);
 
         this._createAddButton(() => {
-            const newGroup = createEmptyGroup(this.option('defaultGroupOperation'));
+            const newGroup = createEmptyGroup(this._getDefaultGroupOperation());
             addItem(newGroup, criteria);
             this._createGroupElement(newGroup, criteria, groupLevel + 1).appendTo($groupContent);
             this._updateFilter();
@@ -321,7 +316,7 @@ const FilterBuilder = Widget.inherit({
                     onItemClick: (e) => {
                         if(groupMenuItem !== e.itemData) {
                             setGroupValue(criteria, e.itemData.value);
-                            $operationButton.html(e.itemData.text);
+                            $operationButton.text(e.itemData.text);
                             groupMenuItem = e.itemData;
                             this._updateFilter();
                         }
@@ -782,18 +777,20 @@ const FilterBuilder = Widget.inherit({
                 // T852701
                 this.repaint();
             },
+            _ignoreFunctionValueDeprecation: true,
             maxHeight: function() {
                 return getElementMaxHeightByWindow(options.menu.position.of);
             },
             visible: true,
             focusStateEnabled: false,
-            closeOnTargetScroll: this.option('closePopupOnTargetScroll'),
-            closeOnOutsideClick: true,
+            hideOnParentScroll: this.option('closePopupOnTargetScroll'),
+            hideOnOutsideClick: true,
             onShown: options.popup.onShown,
             shading: false,
             width: 'auto',
             height: 'auto',
-            showTitle: false
+            showTitle: false,
+            _wrapperClassExternal: options.menu.cssClass,
         });
     },
 

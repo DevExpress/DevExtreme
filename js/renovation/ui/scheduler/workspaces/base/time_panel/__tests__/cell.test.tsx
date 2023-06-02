@@ -16,13 +16,6 @@ describe('TimePanelCell', () => {
     }}
     />);
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(cell.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should render time cell correctly', () => {
       const cell = render({ props: { className: 'test-class' } });
 
@@ -55,9 +48,25 @@ describe('TimePanelCell', () => {
         .toMatchObject({
           isFirstGroupCell: true,
           isLastGroupCell: true,
-          contentTemplate: timeCellTemplate,
-          contentTemplateProps: timeCellTemplateProps,
         });
+    });
+
+    it('should render timeCellTemplate', () => {
+      const timeCellTemplate = jest.fn();
+      const timeCellTemplateProps = {
+        index: 1,
+        data: {},
+      };
+
+      const cell = render({
+        props: {
+          timeCellTemplate,
+        },
+        timeCellTemplateProps,
+      });
+
+      expect(cell.find(timeCellTemplate).props())
+        .toEqual(timeCellTemplateProps);
     });
   });
 

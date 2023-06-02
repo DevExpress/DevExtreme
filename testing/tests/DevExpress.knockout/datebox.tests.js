@@ -1,13 +1,17 @@
-const $ = require('jquery');
-const fx = require('animation/fx');
-const support = require('core/utils/support');
-const devices = require('core/devices');
-const uiDateUtils = require('ui/date_box/ui.date_utils');
-const dateLocalization = require('localization/date');
-const ko = require('knockout');
+import '../../helpers/noIntl.js';
 
-require('integration/knockout');
-require('ui/date_box');
+import $ from 'jquery';
+import fx from 'animation/fx';
+import support from 'core/utils/support';
+import devices from 'core/devices';
+import uiDateUtils from 'ui/date_box/ui.date_utils';
+import dateLocalization from 'localization/date';
+import ko from 'knockout';
+
+import 'integration/knockout';
+import 'ui/date_box';
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(function() {
     const markup =
@@ -66,7 +70,7 @@ const getExpectedResult = function(date, mode, stringDate) {
 };
 
 
-QUnit.module('options changed callbacks', moduleConfig);
+moduleWithoutCsp('options changed callbacks', moduleConfig);
 
 QUnit.test('several editors for same value', function(assert) {
     const value = new Date(2012, 10, 26, 16, 40, 0);
@@ -89,12 +93,15 @@ QUnit.test('several editors for same value', function(assert) {
     const $date = $('#dateboxWithDateFormat').find('.dx-texteditor-input');
     const $datetime = $('#dateboxWithDateTimeFormat').find('.dx-texteditor-input');
     const $time = $('#dateboxWithTimeFormat').find('.dx-texteditor-input');
+
     const dateMode = $('#dateboxWithDateFormat').dxDateBox().dxDateBox('instance').option('mode');
-    const datetimeMode = $('#dateboxWithDateTimeFormat').dxDateBox().dxDateBox('instance').option('mode');
+
+    const dateBoxWithDateTimeFormat = $('#dateboxWithDateTimeFormat').dxDateBox().dxDateBox('instance');
+    const datetimeMode = dateBoxWithDateTimeFormat.option('mode');
     const timeMode = $('#dateboxWithTimeFormat').dxDateBox().dxDateBox('instance').option('mode');
 
     assert.equal($date.val(), getExpectedResult(value, dateMode, toStandardDateFormat(value, dateMode)), '\'date\' format is displayed correctly');
-    assert.equal($datetime.val(), getExpectedResult(value, datetimeMode, toStandardDateFormat(value, datetimeMode)), '\'datetime\' format is displayed correctly');
+    assert.equal(dateBoxWithDateTimeFormat.option('text'), getExpectedResult(value, datetimeMode, toStandardDateFormat(value, datetimeMode)), '\'datetime\' format is displayed correctly');
     assert.equal($time.val(), getExpectedResult(value, timeMode, toStandardDateFormat(value, timeMode)), '\'time\' format is displayed correctly');
 
     newValue = new Date(2013, 11, 22, 16, 40, 0);
@@ -107,7 +114,7 @@ QUnit.test('several editors for same value', function(assert) {
         .trigger('change');
 
     assert.equal($date.val(), getExpectedResult(newValue, dateMode, toStandardDateFormat(newValue, dateMode)), '\'date\' format is displayed correctly');
-    assert.equal($datetime.val(), getExpectedResult(newValue, datetimeMode, toStandardDateFormat(newValue, datetimeMode)), '\'datetime\' format is displayed correctly');
+    assert.equal(dateBoxWithDateTimeFormat.option('text'), getExpectedResult(newValue, datetimeMode, toStandardDateFormat(newValue, datetimeMode)), '\'datetime\' format is displayed correctly');
     assert.equal($time.val(), getExpectedResult(newValue, timeMode, toStandardDateFormat(newValue, timeMode)), '\'time\' format is displayed correctly');
 
     newValue = new Date(2008, 9, 26, 22, 30);
@@ -119,7 +126,7 @@ QUnit.test('several editors for same value', function(assert) {
         .trigger('change');
 
     assert.equal($date.val(), getExpectedResult(newValue, dateMode, toStandardDateFormat(newValue, dateMode)), '\'date\' format is displayed correctly');
-    assert.equal($datetime.val(), getExpectedResult(newValue, datetimeMode, toStandardDateFormat(newValue, datetimeMode)), '\'datetime\' format is displayed correctly');
+    assert.equal(dateBoxWithDateTimeFormat.option('text'), getExpectedResult(newValue, datetimeMode, toStandardDateFormat(newValue, datetimeMode)), '\'datetime\' format is displayed correctly');
     assert.equal($time.val(), getExpectedResult(newValue, timeMode, toStandardDateFormat(newValue, timeMode)), '\'time\' format is displayed correctly');
 
     newValue = new Date(2008, 9, 26, 14, 29);
@@ -131,12 +138,12 @@ QUnit.test('several editors for same value', function(assert) {
         .trigger('change');
 
     assert.equal($date.val(), getExpectedResult(newValue, dateMode, toStandardDateFormat(newValue, dateMode)), '\'date\' format is displayed correctly');
-    assert.equal($datetime.val(), getExpectedResult(newValue, datetimeMode, toStandardDateFormat(newValue, datetimeMode)), '\'datetime\' format is displayed correctly');
+    assert.equal(dateBoxWithDateTimeFormat.option('text'), getExpectedResult(newValue, datetimeMode, toStandardDateFormat(newValue, datetimeMode)), '\'datetime\' format is displayed correctly');
     assert.equal($time.val(), getExpectedResult(newValue, timeMode, toStandardDateFormat(newValue, timeMode)), '\'time\' format is displayed correctly');
 });
 
 
-QUnit.module('dateView integration', {
+moduleWithoutCsp('dateView integration', {
     beforeEach: function() {
         fx.off = true;
 

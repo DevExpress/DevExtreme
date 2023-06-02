@@ -23,9 +23,10 @@ SystemJS.config({
 
 define(function(require, exports, module) {
     const cldrData = [
-        require('../../../node_modules/devextreme-cldr-data/ru.json!json'),
-        require('../../../node_modules/devextreme-cldr-data/en.json!json'),
-        require('../../../node_modules/devextreme-cldr-data/de.json!json')
+        require('devextreme-cldr-data/ar.json!json'),
+        require('devextreme-cldr-data/ru.json!json'),
+        require('devextreme-cldr-data/de.json!json'),
+        require('devextreme-cldr-data/da.json!json')
     ];
 
     require('localization/globalize/core');
@@ -45,7 +46,7 @@ define(function(require, exports, module) {
 
     const ExcelJSLocalizationFormatTests = require('../DevExpress.exporter/exceljsParts/exceljs.format.tests.js');
 
-    const likelySubtags = require('../../../node_modules/cldr-core/supplemental/likelySubtags.json!');
+    const likelySubtags = require('cldr-core/supplemental/likelySubtags.json!');
     Globalize.load(likelySubtags);
 
     cldrData.forEach(localeCldrData => {
@@ -60,7 +61,7 @@ define(function(require, exports, module) {
     const browser = require('core/utils/browser');
     const dateUtils = require('core/utils/date');
 
-    const sharedTests = require('./sharedParts/localization.shared.js');
+    const sharedTests = require('./sharedParts/localization.shared.js').default;
 
     const NEGATIVE_NUMBERS = [-4.645, -35.855];
     const ROUNDING_CORRECTION = {
@@ -138,6 +139,16 @@ define(function(require, exports, module) {
 
         QUnit.test('getPeriodNames', function(assert) {
             assert.deepEqual(dateLocalization.getPeriodNames(), ['AM', 'PM'], 'Array of period names');
+
+            Globalize.locale('ar');
+
+            [null, 'abbreviated', 'wide', 'narrow'].forEach(format => {
+                ['format', null].forEach(type => {
+                    const expect = ([null, 'wide'].includes(format) && type == null) ? ['صباحًا', 'مساءً'] : ['ص', 'م'];
+
+                    assert.deepEqual(dateLocalization.getPeriodNames(format, type), expect, 'Array of correct period names');
+                });
+            });
         });
 
         QUnit.test('getDayNames', function(assert) {
@@ -295,6 +306,12 @@ define(function(require, exports, module) {
         QUnit.test('format: { time: \'medium\' }', function(assert) {
             assert.equal(dateLocalization.format(new Date(2015, 1, 2, 3, 4, 5, 6), { time: 'medium' }), '3:04:05 AM', 'with object format');
         });
+
+        QUnit.test('Parse custom format', function(assert) {
+            const expected = new Date(2010, 2, 2).toString();
+            assert.equal(dateLocalization.parse('20100302', 'yyyyMMdd'), expected, 'Format \'yyyyMMdd\' parse ok');
+            assert.equal(dateLocalization.parse('02mar10', 'dMyyyy'), expected, 'Format \'dMyyyy\' parse ok');
+        });
     });
 
     QUnit.module('Localization message (custom locales)', {
@@ -441,11 +458,31 @@ define(function(require, exports, module) {
 
     QUnit.module('Localization currency with Globalize', () => {
 
+        QUnit.test('format currency default after global config change', function(assert) {
+            const originalDefaultCurrency = config().defaultCurrency;
+
+            assert.equal(numberLocalization.format(1.2, { currency: 'default' }), '$1.20');
+
+            config({ defaultCurrency: 'EUR' });
+            assert.equal(numberLocalization.format(12, { currency: 'default' }), '€12.00');
+
+            config({ defaultCurrency: originalDefaultCurrency });
+            assert.equal(numberLocalization.format(1.2, { currency: 'default' }), '$1.20');
+
+        });
+
         QUnit.test('format', function(assert) {
             assert.equal(numberLocalization.format(1.2, { currency: 'default' }), '$1.20');
             assert.equal(numberLocalization.format(12, { currency: 'default' }), '$12.00');
             assert.equal(numberLocalization.format(1, { minimumIntegerDigits: 2, minimumFractionDigits: 0, currency: 'default' }), '$01');
             assert.equal(numberLocalization.format(1, { minimumIntegerDigits: 2, minimumFractionDigits: 0, currency: 'RUB' }), 'RUB' + NBSP + '01');
+        });
+
+        QUnit.test('format currency with sign/style (T1076906)', function(assert) {
+            assert.equal(numberLocalization.format(-1.2, { currency: 'default', style: 'accounting' }), '($1.20)');
+            assert.equal(numberLocalization.format(-1.2, { type: 'currency', useCurrencyAccountingStyle: true }), '($1)');
+            assert.equal(numberLocalization.format(-12, { currency: 'default', style: 'symbol' }), '-$12.00');
+            assert.equal(numberLocalization.format(-12, { type: 'currency', useCurrencyAccountingStyle: false }), '-$12');
         });
 
         QUnit.test('format currency & power in RU locale', function(assert) {

@@ -1,3 +1,4 @@
+import { getWidth, getHeight, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import 'ui/button';
 import 'ui/button_group';
@@ -7,7 +8,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 const BUTTON_CLASS = 'dx-button';
@@ -22,6 +22,46 @@ QUnit.testStart(() => {
         <div id="widget"></div>
     `;
     $('#qunit-fixture').html(markup);
+});
+
+QUnit.module('options', () => {
+    QUnit.test('items=[item1.elementAttr = { attr1="test1", attr2="test2", attr3="test3" }]', function(assert) {
+        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+            keyExpr: 'id',
+            items: [
+                { id: 1, text: 'button 1', elementAttr: { attr1: 'test1', attr2: 'test2', attr3: 'test3' } },
+            ],
+        });
+
+        const $button = buttonGroup.find('.dx-button');
+        assert.equal($button.attr('attr1'), 'test1');
+        assert.equal($button.attr('attr2'), 'test2');
+        assert.equal($button.attr('attr3'), 'test3');
+    });
+
+    QUnit.test('items=[item1.elementAttr.class="test1",item2.elementAttr.class="test2"]', function(assert) {
+        const buttonGroup = $('#buttonGroup').dxButtonGroup({
+            keyExpr: 'id',
+            items: [
+                { id: 1, text: 'button 1', elementAttr: { class: 'test1' } },
+                { id: 2, text: 'button 2', elementAttr: { class: 'test2' } },
+            ],
+        });
+
+        const $button = buttonGroup.find('.dx-button');
+        assert.equal($button.eq(0).hasClass('test1'), true);
+        assert.equal($button.eq(0).hasClass('test2'), false);
+        assert.equal($button.eq(1).hasClass('test1'), false);
+        assert.equal($button.eq(1).hasClass('test2'), true);
+
+        // default classes are still exist
+        assert.equal($button.eq(0).hasClass('dx-widget'), true);
+        assert.equal($button.eq(1).hasClass('dx-widget'), true);
+        assert.equal($button.eq(0).hasClass('dx-buttongroup-item'), true);
+        assert.equal($button.eq(1).hasClass('dx-buttongroup-item'), true);
+        assert.equal($button.eq(0).hasClass('dx-buttongroup-first-item'), true);
+        assert.equal($button.eq(1).hasClass('dx-buttongroup-last-item'), true);
+    });
 });
 
 QUnit.module('option changed', {
@@ -78,7 +118,7 @@ QUnit.module('option changed', {
         const buttonsSelector = `.${BUTTON_CLASS}`;
         const buttons = $(buttonsSelector);
 
-        assert.equal(this.$buttonGroup.width(), 500, 'button group width');
+        assert.equal(getWidth(this.$buttonGroup), 500, 'button group width');
         assert.ok(buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'first item when button group has width');
         assert.ok(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'second item when button group has width');
     });
@@ -90,15 +130,15 @@ QUnit.module('option changed', {
 
         const buttons = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
-        assert.equal($buttonGroup.height(), 500, 'button group height is right');
-        assert.equal(buttons.eq(0).outerHeight(), 500, 'button group item height is right');
+        assert.equal(getHeight($buttonGroup), 500, 'button group height is right');
+        assert.equal(getOuterHeight(buttons.eq(0)), 500, 'button group item height is right');
 
         this.buttonGroup.option('height', 700);
-        assert.equal($buttonGroup.height(), 700, 'button group height is right');
-        assert.equal(buttons.eq(0).outerHeight(), 700, 'button group item height is right');
+        assert.equal(getHeight($buttonGroup), 700, 'button group height is right');
+        assert.equal(getOuterHeight(buttons.eq(0)), 700, 'button group item height is right');
 
         this.buttonGroup.option('height', '');
-        assert.notEqual($buttonGroup.height(), 700, 'button group height changed to default');
+        assert.notEqual(getHeight($buttonGroup), 700, 'button group height changed to default');
     });
 
     QUnit.test('change the width option when item has template', function(assert) {
@@ -110,7 +150,7 @@ QUnit.module('option changed', {
         buttonGroup.option('width', 500);
 
         const $items = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
-        assert.equal(buttonGroup.$element().width(), 500, 'button group width');
+        assert.equal(getWidth(buttonGroup.$element()), 500, 'button group width');
         assert.ok($items.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'first item when button group has width');
         assert.ok($items.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'second item when button group has width');
     });
@@ -164,6 +204,19 @@ QUnit.module('option changed', {
         assert.deepEqual(templateMock.getCall(1).args[0], item2, 'full item should be passed to the template');
     });
 
+    QUnit.test('custom item property should not be passed to default buttonTemplate', function(assert) {
+        const item1 = { text: 'button 1', icon: 'box', custom: 1 };
+        const item2 = { text: 'button 2', icon: 'box', custom: 2 };
+        this.createButtonGroup({
+            items: [item1, item2]
+        });
+
+        const buttons = $(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton('instance'));
+
+        assert.deepEqual(buttons[0].option('_templateData'), {}, 'full item should be passed to the template');
+        assert.deepEqual(buttons[1].option('_templateData'), {}, 'full item should be passed to the template');
+    });
+
     QUnit.test('item.template should have higher priority than the buttonTemplate option', function(assert) {
         const buttonGroup = this.createButtonGroup({
             items: [{
@@ -178,6 +231,34 @@ QUnit.module('option changed', {
         const $buttonGroup = buttonGroup.$element();
 
         assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), 'item.template', 'template is correct');
+    });
+
+    QUnit.test('button has aria-pressed=false attribute if not selected', function(assert) {
+        $('#widget').dxButtonGroup({ items: [{ id: '1' }] });
+        const $button = $(`.${BUTTON_CLASS}`).eq(0);
+
+        assert.strictEqual($button.attr('aria-pressed'), 'false');
+    });
+
+    QUnit.test('button has aria-pressed=true attribute if selected', function(assert) {
+        $('#widget').dxButtonGroup({ items: [{ id: '1' }] });
+        const $button = $(`.${BUTTON_CLASS}`).eq(0);
+
+        eventsEngine.trigger($button, 'dxclick');
+
+        assert.strictEqual($button.attr('aria-pressed'), 'true');
+    });
+
+    QUnit.test('button has aria-pressed=false attribute if unselected', function(assert) {
+        $('#widget').dxButtonGroup({ items: [{ id: '1' }, { id: '2' }] });
+        const $firstButton = $(`.${BUTTON_CLASS}`).eq(0);
+        const $secondButton = $(`.${BUTTON_CLASS}`).eq(1);
+
+        eventsEngine.trigger($firstButton, 'dxclick');
+        eventsEngine.trigger($secondButton, 'dxclick');
+
+        assert.strictEqual($firstButton.attr('aria-pressed'), 'false');
+        assert.strictEqual($secondButton.attr('aria-pressed'), 'true');
     });
 
     QUnit.test('it should be possible to set full set of options for each button', function(assert) {
@@ -224,7 +305,6 @@ QUnit.module('option changed', {
     });
 });
 
-
 QUnit.module('Events', () => {
     class ButtonGroupEventsTestHelper {
         constructor(eventName, isItemClickInInitialOption, isDisabled, isItemDisabled) {
@@ -239,12 +319,14 @@ QUnit.module('Events', () => {
         createButtonGroup() {
             if(this.isItemClickInInitialOption) {
                 this.buttonGroup = $('#widget').dxButtonGroup({
+                    focusStateEnabled: true,
                     items: [{ text: 'item1', disabled: this.isItemDisabled, custom: 1 }],
                     disabled: this.isDisabled,
                     onItemClick: this.handler
                 }).dxButtonGroup('instance');
             } else {
                 this.buttonGroup = $('#widget').dxButtonGroup({
+                    focusStateEnabled: true,
                     items: [{ text: 'item1', disabled: this.isItemDisabled, custom: 1 }],
                     disabled: this.isDisabled
                 }).dxButtonGroup('instance');

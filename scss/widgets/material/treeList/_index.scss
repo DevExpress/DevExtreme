@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -24,12 +25,10 @@
 );
 
 // adduse
-
-
 @include grid-base(treelist);
 
 $treelist-empty-space-width: 24px;
-$treelist-checkbox-offset-left: $treelist-empty-space-width + $material-grid-base-cell-first-column-padding;
+$treelist-checkbox-offset-left: $treelist-empty-space-width + $material-grid-base-cell-horizontal-padding;
 $treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $material-grid-base-checkbox-size;
 $treelist-editor-cell-padding-left: $treelist-checkbox-offset-left-rtl + $material-grid-base-cell-horizontal-padding;
 $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $material-grid-base-cell-horizontal-padding;
@@ -128,7 +127,7 @@ $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $mat
 
     .dx-checkbox {
       top: 50%;
-      margin-top: -$material-grid-base-checkbox-size / 2;
+      margin-top: math.div(-$material-grid-base-checkbox-size, 2);
     }
   }
 }
@@ -138,7 +137,6 @@ $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $mat
 
   .dx-checkbox {
     left: $treelist-checkbox-offset-left;
-    top: ($material-grid-base-header-height - $material-grid-base-checkbox-size) / 2;
   }
 }
 

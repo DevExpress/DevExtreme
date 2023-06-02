@@ -3,22 +3,12 @@
 @use "../colors" as *;
 
 // adduse
-
-$timeview-bg: darken($base-bg, 5%) !default;
-$timeview-clock-bg: null !default;
-$timeview-hourarrow-bg: null !default;
-$timeview-minutearrow-bg: null !default;
-
+$clock-digits-color: null !default;
 
 @if $mode == "light" {
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/light/timeView/min-arrow.svg') !default;
+  $clock-digits-color: color.change($base-text-color, $alpha: 0.54) !default;
 }
 
 @if $mode == "dark" {
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/material/color-schemes/dark/timeView/min-arrow.svg') !default;
+  $clock-digits-color: color.change($base-text-color, $alpha: 0.6) !default;
 }
-

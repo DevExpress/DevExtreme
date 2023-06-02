@@ -2,7 +2,8 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import devices from '../../../core/devices';
 import { convertRulesToOptions } from '../../../core/options/utils';
-import themes from '../../../ui/themes';
+import { current } from '../../../ui/themes';
+import errors from '../../../core/errors';
 import {
   clear as clearEventHandlers,
   defaultEvent,
@@ -17,7 +18,7 @@ import { Widget } from '../common/widget';
 import { Icon } from '../common/icon';
 import { InkRipple } from '../common/ink_ripple';
 
-type Mock = jest.Mock;
+interface Mock extends jest.Mock {}
 
 jest.mock('../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../core/devices').default;
@@ -34,6 +35,8 @@ jest.mock('../../../ui/themes', () => ({
   ...jest.requireActual('../../../ui/themes'),
   current: jest.fn(() => 'generic'),
 }));
+
+jest.mock('../../../core/errors');
 
 describe('Button', () => {
   describe('Render', () => {
@@ -127,10 +130,42 @@ describe('Button', () => {
       });
     });
 
+    it('should pass template data to the template function', () => {
+      const template = jest.fn(() => <div />);
+
+      mount(viewFunction({
+        props: {
+          template,
+        },
+        buttonTemplateData: {
+          text: 'button',
+          icon: 'icon',
+          templateField1: 'field1',
+          templateField2: 'field2',
+        },
+      } as any) as any);
+
+      expect(template).toHaveBeenCalledTimes(1);
+      expect(template).toHaveBeenCalledWith({
+        data: {
+          icon: 'icon',
+          templateField1: 'field1',
+          templateField2: 'field2',
+          text: 'button',
+        },
+      }, {});
+    });
+
     it('should render template', () => {
-      const template = ({ data: { text } }) => <div className="custom-content">{`${text}_text`}</div>;
+      const template = ({ data: { text } }: {
+        data: {
+          text?: any;
+          icon?: any;
+        };
+      }) => <div className="custom-content">{`${text}_text`}</div>;
       const button = mount(viewFunction({
-        props: { template, text: 'button', icon: 'icon' },
+        props: { template },
+        buttonTemplateData: { text: 'button', icon: 'icon' },
       } as any) as any);
 
       const buttonContent = button.find('.dx-button-content');
@@ -155,7 +190,6 @@ describe('Button', () => {
         height: 100,
         hint: 'hint',
         hoverStateEnabled: true,
-        onContentReady: () => null,
         rtlEnabled: true,
         tabIndex: -2,
         visible: true,
@@ -163,14 +197,14 @@ describe('Button', () => {
       };
       const cssClasses = 'cssClasses';
       const restAttributes = { attr1: 'value1', attr2: 'value2' };
-      const onWidgetKeyDown = () => null;
+      const keyDown = () => null;
       const onWidgetClick = () => null;
       const button = mount(viewFunction({
         ...renderOptions,
         props: renderProps,
         restAttributes,
         cssClasses,
-        onWidgetKeyDown,
+        keyDown,
         onWidgetClick,
       } as any) as any);
       expect(button.find(Widget).props()).toMatchObject({
@@ -178,7 +212,7 @@ describe('Button', () => {
         ...renderProps,
         ...restAttributes,
         classes: cssClasses,
-        onKeyDown: onWidgetKeyDown,
+        onKeyDown: keyDown,
         onClick: onWidgetClick,
       });
     });
@@ -187,23 +221,6 @@ describe('Button', () => {
   describe('Behavior', () => {
     describe('Effects', () => {
       afterEach(clearEventHandlers);
-
-      describe('contentReadyEffect', () => {
-        it('should call "onContentReady" callback with the content node\'s parent', () => {
-          const onContentReady = jest.fn();
-          const button = new Button({ onContentReady });
-          const parentNode = {};
-          button.contentRef = { parentNode } as any;
-          button.contentReadyEffect();
-          expect(onContentReady).toHaveBeenCalledTimes(1);
-          expect(onContentReady).toHaveBeenCalledWith({ element: parentNode });
-        });
-
-        it('should not raise any error if "onContentReady" is not defined', () => {
-          const button = new Button({ onContentReady: undefined });
-          expect(button.contentReadyEffect.bind(button)).not.toThrow();
-        });
-      });
 
       describe('submitEffect', () => {
         it('should be ignored if the "useSubmitBehavior" is false', () => {
@@ -218,15 +235,15 @@ describe('Button', () => {
           expect(getEventHandlers(EVENT.click)).toBeUndefined();
         });
 
-        it('should call "onSubmit" callback by submit input click ', () => {
+        it('should call "onSubmit" callback by submit input click', () => {
           const onSubmit = jest.fn();
           const button = new Button({ useSubmitBehavior: true, onSubmit });
-          button.submitInputRef = {} as any;
+          button.submitInputRef = { current: {} } as any;
           button.submitEffect();
-          emit(EVENT.click, defaultEvent, button.submitInputRef as any);
+          emit(EVENT.click, defaultEvent, button.submitInputRef.current as any);
           expect(onSubmit).toHaveBeenCalledTimes(1);
           expect(onSubmit).toHaveBeenCalledWith(
-            { event: defaultEvent, submitInput: button.submitInputRef },
+            { event: defaultEvent, submitInput: button.submitInputRef.current },
           );
         });
 
@@ -246,11 +263,35 @@ describe('Button', () => {
       describe('focus', () => {
         it('should focus main element', () => {
           const button = new Button({});
-          button.widgetRef = { focus: jest.fn() } as any;
+          button.widgetRef = { current: { focus: jest.fn() } } as any;
           button.focus();
 
-          expect(button.widgetRef.focus).toHaveBeenCalledTimes(1);
-          expect(button.widgetRef.focus).toHaveBeenCalledWith();
+          expect(button.widgetRef.current?.focus).toHaveBeenCalledTimes(1);
+          expect(button.widgetRef.current?.focus).toHaveBeenCalledWith();
+        });
+      });
+
+      describe('Methods', () => {
+        describe('activate', () => {
+          it('should call widget\'s activate method', () => {
+            const button = new Button({});
+            button.widgetRef = { current: { activate: jest.fn() } } as any;
+            button.activate();
+
+            expect(button.widgetRef.current?.activate).toHaveBeenCalledTimes(1);
+            expect(button.widgetRef.current?.activate).toHaveBeenCalledWith();
+          });
+        });
+
+        describe('deactivate', () => {
+          it('should call widget\'s deactivate method', () => {
+            const button = new Button({});
+            button.widgetRef = { current: { deactivate: jest.fn() } } as any;
+            button.deactivate();
+
+            expect(button.widgetRef.current?.deactivate).toHaveBeenCalledTimes(1);
+            expect(button.widgetRef.current?.deactivate).toHaveBeenCalledWith();
+          });
         });
       });
     });
@@ -260,9 +301,10 @@ describe('Button', () => {
         describe('Key down', () => {
           it('should call onKeyDown callback by Widget key down', () => {
             const onKeyDown = jest.fn(() => ({ cancel: true }));
-            const options = {};
+            const originalEvent = {} as Event & { cancel: boolean };
+            const options = { keyName: '', which: '', originalEvent };
             const button = new Button({ onKeyDown });
-            button.onWidgetKeyDown(options);
+            button.keyDown(options);
             expect(onKeyDown).toHaveBeenCalledTimes(1);
             expect(onKeyDown).toHaveBeenCalledWith(options);
           });
@@ -270,35 +312,39 @@ describe('Button', () => {
           it('should prevent key down event processing if onKeyDown event handler returns event.cancel="true"', () => {
             const onKeyDown = jest.fn(() => ({ cancel: true }));
             const onClick = jest.fn();
-            const options = { keyName: 'enter' };
+            const originalEvent = {} as Event & { cancel: boolean };
+            const options = { keyName: 'enter', which: 'enter', originalEvent };
             const button = new Button({ onKeyDown, onClick });
-            button.onWidgetKeyDown(options);
-            expect(onKeyDown).toBeCalled();
-            expect(onClick).not.toBeCalled();
+            button.keyDown(options);
+            expect(onKeyDown).toHaveBeenCalled();
+            expect(onClick).not.toHaveBeenCalled();
           });
 
           it('should prevent default key down event and simulate click by space/enter keys', () => {
             const onClick = jest.fn();
+            const originalEvent = {
+              preventDefault: jest.fn(),
+            } as unknown as Event & { cancel: boolean };
             const options = {
               keyName: 'enter',
-              originalEvent: {
-                preventDefault: jest.fn(),
-              },
+              which: 'enter',
+              originalEvent,
             };
-            const button = new Button({ onClick, validationGroup: 'vGroup' });
-            button.onWidgetKeyDown(options);
-            expect(options.originalEvent.preventDefault).toBeCalled();
+            const button = new Button({ onClick });
+            button.keyDown(options);
+            expect(options.originalEvent.preventDefault).toHaveBeenCalled();
             expect(onClick).toHaveBeenCalledTimes(1);
             expect(onClick).toHaveBeenCalledWith({
-              event: options.originalEvent, validationGroup: 'vGroup',
+              event: options.originalEvent,
             });
           });
 
           it('should not simulate click by common keys down', () => {
             const onClick = jest.fn();
-            const button = new Button({ onClick, validationGroup: 'vGroup' });
-            button.onWidgetKeyDown({ keyName: 'A' });
-            expect(onClick).not.toBeCalled();
+            const button = new Button({ onClick });
+            const originalEvent = {} as Event & { cancel: boolean };
+            button.keyDown({ keyName: 'A', which: 'A', originalEvent });
+            expect(onClick).not.toHaveBeenCalled();
           });
         });
 
@@ -306,28 +352,28 @@ describe('Button', () => {
           it('should call onClick callback by Widget click', () => {
             const onClick = jest.fn();
             const event = {} as Event;
-            const button = new Button({ onClick, validationGroup: 'vGroup' });
+            const button = new Button({ onClick });
             button.onWidgetClick(event);
             expect(onClick).toHaveBeenCalledTimes(1);
             expect(onClick).toHaveBeenCalledWith({
-              event, validationGroup: 'vGroup',
+              event,
             });
           });
 
           it('should force form submit by Widget click if the "useSubmitBehavior" is true', () => {
             const event = {} as Event;
             const button = new Button({ useSubmitBehavior: true });
-            button.submitInputRef = { click: jest.fn() } as any;
+            button.submitInputRef = { current: { click: jest.fn() } } as any;
             button.onWidgetClick(event);
-            expect(button.submitInputRef.click).toHaveBeenCalledTimes(1);
+            expect(button.submitInputRef.current?.click).toHaveBeenCalledTimes(1);
           });
 
           it('should not force form submit by Widget click if the "useSubmitBehavior" is false', () => {
             const event = {} as Event;
             const button = new Button({ useSubmitBehavior: false });
-            button.submitInputRef = { click: jest.fn() } as any;
+            button.submitInputRef = { current: { click: jest.fn() } } as any;
             button.onWidgetClick(event);
-            expect(button.submitInputRef.click).not.toBeCalled();
+            expect(button.submitInputRef.current?.click).not.toHaveBeenCalled();
           });
         });
 
@@ -335,41 +381,43 @@ describe('Button', () => {
           it('should ignore inkripple effects if the useInkRipple is "false"', () => {
             const button = new Button({ useInkRipple: false });
             button.inkRippleRef = {
-              showWave: jest.fn(),
-              hideWave: jest.fn(),
+              current: {
+                showWave: jest.fn(),
+                hideWave: jest.fn(),
+              },
             } as any;
 
             button.onActive({} as Event);
             button.onInactive({} as Event);
-            expect(button.inkRippleRef.showWave).not.toHaveBeenCalled();
-            expect(button.inkRippleRef.hideWave).not.toHaveBeenCalled();
+            expect(button.inkRippleRef.current?.showWave).not.toHaveBeenCalled();
+            expect(button.inkRippleRef.current?.hideWave).not.toHaveBeenCalled();
           });
 
           it('should show inkripple effect on active action', () => {
             const button = new Button({ useInkRipple: true });
-            const contentRef = {};
+            const contentRef = { current: {} };
             const event = {} as Event;
             button.contentRef = contentRef as any;
-            button.inkRippleRef = { showWave: jest.fn() } as any;
+            button.inkRippleRef = { current: { showWave: jest.fn() } } as any;
             button.onActive(event);
 
-            expect(button.inkRippleRef.showWave).toHaveBeenCalledTimes(1);
-            expect(button.inkRippleRef.showWave).toHaveBeenCalledWith({
-              element: contentRef, event,
+            expect(button.inkRippleRef.current?.showWave).toHaveBeenCalledTimes(1);
+            expect(button.inkRippleRef.current?.showWave).toHaveBeenCalledWith({
+              element: contentRef.current, event,
             });
           });
 
           it('should hide inkripple effect on inactive action', () => {
             const button = new Button({ useInkRipple: true });
-            const contentRef = {};
+            const contentRef = { current: {} };
             const event = {} as Event;
             button.contentRef = contentRef as any;
-            button.inkRippleRef = { hideWave: jest.fn() } as any;
+            button.inkRippleRef = { current: { hideWave: jest.fn() } } as any;
             button.onInactive(event);
 
-            expect(button.inkRippleRef.hideWave).toHaveBeenCalledTimes(1);
-            expect(button.inkRippleRef.hideWave).toHaveBeenCalledWith({
-              element: contentRef, event,
+            expect(button.inkRippleRef.current?.hideWave).toHaveBeenCalledTimes(1);
+            expect(button.inkRippleRef.current?.hideWave).toHaveBeenCalledWith({
+              element: contentRef.current, event,
             });
           });
         });
@@ -380,21 +428,72 @@ describe('Button', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       describe('aria', () => {
-        it('should compile label value from the icon if the icon source type is "image"', () => {
-          let button = new Button({ icon: 'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==' });
-          expect(button.aria).toEqual({ label: 'Base64', role: 'button' });
-
-          button = new Button({ icon: '.' });
-          expect(button.aria).toEqual({ label: '.', role: 'button' });
+        describe('role', () => {
+          it('should be equal to "button"', () => {
+            expect(new Button({}).aria).toMatchObject({ role: 'button' });
+          });
         });
 
-        it('should not return label if the text and the icon are empty', () => {
-          expect(new Button({}).aria).toEqual({ role: 'button' });
-        });
+        describe('label', () => {
+          it('should return text value if it is specified', () => {
+            expect(new Button({ text: 'text' }).aria).toMatchObject({ label: 'text' });
+          });
 
-        it('should return icon value if the text is empty', () => {
-          expect(new Button({ icon: 'icon' }).aria)
-            .toEqual({ label: 'icon', role: 'button' });
+          it('should be empty if the text and the icon are empty', () => {
+            expect(new Button({}).aria).not.toHaveProperty('label');
+          });
+
+          it('should be empty if icon is set as a base64', () => {
+            const button = new Button({ icon: 'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==' });
+            expect(button.aria).not.toHaveProperty('label');
+          });
+
+          [
+            'https://google.com/',
+            'http://google.com/',
+            'www.google.com/',
+            'ftp://google.com/',
+          ].forEach((url) => {
+            it(`should be empty if icon is set as an URL, url="${url}"`, () => {
+              const button = new Button({ icon: url });
+              expect(button.aria).not.toHaveProperty('label');
+            });
+          });
+
+          it('should be equal to a file name if icon is set as a path to file', () => {
+            const button = new Button({ icon: './statics/home.png' });
+            expect(button.aria).toMatchObject({ label: 'home' });
+          });
+
+          it('should be empty if invalid icon is specified', () => {
+            const button = new Button({ icon: 1 as unknown as string });
+            expect(button.aria).not.toHaveProperty('label');
+          });
+
+          it('should be equal to icon if it is set as a dx icon', () => {
+            const button = new Button({ icon: 'comment' });
+            expect(button.aria).toMatchObject({ label: 'comment' });
+          });
+
+          it('should be equal to icon name if it is set as a font icon', () => {
+            const button = new Button({ icon: 'fas fa-home' });
+            expect(button.aria).toMatchObject({ label: 'fas fa-home' });
+          });
+
+          it('should be equal to title tag content if icon is set in svg format and contains a title tag', () => {
+            const button = new Button({ icon: '<svg></svg>' });
+            expect(button.aria).not.toHaveProperty('label');
+          });
+
+          it('should be empty if icon is set in svg format and does not contain a title tag (T1160438)', () => {
+            const button = new Button({ icon: '<svg><title>Svg Title</title></svg>' });
+            expect(button.aria).toMatchObject({ label: 'Svg Title' });
+          });
+
+          it('should return icon value if the text is empty', () => {
+            expect(new Button({ icon: 'icon' }).aria)
+              .toMatchObject({ label: 'icon' });
+          });
         });
       });
 
@@ -472,7 +571,7 @@ describe('Button', () => {
           expect(new Button({ type: 'back' }).iconSource).toBe('back');
         });
 
-        it('should return empty string if the icon property value is empty', () => {
+        it('should return "back" if icon property is empty and type is "back"', () => {
           expect(new Button({}).iconSource).toBe('');
         });
 
@@ -502,6 +601,20 @@ describe('Button', () => {
             .toEqual(rippleConfig);
         });
       });
+
+      describe('buttonTemplateData', () => {
+        it('should return icon and text as is', () => {
+          expect(new Button({ icon: 'icon', text: 'text' }).buttonTemplateData)
+            .toEqual({ icon: 'icon', text: 'text' });
+        });
+
+        it('should add templateData fields', () => {
+          const templateData = { customData: 'data ' };
+
+          expect(new Button({ icon: 'icon', text: 'text', templateData }).buttonTemplateData)
+            .toEqual({ icon: 'icon', text: 'text', ...templateData });
+        });
+      });
     });
 
     describe('Default options', () => {
@@ -510,21 +623,20 @@ describe('Button', () => {
 
       beforeEach(() => {
         (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (devices as any).isSimulator.mockImplementation(() => false);
-        ((themes as any).current as Mock).mockImplementation(() => 'generic');
+        (devices.isSimulator as Mock).mockImplementation(() => false);
+        (current as Mock).mockImplementation(() => 'generic');
       });
 
       afterEach(() => jest.resetAllMocks());
 
       describe('useInkRiple', () => {
         it('should be true if material theme', () => {
-          ((themes as any).current as Mock).mockImplementation(() => 'material');
+          (current as Mock).mockImplementation(() => 'material');
           expect(getDefaultOptions().useInkRipple).toBe(true);
         });
 
         it('should be false if theme is not material', () => {
-          ((themes as any).current as Mock).mockImplementation(() => 'generic');
+          (current as Mock).mockImplementation(() => 'generic');
           expect(getDefaultOptions().useInkRipple).toBe(false);
         });
       });
@@ -540,10 +652,29 @@ describe('Button', () => {
         });
 
         it('should be false on simulator', () => {
-          (devices as any).isSimulator.mockImplementation(() => true);
+          (devices.isSimulator as Mock).mockImplementation(() => true);
           expect(getDefaultOptions().focusStateEnabled).toBe(false);
         });
       });
+    });
+  });
+
+  describe('checkDeprecation', () => {
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('check deprecation error', () => {
+      const component = new Button({ type: 'back' });
+      component.checkDeprecation();
+      expect(errors.log).toHaveBeenCalledTimes(1);
+      expect(errors.log).toHaveBeenNthCalledWith(1, 'W0016', 'type', 'back', '22.2', 'Use the \'back\' icon instead');
+    });
+
+    it('no deprecation error', () => {
+      const component = new Button({ icon: 'back' });
+      component.checkDeprecation();
+      expect(errors.log).toHaveBeenCalledTimes(0);
     });
   });
 });

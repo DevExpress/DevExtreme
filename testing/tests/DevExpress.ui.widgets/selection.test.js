@@ -149,6 +149,72 @@ QUnit.test('Select all by one page should skip non-selectable items', function(a
     assert.deepEqual(selection.getSelectedItems(), [this.data[1], this.data[2]], 'selected items');
 });
 
+QUnit.module('Selection with all pages mode: ',
+    {
+        beforeEach: function() {
+            const items = [
+                { id: 1 },
+                { id: 2, disabled: true },
+            ];
+            const dataSource = createDataSource(items, { key: 'id' }, { paginate: true, pageSize: 1 });
+
+            this.selection = new Selection({
+                key: function() {
+                    const store = dataSource.store();
+                    return store && store.key();
+                },
+                keyOf: function(item) {
+                    const store = dataSource.store();
+                    return store && store.keyOf(item);
+                },
+                dataFields: function() {
+                    return dataSource.select();
+                },
+                plainItems: function() {
+                    return dataSource.items();
+                },
+                load: function(options) {
+                    return dataSource && dataSource.store().load(options);
+                }
+            });
+            this.dataSource = dataSource;
+        }
+    }, function() {
+        QUnit.test('Select all should not select disabled items when not ignoreDisabledItems', function(assert) {
+            this.dataSource.load();
+            this.selection.selectAll();
+
+            assert.deepEqual(this.selection.getSelectedItemKeys(), [1], 'selected item keys are correct');
+        });
+
+        QUnit.test('Select all should select disabled items when ignoreDisabledItems', function(assert) {
+            this.selection.options.ignoreDisabledItems = true;
+            this.dataSource.load();
+            this.selection.selectAll();
+
+            assert.deepEqual(this.selection.getSelectedItemKeys(), [1, 2], 'selected item keys are correct');
+        });
+
+        QUnit.test('Deselect all should not unselect disabled items when not ignoreDisabledItems', function(assert) {
+            this.dataSource.load();
+            this.selection.options.ignoreDisabledItems = true;
+            this.selection.selectAll();
+            this.selection.options.ignoreDisabledItems = false;
+            this.selection.deselectAll();
+
+            assert.deepEqual(this.selection.getSelectedItemKeys(), [2], 'selected item keys are correct');
+        });
+
+        QUnit.test('Deselect all should unselect disabled items when ignoreDisabledItems', function(assert) {
+            this.selection.options.ignoreDisabledItems = true;
+            this.dataSource.load();
+            this.selection.selectAll();
+            this.selection.deselectAll();
+
+            assert.deepEqual(this.selection.getSelectedItemKeys(), [], 'selected item keys are correct');
+        });
+    });
+
 QUnit.test('Select all for all pages when item is disabled', function(assert) {
     this.data[5].disabled = true;
     const dataSource = createDataSource(this.data, { key: 'id' }, { paginate: true, pageSize: 3 });
@@ -385,7 +451,7 @@ QUnit.test('clearSelection should work if it call after select', function(assert
 
     // act
     selection.clearSelection();
-    this.clock.tick();
+    this.clock.tick(10);
 
     // assert
     assert.deepEqual(selection.getSelectedItemKeys(), [], 'selection is cleared');
@@ -733,7 +799,7 @@ QUnit.test('selection should work with custom store without filter implementatio
 
         dataSource.load();
         selection.selectedItemKeys(2);
-        clock.tick();
+        clock.tick(10);
     } finally {
         clock.restore();
     }
@@ -2125,6 +2191,57 @@ QUnit.test('Deselect and select item when selected all', function(assert) {
     assert.deepEqual(selection.selectionFilter(), null, 'selectionFilter value');
 });
 
+QUnit.module('Deferred mode. Complex key with three items', {
+    beforeEach: function() {
+        this.data = [
+            { id: 1, name: 'Alex', age: 15 },
+            { id: 2, name: 'Dan', age: 20 },
+            { id: 3, name: 'Vadim', age: 17 },
+            { id: 4, name: 'Dmitry', age: 18 },
+            { id: 5, name: 'Sergey', age: 18 },
+            { id: 6, name: 'Kate', age: 19 },
+            { id: 7, name: 'Dan', age: 16 }
+        ];
+
+        this.dataSource = createDataSource(this.data, { key: ['id', 'name', 'age'] }, { pageSize: 5 });
+        this.dataSource.load();
+
+        this.createDeferredSelection = function(data, options) {
+            return createDeferredSelection(data, options, this.dataSource);
+        };
+    }
+});
+
+QUnit.test('Select item', function(assert) {
+    const selection = this.createDeferredSelection(this.data);
+
+    selection.changeItemSelection(0);
+    // assert
+    assert.deepEqual(selection.selectionFilter(), [['id', '=', 1], 'and', ['name', '=', 'Alex'], 'and', ['age', '=', 15]], 'selectionFilter value');
+});
+
+QUnit.test('Deselect item', function(assert) {
+    const selection = this.createDeferredSelection(this.data);
+
+    selection.selectAll();
+
+    selection.changeItemSelection(0, { control: true });
+
+    // assert
+    assert.deepEqual(selection.selectionFilter(), ['!', [['id', '=', 1], 'and', ['name', '=', 'Alex'], 'and', ['age', '=', 15]]], 'selectionFilter value');
+});
+
+// T978952
+QUnit.test('Select and deselect item', function(assert) {
+    const selection = this.createDeferredSelection(this.data);
+
+    selection.changeItemSelection(0);
+    selection.changeItemSelection(0, { control: true });
+
+    // assert
+    assert.deepEqual(selection.selectionFilter(), [], 'selectionFilter value');
+});
+
 QUnit.module('filter length restriction', {
     beforeEach: function() {
         const data = this.data = [
@@ -2173,6 +2290,32 @@ QUnit.test('Pass filter to load when selection filter', function(assert) {
     assert.strictEqual(this.load.lastCall.args[0].filter, selection.selectionFilter());
 
     assert.deepEqual(selectedKeys, [1, 2, 6], 'selected keys');
+});
+
+QUnit.test('Remove template property from filter value', function(assert) {
+    const selection = this.createDeferredSelection(this.data, {
+        selectionFilter: [['id', '=', { id: 2, template: 'content' }]]
+    });
+
+    selection.getSelectedItemKeys().done();
+
+    assert.strictEqual(this.load.lastCall.args[0].filter[0][2].template, undefined);
+});
+
+QUnit.test('Remove template property from each filter value', function(assert) {
+    const selection = this.createDeferredSelection(this.data, {
+        selectionFilter: [
+            ['id', '=', { id: 1, template: 'content' }],
+            ['id', '=', { id: 2, template: 'content' }],
+            ['id', '=', { id: 3, template: 'content' }]
+        ]
+    });
+
+    selection.getSelectedItemKeys().done();
+
+    assert.strictEqual(this.load.lastCall.args[0].filter[0][2].template, undefined);
+    assert.strictEqual(this.load.lastCall.args[0].filter[1][2].template, undefined);
+    assert.strictEqual(this.load.lastCall.args[0].filter[2][2].template, undefined);
 });
 
 QUnit.test('not pass filter to loadOptions', function(assert) {

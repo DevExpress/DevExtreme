@@ -1,15 +1,15 @@
-const $ = require('jquery');
-const numberLocalization = require('localization/number');
-const dateLocalization = require('localization/date');
-const messageLocalization = require('localization/message');
-const errors = require('core/errors');
-const localization = require('localization');
-const config = require('core/config');
-const logger = require('core/utils/console').logger;
+import $ from 'jquery';
+import dateLocalization from 'localization/date';
+import numberLocalization from 'localization/number';
+import messageLocalization from 'localization/message';
+import errors from 'core/errors';
+import localization from 'localization';
+import config from 'core/config';
+import { logger } from 'core/utils/console';
 
-const generateExpectedDate = require('../../../helpers/dateHelper.js').generateDate;
+import { generateDate } from '../../../helpers/dateHelper.js';
 
-module.exports = function() {
+export default function() {
     QUnit.module('Localization modules', () => {
         const checkModules = function(testName, namespace, methods) {
             QUnit.test(testName, function(assert) {
@@ -40,7 +40,6 @@ module.exports = function() {
         checkModules('localization.message', messageLocalization, [
             'setup',
             'localizeString',
-            'localizeNode',
             'getMessagesByLocales',
             'getFormatter',
             'format',
@@ -410,7 +409,7 @@ module.exports = function() {
                     data = $.makeArray(data);
 
                     $.each(data, function(_, data) {
-                        const expected = data.expectedConfig && generateExpectedDate(data.expectedConfig) || data.expected;
+                        const expected = data.expectedConfig && generateDate(data.expectedConfig) || data.expected;
                         assert.equal(localization.parseDate(data.text, format), expected && String(expected), format + ' format');
                     });
                 });
@@ -418,7 +417,7 @@ module.exports = function() {
                 assert.equal(localization.parseDate('550', 'millisecond').getMilliseconds(), 550, 'millisecond format');
                 assert.equal(localization.parseDate('550', 'SSS').getMilliseconds(), 550, 'millisecond format');
 
-                assert.equal(localization.parseDate(localization.formatDate(new Date(), 'shortdate')), String(generateExpectedDate({ hours: 0 })), 'without format');
+                assert.equal(localization.parseDate(localization.formatDate(new Date(), 'shortdate')), String(generateDate({ hours: 0 })), 'without format');
                 assert.notOk(localization.parseDate(), 'without date');
             } finally {
                 assert.equal(warnLog.length, 0);
@@ -567,25 +566,6 @@ module.exports = function() {
             assert.equal(localized, toLocalize);
         });
 
-        QUnit.test('localizeNode', function(assert) {
-            const $node = $(
-                '<div data=\'@Loading\'>' +
-                    '   @Loading' +
-                    '   <div data=\'@Loading\' class=\'inner\'>' +
-                    '       @Loading' +
-                    '   </div>' +
-                    '</div>');
-            const $contents = $node.contents();
-
-            messageLocalization.localizeNode($node);
-
-            assert.equal($node.attr('data'), 'Loading...');
-
-            assert.equal($.trim($contents.eq(0).text()), 'Loading...');
-            assert.equal($contents.eq(1).attr('data'), 'Loading...');
-            assert.equal($.trim($contents.eq(1).text()), 'Loading...');
-        });
-
         QUnit.test('getDictionary', function(assert) {
             localization.loadMessages({
                 'en': {
@@ -602,68 +582,12 @@ module.exports = function() {
             assert.equal(messageLocalization.getDictionary()['unknownKey'], 'Unknown key');
             assert.equal(messageLocalization.getDictionary(true)['unknownKey'], 'Unknown key');
         });
-
-        QUnit.test('T199912: Application crashes if it has iframe and jquery version is 1.11.x', function(assert) {
-            const $node = $('<iframe data=\'@Loading\'></iframe>');
-
-            messageLocalization.localizeNode($node);
-            assert.equal($node.attr('data'), '@Loading', 'T199912: Don\'t touch iframes');
-        });
-
-        QUnit.test('B239384: Application crushes if opening in IE with flash-specific tags', function(assert) {
-            assert.expect(0);
-
-            const html = '\
-            <object name="_dp_swf_engine" width="1" height="1" align="middle" id="_dp_swf_engine" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" style="width: 1px; height: 1px;">\
-                <param name="_cx" value="5080">\
-                <param name="_cy" value="5080">\
-                <param name="FlashVars" value="">\
-                <param name="Movie" value="">\
-                <param name="Src" value="">\
-                <param name="WMode" value="Transparent">\
-                <param name="Play" value="-1">\
-                <param name="Loop" value="-1">\
-                <param name="Quality" value="High">\
-                <param name="SAlign" value="">\
-                <param name="Menu" value="-1">\
-                <param name="Base" value="">\
-                <param name="AllowScriptAccess" value="always">\
-                <param name="Scale" value="ShowAll">\
-                <param name="DeviceFont" value="0">\
-                <param name="EmbedMovie" value="0">\
-                <param name="BGColor" value="">\
-                <param name="SWRemote" value="">\
-                <param name="MovieData" value="">\
-                <param name="SeamlessTabbing" value="1">\
-                <param name="Profile" value="0">\
-                <param name="ProfileAddress" value="">\
-                <param name="ProfilePort" value="0">\
-                <param name="AllowNetworking" value="all">\
-                <param name="AllowFullScreen" value="false">\
-                <param name="AllowFullScreenInteractive" value="">\
-                <param name="IsDependent" value="61">\
-                <param name="movie" value="">\
-                <param name="quality" value="high">\
-                <param name="wmode" value="transparent">\
-                <param name="allowScriptAccess" value="always">\
-            </object>';
-            messageLocalization.localizeNode($(html));
-        });
-
-        QUnit.test('input attr \'type\' was not localized (Q588810)', function(assert) {
-            const $node = $('<input type=\'text\'></input>');
-
-            messageLocalization.localizeNode($node);
-
-            assert.equal($node.attr('type'), 'text');
-        });
     });
 
     QUnit.module('Localization number', () => {
         QUnit.test('parse different positive and negative parts', function(assert) {
             assert.equal(localization.parseNumber('(10)', '#0;(#0)'), -10);
             assert.equal(localization.parseNumber('-10'), -10);
-            assert.equal(localization.parseNumber('-10', '#0;(#0)'), -10);
         });
 
         QUnit.test('parse different positive and negative parts with groups', function(assert) {
@@ -700,6 +624,8 @@ module.exports = function() {
             assert.equal(localization.formatNumber(1, { type: 'decimal', precision: 2 }), '01');
             assert.equal(localization.formatNumber(1, { type: 'decimal', precision: 3 }), '001');
             assert.equal(localization.formatNumber(1.23456, { type: 'decimal' }), '1.23456');
+            const small18DecimalDigits = -0.004768895486559899;
+            assert.equal(localization.formatNumber(small18DecimalDigits, { type: 'decimal' }), '-0.004768895486559899');
         });
 
         QUnit.test('format: precision', function(assert) {
@@ -968,5 +894,14 @@ module.exports = function() {
 
             assert.equal(errorHandler.callCount, 0, 'warning was not rised');
         });
+        QUnit.test('getTimeSeparator should depend on current locale', function(assert) {
+            try {
+                localization.locale('da');
+                const formattedText = localization.formatDate(new Date(2021, 1, 1, 12, 34), 'shorttime');
+                assert.ok(formattedText.indexOf(dateLocalization.getTimeSeparator()) > 0);
+            } finally {
+                localization.locale('en');
+            }
+        });
     });
-};
+}

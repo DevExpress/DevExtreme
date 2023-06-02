@@ -1,29 +1,195 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/sizes" as *;
+@use "../button/colors" as *;
+@use "../buttonGroup/colors" as *;
 @use "../textEditor/colors" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
+@use "../fileUploader/sizes" as *;
 @use "../../base/htmlEditor";
 
 // adduse
 
-
 .dx-htmleditor {
-  .dx-htmleditor-toolbar-wrapper:first-child {
-    border-bottom: 1px solid $htmleditor-toolbar-border-color;
+  border-color: transparent;
+  position: relative;
+
+  .dx-htmleditor-toolbar-wrapper {
+    padding: 0 $material-htmleditor-toolbar-padding;
+    position: relative;
+
+    &:first-child {
+      border-bottom: 1px solid $texteditor-border-color;
+    }
   }
 
-  border-color: $htmleditor-border-color;
+  &.dx-state-readonly {
+    .dx-htmleditor-toolbar-wrapper::before {
+      position: absolute;
+      top: 1px;
+      bottom: 1px;
+      left: 1px;
+      right: 1px;
+      z-index: 2;
+      background-color: color.change($base-bg, $alpha: 0.4);
+      content: '';
+      pointer-events: none;
+    }
+
+    .dx-toolbar-button .dx-button.dx-state-disabled {
+      opacity: $base-disabled-opacity;
+    }
+  }
 
   &.dx-invalid {
-    border-color: $htmleditor-invalid-faded-border-color;
+    border: 1px solid $htmleditor-invalid-faded-border-color;
 
     &.dx-state-focused {
       border-color: $htmleditor-invalid-border-color;
+    }
+  }
+
+  &.dx-htmleditor-outlined {
+    box-shadow: inset 0 0 0 1px $texteditor-border-color;
+    border-color: transparent;
+    border-radius: $texteditor-input-border-radius;
+
+    .dx-htmleditor-content {
+      margin: 1px 1px 1px 0;
+    }
+
+    &.dx-rtl,
+    .dx-rtl & {
+      .dx-htmleditor-content {
+        margin-right: 0;
+        margin-left: 1px;
+      }
+    }
+
+    .dx-htmleditor-toolbar-wrapper + .dx-quill-container .dx-htmleditor-content {
+      margin-top: 0;
+    }
+
+    &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover {
+      box-shadow: inset 0 0 0 1px color.change($texteditor-color, $alpha: 0.5);
+    }
+
+    &.dx-state-hover {
+      box-shadow: inset 0 0 0 1px $texteditor-hover-border-color;
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      box-shadow: inset 0 0 0 1px $texteditor-focused-border-color;
+      border-color: $texteditor-focused-border-color;
+    }
+
+    &.dx-invalid {
+      border-color: transparent;
+      box-shadow: inset 0 0 0 1px $texteditor-invalid-faded-border-color;
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        box-shadow: inset 0 0 0 1px $texteditor-invalid-focused-border-color;
+        border-color: $texteditor-invalid-focused-border-color;
+      }
+    }
+  }
+
+  &.dx-htmleditor-filled {
+    background: $texteditor-bg;
+    border-radius: $texteditor-input-border-radius;
+
+    &.dx-state-hover {
+      background-color: $texteditor-hover-bg;
+
+      &:not(.dx-invalid) {
+        border-bottom: 1px solid $texteditor-hover-border-color;
+      }
+    }
+
+    &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover {
+      background-color: color.change($texteditor-bg, $alpha: 0.12);
+    }
+  }
+
+  &.dx-htmleditor-underlined {
+    border-color: transparent;
+    border-bottom-color: $texteditor-border-color;
+
+    .dx-htmleditor-content {
+      padding-left: 0;
+    }
+
+    &.dx-rtl {
+      .dx-htmleditor-content {
+        padding-left: $material-html-editor-horizontal-padding;
+        padding-right: 0;
+      }
+    }
+
+    &.dx-state-hover:not(.dx-state-focused) {
+      border-bottom: 2px solid $texteditor-hover-border-color;
+    }
+
+    &.dx-state-disabled,
+    &.dx-state-readonly,
+    &.dx-state-readonly.dx-state-hover {
+      border-bottom-style: dotted;
+      border-bottom-width: 1px;
+    }
+
+    &.dx-invalid {
+      border-bottom-color: $texteditor-invalid-faded-border-color;
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        border-color: transparent;
+        border-bottom-color: $texteditor-invalid-focused-border-color;
+      }
+
+      &.dx-state-hover:not(.dx-state-focused) {
+        border-bottom-color: $texteditor-invalid-faded-border-color;
+      }
+    }
+  }
+
+  &.dx-htmleditor-filled,
+  &.dx-htmleditor-underlined {
+    &::before {
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 0;
+      width: 100%;
+      content: '';
+      position: absolute;
+      z-index: 2;
+      transform: scale(0);
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      &::before {
+        border-bottom: 2px solid $texteditor-focused-border-color;
+        transform: scale(1);
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.02, 1);
+      }
+
+      &.dx-invalid {
+        &::before {
+          border-bottom-color: $texteditor-invalid-focused-border-color;
+        }
+      }
     }
   }
 }
@@ -33,7 +199,8 @@
     color: $texteditor-placeholder-color;
   }
 
-  pre {
+  code,
+  .ql-code-block-container { // stylelint-disable-line selector-class-pattern
     color: color.change($base-text-color, $alpha: 0.8);
   }
 
@@ -52,8 +219,21 @@
     }
   }
 
-  td {
+  td,
+  th {
     border-color: $htmleditor-table-border-color;
+  }
+}
+
+@mixin dx-htmleditor-button-states($default-color, $hover-color, $focused-color) {
+  background-color: $default-color;
+
+  &.dx-state-hover {
+    background-color: $hover-color;
+  }
+
+  &.dx-state-focused {
+    background-color: $focused-color;
   }
 }
 
@@ -61,18 +241,57 @@
   background-color: transparent;
 
   .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
-    background-color: $htmleditor-normal-format-active-bg;
+    &.dx-button-mode-text,
+    &.dx-button-mode-outlined {
+      @include dx-htmleditor-button-states($button-group-normal-selected-bg, $button-group-normal-selected-bg-hover, $button-group-normal-selected-bg-focused);
 
-    &.dx-button-success {
-      background-color: $htmleditor-success-format-active-bg;
+      &.dx-button-success {
+        @include dx-htmleditor-button-states($button-group-success-selected-bg, $button-group-success-selected-bg-hover, $button-group-success-selected-bg-focused);
+      }
+
+      &.dx-button-default {
+        @include dx-htmleditor-button-states($button-group-default-selected-bg, $button-group-default-selected-bg-hover, $button-group-default-selected-bg-focused);
+      }
+
+      &.dx-button-danger {
+        @include dx-htmleditor-button-states($button-group-danger-selected-bg, $button-group-danger-selected-bg-hover, $button-group-danger-selected-bg-focused);
+      }
+
+      &.dx-button-normal,
+      &.dx-button-normal .dx-icon {
+        color: $button-group-normal-selected-color;
+      }
+
+      &.dx-button-success,
+      &.dx-button-success .dx-icon {
+        color: $button-group-success-selected-color;
+      }
+
+      &.dx-button-default,
+      &.dx-button-default .dx-icon {
+        color: $button-group-default-selected-color;
+      }
+
+      &.dx-button-danger,
+      &.dx-button-danger .dx-icon {
+        color: $button-group-danger-selected-color;
+      }
     }
 
-    &.dx-button-default {
-      background-color: $htmleditor-default-format-active-bg;
-    }
+    &.dx-button-mode-contained {
+      @include dx-htmleditor-button-states($button-normal-bg, $button-normal-hover-bg, $button-normal-focused-bg);
 
-    &.dx-button-danger {
-      background-color: $htmleditor-danger-format-active-bg;
+      &.dx-button-success {
+        @include dx-htmleditor-button-states($button-success-bg, $button-success-hover-bg, $button-success-focused-bg);
+      }
+
+      &.dx-button-default {
+        @include dx-htmleditor-button-states($button-default-bg, $button-default-hover-bg, $button-default-focused-bg);
+      }
+
+      &.dx-button-danger {
+        @include dx-htmleditor-button-states($button-danger-bg, $button-danger-hover-bg, $button-danger-focused-bg);
+      }
     }
   }
 }
@@ -80,6 +299,10 @@
 .dx-htmleditor-toolbar-format {
   &.dx-dropdowneditor.dx-editor-filled {
     background-color: transparent;
+
+    &::after {
+      border-bottom-color: transparent;
+    }
   }
 
   &.dx-color-format,
@@ -88,6 +311,10 @@
       padding-bottom: $material-button-vertical-padding - 3px;
     }
   }
+
+  &.dx-size-format {
+    width: $material-toolbar-size-editor-width;
+  }
 }
 
 .dx-htmleditor-toolbar-separator {
@@ -95,7 +322,7 @@
   border-left-color: $htmleditor-toolbar-border-color;
 
   .dx-toolbar-multiline & {
-    height: $material-toolbar-height / 2;
+    height: math.div($material-toolbar-height, 2);
   }
 }
 
@@ -123,10 +350,61 @@
   }
 }
 
+.dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
+  .dx-collection .dx-field-item:not(.dx-last-col) {
+    padding-right: $material-html-editor-add-image-dialog-base-padding;
+  }
+
+  .dx-fix-ratio-container {
+    .dx-textbox {
+      width: calc(100% - $material-button-height - $material-html-editor-add-image-dialog-base-padding);
+    }
+
+    .dx-buttongroup {
+      margin-left: $material-html-editor-add-image-dialog-base-padding;
+      width: $material-button-height;
+      margin-top: math.div($material-base-inline-widget-height - $material-button-height, 2);
+    }
+  }
+
+  .dx-collection .dx-field-item:not(.dx-first-col) {
+    padding-left: 0;
+  }
+
+  .dx-fileuploader-input-wrapper {
+    padding: $material-html-editor-add-image-dialog-fileuploader-padding;
+    border: 3px dashed $base-border-color;
+
+    .dx-fileuploader-input-label {
+      border-width: 0;
+    }
+  }
+}
+
+.dx-htmleditor-add-image-popup {
+  .dx-fileuploader-dragover {
+    .dx-fileuploader-input {
+      padding-top: $material-fileuploader-vertical-padding;
+      padding-bottom: $material-fileuploader-vertical-padding + 1px;
+    }
+
+    .dx-fileuploader-content {
+      background-color: color.change($htmleditor-border-color, $alpha: 0.8);
+    }
+  }
+}
+
 .dx-mention {
   background-color: $htmleditor-mention-bg;
 }
 
 .dx-suggestion-list-wrapper {
   @include dx-dropdownlist-list-appearance();
+}
+
+.dx-table-resize-frame {
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
+    background-color: color.change($base-accent, $alpha: 0.5);
+  }
 }

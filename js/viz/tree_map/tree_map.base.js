@@ -324,7 +324,7 @@ const dxTreeMap = baseWidget.inherit({
         const that = this;
 
         that._tilesGroup.clear();
-        that._renderer.initHatching();
+        that._renderer.initDefsElements();
         that._context.forceReset = true;
         that._context.minLevel = that._topNode.level + 1;
         that._context.maxLevel = that._context.minLevel + that._maxDepth - 1;

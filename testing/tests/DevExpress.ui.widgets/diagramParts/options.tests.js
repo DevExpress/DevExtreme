@@ -1,6 +1,5 @@
 import $ from 'jquery';
 const { test } = QUnit;
-import 'common.css!';
 import 'ui/diagram';
 
 import { DiagramCommand, DataLayoutType } from 'devexpress-diagram';
@@ -45,6 +44,12 @@ QUnit.module('Options', {
         assert.notOk(this.onOptionChanged.called);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ZoomLevel).execute(1.5);
         assert.equal(this.instance.option('zoomLevel'), 1.5);
+        assert.ok(this.onOptionChanged.called);
+
+        // T1044759
+        this.instance.repaint();
+        this.instance.option('zoomLevel', 1.2);
+        assert.equal(this.instance.option('zoomLevel'), 1.2);
         assert.ok(this.onOptionChanged.called);
     });
     test('should change zoomLevel object property', function(assert) {
@@ -362,10 +367,10 @@ QUnit.module('Options', {
         assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setType, undefined);
         assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getText, undefined);
         assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setText, undefined);
-        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getChildren, undefined);
-        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setChildren, undefined);
-        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getContainerKey, undefined);
-        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setContainerKey, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getChildren, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setChildren, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getContainerKey, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setContainerKey, undefined);
 
         assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.getKey, undefined);
         assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.setKey, undefined);
@@ -374,7 +379,20 @@ QUnit.module('Options', {
         assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.getTo, undefined);
         assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.setTo, undefined);
 
-        this.instance.option('nodes.containerKeyExpr', 'containerKey');
+        // nodes.containerKeyExpr = 'containerKey' by default
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getContainerKey, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setContainerKey, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getChildren, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setChildren, undefined);
+
+        this.instance.option('nodes.containerChildrenExpr', 'children'); // should override default containerKeyExpr
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getChildren, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setChildren, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getContainerKey, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setContainerKey, undefined);
+
+        this.instance.option('nodes.containerChildrenExpr', '');
+        this.instance.option('nodes.containerKeyExpr', 'containerId');
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getChildren, undefined);
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setChildren, undefined);
         assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getContainerKey, undefined);
@@ -517,6 +535,35 @@ QUnit.module('Options', {
         assert.equal(description.properties.templateWidth, 1);
         assert.equal(description.properties.templateHeight, 1);
         assert.equal(description.properties.keepRatioOnAutoSize, true);
+    });
+
+    test('should change customShape[0].defaultHeight property', function(assert) {
+        const descriptions = this.instance._diagramInstance.shapeDescriptionManager.descriptions;
+        assert.equal(Object.keys(descriptions).length, 43);
+
+        let keys = Object.keys(descriptions);
+        let description = descriptions[keys[keys.length - 1]];
+        assert.equal(description.properties, undefined);
+
+        this.instance.option('customShapes', [
+            {
+                type: 'type1',
+                title: 'type1',
+                defaultHeight: 1
+            }
+        ]);
+
+        keys = Object.keys(descriptions);
+        assert.equal(keys.length, 44);
+
+        description = descriptions[keys[keys.length - 1]];
+        assert.equal(description.key, 'type1');
+        assert.equal(description.title, 'type1');
+        assert.equal(description.properties.defaultHeight, 1440);
+
+        this.instance.option('customShapes[0].defaultHeight', 3);
+        description = descriptions[keys[keys.length - 1]];
+        assert.equal(description.properties.defaultHeight, 4320);
     });
 
     test('hasChanges changes on import or editing of an unbound diagram', function(assert) {

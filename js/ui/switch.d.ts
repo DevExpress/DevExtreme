@@ -1,54 +1,75 @@
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
 import Editor, {
-    EditorOptions
+    ValueChangedInfo,
+    EditorOptions,
 } from './editor/editor';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxSwitch>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSwitch>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSwitch>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxSwitch, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
      * @docid
      * @hidden false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     name?: string;
     /**
      * @docid
      * @default "OFF"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     switchedOffText?: string;
     /**
      * @docid
      * @default "ON"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     switchedOnText?: string;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: boolean;
@@ -57,26 +78,58 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
  * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/switch
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxSwitch extends Editor {
-    constructor(element: Element, options?: dxSwitchOptions)
-    constructor(element: JQuery, options?: dxSwitchOptions)
-}
+export default class dxSwitch extends Editor<dxSwitchOptions> { }
 
-declare global {
-interface JQuery {
-    dxSwitch(): JQuery;
-    dxSwitch(options: "instance"): dxSwitch;
-    dxSwitch(options: string): any;
-    dxSwitch(options: string, ...params: any[]): any;
-    dxSwitch(options: dxSwitchOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxSwitchOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSwitchOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxSwitchOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxSwitchOptions.onContentReady
+ * @type_function_param1 e:{ui/switch:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxSwitchOptions.onDisposing
+ * @type_function_param1 e:{ui/switch:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSwitchOptions.onInitialized
+ * @type_function_param1 e:{ui/switch:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSwitchOptions.onOptionChanged
+ * @type_function_param1 e:{ui/switch:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxSwitchOptions.onValueChanged
+ * @type_function_param1 e:{ui/switch:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

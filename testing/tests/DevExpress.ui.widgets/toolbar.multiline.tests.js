@@ -5,13 +5,19 @@ import 'ui/select_box';
 import { extend } from 'core/utils/extend';
 import { value as viewPort } from 'core/utils/view_port';
 
-import 'common.css!';
+import { MultiLineStrategy } from 'ui/toolbar/strategy/toolbar.multiline';
+import { SingleLineStrategy } from 'ui/toolbar/strategy/toolbar.singleline';
+
 import 'generic_light.css!';
 
+const TOOLBAR_ITEMS_CLASS = 'dx-toolbar-item';
+const TOOLBAR_ITEMS_CONTAINER_CLASS = 'dx-toolbar-items-container';
 const TOOLBAR_ITEM_HEIGHT = 36;
 
+const BUTTON_TEXT_CLASS = 'dx-button-text';
+
 class ToolbarTestWrapper {
-    constructor(multiline) {
+    constructor(options) {
         viewPort($('#container'));
 
         this._$toolbar = $('#toolbar').dxToolbar(extend({
@@ -44,7 +50,7 @@ class ToolbarTestWrapper {
                 widget: 'dxButton',
                 options: { type: 'back' }
             }]
-        }, { multiline }));
+        }, options));
         this._toolbar = this._$toolbar.dxToolbar('instance');
     }
 
@@ -56,12 +62,19 @@ class ToolbarTestWrapper {
         this._toolbar.option('multiline', value);
     }
 
+    getItems() {
+        return this._$toolbar.find(`.${TOOLBAR_ITEMS_CLASS}`);
+    }
+
+    getItemContainer() {
+        return this._$toolbar.find(`.${TOOLBAR_ITEMS_CONTAINER_CLASS}`);
+    }
+
     checkToolBarHeight(expected) {
         QUnit.assert.roughEqual(this._$toolbar.height(), expected, 2.1, 'toolbar height');
     }
 
     checkItemsInLine(itemsIndexes, lineIndex) {
-        const toolBarOffset = this._$toolbar.offset();
         const itemsElements = this._$toolbar.find('.dx-toolbar-item').toArray();
         const widths = itemsIndexes.map(itemIndex => $(itemsElements[itemIndex]).outerWidth());
         const getAssertMessage = (index, offsetName) => `${lineIndex} line, ${index} item, ${offsetName} offset`;
@@ -70,8 +83,8 @@ class ToolbarTestWrapper {
             const item = itemsElements[itemIndex];
             const expectedLeftOffset = widths.slice(0, i).reduce((result, value) => result + value, 0);
 
-            QUnit.assert.roughEqual($(item).offset().top - toolBarOffset.top, TOOLBAR_ITEM_HEIGHT * lineIndex, 2, getAssertMessage(itemIndex, 'top'));
-            QUnit.assert.roughEqual($(item).offset().left - toolBarOffset.left, expectedLeftOffset, 2.1, getAssertMessage(itemIndex, 'left'));
+            QUnit.assert.roughEqual($(item).offset().top - this._$toolbar.offset().top, TOOLBAR_ITEM_HEIGHT * lineIndex, 2, getAssertMessage(itemIndex, 'top'));
+            QUnit.assert.roughEqual($(item).offset().left - this._$toolbar.offset().left, expectedLeftOffset, 2.1, getAssertMessage(itemIndex, 'left'));
         });
     }
 
@@ -81,6 +94,14 @@ class ToolbarTestWrapper {
 
     checkMultilineCssClass(expected) {
         QUnit.assert.equal(this._$toolbar.hasClass('dx-toolbar-multiline'), expected, 'multiline CSS class');
+    }
+
+    checkRenderLayoutStrategy(isMultiline) {
+        if(isMultiline) {
+            QUnit.assert.ok(this._toolbar._layoutStrategy instanceof MultiLineStrategy, 'multiline strategy render');
+        } else {
+            QUnit.assert.ok(this._toolbar._layoutStrategy instanceof SingleLineStrategy, 'singleline strategy render');
+        }
     }
 }
 
@@ -92,7 +113,7 @@ QUnit.testStart(() => {
 
 QUnit.module('render', () => {
     QUnit.test('multiline is disabled by default', function() {
-        const testWrapper = new ToolbarTestWrapper();
+        const testWrapper = new ToolbarTestWrapper({ compactMode: true });
         testWrapper.checkMultilineOption(false);
         testWrapper.checkMultilineCssClass(false);
 
@@ -102,7 +123,7 @@ QUnit.module('render', () => {
     });
 
     QUnit.test('1 line: [0, 1, 2, 3, 4, 5, 6]', function() {
-        const testWrapper = new ToolbarTestWrapper(true);
+        const testWrapper = new ToolbarTestWrapper({ multiline: true });
         testWrapper.width = 550;
         testWrapper.checkMultilineCssClass(true);
         testWrapper.checkToolBarHeight(36);
@@ -110,7 +131,7 @@ QUnit.module('render', () => {
     });
 
     QUnit.test('2 lines: [0, 1, 2, 3, 4], [5, 6]', function() {
-        const testWrapper = new ToolbarTestWrapper(true);
+        const testWrapper = new ToolbarTestWrapper({ multiline: true });
         testWrapper.width = 330;
         testWrapper.checkToolBarHeight(72);
         testWrapper.checkItemsInLine([0, 1, 2, 3, 4], 0);
@@ -118,7 +139,7 @@ QUnit.module('render', () => {
     });
 
     QUnit.test('2 lines: [0, 1, 2, 3], [4, 5, 6]', function() {
-        const testWrapper = new ToolbarTestWrapper(true);
+        const testWrapper = new ToolbarTestWrapper({ multiline: true });
         testWrapper.width = 300;
         testWrapper.checkToolBarHeight(72);
         testWrapper.checkItemsInLine([0, 1, 2, 3], 0);
@@ -126,16 +147,16 @@ QUnit.module('render', () => {
     });
 
     QUnit.test('2 lines: [0, 1, 2], [3, 4, 5, 6]', function() {
-        const testWrapper = new ToolbarTestWrapper(true);
-        testWrapper.width = 280;
+        const testWrapper = new ToolbarTestWrapper({ multiline: true });
+        testWrapper.width = 265;
         testWrapper.checkToolBarHeight(72);
         testWrapper.checkItemsInLine([0, 1, 2], 0);
         testWrapper.checkItemsInLine([3, 4, 5, 6], 1);
     });
 
     QUnit.test('3 lines: [0, 1, 2], [3, 4, 5], [6]', function() {
-        const testWrapper = new ToolbarTestWrapper(true);
-        testWrapper.width = 270;
+        const testWrapper = new ToolbarTestWrapper({ multiline: true });
+        testWrapper.width = 260;
         testWrapper.checkToolBarHeight(108);
         testWrapper.checkItemsInLine([0, 1, 2], 0);
         testWrapper.checkItemsInLine([3, 4, 5], 1);
@@ -143,8 +164,9 @@ QUnit.module('render', () => {
     });
 
     QUnit.test('4 lines: [0, 1], [2], [3, 4], [5, 6]', function() {
-        const testWrapper = new ToolbarTestWrapper(true);
-        testWrapper.width = 200;
+        const testWrapper = new ToolbarTestWrapper({ multiline: true });
+        testWrapper.width = 185;
+
         testWrapper.checkToolBarHeight(144);
         testWrapper.checkItemsInLine([0, 1], 0);
         testWrapper.checkItemsInLine([2], 1);
@@ -153,8 +175,9 @@ QUnit.module('render', () => {
     });
 
     QUnit.test('5 lines: [0, 1], [2], [3, 4], [5], [6]', function() {
-        const testWrapper = new ToolbarTestWrapper(true);
-        testWrapper.width = 195;
+        const testWrapper = new ToolbarTestWrapper({ multiline: true });
+        testWrapper.width = 180;
+
         testWrapper.checkToolBarHeight(180);
         testWrapper.checkItemsInLine([0, 1], 0);
         testWrapper.checkItemsInLine([2], 1);
@@ -162,16 +185,55 @@ QUnit.module('render', () => {
         testWrapper.checkItemsInLine([5], 3);
         testWrapper.checkItemsInLine([6], 4);
     });
+
+    ['always', 'inMenu'].forEach(showText => {
+        QUnit.test(`button text visibility when showText is ${showText}`, function() {
+            const testWrapper = new ToolbarTestWrapper({
+                items: [{
+                    location: 'before',
+                    widget: 'dxButton',
+                    showText,
+                    options: { text: 'back button', icon: 'back' }
+                }],
+                multiline: true
+            });
+
+            QUnit.assert.strictEqual(testWrapper.getItems().eq(0).find(`.${BUTTON_TEXT_CLASS}`).is(':visible'), showText === 'always' ? true : false);
+        });
+    });
+
+    QUnit.test('Items should be placed in general items container without sections', function() {
+        const testWrapper = new ToolbarTestWrapper({
+            multiline: true,
+            items: [{
+                location: 'before',
+                widget: 'dxButton',
+                options: { text: 'back button', icon: 'back' }
+            }, {
+                location: 'center',
+                text: ''
+            }]
+        });
+
+        const $itemContainer = testWrapper.getItemContainer();
+
+        QUnit.assert.strictEqual($itemContainer.children().length, 2, 'itemContainer nested elements count');
+
+        testWrapper.getItems().each((_, item) => {
+            QUnit.assert.strictEqual(item.parentElement, testWrapper.getItemContainer().get(0));
+        });
+    });
 });
 
 QUnit.module('option changed', () => {
     QUnit.test('multiline: true -> false', function() {
-        const testWrapper = new ToolbarTestWrapper(true);
+        const testWrapper = new ToolbarTestWrapper({ multiline: true });
         testWrapper.width = 330;
         testWrapper.multiline = false;
 
         testWrapper.checkMultilineOption(false);
         testWrapper.checkMultilineCssClass(false);
+        testWrapper.checkRenderLayoutStrategy(false);
         testWrapper.checkToolBarHeight(36);
         testWrapper.checkItemsInLine([0, 1, 2, 3, 4, 5, 6], 0);
     });
@@ -183,6 +245,7 @@ QUnit.module('option changed', () => {
 
         testWrapper.checkMultilineOption(true);
         testWrapper.checkMultilineCssClass(true);
+        testWrapper.checkRenderLayoutStrategy(true);
         testWrapper.checkToolBarHeight(72);
         testWrapper.checkItemsInLine([0, 1, 2, 3, 4], 0);
         testWrapper.checkItemsInLine([5, 6], 1);

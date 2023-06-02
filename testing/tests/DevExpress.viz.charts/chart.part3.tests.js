@@ -1,12 +1,9 @@
 const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
 const commons = require('./chartParts/commons.js');
 const rendererModule = require('viz/core/renderers/renderer');
 const legendModule = require('viz/components/legend');
-const translator2DModule = require('viz/translators/translator2d');
 const crosshairModule = require('viz/chart_components/crosshair');
 const trackerModule = require('viz/chart_components/tracker');
-const Translator = vizMocks.stubClass(translator2DModule.Translator2D);
 const _test_prepareSegmentRectPoints = require('viz/utils')._test_prepareSegmentRectPoints;
 const chartMocks = require('../../helpers/chartMocks.js');
 const MockSeries = chartMocks.MockSeries;
@@ -32,19 +29,6 @@ function checkSegmentRectCommon(assert, chart, i, x1, y1, w, h, fill, dashStyle,
     assert.equal(chart._renderer.path.getCall(i).returnValue.attr.firstCall.args[0]['stroke-linecap'], 'square');
 }
 
-QUnit.module('dxChart Translators', $.extend({}, commons.environment, {
-    beforeEach: function() {
-        commons.environment.beforeEach.call(this);
-
-        this.createTranslator2D = sinon.stub(translator2DModule, 'Translator2D', function() {
-            return new Translator();
-        });
-    },
-    afterEach: function() {
-        commons.environment.afterEach.call(this);
-        this.createTranslator2D.restore();
-    }
-}));
 
 // ////////////////////////////////
 //      Axes
@@ -77,6 +61,8 @@ QUnit.test('Create Horizontal Category Axis, Vertical Continuous axis', function
     assert.ok(chart._argumentAxes[0]._constantLinesGroup);
     assert.ok(chart.getValueAxis()._constantLinesGroup);
     assert.ok(chart.getValueAxis().gridGroup);
+    assert.ok(chart._argumentAxes[0]._labelsAxesGroup);
+    assert.ok(chart.getValueAxis()._labelsAxesGroup);
     const argumentAxis = chart._argumentAxes[0];
 
     assert.ok(argumentAxis.getOptions().categories, 'Categories should be assigned');
@@ -147,6 +133,9 @@ QUnit.test('create axes with crosshair', function(assert) {
     const chart = this.createChart({
         crosshair: {
             enabled: true,
+            label: {
+                visible: true
+            },
             horizontalLine: {
                 visible: true
             },
@@ -176,8 +165,13 @@ QUnit.test('create axes with crosshair. horizontal line is invisible', function(
     const chart = this.createChart({
         crosshair: {
             enabled: true,
+            label: {
+                visible: true
+            },
             horizontalLine: {
-                visible: false
+                label: {
+                    visible: false
+                }
             },
             verticalLine: {
                 visible: true
@@ -210,7 +204,10 @@ QUnit.test('create axes with crosshair. horizontal line is invisible. rotated', 
                 visible: false
             },
             verticalLine: {
-                visible: true
+                visible: true,
+                label: {
+                    visible: true
+                }
             }
         },
         series: {
@@ -239,7 +236,10 @@ QUnit.test('create axes with crosshair. vertical line is invisible', function(as
                 visible: false
             },
             horizontalLine: {
-                visible: true
+                visible: true,
+                label: {
+                    visible: true
+                }
             }
         },
         series: {
@@ -269,7 +269,10 @@ QUnit.test('create axes with crosshair. vertical line is invisible. rotated', fu
                 visible: false
             },
             horizontalLine: {
-                visible: true
+                visible: true,
+                label: {
+                    visible: true
+                }
             }
         },
         series: {
@@ -299,6 +302,9 @@ QUnit.test('T543486. Named value axis in non-existent pane should have crosshair
         }],
         crosshair: {
             enabled: true,
+            label: {
+                visible: true
+            },
             horizontalLine: {
                 visible: true
             },
@@ -332,6 +338,9 @@ QUnit.test('T543486. Named value axis in non-existent pane should have crosshair
         }],
         crosshair: {
             enabled: true,
+            label: {
+                visible: true
+            },
             horizontalLine: {
                 visible: true
             },
@@ -348,6 +357,71 @@ QUnit.test('T543486. Named value axis in non-existent pane should have crosshair
     assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 4);
 });
 
+QUnit.test('crosshairMargin. line invisible', function(assert) {
+    // Arrange
+    const stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    // act
+    const chart = this.createChart({
+        crosshair: {
+            enabled: true,
+            verticalLine: {
+                visible: false,
+                label: {
+                    visible: true
+                }
+            },
+            horizontalLine: {
+                visible: false,
+                label: {
+                    visible: true
+                }
+            }
+        },
+        series: {
+            type: 'line'
+        }
+    });
+
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 0);
+    assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 0);
+});
+
+QUnit.test('crosshairMargin. crosshair disabled', function(assert) {
+    // Arrange
+    const stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    // act
+    const chart = this.createChart({
+        crosshair: {
+            enabled: false,
+            verticalLine: {
+                visible: true,
+                label: {
+                    visible: true
+                }
+            },
+            horizontalLine: {
+                visible: true,
+                label: {
+                    visible: true
+                }
+            }
+        },
+        series: {
+            type: 'line'
+        }
+    });
+
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 0);
+    assert.strictEqual(chart.getValueAxis().getOptions().crosshairMargin, 0);
+});
 
 QUnit.test('Create Horizontal Continuous Axis, Vertical Continuous axis', function(assert) {
     // Arrange
@@ -1125,14 +1199,6 @@ QUnit.test('Draw title (text is not specified)', function(assert) {
 QUnit.module('Panes backgroundColor', commons.environment);
 
 QUnit.test('CommonPaneSetting. Background color', function(assert) {
-    // var chartOptions = {
-    //    width: 800,
-    //    height: 800,
-    //    left: 60,
-    //    right: 50,
-    //    top: 20,
-    //    bottom: 80
-    // };
     const stubSeries = new MockSeries();
     chartMocks.seriesMockData.series.push(stubSeries);
     const chart = this.createChart({
@@ -1162,14 +1228,6 @@ QUnit.test('CommonPaneSetting. Background color', function(assert) {
 });
 
 QUnit.test('CommonPaneSetting. Background color. Two panes. second pane has background', function(assert) {
-    // var chartOptions = {
-    //    width: 800,
-    //    height: 800,
-    //    left: 60,
-    //    right: 50,
-    //    top: 20,
-    //    bottom: 80
-    // };
     const stubSeries = new MockSeries();
     chartMocks.seriesMockData.series.push(stubSeries);
     const chart = this.createChart({
@@ -1207,14 +1265,6 @@ QUnit.test('CommonPaneSetting. Background color. Two panes. second pane has back
 });
 
 QUnit.test('CommonPaneSetting. Background color. Two panes. Both panes has background', function(assert) {
-    // var chartOptions = {
-    //    width: 800,
-    //    height: 800,
-    //    left: 60,
-    //    right: 50,
-    //    top: 20,
-    //    bottom: 80
-    // };
     const stubSeries = new MockSeries();
     chartMocks.seriesMockData.series.push(stubSeries);
     const chart = this.createChart({
@@ -1241,14 +1291,6 @@ QUnit.test('CommonPaneSetting. Background color. Two panes. Both panes has backg
 });
 
 QUnit.test('CommonPaneSetting. Background color. Two panes. First pane has background is none', function(assert) {
-    // var chartOptions = {
-    //    width: 800,
-    //    height: 800,
-    //    left: 60,
-    //    right: 50,
-    //    top: 20,
-    //    bottom: 80
-    // };
     const stubSeries = new MockSeries();
     chartMocks.seriesMockData.series.push(stubSeries);
     const chart = this.createChart({
@@ -1272,6 +1314,32 @@ QUnit.test('CommonPaneSetting. Background color. Two panes. First pane has backg
     assert.equal(chart.panesBackground.length, 2);
     assert.equal(chart.panesBackground[0], null);
     assert.equal(chart.panesBackground[1].attr.firstCall.args[0].fill, 'red');
+});
+
+QUnit.test('CommonPaneSetting. Two panes, color set as object with gradients', function(assert) {
+    const stubSeries = new MockSeries();
+    chartMocks.seriesMockData.series.push(stubSeries);
+    const chart = this.createChart({
+        size: {
+            width: 800,
+            height: 800
+        },
+        margin: {
+            left: 60,
+            right: 50,
+            top: 20,
+            bottom: 80
+        },
+        commonPaneSettings: {
+            backgroundColor: { fillId: 'id_gradient' }
+        },
+        panes: [{ name: 'pane1', backgroundColor: { fillId: 'id_gradient1' } }, { name: 'pane2' }]
+    });
+
+    assert.ok(chart.panesBackground);
+    assert.equal(chart.panesBackground.length, 2);
+    assert.equal(chart.panesBackground[0].attr.firstCall.args[0].fill, 'id_gradient1');
+    assert.equal(chart.panesBackground[1].attr.firstCall.args[0].fill, 'id_gradient');
 });
 
 QUnit.module('Panes border preparations', $.extend({}, commons.environment, {
@@ -1925,10 +1993,10 @@ QUnit.test('Argument and value axes are passed to series in defferent panes', fu
     assert.strictEqual(incidentOccurred.callCount, 0, 'no incidentOccurred');
     assert.strictEqual(chart._valueAxes.length, 2, 'chart has two value axes');
 
-    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[1], 'argument axis is passed to series1');
+    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[0], 'argument axis is passed to series1');
     assert.strictEqual(seriesOptions1.valueAxis.pane, 'pane1', 'correct value axis is passed to series1');
 
-    assert.strictEqual(seriesOptions2.argumentAxis, chart._argumentAxes[1], 'argument axis is passed to series1');
+    assert.strictEqual(seriesOptions2.argumentAxis, chart._argumentAxes[1], 'argument axis is passed to series2');
     assert.strictEqual(seriesOptions2.valueAxis.pane, 'pane2', 'correct value axis is passed to series2');
 });
 

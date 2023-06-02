@@ -10,7 +10,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
@@ -49,10 +48,24 @@ const setupModule = function() {
     };
 
     that.setupTreeList = function() {
-        setupTreeListModules(that, ['data', 'columns', 'rows', 'selection', 'headerPanel', 'masterDetail', 'editing', 'editorFactory', 'validating', 'errorHandling', 'search'], {
+        setupTreeListModules(that, ['data', 'columns', 'rows', 'selection', 'headerPanel', 'masterDetail', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'validating', 'errorHandling', 'search'], {
             initViews: true
         });
     };
+
+    this.addRowViaChanges = (parentId, options = {}) => {
+        this.expandRow(parentId);
+        this.option('editing.changes', [{
+            data: { parentId },
+            type: 'insert',
+            ...options
+        }]);
+    };
+
+    this.addRowViaMethodOrChanges = (addRowWay, parentId) => {
+        (addRowWay === 'changes' ? this.addRowViaChanges : this.addRow)(parentId);
+    };
+
     this.clock = sinon.useFakeTimers();
 };
 
@@ -64,7 +77,7 @@ const teardownModule = function() {
 QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, () => {
 
     QUnit.test('Edit row', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#treeList');
 
         this.setupTreeList();
@@ -147,7 +160,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
     });
 
     QUnit.test('Edit popup', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#treeList');
 
         this.options.editing = {
@@ -175,293 +188,421 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         assert.ok(!$editPopupContent.find('.dx-treelist-icon-container').length, 'hasn\'t expand icon');
     });
 
-    QUnit.test('Add row', function(assert) {
-    // arrange
-        let $rowElements;
-        const $testElement = $('#treeList');
+    QUnit.module('Add row', () => {
+        QUnit.test('Add row', function(assert) {
+            // arrange
+            let $rowElements;
+            const $testElement = $('#treeList');
 
-        this.setupTreeList();
-        this.rowsView.render($testElement);
+            this.setupTreeList();
+            this.rowsView.render($testElement);
 
-        // act
-        this.addRow();
-
-        // assert
-        $rowElements = $testElement.find('tbody > .dx-data-row');
-        assert.equal($rowElements.length, 2, 'count data row');
-        assert.ok($rowElements.first().hasClass('dx-row-inserted'), 'insert row');
-
-        // act
-        $testElement.find('tbody > tr').first().find('input').first().val(666);
-        $testElement.find('tbody > tr').first().find('input').first().trigger('change');
-        this.saveEditData();
-
-        // assert
-        $rowElements = $testElement.find('tbody > .dx-data-row:not(.dx-row-inserted)');
-        assert.equal($rowElements.length, 2, 'count data row');
-
-        const items = this.dataController.items();
-        assert.equal(items.length, 2, 'count item');
-        assert.equal(items[1].rowType, 'data', 'rowType of second item');
-        assert.deepEqual(items[1].values, ['666', undefined, undefined, null], 'values of second item');
-        assert.equal(items[1].node.children.length, 0, 'count children of second item');
-        assert.equal(items[1].level, 0, 'level of second item');
-        assert.notOk(items[1].node.parent.key, 'second item hasn\'t parentKey');
-    });
-
-    QUnit.test('Edit batch - add links should be rendered in rows when allowAdding is true', function(assert) {
-    // arrange, act
-        const $testElement = $('#treeList');
-
-        this.options.editing = {
-            mode: 'batch',
-            allowAdding: true,
-            texts: {
-                addRowToNode: 'Add'
-            }
-        };
-
-        this.setupTreeList();
-        this.rowsView.render($testElement);
-
-        // assert
-        const $addLinks = $testElement.find('.dx-command-edit .dx-link-add');
-        assert.equal($addLinks.length, 1, 'link add is rendered');
-        assert.equal($addLinks.text(), 'Add', 'Add link text');
-    });
-
-    QUnit.test('Add row to child should call addRow method with parentId', function(assert) {
-    // arrange
-        const $testElement = $('#treeList');
-
-        this.options.editing.allowAdding = true;
-        this.options.editing.texts = { addRowToNode: 'Add' };
-
-        this.setupTreeList();
-        this.rowsView.render($testElement);
-
-        this.editingController.addRow = sinon.spy();
-
-        // act
-        $testElement.find('.dx-command-edit .dx-link-add').trigger('click');
-        this.clock.tick();
-
-        // assert
-        assert.ok(this.editingController.addRow.calledOnce, 'addRow is called');
-        assert.deepEqual(this.editingController.addRow.args[0], [1], 'addRow arg is row key');
-    });
-
-    QUnit.test('AddRow method should expand row and add item after parent', function(assert) {
-    // arrange
-        const $testElement = $('#treeList');
-
-        this.options.editing.allowAdding = true;
-        this.options.editing.texts = { addRowToNode: 'Add' };
-
-        this.setupTreeList();
-        this.rowsView.render($testElement);
-
-        // act
-        this.addRow(1);
-        this.clock.tick();
-
-        // assert
-        const rows = this.getVisibleRows();
-
-        assert.strictEqual(rows.length, 3, 'three rows are rendered');
-        assert.strictEqual(rows[0].key, 1, 'row 0');
-        assert.strictEqual(rows[0].isExpanded, true, 'row 0 is expanded');
-        assert.deepEqual(rows[1].isNewRow, true, 'row 1 is inserted');
-        assert.deepEqual(rows[1].data, { parentId: 1 }, 'row 1 data should contains parentId');
-        assert.strictEqual(rows[2].key, 2, 'row 2 key');
-        assert.strictEqual(rows[2].node.parent.key, 1, 'row 2 node parent');
-    });
-
-    QUnit.test('AddRow method should return Deferred with collapsed parent', function(assert) {
-    // arrange
-        this.options.editing.allowAdding = true;
-
-        this.setupTreeList();
-        this.rowsView.render($('#treeList'));
-        this.clock.tick();
-
-        // assert
-        assert.equal(this.getVisibleRows().length, 1, 'one visible row');
-
-        // act
-        let doneExecuteCount = 0;
-        this.addRow(1).done(() => {
-            doneExecuteCount++;
-        });
-        this.clock.tick();
-
-        assert.equal(doneExecuteCount, 1, 'done was executed');
-        assert.equal(this.getVisibleRows().length, 3, 'parent was expanded and one more row was added');
-    });
-
-    QUnit.test('Sequential adding of a row after adding the previous using Deferred (T844118)', function(assert) {
-    // arrange
-        const initNewRowCalls = [];
-
-        this.options.editing.allowAdding = true;
-        this.options.onInitNewRow = (e) => {
-            initNewRowCalls.push(e.data.parentId);
-        };
-
-        this.setupTreeList();
-        this.rowsView.render($('#treeList'));
-        this.clock.tick();
-
-        // assert
-        assert.equal(this.getVisibleRows().length, 1, '1 visible row');
-
-        // act
-        const addRowAfterDeferredResolve = (parentIds, index) => {
-            const parentId = parentIds[index];
-
-            if(parentId !== undefined) {
-                return this.addRow(parentId).done(() => addRowAfterDeferredResolve(parentIds, index + 1));
-            }
+            // act
+            this.addRow();
 
             // assert
-            assert.deepEqual(parentIds, initNewRowCalls, 'for every added row sequentially calls onInitNewRow');
+            $rowElements = $testElement.find('tbody > .dx-data-row');
+            assert.equal($rowElements.length, 2, 'count data row');
+            assert.ok($rowElements.first().hasClass('dx-row-inserted'), 'insert row');
 
-            return $.Deferred().resolve();
-        };
+            // act
+            $testElement.find('tbody > tr').first().find('input').first().val(666);
+            $testElement.find('tbody > tr').first().find('input').first().trigger('change');
+            this.saveEditData();
 
-        addRowAfterDeferredResolve([1, 2], 0);
+            // assert
+            $rowElements = $testElement.find('tbody > .dx-data-row:not(.dx-row-inserted)');
+            assert.equal($rowElements.length, 2, 'count data row');
 
-        this.clock.tick();
-    });
+            const items = this.dataController.items();
+            assert.equal(items.length, 2, 'count item');
+            assert.equal(items[1].rowType, 'data', 'rowType of second item');
+            assert.deepEqual(items[1].values, ['666', undefined, undefined, null], 'values of second item');
+            assert.equal(items[1].node.children.length, 0, 'count children of second item');
+            assert.equal(items[1].level, 0, 'level of second item');
+            assert.notOk(items[1].node.parent.key, 'second item hasn\'t parentKey');
+        });
 
-    QUnit.test('AddRow method returns Deferred with using promise in onInitNewRow (T844118)', function(assert) {
-    // arrange
-        const deferred = $.Deferred();
-        this.options.editing.allowAdding = true;
-        this.options.onInitNewRow = (e) => {
-            e.promise = deferred;
-        };
+        QUnit.test('Edit batch - add links should be rendered in rows when allowAdding is true', function(assert) {
+            // arrange, act
+            const $testElement = $('#treeList');
 
-        this.setupTreeList();
-        this.rowsView.render($('#treeList'));
-        this.clock.tick();
+            this.options.editing = {
+                mode: 'batch',
+                allowAdding: true,
+                texts: {
+                    addRowToNode: 'Add'
+                }
+            };
 
-        // act
-        let isAddRowDone = false;
-        this.addRow(1).done(() => isAddRowDone = true);
-        this.clock.tick();
+            this.setupTreeList();
+            this.rowsView.render($testElement);
 
-        // assert
-        assert.notOk(isAddRowDone, 'done method has not executed yet');
-        deferred.resolve();
-        assert.ok(isAddRowDone, 'done method has executed');
-    });
+            // assert
+            const $addLinks = $testElement.find('.dx-command-edit .dx-link-add');
+            assert.equal($addLinks.length, 1, 'link add is rendered');
+            assert.equal($addLinks.text(), 'Add', 'Add link text');
+        });
 
-    // T553905
-    QUnit.test('Add item in node without children (Angular)', function(assert) {
-    // arrange
-        const $testElement = $('#treeList');
+        QUnit.test('Add row to child should call addRow method with parentId', function(assert) {
+            // arrange
+            const $testElement = $('#treeList');
 
-        this.options.editing.allowAdding = true;
-        this.options.expandedRowKeys = [1];
-        this.options.loadingTimeout = 30;
+            this.options.editing.allowAdding = true;
+            this.options.editing.texts = { addRowToNode: 'Add' };
 
-        this.setupTreeList();
-        this.rowsView.render($testElement);
+            this.setupTreeList();
+            this.rowsView.render($testElement);
 
-        // act
-        this.addRow(2);
-        this.dataController.optionChanged({ name: 'expandedRowKeys', value: [1, 2], previousValue: [1, 2] }); // simulate the call from ngDoCheck hook
-        this.clock.tick(30);
+            this.editingController.addRow = sinon.spy();
 
-        // assert
-        const rows = this.getVisibleRows();
-        assert.strictEqual(rows.length, 3, 'count row');
-        assert.strictEqual(rows[0].key, 1, 'key of the first row');
-        assert.strictEqual(rows[0].isExpanded, true, 'first row is expanded');
-        assert.strictEqual(rows[1].key, 2, 'key of the second row');
-        assert.strictEqual(rows[1].node.parent.key, 1, 'parent key of the second row');
-        assert.deepEqual(rows[2].isNewRow, true, 'third row is inserted');
-        assert.deepEqual(rows[2].data, { parentId: 2 }, 'third row data should contain parentId');
-    });
+            // act
+            $testElement.find('.dx-command-edit .dx-link-add').trigger('click');
+            this.clock.tick(10);
 
-    QUnit.test('AddRow method witout parameters should add item at begin', function(assert) {
-    // arrange
-        const $testElement = $('#treeList');
+            // assert
+            assert.ok(this.editingController.addRow.calledOnce, 'addRow is called');
+            assert.deepEqual(this.editingController.addRow.args[0], [1], 'addRow arg is row key');
+        });
 
-        this.options.rootValue = 0;
-        this.options.editing.allowAdding = true;
-        this.options.editing.texts = { addRowToNode: 'Add' };
+        QUnit.test('AddRow method should expand row and add item after parent', function(assert) {
+            // arrange
+            const $testElement = $('#treeList');
 
-        this.setupTreeList();
-        this.rowsView.render($testElement);
+            this.options.editing.allowAdding = true;
+            this.options.editing.texts = { addRowToNode: 'Add' };
 
-        // act
-        this.addRow();
-        this.clock.tick();
+            this.setupTreeList();
+            this.rowsView.render($testElement);
 
-        // assert
-        const rows = this.getVisibleRows();
+            // act
+            this.addRow(1);
+            this.clock.tick(10);
 
-        assert.strictEqual(rows.length, 2, 'rows count');
-        assert.deepEqual(rows[0].isNewRow, true, 'row 0 is inserted');
-        assert.deepEqual(rows[0].data, { parentId: 0 }, 'row 0 data should contains parentId');
-        assert.strictEqual(rows[1].key, 1, 'row 1');
-        assert.strictEqual(rows[1].isExpanded, false, 'row 1 is not expanded');
-    });
+            // assert
+            const rows = this.getVisibleRows();
 
-    QUnit.test('AddRow method witout parameters should add item at begin if rootValue is defined', function(assert) {
-    // arrange
-        const $testElement = $('#treeList');
+            assert.strictEqual(rows.length, 3, 'three rows are rendered');
+            assert.strictEqual(rows[0].key, 1, 'row 0');
+            assert.strictEqual(rows[0].isExpanded, true, 'row 0 is expanded');
+            assert.deepEqual(rows[1].isNewRow, true, 'row 1 is inserted');
+            assert.deepEqual(rows[1].data, { parentId: 1 }, 'row 1 data should contains parentId');
+            assert.strictEqual(rows[2].key, 2, 'row 2 key');
+            assert.strictEqual(rows[2].node.parent.key, 1, 'row 2 node parent');
+        });
 
-        this.options.rootValue = 0;
-        this.options.dataSource.store.data[0].parentId = 0;
-        this.options.editing.allowAdding = true;
-        this.options.editing.texts = { addRowToNode: 'Add' };
+        QUnit.test('AddRow method should return Deferred with collapsed parent', function(assert) {
+            // arrange
+            this.options.editing.allowAdding = true;
 
-        this.setupTreeList();
-        this.rowsView.render($testElement);
+            this.setupTreeList();
+            this.rowsView.render($('#treeList'));
+            this.clock.tick(10);
 
-        // act
-        this.addRow();
-        this.clock.tick();
+            // assert
+            assert.equal(this.getVisibleRows().length, 1, 'one visible row');
 
-        // assert
-        const rows = this.getVisibleRows();
+            // act
+            let doneExecuteCount = 0;
+            this.addRow(1).done(() => {
+                doneExecuteCount++;
+            });
+            this.clock.tick(10);
 
-        assert.strictEqual(rows.length, 2, 'rows count');
-        assert.deepEqual(rows[0].isNewRow, true, 'row 0 is inserted');
-        assert.deepEqual(rows[0].data, { parentId: 0 }, 'row 0 data should contains parentId');
-        assert.strictEqual(rows[1].key, 1, 'row 1');
-        assert.strictEqual(rows[1].isExpanded, false, 'row 1 is not expanded');
-    });
+            assert.equal(doneExecuteCount, 1, 'done was executed');
+            assert.equal(this.getVisibleRows().length, 3, 'parent was expanded and one more row was added');
+        });
 
-    QUnit.test('Inserted row should be reseted after collapsing when editing mode is row', function(assert) {
-    // arrange
-        const $testElement = $('#treeList');
+        QUnit.test('Sequential adding of a row after adding the previous using Deferred (T844118)', function(assert) {
+            // arrange
+            const initNewRowCalls = [];
 
-        this.options.editing.allowAdding = true;
-        this.options.editing.texts = { addRowToNode: 'Add' };
+            this.options.editing.allowAdding = true;
+            this.options.onInitNewRow = (e) => {
+                initNewRowCalls.push(e.data.parentId);
+            };
 
-        this.setupTreeList();
-        this.rowsView.render($testElement);
+            this.setupTreeList();
+            this.rowsView.render($('#treeList'));
+            this.clock.tick(10);
 
-        // act
-        this.addRow(1);
-        this.clock.tick();
+            // assert
+            assert.equal(this.getVisibleRows().length, 1, '1 visible row');
 
-        this.collapseRow(1);
+            // act
+            const addRowAfterDeferredResolve = (parentIds, index) => {
+                const parentId = parentIds[index];
 
-        // assert
-        const rows = this.getVisibleRows();
-        assert.strictEqual(rows.length, 1, 'one row is rendered');
-        assert.strictEqual(rows[0].key, 1, 'row 0 key');
-        assert.notOk(rows[0].isNewRow, 'row 0 is not inserted');
-        assert.strictEqual(this.editingController.isEditing(), false, 'editing is not active');
+                if(parentId !== undefined) {
+                    return this.addRow(parentId).done(() => addRowAfterDeferredResolve(parentIds, index + 1));
+                }
+
+                // assert
+                assert.deepEqual(parentIds.slice(0, 1), initNewRowCalls, 'for every added row sequentially calls onInitNewRow');
+
+                return $.Deferred().resolve();
+            };
+
+            addRowAfterDeferredResolve([1, 2], 0);
+
+            this.clock.tick(10);
+        });
+
+        QUnit.test('AddRow method returns Deferred with using promise in onInitNewRow (T844118)', function(assert) {
+            // arrange
+            const deferred = $.Deferred();
+            this.options.editing.allowAdding = true;
+            this.options.onInitNewRow = (e) => {
+                e.promise = deferred;
+            };
+
+            this.setupTreeList();
+            this.rowsView.render($('#treeList'));
+            this.clock.tick(10);
+
+            // act
+            let isAddRowDone = false;
+            this.addRow(1).done(() => isAddRowDone = true);
+            this.clock.tick(10);
+
+            // assert
+            assert.notOk(isAddRowDone, 'done method has not executed yet');
+            deferred.resolve();
+            this.clock.tick(10);
+            assert.ok(isAddRowDone, 'done method has executed');
+        });
+
+        // T553905
+        QUnit.test('Add item in node without children (Angular)', function(assert) {
+            // arrange
+            const $testElement = $('#treeList');
+
+            this.options.editing.allowAdding = true;
+            this.options.expandedRowKeys = [1];
+            this.options.loadingTimeout = 30;
+
+            this.setupTreeList();
+            this.rowsView.render($testElement);
+
+            // act
+            this.addRow(2);
+            this.dataController.optionChanged({ name: 'expandedRowKeys', value: [1, 2], previousValue: [1, 2] }); // simulate the call from ngDoCheck hook
+            this.clock.tick(100);
+
+            // assert
+            const rows = this.getVisibleRows();
+            assert.strictEqual(rows.length, 3, 'count row');
+            assert.strictEqual(rows[0].key, 1, 'key of the first row');
+            assert.strictEqual(rows[0].isExpanded, true, 'first row is expanded');
+            assert.strictEqual(rows[1].key, 2, 'key of the second row');
+            assert.strictEqual(rows[1].node.parent.key, 1, 'parent key of the second row');
+            assert.deepEqual(rows[2].isNewRow, true, 'third row is inserted');
+            assert.deepEqual(rows[2].data, { parentId: 2 }, 'third row data should contain parentId');
+        });
+
+        QUnit.test('AddRow method witout parameters should add item at begin', function(assert) {
+            // arrange
+            const $testElement = $('#treeList');
+
+            this.options.rootValue = 0;
+            this.options.editing.allowAdding = true;
+            this.options.editing.texts = { addRowToNode: 'Add' };
+
+            this.setupTreeList();
+            this.rowsView.render($testElement);
+
+            // act
+            this.addRow();
+            this.clock.tick(10);
+
+            // assert
+            const rows = this.getVisibleRows();
+
+            assert.strictEqual(rows.length, 2, 'rows count');
+            assert.deepEqual(rows[0].isNewRow, true, 'row 0 is inserted');
+            assert.deepEqual(rows[0].data, { parentId: 0 }, 'row 0 data should contains parentId');
+            assert.strictEqual(rows[1].key, 1, 'row 1');
+            assert.strictEqual(rows[1].isExpanded, false, 'row 1 is not expanded');
+        });
+
+        QUnit.test('AddRow method witout parameters should add item at begin if rootValue is defined', function(assert) {
+            // arrange
+            const $testElement = $('#treeList');
+
+            this.options.rootValue = 0;
+            this.options.dataSource.store.data[0].parentId = 0;
+            this.options.editing.allowAdding = true;
+            this.options.editing.texts = { addRowToNode: 'Add' };
+
+            this.setupTreeList();
+            this.rowsView.render($testElement);
+
+            // act
+            this.addRow();
+            this.clock.tick(10);
+
+            // assert
+            const rows = this.getVisibleRows();
+
+            assert.strictEqual(rows.length, 2, 'rows count');
+            assert.deepEqual(rows[0].isNewRow, true, 'row 0 is inserted');
+            assert.deepEqual(rows[0].data, { parentId: 0 }, 'row 0 data should contains parentId');
+            assert.strictEqual(rows[1].key, 1, 'row 1');
+            assert.strictEqual(rows[1].isExpanded, false, 'row 1 is not expanded');
+        });
+
+        ['method', 'changes'].forEach(addRowWay => {
+            QUnit.test(`Inserted row should not be reset after collapsing when editing mode is row (adding via ${addRowWay})`, function(assert) {
+            // arrange
+                const $testElement = $('#treeList');
+
+                this.options.editing.allowAdding = true;
+
+                this.setupTreeList();
+                this.rowsView.render($testElement);
+
+                // act
+                this.addRowViaMethodOrChanges(addRowWay, 1);
+                this.clock.tick(10);
+
+                this.collapseRow(1);
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 1, 'one row is rendered');
+                assert.strictEqual(rows[0].key, 1, 'row 0 key');
+                assert.notOk(rows[0].isNewRow, 'row 0 is not inserted');
+                assert.equal(this.option('editing.changes').length, 1, 'changes are not reset');
+
+                // act
+                this.expandRow(1);
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 3, 'three rows are rendered');
+                assert.strictEqual(rows[0].key, 1, 'row 0 key');
+                assert.ok(rows[1].isNewRow, 'row 1 is inserted');
+                assert.equal(this.option('editing.changes').length, 1, 'changes are not reset');
+            });
+
+            QUnit.test(`Inserted child row should change it's rowIndex when sorting is applied (adding via ${addRowWay})`, function(assert) {
+            // arrange
+                const $testElement = $('#treeList');
+
+                this.options.dataSource.store.data[1].parentId = undefined;
+                this.options.editing.allowAdding = true;
+
+                this.setupTreeList();
+                this.rowsView.render($testElement);
+
+                // act
+                this.addRowViaMethodOrChanges(addRowWay, 1);
+                this.clock.tick(10);
+
+                this.columnOption('field2', 'sortOrder', 'desc');
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 3, 'three rows are rendered');
+                assert.strictEqual(rows[0].key, 2, 'first row key');
+                assert.strictEqual(rows[1].key, 1, 'second row key');
+                assert.ok(rows[1].isExpanded, 'second row is expanded');
+                assert.ok(rows[2].isNewRow, 'third row is new row');
+
+                // act
+                this.columnOption('field2', 'sortOrder', 'asc');
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 3, 'three rows are rendered');
+                assert.strictEqual(rows[0].key, 1, 'first row key');
+                assert.ok(rows[0].isExpanded, 'first row is expanded');
+                assert.ok(rows[1].isNewRow, 'second row is new row');
+                assert.strictEqual(rows[2].key, 2, 'third row key');
+            });
+
+            QUnit.test(`Inserted child row should not disappear when filter is applied and reset (adding via ${addRowWay})`, function(assert) {
+            // arrange
+                const $testElement = $('#treeList');
+
+                this.options.dataSource.store.data[1].parentId = undefined;
+                this.options.editing.allowAdding = true;
+
+                this.setupTreeList();
+                this.rowsView.render($testElement);
+
+                // act
+                this.addRowViaMethodOrChanges(addRowWay, 1);
+                this.clock.tick(10);
+
+                this.filter([]);
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 0, 'rows are not rendered');
+
+                // act
+                this.filter(null);
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 3, 'three rows are rendered');
+                assert.strictEqual(rows[0].key, 1, 'first row key');
+                assert.ok(rows[0].isExpanded, 'first row is expanded');
+                assert.ok(rows[1].isNewRow, 'second row is new row');
+                assert.strictEqual(rows[2].key, 2, 'third row key');
+            });
+        });
+
+        QUnit.test('Add row to the end via changes with index = -1', function(assert) {
+            // arrange
+            const $testElement = $('#treeList');
+
+            this.options.dataSource.store.data[1].parentId = undefined;
+            this.options.editing.allowAdding = true;
+
+            this.setupTreeList();
+            this.rowsView.render($testElement);
+
+            // act
+            this.addRowViaChanges(undefined, { insertAfterKey: 2 });
+            this.clock.tick(10);
+
+            // assert
+            const rows = this.getVisibleRows();
+            assert.strictEqual(rows.length, 3, 'three rows are rendered');
+            assert.strictEqual(rows[0].key, 1, 'first row key');
+            assert.strictEqual(rows[1].key, 2, 'second row key');
+            assert.ok(rows[2].isNewRow, 'third row is new row');
+        });
+
+        // T1021047
+        QUnit.test('The addRow method should work correctly when parentId is set at the onInitNewRow event', function(assert) {
+            // arrange
+            this.options.editing.allowAdding = true;
+            this.options.onInitNewRow = (e) => {
+                e.data.parentId = 1;
+            };
+
+            this.setupTreeList();
+            this.rowsView.render($('#treeList'));
+            this.clock.tick(10);
+
+            // act
+            this.addRow();
+            this.clock.tick(10);
+
+            // assert
+            const items = this.getVisibleRows();
+            assert.strictEqual(items.length, 3, 'three rows are rendered');
+            assert.strictEqual(items[0].key, 1, 'first row key');
+            assert.ok(items[1].isNewRow, 'second row is new row');
+            assert.strictEqual(items[2].key, 2, 'third row key');
+        });
     });
 
     QUnit.test('Edit cell on row click', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#treeList');
 
         this.options.editing = {
@@ -550,7 +691,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
     });
 
     QUnit.test('Save edit data - exception when key is not specified in a store', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#treeList');
 
         this.options.editing = {
@@ -579,7 +720,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
     });
 
     QUnit.test('Delete data - exception when key is not specified in a store', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#treeList');
 
         this.options.editing = {
@@ -608,7 +749,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
     });
 
     QUnit.test('Insert data - no exception when key is not specified in a store', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#treeList');
 
         this.options.rootValue = 0;
@@ -758,7 +899,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
     });
 
     QUnit.test('TreeList should show error message on adding row if dataSource is not specified (T711831)', function(assert) {
-    // arrange
+        // arrange
         let errorCode;
         let widgetName;
 
@@ -805,7 +946,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
     // T690119
     QUnit.test('Edit cell - The editable cell should be closed after click on expand button', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#treeList');
 
         this.options.editing = {
@@ -819,11 +960,11 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2003, 2, 3) }
         ];
         this.setupTreeList();
-        this.clock.tick();
+        this.clock.tick(10);
         this.rowsView.render($testElement);
 
         this.editCell(0, 0);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($(this.getCellElement(0, 0)).find('.dx-texteditor').length, 1, 'has editor');
@@ -831,7 +972,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         // act
         $(this.getCellElement(1, 0)).find('.dx-treelist-collapsed').trigger('dxpointerdown');
         $(this.getCellElement(1, 0)).find('.dx-treelist-collapsed').trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($(this.getCellElement(0, 0)).find('.dx-texteditor').length, 0, 'hasn\'t editor');
@@ -839,7 +980,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
     // T697344
     QUnit.test('Removing a selected row should not throw an exception', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#container');
 
         this.options.editing = {
@@ -864,7 +1005,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
     });
 
     QUnit.test('Selection should be updated correctly after deleting a nested node', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#container');
 
         this.options.editing = {
@@ -892,7 +1033,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
     });
 
     QUnit.test('Batch mode - Editing should not work when double-clicking on the select checkbox (startEditAction is dblClick)', function(assert) {
-    // arrange
+        // arrange
         const $testElement = $('#treeList');
 
         this.options.editing = {
@@ -917,10 +1058,49 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         assert.notOk($(this.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell isn\'t editable');
     });
 
+    // T1023019
+    QUnit.test('Batch mode - The checkbox should not be rendered for a new row', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        this.options.editing = {
+            mode: 'batch',
+            allowUpdating: true
+        };
+        this.options.selection = {
+            mode: 'multiple',
+            showCheckBoxesMode: 'always'
+        };
+
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.addRow();
+        this.clock.tick(10);
+
+        // assert
+        let $newRowElement = $testElement.find('tbody > .dx-data-row').first();
+        assert.ok($newRowElement.hasClass('dx-row-inserted'), 'insert row');
+
+        // act
+        $newRowElement.find('td').eq(1).trigger('dxclick');
+        this.clock.tick(10);
+
+        // assert
+        $newRowElement = $testElement.find('tbody > .dx-data-row').first();
+        const $inputElement = $newRowElement.find('td').eq(1).find('.dx-texteditor-input');
+        assert.strictEqual($inputElement.length, 1, 'second cell has input');
+        assert.ok($inputElement.is(':focus'), 'second cell is focused');
+
+        const $selectCheckbox = $newRowElement.find('td').first().find('.dx-select-checkbox');
+        assert.strictEqual($selectCheckbox.length, 0, 'first cell has not checkbox');
+    });
+
     [false, true].forEach(function(remoteOperations) {
     // T836724
         QUnit.test('The added nodes should be displayed when there is a filter and remoteOperations is ' + remoteOperations, function(assert) {
-        // arrange
+            // arrange
             let $rowElements;
 
             const $testElement = $('#treeList');
@@ -1012,7 +1192,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             };
 
             that.setupTreeList = function() {
-                setupTreeListModules(that, ['data', 'columns', 'rows', 'editing', 'editorFactory', 'search'], {
+                setupTreeListModules(that, ['data', 'columns', 'rows', 'editing', 'editingCellBased', 'editorFactory', 'search'], {
                     initViews: true
                 });
             };
@@ -1027,7 +1207,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.addRow(2);
-            this.clock.tick();
+            this.clock.tick(10);
             this.cellValue(2, 'field1', 'added');
             this.saveEditData();
 
@@ -1049,7 +1229,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
             this.cellValue(0, 'field1', 'added');
             this.saveEditData();
 
@@ -1070,7 +1250,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.deleteRow(1);
-            this.clock.tick();
+            this.clock.tick(10);
             this.saveEditData();
 
             // assert
@@ -1091,7 +1271,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.deleteRow(0);
-            this.clock.tick();
+            this.clock.tick(10);
             this.saveEditData();
 
             // assert
@@ -1129,7 +1309,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.getDataSource().store().push([{ type: 'insert', data: { id: 3, parentId: 1, field1: 'test3', hasItems: false }, index: 0 }]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const rows = this.getVisibleRows();
@@ -1148,7 +1328,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.getDataSource().store().push([{ type: 'insert', data: { id: 3, parentId: 1, field1: 'test3', hasItems: false }, index: -1 }]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const rows = this.getVisibleRows();
@@ -1167,7 +1347,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
             // act
             this.getDataSource().store().push([{ type: 'insert', data: { id: 3, parentId: 1, field1: 'test3', hasItems: false }, index: 10 }]);
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             const rows = this.getVisibleRows();
@@ -1176,6 +1356,68 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             assert.strictEqual(rows[0].node.children.length, 2, 'row 0 children count');
             assert.strictEqual(rows[2].data.field1, 'test3', 'row 2 data is updated');
             assert.strictEqual(rows[2].node.parent, rows[0].node, 'row 2 node parent');
+        });
+
+        QUnit.test('Push insert to recently inserted node', function(assert) {
+            // arrange
+            this.options.dataSource.store.data = [
+                { id: 1, field1: 'test1', },
+            ];
+            this.setupTreeList();
+
+            // act
+            this.getDataSource().store().push([{ type: 'insert', data: { id: 2, field1: 'test2' }, index: 2 }]);
+            this.clock.tick(10);
+            this.getDataSource().store().push([{ type: 'insert', data: { id: 3, field1: 'test3', parentId: 2 }, index: 3 }]);
+            this.clock.tick(10);
+
+            // assert
+            let rows = this.getVisibleRows();
+            assert.strictEqual(rows.length, 2);
+            assert.strictEqual(rows[1].node.children.length, 1);
+            assert.ok(rows[1].node.hasChildren);
+
+            // act
+            this.expandRow(1);
+            this.clock.tick(10);
+
+            // assert
+            rows = this.getVisibleRows();
+            assert.strictEqual(rows.length, 2);
+        });
+
+        QUnit.test('Push insert without index', function(assert) {
+            // arrange
+            this.options.dataSource.store.data = [
+                { id: 1, field1: 'test1', },
+            ];
+            this.setupTreeList();
+
+            // act
+            this.getDataSource().store().push([{ type: 'insert', data: { id: 2, field1: 'test2', parentId: 1 } }]);
+            this.clock.tick(10);
+            // assert
+            let rows = this.getVisibleRows();
+            assert.strictEqual(rows.length, 1);
+            assert.strictEqual(rows[0].node.children.length, 1);
+            assert.ok(rows[0].node.hasChildren);
+
+            // act
+            this.expandRow(1);
+            this.clock.tick(10);
+
+            // assert
+            rows = this.getVisibleRows();
+            assert.strictEqual(rows.length, 2);
+
+            // act
+            this.getDataSource().store().push([{ type: 'insert', data: { id: 3, field1: 'test3', parentId: 1 } }]);
+            this.clock.tick(10);
+
+            rows = this.getVisibleRows();
+            assert.strictEqual(rows.length, 3);
+
+
         });
 
         // T836724

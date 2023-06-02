@@ -1,4 +1,1 @@
-import core from './ui.tree_list.core';
-import filterPanelModule from '../grid_core/ui.grid_core.filter_panel';
-
-core.registerModule('filterPanel', filterPanelModule);
+import '../../__internal/grids/tree_list/module_not_extended/filter_panel';

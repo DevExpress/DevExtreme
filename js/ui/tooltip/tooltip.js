@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
-import Popover from '../popover';
+import Popover from '../popover/ui.popover';
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 import { isWindow } from '../../core/utils/type';
@@ -25,6 +25,12 @@ const Tooltip = Popover.inherit({
             showCloseButton: false,
 
             /**
+            * @name dxTooltipOptions.enableBodyScroll
+            * @hidden
+            */
+            enableBodyScroll: true,
+
+            /**
             * @name dxTooltipOptions.showTitle
             * @hidden
             */
@@ -38,6 +44,7 @@ const Tooltip = Popover.inherit({
 
             /**
             * @name dxTooltipOptions.titleTemplate
+            * @type template
             * @hidden
             */
             titleTemplate: null,
@@ -49,13 +56,14 @@ const Tooltip = Popover.inherit({
             */
             onTitleRendered: null,
             bottomTemplate: null,
+            preventScrollEvents: false,
             propagateOutsideClick: true
         });
     },
 
     _render: function() {
         this.$element().addClass(TOOLTIP_CLASS);
-        this._wrapper().addClass(TOOLTIP_WRAPPER_CLASS);
+        this.$wrapper().addClass(TOOLTIP_WRAPPER_CLASS);
         this.callBase();
     },
 
@@ -64,9 +72,8 @@ const Tooltip = Popover.inherit({
 
         this._contentId = 'dx-' + new Guid();
 
-        this._$content.attr({
+        this.$overlayContent().attr({
             'id': this._contentId,
-            'role': 'tooltip'
         });
 
         this._toggleAriaDescription(true);

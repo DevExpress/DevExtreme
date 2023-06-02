@@ -9,6 +9,10 @@ import Toolbar from './modules/toolbar';
 import DropImage from './modules/dropImage';
 import Variables from './modules/variables';
 import Resizing from './modules/resizing';
+import TableResizing from './modules/tableResizing';
+import TableContextMenu from './modules/tableContextMenu';
+import ImageUpload from './modules/imageUpload';
+import ImageCursor from './modules/imageCursor';
 import MentionsModule from './modules/mentions';
 
 class QuillRegistrator {
@@ -33,6 +37,10 @@ class QuillRegistrator {
             'modules/dropImage': DropImage,
             'modules/variables': Variables,
             'modules/resizing': Resizing,
+            'modules/tableResizing': TableResizing,
+            'modules/tableContextMenu': TableContextMenu,
+            'modules/imageUpload': ImageUpload,
+            'modules/imageCursor': ImageCursor,
             'modules/mentions': MentionsModule,
 
             'themes/basic': BaseTheme

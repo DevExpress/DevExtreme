@@ -1,244 +1,358 @@
 import DOMComponent from '../core/dom_component';
 
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    event
+    DxEvent,
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxDraggable, {
     DraggableBase,
-    DraggableBaseOptions
+    DraggableBaseOptions,
 } from './draggable';
 
+import {
+    DragHighlight,
+    Orientation,
+} from '../common';
+
+export {
+    DragHighlight,
+    Orientation,
+};
+
+/** @public */
+export interface AddEvent {
+    readonly component: dxSortable;
+    readonly element: DxElement;
+    readonly model?: any;
+    readonly event: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
+    readonly itemData?: any;
+    readonly itemElement: DxElement;
+    readonly fromIndex: number;
+    readonly toIndex: number;
+    readonly fromComponent: dxSortable | dxDraggable;
+    readonly toComponent: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+    readonly dropInsideItem: boolean;
+}
+
+/** @public */
+export type DisposingEvent = EventInfo<dxSortable>;
+
+/** @public */
+export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    readonly itemData?: any;
+    readonly itemElement: DxElement;
+    readonly fromIndex?: number;
+    readonly toIndex?: number;
+    readonly fromComponent?: dxSortable | dxDraggable;
+    readonly toComponent?: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+    readonly dropInsideItem?: boolean;
+};
+
+/** @public */
+export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    readonly itemData?: any;
+    readonly itemElement: DxElement;
+    readonly fromIndex: number;
+    readonly toIndex: number;
+    readonly fromComponent: dxSortable | dxDraggable;
+    readonly toComponent: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+    readonly dropInsideItem: boolean;
+};
+
+/** @public */
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    readonly itemData?: any;
+    readonly itemElement: DxElement;
+    readonly fromIndex: number;
+    readonly toIndex: number;
+    readonly fromComponent: dxSortable | dxDraggable;
+    readonly toComponent: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+    readonly dropInsideItem: boolean;
+};
+
+/** @public */
+export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    itemData?: any;
+    readonly itemElement: DxElement;
+    readonly fromIndex: number;
+    readonly fromData?: any;
+};
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxSortable>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxSortable> & ChangedOptionInfo;
+
+/** @public */
+export type RemoveEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    readonly itemData?: any;
+    readonly itemElement: DxElement;
+    readonly fromIndex: number;
+    readonly toIndex: number;
+    readonly fromComponent: dxSortable | dxDraggable;
+    readonly toComponent: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+};
+
+/** @public */
+export type ReorderEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    readonly itemData?: any;
+    readonly itemElement: DxElement;
+    readonly fromIndex: number;
+    readonly toIndex: number;
+    readonly fromComponent: dxSortable | dxDraggable;
+    readonly toComponent: dxSortable | dxDraggable;
+    readonly fromData?: any;
+    readonly toData?: any;
+    readonly dropInsideItem: boolean;
+    promise?: PromiseLike<void>;
+};
+
+/** @public */
+export interface DragTemplateData {
+    readonly itemData?: any;
+    readonly itemElement: DxElement;
+    readonly fromIndex: number;
+}
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowDropInsideItem?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     allowReordering?: boolean;
     /**
      * @docid
      * @type_function_param1 dragInfo:object
-     * @type_function_param1_field1 itemData:any
-     * @type_function_param1_field2 itemElement:dxElement
-     * @type_function_param1_field3 fromIndex:number
-     * @type_function_param2 containerElement:dxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: dxElement, fromIndex?: number }, containerElement: dxElement) => string | Element | JQuery);
+    dragTemplate?: template | ((dragInfo: DragTemplateData, containerElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
-     * @type Enums.DropFeedbackMode
      * @default "push"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dropFeedbackMode?: 'push' | 'indicate';
+    dropFeedbackMode?: DragHighlight;
     /**
      * @docid
      * @default "> *"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     filter?: string;
     /**
      * @docid
-     * @type Enums.Orientation
      * @default "vertical"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemOrientation?: 'horizontal' | 'vertical';
+    itemOrientation?: Orientation;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     moveItemOnDrop?: boolean;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 itemData:any
-     * @type_function_param1_field6 itemElement:dxElement
-     * @type_function_param1_field7 fromIndex:number
-     * @type_function_param1_field8 toIndex:number
-     * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
-     * @type_function_param1_field11 fromData:any
-     * @type_function_param1_field12 toData:any
-     * @type_function_param1_field13 dropInsideItem:boolean
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onAdd?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+    onAdd?: ((e: AddEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 cancel:boolean
-     * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
-     * @type_function_param1_field8 fromIndex:number
-     * @type_function_param1_field9 toIndex:number
-     * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-     * @type_function_param1_field12 fromData:any
-     * @type_function_param1_field13 toData:any
-     * @type_function_param1_field14 dropInsideItem:boolean
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragChange?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+    onDragChange?: ((e: DragChangeEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 cancel:boolean
-     * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
-     * @type_function_param1_field8 fromIndex:number
-     * @type_function_param1_field9 toIndex:number
-     * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-     * @type_function_param1_field12 fromData:any
-     * @type_function_param1_field13 toData:any
-     * @type_function_param1_field14 dropInsideItem:boolean
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragEnd?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+    onDragEnd?: ((e: DragEndEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 cancel:boolean
-     * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
-     * @type_function_param1_field8 fromIndex:number
-     * @type_function_param1_field9 toIndex:number
-     * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-     * @type_function_param1_field12 fromData:any
-     * @type_function_param1_field13 toData:any
-     * @type_function_param1_field14 dropInsideItem:boolean
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragMove?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
+    onDragMove?: ((e: DragMoveEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 cancel:boolean
-     * @type_function_param1_field6 itemData:any
-     * @type_function_param1_field7 itemElement:dxElement
-     * @type_function_param1_field8 fromIndex:number
-     * @type_function_param1_field9 fromData:any
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onDragStart?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, fromData?: any }) => any);
+    onDragStart?: ((e: DragStartEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 itemData:any
-     * @type_function_param1_field6 itemElement:dxElement
-     * @type_function_param1_field7 fromIndex:number
-     * @type_function_param1_field8 toIndex:number
-     * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
-     * @type_function_param1_field11 fromData:any
-     * @type_function_param1_field12 toData:any
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRemove?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
+    onRemove?: ((e: RemoveEvent) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 itemData:any
-     * @type_function_param1_field6 itemElement:dxElement
-     * @type_function_param1_field7 fromIndex:number
-     * @type_function_param1_field8 toIndex:number
-     * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
-     * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
-     * @type_function_param1_field11 fromData:any
-     * @type_function_param1_field12 toData:any
-     * @type_function_param1_field13 dropInsideItem:boolean
-     * @type_function_param1_field14 promise:Promise<void>
+     * @type_function_param1_field component:dxSortable
+     * @type_function_param1_field event:event
+     * @type_function_param1_field promise:Promise<void>
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onReorder?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any);
+    onReorder?: ((e: ReorderEvent) => void);
 }
 /**
  * @docid
  * @inherits DraggableBase
  * @hasTranscludedContent
- * @module ui/sortable
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxSortable extends DOMComponent implements DraggableBase {
-    constructor(element: Element, options?: dxSortableOptions)
-    constructor(element: JQuery, options?: dxSortableOptions)
+export default class dxSortable extends DOMComponent<dxSortableOptions> implements DraggableBase {
     /**
      * @docid
      * @publicName update()
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     update(): void;
 }
 
-declare global {
-interface JQuery {
-    dxSortable(): JQuery;
-    dxSortable(options: "instance"): dxSortable;
-    dxSortable(options: string): any;
-    dxSortable(options: string, ...params: any[]): any;
-    dxSortable(options: dxSortableOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxSortableOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxSortableOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxSortableOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onPlaceholderPrepared'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxSortableOptions.onAdd
+ * @type_function_param1 e:{ui/sortable:AddEvent}
+ */
+onAdd?: ((e: AddEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onDisposing
+ * @type_function_param1 e:{ui/sortable:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onDragChange
+ * @type_function_param1 e:{ui/sortable:DragChangeEvent}
+ */
+onDragChange?: ((e: DragChangeEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onDragEnd
+ * @type_function_param1 e:{ui/sortable:DragEndEvent}
+ */
+onDragEnd?: ((e: DragEndEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onDragMove
+ * @type_function_param1 e:{ui/sortable:DragMoveEvent}
+ */
+onDragMove?: ((e: DragMoveEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onDragStart
+ * @type_function_param1 e:{ui/sortable:DragStartEvent}
+ */
+onDragStart?: ((e: DragStartEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onInitialized
+ * @type_function_param1 e:{ui/sortable:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onOptionChanged
+ * @type_function_param1 e:{ui/sortable:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onRemove
+ * @type_function_param1 e:{ui/sortable:RemoveEvent}
+ */
+onRemove?: ((e: RemoveEvent) => void);
+/**
+ * @skip
+ * @docid dxSortableOptions.onReorder
+ * @type_function_param1 e:{ui/sortable:ReorderEvent}
+ */
+onReorder?: ((e: ReorderEvent) => void);
+};
+///#ENDDEBUG

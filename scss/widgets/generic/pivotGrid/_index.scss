@@ -19,6 +19,7 @@
   $header-filter-color-empty: $header-filter-color-empty,
   $pivotgrid-area-background: $pivotgrid-area-background,
   $pivotgrid-common-top-bottom-padding: $pivotgrid-common-top-bottom-padding,
+  $pivotgrid-header-top-bottom-padding: $pivotgrid-header-top-bottom-padding,
   $pivotgrid-field-indicators-offset: $pivotgrid-field-indicators-offset,
   $pivotgrid-indicators-line-height: $pivotgrid-indicators-line-height,
   $pivotgrid-totalcolor: $pivotgrid-totalcolor,
@@ -33,6 +34,8 @@
   $pivotgrid-area-data-image: $pivotgrid-area-data-image,
   $pivotgrid-dimension-image: $pivotgrid-dimension-image,
   $pivotgrid-hierarchy-image: $pivotgrid-hierarchy-image,
+  $pivotgrid-empty-area-text-padding: $pivotgrid-empty-area-text-padding,
+  $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
 );
 
 // adduse
@@ -52,10 +55,6 @@
     .dx-pivotgrid-toolbar {
       .dx-button-content {
         padding: 5px;
-      }
-
-      .dx-button {
-        margin-top: 10px;
       }
     }
   }
@@ -86,12 +85,6 @@
     td.dx-white-space-column {
       width: $pivotgrid-empty-column-width;
       min-width: $pivotgrid-empty-column-width;
-    }
-  }
-
-  .dx-ie {
-    .dx-pivotgrid-fields-area {
-      @include dx-base-typography();
     }
   }
 }

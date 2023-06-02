@@ -1,26 +1,13 @@
 // eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
 import coreLocalization from '../core';
+import { enCldr } from '../cldr-data/en';
+import { supplementalCldr } from '../cldr-data/supplemental';
+
 
 if(Globalize && Globalize.load) {
-    const likelySubtags = {
-        'supplemental': {
-            'version': {
-                '_cldrVersion': '28',
-                '_unicodeVersion': '8.0.0',
-                '_number': '$Revision: 11965 $'
-            },
-            'likelySubtags': {
-                'en': 'en-Latn-US',
-                'de': 'de-Latn-DE',
-                'ru': 'ru-Cyrl-RU',
-                'ja': 'ja-Jpan-JP'
-            }
-        }
-    };
-
     if(!Globalize.locale()) {
-        Globalize.load(likelySubtags);
+        Globalize.load(enCldr, supplementalCldr);
         Globalize.locale('en');
     }
 

@@ -1,10 +1,10 @@
 import $ from 'jquery';
 const { test } = QUnit;
-import 'common.css!';
 import 'ui/diagram';
 
 import { DiagramCommand } from 'devexpress-diagram';
 import { Consts, getContextMenuInstance, findContextMenuItem } from '../../../helpers/diagramHelpers.js';
+import { getActiveElement } from '../../../helpers/shadowDom.js';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -66,11 +66,11 @@ QUnit.module('Context Menu', {
         this.instance.option('contextMenu.commands', ['selectAll']);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
         const contextMenu = getContextMenuInstance(this.$element);
-        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+        assert.notEqual(getActiveElement(), this.instance._diagramInstance.render.input.inputElement);
         contextMenu.show();
         findContextMenuItem(this.$element, 'select all').trigger('dxclick');
         this.clock.tick(200);
-        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+        assert.equal(getActiveElement(), this.instance._diagramInstance.render.input.inputElement);
     });
     test('should execute custom commands on click', function(assert) {
         this.instance.option('contextMenu.commands', [

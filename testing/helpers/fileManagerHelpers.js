@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import devices from 'core/devices';
+import { isDefined } from 'core/utils/type.js';
 import { deserializeDate } from 'core/utils/date_serialization';
 import FileSystemItem from 'file_management/file_system_item';
 
@@ -13,6 +14,7 @@ export const Consts = {
     GENERAL_TOOLBAR_CLASS: 'dx-filemanager-general-toolbar',
     FILE_TOOLBAR_CLASS: 'dx-filemanager-file-toolbar',
     CONTAINER_CLASS: 'dx-filemanager-container',
+    DRAWER_WRAPPER_CLASS: 'dx-drawer-wrapper',
     DRAWER_PANEL_CONTENT_CLASS: 'dx-drawer-panel-content',
     DRAWER_CONTENT_CLASS: 'dx-drawer-content',
     DRAWER_MODE_SHRINK: 'dx-drawer-shrink',
@@ -39,31 +41,47 @@ export const Consts = {
     FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
     FOLDERS_TREE_VIEW_ITEM_CLASS: 'dx-treeview-item',
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: 'dx-treeview-toggle-item-visibility',
+    FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened',
     BREADCRUMBS_CLASS: 'dx-filemanager-breadcrumbs',
     BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: 'dx-filemanager-breadcrumbs-parent-folder-item',
     BREADCRUMBS_SEPARATOR_ITEM_CLASS: 'dx-filemanager-breadcrumbs-separator-item',
     ITEMS_PANEL_CLASS: 'dx-filemanager-items-panel',
-    ITEMS_GRID_VIEW_CLASS: 'dx-filemanager-files-view',
     FOCUSED_ITEM_CLASS: 'dx-filemanager-focused-item',
-    INACTIVE_AREA_CLASS: 'dx-filemanager-inactive-area',
     CUSTOM_THUMBNAIL_CLASS: 'dx-filemanager-item-custom-thumbnail',
-    TOOLBAR_SEPARATOR_ITEM: 'dx-filemanager-toolbar-separator-item',
+    TOOLBAR_SEPARATOR_ITEM_CLASS: 'dx-filemanager-toolbar-separator-item',
+    TOOLBAR_VIEWMODE_ITEM_CLASS: 'dx-filemanager-toolbar-viewmode-item',
+    TOOLBAR_HAS_LARGE_ICON_CLASS: 'dx-filemanager-toolbar-has-large-icon',
+    TOOLBAR_ITEM_CLASS: 'dx-toolbar-item',
+    TOOLBAR_ITEM_WITH_HIDDEN_TEXT_CLASS: 'dx-toolbar-text-auto-hide',
+    TOOLBAR_REFRESH_ITEM_ICON_CLASS: 'dx-filemanager-i',
+    TOOLBAR_REFRESH_ICON_MAP: {
+        default: 'dx-filemanager-i dx-filemanager-i-refresh',
+        progress: 'dx-filemanager-i dx-filemanager-i-progress',
+        success: 'dx-filemanager-i dx-filemanager-i-done',
+        error: 'dx-filemanager-i dx-filemanager-i-danger'
+    },
     DETAILS_VIEW_CLASS: 'dx-filemanager-details',
     DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
     FOLDER_CHOOSER_DIALOG_CLASS: 'dx-filemanager-dialog-folder-chooser-popup',
+    NAME_EDITOR_DIALOG_CLASS: 'dx-filemanager-dialog-name-editor-popup',
+    DELETE_ITEM_DIALOG_CLASS: 'dx-filemanager-dialog-delete-item-popup',
+    NOTIFICATION_POPUP_CLASS: 'dx-filemanager-notification-popup',
     POPUP_NORMAL_CLASS: 'dx-popup-normal',
     POPUP_BOTTOM_CLASS: 'dx-popup-bottom',
     BUTTON_CLASS: 'dx-button',
     BUTTON_HAS_TEXT_CLASS: 'dx-button-has-text',
     BUTTON_TEXT_CLASS: 'dx-button-text',
+    BUTTON_OUTLINED_CLASS: 'dx-button-mode-outlined',
     DROP_DOWN_BUTTON_CLASS: 'dx-dropdownbutton',
     DROP_DOWN_BUTTON_ACTION_CLASS: 'dx-dropdownbutton-action',
     TEXT_EDITOR_INPUT_CLASS: 'dx-texteditor-input',
     MENU_ITEM_WITH_TEXT_CLASS: 'dx-menu-item-has-text',
+    MENU_ITEM_SELECTED_CLASS: 'dx-menu-item-selected',
     CONTEXT_MENU_CLASS: 'dx-context-menu',
     MENU_ITEM_CLASS: 'dx-menu-item',
     MENU_ITEM_WITH_SUBMENU_CLASS: 'dx-menu-item-has-submenu',
     SUBMENU_CLASS: 'dx-submenu',
+    CONTEXT_MENU_SEPARATOR_CLASS: 'dx-menu-separator',
     SELECTION_CLASS: 'dx-selection',
     ITEM_SELECTED_CLASS: 'dx-item-selected',
     FOCUSED_ROW_CLASS: 'dx-row-focused',
@@ -71,6 +89,7 @@ export const Consts = {
     SPLITTER_CLASS: 'dx-splitter',
     FOCUSED_STATE_CLASS: 'dx-state-focused',
     DISABLED_STATE_CLASS: 'dx-state-disabled',
+    READONLY_STATE_CLASS: 'dx-state-readonly',
     UPLOAD_ICON_CLASS: 'dx-icon-upload',
     DROPDOWN_MENU_BUTTON_CLASS: 'dx-dropdownmenu-button',
     DROPDOWN_MENU_LIST_CLASS: 'dx-dropdownmenu-list',
@@ -80,7 +99,8 @@ export const Consts = {
     SCROLLABLE_CONTAINER_ClASS: 'dx-scrollable-container',
     EDITING_CONTAINER: 'dx-filemanager-editing-container',
     FILE_UPLOADER_INPUT: 'dx-fileuploader-input',
-    FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS: 'dx-filemanager-fileuploader-dropzone-placeholder'
+    FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS: 'dx-filemanager-fileuploader-dropzone-placeholder',
+    OVERLAY_SHADER_CLASS: 'dx-overlay-shader'
 };
 const showMoreButtonText = '\u22EE';
 
@@ -112,7 +132,7 @@ export class FileManagerWrapper {
 
     getFolderNodes(inDialog) {
         if(inDialog) {
-            return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
+            return this.getFolderChooserDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
         }
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
     }
@@ -126,22 +146,31 @@ export class FileManagerWrapper {
         return text.replace(showMoreButtonText, '');
     }
 
-    getFolderNodeByText(text, inDialog) {
-        return this.getFolderNodes(inDialog).filter(function(index, node) {
-            const content = $(node).text();
-            return content === text;
-        }).first();
-    }
-
     getFolderToggles(inDialog) {
         if(inDialog) {
-            return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
+            return this.getFolderChooserDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
         }
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
     }
 
     getFolderToggle(index, inDialog) {
         return this.getFolderToggles(inDialog).eq(index);
+    }
+
+    isFolderNodeToggleOpened(text, inDialog) {
+        let result = null;
+        const targetNode = this.getFolderNodes(inDialog).filter(function() { return $(this).text() === text; }).eq(0).parent();
+        if(targetNode.length) {
+            const itemToggle = targetNode.children(`.${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
+            if(itemToggle.length) {
+                result = itemToggle.hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS);
+            }
+        }
+        return result;
+    }
+
+    getTreeViewScrollableContainer() {
+        return this.getDirsTree().find(`.${Consts.SCROLLABLE_CONTAINER_ClASS}`);
     }
 
     getFocusedItemText() {
@@ -177,8 +206,22 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS}`);
     }
 
+    getGeneralToolbar() {
+        return this.getToolbar().children().first();
+    }
+
+    getFileSelectionToolbar() {
+        return this.getToolbar().children().first().next();
+    }
+
+    getAllItemsOfToolbar(isFileSelection) {
+        const toolbarElement = isFileSelection ? this.getFileSelectionToolbar() : this.getGeneralToolbar();
+        return toolbarElement.find(`.${Consts.TOOLBAR_ITEM_CLASS}`);
+    }
+
     getToolbarElements() {
-        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS}:visible .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS} .${Consts.DROP_DOWN_BUTTON_CLASS}`)
+            .filter(':visible');
     }
 
     getToolbarElementsInSection(sectionName) {
@@ -187,21 +230,33 @@ export class FileManagerWrapper {
     }
 
     getGeneralToolbarElements() {
-        const _$generalToolbar = this.getToolbar().children().first();
-        return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+        return this.getGeneralToolbar().find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getFileSelectionToolbarElements() {
-        const _$fileSelectionToolbar = this.getToolbar().children().first().next();
-        return _$fileSelectionToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+        return this.getFileSelectionToolbar().find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getToolbarButton(text) {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('${text}')`);
     }
 
+    getToolbarRefreshButton(isFileSelectionToolbar) {
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}[title='Refresh']`).eq(isFileSelectionToolbar ? 1 : 0);
+    }
+
+    getToolbarRefreshButtonState(isFileSelectionToolbar) {
+        const refreshIcon = this.getToolbarRefreshButton(isFileSelectionToolbar).find(`.${Consts.TOOLBAR_REFRESH_ITEM_ICON_CLASS}`);
+        return {
+            isDefault: refreshIcon.hasClass(Consts.TOOLBAR_REFRESH_ICON_MAP.default),
+            isProgress: refreshIcon.hasClass(Consts.TOOLBAR_REFRESH_ICON_MAP.progress),
+            isSuccess: refreshIcon.hasClass(Consts.TOOLBAR_REFRESH_ICON_MAP.success),
+            isError: refreshIcon.hasClass(Consts.TOOLBAR_REFRESH_ICON_MAP.error)
+        };
+    }
+
     getToolbarSeparators() {
-        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM}:visible`);
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM_CLASS}:visible`);
     }
 
     getToolbarDropDownButton() {
@@ -213,11 +268,11 @@ export class FileManagerWrapper {
     }
 
     getToolbarDropDownMenuItem(childIndex) {
-        return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
+        return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`).eq(childIndex);
     }
 
     getToolbarViewSwitcherListItem(childIndex) {
-        return $(`.${Consts.POPUP_NORMAL_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
+        return $(`.${Consts.POPUP_NORMAL_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`).eq(childIndex);
     }
 
     getToolbarNavigationPaneToggleButton() {
@@ -229,7 +284,7 @@ export class FileManagerWrapper {
     }
 
     getDetailsItemList() {
-        return this._$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`);
+        return this.getItemsView();
     }
 
     getThumbnailsViewPort() {
@@ -358,6 +413,10 @@ export class FileManagerWrapper {
             .replace(showMoreButtonText, '');
     }
 
+    getDetailsOverlayShader() {
+        return this.getDetailsItemList().find(`.${Consts.OVERLAY_SHADER_CLASS}`);
+    }
+
     getSelectAllCheckBox() {
         const $itemList = this.getDetailsItemList();
         return $itemList.find('.dx-header-row > td.dx-command-select .dx-select-checkbox');
@@ -386,12 +445,14 @@ export class FileManagerWrapper {
         return this.getRowInDetailsView(index).is(`.${Consts.FOCUSED_ROW_CLASS}`);
     }
 
+    getContextMenuItemsWithSeparators() {
+        return $(`.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}, .${Consts.CONTEXT_MENU_CLASS} .${Consts.CONTEXT_MENU_SEPARATOR_CLASS}`).filter(':visible');
+    }
+
     getContextMenuItems(visible) {
-        let selector = `.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}`;
-        if(visible) {
-            selector += ':visible';
-        }
-        return $(selector);
+        const selector = `.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}`;
+
+        return visible ? $(selector).filter(':visible') : $(selector);
     }
 
     getContextMenuItem(text) {
@@ -406,8 +467,12 @@ export class FileManagerWrapper {
         return $container.find(`.${Consts.FILE_ACTION_BUTTON_CLASS} .${Consts.BUTTON_CLASS}`);
     }
 
-    getDrawerPanelContent() {
+    getNavPaneDrawerPanelContent() {
         return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
+    }
+
+    getProgressPaneDrawerPanelContent() {
+        return this._$element.find(`.${Consts.NOTIFICATION_DRAWER_CLASS} > .${Consts.DRAWER_WRAPPER_CLASS} > .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
     }
 
     getProgressDrawer() {
@@ -420,7 +485,7 @@ export class FileManagerWrapper {
 
     moveSplitter(delta, pointerType) {
         const $splitter = this.getSplitter();
-        const $drawerContent = this.getDrawerPanelContent();
+        const $drawerContent = this.getNavPaneDrawerPanelContent();
         if(!pointerType) {
             pointerType = 'mouse';
         }
@@ -443,12 +508,29 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.SPLITTER_CLASS}`);
     }
 
+    getSplitterPosition() {
+        const $splitterWrapper = this._$element.find(`.${Consts.SPLITTER_WRAPPER_CLASS}`);
+        return $splitterWrapper.get(0).offsetLeft + parseFloat(this.getSplitter().css('margin-left'));
+    }
+
+    getNotificationPopup() {
+        return $(`.${Consts.NOTIFICATION_POPUP_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+    }
+
     getFolderChooserDialog() {
-        return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+        return $(`.${Consts.FOLDER_CHOOSER_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
+    }
+
+    getNameEditorDialog() {
+        return $(`.${Consts.NAME_EDITOR_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
+    }
+
+    getDeleteItemDialog() {
+        return $(`.${Consts.DELETE_ITEM_DIALOG_CLASS} .${Consts.POPUP_NORMAL_CLASS}`).filter(':visible');
     }
 
     getDialogTextInput() {
-        return $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+        return this.getNameEditorDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
     }
 
     getDialogButton(text) {
@@ -468,6 +550,30 @@ export class FileManagerWrapper {
 
     getUploaderDropZonePlaceholder() {
         return this._$element.find(`.${Consts.FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS}`);
+    }
+
+    triggerDragEvent($element, eventType, elementOffset) {
+        const offsetValue = eventType === 'dragenter' ? 1 : -1;
+        $element = $($element);
+        if(!isDefined(elementOffset)) {
+            elementOffset = { top: offsetValue, left: offsetValue };
+        } else {
+            elementOffset.top = !isDefined(elementOffset.top) ? offsetValue : elementOffset.top;
+            elementOffset.left = !isDefined(elementOffset.left) ? offsetValue : elementOffset.left;
+        }
+        $element.trigger($.Event(eventType, {
+            clientX: $element.offset().left + elementOffset.left - this.getDocumentScrollLeft(),
+            clientY: $element.offset().top + elementOffset.top - this.getDocumentScrollTop(),
+            originalEvent: $.Event(eventType, { dataTransfer: { types: ['Files'] } })
+        }));
+    }
+
+    getDocumentScrollTop() {
+        return document.documentElement.scrollTop || document.body.scrollTop;
+    }
+
+    getDocumentScrollLeft() {
+        return document.documentElement.scrollLeft || document.body.scrollLeft;
     }
 
 }
@@ -650,22 +756,27 @@ export const createTestFileSystem = () => {
         {
             name: 'Folder 1',
             isDirectory: true,
+            hasSubDirectories: true,
             items: [
                 {
                     name: 'Folder 1.1',
                     isDirectory: true,
+                    hasSubDirectories: true,
                     items: [
                         {
                             name: 'Folder 1.1.1',
                             isDirectory: true,
+                            hasSubDirectories: true,
                             items: [
                                 {
                                     name: 'Folder 1.1.1.1',
                                     isDirectory: true,
+                                    hasSubDirectories: true,
                                     items: [
                                         {
                                             name: 'Folder 1.1.1.1.1',
                                             isDirectory: true,
+                                            hasSubDirectories: false,
                                             items: [
                                                 {
                                                     name: 'Special deep file.txt',
@@ -697,7 +808,8 @@ export const createTestFileSystem = () => {
                 },
                 {
                     name: 'Folder 1.2',
-                    isDirectory: true
+                    isDirectory: true,
+                    hasSubDirectories: false
                 },
                 {
                     name: 'File 1-1.txt',
@@ -711,6 +823,7 @@ export const createTestFileSystem = () => {
         {
             name: 'Folder 2',
             isDirectory: true,
+            hasSubDirectories: false,
             items: [
                 {
                     name: 'File 2-1.jpg',
@@ -719,7 +832,8 @@ export const createTestFileSystem = () => {
         },
         {
             name: 'Folder 3',
-            isDirectory: true
+            isDirectory: true,
+            hasSubDirectories: false
         },
         {
             name: 'File 1.txt',
@@ -736,24 +850,32 @@ export const createTestFileSystem = () => {
     ];
 };
 
-export const createHugeFileSystem = () => {
+export const createHugeFileSystem = (rootFilesCount = 10, rootDirsCount = 2, ...filesCount) => {
     const result = [];
-    for(let i = 0; i < 10; i++) {
-        result.push({
+    const getFiles = amount =>
+        [...new Array(amount).keys()].map(i => ({
             name: `File ${i}.txt`,
             isDirectory: false
+        }));
+    for(let i = 0; i < rootDirsCount; i++) {
+        result.push({
+            name: `Folder ${i + 1}`,
+            isDirectory: true,
+            hasDubDirectories: false,
+            items: getFiles((filesCount && filesCount[i]) || 100)
         });
     }
+    result.push(...getFiles(rootFilesCount));
     return result;
 };
 
-export const createUploaderFiles = count => {
+export const createUploaderFiles = (count, size) => {
     const result = [];
 
     for(let i = 0; i < count; i++) {
-        const size = 300000 + i * 200000;
+        const fileSize = (size !== null && size !== undefined) ? size : (300000 + i * 200000);
         const fileName = `Upload file ${i}.txt`;
-        const content = generateString(size, i.toString());
+        const content = generateString(fileSize, i.toString());
 
         const file = createFileObject(fileName, content);
         result.push(file);
@@ -835,14 +957,20 @@ export const createUploadInfo = (file, chunkIndex, customData, chunkSize) => {
     chunkSize = chunkSize || 200000;
 
     const bytesUploaded = chunkIndex * chunkSize;
-    const chunkCount = Math.ceil(file.size / chunkSize);
+    const chunkCount = getFileChunkCount(file, chunkSize);
     const chunkBlob = file.slice(bytesUploaded, Math.min(file.size, bytesUploaded + chunkSize));
 
     return { bytesUploaded, chunkCount, customData, chunkBlob, chunkIndex };
 };
 
+export const getFileChunkCount = (file, chunkSize) => {
+    return file.size === 0 ? 1 : Math.ceil(file.size / chunkSize);
+};
+
 export const stubFileReader = object => {
-    sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+    if(!(object['_createFileReader'].restore && object['_createFileReader'].restore.sinon)) {
+        sinon.stub(object, '_createFileReader').callsFake(() => new FileReaderMock());
+    }
 };
 
 export const isDesktopDevice = () => {
@@ -850,3 +978,21 @@ export const isDesktopDevice = () => {
 };
 
 export const getDropFileEvent = file => $.Event($.Event('drop', { dataTransfer: { files: [file] } }));
+
+export const createEditingEvents = () => {
+    return {
+        onDirectoryCreating: sinon.spy(),
+        onDirectoryCreated: sinon.spy(),
+        onItemRenaming: sinon.spy(),
+        onItemRenamed: sinon.spy(),
+        onItemDeleting: sinon.spy(),
+        onItemDeleted: sinon.spy(),
+        onItemMoving: sinon.spy(),
+        onItemMoved: sinon.spy(),
+        onItemCopying: sinon.spy(),
+        onItemCopied: sinon.spy(),
+        onFileUploading: sinon.spy(),
+        onFileUploaded: sinon.spy(),
+        onItemDownloading: sinon.spy()
+    };
+};

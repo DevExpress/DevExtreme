@@ -1,6 +1,6 @@
 import { createWrapper, initTestMarkup, CLASSES } from '../../helpers/scheduler/helpers.js';
+import { dateToMilliseconds as toMs } from 'core/utils/date';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
@@ -290,5 +290,81 @@ module('Current Time Cell Indication Updating', {
             assert.equal(currentTimeCells.length, 1, 'Correct number of current time cells');
             assert.ok(currentCell.hasClass(HEADER_PANEL_CURRENT_TIME_CELL_CLASS), 'The current time cell has current-time class');
         });
+    });
+});
+
+module('Integration with Virtual Scrolling', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers(NOW.getTime());
+    },
+    afterEach: function() {
+        this.clock.restore();
+    },
+}, () => {
+    test('Scheduler should display correct number of indicators', function(assert) {
+        const scheduler = createWrapper({
+            currentDate: NOW,
+            views: ['timelineDay', 'timelineWeek', 'timelineMonth'],
+            currentView: 'timelineDay',
+            startDayHour: 11,
+            endDayHour: 13,
+            height: 250,
+            groups: ['resourceId0'],
+            crossScrollingEnabled: true,
+            resources: [{
+                fieldExpr: 'resourceId0',
+                dataSource: [
+                    { id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 },
+                    { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 },
+                ],
+            }],
+            scrolling: { mode: 'virtual' },
+        });
+
+        const actualNumberOfIndicators = scheduler.workSpace.getCurrentTimeIndicatorCount();
+
+        assert.equal(actualNumberOfIndicators, 1, 'Correct number of indicators');
+    });
+});
+
+module('Common cases', () => {
+    test('Current time indicator calculates position correctly with workWeek view (T750252)', function(assert) {
+        const clock = sinon.useFakeTimers((new Date(2021, 0, 20, 20)).getTime());
+
+        const scheduler = createWrapper({
+            views: [{
+                name: '2 Work Weeks',
+                type: 'workWeek',
+                intervalCount: 2,
+                startDate: new Date(Date.now() - 5 * toMs('day')),
+            }],
+            currentView: 'workWeek',
+            currentDate: new Date(),
+            height: 580,
+        });
+
+        const $dateTimeIndicator = scheduler.workSpace.getCurrentTimeIndicator()[0];
+        const position = { top: $dateTimeIndicator.style.top, left: $dateTimeIndicator.style.left };
+
+        assert.notDeepEqual(position, { left: 0, top: 0 }, 'Current time indicator positioned correctly');
+
+        clock.restore();
+    });
+
+    test('Current time indicator should be visible in period between 23.59 and 24.00', function(assert) {
+        const clock = sinon.useFakeTimers((new Date(2021, 0, 20, 23, 59, 58)).getTime());
+
+        const scheduler = createWrapper({
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(),
+            height: 580,
+        });
+
+        const currentTimeIndicator = scheduler.workSpace.getCurrentTimeIndicator();
+
+        assert.equal(currentTimeIndicator.length, 1, 'Current time indicator is visible');
+
+        clock.restore();
     });
 });

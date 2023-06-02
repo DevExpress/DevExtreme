@@ -1,9 +1,8 @@
 import errors from '../../core/errors';
 import { each } from '../../core/utils/iterator';
-import { inArray } from '../../core/utils/array';
 import { RRule, RRuleSet } from 'rrule';
 import dateUtils from '../../core/utils/date';
-import timeZoneUtils from './utils.timeZone.js';
+import timeZoneUtils from './utils.timeZone';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -11,8 +10,11 @@ const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymont
 const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
 const days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
 const loggedWarnings = [];
+const MS_IN_HOUR = 1000 * 60 * 60;
+const MS_IN_DAY = MS_IN_HOUR * 24;
 
 let recurrence = null;
+
 export function getRecurrenceProcessor() {
     if(!recurrence) {
         recurrence = new RecurrenceProcessor();
@@ -28,36 +30,82 @@ class RecurrenceProcessor {
     }
 
     generateDates(options) {
-        const result = [];
         const recurrenceRule = this.evalRecurrenceRule(options.rule);
         const rule = recurrenceRule.rule;
 
         if(!recurrenceRule.isValid || !rule.freq) {
-            return result;
+            return [];
         }
 
-        const startDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.start);
-        const endDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.end);
-        const minDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.min);
-        const maxDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.max);
+        const rruleIntervalParams = this._createRruleIntervalParams(options);
 
-        const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
+        this._initializeRRule(options,
+            rruleIntervalParams.startIntervalDate,
+            rule.until);
 
-        this._initializeRRule(options, startDateUtc);
+        return this.rRuleSet.between(
+            rruleIntervalParams.minViewDate,
+            rruleIntervalParams.maxViewDate,
+            true
+        )
+            .filter((date) => date.getTime() + rruleIntervalParams.appointmentDuration >= rruleIntervalParams.minViewTime)
+            .map((date) => this._convertRruleResult(rruleIntervalParams, options, date));
+    }
 
-        const minTime = minDateUtc.getTime();
-        const leftBorder = this._getLeftBorder(options, minDateUtc, duration);
+    _createRruleIntervalParams(options) {
+        const { start, min, max, appointmentTimezoneOffset } = options;
+        // NOTE: Get local timezone offset of each Rrule date params.
+        const clientOffsets = {
+            startDate: timeZoneUtils.getClientTimezoneOffset(start),
+            minViewDate: timeZoneUtils.getClientTimezoneOffset(min),
+            maxViewDate: timeZoneUtils.getClientTimezoneOffset(max),
+        };
+        const duration = options.end ? options.end.getTime() - options.start.getTime() : 0;
 
-        this.rRuleSet.between(leftBorder, maxDateUtc, true).forEach(date => {
-            const endAppointmentTime = date.getTime() + duration;
+        // NOTE: Remove local timezone offsets from Rrule date params.
+        const startIntervalDate = timeZoneUtils.setOffsetsToDate(options.start, [-clientOffsets.startDate, appointmentTimezoneOffset]);
+        const minViewTime = options.min.getTime() - clientOffsets.minViewDate + appointmentTimezoneOffset;
+        // NOTE: Shift minViewDate, because recurrent appointment may start before start view date.
+        const minViewDate = new Date(minViewTime - duration);
+        const maxViewDate = timeZoneUtils.setOffsetsToDate(options.max, [-clientOffsets.maxViewDate, appointmentTimezoneOffset]);
 
-            if(endAppointmentTime >= minTime) {
-                const correctDate = timeZoneUtils.createDateFromUTCWithLocalOffset(date);
-                result.push(correctDate);
-            }
-        });
+        // NOTE: Check DST after start date without local timezone offset conversion.
+        const startDateDSTDifferenceMs = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(options.start, startIntervalDate);
+        const switchToSummerTime = startDateDSTDifferenceMs < 0;
 
-        return result;
+        return {
+            startIntervalDate,
+            minViewTime,
+            minViewDate,
+            maxViewDate,
+            startIntervalDateDSTShift: switchToSummerTime ? 0 : startDateDSTDifferenceMs,
+            appointmentDuration: duration,
+        };
+    }
+
+    _convertRruleResult(rruleIntervalParams, options, rruleDate) {
+        const localTimezoneOffset = timeZoneUtils.getClientTimezoneOffset(rruleDate);
+        // NOTE: Workaround for the RRule bug with timezones greater than GMT+12 (e.g. Apia Standard Time GMT+13)
+        // GitHub issue: https://github.com/jakubroztocil/rrule/issues/555
+        const additionalWorkaroundOffsetForRrule =
+            localTimezoneOffset / MS_IN_HOUR <= -13 ? -MS_IN_DAY : 0;
+        const convertedBackDate = timeZoneUtils.setOffsetsToDate(
+            rruleDate, [
+                localTimezoneOffset,
+                additionalWorkaroundOffsetForRrule,
+                -options.appointmentTimezoneOffset,
+                rruleIntervalParams.startIntervalDateDSTShift,
+            ]);
+        const convertedDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(convertedBackDate, rruleDate);
+        const switchToSummerTime = convertedDateDSTShift < 0;
+        const resultDate = timeZoneUtils.setOffsetsToDate(convertedBackDate, [convertedDateDSTShift]);
+        const resultDateDSTShift = timeZoneUtils.getDiffBetweenClientTimezoneOffsets(resultDate, convertedBackDate);
+
+        if(resultDateDSTShift && switchToSummerTime) {
+            return new Date(resultDate.getTime() + resultDateDSTShift);
+        }
+
+        return resultDate;
     }
 
     hasRecurrence(options) {
@@ -93,11 +141,14 @@ class RecurrenceProcessor {
             }
         }
 
-        return result;
+        return result.map(item => {
+            const match = item.match(/[A-Za-z]+/);
+            return !!match && match[0];
+        }).filter(item => !!item);
     }
 
     getAsciiStringByDate(date) {
-        const currentOffset = this._getTimeZoneOffset() * toMs('minute');
+        const currentOffset = date.getTimezoneOffset() * toMs('minute');
         const offsetDate = new Date(date.getTime() + currentOffset);
 
         return offsetDate.getFullYear() + ('0' + (offsetDate.getMonth() + 1)).slice(-2) + ('0' + offsetDate.getDate()).slice(-2) +
@@ -182,7 +233,7 @@ class RecurrenceProcessor {
         return new Date().getTimezoneOffset();
     }
 
-    _initializeRRule(options, startDateUtc) {
+    _initializeRRule(options, startDateUtc, until) {
         const ruleOptions = RRule.parseString(options.rule);
         const firstDayOfWeek = options.firstDayOfWeek;
 
@@ -191,6 +242,11 @@ class RecurrenceProcessor {
         if(!ruleOptions.wkst && firstDayOfWeek) {
             const weekDayNumbers = [6, 0, 1, 2, 3, 4, 5];
             ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
+        }
+
+        if(until) {
+            ruleOptions.until = timeZoneUtils.setOffsetsToDate(until,
+                [-timeZoneUtils.getClientTimezoneOffset(until), options.appointmentTimezoneOffset]);
         }
 
         this._createRRule(ruleOptions);
@@ -206,7 +262,9 @@ class RecurrenceProcessor {
                     date = options.getPostProcessedException(date);
                 }
 
-                const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
+                const utcDate = timeZoneUtils.setOffsetsToDate(date,
+                    [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset]);
+
                 this.rRuleSet.exdate(utcDate);
             });
         }
@@ -215,20 +273,10 @@ class RecurrenceProcessor {
     _createRRule(ruleOptions) {
         this._dispose();
 
-        const rRuleSet = new RRuleSet();
-
-        this.rRuleSet = rRuleSet;
+        this.rRuleSet = new RRuleSet();
         this.rRule = new RRule(ruleOptions);
 
         this.rRuleSet.rrule(this.rRule);
-    }
-
-    _getLeftBorder(options, minDateUtc, appointmentDuration) {
-        if(options.end && !timeZoneUtils.isSameAppointmentDates(options.start, options.end)) {
-            return new Date(minDateUtc.getTime() - appointmentDuration);
-        }
-
-        return minDateUtc;
     }
 
     _parseRecurrenceRule(recurrence) {
@@ -297,7 +345,7 @@ class RecurrenceProcessor {
 class RecurrenceValidator {
     validateRRule(rule, recurrence) {
         if(this._brokenRuleNameExists(rule) ||
-            inArray(rule.freq, freqNames) === -1 ||
+            !freqNames.includes(rule.freq) ||
             this._wrongCountRule(rule) || this._wrongIntervalRule(rule) ||
             this._wrongDayOfWeek(rule) ||
             this._wrongByMonthDayRule(rule) || this._wrongByMonth(rule) ||
@@ -388,7 +436,7 @@ class RecurrenceValidator {
         let brokenRuleExists = false;
 
         each(rule, function(ruleName) {
-            if(inArray(ruleName, ruleNames) === -1) {
+            if(!ruleNames.includes(ruleName)) {
                 brokenRuleExists = true;
                 return false;
             }
@@ -398,7 +446,7 @@ class RecurrenceValidator {
     }
 
     _logBrokenRule(recurrence) {
-        if(inArray(recurrence, loggedWarnings) === -1) {
+        if(!loggedWarnings.includes(recurrence)) {
             errors.log('W0006', recurrence);
             loggedWarnings.push(recurrence);
         }

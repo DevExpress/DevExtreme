@@ -14,13 +14,17 @@ export default {
         const visibleArea = this.getCanvasVisibleArea();
         const minValue = this.from(visibleArea.min + minBarSize);
         const canvasOptions = this._canvasOptions;
+        const startValue = this.fromValue(this.from(visibleArea.min));
+        const endValue = this.fromValue(minValue ?? this.from(visibleArea.max));
 
-        return Math.pow(canvasOptions.base, canvasOptions.rangeMinVisible + this.fromValue(this.from(visibleArea.min)) - this.fromValue(!isDefined(minValue) ? this.from(visibleArea.max) : minValue));
+        const value = Math.abs(startValue - endValue);
+
+        return Math.pow(canvasOptions.base, value);
     },
 
     checkMinBarSize: function(initialValue, minShownValue, stackValue) {
         const canvasOptions = this._canvasOptions;
-        const prevValue = stackValue - initialValue;
+        const prevValue = stackValue ? stackValue - initialValue : 0;
         const baseMethod = this.constructor.prototype.checkMinBarSize;
         let minBarSize;
         let updateValue;

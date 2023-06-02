@@ -1,1 +1,1 @@
-window.jQuery = module.exports = undefined;
+window.jQuery = module.exports = null;

@@ -1,14 +1,17 @@
 import $ from 'jquery';
+import renderer from 'core/renderer';
 import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
 import DefaultAdapter from 'ui/validation/default_adapter';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
+import localization from 'localization';
+import ja from 'localization/messages/ja.json!';
 import { Deferred } from 'core/utils/deferred';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import dxButton from 'ui/button';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -16,13 +19,15 @@ QUnit.testStart(function() {
         '<form id="form">\
         <div id="button"></div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="widthRootStyle"></div>\
         <div id="inkButton"></div>\
             <div data-options="dxTemplate: { name: \'content\' }" data-bind="text: text"></div>\
         </div>\
         </form>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
+    addShadowDomStyles($('#qunit-fixture'));
 
     $('#form').on('submit', function(e) {
         e.preventDefault();
@@ -39,8 +44,6 @@ const BUTTON_OUTLINED_STYLE_CLASS = 'dx-button-mode-outlined';
 const INK_RIPPLE_CLASS = 'dx-inkripple';
 
 QUnit.module('Button', function() {
-    const isRenovation = !!dxButton.IS_RENOVATED_WIDGET;
-
     QUnit.module('options changed callbacks', {
         beforeEach: function() {
             this.element = $('#button').dxButton();
@@ -68,6 +71,38 @@ QUnit.module('Button', function() {
             assert.ok(params, 'Event params should be passed');
             assert.ok(params.event, 'Event should be passed');
             assert.ok(params.validationGroup, 'validationGroup should be passed');
+        });
+
+        QUnit.test('onClick handler should not closure on a first one', function(assert) {
+            this.instance.option('onClick', () => {});
+            this.element.trigger('dxclick');
+
+            const clickHandler = sinon.stub();
+
+            this.instance.option('onClick', clickHandler);
+            this.element.trigger('dxclick');
+
+            assert.ok(clickHandler.calledOnce, 'second handler is called');
+        });
+
+        QUnit.test('onClick should have validationGroup parameter even if validationGroup is inited on another element (T1041957)', function(assert) {
+            const clickHandler = sinon.stub();
+
+            this.instance.option({
+                onClick: clickHandler,
+                validationGroup: 'group'
+            });
+
+            try {
+                ValidationEngine.registerValidatorInGroup('group', sinon.stub());
+
+                this.element.trigger('dxclick');
+
+                const params = clickHandler.getCall(0).args[0];
+                assert.ok(params.validationGroup, 'validationGroup should be passed');
+            } finally {
+                ValidationEngine.initGroups();
+            }
         });
 
         QUnit.test('icon', function(assert) {
@@ -111,17 +146,15 @@ QUnit.module('Button', function() {
             assert.ok(this.element.hasClass('dx-state-disabled'));
         });
 
-        if(!isRenovation) {
-            QUnit.test('_templateData', function(assert) {
-                const template = sinon.stub().returns('TPL');
-                this.instance.option('template', template);
-                this.instance.option('_templateData', { custom: 1 });
-                template.reset();
-                this.instance.repaint();
+        QUnit.test('_templateData', function(assert) {
+            const template = sinon.stub().returns('TPL');
+            this.instance.option('template', template);
+            this.instance.option('_templateData', { custom: 1 });
+            template.reset();
+            this.instance.repaint();
 
-                assert.strictEqual(template.firstCall.args[0].custom, 1, 'custom field is correct');
-            });
-        }
+            assert.strictEqual(template.firstCall.args[0].custom, 1, 'custom field is correct');
+        });
 
         QUnit.test('stylingMode', function(assert) {
             assert.ok(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
@@ -138,6 +171,25 @@ QUnit.module('Button', function() {
             assert.ok(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
             assert.notOk(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
         });
+
+        if(!dxButton.IS_RENOVATED_WIDGET) {
+            [
+                { option: 'stylingMode', value: 'text' },
+                { option: 'type', value: 'danger' }
+            ].forEach(({ option, value }) => {
+                QUnit.test(`only className argument is passed when changing the "${option}" option`, function(assert) {
+                    const removeClassSpy = sinon.spy(renderer.fn, 'removeClass');
+
+                    this.instance.option(option, value);
+
+                    removeClassSpy.getCalls().forEach((funcCall) => {
+                        assert.strictEqual(funcCall.args.length, 1, 'only one argument passed to removeClass');
+                    });
+
+                    removeClassSpy.restore();
+                });
+            });
+        }
 
         QUnit.test('readOnly validator should be excluded for the click action', function(assert) {
             const clickHandler = sinon.spy();
@@ -267,7 +319,7 @@ QUnit.module('Button', function() {
             const pointer = pointerMock($inkButton);
 
             pointer.start('touch').down();
-            clock.tick();
+            clock.tick(10);
             pointer.start('touch').up();
             assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
 
@@ -275,13 +327,13 @@ QUnit.module('Button', function() {
             assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed');
 
             pointer.start('touch').down();
-            clock.tick();
+            clock.tick(10);
             pointer.start('touch').up();
             assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed is still removed after click');
 
             inkButton.option('useInkRipple', true);
             pointer.start('touch').down();
-            clock.tick();
+            clock.tick(10);
             pointer.start('touch').up();
             assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
 
@@ -375,7 +427,7 @@ QUnit.module('Button', function() {
             this.$form = $('#form');
             this.clickButton = function() {
                 this.$element.trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
             };
         },
         afterEach: function() {
@@ -384,6 +436,10 @@ QUnit.module('Button', function() {
     }, function() {
         QUnit.test('render input with submit type', function(assert) {
             assert.strictEqual(this.$element.find('input[type=submit]').length, 1);
+        });
+
+        QUnit.test('input with submit type should not have display:none (T983803)', function(assert) {
+            assert.notStrictEqual(this.$element.find('input[type=submit]').css('display'), 'none');
         });
 
         QUnit.test('submit input has .dx-button-submit-input CSS class', function(assert) {
@@ -569,58 +625,56 @@ QUnit.module('Button', function() {
             this.$element.trigger('dxclick');
         });
 
-        if(!isRenovation) {
-            QUnit.test('Form should be submitted only when an async validation rule is passed positively (T887207)', function(assert) {
-                this.clock.restore();
-                let value = 'a';
-                const validValue = 'b';
-                const validator = new Validator($('<div>').appendTo(this.$form), {
-                    adapter: sinon.createStubInstance(DefaultAdapter),
-                    validationRules: [{
-                        type: 'async',
-                        validationCallback: function() {
-                            const d = new Deferred();
-                            setTimeout(() => {
-                                d.resolve({
-                                    isValid: value === validValue
-                                });
-                            }, 10);
-                            return d.promise();
-                        }
-                    }]
-                });
-                const done = assert.async();
-                const onSubmit = () => {
-                    assert.strictEqual(value, validValue, 'submitted with valid value');
+        QUnit.test('Form should be submitted only when an async validation rule is passed positively (T887207)', function(assert) {
+            this.clock.restore();
+            let value = 'a';
+            const validValue = 'b';
+            const validator = new Validator($('<div>').appendTo(this.$form), {
+                adapter: sinon.createStubInstance(DefaultAdapter),
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function() {
+                        const d = new Deferred();
+                        setTimeout(() => {
+                            d.resolve({
+                                isValid: value === validValue
+                            });
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            });
+            const done = assert.async();
+            const onSubmit = () => {
+                assert.strictEqual(value, validValue, 'submitted with valid value');
 
-                    ValidationEngine.initGroups();
-                    this.$form.off('submit', onSubmit);
-                    done();
-                };
-                const triggerButtonClick = () => {
-                    this.$element.trigger('dxclick');
-                };
+                ValidationEngine.initGroups();
+                this.$form.off('submit', onSubmit);
+                done();
+            };
+            const triggerButtonClick = () => {
+                this.$element.trigger('dxclick');
+            };
 
-                this.$form.on('submit', onSubmit);
+            this.$form.on('submit', onSubmit);
 
-                this.$element.dxButton({
-                    validationGroup: 'testGroup',
-                    onOptionChanged: function(args) {
-                        if(args.name === 'disabled') {
-                            if(args.value === false && validator._validationInfo.result.status === 'invalid') {
-                                setTimeout(function() {
-                                    value = validValue;
-                                    triggerButtonClick();
-                                });
-                            }
+            this.$element.dxButton({
+                validationGroup: 'testGroup',
+                onOptionChanged: function(args) {
+                    if(args.name === 'disabled') {
+                        if(args.value === false && validator._validationInfo.result.status === 'invalid') {
+                            setTimeout(function() {
+                                value = validValue;
+                                triggerButtonClick();
+                            });
                         }
                     }
-                });
-
-                ValidationEngine.registerValidatorInGroup('testGroup', validator);
-                triggerButtonClick();
+                }
             });
-        }
+
+            ValidationEngine.registerValidatorInGroup('testGroup', validator);
+            triggerButtonClick();
+        });
     });
 
     QUnit.module('templates', function() {
@@ -688,23 +742,61 @@ QUnit.module('Button', function() {
             assert.ok(params.validationGroup, 'validationGroup should be passed');
         });
 
-        if(isRenovation) {
-            QUnit.skip('contentReady');
-        } else {
-            QUnit.test('contentReady', function(assert) {
-                assert.expect(3);
+        QUnit.test('contentReady', function(assert) {
+            assert.expect(3);
 
-                const button = $('#button').dxButton({
-                    text: 'test',
-                }).dxButton('instance');
+            const button = $('#button').dxButton({
+                text: 'test',
+            }).dxButton('instance');
 
-                button.on('contentReady', (e) => {
-                    assert.ok(e.component, 'Component info should be passed');
-                    assert.ok(e.element, 'Element info should be passed');
-                    assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
-                });
-                button.repaint();
+            button.on('contentReady', (e) => {
+                assert.ok(e.component, 'Component info should be passed');
+                assert.ok(e.element, 'Element info should be passed');
+                assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
             });
-        }
+            button.repaint();
+        });
+    });
+
+    QUnit.module('localization', function() {
+        [
+            { locale: 'en', text: 'text', icon: 'close', expectedAriaLabelText: 'text' },
+            { locale: 'en', text: '', icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'en', text: '', icon: '', expectedAriaLabelText: undefined },
+            { locale: 'en', text: undefined, icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'en', text: null, icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'en', text: 'text', icon: 'close', expectedAriaLabelText: 'text' },
+            { locale: 'en', text: '', icon: 'close', expectedAriaLabelText: 'Close' },
+            { locale: 'en', text: undefined, icon: 'close', expectedAriaLabelText: 'Close' },
+            { locale: 'en', text: null, icon: 'close', expectedAriaLabelText: 'Close' },
+            { locale: 'ja', text: 'text', icon: 'close', expectedAriaLabelText: 'text' },
+            { locale: 'ja', text: 'text', icon: 'close', expectedAriaLabelText: 'text' },
+            { locale: 'ja', text: '', icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'ja', text: '', icon: '', expectedAriaLabelText: undefined },
+            { locale: 'ja', text: undefined, icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'ja', text: null, icon: 'iconName', expectedAriaLabelText: 'iconName' },
+            { locale: 'ja', text: 'text', icon: 'close', expectedAriaLabelText: 'text' },
+            { locale: 'ja', text: '', icon: 'close', expectedAriaLabelText: '閉じる' },
+            { locale: 'ja', text: undefined, icon: 'close', expectedAriaLabelText: '閉じる' },
+            { locale: 'ja', text: null, icon: 'close', expectedAriaLabelText: '閉じる' },
+        ].forEach(({ locale, text, icon, expectedAriaLabelText }) => {
+            QUnit.test(`aria-label attribute value should be equal=${expectedAriaLabelText} in '${locale}' locale when text='${text}', icon='${icon}' (T1109711)`, function(assert) {
+                const defaultLocale = localization.locale();
+
+                try {
+                    localization.loadMessages(ja);
+                    localization.locale(locale);
+
+                    const $button = $('#button').dxButton({
+                        text,
+                        icon,
+                    });
+
+                    assert.strictEqual($button.attr('aria-label'), expectedAriaLabelText, 'aria-label attribute localized correctly');
+                } finally {
+                    localization.locale(defaultLocale);
+                }
+            });
+        });
     });
 });

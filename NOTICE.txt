@@ -1,5 +1,25 @@
 The following open source libraries are used and included within this product:
 
+AngularJS JavaScript Library (Open Source - MIT License)
+Copyright (c) Google, Inc.
+http://angularjs.org/
+
+ASP.NET Core SignalR (Open Source – Apache 2.0)
+Copyright (c) .NET Foundation and Contributors
+https://github.com/aspnet/SignalR/blob/dev/LICENSE.txt
+
+babel (Open Source - MIT License)
+Copyright (c) 2014-present Sebastian McKenzie and other contributors.
+https://github.com/babel/babel/blob/main/LICENSE
+
+Bootstrap (Open Source – MIT License)
+Copyright (c) 2011-2018 Twitter, Inc. / Copyright (c) 2011-2018 The Bootstrap Authors
+https://github.com/twbs/bootstrap/blob/v4-dev/LICENSE
+
+canvg (Open Source – MIT License)
+Copyright (c) 2010 - present Gabe Lerner (gabelerner@gmail.com)
+https://github.com/canvg/canvg/blob/master/LICENSE
+
 cldr-core
 Copyright (c) 1991-2017 Unicode, Inc
 http://unicode.org/copyright.html
@@ -8,19 +28,68 @@ cldr-dates-full
 Copyright (c) 1991-2017 Unicode, Inc
 http://unicode.org/copyright.html
 
+cldrjs JavaScript Library (Open Source - MIT License)
+Copyright (c) Rafael Xavier de Souza
+http://rafael.xavier.blog.br
+https://github.com/rxaviers/cldrjs/blob/master/LICENSE
+
 cldr-numbers-full
 Copyright (c) 1991-2017 Unicode, Inc
 http://unicode.org/copyright.html
+
+DevExtreme Data Layer Extension for ASP.NET (Open Source - MIT License)
+Copyright (c) Developer Express Inc.
+https://github.com/DevExpress/DevExtreme.AspNet.Data
+
+Globalize JavaScript Library (Open Source - MIT License)
+Copyright (c) jQuery Foundation and other contributors
+http://jquery.org/license
+
+Highlight.js (Open Source – BSD License)
+Copyright (c) 2006, Ivan Sagalaev. All rights reserved.
+https://github.com/isagalaev/highlight.js/blob/master/LICENSE
+
+inferno (Open Source - MIT License)
+Copyright (c) 2015-2021 Dominic Gannaway
+https://github.com/infernojs/inferno/blob/master/LICENSE.md
+
+jQuery JavaScript Library (Open Source - MIT License)
+Copyright (c) jQuery Foundation and other contributors
+http://jquery.com/
+
+JS Beautifier (Open Source – MIT License)
+Copyright (c) 2007-2017 Einar Lielmanis, Liam Newman, and contributors.
+https://github.com/beautify-web/js-beautify/blob/master/LICENSE
 
 JSZip JavaScript Library (Open Source - MIT License)
 Copyright (c) Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
 https://stuk.github.io/jszip/
 
+Knockout JavaScript Library (Open Source - MIT License)
+Copyright (c) Knockoutjs.com
+http://knockoutjs.com/
+http://opensource.org/licenses/mit-license.php
+
+Less.js (Open Source – Apache 2.0)
+Copyright (c) 2009-2017 Alexis Sellier and The Core Less Team
+https://github.com/less/less.js/blob/master/LICENSE
+
+preact (Open Source - MIT License)
+Copyright (c) 2015-present Jason Miller
+https://github.com/preactjs/preact/blob/master/LICENSE
+
 Roboto Font (Open Source – Apache 2.0)
 https://github.com/google/roboto/blob/master/LICENSE
 
-rrule.js (Open Source - BSD License)
-Copyright 2010, Jakub Roztocil and Lars Schoning
+rrule (Open Source - BSD-3-Clause License)
+Copyright 2010, Jakub Roztocil (jakub@roztocil.name) and Lars Schoning
 https://github.com/jakubroztocil/rrule/blob/master/LICENCE
+
+tslib (Open Source - BSD Zero Clause License)
+https://github.com/microsoft/tslib/blob/master/LICENSE.txt
+
+underscore (Open Source – MIT License)
+Copyright (c) 2009-2017 Jeremy Ashkenas, DocumentCloud and Investigative Reporters and Editors
+https://github.com/jashkenas/underscore/blob/master/LICENSE
 
 The open source libraries included in this product are done so pursuant to each individual open source library license and subject to the disclaimers and limitations on liability set forth in each open source library license.

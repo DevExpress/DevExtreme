@@ -57,8 +57,6 @@ QUnit.test('Flex props should exist in style attribute', function(assert) {
 
     [
         'display: flex;',
-        'flex-basis: 3px;',
-        'flex-grow: 4;',
-        'flex-shrink: 5;'
+        'flex: 4 5 3px;'
     ].forEach(style => assert.ok(itemElement.attributes.style.value.indexOf(style) > -1));
 });

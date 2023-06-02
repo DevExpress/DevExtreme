@@ -1,7 +1,6 @@
 import {
   Component,
   ComponentBindings,
-  ForwardRef,
   OneWay,
   JSXComponent,
   Ref,
@@ -9,11 +8,31 @@ import {
   Effect,
   Consumer,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+  Mutable,
+} from '@devextreme-generator/declarations';
+import { renderTemplate, hasTemplate } from '@devextreme/runtime/declarations';
 import type DomComponent from '../../../core/dom_component';
+import { ComponentClass } from '../../../core/dom_component'; // eslint-disable-line import/named
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
-import { EventCallback } from './event_callback.d';
-import { renderTemplate } from '../../utils/render_template';
+import { EventCallback } from './event_callback';
+import { DisposeEffectReturn } from '../../utils/effect_return';
+import { getUpdatedOptions } from './utils/get_updated_options';
+
+interface ComponentProps {
+  className?: string;
+  itemTemplate?: string | (() => string | HTMLElement);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  valueChange?: EventCallback<any>;
+}
+
+const normalizeProps = (props: ComponentProps): ComponentProps => Object
+  .keys(props).reduce((accumulator, key) => {
+    if (props[key] !== undefined) {
+      accumulator[key] = props[key];
+    }
+
+    return accumulator;
+  }, {});
 
 export const viewFunction = ({
   widgetRef,
@@ -28,48 +47,43 @@ export const viewFunction = ({
   />
 );
 
-interface WidgetInstanceType { option: (properties: Record<string, unknown>) => void }
-
 @ComponentBindings()
 export class DomComponentWrapperProps {
-  @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @OneWay() componentType!: ComponentClass<Record<string, any>>;
 
-  @OneWay() componentType!: typeof DomComponent & {
-    getInstance: (widgetRef: HTMLDivElement) => WidgetInstanceType;
-  };
+  @OneWay() templateNames!: string[];
 
-  @OneWay() componentProps!: {
-    className?: string;
-    itemTemplate?: string;
-    valueChange?: EventCallback<any>;
-  };
+  @OneWay() componentProps!: ComponentProps;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 'componentType' | 'componentProps'>() {
+export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 'componentType' | 'templateNames' | 'componentProps'>() {
   @Ref()
   widgetRef!: RefObject<HTMLDivElement>;
 
-  @Ref()
+  @Mutable()
   instance!: DomComponent | null;
+
+  @Mutable() prevProps!: Record<string, unknown>;
+
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
 
   @Method()
   getInstance(): DomComponent | null {
     return this.instance;
   }
 
-  @Effect()
-  updateWidget(): void {
-    this.getInstance()?.option(this.properties);
-  }
-
   @Effect({ run: 'once' })
-  setupWidget(): () => void {
+  setupWidget(): DisposeEffectReturn {
     // eslint-disable-next-line new-cap
-    const componentInstance = new this.props.componentType(this.widgetRef, this.properties) as any;
+    const componentInstance = new this.props.componentType(
+      this.widgetRef.current!, this.properties,
+    );
     this.instance = componentInstance;
 
     return (): void => {
@@ -78,35 +92,47 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     };
   }
 
-  @Effect({ run: 'once' }) setRootElementRef(): void {
-    const { rootElementRef } = this.props;
-    if (rootElementRef) {
-      this.props.rootElementRef = this.widgetRef;
+  @Effect()
+  updateWidget(): void {
+    const instance = this.getInstance();
+    if (!instance) {
+      return;
     }
+
+    const updatedOptions = getUpdatedOptions(this.prevProps || {}, this.properties);
+    if (updatedOptions.length) {
+      instance.beginUpdate();
+      updatedOptions.forEach(({ path, value }) => { instance.option(path, value); });
+      instance.endUpdate();
+    }
+
+    this.prevProps = this.properties;
   }
 
-  @Consumer(ConfigContext)
-  config?: ConfigContextValue;
-
   get properties(): Record<string, unknown> {
+    const normalizedProps = normalizeProps(this.props.componentProps);
+
     const {
-      itemTemplate,
       valueChange,
       ...restProps
-    } = this.props.componentProps;
+    } = normalizedProps;
 
     const properties = ({
-      rtlEnabled: this.config?.rtlEnabled || false, // widget expects boolean
+      rtlEnabled: !!this.config?.rtlEnabled, // widget expects boolean
+      isRenovated: true,
       ...restProps,
     }) as Record<string, unknown>;
     if (valueChange) {
       properties.onValueChanged = ({ value }): void => valueChange(value);
     }
-    if (itemTemplate) {
-      properties.itemTemplate = (item, index, container): void => {
-        renderTemplate(itemTemplate, { item, index, container }, container);
-      };
-    }
+    const templates = this.props.templateNames;
+    templates.forEach((name) => {
+      if (hasTemplate(name, properties, this)) {
+        properties[name] = (item, index, container): void => {
+          renderTemplate(this.props.componentProps[name], { item, index, container }, this);
+        };
+      }
+    });
     return properties;
   }
 }

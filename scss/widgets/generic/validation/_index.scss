@@ -7,8 +7,6 @@
 
 // adduse
 @use "../overlay";
-
-
 @include dx-base-validation($validation-summary-color, $validation-message-color, $validation-message-background-color);
 
 .dx-invalid-message > .dx-overlay-content {

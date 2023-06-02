@@ -1,3 +1,5 @@
+@use "./mixins" as *;
+
 $scheduler-appointment-base-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-appointment-overlay-bg: null !default;
@@ -20,19 +22,15 @@ $scheduler-appointment-overlay-bg: null !default;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
   }
 
-  .dx-tooltip-appointment-item-marker-body {
-    background: $scheduler-appointment-base-color;
-  }
-
   .dx-tooltip-appointment-item {
     display: flex;
 
     .dx-tooltip-appointment-item-marker-body {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
       margin-top: 7px;
       margin-left: 5px;
+      background: $scheduler-appointment-base-color;
+
+      @include use-colored-marker(20);
     }
 
     .dx-tooltip-appointment-item-delete-button .dx-icon {

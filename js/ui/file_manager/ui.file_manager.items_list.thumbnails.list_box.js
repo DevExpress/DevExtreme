@@ -1,6 +1,6 @@
+import { getOuterWidth, getOuterHeight, getInnerWidth, getInnerHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { find } from '../../core/utils/array';
 import { isDefined } from '../../core/utils/type';
 import { Deferred, when } from '../../core/utils/deferred';
 
@@ -81,6 +81,10 @@ class FileManagerThumbnailListBox extends CollectionWidget {
             this._$scrollView = $('<div>')
                 .appendTo(this.$element());
         }
+    }
+
+    getScrollable() {
+        return this._scrollView;
     }
 
     _renderItemsContainer() {
@@ -382,7 +386,7 @@ class FileManagerThumbnailListBox extends CollectionWidget {
         const focusedItemKey = this.option('focusedItemKey');
         if(isDefined(focusedItemKey)) {
             const items = this.option('items');
-            const focusedItem = find(items, item => this.keyOf(item) === focusedItemKey);
+            const focusedItem = items.find(item => this.keyOf(item) === focusedItemKey);
             if(focusedItem) {
                 this._focusItem(focusedItem, true);
                 deferred.resolve();
@@ -525,15 +529,15 @@ class ListBoxLayoutUtils {
             return null;
         }
 
-        const itemWidth = this._$item.outerWidth(true);
+        const itemWidth = getOuterWidth(this._$item, true);
         if(itemWidth === 0) {
             return null;
         }
 
-        const itemHeight = this._$item.outerHeight(true);
+        const itemHeight = getOuterHeight(this._$item, true);
 
-        const viewPortWidth = this._$itemContainer.innerWidth();
-        const viewPortHeight = this._$viewPort.innerHeight();
+        const viewPortWidth = getInnerWidth(this._$itemContainer);
+        const viewPortHeight = getInnerHeight(this._$viewPort);
         const viewPortScrollTop = this._scrollView.scrollTop();
         const viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
 

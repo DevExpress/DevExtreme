@@ -5,24 +5,33 @@ import {
     FORM_LAYOUT_MANAGER_CLASS,
     FIELD_ITEM_CLASS,
     FIELD_ITEM_LABEL_CLASS,
-    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-    FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
-    FIELD_ITEM_CONTENT_LOCATION_CLASS,
-    FIELD_ITEM_REQUIRED_CLASS,
+    LAYOUT_MANAGER_ONE_COLUMN,
+} from 'ui/form/constants';
+
+import {
+    FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_ITEM_OPTIONAL_CLASS,
-    FIELD_ITEM_REQUIRED_MARK_CLASS,
-    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_REQUIRED_CLASS,
+    FIELD_ITEM_CONTENT_WRAPPER_CLASS,
+    FIELD_ITEM_CONTENT_LOCATION_CLASS,
     FIELD_ITEM_LABEL_ALIGN_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
-    FIELD_ITEM_CONTENT_WRAPPER_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS,
+    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
+} from 'ui/form/components/field_item';
+
+import {
+    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_LABEL_LOCATION_CLASS,
+    FIELD_ITEM_REQUIRED_MARK_CLASS,
+} from 'ui/form/components/label';
+
+import {
     FIELD_EMPTY_ITEM_CLASS,
-    LAYOUT_MANAGER_ONE_COLUMN
-} from 'ui/form/constants';
+} from 'ui/form/components/empty_item';
+
 import config from 'core/config';
-import typeUtils from 'core/utils/type';
-import { inArray } from 'core/utils/array';
+import { isFunction, isDefined, isRenderer } from 'core/utils/type';
 import windowUtils from 'core/utils/window';
 
 import 'ui/switch';
@@ -39,9 +48,9 @@ import 'ui/slider';
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
 
-import 'common.css!';
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
+const TEXTEDITOR_PLACEHOLDER_CLASS = 'dx-placeholder';
 
 const { test } = QUnit;
 
@@ -140,7 +149,6 @@ QUnit.module('Layout manager', () => {
                 itemType: 'simple',
                 isRequired: true,
                 template: function(data, element) {
-
                     $('<div>')
                         .appendTo(element)
                         .dxButton({
@@ -166,6 +174,32 @@ QUnit.module('Layout manager', () => {
         const $items = $testContainer.find('.' + FIELD_ITEM_CLASS);
 
         assert.equal($items.length, 2, 'field items is rendered');
+    });
+
+    test('Default render with label template', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            layoutData: {
+                firstName: 'Alex',
+                address: 'Winnipeg'
+            },
+            items: [{
+                dataField: 'FirstName',
+                itemType: 'simple',
+                isRequired: true,
+                label: {
+                    template: function(data, element) {
+                        $('<div>')
+                            .appendTo(element)
+                            .dxButton({
+                                icon: 'find',
+                                text: 'find'
+                            });
+                    }
+                }
+            }]
+        });
+        const $button = $testContainer.find(`.${'dx-button'}`);
+        assert.equal($button.length, 1, 'field item label with button is rendered');
     });
 
     test('Default render with marks', function(assert) {
@@ -334,7 +368,6 @@ QUnit.module('Layout manager', () => {
         const $testContainer = $('#container').dxLayoutManager();
         const layoutManager = $testContainer.dxLayoutManager('instance');
 
-        layoutManager._hasBrowserFlex = () => true;
         layoutManager.option('items', items);
         const $items = $testContainer.find(`.${FIELD_ITEM_CLASS}`);
 
@@ -532,6 +565,18 @@ QUnit.module('Layout manager', () => {
         });
 
         assert.ok(!$testContainer.find('.' + FIELD_ITEM_LABEL_CLASS).length);
+    });
+
+    test('Label is not rendered when labelMode option is not "default"', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            labelMode: 'static',
+            items: [{
+                label: { text: 'Label text' },
+                editorType: 'dxTextBox'
+            }]
+        });
+
+        assert.notOk($testContainer.find('.' + FIELD_ITEM_LABEL_CLASS).length);
     });
 
     test('If item is not visible we will not render them', function(assert) {
@@ -1322,27 +1367,27 @@ QUnit.module('Layout manager', () => {
         const $testContainer = $('#container');
 
         $testContainer.dxLayoutManager({
-            layoutData: {
-                name: 'Alex',
-                lastName: 'Johnson',
-                state: 'CA'
-            },
-            items: [{
-                dataField: 'name',
-                helpText: 'Type a name'
-            }, {
-                dataField: 'lastName'
-            }]
+            items: [
+                { dataField: 'field1', helpText: 'field1 help text' },
+                { dataField: 'field1', helpText: null },
+                { dataField: 'field1', helpText: undefined },
+                'field3',
+                { dataField: 'field2' },
+                { itemType: 'empty', helpText: 'should be rendered for simple only' },
+                { itemType: 'group', helpText: 'should be rendered for simple only' },
+                { itemType: 'tabbed', helpText: 'should be rendered for simple only' },
+                { itemType: 'button', helpText: 'should be rendered for simple only' },
+            ]
         });
 
         const $fieldItems = $testContainer.find('.' + FIELD_ITEM_CLASS);
 
-        assert.equal($fieldItems.eq(0).find('.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS).length, 1, 'First field item has widget wrapper');
-        assert.equal($fieldItems.eq(0).find('.' + FIELD_ITEM_HELP_TEXT_CLASS).length, 1, 'First field item has help text element');
-        assert.equal($fieldItems.eq(0).find('.' + FIELD_ITEM_HELP_TEXT_CLASS).text(), 'Type a name', 'Correct help text');
+        assert.equal($testContainer.find('.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS).length, 1, 'FIELD_ITEM_CONTENT_WRAPPER_CLASS.length');
+        assert.equal($testContainer.find('.' + FIELD_ITEM_HELP_TEXT_CLASS).length, 1, 'FIELD_ITEM_HELP_TEXT_CLASS.length');
 
-        assert.equal($fieldItems.eq(1).find('.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS).length, 0, 'Second field item has\'t widget wrapper');
-        assert.equal($fieldItems.eq(1).find('.' + FIELD_ITEM_HELP_TEXT_CLASS).length, 0, 'Second field item has\'t help text element');
+        const $fieldHelpText = $fieldItems.eq(0).find('>.' + FIELD_ITEM_CONTENT_WRAPPER_CLASS + '>.' + FIELD_ITEM_HELP_TEXT_CLASS + ':last-child');
+        assert.equal($fieldHelpText.length, 1, '$field1HelpText.length');
+        assert.equal($fieldHelpText.text(), 'field1 help text');
     });
 
     test('Change the order of items', function(assert) {
@@ -1459,24 +1504,6 @@ QUnit.module('Layout manager', () => {
         });
 
         assert.equal($testContainer.find('.' + FIELD_EMPTY_ITEM_CLASS).length, 1);
-    });
-
-    test('Templates of form\'s items render with deferring_T638831', function(assert) {
-        let spy;
-
-        $('#container').dxLayoutManager({
-            onInitialized: function(e) {
-                spy = sinon.spy(e.component, '_renderTemplates');
-            },
-            items: [{
-                dataField: 'StartDate',
-                editorType: 'dxDateBox'
-            }]
-        });
-
-        const templatesInfo = spy.args[0][0];
-        assert.ok(templatesInfo[0].container.hasClass('dx-field-item'), 'template container of field item');
-        assert.equal(templatesInfo[0].formItem.dataField, 'StartDate', 'correct a form item for template');
     });
 
     test('layoutData with \'null\' fields shouldn\'t reset editor\'s \'isValid\' option', function(assert) {
@@ -2171,7 +2198,7 @@ QUnit.module('Templates', () => {
             items: [{
                 dataField: 'test',
                 template: function(data, container) {
-                    assert.deepEqual(typeUtils.isRenderer(container), !!config().useJQuery, 'container is correct');
+                    assert.deepEqual(isRenderer(container), !!config().useJQuery, 'container is correct');
 
                     $(container).append($('<span>').text('Template'));
 
@@ -2195,8 +2222,42 @@ QUnit.module('Templates', () => {
         assert.equal(textArea.option('value'), layoutManager.option('layoutData.test'), 'Widget\'s value equal to bound datafield');
     });
 
-    test('Check arguments of the template', function(assert) {
-        const templateStub = sinon.stub();
+    test('Render label template', function(assert) {
+        const $testContainer = $('#container');
+
+        $testContainer.dxLayoutManager({
+            layoutData: {
+                test: 'abc'
+            },
+            items: [{
+                dataField: 'test',
+                template: function(data, container) {
+                    assert.deepEqual(isRenderer(container), !!config().useJQuery, 'container is correct');
+
+                    $(container).append($('<span>').text('Template'));
+
+                    data.editorOptions.onValueChanged = function(args) {
+                        data.component.option('layoutData.' + data.dataField, args.value);
+                    };
+
+                    $('<div>')
+                        .dxTextArea(data.editorOptions)
+                        .appendTo(container);
+                }
+            }]
+        });
+
+        const $fieldItemWidget = $testContainer.find('.' + FIELD_ITEM_CONTENT_CLASS);
+        const spanText = $fieldItemWidget.find('span').text();
+        const textArea = $fieldItemWidget.find('.dx-textarea').dxTextArea('instance');
+        const layoutManager = $testContainer.dxLayoutManager('instance');
+
+        assert.equal(spanText, 'Template');
+        assert.equal(textArea.option('value'), layoutManager.option('layoutData.test'), 'Widget\'s value equal to bound datafield');
+    });
+
+    test('Check arguments of the label template', function(assert) {
+        const labelTemplateStub = sinon.stub();
         const layoutManager = $('#container').dxLayoutManager({
             items: [{
                 name: 'TestName',
@@ -2205,18 +2266,37 @@ QUnit.module('Templates', () => {
                 editorOptions: {
                     text: 'TestText'
                 },
-                template: templateStub
+                label: {
+                    showColon: true,
+                    template: labelTemplateStub
+                }
             }]
         }).dxLayoutManager('instance');
 
-        const args = templateStub.firstCall.args[0];
+        const args = labelTemplateStub.firstCall.args[0];
         assert.strictEqual(args.name, 'TestName', 'name argument');
+        assert.strictEqual(args.text, 'Test Data Field:', 'text argument');
         assert.strictEqual(args.dataField, 'TestDataField', 'dataField argument');
         assert.strictEqual(args.editorType, 'dxColorBox', 'editorType argument');
         assert.deepEqual(args.editorOptions.inputAttr, {}, 'editorOptions.inputAttr argument');
         assert.strictEqual(args.editorOptions.name, 'TestDataField', 'editorOptions.name argument');
         assert.strictEqual(args.editorOptions.text, 'TestText', 'editorOptions.text argument');
         assert.equal(args.component, layoutManager, 'component argument');
+    });
+
+    test('Label template should not be called for group items', function(assert) {
+        const labelTemplateStub = sinon.stub();
+        $('#container').dxLayoutManager({
+            items: [{
+                itemType: 'group',
+                caption: 'Personal info',
+                label: {
+                    template: labelTemplateStub
+                }
+            }]
+        });
+
+        assert.strictEqual(labelTemplateStub.callCount, 0, 'label template call count');
     });
 
     test('Check template bound to data', function(assert) {
@@ -2310,9 +2390,9 @@ QUnit.module('Public methods', () => {
 
         const layoutManager = $testContainer.dxLayoutManager('instance');
 
-        assert.ok(!typeUtils.isDefined(layoutManager.getEditor('test2')), 'We has\'t instance for \'test2\' field');
-        assert.ok(typeUtils.isDefined(layoutManager.getEditor('test1')), 'We have instance for \'test1\' field');
-        assert.ok(typeUtils.isDefined(layoutManager.getEditor('test3')), 'We have instance for \'test3\' field');
+        assert.ok(!isDefined(layoutManager.getEditor('test2')), 'We has\'t instance for \'test2\' field');
+        assert.ok(isDefined(layoutManager.getEditor('test1')), 'We have instance for \'test1\' field');
+        assert.ok(isDefined(layoutManager.getEditor('test3')), 'We have instance for \'test3\' field');
 
         assert.equal(layoutManager.getEditor('test1').NAME, 'dxTextBox', 'It\'s textbox');
         assert.equal(layoutManager.getEditor('test3').NAME, 'dxNumberBox', 'It\'s numberBox');
@@ -2360,18 +2440,21 @@ QUnit.module('Accessibility', () => {
 
         items.forEach(({ dataField, editorType }) => {
             const editor = layoutManager.getEditor(dataField);
-            const $ariaTarget = editor._getAriaTarget();
+            const $ariaTarget = isFunction(editor._getAriaTarget) ? editor._getAriaTarget() : editor.$element();
             const $label = editor.$element().closest(`.${FIELD_ITEM_CLASS}`).children().first();
+            const $placeholder = editor.$element().find(`.${TEXTEDITOR_PLACEHOLDER_CLASS}`);
             const editorClassName = `dx-${editorType.toLowerCase().substr(2)}`;
 
-            if(inArray(editorClassName, editorClassesRequiringIdForLabel) !== -1) {
+            if(editorClassesRequiringIdForLabel.includes(editorClassName)) {
                 if(!(!windowUtils.hasWindow() && editorType === 'dxHtmlEditor')) {
-                    assert.ok($ariaTarget.attr('aria-labelledby'), `aria-labeledby attribute ${editorClassName}`);
+                    assert.ok($ariaTarget.attr('aria-labelledby'), `aria-labelledby attribute ${editorClassName}`);
                     assert.ok($label.attr('id'), `label id attribute for ${editorClassName}`);
                     assert.strictEqual($ariaTarget.attr('aria-labelledby'), $label.attr('id'), 'attributes aria-labelledby and labelID are equal');
                 }
             } else {
-                assert.equal($ariaTarget.eq(0).attr('aria-labelledby'), null, `aria-labeledby attribute ${editorClassName}`);
+                const expectedTargetValue = $placeholder.length ? $placeholder.attr('id') : null;
+
+                assert.equal($ariaTarget.eq(0).attr('aria-labelledby'), expectedTargetValue, `aria-labelledby attribute ${editorClassName}`);
                 assert.equal($label.attr('id'), null, `label id attribute for ${editorClassName}`);
             }
         });
@@ -2564,7 +2647,7 @@ QUnit.module('Supported editors', () => {
 
         const errorMessage = consoleErrorStub.getCall(0).args[0];
         assert.equal(consoleErrorStub.callCount, 1, 'error was raised for item without dataField and editorType');
-        assert.equal(errorMessage.indexOf('E1035 - The editor cannot be created because of an internal error'), 0);
+        assert.equal(errorMessage.indexOf('E1035 - The editor cannot be created'), 0);
         assert.ok(errorMessage.indexOf('See:\nhttp://js.devexpress.com/error/') > 0);
         consoleErrorStub.restore();
     });
@@ -2860,42 +2943,6 @@ QUnit.module('Supported editors', () => {
         assert.ok(!layoutManager._isValueChangedCalled);
     });
 
-    test('Check that inner widgets change readOnly option at layoutManager optionChange', function(assert) {
-        const layoutManager = createFormWithSupportedEditors();
-        const $testContainer = layoutManager.$element();
-
-        checkSupportedEditors((editor, className) => {
-            assert.notOk($testContainer.find(`.${FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is not read only`);
-        });
-
-        layoutManager.option('readOnly', true);
-
-        checkSupportedEditors((editor, className) => {
-            assert.ok($testContainer.find(`.${FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is read only`);
-        });
-    });
-
-    test('Check readOnly state for editor when readOnly is enabled in the editorOptions', function(assert) {
-        const layoutManager = createFormWithSupportedEditors({ readOnly: true });
-        const $testContainer = layoutManager.$element();
-
-        checkSupportedEditors((editor, className) => {
-            assert.ok($testContainer.find(`.${FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is read only`);
-        });
-    });
-
-    test('Editor\'s read only state should not be reset on the dxForm \'readOnly\' option changing', function(assert) {
-        const layoutManager = createFormWithSupportedEditors({ readOnly: true });
-        const $testContainer = layoutManager.$element();
-
-        layoutManager.option('readOnly', true);
-        layoutManager.option('readOnly', false);
-
-        checkSupportedEditors((editor, className) => {
-            assert.ok($testContainer.find(`.${FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is read only`);
-        });
-    });
-
     test('Check the Html Editor with a value and toolbar items', function(assert) {
         const expectedText = 'This <b>text</b> for testing the <i>Html Editor</i>';
         const layoutManager = $('#container').dxLayoutManager({
@@ -2940,9 +2987,143 @@ QUnit.module('Supported editors', () => {
         const editor = layoutManager.getEditor('description');
         editor.option('value', 'new <b>value</b>');
 
-        assert.deepEqual(layoutManager.option('layoutData'), { description: 'new <b>value</b>' }, 'layoutData');
         if(windowUtils.hasWindow()) {
             assert.equal($('.dx-htmleditor-content').html(), '<p>new <strong>value</strong></p>', 'HtmlEditor content');
+            assert.deepEqual(layoutManager.option('layoutData'), { description: '<p>new <strong>value</strong></p>' }, 'layoutData');
+        } else {
+            assert.deepEqual(layoutManager.option('layoutData'), { description: 'new <b>value</b>' }, 'layoutData');
         }
+    });
+});
+
+QUnit.module('ReadOnly option', () => {
+    const getEditorClassName = (editorName) => (
+        `dx-${editorName.substr(2, editorName.length - 1).toLowerCase()}`
+    );
+
+    const checkSupportedEditors = (callBack) => (
+        supportedEditors.forEach((supportedEditor) => (
+            callBack(supportedEditor, getEditorClassName(supportedEditor)))
+        )
+    );
+
+    const isEditorReadOnly = ($container, editorClassName) => (
+        $container
+            .find(`.${FIELD_ITEM_CLASS} .${editorClassName}`)
+            .hasClass(READONLY_STATE_CLASS)
+    );
+
+    test('editors should be read only when readOnly option is enabled in the editorOptions', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            items: supportedEditors.map(supportedEditor => ({
+                name: supportedEditor,
+                editorType: supportedEditor,
+                editorOptions: { readOnly: true }
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.ok(isEditorReadOnly($testContainer, className), `${editor}: editor is read only`);
+        });
+    });
+
+    test('editors should not be read only when readOnly option is enabled in form, but in the editorOptions it is set to false', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: true,
+            items: supportedEditors.map(supportedEditor => ({
+                name: supportedEditor,
+                editorType: supportedEditor,
+                editorOptions: { readOnly: false }
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.notOk(isEditorReadOnly($testContainer, className), `${editor}: editor is not read only`);
+        });
+    });
+
+    test('editors should be read only when readOnly option is enabled in form and in the editorOptions is not set', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: true,
+            items: supportedEditors.map(supportedEditor => ({
+                name: supportedEditor,
+                editorType: supportedEditor,
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.ok(isEditorReadOnly($testContainer, className), `${editor}: editor is read only`);
+        });
+    });
+
+    test('editors should change their readonly state after change readOnly option in form if editorOptions.readOnly is not specified', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: true,
+            items: supportedEditors.map(supportedEditor => ({
+                dataField: supportedEditor,
+                editorType: supportedEditor,
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.ok(isEditorReadOnly($testContainer, className), `${editor}: editor is read only`);
+        });
+
+        $testContainer.dxLayoutManager('instance').option('readOnly', false);
+
+        checkSupportedEditors((editor, className) => {
+            assert.notOk(isEditorReadOnly($testContainer, className), `${editor}: editor is not read only`);
+        });
+    });
+
+    test('editors should not change their readonly state after change readOnly option in form if readOnly option is also set in editors options', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: false,
+            items: supportedEditors.map(supportedEditor => ({
+                dataField: supportedEditor,
+                editorType: supportedEditor,
+                editorOptions: { readOnly: false }
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.notOk(isEditorReadOnly($testContainer, className), `${editor}: editor is not read only`);
+        });
+
+        $testContainer.dxLayoutManager('instance').option('readOnly', true);
+
+        checkSupportedEditors((editor, className) => {
+            assert.notOk(isEditorReadOnly($testContainer, className), `${editor}: editor is not read only`);
+        });
+    });
+
+    test('editors should not has readonly state if editorOptions.readOnly is null', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: true,
+            items: supportedEditors.map(supportedEditor => ({
+                dataField: supportedEditor,
+                editorType: supportedEditor,
+                editorOptions: { readOnly: null }
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.notOk(isEditorReadOnly($testContainer, className), `${editor}: editor is not read only`);
+        });
+    });
+
+    test('editors should has readonly state if editorOptions.readOnly is undefined and form readOnly is true', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            readOnly: true,
+            items: supportedEditors.map(supportedEditor => ({
+                dataField: supportedEditor,
+                editorType: supportedEditor,
+                editorOptions: { readOnly: undefined }
+            }))
+        });
+
+        checkSupportedEditors((editor, className) => {
+            assert.ok(isEditorReadOnly($testContainer, className), `${editor}: editor is read only`);
+        });
     });
 });

@@ -1,7 +1,6 @@
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import { isNumeric, isDefined, isFunction, isString } from '../../core/utils/type';
-import browser from '../../core/utils/browser';
 import devices from '../../core/devices';
 import { fitIntoRange, inRange } from '../../core/utils/math';
 
@@ -12,18 +11,18 @@ import {
 } from './number_box.caret';
 import { getFormat as getLDMLFormat } from '../../localization/ldml/number';
 import NumberBoxBase from './number_box.base';
-import { addNamespace, getChar, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, getChar, normalizeKeyName, isCommandKeyPressed } from '../../events/utils/index';
 import { ensureDefined, escapeRegExp } from '../../core/utils/common';
+import { getRealSeparatorIndex, getNthOccurrence, splitByIndex, adjustPercentValue } from './utils';
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';
 const MOVE_FORWARD = 1;
 const MOVE_BACKWARD = -1;
 const MINUS = '-';
 const MINUS_KEY = 'minus';
-const NUMPUD_MINUS_KEY_IE = 'Subtract';
 const INPUT_EVENT = 'input';
 
-const CARET_TIMEOUT_DURATION = browser.msie ? 300 : 0; // If we move caret before the second click, IE can prevent browser text selection on double click
+const CARET_TIMEOUT_DURATION = 0;
 
 const NumberBoxMask = NumberBoxBase.inherit({
 
@@ -59,17 +58,22 @@ const NumberBoxMask = NumberBoxBase.inherit({
         });
     },
 
+    _getTextSeparatorIndex: function(text) {
+        const decimalSeparator = number.getDecimalSeparator();
+        const realSeparatorOccurrenceIndex = getRealSeparatorIndex(this.option('format')).occurrence;
+        return getNthOccurrence(text, decimalSeparator, realSeparatorOccurrenceIndex);
+    },
+
     _focusInHandler: function(e) {
         if(!this._preventNestedFocusEvent(e)) {
             this.clearCaretTimeout();
             this._caretTimeout = setTimeout(function() {
-                this._caretTimeout = null;
+                this._caretTimeout = undefined;
                 const caret = this._caret();
 
                 if(caret.start === caret.end && this._useMaskBehavior()) {
                     const text = this._getInputVal();
-                    const decimalSeparator = number.getDecimalSeparator();
-                    const decimalSeparatorIndex = text.indexOf(decimalSeparator);
+                    const decimalSeparatorIndex = this._getTextSeparatorIndex(text);
 
                     if(decimalSeparatorIndex >= 0) {
                         this._caret({ start: decimalSeparatorIndex, end: decimalSeparatorIndex });
@@ -160,11 +164,9 @@ const NumberBoxMask = NumberBoxBase.inherit({
     _shouldMoveCaret: function(text, caret) {
         const decimalSeparator = number.getDecimalSeparator();
         const isDecimalSeparatorNext = text.charAt(caret.end) === decimalSeparator;
-        const isZeroNext = text.charAt(caret.end) === '0';
-        const moveToFloat = (this._lastKey === decimalSeparator || this._lastKey === '.') && isDecimalSeparatorNext;
-        const zeroToZeroReplace = this._lastKey === '0' && isZeroNext;
+        const moveToFloat = (this._lastKey === decimalSeparator || this._lastKey === '.' || this._lastKey === ',') && isDecimalSeparatorNext;
 
-        return moveToFloat || zeroToZeroReplace;
+        return moveToFloat;
     },
 
     _getInputVal: function() {
@@ -286,28 +288,33 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const formatOption = this.option('format');
         const isCustomParser = isFunction(formatOption.parser);
         const parser = isCustomParser ? formatOption.parser : number.parse;
+        let integerPartStartIndex = 0;
 
         if(!isCustomParser) {
-            const formatPointIndex = format.indexOf('.');
-            const textPointIndex = text.indexOf(number.getDecimalSeparator());
+            const formatPointIndex = getRealSeparatorIndex(format).index;
+            const textPointIndex = this._getTextSeparatorIndex(text);
 
             const formatIntegerPartLength = formatPointIndex !== -1 ? formatPointIndex : format.length;
             const textIntegerPartLength = textPointIndex !== -1 ? textPointIndex : text.length;
 
             if(textIntegerPartLength > formatIntegerPartLength && format.indexOf('#') === -1) {
-                text = text.substr(textIntegerPartLength - formatIntegerPartLength);
+                integerPartStartIndex = textIntegerPartLength - formatIntegerPartLength;
             }
         }
+
+        text = text.substr(integerPartStartIndex);
 
         return parser(text, format);
     },
 
     _format: function(value, format) {
         const formatOption = this.option('format');
-        const isCustomFormatter = isFunction(formatOption?.formatter);
-        const formatter = isCustomFormatter ? formatOption.formatter : number.format;
+        const customFormatter = formatOption?.formatter || formatOption;
+        const formatter = isFunction(customFormatter) ? customFormatter : number.format;
 
-        return formatter(value, format);
+        const formattedValue = value === null ? '' : formatter(value, format);
+
+        return formattedValue;
     },
 
     _getFormatPattern: function() {
@@ -322,10 +329,12 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const format = this.option('format');
         const isCustomParser = isFunction(format?.parser);
         const isLDMLPattern = isString(format) && (format.indexOf('0') >= 0 || format.indexOf('#') >= 0);
+        const isExponentialFormat = format === 'exponential' || format?.type === 'exponential';
+        const shouldUseFormatAsIs = isCustomParser || isLDMLPattern || isExponentialFormat;
 
-        this._currentFormat = isCustomParser || isLDMLPattern ?
-            format :
-            getLDMLFormat((value) => {
+        this._currentFormat = shouldUseFormatAsIs
+            ? format
+            : getLDMLFormat((value) => {
                 const text = this._format(value, format);
                 return number.convertDigits(text, true);
             });
@@ -416,7 +425,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const value = parsedValue === null ? this._parsedValue : parsedValue;
         parsedValue = maxPrecision ? this._truncateToPrecision(value, maxPrecision) : parsedValue;
 
-        return !format.parser && this._isPercentFormat() ? (parsedValue && parsedValue / 100) : parsedValue;
+        return !format.parser && this._isPercentFormat() ? adjustPercentValue(parsedValue, maxPrecision) : parsedValue;
     },
 
     _getParsedValue: function(text, format) {
@@ -436,7 +445,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
         const caret = this._caret();
         const point = number.getDecimalSeparator();
-        const pointIndex = text.indexOf(point);
+        const pointIndex = this._getTextSeparatorIndex(text);
         const isCaretOnFloat = pointIndex >= 0 && pointIndex < caret.start;
         const textParts = this._removeStubs(text, true).split(point);
 
@@ -506,7 +515,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _shouldHandleKey: function(e) {
         const keyName = normalizeKeyName(e);
-        const isSpecialChar = e.ctrlKey || e.shiftKey || e.altKey || !this._isChar(keyName);
+        const isSpecialChar = isCommandKeyPressed(e) || e.altKey || e.shiftKey || !this._isChar(keyName);
         const isMinusKey = keyName === MINUS_KEY;
         const useMaskBehavior = this._useMaskBehavior();
 
@@ -549,15 +558,10 @@ const NumberBoxMask = NumberBoxBase.inherit({
             this._isValuePasted = false;
         }.bind(this));
 
-        if(browser.msie && browser.version < 12) {
-            eventsEngine.on($input, addNamespace('paste', NUMBER_FORMATTER_NAMESPACE), function() {
-                this._isValuePasted = true;
-            }.bind(this));
-        }
-
         eventsEngine.on($input, addNamespace('dxclick', NUMBER_FORMATTER_NAMESPACE), function() {
             if(!this._caretTimeout) {
                 this._caretTimeout = setTimeout(function() {
+                    this._caretTimeout = undefined;
                     this._caret(getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
                 }.bind(this), CARET_TIMEOUT_DURATION);
             }
@@ -570,7 +574,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     clearCaretTimeout: function() {
         clearTimeout(this._caretTimeout);
-        this._caretTimeout = null;
+        this._caretTimeout = undefined;
     },
 
     _forceRefreshInputValue: function() {
@@ -579,8 +583,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
-    _isNonStubAfter: function(index, text) {
-        text = (text || this._getInputVal()).slice(index);
+    _isNonStubAfter: function(index) {
+        const text = this._getInputVal().slice(index);
         return text && !this._isStub(text, true);
     },
 
@@ -602,7 +606,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _getPrecisionLimits: function(text) {
         const currentFormat = this._getFormatForSign(text);
-        const floatPart = (currentFormat.split('.')[1] || '').replace(/[^#0]/g, '');
+        const realSeparatorIndex = getRealSeparatorIndex(currentFormat).index;
+        const floatPart = (splitByIndex(currentFormat, realSeparatorIndex)[1] || '').replace(/[^#0]/g, '');
         const minPrecision = floatPart.replace(/^(0*)#*/, '$1').length;
         const maxPrecision = floatPart.length;
 
@@ -631,7 +636,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
     _applyRevertedSign: function(e, caret, preserveSelectedText) {
         const newValue = -1 * ensureDefined(this._parsedValue, null);
 
-        if(this._isValueInRange(newValue)) {
+        if(this._isValueInRange(newValue) || newValue === 0) {
             this._parsedValue = newValue;
 
             if(preserveSelectedText) {
@@ -648,16 +653,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
                 const caretInBoundaries = getCaretInBoundaries(caret, currentText, format);
 
-                if(browser.msie) {
-                    clearTimeout(this._caretTimeout);
-                    this._caretTimeout = setTimeout(this._caret.bind(this, caretInBoundaries));
-                } else {
-                    this._caret(caretInBoundaries);
-                }
-            }
-
-            if(e.key === NUMPUD_MINUS_KEY_IE) { // Workaround for IE (T592690)
-                eventsEngine.trigger(this._input(), INPUT_EVENT);
+                this._caret(caretInBoundaries);
             }
         }
     },
@@ -768,9 +764,12 @@ const NumberBoxMask = NumberBoxBase.inherit({
         switch(args.name) {
             case 'format':
             case 'useMaskBehavior':
+                this._renderInputType();
                 this._updateFormat();
                 this._renderFormatter();
                 this._renderValue();
+                this._refreshValueChangeEvent();
+                this._refreshEvents();
                 break;
             case 'min':
             case 'max':

@@ -3,6 +3,7 @@ import { extend } from '../../core/utils/extend';
 import localizationCoreUtils from '../core';
 
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
+const NARROW_NO_BREAK_SPACE_REGEX = /[\u202F]/g;
 
 const getIntlFormatter = format => {
     return date => {
@@ -14,7 +15,7 @@ const getIntlFormatter = format => {
             const recognizableAsTwentyCentury = String(year).length < 3;
             const safeYearShift = 400;
             const temporaryYearValue = recognizableAsTwentyCentury ? year + safeYearShift : year;
-            const utcDate = new Date(Date.UTC(temporaryYearValue, date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+            const utcDate = new Date(Date.UTC(temporaryYearValue, date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
             if(recognizableAsTwentyCentury) {
                 utcDate.setFullYear(year);
             }
@@ -38,7 +39,9 @@ const getFormatter = format => {
 };
 
 function formatDateTime(date, format) {
-    return getFormatter(format)(date).replace(SYMBOLS_TO_REMOVE_REGEX, '');
+    return getFormatter(format)(date)
+        .replace(SYMBOLS_TO_REMOVE_REGEX, '')
+        .replace(NARROW_NO_BREAK_SPACE_REGEX, ' ');
 }
 
 const formatNumber = number => {
@@ -300,6 +303,14 @@ export default {
         }
 
         return this.callBase.apply(this, arguments);
+    },
+    getTimeSeparator: function() {
+        const formatOptions = {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false
+        };
+        return normalizeNumerals(formatDateTime(new Date(2001, 1, 1, 11, 11), formatOptions)).replace(/\d/g, '');
     },
 
     getFormatParts: function(format) {

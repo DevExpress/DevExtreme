@@ -155,7 +155,7 @@ export default errorUtils({
     /**
     * @name ErrorsCore.E0121
     */
-    E0121: 'The \'customItem\' field of the \'onCustomItemCreating\' function\'s parameter should contain a custom item or Promise that is resolved after the item is created.',
+    E0121: 'The \'customItem\' parameter of the \'onCustomItemCreating\' function is empty or contains invalid data. Assign a custom object or a Promise that is resolved after the item is created.',
 
 
     /**
@@ -241,5 +241,13 @@ export default errorUtils({
     /**
     * @name ErrorsCore.W0016
     */
-    W0016: 'The "{0}" option does not accept the "{1}" value since v.{2}. {3}.'
+    W0016: 'The "{0}" option does not accept the "{1}" value since v{2}. {3}.',
+    /**
+    * @name ErrorsCore.W0017
+    */
+    W0017: 'Setting the "{0}" property with a function is deprecated since v21.2',
+    /**
+    * @name ErrorsCore.W0018
+    */
+    W0018: 'Setting the "position" property with a function is deprecated since v21.2'
 });

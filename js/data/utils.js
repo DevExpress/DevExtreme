@@ -8,9 +8,9 @@ import { equalByValue } from '../core/utils/common';
 
 const ready = readyCallbacks.add;
 
-const XHR_ERROR_UNLOAD = 'DEVEXTREME_XHR_ERROR_UNLOAD';
+export const XHR_ERROR_UNLOAD = 'DEVEXTREME_XHR_ERROR_UNLOAD';
 
-const normalizeBinaryCriterion = function(crit) {
+export const normalizeBinaryCriterion = function(crit) {
     return [
         crit[0],
         crit.length < 3 ? '=' : String(crit[1]).toLowerCase(),
@@ -18,7 +18,7 @@ const normalizeBinaryCriterion = function(crit) {
     ];
 };
 
-const normalizeSortingInfo = function(info) {
+export const normalizeSortingInfo = function(info) {
     if(!Array.isArray(info)) {
         info = [info];
     }
@@ -35,7 +35,7 @@ const normalizeSortingInfo = function(info) {
     });
 };
 
-const errorMessageFromXhr = (function() {
+export const errorMessageFromXhr = (function() {
     const textStatusMessages = {
         'timeout': 'Network connection timeout',
         'error': 'Unspecified network error',
@@ -82,7 +82,7 @@ const errorMessageFromXhr = (function() {
     };
 })();
 
-const aggregators = {
+export const aggregators = {
     count: {
         seed: 0,
         step: function(count) { return 1 + count; }
@@ -108,7 +108,7 @@ const aggregators = {
     }
 };
 
-const processRequestResultLock = (function() {
+export const processRequestResultLock = (function() {
     let lockCount = 0;
     let lockDeferred;
 
@@ -146,32 +146,33 @@ const processRequestResultLock = (function() {
     };
 })();
 
-function isDisjunctiveOperator(condition) {
+export function isDisjunctiveOperator(condition) {
     return /^(or|\|\||\|)$/i.test(condition);
 }
 
-function isConjunctiveOperator(condition) {
+export function isConjunctiveOperator(condition) {
     return /^(and|&&|&)$/i.test(condition);
 }
 
-const keysEqual = function(keyExpr, key1, key2) {
+export const keysEqual = function(keyExpr, key1, key2) {
     if(Array.isArray(keyExpr)) {
         const names = map(key1, function(v, k) { return k; });
         let name;
         for(let i = 0; i < names.length; i++) {
             name = names[i];
-            if(!equalByValue(key1[name], key2[name], 0, false)) {
+            if(!equalByValue(key1[name], key2[name], { strict: false })) {
                 return false;
             }
         }
         return true;
     }
-    return equalByValue(key1, key2, 0, false);
+
+    return equalByValue(key1, key2, { strict: false });
 };
 
 const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 
-const base64_encode = function(input) {
+export const base64_encode = function(input) {
     if(!Array.isArray(input)) {
         input = stringToByteArray(String(input));
     }
@@ -223,7 +224,7 @@ function stringToByteArray(str) {
     return bytes;
 }
 
-const isUnaryOperation = function(crit) {
+export const isUnaryOperation = function(crit) {
     return crit[0] === '!' && Array.isArray(crit[1]);
 };
 
@@ -231,7 +232,7 @@ const isGroupOperator = function(value) {
     return value === 'and' || value === 'or';
 };
 
-const isGroupCriterion = function(crit) {
+export const isGroupCriterion = function(crit) {
     const first = crit[0];
     const second = crit[1];
 
@@ -247,34 +248,30 @@ const isGroupCriterion = function(crit) {
     return false;
 };
 
-const trivialPromise = function() {
+export const trivialPromise = function() {
     const d = new Deferred();
     return d.resolve.apply(d, arguments).promise();
 };
 
-const rejectedPromise = function() {
+export const rejectedPromise = function() {
     const d = new Deferred();
     return d.reject.apply(d, arguments).promise();
 };
 
 function throttle(func, timeout) {
     let timeoutId;
-    let lastArgs;
     return function() {
-        lastArgs = arguments;
         if(!timeoutId) {
             timeoutId = setTimeout(() => {
                 timeoutId = undefined;
-                if(lastArgs) {
-                    func.call(this, lastArgs);
-                }
+                func.call(this);
             }, isFunction(timeout) ? timeout() : timeout);
         }
         return timeoutId;
     };
 }
 
-function throttleChanges(func, timeout) {
+export function throttleChanges(func, timeout) {
     let cache = [];
     const throttled = throttle(function() {
         func.call(this, cache);
@@ -292,28 +289,3 @@ function throttleChanges(func, timeout) {
 /**
 * @name Utils
 */
-const utils = {
-    XHR_ERROR_UNLOAD: XHR_ERROR_UNLOAD,
-
-    normalizeBinaryCriterion: normalizeBinaryCriterion,
-    normalizeSortingInfo: normalizeSortingInfo,
-    errorMessageFromXhr: errorMessageFromXhr,
-    aggregators: aggregators,
-
-    keysEqual: keysEqual,
-    throttleChanges: throttleChanges,
-    trivialPromise: trivialPromise,
-    rejectedPromise: rejectedPromise,
-
-    isDisjunctiveOperator: isDisjunctiveOperator,
-    isConjunctiveOperator: isConjunctiveOperator,
-
-    processRequestResultLock: processRequestResultLock,
-
-    isUnaryOperation: isUnaryOperation,
-    isGroupCriterion: isGroupCriterion,
-
-    base64_encode: base64_encode
-};
-
-export default utils;

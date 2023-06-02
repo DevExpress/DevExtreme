@@ -59,6 +59,22 @@ QUnit.test('#xxx colors', function(assert) {
     this.checkHsv(new Color('#AdF'), 204, 33, 100, '#AdF', assert);
 });
 
+QUnit.test('#xxxx colors', function(assert) {
+    this.check(new Color('#FC0C'), { r: 255, g: 204, b: 0, a: 0.8 }, '#FC0C', assert);
+    this.check(new Color('#c0fa'), { r: 204, g: 0, b: 255, a: 0.67 }, '#c0fa', assert);
+
+    this.checkHsv(new Color('#FC0C'), 48, 100, 100, '#FC0C', assert);
+    this.checkHsv(new Color('#c0fa'), 288, 100, 100, '#c0fa', assert);
+});
+
+QUnit.test('#xxxxxxxx colors', function(assert) {
+    this.check(new Color('#be73146b'), { r: 190, g: 115, b: 20, a: 0.42 }, '#be73146b', assert);
+    this.check(new Color('#FFCC00FF'), { r: 255, g: 204, b: 0, a: 1 }, '#FFCC00FF', assert);
+
+    this.checkHsv(new Color('#be73146b'), 34, 89, 75, '#be73146b', assert);
+    this.checkHsv(new Color('#FFCC00FF'), 48, 100, 100, '#FFCC00FF', assert);
+});
+
 QUnit.test('rgb(x,x,x) colors', function(assert) {
     this.check(new Color('rgb(10, 23, 140)'), { r: 10, g: 23, b: 140, a: 1 }, 'rgb(10, 23, 140)', assert);
     this.check(new Color('rgb(0,3,100)'), { r: 0, g: 3, b: 100, a: 1 }, 'rgb(0,3,100)', assert);
@@ -144,6 +160,8 @@ QUnit.test('to hex', function(assert) {
     assert.strictEqual(new Color('rgb(10,20,40)').toHex(), '#0a1428', 'rgb(10,20,40)');
     assert.strictEqual(new Color('#A0df10').toHex(), '#a0df10', '#A0df10');
     assert.strictEqual(new Color('#ad9').toHex(), '#aadd99', '#ad9');
+    assert.strictEqual(new Color('#BE73146B').toHex(), '#be7314', '#BE73146B');
+    assert.strictEqual(new Color('#fc0c').toHex(), '#ffcc00', '#fc0');
     assert.strictEqual(new Color('hsv(128, 70, 51)').toHex(), '#278233', 'hsv(128, 70, 51)');
     assert.strictEqual(new Color('rgba(10, 20, 40, .5)').toHex(), '#0a1428', 'rgba(10,20,40)');
 });

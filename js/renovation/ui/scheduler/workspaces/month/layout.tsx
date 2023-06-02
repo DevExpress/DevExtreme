@@ -1,7 +1,7 @@
 // We do not use this component yet so it is safe to remove several parts temporarily
 // We have to do this because of a bug in Vue generator
-import { Component, JSXComponent } from 'devextreme-generator/component_declaration/common';
-import { LayoutBase } from '../base/layout';
+import { Component, JSXComponent } from '@devextreme-generator/declarations';
+import { OrdinaryLayout } from '../base/ordinary_layout';
 import { LayoutProps } from '../base/layout_props';
 
 // const HeaderTemplate = ({ viewCellsData }: HeaderPanelLayoutProps): JSX.Element => (
@@ -12,7 +12,7 @@ import { LayoutProps } from '../base/layout_props';
 // );
 
 export const viewFunction = (viewModel: MonthLayout): JSX.Element => (
-  <LayoutBase
+  <OrdinaryLayout
     viewData={viewModel.props.viewData}
     // headerPanelTemplate={HeaderTemplate}
     // dateTableTemplate={MonthDateTableLayout}

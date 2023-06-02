@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../../base/mixins" as *;
 
 // adduse
@@ -24,10 +25,6 @@ $scheduler-popup-scrollable-content-padding: 20px;
 }
 
 .dx-scheduler {
-  .dx-scheduler-appointment-content-details {
-    margin-top: 2px;
-  }
-
   .dx-empty-message {
     line-height: normal;
   }
@@ -43,32 +40,24 @@ $scheduler-popup-scrollable-content-padding: 20px;
   position: absolute;
   display: block;
   height: $scheduler-appointment-collector-height;
-  text-align: center;
   cursor: pointer;
   margin: $scheduler-appointment-collector-margin 0 0 $scheduler-appointment-collector-margin;
 
-  .dx-scheduler-appointment-collector-content {
+  .dx-scheduler-appointment-collector-content,
+  .dx-button-content {
+    &::after {
+      display: inline-block;
+      position: relative;
+      height: 100%;
+      content: '';
+      vertical-align: middle;
+      font-size: 0;
+    }
+
     @include dx-overflow();
 
     margin: 0 2 * ($scheduler-appointment-collector-margin - 1);
-
-    &.dx-button-content {
-      padding: 0;
-    }
-
-    span:last-child {
-      display: inline-block;
-      vertical-align: middle;
-      line-height: $scheduler-appointment-collector-height / 1.5;
-      height: $scheduler-appointment-collector-height;
-      padding-left: 2px;
-    }
-  }
-
-  &.dx-state-hover {
-    &::before {
-      border-radius: $scheduler-appointment-collector-height;
-    }
+    padding: 0;
   }
 
   &.dx-button.dx-button-default {
@@ -80,7 +69,8 @@ $scheduler-popup-scrollable-content-padding: 20px;
 
 .dx-scheduler-work-space-mouse-selection {
   .dx-scheduler-fixed-appointments,
-  .dx-scheduler-scrollable-appointments {
+  .dx-scheduler-scrollable-appointments,
+  .dx-scheduler-all-day-appointments {
     pointer-events: none;
   }
 }
@@ -105,11 +95,5 @@ $scheduler-popup-scrollable-content-padding: 20px;
 
   .dx-scheduler-appointment-collector {
     margin: 0;
-
-    .dx-scheduler-appointment-collector-content {
-      span:last-child {
-        line-height: $scheduler-appointment-collector-height;
-      }
-    }
   }
 }

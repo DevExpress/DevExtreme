@@ -20,7 +20,7 @@ const themeManagerModule = require('viz/gauges/theme_manager');
 
 $('<div id="test-container">').appendTo('#qunit-fixture');
 
-sinon.stub(rangeModule, 'Range', function(parameters) {
+sinon.stub(rangeModule, 'Range').callsFake(function(parameters) {
     return new stubRange(parameters);
 });
 
@@ -173,7 +173,7 @@ loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
     return new vizMocks.LoadingIndicator(parameters);
 });
 
-sinon.stub(rendererModule, 'Renderer', function() {
+sinon.stub(rendererModule, 'Renderer').callsFake(function() {
     return currentTest().renderer;
 });
 
@@ -236,10 +236,12 @@ QUnit.test('Scale is rendered', function(assert) {
 
     const scale = axisModule.Axis.getCall(0).returnValue;
     const scaleGroup = this.renderer.g.getCall(6).returnValue;
+    const labelsAxesGroup = this.renderer.g.getCall(7).returnValue;
     const axisArguments = axisModule.Axis.getCall(0).args[0];
 
     assert.deepEqual(axisArguments.renderer, this.renderer, 'scale params: renderer');
     assert.deepEqual(axisArguments.axesContainerGroup, scaleGroup, 'scale params: group');
+    assert.deepEqual(axisArguments.labelsAxesGroup, labelsAxesGroup, 'scale params: labels');
     assert.deepEqual(axisArguments.axisType, 'testAxes', 'scale params: type');
     assert.deepEqual(axisArguments.drawingType, 'testDrawing', 'scale params: drawingType');
     assert.deepEqual(axisArguments.widgetClass, 'dxg', 'scale params: dxg');
@@ -469,7 +471,7 @@ QUnit.test('Subvalue indicators are rendered', function(assert) {
         assert.strictEqual(target.renderer, gauge._renderer, 'renderer is passed');
         assert.strictEqual(target.translator, gauge._translator, 'translator is passed');
 
-        const subvalueIndicatorsContainer = gauge._renderer.g.getCall(7).returnValue;
+        const subvalueIndicatorsContainer = gauge._renderer.g.getCall(8).returnValue;
         assert.strictEqual(target.owner, subvalueIndicatorsContainer, 'root element is passed');
         assert.deepEqual(subvalueIndicatorsContainer.attr.firstCall.args[0], { class: 'dxg-subvalue-indicators' });
         assert.strictEqual(subvalueIndicatorsContainer.linkOn.callCount, 1);
@@ -728,7 +730,7 @@ QUnit.module('Gauge - resizing', {
 QUnit.test('Resizable by default', function(assert) {
     assert.expect(2);
     const done = assert.async();
-    const gauge = this.createTestGauge();
+    const gauge = this.createTestGauge({ redrawOnResize: 'windowOnly' });
     gauge.rendered = function() {
         assert.strictEqual(gauge.renderCount, 2, 'render count');
         assert.deepEqual(gauge._DEBUG_rootRect, [0, 0, 400, 200], 'resized');
@@ -737,38 +739,6 @@ QUnit.test('Resizable by default', function(assert) {
 
     this.container.css({ width: 400, height: 200 });
     resizeCallbacks.fire();
-});
-
-QUnit.test('Not resizable', function(assert) {
-    const gauge = this.createTestGauge({
-        redrawOnResize: false
-    });
-    const rect = gauge._DEBUG_rootRect;
-    gauge.rendered = function() {
-        assert.ok(false);
-    };
-
-    this.container.css({ width: 400, height: 200 });
-    resizeCallbacks.fire();
-
-    assert.strictEqual(gauge.renderCount, 1, 'render count');
-    assert.deepEqual(gauge._DEBUG_rootRect, rect, 'not resized');
-});
-
-QUnit.test('Not resizable if sizes defined', function(assert) {
-    const gauge = this.createTestGauge({
-        size: { width: 100, height: 200 }
-    });
-    const rect = gauge._DEBUG_rootRect;
-    gauge.rendered = function() {
-        assert.ok(false);
-    };
-
-    this.container.css({ width: 400, height: 300 });
-    resizeCallbacks.fire();
-
-    assert.strictEqual(gauge.renderCount, 1, 'render count');
-    assert.deepEqual(gauge._DEBUG_rootRect, rect, 'not resized');
 });
 
 QUnit.test('Value indicators are not moved on resize', function(assert) {
@@ -790,7 +760,7 @@ QUnit.test('Value indicators are not moved on resize', function(assert) {
     delete gauge._subvalueIndicatorsSet._indicators[1].previousValue;
 
     this.container.css({ width: 200, height: 100 });
-    resizeCallbacks.fire();
+    gauge.render();
 });
 
 //  B252892
@@ -813,15 +783,7 @@ QUnit.test('Value indicators preserve their value on resize', function(assert) {
     delete gauge._subvalueIndicatorsSet._indicators[1].previousValue;
 
     this.container.css({ width: 200, height: 100 });
-    resizeCallbacks.fire();
-});
-
-QUnit.test('Can set value to null', function(assert) {
-    const gauge = this.createTestGauge({
-        value: null
-    });
-
-    assert.strictEqual(gauge.value(), null);
+    gauge.render();
 });
 
 //  B252892
@@ -844,7 +806,7 @@ QUnit.test('Value indicators preserve their value on resize (hard mode)', functi
     };
 
     this.container.css({ width: 200, height: 100 });
-    resizeCallbacks.fire();
+    gauge.render();
 });
 
 //  B253559
@@ -867,7 +829,7 @@ QUnit.test('Animation settings are preserved on resize', function(assert) {
     delete gauge._subvalueIndicatorsSet._indicators[1].previousValue;
 
     this.container.css({ width: 200, height: 100 });
-    resizeCallbacks.fire();
+    gauge.render();
 });
 
 //  B253559
@@ -890,18 +852,7 @@ QUnit.test('Animation settings are preserved on resize (hard mode)', function(as
     };
 
     this.container.css({ width: 200, height: 100 });
-    resizeCallbacks.fire();
-});
-
-QUnit.test('Not redrawn if size is not changed', function(assert) {
-    const gauge = this.createTestGauge();
-    gauge.rendered = function() {
-        assert.ok(false);
-    };
-
-    resizeCallbacks.fire();
-
-    assert.strictEqual(gauge.renderCount, 1, 'render count');
+    gauge.render();
 });
 
 //  B238220
@@ -916,10 +867,18 @@ QUnit.test('Translator is not recreated on resize', function(assert) {
     };
 
     this.container.css({ width: 200, height: 100 });
-    resizeCallbacks.fire();
+    gauge.render();
 });
 
 QUnit.module('Gauge - options processing', environment);
+
+QUnit.test('Can set value to null', function(assert) {
+    const gauge = this.createTestGauge({
+        value: null
+    });
+
+    assert.strictEqual(gauge.value(), null);
+});
 
 //  B232788
 QUnit.test('Less ranges in range container', function(assert) {

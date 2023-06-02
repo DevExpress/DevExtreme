@@ -1,33 +1,36 @@
-import 'common.css!';
 import 'generic_light.css!';
 
 import $ from 'jquery';
 import dataUtils from 'core/element_data';
-import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import typeUtils from 'core/utils/type';
+import { format } from 'core/utils/string';
 import config from 'core/config';
 import devices from 'core/devices';
 import { DataSource } from 'data/data_source/data_source';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
+import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import dateLocalization from 'localization/date';
 import messageLocalization from 'localization/message';
+import { addShadowDomStyles } from 'core/utils/shadow_dom.js';
 
-import 'ui/data_grid/ui.data_grid';
-import '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
-setTemplateEngine('hogan');
+import 'ui/data_grid';
 
 const SORT_INDEX_ICON_SELECTOR = '.dx-sort-index-icon';
 const SORT_INDEX_INDICATOR_SELECTOR = '.dx-sort-index-indicator';
 
 $('body').addClass('dx-viewport');
 QUnit.testStart(function() {
+    $('#qunit-fixture').addClass('dx-viewport');
+
     const markup =
-        '<div class="dx-widget">\
-            <div id="container" class="dx-datagrid"></div>\
-        </div>\
-        <div id="containerIE" class="dx-datagrid"></div>';
+        `<div class="dx-widget">
+            <div id="container" class="dx-datagrid"></div>
+        </div>
+        <div id="containerIE" class="dx-datagrid"></div>`;
 
     $('#qunit-fixture').html(markup);
+
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 function getText(cell) {
@@ -381,18 +384,22 @@ QUnit.module('Headers', {
         // arrange
         const testElement = $('#container');
 
-        $.extend(this.columns, [{ headerCaption: 'Column 1', groupIndex: 0, command: 'expand' }, { headerCaption: 'Column 2', groupIndex: 1, command: 'expand' }, { headerCaption: 'Column 3', groupIndex: 2, command: 'expand' }, { command: 'empty' }]);
+        $.extend(this.columns, [
+            { headerCaption: 'Column 1', groupIndex: 0, command: 'expand' },
+            { headerCaption: 'Column 2', groupIndex: 1, command: 'expand' },
+            { headerCaption: 'Column 3', groupIndex: 2, command: 'expand' }
+        ]);
 
         // act
         this.columnHeadersView.render(testElement);
         const cells = testElement.find('td');
 
         // assert
-        assert.equal(cells.length, 4, 'headers count');
+        assert.equal(cells.length, 3, 'headers count');
         assert.strictEqual($(cells[0]).html(), '&nbsp;', '1 group space text');
         assert.strictEqual($(cells[1]).html(), '&nbsp;', '2 group space text');
         assert.strictEqual($(cells[2]).html(), '&nbsp;', '3 group space text');
-        assert.strictEqual($(cells[3]).html(), '&nbsp;', 'text column with command is empty');
+
         assert.ok(cells.parent().outerHeight() >= 30, 'height header');
     });
 
@@ -527,7 +534,7 @@ QUnit.module('Headers', {
             const $element = $(element);
             assert.equal($element.attr('aria-colindex'), index + 1);
             assert.equal($element.attr('role'), 'gridcell');
-            assert.equal($element.attr('aria-selected'), 'false');
+            assert.notOk(element.hasAttribute('aria-selected'), 'element has no aria-selected attribute'); // T1093760
         });
     });
 
@@ -675,8 +682,12 @@ QUnit.module('Headers', {
         // arrange
         const $testElement = $('#container');
 
-        $.extend(this.columns, [{ alignment: 'center', sortOrder: 'asc' }, { alignment: 'right', sortOrder: 'asc' },
-            { alignment: 'left', sortOrder: 'desc' }, { alignment: 'left', allowSorting: true }]);
+        $.extend(this.columns, [
+            { alignment: 'center', sortOrder: 'asc' },
+            { alignment: 'right', sortOrder: 'asc' },
+            { alignment: 'left', sortOrder: 'desc' },
+            { alignment: 'left', allowSorting: true }
+        ]);
 
         this.options.showColumnLines = true;
         this.options.sorting = {
@@ -790,19 +801,19 @@ QUnit.module('Headers', {
         this.columnHeadersView.render(testElement);
 
         // assert
-        let sortElements = testElement.find('.' + 'dx-sort');
+        let sortElements = testElement.find('.dx-sort:not(.dx-sort-none)');
         assert.equal(sortElements.length, 0, 'sortElements count');
 
 
         let headerElement = testElement.find('td');
-        sortElements = testElement.find('.' + 'dx-sort');
+        sortElements = testElement.find('.dx-sort:not(.dx-sort-none)');
         assert.equal(sortElements.length, 0, 'not sorting');
         assert.equal(headerElement.attr('aria-sort'), 'none');
 
         // act
         headerElement.trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         sortElements = testElement.find('.' + 'dx-sort-up');
         assert.equal(sortElements.length, 1, 'up sort');
@@ -812,7 +823,7 @@ QUnit.module('Headers', {
         headerElement = testElement.find('td');
         headerElement.trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         sortElements = testElement.find('.' + 'dx-sort-down');
         assert.equal(sortElements.length, 1, 'down sort');
@@ -822,7 +833,7 @@ QUnit.module('Headers', {
         headerElement = testElement.find('td');
         headerElement.eq(0).trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         sortElements = testElement.find('.' + 'dx-sort');
@@ -846,7 +857,7 @@ QUnit.module('Headers', {
 
         // act
         headerElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(headerElement.attr('aria-sort'), 'none');
     });
@@ -868,7 +879,7 @@ QUnit.module('Headers', {
 
         // act
         headerElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(headerElement.attr('aria-sort'), 'none');
     });
@@ -890,7 +901,7 @@ QUnit.module('Headers', {
 
         // act
         headerElement.trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(headerElement.attr('aria-sort'), 'ascending');
     });
@@ -916,7 +927,7 @@ QUnit.module('Headers', {
         // act
         popupMenu.find('.dx-menu-item').first().trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('td').first().find('.dx-sort-up').length, 1, 'has element with class dx-sort-up');
@@ -943,7 +954,7 @@ QUnit.module('Headers', {
         // act
         popupMenu.find('.dx-menu-item').eq(1).trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('td').first().find('.dx-sort-down').length, 1, 'has element with class dx-sort-down');
@@ -974,7 +985,7 @@ QUnit.module('Headers', {
         // act
         popupMenu.find('.dx-menu-item').last().trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(testElement.find('td').first().find('.dx-sort-up').length, 0, 'not has element with class dx-sort-up');
@@ -1133,14 +1144,14 @@ QUnit.module('Headers', {
         this.columnHeadersView.render(testElement);
 
         // assert
-        assert.equal(testElement.find('td').last().find('.' + 'dx-sort').length, 1);
+        assert.equal(testElement.find('td').last().find('.dx-sort:not(.dx-sort-none)').length, 1);
 
         // act
         testElement.find('td').last().trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
-        assert.strictEqual(testElement.find('td').last().find('.' + 'dx-sort').length, 0);
+        assert.strictEqual(testElement.find('td').last().find('.dx-sort:not(.dx-sort-none)').length, 0);
     });
 
     QUnit.test('Apply alignment for sorting', function(assert) {
@@ -1356,7 +1367,7 @@ QUnit.module('Headers', {
     });
 
     QUnit.test('Check correct work getColumnsWidth without columns', function(assert) {
-    // act
+        // act
         this.columnHeadersView.render($('#container'));
         // assert
         assert.deepEqual(this.columnHeadersView.getColumnWidths(), [], 'empty column widths');
@@ -1510,7 +1521,7 @@ QUnit.module('Headers', {
         assert.equal(headerCellTemplateOptions.columnIndex, 2, 'headerCellTemplate option columnIndex');
     });
 
-    QUnit.test('Custom headerCellTemplate as string selector for column with hogan', function(assert) {
+    QUnit.test('Custom headerCellTemplate as string selector for column with jquery template', function(assert) {
         // arrange
         const that = this;
         const testElement = $('#container');
@@ -1520,15 +1531,16 @@ QUnit.module('Headers', {
             { caption: 'Column 2' },
             {
                 caption: 'Column3',
-                headerCellTemplate: '#hoganHeaderColumnTemplate'
+                headerCellTemplate: '#jqHeaderColumnTemplate'
             }
         ]);
 
         this._getTemplate = function(selector) {
-            assert.equal(selector, '#hoganHeaderColumnTemplate');
+            assert.equal(selector, '#jqHeaderColumnTemplate');
             return {
                 render: function(options) {
                     options.container.append('<b>' + options.model.caption + '</b>');
+                    options.deferred && options.deferred.resolve();
                 }
             };
         };
@@ -1546,7 +1558,6 @@ QUnit.module('Headers', {
     QUnit.test('Allow dragging when allowReordering true', function(assert) {
         // arrange
         const testElement = $('#container');
-        const draggingPanels = [this.columnHeadersView, { allowDragging: function() { return false; } }, { allowDragging: function() { return false; } }];
 
         $.extend(this.columns, [{ caption: 'Column 1', allowReordering: true }, { caption: 'Column 2', allowReordering: true }]);
 
@@ -1555,15 +1566,32 @@ QUnit.module('Headers', {
         // act
         this.columnHeadersView.render(testElement);
 
-        // act, assert
-        assert.ok(this.columnHeadersView.allowDragging({ caption: 'Column 1', allowReordering: true }, draggingPanels), 'allow dragging');
+        const isAllowDragging = this.columnHeadersView.allowDragging(this.columns[0]);
+
+        // assert
+        assert.ok(isAllowDragging, 'allow dragging');
+    });
+
+    QUnit.test('Allow dragging when many there are columns and one has allowReordering=true', function(assert) {
+        // arrange
+        const testElement = $('#container');
+
+        $.extend(this.columns, [{ caption: 'Column 1', allowReordering: false }, { caption: 'Column 2', allowReordering: true }]);
+
+        this.options.allowColumnReordering = true;
+
+        // act
+        this.columnHeadersView.render(testElement);
+
+        // assert
+        assert.notOk(this.columnHeadersView.allowDragging(this.columns[0]), 'not allow dragging');
+        assert.ok(this.columnHeadersView.allowDragging(this.columns[1]), 'allow dragging');
     });
 
     // T117339
     QUnit.test('Not allow dragging when allowReordering true and one column', function(assert) {
         // arrange
         const testElement = $('#container');
-        const draggingPanels = [this.columnHeadersView, { allowDragging: function() { return false; } }, { allowDragging: function() { return false; } }];
 
         $.extend(this.columns, [{ caption: 'Column 1', allowReordering: true }]);
 
@@ -1572,15 +1600,16 @@ QUnit.module('Headers', {
         // act
         this.columnHeadersView.render(testElement);
 
-        // act, assert
-        assert.ok(!this.columnHeadersView.allowDragging({ caption: 'Column 1', allowReordering: true }, draggingPanels), 'not allow dragging');
+        const isAllowDragging = this.columnHeadersView.allowDragging(this.columns[0]);
+
+        // assert
+        assert.notOk(isAllowDragging, 'not allow dragging');
     });
 
     // T117339
     QUnit.test('Not allow dragging when allowReordering false', function(assert) {
         // arrange
         const testElement = $('#container');
-        const draggingPanels = [this.columnHeadersView, { allowDragging: function() { return false; } }, { allowDragging: function() { return false; } }];
 
         $.extend(this.columns, [{ caption: 'Column 1', allowReordering: false }, { caption: 'Column 2', allowReordering: false }]);
 
@@ -1589,8 +1618,10 @@ QUnit.module('Headers', {
         // act
         this.columnHeadersView.render(testElement);
 
+        const isAllowDragging = this.columnHeadersView.allowDragging(this.columns[0]);
+
         // act, assert
-        assert.ok(!this.columnHeadersView.allowDragging({ caption: 'Column 1', allowReordering: false }, draggingPanels), 'not allow dragging');
+        assert.notOk(isAllowDragging, 'not allow dragging');
     });
 
     QUnit.test('Headers with option onCellPrepared', function(assert) {
@@ -2104,6 +2135,207 @@ QUnit.module('Headers with grouping', {
     });
 });
 
+QUnit.module('Headers with grouping and chooser', {
+    beforeEach: function() {
+        const that = this;
+
+        that.clock = sinon.useFakeTimers();
+
+        that.$element = function() {
+            return $('#container');
+        };
+
+        that.setupDataGrid = function(options) {
+            dataGridMocks.setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'grouping', 'columnChooser', 'headerPanel'], {
+                initViews: true,
+                controllers: {
+                    data: new dataGridMocks.MockDataController({ items: [] })
+                },
+                options: options
+            });
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('Check header text when all columns are grouped', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', groupIndex: 0 },
+                { caption: 'Column 2', groupIndex: 1 }
+            ],
+            groupPanel: { visible: true }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        assert.strictEqual(emptyCell.find('.dx-datagrid-text-content').length, 1, 'cell content rendered');
+        assert.strictEqual(emptyCell.text(), messageLocalization.format('dxDataGrid-emptyHeaderWithGroupPanelText'));
+    });
+
+    QUnit.test('Check header text when all columns are grouped but group panel is not visible', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', groupIndex: 0 },
+                { caption: 'Column 2', groupIndex: 1 }
+            ],
+            groupPanel: { visible: false }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        assert.strictEqual(emptyCell.html(), '&nbsp;', 'no message');
+    });
+
+    QUnit.test('Check header text when all columns are hidden in column chooser', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', visible: false },
+                { caption: 'Column 2', visible: false }
+            ],
+            columnChooser: { enabled: true }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        const columnChooserTitle = messageLocalization.format('dxDataGrid-emptyHeaderColumnChooserText');
+        const text = format(messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserText'), columnChooserTitle);
+
+        assert.strictEqual(emptyCell.find('.dx-datagrid-text-content').length, 1, 'cell content rendered');
+        assert.strictEqual(emptyCell.text(), text);
+
+        // act
+        const columnChooserLink = emptyCell.find('.dx-datagrid-text-content .dx-link');
+
+        // assert
+        assert.strictEqual(columnChooserLink.length, 1, 'link for column chooser created');
+        assert.strictEqual(columnChooserLink.text(), columnChooserTitle);
+
+        // act
+        let chooserOpened = false;
+        this.columnChooserView.showColumnChooser = () => chooserOpened = true;
+
+        columnChooserLink.trigger('click');
+
+        // assert
+        assert.ok(chooserOpened, 'chooser has been opened');
+    });
+
+    QUnit.test('Check header text when all columns are hidden but column chooser is not enabled', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', visible: false },
+                { caption: 'Column 2', visible: false }
+            ],
+            columnChooser: { enabled: false }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        assert.strictEqual(emptyCell.html(), '&nbsp;', 'no message');
+    });
+
+    QUnit.test('Check header text when all columns are hidden in column chooser or grouped in group panel', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', visible: false },
+                { caption: 'Column 2', groupIndex: 0 }
+            ],
+            columnChooser: { enabled: true },
+            groupPanel: { visible: true }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        const columnChooserTitle = messageLocalization.format('dxDataGrid-emptyHeaderColumnChooserText');
+        const text = format(messageLocalization.format('dxDataGrid-emptyHeaderWithColumnChooserAndGroupPanelText'), columnChooserTitle);
+
+        assert.strictEqual(emptyCell.find('.dx-datagrid-text-content').length, 1, 'cell content rendered');
+        assert.strictEqual(emptyCell.text(), text);
+
+        // act
+        const columnChooserLink = emptyCell.find('.dx-datagrid-text-content .dx-link');
+
+        // assert
+        assert.strictEqual(columnChooserLink.length, 1, 'link for column chooser created');
+        assert.strictEqual(columnChooserLink.text(), columnChooserTitle);
+
+        // act
+        let chooserOpened = false;
+        this.columnChooserView.showColumnChooser = () => chooserOpened = true;
+
+        columnChooserLink.trigger('click');
+
+        // assert
+        assert.ok(chooserOpened, 'chooser has been opened');
+    });
+
+    QUnit.test('Check header text when all columns are hidden or grouped but column chooser and group panel are not enabled', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.setupDataGrid({
+            showColumnHeaders: true,
+            columns: [
+                { caption: 'Column 1', visible: false },
+                { caption: 'Column 2', groupIndex: 0 }
+            ],
+            columnChooser: { enabled: false },
+            groupPanel: { visible: false }
+        });
+
+        // act
+        this.columnHeadersView.render($testElement);
+
+        const emptyCell = $('.dx-header-row td:not(.dx-command-expand)');
+
+        // assert
+        assert.strictEqual(emptyCell.html(), '&nbsp;', 'no message');
+    });
+});
+
 QUnit.module('Headers with band columns', {
     beforeEach: function() {
         const that = this;
@@ -2314,8 +2546,11 @@ QUnit.module('Headers with band columns', {
         this.options.allowColumnReordering = true;
         this.setupDataGrid();
 
-        // act, assert
-        assert.ok(this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(1)[0]), 'allow dragging');
+        // act
+        const firstColumnAllowDragging = this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(1)[0]);
+
+        // assert
+        assert.ok(firstColumnAllowDragging, 'first column can be dragged');
     });
 
     QUnit.test('Not allow dragging when allowReordering true and only one band column', function(assert) {
@@ -2324,8 +2559,11 @@ QUnit.module('Headers with band columns', {
         this.options.allowColumnReordering = true;
         this.setupDataGrid();
 
-        // act, assert
-        assert.ok(!this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(0)[0]), 'not allow dragging');
+        // act
+        const bandColumnAllowDragging = this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(0)[0]);
+
+        // assert
+        assert.notOk(bandColumnAllowDragging, 'band column can not be dragged');
     });
 
     QUnit.test('Not allow dragging when allowReordering true and one column', function(assert) {
@@ -2334,8 +2572,11 @@ QUnit.module('Headers with band columns', {
         this.options.allowColumnReordering = true;
         this.setupDataGrid();
 
-        // act, assert
-        assert.ok(!this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(1)[0]), 'not allow dragging');
+        // act
+        const columnAllowDragging = this.columnHeadersView.allowDragging(this.columnsController.getVisibleColumns(1)[0]);
+
+        // assert
+        assert.notOk(columnAllowDragging, 'not allow dragging');
     });
 
     // T360137
@@ -2359,7 +2600,7 @@ QUnit.module('Headers with band columns', {
         // act
         $popupMenu.find('.dx-menu-item').first().trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($cell.find('.dx-sort-up').length, 1, 'has element with class dx-sort-up');
@@ -2853,6 +3094,32 @@ QUnit.module('Multiple sorting', {
             cellWidthDiff: -12
         });
     });
+
+    ['ctrlKey', 'metaKey'].forEach((key) => {
+        QUnit.test(`${key} + click should reset sort order`, function(assert) {
+            // arrange
+            const $testElement = this.$element().addClass('dx-widget');
+            const options = {
+                sorting: {
+                    mode: 'multiple'
+                }
+            };
+
+            this.setupDataGrid(options);
+
+            // act
+            this.columnHeadersView.render($testElement);
+            const $headerCells = $testElement.find('.dx-header-row').children();
+
+            $headerCells.eq(1).trigger($.Event('dxclick', { [key]: true }));
+            this.clock.tick(10);
+
+            const cols = this.columnsController.getVisibleColumns();
+            assert.strictEqual(cols[0].sortOrder, undefined, 'first column has not sort order');
+            assert.strictEqual(cols[1].sortOrder, undefined, 'second column has not sort order');
+            assert.strictEqual(cols[2].sortOrder, 'asc', 'third column has sort order');
+        });
+    });
 });
 
 QUnit.module('Headers with RTL', {
@@ -2911,5 +3178,102 @@ QUnit.module('Headers with RTL', {
         assert.notOk($headerCellIndicators.eq(2).hasClass('dx-visibility-hidden'), 'indicator is not hidden');
 
         assert.ok($headerCellContent.eq(2).offset().left > $headerCellIndicators.eq(3).offset().left, 'indicators are on the left');
+    });
+});
+
+QUnit.module('Render templates with renderAsync', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.setupDataGrid = function(options) {
+            dataGridMocks.setupDataGridModules(this, ['data', 'columns', 'headerFilter', 'columnHeaders', 'sorting', 'gridView', 'rows'], {
+                initViews: true,
+                initDefaultOptions: true,
+                options: options
+            });
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+}, () => {
+
+    [true, false].forEach((templatesRenderAsynchronously) => {
+        [true, false].forEach((renderAsync) => {
+            QUnit.test(`Render column with headerCellTemplate when renderAsync = ${renderAsync} and templatesRenderAsynchronously=${templatesRenderAsynchronously}`, function(assert) {
+                // arrange
+                assert.expect(3);
+
+                const $testElement = $('#container');
+                const options = {
+                    columns: [{
+                        dataField: 'name',
+                        headerCellTemplate: '#testTemplate'
+                    }],
+                    renderAsync,
+                    templatesRenderAsynchronously
+                };
+
+                this.setupDataGrid(options);
+                this._getTemplate = function() {
+                    return {
+                        render: function(options) {
+                            const container = $(options.container).get(0);
+
+                            // assert
+                            if(templatesRenderAsynchronously && renderAsync === false) {
+                                assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 0, 'container is detached to DOM');
+                            } else {
+                                assert.strictEqual($(container).closest(findShadowHostOrDocument(container)).length, 1, 'container is attached to DOM');
+                            }
+                            setTimeout(() => {
+                                options.deferred && options.deferred.resolve();
+                            }, 50);
+                        }
+                    };
+                };
+
+                // act
+                this.columnHeadersView.render($testElement);
+
+                // assert
+                assert.strictEqual(this.columnHeadersView._templateDeferreds.size, 1, 'templateDeferreds array isn\'t empty');
+                this.clock.tick(50);
+
+                // assert
+                assert.strictEqual(this.columnHeadersView._templateDeferreds.size, 0, 'templateDeferreds array is empty');
+            });
+        });
+    });
+    // T1139245 - DataGrid - It is not possible to reorder columns when headerCellRender is used in React
+    QUnit.test('The renderCompleted should raise then content has rendered', function(assert) {
+        const $testElement = $('#container');
+        const options = {
+            columns: [{
+                dataField: 'name',
+                headerCellTemplate: '#testTemplate'
+            }],
+            renderAsync: false,
+            templatesRenderAsynchronously: true
+        };
+
+        this.setupDataGrid(options);
+        this._getTemplate = function() {
+            return {
+                render: function(options) {
+                    setTimeout(() => {
+                        options.deferred && options.deferred.resolve();
+                    }, 50);
+                }
+            };
+        };
+        let renderCompletedCall = false;
+        this.columnHeadersView.renderCompleted.add(() => { renderCompletedCall = true; });
+
+        // act
+        this.columnHeadersView.render($testElement);
+        assert.ok(!renderCompletedCall, 'renderCompleted isnt fired because template isnt rendered');
+        this.clock.tick(50);
+        assert.ok(renderCompletedCall, 'renderCompleted fired after template is rendered');
     });
 });

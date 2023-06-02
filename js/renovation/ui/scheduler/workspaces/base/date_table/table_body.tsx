@@ -2,15 +2,21 @@ import {
   Component,
   JSXComponent,
   Fragment,
-} from 'devextreme-generator/component_declaration/common';
+  ComponentBindings,
+  Template,
+  JSXTemplate,
+} from '@devextreme-generator/declarations';
 import { Row } from '../row';
-import { ViewCellData } from '../../types.d';
-import {
-  getKeyByGroup,
-  getIsGroupedAllDayPanel,
-} from '../../utils';
+import { DataCellTemplateProps, ViewCellData } from '../../types';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
-import { DateTableLayoutProps } from './layout_props';
+import { LayoutProps } from '../layout_props';
+import { DateTableCellBase } from './cell';
+import { combineClasses } from '../../../../../utils/combine_classes';
+import { DATE_TABLE_ROW_CLASS } from '../../const';
+
+export interface CellTemplateProps extends ViewCellData {
+  dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
+}
 
 export const viewFunction = ({
   props: {
@@ -18,35 +24,47 @@ export const viewFunction = ({
     dataCellTemplate,
     cellTemplate: Cell,
   },
+  rowClasses,
 }: DateTableBody): JSX.Element => (
   <Fragment>
     {viewData
-      .groupedData.map(({ dateTable, allDayPanel }, groupIndex) => (
-        <Fragment key={getKeyByGroup(groupIndex)}>
-          {getIsGroupedAllDayPanel(viewData, groupIndex) && (
+      .groupedData.map(({
+        dateTable,
+        allDayPanel,
+        key: fragmentKey,
+        isGroupedAllDayPanel,
+      }) => (
+        <Fragment key={fragmentKey}>
+          {isGroupedAllDayPanel && (
             <AllDayPanelTableBody
               viewData={allDayPanel}
               dataCellTemplate={dataCellTemplate}
               isVerticalGroupOrientation
               leftVirtualCellWidth={viewData.leftVirtualCellWidth}
               rightVirtualCellWidth={viewData.rightVirtualCellWidth}
+              leftVirtualCellCount={viewData.leftVirtualCellCount}
+              rightVirtualCellCount={viewData.rightVirtualCellCount}
             />
           )}
-          {dateTable.map((cellsRow) => (
+          {dateTable.map(({ key: rowKey, cells }) => (
             <Row
-              className="dx-scheduler-date-table-row"
-              key={cellsRow[0].key}
+              className={rowClasses}
+              key={rowKey}
               leftVirtualCellWidth={viewData.leftVirtualCellWidth}
               rightVirtualCellWidth={viewData.rightVirtualCellWidth}
+              leftVirtualCellCount={viewData.leftVirtualCellCount}
+              rightVirtualCellCount={viewData.rightVirtualCellCount}
             >
-              {cellsRow.map(({
+              {cells.map(({
                 startDate,
                 endDate,
                 groups,
                 groupIndex: cellGroupIndex,
-                index,
+                index: cellIndex,
                 isFirstGroupCell,
                 isLastGroupCell,
+                isSelected,
+                isFocused,
                 key,
                 text,
                 otherMonth,
@@ -60,13 +78,15 @@ export const viewFunction = ({
                   endDate={endDate}
                   groups={groups}
                   groupIndex={cellGroupIndex}
-                  index={index}
+                  index={cellIndex}
                   dataCellTemplate={dataCellTemplate}
                   key={key}
                   text={text}
                   today={today}
                   otherMonth={otherMonth}
                   firstDayOfMonth={firstDayOfMonth}
+                  isSelected={isSelected}
+                  isFocused={isFocused}
                 />
               ))}
             </Row>
@@ -76,8 +96,22 @@ export const viewFunction = ({
   </Fragment>
 );
 
+@ComponentBindings()
+export class DateTableBodyProps extends LayoutProps {
+  @Template() cellTemplate: JSXTemplate<CellTemplateProps> = DateTableCellBase;
+}
+
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent<DateTableLayoutProps, 'cellTemplate'>() {}
+export class DateTableBody extends JSXComponent<DateTableBodyProps, 'cellTemplate'>() {
+  get rowClasses(): string {
+    const { addVerticalSizesClassToRows } = this.props;
+
+    return combineClasses({
+      [DATE_TABLE_ROW_CLASS]: true,
+      'dx-scheduler-cell-sizes-vertical': addVerticalSizesClassToRows,
+    });
+  }
+}

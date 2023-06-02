@@ -1,0 +1,88 @@
+name: QUnit tests for renovation
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches: [23_1]
+
+jobs:
+  build:
+    runs-on: devextreme-shr2
+    name: Build
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Build
+      env:
+        DEVEXTREME_TEST_CI: "true"
+        DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+      run: BUILD_INPROGRESS_RENOVATION=true npm run build:dev
+
+    - name: Zip artifacts
+      run: |
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: devextreme-artifacts
+        path: artifacts.zip
+        retention-days: 1
+
+  qunit-tests:
+    needs: build
+    runs-on: devextreme-shr2
+    name: Constel ${{ matrix.CONSTEL }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [ export, misc, ui, ui.widgets(1/2), ui.widgets(2/2), ui.editors, ui.htmlEditor, ui.grid, ui.scheduler(1/2), ui.scheduler(2/2), viz, renovation ]
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v3
+
+    - name: Run QUnit tests
+      uses: ./.github/actions/run-qunit-tests
+      with:
+        constel: ${{ matrix.CONSTEL }}
+        useCsp: "false"
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [build, qunit-tests]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DevExpress/github-actions/send-teams-notification@main
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 23_1

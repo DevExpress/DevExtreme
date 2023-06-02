@@ -217,10 +217,7 @@ for(const field in window) {
 }
 
 const makeWindowEmpty = function() {
-    windowUtils.hasWindow = () => false;
-    windowUtils.getWindow = () => windowMock;
-    windowUtils.getNavigator = () => ({ userAgent: '' });
-    windowUtils.hasProperty = () => false;
+    windowUtils.setWindow(windowMock);
 };
 
 // Ensure domAdapter is not used on scripts loading stage (until the integration is not injected)

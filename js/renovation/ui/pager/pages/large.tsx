@@ -3,15 +3,14 @@ import {
   JSXComponent,
   Fragment,
   Consumer,
-  Ref,
-} from 'devextreme-generator/component_declaration/common';
-import { Page, PageProps } from './page';
-import PagerProps from '../common/pager_props';
+  Mutable,
+} from '@devextreme-generator/declarations';
+import { Page, PagePropsInterface } from './page';
+import { InternalPagerProps } from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const viewFunction = ({ pages }: PagesLarge) => {
+export const viewFunction = ({ pages }: PagesLarge): JSX.Element => {
   const PagesMarkup = pages.map(({ key, pageProps }) => (pageProps
     ? (
       <Page
@@ -29,17 +28,18 @@ export const viewFunction = ({ pages }: PagesLarge) => {
 };
 
 const PAGES_LIMITER = 4;
+
 interface PageType {
   key: string;
-  pageProps: Partial<PageProps> | null;
+  pageProps: PagePropsInterface | null;
 }
 interface SlidingWindowState {
   indexesForReuse: number[];
   slidingWindowIndexes: number[];
 }
 type PageIndex = number | 'low' | 'high';
-type PageIndexes = PageIndex[];
 type DelimiterType = 'none' | 'low' | 'high' | 'both';
+interface PageIndexes extends Array<PageIndex> {}
 
 function getDelimiterType(
   startIndex: number, slidingWindowSize: number, pageCount: number,
@@ -90,19 +90,19 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
   );
 }
 
-type PagesLargePropsType = Pick<PagerProps,
-'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type PagesLargePropsType = Pick<InternalPagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
-export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
+export class PagesLarge extends JSXComponent<PagesLargePropsType, 'pageIndexChange'>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
-  @Ref()
-  slidingWindowStateRef!: SlidingWindowState;
+  @Mutable()
+  slidingWindowStateHolder!: SlidingWindowState;
 
   private get slidingWindowState(): SlidingWindowState {
-    const slidingWindowState = this.slidingWindowStateRef;
+    const slidingWindowState = this.slidingWindowStateHolder;
     if (!slidingWindowState) {
       return {
         indexesForReuse: [],
@@ -114,9 +114,9 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
 
   private canReuseSlidingWindow(currentPageCount: number, pageIndex: number): boolean {
     const { indexesForReuse } = this.slidingWindowState;
-    const currentPageNotExistInIndexes = indexesForReuse.indexOf(currentPageCount) === -1;
-    const pageIndexExistInIndexes = indexesForReuse.indexOf(pageIndex) !== -1;
-    return currentPageNotExistInIndexes && pageIndexExistInIndexes;
+    const lastPageIsFartherThanWindow = indexesForReuse.slice(-1)[0] < currentPageCount - 1;
+    const pageIndexExistInIndexes = indexesForReuse.includes(pageIndex);
+    return lastPageIsFartherThanWindow && pageIndexExistInIndexes;
   }
 
   private generatePageIndexes(): PageIndexes {
@@ -140,7 +140,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
       pageIndexes,
       ...slidingWindowState
     } = createPageIndexes(startIndex, slidingWindowSize, pageCount, delimiter);
-    this.slidingWindowStateRef = slidingWindowState;
+    this.slidingWindowStateHolder = slidingWindowState;
     return pageIndexes;
   }
 
@@ -150,11 +150,11 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   }
 
   private onPageClick(pageIndex: number): void {
-    this.props.pageIndexChange?.(pageIndex);
+    this.props.pageIndexChange(pageIndex);
   }
 
   get pageIndexes(): PageIndexes {
-    const { pageCount } = this.props as {pageCount: number};
+    const { pageCount } = this.props as { pageCount: number };
     if (this.isSlidingWindowMode()) {
       return createPageIndexes(0, pageCount, pageCount, 'none').pageIndexes;
     }
@@ -173,7 +173,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   get pages(): PageType[] {
     const { pageIndex } = this.props;
     const createPage = (index: PageIndex): PageType => {
-      const pagerProps = (index === 'low' || index === 'high') ? null
+      const pagerProps = index === 'low' || index === 'high' ? null
         : {
           index,
           onClick: (): void => this.onPageClick(index),

@@ -4,29 +4,142 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/sizes" as *;
+@use "../button/colors" as *;
+@use "../buttonGroup/colors" as *;
 @use "../textEditor/colors" as *;
+@use "../fileUploader/index" as *;
+@use "../fileUploader/sizes" as *;
 @use "../toolbar/sizes" as *;
 @use "../common/mixins" as *;
 @use "../../base/htmlEditor";
 
 // adduse
 
-
-$generic-html-editor-toolbar-height: $generic-base-inline-widget-height;
-$generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
-
 .dx-htmleditor {
-  .dx-htmleditor-toolbar-wrapper:first-child {
-    border-bottom: 1px solid $htmleditor-toolbar-border-color;
+  .dx-htmleditor-toolbar-wrapper {
+    padding: 5px;
+    position: relative;
+
+    &:first-child {
+      border-bottom: 1px solid $htmleditor-toolbar-border-color;
+    }
   }
 
   border-color: $htmleditor-border-color;
 
-  &.dx-invalid {
-    border-color: $htmleditor-invalid-faded-border-color;
+  &.dx-state-readonly {
+    border-style: dashed;
 
-    &.dx-state-focused {
-      border-color: $htmleditor-invalid-border-color;
+    .dx-htmleditor-toolbar-wrapper::before {
+      position: absolute;
+      top: 1px;
+      bottom: 1px;
+      left: 1px;
+      right: 1px;
+      z-index: 2;
+      background-color: color.change($base-bg, $alpha: 0.2);
+      content: '';
+      pointer-events: none;
+    }
+
+    .dx-toolbar-button .dx-button.dx-state-disabled {
+      opacity: $base-disabled-opacity;
+    }
+  }
+
+  &.dx-htmleditor-outlined {
+    border-radius: $texteditor-input-border-radius;
+
+    &.dx-state-hover {
+      border-color: $texteditor-hover-border-color;
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      border-color: $texteditor-focused-border-color;
+    }
+
+    &.dx-invalid {
+      border-color: $htmleditor-invalid-faded-border-color;
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        border-color: $htmleditor-invalid-border-color;
+      }
+    }
+  }
+
+  &.dx-htmleditor-filled {
+    border-color: $htmleditor-filled-border-color;
+    background: $texteditor-filled-bg;
+    border-radius: $texteditor-input-border-radius;
+
+    &.dx-state-readonly {
+      border-style: dashed;
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        background-color: color.change($texteditor-filled-bg, $alpha: 0.03);
+      }
+    }
+
+    &.dx-state-hover,
+    &.dx-state-hover.dx-invalid.dx-state-readonly:not(.dx-state-focused) {
+      background-color: color.change($texteditor-hover-border-color, $alpha: 0.07);
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      background-color: transparent;
+      border-color: $texteditor-focused-border-color;
+    }
+
+    &.dx-invalid {
+      background-color: $texteditor-filled-invalid-background;
+
+      &.dx-state-focused,
+      &.dx-state-active {
+        background: transparent;
+        border-color: $htmleditor-invalid-border-color;
+      }
+    }
+  }
+
+  &.dx-htmleditor-underlined {
+    border-color: $htmleditor-filled-border-color;
+    border-bottom-color: $htmleditor-border-color;
+
+    .dx-htmleditor-content {
+      padding-left: 0;
+    }
+
+    &.dx-state-hover {
+      border-bottom-color: $texteditor-hover-border-color;
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+      border-bottom-color: $texteditor-focused-border-color;
+
+      &.dx-invalid {
+        border-bottom-color: $htmleditor-invalid-border-color;
+      }
+    }
+
+    &.dx-rtl {
+      .dx-htmleditor-content {
+        padding-left: $generic-html-editor-horizontal-padding;
+        padding-right: 0;
+      }
+    }
+
+    &.dx-invalid {
+      border-bottom-color: $texteditor-invalid-faded-border-color;
+
+      &.dx-state-focused {
+        border-color: $htmleditor-filled-border-color;
+        border-bottom-color: $htmleditor-invalid-border-color;
+      }
     }
   }
 }
@@ -36,7 +149,8 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
     color: $texteditor-placeholder-color;
   }
 
-  pre {
+  code,
+  .ql-code-block-container { // stylelint-disable-line selector-class-pattern
     color: color.change($base-text-color, $alpha: 0.8);
   }
 
@@ -55,8 +169,21 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
     }
   }
 
-  td {
+  td,
+  th {
     border-color: $htmleditor-table-border-color;
+  }
+}
+
+@mixin dx-htmleditor-button-states($default-color, $hover-color, $focused-color) {
+  background-color: $default-color;
+
+  &.dx-state-hover {
+    background-color: $hover-color;
+  }
+
+  &.dx-state-focused {
+    background-color: $focused-color;
   }
 }
 
@@ -64,27 +191,62 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
   background-color: transparent;
 
   .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
-    background-color: $htmleditor-normal-format-active-bg;
+    &.dx-button-mode-text,
+    &.dx-button-mode-outlined {
+      @include dx-htmleditor-button-states($button-group-normal-selected-bg, $button-group-normal-selected-bg-hover, $button-group-normal-selected-bg-focused);
 
-    &.dx-button-success {
-      background-color: $htmleditor-success-format-active-bg;
+      &.dx-button-success {
+        @include dx-htmleditor-button-states($button-group-success-selected-bg, $button-group-success-selected-bg-hover, $button-group-success-selected-bg-focused);
+      }
+
+      &.dx-button-default {
+        @include dx-htmleditor-button-states($button-group-default-selected-bg, $button-group-default-selected-bg-hover, $button-group-default-selected-bg-focused);
+      }
+
+      &.dx-button-danger {
+        @include dx-htmleditor-button-states($button-group-danger-selected-bg, $button-group-danger-selected-bg-hover, $button-group-danger-selected-bg-focused);
+      }
+
+      &.dx-button-normal,
+      &.dx-button-normal .dx-icon {
+        color: $button-group-normal-selected-color;
+      }
+
+      &.dx-button-success,
+      &.dx-button-success .dx-icon {
+        color: $button-group-success-selected-color;
+      }
+
+      &.dx-button-default,
+      &.dx-button-default .dx-icon {
+        color: $button-group-default-selected-color;
+      }
+
+      &.dx-button-danger,
+      &.dx-button-danger .dx-icon {
+        color: $button-group-danger-selected-color;
+      }
     }
 
-    &.dx-button-default {
-      background-color: $htmleditor-default-format-active-bg;
-    }
+    &.dx-button-mode-contained {
+      @include dx-htmleditor-button-states($button-normal-bg, $button-normal-contained-bg-hover, $button-normal-contained-bg-focused);
 
-    &.dx-button-danger {
-      background-color: $htmleditor-danger-format-active-bg;
+      &.dx-button-success {
+        @include dx-htmleditor-button-states($button-success-bg, $button-success-contained-bg-hover, $button-success-contained-bg-focused);
+      }
+
+      &.dx-button-default {
+        @include dx-htmleditor-button-states($button-default-bg, $button-default-contained-bg-hover, $button-default-contained-bg-focused);
+      }
+
+      &.dx-button-danger {
+        @include dx-htmleditor-button-states($button-danger-bg, $button-danger-contained-bg-hover, $button-danger-contained-bg-focused);
+      }
     }
   }
 
   .dx-htmleditor-toolbar-separator {
-    height: $generic-html-editor-toolbar-height;
-
-    .dx-device-mobile & {
-      height: $generic-mobile-html-editor-toolbar-height;
-    }
+    height: $generic-toolbar-height;
   }
 }
 
@@ -98,6 +260,10 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
     .dx-button-content {
       padding-bottom: $generic-button-icon-horizontal-padding - 3px;
     }
+  }
+
+  &.dx-size-format {
+    width: $generic-toolbar-size-editor-width;
   }
 }
 
@@ -129,6 +295,67 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
   }
 }
 
+.dx-htmleditor-add-image-popup > .dx-overlay-content > .dx-popup-content {
+  .dx-tab:first-child {
+    box-shadow: inset 0 1px $htmleditor-border-color, inset -1px 0 $htmleditor-border-color, inset 0 0 $htmleditor-border-color, inset 0 0 $htmleditor-border-color;
+  }
+
+  .dx-tabpanel {
+    &.dx-state-focused {
+      .dx-tab.dx-tab-selected:first-child {
+        box-shadow: inset 0 1px $base-accent, inset -1px 0 $base-accent, inset 0 0 $base-accent;
+      }
+
+      .dx-tab:first-child {
+        box-shadow: inset 0 1px $htmleditor-border-color, inset 0 0 $htmleditor-border-color, inset 0 -1px $base-accent, inset 0 0 $htmleditor-border-color;
+      }
+    }
+  }
+
+  .dx-collection .dx-field-item:not(.dx-last-col) {
+    padding-right: $generic-html-editor-add-image-dialog-base-padding;
+  }
+
+  .dx-collection .dx-field-item:not(.dx-first-col) {
+    padding-left: 0;
+  }
+
+  .dx-fileuploader-input-wrapper {
+    padding: $generic-html-editor-add-image-dialog-fileuploader-padding;
+    border: $generic-fileuploader-file-wrapper-border-size dashed $base-border-color;
+
+    .dx-fileuploader-input-label {
+      border-width: 0;
+    }
+  }
+
+  .dx-fileuploader-dragover {
+    .dx-fileuploader-input {
+      padding-top: $generic-fileuploader-vertical-padding;
+      padding-bottom: $generic-fileuploader-vertical-padding + 1px;
+    }
+
+    .dx-fileuploader-input-label {
+      padding-top: $generic-fileuploader-vertical-padding + 1px;
+    }
+
+    .dx-fileuploader-content {
+      background-color: color.change($htmleditor-border-color, $alpha: 0.8);
+    }
+  }
+
+  .dx-fix-ratio-container {
+    .dx-textbox {
+      width: calc(100% - ($generic-html-editor-add-image-dialog-base-padding + $generic-base-inline-widget-height));
+    }
+
+    .dx-buttongroup {
+      margin-left: $generic-html-editor-add-image-dialog-base-padding;
+      width: $generic-base-inline-widget-height;
+    }
+  }
+}
+
 .dx-mention {
   background-color: $htmleditor-mention-bg;
   color: $htmleditor-mention-color;
@@ -136,4 +363,11 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 
 .dx-suggestion-list-wrapper {
   @include dx-dropdownlist-list-appearance();
+}
+
+.dx-table-resize-frame {
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-column,
+  > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
+    background-color: $htmleditor-cells-separator-bg;
+  }
 }

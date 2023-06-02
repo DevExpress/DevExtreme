@@ -1,3 +1,4 @@
+import { getHeight, getWidth, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { locate, move } from '../../animation/translator';
@@ -10,7 +11,9 @@ import Editor from '../editor/editor';
 import NumberBox from '../number_box';
 import TextBox from '../text_box';
 import Draggable from '../draggable';
+import { isCommandKeyPressed } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
+import Guid from '../../core/guid';
 
 const COLOR_VIEW_CLASS = 'dx-colorview';
 const COLOR_VIEW_CONTAINER_CLASS = 'dx-colorview-container';
@@ -50,6 +53,10 @@ const COLOR_VIEW_COLOR_PREVIEW_CONTAINER_CLASS = 'dx-colorview-color-preview-con
 const COLOR_VIEW_COLOR_PREVIEW_CONTAINER_INNER_CLASS = 'dx-colorview-color-preview-container-inner';
 const COLOR_VIEW_COLOR_PREVIEW_COLOR_CURRENT = 'dx-colorview-color-preview-color-current';
 const COLOR_VIEW_COLOR_PREVIEW_COLOR_NEW = 'dx-colorview-color-preview-color-new';
+
+const TEXT_EDITOR_INPUT = 'dx-texteditor-input';
+
+const BLACK_COLOR = '#000000';
 
 const ColorView = Editor.inherit({
 
@@ -143,48 +150,56 @@ const ColorView = Editor.inherit({
             upArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     if(this._currentColor.hsv.h <= 360 && !this._isTopColorHue) {
+                        this._saveValueChangeEvent(e);
                         updateHueScaleValue(getHueScaleStep(e));
                     }
                 } else if(this._currentColor.hsv.v < 100) {
+                    this._saveValueChangeEvent(e);
                     updateVerticalPaletteValue(getVerticalPaletteStep(e));
                 }
             },
             downArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     if(this._currentColor.hsv.h >= 0) {
                         if(this._isTopColorHue) {
                             this._currentColor.hsv.h = 360;
                         }
 
+                        this._saveValueChangeEvent(e);
                         updateHueScaleValue(-getHueScaleStep(e));
                     }
                 } else if(this._currentColor.hsv.v > 0) {
+                    this._saveValueChangeEvent(e);
                     updateVerticalPaletteValue(-getVerticalPaletteStep(e));
                 }
             },
             rightArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     if(isRTL ? this._currentColor.a < 1 : this._currentColor.a > 0 && this.option('editAlphaChannel')) {
+                        this._saveValueChangeEvent(e);
                         updateAlphaScaleValue(-getAlphaScaleStep(e));
                     }
                 } else if(this._currentColor.hsv.s < 100) {
+                    this._saveValueChangeEvent(e);
                     updateHorizontalPaletteValue(getHorizontalPaletteStep(e));
                 }
             },
             leftArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     if(isRTL ? this._currentColor.a > 0 : this._currentColor.a < 1 && this.option('editAlphaChannel')) {
+                        this._saveValueChangeEvent(e);
                         updateAlphaScaleValue(getAlphaScaleStep(e));
                     }
                 } else if(this._currentColor.hsv.s > 0) {
+                    this._saveValueChangeEvent(e);
                     updateHorizontalPaletteValue(-getHorizontalPaletteStep(e));
                 }
             },
@@ -240,7 +255,7 @@ const ColorView = Editor.inherit({
     },
 
     _setCurrentColor: function(value) {
-        value = value || '#000000';
+        value = value || BLACK_COLOR;
         const newColor = new Color(value);
         if(!newColor.colorIsInvalid) {
             if(!this._currentColor || this._makeRgba(this._currentColor) !== this._makeRgba(newColor)) {
@@ -250,12 +265,15 @@ const ColorView = Editor.inherit({
                 }
             }
         } else {
+            if(!this._currentColor) {
+                this._currentColor = new Color(BLACK_COLOR);
+            }
             this.option('value', this._currentColor.baseColor);
         }
     },
 
     _setBaseColor: function(value) {
-        const color = value || '#000000';
+        const color = value || BLACK_COLOR;
         const newColor = new Color(color);
 
         if(!newColor.colorIsInvalid) {
@@ -356,8 +374,8 @@ const ColorView = Editor.inherit({
             .css('backgroundColor', this._currentColor.getPureColor().toHex())
             .appendTo($paletteCell);
 
-        this._paletteHeight = this._$palette.height();
-        this._paletteWidth = this._$palette.width();
+        this._paletteHeight = getHeight(this._$palette);
+        this._paletteWidth = getWidth(this._$palette);
 
         this._renderPaletteHandle();
         this._$palette.append([$paletteGradientWhite, $paletteGradientBlack]);
@@ -367,6 +385,14 @@ const ColorView = Editor.inherit({
         this._$paletteHandle = $('<div>')
             .addClass(COLOR_VIEW_PALETTE_HANDLE_CLASS)
             .appendTo(this._$palette);
+
+        const handleAria = {
+            id: this.option('ariaId'),
+            role: 'application',
+        };
+
+        this.setAria(handleAria, this._$paletteHandle);
+
         this._createComponent(this._$paletteHandle, Draggable, {
             contentTemplate: null,
             boundary: this._$palette,
@@ -374,19 +400,20 @@ const ColorView = Editor.inherit({
             boundOffset: (function() {
                 return -this._paletteHandleHeight / 2;
             }).bind(this),
-            onDragMove: (function() {
+            onDragMove: ({ event }) => {
                 const paletteHandlePosition = locate(this._$paletteHandle);
                 this._updateByDrag = true;
+                this._saveValueChangeEvent(event);
                 this._updateColorFromHsv(
                     this._currentColor.hsv.h,
                     this._calculateColorSaturation(paletteHandlePosition),
                     this._calculateColorValue(paletteHandlePosition)
                 );
-            }).bind(this)
+            }
         });
 
-        this._paletteHandleWidth = this._$paletteHandle.width();
-        this._paletteHandleHeight = this._$paletteHandle.height();
+        this._paletteHandleWidth = getWidth(this._$paletteHandle);
+        this._paletteHandleHeight = getHeight(this._$paletteHandle);
 
         this._placePaletteHandle();
     },
@@ -427,8 +454,8 @@ const ColorView = Editor.inherit({
             .addClass(COLOR_VIEW_HUE_SCALE_CLASS)
             .appendTo(this._$hueScaleWrapper);
 
-        this._hueScaleHeight = this._$hueScale.height();
-        this._hueScaleWrapperHeight = this._$hueScaleWrapper.outerHeight();
+        this._hueScaleHeight = getHeight(this._$hueScale);
+        this._hueScaleWrapperHeight = getOuterHeight(this._$hueScaleWrapper);
 
         this._renderHueScaleHandle();
     },
@@ -442,13 +469,14 @@ const ColorView = Editor.inherit({
             boundary: this._$hueScaleWrapper,
             allowMoveByClick: true,
             dragDirection: 'vertical',
-            onDragMove: (function() {
+            onDragMove: ({ event }) => {
                 this._updateByDrag = true;
+                this._saveValueChangeEvent(event);
                 this._updateColorHue(locate(this._$hueScaleHandle).top + this._hueScaleHandleHeight / 2);
-            }).bind(this)
+            }
         });
 
-        this._hueScaleHandleHeight = this._$hueScaleHandle.height();
+        this._hueScaleHandleHeight = getHeight(this._$hueScaleHandle);
 
         this._placeHueScaleHandle();
     },
@@ -622,6 +650,15 @@ const ColorView = Editor.inherit({
                 .appendTo(this._$controlsContainer)
                 .find('.dx-textbox')
         );
+
+        const inputId = `dx-${new Guid()}`;
+
+        const $hexInput = this._$controlsContainer
+            .find(`.${COLOR_VIEW_HEX_LABEL_CLASS}`)
+            .find(`.${TEXT_EDITOR_INPUT}`);
+
+        this.setAria('id', inputId, $hexInput);
+        this.setAria('labelledby', inputId, this._$paletteHandle);
     },
 
     _renderAlphaChannelScale: function() {
@@ -643,26 +680,13 @@ const ColorView = Editor.inherit({
 
     _makeCSSLinearGradient: function($el) {
         const color = this._currentColor;
-        const colorAsRgb = [color.r, color.g, color.b].join(',');
-        const colorAsHex = color.toHex().replace('#', '');
+        const colorAsRgb = `${color.r},${color.g},${color.b}`;
+        const rtlEnabled = this.option('rtlEnabled');
+        const startColor = `rgba(${colorAsRgb}, ${rtlEnabled ? '1' : '0'})`;
+        const finishColor = `rgba(${colorAsRgb}, ${rtlEnabled ? '0' : '1'})`;
+        const backgroundImage = `linear-gradient(-90deg, ${startColor}, ${finishColor})`;
 
-        const combineGradientString = function(colorAsRgb, colorAsHex) {
-            const rtlEnabled = this.option('rtlEnabled');
-            const startColor = 'rgba(' + colorAsRgb + ', ' + (rtlEnabled ? '1' : '0') + ')';
-            const finishColor = 'rgba(' + colorAsRgb + ', ' + (rtlEnabled ? '0' : '1') + ')';
-            const startColorIE = '\'#' + (rtlEnabled ? '00' : '') + colorAsHex + '\'';
-            const finishColorIE = '\'#' + (rtlEnabled ? '' : '00') + colorAsHex + '\'';
-
-            return [
-                'background-image: -webkit-linear-gradient(180deg, ' + startColor + ', ' + finishColor + ')',
-                'background-image: -moz-linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')',
-                'background-image: -o-linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')',
-                'background-image: linear-gradient(-90deg, ' + startColor + ', ' + finishColor + ')',
-                'filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=' + startColorIE + ', endColorstr=' + finishColorIE + ')'
-            ].join(';');
-        };
-
-        $el.attr('style', combineGradientString.call(this, colorAsRgb, colorAsHex));
+        $el.css('backgroundImage', backgroundImage);
     },
 
     _renderAlphaChannelInput: function() {
@@ -674,9 +698,10 @@ const ColorView = Editor.inherit({
             value: this._currentColor.a,
             max: 1,
             step: 0.1,
-            onValueChanged: function(e) {
-                let value = e.value;
+            onValueChanged: function(args) {
+                let value = args.value;
                 value = that._currentColor.isValidAlpha(value) ? value : that._currentColor.a;
+                args.event && that._saveValueChangeEvent(args.event);
                 that._updateColorTransparency(value);
                 that._placeAlphaChannelHandle();
             },
@@ -703,18 +728,18 @@ const ColorView = Editor.inherit({
             boundary: $parent,
             allowMoveByClick: true,
             dragDirection: 'horizontal',
-            onDragMove: (function() {
+            onDragMove: ({ event }) => {
                 this._updateByDrag = true;
                 const $alphaChannelHandle = this._$alphaChannelHandle;
                 const alphaChannelHandlePosition = locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
-
+                this._saveValueChangeEvent(event);
                 this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
-            }).bind(this)
+            }
         });
 
-        this._alphaChannelHandleWidth = this._$alphaChannelHandle.width();
+        this._alphaChannelHandleWidth = getWidth(this._$alphaChannelHandle);
 
-        this._alphaChannelScaleWorkWidth = $parent.width() - this._alphaChannelHandleWidth;
+        this._alphaChannelScaleWorkWidth = getWidth($parent) - this._alphaChannelHandleWidth;
 
         this._placeAlphaChannelHandle();
     },
@@ -731,9 +756,16 @@ const ColorView = Editor.inherit({
             transparency = transparency.toFixed(2);
         }
 
+        const previousTransparency = this._alphaChannelInput.option('value');
         transparency = Math.max(transparency, 0);
         transparency = Math.min(transparency, 1);
-        this._alphaChannelInput.option('value', transparency);
+
+        if(transparency === previousTransparency) {
+            this._updateByDrag = false;
+        } else {
+            this._alphaChannelInput.option('value', transparency);
+        }
+
     },
 
     _placeAlphaChannelHandle: function() {
@@ -752,10 +784,15 @@ const ColorView = Editor.inherit({
     },
 
     applyColor: function() {
+        const previousValue = this.option('value');
         const colorValue = this.option('editAlphaChannel') ? this._makeRgba(this._currentColor) : this._currentColor.toHex();
         this._makeTransparentBackground(this._$currentColor, this._currentColor);
 
-        this.option('value', colorValue);
+        if(colorValue === previousValue) {
+            this._updateByDrag = false;
+        } else {
+            this.option('value', colorValue);
+        }
     },
 
     cancelColor: function() {
@@ -763,7 +800,7 @@ const ColorView = Editor.inherit({
         this._refreshMarkup();
     },
 
-    _updateColor: function(isHex, e) {
+    _updateColor: function(isHex, args) {
         let rgba;
         let newColor;
 
@@ -781,6 +818,7 @@ const ColorView = Editor.inherit({
 
         if(!this._suppressEditorsValueUpdating) {
             this._currentColor = new Color(newColor);
+            this._saveValueChangeEvent(args.event);
             this.applyColor();
             this._refreshMarkup();
         }

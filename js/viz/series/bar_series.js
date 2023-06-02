@@ -3,7 +3,7 @@ import { each } from '../../core/utils/iterator';
 import * as scatterSeries from './scatter_series';
 import { chart as areaChart } from './area_series';
 const areaSeries = areaChart.area;
-import { convertPolarToXY } from '../core/utils';
+import { convertPolarToXY, extractColor } from '../core/utils';
 const chartSeries = scatterSeries.chart;
 const polarSeries = scatterSeries.polar;
 import { isDefined as _isDefined } from '../../core/utils/type';
@@ -16,16 +16,20 @@ const polar = {};
 const baseBarSeriesMethods = {
     _createLegendState: function(styleOptions, defaultColor) {
         return {
-            fill: styleOptions.color || defaultColor,
-            hatching: styleOptions.hatching
+            fill: extractColor(styleOptions.color) || defaultColor,
+            hatching: styleOptions.hatching,
+            filter: styleOptions.highlight
         };
     },
 
+    _getColorId: areaSeries._getColorId,
+
     _parsePointStyle: function(style, defaultColor, defaultBorderColor) {
-        const color = style.color || defaultColor;
+        const color = extractColor(style.color) || defaultColor;
         const base = chartSeries._parsePointStyle.call(this, style, color, defaultBorderColor);
         base.fill = color;
         base.hatching = style.hatching;
+        base.filter = style.highlight;
         base.dashStyle = style.border && style.border.dashStyle || 'solid';
         delete base.r;
 
@@ -60,12 +64,20 @@ const baseBarSeriesMethods = {
 
     _createPointStyles: function(pointOptions) {
         const that = this;
-        const mainColor = pointOptions.color || that._getMainColor();
+        const mainColor = extractColor(pointOptions.color, true) || that._getMainColor();
+        const colorId = pointOptions.color?.fillId;
+        const hoverStyle = pointOptions.hoverStyle || {};
+        const selectionStyle = pointOptions.selectionStyle || {};
+
+        if(colorId) {
+            that._turnOffHatching(hoverStyle, selectionStyle);
+        }
 
         return {
+            labelColor: mainColor,
             normal: that._parsePointStyle(pointOptions, mainColor, mainColor),
-            hover: that._parsePointStyle(pointOptions.hoverStyle || {}, mainColor, mainColor),
-            selection: that._parsePointStyle(pointOptions.selectionStyle || {}, mainColor, mainColor)
+            hover: that._parsePointStyle(hoverStyle, colorId || mainColor, mainColor),
+            selection: that._parsePointStyle(selectionStyle, colorId || mainColor, mainColor)
         };
     },
 
@@ -97,7 +109,7 @@ const baseBarSeriesMethods = {
     getValueRangeInitialValue: areaSeries.getValueRangeInitialValue,
 
     _patchMarginOptions: function(options) {
-        options.checkInterval = !this.useAggregation();
+        options.checkInterval = !this.useAggregation() || this.getArgumentAxis()?.aggregatedPointBetweenTicks();
         return options;
     },
 
@@ -133,7 +145,7 @@ chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     },
 
     checkSeriesViewportCoord(axis, coord) {
-        if(this._points.length === 0) {
+        if(!chartSeries.checkSeriesViewportCoord.call(this)) {
             return false;
         }
         if(axis.isArgumentAxis) {

@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
-import 'ui/data_grid/ui.data_grid';
-import 'common.css!';
+import 'ui/data_grid';
 import 'generic_light.css!';
 import { DataSource } from 'data/data_source/data_source';
 import dataSourceAdapter from 'ui/data_grid/ui.data_grid.data_source_adapter';
+import { getOuterWidth } from 'core/utils/size';
 
 const setupModule = function() {
     const columns = [];
@@ -385,7 +385,7 @@ QUnit.module('Scrolling', { beforeEach: setupModule, afterEach: teardownModule }
         this.columnsController.columnsChanged.add(e => {
             assert.deepEqual(e, {
                 optionNames: { all: true, length: 1 },
-                changeTypes: { columns: true, length: 1 }
+                changeTypes: { columns: true, virtualColumnsScrolling: true, length: 2 }
             }, 'columnsChanged args');
             columnsChangedPositions.push(pos);
         });
@@ -413,7 +413,7 @@ QUnit.module('Scrolling', { beforeEach: setupModule, afterEach: teardownModule }
         this.columnsController.columnsChanged.add(e => {
             assert.deepEqual(e, {
                 optionNames: { all: true, length: 1 },
-                changeTypes: { columns: true, length: 1 }
+                changeTypes: { columns: true, virtualColumnsScrolling: true, length: 2 }
             }, 'columnsChanged args');
             columnsChangedPositions.push(pos);
         });
@@ -446,6 +446,50 @@ QUnit.module('Scrolling', { beforeEach: setupModule, afterEach: teardownModule }
 
         // assert
         assert.equal(offset, 3, 'offset with fixed column');
+    });
+
+    QUnit.test('Scrolling timeout should be zero when renderAsync is false', function(assert) {
+        // arrange
+        this.setupVirtualColumns();
+        this.options.scrolling.renderAsync = false;
+        this.options.scrolling.columnRenderingThreshold = 110;
+        this.options.scrolling.timeout = 100;
+        this.columnsController._renderTime = 150;
+
+        // act
+        const timeout = this.columnsController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 0);
+    });
+
+    QUnit.test('Scrolling timeout should be set to timeout if renderAsync is not defined', function(assert) {
+        // arrange
+        this.setupVirtualColumns();
+        this.options.scrolling.columnRenderingThreshold = 110;
+        this.options.scrolling.timeout = 100;
+        this.columnsController._renderTime = 150;
+
+        // act
+        const timeout = this.columnsController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 100);
+    });
+
+    QUnit.test('Scrolling timeout should be set to timeout if renderAsync is true', function(assert) {
+        // arrange
+        this.setupVirtualColumns();
+        this.options.scrolling.renderAsync = true;
+        this.options.scrolling.columnRenderingThreshold = 110;
+        this.options.scrolling.timeout = 100;
+        this.columnsController._renderTime = 150;
+
+        // act
+        const timeout = this.columnsController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 100);
     });
 });
 
@@ -587,12 +631,12 @@ QUnit.module('Rendering', { beforeEach: setupRenderingModule, afterEach: teardow
         });
 
         this.gridView.render($('#container'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         const columnsChangedSpy = sinon.spy();
         this.columnsController.columnsChanged.add(columnsChangedSpy);
         this.gridView.update();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(this.columnHeadersView.element().find('tr td').length, 11);
@@ -635,8 +679,8 @@ QUnit.module('Rendering', { beforeEach: setupRenderingModule, afterEach: teardow
         // assert
         const $cells = this.rowsView.element().find('.dx-data-row').children();
         assert.strictEqual($cells.length, 6, 'cell count in data row');
-        assert.strictEqual($cells.eq(0).outerWidth(), 50, 'first cell width');
-        assert.strictEqual($cells.eq(5).outerWidth(), 2250, 'virtual cell width');
+        assert.strictEqual(getOuterWidth($cells.eq(0)), 50, 'first cell width');
+        assert.strictEqual(getOuterWidth($cells.eq(5)), 2250, 'virtual cell width');
         assert.strictEqual(this.getVisibleColumns()[0].dataField, 'field1', 'first rendered dataField');
     });
 });

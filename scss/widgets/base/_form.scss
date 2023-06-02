@@ -79,11 +79,20 @@
       .dx-field-item-label-content {
         display: block;
       }
+
+      .dx-field-item-custom-label-content {
+        display: inline-block;
+
+        .dx-icon {
+          vertical-align: top;
+        }
+      }
     }
 
     .dx-field-item-content {
       vertical-align: top;
 
+      // TODO: form layout manager should not contains settings with checkbox/switch classes
       .dx-checkbox,
       .dx-switch {
         margin-top: 7px;
@@ -106,6 +115,14 @@
 
 .dx-field-item-label-location-top {
   display: block;
+
+  .dx-field-item-custom-label-content {
+    display: inline-block;
+
+    .dx-icon {
+      vertical-align: top;
+    }
+  }
 }
 
 .dx-form-group-content {
@@ -149,6 +166,15 @@
 
 .dx-field-item-label-location-right {
   padding-left: 10px;
+}
+
+.dx-field-item-required,
+.dx-field-item-optional {
+  .dx-label > span {
+    &::after {
+      content: attr(data-mark);
+    }
+  }
 }
 
 .dx-rtl {

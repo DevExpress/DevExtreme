@@ -2,36 +2,14 @@ import { isObject, isString, isDate, isDefined, isNumeric } from './type';
 import { adjust } from './math';
 import { each } from './iterator';
 import { camelize } from './inflector';
-import browser from './browser';
+import { toMilliseconds } from '../../renovation/ui/common/utils/date/index';
 
-const isIE11 = browser.msie && parseInt(browser.version) <= 11;
+const DAYS_IN_WEEK = 7;
+const THURSDAY_WEEK_NUMBER = 4;
+const SUNDAY_WEEK_NUMBER = 7;
+const USUAL_WEEK_COUNT_IN_YEAR = 52;
 
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
-
-const toMilliseconds = function(value) {
-    switch(value) {
-        case 'millisecond':
-            return 1;
-        case 'second':
-            return toMilliseconds('millisecond') * 1000;
-        case 'minute':
-            return toMilliseconds('second') * 60;
-        case 'hour':
-            return toMilliseconds('minute') * 60;
-        case 'day':
-            return toMilliseconds('hour') * 24;
-        case 'week':
-            return toMilliseconds('day') * 7;
-        case 'month':
-            return toMilliseconds('day') * 30;
-        case 'quarter':
-            return toMilliseconds('month') * 3;
-        case 'year':
-            return toMilliseconds('day') * 365;
-        default:
-            return 0;
-    }
-};
 
 const getDatesInterval = function(startDate, endDate, intervalUnit) {
     const delta = endDate.getTime() - startDate.getTime();
@@ -452,6 +430,10 @@ function sameYear(date1, date2) {
     return date1 && date2 && date1.getFullYear() === date2.getFullYear();
 }
 
+function sameHoursAndMinutes(date1, date2) {
+    return date1 && date2 && date1.getHours() === date2.getHours() && date1.getMinutes() === date2.getMinutes();
+}
+
 const sameDecade = function(date1, date2) {
     if(!isDefined(date1) || !isDefined(date2)) return;
 
@@ -493,12 +475,79 @@ const getLastMonthDate = function(date) {
 };
 
 function getFirstWeekDate(date, firstDayOfWeek) {
-    const delta = (date.getDay() - firstDayOfWeek + 7) % 7;
+    const delta = (date.getDay() - firstDayOfWeek + DAYS_IN_WEEK) % DAYS_IN_WEEK;
 
     const result = new Date(date);
     result.setDate(date.getDate() - delta);
 
     return result;
+}
+
+function getUTCTime(date) {
+    return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function getDayNumber(date) {
+    const ms = getUTCTime(date) - getUTCTime(getFirstDateInYear(date.getFullYear()));
+
+    return 1 + Math.floor(ms / toMilliseconds('day'));
+}
+
+function getFirstDateInYear(year) {
+    return new Date(year, 0, 1);
+}
+
+function getLastDateInYear(year) {
+    return new Date(year, 11, 31);
+}
+
+function getDayWeekNumber(date, firstDayOfWeek) {
+    let day = date.getDay() - firstDayOfWeek + 1;
+    if(day <= 0) { day += DAYS_IN_WEEK; }
+
+    return day;
+}
+
+function getWeekNumber(date, firstDayOfWeek, rule) {
+    const firstWeekDayInYear = getDayWeekNumber(getFirstDateInYear(date.getFullYear()), firstDayOfWeek);
+    const lastWeekDayInYear = getDayWeekNumber(getLastDateInYear(date.getFullYear()), firstDayOfWeek);
+    const daysInFirstWeek = DAYS_IN_WEEK - firstWeekDayInYear + 1;
+
+    let weekNumber = Math.ceil((getDayNumber(date) - daysInFirstWeek) / 7);
+    switch(rule) {
+        case 'fullWeek': {
+            if(daysInFirstWeek === DAYS_IN_WEEK) { weekNumber++; }
+            if(weekNumber === 0) {
+                const lastDateInPreviousYear = getLastDateInYear(date.getFullYear() - 1);
+                return getWeekNumber(lastDateInPreviousYear, firstDayOfWeek, rule);
+            }
+            return weekNumber;
+        }
+        case 'firstDay': {
+            if(daysInFirstWeek > 0) { weekNumber++; }
+
+            const isSunday = firstWeekDayInYear === SUNDAY_WEEK_NUMBER
+                || lastWeekDayInYear === SUNDAY_WEEK_NUMBER;
+            if((weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isSunday) || weekNumber === 54) { weekNumber = 1; }
+
+            return weekNumber;
+        }
+        case 'firstFourDays': {
+            if(daysInFirstWeek > 3) { weekNumber++; }
+
+            const isThursday = firstWeekDayInYear === THURSDAY_WEEK_NUMBER
+                || lastWeekDayInYear === THURSDAY_WEEK_NUMBER;
+            if(weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isThursday) { weekNumber = 1; }
+
+            if(weekNumber === 0) {
+                const lastDateInPreviousYear = getLastDateInYear(date.getFullYear() - 1);
+                return getWeekNumber(lastDateInPreviousYear, firstDayOfWeek, rule);
+            }
+            return weekNumber;
+        }
+        default:
+            break;
+    }
 }
 
 const normalizeDateByWeek = function(date, currentDate) {
@@ -520,6 +569,19 @@ const dateInRange = function(date, min, max, format) {
     }
 
     return normalizeDate(date, min, max) === date;
+};
+
+const intervalsOverlap = function(options) {
+    const {
+        firstMin,
+        firstMax,
+        secondMin,
+        secondMax
+    } = options;
+
+    return (firstMin <= secondMin && secondMin <= firstMax) ||
+        (firstMin > secondMin && firstMin < secondMax) ||
+        (firstMin < secondMax && firstMax > secondMax);
 };
 
 const dateTimeFromDecimal = function(number) {
@@ -582,10 +644,12 @@ function fixTimezoneGap(oldDate, newDate) {
 }
 
 const roundToHour = function(date) {
-    date.setHours(date.getHours() + 1);
-    date.setMinutes(0);
+    const result = new Date(date.getTime());
 
-    return date;
+    result.setHours(result.getHours() + 1);
+    result.setMinutes(0);
+
+    return result;
 };
 
 function getTimezonesDifference(min, max) {
@@ -608,10 +672,6 @@ const getDatesOfInterval = function(startDate, endDate, step) {
     }
 
     return result;
-};
-
-const createDate = function(date) {
-    return new Date(isIE11 && isDate(date) ? date.getTime() : date);
 };
 
 const createDateWithFullYear = function(year) {
@@ -640,6 +700,7 @@ const dateUtils = {
     addInterval: addInterval,
     getSequenceByInterval: getSequenceByInterval,
     getDateIntervalByString: getDateIntervalByString,
+    sameHoursAndMinutes: sameHoursAndMinutes,
     sameDate: sameDate,
     sameMonthAndYear: sameMonthAndYear,
     sameMonth: sameMonthAndYear,
@@ -659,10 +720,12 @@ const dateUtils = {
     getLastMonthDate: getLastMonthDate,
     getFirstMonthDate: getFirstMonthDate,
     getFirstWeekDate: getFirstWeekDate,
+    getWeekNumber: getWeekNumber,
     normalizeDateByWeek: normalizeDateByWeek,
     getQuarter: getQuarter,
     getFirstQuarterMonth: getFirstQuarterMonth,
     dateInRange: dateInRange,
+    intervalsOverlap: intervalsOverlap,
     roundToHour: roundToHour,
     normalizeDate: normalizeDate,
     getViewMinBoundaryDate: getViewMinBoundaryDate,
@@ -677,7 +740,6 @@ const dateUtils = {
 
     getDatesOfInterval: getDatesOfInterval,
 
-    createDate: createDate,
     createDateWithFullYear: createDateWithFullYear
 };
 

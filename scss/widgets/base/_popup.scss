@@ -19,9 +19,7 @@
     min-height: inherit;
 
     > .dx-scrollable-wrapper,
-    > .dx-scrollable-wrapper > .dx-scrollable-container,
-    > div > .dx-scrollable-wrapper,
-    > div > .dx-scrollable-wrapper > .dx-scrollable-container {
+    > .dx-scrollable-wrapper > .dx-scrollable-container {
       max-height: inherit;
       min-height: inherit;
     }
@@ -91,6 +89,11 @@
       @include dx-popup-content-auto-resizing();
     }
   }
+}
+
+.dx-popup-content-scrollable {
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .dx-dialog-root {

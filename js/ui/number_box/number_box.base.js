@@ -5,7 +5,6 @@ import { applyServerDecimalSeparator, ensureDefined } from '../../core/utils/com
 import { isDefined } from '../../core/utils/type';
 import { fitIntoRange, inRange } from '../../core/utils/math';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import devices from '../../core/devices';
 import browser from '../../core/utils/browser';
 import TextEditor from '../text_box/ui.text_editor';
@@ -101,6 +100,10 @@ const NumberBoxBase = TextEditor.inherit({
         });
     },
 
+    _useTemplates: function() {
+        return false;
+    },
+
     _getDefaultButtons: function() {
         return this.callBase().concat([{ name: 'spins', Ctor: SpinButtons }]);
     },
@@ -111,7 +114,6 @@ const NumberBoxBase = TextEditor.inherit({
         return (
             browser.chrome && version >= 66
             || browser.safari && version >= 12
-            || browser.msie && version >= 75
         );
     },
 
@@ -174,13 +176,13 @@ const NumberBoxBase = TextEditor.inherit({
         this.callBase(e);
 
         const char = getChar(e);
-        const validCharRegExp = /[\d.,eE\-+]|Subtract/; // Workaround for IE (T592690)
+        const validCharRegExp = /[\d.,eE\-+]/;
         const isInputCharValid = validCharRegExp.test(char);
 
         if(!isInputCharValid) {
             const keyName = normalizeKeyName(e);
             // NOTE: Additional check for Firefox control keys
-            if(isCommandKeyPressed(e) || keyName && (inArray(keyName, FIREFOX_CONTROL_KEYS) >= 0)) {
+            if(isCommandKeyPressed(e) || keyName && FIREFOX_CONTROL_KEYS.includes(keyName)) {
                 return;
             }
 
@@ -230,8 +232,6 @@ const NumberBoxBase = TextEditor.inherit({
     },
 
     _renderProps: function() {
-        this.callBase();
-
         this._input().prop({
             'min': this.option('min'),
             'max': this.option('max'),
@@ -461,7 +461,9 @@ const NumberBoxBase = TextEditor.inherit({
     reset: function() {
         if(this.option('value') === null) {
             this.option('text', '');
-            this._renderValue();
+            if(this._input().length) {
+                this._renderValue();
+            }
         } else {
             this.option('value', null);
         }

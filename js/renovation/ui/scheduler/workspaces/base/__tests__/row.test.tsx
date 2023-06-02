@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as RowView, Row } from '../row';
-import { VirtualCell } from '../virtual-cell';
+import { VirtualCell } from '../virtual_cell';
 
 jest.mock('../../utils', () => ({
   addHeightToStyle: jest.fn(() => 'style'),
@@ -23,13 +23,6 @@ describe('RowBase', () => {
         .toBe(true);
     });
 
-    it('should spread restAttributes', () => {
-      const row = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(row.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should render children', () => {
       const row = render({ props: { children: <div className="child" /> } });
 
@@ -43,6 +36,7 @@ describe('RowBase', () => {
       expected: {
         selectors: ['.child'],
         widths: [50],
+        colSpans: [undefined],
       },
     }, {
       hasLeftVirtualCell: true,
@@ -50,12 +44,14 @@ describe('RowBase', () => {
         selectors: [VirtualCell, '.child'],
         leftVirtualCellWidth: 100,
         widths: [100, 50],
+        colSpans: [3, undefined],
       },
     }, {
       hasRightVirtualCell: true,
       expected: {
         selectors: ['.child', VirtualCell],
         widths: [50, 200],
+        colSpans: [undefined, 4],
       },
     }, {
       hasLeftVirtualCell: true,
@@ -63,6 +59,7 @@ describe('RowBase', () => {
       expected: {
         selectors: [VirtualCell, '.child', VirtualCell],
         widths: [100, 50, 200],
+        colSpans: [3, undefined, 4],
       },
     }].forEach((option) => {
       it(`should render virtual cells correctly if 'hasLeftVirtualCell' is ${option.hasLeftVirtualCell},
@@ -71,7 +68,9 @@ describe('RowBase', () => {
           props: {
             leftVirtualCellWidth: 100,
             rightVirtualCellWidth: 200,
-            children: <td className="child" width={50} />,
+            leftVirtualCellCount: 3,
+            rightVirtualCellCount: 4,
+            children: <td className="child" style={{ width: 50 }} />,
           },
           hasLeftVirtualCell: option.hasLeftVirtualCell,
           hasRightVirtualCell: option.hasRightVirtualCell,
@@ -83,53 +82,96 @@ describe('RowBase', () => {
           .toHaveLength(expected.selectors.length);
 
         expected.selectors.forEach((selector, index) => {
-          const child = row.childAt(index);
+          const cell = row.childAt(index);
 
-          expect(child.is(selector))
+          expect(cell.is(selector))
             .toBe(true);
 
-          expect(child.prop('width'))
+          const width = selector === VirtualCell
+            ? cell.getElement().props.width
+            : cell.getElement().props.style.width;
+
+          expect(width)
             .toEqual(expected.widths[index]);
+          expect(cell.prop('colSpan'))
+            .toBe(expected.colSpans[index]);
         });
       });
+    });
+
+    it('should pass isHeaderCell as true to virtual cells when it is a header row', () => {
+      const row = render({
+        props: {
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
+          leftVirtualCellCount: 3,
+          rightVirtualCellCount: 4,
+          isHeaderRow: true,
+        },
+        hasLeftVirtualCell: true,
+        hasRightVirtualCell: true,
+      });
+
+      const virtualCells = row.find(VirtualCell);
+
+      expect(virtualCells.at(0).prop('isHeaderCell'))
+        .toBe(true);
+      expect(virtualCells.at(1).prop('isHeaderCell'))
+        .toBe(true);
+    });
+
+    it('should pass isHeaderCell as false to virtual cells when it is not a header row', () => {
+      const row = render({
+        props: {
+          leftVirtualCellWidth: 100,
+          rightVirtualCellWidth: 200,
+          leftVirtualCellCount: 3,
+          rightVirtualCellCount: 4,
+        },
+        hasLeftVirtualCell: true,
+        hasRightVirtualCell: true,
+      });
+
+      const virtualCells = row.find(VirtualCell);
+
+      expect(virtualCells.at(0).prop('isHeaderCell'))
+        .toBe(false);
+      expect(virtualCells.at(1).prop('isHeaderCell'))
+        .toBe(false);
     });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
-      describe('leftVirtualCellWidth', () => {
+      describe('hasLeftVirtualCell', () => {
         [{
-          leftVirtualCellWidth: 0,
+          leftVirtualCellCount: 0,
           hasLeftVirtualCell: false,
         }, {
-          leftVirtualCellWidth: 10,
+          leftVirtualCellCount: 10,
           hasLeftVirtualCell: true,
-        }].forEach((option) => {
-          it(`should determine "hasLeftVirtualCell" correctly if leftVirtualCellWidth is ${option.leftVirtualCellWidth}`, () => {
-            const row = new Row({
-              leftVirtualCellWidth: option.leftVirtualCellWidth,
-            });
+        }].forEach(({ leftVirtualCellCount, hasLeftVirtualCell }) => {
+          it(`should determine "hasLeftVirtualCell" correctly if leftVirtualCellCount is ${leftVirtualCellCount}`, () => {
+            const row = new Row({ leftVirtualCellCount });
 
-            expect(option.hasLeftVirtualCell)
+            expect(hasLeftVirtualCell)
               .toBe(row.hasLeftVirtualCell);
           });
         });
       });
 
-      describe('rightVirtualCellWidth', () => {
+      describe('hasRightVirtualCell', () => {
         [{
-          rightVirtualCellWidth: 0,
+          rightVirtualCellCount: 0,
           hasRightVirtualCell: false,
         }, {
-          rightVirtualCellWidth: 10,
+          rightVirtualCellCount: 10,
           hasRightVirtualCell: true,
-        }].forEach((option) => {
-          it(`should determine "hasRightVirtualCell" correctly if rightVirtualCellWidth is ${option.rightVirtualCellWidth}`, () => {
-            const row = new Row({
-              rightVirtualCellWidth: option.rightVirtualCellWidth,
-            });
+        }].forEach(({ rightVirtualCellCount, hasRightVirtualCell }) => {
+          it(`should determine "hasRightVirtualCell" correctly if rightVirtualCellCount is ${rightVirtualCellCount}`, () => {
+            const row = new Row({ rightVirtualCellCount });
 
-            expect(option.hasRightVirtualCell)
+            expect(hasRightVirtualCell)
               .toBe(row.hasRightVirtualCell);
           });
         });

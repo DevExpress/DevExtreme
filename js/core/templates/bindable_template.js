@@ -1,7 +1,7 @@
 import $ from '../renderer';
 import { TemplateBase } from './template_base';
 import eventsEngine from '../../events/core/events_engine';
-import removeEvent from '../remove_event';
+import { removeEvent } from '../../events/remove';
 import { isPrimitive } from '../utils/type';
 
 const watchChanges = (function() {

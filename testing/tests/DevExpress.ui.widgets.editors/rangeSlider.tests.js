@@ -1,13 +1,13 @@
 import $ from 'jquery';
-import Tooltip from 'ui/tooltip';
+import SliderTooltip from 'ui/slider/ui.slider_tooltip';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
+import { normalizeKeyName } from 'events/utils/index';
 
 import 'ui/range_slider';
 import 'ui/number_box/number_box';
 import 'ui/validator';
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -126,8 +126,7 @@ QUnit.module('render', moduleOptions, () => {
             max: 100,
             min: 0,
             start: 0,
-            end: 100,
-            useInkRipple: false
+            end: 100
         }).dxRangeSlider('instance');
 
         isRangeSliderDimensionsMatchOptions('#slider', assert);
@@ -146,8 +145,7 @@ QUnit.module('render', moduleOptions, () => {
             max: 500,
             min: 0,
             start: 0,
-            end: 500,
-            useInkRipple: false
+            end: 500
         }).css('width', 500);
 
         const instance = el.dxRangeSlider('instance');
@@ -170,21 +168,6 @@ QUnit.module('render', moduleOptions, () => {
         assert.equal(instance.option('end'), 500);
         isRangeSliderDimensionsMatchOptions('#slider', assert);
     });
-
-    QUnit.test('value change should have jQuery event', function(assert) {
-        const el = $('#slider').dxRangeSlider({
-            max: 500,
-            min: 0,
-            start: 0,
-            end: 500,
-            onValueChanged: function(args) {
-                assert.ok(args.event, 'Event present');
-            },
-            useInkRipple: false
-        }).css('width', 500);
-
-        pointerMock(el).start().move(240 + el.offset().left).down();
-    });
 });
 
 QUnit.module('slider with tooltip', () => {
@@ -193,15 +176,14 @@ QUnit.module('slider with tooltip', () => {
             tooltip: {
                 enabled: true,
                 showMode: 'always'
-            },
-            useInkRipple: false
+            }
         });
         const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
         const $tooltips = $handle.find('.' + TOOLTIP_CLASS);
 
         assert.equal($tooltips.length, 2);
-        assert.ok(Tooltip.getInstance($tooltips.eq(0)));
-        assert.ok(Tooltip.getInstance($tooltips.eq(1)));
+        assert.ok(SliderTooltip.getInstance($tooltips.eq(0)));
+        assert.ok(SliderTooltip.getInstance($tooltips.eq(1)));
     });
 
     QUnit.test('\'tooltip.format\' should not be called for \'value\' option', function(assert) {
@@ -218,8 +200,7 @@ QUnit.module('slider with tooltip', () => {
                 format: function(value) {
                     formatLog.push(value);
                 }
-            },
-            useInkRipple: false
+            }
         });
 
         assert.equal($.inArray(300, formatLog), -1);
@@ -234,8 +215,7 @@ QUnit.module('user interaction', () => {
             min: 0,
             start: 40,
             end: 60,
-            width: 100 + CONTAINER_MARGIN * 2,
-            useInkRipple: false
+            width: 100 + CONTAINER_MARGIN * 2
         });
 
         const instance = $element.dxRangeSlider('instance');
@@ -263,8 +243,7 @@ QUnit.module('user interaction', () => {
             min: 60,
             start: 120,
             end: 140,
-            width: 100 + CONTAINER_MARGIN * 2,
-            useInkRipple: false
+            width: 100 + CONTAINER_MARGIN * 2
         });
 
         const instance = $element.dxRangeSlider('instance');
@@ -286,8 +265,7 @@ QUnit.module('user interaction', () => {
             start: 40,
             end: 60,
             width: 100 + CONTAINER_MARGIN * 2,
-            rtlEnabled: true,
-            useInkRipple: false
+            rtlEnabled: true
         });
 
         const instance = $element.dxRangeSlider('instance');
@@ -318,8 +296,7 @@ QUnit.module('actions', () => {
             min: 0,
             start: 0,
             end: 500,
-            onValueChanged: onValueChangedStub,
-            useInkRipple: false
+            onValueChanged: onValueChangedStub
         }).css('width', 500);
 
         pointerMock(el).start().move(250 + el.offset().left).down();
@@ -336,8 +313,7 @@ QUnit.module('actions', () => {
             min: 0,
             start: 20,
             end: 60,
-            onValueChanged: onValueChangedStub,
-            useInkRipple: false
+            onValueChanged: onValueChangedStub
         }).dxRangeSlider('instance');
 
         slider.option('start', 30);
@@ -354,8 +330,7 @@ QUnit.module('actions', () => {
             min: 0,
             start: 20,
             end: 60,
-            onValueChanged: onValueChangedStub,
-            useInkRipple: false
+            onValueChanged: onValueChangedStub
         }).dxRangeSlider('instance');
 
         slider.option('start', 30);
@@ -374,8 +349,7 @@ QUnit.module('focus policy', moduleOptions, () => {
             start: 40,
             end: 60,
             width: 100,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const $handles = $rangeSlider.find('.' + SLIDER_HANDLE_CLASS);
         const $leftHandle = $handles.eq(0);
@@ -400,8 +374,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             start: 50,
             end: 80,
             step: 3,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
@@ -442,47 +415,6 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
         assert.equal(rangeSlider.option('end'), 90, 'value is correct after end press');
     });
 
-    QUnit.test('correct event should be passed to valueChanged when it is raised by keyboard navigation', function(assert) {
-        assert.expect(12);
-
-        const $rangeSlider = $('#slider').dxRangeSlider({
-            min: 10,
-            max: 90,
-            start: 50,
-            end: 80,
-            step: 3,
-            focusStateEnabled: true,
-            useInkRipple: false,
-            onValueChanged: (data) => {
-                assert.strictEqual(data.event.type, 'keydown', 'correct event has been passed');
-            }
-        });
-
-        const $handles = $rangeSlider.find('.' + SLIDER_HANDLE_CLASS);
-        const $leftHandle = $handles.eq(0);
-        const $rightHandle = $handles.eq(1);
-        let keyboard = keyboardMock($leftHandle);
-
-        $leftHandle.trigger('focusin');
-
-        keyboard.keyDown('right');
-        keyboard.keyDown('left');
-        keyboard.keyDown('home');
-        keyboard.keyDown('end');
-        keyboard.keyDown('pageUp');
-        keyboard.keyDown('pageDown');
-
-        keyboard = keyboardMock($rightHandle);
-        $rightHandle.trigger('focusin');
-
-        keyboard.keyDown('right');
-        keyboard.keyDown('left');
-        keyboard.keyDown('home');
-        keyboard.keyDown('end');
-        keyboard.keyDown('pageUp');
-        keyboard.keyDown('pageDown');
-    });
-
     QUnit.test('pageUp/pageDown keys test', function(assert) {
         assert.expect(6);
 
@@ -492,8 +424,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             start: 50,
             end: 80,
             keyStep: 1,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
@@ -539,8 +470,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             start: 50,
             end: 80,
             step: 3,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
@@ -591,8 +521,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             start: 50,
             end: 80,
             keyStep: 1,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
@@ -631,8 +560,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
         const $rangeSlider = $('#slider').dxRangeSlider({
             start: 29,
             end: 30,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
@@ -659,8 +587,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             rtlEnabled: true,
             start: 30,
             end: 31,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
@@ -687,8 +614,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
             rtlEnabled: true,
             start: 29,
             end: 30,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
@@ -715,8 +641,7 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
         const $rangeSlider = $('#slider').dxRangeSlider({
             start: 30,
             end: 31,
-            focusStateEnabled: true,
-            useInkRipple: false
+            focusStateEnabled: true
         });
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
@@ -1102,8 +1027,7 @@ QUnit.module('RTL', moduleOptions, () => {
             min: 0,
             start: 0,
             end: 100,
-            rtlEnabled: true,
-            useInkRipple: false
+            rtlEnabled: true
         });
 
         const slider = $element.dxRangeSlider('instance');
@@ -1129,8 +1053,7 @@ QUnit.module('RTL', moduleOptions, () => {
             min: 0,
             start: 0,
             end: 500,
-            rtlEnabled: true,
-            useInkRipple: false
+            rtlEnabled: true
         }).css('width', 500 + 2 * CONTAINER_MARGIN);
 
         const instance = $element.dxRangeSlider('instance');
@@ -1157,8 +1080,7 @@ QUnit.module('RTL', moduleOptions, () => {
             max: 100,
             start: 25,
             end: 75,
-            rtlEnabled: true,
-            useInkRipple: false
+            rtlEnabled: true
         }).css('width', 100 + 2 * CONTAINER_MARGIN);
         const pointer = pointerMock($element).start();
 
@@ -1178,13 +1100,17 @@ QUnit.module('option value', () => {
     QUnit.test('onValueChanged event should be fired with correct arguments', function(assert) {
         const start = 15;
         const end = 45;
-        const $element = $('#slider').dxRangeSlider({
+        const expectedFields = [
+            'component', 'element', 'event', 'previousValue', 'value', 'start', 'end'
+        ];
+        const instance = $('#slider').dxRangeSlider({
             value: [0, end]
-        });
-        const instance = $element.dxRangeSlider('instance');
+        }).dxRangeSlider('instance');
 
         instance.option('onValueChanged', function(args) {
-            assert.deepEqual(args.value, [start, end], 'value argument got correct value');
+            expectedFields.forEach(field => {
+                assert.ok(field in args, `argument has ${field} field`);
+            });
         });
         instance.option('value', [start, end]);
     });
@@ -1320,3 +1246,201 @@ QUnit.module('Validation', () => {
         });
     });
 });
+
+QUnit.module('valueChanged handler should receive correct event parameter', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#slider').dxRangeSlider({
+            min: 0,
+            max: 100,
+            start: 50,
+            end: 80,
+            width: 100 + CONTAINER_MARGIN * 2,
+            focusStateEnabled: true,
+            onValueChanged: this.valueChangedHandler
+        });
+        this.instance = this.$element.dxRangeSlider('instance');
+        this.$handles = this.$element.find(`.${SLIDER_HANDLE_CLASS}`);
+        this.$wrapper = this.$element.find(`.${SLIDER_WRAPPER_CLASS}`);
+        this.pointer = pointerMock(this.$wrapper);
+
+        this.testProgramChange = (assert) => {
+            const value = this.instance.option('value');
+            this.instance.option('value', [value[0] - 1, value[1] + 1]);
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
+        };
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('on value program change', function(assert) {
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on handle swipe', function(assert) {
+        this.pointer
+            .start()
+            .down(this.$wrapper.offset().left + CONTAINER_MARGIN + 50, this.$wrapper.offset().top)
+            .move(20);
+
+        this.checkEvent(assert, 'dxswipe', this.$wrapper);
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on handle swipeend (correction after swipe on float step)', function(assert) {
+        this.pointer
+            .start()
+            .down(this.$wrapper.offset().left + CONTAINER_MARGIN + 50, this.$wrapper.offset().top)
+            .move(9.666692444513187)
+            .swipeStart()
+            .swipeEnd();
+
+        const event = this.valueChangedHandler.getCall(1).args[0].event;
+        assert.strictEqual(event.type, 'dxswipeend', 'event type is correct');
+        assert.strictEqual(event.target, this.$wrapper.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+
+    QUnit.test('on click on slider scale', function(assert) {
+        this.pointer.start().move(10 + this.$element.offset().left).down();
+
+        this.checkEvent(assert, 'dxpointerdown', this.$wrapper);
+        this.testProgramChange(assert);
+    });
+
+    [0, 1].forEach(handlerNumber => {
+        QUnit.module(`on ${handlerNumber === 0 ? 'left' : 'right'} handle`, {
+            beforeEach: function() {
+                this.$handle = this.$handles.eq(handlerNumber);
+                this.keyboard = keyboardMock(this.$handle);
+            }
+        }, () => {
+            ['rightArrow', 'leftArrow', 'home', 'end', 'pageUp', 'pageDown'].forEach(key => {
+                QUnit.test(`on ${key} press`, function(assert) {
+                    this.keyboard.press(key);
+
+                    this.checkEvent(assert, 'keydown', this.$handle, key);
+                    this.testProgramChange(assert);
+                });
+            });
+        });
+    });
+});
+
+QUnit.module('valueChangeMode option', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#slider').dxRangeSlider({
+            max: 100,
+            min: 0,
+            start: 20,
+            end: 60,
+            valueChangeMode: 'onHandleRelease',
+            onValueChanged: this.valueChangedHandler,
+            tooltip: {
+                enabled: true,
+                showMode: 'always'
+            }
+        });
+        this.instance = this.$element.dxRangeSlider('instance');
+        this.$handle = this.$element.find(`.${SLIDER_HANDLE_CLASS}`);
+        this.leftHandle = this.$handle.eq(0);
+        this.rightHandle = this.$handle.eq(1);
+        this.leftHandleTooltip = this.leftHandle.find(`.${TOOLTIP_CLASS}`);
+        this.rightHandleTooltip = this.rightHandle.find(`.${TOOLTIP_CLASS}`);
+
+        this.range = this.$element.find('.' + SLIDER_RANGE_CLASS);
+
+        this.getLeftTooltipText = () => $.trim(this.leftHandleTooltip.text());
+        this.getRightTooltipText = () => $.trim(this.rightHandleTooltip.text());
+    }
+}, () => {
+    QUnit.test('value option should not change on left handle swipe with "onHandleRelease" valueChangeMode', function(assert) {
+        const pointer = pointerMock(this.leftHandle);
+        pointer.start().move(this.range.offset().left).down().move(200);
+
+        assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
+
+        pointer.up();
+
+        assert.equal(this.instance.option('start'), 40);
+        assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
+    });
+
+    QUnit.test('value option should not change on right handle swipe with "onHandleRelease" valueChangeMode', function(assert) {
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(200);
+
+        assert.notOk(this.valueChangedHandler.called, 'the onValueChanged is not called');
+
+        pointer.up();
+
+        assert.equal(this.instance.option('end'), 80);
+        assert.ok(this.valueChangedHandler.called, 'the onValueChanged is called');
+    });
+
+    QUnit.test('tooltip value should change on left handle swipe with "onHandleRelease" valueChangeMode', function(assert) {
+        const pointer = pointerMock(this.leftHandle);
+        pointer.start()
+            .down(this.range.offset().left)
+            .move(200);
+
+        assert.strictEqual(this.getLeftTooltipText(), '40');
+
+        pointer.move(400).up();
+
+        assert.strictEqual(this.getLeftTooltipText(), '60');
+    });
+
+    QUnit.test('tooltip value should change on right handle swipe with "onHandleRelease" valueChangeMode', function(assert) {
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(200);
+
+        assert.strictEqual(this.getRightTooltipText(), '80');
+
+        pointer.move(100).up();
+
+        assert.strictEqual(this.getRightTooltipText(), '90');
+    });
+
+    QUnit.test('value should be correctly updated when right handle is moved through left handle', function(assert) {
+        this.instance.option('start', 40);
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(-400).up();
+
+        assert.strictEqual(this.instance.option('start'), 20);
+    });
+
+    QUnit.test('value should be correctly updated when left handle is moved through right handle', function(assert) {
+        this.instance.option('start', 40);
+        const pointer = pointerMock(this.leftHandle);
+        pointer.start().down(this.leftHandle.offset().left + CONTAINER_MARGIN).move(400).up();
+
+        assert.strictEqual(this.instance.option('end'), 80);
+    });
+
+    QUnit.test('tooltip value should be correctly updated when handle value is 0', function(assert) {
+        const pointer = pointerMock(this.rightHandle);
+        pointer.start().down(this.rightHandle.offset().left + CONTAINER_MARGIN).move(-600);
+
+        assert.strictEqual(this.getLeftTooltipText(), '0');
+    });
+});
+

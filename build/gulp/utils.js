@@ -1,38 +1,42 @@
 'use strict';
 
 const gulp = require('gulp');
+const Vinyl = require('vinyl');
 const env = require('./env-variables');
 
 gulp.task('skippedTask', done => done());
 
+const isEsmPackage = env.BUILD_ESM_PACKAGE;
+const packageDir = 'devextreme';
+const packageDistDir = 'devextreme-dist';
+
 const runTaskByCondition = (condition, task) => {
     if(condition) {
-        return (done) => task(done);
+        return task;
     }
     return (done) => done ? done() : gulp.series('skippedTask');
 };
 
-const isEsmPackage = env.BUILD_ESM_PACKAGE && !env.USE_RENOVATION;
-const isRegularPackage = !env.BUILD_ESM_PACKAGE && !env.USE_RENOVATION;
-const isRenovationPackage = env.USE_RENOVATION && !env.BUILD_ESM_PACKAGE;
+const stringSrc = (filename, str) => {
+    const src = require('stream').Readable({ objectMode: true });
 
-let packageDir = '';
+    src._read = function() {
+        this.push(new Vinyl({
+            cwd: '',
+            path: filename,
+            contents: Buffer.from(str, 'utf-8')
+        }));
+        this.push(null);
+    };
 
-if(isRenovationPackage) {
-    packageDir = 'devextreme-renovation';
-} else if(isEsmPackage) {
-    packageDir = 'devextreme-esm';
-} else if(isRegularPackage) {
-    packageDir = 'devextreme';
-}
+    return src;
+};
 
 module.exports = {
     packageDir,
+    packageDistDir,
+    stringSrc,
     isEsmPackage,
-    isRegularPackage,
-    isRenovationPackage,
     runTaskByCondition,
-    ifRegularPackage: (task) => runTaskByCondition(isRegularPackage, task),
     ifEsmPackage: (task) => runTaskByCondition(isEsmPackage, task),
-    ifRenovationPackage: (task) => runTaskByCondition(isRenovationPackage, task)
 };

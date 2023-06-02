@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import 'ui/diagram';
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =

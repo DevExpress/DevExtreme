@@ -91,7 +91,8 @@ export class TooltipStrategyBase {
             onContentReady: this._onListRender.bind(this),
             onItemClick: e => this._onListItemClick(e),
             itemTemplate: (item, index) => this._renderTemplate(item.appointment, item.targetedAppointment, index, item.color),
-            _swipeEnabled: false
+            _swipeEnabled: false,
+            pageLoadMode: 'scrollBottom',
         };
     }
 
@@ -119,14 +120,17 @@ export class TooltipStrategyBase {
         return this._createFunctionTemplate(template, appointment, targetedAppointment, index);
     }
 
-    _createFunctionTemplate(template, data, targetData, index) {
+    _createFunctionTemplate(template, appointmentData, targetedAppointmentData, index) {
+        const isButtonClicked = !!this._extraOptions.isButtonClick;
+
         const isEmptyDropDownAppointmentTemplate = this._isEmptyDropDownAppointmentTemplate();
         return new FunctionTemplate(options => {
             return template.render({
                 model: isEmptyDropDownAppointmentTemplate ? {
-                    appointmentData: data,
-                    targetedAppointmentData: targetData
-                } : data,
+                    appointmentData,
+                    targetedAppointmentData,
+                    isButtonClicked
+                } : appointmentData,
                 container: options.container,
                 index: index
             });

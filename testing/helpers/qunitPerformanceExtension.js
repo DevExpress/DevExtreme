@@ -1,22 +1,26 @@
 /* eslint-disable no-console */
 
 (function(root, factory) {
+    const useJQuery = !QUnit.urlParams['nojquery'];
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            factory(require('jquery'));
+            factory(useJQuery ? require('jquery') : undefined, require('core/utils/size'));
         });
     } else {
-        factory(root.jQuery);
+        factory(useJQuery ? root.jQuery : undefined, DevExpress.require('core/utils/size'));
     }
-}(this, function($) {
+}(this, function($, sizeUtils) {
     function ChromeRemote() {
         const that = this;
         that.callbacks = {};
+        that.eventHandlers = {};
         that.nextCommandId = 1;
 
         loadJSON('http://localhost:9223/json', function(data) {
-            $.each(data, function(_, item) {
-                const title = $('<div>').html(item.title).text();
+            [...data].forEach(function(item) {
+                const div = document.createElement('div');
+                div.innerHTML = item.title;
+                const title = div.innerText;
                 // TODO: Try to find another way (item.title.indexOf(document.title) !== -1))
                 if(item.webSocketDebuggerUrl && (title.indexOf(document.title) !== -1 || title.indexOf(window.location.href) !== -1)) {
                     that.connect(item.webSocketDebuggerUrl);
@@ -28,17 +32,34 @@
     }
 
     function loadJSON(path, onSuccess, onError) {
-        $.ajax({
-            type: 'GET',
-            url: path,
-            success: function(result) {
-                onSuccess(result);
-            },
-            error: function(result) {
-                onError(result);
-            }
-        });
+        fetch(path, { method: 'GET' })
+            .then(x => x.json())
+            .then(x=> onSuccess(x))
+            .catch(err => onError(err));
     }
+
+    ChromeRemote.prototype.on = function(eventName, callback) {
+        if(!this.eventHandlers[eventName]) {
+            this.eventHandlers[eventName] = [];
+        }
+        this.eventHandlers[eventName].push(callback);
+    };
+    ChromeRemote.prototype.off = function(eventName, callback) {
+        if(!this.eventHandlers[eventName]) {
+            return;
+        }
+        const index = this.eventHandlers[eventName].indexOf(callback);
+        if(index > -1) {
+            this.eventHandlers[eventName].splice(index, 1);
+        }
+    };
+    ChromeRemote.prototype.trigger = function(eventName, args) {
+        const eventRoute = this.eventHandlers[eventName];
+        if(!eventRoute) { return; }
+        eventRoute.forEach(x => {
+            x(eventName, ...args);
+        });
+    };
 
     ChromeRemote.prototype.connect = function(url) {
         if(this.ws) return;
@@ -65,12 +86,12 @@
 
                 delete that.callbacks[message.id];
             } else if(message.method) {
-                $(that).trigger(message.method, [message.params]);
+                that.trigger(message.method, [message.params]);
             }
         };
 
         this.ws.onerror = function(err) {
-            $(that).trigger('error');
+            that.trigger('error');
         };
     };
 
@@ -94,7 +115,8 @@
         chromeRemoteIsReady = true;
     };
 
-    $(function() {
+
+    document.addEventListener('DOMContentLoaded', () => {
         documentIsLoaded = true;
     });
 
@@ -121,9 +143,9 @@
 
                     if(task.name === 'ScheduleStyleRecalculation') {
                         const stackTrace = task.args.data.stackTrace || [];
-                        const excludedRestyles = $.grep(stackTrace, function(trace) {
-                            return trace.url.indexOf('chrome-devtools') === 0 || trace.functionName === 'readThemeMarker';
-                        });
+                        const excludedRestyles = stackTrace.filter(
+                            (trace) => (trace.url.indexOf('chrome-devtools') === 0 || trace.functionName === 'readThemeMarker')
+                        );
 
                         if(!excludedRestyles.length && stackTrace.length) {
                             updateLayout = {
@@ -148,13 +170,14 @@
             };
 
             const collectEndData = function() {
-                $(chrome).off('Tracing.dataCollected', collectData);
-                $(chrome).off('Tracing.tracingComplete', collectEndData);
+                chrome.off('Tracing.dataCollected', collectData);
+                chrome.off('Tracing.tracingComplete', collectEndData);
 
+                const recalculationsStackString = JSON.stringify(JSON.stringify(that.styleRecalculations, null, 2));
                 const assertResult = (typeof standardMeasure === 'function') ? standardMeasure(that.styleRecalculations.length) : standardMeasure === that.styleRecalculations.length;
                 const resultMessage = 'Took ' + that.styleRecalculations.length + ' style recalculations';
                 const expectedMessage = 'Expected ' + standardMeasure + ' style recalculations';
-                const assertMessage = 'Performance test (Expected ' + standardMeasure + ' style recalculations, took ' + that.styleRecalculations.length + ' style recalculations)';
+                const assertMessage = 'Performance test (Expected ' + standardMeasure + ' style recalculations, took ' + that.styleRecalculations.length + ' style recalculations)' + '\r\n' + recalculationsStackString;
 
                 if(debug) {
                     const time = 0;
@@ -174,10 +197,14 @@
                 done();
             };
 
-            $('body').outerWidth(true);
+            if(!$) {
+                [...document.querySelectorAll('body')].forEach(x => sizeUtils.getOuterWidth(x, true));
+            } else {
+                $('body').outerWidth(true);
+            }
 
-            $(chrome).on('Tracing.dataCollected', collectData);
-            $(chrome).on('Tracing.tracingComplete', collectEndData);
+            chrome.on('Tracing.dataCollected', collectData);
+            chrome.on('Tracing.tracingComplete', collectEndData);
 
             const categories = [
                 'disabled-by-default-devtools.timeline',
@@ -185,12 +212,12 @@
                 'disabled-by-default-devtools.timeline.stack'
             ];
             chrome.send('Tracing.start', { categories: categories.join(',') }, function(isError) {
-                (function() {
-                    const result = measureFunction();
-                    return result || $.Deferred().resolve();
-                })().done(function() {
-                    isError ? collectEndData() : chrome.send('Tracing.end', {});
-                });
+                measureFunction();
+                if(isError) {
+                    collectEndData();
+                } else {
+                    chrome.send('Tracing.end', {});
+                }
             });
         });
     };

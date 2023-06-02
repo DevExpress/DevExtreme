@@ -1,0 +1,44 @@
+@use "./button/mixins" as *;
+
+// adduse
+
+
+.dx-actionsheet-popup-wrapper {
+  .dx-overlay-content {
+    padding-top: 0;
+    padding-bottom: 0;
+    -webkit-user-drag: none;
+  }
+}
+
+.dx-actionsheet-popup-wrapper,
+.dx-actionsheet-popover-wrapper {
+  .dx-popup-content {
+    .dx-button {
+      width: 100%;
+      margin-right: 0;
+      margin-left: 0;
+    }
+  }
+}
+
+.dx-actionsheet-item,
+.dx-actionsheet-cancel {
+  width: 100%;
+}
+
+.dx-state-disabled {
+  .dx-actionsheet-container {
+    .dx-button {
+      @include dx-button-disabled();
+    }
+  }
+}
+
+// stylelint-disable-next-line no-duplicate-selectors
+.dx-actionsheet-popup-wrapper,
+.dx-actionsheet-popover-wrapper {
+  .dx-popup-title {
+    word-wrap: break-word;
+  }
+}

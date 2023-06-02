@@ -9,8 +9,8 @@ import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import ValidationGroup from 'ui/validation_group';
 import eventsEngine from 'events/core/events_engine';
+import Scheduler from 'ui/scheduler';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'integration/angular';
 
@@ -22,8 +22,6 @@ import 'ui/menu';
 import 'ui/popup';
 import 'ui/popover';
 import 'ui/date_box';
-import 'ui/scheduler';
-import 'ui/slide_out_view';
 import 'ui/tabs';
 import 'ui/text_box';
 import 'ui/toolbar';
@@ -33,6 +31,7 @@ import Button from 'ui/button';
 import '../../helpers/ignoreAngularTimers.js';
 
 const FILTERING_TIMEOUT = 700;
+const isRenovatedScheduler = !!Scheduler.IS_RENOVATED_WIDGET;
 
 fx.off = true;
 
@@ -81,14 +80,19 @@ QUnit.test('dxPopup', function(assert) {
         originalPositionSetup($content, position);
     };
 
-    const $markup = $('\
-        <div dx-popup=\'popupOptions\'>\
-            <div data-options=\'dxTemplate: { name: "custom" }\' style=\'line-height: 18px\'>\
-                {{VeryVeryVeryLongField.value1}}\
-                {{VeryVeryVeryLongField.value2}}\
-            </div>\
-        </div>\
-    ');
+    const $markup = $(`
+        <style nonce="qunit-test">
+            #popup {
+                line-height: 18px;
+            }
+        </style>
+        <div dx-popup="popupOptions">
+            <div id="popup" data-options="dxTemplate: { name: 'custom' }">
+                {{VeryVeryVeryLongField.value1}}
+                {{VeryVeryVeryLongField.value2}}
+            </div>
+        </div>
+    `);
 
     const controller = function($scope) {
         $scope.VeryVeryVeryLongField = {
@@ -119,14 +123,19 @@ QUnit.test('dxPopup', function(assert) {
 });
 
 QUnit.test('dxPopover', function(assert) {
-    const $markup = $('\
-        <a id="link1">testLink</a>\
-        <div id="popover" dx-popover=\'popoverOptions\'>\
-            <div data-options=\'dxTemplate: { name: "content" }\' style=\'line-height: 18px\'>\
-                {{popoverContent}} {{popoverContent}}\
-            </div>\
-        </div>\
-    ');
+    const $markup = $(`
+        <style nonce="qunit-test">
+            #popover-content {
+                line-height: 18px;
+            }
+        </style>
+        <a id="link1">testLink</a>
+        <div id="popover" dx-popover="popoverOptions">
+            <div id="popover-content" data-options="dxTemplate: { name: 'content' }">
+                {{popoverContent}} {{popoverContent}}
+            </div>
+        </div>
+    `);
 
     const controller = function($scope) {
         $scope.popoverOptions = {
@@ -175,7 +184,7 @@ QUnit.test('dxDataGrid', function(assert) {
 
     initMarkup($markup, controller, this);
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     const $cols = $('.dx-datagrid-rowsview col');
     assert.roughEqual(parseInt($cols[0].style.width), 100, 1.01);
@@ -206,7 +215,7 @@ QUnit.test('dxDataGrid - search with row template should highlight data without 
     };
 
     initMarkup($markup, controller, this);
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     assert.equal($($('.mycell')[0]).text(), 'text.1');
 
@@ -265,7 +274,7 @@ QUnit.test('dxDataGrid - search with cell template should highlight data without
     };
 
     initMarkup($markup, controller, this);
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     assert.equal($($('.mycell')[0]).text(), 'text1');
 
@@ -322,7 +331,7 @@ QUnit.test('dxDataGrid - row template should rendered correctly with grouping', 
     };
 
     initMarkup($markup, controller, this);
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     const $rows = $('.dx-datagrid-rowsview tbody > tr');
 
@@ -424,7 +433,7 @@ QUnit.test('Two-way binding', function(assert) {
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     let $rows = $markup.find('.dx-data-row');
     assert.equal($rows.length, 2, 'row count');
@@ -461,7 +470,7 @@ QUnit.test('Two-way binding when columnFixing', function(assert) {
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     let $rows = $markup.find('.dx-datagrid-content-fixed .dx-data-row');
     assert.equal($rows.length, 2, 'row count');
@@ -501,7 +510,7 @@ QUnit.test('Two-way binding does not work for inserted rows', function(assert) {
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     scope.$apply(function() {
         scope.grid.addRow();
@@ -539,7 +548,7 @@ QUnit.test('Assign selectedRowKeys option via binding', function(assert) {
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
     scope.$apply(function() {
         scope.selectedRowKeys = [{ field1: 1, field2: 2 }];
         scope.selectedRowKeysInstance = scope.selectedRowKeys;
@@ -563,7 +572,7 @@ QUnit.test('Change selection.mode option via binding and refresh', function(asse
                 { value: 2, text: 'B' },
                 { value: 3, text: 'C' }
             ],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             bindingOptions: {
                 'selection.mode': 'mode'
             },
@@ -577,12 +586,12 @@ QUnit.test('Change selection.mode option via binding and refresh', function(asse
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
 
     $($markup.find('.dx-data-row').eq(0).children().first()).trigger('dxclick');
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
 
     scope.$apply(function() {
@@ -591,7 +600,7 @@ QUnit.test('Change selection.mode option via binding and refresh', function(asse
         scope.grid.refresh();
     });
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
 
     assert.equal($markup.find('.dx-header-row').eq(0).children().length, 2, 'two cells in header row');
@@ -620,7 +629,7 @@ QUnit.test('Scope refreshing count on init', function(assert) {
 
     initMarkup($markup, controller, this);
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     assert.equal(refreshingCount, 4);
 });
@@ -703,11 +712,16 @@ QUnit.test('Component can change itself options on init (T446364)', function(ass
 });
 
 QUnit.test('The hamburger button should be visible on small screen (T377800)', function(assert) {
-    const $markup = $('\
-        <div style=\'width: 100px\'>\
-            <div dx-menu=\'menu\'></div>\
-        </div>'
-    );
+    const $markup = $(`
+        <style nonce="qunit-test">
+            #markup {
+                width: 100px;
+            }
+        </style>
+        <div id="markup">
+            <div dx-menu='menu'></div>
+        </div>
+    `);
 
     const controller = function($scope) {
         $scope.menu = {
@@ -804,13 +818,18 @@ QUnit.test('item height is correct in animation config (T520346)', function(asse
 
     const originalAnimate = fx.animate;
 
-    const $markup = $(
-        '<div dx-accordion="accordionOptions" dx-item-alias="veryVeryVeryLongAlias">\
-            <div data-options="dxTemplate : { name: \'item\' } " style=\'line-height: 18px\'>\
-                {{veryVeryVeryLongAlias.Value}} {{veryVeryVeryLongAlias.Value}}\
-            </div>\
-        </div>'
-    );
+    const $markup = $(`
+        <style nonce="qunit-test">
+            #accordion-data {
+                line-height: 18px;
+            }
+        </style>
+        <div dx-accordion="accordionOptions" dx-item-alias="veryVeryVeryLongAlias">
+            <div id="accordion-data" data-options="dxTemplate : { name: 'item' }">
+                {{veryVeryVeryLongAlias.Value}} {{veryVeryVeryLongAlias.Value}}
+            </div>
+        </div>
+    `);
 
     const controller = function($scope) {
         $scope.accordionOptions = {
@@ -844,14 +863,18 @@ QUnit.test('item height is correct in animation config (T520346)', function(asse
 QUnit.test('title height is correct if the title is customized using ng-class (T444379)', function(assert) {
     this.clock = sinon.useFakeTimers();
 
-    const $markup = $(
-        '<style>.test-class { height: 100px; }</style>\
-        <div dx-accordion="accordionOptions" dx-item-alias="item">\
-            <div data-options="dxTemplate : { name: \'title\' } ">\
-                <div ng-class="getClass()">{{item.Value}}</div>\
+    const $markup = $(`
+        <style nonce="qunit-test">
+            .test-class {
+                height: 100px;
+            }
+        </style>
+        <div dx-accordion="accordionOptions" dx-item-alias="item">
+            <div data-options="dxTemplate : { name: 'title' } ">
+                <div ng-class="getClass()">{{item.Value}}</div>
             </div>\
-        </div>'
-    );
+        </div>
+    `);
 
     const controller = function($scope) {
         $scope.accordionOptions = {
@@ -923,7 +946,7 @@ QUnit.test('dxDateBox with list strategy automatically scrolls to selected item 
 
     initMarkup($markup, function() {}, this);
 
-    this.clock.tick();
+    this.clock.tick(40);
 
     const $popupContent = $('.dx-popup-content');
     const $selectedItem = $popupContent.find('.dx-list-item-selected');
@@ -973,7 +996,7 @@ QUnit.module('dxScheduler', {
     }
 });
 
-QUnit.test('Custom store with ISO8601 dates', function(assert) {
+QUnit[isRenovatedScheduler ? 'skip' : 'test']('Custom store with ISO8601 dates', function(assert) {
     const $markup = $('<div dx-scheduler="schedulerOptions"></div>');
 
     const controller = function($scope) {
@@ -1006,6 +1029,30 @@ QUnit.test('Custom store with ISO8601 dates', function(assert) {
     assert.equal($markup.find('.dx-scheduler-appointment').length, 1, 'appointment count');
 });
 
+QUnit.test('Should not merge element with ".dx-template-wrapper" class', function(assert) {
+    const $markup = $('\
+        <div dx-scheduler="schedulerOptions">\
+            <div data-options=\'dxTemplate: { name: "dataCellTemplate" }\' class=\'test-cell\'>\
+            </div>\
+        </div>\
+    ');
+
+    const controller = function($scope) {
+        $scope.schedulerOptions = {
+            dataCellTemplate: 'dataCellTemplate'
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    this.clock.tick(0);
+    const template = $markup.find('.test-cell').first();
+
+    assert.equal(template.length, 1, 'Template exists');
+    assert.ok(template.hasClass('dx-template-wrapper'), 'Template has class ".dx-template-wrapper"');
+    assert.ok(template.parent().is('td'), 'Template\'s parent is cell');
+});
+
 
 QUnit.module('Widgets without model for template', {
     beforeEach: function() {
@@ -1025,10 +1072,6 @@ const noModelWidgets = [
         name: 'dxPopup',
         options: { visible: true }
     },
-    {
-        name: 'dxSlideOutView',
-        options: {}
-    }
 ];
 
 noModelWidgets.forEach(function(widget) {

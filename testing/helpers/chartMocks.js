@@ -10,7 +10,6 @@ import translator2DModule from 'viz/translators/translator2d';
 import seriesFamilyModule from 'viz/core/series_family';
 import seriesModule from 'viz/series/base_series';
 import vizMocks from './vizMocks.js';
-import { isDefined } from '../../js/core/utils/type.js';
 import { Range } from 'viz/translators/range';
 const LoadingIndicatorOrig = loadingIndicatorModule.LoadingIndicator;
 
@@ -23,7 +22,11 @@ const sourceItemsToMocking = {};
 export const categories = [firstCategory, secondCategory, thirdCategory, fourthCategory];
 let renderer;
 
-export let seriesMockData = {};
+export const seriesMockData = {
+    series: [],
+    args: [],
+    currentSeries: 0
+};
 
 const canvas = {
     width: 610,
@@ -255,7 +258,7 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
     const axis = new axisModule.Axis({
         renderer: new vizMocks.Renderer(),
         stripsGroup: allOptions.stripsGroup,
-        labelAxesGroup: allOptions.labelAxesGroup,
+        stripLabelAxesGroup: allOptions.stripLabelAxesGroup,
         constantLinesGroup: allOptions.constantLinesGroup,
         axesContainerGroup: allOptions.axesContainerGroup,
         gridGroup: allOptions.gridGroup,
@@ -326,11 +329,7 @@ const MockSeriesFamily = Class.inherit({
 });
 
 export const insertMockFactory = function insertMockFactory() {
-    seriesMockData = {
-        series: [],
-        args: [],
-        currentSeries: 0
-    };
+    resetMockFactory();
 
     mockItem('Point', pointModule, function(series, data, options) {
         const opt = $.extend(true, {}, data, options);
@@ -384,7 +383,9 @@ export const restoreMockFactory = function() {
 };
 
 export const resetMockFactory = function resetMockFactory() {
-    seriesMockData = null;
+    seriesMockData.series = [];
+    seriesMockData.args = [];
+    seriesMockData.currentSeries = 0;
 };
 
 export const setupSeriesFamily = function() {
@@ -668,7 +669,8 @@ export const MockSeries = function MockSeries(options) {
         getMarginOptions: sinon.stub().returns(options.marginOptions || {}),
         useAggregation: sinon.stub().returns(!!(options.aggregation && options.aggregation.enabled)),
         usePointsToDefineAutoHiding: sinon.stub().returns(false),
-        resetApplyingAnimation: sinon.stub()
+        resetApplyingAnimation: sinon.stub(),
+        clearSelection: function() { }
     };
 };
 
@@ -898,7 +900,8 @@ export const MockPoint = Class.inherit(
         setHole: function() { },
         resetHoles: function() { },
         setInvisibility: sinon.spy(),
-        setDefaultCoords: sinon.spy()
+        setDefaultCoords: sinon.spy(),
+        clearSelection: function() { },
     });
 
 export const MockAxis = function(renderOptions) {
@@ -919,12 +922,13 @@ export const MockAxis = function(renderOptions) {
                 this._constantLinesGroup =
                 this._scaleBreaksGroup =
                 this._renderer =
-                this._labelAxesGroup =
+                this._stripLabelAxesGroup =
                 this._orthogonalTranslator =
                 this._stripsGroup =
                 this._translator =
                 this.axesContainerGroup =
                 this.gridGroup =
+                this._labelsAxesGroup =
                 this._options = null;
 
             this.disposed = true;
@@ -977,7 +981,7 @@ export const MockAxis = function(renderOptions) {
             this._options[typeSelector] = axisType || this._options[typeSelector];
         },
         getOptions: function() {
-            if(!isDefined(this._options)) {
+            if(!typeUtils.isDefined(this._options)) {
                 this._options = {
                     width: 1,
                     visible: true
@@ -1039,7 +1043,8 @@ export const MockAxis = function(renderOptions) {
         _isHorizontal: renderOptions.isHorizontal,
         _incidentOccurred: renderOptions.incidentOccurred,
         _stripsGroup: renderOptions.stripsGroup,
-        _labelAxesGroup: renderOptions.labelAxesGroup,
+        _stripLabelAxesGroup: renderOptions.stripLabelAxesGroup,
+        _labelsAxesGroup: renderOptions.labelsAxesGroup,
         _constantLinesGroup: renderOptions.constantLinesGroup,
         _scaleBreaksGroup: renderOptions.scaleBreaksGroup,
         axesContainerGroup: renderOptions.axesContainerGroup,
@@ -1074,9 +1079,6 @@ export const MockAxis = function(renderOptions) {
                 ticks: []
             };
         },
-        dataVisualRangeIsReduced: function() {
-            return true;
-        },
         getCategoriesSorter: function() {
             return this._options.categoriesSortingMethod;
         },
@@ -1090,13 +1092,16 @@ export const MockAxis = function(renderOptions) {
         customPositionIsAvailable() {
             return false;
         },
-        hasCustomPosition() {
+        hasNonBoundaryPosition() {
             return false;
         },
         getResolvedBoundaryPosition() {
             return 'bottom';
         },
-        getMarginOptions: sinon.stub.returns({}),
+        isFirstDrawing() {
+            return true;
+        },
+        getMarginOptions: sinon.stub().returns({}),
         applyVisualRangeSetter: sinon.spy(),
         _setVisualRange: sinon.spy(),
         _getAdjustedBusinessRange: sinon.spy(),
@@ -1110,8 +1115,7 @@ export const MockAxis = function(renderOptions) {
         setRenderedState: sinon.spy(),
         isRendered: sinon.spy(),
         getTemplatesGroups: sinon.stub().returns([]),
-        beforeCleanGroups: sinon.spy(),
-        afterCleanGroups: sinon.spy()
+        aggregatedPointBetweenTicks: sinon.stub().returns(false)
     };
 };
 

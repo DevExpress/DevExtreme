@@ -15,12 +15,12 @@ DevExpress.clientExporter = require('../../exporter');
 DevExpress.excelExporter = require('../../excel_exporter');
 DevExpress.pdfExporter = require('../../pdf_exporter');
 
-DevExpress.VERSION = require('../../core/version');
+DevExpress.VERSION = require('../../core/version').version;
 
 DevExpress.Class = require('../../core/class');
 DevExpress.DOMComponent = require('../../core/dom_component');
 
-DevExpress.Component = require('../../core/component');
+DevExpress.Component = require('../../core/component').Component;
 
 DevExpress.registerComponent = require('../../core/component_registrator');
 DevExpress.devices = require('../../core/devices');
@@ -74,10 +74,10 @@ DevExpress.fx = require('../../animation/fx');
 DevExpress.TransitionExecutor = require('../../animation/transition_executor/transition_executor').TransitionExecutor;
 DevExpress.AnimationPresetCollection = require('../../animation/presets/presets').PresetCollection;
 
-DevExpress.events = require('../../events/index');
+DevExpress.events = require('../../events');
 
 DevExpress.events.click = require('../../events/click');
-DevExpress.events.utils = require('../../events/utils/index');
+DevExpress.events.utils = require('../../events/utils');
 DevExpress.events.GestureEmitter = require('../../events/gesture/emitter.gesture');
 
 DevExpress.localization = require('../../localization');

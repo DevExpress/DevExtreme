@@ -1,13 +1,15 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../textEditor/sizes" as *;
+@use "../../base/timeView/mixins" as *;
 @use "../../base/timeView";
 
 // adduse
-
+@include clock-action-icons-mixin($base-accent, $clock-bg-color, $clock-digits-color);
 
 .dx-timeview {
   height: auto;
@@ -15,20 +17,7 @@
 }
 
 .dx-timeview-clock {
-  min-height: $generic-timeview-clock-min-size + $generic-timeview-clock-additional-size;
-  min-width: $generic-timeview-clock-min-size + $generic-timeview-clock-additional-size;
-  background: $timeview-clock-bg no-repeat 50% 50%;
-  background-size: $generic-timeview-clock-min-size;
-}
-
-.dx-timeview-hourarrow {
-  background-image: $timeview-hourarrow-bg;
-  background-size: 5px 57px - $generic-timeview-arrow-height-reduce;
-}
-
-.dx-timeview-minutearrow {
-  background-image: $timeview-minutearrow-bg;
-  background-size: 5px 79px - $generic-timeview-arrow-height-reduce / 2;
+  margin-bottom: 20px;
 }
 
 .dx-timeview-format12 {

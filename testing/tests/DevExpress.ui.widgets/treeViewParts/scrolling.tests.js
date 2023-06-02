@@ -1,29 +1,40 @@
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
-import browser from 'core/utils/browser';
+import {
+    SCROLLABLE_SIMULATED_CLASS,
+    SCROLLABLE_NATIVE_CLASS
+} from '../scrollableParts/scrollable.constants.js';
 import $ from 'jquery';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
-import 'common.css!';
 import 'generic_light.css!';
 
-QUnit.module('scrollToItem', () => {
-    if(browser.msie) {
-        return;
+QUnit.module('scrollToItem', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
-
-    function createWrapper(config, items) {
+}, () => {
+    function createWrapper({
+        scrollDirection,
+        initialPosition,
+        rtlEnabled,
+        onContentReady
+    }, items) {
         const wrapper = new TreeViewTestWrapper({
             displayExpr: 'id',
-            scrollDirection: config.scrollDirection,
+            scrollDirection: scrollDirection,
             height: 150,
             width: 150,
             animationEnabled: false,
             items: items,
-            rtlEnabled: config.rtlEnabled,
-            onContentReady: config.onContentReady,
+            rtlEnabled: rtlEnabled,
+            onContentReady: onContentReady,
         });
 
-        if(config.initialPosition) {
-            wrapper.instance._scrollableContainer.scrollTo(config.initialPosition);
+        if(initialPosition) {
+            wrapper.instance.getScrollable().scrollTo(initialPosition);
         }
 
         return wrapper;
@@ -94,9 +105,11 @@ QUnit.module('scrollToItem', () => {
                         wrapper.getElement().focusout();
                         wrapper.getElement().focusin();
                         wrapper.checkNodeIsInVisibleArea(key);
+                        this.clock.tick(400);
                         done();
                     });
                 }
+                this.clock.tick(10);
             });
         });
 
@@ -117,6 +130,7 @@ QUnit.module('scrollToItem', () => {
                             done();
                         });
                     }
+                    this.clock.tick(10);
                 });
             });
         });
@@ -133,25 +147,28 @@ QUnit.module('scrollToItem', () => {
 
         const done = assert.async(3);
         const key = 'item1_1_1';
-        wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
+        wrapper.instance.getScrollable().scrollTo({ left: 0, top: 0 });
         wrapper.instance.scrollToItem('item1_1_1').done(() => {
             wrapper.checkNodeIsInVisibleArea(key);
             done();
         });
+        this.clock.tick(10);
 
-        wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
+        wrapper.instance.getScrollable().scrollTo({ left: 0, top: 0 });
         const node = wrapper.getElement().find('[data-item-id="item1_1_1"]').get(0);
         wrapper.instance.scrollToItem(node).done(() => {
             wrapper.checkNodeIsInVisibleArea(node.getAttribute('data-item-id'));
             done();
         });
+        this.clock.tick(10);
 
-        wrapper.instance._scrollableContainer.scrollTo({ left: 0, top: 0 });
+        wrapper.instance.getScrollable().scrollTo({ left: 0, top: 0 });
         const itemData = wrapper.instance.option('items')[0].items[0].items[0];
         wrapper.instance.scrollToItem(itemData).done(() => {
             wrapper.checkNodeIsInVisibleArea(itemData.id);
             done();
         });
+        this.clock.tick(10);
     });
 
     QUnit.test('scrollToItem(not exists key)', function(assert) {
@@ -160,7 +177,57 @@ QUnit.module('scrollToItem', () => {
 
         const done = assert.async(3);
         wrapper.instance.scrollToItem('12345').fail(() => { assert.ok('scroll must fail, node not found for this key'); done(); });
+        this.clock.tick(10);
         wrapper.instance.scrollToItem($('<div/>').get(0)).fail(() => { assert.ok('scroll must fail, node not found for this itemElement'); done(); });
+        this.clock.tick(10);
         wrapper.instance.scrollToItem({}).fail(() => { assert.ok('scroll must fail, node not found for this itemData'); done(); });
+        this.clock.tick(10);
+    });
+});
+
+QUnit.module('useNativeScrolling', () => {
+    QUnit.test('switching useNative to false turns off native scrolling', function(assert) {
+        const wrapper = new TreeViewTestWrapper({
+            useNativeScrolling: true
+        });
+
+        const $treeView = wrapper.getElement();
+
+        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 1, 'native scrollable');
+        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 0, 'simulated scrollable');
+
+        wrapper.getInstance().option('useNativeScrolling', false);
+
+        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 0, 'native scrollable');
+        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 1, 'simulated scrollable');
+    });
+
+    QUnit.test('switching useNative to true turns off simulated scrolling', function(assert) {
+        const wrapper = new TreeViewTestWrapper({
+            useNativeScrolling: false
+        });
+
+        const $treeView = wrapper.getElement();
+
+        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 0, 'native scrollable');
+        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 1, 'simulated scrollable');
+
+        wrapper.getInstance().option('useNativeScrolling', true);
+
+        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 1, 'native scrollable');
+        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 0, 'simulated scrollable');
+    });
+});
+
+QUnit.module('getScrollable()', () => {
+    QUnit.test('getScrollable() method should return instance of private Scrollable widget', function(assert) {
+        const wrapper = new TreeViewTestWrapper({
+            useNativeScrolling: true
+        });
+
+        const scrollableInstance = wrapper.getInstance().getScrollable();
+
+        assert.ok(scrollableInstance instanceof Scrollable, 'scrollable instance');
+        assert.strictEqual(scrollableInstance, wrapper.getElement().find('.dx-scrollable').dxScrollable('instance'), 'getScrollable() return internal scrollable instance');
     });
 });

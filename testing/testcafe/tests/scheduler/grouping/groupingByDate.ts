@@ -3,7 +3,7 @@ import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
-fixture`Drag-and-drop appointments into allDay panel in the grouped Scheduler `
+fixture.disablePageReloads`Drag-and-drop appointments into allDay panel in the grouped Scheduler `
   .page(url(__dirname, '../../container.html'));
 
 test('Drag-n-drop between dateTable and allDay panel, groupByDate=true', async (t) => {
@@ -11,13 +11,11 @@ test('Drag-n-drop between dateTable and allDay panel, groupByDate=true', async (
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
   await t
-    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(1), {
-      speed: 0.1,
-    })
+    .dragToElement(draggableAppointment.element, scheduler.getAllDayTableCell(1), { speed: 0.2 })
     .expect(draggableAppointment.element.exists).ok()
     .expect(draggableAppointment.isAllDay)
     .ok();
-}).before(() => createScheduler({
+}).before(async () => createScheduler({
   dataSource,
   groupByDate: true,
 }));

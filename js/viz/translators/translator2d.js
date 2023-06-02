@@ -167,7 +167,7 @@ _Translator2d.prototype = {
                     script = categoryTranslator;
                     that._categories = categories;
                     canvasOptions.interval = that._getDiscreteInterval(options.addSpiderCategory ? categoriesLength + 1 : categoriesLength, canvasOptions);
-                    that._categoriesToPoints = makeCategoriesToPoints(categories, canvasOptions.invert);
+                    that._categoriesToPoints = makeCategoriesToPoints(categories);
                     if(categoriesLength) {
                         canvasOptions.startPointIndex = that._categoriesToPoints[visibleCategories[0].valueOf()];
                         that.visibleCategories = visibleCategories;
@@ -384,7 +384,8 @@ _Translator2d.prototype = {
 
         return _abs(this.from(visibleArea.min) - (!isDefined(minValue) ? this.from(visibleArea.max) : minValue));
     },
-    checkMinBarSize: function(value, minShownValue, stackValue) {
+
+    checkMinBarSize: function(value, minShownValue) {
         return _abs(value) < minShownValue ? value >= 0 ? minShownValue : -minShownValue : value;
     },
 

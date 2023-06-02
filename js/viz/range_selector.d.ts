@@ -1,832 +1,752 @@
-import {
-    dxElement
-} from '../core/element';
+import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
-    PaletteType,
-    PaletteExtensionModeType
-} from './palette';
-
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
-
-import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    format
-} from '../ui/widget/ui.widget';
+  Format,
+} from '../localization';
 
 import {
-    dxChartCommonSeriesSettings
+    dxChartCommonSeriesSettings,
 } from './chart';
 
 import {
     ChartSeries,
-    ScaleBreak,
-    VizRange,
-    TimeIntervalType
 } from './common';
 
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo,
 } from './core/base_widget';
 
+import {
+    ChartsDataType,
+    DiscreteAxisDivisionMode,
+    LabelOverlap,
+    Palette,
+    PaletteExtensionMode,
+    ScaleBreak,
+    ScaleBreakLineStyle,
+    TimeIntervalConfig,
+    VisualRange,
+    VisualRangeUpdateMode,
+} from '../common/charts';
+
+import { SliderValueChangeMode } from '../common';
+
+export {
+    ChartsDataType,
+    DiscreteAxisDivisionMode,
+    LabelOverlap,
+    Palette,
+    PaletteExtensionMode,
+    ScaleBreakLineStyle,
+    VisualRangeUpdateMode,
+};
+
+/** @public */
+export type BackgroundImageLocation = 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop';
+/** @public */
+export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
+/** @public */
+export type AxisScale = 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';
+/** @public */
+export type ChartAxisScale = 'continuous' | 'logarithmic';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxRangeSelector>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxRangeSelector>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxRangeSelector>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxRangeSelector> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = FileSavingEventInfo<dxRangeSelector>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxRangeSelector> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxRangeSelector>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxRangeSelector> & ChangedOptionInfo;
+
+/** @public */
+export type ValueChangedEvent = NativeEventInfo<dxRangeSelector, MouseEvent | TouchEvent> & {
+  readonly value: Array<number | string | Date>;
+  readonly previousValue: Array<number | string | Date>;
+};
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ * @docid
+ */
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     background?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#C0BAE1'
-      */
-      color?: string,
+       * @docid
+       * @default '#C0BAE1'
+       */
+      color?: string;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       */
       image?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.BackgroundImageLocation
-        * @default 'full'
-        */
-        location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop',
+         * @docid
+         * @default 'full'
+         */
+        location?: BackgroundImageLocation;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
-        url?: string
-      },
+         * @docid
+         * @default undefined
+         */
+        url?: string;
+      };
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
-      visible?: boolean
+       * @docid
+       * @default true
+       */
+      visible?: boolean;
     };
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     behavior?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
-      allowSlidersSwap?: boolean,
+       * @docid
+       * @default true
+       */
+      allowSlidersSwap?: boolean;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
-      animationEnabled?: boolean,
+       * @docid
+       * @default true
+       */
+      animationEnabled?: boolean;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.ValueChangedCallMode
-      * @default 'onMovingComplete'
-      */
-      callValueChanged?: 'onMoving' | 'onMovingComplete',
+       * @docid
+       * @default 'onMovingComplete'
+       * @deprecated
+       */
+      callValueChanged?: ValueChangedCallMode;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
-      manualRangeSelectionEnabled?: boolean,
+       * @docid
+       * @default true
+       */
+      manualRangeSelectionEnabled?: boolean;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
-      moveSelectedRangeByClick?: boolean,
+       * @docid
+       * @default true
+       */
+      moveSelectedRangeByClick?: boolean;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
-      snapToTicks?: boolean
+       * @docid
+       * @default true
+       */
+      snapToTicks?: boolean;
+      /**
+       * @docid
+       * @default 'onHandleRelease'
+       */
+      valueChangeMode?: SliderValueChangeMode;
     };
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     chart?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0.3
-      * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
-      */
-      barGroupPadding?: number,
+       * @docid
+       * @default 0.3
+       * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
+       */
+      barGroupPadding?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
-      */
-      barGroupWidth?: number,
+       * @docid
+       * @default undefined
+       * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
+       */
+      barGroupWidth?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0
-      */
-      bottomIndent?: number,
+       * @docid
+       * @default 0
+       */
+      bottomIndent?: number;
       /**
-      * @docid
-      * @type dxChartOptions.commonSeriesSettings
-      * @prevFileNamespace DevExpress.viz
-      */
-      commonSeriesSettings?: dxChartCommonSeriesSettings,
+       * @docid
+       * @type dxChartOptions.commonSeriesSettings
+       */
+      commonSeriesSettings?: dxChartCommonSeriesSettings;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       */
       dataPrepareSettings?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default false
-        */
-        checkTypeForAllData?: boolean,
+         * @docid
+         * @default false
+         */
+        checkTypeForAllData?: boolean;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default true
-        */
-        convertToAxisDataType?: boolean,
+         * @docid
+         * @default true
+         */
+        convertToAxisDataType?: boolean;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type_function_param1 a:object
-        * @type_function_param1_field1 arg:Date|Number|string
-        * @type_function_param1_field2 val:Date|Number|string
-        * @type_function_param2 b:object
-        * @type_function_param2_field1 arg:Date|Number|string
-        * @type_function_param2_field2 val:Date|Number|string
-        * @type_function_return Number
-        * @default true
-        */
-        sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number)
-      },
+         * @docid
+         * @default true
+         */
+        sortingMethod?: boolean | ((a: { arg?: Date | number | string; val?: Date | number | string }, b: { arg?: Date | number | string; val?: Date | number | string }) => number);
+      };
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0.2
-      * @propertyOf dxChartSeriesTypes.BubbleSeries
-      */
-      maxBubbleSize?: number,
+       * @docid
+       * @default 0.2
+       * @propertyOf dxChartSeriesTypes.BubbleSeries
+       */
+      maxBubbleSize?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 12
-      * @propertyOf dxChartSeriesTypes.BubbleSeries
-      */
-      minBubbleSize?: number,
+       * @docid
+       * @default 12
+       * @propertyOf dxChartSeriesTypes.BubbleSeries
+       */
+      minBubbleSize?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
-      negativesAsZeroes?: boolean,
+       * @docid
+       * @default false
+       */
+      negativesAsZeroes?: boolean;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @extends CommonVizPalette
-      * @type Array<string>|Enums.VizPalette
-      */
-      palette?: Array<string> | PaletteType,
+       * @docid
+       * @default "Material"
+       */
+      palette?: Array<string> | Palette;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.VizPaletteExtensionMode
-      * @default 'blend'
-      */
-      paletteExtensionMode?: PaletteExtensionModeType,
+       * @docid
+       * @default 'blend'
+       */
+      paletteExtensionMode?: PaletteExtensionMode;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type ChartSeries|Array<ChartSeries>
-      * @default undefined
-      * @notUsedInTheme
-      */
-      series?: ChartSeries | Array<ChartSeries>,
+       * @docid
+       * @default undefined
+       * @notUsedInTheme
+       */
+      series?: ChartSeries | Array<ChartSeries>;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
+       * @docid
+       * @default undefined
+       */
       seriesTemplate?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type_function_param1 seriesName:any
-        * @type_function_return ChartSeries
-        */
-        customizeSeries?: ((seriesName: any) => ChartSeries),
+         * @docid
+         */
+        customizeSeries?: ((seriesName: any) => ChartSeries);
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 'series'
-        */
-        nameField?: string
-      },
+         * @docid
+         * @default 'series'
+         */
+        nameField?: string;
+      };
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0.1
-      */
-      topIndent?: number,
+       * @docid
+       * @default 0.1
+       */
+      topIndent?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       */
       valueAxis?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default false
-        */
-        inverted?: boolean,
+         * @docid
+         * @default false
+         */
+        inverted?: boolean;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 10
-        */
-        logarithmBase?: number,
+         * @docid
+         * @default 10
+         */
+        logarithmBase?: number;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
-        max?: number,
+         * @docid
+         * @default undefined
+         */
+        max?: number;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default undefined
-        */
-        min?: number,
+         * @docid
+         * @default undefined
+         */
+        min?: number;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.RangeSelectorChartAxisScaleType
-        * @default undefined
-        */
-        type?: 'continuous' | 'logarithmic',
+         * @docid
+         * @default undefined
+         */
+        type?: ChartAxisScale;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.ChartDataType
-        * @default undefined
-        */
-        valueType?: 'datetime' | 'numeric' | 'string'
-      }
+         * @docid
+         * @default undefined
+         */
+        valueType?: ChartsDataType;
+      };
     };
     /**
      * @docid
      * @default '#FFFFFF'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     containerBackgroundColor?: string;
     /**
      * @docid
-     * @extends CommonVizDataSource
-     * @prevFileNamespace DevExpress.viz
+     * @notUsedInTheme
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
      */
-    dataSource?: Array<any> | DataSource | DataSourceOptions | string;
+    dataSource?: DataSourceLike<any> | null;
     /**
      * @docid
      * @default 'arg'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     dataSourceField?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     indent?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @notUsedInTheme
-      */
-      left?: number,
+       * @docid
+       * @default undefined
+       * @notUsedInTheme
+       */
+      left?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @notUsedInTheme
-      */
-      right?: number
+       * @docid
+       * @default undefined
+       * @notUsedInTheme
+       */
+      right?: number;
     };
     /**
      * @docid
-     * @extends Action
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 value:Array<number,string,Date>
-     * @type_function_param1_field5 previousValue:Array<number,string,Date>
-     * @type_function_param1_field6 event:event
      * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field component:dxRangeSelector
+     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onValueChanged?: ((e: { component?: dxRangeSelector, element?: dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: event }) => any);
+    onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     scale?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
-      aggregateByCategory?: boolean,
+       * @docid
+       * @default true
+       * @deprecated  dxChartSeriesTypes.CommonSeries.aggregation.enabled
+       */
+      aggregateByCategory?: boolean;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
-      aggregationGroupWidth?: number,
+       * @docid
+       * @default undefined
+       */
+      aggregationGroupWidth?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @inherits VizTimeInterval
-      * @type number|object|Enums.VizTimeInterval
-      */
-      aggregationInterval?: number | any | TimeIntervalType,
+       * @docid
+       * @inherits VizTimeInterval
+       * @type number|object|Enums.TimeInterval
+       */
+      aggregationInterval?: TimeIntervalConfig;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
-      allowDecimals?: boolean,
+       * @docid
+       * @default 'betweenLabels'
+       * @public
+       */
+      discreteAxisDivisionMode?: DiscreteAxisDivisionMode;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       * @default undefined
+       */
+      allowDecimals?: boolean;
+      /**
+       * @docid
+       */
       breakStyle?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default "#ababab"
-        */
-        color?: string,
+         * @docid
+         * @default "#ababab"
+         */
+        color?: string;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.ScaleBreakLineStyle
-        * @default "waved"
-        */
-        line?: 'straight' | 'waved',
+         * @docid
+         * @default "waved"
+         */
+        line?: ScaleBreakLineStyle;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 5
-        */
-        width?: number
-      },
+         * @docid
+         * @default 5
+         */
+        width?: number;
+      };
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @inherits ScaleBreak
-      * @default undefined
-      * @notUsedInTheme
-      */
-      breaks?: Array<ScaleBreak>,
+       * @docid
+       * @inherits ScaleBreak
+       * @default undefined
+       * @notUsedInTheme
+       */
+      breaks?: Array<ScaleBreak>;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
-      categories?: Array<number | string | Date>,
+       * @docid
+       */
+      categories?: Array<number | string | Date>;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
-      endOnTick?: boolean,
+       * @docid
+       * @default false
+       */
+      endOnTick?: boolean;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @notUsedInTheme
-      */
-      endValue?: number | Date | string,
+       * @docid
+       * @default undefined
+       * @notUsedInTheme
+       */
+      endValue?: number | Date | string;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
-      holidays?: Array<Date | string> | Array<number>,
+       * @docid
+       * @default undefined
+       */
+      holidays?: Array<Date | string> | Array<number>;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       */
       label?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type_function_param1 scaleValue:object
-        * @type_function_param1_field1 value:Date|Number|string
-        * @type_function_param1_field2 valueText:string
-        * @type_function_return string
-        * @notUsedInTheme
-        */
-        customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string),
+         * @docid
+         * @notUsedInTheme
+         */
+        customizeText?: ((scaleValue: { value?: Date | number | string; valueText?: string }) => string);
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#767676' [prop](color)
-        * @default 11 [prop](size)
-        */
-        font?: Font,
+         * @docid
+         * @default '#767676' &prop(color)
+         * @default 11 &prop(size)
+         */
+        font?: Font;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @extends CommonVizFormat
-        */
-        format?: format,
+         * @docid
+         * @default undefined
+         */
+        format?: Format;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @type Enums.ScaleLabelOverlappingBehavior
-        * @default "hide"
-        */
-        overlappingBehavior?: 'hide' | 'none',
+         * @docid
+         * @default "hide"
+         */
+        overlappingBehavior?: LabelOverlap;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 7
-        */
-        topIndent?: number,
+         * @docid
+         * @default 7
+         */
+        topIndent?: number;
         /**
+         * @docid
+         * @default true
+         */
+        visible?: boolean;
+      };
+      /**
        * @docid
-       * @prevFileNamespace DevExpress.viz
-       * @default true
+       * @default 0
        */
-        visible?: boolean
-      },
+      linearThreshold?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0
-      */
-      linearThreshold?: number,
+       * @docid
+       * @default 10
+       */
+      logarithmBase?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 10
-      */
-      logarithmBase?: number,
-      /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       */
       marker?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        */
+         * @docid
+         */
         label?: {
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @type_function_param1 markerValue:object
-          * @type_function_param1_field1 value:Date|Number
-          * @type_function_param1_field2 valueText:string
-          * @type_function_return string
-          * @notUsedInTheme
-          */
-          customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string),
+           * @docid
+           * @notUsedInTheme
+           */
+          customizeText?: ((markerValue: { value?: Date | number; valueText?: string }) => string);
           /**
-          * @docid
-          * @prevFileNamespace DevExpress.viz
-          * @extends CommonVizFormat
-          */
-          format?: format
-        },
+           * @docid
+           * @default undefined
+           */
+          format?: Format;
+        };
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 33
-        */
-        separatorHeight?: number,
+         * @docid
+         * @default 33
+         */
+        separatorHeight?: number;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 7
-        */
-        textLeftIndent?: number,
+         * @docid
+         * @default 7
+         */
+        textLeftIndent?: number;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 11
-        */
-        textTopIndent?: number,
+         * @docid
+         * @default 11
+         */
+        textTopIndent?: number;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 10
-        */
-        topIndent?: number,
+         * @docid
+         * @default 10
+         */
+        topIndent?: number;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default true
-        */
-        visible?: boolean
-      },
+         * @docid
+         * @default true
+         */
+        visible?: boolean;
+      };
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @inherits VizTimeInterval
-      * @type number|object|Enums.VizTimeInterval
-      */
-      maxRange?: number | any | TimeIntervalType,
+       * @docid
+       * @inherits VizTimeInterval
+       * @type number|object|Enums.TimeInterval
+       */
+      maxRange?: TimeIntervalConfig;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @inherits VizTimeInterval
-      * @type number|object|Enums.VizTimeInterval
-      */
-      minRange?: number | any | TimeIntervalType,
+       * @docid
+       * @inherits VizTimeInterval
+       * @type number|object|Enums.TimeInterval
+       */
+      minRange?: TimeIntervalConfig;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       */
       minorTick?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#000000'
-        */
-        color?: string,
+         * @docid
+         * @default '#000000'
+         */
+        color?: string;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 0.06
-        */
-        opacity?: number,
+         * @docid
+         * @default 0.06
+         */
+        opacity?: number;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default true
-        */
-        visible?: boolean,
+         * @docid
+         * @default true
+         */
+        visible?: boolean;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
-        width?: number
-      },
+         * @docid
+         * @default 1
+         */
+        width?: number;
+      };
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
-      minorTickCount?: number,
+       * @docid
+       * @default undefined
+       */
+      minorTickCount?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @inherits VizTimeInterval
-      * @type number|object|Enums.VizTimeInterval
-      */
-      minorTickInterval?: number | any | TimeIntervalType,
+       * @docid
+       * @inherits VizTimeInterval
+       * @type number|object|Enums.TimeInterval
+       */
+      minorTickInterval?: TimeIntervalConfig;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
-      placeholderHeight?: number,
+       * @docid
+       * @default undefined
+       */
+      placeholderHeight?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
-      showCustomBoundaryTicks?: boolean,
+       * @docid
+       * @default true
+       */
+      showCustomBoundaryTicks?: boolean;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
-      singleWorkdays?: Array<Date | string> | Array<number>,
+       * @docid
+       * @default undefined
+       */
+      singleWorkdays?: Array<Date | string> | Array<number>;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @notUsedInTheme
-      */
-      startValue?: number | Date | string,
+       * @docid
+       * @default undefined
+       * @notUsedInTheme
+       */
+      startValue?: number | Date | string;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      */
+       * @docid
+       */
       tick?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default '#000000'
-        */
-        color?: string,
+         * @docid
+         * @default '#000000'
+         */
+        color?: string;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 0.1
-        */
-        opacity?: number,
+         * @docid
+         * @default 0.1
+         */
+        opacity?: number;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.viz
-        * @default 1
-        */
-        width?: number
-      },
+         * @docid
+         * @default 1
+         */
+        width?: number;
+      };
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @inherits VizTimeInterval
-      * @type number|object|Enums.VizTimeInterval
-      */
-      tickInterval?: number | any | TimeIntervalType,
+       * @docid
+       * @inherits VizTimeInterval
+       * @type number|object|Enums.TimeInterval
+       */
+      tickInterval?: TimeIntervalConfig;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.RangeSelectorAxisScaleType
-      * @default undefined
-      */
-      type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete',
+       * @docid
+       * @default undefined
+       */
+      type?: AxisScale;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type Enums.ChartDataType
-      * @default undefined
-      */
-      valueType?: 'datetime' | 'numeric' | 'string',
+       * @docid
+       * @default undefined
+       */
+      valueType?: ChartsDataType;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default [1, 2, 3, 4, 5]
-      */
-      workWeek?: Array<number>,
+       * @docid
+       * @default [1, 2, 3, 4, 5]
+       */
+      workWeek?: Array<number>;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default false
-      */
-      workdaysOnly?: boolean
+       * @docid
+       * @default false
+       */
+      workdaysOnly?: boolean;
     };
     /**
      * @docid
      * @default "#606060"
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     selectedRangeColor?: string;
     /**
      * @docid
-     * @type Enums.VisualRangeUpdateMode
      * @default "reset"
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    selectedRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
+    selectedRangeUpdateMode?: VisualRangeUpdateMode;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     shutter?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      */
-      color?: string,
+       * @docid
+       * @default undefined
+       */
+      color?: string;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0.75
-      */
-      opacity?: number
+       * @docid
+       * @default 0.75
+       */
+      opacity?: number;
     };
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     sliderHandle?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#000000'
-      */
-      color?: string,
+       * @docid
+       * @default '#000000'
+       */
+      color?: string;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 0.2
-      */
-      opacity?: number,
+       * @docid
+       * @default 0.2
+       */
+      opacity?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 1
-      */
-      width?: number
+       * @docid
+       * @default 1
+       */
+      width?: number;
     };
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     sliderMarker?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#9B9B9B'
-      */
-      color?: string,
+       * @docid
+       * @default '#9B9B9B'
+       */
+      color?: string;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @type_function_param1 scaleValue:object
-      * @type_function_param1_field1 value:Date|Number|string
-      * @type_function_param1_field2 valueText:string
-      * @type_function_return string
-      * @notUsedInTheme
-      */
-      customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string),
+       * @docid
+       * @notUsedInTheme
+       */
+      customizeText?: ((scaleValue: { value?: Date | number | string; valueText?: string }) => string);
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default '#FFFFFF' [prop](color)
-      * @default 14 [prop](size)
-      */
-      font?: Font,
+       * @docid
+       * @default '#FFFFFF' &prop(color)
+       * @default 14 &prop(size)
+       */
+      font?: Font;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @extends CommonVizFormat
-      */
-      format?: format,
+       * @docid
+       * @default undefined
+       */
+      format?: Format;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 'red'
-      */
-      invalidRangeColor?: string,
+       * @docid
+       * @default 'red'
+       */
+      invalidRangeColor?: string;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 4
-      */
-      paddingLeftRight?: number,
+       * @docid
+       * @default 4
+       */
+      paddingLeftRight?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default 2
-      */
-      paddingTopBottom?: number,
+       * @docid
+       * @default 2
+       */
+      paddingTopBottom?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default undefined
-      * @notUsedInTheme
-      */
-      placeholderHeight?: number,
+       * @docid
+       * @default undefined
+       * @notUsedInTheme
+       */
+      placeholderHeight?: number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.viz
-      * @default true
-      */
-      visible?: boolean
+       * @docid
+       * @default true
+       */
+      visible?: boolean;
     };
     /**
      * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @hidden
      */
     tooltip?: BaseWidgetTooltip;
@@ -834,28 +754,21 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @docid
      * @fires dxRangeSelectorOptions.onValueChanged
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    value?: Array<number | string | Date> | VizRange;
+    value?: Array<number | string | Date> | VisualRange;
 }
 /**
  * @docid
  * @inherits BaseWidget, DataHelperMixin
- * @module viz/range_selector
- * @export default
- * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxRangeSelector extends BaseWidget {
-    constructor(element: Element, options?: dxRangeSelectorOptions)
-    constructor(element: JQuery, options?: dxRangeSelectorOptions)
+export default class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> {
     getDataSource(): DataSource;
     /**
      * @docid
      * @publicName getValue()
-     * @return Array<number,string,Date>
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     getValue(): Array<number | string | Date>;
@@ -863,31 +776,86 @@ export default class dxRangeSelector extends BaseWidget {
     /**
      * @docid
      * @publicName render(skipChartAnimation)
-     * @param1 skipChartAnimation:boolean
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     render(skipChartAnimation: boolean): void;
     /**
      * @docid
      * @publicName setValue(value)
-     * @param1 value:Array<number,string,Date> | VizRange
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    setValue(value: Array<number | string | Date> | VizRange): void;
+    setValue(value: Array<number | string | Date> | VisualRange): void;
 }
 
-declare global {
-interface JQuery {
-    dxRangeSelector(): JQuery;
-    dxRangeSelector(options: "instance"): dxRangeSelector;
-    dxRangeSelector(options: string): any;
-    dxRangeSelector(options: string, ...params: any[]): any;
-    dxRangeSelector(options: dxRangeSelectorOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxRangeSelectorOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxRangeSelectorOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxRangeSelectorOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxRangeSelectorOptions.onDisposing
+ * @type_function_param1 e:{viz/range_selector:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxRangeSelectorOptions.onDrawn
+ * @type_function_param1 e:{viz/range_selector:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxRangeSelectorOptions.onExported
+ * @type_function_param1 e:{viz/range_selector:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxRangeSelectorOptions.onExporting
+ * @type_function_param1 e:{viz/range_selector:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxRangeSelectorOptions.onFileSaving
+ * @type_function_param1 e:{viz/range_selector:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxRangeSelectorOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/range_selector:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxRangeSelectorOptions.onInitialized
+ * @type_function_param1 e:{viz/range_selector:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxRangeSelectorOptions.onOptionChanged
+ * @type_function_param1 e:{viz/range_selector:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxRangeSelectorOptions.onValueChanged
+ * @type_function_param1 e:{viz/range_selector:ValueChangedEvent}
+ */
+onValueChanged?: ((e: ValueChangedEvent) => void);
+};
+///#ENDDEBUG

@@ -1,8 +1,8 @@
+import { getOuterWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
 import { extend } from '../core/utils/extend';
-import { render } from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
 import Editor from './editor/editor';
 import { addNamespace } from '../events/utils/index';
@@ -38,6 +38,7 @@ const Switch = Editor.inherit({
         const move = function(value, e) {
             e.preventDefault();
             e.stopPropagation();
+            this._saveValueChangeEvent(e);
             this._animateValue(value);
         };
         return extend(this.callBase(), {
@@ -46,6 +47,10 @@ const Switch = Editor.inherit({
             leftArrow: move.bind(this, isRTL ? true : false),
             rightArrow: move.bind(this, isRTL ? false : true)
         });
+    },
+
+    _useTemplates: function() {
+        return false;
     },
 
     _getDefaultOptions: function() {
@@ -58,9 +63,7 @@ const Switch = Editor.inherit({
 
             switchedOffText: messageLocalization.format('dxSwitch-switchedOffText'),
 
-            value: false,
-
-            useInkRipple: false
+            value: false
         });
     },
 
@@ -82,7 +85,6 @@ const Switch = Editor.inherit({
 
     _initMarkup: function() {
         this._renderContainers();
-        this.option('useInkRipple') && this._renderInkRipple();
 
         this.$element()
             .addClass(SWITCH_CLASS)
@@ -164,7 +166,7 @@ const Switch = Editor.inherit({
     },
 
     _getItemSizeFunc: function() {
-        return this._$switchContainer.outerWidth(true) - getBoundingRect(this._$handle.get(0)).width;
+        return getOuterWidth(this._$switchContainer, true) - getBoundingRect(this._$handle.get(0)).width;
     },
 
     _renderSubmitElement: function() {
@@ -175,43 +177,6 @@ const Switch = Editor.inherit({
 
     _getSubmitElement: function() {
         return this._$submitElement;
-    },
-
-    _renderInkRipple: function() {
-        this._inkRipple = render({
-            waveSizeCoefficient: 1.7,
-            isCentered: true,
-            useHoldAnimation: false,
-            wavesNumber: 2
-        });
-    },
-
-    _renderInkWave: function(element, dxEvent, doRender, waveIndex) {
-        if(!this._inkRipple) {
-            return;
-        }
-
-        const config = {
-            element: element,
-            event: dxEvent,
-            wave: waveIndex
-        };
-
-        if(doRender) {
-            this._inkRipple.showWave(config);
-        } else {
-            this._inkRipple.hideWave(config);
-        }
-    },
-
-    _updateFocusState: function(e, value) {
-        this.callBase.apply(this, arguments);
-        this._renderInkWave(this._$handle, e, value, 0);
-    },
-
-    _toggleActiveState: function($element, value, e) {
-        this.callBase.apply(this, arguments);
-        this._renderInkWave(this._$handle, e, value, 1);
     },
 
     _offsetDirection: function() {
@@ -378,9 +343,6 @@ const Switch = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case 'useInkRipple':
-                this._invalidate();
-                break;
             case 'width':
                 delete this._marginBound;
                 this._refresh();
@@ -396,11 +358,6 @@ const Switch = Editor.inherit({
             default:
                 this.callBase(args);
         }
-    },
-
-    _clean: function() {
-        delete this._inkRipple;
-        this.callBase();
     }
 });
 

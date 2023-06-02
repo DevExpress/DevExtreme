@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import 'ui/file_manager';
 import FileSystemItem from 'file_management/file_system_item';
 
@@ -5,8 +6,8 @@ import RemoteFileSystemProvider from 'file_management/remote_provider';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 import { createSampleFileItems, generateString, createFileObject } from '../../../helpers/fileManagerHelpers.js';
 import { when } from 'core/utils/deferred';
-import { isString } from 'core/utils/type';
-import browser from 'core/utils/browser';
+import { isString, isFunction } from 'core/utils/type';
+import { extend } from 'core/utils/extend';
 
 const { test } = QUnit;
 
@@ -15,17 +16,18 @@ const { filesPathInfo, itemData, fileSystemItems } = createSampleFileItems();
 const moduleConfig = {
 
     beforeEach: function() {
-        this.options = {
-            endpointUrl: '/api/endpoint'
-        };
-
-        this.provider = new RemoteFileSystemProvider(this.options);
+        this.options = { endpointUrl: '/api/endpoint' };
+        createProvider(this, this.options);
     },
 
     afterEach: function() {
         ajaxMock.clear();
     }
 
+};
+
+const createProvider = (context, options) => {
+    context.provider = new RemoteFileSystemProvider(options);
 };
 
 QUnit.module('Remote Provider', moduleConfig, () => {
@@ -162,12 +164,7 @@ QUnit.module('Remote Provider', moduleConfig, () => {
             callback: request => {
                 assert.equal(request.method, 'POST');
 
-                if(browser.msie) {
-                    return;
-                }
-
                 const data = request.data;
-
                 const args = JSON.parse(data.get('arguments'));
 
                 const chunkMetadata = JSON.parse(args.chunkMetadata);
@@ -232,15 +229,124 @@ QUnit.module('Remote Provider', moduleConfig, () => {
     });
 
     test('generation end point', function(assert) {
-        let provider = new RemoteFileSystemProvider({
-            endpointUrl: 'myEndpoint'
-        });
-        assert.notStrictEqual(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?command=myCommand'), -1);
+        createProvider(this, { endpointUrl: 'myEndpoint' });
+        assert.notStrictEqual(this.provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?command=myCommand'), -1);
 
-        provider = new RemoteFileSystemProvider({
-            endpointUrl: 'myEndpoint?param1=value'
+        createProvider(this, { endpointUrl: 'myEndpoint?param1=value' });
+        assert.notStrictEqual(this.provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?param1=value&command=myCommand'), -1);
+    });
+
+    test('custom request headers API', function(assert) {
+        const done = assert.async();
+        const tokenValue = 'someTokenValue';
+        createProvider(this, extend(this.options, {
+            requestHeaders: {
+                RequestVerificationToken: tokenValue
+            },
+            beforeAjaxSend: function({ headers }) {
+                assert.strictEqual(headers.RequestVerificationToken, tokenValue, 'token value is available from the beforeAjaxSend() callback');
+            }
+        }));
+
+        ajaxMock.setup({
+            url: this.options.endpointUrl + '?command=GetDirContents&arguments=%7B%22pathInfo%22%3A%5B%7B%22key%22%3A%22Root%22%2C%22name%22%3A%22Root%22%7D%2C%7B%22key%22%3A%22Root%2FFiles%22%2C%22name%22%3A%22Files%22%7D%5D%7D',
+            responseText: {
+                result: itemData,
+                success: true
+            },
+            callback: request => {
+                assert.strictEqual(request.headers.RequestVerificationToken, tokenValue, 'token value presents');
+            }
         });
-        assert.notStrictEqual(provider._getEndpointUrl('myCommand', { }).indexOf('myEndpoint?param1=value&command=myCommand'), -1);
+
+        this.provider.getItems(new FileSystemItem('Root/Files', true)).done(done);
+    });
+
+    test('custom request get data API', function(assert) {
+        const done = assert.async();
+        const tokenValue = 'someTokenValue';
+        const dataValueText = 'newValue';
+        createProvider(this, extend(this.options, {
+            beforeAjaxSend: function({ headers, formData, xhrFields }) {
+                headers.RequestVerificationToken = tokenValue;
+                formData.dataValue = dataValueText;
+                xhrFields.withCredentials = true;
+            }
+        }));
+
+        ajaxMock.setup({
+            url: this.options.endpointUrl + '?command=GetDirContents&arguments=%7B%22pathInfo%22%3A%5B%7B%22key%22%3A%22Root%22%2C%22name%22%3A%22Root%22%7D%2C%7B%22key%22%3A%22Root%2FFiles%22%2C%22name%22%3A%22Files%22%7D%5D%7D',
+            responseText: {
+                result: itemData,
+                success: true
+            },
+            callback: request => {
+                assert.strictEqual(request.method, 'GET', 'request method is GET');
+                assert.strictEqual(request.headers.RequestVerificationToken, tokenValue, 'custom header presents');
+                assert.strictEqual(request.data.dataValue, dataValueText, 'custom formData value presents');
+                assert.ok(request.xhrFields.withCredentials, 'custom xhr field presents');
+            }
+        });
+
+        this.provider.getItems(new FileSystemItem('Root/Files', true)).done(done);
+    });
+
+    test('custom request post data API', function(assert) {
+        const done = assert.async();
+        const tokenValue = 'someTokenValue';
+        const dataValueText = 'newValue';
+        createProvider(this, extend(this.options, {
+            beforeAjaxSend: function({ headers, formData, xhrFields }) {
+                headers.RequestVerificationToken = tokenValue;
+                formData.dataValue = dataValueText;
+                xhrFields.withCredentials = true;
+            }
+        }));
+
+        ajaxMock.setup({
+            url: this.options.endpointUrl,
+            responseText: {
+                result: itemData,
+                success: true
+            },
+            callback: request => {
+                assert.strictEqual(request.method, 'POST', 'request method is POST');
+                assert.strictEqual(request.headers.RequestVerificationToken, tokenValue, 'custom header presents');
+                assert.strictEqual(request.data.get('dataValue'), dataValueText, 'custom formData value presents');
+                assert.ok(request.xhrFields.withCredentials, 'custom xhr field presents');
+            }
+        });
+
+        this.provider.getItemsContent([new FileSystemItem(filesPathInfo, 'Article.txt')]).done(done);
+    });
+
+    test('custom request submit data API', function(assert) {
+        const dataValueText = 'newValue';
+        const command = 'download';
+        createProvider(this, extend(this.options, {
+            beforeSubmit: function({ formData }) {
+                formData.dataValue = dataValueText;
+            }
+        }));
+
+        const $form = $('<form>');
+
+        const formDataEntries = { command };
+
+        assert.ok(isFunction(this.provider._beforeSubmitInternal), '_beforeSubmitInternal is a function');
+        assert.ok(isFunction(this.provider._appendFormDataInputsToForm), '_appendFormDataInputsToForm is a function');
+
+        this.provider._beforeSubmitInternal(formDataEntries);
+        this.provider._appendFormDataInputsToForm(formDataEntries, $form);
+
+        const $inputs = $form.find('input');
+        assert.strictEqual($inputs.length, 2, 'number of inputs is equal to the number of formData entries');
+        assert.strictEqual($inputs.eq(0).attr('name'), 'command', 'first input has correct name');
+        assert.strictEqual($inputs.eq(0).val(), command, 'first input has correct value');
+        assert.strictEqual($inputs.eq(1).attr('name'), 'dataValue', 'first input has correct name');
+        assert.strictEqual($inputs.eq(1).val(), dataValueText, 'first input has correct value');
+
+        $form.remove();
     });
 
 });

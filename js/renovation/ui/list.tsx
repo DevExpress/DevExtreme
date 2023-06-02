@@ -1,29 +1,46 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Event,
-} from 'devextreme-generator/component_declaration/common';
+  Component, ComponentBindings, JSXComponent, OneWay, Event, Template,
+} from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
-import DataSource, { DataSourceOptions } from '../../data/data_source';
-import { WidgetProps } from './common/widget';
+import DataSource, { Options as DataSourceOptions } from '../../data/data_source';
+import Store from '../../data/abstract_store';
 import LegacyList, { dxListItem } from '../../ui/list';
-import { dxElement } from '../../core/element';
-import { event } from '../../events/index';
+import { DxElement } from '../../core/element';
+import { EventExtension, DxEvent } from '../../events/index';
+
 // import renderTemplate from '../utils/render_template';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
+import { BaseWidgetProps } from './common/base_props';
+
+export interface ItemClickInfo {
+  component?: LegacyList;
+  element?: DxElement;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  model?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  itemData: any;
+  itemElement?: DxElement;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  itemIndex?: number | any;
+  event?: DxEvent;
+}
+
+export type ItemClickEvent = ItemClickInfo & EventExtension;
 
 export const viewFunction = ({
-  props: { rootElementRef, ...componentProps },
+  componentProps,
   restAttributes,
 }: List): JSX.Element => (
   <DomComponentWrapper
-    rootElementRef={rootElementRef as any}
     componentType={LegacyList}
     componentProps={componentProps}
+    templateNames={['itemTemplate']}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
 );
 @ComponentBindings()
-export class ListProps extends WidgetProps {
+export class ListProps extends BaseWidgetProps {
   // Properties have been copied from ../ui/list.d.ts
 
   @OneWay() activeStateEnabled?: boolean;
@@ -36,14 +53,22 @@ export class ListProps extends WidgetProps {
 
   //   @OneWay() collapsibleGroups?: boolean;
 
-  @OneWay() dataSource?: string | (string | dxListItem | any)[] | DataSource | DataSourceOptions;
+  @OneWay() dataSource?:
+  | string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  | (string | dxListItem | any)[]
+  | Store
+  | DataSource
+  | DataSourceOptions;
 
   //   @OneWay() displayExpr?: string | ((item: any) => string);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Template() itemTemplate?: any;
 
   @OneWay() focusStateEnabled?: boolean;
 
   // @Template() groupTemplate?: template
-  // | ((groupData: any, groupIndex: number, groupElement: dxElement) => string | Element | JQuery);
+  // |((groupData:any, groupIndex: number, groupElement: DxElement) => string | UserDefinedElement);
 
   // @OneWay() grouped?: boolean;
 
@@ -59,74 +84,66 @@ export class ListProps extends WidgetProps {
   // @TwoWay() items?: Array<string | dxListItem | any>;
 
   // @OneWay() menuItems?:
-  // Array<{ action?: ((itemElement: dxElement, itemData: any) => any), text?: string }>;
+  // Array<{ action?: ((itemElement: DxElement, itemData: any) => any), text?: string }>;
 
   // @OneWay() menuMode?: 'context' | 'slide';
 
   // @OneWay() nextButtonText?: string;
 
   // @Event()onGroupRendered?:((e: {
-  //   component?: dxList, element?: dxElement, model?: any, groupData?: any,
-  //   groupElement?: dxElement, groupIndex?: number
+  //   component?: dxList, element?: DxElement, model?: any, groupData?: any,
+  //   groupElement?: DxElement, groupIndex?: number
   // }) => any);
 
-  @Event() onItemClick?: ((e: {
-    component?: LegacyList;
-    element?: dxElement;
-    model?: any;
-    itemData: any;
-    itemElement?: dxElement;
-    itemIndex?: number | any;
-    jQueryEvent?: JQueryEventObject;
-    event?: event;
-  }) => any) | string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Event() onItemClick?: ((e: ItemClickEvent) => any) | string;
 
   // @Event() onItemContextMenu?: ((e: {
-  //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
-  //   itemElement?: dxElement, itemIndex?: number | any,
+  //   component?: dxList, element?: DxElement, model?: any, itemData?: any,
+  //   itemElement?: DxElement, itemIndex?: number | any,
   //   event?: event
   // }) => any);
 
   // @Event()onItemDeleted?: ((e: {
-  //   component?: dxList, element?: dxElement, model?: any,
-  //   itemData?: any, itemElement?: dxElement, itemIndex?: number | any
+  //   component?: dxList, element?: DxElement, model?: any,
+  //   itemData?: any, itemElement?: DxElement, itemIndex?: number | any
   // }) => any);
 
   // @Event()onItemDeleting?: ((e: {
-  //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
-  //   itemElement?: dxElement, itemIndex?: number | any,
-  //   cancel?: boolean | Promise<void> | JQueryPromise<void>
+  //   component?: dxList, element?: DxElement, model?: any, itemData?: any,
+  //   itemElement?: DxElement, itemIndex?: number | any,
+  //   cancel?: boolean | DxPromise
   // }) => any);
 
   // @Event()onItemHold?: ((e: {
-  //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
-  //   itemElement?: dxElement, itemIndex?: number | any,
+  //   component?: dxList, element?: DxElement, model?: any, itemData?: any,
+  //   itemElement?: DxElement, itemIndex?: number | any,
   //   event?: event
   // }) => any);
 
   // @Event()onItemReordered?: ((e: {
-  //   component?: dxList, element?: dxElement, model?: any, itemData?: any,
-  //   itemElement?: dxElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number
+  //   component?: dxList, element?: DxElement, model?: any, itemData?: any,
+  //   itemElement?: DxElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number
   // }) => any);
 
   // @Event()onItemSwipe?: ((e: {
-  //   component?: dxList, element?: dxElement, model?: any,
+  //   component?: dxList, element?: DxElement, model?: any,
   //   event?: event,
-  //   itemData?: any, itemElement?: dxElement, itemIndex?: number | any, direction?: string
+  //   itemData?: any, itemElement?: DxElement, itemIndex?: number | any, direction?: string
   // }) => any);
 
-  // @Event()onPageLoading?: ((e: { component?: dxList, element?: dxElement, model?: any }) => any);
+  // @Event()onPageLoading?:((e:{component?: dxList, element?: DxElement, model?: any }) => any);
 
-  // @Event()onPullRefresh?: ((e: { component?: dxList, element?: dxElement, model?: any }) => any);
+  // @Event()onPullRefresh?:((e:{component?: dxList, element?: DxElement, model?: any }) => any);
 
   // @Event()onScroll?: ((e: {
-  // component?: dxList, element?: dxElement, model?: any,
+  // component?: dxList, element?: DxElement, model?: any,
   // event?: event, scrollOffset?: any, reachedLeft?: boolean,
   // reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean
   // }) => any);
 
   // @Event()onSelectAllValueChanged?: ((e: {
-  //   component?: dxList, element?: dxElement, model?: any, value?: boolean
+  //   component?: dxList, element?: DxElement, model?: any, value?: boolean
   // }) => any);
 
   // @OneWay()pageLoadMode?: 'nextButton' | 'scrollBottom';
@@ -159,8 +176,6 @@ export class ListProps extends WidgetProps {
 
   // @OneWay()useNativeScrolling?: boolean;
 
-  @OneWay() itemTemplate?: any;
-
 //   @Event() onItemClick?: (e: any) => any = (() => {});
 }
 
@@ -168,4 +183,9 @@ export class ListProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class List extends JSXComponent(ListProps) {}
+export class List extends JSXComponent<ListProps>() {
+  /* istanbul ignore next: WA for Angular */
+  get componentProps(): ListProps {
+    return this.props;
+  }
+}

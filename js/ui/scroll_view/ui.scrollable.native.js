@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { isDxMouseWheelEvent } from '../../events/utils/index';
@@ -27,50 +28,41 @@ const NativeStrategy = Class.inherit({
     _init: function(scrollable) {
         this._component = scrollable;
         this._$element = scrollable.$element();
-        this._$container = scrollable._$container;
-        this._$content = scrollable._$content;
+        this._$container = $(scrollable.container());
+        this._$content = scrollable.$content();
 
         this._direction = scrollable.option('direction');
         this._useSimulatedScrollbar = scrollable.option('useSimulatedScrollbar');
-        this._showScrollbar = scrollable.option('showScrollbar');
 
         this.option = scrollable.option.bind(scrollable);
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
-        this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
         this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
+        this._isRtlNativeStrategy = scrollable._isRtlNativeStrategy.bind(scrollable);
     },
 
     render: function() {
-        this._renderPushBackOffset();
         const device = devices.real();
         const deviceType = device.platform;
 
         this._$element
             .addClass(SCROLLABLE_NATIVE_CLASS)
             .addClass(SCROLLABLE_NATIVE_CLASS + '-' + deviceType)
-            .toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this._showScrollbar);
+            .toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this._isScrollbarVisible());
 
-        if(this._showScrollbar && this._useSimulatedScrollbar) {
+        if(this._isScrollbarVisible() && this._useSimulatedScrollbar) {
             this._renderScrollbars();
         }
     },
 
-    updateBounds: noop,
-
-    _renderPushBackOffset: function() {
-        const pushBackValue = this.option('pushBackValue');
-        if(!pushBackValue && !this._component._lastPushBackValue) {
-            return;
+    updateRtlPosition: function(isFirstRender) {
+        if(isFirstRender && this.option('rtlEnabled')) {
+            if(this._isScrollbarVisible() && this._useSimulatedScrollbar) {
+                this._moveScrollbars();
+            }
         }
-
-        this._$content.css({
-            paddingTop: pushBackValue,
-            paddingBottom: pushBackValue
-        });
-        this._component._lastPushBackValue = pushBackValue;
     },
 
     _renderScrollbars: function() {
@@ -95,9 +87,7 @@ const NativeStrategy = Class.inherit({
     },
 
     handleInit: noop,
-    handleStart: function() {
-        this._disablePushBack = true;
-    },
+    handleStart: noop,
 
     handleMove: function(e) {
         if(this._isLocked()) {
@@ -110,9 +100,7 @@ const NativeStrategy = Class.inherit({
         }
     },
 
-    handleEnd: function() {
-        this._disablePushBack = false;
-    },
+    handleEnd: noop,
     handleCancel: noop,
     handleStop: noop,
 
@@ -134,65 +122,55 @@ const NativeStrategy = Class.inherit({
         return {
             event: this._eventForUserAction,
             scrollOffset: this._getScrollOffset(),
-            reachedLeft: this._isReachedLeft(left),
-            reachedRight: this._isReachedRight(left),
-            reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top - 2 * this.option('pushBackValue') : undefined
+            reachedLeft: this._isRtlNativeStrategy() ? this._isReachedRight(-left) : this._isReachedLeft(left),
+            reachedRight: this._isRtlNativeStrategy() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
+            reachedTop: this._isDirection(VERTICAL) ? Math.round(top) >= 0 : undefined,
+            reachedBottom: this._isDirection(VERTICAL) ? Math.round(Math.abs(top) - this._getMaxOffset().top) >= 0 : undefined
         };
     },
 
-    _isReachedLeft: function() {
-        return this._isDirection(HORIZONTAL) ? this.location().left >= 0 : undefined;
+    _getScrollOffset: function() {
+        const { top, left } = this.location();
+
+        return {
+            top: -top,
+            left: this._normalizeOffsetLeft(-left)
+        };
     },
 
-    _isReachedRight: function() {
-        return this._isDirection(HORIZONTAL) ? Math.abs(this.location().left) >= this._getMaxOffset().left : undefined;
+    _normalizeOffsetLeft(scrollLeft) {
+        if(this._isRtlNativeStrategy()) {
+            return this._getMaxOffset().left + scrollLeft;
+        }
+
+        return scrollLeft;
+    },
+
+    _isReachedLeft: function(left) {
+        return this._isDirection(HORIZONTAL) ? Math.round(left) >= 0 : undefined;
+    },
+
+    _isReachedRight: function(left) {
+        return this._isDirection(HORIZONTAL) ? Math.round(Math.abs(left) - this._getMaxOffset().left) >= 0 : undefined;
+    },
+
+    _isScrollbarVisible: function() {
+        const { showScrollbar } = this.option();
+
+        return showScrollbar !== 'never' && showScrollbar !== false;
     },
 
     handleScroll: function(e) {
-        this._component._updateRtlConfig();
-        if(!this._isScrollLocationChanged()) {
-            // NOTE: ignoring scroll events when scroll location was not changed (for Android browser - B250122)
-            e.stopImmediatePropagation();
-            return;
-        }
-
         this._eventForUserAction = e;
         this._moveScrollbars();
         this._scrollAction(this._createActionArgs());
-        this._lastLocation = this.location();
-        this._pushBackFromBoundary();
-    },
-
-    _pushBackFromBoundary: function() {
-        const pushBackValue = this.option('pushBackValue');
-        if(!pushBackValue || this._disablePushBack) {
-            return;
-        }
-
-        const scrollOffset = this._containerSize.height - this._contentSize.height;
-        const scrollTopPos = this._$container.scrollTop();
-        const scrollBottomPos = scrollOffset + scrollTopPos - pushBackValue * 2;
-
-        if(!scrollTopPos) {
-            this._$container.scrollTop(pushBackValue);
-        } else if(!scrollBottomPos) {
-            this._$container.scrollTop(pushBackValue - scrollOffset);
-        }
-    },
-
-    _isScrollLocationChanged: function() {
-        const currentLocation = this.location();
-        const lastLocation = this._lastLocation || {};
-        const isTopChanged = lastLocation.top !== currentLocation.top;
-        const isLeftChanged = lastLocation.left !== currentLocation.left;
-
-        return isTopChanged || isLeftChanged;
     },
 
     _moveScrollbars: function() {
+        const { top, left } = this._getScrollOffset();
+
         this._eachScrollbar(function(scrollbar) {
-            scrollbar.moveTo(this.location());
+            scrollbar.moveTo({ top: -top, left: -left });
             scrollbar.option('visible', true);
         });
 
@@ -212,7 +190,7 @@ const NativeStrategy = Class.inherit({
     location: function() {
         return {
             left: -this._$container.scrollLeft(),
-            top: this.option('pushBackValue') - this._$container.scrollTop()
+            top: -this._$container.scrollTop()
         };
     },
 
@@ -230,19 +208,17 @@ const NativeStrategy = Class.inherit({
 
     _updateDimensions: function() {
         this._containerSize = {
-            height: this._$container.height(),
-            width: this._$container.width()
+            height: getHeight(this._$container),
+            width: getWidth(this._$container)
         };
         this._componentContentSize = {
-            height: this._component.$content().height(),
-            width: this._component.$content().width()
+            height: getHeight(this._component.$content()),
+            width: getWidth(this._component.$content())
         };
         this._contentSize = {
-            height: this._$content.height(),
-            width: this._$content.width()
+            height: getHeight(this._$content),
+            width: getWidth(this._$content)
         };
-
-        this._pushBackFromBoundary();
     },
 
     _updateScrollbars: function() {
@@ -285,7 +261,7 @@ const NativeStrategy = Class.inherit({
 
     scrollBy: function(distance) {
         const location = this.location();
-        this._$container.scrollTop(Math.round(-location.top - distance.top + this.option('pushBackValue')));
+        this._$container.scrollTop(Math.round(-location.top - distance.top));
         this._$container.scrollLeft(Math.round(-location.left - distance.left));
     },
 
@@ -323,10 +299,6 @@ const NativeStrategy = Class.inherit({
     getDirection: function() {
         return this._allowedDirection();
     },
-
-    verticalOffset: function() {
-        return this.option('pushBackValue');
-    }
 });
 
 export default NativeStrategy;

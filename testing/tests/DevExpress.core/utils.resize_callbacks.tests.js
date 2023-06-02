@@ -5,18 +5,15 @@ import windowUtils from 'core/utils/window';
 QUnit.module('resizeCallbacks', {
     beforeEach: function() {
         const test = this;
-        test.__originalWindowElementGetter = windowUtils.getWindow;
-        test.width = 400;
-        test.height = 300;
 
-        windowUtils.getWindow = function() {
-            const fakeWindow = {};
-            fakeWindow.window = fakeWindow;
-            fakeWindow.innerHeight = test.height;
-            fakeWindow.innerWidth = test.width;
-
-            return fakeWindow;
+        const fakeWindow = {
+            innerHeight: 300,
+            innerWidth: 400
         };
+        fakeWindow.window = fakeWindow;
+        test.fakeWindow = fakeWindow;
+
+        windowUtils.setWindow(fakeWindow, true);
 
         test.__originalListener = domAdapter.listen;
 
@@ -31,8 +28,8 @@ QUnit.module('resizeCallbacks', {
 
         this.triggerResize = function() {
             if(!arguments.length || arguments[0]) {
-                ++test.width;
-                ++test.height;
+                ++fakeWindow.innerWidth;
+                ++fakeWindow.innerHeight;
             }
             resizeHandlers.forEach(function(handler) {
                 handler();
@@ -42,13 +39,10 @@ QUnit.module('resizeCallbacks', {
         this.triggerResize(); //  to reset size cache
     },
     afterEach: function() {
-        windowUtils.getWindow = this.__originalWindowElementGetter;
+        windowUtils.setWindow(window);
         domAdapter.listen = this.__originalListener;
-        delete this.__originalDocumentElementGetter;
-        delete this.__originalWindowElementGetter;
         delete this.__originalListener;
-        delete this.width;
-        delete this.height;
+        delete this.fakeWindow;
         delete this.callbacks;
         this.triggerResize(); //  to reset size cache
         delete this.triggerResize;
@@ -183,13 +177,13 @@ QUnit.test('callbacks should be fired with changed dimensions', function(assert)
     this.callbacks.add(callback);
 
     callback.reset();
-    this.width = 500;
+    this.fakeWindow.innerWidth = 500;
     this.triggerResize(false);
 
     assert.ok(callback.calledWith('width'), 'callback is called for width only');
 
     callback.reset();
-    this.height = 500;
+    this.fakeWindow.innerHeight = 500;
     this.triggerResize(false);
 
     assert.ok(callback.calledWith('height'), 'callback is called for height only');

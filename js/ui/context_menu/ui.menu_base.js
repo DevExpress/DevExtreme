@@ -28,6 +28,9 @@ const DX_MENU_ITEM_POPOUT_CONTAINER_CLASS = DX_MENU_ITEM_POPOUT_CLASS + '-contai
 const DX_MENU_ITEM_CAPTION_CLASS = ITEM_CLASS + '-text';
 const SINGLE_SELECTION_MODE = 'single';
 const DEFAULT_DELAY = { 'show': 50, 'hide': 300 };
+const DX_MENU_ITEM_CAPTION_URL_CLASS = `${DX_MENU_ITEM_CAPTION_CLASS}-with-url`;
+const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
+const DX_ITEM_URL_CLASS = 'dx-item-url';
 
 
 class MenuBase extends HierarchicalCollectionWidget {
@@ -129,7 +132,7 @@ class MenuBase extends HierarchicalCollectionWidget {
         return ITEM_CLASS;
     }
 
-    _setAriaSelected() {}
+    _setAriaSelectionAttribute() {}
 
     _selectedItemClass() {
         return DX_MENU_SELECTED_ITEM_CLASS;
@@ -162,7 +165,7 @@ class MenuBase extends HierarchicalCollectionWidget {
         return extend(super._supportedKeys(), {
             space: selectItem,
             pageUp: noop,
-            pageDown: noop
+            pageDown: noop,
         });
     }
 
@@ -177,12 +180,45 @@ class MenuBase extends HierarchicalCollectionWidget {
         this._initActions();
     }
 
-    _getTextContainer(itemData) {
-        const itemText = itemData.text;
-        const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
-        const itemContent = isPlainObject(itemData) ? itemText : String(itemData);
+    _getLinkContainer(iconContainer, textContainer, { linkAttr, url }) {
+        iconContainer?.addClass(DX_ICON_WITH_URL_CLASS);
+        textContainer?.addClass(DX_MENU_ITEM_CAPTION_URL_CLASS);
+        const linkAttributes = isObject(linkAttr) ? linkAttr : {};
+        return $('<a>')
+            .addClass(DX_ITEM_URL_CLASS)
+            .attr({ ...linkAttributes, href: url })
+            .append(iconContainer)
+            .append(textContainer);
+    }
 
-        return itemText && $itemContainer.text(itemContent);
+    _addContent($container, itemData) {
+        const { html, url } = itemData;
+
+        const iconContainer = this._getIconContainer(itemData);
+        const textContainer = this._getTextContainer(itemData);
+
+        $container.html(html);
+        if(url) {
+            const link = this._getLinkContainer(iconContainer, textContainer, itemData);
+            $container.append(link);
+        } else {
+            $container
+                .append(iconContainer)
+                .append(textContainer);
+        }
+        $container.append(this._getPopoutContainer(itemData));
+        this._addContentClasses(itemData, $container.parent());
+    }
+
+    _getTextContainer(itemData) {
+        const { text } = itemData;
+        const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
+        const itemText = isPlainObject(itemData) ? text : String(itemData);
+        return text && $itemContainer.text(itemText);
+    }
+
+    _getItemExtraPropNames() {
+        return ['url', 'linkAttr'];
     }
 
     _getPopoutContainer(itemData) {
@@ -243,7 +279,6 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     _initMarkup() {
         super._initMarkup();
-        this._addCustomCssClass(this.$element());
         this.option('useInkRipple') && this._renderInkRipple();
     }
 
@@ -486,7 +521,7 @@ class MenuBase extends HierarchicalCollectionWidget {
         const selectedIndex = this._dataAdapter.getSelectedNodesKeys();
 
         if(!selectedIndex.length || !this._selectedGetter(args.itemData) || !this._isItemSelectable(args.itemData)) {
-            this._setAriaSelected($itemElement, 'false');
+            this._setAriaSelectionAttribute($itemElement, 'false');
             return;
         }
 
@@ -494,9 +529,9 @@ class MenuBase extends HierarchicalCollectionWidget {
 
         if(node.internalFields.key === selectedIndex[0]) {
             $itemElement.addClass(this._selectedItemClass());
-            this._setAriaSelected($itemElement, 'true');
+            this._setAriaSelectionAttribute($itemElement, 'true');
         } else {
-            this._setAriaSelected($itemElement, 'false');
+            this._setAriaSelectionAttribute($itemElement, 'false');
         }
     }
 
@@ -514,8 +549,19 @@ class MenuBase extends HierarchicalCollectionWidget {
         if(e._skipHandling) return;
 
         const itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));
-        this._itemDXEventHandler(e, 'onItemClick', {}, { afterExecute: itemClickActionHandler.bind(this) });
+        this._itemDXEventHandler(e, 'onItemClick', {}, {
+            beforeExecute: this._itemClick,
+            afterExecute: itemClickActionHandler.bind(this)
+        });
         e._skipHandling = true;
+    }
+
+    _itemClick(actionArgs) {
+        const args = actionArgs.args[0];
+        const link = args.event.target.getElementsByClassName(DX_ITEM_URL_CLASS)[0];
+        if(args.itemData.url && link) {
+            link.click();
+        }
     }
 
     _updateSubmenuVisibilityOnClick(actionArgs) {
@@ -529,7 +575,7 @@ class MenuBase extends HierarchicalCollectionWidget {
     _updateSelectedItemOnClick(actionArgs) {
         const args = actionArgs.args ? actionArgs.args[0] : actionArgs;
 
-        if(!this._isItemSelectionAllowed(args.itemData)) {
+        if(!this._isItemSelectAllowed(args.itemData)) {
             return;
         }
 
@@ -549,9 +595,9 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     }
 
-    _isItemSelectionAllowed(item) {
-        const isSelectionByClickEnabled = this._isSelectionEnabled() && this.option('selectByClick');
-        return !this._isContainerEmpty() && isSelectionByClickEnabled && this._isItemSelectable(item) && !this._itemsGetter(item);
+    _isItemSelectAllowed(item) {
+        const isSelectByClickEnabled = this._isSelectionEnabled() && this.option('selectByClick');
+        return !this._isContainerEmpty() && isSelectByClickEnabled && this._isItemSelectable(item) && !this._itemsGetter(item);
     }
 
     _isContainerEmpty() {

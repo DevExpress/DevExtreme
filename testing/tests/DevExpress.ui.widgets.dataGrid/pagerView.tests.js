@@ -1,28 +1,26 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div class="dx-datagrid">\
-        <div id="container"></div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-
-import 'common.css!';
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import $ from 'jquery';
 import { setupDataGridModules, MockDataController } from '../../helpers/dataGridMocks.js';
 import dataUtils from 'core/element_data';
 import { createEvent } from 'events/utils/index';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 import Pager from 'ui/pager';
 
-// import { act } from 'preact/test-utils';
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div class="dx-datagrid">
+                <div id="container"></div>
+            </div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('Pager', {
     beforeEach: function() {
@@ -73,7 +71,7 @@ QUnit.module('Pager', {
 
         // act
         pagerView.render(testElement);
-        const pager = pagerView._getPager();
+        const pager = pagerView.getPager();
 
         // assert
         assert.ok(!pager);
@@ -89,7 +87,7 @@ QUnit.module('Pager', {
 
         // act
         pagerView.render(testElement);
-        const pager = pagerView._getPager();
+        const pager = pagerView.getPager();
 
         // assert
         assert.equal(testElement.find('.dx-pager').length, 1, 'pager element');
@@ -133,7 +131,7 @@ QUnit.module('Pager', {
         // });
         $(testElement.find('.dx-page')[5]).trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
         // assert
         assert.equal(that.dataControllerOptions.pageIndex, '19', 'page index');
     });
@@ -148,7 +146,7 @@ QUnit.module('Pager', {
         this.dataController.pageIndex(13);
 
         // assert
-        assert.equal(pagerView._getPager().option('pageIndex'), 14, 'page index');
+        assert.equal(pagerView.getPager().option('pageIndex'), 14, 'page index');
     });
 
     // T211403
@@ -161,10 +159,10 @@ QUnit.module('Pager', {
         pagerView.render(testElement);
         this.dataController.pageIndex(13);
         this.dataController.pageIndex(14);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
-        assert.equal(pagerView._getPager().option('pageIndex'), 15, 'page index');
+        assert.equal(pagerView.getPager().option('pageIndex'), 15, 'page index');
     });
 
     // T220755
@@ -176,10 +174,10 @@ QUnit.module('Pager', {
         // act
         pagerView.render(testElement);
         this.dataController.pageIndex('14');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
-        assert.equal(pagerView._getPager().option('pageIndex'), 15, 'page index changed');
+        assert.equal(pagerView.getPager().option('pageIndex'), 15, 'page index changed');
     });
 
     QUnit.test('Pages count is changed from dataController', function(assert) {
@@ -192,7 +190,7 @@ QUnit.module('Pager', {
         this.dataController.updatePagesCount(7);
 
         // assert
-        assert.equal(pagerView._getPager().option('pageCount'), 7, 'pageCount');
+        assert.equal(pagerView.getPager().option('pageCount'), 7, 'pageCount');
     });
 
     QUnit.test('Page size is changed from dataController', function(assert) {
@@ -205,7 +203,7 @@ QUnit.module('Pager', {
         this.dataController.pageSize(9);
 
         // assert
-        assert.equal(pagerView._getPager().option('pageSize'), 9, 'pageSize');
+        assert.equal(pagerView.getPager().option('pageSize'), 9, 'pageSize');
     });
 
     QUnit.test('HasKnownLastPage is changed from dataController', function(assert) {
@@ -223,7 +221,7 @@ QUnit.module('Pager', {
             assert.strictEqual(testElement.find('.dx-next-button').length, 1, 'pager has next page button');
             assert.strictEqual(testElement.find('.dx-prev-button').length, 0, 'pager doesnt have prev page button');
         } else {
-            assert.ok(pagerView._getPager()._testShowMoreButton, 'showMoreButton in pager');
+            assert.ok(pagerView.getPager()._testShowMoreButton, 'showMoreButton in pager');
         }
     });
 
@@ -244,6 +242,19 @@ QUnit.module('Pager', {
 
         // assert
         assert.notStrictEqual(testElement.find('.dx-pager').css('display'), 'none', 'pager visible');
+    });
+
+    QUnit.test('Label option works', function(assert) {
+        // arrange
+        const testElement = $('#container');
+        const pagerView = this.pagerView;
+
+        this.dataControllerOptions.pageCount = 1;
+        this.options.pager.label = 'my_label';
+        pagerView.render(testElement, {});
+
+        // assert
+        assert.strictEqual(testElement.find('.dx-pager').attr('aria-label'), 'my_label');
     });
 
     QUnit.test('Pager is not rendered on partial update', function(assert) {
@@ -273,7 +284,7 @@ QUnit.module('Pager', {
 
         pagerView.render(testElement);
 
-        sinon.spy(pagerView._getPager(), 'option');
+        sinon.spy(pagerView.getPager(), 'option');
 
         assert.equal(pagerView._createComponent.callCount, 1, '_createComponent call count before partial update');
 
@@ -282,8 +293,8 @@ QUnit.module('Pager', {
 
         // assert
         assert.equal(pagerView._createComponent.callCount, 1, '_createComponent call count after partial update');
-        assert.equal(pagerView._getPager().option.callCount, 1, 'pager option call count after partial update');
-        assert.deepEqual(pagerView._getPager().option.getCall(0).args, [{
+        assert.equal(pagerView.getPager().option.callCount, 1, 'pager option call count after partial update');
+        assert.deepEqual(pagerView.getPager().option.getCall(0).args, [{
             hasKnownLastPage: true, // T697587
             totalCount: 143, // #7259
             pageCount: 20,
@@ -551,10 +562,8 @@ QUnit.module('Pager', {
         this.options.pager = { visible: 'auto' };
         this.dataControllerOptions.pageCount = 2;
 
-        pagerView.isVisible();
-
         // assert
-        assert.equal(pagerView._isVisible, true, 'isVisible');
+        assert.equal(pagerView.isVisible(), true, 'isVisible');
 
         // act
         pagerView.component.resize = function() {
@@ -563,10 +572,10 @@ QUnit.module('Pager', {
         pagerView._invalidate = function() {
             isInvalidateCalled = true;
         };
-        pagerView.optionChanged({ name: 'dataSource', value: [{}] });
+        pagerView.option('dataSource', [{}]);
 
         // assert
-        assert.equal(pagerView._isVisible, true, 'isVisible');
+        assert.equal(pagerView.isVisible(), true, 'isVisible');
         assert.equal(isInvalidateCalled, undefined, 'invalidate');
         assert.equal(isResizeCalled, undefined, 'resize');
     });
@@ -634,11 +643,11 @@ QUnit.module('Pager', {
         const pagerView = this.pagerView;
 
         this.options.pager.showInfo = true;
-        this.options.pager.infoText = '{0} Страница из {1}';
+        this.options.pager.infoText = 'Page {0} sur {1}';
 
         // act
         pagerView.render(testElement);
-        assert.equal($('.dx-info').text(), '2 Страница из 20');
+        assert.equal($('.dx-info').text(), 'Page 2 sur 20');
     });
 
     QUnit.test('Invalidate instead of render for options', function(assert) {
@@ -679,10 +688,10 @@ QUnit.module('Pager', {
 
         // act
         this.dataController.skipProcessingPagingChange = function() { return true; };
-        this.pagerView.optionChanged({ name: 'paging', fullName: 'paging.pageSize', value: 6 });
+        this.option('paging.pageSize', 6);
 
         // assert
-        assert.ok(this.pagerView._isVisible, 'pager visible');
+        assert.ok(this.pagerView.isVisible(), 'pager visible');
         assert.strictEqual(this.pagerView._invalidate.callCount, 0, 'render not execute');
         this.pagerView._invalidate.restore();
     });
@@ -746,6 +755,28 @@ QUnit.module('Pager', {
 
         // assert
         assert.equal(this.pagerView.element().find('.dx-info').css('direction'), 'rtl', 'infoText has rtl direction');
+    });
+
+    // T1011042
+    QUnit.test('Pager container is hidden after refresh if its content is not visible', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.dataControllerOptions = {};
+        this.options.pager = {
+            visible: 'auto'
+        };
+        this.pagerView.render($testElement);
+
+        // assert
+        assert.strictEqual($('.dx-datagrid-pager').length, 1, 'pager container exists');
+        assert.notOk($('.dx-datagrid-pager').hasClass('dx-hidden'), 'pager container is visible');
+
+        // act
+        this.dataController.updatePagesCount(1);
+
+        // assert
+        assert.ok($('.dx-datagrid-pager').hasClass('dx-hidden'), 'pager is not visible');
     });
 });
 

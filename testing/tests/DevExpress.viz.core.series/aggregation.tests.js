@@ -260,7 +260,8 @@ QUnit.module('Aggregation methods', {
             },
             getVisualRangeCenter({ minVisible, maxVisible }) {
                 return (minVisible + maxVisible) / 2;
-            }
+            },
+            aggregatedPointBetweenTicks: sinon.stub()
         };
 
         this.createSeries = function(method, type, options) {
@@ -303,6 +304,13 @@ QUnit.module('Aggregation methods', {
     }
 });
 
+// T983625
+QUnit.test('length as argumentField', function(assert) {
+    const points = this.aggregateData('avg', [{ length: 1, val: 1 }, { length: 2, val: 2 }], 'line', { argumentField: 'length' });
+
+    assert.strictEqual(points.length, 1);
+});
+
 QUnit.test('Aggregation is disabled', function(assert) {
     const points = this.aggregateData('unknown', this.data, 'line', { aggregation: { enabled: false } });
     assert.equal(points.length, 5);
@@ -325,6 +333,13 @@ QUnit.test('Avg', function(assert) {
     assert.equal(points[0].value, 500);
 });
 
+QUnit.test('Aggregation with aggregatedPointsPosition', function(assert) {
+    this.argumentAxis.aggregatedPointBetweenTicks.returns(true);
+    const points = this.aggregateData('avg', this.data);
+    assert.equal(points.length, 1);
+    assert.equal(points[0].argument, 0);
+    assert.equal(points[0].value, 500);
+});
 QUnit.test('Sum', function(assert) {
     const points = this.aggregateData('sum', this.data);
     assert.equal(points.length, 1);
@@ -1073,4 +1088,31 @@ QUnit.test('Aggregate by category. Check aggregation info', function(assert) {
         intervalEnd: 'B',
         intervalStart: 'B'
     });
+});
+
+QUnit.test('Single datetime interval aggregation (T1060164)', function(assert) {
+    const date = '2022-01-31T12:00:00Z';
+
+    this.getBusinessRange = () => {
+        return {
+            min: new Date(date),
+            max: new Date(date),
+            minVisible: new Date(date),
+            maxVisible: new Date(date)
+        };
+    };
+    this.argumentAxis.getAggregationInfo = () => {
+        return {
+            interval: undefined,
+            ticks: [new Date(date)]
+        };
+    };
+
+    const points = this.aggregateData('sum', [
+        { val: 60.00, arg: new Date(date) },
+        { val: 30.00, arg: new Date(date) }
+    ], 'bar', {}, false, 'continuous');
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].value, 90);
 });

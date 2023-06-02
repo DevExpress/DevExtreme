@@ -4,23 +4,37 @@ import {
   JSXComponent,
   JSXTemplate,
   Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { CellBase as Cell, CellBaseProps } from '../cell';
-import { ContentTemplateProps, DateTimeCellTemplateProps } from '../../types.d';
+import { DateTimeCellTemplateProps } from '../../types';
 
-export const viewFunction = (viewModel: TimePanelCell): JSX.Element => (
+export const viewFunction = ({
+  props: {
+    text,
+    isFirstGroupCell,
+    isLastGroupCell,
+    className,
+    timeCellTemplate: TimeCellTemplate,
+  },
+  timeCellTemplateProps,
+}: TimePanelCell): JSX.Element => (
   <Cell
-      // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    isFirstGroupCell={viewModel.props.isFirstGroupCell}
-    isLastGroupCell={viewModel.props.isLastGroupCell}
-    contentTemplate={viewModel.props.timeCellTemplate}
-    contentTemplateProps={viewModel.timeCellTemplateProps}
-    className={`dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical ${viewModel.props.className}`}
+    isFirstGroupCell={isFirstGroupCell}
+    isLastGroupCell={isLastGroupCell}
+    className={`dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical ${className}`}
   >
-    <div>
-      {viewModel.props.text}
-    </div>
+
+    {!TimeCellTemplate && (
+      <div>
+        {text}
+      </div>
+    )}
+    {!!TimeCellTemplate && (
+      <TimeCellTemplate
+        index={timeCellTemplateProps.index}
+        data={timeCellTemplateProps.data}
+      />
+    )}
   </Cell>
 );
 
@@ -34,7 +48,7 @@ export class TimePanelCellProps extends CellBaseProps {
   view: viewFunction,
 })
 export class TimePanelCell extends JSXComponent(TimePanelCellProps) {
-  get timeCellTemplateProps(): ContentTemplateProps {
+  get timeCellTemplateProps(): DateTimeCellTemplateProps {
     const {
       index, startDate, groups, groupIndex, text,
     } = this.props;

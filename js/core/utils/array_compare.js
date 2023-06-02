@@ -17,6 +17,20 @@ const getSameNewByOld = function(oldItem, newItems, newIndexByKey, getKey) {
     return newItems[newIndexByKey[key]];
 };
 
+export const isKeysEqual = function(oldKeys, newKeys) {
+    if(oldKeys.length !== newKeys.length) {
+        return false;
+    }
+
+    for(let i = 0; i < newKeys.length; i++) {
+        if(oldKeys[i] !== newKeys[i]) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
 export const findChanges = function(oldItems, newItems, getKey, isItemEquals) {
     const oldIndexByKey = {};
     const newIndexByKey = {};

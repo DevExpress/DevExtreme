@@ -3,13 +3,11 @@ import { extend } from '../../../core/utils/extend';
 
 import Popup from '../../popup';
 import Form from '../../form';
-import domAdapter from '../../../core/dom_adapter';
-import { resetActiveElement } from '../../../core/utils/dom';
 import { Deferred } from '../../../core/utils/deferred';
 import localizationMessage from '../../../localization/message';
-import browser from '../../../core/utils/browser';
-
-const getActiveElement = domAdapter.getActiveElement;
+import { getCurrentScreenFactor, hasWindow } from '../../../core/utils/window';
+import devices from '../../../core/devices';
+import { isMaterial } from '../../themes';
 
 const DIALOG_CLASS = 'dx-formdialog';
 const FORM_CLASS = 'dx-formdialog-form';
@@ -20,6 +18,7 @@ class FormDialog {
         this._popupUserConfig = popupConfig;
 
         this._renderPopup();
+        this._attachOptionChangedHandler();
     }
 
     _renderPopup() {
@@ -32,6 +31,18 @@ class FormDialog {
         return editorInstance._createComponent($container, Popup, popupConfig);
     }
 
+    _attachOptionChangedHandler() {
+        this._popup
+            ?.on(
+                'optionChanged',
+                ({ name, value }) => {
+                    if(name === 'title') {
+                        this._updateFormLabel(value);
+                    }
+                }
+            );
+    }
+
     _escKeyHandler() {
         this._popup.hide();
     }
@@ -40,24 +51,27 @@ class FormDialog {
         e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
     }
 
+    _isSmallScreen() {
+        const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
+        return devices.real().deviceType === 'phone' || screenFactor === 'xs';
+    }
+
     _getPopupConfig() {
         return extend({
             onInitialized: (e) => {
                 this._popup = e.component;
-                this._popup.on('hiding', () => { this.deferred.reject(); });
+                this._popup.on('hiding', () => this.onHiding());
                 this._popup.on('shown', () => { this._form.focus(); });
             },
             deferRendering: false,
             focusStateEnabled: false,
             showCloseButton: false,
+            fullScreen: this._isSmallScreen(),
             contentTemplate: (contentElem) => {
                 const $formContainer = $('<div>').appendTo(contentElem);
 
                 this._renderForm($formContainer, {
-                    onEditorEnterKey: ({ component, dataField, event }) => {
-                        this._updateEditorValue(component, dataField);
-                        this.hide(component.option('formData'), event);
-                    },
+                    onEditorEnterKey: (e) => this.callAddButtonAction(e.event),
                     customizeItem: (item) => {
                         if(item.itemType === 'simple') {
                             item.editorOptions = extend(
@@ -78,9 +92,7 @@ class FormDialog {
                     options: {
                         onInitialized: this._addEscapeHandler.bind(this),
                         text: localizationMessage.format('OK'),
-                        onClick: ({ event }) => {
-                            this.hide(this._form.option('formData'), event);
-                        }
+                        onClick: (e) => this.callAddButtonAction(e.event)
                     }
                 }, {
                     toolbar: 'bottom',
@@ -94,24 +106,47 @@ class FormDialog {
                         }
                     }
                 }
-            ]
+            ],
+            _wrapperClassExternal: DIALOG_CLASS,
         }, this._popupUserConfig);
     }
 
-    _updateEditorValue(component, dataField) {
-        if(browser.msie && parseInt(browser.version) <= 11) {
-            const editor = component.getEditor(dataField);
-            const activeElement = getActiveElement();
+    onHiding() {
+        this.beforeAddButtonAction = undefined;
+        this.deferred.reject();
+    }
 
-            if(editor.$element().find(activeElement).length) {
-                resetActiveElement();
-            }
+    callAddButtonAction(event) {
+        if(this.beforeAddButtonAction && !this.beforeAddButtonAction()) {
+            return;
         }
+
+        this.hide(this._form.option('formData'), event);
     }
 
     _renderForm($container, options) {
         $container.addClass(FORM_CLASS);
         this._form = this._editorInstance._createComponent($container, Form, options);
+        this._updateFormLabel();
+    }
+
+    _updateFormLabel(text) {
+        const label = text ?? this.popupOption('title');
+        this._form
+            ?.$element()
+            .attr('aria-label', label);
+    }
+
+    _getDefaultFormOptions() {
+        return {
+            colCount: 1,
+            width: 'auto',
+            labelLocation: isMaterial() ? 'top' : 'left'
+        };
+    }
+
+    formOption(optionName, optionValue) {
+        return this._form.option.apply(this._form, arguments);
     }
 
     show(formUserConfig) {
@@ -120,9 +155,10 @@ class FormDialog {
         }
 
         this.deferred = new Deferred();
-        const formConfig = extend({}, formUserConfig);
+        const formConfig = extend(this._getDefaultFormOptions(), formUserConfig);
 
         this._form.option(formConfig);
+
         this._popup.show();
 
         return this.deferred.promise();

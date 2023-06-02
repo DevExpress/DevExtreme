@@ -1,6 +1,17 @@
 import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
 import { isString } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
+
+export const defaultPermissions = {
+    create: false,
+    copy: false,
+    move: false,
+    delete: false,
+    rename: false,
+    upload: false,
+    download: false
+};
 
 export class FileManagerCommandManager {
 
@@ -108,6 +119,14 @@ export class FileManagerCommandManager {
         if(action) {
             return action(arg);
         }
+    }
+
+    updatePermissions(permissions) {
+        const resultPermissions = extend({}, defaultPermissions, permissions);
+        this._permissions = resultPermissions;
+        each(this._permissions, permission => {
+            this._commandMap[permission].enabled = this._permissions[permission];
+        });
     }
 
     setCommandEnabled(commandName, enabled) {

@@ -104,11 +104,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1026: 'The "calculateCustomSummary" function is missing from a field whose "summaryType" option is set to "custom"',
 
     /**
-    * @name ErrorsUIWidgets.E1030
-    */
-    E1030: 'Unknown ScrollView refresh strategy: \'{0}\'',
-
-    /**
     * @name ErrorsUIWidgets.E1031
     */
     E1031: 'Unknown subscription in the Scheduler widget: \'{0}\'',
@@ -131,7 +126,7 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.E1035
      */
-    E1035: 'The editor cannot be created because of an internal error: {0}',
+    E1035: 'The editor cannot be created: {0}',
 
     /**
      * @name ErrorsUIWidgets.E1037
@@ -319,5 +314,35 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1015
     */
-    W1015: 'The "cellDuration" should divide the range from the "startDayHour" to the "endDayHour" into even intervals'
+    W1015: 'The "cellDuration" should divide the range from the "startDayHour" to the "endDayHour" into even intervals',
+
+    /**
+    * @name ErrorsUIWidgets.W1016
+    */
+    W1016: 'The \'{0}\' field in the HTML Editor toolbar item configuration was renamed to \'{1}\'. Please make a corresponding change in your code.',
+
+    /**
+    * @name ErrorsUIWidgets.W1017
+    */
+    W1017: 'The \'key\' property is not specified for a lookup data source. Please specify it to prevent requests for the entire dataset when users filter data.',
+
+    /**
+    * @name ErrorsUIWidgets.W1018
+    */
+    W1018: 'Infinite scrolling may not work properly with multiple selection. To use these features together, set \'selection.deferred\' to true or set \'selection.selectAllMode\' to \'page\'.',
+
+    /**
+    * @name ErrorsUIWidgets.W1019
+    */
+    W1019: 'Filter query string exceeds maximum length limit of {0} characters.',
+
+    /**
+    * @name ErrorsUIWidgets.W1020
+    */
+    W1020: 'hideEvent is ignored when the shading property is true',
+
+    /**
+    * @name ErrorsUIWidgets.W1021
+    */
+    W1021: 'The \'{0}\' is not rendered because none of the DOM elements match the value of the "container" property.'
 });

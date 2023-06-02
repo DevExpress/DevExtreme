@@ -1,0 +1,29 @@
+import 'core-js/proposals/reflect-metadata';
+import 'zone.js/dist/zone';
+
+import { NgModule, Component } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { DxAppModule } from '<%= componentModule %>';
+
+import template from './app.component.html';
+
+@Component({
+  providers: [],
+  selector: '#app',
+  styleUrls: [],
+  template,
+})
+export class AppComponent { }
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    DxAppModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
+})
+class AppModule {}
+
+platformBrowserDynamic().bootstrapModule(AppModule);

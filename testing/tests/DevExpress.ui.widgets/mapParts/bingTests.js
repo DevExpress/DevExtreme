@@ -44,13 +44,15 @@ QUnit.module('bing provider', {
         ajaxMock.setup({
             url: fakeURL,
             callback: function() {
-                $.getScript('../../testing/helpers/forMap/bingMock.js')
-                    .done(function() {
-                        prepareTestingBingProvider(this.abortDirectionsUpdate);
-                        if(window._bingScriptReady) {
-                            window._bingScriptReady();
-                        }
-                    }.bind(this));
+                $.getScript({
+                    url: '../../testing/helpers/forMap/bingMock.js',
+                    scriptAttrs: { nonce: 'qunit-test' }
+                }).done(function() {
+                    prepareTestingBingProvider(this.abortDirectionsUpdate);
+                    if(window._bingScriptReady) {
+                        window._bingScriptReady();
+                    }
+                }.bind(this));
             }.bind(this)
         });
 
@@ -104,7 +106,7 @@ QUnit.test('map ready action', function(assert) {
         onReady: function(e) {
             assert.ok(true, 'map ready');
             assert.equal(window.Microsoft.optionsSpecified, true, 'map options specified');
-            assert.ok(window.Microsoft.options.credentials, 'map credentials specified');
+            assert.strictEqual(window.Microsoft.options.credentials, '', 'map credentials are not specified by default');
             assert.ok(e.originalMap instanceof Microsoft.Maps.Map, 'map instance specified');
 
             done();

@@ -10,6 +10,7 @@ export const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
 export const SCROLLBAR_VERTICAL_CLASS = 'dx-scrollbar-vertical';
 export const SCROLLBAR_HORIZONTAL_CLASS = 'dx-scrollbar-horizontal';
 export const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
+export const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
 export const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 export const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
 export const SCROLLABLE_DISABLED_CLASS = 'dx-scrollable-disabled';
@@ -32,3 +33,5 @@ export const calculateInertiaDistance = function(distance, duration) {
 
     return result;
 };
+
+export const RESIZE_WAIT_TIMEOUT = 50;

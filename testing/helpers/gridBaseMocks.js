@@ -22,8 +22,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             }
         }
 
-        if(!options.key) {
-            options.items?.forEach(item => {
+        if(!options.key && options.items) {
+            options.items.forEach(item => {
                 if(item.key === null || item.key === undefined) {
                     item.key = item;
                 }
@@ -151,9 +151,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return options.viewportSize;
             },
 
+            viewportHeight: function() {
+            },
+
             viewportItemSize: function() {},
 
-            setContentSize: function() {},
+            setContentItemSizes: function() {},
 
             setViewportItemIndex: function(index) {
                 options.viewportItemIndex = index;
@@ -242,7 +245,16 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             loadingChanged: $.Callbacks(),
             pageChanged: $.Callbacks(),
             dataSourceChanged: $.Callbacks(),
+            pushed: $.Callbacks(),
             fireError: function() { },
+            getMaxRowIndex: function() {
+                this.items().length - 1;
+            },
+            loadViewport: commonUtils.noop,
+            updateViewport: commonUtils.noop,
+            getScrollingTimeout: function() {
+                return this.option('scrolling.renderAsync') ? this.option('scrolling.timeout') : 0;
+            }
         };
     };
 
@@ -322,11 +334,13 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             columns[key].index = parseInt(key);
         }
 
-        columns?.forEach(column => {
-            if(typeUtils.isDefined(column.dataField) && !typeUtils.isDefined(column.name)) {
-                column.name = column.dataField;
-            }
-        });
+        if(columns) {
+            columns.forEach(column => {
+                if(typeUtils.isDefined(column.dataField) && !typeUtils.isDefined(column.name)) {
+                    column.name = column.dataField;
+                }
+            });
+        }
 
         return {
             updateOptions: [],
@@ -388,6 +402,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 }
 
                 return columns;
+            },
+
+            getVisibleIndexByColumn: function(column, rowIndex) {
+                const visibleColumns = this.getVisibleColumns(rowIndex);
+                const visibleColumn = visibleColumns.filter(col => col.index === column.index && col.command === column.command)[0];
+                return visibleColumns.indexOf(visibleColumn);
             },
 
             getColumnIndexOffset: function() {
@@ -959,18 +979,14 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         that.options.rtlEnabled = !!that.options.rtlEnabled;
 
-        if(that.options.legacyRendering === undefined) {
-            that.options.legacyRendering = false;
-        }
-
-        if(that.options.editing?.changes === undefined) {
-            if(that.options.editing) {
+        if(that.options.editing) {
+            if(that.options.editing.changes === undefined) {
                 that.options.editing.changes = [];
-            } else {
-                that.options.editing = {
-                    changes: []
-                };
             }
+        } else {
+            that.options.editing = {
+                changes: []
+            };
         }
 
         that.optionCalled = $.Callbacks();
@@ -989,8 +1005,18 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                             const previousValue = result[path[i]];
                             result[path[i]] = value;
 
-                            if(path[0] === 'editing' && that.needFireOptionChange) {
-                                that.editingController.optionChanged({ name: path[0], fullName: options, value, previousValue });
+                            if(that.needFireOptionChange && that._initialized && !that.preventOptionChanged) {
+                                const controllersAndViews = Object.assign({}, that._controllers, that._views);
+                                Object.keys(controllersAndViews).forEach((key) => {
+                                    if(controllersAndViews[key].optionChanged) {
+                                        controllersAndViews[key].optionChanged({
+                                            name: path[0],
+                                            fullName: options,
+                                            value,
+                                            previousValue
+                                        });
+                                    }
+                                });
                             }
 
                             if(that._optionCache) {
@@ -1125,6 +1151,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 this.init && this.init();
             });
         }
+
+        that._initialized = true;
     };
 
     exports.generateItems = function(itemCount) {
@@ -1134,6 +1162,16 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             items.push({ id: i, field1: 'test1' + i, field2: 'test2' + i, field3: 'test3' + i, field4: 'test4' + i });
         }
 
+        return items;
+    };
+
+    exports.generateNestedData = function(itemCount, depth) {
+        const items = [];
+        let i = 0;
+        const generateParentId = (i) => (i % depth === 0 ? 0 : i - 1);
+        while(i++ < itemCount) {
+            items.push({ id: i, parentId: generateParentId(i), field1: 'test', field2: 'test2' });
+        }
         return items;
     };
 

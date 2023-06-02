@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import MenuBase from 'ui/context_menu/ui.menu_base';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -26,12 +25,6 @@ QUnit.module('Menu markup', () => {
         const menuBase = createMenu();
 
         assert.ok(menuBase.element.hasClass(DX_MENU_BASE_CLASS));
-    });
-
-    QUnit.test('Render custom CSS class', function(assert) {
-        const menu = createMenu({ cssClass: 'testCssClass' });
-
-        assert.ok(menu.element.hasClass('testCssClass'));
     });
 });
 

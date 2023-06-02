@@ -5,8 +5,9 @@ import {
   DateTableCellBase,
   DateTableCellBaseProps,
 } from '../cell';
-import { CellBase } from '../../cell';
+import { CellBase, CellBaseProps } from '../../cell';
 import * as combineClassesModule from '../../../../../../utils/combine_classes';
+import { DATE_TABLE_CELL_CLASS } from '../../../const';
 
 const combineClasses = jest.spyOn(combineClassesModule, 'combineClasses');
 
@@ -18,19 +19,13 @@ describe('DateTableCellBase', () => {
     }}
     />);
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(cell.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should pass correct props to the base cell', () => {
       const dataCellTemplate = () => null;
       const dataCellTemplateProps = {};
       const cell = render({
         classes: 'test-class',
         dataCellTemplateProps,
+        ariaLabel: 'Custom label',
         props: {
           isFirstGroupCell: true,
           isLastGroupCell: false,
@@ -43,11 +38,15 @@ describe('DateTableCellBase', () => {
       expect(cell.hasClass('test-class'))
         .toBe(true);
       expect(cell.props())
-        .toMatchObject({
+        .toEqual({
+          ...new CellBaseProps(),
           isFirstGroupCell: true,
           isLastGroupCell: false,
-          contentTemplate: dataCellTemplate,
-          contentTemplateProps: dataCellTemplateProps,
+          ariaLabel: 'Custom label',
+          className: 'test-class',
+          startDate: expect.any(Date),
+          endDate: expect.any(Date),
+          children: expect.anything(),
         });
     });
 
@@ -57,6 +56,27 @@ describe('DateTableCellBase', () => {
       expect(cell.find('.child').exists())
         .toBe(true);
     });
+
+    it('should render dataCellTemplate', () => {
+      const dataCellTemplate = jest.fn();
+      const dataCellTemplateProps = {
+        index: 1,
+        data: {},
+      };
+
+      const cell = render({
+        props: {
+          children: <div className="child" />,
+          dataCellTemplate,
+        },
+        dataCellTemplateProps,
+      });
+
+      expect(cell.find('.child').exists())
+        .toBe(false);
+      expect(cell.find(dataCellTemplate).props())
+        .toEqual(dataCellTemplateProps);
+    });
   });
 
   describe('Logic', () => {
@@ -65,7 +85,7 @@ describe('DateTableCellBase', () => {
         afterEach(jest.resetAllMocks);
 
         it('should call combineClasses with correct parameters', () => {
-          const cell = new DateTableCellBase({ index: 0 });
+          const cell = new DateTableCellBase({ index: 0, isSelected: true, isFocused: true });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           cell.classes;
@@ -74,7 +94,9 @@ describe('DateTableCellBase', () => {
             .toHaveBeenCalledWith({
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-cell-sizes-vertical': true,
-              'dx-scheduler-date-table-cell': true,
+              [DATE_TABLE_CELL_CLASS]: true,
+              'dx-state-focused': true,
+              'dx-scheduler-focused-cell': true,
               '': true,
             });
         });
@@ -89,7 +111,7 @@ describe('DateTableCellBase', () => {
             .toHaveBeenCalledWith({
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-cell-sizes-vertical': false,
-              'dx-scheduler-date-table-cell': false,
+              [DATE_TABLE_CELL_CLASS]: false,
               '': true,
             });
         });
@@ -104,7 +126,7 @@ describe('DateTableCellBase', () => {
             .toHaveBeenCalledWith({
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-cell-sizes-vertical': true,
-              'dx-scheduler-date-table-cell': true,
+              [DATE_TABLE_CELL_CLASS]: true,
               'test-class': true,
             });
         });
@@ -120,7 +142,7 @@ describe('DateTableCellBase', () => {
             allDay: true,
           };
           const props = {
-            ...(new DateTableCellBaseProps()),
+            ...new DateTableCellBaseProps(),
             index: 0,
             ...data,
           };
@@ -147,7 +169,7 @@ describe('DateTableCellBase', () => {
             allDay: false,
           };
           const props = {
-            ...(new DateTableCellBaseProps()),
+            ...new DateTableCellBaseProps(),
             index: 0,
             ...data,
           };
@@ -174,7 +196,7 @@ describe('DateTableCellBase', () => {
             groupIndex: 3,
           };
           const props = {
-            ...(new DateTableCellBaseProps()),
+            ...new DateTableCellBaseProps(),
             index: 0,
             ...data,
           };
@@ -218,6 +240,27 @@ describe('DateTableCellBase', () => {
                 text: 'test text',
               },
             });
+        });
+      });
+
+      describe('aria-label', () => {
+        it('should return correct aria-label when a cell is selected', () => {
+          const cell = new DateTableCellBase({ isSelected: true });
+
+          expect(cell.ariaLabel)
+            .toBe('Add appointment');
+        });
+
+        it('should return undefined when a cell is not selected', () => {
+          const cell = new DateTableCellBase({});
+
+          expect(cell.ariaLabel)
+            .toBe(undefined);
+
+          cell.props.isSelected = false;
+
+          expect(cell.ariaLabel)
+            .toBe(undefined);
         });
       });
     });

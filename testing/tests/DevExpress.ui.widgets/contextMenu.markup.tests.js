@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import ContextMenu from 'ui/context_menu';
 
-import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -24,6 +23,12 @@ QUnit.module('ContextMenu markup', moduleConfig, () => {
         new ContextMenu(this.$element, {});
 
         assert.ok(this.$element.hasClass(DX_HAS_CONTEXT_MENU_CLASS), 'context menu have correct class');
+    });
+
+    QUnit.test('context menu should have custom css class on root element', function(assert) {
+        new ContextMenu(this.$element, { cssClass: 'custom' });
+
+        assert.equal(this.$element.hasClass('custom'), false, 'context menu does not has custom class');
     });
 
     QUnit.test('aria role', function(assert) {

@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -6,9 +7,11 @@
 @use "../../base/icons" as *;
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
+@use "../textEditor/sizes" as *;
 @use "../common/mixins" as *;
 @use "../common/sizes" as *;
 @use "../popup/colors" as *;
+@use "../popup/sizes" as *;
 @use "../menu/colors" as *;
 @use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
@@ -21,23 +24,19 @@
 @use "../overlay";
 @use "../pager";
 
-
 $material-grid-base-border-hidden: 1px solid transparent;
 $material-grid-base-row-border: 1px solid transparent;
 $material-grid-base-border-color: $datagrid-border-color;
 $material-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
 $material-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
-$material-grid-base-header-cell-vertical-padding: round(($material-grid-base-header-height - $material-grid-base-header-line-height) / 2);
+$material-grid-base-header-cell-vertical-padding: round(math.div($material-grid-base-header-height - $material-grid-base-header-line-height, 2));
 $material-grid-base-footer-font-size: $material-grid-base-header-cell-font-size;
 
-$material-grid-base-command-select-column-width:
-  $material-grid-base-checkbox-size +
-  ($material-grid-base-cell-first-column-padding - $material-grid-base-cell-horizontal-padding) +
-  $material-grid-base-cell-first-column-padding +
-  $material-command-column-additional-right-margin;
+$material-grid-base-command-select-column-width: $material-grid-base-checkbox-size + 2 * $material-grid-base-cell-horizontal-padding;
 
-$material-grid-base-cell-vertical-padding: round(($material-grid-base-cell-height - $material-grid-base-cell-line-height) / 2);
+$material-grid-base-cell-vertical-padding: round(math.div($material-grid-base-cell-height - $material-grid-base-cell-line-height, 2));
 $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $material-grid-base-cell-horizontal-padding;
+$grid-masterdetail-padding: 16px;
 
 @mixin grid-base($widget-name) {
   .dx-#{$widget-name},
@@ -74,9 +73,11 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     .dx-editor-with-menu {
-      height: $material-grid-base-cell-height;
-
       .dx-menu-item-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         .dx-icon {
           @include dx-icon-sizing($material-grid-base-filter-icon-size - 4);
 
@@ -87,7 +88,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       }
 
       .dx-texteditor {
-        .dx-texteditor-input {
+        .dx-texteditor-input,
+        .dx-placeholder::before {
           padding-left: $material-grid-base-texteditor-input-padding;
         }
       }
@@ -196,15 +198,15 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     .dx-row-alt {
       & > td {
         background-color: $datagrid-row-alternation-bg;
-
-        // T838734
-        border-top: 1px solid $datagrid-row-alternation-bg;
-        border-bottom: 1px solid $datagrid-row-alternation-bg;
       }
 
       &.dx-row:not(.dx-row-removed) {
         border-bottom-color: transparent;
       }
+
+      // T838734
+      border-top: 1px solid $datagrid-row-alternation-bg;
+      border-bottom: 1px solid $datagrid-row-alternation-bg;
     }
 
     .dx-link {
@@ -237,35 +239,27 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-row {
       & > td {
-        padding-top: $material-grid-base-cell-vertical-padding;
-        padding-bottom: $material-grid-base-cell-vertical-padding;
+        padding: $material-grid-base-cell-vertical-padding $material-grid-base-cell-horizontal-padding;
         font-size: $material-grid-base-cell-font-size;
         line-height: $material-grid-base-cell-line-height;
       }
+    }
+
+    .dx-#{$widget-name}-table .dx-header-row  > td {
+      padding-top: $material-grid-base-header-cell-vertical-padding;
+      padding-bottom: $material-grid-base-header-cell-vertical-padding;
     }
 
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
       > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all),
       > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending),
       > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) {
-        padding-right: $material-grid-base-cell-horizontal-padding;
-        padding-left: $material-grid-base-cell-horizontal-padding;
         vertical-align: middle;
-
-        &:first-of-type {
-          padding-left: $material-grid-base-cell-first-column-padding;
-        }
-
-        &:last-of-type {
-          padding-right: $material-grid-base-cell-last-column-padding;
-        }
 
         &.dx-command-select {
           overflow: visible;
           width: $material-grid-base-command-select-column-width;
           min-width: $material-grid-base-command-select-column-width;
-          padding-left: $material-grid-base-cell-first-column-padding;
-          padding-right: $material-grid-base-command-select-column-width - $material-grid-base-cell-first-column-padding - $material-grid-base-checkbox-size;
           line-height: 1;
         }
 
@@ -288,6 +282,14 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
               width: auto;
             }
           }
+
+          .dx-link.dx-state-disabled {
+            opacity: $datagrid-text-link-disabled-opacity;
+
+            &.dx-link-icon {
+              opacity: $datagrid-icon-link-disabled-opacity;
+            }
+          }
         }
 
         &.dx-command-expand,
@@ -308,8 +310,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     .dx-command-drag {
-      width: $material-grid-base-cell-last-column-padding + $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
-      min-width: $material-grid-base-cell-last-column-padding + $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
+      width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
+      min-width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
 
       .dx-#{$widget-name}-drag-icon {
         @include dx-icon-sizing($material-base-icon-size);
@@ -317,8 +319,18 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
   }
 
-  .dx-#{$widget-name}-edit-popup .dx-error-message {
-    padding: $material-grid-base-cell-padding;
+  .dx-#{$widget-name}-edit-popup {
+    .dx-popup-content {
+      padding: 0;
+    }
+
+    .dx-error-message {
+      padding: $material-grid-base-cell-padding;
+    }
+  }
+
+  .dx-#{$widget-name}-edit-popup-form {
+    padding: $material-popup-content-padding;
   }
 
   .dx-#{$widget-name}-headers,
@@ -329,12 +341,13 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-lookup {
       height: auto;
-    }
 
-    .dx-lookup-field {
-      padding-left: $material-grid-base-cell-horizontal-padding;
-      padding-top: $material-grid-base-cell-vertical-padding;
-      padding-bottom: $material-grid-base-cell-vertical-padding;
+      .dx-lookup-field {
+        padding-left: $material-grid-base-cell-horizontal-padding;
+        padding-top: $material-grid-base-cell-vertical-padding;
+        padding-bottom: $material-grid-base-cell-vertical-padding;
+        font-size: $material-grid-base-cell-font-size;
+      }
     }
 
     .dx-dropdowneditor-button-visible.dx-dropdowneditor {
@@ -368,18 +381,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
       &.dx-rtl .dx-texteditor-input {
         padding-right: 0;
-      }
-    }
-
-    .dx-searchbox {
-      .dx-texteditor-input,
-      .dx-placeholder::before {
-        padding-left: $material-texteditor-icon-container-size;
-
-        @at-root #{selector-append(".dx-rtl", &)},
-        .dx-rtl & {
-          padding-right: $material-texteditor-icon-container-size;
-        }
       }
     }
   }
@@ -474,25 +475,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         padding-bottom: $material-grid-base-cell-vertical-padding;
       }
     }
-
-    &:first-of-type {
-      > .dx-texteditor {
-        .dx-texteditor-input {
-          padding-left: $material-grid-base-cell-first-column-padding;
-        }
-      }
-    }
-
-    &:last-of-type {
-      > .dx-texteditor {
-        .dx-texteditor-input {
-          padding-right: $material-grid-base-cell-last-column-padding;
-        }
-      }
-    }
   }
 
-  .dx-device-mobile .dx-#{$widget-name}-column-chooser-list,
   .dx-#{$widget-name}-column-chooser-list {
     .dx-empty-message {
       color: $datagrid-columnchooser-message-color;
@@ -637,8 +621,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       .dx-row {
         > td {
           border-bottom: $datagrid-border;
-          padding-top: $material-grid-base-header-cell-vertical-padding;
-          padding-bottom: $material-grid-base-header-cell-vertical-padding;
           line-height: $material-grid-base-header-line-height;
           font-weight: $datagrid-columnchooser-font-weight;
           font-size: $material-grid-base-header-cell-font-size;
@@ -671,7 +653,7 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
           .dx-row {
             &.dx-header-row {
               .dx-command-select {
-                padding-bottom: ($material-grid-base-header-height - $material-grid-base-checkbox-size) / 2;
+                padding-bottom: math.div($material-grid-base-header-height - $material-grid-base-checkbox-size, 2);
               }
 
               > td {
@@ -679,6 +661,11 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
                 padding-bottom: 12px;
                 vertical-align: bottom;
                 border-right: 1px solid $material-grid-base-border-color;
+                border-left: 1px solid $material-grid-base-border-color;
+
+                &:first-child {
+                  border-left: none;
+                }
 
                 &:last-child {
                   border-right: none;
@@ -824,18 +811,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
   }
 
-  .dx-#{$widget-name}-export-button {
-    .dx-icon-export-to {
-      @include dx-icon(export);
-      @include dx-icon-sizing($material-base-icon-size);
-    }
-
-    .dx-icon-export-excel-button {
-      @include dx-icon(xlsxfile);
-      @include dx-icon-sizing($material-base-icon-size);
-    }
-  }
-
   .dx-datagrid-export-menu {
     .dx-menu-item .dx-icon-xlsxfile {
       @include dx-icon-sizing($material-base-icon-size);
@@ -863,13 +838,18 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
   .dx-#{$widget-name}-rowsview {
     border-top: 1px solid $material-grid-base-border-color;
 
-    .dx-#{$widget-name}-headers + & {
+    .dx-#{$widget-name}-headers + &,
+    &.dx-#{$widget-name}-after-headers {
       border-top: none;
     }
 
     .dx-row {
       border-top: $material-grid-base-row-border;
       border-bottom: $material-grid-base-row-border;
+
+      &:focus {
+        outline: none;
+      }
 
       &.dx-edit-row:first-child > td {
         border-top-width: 0;
@@ -883,6 +863,9 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     .dx-master-detail-row {
+      > .dx-master-detail-cell {
+        padding: $grid-masterdetail-padding;
+      }
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell {
         border-top: $datagrid-border;
@@ -925,8 +908,9 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
-      border-top: 1px solid $datagrid-cell-modified-border-color;
-      border-bottom: 1px solid $datagrid-cell-modified-border-color;
+      border-top: 1px solid $datagrid-cell-removed-border-color;
+      border-bottom: 1px solid $datagrid-cell-removed-border-color;
+      color: $datagrid-cell-removed-text-color;
     }
 
     .dx-adaptive-detail-row {
@@ -965,13 +949,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     .dx-row-focused {
-      &:focus {
-        outline: none;
-      }
-
       &.dx-data-row {
-        & > td:not(.dx-focused),
-        & > tr > td:not(.dx-focused),
+        & > td:not(.dx-focused):not(.dx-cell-modified),
         & .dx-command-edit .dx-link {
           background-color: $datagrid-row-focused-bg;
           color: $datagrid-row-focused-color;
@@ -989,7 +968,7 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
         & > td,
         & > tr:last-child > td {
-          border-bottom: 1px solid $datagrid-focused-border-color;
+          border-bottom: 2px solid $datagrid-focused-border-color;
         }
 
         &:not(.dx-row-lines) {
@@ -1096,13 +1075,7 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
   .dx-#{$widget-name}-bottom-load-panel {
     border-top: $datagrid-border;
-  }
-
-  .dx-#{$widget-name}-pager {
-    &.dx-widget {
-      font-size: $material-grid-base-footer-font-size;
-      color: $datagrid-columnchooser-item-color;
-    }
+    background-color: $datagrid-base-background-color;
   }
 
   .dx-#{$widget-name}-summary-item {
@@ -1126,7 +1099,22 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-revert-button {
       @include dx-button-sizing(2px, 18px, 0);
-      @include dx-button-styling($button-danger-bg, $button-danger-color, $button-danger-bg, $button-danger-bg, $button-danger-bg, $button-danger-color);
+
+      border-radius: $button-border-radius;
+
+      @include dx-button-styling-variant(
+        $button-danger-bg,
+        $button-danger-color,
+        none,
+        $button-danger-bg,
+        none,
+        $button-danger-bg,
+        none,
+        $button-danger-bg,
+        none,
+        $button-disabled-background,
+        $button-danger-color
+      );
 
       margin: 0 0 0 1px;
       height: $material-grid-base-cell-height;
@@ -1161,27 +1149,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         .dx-menu-item-has-submenu.dx-menu-item-has-icon {
           .dx-icon {
             margin: 0 3px;
-          }
-        }
-      }
-
-      .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
-        > td,
-        > td.dx-cell-modified:not(.dx-field-item-content),
-        > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content) {
-          &:first-of-type {
-            padding-left: $material-grid-base-cell-horizontal-padding;
-            padding-right: $material-grid-base-cell-first-column-padding;
-          }
-
-          &:last-of-type {
-            padding-right: $material-grid-base-cell-horizontal-padding;
-            padding-left: $material-grid-base-cell-last-column-padding;
-          }
-
-          &.dx-command-select {
-            padding-right: $material-grid-base-cell-first-column-padding;
-            padding-left: $material-grid-base-cell-first-column-padding - $material-grid-base-cell-horizontal-padding;
           }
         }
       }
@@ -1226,12 +1193,12 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
   }
 
   .dx-command-adaptive {
-    width: $material-grid-base-cell-last-column-padding + $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
-    min-width: $material-grid-base-cell-last-column-padding + $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
+    width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
+    min-width: 2 * $material-grid-base-cell-horizontal-padding + $material-base-icon-size;
   }
 
   .dx-#{$widget-name}-filter-panel {
-    padding: 15px $material-grid-base-cell-last-column-padding 15px $material-grid-base-cell-first-column-padding;
+    padding: 18px $material-grid-base-cell-horizontal-padding;
 
     .dx-#{$widget-name}-filter-panel-text,
     .dx-#{$widget-name}-filter-panel-clear-filter {
@@ -1243,9 +1210,15 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     .dx-icon-filter {
       color: $datagrid-filter-panel-color;
     }
+  }
 
-    + .dx-pager {
-      border-top: 1px solid $material-grid-base-border-color;
+  .dx-adaptive-item-text {
+    padding-left: $material-filled-texteditor-input-horizontal-padding;
+    padding-right: $material-filled-texteditor-input-horizontal-padding;
+    &.dx-cell-modified,
+    &.dx-#{$widget-name}-invalid {
+      padding-top: 0;
+      padding-bottom: 0;
     }
   }
 }

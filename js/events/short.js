@@ -1,4 +1,3 @@
-import domAdapter from '../core/dom_adapter';
 import eventsEngine from './core/events_engine';
 import KeyboardProcessor from './core/keyboard_processor';
 import { addNamespace as pureAddNamespace } from './utils/index';
@@ -64,24 +63,14 @@ export const visibility = {
 };
 
 export const focus = {
-    on: ($el, focusIn, focusOut, { namespace, isFocusable }) => {
+    on: ($el, focusIn, focusOut, { namespace }) => {
         eventsEngine.on($el, addNamespace('focusin', namespace), focusIn);
         eventsEngine.on($el, addNamespace('focusout', namespace), focusOut);
-
-        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
-            eventsEngine.on($el, addNamespace('beforeactivate', namespace),
-                e => isFocusable(null, e.target) || e.preventDefault()
-            );
-        }
     },
 
     off: ($el, { namespace }) => {
         eventsEngine.off($el, addNamespace('focusin', namespace));
         eventsEngine.off($el, addNamespace('focusout', namespace));
-
-        if(domAdapter.hasDocumentProperty('onbeforeactivate')) {
-            eventsEngine.off($el, addNamespace('beforeactivate', namespace));
-        }
     },
 
     trigger: $el => eventsEngine.trigger($el, 'focus')
@@ -102,47 +91,6 @@ export const click = {
     },
     off: ($el, { namespace } = {}) => {
         eventsEngine.off($el, addNamespace('click', namespace));
-    }
-};
-
-export const dxScrollStart = {
-    on: ($el, onStart, { namespace } = {}) => {
-        eventsEngine.on($el, addNamespace('dxscrollstart', namespace), onStart);
-    },
-    off: ($el, { namespace } = {}) => {
-        eventsEngine.off($el, addNamespace('dxscrollstart', namespace));
-    }
-};
-export const dxScrollMove = {
-    on: ($el, onScroll, { namespace } = {}) => {
-        eventsEngine.on($el, addNamespace('dxscroll', namespace), onScroll);
-    },
-    off: ($el, { namespace } = {}) => {
-        eventsEngine.off($el, addNamespace('dxscroll', namespace));
-    }
-};
-export const dxScrollEnd = {
-    on: ($el, onEnd, { namespace } = {}) => {
-        eventsEngine.on($el, addNamespace('dxscrollend', namespace), onEnd);
-    },
-    off: ($el, { namespace } = {}) => {
-        eventsEngine.off($el, addNamespace('dxscrollend', namespace));
-    }
-};
-export const dxScrollStop = {
-    on: ($el, onStop, { namespace } = {}) => {
-        eventsEngine.on($el, addNamespace('dxscrollstop', namespace), onStop);
-    },
-    off: ($el, { namespace } = {}) => {
-        eventsEngine.off($el, addNamespace('dxscrollstop', namespace));
-    }
-};
-export const dxScrollCancel = {
-    on: ($el, onCancel, { namespace } = {}) => {
-        eventsEngine.on($el, addNamespace('dxscrollcancel', namespace), onCancel);
-    },
-    off: ($el, { namespace } = {}) => {
-        eventsEngine.off($el, addNamespace('dxscrollcancel', namespace));
     }
 };
 

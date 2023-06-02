@@ -9,73 +9,62 @@ const { abs, floor } = Math;
 const EXPONENTIAL = 'exponential';
 const formats = ['fixedPoint', 'thousands', 'millions', 'billions', 'trillions', EXPONENTIAL];
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'];
+const INTERVALS_MAP = {
+    'week': 'day',
+    'quarter': 'month',
+    'shorttime': 'hour',
+    'longtime': 'second'
+};
 
-function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
-    let prevDifferences;
-    let nextDifferences;
-    let dateUnitInterval;
-    const dateUnitsLength = dateUnitIntervals.length;
-    let i;
-    let j;
-
-    if(tickFormat === 'week') {
-        tickFormat = 'day';
-    } else if(tickFormat === 'quarter') {
-        tickFormat = 'month';
-    } else if(tickFormat === 'shorttime') {
-        tickFormat = 'hour';
-    } else if(tickFormat === 'longtime') {
-        tickFormat = 'second';
-    }
-
-    const tickFormatIndex = dateUnitIntervals.indexOf(tickFormat);
-
-    if(nextDate) {
-        nextDifferences = dateUtils.getDatesDifferences(curDate, nextDate);
-        prevDifferences = dateUtils.getDatesDifferences(curDate, prevDate);
-        if(nextDifferences[tickFormat]) {
-            for(i = dateUnitsLength - 1; i >= tickFormatIndex; i--) {
-                dateUnitInterval = dateUnitIntervals[i];
-                if(i === tickFormatIndex) {
-                    setDateUnitInterval(nextDifferences, tickFormatIndex + (nextDifferences['millisecond'] ? 2 : 1));
-                } else if(nextDifferences[dateUnitInterval]) {
-                    resetDateUnitInterval(nextDifferences, i);
-                    break;
-                }
-            }
-        }
-    } else {
-        prevDifferences = dateUtils.getDatesDifferences(prevDate, curDate);
-        for(i = dateUnitsLength - 1; i >= tickFormatIndex; i--) {
-            dateUnitInterval = dateUnitIntervals[i];
-            if(prevDifferences[dateUnitInterval]) {
-                if(i - tickFormatIndex > 1) {
-                    for(j = tickFormatIndex + 1; j >= 0; j--) {
-                        resetDateUnitInterval(prevDifferences, j);
-                    }
-                    break;
-                } else if(isDateTimeStart(curDate, dateUnitInterval)) {
-                    for(j = i - 1; j > 0; j--) {
-                        resetDateUnitInterval(prevDifferences, j);
-                    }
-                    break;
-                }
-            }
+function patchFirstTickDiff(differences, tickFormatIndex) {
+    for(let i = tickFormatIndex; i < dateUnitIntervals.length - 1; i++) {
+        const dateUnitInterval = dateUnitIntervals[i];
+        if(i === tickFormatIndex) {
+            setDateUnitInterval(differences, tickFormatIndex + (differences['millisecond'] ? 2 : 1));
+            break;
+        } else if(differences[dateUnitInterval] && differences.count > 1) {
+            resetDateUnitInterval(differences, i);
+            break;
         }
     }
-    return nextDate ? nextDifferences : prevDifferences;
 }
 
-function isDateTimeStart(date, dateUnitInterval) {
-    const unitNumbers = [date.getMilliseconds(), date.getSeconds(), date.getMinutes(), date.getHours(), date.getDate(), date.getMonth()];
-    const unitIndex = dateUnitIntervals.indexOf(dateUnitInterval);
-    let i;
-    for(i = 0; i < unitIndex; i++) {
-        if((i === 4 && unitNumbers[i] !== 1) || (i !== 4 && unitNumbers[i] !== 0)) {
-            return false;
+function patchTickDiff(differences, tickFormatIndex) {
+    let patched = false;
+    for(let i = dateUnitIntervals.length - 1; i >= tickFormatIndex; i--) {
+        const dateUnitInterval = dateUnitIntervals[i];
+        if(differences[dateUnitInterval]) {
+            if(i - tickFormatIndex > 1) {
+                for(let j = 0; j <= tickFormatIndex; j++) {
+                    resetDateUnitInterval(differences, j);
+                    patched = true;
+                }
+                break;
+            }
         }
     }
-    return true;
+    return patched;
+}
+
+function getDatesDifferences(prevDate, curDate, nextDate, tickIntervalFormat) {
+    tickIntervalFormat = INTERVALS_MAP[tickIntervalFormat] || tickIntervalFormat;
+
+    const tickFormatIndex = dateUnitIntervals.indexOf(tickIntervalFormat);
+
+    if(nextDate) {
+        const nextDifferences = dateUtils.getDatesDifferences(curDate, nextDate);
+        if(nextDifferences[tickIntervalFormat]) {
+            patchFirstTickDiff(nextDifferences, tickFormatIndex);
+        }
+        return nextDifferences;
+    } else {
+        const prevDifferences = dateUtils.getDatesDifferences(prevDate, curDate);
+        const patched = patchTickDiff(prevDifferences, tickFormatIndex);
+        if(!patched && prevDifferences.count === 1) {
+            setDateUnitInterval(prevDifferences, tickFormatIndex);
+        }
+        return prevDifferences;
+    }
 }
 
 function resetDateUnitInterval(differences, intervalIndex) {
@@ -132,123 +121,80 @@ function createFormat(type) {
     return { type, formatter };
 }
 
-export function smartFormatter(tick, options) {
-    let tickInterval = options.tickInterval;
-    let tickIntervalIndex;
-    let tickIndex;
-    let actualIndex;
-    const stringTick = abs(tick).toString();
-    let precision = 0;
-    let typeFormat;
-    let offset = 0;
-    let separatedTickInterval;
-    let indexOfFormat = 0;
-    let indexOfTick = -1;
-    let datesDifferences;
-    let format = options.labelOptions.format;
-    const ticks = options.ticks;
-    let log10Tick;
-    let prevDateIndex;
-    let nextDateIndex;
-    const isLogarithmic = options.type === 'logarithmic';
+function formatLogarithmicNumber(tick) {
+    const log10Tick = log10(abs(tick));
+    let type;
 
-    if(ticks.length === 1 && ticks.indexOf(tick) === 0 && !isDefined(tickInterval)) {
-        tickInterval = abs(tick) >= 1 ? 1 : adjust(1 - abs(tick), tick);
-    }
-
-    if(!isDefined(format) && options.type !== 'discrete' && tick && (options.logarithmBase === 10 || !isLogarithmic)) {
-        if(options.dataType !== 'datetime' && isDefined(tickInterval)) {
-            if(ticks.length && ticks.indexOf(tick) === -1) {
-                indexOfTick = getTransitionTickIndex(ticks, tick);
-                tickInterval = adjust(abs(tick - ticks[indexOfTick]), tick);
-            }
-
-            separatedTickInterval = splitDecimalNumber(tickInterval);
-            if(separatedTickInterval < 2) {
-                separatedTickInterval = splitDecimalNumber(tick);
-            }
-
-            if(isLogarithmic) {
-                log10Tick = log10(abs(tick));
-                if(log10Tick > 0) {
-                    typeFormat = formats[floor(log10Tick / 3)] || EXPONENTIAL;
-                } else {
-                    if(log10Tick < -4) {
-                        typeFormat = EXPONENTIAL;
-                    } else {
-                        return _format(adjust(tick));
-                    }
-                }
-            } else {
-                if(separatedTickInterval.length > 1 && !isExponential(tickInterval)) {
-                    precision = separatedTickInterval[1].length;
-                    typeFormat = formats[indexOfFormat];
-                } else {
-                    if(isExponential(tickInterval) && (stringTick.indexOf('.') !== -1 || isExponential(tick))) {
-                        typeFormat = EXPONENTIAL;
-                        if(!isExponential(tick)) {
-                            precision = abs(getNoZeroIndex(stringTick.split('.')[1]) - getExponent(tickInterval) + 1);
-                        } else {
-                            precision = Math.max(abs(getExponent(tick) - getExponent(tickInterval)), abs(getPrecision(tick) - getPrecision(tickInterval)));
-                        }
-                    } else {
-                        tickIntervalIndex = floor(log10(tickInterval));
-                        actualIndex = tickIndex = floor(log10(abs(tick)));
-
-                        if(tickIndex - tickIntervalIndex >= 2) {
-                            actualIndex = tickIntervalIndex;
-                        }
-
-                        indexOfFormat = floor(actualIndex / 3);
-                        offset = indexOfFormat * 3;
-                        if(indexOfFormat < 5) {
-                            if(tickIntervalIndex - offset === 2 && tickIndex >= 3) {
-                                indexOfFormat++;
-                                offset = indexOfFormat * 3;
-                            }
-                            typeFormat = formats[indexOfFormat];
-                        } else {
-                            typeFormat = formats[formats.length - 1];
-                        }
-
-                        if(offset > 0) {
-                            separatedTickInterval = splitDecimalNumber(tickInterval / Math.pow(10, offset));
-                            if(separatedTickInterval[1]) {
-                                precision = separatedTickInterval[1].length;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if(typeFormat !== undefined || precision !== undefined) {
-                format = {
-                    type: typeFormat,
-                    precision: precision
-                };
-            }
-        } else if(options.dataType === 'datetime') {
-            typeFormat = dateUtils.getDateFormatByTickInterval(tickInterval);
-            if(options.showTransition && ticks.length) {
-                indexOfTick = ticks.map(Number).indexOf(+tick);
-                if(ticks.length === 1 && indexOfTick === 0) {
-                    typeFormat = formatHelper.getDateFormatByTicks(ticks);
-                } else {
-                    if(indexOfTick === -1) {
-                        prevDateIndex = getTransitionTickIndex(ticks, tick);
-                    } else {
-                        prevDateIndex = indexOfTick === 0 ? ticks.length - 1 : indexOfTick - 1;
-                        nextDateIndex = indexOfTick === 0 ? 1 : -1;
-                    }
-                    datesDifferences = getDatesDifferences(ticks[prevDateIndex], tick, ticks[nextDateIndex], typeFormat);
-                    typeFormat = formatHelper.getDateFormatByDifferences(datesDifferences, typeFormat);
-                }
-            }
-            format = createFormat(typeFormat);
+    if(log10Tick > 0) {
+        type = formats[floor(log10Tick / 3)] || EXPONENTIAL;
+    } else {
+        if(log10Tick < -4) {
+            type = EXPONENTIAL;
+        } else {
+            return _format(adjust(tick));
         }
     }
 
-    return _format(tick, format);
+    return _format(tick, { type, precision: 0 });
+}
+
+function getDateTimeFormat(tick, { showTransition, ticks, tickInterval }) {
+    let typeFormat = dateUtils.getDateFormatByTickInterval(tickInterval);
+    let prevDateIndex;
+    let nextDateIndex;
+
+    if(showTransition && ticks.length) {
+        const indexOfTick = ticks.map(Number).indexOf(+tick);
+        if(ticks.length === 1 && indexOfTick === 0) {
+            typeFormat = formatHelper.getDateFormatByTicks(ticks);
+        } else {
+            if(indexOfTick === -1) {
+                prevDateIndex = getTransitionTickIndex(ticks, tick);
+            } else {
+                prevDateIndex = indexOfTick === 0 ? ticks.length - 1 : indexOfTick - 1;
+                nextDateIndex = indexOfTick === 0 ? 1 : -1;
+            }
+            const datesDifferences = getDatesDifferences(ticks[prevDateIndex], tick, ticks[nextDateIndex], typeFormat);
+            typeFormat = formatHelper.getDateFormatByDifferences(datesDifferences, typeFormat);
+        }
+    }
+    return createFormat(typeFormat);
+}
+
+function getFormatExponential(tick, tickInterval) {
+    const stringTick = abs(tick).toString();
+    if(isExponential(tick)) {
+        return Math.max(abs(getExponent(tick) - getExponent(tickInterval)), abs(getPrecision(tick) - getPrecision(tickInterval)));
+    } else {
+        return abs(getNoZeroIndex(stringTick.split('.')[1]) - getExponent(tickInterval) + 1);
+    }
+}
+
+function getFormatWithModifier(tick, tickInterval) {
+    const tickIntervalIndex = floor(log10(tickInterval));
+    let tickIndex;
+    let precision = 0;
+    let actualIndex = tickIndex = floor(log10(abs(tick)));
+
+    if(tickIndex - tickIntervalIndex >= 2) {
+        actualIndex = tickIntervalIndex;
+    }
+
+    let indexOfFormat = floor(actualIndex / 3);
+    const offset = indexOfFormat * 3;
+    if(indexOfFormat < 0) {
+        indexOfFormat = 0;
+    }
+    const typeFormat = formats[indexOfFormat] || formats[formats.length - 1];
+
+    if(offset > 0) {
+        const separatedTickInterval = splitDecimalNumber(tickInterval / Math.pow(10, offset));
+        if(separatedTickInterval[1]) {
+            precision = separatedTickInterval[1].length;
+        }
+    }
+
+    return { precision, type: typeFormat };
 }
 
 function getHighDiffFormat(diff) {
@@ -320,7 +266,60 @@ function processDateInterval(interval) {
     return interval;
 }
 
-export function formatRange(startValue, endValue, tickInterval, { dataType, type, logarithmBase }) {
+export function smartFormatter(tick, options) {
+    let tickInterval = options.tickInterval;
+    const stringTick = abs(tick).toString();
+    let format = options.labelOptions.format;
+    const ticks = options.ticks;
+    const isLogarithmic = options.type === 'logarithmic';
+
+    if(ticks.length === 1 && ticks.indexOf(tick) === 0 && !isDefined(tickInterval)) {
+        tickInterval = abs(tick) >= 1 ? 1 : adjust(1 - abs(tick), tick);
+    }
+
+    if(Object.is(tick, -0)) {
+        tick = 0;
+    }
+
+    if(!isDefined(format) && options.type !== 'discrete' && tick && (options.logarithmBase === 10 || !isLogarithmic)) {
+        if(options.dataType !== 'datetime' && isDefined(tickInterval)) {
+            if(ticks.length && ticks.indexOf(tick) === -1) {
+                const indexOfTick = getTransitionTickIndex(ticks, tick);
+                tickInterval = adjust(abs(tick - ticks[indexOfTick]), tick);
+            }
+
+            if(isLogarithmic) {
+                return formatLogarithmicNumber(tick);
+            } else {
+                let separatedTickInterval = splitDecimalNumber(tickInterval);
+                if(separatedTickInterval < 2) {
+                    separatedTickInterval = splitDecimalNumber(tick);
+                }
+                if(separatedTickInterval.length > 1 && !isExponential(tickInterval)) {
+                    format = {
+                        type: formats[0],
+                        precision: separatedTickInterval[1].length
+                    };
+                } else {
+                    if(isExponential(tickInterval) && (stringTick.indexOf('.') !== -1 || isExponential(tick))) {
+                        format = {
+                            type: EXPONENTIAL,
+                            precision: getFormatExponential(tick, tickInterval)
+                        };
+                    } else {
+                        format = getFormatWithModifier(tick, tickInterval);
+                    }
+                }
+            }
+        } else if(options.dataType === 'datetime') {
+            format = getDateTimeFormat(tick, options);
+        }
+    }
+
+    return _format(tick, format);
+}
+
+export function formatRange({ startValue, endValue, tickInterval, argumentFormat, axisOptions: { dataType, type, logarithmBase } }) {
     if(type === 'discrete') {
         return '';
     }
@@ -335,7 +334,7 @@ export function formatRange(startValue, endValue, tickInterval, { dataType, type
         dataType,
         tickInterval,
         logarithmBase,
-        labelOptions: {}
+        labelOptions: { format: argumentFormat }
     };
     return `${smartFormatter(startValue, formatOptions)} - ${smartFormatter(endValue, formatOptions)}`;
 }

@@ -84,22 +84,6 @@
     }
   }
 
-  .dx-ie {
-    height: 1px;
-
-    .dx-area-description-cell { // T656699, T696419
-      position: static;
-      height: inherit;
-      vertical-align: bottom;
-      font-size: 0;
-
-      .dx-pivotgrid-fields-area {
-        position: relative;
-        display: inline-block;
-      }
-    }
-  }
-
   .dx-area-field-content {
     display: inline-block;
   }
@@ -253,4 +237,12 @@
 
 .dx-pivotgrid-drag-action {
   touch-action: pinch-zoom;
+}
+
+.dx-pivotgrid-scrollbar-measure-element {
+  position: absolute;
+  top: -9999px;
+  width: 100px;
+  height: 100px;
+  overflow: scroll;
 }

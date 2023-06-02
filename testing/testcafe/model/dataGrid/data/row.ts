@@ -2,10 +2,11 @@ import { ClientFunction } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import DataCell from './cell';
-import CommandCell from '../command-cell';
+import CommandCell from '../commandCell';
 
 const CLASS = {
   commandExpand: 'dx-command-expand',
+  commandDrag: 'dx-command-drag',
   focusedRow: 'dx-row-focused',
   rowRemoved: 'dx-row-removed',
   selection: 'dx-selection',
@@ -13,6 +14,7 @@ const CLASS = {
   insertedRow: 'dx-row-inserted',
   editedRow: 'dx-edit-row',
   groupExpanded: 'group-opened',
+  stateHover: 'dx-state-hover',
 };
 
 export default class DataRow extends FocusableElement {
@@ -30,6 +32,8 @@ export default class DataRow extends FocusableElement {
 
   isExpanded: Promise<boolean>;
 
+  isHovered: Promise<boolean>;
+
   constructor(element: Selector, widgetName: string) {
     super(element);
     this.widgetName = widgetName;
@@ -39,6 +43,7 @@ export default class DataRow extends FocusableElement {
     this.isInserted = this.element.hasClass(CLASS.insertedRow);
     this.isEdited = this.element.hasClass(CLASS.editedRow);
     this.isExpanded = this.element.find(`.${CLASS.commandExpand} .${Widget.addClassPrefix(this.widgetName, CLASS.groupExpanded)}`).exists;
+    this.isHovered = this.element.hasClass(CLASS.stateHover);
   }
 
   getDataCell(index: number): DataCell {
@@ -47,6 +52,10 @@ export default class DataRow extends FocusableElement {
 
   getCommandCell(index: number): CommandCell {
     return new CommandCell(this.element, index, this.widgetName);
+  }
+
+  getDragCommand(): Selector {
+    return this.element.find(`.${CLASS.commandDrag}`);
   }
 
   getSelectCheckBox(): Selector {

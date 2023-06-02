@@ -1,9 +1,12 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/form";
+@use "../../base/icons" as *;
+@use "../textEditor/sizes" as *;
 
 // adduse
 @use "../scrollable";
@@ -23,8 +26,7 @@
 }
 
 .dx-form {
-  > .dx-scrollable-wrapper,
-  > div > .dx-scrollable-wrapper {
+  > .dx-scrollable-wrapper {
     > .dx-scrollable-container {
       margin-left: -10px;
       padding-left: 10px;
@@ -58,6 +60,14 @@
   }
 }
 
+.dx-form > .dx-layout-manager.dx-layout-manager-one-col {
+  .dx-field-item {
+    .dx-field-item.dx-last-row:not(.dx-last-col) {
+      padding-bottom: 10px;
+    }
+  }
+}
+
 .dx-field-item {
   &:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs):not(.dx-first-row):not(.dx-label-v-align) {
     padding-top: $material-form-default-top-padding;
@@ -68,14 +78,14 @@
   }
 
   &.dx-label-v-align {
-    .dx-textarea {
-      margin-top: 6px;
-    }
-
     .dx-invalid-message > .dx-overlay-wrapper,
     .dx-invalid-message > .dx-overlay-content {
       transform: translate(0, 0) !important; // stylelint-disable-line declaration-no-important
     }
+  }
+
+  .dx-toggle-controls-paddings {
+    padding-left: $material-filled-texteditor-input-horizontal-padding;
   }
 }
 
@@ -87,6 +97,13 @@
 
 .dx-field-item-label-location-top {
   padding: $material-form-top-label-padding;
+  padding-left: $material-filled-texteditor-input-horizontal-padding;
+  padding-right: $material-filled-texteditor-input-horizontal-padding;
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .dx-field-item-label-text {
@@ -95,14 +112,28 @@
 
 .dx-field-item-help-text {
   color: $form-field-item-color;
-  padding: 6px 0 2px;
+  padding: 6px $material-filled-texteditor-input-horizontal-padding 2px;
   font-style: normal;
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
+.dx-field-item-optional .dx-label > span::after,
+.dx-field-item-optional-mark {
+  color: $form-field-mark-color;
+}
+
+.dx-field-item-required .dx-label > span::after,
 .dx-field-item-required-mark {
   color: $form-field-required-color;
 }
 
-.dx-field-item-optional-mark {
-  color: $form-field-mark-color;
+.dx-field-item-custom-label-content {
+  .dx-icon {
+    @include dx-icon-sizing($material-form-label-icon-size);
+    @include dx-icon-margin(math.div($material-base-icon-size, 3));
+  }
 }

@@ -281,3 +281,23 @@ QUnit.test('Set skip template in tooltip cusomizeObject if templates are not def
 
     assert.equal(sankey._tooltip._textHtml.html(), 'html');
 });
+
+QUnit.test('Format option applies to weights values in default tooltip templates', function(assert) {
+    const dataRow = { source: 'A', target: 'Z', weight: 100 };
+    const sankey = createSankey({
+        node: {
+            width: 15
+        },
+        dataSource: [dataRow],
+        tooltip: {
+            enabled: true,
+            format: {
+                type: 'percent'
+            }
+        }
+    });
+
+    const tooltipRenderedData = sankey._tooltip._customizeTooltip({ type: 'link', info: dataRow });
+    const tooltipEl = $(`<div>${tooltipRenderedData.html}</div>`);
+    assert.equal(tooltipEl.text(), 'A > ZWeight: 10,000%');
+});

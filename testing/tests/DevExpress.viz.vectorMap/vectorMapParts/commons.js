@@ -1,10 +1,9 @@
 const $ = require('jquery');
-const renderer = require('core/renderer');
 const vizMocks = require('../../../helpers/vizMocks.js');
 const dxVectorMapUtils = require('viz/vector_map/vector_map.utils');
 
 const projectionModule = require('viz/vector_map/projection.main');
-const controlBarModule = require('viz/vector_map/control_bar');
+const controlBarModule = require('viz/vector_map/control_bar/control_bar');
 const gestureHandlerModule = require('viz/vector_map/gesture_handler');
 const trackerModule = require('viz/vector_map/tracker');
 const themeManagerModule = require('viz/core/base_theme_manager');
@@ -29,6 +28,7 @@ const rendererModule = require('viz/core/renderers/renderer');
 const titleModule = require('viz/core/title');
 const exportModule = require('viz/core/export');
 const tooltipModule = require('viz/core/tooltip');
+const { implementationsMap } = require('core/utils/size');
 
 require('viz/vector_map');
 
@@ -85,17 +85,17 @@ exports.environment = {
         this.title = new vizMocks.Title();
         this.exportMenu = new StubExportMenu();
         this.tooltip = new vizMocks.Tooltip();
-        this._$fn_width = renderer.fn.width;
-        this._$fn_height = renderer.fn.height;
-        renderer.fn.width = returnValue(400);
-        renderer.fn.height = returnValue(300);
+        this._$fn_width = implementationsMap.getWidth;
+        this._$fn_height = implementationsMap.getHeight;
+        implementationsMap.getWidth = returnValue(400);
+        implementationsMap.getHeight = returnValue(300);
         stubComponentConstructors(this);
     },
 
     afterEach: function() {
         this.$container.remove(); //  To invoke Component disposing mechanism
-        renderer.fn.width = this._$fn_width;
-        renderer.fn.height = this._$fn_height;
+        implementationsMap.getWidth = this._$fn_width;
+        implementationsMap.getHeight = this._$fn_height;
     },
 
     createMap: function(options) {

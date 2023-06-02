@@ -4,7 +4,6 @@ import { move } from '../../animation/translator';
 import NativeStrategy from './ui.scrollable.native';
 import LoadIndicator from '../load_indicator';
 import { each } from '../../core/utils/iterator';
-import browser from '../../core/utils/browser';
 import { Deferred } from '../../core/utils/deferred';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
@@ -26,9 +25,9 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this.callBase(scrollView);
         this._$topPocket = scrollView._$topPocket;
         this._$pullDown = scrollView._$pullDown;
-        this._$bottomPocket = scrollView._$bottomPocket;
         this._$refreshingText = scrollView._$refreshingText;
         this._$scrollViewContent = $(scrollView.content());
+        this._$container = $(scrollView.container());
 
         this._initCallbacks();
     },
@@ -67,12 +66,6 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this._refreshPullDownText();
     },
 
-    _pushBackFromBoundary: function() {
-        if(!this._isLocked() && !this._component.isEmpty()) {
-            this.callBase();
-        }
-    },
-
     _refreshPullDownText: function() {
         const that = this;
         const pullDownTextItems = [{
@@ -99,14 +92,11 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     _updateDimensions: function() {
         this.callBase();
-        this._topPocketSize = this._$topPocket.height();
-        this._bottomPocketSize = this._$bottomPocket.height();
+        this._topPocketSize = this._$topPocket.get(0).clientHeight;
 
-        if(browser.msie) {
-            this._scrollOffset = Math.round((this._$container.height() - this._$content.height()) * 100) / 100;
-        } else {
-            this._scrollOffset = this._$container.height() - this._$content.height();
-        }
+        const contentEl = this._$scrollViewContent.get(0);
+        const containerEl = this._$container.get(0);
+        this._bottomBoundary = Math.max(contentEl.clientHeight - containerEl.clientHeight, 0);
     },
 
     _allowedDirections: function() {
@@ -173,7 +163,7 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && this._location - (this._scrollOffset + this._bottomPocketSize) <= 0.5; // T858013
+        return this._reachBottomEnabled && Math.round(this._bottomBoundary + Math.floor(this._location)) <= 1;
     },
 
     _reachBottom: function() {

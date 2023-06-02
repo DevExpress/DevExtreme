@@ -1,8 +1,9 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { noop } from '../../core/utils/common';
-import { isNumeric, isString, isFunction, isDefined, isDate } from '../../core/utils/type';
+import { isNumeric, isString, isFunction, isDefined } from '../../core/utils/type';
 import { inRange } from '../../core/utils/math';
 import { extend } from '../../core/utils/extend';
 import Button from '../button';
@@ -11,14 +12,20 @@ import Swipeable from '../../events/gesture/swipeable';
 import Navigator from './ui.calendar.navigator';
 import Views from './ui.calendar.views';
 import { move } from '../../animation/translator';
-import browser from '../../core/utils/browser';
 import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
 import devices from '../../core/devices';
 import fx from '../../animation/fx';
 import { hasWindow } from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
+import dateLocalization from '../../localization/date';
 import { FunctionTemplate } from '../../core/templates/function_template';
+import { isCommandKeyPressed, addNamespace } from '../../events/utils/index';
+import CalendarSingleSelectionStrategy from './ui.calendar.single.selection.strategy';
+import CalendarMultiSelectionStrategy from './ui.calendar.multi.selection.strategy';
+import CalendarRangeSelectionStrategy from './ui.calendar.range.selection.strategy';
+import { end as hoverEndEventName } from '../../events/hover';
+import eventsEngine from '../../events/core/events_engine';
 
 // STYLE calendar
 
@@ -30,7 +37,10 @@ const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
 const CALENDAR_HAS_FOOTER_CLASS = 'dx-calendar-with-footer';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_VIEW_CLASS = 'dx-calendar-view';
+const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
+const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
+const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 
 const ANIMATION_DURATION_SHOW_VIEW = 250;
 const POP_ANIMATION_FROM = 0.6;
@@ -38,6 +48,8 @@ const POP_ANIMATION_TO = 1;
 
 const CALENDAR_INPUT_STANDARD_PATTERN = 'yyyy-MM-dd';
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
+
+const CALENDAR_DXHOVEREND_EVENT_NAME = addNamespace(hoverEndEventName, 'dxCalendar');
 
 const LEVEL_COMPARE_MAP = {
     'month': 3,
@@ -53,7 +65,15 @@ const ZOOM_LEVEL = {
     CENTURY: 'century'
 };
 
-const isIE11 = browser.msie && parseInt(browser.version) <= 11;
+const SELECTION_STRATEGIES = {
+    SingleSelection: CalendarSingleSelectionStrategy,
+    MultiSelection: CalendarMultiSelectionStrategy,
+    RangeSelection: CalendarRangeSelectionStrategy
+};
+
+function elementHasFocus(element) {
+    return element.hasClass(FOCUSED_STATE_CLASS);
+}
 
 const Calendar = Editor.inherit({
     _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
@@ -75,6 +95,8 @@ const Calendar = Editor.inherit({
 
             value: null,
 
+            values: [],
+
             dateSerializationFormat: undefined,
 
             min: new Date(1000, 0),
@@ -83,13 +105,21 @@ const Calendar = Editor.inherit({
 
             firstDayOfWeek: undefined,
 
+            viewsCount: 1,
+
             zoomLevel: ZOOM_LEVEL.MONTH,
 
             maxZoomLevel: ZOOM_LEVEL.MONTH,
 
             minZoomLevel: ZOOM_LEVEL.CENTURY,
 
+            selectionMode: 'single',
+
             showTodayButton: false,
+
+            showWeekNumbers: false,
+
+            weekNumberRule: 'auto',
 
             cellTemplate: 'cell',
 
@@ -97,9 +127,7 @@ const Calendar = Editor.inherit({
 
             onCellClick: null,
             onContouredChanged: null,
-            hasFocus: function(element) {
-                return element.hasClass(FOCUSED_STATE_CLASS);
-            },
+            skipFocusCheck: false,
 
             _todayDate: () => new Date()
 
@@ -129,7 +157,7 @@ const Calendar = Editor.inherit({
         return extend(this.callBase(), {
             rightArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._waitRenderView(1);
                 } else {
                     this._moveCurrentDateByOffset(1 * this._getRtlCorrection());
@@ -137,7 +165,7 @@ const Calendar = Editor.inherit({
             },
             leftArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._waitRenderView(-1);
                 } else {
                     this._moveCurrentDateByOffset(-1 * this._getRtlCorrection());
@@ -145,7 +173,7 @@ const Calendar = Editor.inherit({
             },
             upArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._navigateUp();
                 } else {
                     if(fx.isAnimating(this._view.$element())) {
@@ -156,7 +184,7 @@ const Calendar = Editor.inherit({
             },
             downArrow: function(e) {
                 e.preventDefault();
-                if(e.ctrlKey) {
+                if(isCommandKeyPressed(e)) {
                     this._navigateDown();
                 } else {
                     if(fx.isAnimating(this._view.$element())) {
@@ -208,15 +236,17 @@ const Calendar = Editor.inherit({
                 this._waitRenderView(1 * this._getRtlCorrection());
             },
             tab: noop,
-            enter: function(e) {
-                if(!this._isMaxZoomLevel()) {
-                    this._navigateDown();
-                } else if(!this._view.isDateDisabled(this.option('currentDate'))) {
-                    const value = this._updateTimeComponent(this.option('currentDate'));
-                    this._dateValue(value, e);
-                }
-            }
+            enter: this._enterKeyHandler
         });
+    },
+
+    _enterKeyHandler: function(e) {
+        if(!this._isMaxZoomLevel()) {
+            this._navigateDown();
+        } else if(!this._view.isDateDisabled(this.option('currentDate'))) {
+            const value = this._updateTimeComponent(this.option('currentDate'));
+            this._selectionStrategy.selectValue(value, e);
+        }
     },
 
     _getSerializationFormat: function(optionName) {
@@ -237,22 +267,36 @@ const Calendar = Editor.inherit({
         return dateSerialization.getDateSerializationFormat(value);
     },
 
-    _convertToDate: function(value, optionName) {
+    _convertToDate: function(value) {
         return dateSerialization.deserializeDate(value);
     },
 
-    _dateValue: function(value, dxEvent) {
-        if(dxEvent) this._saveValueChangeEvent(dxEvent);
-        this._dateOption('value', value);
+    _dateValue: function(value, event) {
+        const optionName = Array.isArray(value) ? 'values' : 'value';
+        if(event) {
+            if(event.type === 'keydown') {
+                const cellElement = this._view._getContouredCell().get(0);
+                event.target = cellElement;
+            }
+            this._saveValueChangeEvent(event);
+        }
+        this._dateOption(optionName, value);
     },
 
     _dateOption: function(optionName, optionValue) {
         if(arguments.length === 1) {
-            return this._convertToDate(this.option(optionName), optionName);
+            const values = this.option('values') ?? [];
+            return optionName === 'values'
+                ? values.map((value) => this._convertToDate(value))
+                : this._convertToDate(this.option(optionName));
         }
 
         const serializationFormat = this._getSerializationFormat(optionName);
-        this.option(optionName, dateSerialization.serializeDate(optionValue, serializationFormat));
+        const serializedValue = optionName === 'values'
+            ? optionValue?.map((value) => dateSerialization.serializeDate(value, serializationFormat)) || []
+            : dateSerialization.serializeDate(optionValue, serializationFormat);
+
+        this.option(optionName, serializedValue);
     },
 
     _shiftDate: function(zoomLevel, date, offset, reverse) {
@@ -286,7 +330,7 @@ const Calendar = Editor.inherit({
         const dateForward = new Date(currentDate);
 
         while(isDateForwardInRange) {
-            if(isDateForwardInRange && !this._view.isDateDisabled(dateForward)) {
+            if(!this._view.isDateDisabled(dateForward)) {
                 currentDate = dateForward;
                 break;
             }
@@ -300,6 +344,7 @@ const Calendar = Editor.inherit({
         if(this._view.isDateDisabled(baseDate) || this._view.isDateDisabled(currentDate)) {
             this._waitRenderView(offset > 0 ? 1 : -1);
         } else {
+            this._skipNavigate = true;
             this.option('currentDate', currentDate);
         }
     },
@@ -336,7 +381,7 @@ const Calendar = Editor.inherit({
     },
 
     _moveToClosestAvailableDate: function(baseDate = this.option('currentDate')) {
-        let currentDate = dateUtils.createDate(baseDate);
+        let currentDate = new Date(baseDate);
         const zoomLevel = this.option('zoomLevel');
 
         const isCurrentDateAvailable = !this._isDateNotAvailable(currentDate);
@@ -347,8 +392,8 @@ const Calendar = Editor.inherit({
         let isDateForwardInStartView;
         let isDateBackwardInStartView;
 
-        const dateForward = dateUtils.createDate(currentDate);
-        const dateBackward = dateUtils.createDate(currentDate);
+        const dateForward = new Date(currentDate);
+        const dateBackward = new Date(currentDate);
 
         do {
             if(isDateForwardAvailable) {
@@ -383,9 +428,37 @@ const Calendar = Editor.inherit({
 
     _init: function() {
         this.callBase();
+        this._initSelectionStrategy();
         this._correctZoomLevel();
         this._initCurrentDate();
         this._initActions();
+    },
+
+    _initSelectionStrategy: function() {
+        const strategyName = this._getSelectionStrategyName();
+        const strategy = SELECTION_STRATEGIES[strategyName];
+
+        if(!this._selectionStrategy || this._selectionStrategy.NAME !== strategyName) {
+            this._selectionStrategy = new strategy(this);
+        }
+    },
+
+    _refreshSelectionStrategy: function() {
+        this._initSelectionStrategy();
+        this._refresh();
+    },
+
+    _getSelectionStrategyName: function() {
+        const selectionMode = this.option('selectionMode');
+
+        switch(selectionMode) {
+            case 'multi':
+                return 'MultiSelection';
+            case 'range':
+                return 'RangeSelection';
+            default:
+                return 'SingleSelection';
+        }
     },
 
     _correctZoomLevel: function() {
@@ -405,7 +478,9 @@ const Calendar = Editor.inherit({
     },
 
     _initCurrentDate: function() {
-        const currentDate = this._getNormalizedDate(this._dateOption('value')) || this._getNormalizedDate(this.option('currentDate'));
+        const currentDate = this._getNormalizedDate(this._selectionStrategy.getDefaultCurrentDate())
+            ?? this._getNormalizedDate(this.option('currentDate'));
+
         this.option('currentDate', currentDate);
     },
 
@@ -445,7 +520,7 @@ const Calendar = Editor.inherit({
         const normalizedDate = this._getNormalizedDate(date);
 
         if(date.getTime() !== normalizedDate.getTime()) {
-            this.option('currentDate', dateUtils.createDate(normalizedDate));
+            this.option('currentDate', new Date(normalizedDate));
             return;
         }
 
@@ -454,21 +529,58 @@ const Calendar = Editor.inherit({
         if(offset !== 0 && !this._isMaxZoomLevel() && this._isOtherViewCellClicked) { offset = 0; }
 
         if(this._view && offset !== 0 && !this._suppressNavigation) {
-            this._navigate(offset, normalizedDate);
+            if(this._additionalView) {
+                if(offset > 2 || offset < -1) {
+                    this._refreshViews();
+                    this._setViewContoured(normalizedDate);
+                    this._updateAriaId(normalizedDate);
+                    this._renderNavigator();
+                } else if(offset === 1 && this._skipNavigate) {
+                    this._setViewContoured(normalizedDate);
+                    this._updateAriaId(normalizedDate);
+                } else {
+                    this._navigate(offset, normalizedDate);
+                }
+            } else {
+                this._navigate(offset, normalizedDate);
+            }
         } else {
             this._renderNavigator();
             this._setViewContoured(normalizedDate);
             this._updateAriaId(normalizedDate);
         }
+        this._skipNavigate = false;
+    },
+
+    _isAdditionalViewDate(date) {
+        if(!this._additionalView) {
+            return false;
+        }
+
+        return date >= this._additionalView._getFirstAvailableDate();
+    },
+
+    _getActiveView: function(date) {
+        return this._isAdditionalViewDate(date) ? this._additionalView : this._view;
     },
 
     _setViewContoured: function(date) {
-        if(this.option('hasFocus')(this._focusTarget())) {
-            this._view.option('contouredDate', date);
+        if(this.option('skipFocusCheck') || elementHasFocus(this._focusTarget())) {
+            this._view.option('contouredDate', null);
+            this._additionalView?.option('contouredDate', null);
+
+            const view = this._isAdditionalViewDate(date) ? this._additionalView : this._view;
+
+            view.option('contouredDate', date);
         }
     },
 
     _getMinDate: function() {
+        const _rangeMin = this.option('_rangeMin');
+        if(_rangeMin) {
+            return _rangeMin;
+        }
+
         if(this.min) {
             return this.min;
         }
@@ -478,6 +590,11 @@ const Calendar = Editor.inherit({
     },
 
     _getMaxDate: function() {
+        const _rangeMax = this.option('_rangeMax');
+        if(_rangeMax) {
+            return _rangeMax;
+        }
+
         if(this.max) {
             return this.max;
         }
@@ -538,7 +655,7 @@ const Calendar = Editor.inherit({
     },
 
     _getDateByOffset: function(offset, date) {
-        date = this._getDate(date || this.option('currentDate'));
+        date = this._getDate(date ?? this.option('currentDate'));
 
         const currentDay = date.getDate();
         const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
@@ -563,20 +680,24 @@ const Calendar = Editor.inherit({
 
         const $element = this.$element();
         $element.addClass(CALENDAR_CLASS);
+        $element.toggleClass(CALENDAR_RANGE_CLASS, this.option('selectionMode') === 'range');
 
         this._renderBody();
         $element.append(this.$body);
 
         this._renderViews();
+        this._renderEvents();
 
         this._renderNavigator();
-        $element.append(this._navigator.$element());
+        $element.prepend(this._navigator.$element());
 
         this._renderSwipeable();
         this._renderFooter();
 
-        this._updateAriaSelected();
+        this._selectionStrategy.updateAriaSelected();
         this._updateAriaId();
+
+        this.setAria('role', 'application');
 
         this._moveToClosestAvailableDate();
     },
@@ -602,7 +723,9 @@ const Calendar = Editor.inherit({
     _renderViews: function() {
         this.$element().addClass(CALENDAR_VIEW_CLASS + '-' + this.option('zoomLevel'));
 
-        const currentDate = this.option('currentDate');
+        const { currentDate, viewsCount } = this.option();
+
+        this.$element().toggleClass(CALENDAR_MULTIVIEW_CLASS, viewsCount > 1);
 
         this._view = this._renderSpecificView(currentDate);
 
@@ -610,42 +733,63 @@ const Calendar = Editor.inherit({
             const beforeDate = this._getDateByOffset(-1, currentDate);
             this._beforeView = this._isViewAvailable(beforeDate) ? this._renderSpecificView(beforeDate) : null;
 
-            const afterDate = this._getDateByOffset(1, currentDate);
+            const afterDate = this._getDateByOffset(viewsCount, currentDate);
             afterDate.setDate(1);
 
             this._afterView = this._isViewAvailable(afterDate) ? this._renderSpecificView(afterDate) : null;
+        }
+
+        if(viewsCount > 1) {
+            this._additionalView = this._renderSpecificView(this._getDateByOffset(1, currentDate));
         }
 
         this._translateViews();
     },
 
     _renderSpecificView: function(date) {
-        const specificView = Views[this.option('zoomLevel')];
+        const { zoomLevel } = this.option();
+        const specificView = Views[zoomLevel];
         const $view = $('<div>').appendTo(this._$viewsWrapper);
         const config = this._viewConfig(date);
 
-        return this._createComponent($view, specificView, config);
+        const view = this._createComponent($view, specificView, config);
+
+        return view;
     },
 
     _viewConfig: function(date) {
         let disabledDates = this.option('disabledDates');
 
         disabledDates = isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this)) : disabledDates;
+
         return {
+            ...this._selectionStrategy.getViewOptions(),
             date: date,
             min: this._getMinDate(),
             max: this._getMaxDate(),
-            firstDayOfWeek: this.option('firstDayOfWeek'),
-            value: this._dateOption('value'),
+            firstDayOfWeek: this.option('firstDayOfWeek') ?? dateLocalization.firstDayOfWeekIndex(),
+            showWeekNumbers: this.option('showWeekNumbers'),
+            weekNumberRule: this.option('weekNumberRule'),
+            zoomLevel: this.option('zoomLevel'),
             tabIndex: undefined,
             focusStateEnabled: this.option('focusStateEnabled'),
             hoverStateEnabled: this.option('hoverStateEnabled'),
-            disabledDates: disabledDates,
+            disabledDates,
             onCellClick: this._cellClickHandler.bind(this),
             cellTemplate: this._getTemplateByOption('cellTemplate'),
             allowValueSelection: this._isMaxZoomLevel(),
             _todayDate: this.option('_todayDate')
         };
+    },
+
+    _renderEvents() {
+        eventsEngine.off(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME);
+
+        if(this.option('selectionMode') === 'range') {
+            eventsEngine.on(this._$viewsWrapper, CALENDAR_DXHOVEREND_EVENT_NAME, null, ((e) => {
+                this._updateViewsOption('hoveredRange', []);
+            }));
+        }
     },
 
     _injectComponent: function(func) {
@@ -665,21 +809,23 @@ const Calendar = Editor.inherit({
     },
 
     _translateViews: function() {
+        const { viewsCount } = this.option();
+
         move(this._view.$element(), { left: 0, top: 0 });
+        this._moveViewElement(this._beforeView, -1);
+        this._moveViewElement(this._afterView, viewsCount);
+        this._moveViewElement(this._additionalView, 1);
+    },
 
-        this._beforeView && move(this._beforeView.$element(), {
-            left: this._getViewPosition(-1),
-            top: 0
-        });
-
-        this._afterView && move(this._afterView.$element(), {
-            left: this._getViewPosition(1),
+    _moveViewElement(view, coefficient) {
+        view && move(view.$element(), {
+            left: this._getViewPosition(coefficient),
             top: 0
         });
     },
 
     _getViewPosition: function(coefficient) {
-        const rtlCorrection = this.option('rtlEnabled') && !browser.msie ? -1 : 1;
+        const rtlCorrection = this.option('rtlEnabled') ? -1 : 1;
         return (coefficient * 100 * rtlCorrection) + '%';
     },
 
@@ -693,13 +839,13 @@ const Calendar = Editor.inherit({
             this._navigateDown(e.event.currentTarget);
         } else {
             const newValue = this._updateTimeComponent(e.value);
-            this._dateValue(newValue, e.event);
+            this._selectionStrategy.selectValue(newValue, e.event);
             this._cellClickAction(e);
         }
     },
 
     _updateTimeComponent: function(date) {
-        const result = dateUtils.createDate(date);
+        const result = new Date(date);
         const currentValue = this._dateOption('value');
 
         if(currentValue) {
@@ -754,24 +900,36 @@ const Calendar = Editor.inherit({
             this._navigator = new Navigator($('<div>'), this._navigatorConfig());
         }
 
-        this._navigator.option('text', this._view.getNavigatorCaption());
+        this._navigator.option('text', this._getViewsCaption(this._view, this._additionalView));
         this._updateButtonsVisibility();
     },
 
     _navigatorConfig: function() {
+        const { rtlEnabled } = this.option();
+
         return {
-            text: this._view.getNavigatorCaption(),
+            text: this._getViewsCaption(this._view, this._additionalView),
             onClick: this._navigatorClickHandler.bind(this),
             onCaptionClick: this._navigateUp.bind(this),
-            rtlEnabled: this.option('rtlEnabled')
+            rtlEnabled,
         };
     },
 
     _navigatorClickHandler: function(e) {
-        const currentDate = this._getDateByOffset(e.direction, this.option('currentDate'));
+        const { currentDate, viewsCount } = this.option();
+        let offset = e.direction;
 
-        this._moveToClosestAvailableDate(currentDate);
-        this._updateNavigatorCaption(-e.direction * this._getRtlCorrection());
+        if(viewsCount > 1) {
+            const additionalViewActive = this._isAdditionalViewDate(currentDate);
+            const shouldDoubleOffset = additionalViewActive && offset < 0 || !additionalViewActive && offset > 0;
+
+            if(shouldDoubleOffset) {
+                offset *= 2;
+            }
+        }
+
+        const newCurrentDate = this._getDateByOffset(offset, currentDate);
+        this._moveToClosestAvailableDate(newCurrentDate);
     },
 
     _navigateUp: function() {
@@ -800,8 +958,8 @@ const Calendar = Editor.inherit({
     },
 
     _updateButtonsVisibility: function() {
-        this._navigator.toggleButton('next', !isDefined(this._getRequiredView('next')));
-        this._navigator.toggleButton('prev', !isDefined(this._getRequiredView('prev')));
+        this._navigator.toggleButton('next', !isDefined(this._afterView));
+        this._navigator.toggleButton('prev', !isDefined(this._beforeView));
     },
 
     _renderSwipeable: function() {
@@ -817,9 +975,16 @@ const Calendar = Editor.inherit({
 
     _swipeStartHandler: function(e) {
         fx.stop(this._$viewsWrapper, true);
+        const { viewsCount } = this.option();
 
-        e.event.maxLeftOffset = this._getRequiredView('next') ? 1 : 0;
-        e.event.maxRightOffset = this._getRequiredView('prev') ? 1 : 0;
+        this._toggleGestureCoverCursor('grabbing');
+
+        e.event.maxLeftOffset = this._getRequiredView('next') ? 1 / viewsCount : 0;
+        e.event.maxRightOffset = this._getRequiredView('prev') ? 1 / viewsCount : 0;
+    },
+
+    _toggleGestureCoverCursor: function(cursor) {
+        $(`.${GESTURE_COVER_CLASS}`).css('cursor', cursor);
     },
 
     _getRequiredView: function(name) {
@@ -843,15 +1008,22 @@ const Calendar = Editor.inherit({
     },
 
     _swipeEndHandler: function(e) {
+        this._toggleGestureCoverCursor('auto');
+
+        const { currentDate, rtlEnabled } = this.option();
         const targetOffset = e.event.targetOffset;
         const moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
+
+        const isAdditionalViewActive = this._isAdditionalViewDate(currentDate);
+        const shouldDoubleOffset = isAdditionalViewActive && (rtlEnabled ? moveOffset === -1 : moveOffset === 1);
 
         if(moveOffset === 0) {
             this._animateWrapper(0, ANIMATION_DURATION_SHOW_VIEW);
             return;
         }
 
-        let date = this._getDateByOffset(-moveOffset * this._getRtlCorrection());
+        const offset = -moveOffset * this._getRtlCorrection() * (shouldDoubleOffset ? 2 : 1);
+        let date = this._getDateByOffset(offset);
 
         if(this._isDateInInvalidRange(date)) {
             if(moveOffset >= 0) {
@@ -860,13 +1032,12 @@ const Calendar = Editor.inherit({
                 date = new Date(this._getMaxDate());
             }
         }
-
         this.option('currentDate', date);
     },
 
     _viewWidth: function() {
         if(!this._viewWidthValue) {
-            this._viewWidthValue = this.$element().width();
+            this._viewWidthValue = getWidth(this.$element()) / this.option('viewsCount');
         }
 
         return this._viewWidthValue;
@@ -874,16 +1045,35 @@ const Calendar = Editor.inherit({
 
     _updateNavigatorCaption: function(offset) {
         offset *= this._getRtlCorrection();
+        const isMultiView = this.option('viewsCount') > 1;
 
-        let view = this._view;
+        let view;
+        let additionalView;
 
         if(offset > 0.5 && this._beforeView) {
             view = this._beforeView;
+            additionalView = isMultiView && this._view;
         } else if(offset < -0.5 && this._afterView) {
-            view = this._afterView;
+            view = isMultiView ? this._additionalView : this._afterView;
+            additionalView = isMultiView ? this._afterView : null;
+        } else {
+            view = this._view;
+            additionalView = isMultiView ? this._additionalView : null;
         }
 
-        this._navigator.option('text', view.getNavigatorCaption());
+        this._navigator.option('text', this._getViewsCaption(view, additionalView));
+    },
+
+    _getViewsCaption: function(view, additionalView) {
+        let caption = view.getNavigatorCaption();
+        const { viewsCount } = this.option();
+
+        if(viewsCount > 1 && additionalView) {
+            const additionalViewCaption = additionalView.getNavigatorCaption();
+            caption = `${caption} - ${additionalViewCaption}`;
+        }
+
+        return caption;
     },
 
     _isDateInInvalidRange: function(date) {
@@ -902,13 +1092,15 @@ const Calendar = Editor.inherit({
         const showTodayButton = this.option('showTodayButton');
 
         if(showTodayButton) {
-            const $todayButton = this._createComponent($('<a>'),
+            const $todayButton = this._createComponent($('<div>'),
                 Button, {
-                    focusStateEnabled: false,
+                    focusStateEnabled: this.option('focusStateEnabled'),
                     text: messageLocalization.format('dxCalendar-todayButtonText'),
-                    onClick: (function() {
-                        this._toTodayView();
-                    }).bind(this),
+                    onClick: (args) => {
+                        this._toTodayView(args);
+                    },
+                    type: 'default',
+                    stylingMode: 'text',
                     integrationOptions: {}
                 }).$element()
                 .addClass(CALENDAR_TODAY_BUTTON_CLASS);
@@ -941,7 +1133,12 @@ const Calendar = Editor.inherit({
 
     _animateShowView: function() {
         fx.stop(this._view.$element(), true);
-        return this._popAnimationView(this._view, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW).promise();
+        this._popAnimationView(this._view, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW);
+
+        if(this.option('viewsCount') > 1) {
+            fx.stop(this._additionalView.$element(), true);
+            this._popAnimationView(this._additionalView, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW);
+        }
     },
 
     _popAnimationView: function(view, from, to, duration) {
@@ -1000,26 +1197,21 @@ const Calendar = Editor.inherit({
     },
 
     _getDate(value) {
-        const result = dateUtils.createDate(value);
-        if(isIE11 && isDate(value)) {
-            result.setMilliseconds(0);
-        }
-
-        return result;
+        return new Date(value);
     },
 
-    _toTodayView: function() {
+    _toTodayView: function(args) {
         const today = new Date();
 
         if(this._isMaxZoomLevel()) {
-            this._dateOption('value', today);
+            this._selectionStrategy.selectValue(today, args.event);
             return;
         }
 
         this._preventViewChangeAnimation = true;
 
         this.option('zoomLevel', this.option('maxZoomLevel'));
-        this._dateOption('value', today);
+        this._selectionStrategy.selectValue(today, args.event);
 
         this._animateShowView();
 
@@ -1033,6 +1225,7 @@ const Calendar = Editor.inherit({
         this._renderNavigator();
         this._setViewContoured(newDate);
         this._updateAriaId(newDate);
+        this._selectionStrategy.updateAriaSelected();
     },
 
     _rearrangeViews: function(offset) {
@@ -1040,18 +1233,25 @@ const Calendar = Editor.inherit({
             return;
         }
 
+        const { viewsCount } = this.option();
         let viewOffset;
         let viewToCreateKey;
         let viewToRemoveKey;
+        let viewBeforeCreateKey;
+        let viewAfterRemoveKey;
 
         if(offset < 0) {
             viewOffset = 1;
             viewToCreateKey = '_beforeView';
             viewToRemoveKey = '_afterView';
+            viewBeforeCreateKey = '_view';
+            viewAfterRemoveKey = viewsCount === 1 ? '_view' : '_additionalView';
         } else {
             viewOffset = -1;
             viewToCreateKey = '_afterView';
             viewToRemoveKey = '_beforeView';
+            viewBeforeCreateKey = viewsCount === 1 ? '_view' : '_additionalView';
+            viewAfterRemoveKey = '_view';
         }
 
         if(!this[viewToCreateKey]) {
@@ -1060,18 +1260,16 @@ const Calendar = Editor.inherit({
 
         const destinationDate = this[viewToCreateKey].option('date');
 
-        if(this[viewToRemoveKey]) {
-            this[viewToRemoveKey].$element().remove();
-        }
+        this[viewToRemoveKey]?.$element().remove();
+        this[viewToRemoveKey] = this._renderSpecificView(this._getDateByOffset(viewOffset * viewsCount, destinationDate));
+        this[viewAfterRemoveKey].$element().remove();
 
-        if(offset === viewOffset) {
-            this[viewToRemoveKey] = this._view;
+        if(viewsCount === 1) {
+            this[viewAfterRemoveKey] = this[viewToCreateKey];
         } else {
-            this[viewToRemoveKey] = this._renderSpecificView(this._getDateByOffset(viewOffset, destinationDate));
-            this._view.$element().remove();
+            this[viewAfterRemoveKey] = this[viewBeforeCreateKey];
+            this[viewBeforeCreateKey] = this[viewToCreateKey];
         }
-
-        this._view = this[viewToCreateKey];
 
         const dateByOffset = this._getDateByOffset(-viewOffset, destinationDate);
         this[viewToCreateKey] = this._isViewAvailable(dateByOffset) ? this._renderSpecificView(dateByOffset) : null;
@@ -1097,10 +1295,13 @@ const Calendar = Editor.inherit({
     _disposeViews: function() {
         this._view.$element().remove();
         this._beforeView && this._beforeView.$element().remove();
+        this._additionalView && this._additionalView.$element().remove();
         this._afterView && this._afterView.$element().remove();
         delete this._view;
+        delete this._additionalView;
         delete this._beforeView;
         delete this._afterView;
+        delete this._skipNavigate;
     },
 
     _dispose: function() {
@@ -1109,6 +1310,7 @@ const Calendar = Editor.inherit({
     },
 
     _refreshViews: function() {
+        this._resetActiveState();
         this._disposeViews();
         this._renderViews();
     },
@@ -1119,41 +1321,60 @@ const Calendar = Editor.inherit({
 
     _focusInHandler: function() {
         this.callBase.apply(this, arguments);
-        this._view.option('contouredDate', this.option('currentDate'));
+        this._setViewContoured(this.option('currentDate'));
     },
 
     _focusOutHandler: function() {
         this.callBase.apply(this, arguments);
         this._view.option('contouredDate', null);
+        this._additionalView?.option('contouredDate', null);
     },
 
-    _updateViewsValue: function(value) {
-        const newValue = value ? new Date(value) : null;
+    _updateViewsOption: function(optionName, newValue) {
+        this._view.option(optionName, newValue);
+        this._additionalView?.option(optionName, newValue);
+        this._beforeView?.option(optionName, newValue);
+        this._afterView?.option(optionName, newValue);
+    },
 
-        this._view.option('value', newValue);
-        this._beforeView && this._beforeView.option('value', newValue);
-        this._afterView && this._afterView.option('value', newValue);
+    _setViewsMinOption: function(min) {
+        this._restoreViewsMinMaxOptions();
+        this.option('_rangeMin', this._convertToDate(min));
+        this._updateViewsOption('min', this._getMinDate());
+    },
+
+    _setViewsMaxOption: function(max) {
+        this._restoreViewsMinMaxOptions();
+        this.option('_rangeMax', this._convertToDate(max));
+        this._updateViewsOption('max', this._getMaxDate());
+    },
+
+    _restoreViewsMinMaxOptions: function() {
+        this.option({
+            _rangeMin: null,
+            _rangeMax: null,
+        });
+
+        this._updateViewsOption('min', this._getMinDate());
+        this._updateViewsOption('max', this._getMaxDate());
     },
 
     _updateAriaSelected: function(value, previousValue) {
-        value = value || this._dateOption('value');
+        previousValue.forEach((item) => { this.setAria('selected', undefined, this._view._getCellByDate(item)); });
+        value.forEach((item) => { this.setAria('selected', true, this._view._getCellByDate(item)); });
 
-        const $prevSelectedCell = this._view._getCellByDate(previousValue);
-        const $selectedCell = this._view._getCellByDate(value);
-
-        this.setAria('selected', undefined, $prevSelectedCell);
-        this.setAria('selected', true, $selectedCell);
-
-        if(value && this.option('currentDate').getTime() === value.getTime()) {
-            this._updateAriaId(value);
+        if(this.option('viewsCount') > 1) {
+            previousValue.forEach((item) => { this.setAria('selected', undefined, this._additionalView._getCellByDate(item)); });
+            value.forEach((item) => { this.setAria('selected', true, this._additionalView._getCellByDate(item)); });
         }
     },
 
     _updateAriaId: function(value) {
-        value = value || this.option('currentDate');
+        value = value ?? this.option('currentDate');
 
         const ariaId = 'dx-' + new Guid();
-        const $newCell = this._view._getCellByDate(value);
+        const view = this._getActiveView(value);
+        const $newCell = view._getCellByDate(value);
 
         this.setAria('id', ariaId, $newCell);
         this.setAria('activedescendant', ariaId);
@@ -1168,8 +1389,7 @@ const Calendar = Editor.inherit({
     },
 
     _optionChanged: function(args) {
-        let value = args.value;
-        let previousValue = args.previousValue;
+        const { value, previousValue } = args;
 
         switch(args.name) {
             case 'width':
@@ -1183,6 +1403,10 @@ const Calendar = Editor.inherit({
                 this._suppressingNavigation(this._updateCurrentDate, [this.option('currentDate')]);
                 this._refreshViews();
                 this._renderNavigator();
+                break;
+            case 'selectionMode':
+                this._refreshSelectionStrategy();
+                this._initCurrentDate();
                 break;
             case 'firstDayOfWeek':
                 this._refreshViews();
@@ -1205,13 +1429,22 @@ const Calendar = Editor.inherit({
                 this._updateButtonsVisibility();
                 break;
             case 'value':
-                value = this._convertToDate(value);
-                previousValue = this._convertToDate(previousValue);
-                this._updateAriaSelected(value, previousValue);
-                this.option('currentDate', isDefined(value) ? dateUtils.createDate(value) : new Date());
-                this._updateViewsValue(value);
+                if(this.option('selectionMode') === 'single') {
+                    this._selectionStrategy.processValueChanged([value], [previousValue]);
+                }
                 this._setSubmitValue(value);
                 this.callBase(args);
+                break;
+            case 'values':
+                if(this.option('selectionMode') !== 'single') {
+                    this._selectionStrategy.processValueChanged(value, previousValue);
+                }
+                this._raiseValueChangeAction(value, previousValue);
+                this._saveValueChangeEvent(undefined);
+                break;
+            case 'viewsCount':
+                this._refreshViews();
+                this._renderNavigator();
                 break;
             case 'onCellClick':
                 this._view.option('onCellClick', value);
@@ -1225,14 +1458,21 @@ const Calendar = Editor.inherit({
             case 'showTodayButton':
                 this._invalidate();
                 break;
-            case 'hasFocus':
+            case 'skipFocusCheck':
                 break;
             case '_todayDate':
+            case 'showWeekNumbers':
+            case 'weekNumberRule':
                 this._refreshViews();
                 break;
             default:
                 this.callBase(args);
         }
+    },
+
+
+    getContouredDate: function() {
+        return this._view.option('contouredDate');
     }
 });
 

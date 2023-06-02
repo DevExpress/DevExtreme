@@ -1,45 +1,66 @@
-import 'common.css!';
+import { getWidth, getHeight } from 'core/utils/size';
 import device from 'core/devices';
+import config from 'core/config';
 import domAdapter from 'core/dom_adapter';
-import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
-import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
+import visibilityEventsModule from 'events/visibility_change';
+import { EDITORS_WITHOUT_LABELS } from 'ui/form/ui.form.layout_manager.utils';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
 import 'ui/calendar';
 import 'ui/date_box';
 import 'ui/drop_down_box';
+
+import windowModule from 'core/utils/window';
+import Form from 'ui/form/ui.form.js';
+import TextEditorBase from 'ui/text_box/ui.text_editor.base.js';
+import { renderLabel } from 'ui/form/components/label.js';
+
 import {
     FIELD_ITEM_CLASS,
     FORM_GROUP_CLASS,
     FORM_LAYOUT_MANAGER_CLASS,
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FORM_FIELD_ITEM_COL_CLASS,
-    HIDDEN_LABEL_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
-    FIELD_ITEM_LABEL_TEXT_CLASS,
-    FIELD_ITEM_REQUIRED_MARK_CLASS,
-    FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_LABEL_CLASS,
-    FORM_GROUP_CAPTION_CLASS
+    FORM_GROUP_CAPTION_CLASS,
+    FORM_UNDERLINED_CLASS,
+    FORM_VALIDATION_SUMMARY
 } from 'ui/form/constants';
+
+import {
+    GET_LABEL_WIDTH_BY_TEXT_CLASS,
+    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_REQUIRED_MARK_CLASS,
+    FIELD_ITEM_LABEL_TEXT_CLASS,
+} from 'ui/form/components/label';
+
+const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
+const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
+
+import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
+
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/tag_box';
+import 'ui/toolbar';
 import 'ui/text_area';
 import themes from 'ui/themes';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
-
+import { isDefined } from 'core/utils/type.js';
 
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
+const LAST_COL_CLASS = 'dx-last-col';
 
 QUnit.testStart(function() {
     const markup =
@@ -60,7 +81,7 @@ if(device.current().deviceType === 'desktop') {
     items.forEach((item) => {
         registerKeyHandlerTestHelper.runTests({
             createWidget: ($element) => $element.dxForm({ items: items }).dxForm('instance'),
-            keyPressTargetElement: (widget) => widget.getEditor(item.dataField).$element().find('.dx-texteditor-input'),
+            keyPressTargetElement: (widget) => widget.getEditor(item.dataField).$element().find(`.${EDITOR_INPUT_CLASS}`),
             checkInitialize: false,
             testNamePrefix: `Form -> ${item.editorType}:`
         });
@@ -98,7 +119,7 @@ QUnit.testInActiveWindow('Form\'s inputs saves value on refresh', function(asser
     assert.deepEqual(formData, { name: 'test' }, 'value updates');
 });
 
-QUnit.test('Check field  wodth on render form with colspan', function(assert) {
+QUnit.test('Check field width on render form with colspan', function(assert) {
     const $testContainer = $('#form');
 
     $testContainer.dxForm({
@@ -120,10 +141,10 @@ QUnit.test('Check field  wodth on render form with colspan', function(assert) {
 
     const $fieldItems = $testContainer.find('.' + FIELD_ITEM_CLASS);
     const fieldWidths = {
-        ID: $fieldItems.eq(1).width(),
-        FirstName: $fieldItems.eq(2).width(),
-        LastName: $fieldItems.eq(3).width(),
-        HireDate: $fieldItems.eq(4).width()
+        ID: getWidth($fieldItems.eq(1)),
+        FirstName: getWidth($fieldItems.eq(2)),
+        LastName: getWidth($fieldItems.eq(3)),
+        HireDate: getWidth($fieldItems.eq(4))
     };
 
     assert.equal($fieldItems.length, 5, '4 simple items + 1 group item');
@@ -195,26 +216,6 @@ QUnit.test('Invalid field name when item is defined not as string and not as obj
     assert.equal(form.$element().find('.' + FIELD_ITEM_CLASS).length, 1, 'items count');
     assert.equal(form.getEditor('name'), undefined, 'editor by name field');
     assert.equal(form.getEditor('lastName').option('value'), 'Klark', 'editor by lastName field');
-});
-
-QUnit.test('dxshown event fire when visible option changed to true', function(assert) {
-    const form = $('#form').dxForm({
-        formData: { id: 1 }
-    }).dxForm('instance');
-    let dxShownEventCounter = 0;
-
-    $(form.$element())
-        .find('.dx-visibility-change-handler')
-        .first()
-        .on('dxshown', function() {
-            dxShownEventCounter++;
-        });
-
-    form.option('visible', false);
-    assert.equal(dxShownEventCounter, 0, 'dxshown event does not fire');
-
-    form.option('visible', true);
-    assert.equal(dxShownEventCounter, 1, 'dxshown event fired');
 });
 
 QUnit.test('Reset editor\'s value when the formData option is empty object', function(assert) {
@@ -319,19 +320,19 @@ QUnit.test('The \'dataField\' option of a simple item should not affect existing
     assert.equal(form.getEditor('firstName').option('name'), 'UserName', 'Editor name is OK');
 });
 
-QUnit.test('Refresh form when visibility changed to \'true\' in msie browser', function(assert) {
+QUnit.test('Don\'t refresh form when visibility changed to \'true\'', function(assert) {
     const $testContainer = $('#form');
-    const expectedRefreshCount = browser.msie ? 1 : 0;
+    const expectedRefreshCount = 0;
     const form = $testContainer.dxForm({
         formData: { name: 'TestName' },
         items: [{ dataField: 'name' }]
     }).dxForm('instance');
 
     const refreshStub = sinon.stub(form, '_refresh');
-    triggerHidingEvent($testContainer);
-    triggerShownEvent($testContainer);
+    visibilityEventsModule.triggerHidingEvent($testContainer);
+    visibilityEventsModule.triggerShownEvent($testContainer);
 
-    assert.equal(refreshStub.callCount, expectedRefreshCount, 'Refresh on visibility changed to \'true\' if browser is IE or Edge');
+    assert.equal(refreshStub.callCount, expectedRefreshCount, 'Don\'t refresh on visibility changed to \'true\'');
     refreshStub.restore();
 });
 
@@ -425,6 +426,208 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
 
+QUnit.test('From renders editors with the right label, labelMode', function(assert) {
+    ['outside', 'hidden', 'static', 'floating'].forEach(labelMode => {
+        const form = $('#form').dxForm({
+            items: [ { dataField: 'name', editorType: 'dxTextBox' } ],
+            labelMode
+        }).dxForm('instance');
+
+        const renderedWidget = $('#form').find('.dx-field-item .dx-textbox').dxTextBox('instance');
+        const widgetLabelMode = renderedWidget.option('labelMode');
+        const widgetLabelText = renderedWidget.option('label');
+
+        assert.equal(widgetLabelMode, labelMode === 'outside' ? 'hidden' : labelMode);
+        assert.equal(widgetLabelText, 'Name');
+
+        form.dispose();
+    });
+});
+
+[true, false].forEach((showColon) => {
+    [undefined, true, false].forEach((isLabelVisible) => {
+        ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+            [
+                'dxAutocomplete',
+                'dxCalendar',
+                'dxCheckBox',
+                'dxColorBox',
+                'dxDateBox',
+                'dxDropDownBox',
+                'dxHtmlEditor',
+                'dxLookup',
+                'dxNumberBox',
+                'dxRadioGroup',
+                'dxRangeSlider',
+                'dxSelectBox',
+                'dxSlider',
+                'dxSwitch',
+                'dxTagBox',
+                'dxTextArea',
+                'dxTextBox'
+            ].forEach((editorType) => {
+                QUnit.test(`label rendering, form.labelMode=${formLabelMode},label.visible=${isLabelVisible},editorType=${editorType},label.showColon=${showColon}`, function(assert) {
+                    const $form = $('#form').dxForm({
+                        labelMode: formLabelMode,
+                        items: [{
+                            dataField: 'item1',
+                            editorType,
+                            label: {
+                                visible: isLabelVisible,
+                                showColon,
+                            }
+                        }],
+                    });
+
+                    const $label = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+                    let needRenderLabel = isLabelVisible;
+                    if(needRenderLabel === undefined) {
+                        if(EDITORS_WITHOUT_LABELS.indexOf(editorType) !== -1 && formLabelMode !== 'hidden') {
+                            needRenderLabel = true;
+                        } else if(formLabelMode === 'outside') {
+                            needRenderLabel = true;
+                        }
+                    }
+                    assert.equal($label.length, needRenderLabel ? 1 : 0, 'label is rendered correctly');
+                    assert.equal($label.text(), needRenderLabel ? `Item 1${showColon ? ':' : ''}` : '');
+                });
+            });
+        });
+    });
+});
+
+
+['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+    [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
+        QUnit.test(`check editor labelMode, form.labelMode=${formLabelMode},editorOptions.labelMode=${editorLabelMode}`, function(assert) {
+            const form = $('#form').dxForm({
+                labelMode: formLabelMode,
+                items: [
+                    { dataField: 'item1', editorType: 'dxTextBox', editorOptions: { labelMode: editorLabelMode } }
+                ]
+            }).dxForm('instance');
+
+            const editor = form.getEditor('item1');
+            let expectedEditorLabelMode = editorLabelMode;
+            if(expectedEditorLabelMode === undefined) {
+                expectedEditorLabelMode = formLabelMode === 'outside'
+                    ? 'hidden'
+                    : formLabelMode;
+            }
+            assert.equal(editor.option('labelMode'), expectedEditorLabelMode, 'editor.labelMode is correct');
+        });
+    });
+});
+
+[true, false].forEach((showOptionalMark) => {
+    [true, false].forEach((isLabelVisible) => {
+        [true, false].forEach((showColon) => {
+            ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+                [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
+                    [undefined, '', 'some help text'].forEach((helpText) => {
+                        [null, () => { return $('<div>').text('Custom text'); }].forEach((labelTemplate) => {
+                            QUnit.test(`form renders with right optional mark, config=${JSON.stringify({ showOptionalMark, isLabelVisible, formLabelMode, editorLabelMode, helpText, showColon, labelTemplate })}`, function(assert) {
+                                const $form = $('#form').dxForm({
+                                    showOptionalMark,
+                                    labelMode: formLabelMode,
+                                    items: [ {
+                                        dataField: 'item1',
+                                        label: { visible: isLabelVisible, showColon, template: labelTemplate },
+                                        editorOptions: { labelMode: editorLabelMode },
+                                        helpText
+                                    }]
+                                });
+
+                                const $formLabel = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+                                const $editorLabel = $form.find(`.${EDITOR_LABEL_CLASS}`);
+                                const $helpText = $form.find(`.${FIELD_ITEM_HELP_TEXT_CLASS}`);
+
+                                const optionalMarkIsRenderedAsHelpText = $helpText.text().indexOf('optional') !== -1;
+                                const optionalMarkIsRenderedAsFormLabel = $formLabel.text().indexOf('optional') !== -1;
+                                const optionalMarkIsRenderedAsEditorLabel = $editorLabel.text().indexOf('optional') !== -1;
+
+                                const labelText = labelTemplate ? 'Custom text' : 'Item 1';
+                                const editorLabelText = 'Item 1';
+
+                                const expectedFormLabelText = isLabelVisible ? `${labelText}${showColon && !labelTemplate ? ':' : ''}${optionalMarkIsRenderedAsFormLabel ? `${String.fromCharCode(160)}optional` : ''}` : '';
+                                assert.equal($formLabel.text(), expectedFormLabelText, 'form.labelText');
+                                const resultLabelMode = editorLabelMode || formLabelMode;
+                                const needRenderEditorLabel = resultLabelMode !== 'outside' && resultLabelMode !== 'hidden';
+                                assert.equal($editorLabel.text(), needRenderEditorLabel ? editorLabelText : '', 'editor.labelText');
+
+                                assert.equal(optionalMarkIsRenderedAsEditorLabel, false, 'optional mark in editor is not rendered');
+                                if(showOptionalMark === false) {
+                                    assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered');
+                                    assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered');
+                                } else if(isLabelVisible) {
+                                    assert.equal(optionalMarkIsRenderedAsFormLabel, true, 'optional mark in form label is rendered if label is visible');
+                                    assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered if label is visible');
+                                } else {
+                                    assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered if label is hidden');
+                                    assert.equal(optionalMarkIsRenderedAsHelpText, !isDefined(helpText) && ['static', 'floating'].indexOf(editorLabelMode || formLabelMode) !== -1, 'optional mark in help text is rendered correctly');
+                                }
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+
+QUnit.test('Check aria-labelledby attribute for editors label', function(assert) {
+    const form = $('#form').dxForm({
+        items: [ { dataField: 'name', editorType: 'dxTextBox' } ],
+        labelMode: 'floating'
+    }).dxForm('instance');
+
+    const $fieldItem = $('#form').find(`.${FIELD_ITEM_CLASS}`);
+    const itemInputAttr = $fieldItem.find(`.${EDITOR_INPUT_CLASS}`).attr('aria-labelledby');
+    const editorLabelID = $fieldItem.find(`.${EDITOR_LABEL_CLASS}`).attr('id');
+
+    assert.strictEqual(itemInputAttr.includes(editorLabelID), true, 'input attr value includes editor label id');
+
+    form.dispose();
+});
+
+QUnit.test('field1.required -> form.validate() -> form.option("onFieldDataChanged", "newHandler") -> check form is not re-rendered (T1014577)', function(assert) {
+    const checkEditorIsInvalid = (form) => form.$element().find('.dx-textbox').hasClass(INVALID_CLASS);
+    const form = $('#form').dxForm({
+        formData: { field1: '' },
+        items: [ {
+            dataField: 'field1',
+            validationRules: [{ type: 'required' }]
+        } ]
+    }).dxForm('instance');
+
+    form.validate();
+    assert.equal(checkEditorIsInvalid(form), true, 'editor is invalid after validate');
+
+    form.option('onFieldDataChanged', () => {});
+    assert.equal(checkEditorIsInvalid(form), true, 'editor is still invalid after changing the onFieldDataChanged option');
+});
+
+QUnit.test('form.option("onFieldDataChanged", "newHandler") -> check new handler is called (T1014577)', function(assert) {
+    const form = $('#form').dxForm({
+        formData: { field1: '' },
+        items: [ {
+            dataField: 'field1',
+            validationRules: [{ type: 'required' }]
+        } ]
+    }).dxForm('instance');
+
+    const onFieldDataChangedStub = sinon.stub();
+    form.option('onFieldDataChanged', onFieldDataChangedStub);
+
+    form.updateData({ field1: 'some value 1' });
+    assert.equal(onFieldDataChangedStub.callCount, 1, 'new handler is called after formData is updated');
+
+    form.getEditor('field1').option('value', 'some value 2');
+    assert.equal(onFieldDataChangedStub.callCount, 2, 'new handler is called after editor value is changed');
+});
+
+
 [
     { editorType: 'dxTextBox' },
     { label: { text: 'label text' } },
@@ -495,6 +698,105 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     });
 });
 
+QUnit.test('Change options -> check _itemsOptionChangedHandler/_formDataOptionChangedHandler calls', function(assert) {
+    const form = $('#form').dxForm({
+        items: [ { name: 'id' } ]
+    }).dxForm('instance');
+
+    let actualLog = '';
+    const _itemsOptionChangedHandler = form._itemsOptionChangedHandler;
+    form._itemsOptionChangedHandler = function() { actualLog += 'items; '; return _itemsOptionChangedHandler.apply(form, arguments); };
+    const _formDataOptionChangedHandler = form._formDataOptionChangedHandler;
+    form._formDataOptionChangedHandler = function() { actualLog += 'formData; '; return _formDataOptionChangedHandler.apply(form, arguments); };
+    const _defaultOptionChangedHandler = form._defaultOptionChangedHandler;
+    form._defaultOptionChangedHandler = function() { actualLog += 'default; '; return _defaultOptionChangedHandler.apply(form, arguments); };
+
+    function testConfig(optionName, expectedLog) {
+        actualLog = '';
+        form.option(optionName, {});
+        assert.strictEqual(actualLog, expectedLog, `option("${optionName}")`);
+    }
+
+    testConfig('.', 'default; ');
+    testConfig('.hint', 'default; ');
+    testConfig('.items', 'default; ');
+    testConfig('.formData', 'default; ');
+
+    testConfig('a', 'default; ');
+    testConfig('hint.b', 'default; ');
+    testConfig('colCountByScreen.b.', 'default; ');
+    testConfig('colCountByScreen.lg.c', 'default; ');
+
+    testConfig('formData', 'default; ');
+    testConfig('formData.', 'formData; ');
+    testConfig(' formData . ', 'formData; ');
+    testConfig('formData.a', 'formData; ');
+    testConfig('formData.a.', 'formData; ');
+    testConfig('formData.a.b', 'formData; ');
+    testConfig('formData.items', 'formData; ');
+    testConfig('formData.items[0]', 'formData; ');
+    testConfig('formData.formData', 'formData; ');
+
+    testConfig('items', 'default; ');
+    testConfig('items.', 'items; default; ');
+    testConfig(' items . ', 'items; default; ');
+    testConfig('items.a', 'items; default; ');
+    testConfig(' items . a ', 'items; default; ');
+    testConfig('items.a.b', 'items; default; ');
+    testConfig('items.formData', 'items; default; ');
+    testConfig('items.formData.b', 'items; default; ');
+    testConfig('items.items', 'items; default; ');
+
+    testConfig('items[0]', 'default; ');
+    testConfig('items[0].a', 'items; default; ');
+    testConfig('items[0].visible', 'items; default; ');
+    testConfig('items[0].items', 'items; default; ');
+    testConfig('items[0].formData', 'items; default; ');
+    testConfig('items[0].items[0]', 'items; default; ');
+
+    testConfig('items[0].tabs', 'items; default; ');
+    testConfig('items[0].tabs.a', 'items; default; ');
+    testConfig('items[0].tabs.visible', 'items; default; ');
+    testConfig('items[0].tabs[0]', 'items; default; ');
+    testConfig('items[0].tabs[0].visible', 'items; default; ');
+    testConfig('items[0].tabs[0].items', 'items; default; ');
+    testConfig('items[0].tabs[0].formData', 'items; default; ');
+    testConfig('items[0].tabs[0].items[0]', 'items; default; ');
+
+    testConfig('hint.items', 'default; ');
+    testConfig('hint.items.', 'default; ');
+    testConfig('hint.items.a', 'default; ');
+    testConfig('hint.items[0]', 'default; ');
+    testConfig('hint.items[0].visible', 'default; ');
+
+    testConfig('hint.formData', 'default; ');
+    testConfig('hint.formData.a', 'default; ');
+
+    testConfig('formData_items', 'default; ');
+    testConfig('formData_items.', 'items; default; ');
+    testConfig('xxx_formData_xxx', 'default; ');
+    testConfig('xxx_formData_xxx.', 'formData; ');
+    testConfig('xxx_items_xxx', 'default; ');
+    testConfig('xxx_items_xxx.', 'items; default; ');
+});
+
+QUnit.test('Keep validation summary in an item with Form in its template', function(assert) {
+    const $testContainer = $('#form');
+
+    $testContainer.dxForm({
+        showValidationSummary: true,
+        items: [{
+            template: () => {
+                return $('<div></div>').dxForm({
+                    showValidationSummary: true,
+                    items: []
+                });
+            }
+        }]
+    });
+
+    assert.strictEqual($testContainer.find('.' + FORM_VALIDATION_SUMMARY).length, 2, 'FORM_VALIDATION_SUMMARY');
+});
 
 QUnit.module('Tabs', {
     beforeEach: function() {
@@ -546,7 +848,30 @@ QUnit.test('items aren\'t tiny', function(assert) {
                     }]
             }]
     });
-    assert.ok(testContainer.find('.dx-multiview-item .dx-textbox').first().width() / testContainer.width() > 0.5, 'Editors are not tiny');
+    assert.ok(getWidth(testContainer.find('.dx-multiview-item .dx-textbox').first()) / getWidth(testContainer) > 0.5, 'Editors are not tiny');
+});
+
+QUnit.test('Show scroll buttons in tabpanel', function(assert) {
+    const $testContainer = $('#form');
+    $testContainer.width(250);
+
+    $testContainer.dxForm({
+        items: [
+            {
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    showNavButtons: true,
+                },
+                tabs: [
+                    { title: 'tabbed 1111111111111' },
+                    { title: 'tabbed 2222222222222' },
+                ]
+            }
+        ]
+    });
+
+    assert.strictEqual($testContainer.find('.dx-tabs-nav-button').length, 2, 'tabPanelNavButtons.length');
+    assert.strictEqual($testContainer.find('.dx-tabs-scrollable').length, 1, 'tabPanelNavButtons.length');
 });
 
 QUnit.test('Render tabs when formData is changed', function(assert) {
@@ -660,16 +985,16 @@ QUnit.test('Check align labels', function(assert) {
 
     $layoutManager = $layoutManagers.eq(0);
     $labelTexts = findLabelTextsInColumn($layoutManager, 0);
-    assert.roughEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 1, 'col 1');
+    assert.roughEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)), 1, 'col 1');
 
     $layoutManager = $layoutManagers.eq(1);
     $labelTexts = findLabelTextsInColumn($layoutManager, 0);
     labelWidth = getLabelWidth($layoutManager, form, 'Address room:');
-    assert.roughEqual($labelTexts.eq(0).width(), labelWidth, 1, 'tab 1 col 1');
+    assert.roughEqual(getWidth($labelTexts.eq(0)), labelWidth, 1, 'tab 1 col 1');
 
     $labelTexts = findLabelTextsInColumn($layoutManager, 1);
     labelWidth = getLabelWidth($layoutManager, form, 'Address house:');
-    assert.roughEqual($labelTexts.eq(1).width(), labelWidth, 1, 'tab 1 col 2');
+    assert.roughEqual(getWidth($labelTexts.eq(1)), labelWidth, 1, 'tab 1 col 2');
 
     testContainer.find('.dx-tabpanel').dxTabPanel('instance').option('selectedIndex', 1);
     this.clock.tick();
@@ -678,11 +1003,11 @@ QUnit.test('Check align labels', function(assert) {
     $layoutManager = $layoutManagers.eq(3);
     $labelTexts = findLabelTextsInColumn($layoutManager, 0);
     labelWidth = getLabelWidth($layoutManager, form, 'First Name:');
-    assert.roughEqual($labelTexts.eq(0).width(), labelWidth, 1, 'tab 2 col 1');
+    assert.roughEqual(getWidth($labelTexts.eq(0)), labelWidth, 1, 'tab 2 col 1');
 
     $labelTexts = findLabelTextsInColumn($layoutManager, 1);
     labelWidth = getLabelWidth($layoutManager, form, 'Last Name:');
-    assert.roughEqual($labelTexts.eq(0).width(), labelWidth, 1, 'tab 2 col 2');
+    assert.roughEqual(getWidth($labelTexts.eq(0)), labelWidth, 1, 'tab 2 col 2');
 });
 
 QUnit.test('Check align labels when layout is changed by default_T306106', function(assert) {
@@ -733,7 +1058,7 @@ QUnit.test('Check align labels when layout is changed by default_T306106', funct
     $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'Address house:');
     for(i = 0; i < 4; i++) {
-        labelContentWidth = $labelsContent.eq(i).width();
+        labelContentWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelContentWidth, labelWidth, 1, 'tab 1, item ' + i);
     }
@@ -746,7 +1071,7 @@ QUnit.test('Check align labels when layout is changed by default_T306106', funct
     $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'First Name:');
     for(i = 0; i < 2; i++) {
-        labelContentWidth = $labelsContent.eq(i).width();
+        labelContentWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelContentWidth, labelWidth, 1, 'tab 2, item ' + i);
     }
@@ -800,7 +1125,7 @@ QUnit.test('Check align labels when layout is changed_T306106', function(assert)
     $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'Address house:');
     for(i = 0; i < 4; i++) {
-        labelContentWidth = $labelsContent.eq(i).width();
+        labelContentWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelContentWidth, labelWidth, 1, 'tab 1, item ' + i);
     }
@@ -813,7 +1138,7 @@ QUnit.test('Check align labels when layout is changed_T306106', function(assert)
     $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'First Name:');
     for(i = 0; i < 2; i++) {
-        labelContentWidth = $labelsContent.eq(i).width();
+        labelContentWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelContentWidth, labelWidth, 1, 'tab 2, item ' + i);
     }
@@ -866,6 +1191,51 @@ QUnit.test('Update editorOptions of an editor inside the tab', function(assert) 
     assert.equal(form.getEditor('firstName').option('disabled'), false, '\'disabled\' option was successfully changed');
 });
 
+QUnit.test('Update layout inside a tab (T1040296)', function(assert) {
+    const testContainer = $('#form');
+
+    const form = testContainer.dxForm({
+        deferRendering: false,
+        items: [
+            {
+                itemType: 'tabbed',
+                tabPanelOptions: { 'deferRendering': false },
+                tabs: [
+                    {
+                        title: 'General',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [
+                                    { dataField: 'id', visible: false },
+                                    { itemType: 'group', items: [{ dataField: 'minWidth' }] }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm('instance');
+
+    form.option('items[0].tabs[0].items[0].items[0].visible', true);
+    form.option('items[0].tabs', [
+        {
+            title: 'General',
+            items: [
+                {
+                    itemType: 'group',
+                    items: [
+                        { dataField: 'id', visible: true }, { itemType: 'group', items: [{ dataField: 'minWidth' }] }
+                    ]
+                }
+            ]
+        },
+        { title: 'Window' }
+    ]);
+
+    assert.deepEqual([...document.querySelectorAll('.dx-tab-text')].map(e => e.textContent), ['General', 'Window'], 'dx-tab-text elements');
+});
 
 QUnit.module('Align labels', {
     beforeEach: function() {
@@ -893,8 +1263,8 @@ QUnit.module('Align labels', {
 });
 
 function getLabelWidth(container, form, text) {
-    const $label = form._rootLayoutManager._renderLabel({ text: text, location: 'left' }).appendTo(container);
-    const width = $label.children().first().width();
+    const $label = renderLabel({ text: text, location: 'left' }).appendTo(container);
+    const width = getWidth($label.children().first());
 
     $label.remove();
     return width;
@@ -938,33 +1308,33 @@ QUnit.test('Align labels in column', function(assert) {
     let labelWidth;
 
     for(i = 0; i < 4; i++) {
-        labelWidth = $col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col0 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'First Name:');
     for(i = 0; i < 3; i++) {
-        labelWidth = $col2.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col2.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col1 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'Birth Date:');
     for(i = 0; i < 2; i++) {
-        labelWidth = $col3.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col3.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col2 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'Last Name:');
     for(i = 0; i < 2; i++) {
-        labelWidth = $col4.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col4.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col3 item ' + i);
     }
 
-    assert.equal($('.' + HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Align labels in column when labels text is identical', function(assert) {
@@ -978,7 +1348,7 @@ QUnit.test('Align labels in column when labels text is identical', function(asse
     let i;
 
     for(i = 0; i < 2; i++) {
-        const labelWidth = $col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        const labelWidth = getWidth($col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col0 item ' + i);
     }
@@ -994,7 +1364,7 @@ QUnit.test('Disable alignItemLabels', function(assert) {
 
     const $labelTexts = $('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
 
-    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width());
+    assert.notEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)));
 });
 
 QUnit.test('Disable alignItemLabels in group', function(assert) {
@@ -1018,10 +1388,10 @@ QUnit.test('Disable alignItemLabels in group', function(assert) {
     const $groups = $('.' + FORM_GROUP_CLASS);
     let $labelTexts = $groups.eq(0).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
 
-    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 1');
+    assert.notEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)), 'group 1');
 
     $labelTexts = $groups.eq(1).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
-    assert.equal($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 2');
+    assert.equal(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)), 'group 2');
 });
 
 QUnit.test('Align labels in column when alignItemLabelsInAllGroups is enabled', function(assert) {
@@ -1073,24 +1443,24 @@ QUnit.test('Align labels in column when alignItemLabelsInAllGroups is enabled', 
     $texts = findLabelTextsInColumn($groups, 0);
     labelWidth = getLabelWidth(testContainer, form, 'Address city:');
     for(i = 0; i < 2; i++) {
-        textWidth = $texts.eq(i).width();
+        textWidth = getWidth($texts.eq(i));
 
         assert.roughEqual(textWidth, labelWidth, 1, 'group col 1, col1 item ' + i);
     }
 
     $texts = findLabelTextsInColumn($groups, 1);
-    assert.roughEqual($texts.eq(0).width(), getLabelWidth(testContainer, form, 'Last Name:'), 1, 'group col 1, col2 item 1');
-    assert.roughEqual($texts.eq(1).width(), getLabelWidth(testContainer, form, 'Address street:'), 1, 'group col 1, col2 item 2');
+    assert.roughEqual(getWidth($texts.eq(0)), getLabelWidth(testContainer, form, 'Last Name:'), 1, 'group col 1, col2 item 1');
+    assert.roughEqual(getWidth($texts.eq(1)), getLabelWidth(testContainer, form, 'Address street:'), 1, 'group col 1, col2 item 2');
 
     $texts = findLabelTextsInColumn($groups, 2);
     labelWidth = getLabelWidth(testContainer, form, 'Middle Name:');
-    assert.roughEqual($texts.eq(0).width(), labelWidth, 1, 'group col 1, col3 item 1');
+    assert.roughEqual(getWidth($texts.eq(0)), labelWidth, 1, 'group col 1, col3 item 1');
 
     $groups = form._getGroupElementsInColumn(testContainer, 1);
     $texts = findLabelTextsInColumn($groups, 0);
     labelWidth = getLabelWidth(testContainer, form, 'Address room:');
     for(i = 0; i < 2; i++) {
-        textWidth = $texts.eq(i).width();
+        textWidth = getWidth($texts.eq(i));
 
         assert.roughEqual(textWidth, labelWidth, 1, 'group col 2, col1 item ' + i);
     }
@@ -1098,7 +1468,7 @@ QUnit.test('Align labels in column when alignItemLabelsInAllGroups is enabled', 
     $texts = findLabelTextsInColumn($groups, 1);
     labelWidth = getLabelWidth(testContainer, form, 'Address house:');
     for(i = 0; i < 2; i++) {
-        textWidth = $texts.eq(i).width();
+        textWidth = getWidth($texts.eq(i));
 
         assert.roughEqual(textWidth, labelWidth, 1, 'group col , col2 item ' + i);
     }
@@ -1146,10 +1516,10 @@ QUnit.test('Align labels in column when alignItemLabelsInAllGroups is disabled',
     let $groups;
 
     $groups = form._getGroupElementsInColumn(testContainer, 0);
-    assert.notEqual(findLabelTextsInColumn($groups.eq(0), 0).eq(0).width(), findLabelTextsInColumn($groups.eq(1), 0).eq(0).width(), 'compare group1 with group2');
+    assert.notEqual(getWidth(findLabelTextsInColumn($groups.eq(0), 0).eq(0)), getWidth(findLabelTextsInColumn($groups.eq(1), 0).eq(0)), 'compare group1 with group2');
 
     $groups = form._getGroupElementsInColumn(testContainer, 1);
-    assert.notEqual(findLabelTextsInColumn($groups.eq(0), 0).eq(0).width(), findLabelTextsInColumn($groups.eq(1), 0).eq(0).width(), 'compare group1 with group2');
+    assert.notEqual(getWidth(findLabelTextsInColumn($groups.eq(0), 0).eq(0)), getWidth(findLabelTextsInColumn($groups.eq(1), 0).eq(0)), 'compare group1 with group2');
 });
 
 QUnit.test('Align labels in columns when there are rows', function(assert) {
@@ -1199,14 +1569,14 @@ QUnit.test('Align labels in columns when there are rows', function(assert) {
     let labelWidth;
 
     for(i = 0; i < 2; i++) {
-        labelWidth = $col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col0 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'Field four:');
     for(i = 0; i < 2; i++) {
-        labelWidth = $col2.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = getWidth($col2.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first());
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col2 item ' + i);
     }
@@ -1238,6 +1608,31 @@ QUnit.test('Change option after group rendered (check for cycling template rende
     const $fieldItemWidgets = $formContainer.find('.' + FIELD_ITEM_CONTENT_CLASS);
 
     assert.equal($fieldItemWidgets.length, 3, 'Correct number of a widgets');
+});
+
+QUnit.test('template should be applied to default field if items[].template option has been changed (T1085831)', function(assert) {
+    const $formContainer = $('#form').dxForm({
+        formData: {
+            firstName: 'John',
+        },
+        items: [
+            {
+                itemType: 'group',
+                caption: 'Personal',
+                items: [
+                    {
+                        dataField: 'firstName'
+                    },
+                ]
+            }]
+    });
+
+    const $customFieldTemplate = $('<div>').text('template').addClass('custom-field-template');
+
+    $formContainer.dxForm('instance').option('items[0].items[0].template', () => $customFieldTemplate);
+
+    assert.equal($formContainer.find('.custom-field-template').length, 1, 'custom template has been applied');
+    assert.equal($formContainer.find('.custom-field-template').text(), 'template', 'template text is correct');
 });
 
 QUnit.test('Align labels when layout is changed in responsive box_T306106', function(assert) {
@@ -1272,12 +1667,12 @@ QUnit.test('Align labels when layout is changed in responsive box_T306106', func
     this.updateScreenSize(500);
 
     for(i = 0; i < 11; i++) {
-        const labelWidth = $labelsContent.eq(i).width();
+        const labelWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'item ' + i);
     }
 
-    assert.equal($('.' + HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Align labels when layout is changed when small window size by default_T306106', function(assert) {
@@ -1312,12 +1707,12 @@ QUnit.test('Align labels when layout is changed when small window size by defaul
     let i;
 
     for(i = 0; i < 11; i++) {
-        const labelWidth = $labelsContent.eq(i).width();
+        const labelWidth = getWidth($labelsContent.eq(i));
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'item ' + i);
     }
 
-    assert.equal($('.' + HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + GET_LABEL_WIDTH_BY_TEXT_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Labels are not aligned when labelLocation is top', function(assert) {
@@ -1330,7 +1725,7 @@ QUnit.test('Labels are not aligned when labelLocation is top', function(assert) 
     }).dxForm('instance');
 
     const $labelTexts = $(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width());
+    assert.notEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)));
 });
 
 QUnit.test('Labels are not aligned when labelLocation is top with the groups', function(assert) {
@@ -1357,10 +1752,10 @@ QUnit.test('Labels are not aligned when labelLocation is top with the groups', f
     const $groups = $(`.${FORM_GROUP_CLASS}`);
     let $labelTexts = $groups.eq(0).find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
 
-    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 1');
+    assert.notEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)), 'group 1');
 
     $labelTexts = $groups.eq(1).find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 2');
+    assert.notEqual(getWidth($labelTexts.eq(0)), getWidth($labelTexts.eq(1)), 'group 2');
 });
 
 QUnit.test('required mark aligned', function(assert) {
@@ -1378,8 +1773,76 @@ QUnit.test('required mark aligned', function(assert) {
 
     $labelsContent.width(200);
 
-    assert.roughEqual($labelsContent.offset().left + $requiredLabel.width(), $requiredMark.offset().left, 0.5, 'position of requared mark is right');
+    assert.roughEqual($labelsContent.offset().left + getWidth($requiredLabel), $requiredMark.offset().left, 0.5, 'position of requared mark is right');
     assert.ok($requiredLabel.position().left < $requiredMark.position().left, 'required mark should be after of the text');
+});
+
+QUnit.test('Align with "" required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: '',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
+});
+
+QUnit.test('Align with " " required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: ' ',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
+});
+
+QUnit.test('Align with "!" required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: '!',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 29, 3, 'textBox.left');
+});
+
+QUnit.test('Align with "×" required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: '×',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 35, 3, 'textBox.left');
 });
 
 QUnit.test('optional mark aligned', function(assert) {
@@ -1395,10 +1858,64 @@ QUnit.test('optional mark aligned', function(assert) {
 
     $labelsContent.width(200);
 
-    assert.roughEqual($labelsContent.offset().left + $optionalLabel.width(), $optionalMark.offset().left, 0.5, 'position of optional mark is right');
+    assert.roughEqual($labelsContent.offset().left + getWidth($optionalLabel), $optionalMark.offset().left, 0.5, 'position of optional mark is right');
     assert.ok($optionalLabel.position().left < $optionalMark.position().left, 'optional mark should be after of the text');
 });
 
+QUnit.module('T986577', () => {
+    function getFormConfig() {
+        return {
+            width: 200,
+            screenByWidth: (_) => { return 'md'; },
+            colCountByScreen: {
+                md: 1
+            },
+            items: [ {
+                label: { text: 'text' },
+                template: function() {
+                    return $('<div></div>').dxToolbar({
+                        multiline: false,
+                        items: [
+                            { text: 'Item1', locateInMenu: 'auto' },
+                            { text: 'Item2', locateInMenu: 'auto' },
+                            { text: 'Item3', locateInMenu: 'auto' }
+                        ]
+                    });
+                }
+            }, {
+                label: { text: 'Very very long text' },
+                editorType: 'dxTextBox'
+            } ]
+        };
+    }
+
+    QUnit.test('Toolbar is rendered inside form. alignItemLabels = false', function(assert) {
+        const resizeEventSpy = sinon.spy(visibilityEventsModule, 'triggerResizeEvent');
+        const $form = $('#form').dxForm(extend({ alignItemLabels: false }, getFormConfig()));
+
+        const resizeEventArg = resizeEventSpy.getCall(0).args[0];
+        assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
+        assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
+        assert.roughEqual(getWidth(resizeEventArg), 164, 5, 'toolbar width is correct');
+        assert.roughEqual(getHeight(resizeEventArg), 36, 1, 'toolbar height is correct');
+
+        resizeEventSpy.restore();
+    });
+
+
+    QUnit.test('Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
+        const resizeEventSpy = sinon.spy(visibilityEventsModule, 'triggerResizeEvent');
+        const $form = $('#form').dxForm(extend({ alignItemLabels: true }, getFormConfig()));
+
+        const resizeEventArg = resizeEventSpy.getCall(0).args[0];
+        assert.equal(resizeEventSpy.called, 1, 'resize is triggered only once');
+        assert.deepEqual(resizeEventArg.get(0), $form.find(`.${TOOLBAR_CLASS}`).get(0), 'element is toolbar');
+        assert.roughEqual(getWidth(resizeEventArg), 72, 5, 'toolbar width is correct');
+        assert.roughEqual(getHeight(resizeEventArg), 36, 1, 'toolbar height is correct');
+
+        resizeEventSpy.restore();
+    });
+});
 
 QUnit.module('Public API', {
     beforeEach: function() {
@@ -1987,6 +2504,42 @@ QUnit.test('The exception is not thrown when option of an unknown item is change
     form.itemOption('lastName', 'cssClass', 'custom-class');
 
     assert.equal(form.$element().find('.custom-class').length, 0, 'custom css class is not found');
+});
+
+QUnit.test('No errors should occur on form reset twice when dxNumberBox is set as item with visible=false (T1146107)', function(assert) {
+    const form = $('#form').dxForm({
+        items: [{
+            itemType: 'group',
+            items: [{
+                editorType: 'dxNumberBox',
+                dataField: 'TestField',
+            }]
+        }],
+    }).dxForm('instance');
+
+    form.itemOption('TestField', 'visible', false);
+
+    form.resetValues();
+    form.resetValues();
+
+    assert.ok(true, 'There are no exceptions');
+});
+
+QUnit.test('The exception is not thrown when tabs property in TabbedItem is not defined (T1151539)', function(assert) {
+    try {
+        $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    deferRendering: false,
+                },
+            }]
+        });
+    } catch(e) {
+        assert.ok(false, e);
+    } finally {
+        assert.ok(true, 'the exception is not thrown');
+    }
 });
 
 [false, true].forEach(useItemOption => {
@@ -2813,6 +3366,102 @@ QUnit.module('visible/visibleIndex', () => {
         assert.equal($inputs_2.eq(0).attr('name'), 'field2', 'inputs_2');
         assert.equal($inputs_2.eq(1).attr('name'), 'field1', 'inputs_2');
     });
+
+    QUnit.test('group.all.visible:false -> group.item1.visible:true,group.item2.visible:false (no visibleIndex), useUpdate=false', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                name: 'group',
+                items: [
+                    { dataField: 'field1', visible: false },
+                    { dataField: 'field2', visible: false } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.itemOption('group.field1', 'visible', true);
+        form.itemOption('group.field2', 'visible', false);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
+    });
+
+    QUnit.test('group.all.visible:false -> group.item1.visible:true,group.item2.visible:false (no visibleIndex), useUpdate=true', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                name: 'group',
+                items: [
+                    { dataField: 'field1', visible: false },
+                    { dataField: 'field2', visible: false } ]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.beginUpdate();
+        form.itemOption('group.field1', 'visible', true);
+        form.itemOption('group.field2', 'visible', false);
+        form.endUpdate();
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
+    });
+
+    QUnit.test('tabbedGroup.all.visible:false -> tabbedGroup.item1.visible:true, tabbedGroup.item2.visible:false (no visibleIndex), useUpdate=false', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: false },
+                        { dataField: 'field2', visible: false }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.itemOption('tabbed.tab.field1', 'visible', true);
+        form.itemOption('tabbed.tab.field2', 'visible', false);
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
+    });
+
+    QUnit.test('tabbedGroup.all.visible:false -> tabbedGroup.item1.visible:true, tabbedGroup.item2.visible:false (no visibleIndex), useUpdate=true', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'tabbed',
+                name: 'tabbed',
+                tabs: [{
+                    title: 'tab', items: [
+                        { dataField: 'field1', visible: false },
+                        { dataField: 'field2', visible: false }]
+                }]
+            }]
+        }).dxForm('instance');
+
+        const $inputs = form.$element().find('input');
+        assert.equal($inputs.length, 0);
+
+        form.beginUpdate();
+        form.itemOption('tabbed.tab.field1', 'visible', true);
+        form.itemOption('tabbed.tab.field2', 'visible', false);
+        form.endUpdate();
+
+        const $inputs_2 = form.$element().find('input');
+        assert.equal($inputs_2.length, 1);
+        assert.equal($inputs_2.eq(0).attr('name'), 'field1');
+    });
 });
 
 QUnit.test('resetValues - old test', function(assert) {
@@ -2957,7 +3606,16 @@ const formatTestValue = value => Array.isArray(value) ? '[]' : value;
     });
 });
 
-QUnit.module('Adaptivity');
+QUnit.module('Adaptivity', {
+    beforeEach: function() {
+        const that = this;
+        that.clock = sinon.useFakeTimers();
+    },
+
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
 
 QUnit.test('One column screen should be customizable with screenByWidth option on init', function(assert) {
     const $form = $('#form');
@@ -3331,6 +3989,7 @@ QUnit.test('Form refreshes only one time on dimension changed with group layout'
 
     $form.width(100);
     resizeCallbacks.fire();
+    this.clock.tick();
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout one time');
 });
 
@@ -3356,8 +4015,157 @@ QUnit.test('Form redraw layout when colCount is \'auto\' and an calculated colCo
 
     $form.width(100);
     resizeCallbacks.fire();
+    this.clock.tick();
 
     assert.equal(refreshSpy.callCount, 1, 'form has been redraw layout');
+});
+
+function getColsCountFromDOM($form) {
+    let result = -1;
+
+    const $lastCol = $form.find(`.${LAST_COL_CLASS}`);
+    [1, 2, 3, 4].forEach(colCount => {
+        $lastCol.each((_, $item) => {
+            if($($item).hasClass(`dx-col-${colCount - 1}`)) {
+                result = colCount;
+            }
+        });
+    });
+
+    return result;
+}
+
+QUnit.test('group colCountByScreen property change should update layout', function(assert) {
+    const form = $('#form').dxForm({
+        screenByWidth: () => 'md',
+        items: [{
+            itemType: 'group',
+            colCountByScreen: { md: 1 },
+            items: ['name', 'email']
+        }],
+    }).dxForm('instance');
+
+    form.option('items[0].colCountByScreen.md', 2);
+
+    assert.strictEqual(getColsCountFromDOM(form.$element()), 2);
+});
+
+QUnit.test('nested group colCountByScreen property change should update layout', function(assert) {
+    const form = $('#form').dxForm({
+        screenByWidth: () => 'md',
+        items: [{
+            itemType: 'group',
+            items: [{
+                itemType: 'group',
+                colCountByScreen: { md: 2 },
+                items: ['Phone', 'Email'],
+            }],
+        }],
+    }).dxForm('instance');
+
+    form.option('items[0].items[0].colCountByScreen.md', 1);
+
+    assert.strictEqual(getColsCountFromDOM(form.$element()), 1);
+});
+
+QUnit.test('tab colCountByScreen property change should update layouts', function(assert) {
+    const form = $('#form').dxForm({
+        screenByWidth: () => 'md',
+        items: [{
+            itemType: 'tabbed',
+            tabs: [{
+                items: ['Phone', 'Email'],
+                colCountByScreen: { md: 2 },
+            }],
+        }],
+    }).dxForm('instance');
+
+    form.option('items[0].tabs[0].colCountByScreen.md', 1);
+
+    assert.strictEqual(getColsCountFromDOM(form.$element()), 1);
+});
+
+QUnit.test('colCountByScreen property change with itemOption should update layout', function(assert) {
+    const form = $('#form').dxForm({
+        screenByWidth: () => 'md',
+        items: [{
+            itemType: 'tabbed',
+            name: 'groupName',
+            tabs: [{
+                name: 'tabName',
+                items: ['Phone', 'Email'],
+                colCountByScreen: { md: 1 },
+            }],
+        }],
+    }).dxForm('instance');
+
+    form.itemOption('groupName.tabName', 'colCountByScreen.md', 2);
+
+    assert.strictEqual(getColsCountFromDOM(form.$element()), 2);
+});
+
+[
+    { screenWidth: 1500, expectedSize: 'lg' },
+    { screenWidth: 1000, expectedSize: 'md' },
+    { screenWidth: 900, expectedSize: 'sm' },
+    { screenWidth: 700, expectedSize: 'xs' },
+].forEach((testConfig) => {
+    QUnit.test(`Default implementation of screenByWidth. Screen size: ${testConfig.screenWidth}`, function(assert) {
+        const getDocumentElementStub = sinon.stub(domAdapter, 'getDocumentElement').returns({
+            clientWidth: testConfig.screenWidth
+        });
+
+        const config = {
+            colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
+            items: [
+                { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }
+            ]
+        };
+
+        const $form = $('#form').dxForm(config);
+
+        const colsCount = getColsCountFromDOM($form);
+        assert.equal(colsCount, config.colCountByScreen[testConfig.expectedSize], 'form has correct columns count');
+        getDocumentElementStub.restore();
+    });
+});
+
+['globalOption', 'instanceOption'].forEach((optionType) => {
+    QUnit.test(`Setting screen by width. Use ${optionType}`, function(assert) {
+        const defaultCustomRules = Form._classCustomRules;
+
+        const globalOptionStub = sinon.stub().returns('xs');
+        const instanceOptionStub = sinon.stub().returns('xs');
+        const defaultFunctionStub = sinon.spy(windowModule, 'defaultScreenFactorFunc');
+
+        const config = {
+            colCountByScreen: { xs: 1, sm: 2, md: 3, lg: 4 },
+            items: [
+                { dataField: 'field1' }, { dataField: 'field2' }, { dataField: 'field3' }, { dataField: 'field4' }
+            ]
+        };
+
+        if(optionType === 'globalOption') {
+            Form.defaultOptions({
+                options: {
+                    screenByWidth: globalOptionStub
+                }
+            });
+        } else if(optionType === 'instanceOption') {
+            config['screenByWidth'] = instanceOptionStub;
+        }
+
+        const $form = $('#form').dxForm(config);
+        assert.equal(globalOptionStub.called, optionType === 'globalOption', 'global function is called');
+        assert.equal(instanceOptionStub.called, optionType === 'instanceOption', 'instance function is called');
+        assert.equal(defaultFunctionStub.called, 0, 'default function is called');
+
+        const colsCount = getColsCountFromDOM($form);
+        assert.equal(colsCount, 1, 'form has correct columns count');
+
+        Form._classCustomRules = defaultCustomRules;
+        defaultFunctionStub.restore();
+    });
 });
 
 QUnit.module('Form when rtlEnabled is true');
@@ -3449,3 +4257,103 @@ QUnit.test('Should not skip `optionChanged` event handler that has been added on
     });
 });
 
+QUnit.test('Form set the right class to the root element for different global editorStylingMode option', function(assert) {
+    const stylingModes = ['filled', 'underlined', 'outlined'];
+
+    stylingModes.forEach(mode => {
+        const shouldSetClass = mode === 'underlined';
+
+        config({ editorStylingMode: mode });
+        $('#form').dxForm({});
+
+        assert.equal(
+            $('#form').hasClass(FORM_UNDERLINED_CLASS),
+            shouldSetClass,
+            `${FORM_UNDERLINED_CLASS} is ${shouldSetClass ? '' : 'not'} set`);
+
+        $('#form').dxForm('instance').dispose();
+        config({ editorStylingMode: null });
+    });
+});
+
+QUnit.test('Form item stylingMode option should rewrite global editorStylingMode option (T1044604)', function(assert) {
+    const stylingModes = [null, 'outlined', 'filled', 'underlined' ];
+    const defaultStylingMode = TextEditorBase.prototype._getDefaultOptions().stylingMode;
+
+
+    stylingModes.forEach(globalStylingMode => {
+        stylingModes.forEach(editorStylingMode => {
+            if(globalStylingMode) {
+                config({ editorStylingMode: globalStylingMode });
+            }
+
+            $('#form').dxForm({
+                formData: { field1: '', field2: '' },
+                items: [
+                    { dataField: 'field1' },
+                    { dataField: 'field2', editorOptions: { stylingMode: editorStylingMode } }
+                ]
+            });
+
+            function getExpectedClass(mode) {
+                return `dx-editor-${mode ? mode : defaultStylingMode}`;
+            }
+
+            const firstEditorExpectedClass = getExpectedClass(globalStylingMode);
+            const secondEditorExpectedClass = getExpectedClass(editorStylingMode || globalStylingMode);
+
+            const form = $('#form').dxForm('instance');
+
+            assert.ok($(form.getEditor('field1').element()).hasClass(firstEditorExpectedClass), `default editor (global=${globalStylingMode}), editor not set`);
+            assert.ok($(form.getEditor('field2').element()).hasClass(secondEditorExpectedClass), `custom editor (global=${globalStylingMode}, editor=${editorStylingMode})`);
+
+            form.dispose();
+            config({ editorStylingMode: null });
+        });
+    });
+});
+
+QUnit.test('TagBox.SelectionChanged is raised once if formData is wrapped into a recursive Proxy', function(assert) {
+    function wrapToRecursiveProxy(target) {
+        const handler = {
+            get: function(obj, prop) {
+                const propValue = obj[prop];
+                return (propValue !== null && typeof propValue === 'object') ? new Proxy(propValue, handler) : propValue;
+            },
+        };
+        return new Proxy(target, handler);
+    }
+
+    const $testContainer = $('#form');
+    const formData = { arrayField: ['item1', 'item2'] };
+    const watchCallbacks = [];
+    let onSelectionChangedCounter = 0;
+
+    const form = $testContainer.dxForm({
+        formData: wrapToRecursiveProxy(formData),
+        items: [
+            {
+                dataField: 'arrayField',
+                editorType: 'dxTagBox',
+                editorOptions: { dataSource: ['item1', 'item2'], onSelectionChanged: () => onSelectionChangedCounter++ }
+            }
+        ],
+        integrationOptions: {
+            watchMethod: function(fn, callback, options, __debug) {
+                if(__debug && __debug.createWatcherDataField === 'arrayField') {
+                    watchCallbacks.push(callback);
+                }
+                return function() {};
+            },
+        },
+    }).dxForm('instance');
+
+    onSelectionChangedCounter = 0;
+    form.getEditor('arrayField').option('value', ['item1']);
+
+    watchCallbacks.forEach(callback => callback());
+
+    assert.deepEqual(form.getEditor('arrayField').option('value'), ['item1'], 'tagBox.option(value)');
+    assert.deepEqual(formData, { arrayField: ['item1'] }, 'formData');
+    assert.strictEqual(onSelectionChangedCounter, 1, 'onSelectionChangedCounter');
+});

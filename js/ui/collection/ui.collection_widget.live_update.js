@@ -1,9 +1,9 @@
 import $ from '../../core/renderer';
 import CollectionWidget from './ui.collection_widget.edit';
 import { extend } from '../../core/utils/extend';
-import { isDefined } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
 import { update, insert, indexByKey } from '../../data/array_utils';
-import dataUtils from '../../data/utils';
+import { keysEqual } from '../../data/utils';
 import { when } from '../../core/utils/deferred';
 import { findChanges } from '../../core/utils/array_compare';
 import domAdapter from '../../core/dom_adapter';
@@ -22,8 +22,9 @@ export default CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
 
         this._customizeStoreLoadOptions = (e) => {
-            const dataSource = this._dataSource;
-            if(dataSource && !dataSource.isLoaded()) {
+            const dataController = this._dataController;
+
+            if(dataController.getDataSource() && !this._dataController.isLoaded()) {
                 this._correctionIndex = 0;
             }
             if(this._correctionIndex && e.storeLoadOptions) {
@@ -31,7 +32,7 @@ export default CollectionWidget.inherit({
             }
         },
 
-        this._dataSource && this._dataSource.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
+        this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
     },
 
     reload: function() {
@@ -50,7 +51,7 @@ export default CollectionWidget.inherit({
         this.itemElements().each((_, item) => {
             const $item = $(item);
             const itemData = this._getItemData($item);
-            if(keyExpr ? dataUtils.keysEqual(keyExpr, this.keyOf(itemData), key) : this._isItemEquals(itemData, key)) {
+            if(keyExpr ? keysEqual(keyExpr, this.keyOf(itemData), key) : this._isItemEquals(itemData, key)) {
                 result = $item;
                 return false;
             }
@@ -83,6 +84,28 @@ export default CollectionWidget.inherit({
         return this._isItemEquals(item1, item2);
     },
 
+    _shouldAddNewGroup: function(changes, items) {
+        let result = false;
+        if(this.option('grouped')) {
+            if(!changes.length) {
+                result = true;
+            }
+            each(changes, (i, change) => {
+                if(change.type === 'insert') {
+                    result = true;
+                    each(items, (_, item) => {
+                        if(change.data.key !== undefined && change.data.key === item.key) {
+                            result = false;
+                            return false;
+                        }
+                    });
+                }
+            });
+        }
+
+        return result;
+    },
+
     _partialRefresh: function() {
         if(this.option('repaintChangesOnly')) {
             const keyOf = (data) => {
@@ -92,7 +115,7 @@ export default CollectionWidget.inherit({
                 return this.keyOf(data);
             };
             const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemStrictEquals.bind(this));
-            if(result && this._itemsCache.length) {
+            if(result && this._itemsCache.length && !this._shouldAddNewGroup(result, this._itemsCache)) {
                 this._modifyByChanges(result, true);
                 this._renderEmptyMessage();
                 return true;
@@ -123,7 +146,7 @@ export default CollectionWidget.inherit({
     },
 
     _dispose: function() {
-        this._dataSource && this._dataSource.off('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
+        this._dataController.off('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
         this.callBase();
     },
 
@@ -143,10 +166,18 @@ export default CollectionWidget.inherit({
     _insertByChange: function(keyInfo, items, change, isPartialRefresh) {
         when(isPartialRefresh || insert(keyInfo, items, change.data, change.index)).done(() => {
             this._beforeItemElementInserted(change);
-            this._renderItem(isDefined(change.index) ? change.index : items.length, change.data);
+
+            const $itemContainer = this._getItemContainer(change.data);
+
+            this._renderItem(change.index ?? items.length, change.data, $itemContainer);
+
             this._afterItemElementInserted();
             this._correctionIndex++;
         });
+    },
+
+    _getItemContainer: function(changeData) {
+        return this._itemContainer();
     },
 
     _updateSelectionAfterRemoveByChange: function(removeIndex) {
@@ -196,9 +227,9 @@ export default CollectionWidget.inherit({
     _modifyByChanges: function(changes, isPartialRefresh) {
         const items = this._editStrategy.itemsGetter();
         const keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
-        const dataSource = this._dataSource;
-        const paginate = dataSource && dataSource.paginate();
-        const group = dataSource && dataSource.group();
+        const dataController = this._dataController;
+        const paginate = dataController.paginate();
+        const group = dataController.group();
 
         if(paginate || group) {
             changes = changes.filter(item => item.type !== 'insert' || item.index !== undefined);

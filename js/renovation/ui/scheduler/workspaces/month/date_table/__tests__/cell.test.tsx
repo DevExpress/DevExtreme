@@ -36,13 +36,6 @@ describe('MonthDateTableCell', () => {
         .toBe(true);
     });
 
-    it('should spread restAttributes', () => {
-      const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(cell.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should render text correctly', () => {
       const cell = render({});
 
@@ -69,12 +62,14 @@ describe('MonthDateTableCell', () => {
           isFirstGroupCell,
           isLastGroupCell,
           dataCellTemplate,
+          isFocused: true,
+          isSelected: true,
         },
         contentTemplateProps,
       });
 
       expect(cell.props())
-        .toMatchObject({
+        .toEqual({
           groups,
           groupIndex,
           index,
@@ -85,6 +80,10 @@ describe('MonthDateTableCell', () => {
           endDate,
           text,
           contentTemplateProps,
+          isFocused: true,
+          isSelected: true,
+          children: expect.anything(),
+          className: undefined,
         });
     });
   });

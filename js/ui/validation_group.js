@@ -47,7 +47,7 @@ class ValidationGroup extends DOMComponent {
             Validator.getInstance($(validatorContainer))._initGroupRegistration();
         });
         $element.find(`.${VALIDATION_SUMMARY_CLASS}`).each(function(_, summaryContainer) {
-            ValidationSummary.getInstance($(summaryContainer))._initGroupRegistration();
+            ValidationSummary.getInstance($(summaryContainer)).refreshValidationGroup();
         });
         super._initMarkup();
     }

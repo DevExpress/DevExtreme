@@ -1,4 +1,4 @@
-import '../../../testing/content/orders.js';
+import '../../content/orders.js';
 import 'data/odata/store';
 
 import $ from 'jquery';
@@ -221,7 +221,7 @@ QUnit.module('Array Local Store', moduleConfig, () => {
         assert.notOk(doneCalled, 'load is not completed');
 
         // act
-        clock.tick();
+        clock.tick(10);
 
         // assert
         assert.ok(doneCalled, 'load is completed');

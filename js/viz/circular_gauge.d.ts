@@ -1,35 +1,99 @@
 import {
+    UserDefinedElement,
+} from '../core/element';
+
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
+import {
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo,
+} from './core/base_widget';
+
+import {
+    template,
+} from '../core/templates/template';
+
+import {
     BaseGauge,
     BaseGaugeOptions,
     BaseGaugeRangeContainer,
     BaseGaugeScale,
     BaseGaugeScaleLabel,
-    GaugeIndicator
+    GaugeIndicator,
+    TooltipInfo,
 } from './gauges/base_gauge';
 
+/** @public */
+export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
+/** @public */
+export type CircularGaugeLabelOverlap = 'first' | 'last';
+
+/** @public */
+export type DisposingEvent = EventInfo<dxCircularGauge>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxCircularGauge>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxCircularGauge>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxCircularGauge> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = FileSavingEventInfo<dxCircularGauge>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxCircularGauge> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxCircularGauge>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxCircularGauge> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = EventInfo<dxCircularGauge> & TooltipInfo;
+
+/** @public */
+export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ * @docid
+ */
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     geometry?: {
       /**
        * @docid
-       * @prevFileNamespace DevExpress.viz
        * @default 315
        */
-      endAngle?: number,
+      endAngle?: number;
       /**
        * @docid
-       * @prevFileNamespace DevExpress.viz
        * @default 225
        */
-      startAngle?: number
+      startAngle?: number;
     };
     /**
      * @docid
-     * @prevFileNamespace DevExpress.viz
+     * @default undefined
+     * @type_function_return string|SVGElement|jQuery
+     * @public
+     */
+    centerTemplate?: template | ((component: dxCircularGauge, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
+    /**
+     * @docid
      * @type object
      * @public
      */
@@ -37,72 +101,72 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
     /**
      * @docid
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     scale?: dxCircularGaugeScale;
     /**
      * @docid
      * @inheritAll
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     subvalueIndicator?: GaugeIndicator;
     /**
      * @docid
      * @inheritAll
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     valueIndicator?: GaugeIndicator;
 }
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
     /**
      * @docid dxCircularGaugeOptions.rangeContainer.orientation
-     * @type Enums.CircularGaugeElementOrientation
      * @default 'outside'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    orientation?: 'center' | 'inside' | 'outside';
+    orientation?: CircularGaugeElementOrientation;
     /**
      * @docid dxCircularGaugeOptions.rangeContainer.width
      * @default 5
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     width?: number;
 }
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxCircularGaugeScale extends BaseGaugeScale {
     /**
      * @docid dxCircularGaugeOptions.scale.label
      * @type object
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     label?: dxCircularGaugeScaleLabel;
     /**
      * @docid dxCircularGaugeOptions.scale.orientation
-     * @type Enums.CircularGaugeElementOrientation
      * @default 'outside'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    orientation?: 'center' | 'inside' | 'outside';
+    orientation?: CircularGaugeElementOrientation;
 }
+/**
+ * @docid
+ * @namespace DevExpress.viz
+ */
 export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
      * @docid dxCircularGaugeOptions.scale.label.hideFirstOrLast
-     * @type Enums.GaugeOverlappingBehavior
      * @default 'last'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
-    hideFirstOrLast?: 'first' | 'last';
+    hideFirstOrLast?: CircularGaugeLabelOverlap;
     /**
      * @docid dxCircularGaugeOptions.scale.label.indentFromTick
      * @default 10
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     indentFromTick?: number;
@@ -110,26 +174,86 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
 /**
  * @docid
  * @inherits BaseGauge
- * @module viz/circular_gauge
- * @export default
- * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxCircularGauge extends BaseGauge {
-    constructor(element: Element, options?: dxCircularGaugeOptions)
-    constructor(element: JQuery, options?: dxCircularGaugeOptions)
-}
+export default class dxCircularGauge extends BaseGauge<dxCircularGaugeOptions> { }
 
-declare global {
-interface JQuery {
-    dxCircularGauge(): JQuery;
-    dxCircularGauge(options: "instance"): dxCircularGauge;
-    dxCircularGauge(options: string): any;
-    dxCircularGauge(options: string, ...params: any[]): any;
-    dxCircularGauge(options: dxCircularGaugeOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxCircularGaugeOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxCircularGaugeOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxCircularGaugeOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onDisposing
+ * @type_function_param1 e:{viz/circular_gauge:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onDrawn
+ * @type_function_param1 e:{viz/circular_gauge:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onExported
+ * @type_function_param1 e:{viz/circular_gauge:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onExporting
+ * @type_function_param1 e:{viz/circular_gauge:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onFileSaving
+ * @type_function_param1 e:{viz/circular_gauge:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/circular_gauge:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onInitialized
+ * @type_function_param1 e:{viz/circular_gauge:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onOptionChanged
+ * @type_function_param1 e:{viz/circular_gauge:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onTooltipHidden
+ * @type_function_param1 e:{viz/circular_gauge:TooltipHiddenEvent}
+ */
+onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxCircularGaugeOptions.onTooltipShown
+ * @type_function_param1 e:{viz/circular_gauge:TooltipShownEvent}
+ */
+onTooltipShown?: ((e: TooltipShownEvent) => void);
+};
+///#ENDDEBUG

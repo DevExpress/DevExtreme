@@ -10,6 +10,8 @@ import devices from 'core/devices';
 
 const { test, module } = QUnit;
 
+const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
+
 QUnit.testStart(() => {
     $('#qunit-fixture').html('<div id=\'dateBox\'></div>');
 });
@@ -49,11 +51,7 @@ const simulateIMEInput = function(eventsData) {
         })
     }));
 
-    this.$input.trigger($.Event('compositionend', {
-        originalEvent: $.Event('compositionend', {
-            data: eventsData.compositionEndData // for msie
-        })
-    }));
+    this.$input.trigger($.Event('compositionend'));
 };
 
 const setupModule = {
@@ -460,6 +458,21 @@ module('Keyboard navigation', setupModule, () => {
         }.bind(this));
     });
 
+    test('Up/down arrow press after mask part focus using click should not revert previous changes of other mask part (T1106659)', function(assert) {
+        this.instance.option('displayFormat', 'shortdate');
+
+        this.keyboard.press('up');
+        this.keyboard.caret(4);
+        this.$input.trigger('dxclick');
+        this.keyboard.press('up');
+
+        const increasedDateText = '11/11/2012';
+        assert.strictEqual(this.$input.val(), increasedDateText, 'input text is changed correctly');
+
+        this.$input.change();
+        assert.deepEqual(this.instance.option('value'), new Date(increasedDateText), 'value is changed correctly');
+    });
+
     test('Hours switching should not switch am/pm', function(assert) {
         this.instance.option('displayFormat', 'h a');
         this.instance.option('value', new Date(2012, 3, 4, 23, 55, 0));
@@ -534,10 +547,6 @@ module('Keyboard navigation', setupModule, () => {
 
         this.keyboard.press('enter');
         assert.strictEqual(this.instance.option('value').getMonth(), 10, 'month was changed in the value');
-
-        this.keyboard.press('down');
-        assert.strictEqual(this.$input.val(), 'November 9 2012', 'text was changed');
-        assert.strictEqual(this.instance.option('value').getDate(), 10, 'day did not changed in the value after commit');
     });
 
     test('Mask should not catch arrows on opened dateBox', function(assert) {
@@ -663,12 +672,26 @@ module('Keyboard navigation', setupModule, () => {
 
     test('enter should clear search value', function(assert) {
         this.keyboard.type('1');
+
         assert.strictEqual(this.instance.option('text'), 'January 10 2012', 'text has been changed');
 
         this.keyboard.press('enter');
         this.keyboard.type('2');
+
         assert.strictEqual(this.instance.option('text'), 'January 2 2012', 'search value was cleared');
-        assert.deepEqual(this.keyboard.caret(), { start: 8, end: 9 }, 'next group has been selected');
+    });
+
+    QUnit.test('enter should not prevent keypress event that triggers form validation (T1131035)', function(assert) {
+        assert.expect(1);
+
+        this.$element.on('keypress', e => {
+            if(e.key === 'Enter') {
+                assert.ok(true, 'keypress enter event is triggered');
+            }
+        });
+
+        this.keyboard.type('1');
+        this.keyboard.press('enter');
     });
 
     test('incorrect input should clear search value', function(assert) {
@@ -704,6 +727,17 @@ module('Keyboard navigation', setupModule, () => {
     test('keydown event shouldn\'t be prevented on \'Esc\' key press', function(assert) {
         this.keyboard.press('esc');
         assert.notOk(this.keyboard.event.isDefaultPrevented(), 'event should not be prevented');
+    });
+
+    QUnit.test('command+v should not be prevented (T988724)', function(assert) {
+        if(!devices.real().mac) {
+            assert.ok(true, 'Test is actual only for mac');
+            return;
+        }
+
+        this.keyboard.keyDown('v', { metaKey: true });
+
+        assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, 'keydown event is not prevented');
     });
 });
 
@@ -774,6 +808,94 @@ module('Events', setupModule, () => {
         this.$input.trigger('focusout');
 
         assert.strictEqual(this.$input.val(), 'January 31 2019', 'value is correct');
+    });
+
+    test('change event should be triggered before focusout event (T1026909)', function(assert) {
+        const valueChangedStub = sinon.stub();
+        const focusOutStub = sinon.stub();
+
+        this.instance.option({
+            onValueChanged: valueChangedStub,
+            onFocusOut: focusOutStub
+        });
+
+        this.keyboard
+            .focus()
+            .type('1')
+            .blur();
+
+        assert.ok(valueChangedStub.calledBefore(focusOutStub));
+    });
+
+    test('onInput event handler should be called even when useMaskBehavior option is true (T1023540)', function(assert) {
+        const onInput = sinon.stub();
+
+        this.instance.option({ onInput });
+
+        this.keyboard
+            .focus()
+            .type('1');
+
+        assert.ok(onInput.calledOnce);
+    });
+
+    QUnit.test('click on input after clear button click should not cause any errors, useMaskBehavior: true (T1094710)', function(assert) {
+        const isIos = devices.current().platform === 'ios';
+        const isMac = devices.current().mac;
+        const currentDate = new Date();
+
+        this.instance.option({
+            pickerType: 'calendar',
+            showClearButton: true,
+            value: new Date(2022, 3, 3),
+            displayFormat: 'dd.MM.yyyy HH:mm',
+            onValueChanged(e) {
+                if(e.value === null) {
+                    e.component.option('value', currentDate);
+                }
+            },
+            useMaskBehavior: true
+        });
+
+        const $clearButton = this.$element.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
+
+        $clearButton.trigger('dxclick');
+
+        assert.deepEqual(this.keyboard.caret(), isIos || isMac ? { start: 16, end: 16 } : { start: 0, end: 2 }, 'caret');
+
+        try {
+            this.keyboard.caret(9);
+            this.$input.trigger('dxclick');
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        } finally {
+            assert.strictEqual(this.instance.option('value'), currentDate, 'value is updated correctly');
+        }
+    });
+
+    QUnit.test('focusout after clear value by clear button should not lose input value, useMaskBehavior: true', function(assert) {
+        const currentDate = new Date();
+
+        this.instance.option({
+            pickerType: 'calendar',
+            showClearButton: true,
+            value: new Date(2022, 3, 3),
+            displayFormat: 'dd.MM.yyyy HH:mm',
+            onValueChanged(e) {
+                if(e.value === null) {
+                    e.component.option('value', currentDate);
+                }
+            },
+            useMaskBehavior: true
+        });
+
+        const $clearButton = this.$element.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
+
+        $clearButton.trigger('dxclick');
+
+        this.$input.focusout();
+
+        assert.strictEqual(this.instance.option('value'), currentDate, 'value is updated correctly');
     });
 });
 
@@ -1026,7 +1148,7 @@ module('Empty dateBox', {
 
         assert.strictEqual(this.$input.val(), 'July 19 2018', 'initial value is correct');
 
-        this.$element.find('.dx-clear-button-area').trigger('dxclick');
+        this.$element.find(`.${CLEAR_BUTTON_AREA_CLASS}`).trigger('dxclick');
 
         assert.strictEqual(this.$input.val(), '', 'text was cleared');
         assert.strictEqual(this.instance.option('value'), null, 'value was cleared');
@@ -1104,19 +1226,36 @@ module('Empty dateBox', {
         assert.strictEqual(this.$input.val(), '', 'value is correct');
     });
 
-    test('navigation keys should do nothing in an empty datebox', function(assert) {
-        this.keyboard.press('home');
-        this.keyboard.press('end');
-        this.keyboard.press('del');
-        this.keyboard.press('backspace');
-        this.keyboard.press('esc');
-        this.keyboard.press('left');
-        this.keyboard.press('right');
-        this.keyboard.press('enter');
+    [
+        'home',
+        'end',
+        'del',
+        'backpace',
+        'esc',
+        'left',
+        'right',
+        'enter'
+    ].forEach((key) => {
+        test(`${key} key should do nothing in an empty datebox`, function(assert) {
+            this.keyboard.press(key);
 
-        assert.deepEqual(this.instance.option('value'), null, 'value is good');
-        assert.deepEqual(this.$input.val(), '', 'text is good');
-        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, 'caret is good');
+            assert.deepEqual(this.instance.option('value'), null, 'value is good');
+            assert.deepEqual(this.$input.val(), '', 'text is good');
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, 'caret is good');
+        });
+    });
+
+    test('space keydown event should be prevented', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
+        const value = new Date(2020, 5, 5);
+        this.instance.option({ value });
+        this.keyboard.keyDown('space');
+
+        assert.ok(this.keyboard.event.isDefaultPrevented(), 'space key keydown prevented');
     });
 });
 
@@ -1315,6 +1454,108 @@ module('Caret moving', setupModule, () => {
         assert.deepEqual(this.keyboard.caret(), { start: 5, end: 7 }, 'caret was moved to month');
     });
 
+    test('Caret should not be moved to next group after type hour "1" when "hh" time format is used', function(assert) {
+        this.instance.option({
+            value: new Date(2021, 9, 17, 16, 6),
+            displayFormat: 'hh:mm a'
+        });
+
+        this.keyboard.type('1');
+        assert.strictEqual(this.instance.option('text'), '01:06 PM', 'text is correct');
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'caret position is correct');
+    });
+
+    [2, 3, 4, 5, 6, 7, 8, 9].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "hh" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'hh:mm a'
+            });
+
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `0${hour}:06 PM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret position is correct');
+        });
+    });
+
+    [10, 11, 12].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "hh" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'hh:mm a'
+            });
+
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `${hour}:06 PM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret was moved to month');
+        });
+    });
+
+    [13, 14, 15, 16, 17, 18, 19].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "hh" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'hh:mm a'
+            });
+
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `0${hour.toString()[1]}:06 PM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret position is correct');
+        });
+    });
+
+    [0, 1, 2].forEach((hour) => {
+        test(`Caret should not be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'HH:mm a'
+            });
+
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `0${hour}:06 AM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 2 }, 'caret position is correct');
+        });
+    });
+
+    [3, 4, 5, 6, 7, 8, 9].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'HH:mm a'
+            });
+
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `0${hour}:06 AM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret position is correct');
+        });
+    });
+
+    [10, 11].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'HH:mm a'
+            });
+
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `${hour}:06 AM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret position is correct');
+        });
+    });
+
+    [12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23].forEach((hour) => {
+        test(`Caret should be moved to next group after type hour "${hour}" when "HH" time format is used`, function(assert) {
+            this.instance.option({
+                value: new Date(2021, 9, 17, 16, 6),
+                displayFormat: 'HH:mm a'
+            });
+
+            this.keyboard.type(`${hour}`);
+            assert.strictEqual(this.instance.option('text'), `${hour}:06 PM`, 'text is correct');
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret position is correct');
+        });
+    });
+
     test('Typed year and value should be in the same century when short year format is used', function(assert) {
         this.instance.option({
             displayFormat: 'yy MM',
@@ -1343,6 +1584,17 @@ module('Caret moving', setupModule, () => {
 
         this.keyboard.type('01');
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret was moved to month');
+    });
+
+    test('Click on input should not change caret position to select date part if all text is selected (T988726)', function(assert) {
+        const text = this.instance.option('text');
+        const allSelectedCaret = { start: 0, end: text.length };
+
+        this.keyboard.caret(allSelectedCaret);
+
+        this.$input.trigger('dxclick');
+
+        assert.deepEqual(this.keyboard.caret(), allSelectedCaret, 'no date part is selected');
     });
 });
 

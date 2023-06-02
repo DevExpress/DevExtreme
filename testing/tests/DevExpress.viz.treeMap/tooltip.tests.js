@@ -24,12 +24,10 @@ QUnit.test('Show tooltip', function(assert) {
     root.getChild(1).showTooltip();
 
     assert.deepEqual(this.tooltip.show.lastCall.args[0], { value: 2, valueText: 'formatted', node: root.getChild(1) });
-    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 });
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 490, y: 163.5, offset: 0 });
     assert.deepEqual(this.tooltip.show.lastCall.args[2], { node: root.getChild(1) });
     assert.equal(this.tooltip.show.lastCall.args[3], undefined);
     assert.equal(typeof this.tooltip.show.lastCall.args[4], 'function');
-
-    assert.deepEqual(this.tooltip.move.lastCall.args, [490, 163.5, 0], 'move');
 });
 
 QUnit.test('Show tooltip, async render', function(assert) {
@@ -40,9 +38,8 @@ QUnit.test('Show tooltip, async render', function(assert) {
 
     root.getChild(1).showTooltip();
 
-    assert.ok(!this.tooltip.hide.called);
     this.tooltip.show.lastCall.args[4](true);
-    assert.equal(this.tooltip.move.callCount, 1);
+    assert.ok(!this.tooltip.hide.called);
 });
 
 QUnit.test('Hide tooltip if it does not render, async render', function(assert) {
@@ -66,12 +63,10 @@ QUnit.test('Show tooltip / coords', function(assert) {
     root.getChild(1).showTooltip([20, 10]);
 
     assert.deepEqual(this.tooltip.show.lastCall.args[0], { value: 2, valueText: 'formatted', node: root.getChild(1) });
-    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 });
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 20, y: 10, offset: 0 });
     assert.deepEqual(this.tooltip.show.lastCall.args[2], { node: root.getChild(1) });
     assert.equal(this.tooltip.show.lastCall.args[3], undefined);
     assert.equal(typeof this.tooltip.show.lastCall.args[4], 'function');
-
-    assert.deepEqual(this.tooltip.move.lastCall.args, [20, 10, 0], 'move');
 });
 
 QUnit.test('Show tooltip / disabled by customization', function(assert) {
@@ -83,7 +78,7 @@ QUnit.test('Show tooltip / disabled by customization', function(assert) {
     root.getChild(1).showTooltip();
 
     assert.deepEqual(this.tooltip.show.lastCall.args[0], { value: 2, valueText: 'formatted', node: root.getChild(1) });
-    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 });
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 490, y: 163.5, offset: 0 });
     assert.deepEqual(this.tooltip.show.lastCall.args[2], { node: root.getChild(1) });
     assert.equal(this.tooltip.show.lastCall.args[3], undefined);
     assert.equal(typeof this.tooltip.show.lastCall.args[4], 'function');
@@ -126,9 +121,8 @@ QUnit.test('Tooltip is shown during customization', function(assert) {
         }
     });
 
-    assert.strictEqual(this.tooltip.move.callCount, 2, 'move count');
-    assert.deepEqual(this.tooltip.move.getCall(0).args, [-1000, -1000, 0], 'move 1');
-    assert.deepEqual(this.tooltip.move.getCall(1).args, [240, 230, 0], 'move 2');
+    assert.strictEqual(this.tooltip.move.callCount, 1, 'move count');
+    assert.deepEqual(this.tooltip.move.getCall(0).args, [240, 230, 0], 'move 1');
 });
 
 QUnit.test('Tooltip is moved if shown when tiling is performed', function(assert) {
@@ -143,6 +137,6 @@ QUnit.test('Tooltip is moved if shown when tiling is performed', function(assert
 
     widget.option('size', { width: 300, height: 200 });
 
-    assert.strictEqual(this.tooltip.move.callCount, 2, 'move count');
+    assert.strictEqual(this.tooltip.move.callCount, 1, 'move count');
     assert.deepEqual(this.tooltip.move.lastCall.args, [140, 130, 0], 'move');
 });

@@ -7,15 +7,38 @@ import {
   InternalState,
   Consumer,
   RefObject,
-} from 'devextreme-generator/component_declaration/common';
+  Nested,
+  Fragment,
+  Effect,
+  ForwardRef,
+  Event,
+} from '@devextreme-generator/declarations';
 import { combineClasses } from '../../utils/combine_classes';
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
-import { BaseWidgetProps } from '../core/base_props';
-import { BaseWidget } from '../core/base_widget';
-import { createAxis } from './utils';
+import { getElementOffset } from '../../utils/get_element_offset';
+import { BaseWidgetProps } from '../common/base_props';
+import { BaseWidget } from '../common/base_widget';
+import {
+  createAxis,
+  SparklineTooltipData,
+  generateCustomizeTooltipCallback,
+} from './utils';
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
-import { PathSvgElement } from '../core/renderers/svg_path';
-import { Canvas } from '../core/common/types.d';
+import { PathSvgElement } from '../common/renderers/svg_path';
+import {
+  OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData,
+} from '../common/types';
+import { Tooltip as TooltipComponent, TooltipProps } from '../common/tooltip';
+import { getFormatValue, pointInCanvas } from '../common/utils';
+import eventsEngine from '../../../events/core/events_engine';
+import { addNamespace } from '../../../events/utils/index';
+import pointerEvents from '../../../events/pointer';
+import { EffectReturn } from '../../utils/effect_return';
+import domAdapter from '../../../core/dom_adapter';
+
+import {
+  ArgumentAxisRange, ValueAxisRange, BulletScaleProps,
+} from './types';
 
 const TARGET_MIN_Y = 0.02;
 const TARGET_MAX_Y = 0.98;
@@ -27,49 +50,34 @@ const DEFAULT_CANVAS_HEIGHT = 30;
 const DEFAULT_HORIZONTAL_MARGIN = 1;
 const DEFAULT_VERTICAL_MARGIN = 2;
 
-interface ArgumentAxisRange {
-  invert: boolean;
-  min?: number;
-  max?: number;
-  axisType: string;
-  dataType: string;
-}
+const DEFAULT_OFFSET = { top: 0, left: 0 };
 
-interface ValueAxisRange {
-  min?: number;
-  max?: number;
-  axisType: string;
-  dataType: string;
-}
+const EVENT_NS = 'sparkline-tooltip';
+const POINTER_ACTION = addNamespace(
+  [pointerEvents.down, pointerEvents.move],
+  EVENT_NS,
+);
 
-interface BulletScaleProps {
-  inverted: boolean;
-  value: number;
-  target: number;
-  startScaleValue: number;
-  endScaleValue: number;
-}
-
-const isValidBulletScale = (props: BulletScaleProps): boolean => {
-  const {
-    value,
-    startScaleValue,
-    endScaleValue,
-    target,
-  } = props;
-  const isValidBounds = startScaleValue !== endScaleValue;
-  const isValidMin = Number.isFinite(startScaleValue);
-  const isValidMax = Number.isFinite(endScaleValue);
-  const isValidValue = Number.isFinite(value);
-  const isValidTarget = Number.isFinite(target);
-
-  return isValidBounds && isValidMax && isValidMin && isValidTarget && isValidValue;
+const inCanvas = (canvas: ClientRect, x: number, y: number): boolean => {
+  const { width, height } = canvas;
+  return pointInCanvas(
+    {
+      left: 0,
+      top: 0,
+      right: width,
+      bottom: height,
+      width,
+      height,
+    },
+    x,
+    y,
+  );
 };
 
 const getCssClasses = ({ classes }): string => {
   const rootClassesMap = {
-    // eslint-disable-next-line quote-props
-    'dxb': true,
+    // eslint-disable-next-line spellcheck/spell-checker
+    dxb: true,
     'dxb-bullet': true,
     [String(classes)]: !!classes,
   };
@@ -87,59 +95,80 @@ const getContainerCssClasses = ({ className }): string => {
 };
 
 export const viewFunction = (viewModel: Bullet): JSX.Element => {
-  const scaleProps = viewModel.prepareInternalComponents();
-  const isValidBullet = isValidBulletScale(scaleProps);
+  const {
+    size,
+    margin,
+    disabled,
+    color,
+    targetColor,
+    targetWidth,
+  } = viewModel.props;
+  const {
+    customizedTooltipProps, zeroLevelShape, isValidZeroLevel, isValidBulletScale,
+    barValueShape, isValidTarget, targetShape,
+  } = viewModel;
   return (
-    <BaseWidget
-      ref={viewModel.widgetRef}
-      classes={viewModel.cssClasses}
-      className={viewModel.cssClassName}
-      size={viewModel.props.size}
-      margin={viewModel.props.margin}
-      defaultCanvas={viewModel.defaultCanvas}
-      disabled={viewModel.props.disabled}
-      rtlEnabled={viewModel.rtlEnabled}
-      onContentReady={viewModel.props.onContentReady}
-      canvasChange={viewModel.onCanvasChange}
-      pointerEvents="visible"
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
-    >
-      {isValidBullet
-      && (
-      <PathSvgElement
-        type="line"
-        points={viewModel.getBarValueShape(scaleProps)}
-        className="dxb-bar-value"
-        strokeLineCap="square"
-        fill={viewModel.props.color}
-      />
+    <Fragment>
+      <BaseWidget
+        rootElementRef={viewModel.widgetRootRef}
+        ref={viewModel.widgetRef}
+        classes={viewModel.cssClasses}
+        className={viewModel.cssClassName}
+        size={size}
+        margin={margin}
+        defaultCanvas={viewModel.defaultCanvas}
+        disabled={disabled}
+        rtlEnabled={viewModel.rtlEnabled}
+        canvasChange={viewModel.onCanvasChange}
+        pointerEvents="visible"
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...viewModel.restAttributes}
+      >
+        {isValidBulletScale ? (
+          <Fragment>
+            <PathSvgElement
+              type="line"
+              points={barValueShape}
+              className="dxb-bar-value"
+              strokeLineCap="square"
+              fill={color}
+            />
+            { isValidTarget && (
+              <PathSvgElement
+                type="line"
+                points={targetShape}
+                className="dxb-target"
+                sharp
+                strokeLineCap="square"
+                stroke={targetColor}
+                strokeWidth={targetWidth}
+              />
+            )}
+            {isValidZeroLevel && (
+              <PathSvgElement
+                type="line"
+                points={zeroLevelShape}
+                className="dxb-zero-level"
+                sharp
+                strokeLineCap="square"
+                stroke={targetColor}
+                strokeWidth={1}
+              />
+            )}
+          </Fragment>
+        ) : undefined}
+
+      </BaseWidget>
+      {customizedTooltipProps.enabled && (
+        <TooltipComponent
+          rootWidget={viewModel.widgetRootRef}
+          ref={viewModel.tooltipRef}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...customizedTooltipProps}
+          visible={viewModel.tooltipVisible}
+        />
       )}
-      {isValidBullet && viewModel.isValidTarget(scaleProps)
-      && (
-      <PathSvgElement
-        type="line"
-        points={viewModel.getTargetShape(scaleProps)}
-        className="dxb-target"
-        sharp
-        strokeLineCap="square"
-        stroke={viewModel.props.targetColor}
-        strokeWidth={viewModel.props.targetWidth}
-      />
-      )}
-      {isValidBullet && viewModel.isValidZeroLevel(scaleProps)
-      && (
-      <PathSvgElement
-        type="line"
-        points={viewModel.getZeroLevelShape()}
-        className="dxb-zero-level"
-        sharp
-        strokeLineCap="square"
-        stroke={viewModel.props.targetColor}
-        strokeWidth={1}
-      />
-      )}
-    </BaseWidget>
+    </Fragment>
   );
 };
 @ComponentBindings()
@@ -161,6 +190,12 @@ export class BulletProps extends BaseWidgetProps {
   @OneWay() startScaleValue = 0;
 
   @OneWay() endScaleValue?: number;
+
+  @Nested() tooltip: TooltipProps = new TooltipProps();
+
+  @Event() onTooltipHidden?: OnTooltipHiddenFn<BaseEventData>;
+
+  @Event() onTooltipShown?: OnTooltipShownFn<BaseEventData>;
 }
 
 @Component({
@@ -173,11 +208,15 @@ export class BulletProps extends BaseWidgetProps {
 export class Bullet extends JSXComponent(BulletProps) {
   @Ref() widgetRef!: RefObject<BaseWidget>;
 
+  @Ref() tooltipRef!: RefObject<TooltipComponent>;
+
+  @ForwardRef() widgetRootRef!: RefObject<HTMLDivElement>;
+
   @InternalState() argumentAxis = createAxis(true);
 
   @InternalState() valueAxis = createAxis(false);
 
-  @InternalState() canvasState: Canvas = {
+  @InternalState() canvasState: ClientRect = {
     width: 0,
     height: 0,
     top: 0,
@@ -186,8 +225,39 @@ export class Bullet extends JSXComponent(BulletProps) {
     right: 0,
   };
 
+  @InternalState() offsetState: { top: number; left: number } = DEFAULT_OFFSET;
+
+  @InternalState() tooltipVisible = false;
+
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
+
+  @Effect()
+  tooltipEffect(): EffectReturn {
+    const { disabled } = this.props;
+    if (!disabled && this.customizedTooltipProps.enabled) {
+      const svg = this.widgetRef.current?.svg();
+      eventsEngine.on(svg, POINTER_ACTION, this.pointerHandler);
+      return (): void => {
+        eventsEngine.off(svg, POINTER_ACTION, this.pointerHandler);
+      };
+    }
+
+    return undefined;
+  }
+
+  @Effect()
+  tooltipOutEffect(): EffectReturn {
+    if (this.tooltipVisible) {
+      const document = domAdapter.getDocument();
+      eventsEngine.on(document, POINTER_ACTION, this.pointerOutHandler);
+      return (): void => {
+        eventsEngine.off(document, POINTER_ACTION, this.pointerOutHandler);
+      };
+    }
+
+    return undefined;
+  }
 
   get cssClasses(): string {
     const { classes } = this.props;
@@ -208,8 +278,58 @@ export class Bullet extends JSXComponent(BulletProps) {
     return !(this.props.value === undefined && this.props.target === undefined);
   }
 
+  get tooltipData(): SparklineTooltipData {
+    const { value, target, tooltip } = this.props;
+    const valueText = getFormatValue(value, undefined, {
+      format: tooltip?.format,
+    });
+    const targetText = getFormatValue(target, undefined, {
+      format: tooltip?.format,
+    });
+
+    return {
+      originalValue: value,
+      originalTarget: target,
+      value: valueText,
+      target: targetText,
+      valueTexts: ['Actual Value:', valueText, 'Target Value:', targetText],
+    };
+  }
+
+  get tooltipCoords(): { x: number; y: number } {
+    const canvas = this.canvasState;
+    const rootOffset = this.offsetState;
+    return {
+      x: canvas.width / 2 + rootOffset.left,
+      y: canvas.height / 2 + rootOffset.top,
+    };
+  }
+
+  get customizedTooltipProps(): Partial<TooltipProps> {
+    const { tooltip, onTooltipHidden, onTooltipShown } = this.props;
+    const customProps = {
+      enabled: this.tooltipEnabled,
+      eventData: { component: this.widgetRef },
+      onTooltipHidden,
+      onTooltipShown,
+      customizeTooltip: generateCustomizeTooltipCallback(
+        tooltip.customizeTooltip,
+        tooltip.font,
+        this.rtlEnabled,
+      ),
+      data: this.tooltipData,
+      ...this.tooltipCoords,
+    };
+
+    return {
+      ...tooltip,
+      ...customProps,
+      enabled: tooltip.enabled && this.tooltipEnabled,
+    };
+  }
+
   // eslint-disable-next-line class-methods-use-this
-  get defaultCanvas(): Canvas {
+  get defaultCanvas(): ClientRect {
     return {
       width: DEFAULT_CANVAS_WIDTH,
       height: DEFAULT_CANVAS_HEIGHT,
@@ -220,54 +340,100 @@ export class Bullet extends JSXComponent(BulletProps) {
     };
   }
 
-  onCanvasChange(canvas: Canvas): void {
-    this.canvasState = canvas;
-  }
-
-  prepareInternalComponents(): BulletScaleProps {
+  get scaleProps(): BulletScaleProps {
     const props = this.prepareScaleProps();
+    const canvas = this.canvasState;
+    const ranges = this.getRange(props);
 
-    this.updateWidgetElements(props);
+    this.argumentAxis.update(ranges.arg, canvas, undefined);
+    this.valueAxis.update(ranges.val, canvas, undefined);
 
     return props;
   }
 
-  updateWidgetElements(props: BulletScaleProps): void {
-    const canvas = this.canvasState;
-    const ranges = this.updateRange(props);
+  get isValidBulletScale(): boolean {
+    const {
+      value, startScaleValue, endScaleValue, target,
+    } = this.props;
+    const isValidBounds = startScaleValue !== endScaleValue;
+    const isValidMin = Number.isFinite(startScaleValue);
+    const isValidMax = Number.isFinite(endScaleValue);
+    const isValidValue = Number.isFinite(value);
+    const isValidTarget = Number.isFinite(target);
 
-    this.argumentAxis.update(ranges.arg, canvas, undefined);
-    this.valueAxis.update(ranges.val, canvas, undefined);
+    return (
+      isValidBounds && isValidMax && isValidMin && isValidTarget && isValidValue
+    );
+  }
+
+  get targetShape(): [number, number, number, number] {
+    return this.getSimpleShape(this.scaleProps.target);
+  }
+
+  get zeroLevelShape(): [number, number, number, number] {
+    return this.getSimpleShape(0);
+  }
+
+  get isValidTarget(): boolean {
+    const { showTarget } = this.props;
+
+    return !(this.scaleProps.target > this.scaleProps.endScaleValue
+      || this.scaleProps.target < this.scaleProps.startScaleValue || !showTarget);
+  }
+
+  get isValidZeroLevel(): boolean {
+    const { showZeroLevel } = this.props;
+
+    return !(this.scaleProps.endScaleValue < 0
+      || this.scaleProps.startScaleValue > 0 || !showZeroLevel);
+  }
+
+  get barValueShape(): [number, number, number, number, number, number, number, number] {
+    const translatorX = this.argumentAxis.getTranslator();
+    const translatorY = this.valueAxis.getTranslator();
+    const y2 = translatorY.translate(BAR_VALUE_MIN_Y);
+    const y1 = translatorY.translate(BAR_VALUE_MAX_Y);
+    let x1 = Number.NaN;
+    let x2 = Number.NaN;
+
+    if (this.scaleProps.value > 0) {
+      x1 = Math.max(0, this.scaleProps.startScaleValue);
+      x2 = this.scaleProps.value >= this.scaleProps.endScaleValue
+        ? this.scaleProps.endScaleValue : Math.max(this.scaleProps.value, x1);
+    } else {
+      x1 = Math.min(0, this.scaleProps.endScaleValue);
+      x2 = this.scaleProps.value < this.scaleProps.startScaleValue
+        ? this.scaleProps.startScaleValue : Math.min(this.scaleProps.value, x1);
+    }
+
+    x1 = translatorX.translate(x1);
+    x2 = translatorX.translate(x2);
+
+    return [x1, y1, x2, y1, x2, y2, x1, y2];
+  }
+
+  onCanvasChange(canvas: ClientRect): void {
+    this.canvasState = canvas;
+    const svgElement = this.widgetRef.current?.svg() ?? undefined;
+    this.offsetState = getElementOffset(svgElement);
   }
 
   prepareScaleProps(): BulletScaleProps {
-    let level;
-    const tmpProps: BulletScaleProps = {
+    const {
+      value, target, startScaleValue, endScaleValue,
+    } = this.props;
+
+    const tmpProps = {
       inverted: false,
-      value: this.props.value !== undefined ? Number(this.props.value) : 0,
-      target: this.props.target !== undefined ? Number(this.props.target) : 0,
-      startScaleValue: 0,
-      endScaleValue: 0,
+      value,
+      target,
+      startScaleValue: startScaleValue === undefined ? Math.min(target, value, 0) : startScaleValue,
+      endScaleValue: endScaleValue === undefined ? Math.max(target, value) : endScaleValue,
     };
 
-    const { value, target } = tmpProps;
-
-    if (this.props.startScaleValue === undefined) {
-      tmpProps.startScaleValue = target < value ? target : value;
-      tmpProps.startScaleValue = tmpProps.startScaleValue < 0
-        ? tmpProps.startScaleValue : 0;
-    } else {
-      tmpProps.startScaleValue = Number(this.props.startScaleValue);
-    }
-    // eslint-disable-next-line no-nested-ternary
-    tmpProps.endScaleValue = this.props.endScaleValue === undefined
-      ? (target > value ? target : value) : Number(this.props.endScaleValue);
-
-    const { startScaleValue, endScaleValue } = tmpProps;
-
-    if (endScaleValue < startScaleValue) {
-      level = endScaleValue;
-      tmpProps.endScaleValue = startScaleValue;
+    if (tmpProps.endScaleValue < tmpProps.startScaleValue) {
+      const level = tmpProps.endScaleValue;
+      tmpProps.endScaleValue = tmpProps.startScaleValue;
       tmpProps.startScaleValue = level;
       tmpProps.inverted = true;
     }
@@ -275,12 +441,8 @@ export class Bullet extends JSXComponent(BulletProps) {
     return tmpProps;
   }
 
-  updateRange(scaleProps: BulletScaleProps): { arg: ArgumentAxisRange; val: ValueAxisRange } {
-    const {
-      startScaleValue,
-      endScaleValue,
-      inverted,
-    } = scaleProps;
+  getRange(scaleProps: BulletScaleProps): { arg: ArgumentAxisRange; val: ValueAxisRange } {
+    const { startScaleValue, endScaleValue, inverted } = scaleProps;
 
     return {
       arg: {
@@ -299,69 +461,29 @@ export class Bullet extends JSXComponent(BulletProps) {
     };
   }
 
-  getBarValueShape(props: BulletScaleProps):
-  [number, number, number, number, number, number, number, number] {
-    const translatorX = this.argumentAxis.getTranslator();
-    const translatorY = this.valueAxis.getTranslator();
-    const {
-      value,
-      startScaleValue,
-      endScaleValue,
-    } = props;
-    const y2 = translatorY.translate(BAR_VALUE_MIN_Y);
-    const y1 = translatorY.translate(BAR_VALUE_MAX_Y);
-    let x1;
-    let x2;
-
-    if (value > 0) {
-      x1 = startScaleValue <= 0 ? 0 : startScaleValue;
-      // eslint-disable-next-line no-nested-ternary
-      x2 = value >= endScaleValue ? endScaleValue : (value < x1 ? x1 : value);
-    } else {
-      x1 = endScaleValue >= 0 ? 0 : endScaleValue;
-      // eslint-disable-next-line no-nested-ternary
-      x2 = value < startScaleValue ? startScaleValue : (value > x1 ? x1 : value);
-    }
-
-    x1 = translatorX.translate(x1);
-    x2 = translatorX.translate(x2);
-
-    return [x1, y1, x2, y1, x2, y2, x1, y2];
-  }
-
   getSimpleShape(value: number): [number, number, number, number] {
     const translatorY = this.valueAxis.getTranslator();
     const x = this.argumentAxis.getTranslator().translate(value);
 
-    return [x, translatorY.translate(TARGET_MIN_Y), x, translatorY.translate(TARGET_MAX_Y)];
+    return [
+      x,
+      translatorY.translate(TARGET_MIN_Y),
+      x,
+      translatorY.translate(TARGET_MAX_Y),
+    ];
   }
 
-  getTargetShape(props: BulletScaleProps): [number, number, number, number] {
-    return this.getSimpleShape(props.target);
+  pointerHandler(): void {
+    this.tooltipVisible = true;
   }
 
-  getZeroLevelShape(): [number, number, number, number] {
-    return this.getSimpleShape(0);
-  }
+  pointerOutHandler({ pageX, pageY }: { pageX: number; pageY: number }): void {
+    const { left, top } = this.offsetState;
+    const x = Math.floor(pageX - left);
+    const y = Math.floor(pageY - top);
 
-  isValidTarget(scaleProps: BulletScaleProps): boolean {
-    const {
-      target,
-      startScaleValue,
-      endScaleValue,
-    } = scaleProps;
-    const { showTarget } = this.props;
-
-    return !((target > endScaleValue) || (target < startScaleValue) || !showTarget);
-  }
-
-  isValidZeroLevel(scaleProps: BulletScaleProps): boolean {
-    const {
-      startScaleValue,
-      endScaleValue,
-    } = scaleProps;
-    const { showZeroLevel } = this.props;
-
-    return !((endScaleValue < 0) || (startScaleValue > 0) || !showZeroLevel);
+    if (!inCanvas(this.canvasState, x, y)) {
+      this.tooltipVisible = false;
+    }
   }
 }

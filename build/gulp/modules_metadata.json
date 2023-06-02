@@ -104,7 +104,7 @@
     }
   },
   {
-    "name": "data/load_options",
+    "name": "data/index",
     "exports": {
       "LoadOptions": { "path": "data.LoadOptions", "exportAs": "type" }
     }
@@ -181,6 +181,12 @@
       "off": { "path": "events.off" },
       "trigger": { "path": "events.trigger" },
       "triggerHandler": { "path": "events.triggerHandler" }
+    }
+  },
+  {
+    "name": "file_management/error",
+    "exports": {
+      "default": { "path": "fileManagement.FileSystemError" }
     }
   },
   {
@@ -308,16 +314,15 @@
     }
   },
   {
-    "name": "ui/data_grid/ui.data_grid.base",
-    "isInternal": true,
-    "exports": {
-      "Column": { "path": "ui.GridBaseColumn", "exportAs": "type" }
-    }
-  },
-  {
     "name": "ui/date_box",
     "exports": {
       "default": { "path": "ui.dxDateBox", "isWidget": true }
+    }
+  },
+  {
+    "name": "ui/date_range_box",
+    "exports": {
+      "default": { "path": "ui.dxDateRangeBox", "isWidget": true }
     }
   },
   {
@@ -459,12 +464,6 @@
     }
   },
   {
-    "name": "ui/nav_bar",
-    "exports": {
-      "default": { "path": "ui.dxNavBar", "isWidget": true }
-    }
-  },
-  {
     "name": "ui/notify",
     "exports": {
       "default": { "path": "ui.notify" }
@@ -474,6 +473,12 @@
     "name": "ui/speed_dial_action/repaint_floating_action_button",
     "exports": {
       "default": { "path": "ui.repaintFloatingActionButton" }
+    }
+  },
+  {
+    "name": "ui/toast/hide_toasts",
+    "exports": {
+      "default": { "path": "ui.hideToasts" }
     }
   },
   {
@@ -597,18 +602,6 @@
     "name": "ui/set_template_engine",
     "exports": {
       "default": { "path": "setTemplateEngine" }
-    }
-  },
-  {
-    "name": "ui/slide_out",
-    "exports": {
-      "default": { "path": "ui.dxSlideOut", "isWidget": true }
-    }
-  },
-  {
-    "name": "ui/slide_out_view",
-    "exports": {
-      "default": { "path": "ui.dxSlideOutView", "isWidget": true }
     }
   },
   {

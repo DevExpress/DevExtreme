@@ -1,3 +1,4 @@
+import { getWidth, getOuterWidth, getOuterHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import Class from '../core/class';
@@ -127,7 +128,8 @@ const Pager = Widget.inherit({
             } else {
                 pages.push(new Page(1, 0));
                 firstValue = currentPage ? currentPage.value() - currentPage.index : 1;
-                for(i = 1; i <= PAGES_LIMITER; i++) {
+                const pagesCount = count === firstValue + PAGES_LIMITER ? PAGES_LIMITER - 1 : PAGES_LIMITER;
+                for(i = 1; i <= pagesCount; i++) {
                     pages.push(new Page(firstValue + i, i));
                 }
                 pages.push(new Page(count, PAGES_LIMITER + 1));
@@ -320,7 +322,7 @@ const Pager = Widget.inherit({
 
             that.setAria({
                 'role': 'button',
-                'label': 'Page ' + page.value()
+                'label': messageLocalization.format('dxPager-page') + page.value()
             }, page.element());
 
             setTabIndex(that, page.element());
@@ -521,7 +523,7 @@ const Pager = Widget.inherit({
             that._renderPageSizes();
         }
 
-        that._pagesSizeChooserWidth = that._$pagesSizeChooser.width();
+        that._pagesSizeChooserWidth = getWidth(that._$pagesSizeChooser);
     },
 
     _renderInfo: function() {
@@ -535,7 +537,7 @@ const Pager = Widget.inherit({
                 .appendTo(this._$pagesChooser);
 
             if(!this._isInfoHide) {
-                this._infoWidth = this._$info.outerWidth(true);
+                this._infoWidth = getOuterWidth(this._$info, true);
             }
         }
     },
@@ -553,10 +555,9 @@ const Pager = Widget.inherit({
             eventsEngine.on($button, addNamespace([pointerEvents.up, clickEventName], that.Name + 'Pages'), that._wrapClickAction(clickAction));
 
             registerKeyboardAction('pager', that, $button, undefined, clickAction);
-
             that.setAria({
                 'role': 'button',
-                'label': direction === 'prev' ? 'Previous page' : ' Next page'
+                'label': messageLocalization.format(`dxPager-${messageLocalization.format(direction === 'prev' ? 'prev' : 'next')}Page`)
             }, $button);
 
             setTabIndex(that, $button);
@@ -716,24 +717,24 @@ const Pager = Widget.inherit({
     },
 
     _updatePagesChooserWidth: deferUpdater(function() {
-        const lastPageWidth = this._pages && this._pages.length > 0 ? this._pages[this._pages.length - 1]._$page.width() : 0;
-        this._pagesChooserWidth = this._$pagesChooser.width() + lastPageWidth;
+        const lastPageWidth = this._pages && this._pages.length > 0 ? getWidth(this._pages[this._pages.length - 1]._$page) : 0;
+        this._pagesChooserWidth = getWidth(this._$pagesChooser) + lastPageWidth;
     }),
 
     _updateLightMode: deferUpdater(function() {
         const that = this;
-        const width = this.$element().width();
+        const width = getWidth(this.$element());
         const infoWidth = isDefined(this._infoWidth) ? this._infoWidth : 0;
 
         deferRender(function() {
             if(that._isInfoHide && width > that._getMinPagerWidth() + infoWidth) {
-                that._$info.show();
+                that._$info.css('display', '');
                 that._updatePagesChooserWidth();
                 that._isInfoHide = false;
             }
 
             if(!that._isInfoHide && width > that._getMinPagerWidth() - infoWidth && width < that._getMinPagerWidth()) {
-                that._$info.hide();
+                that._$info.css('display', 'none');
                 that._updatePagesChooserWidth();
                 that._isInfoHide = true;
             }
@@ -758,7 +759,7 @@ const Pager = Widget.inherit({
     },
 
     getHeight: function() {
-        return this.option('visible') ? this.$element().outerHeight() : 0;
+        return this.option('visible') ? getOuterHeight(this.$element()) : 0;
     }
 });
 

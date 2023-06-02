@@ -1,9 +1,15 @@
+@use "sass:math";
+
+.dx-fa-button .dx-overlay-content {
+  border-radius: 50%;
+  cursor: pointer;
+}
+
 @mixin dx-fa-button-mixin(
   $main-action-button-size,
   $action-button-size,
   $icon-size,
   $font-size,
-  $label-height,
   $label-padding,
   $label-offset,
   $speed-dial-action-color,
@@ -28,7 +34,7 @@
         background-color: $button-default-bg;
         color: $button-default-color;
         overflow: visible;
-        border-radius: $main-action-button-size / 2;
+        border-radius: math.div($main-action-button-size, 2);
         box-shadow: $speed-dial-action-shadow;
 
         &.dx-state-hover {
@@ -49,7 +55,7 @@
 
         .dx-fa-button-icon,
         .dx-fa-button-icon-close {
-          padding: ($main-action-button-size - $icon-size) / 2;
+          padding: math.div($main-action-button-size - $icon-size, 2);
           box-shadow: none;
           background-color: transparent;
         }
@@ -67,7 +73,7 @@
         }
 
         .dx-inkripple {
-          border-radius: $main-action-button-size / 2;
+          border-radius: math.div($main-action-button-size, 2);
         }
       }
 
@@ -78,15 +84,21 @@
 
           .dx-fa-button-icon,
           .dx-fa-button-icon-close {
-            padding: ($main-action-button-size - $icon-size) / 2 0 ($main-action-button-size - $icon-size) / 2 12px;
+            padding: math.div($main-action-button-size - $icon-size, 2) 0 math.div($main-action-button-size - $icon-size, 2) math.div($main-action-button-size - $icon-size, 2);
           }
+        }
+      }
+
+      &.dx-fa-button-without-icon {
+        .dx-fa-button-icon {
+          width: 0;
         }
       }
     }
 
     .dx-fa-button-icon,
     .dx-fa-button-icon-close {
-      padding: ($action-button-size - $icon-size) / 2;
+      padding: math.div($action-button-size - $icon-size, 2);
       width: $icon-size;
       height: $icon-size;
       box-sizing: content-box;
@@ -148,10 +160,8 @@
           border-radius: 4px;
           padding: $label-padding;
           margin-right: $label-offset;
-          line-height: $label-height;
-          height: $label-height;
           box-shadow: $speed-dial-action-label-shadow;
-          font-size: $font-size - 2;
+          font-size: $font-size;
         }
       }
 
@@ -164,7 +174,7 @@
 
       .dx-inkripple {
         overflow: hidden;
-        border-radius: $action-button-size / 2;
+        border-radius: math.div($action-button-size, 2);
       }
     }
   }

@@ -1,4 +1,2 @@
-import gridCore from './ui.data_grid.core';
-import sortingModule from '../grid_core/ui.grid_core.sorting';
-
-gridCore.registerModule('sorting', sortingModule);
+// deprecated
+export * from '../../__internal/grids/data_grid/module_not_extended/sorting';

@@ -1,20 +1,27 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/textArea";
 
 // adduse
+
 $textarea-vertical-padding:
   $material-base-inline-widget-height -
   $material-base-inline-block-height;
 
 $textarea-top-padding:
-  floor($textarea-vertical-padding / 2) -
+  floor(math.div($textarea-vertical-padding, 2)) -
   $material-base-border-width;
 
 .dx-textarea {
   height: auto;
+
+  .dx-texteditor-input-container {
+    margin: 2px;
+  }
 
   .dx-texteditor-input {
     padding: $textarea-content-padding;

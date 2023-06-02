@@ -88,6 +88,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.75
             },
+            highlight: true,
             border: {
                 visible: false,
                 width: 3
@@ -100,6 +101,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.5
             },
+            highlight: true,
             border: {
                 visible: false,
                 width: 3
@@ -181,6 +183,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.75
             },
+            highlight: true,
             border: {
                 visible: false,
                 width: 3
@@ -193,6 +196,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.5
             },
+            highlight: true,
             border: {
                 visible: false,
                 width: 3
@@ -316,6 +320,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.75
             },
+            highlight: false,
             border: {
                 visible: false,
                 width: 3
@@ -329,6 +334,7 @@ function createThemeManager(options, themeGroupName) {
                 step: 6,
                 opacity: 0.5
             },
+            highlight: true,
             border: {
                 visible: false,
                 width: 3
@@ -417,6 +423,42 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.point.color, undefined);
         assert.equal(theme.point.hoverStyle.color, undefined);
         assert.equal(theme.point.selectionStyle.color, undefined);
+    });
+
+    QUnit.test('Pass color as object', function(assert) {
+        const themeManager = createThemeManager({});
+        themeManager.setTheme({});
+        // act
+        const theme = themeManager.getOptions('series', {
+            type: 'area',
+            color: {
+                base: 'red',
+                fillId: 'id_pattern'
+            }
+        });
+        // assert series theme
+        assert.deepEqual(theme.color, {
+            base: 'red',
+            fillId: 'id_pattern'
+        });
+        assert.strictEqual(theme.mainSeriesColor, 'red');
+    });
+
+    QUnit.test('Pass color as object, base color is not set', function(assert) {
+        const themeManager = createThemeManager({});
+        themeManager.setTheme({});
+        // act
+        const theme = themeManager.getOptions('series', {
+            type: 'area',
+            color: {
+                fillId: 'id_pattern'
+            }
+        });
+        // assert series theme
+        assert.deepEqual(theme.color, {
+            fillId: 'id_pattern'
+        });
+        assert.strictEqual(theme.mainSeriesColor, '#1db2f5');
     });
 
     QUnit.test('Wrong palette fall back to default', function(assert) {

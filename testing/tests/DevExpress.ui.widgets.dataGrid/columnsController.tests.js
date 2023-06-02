@@ -9,13 +9,14 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import config from 'core/config';
 import errors from 'ui/widget/ui.errors';
+import coreErrors from 'core/errors';
 import ajaxMock from '../../helpers/ajaxMock.js';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
-QUnit.testDone(function() {
-    ajaxMock.clear();
-});
+import 'localization/globalize/currency';
+import 'localization/globalize/number';
+import { locale } from 'localization/core';
 
 const createMockDataSource = function(items, loadOptions) {
     loadOptions = loadOptions || {};
@@ -84,9 +85,11 @@ const processColumnsForCompare = function(columns, parameterNames, ignoreParamet
 };
 
 const setupModule = function(moduleNames) {
+    locale('en');
+
     executeAsyncMock.setup();
 
-    dataGridMocks.setupDataGridModules(this, ['columns', 'data', 'selection', 'editing', 'filterRow', 'masterDetail'].concat(moduleNames || []), {
+    dataGridMocks.setupDataGridModules(this, ['columns', 'data', 'selection', 'editing', 'editingRowBased', 'filterRow', 'masterDetail'].concat(moduleNames || []), {
         controllers: {
             data: new dataGridMocks.MockDataController({ items: [] })
         }
@@ -111,6 +114,10 @@ const teardownModule = function() {
     executeAsyncMock.teardown();
     this.dispose();
 };
+
+QUnit.testDone(function() {
+    ajaxMock.clear();
+});
 
 QUnit.module('initialization from options', { beforeEach: setupModule, afterEach: teardownModule }, () => {
 
@@ -209,6 +216,30 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             { index: 1, visible: true, showEditorAlways: true, dataType: 'boolean', allowFiltering: true, dataField: 'TestField2', caption: 'Test Field 2', alignment: 'center', name: 'TestField2' },
             { index: 2, visible: true, showEditorAlways: true, allowFiltering: true, dataField: 'TestField3', caption: 'Test Field 3', name: 'TestField3' }
         ]);
+    });
+
+    QUnit.test('Lookup column with boolean values should not have showEditorAlways (T1063568)', function(assert) {
+        const dataSource = createDataSource(this, [
+            { boolField: true }
+        ]);
+        dataSource.load();
+
+        this.columnsController.applyDataSource(dataSource);
+
+        this.applyOptions({
+            columns: [
+                { dataField: 'boolField', lookup: { dataSource: [false, true] } },
+            ]
+        });
+
+        this.editingController.init();
+
+        assert.ok(this.columnsController.isInitialized());
+        const visibleColumns = this.columnsController.getVisibleColumns();
+
+        assert.strictEqual(visibleColumns[0].dataType, 'boolean');
+        assert.strictEqual(visibleColumns[0].lookup.dataType, 'boolean');
+        assert.strictEqual(visibleColumns[0].showEditorAlways, false);
     });
 
     QUnit.test('Boolean columns initialize with correct \'showEditorAlways\' option when cellTemplate is defined', function(assert) {
@@ -587,9 +618,9 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
     QUnit.test('getVisibleColumns when all columns grouped', function(assert) {
         this.applyOptions({
             columns: [
-                { dataField: 'TestField1', headerCaption: 'Custom Title 1', groupIndex: 0 },
-                { dataField: 'TestField2', headerCaption: 'Custom Title 2', groupIndex: 1 },
-                { dataField: 'TestField3', headerCaption: 'Custom Title 3', groupIndex: 2 },
+                { dataField: 'TestField1', caption: 'Custom Title 1', groupIndex: 0 },
+                { dataField: 'TestField2', caption: 'Custom Title 2', groupIndex: 1 },
+                { dataField: 'TestField3', caption: 'Custom Title 3', groupIndex: 2 },
             ]
         });
 
@@ -679,9 +710,9 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         // arrange
         this.applyOptions({
             columns: [
-                { dataField: 'TestField1', headerCaption: 'Custom Title 1' },
-                { dataField: 'TestField2', headerCaption: 'Custom Title 2', visible: false },
-                { dataField: 'TestField3', headerCaption: 'Custom Title 3', visible: false },
+                { dataField: 'TestField1', caption: 'Custom Title 1' },
+                { dataField: 'TestField2', caption: 'Custom Title 2', visible: false },
+                { dataField: 'TestField3', caption: 'Custom Title 3', visible: false },
             ]
         });
 
@@ -973,9 +1004,9 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         // arrange
         this.applyOptions({
             columns: [
-                { dataField: 'TestField1', headerCaption: 'Custom Title 1' },
-                { dataField: 'TestField2', headerCaption: 'Custom Title 2', visible: false },
-                { dataField: 'TestField3', headerCaption: 'Custom Title 3', visible: false },
+                { dataField: 'TestField1', caption: 'Custom Title 1' },
+                { dataField: 'TestField2', caption: 'Custom Title 2', visible: false },
+                { dataField: 'TestField3', caption: 'Custom Title 3', visible: false },
             ]
         });
 
@@ -994,10 +1025,10 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         // arrange
         this.applyOptions({
             columns: [
-                { dataField: 'TestField1', headerCaption: 'Custom Title 1' },
-                { dataField: 'TestField2', headerCaption: 'Custom Title 2', visible: false },
-                { dataField: 'TestField3', headerCaption: 'Custom Title 3', visible: false, showInColumnChooser: false },
-                { dataField: 'TestField4', headerCaption: 'Custom Title 4', visible: false },
+                { dataField: 'TestField1', caption: 'Custom Title 1' },
+                { dataField: 'TestField2', caption: 'Custom Title 2', visible: false },
+                { dataField: 'TestField3', caption: 'Custom Title 3', visible: false, showInColumnChooser: false },
+                { dataField: 'TestField4', caption: 'Custom Title 4', visible: false },
             ]
         });
 
@@ -1009,6 +1040,72 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         assert.equal(chooserColumns.length, 2, 'count chooser columns');
         assert.strictEqual(chooserColumns[0].dataField, 'TestField2', 'dataField column');
         assert.strictEqual(chooserColumns[1].dataField, 'TestField4', 'dataField column');
+    });
+
+    QUnit.test('getChooserColumns with sort ordering (asc)', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { dataField: '1', caption: 'A', visible: false },
+                { dataField: '2', caption: 'C', visible: false },
+                { dataField: '3', caption: 'B', visible: false },
+            ],
+            columnChooser: {
+                sortOrder: 'asc'
+            }
+        });
+
+        // act
+        const chooserColumns = this.columnsController.getChooserColumns();
+
+        // assert
+        assert.strictEqual(chooserColumns[0].dataField, '1', 'dataField column');
+        assert.strictEqual(chooserColumns[1].dataField, '3', 'dataField column');
+        assert.strictEqual(chooserColumns[2].dataField, '2', 'dataField column');
+    });
+
+    QUnit.test('getChooserColumns with sort ordering (desc)', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { dataField: '1', caption: 'A', visible: false },
+                { dataField: '2', caption: 'C', visible: false },
+                { dataField: '3', caption: 'B', visible: false },
+            ],
+            columnChooser: {
+                sortOrder: 'desc'
+            }
+        });
+
+        // act
+        const chooserColumns = this.columnsController.getChooserColumns();
+
+        // assert
+        assert.strictEqual(chooserColumns[0].dataField, '2', 'dataField column');
+        assert.strictEqual(chooserColumns[1].dataField, '3', 'dataField column');
+        assert.strictEqual(chooserColumns[2].dataField, '1', 'dataField column');
+    });
+
+    QUnit.test('getChooserColumns with sort ordering when caption is undefined', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { caption: '2', visible: false },
+                { caption: '1', visible: false },
+                { visible: false },
+            ],
+            columnChooser: {
+                sortOrder: 'asc',
+            }
+        });
+
+        // act
+        const chooserColumns = this.columnsController.getChooserColumns();
+
+        // assert
+        assert.strictEqual(chooserColumns[0].caption, undefined, 'dataField column');
+        assert.strictEqual(chooserColumns[1].caption, '1', 'dataField column');
+        assert.strictEqual(chooserColumns[2].caption, '2', 'dataField column');
     });
 
     QUnit.test('column with calculateCellValue', function(assert) {
@@ -1105,6 +1202,18 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
         assert.deepEqual(column.calculateFilterExpression(201), ['TestField', '=', 201]);
         assert.deepEqual(column.calculateFilterExpression(1.2), ['TestField', '=', 1.2]);
         assert.deepEqual(column.calculateFilterExpression(12, '>='), ['TestField', '>=', 12]);
+    });
+
+    QUnit.test('calculateFilterExpression for column with object dataField (T1065008)', function(assert) {
+        this.applyOptions({
+            columns: [{ dataField: 'TestField', dataType: 'object' }]
+        });
+
+        const column = this.columnsController.getColumns()[0];
+        assert.ok(column);
+        assert.ok(column.calculateFilterExpression);
+        assert.deepEqual(column.calculateFilterExpression('test'), ['TestField', '=', 'test']);
+        assert.deepEqual(column.calculateFilterExpression('test', '>='), ['TestField', '>=', 'test']);
     });
 
     QUnit.test('calculateFilterExpression for column with lookup and string dataField', function(assert) {
@@ -2069,6 +2178,32 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
         // assert
         const lookupColumn = this.columnsController.getVisibleColumns()[1];
         assert.equal(lookupColumn.lookup.calculateCellValue(4), 'Category 4', 'lookup calculateCellValue return correct value for added item');
+    });
+
+    // T1130874
+    QUnit.test('defaultFilterOperationLookup of lookup column should not be undefined if dataSource is empty and calculateDisplayValue is set', function(assert) {
+        const lookupDataSource = [
+            { id: 1, category_name: 'Category 1' },
+            { id: 2, category_name: 'Category 2' },
+            { id: 3, category_name: 'Category 3' }
+        ];
+
+        this.applyOptions({
+            columns: [{
+                dataType: 'number',
+                dataField: 'test_column',
+                calculateDisplayValue: 'lookupColumnDisplayValue',
+                lookup: {
+                    dataSource: lookupDataSource,
+                    valueExpr: 'id',
+                    displayExpr: 'category_name',
+                }
+            }]
+        });
+
+        const lookupColumn = this.columnsController.getVisibleColumns()[0];
+
+        assert.strictEqual(lookupColumn.defaultFilterOperation, '=', 'defaultFilterOperation must be defined');
     });
 
     QUnit.test('Initialize Lookup column when calculateDisplayValue is defined as string', function(assert) {
@@ -3568,7 +3703,6 @@ QUnit.module('Update columns on initialization', { beforeEach: setupModule, afte
         this.columnsController.applyDataSource(createMockDataSource([{ number: 55, string: 'str', date: new Date(), boolean: true }]));
 
         this.option('rtlEnabled', true);
-        this.columnsController.optionChanged({ name: 'rtlEnabled' });
 
         assert.strictEqual(this.columnsController.getColumns().length, 4);
 
@@ -3617,8 +3751,7 @@ QUnit.module('Update columns on initialization', { beforeEach: setupModule, afte
         assert.ok(!this.columnsController.getColumns()[0].allowCollapsing);
 
         // act
-        this.options.grouping = { autoExpandAll: true, allowCollapsing: true };
-        this.columnsController.optionChanged({ name: 'grouping' });
+        this.option('grouping', { autoExpandAll: true, allowCollapsing: true });
 
         // assert
         assert.strictEqual(this.columnsController.getVisibleColumns().length, 3);
@@ -3638,8 +3771,7 @@ QUnit.module('Update columns on initialization', { beforeEach: setupModule, afte
         assert.ok(!this.columnsController.getColumns()[0].allowGrouping);
 
         // act
-        this.options.groupPanel = { allowColumnDragging: true, visible: true };
-        this.columnsController.optionChanged({ name: 'groupPanel' });
+        this.option('groupPanel', { allowColumnDragging: true, visible: true });
 
         // assert
         assert.strictEqual(this.columnsController.getVisibleColumns().length, 3);
@@ -3657,8 +3789,7 @@ QUnit.module('Update columns on initialization', { beforeEach: setupModule, afte
         this.columnsController.columnOption('field1', 'visible', false);
 
         // act
-        this.options.columns[0].allowSorting = false;
-        this.columnsController.optionChanged({ name: 'columns', fullName: 'columns[0].allowSorting' });
+        this.option('columns[0].allowSorting', false);
 
         // assert
         assert.strictEqual(this.columnsController.getVisibleColumns().length, 1, 'columns state is not reset');
@@ -6442,6 +6573,28 @@ QUnit.module('Sorting/Grouping', { beforeEach: setupModule, afterEach: teardownM
         assert.strictEqual(expandColumns[0].groupIndex, 0);
         assert.strictEqual(expandColumns[0].headerCellTemplate, null);
     });
+
+    // T1075560
+    QUnit.test('Fixed position of expand columns should be identical to RTL', function(assert) {
+        [true, false].forEach((rtlEnabled) => {
+            ['left', 'right'].forEach((initialFixedPosition) => {
+                this.applyOptions({
+                    columns: [{
+                        dataField: 'field', groupIndex: 0, fixed: true, fixedPosition: initialFixedPosition
+                    }],
+                    rtlEnabled,
+                });
+
+                // assert
+                const expandColumns = this.columnsController.getExpandColumns();
+                const properFixedPosition = rtlEnabled ? 'right' : 'left';
+
+                assert.strictEqual(expandColumns.length, 1, 'count expand column');
+                assert.strictEqual(expandColumns[0].fixedPosition, properFixedPosition, `rtl: ${rtlEnabled}, initialFixedPosition: ${initialFixedPosition}`);
+            });
+        });
+
+    });
 });
 
 QUnit.module('ParseValue', { beforeEach: setupModule, afterEach: teardownModule }, () => {
@@ -6453,19 +6606,25 @@ QUnit.module('ParseValue', { beforeEach: setupModule, afterEach: teardownModule 
             columns: [{ dataField: 'TestField', dataType: 'number' }]
         });
 
-        // act
         const column = this.columnsController.getColumns()[0];
+        const formats = [undefined, '#.#'];
 
-        // assert
-        assert.ok(column);
-        assert.ok(column.parseValue);
-        assert.strictEqual(column.parseValue(undefined), undefined);
-        assert.strictEqual(column.parseValue(''), undefined);
-        assert.strictEqual(column.parseValue('a'), undefined);
-        assert.strictEqual(column.parseValue('a1'), undefined, 'Number should parse for numeric data (T669808)');
-        assert.strictEqual(column.parseValue('201'), 201);
-        assert.strictEqual(column.parseValue('1.2'), 1.2);
-        assert.strictEqual(column.parseValue('12'), 12);
+        formats.forEach(format => {
+            // act
+            this.columnOption(0, 'format', format);
+
+            // assert
+            assert.ok(column);
+            assert.ok(column.parseValue);
+            assert.strictEqual(column.parseValue(undefined), undefined);
+            assert.strictEqual(column.parseValue(''), undefined);
+            assert.strictEqual(column.parseValue('a'), undefined);
+            assert.strictEqual(column.parseValue('a1'), undefined, 'Number should parse for numeric data (T669808)');
+            assert.strictEqual(column.parseValue('201'), 201);
+            assert.strictEqual(column.parseValue('1.2'), 1.2);
+            assert.strictEqual(column.parseValue('12'), 12);
+            assert.strictEqual(column.parseValue('-12'), -12);
+        });
     });
 
     // T111930
@@ -6481,13 +6640,30 @@ QUnit.module('ParseValue', { beforeEach: setupModule, afterEach: teardownModule 
         // assert
         assert.ok(column);
         assert.ok(column.parseValue);
-        assert.equal(column.parseValue('a'), undefined);
-        assert.equal(column.parseValue('$a'), undefined);
-        assert.equal(column.parseValue('1.2'), 1.2);
-        assert.equal(column.parseValue('$1.2'), 1.2);
-        assert.equal(column.parseValue('12'), 12);
-        assert.equal(column.parseValue('$12'), 12);
-        assert.equal(column.parseValue(12), 12);
+        assert.equal(column.parseValue('a'), undefined, 'a');
+        assert.equal(column.parseValue('$a'), undefined, '$a');
+        assert.equal(column.parseValue('12'), 12, '12');
+        assert.equal(column.parseValue('$12'), 12, '$12');
+        assert.equal(column.parseValue('$12,000'), 12000, '$12,000');
+        assert.equal(column.parseValue('12000'), 12000, '12000');
+        assert.equal(column.parseValue(12), 12, '12 (number)');
+    });
+
+    QUnit.test('parseValue should not rise warning if column with number dataField and format with object (T1079297)', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [{ dataField: 'TestField', dataType: 'number', format: { type: 'fixedPoint', precision: 4 } }]
+        });
+
+        const column = this.columnsController.getColumns()[0];
+        const errorHandler = sinon.spy(coreErrors, 'log');
+
+        // act
+        const value = column.parseValue('123');
+
+        // assert
+        assert.equal(value, 123, '123');
+        assert.equal(errorHandler.callCount, 0, 'warning was not rised');
     });
 
     QUnit.test('parseValue for column with date dataField', function(assert) {
@@ -6789,8 +6965,7 @@ QUnit.module('Edit Column', { beforeEach: setupModule, afterEach: teardownModule
         // act
         that.columnsController.addColumn({ dataField: 'AddedColumn', caption: 'My Column' });
         that.columnOption('AddedColumn', 'filterValue', 'Test');
-        that.options.editing.mode = 'batch';
-        that.columnsController.optionChanged({ name: 'editing' });
+        this.option('editing.mode', 'batch');
 
         // assert
         const columns = that.columnsController.getVisibleColumns();
@@ -8097,16 +8272,16 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
         assert.equal(visibleColumns[1].visibleIndex, 1, 'visibleIndex of the second column');
 
         assert.strictEqual(visibleColumns[2].caption, 'TestField3', 'caption of the third column');
-        assert.equal(visibleColumns[2].visibleIndex, 0, 'visibleIndex of the third column');
+        assert.equal(visibleColumns[2].visibleIndex, 2, 'visibleIndex of the third column');
 
         assert.strictEqual(visibleColumns[3].caption, 'TestField4', 'caption of the fourth column');
-        assert.equal(visibleColumns[3].visibleIndex, 1, 'visibleIndex of the fourth column');
+        assert.equal(visibleColumns[3].visibleIndex, 3, 'visibleIndex of the fourth column');
 
         assert.strictEqual(visibleColumns[4].caption, 'TestField5', 'caption of the fifth column');
-        assert.equal(visibleColumns[4].visibleIndex, 0, 'visibleIndex of the fifth column');
+        assert.equal(visibleColumns[4].visibleIndex, 4, 'visibleIndex of the fifth column');
 
         assert.strictEqual(visibleColumns[5].caption, 'TestField6', 'caption of the sixth column');
-        assert.equal(visibleColumns[5].visibleIndex, 1, 'visibleIndex of the sixth column');
+        assert.equal(visibleColumns[5].visibleIndex, 5, 'visibleIndex of the sixth column');
     });
 
     QUnit.test('getVisibleIndex when there is band columns', function(assert) {
@@ -8832,6 +9007,38 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
         assert.strictEqual(this.columnsController.getRowCount(), 1, 'header row count');
     });
 
+    QUnit.test('Delete several band columns via API inside beginUpdate/endUpdate (T1049616)', function(assert) {
+        // arrange
+
+        this.applyOptions({
+            columns: [{
+                dataField: 'Area',
+            }, {
+                caption: 'Population',
+                columns: [{
+                    dataField: 'Population_Total',
+                }],
+            }, {
+                caption: 'Nominal GDP',
+                columns: [{
+                    dataField: 'GDP_Total',
+                }],
+            }],
+        });
+
+        // act
+        this.beginUpdate();
+        this.columnsController.deleteColumn('Population');
+        this.columnsController.deleteColumn('Nominal GDP');
+        this.endUpdate();
+
+        // assert
+        const visibleColumns = this.columnsController.getVisibleColumns(0);
+        assert.strictEqual(visibleColumns.length, 1, 'column count');
+        assert.strictEqual(visibleColumns[0].dataField, 'Area', 'dataField of the last column');
+        assert.strictEqual(this.columnsController.getRowCount(), 1, 'header row count');
+    });
+
     // T715902
     QUnit.test('No exceptions on an attempt to manipulate columns at runtime', function(assert) {
         // arrange
@@ -9181,7 +9388,7 @@ QUnit.module('Customization of the command columns', {
         }, 'select column');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering selection', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering selection', function(assert) {
         // arrange
         this.applyOptions({
             selection: {
@@ -9195,7 +9402,7 @@ QUnit.module('Customization of the command columns', {
         assert.equal(this.getVisibleColumnIndex('field1'), 1, 'index');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering command column', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering command column', function(assert) {
         // arrange
         this.applyOptions({
             columns: [{
@@ -9207,7 +9414,7 @@ QUnit.module('Customization of the command columns', {
         assert.equal(this.getVisibleColumnIndex('field1'), 1, 'index');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering grouping', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering grouping', function(assert) {
         // arrange
         this.applyOptions({
             columns: ['field1', {
@@ -9221,7 +9428,7 @@ QUnit.module('Customization of the command columns', {
         assert.equal(this.getVisibleColumnIndex('field1'), 1, 'regular column');
     });
 
-    QUnit.test('visibleColumnIndex should find index сonsidering reordering', function(assert) {
+    QUnit.test('visibleColumnIndex should find index considering reordering', function(assert) {
         // arrange
         this.applyOptions({
             columns: [{
@@ -9545,6 +9752,33 @@ QUnit.module('Customization of the command columns', {
 
         // assert
         assert.deepEqual(this.columnOption('TestField3', 'lookup.dataSource'), [1, 2, 3], 'lookup datasource');
+    });
+
+    // T1046609
+    QUnit.test('Update dataSource of the column lookup when command column is specified', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { type: 'buttons', buttons: ['button1', 'button2'] },
+                {
+                    caption: 'Band Column 1', columns: [
+                        { dataField: 'TestField1', caption: 'Column 1', lookup: { dataSource: [] } },
+                        { dataField: 'TestField2', caption: 'Column 2' },
+                    ]
+                }
+            ]
+        });
+
+        try {
+            // act
+            this.columnOption('TestField1', 'lookup.dataSource', [1, 2, 3]);
+
+            // assert
+            assert.deepEqual(this.columnOption('TestField1', 'lookup.dataSource'), [1, 2, 3], 'lookup datasource');
+        } catch(e) {
+            // assert
+            assert.ok(false, 'exception');
+        }
     });
 
     // T652910

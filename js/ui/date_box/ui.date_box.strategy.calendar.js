@@ -10,6 +10,12 @@ const CalendarStrategy = DateBoxStrategy.inherit({
 
     NAME: 'Calendar',
 
+    getDefaultOptions: function() {
+        return extend(this.callBase(), {
+            todayButtonText: messageLocalization.format('dxCalendar-todayButtonText'),
+        });
+    },
+
     supportedKeys: function() {
         const homeEndHandler = function(e) {
             if(this.option('opened')) {
@@ -35,14 +41,18 @@ const CalendarStrategy = DateBoxStrategy.inherit({
                     e.preventDefault();
 
                     if(this._widget.option('zoomLevel') === this._widget.option('maxZoomLevel')) {
-                        const contouredDate = this._widget._view.option('contouredDate');
+                        const viewValue = this._getContouredValue();
                         const lastActionElement = this._lastActionElement;
-                        if(contouredDate && lastActionElement === 'calendar') {
-                            this.dateBoxValue(contouredDate, e);
+                        const shouldCloseDropDown = this._closeDropDownByEnter();
+
+                        if(shouldCloseDropDown && viewValue && lastActionElement === 'calendar') {
+                            this.dateBoxValue(viewValue, e);
                         }
 
-                        this.dateBox.close();
+                        shouldCloseDropDown && this.dateBox.close();
                         this.dateBox._valueChangeEventHandler(e);
+
+                        return !shouldCloseDropDown;
                     } else {
                         return true;
                     }
@@ -59,8 +69,14 @@ const CalendarStrategy = DateBoxStrategy.inherit({
         return displayFormat || 'shortdate';
     },
 
+    _closeDropDownByEnter: () => true,
+
     _getWidgetName: function() {
         return Calendar;
+    },
+
+    _getContouredValue: function() {
+        return this._widget._view.option('contouredDate');
     },
 
     getKeyboardListener() {
@@ -80,7 +96,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             tabIndex: null,
             disabledDates: isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
             onContouredChanged: this._refreshActiveDescendant.bind(this),
-            hasFocus: function() { return true; }
+            skipFocusCheck: true
         });
     },
 
@@ -97,45 +113,54 @@ const CalendarStrategy = DateBoxStrategy.inherit({
         this.dateBox.setAria('activedescendant', e.actionValue);
     },
 
-    popupConfig: function(popupConfig) {
-        const toolbarItems = popupConfig.toolbarItems;
+    _getTodayButtonConfig() {
         const buttonsLocation = this.dateBox.option('buttonsLocation');
+        const isButtonsLocationDefault = buttonsLocation === 'default';
 
-        let position = [];
+        const position = isButtonsLocationDefault ? ['bottom', 'center'] : splitPair(buttonsLocation);
 
-        if(buttonsLocation !== 'default') {
-            position = splitPair(buttonsLocation);
-        } else {
-            position = ['bottom', 'center'];
-        }
-
-        if(this.dateBox.option('applyValueMode') === 'useButtons' && this._isCalendarVisible()) {
-            toolbarItems.unshift({
-                widget: 'dxButton',
-                toolbar: position[0],
-                location: position[1] === 'after' ? 'before' : position[1],
-                options: {
-                    onInitialized: function(e) {
-                        e.component.registerKeyHandler('escape', this._escapeHandler.bind(this));
-                    }.bind(this),
-                    onClick: (function() { this._widget._toTodayView(); }).bind(this),
-                    text: messageLocalization.format('dxCalendar-todayButtonText'),
-                    type: 'today'
-                }
-            });
-        }
-
-        return extend(true, popupConfig, {
-            toolbarItems: toolbarItems,
-            position: {
-                collision: 'flipfit flip'
-            },
-            width: 'auto'
-        });
+        return {
+            widget: 'dxButton',
+            toolbar: position[0],
+            location: position[1] === 'after' ? 'before' : position[1],
+            options: {
+                onInitialized: function(e) {
+                    e.component.registerKeyHandler('escape', this._escapeHandler.bind(this));
+                }.bind(this),
+                onClick: (args) => { this._widget._toTodayView(args); },
+                text: this.dateBox.option('todayButtonText'),
+                type: 'today',
+            }
+        };
     },
 
     _isCalendarVisible: function() {
-        return isEmptyObject(this.dateBox.option('calendarOptions')) || this.dateBox.option('calendarOptions.visible') !== false;
+        const { calendarOptions } = this.dateBox.option();
+
+        return isEmptyObject(calendarOptions) || calendarOptions.visible !== false;
+    },
+
+    _getPopupToolbarItems(toolbarItems) {
+        const useButtons = this.dateBox.option('applyValueMode') === 'useButtons';
+        const shouldRenderTodayButton = useButtons && this._isCalendarVisible();
+
+        if(shouldRenderTodayButton) {
+            const todayButton = this._getTodayButtonConfig();
+
+            return [
+                todayButton,
+                ...toolbarItems,
+            ];
+        }
+
+        return toolbarItems;
+    },
+
+    popupConfig: function(popupConfig) {
+        return extend(true, popupConfig, {
+            position: { collision: 'flipfit flip' },
+            width: 'auto'
+        });
     },
 
     _escapeHandler: function() {
@@ -144,15 +169,14 @@ const CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _valueChangedHandler: function(e) {
-        const dateBox = this.dateBox;
         const value = e.value;
         const prevValue = e.previousValue;
 
-        if(dateUtils.sameDate(value, prevValue)) {
+        if(dateUtils.sameDate(value, prevValue) && dateUtils.sameHoursAndMinutes(value, prevValue)) {
             return;
         }
 
-        if(dateBox.option('applyValueMode') === 'instantly') {
+        if(this.dateBox.option('applyValueMode') === 'instantly') {
             this.dateBoxValue(this.getValue(), e.event);
         }
     },
@@ -180,7 +204,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             dateBox.option('opened', false);
             this.dateBoxValue(this.getValue(), e.event);
         }
-    }
+    },
 });
 
 export default CalendarStrategy;

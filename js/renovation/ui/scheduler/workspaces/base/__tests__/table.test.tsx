@@ -1,7 +1,7 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { viewFunction as TableView, Table } from '../table';
-import { VirtualRow } from '../virtual-row';
+import { VirtualRow } from '../virtual_row';
 
 describe('LayoutBase', () => {
   describe('Render', () => {
@@ -11,13 +11,6 @@ describe('LayoutBase', () => {
         ...viewModel.props,
       },
     }) as any);
-
-    it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(layout.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
 
     it('render should be correct', () => {
       const layout = render({
@@ -78,6 +71,8 @@ describe('LayoutBase', () => {
         props: {
           leftVirtualCellWidth: 100,
           rightVirtualCellWidth: 150,
+          leftVirtualCellCount: 32,
+          rightVirtualCellCount: 42,
         },
       });
 
@@ -87,23 +82,37 @@ describe('LayoutBase', () => {
         .toHaveLength(2);
 
       virtualRows
-        .forEach((item) => {
-          expect(item.prop('leftVirtualCellWidth'))
-            .toEqual(100);
-
-          expect(item.prop('rightVirtualCellWidth'))
-            .toEqual(150);
+        .forEach((row) => {
+          expect(row.props())
+            .toMatchObject({
+              leftVirtualCellWidth: 100,
+              rightVirtualCellWidth: 150,
+              leftVirtualCellCount: 32,
+              rightVirtualCellCount: 42,
+            });
         });
+    });
+
+    it('should pass ref to the root', () => {
+      const ref = React.createRef();
+      mount(TableView({
+        props: {
+          tableRef: ref,
+        },
+      } as any));
+
+      expect(ref.current)
+        .not.toBe(null);
     });
   });
 
   describe('Logic', () => {
     describe('Getters', () => {
       it('style', () => {
-        const layout = new Table({ height: 100 });
+        const layout = new Table({ height: 100, width: 300 });
 
         expect(layout.style)
-          .toStrictEqual({ height: '100px' });
+          .toStrictEqual({ height: '100px', width: '300px' });
       });
 
       describe('hasTopVirtualRow,  hasBottomVirtualRow', () => {

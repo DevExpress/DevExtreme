@@ -9,8 +9,7 @@ import {
     formatFunctionInvocationUrl,
     escapeServiceOperationParams
 } from './utils';
-import proxyUrlFormatter from '../proxy_url_formatter';
-import errorsUtils from '../errors';
+import { errors } from '../errors';
 import query from '../query';
 import Store from '../abstract_store';
 import RequestDispatcher from './request_dispatcher';
@@ -32,7 +31,7 @@ const mergeFieldTypesWithKeyType = (fieldTypes, keyType) => {
     for(const keyName in keyType) {
         if(keyName in result) {
             if(result[keyName] !== keyType[keyName]) {
-                errorsUtils.errors.log('W4001', keyName);
+                errors.log('W4001', keyName);
             }
         } else {
             result[keyName] = keyType[keyName];
@@ -187,11 +186,8 @@ const ODataStore = Store.inherit({
         return result;
     },
 
-    _byKeyUrl(value, useOriginalHost) {
-        const baseUrl = useOriginalHost
-            ? proxyUrlFormatter.formatLocalUrl(this._requestDispatcher.url)
-            : this._requestDispatcher.url;
-
+    _byKeyUrl(value) {
+        const baseUrl = this._requestDispatcher.url;
         const convertedKey = this._convertKey(value);
 
         return `${baseUrl}(${encodeURIComponent(serializeKey(convertedKey, this.version()))})`;

@@ -1,0 +1,85 @@
+name: 'CodeQL'
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        branch: [ '22_1', '22_2', '23_1' ]
+        language: [ 'csharp', 'javascript' ]
+        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
+        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ matrix.branch }}
+
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{matrix.language}}"
+
+  fetch:
+    runs-on: devextreme-shr2
+    name: Fetch analysis
+    needs: [ analyze ]
+
+    steps:
+      - name: Get Latest Analysis info
+        run: |
+          RESPONSE=$(curl \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/code-scanning/alerts)
+          echo 'ALERTS<<EOF' >> $GITHUB_ENV
+          echo $RESPONSE >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [ analyze, fetch ]
+
+    steps:
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%s")"
+        shell: bash
+
+      - uses: actions/cache@v3
+        id: notify-cache
+        with:
+          path: notify.json
+          key: ${{ runner.os }}-${{ matrix.branch }}-${{ matrix.language }}-${{ steps.get-date.outputs.date }}
+          restore-keys: ${{ runner.os }}-${{ matrix.branch }}-${{ matrix.language }}
+
+      - name: Teams Notification
+        uses: DevExpress/github-actions/send-teams-notification@main
+        with:
+          hook_url: ${{ secrets.TEAMS_HOOK_TMP }}
+          alerts: ${{ env.ALERTS }}

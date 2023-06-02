@@ -1,18 +1,16 @@
+@use "sass:math";
 @use "sass:color";
 @use "../sizes" as *;
 @use "sizes" as *;
 @use "colors" as *;
+@use "../colors" as *;
 @use "../../base/icons" as *;
 
 $generic-button-padding:
-  $generic-base-inline-widget-top-padding - $generic-button-border-weight
-  $generic-button-horizontal-padding
-  $generic-base-inline-widget-bottom-padding - $generic-button-border-weight;
+  $generic-button-vertical-padding
+  $generic-button-horizontal-padding;
 
-$generic-button-icononly-padding: $generic-button-icon-horizontal-padding;
 $generic-button-icon-size: $generic-base-icon-size;
-$generic-editor-custom-button-margin: 1px;
-
 
 @mixin dx-button-sizing($padding, $icon-size, $icon-margin) {
   .dx-button-content {
@@ -20,19 +18,21 @@ $generic-editor-custom-button-margin: 1px;
   }
 
   .dx-icon {
-    @include dx-icon-sizing($icon-size);
+    width: $icon-size;
+    height: $icon-size;
+    font-size: $icon-size;
+
     @include dx-icon-margin($icon-margin);
   }
 }
 
 @mixin dx-button-onlyicon-sizing() {
-  @include dx-button-sizing($generic-button-icononly-padding, $generic-button-icon-size, 0);
+  @include dx-button-sizing($generic-button-icon-horizontal-padding, $generic-button-icon-size, 0);
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($generic-button-padding, $generic-button-icon-size, $generic-button-icon-size / 2);
+  @include dx-button-sizing($generic-button-padding, $generic-button-icon-size, math.div($generic-button-icon-size, 2));
 }
-
 
 @mixin dx-button-styling-variant(
     $background-color, $border-color, $text-color,
@@ -92,7 +92,122 @@ $generic-editor-custom-button-margin: 1px;
   }
 }
 
-@mixin dx-button-styling-clear() {
-  background: transparent;
-  border-color: transparent;
+@mixin dx-button-mode-contained-styling() {
+  @include dx-button-styling-variant(
+    $button-normal-bg, $button-normal-border-color, $button-normal-color,
+    $button-normal-contained-bg-hover, $button-normal-border-color,
+    $button-normal-contained-bg-focused, $button-normal-border-color,
+    $button-normal-contained-bg-active, $button-normal-border-color, $button-normal-color,
+    $button-normal-color
+  );
+
+  &.dx-button-danger {
+    @include dx-button-styling-variant(
+      $button-danger-bg, transparent, $button-danger-color,
+      $button-danger-contained-bg-hover, transparent,
+      $button-danger-contained-bg-focused, transparent,
+      $button-danger-contained-bg-active, transparent, $button-danger-color,
+      $button-danger-color
+    );
+  }
+
+  &.dx-button-success {
+    @include dx-button-styling-variant(
+      $button-success-bg, transparent, $button-success-color,
+      $button-success-contained-bg-hover, transparent,
+      $button-success-contained-bg-focused, transparent,
+      $button-success-contained-bg-active, transparent, $button-success-color,
+      $button-success-color
+    );
+  }
+
+  &.dx-button-default {
+    @include dx-button-styling-variant(
+      $button-default-bg, transparent, $button-default-color,
+      $button-default-contained-bg-hover, transparent,
+      $button-default-contained-bg-focused, transparent,
+      $button-default-contained-bg-active, transparent, $button-default-color,
+      $button-default-color
+    );
+  }
+}
+
+@mixin dx-button-mode-outlined-styling() {
+  @include dx-button-styling-variant(
+    transparent, $button-normal-border-color, $button-normal-color,
+    $button-normal-outlined-bg-hover, $button-normal-border-color,
+    $button-normal-outlined-bg-focused, $button-normal-border-color,
+    $button-normal-outlined-bg-active, $button-normal-border-color, $button-normal-color,
+    $button-normal-color
+  );
+
+  &.dx-button-danger {
+    @include dx-button-styling-variant(
+      transparent, $button-danger-border-color, $button-danger-border-color,
+      $button-danger-outlined-bg-hover, $button-danger-border-color,
+      $button-danger-outlined-bg-focused, $button-danger-border-color,
+      $button-danger-outlined-bg-active, $button-danger-border-color, $button-danger-border-color,
+      $button-danger-border-color
+    );
+  }
+
+  &.dx-button-success {
+    @include dx-button-styling-variant(
+      transparent, $button-success-border-color, $button-success-border-color,
+      $button-success-outlined-bg-hover, $button-success-border-color,
+      $button-success-outlined-bg-focused, $button-success-border-color,
+      $button-success-outlined-bg-active, $button-success-border-color, $button-success-border-color,
+      $button-success-border-color
+    );
+  }
+
+  &.dx-button-default {
+    @include dx-button-styling-variant(
+      transparent, $button-default-border-color, $button-default-border-color,
+      $button-default-outlined-bg-hover, $button-default-border-color,
+      $button-default-outlined-bg-focused, $button-default-border-color,
+      $button-default-outlined-bg-active, $button-default-border-color, $button-default-border-color,
+      $button-default-border-color
+    );
+  }
+}
+
+@mixin dx-button-mode-text-styling() {
+  @include dx-button-styling-variant(
+    transparent, transparent, $button-normal-color,
+    $button-normal-text-bg-hover, transparent,
+    $button-normal-text-bg-focused, transparent,
+    $button-normal-text-bg-active, transparent, $button-normal-color,
+    $button-normal-color
+  );
+
+  &.dx-button-danger {
+    @include dx-button-styling-variant(
+      transparent, transparent, $button-danger-border-color,
+      $button-danger-text-bg-hover, transparent,
+      $button-danger-text-bg-focused, transparent,
+      $button-danger-text-bg-active, transparent, $button-danger-border-color,
+      $button-danger-border-color
+    );
+  }
+
+  &.dx-button-success {
+    @include dx-button-styling-variant(
+      transparent, transparent, $button-success-border-color,
+      $button-success-text-bg-hover, transparent,
+      $button-success-text-bg-focused, transparent,
+      $button-success-text-bg-active, transparent, $button-success-border-color,
+      $button-success-border-color
+    );
+  }
+
+  &.dx-button-default {
+    @include dx-button-styling-variant(
+      transparent, transparent, $button-default-border-color,
+      $button-default-text-bg-hover, transparent,
+      $button-default-text-bg-focused, transparent,
+      $button-default-text-bg-active, transparent, $button-default-border-color,
+      $button-default-border-color
+    );
+  }
 }

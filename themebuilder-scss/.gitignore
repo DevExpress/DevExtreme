@@ -3,9 +3,3 @@ coverage
 dist
 src/data/scss
 src/data/metadata
-dart-compiler/.dart_tool
-dart-compiler/.packages
-dart-compiler/pubspec.lock
-dart-compiler/compiler
-dart-compiler/compiler.exe
-dart-compiler/metadata

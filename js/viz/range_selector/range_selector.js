@@ -4,6 +4,7 @@ import {
     isNumeric as _isNumber,
     isDate as _isDate,
     type as _type,
+    isFunction,
     isPlainObject
 } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -29,6 +30,7 @@ import { Tracker } from './tracker';
 import { RangeView } from './range_view';
 import { SeriesDataSource } from './series_data_source';
 import { tickGenerator } from '../axes/tick_generator';
+import constants from '../axes/axes_constants';
 import baseWidgetModule from '../core/base_widget';
 
 const _max = Math.max;
@@ -312,7 +314,7 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
         rangeForCategories.addRange(translatorRange);
         translatorRange = rangeForCategories;
 
-        categories = seriesDataSource ? seriesDataSource.argCategories : (scaleOptions.categories || (!seriesDataSource) && startValue && endValue && [startValue, endValue]);
+        categories = seriesDataSource ? seriesDataSource.argCategories : (scaleOptions.categories || startValue && endValue && [startValue, endValue]);
         categories = categories || [];
         scaleOptions._categoriesInfo = categoriesInfo = getCategoriesInfo(categories, startValue, endValue);
     }
@@ -558,6 +560,14 @@ const dxRangeSelector = baseWidgetModule.inherit({
 
     _fontFields: ['scale.label.font', 'sliderMarker.font'],
 
+    _setDeprecatedOptions() {
+        this.callBase();
+        extend(this._deprecatedOptions, {
+            'behavior.callValueChanged': { since: '23.1', message: 'Use the "behavior.valueChangeMode" property instead' },
+            'scale.aggregateByCategory': { since: '23.1', message: 'Use the aggregation.enabled property' }
+        });
+    },
+
     _initCore: function() {
         const that = this;
         const renderer = that._renderer;
@@ -574,6 +584,7 @@ const dxRangeSelector = baseWidgetModule.inherit({
         const rangeViewGroup = renderer.g().attr({ 'class': 'dxrs-view' }).append(root);
         const slidersGroup = renderer.g().attr({ 'class': 'dxrs-slidersContainer', 'clip-path': that._clipRect.id }).append(root);
         const scaleGroup = renderer.g().attr({ 'class': 'dxrs-scale', 'clip-path': that._clipRect.id }).append(root);
+        const labelsAxesGroup = renderer.g().attr({ 'class': 'dxrs-scale-elements', 'clip-path': that._clipRect.id }).append(root);
         const scaleBreaksGroup = renderer.g().attr({ 'class': 'dxrs-scale-breaks' }).append(root);
         const trackersGroup = renderer.g().attr({ 'class': 'dxrs-trackers' }).append(root);
 
@@ -581,6 +592,7 @@ const dxRangeSelector = baseWidgetModule.inherit({
             renderer: renderer,
             root: scaleGroup,
             scaleBreaksGroup: scaleBreaksGroup,
+            labelsAxesGroup: labelsAxesGroup,
             updateSelectedRange: function(range, e) { that.setValue(convertVisualRangeObject(range), e); },
             incidentOccurred: that._incidentOccurred
         });
@@ -716,11 +728,10 @@ const dxRangeSelector = baseWidgetModule.inherit({
     },
 
     _validateRange: function(start, end) {
-        const that = this;
-        const translator = that._axis.getTranslator();
-        if(_isDefined(start) && !translator.isValid(start) ||
-            _isDefined(end) && !translator.isValid(end)) {
-            that._incidentOccurred('E2203');
+        const ensureValueInvalid = value => _isDefined(value) && !this._axis.getTranslator().isValid(value);
+
+        if(this._dataIsReady() && (ensureValueInvalid(start) || ensureValueInvalid(end))) {
+            this._incidentOccurred('E2203');
         }
     },
 
@@ -1019,7 +1030,7 @@ function createDateMarkersEvent(scaleOptions, markerTrackers, setSelectedRange) 
     }
 }
 
-function getShiftDirection() {
+function getSharpDirection() {
     return 1;
 }
 
@@ -1027,12 +1038,37 @@ function getTickStartPositionShift(length) {
     return length % 2 === 1 ? -_floor(length / 2) : -length / 2;
 }
 
+function checkShiftedLabels(majorTicks, boxes, minSpacing, alignment) {
+    function checkLabelsOverlapping(nearestLabelsIndexes) {
+        if(nearestLabelsIndexes.length === 2 &&
+            constants.areLabelsOverlap(boxes[nearestLabelsIndexes[0]], boxes[nearestLabelsIndexes[1]], minSpacing, alignment)) {
+            majorTicks[nearestLabelsIndexes[0]].removeLabel();
+        }
+    }
+    function getTwoVisibleLabels(startIndex) {
+        const labels = [];
+
+        for(let i = startIndex; labels.length < 2 && i < majorTicks.length; i++) {
+            majorTicks[i].label && labels.push(i);
+        }
+
+        return labels;
+    }
+
+    if(majorTicks.length < 3) {
+        return;
+    }
+
+    checkLabelsOverlapping(getTwoVisibleLabels(0));
+    checkLabelsOverlapping(getTwoVisibleLabels(majorTicks.length - 2).reverse());
+}
 function AxisWrapper(params) {
     const that = this;
     that._axis = new Axis({
         renderer: params.renderer,
         axesContainerGroup: params.root,
         scaleBreaksGroup: params.scaleBreaksGroup,
+        labelsAxesGroup: params.labelsAxesGroup,
         incidentOccurred: params.incidentOccurred,
         // TODO: These dependencies should be statically resolved (not for every new instance)
         axisType: 'xyAxes',
@@ -1043,20 +1079,13 @@ function AxisWrapper(params) {
         getTemplate() {}
     });
     that._updateSelectedRangeCallback = params.updateSelectedRange;
-    that._axis.getAxisSharpDirection = that._axis.getSharpDirectionByCoords = getShiftDirection;
+    that._axis.getAxisSharpDirection = that._axis.getSharpDirectionByCoords = getSharpDirection;
     that._axis.getTickStartPositionShift = getTickStartPositionShift;
+    that._axis._checkShiftedLabels = checkShiftedLabels;
 }
 
 AxisWrapper.prototype = {
     constructor: AxisWrapper,
-
-    dispose: function() {
-        this._axis.dispose();
-    },
-
-    calculateInterval: function(value, prevValue) {
-        return this._axis.calculateInterval(value, prevValue);
-    },
 
     update: function(options, isCompactMode, canvas, businessRange, seriesDataSource) {
         const axis = this._axis;
@@ -1096,12 +1125,14 @@ AxisWrapper.prototype = {
     }
 };
 
-['setMarginOptions', 'getFullTicks', 'updateCanvas', 'updateOptions', 'getAggregationInfo', 'getTranslator', 'getVisualRangeLength', 'getVisibleArea', 'getMarginOptions', 'getVisualRangeCenter'].forEach(methodName => {
-    AxisWrapper.prototype[methodName] = function() {
-        const axis = this._axis;
+each(Axis.prototype, field => {
+    if(field !== 'constructor' && field[0] !== '_' && isFunction(Axis.prototype[field]) && !(field in AxisWrapper.prototype)) {
+        AxisWrapper.prototype[field] = function() {
+            const axis = this._axis;
 
-        return axis[methodName].apply(axis, arguments);
-    };
+            return axis[field].apply(axis, arguments);
+        };
+    }
 });
 
 registerComponent('dxRangeSelector', dxRangeSelector);

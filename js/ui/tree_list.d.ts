@@ -1,75 +1,514 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
+    UserDefinedElementsArray,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
+
+import {
+    DxPromise,
+} from '../core/utils/deferred';
 
 import DataSource from '../data/data_source';
 
 import {
-    event
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
+    DataStructure,
+    Mode,
+    ScrollMode,
+    SingleMultipleOrNone,
+    ToolbarItemLocation,
+} from '../common';
+
+import {
+    AdaptiveDetailRowPreparingInfo,
+    ColumnBase,
+    ColumnButtonBase,
+    DataChangeInfo,
+    DataErrorOccurredInfo,
+    DragDropInfo,
+    DragReorderInfo,
+    DragStartEventInfo,
+    EditingBase,
+    EditingTextsBase,
     GridBase,
-    GridBaseColumn,
-    GridBaseColumnButton,
-    GridBaseEditing,
-    GridBaseEditingTexts,
     GridBaseOptions,
-    GridBasePaging,
-    GridBaseScrolling,
-    GridBaseSelection
-} from './data_grid';
+    KeyDownInfo,
+    NewRowInfo,
+    PagingBase,
+    ReducedNativeEventInfo,
+    RowDraggingEventInfo,
+    RowDraggingTemplateData,
+    RowInsertedInfo,
+    RowInsertingInfo,
+    RowKeyInfo,
+    RowRemovedInfo,
+    RowRemovingInfo,
+    RowUpdatedInfo,
+    RowUpdatingInfo,
+    RowValidatingInfo,
+    SavingInfo,
+    ScrollingBase,
+    SelectionBase,
+    SelectionChangedInfo,
+    ToolbarPreparingInfo,
+} from '../common/grids';
+
+import { dxToolbarItem } from './toolbar';
 
 import dxScrollable from './scroll_view/ui.scrollable';
 
 import Widget from './widget/ui.widget';
-export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
+
+interface CellInfo<TRowData = any, TKey = any> {
+    readonly data: TRowData;
+    readonly key: TKey;
+    readonly value?: any;
+    readonly displayValue?: any;
+    readonly text: string;
+    readonly columnIndex: number;
+    readonly column: Column<TRowData, TKey>;
+    readonly rowIndex: number;
+    readonly rowType: string;
+    readonly cellElement: DxElement;
+    readonly row: Row<TRowData, TKey>;
+}
+
+export {
+    SearchMode,
+} from '../common';
+
+export {
+    ApplyFilterMode,
+    ColumnChooser,
+    ColumnChooserMode,
+    ColumnChooserSearchConfig,
+    ColumnChooserSelectionConfig,
+    ColumnCustomizeTextArg,
+    ColumnFixing,
+    ColumnFixingTexts,
+    ColumnHeaderFilter,
+    ColumnHeaderFilterSearchConfig,
+    ColumnLookup,
+    ColumnResizeMode,
+    DataChange,
+    DataChangeType,
+    DataRenderMode,
+    EnterKeyAction,
+    EnterKeyDirection,
+    FilterOperation,
+    FilterPanelTexts,
+    FilterRow,
+    FilterRowOperationDescriptions,
+    FilterType,
+    GridsEditMode,
+    GridsEditRefreshMode,
+    GroupExpandMode,
+    HeaderFilter,
+    HeaderFilterSearchConfig,
+    HeaderFilterGroupInterval,
+    HeaderFilterTexts,
+    KeyboardNavigation,
+    LoadPanel,
+    NewRowPosition,
+    Pager,
+    PagerDisplayMode,
+    PagerPageSize,
+    RowDraggingTemplateData,
+    SearchPanel,
+    SelectedFilterOperation,
+    SelectionColumnDisplayMode,
+    Sorting,
+    StartEditAction,
+    StateStoreType,
+    StateStoring,
+    SummaryType,
+} from '../common/grids';
+
+export {
+    DataStructure,
+    Mode,
+    ScrollMode,
+    SingleMultipleOrNone,
+    ToolbarItemLocation,
+};
+
+/** @public */
+export type TreeListPredefinedColumnButton = 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
+/** @public */
+export type TreeListPredefinedToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+/** @public */
+export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
+/** @public */
+export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
+
+/** @public */
+export type Scrollable = Omit<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
+
+/** @public */
+export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
+
+/** @public */
+export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & CellInfo<TRowData, TKey>;
+
+/** @public */
+export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & CellInfo<TRowData, TKey>;
+
+/** @public */
+export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
+    readonly eventType: string;
+};
+
+/** @public */
+export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
+    readonly isSelected?: boolean;
+    readonly isExpanded?: boolean;
+    readonly isNewRow?: boolean;
+    readonly watch?: Function;
+    readonly oldValue?: any;
+};
+
+/** @public */
+export type ContentReadyEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>>;
+
+/** @public */
+export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
+    items?: Array<any>;
+    readonly target: string;
+    readonly targetElement: DxElement;
+    readonly columnIndex: number;
+    readonly column?: Column<TRowData, TKey>;
+    readonly rowIndex: number;
+    readonly row?: Row<TRowData, TKey>;
+};
+
+/** @public */
+export type DataErrorOccurredEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataErrorOccurredInfo;
+
+/** @public */
+export type DisposingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>>;
+
+/** @public */
+export type EditCanceledEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
+
+/** @public */
+export type EditCancelingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
+
+/** @public */
+export type EditingStartEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly data: TRowData;
+    readonly key: TKey;
+    readonly column: Column<TRowData, TKey>;
+};
+
+/** @public */
+export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly parentType: string;
+    readonly value?: any;
+    readonly setValue?: any;
+    readonly updateValueTimeout?: number;
+    readonly width?: number;
+    readonly disabled: boolean;
+    readonly rtlEnabled: boolean;
+    readonly editorElement: DxElement;
+    readonly readOnly: boolean;
+    readonly dataField?: string;
+    readonly row?: Row<TRowData, TKey>;
+};
+
+/** @public */
+export type EditorPreparingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly parentType: string;
+    readonly value?: any;
+    readonly setValue?: any;
+    updateValueTimeout?: number;
+    readonly width?: number;
+    readonly disabled: boolean;
+    readonly rtlEnabled: boolean;
+    readonly editorElement: DxElement;
+    readonly readOnly: boolean;
+    editorName: string;
+    editorOptions: any;
+    readonly dataField?: string;
+    readonly row?: Row<TRowData, TKey>;
+};
+
+/** @public */
+export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly cellElement: DxElement;
+    readonly columnIndex: number;
+    readonly rowIndex: number;
+    readonly row: Row<TRowData, TKey>;
+    readonly column: Column<TRowData, TKey>;
+};
+
+/** @public */
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+    readonly cellElement: DxElement;
+    readonly prevColumnIndex: number;
+    readonly prevRowIndex: number;
+    newColumnIndex: number;
+    newRowIndex: number;
+    readonly rows: Array<Row<TRowData, TKey>>;
+    readonly columns: Array<Column<TRowData, TKey>>;
+    isHighlighted: boolean;
+};
+
+/** @public */
+export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly rowElement: DxElement;
+    readonly rowIndex: number;
+    readonly row: Row<TRowData, TKey>;
+};
+
+/** @public */
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+    readonly rowElement: DxElement;
+    readonly prevRowIndex: number;
+    newRowIndex: number;
+    readonly rows: Array<Row<TRowData, TKey>>;
+};
+
+/** @public */
+export type InitializedEvent<TRowData = any, TKey = any> = InitializedEventInfo<dxTreeList<TRowData, TKey>>;
+
+/** @public */
+export type InitNewRowEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & NewRowInfo<TRowData>;
+
+/** @public */
+export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent> & KeyDownInfo;
+
+/** @public */
+export type NodesInitializedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly root: Node<TRowData, TKey>;
+};
+
+/** @public */
+export type OptionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
+    readonly data: TRowData;
+    readonly key: TKey;
+    readonly values: Array<any>;
+    readonly columns: Array<Column<TRowData, TKey>>;
+    readonly rowIndex: number;
+    readonly rowType: string;
+    readonly isSelected?: boolean;
+    readonly isExpanded?: boolean;
+    readonly isNewRow?: boolean;
+    readonly rowElement: DxElement;
+    readonly handled: boolean;
+    readonly node: Node<TRowData, TKey>;
+    readonly level: number;
+};
+
+/** @public */
+export type RowCollapsedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
+
+/** @public */
+export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
+
+/** @public */
+export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
+    readonly data: TRowData;
+    readonly key: TKey;
+    readonly values: Array<any>;
+    readonly columns: Array<Column<TRowData, TKey>>;
+    readonly rowIndex: number;
+    readonly rowType: string;
+    readonly isSelected?: boolean;
+    readonly isExpanded?: boolean;
+    readonly isNewRow?: boolean;
+    readonly rowElement: DxElement;
+};
+
+/** @public */
+export type RowExpandedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
+
+/** @public */
+export type RowExpandingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
+
+/** @public */
+export type RowInsertedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowInsertedInfo<TRowData, TKey>;
+
+/** @public */
+export type RowInsertingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowInsertingInfo<TRowData>;
+
+/** @public */
+export type RowPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly data: TRowData;
+    readonly key: TKey;
+    readonly values: Array<any>;
+    readonly columns: Array<Column<TRowData, TKey>>;
+    readonly rowIndex: number;
+    readonly rowType: string;
+    readonly isSelected?: boolean;
+    readonly isExpanded?: boolean;
+    readonly isNewRow?: boolean;
+    readonly rowElement: DxElement;
+    readonly node: Node<TRowData, TKey>;
+    readonly level: number;
+};
+
+/** @public */
+export type RowRemovedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowRemovedInfo<TRowData, TKey>;
+
+/** @public */
+export type RowRemovingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowRemovingInfo<TRowData, TKey>;
+
+/** @public */
+export type RowUpdatedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowUpdatedInfo<TRowData, TKey>;
+
+/** @public */
+export type RowUpdatingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowUpdatingInfo<TRowData, TKey>;
+
+/** @public */
+export type RowValidatingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowValidatingInfo<TRowData, TKey>;
+
+/** @public */
+export type SavedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
+
+/** @public */
+export type SavingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & SavingInfo<TRowData, TKey>;
+
+/** @public */
+export type SelectionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & SelectionChangedInfo<TRowData, TKey>;
+
+/** @public */
+export type ToolbarPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ToolbarPreparingInfo;
+
+/** @public */
+export type RowDraggingAddEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
+
+/** @public */
+export type RowDraggingChangeEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
+
+/** @public */
+export type RowDraggingEndEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
+
+/** @public */
+export type RowDraggingMoveEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragDropInfo;
+
+/** @public */
+export type RowDraggingStartEvent<TRowData = any, TKey = any> = Cancelable & ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & DragStartEventInfo<TRowData>;
+
+/** @public */
+export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData>;
+
+/** @public */
+export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
+
+/** @public */
+export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
+    row?: Row<TRowData, TKey>;
+    column?: Column<TRowData, TKey>;
+};
+
+/** @public */
+export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
+    readonly component: dxTreeList<TRowData, TKey>;
+    readonly data: TRowData;
+    readonly key: TKey;
+    readonly columnIndex: number;
+    readonly column: Column<TRowData, TKey>;
+    readonly rowIndex: number;
+    readonly rowType: string;
+    readonly row: Row<TRowData, TKey>;
+};
+
+/** @public */
+export type ColumnCellTemplateData<TRowData = any, TKey = any> = {
+    readonly data: TRowData;
+    readonly component: dxTreeList<TRowData, TKey>;
+    readonly value?: any;
+    readonly oldValue?: any;
+    readonly displayValue?: any;
+    readonly text: string;
+    readonly columnIndex: number;
+    readonly rowIndex: number;
+    readonly column: Column<TRowData, TKey>;
+    readonly row: Row<TRowData, TKey>;
+    readonly rowType: string;
+    readonly watch?: Function;
+};
+
+/** @public */
+export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
+    readonly setValue?: any;
+    readonly data: TRowData;
+    readonly component: dxTreeList<TRowData, TKey>;
+    readonly value?: any;
+    readonly displayValue?: any;
+    readonly text: string;
+    readonly columnIndex: number;
+    readonly rowIndex: number;
+    readonly column: Column<TRowData, TKey>;
+    readonly row: Row<TRowData, TKey>;
+    readonly rowType: string;
+    readonly watch?: Function;
+};
+
+export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
+    readonly component: dxTreeList<TRowData, TKey>;
+    readonly columnIndex: number;
+    readonly column: Column<TRowData, TKey>;
+};
+
+type OverriddenKeys = 'autoExpandAll' | 'columns' | 'customizeColumns' | 'dataStructure' | 'editing' | 'expandedRowKeys' | 'expandNodesOnFiltering' | 'filterMode' | 'hasItemsExpr' | 'itemsExpr' | 'keyExpr' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared' | 'paging' | 'parentIdExpr' | 'remoteOperations' | 'rootValue' | 'scrolling' | 'selection' | 'toolbar';
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ * @docid
+ * @type object
+ */
+export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey>, OverriddenKeys> & {
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     autoExpandAll?: boolean;
     /**
      * @docid
+     * @type Array<dxTreeListColumn|string>
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    columns?: Array<dxTreeListColumn | string>;
+    columns?: Array<Column<TRowData, TKey> | string>;
     /**
      * @docid
      * @type_function_param1 columns:Array<dxTreeListColumn>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    customizeColumns?: ((columns: Array<dxTreeListColumn>) => any);
+    customizeColumns?: ((columns: Array<Column<TRowData, TKey>>) => void);
     /**
      * @docid
-     * @type Enums.TreeListDataStructure
      * @default "plain"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataStructure?: 'plain' | 'tree';
+    dataStructure?: DataStructure;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
-    editing?: dxTreeListEditing;
+    editing?: Editing<TRowData, TKey>;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     expandNodesOnFiltering?: boolean;
@@ -77,470 +516,415 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid
      * @default []
      * @fires dxTreeListOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandedRowKeys?: Array<any>;
+    expandedRowKeys?: Array<TKey>;
     /**
      * @docid
-     * @type Enums.TreeListFilterMode
      * @default "withAncestors"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    filterMode?: 'fullBranch' | 'withAncestors' | 'matchOnly';
+    filterMode?: TreeListFilterMode;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hasItemsExpr?: string | Function;
     /**
      * @docid
      * @default "items"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemsExpr?: string | Function;
     /**
      * @docid
      * @default "id"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     keyExpr?: string | Function;
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 data:object
-     * @type_function_param1_field6 key:any
-     * @type_function_param1_field7 value:any
-     * @type_function_param1_field8 displayValue:any
-     * @type_function_param1_field9 text:string
-     * @type_function_param1_field10 columnIndex:number
-     * @type_function_param1_field11 column:object
-     * @type_function_param1_field12 rowIndex:number
-     * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:dxElement
-     * @type_function_param1_field15 row:dxTreeListRowObject
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field event:event
+     * @type_function_param1_field data:object
+     * @type_function_param1_field key:any
+     * @type_function_param1_field column:object
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any) | string;
+    onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 data:object
-     * @type_function_param1_field6 key:any
-     * @type_function_param1_field7 value:any
-     * @type_function_param1_field8 displayValue:any
-     * @type_function_param1_field9 text:string
-     * @type_function_param1_field10 columnIndex:number
-     * @type_function_param1_field11 column:dxTreeListColumn
-     * @type_function_param1_field12 rowIndex:number
-     * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:dxElement
-     * @type_function_param1_field15 row:dxTreeListRowObject
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field event:event
+     * @type_function_param1_field data:object
+     * @type_function_param1_field key:any
+     * @type_function_param1_field column:dxTreeListColumn
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellDblClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any);
+    onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 eventType:string
-     * @type_function_param1_field5 data:object
-     * @type_function_param1_field6 key:any
-     * @type_function_param1_field7 value:any
-     * @type_function_param1_field8 text:string
-     * @type_function_param1_field9 displayValue:any
-     * @type_function_param1_field10 columnIndex:number
-     * @type_function_param1_field11 rowIndex:number
-     * @type_function_param1_field12 column:dxTreeListColumn
-     * @type_function_param1_field13 rowType:string
-     * @type_function_param1_field14 cellElement:dxElement
-     * @type_function_param1_field15 row:dxTreeListRowObject
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field data:object
+     * @type_function_param1_field key:any
+     * @type_function_param1_field column:dxTreeListColumn
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellHoverChanged?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any);
+    onCellHoverChanged?: ((e: CellHoverChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 data:object
-     * @type_function_param1_field5 key:any
-     * @type_function_param1_field6 value:any
-     * @type_function_param1_field7 displayValue:any
-     * @type_function_param1_field8 text:string
-     * @type_function_param1_field9 columnIndex:number
-     * @type_function_param1_field10 column:dxTreeListColumn
-     * @type_function_param1_field11 rowIndex:number
-     * @type_function_param1_field12 rowType:string
-     * @type_function_param1_field13 row:dxTreeListRowObject
-     * @type_function_param1_field14 isSelected:boolean
-     * @type_function_param1_field15 isExpanded:boolean
-     * @type_function_param1_field16 isNewRow:boolean
-     * @type_function_param1_field17 cellElement:dxElement
-     * @type_function_param1_field18 watch:function
-     * @type_function_param1_field19 oldValue:any
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field data:object
+     * @type_function_param1_field key:any
+     * @type_function_param1_field column:dxTreeListColumn
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellPrepared?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, cellElement?: dxElement, watch?: Function, oldValue?: any }) => any);
+    onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:Object
-     * @type_function_param1_field4 items:Array<Object>
-     * @type_function_param1_field5 target:string
-     * @type_function_param1_field6 targetElement:dxElement
-     * @type_function_param1_field7 columnIndex:number
-     * @type_function_param1_field8 column:dxTreeListColumn
-     * @type_function_param1_field9 rowIndex:number
-     * @type_function_param1_field10 row:dxTreeListRowObject
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field items:Array<Object>
+     * @type_function_param1_field column:dxTreeListColumn
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: dxElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 data:object
-     * @type_function_param1_field5 key:any
-     * @type_function_param1_field6 cancel:boolean
-     * @type_function_param1_field7 column:object
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field data:object
+     * @type_function_param1_field key:any
+     * @type_function_param1_field column:object
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditingStart?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => any);
+    onEditingStart?: ((e: EditingStartEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 options:object
-     * @type_function_param1_field4 parentType:string
-     * @type_function_param1_field5 value:any
-     * @type_function_param1_field6 setValue(newValue, newText):any
-     * @type_function_param1_field7 updateValueTimeout:number
-     * @type_function_param1_field8 width:number
-     * @type_function_param1_field9 disabled:boolean
-     * @type_function_param1_field10 rtlEnabled:boolean
-     * @type_function_param1_field11 editorElement:dxElement
-     * @type_function_param1_field12 readOnly:boolean
-     * @type_function_param1_field13 dataField:string
-     * @type_function_param1_field14 row:dxTreeListRowObject
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field setValue(newValue, newText):any
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPrepared?: ((options: { component?: dxTreeList, element?: dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: dxElement, readOnly?: boolean, dataField?: string, row?: dxTreeListRowObject }) => any);
+    onEditorPrepared?: ((options: EditorPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 parentType:string
-     * @type_function_param1_field5 value:any
-     * @type_function_param1_field6 setValue(newValue, newText):any
-     * @type_function_param1_field7 updateValueTimeout:number
-     * @type_function_param1_field8 width:number
-     * @type_function_param1_field9 disabled:boolean
-     * @type_function_param1_field10 rtlEnabled:boolean
-     * @type_function_param1_field11 cancel:boolean
-     * @type_function_param1_field12 editorElement:dxElement
-     * @type_function_param1_field13 readOnly:boolean
-     * @type_function_param1_field14 editorName:string
-     * @type_function_param1_field15 editorOptions:object
-     * @type_function_param1_field16 dataField:string
-     * @type_function_param1_field17 row:dxTreeListRowObject
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field setValue(newValue, newText):any
+     * @type_function_param1_field editorOptions:object
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEditorPreparing?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: dxElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxTreeListRowObject }) => any);
+    onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 cellElement:dxElement
-     * @type_function_param1_field5 columnIndex:number
-     * @type_function_param1_field6 rowIndex:number
-     * @type_function_param1_field7 row:dxTreeListRowObject
-     * @type_function_param1_field8 column:dxTreeListColumn
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1_field column:dxTreeListColumn
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedCellChanged?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, cellElement?: dxElement, columnIndex?: number, rowIndex?: number, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any);
+    onFocusedCellChanged?: ((e: FocusedCellChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 cellElement:dxElement
-     * @type_function_param1_field5 prevColumnIndex:number
-     * @type_function_param1_field6 prevRowIndex:number
-     * @type_function_param1_field7 newColumnIndex:number
-     * @type_function_param1_field8 newRowIndex:number
-     * @type_function_param1_field9 event:event
-     * @type_function_param1_field10 rows:Array<dxTreeListRowObject>
-     * @type_function_param1_field11 columns:Array<dxTreeListColumn>
-     * @type_function_param1_field12 cancel:boolean
-     * @type_function_param1_field13 isHighlighted:boolean
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field event:event
+     * @type_function_param1_field rows:Array<dxTreeListRowObject>
+     * @type_function_param1_field columns:Array<dxTreeListColumn>
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedCellChanging?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, cellElement?: dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxTreeListRowObject>, columns?: Array<dxTreeListColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
+    onFocusedCellChanging?: ((e: FocusedCellChangingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rowElement:dxElement
-     * @type_function_param1_field5 rowIndex:number
-     * @type_function_param1_field6 row:dxTreeListRowObject
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedRowChanged?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, rowElement?: dxElement, rowIndex?: number, row?: dxTreeListRowObject }) => any);
+    onFocusedRowChanged?: ((e: FocusedRowChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rowElement:dxElement
-     * @type_function_param1_field5 prevRowIndex:number
-     * @type_function_param1_field6 newRowIndex:number
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 rows:Array<dxTreeListRowObject>
-     * @type_function_param1_field9 cancel:boolean
-     * @extends Action
+     * @type_function_param1_field element:DxElement
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field model:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field rowElement:DxElement
+     * @type_function_param1_field prevRowIndex:number
+     * @type_function_param1_field newRowIndex:number
+     * @type_function_param1_field rows:Array<dxTreeListRowObject>
+     * @type_function_param1_field cancel:boolean
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusedRowChanging?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, rowElement?: dxElement, prevRowIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxTreeListRowObject>, cancel?: boolean }) => any);
+    onFocusedRowChanging?: ((e: FocusedRowChangingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 root:dxTreeListNode
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field root:dxTreeListNode
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onNodesInitialized?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, root?: dxTreeListNode }) => any);
+    onNodesInitialized?: ((e: NodesInitializedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 data:object
-     * @type_function_param1_field6 key:any
-     * @type_function_param1_field7 values:Array<any>
-     * @type_function_param1_field8 columns:Array<Object>
-     * @type_function_param1_field9 rowIndex:number
-     * @type_function_param1_field10 rowType:string
-     * @type_function_param1_field11 isSelected:boolean
-     * @type_function_param1_field12 isExpanded:boolean
-     * @type_function_param1_field13 isNewRow:boolean
-     * @type_function_param1_field14 rowElement:dxElement
-     * @type_function_param1_field15 handled:boolean
-     * @type_function_param1_field16 node:dxTreeListNode
-     * @type_function_param1_field17 level:number
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field event:event
+     * @type_function_param1_field data:object
+     * @type_function_param1_field key:any
+     * @type_function_param1_field values:Array<any>
+     * @type_function_param1_field columns:Array<Object>
+     * @type_function_param1_field node:dxTreeListNode
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
+    onRowClick?: ((e: RowClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 data:object
-     * @type_function_param1_field6 key:any
-     * @type_function_param1_field7 values:Array<any>
-     * @type_function_param1_field8 columns:Array<dxTreeListColumn>
-     * @type_function_param1_field9 rowIndex:number
-     * @type_function_param1_field10 rowType:string
-     * @type_function_param1_field11 isSelected:boolean
-     * @type_function_param1_field12 isExpanded:boolean
-     * @type_function_param1_field13 isNewRow:boolean
-     * @type_function_param1_field14 rowElement:dxElement
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field event:event
+     * @type_function_param1_field data:object
+     * @type_function_param1_field key:any
+     * @type_function_param1_field values:Array<any>
+     * @type_function_param1_field columns:Array<dxTreeListColumn>
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowDblClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement }) => any);
+    onRowDblClick?: ((e: RowDblClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
-     * @type_function_param1_field4 data:object
-     * @type_function_param1_field5 key:any
-     * @type_function_param1_field6 values:Array<any>
-     * @type_function_param1_field7 columns:Array<dxTreeListColumn>
-     * @type_function_param1_field8 rowIndex:number
-     * @type_function_param1_field9 rowType:string
-     * @type_function_param1_field10 isSelected:boolean
-     * @type_function_param1_field11 isExpanded:boolean
-     * @type_function_param1_field12 isNewRow:boolean
-     * @type_function_param1_field13 rowElement:dxElement
-     * @type_function_param1_field14 node:dxTreeListNode
-     * @type_function_param1_field15 level:number
-     * @extends Action
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field data:object
+     * @type_function_param1_field key:any
+     * @type_function_param1_field values:Array<any>
+     * @type_function_param1_field columns:Array<dxTreeListColumn>
+     * @type_function_param1_field node:dxTreeListNode
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowPrepared?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement, node?: dxTreeListNode, level?: number }) => any);
+    onRowPrepared?: ((e: RowPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
-    paging?: dxTreeListPaging;
+    paging?: Paging;
     /**
      * @docid
      * @default "parentId"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     parentIdExpr?: string | Function;
     /**
      * @docid
-     * @type object|Enums.Mode
      * @default "auto"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     remoteOperations?: {
-    /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      filtering?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      grouping?: boolean,
-      /**
-       * @docid
-       * @prevFileNamespace DevExpress.ui
-       * @default false
-       */
-      sorting?: boolean
-    } | 'auto';
+        /**
+         * @docid
+         * @default false
+         */
+        filtering?: boolean;
+        /**
+         * @docid
+         * @default false
+         */
+        grouping?: boolean;
+        /**
+         * @docid
+         * @default false
+         */
+        sorting?: boolean;
+    } | Mode;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    rootValue?: any;
+    rootValue?: TKey;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
-    scrolling?: dxTreeListScrolling;
+    scrolling?: Scrolling;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
      * @type object
      */
-    selection?: dxTreeListSelection;
-}
-export interface dxTreeListEditing extends GridBaseEditing {
+    selection?: Selection;
+    /**
+     * @docid
+     * @type dxTreeListToolbar
+     * @default undefined
+     * @public
+     */
+    toolbar?: Toolbar;
+};
+
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated Use Editing instead
+ */
+export type dxTreeListEditing<TRowData = any, TKey = any> = Editing<TRowData, TKey>;
+
+/**
+ * @public
+ */
+export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowData, TKey> {
     /**
      * @docid dxTreeListOptions.editing.allowAdding
      * @default false
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 row:dxTreeListRowObject
-     * @type_function_return Boolean
-     * @prevFileNamespace DevExpress.ui
+     * @type boolean|function
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field row:dxTreeListRowObject
      * @public
      */
-    allowAdding?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject }) => boolean);
+    allowAdding?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey> }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowDeleting
      * @default false
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 row:dxTreeListRowObject
-     * @type_function_return Boolean
-     * @prevFileNamespace DevExpress.ui
+     * @type boolean|function
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field row:dxTreeListRowObject
      * @public
      */
-    allowDeleting?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject }) => boolean);
+    allowDeleting?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey> }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowUpdating
      * @default false
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 row:dxTreeListRowObject
-     * @type_function_return Boolean
-     * @prevFileNamespace DevExpress.ui
+     * @type boolean|function
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field row:dxTreeListRowObject
      * @public
      */
-    allowUpdating?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject }) => boolean);
+    allowUpdating?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey> }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.texts
      * @type object
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    texts?: dxTreeListEditingTexts;
+    texts?: EditingTexts;
 }
-export interface dxTreeListEditingTexts extends GridBaseEditingTexts {
+
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
+export type dxTreeListEditingTexts = EditingTexts;
+
+/**
+ * @docid
+ */
+export interface EditingTexts extends EditingTextsBase {
     /**
      * @docid dxTreeListOptions.editing.texts.addRowToNode
      * @default "Add"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     addRowToNode?: string;
 }
-export interface dxTreeListPaging extends GridBasePaging {
+
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated
+ */
+export type dxTreeListPaging = Paging;
+
+/**
+ * @docid
+ */
+export interface Paging extends PagingBase {
     /**
      * @docid dxTreeListOptions.paging.enabled
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     enabled?: boolean;
 }
-export interface dxTreeListScrolling extends GridBaseScrolling {
+
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated Use Scrolling instead
+ */
+export type dxTreeListScrolling = Scrolling;
+
+/**
+ * @public
+ */
+export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxTreeListOptions.scrolling.mode
-     * @type Enums.TreeListScrollingMode
      * @default "virtual"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    mode?: 'standard' | 'virtual';
+    mode?: ScrollMode;
 }
-export interface dxTreeListSelection extends GridBaseSelection {
+
+/**
+ * @public
+ * @namespace DevExpress.ui
+ * @deprecated Use Selection instead
+ */
+export type dxTreeListSelection = Selection;
+
+/**
+ * @docid
+ * @public
+ */
+export interface Selection extends SelectionBase {
     /**
      * @docid dxTreeListOptions.selection.recursive
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     recursive?: boolean;
@@ -548,62 +932,49 @@ export interface dxTreeListSelection extends GridBaseSelection {
 /**
  * @docid
  * @inherits GridBase
- * @module ui/tree_list
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
+ * @options dxTreeListOptions
  */
-export default class dxTreeList extends Widget implements GridBase {
-    constructor(element: Element, options?: dxTreeListOptions)
-    constructor(element: JQuery, options?: dxTreeListOptions)
+export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTreeListOptions<TRowData, TKey>> implements GridBase<TRowData, TKey> {
     /**
      * @docid
      * @publicName addColumn(columnOptions)
      * @param1 columnOptions:object|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addColumn(columnOptions: any | string): void;
+    addColumn(columnOptions: Column<TRowData, TKey> | string): void;
     /**
      * @docid
      * @publicName addRow()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(): Promise<void> & JQueryPromise<void>;
+    addRow(): DxPromise<void>;
     /**
      * @docid
      * @publicName addRow(parentId)
-     * @param1 parentId:any
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(parentId: any): Promise<void> & JQueryPromise<void>;
+    addRow(parentId: TKey): DxPromise<void>;
     /**
      * @docid
      * @publicName collapseRow(key)
-     * @param1 key:any
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    collapseRow(key: any): Promise<void> & JQueryPromise<void>;
+    collapseRow(key: TKey): DxPromise<void>;
     /**
      * @docid
      * @publicName expandRow(key)
-     * @param1 key:any
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    expandRow(key: any): Promise<void> & JQueryPromise<void>;
+    expandRow(key: TKey): DxPromise<void>;
     /**
      * @docid
      * @publicName forEachNode(callback)
-     * @param1 callback:function
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     forEachNode(callback: Function): void;
@@ -611,126 +982,99 @@ export default class dxTreeList extends Widget implements GridBase {
      * @docid
      * @publicName forEachNode(nodes, callback)
      * @param1 nodes:Array<dxTreeListNode>
-     * @param2 callback:function
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    forEachNode(nodes: Array<dxTreeListNode>, callback: Function): void;
+    forEachNode(nodes: Array<Node<TRowData, TKey>>, callback: Function): void;
     /**
      * @docid
      * @publicName getNodeByKey(key)
      * @param1 key:object|string|number
      * @return dxTreeListNode
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getNodeByKey(key: any | string | number): dxTreeListNode;
+    getNodeByKey(key: TKey): Node<TRowData, TKey>;
     /**
      * @docid
      * @publicName getRootNode()
      * @return dxTreeListNode
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getRootNode(): dxTreeListNode;
+    getRootNode(): Node<TRowData, TKey>;
     /**
      * @docid
      * @publicName getSelectedRowKeys()
-     * @return Array<any>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowKeys(): Array<any>;
+    getSelectedRowKeys(): Array<TKey>;
     /**
      * @docid
      * @publicName getSelectedRowKeys(mode)
-     * @param1 mode:string
-     * @return Array<any>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowKeys(mode: string): Array<any>;
+    getSelectedRowKeys(mode: string): Array<TKey>;
     /**
      * @docid
      * @publicName getSelectedRowsData()
-     * @return Array<any>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowsData(): Array<any>;
+    getSelectedRowsData(): Array<TRowData>;
     /**
      * @docid
      * @publicName getSelectedRowsData(mode)
-     * @param1 mode:string
-     * @return Array<any>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getSelectedRowsData(mode: string): Array<any>;
+    getSelectedRowsData(mode: string): Array<TRowData>;
     /**
      * @docid
      * @publicName getVisibleColumns()
      * @return Array<dxTreeListColumn>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getVisibleColumns(): Array<dxTreeListColumn>;
+    getVisibleColumns(): Array<Column<TRowData, TKey>>;
     /**
      * @docid
      * @publicName getVisibleColumns(headerLevel)
-     * @param1 headerLevel:number
      * @return Array<dxTreeListColumn>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getVisibleColumns(headerLevel: number): Array<dxTreeListColumn>;
+    getVisibleColumns(headerLevel: number): Array<Column<TRowData, TKey>>;
     /**
      * @docid
      * @publicName getVisibleRows()
      * @return Array<dxTreeListRowObject>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    getVisibleRows(): Array<dxTreeListRowObject>;
+    getVisibleRows(): Array<Row<TRowData, TKey>>;
     /**
      * @docid
      * @publicName isRowExpanded(key)
-     * @param1 key:any
-     * @return boolean
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    isRowExpanded(key: any): boolean;
+    isRowExpanded(key: TKey): boolean;
     /**
      * @docid
      * @publicName loadDescendants()
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(): Promise<void> & JQueryPromise<void>;
+    loadDescendants(): DxPromise<void>;
     /**
      * @docid
      * @publicName loadDescendants(keys)
-     * @param1 keys:Array<any>
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(keys: Array<any>): Promise<void> & JQueryPromise<void>;
+    loadDescendants(keys: Array<TKey>): DxPromise<void>;
     /**
      * @docid
      * @publicName loadDescendants(keys, childrenOnly)
-     * @param1 keys:Array<any>
-     * @param2 childrenOnly:boolean
      * @return Promise<void>
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadDescendants(keys: Array<any>, childrenOnly: boolean): Promise<void> & JQueryPromise<void>;
+    loadDescendants(keys: Array<TKey>, childrenOnly: boolean): DxPromise<void>;
 
     beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+    byKey(key: TKey): DxPromise<TRowData>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
     cellValue(rowIndex: number, dataField: string, value: any): void;
@@ -749,47 +1093,47 @@ export default class dxTreeList extends Widget implements GridBase {
     columnOption(id: number | string, options: any): void;
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
-    deselectAll(): Promise<void> & JQueryPromise<void>;
-    deselectRows(keys: Array<any>): Promise<any> & JQueryPromise<any>;
+    deselectAll(): DxPromise<void>;
+    deselectRows(keys: Array<TKey>): DxPromise<Array<TRowData>>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
     endCustomLoading(): void;
-    expandAdaptiveDetailRow(key: any): void;
+    expandAdaptiveDetailRow(key: TKey): void;
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
-    focus(element: Element | JQuery): void;
-    getCellElement(rowIndex: number, dataField: string): dxElement | undefined;
-    getCellElement(rowIndex: number, visibleColumnIndex: number): dxElement | undefined;
+    focus(element: UserDefinedElement): void;
+    getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
+    getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DataSource;
-    getKeyByRowIndex(rowIndex: number): any;
-    getRowElement(rowIndex: number): Array<Element> & JQuery | undefined;
-    getRowIndexByKey(key: any | string | number): number;
-    getScrollable(): dxScrollable;
+    getDataSource(): DataSource<TRowData, TKey>;
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
+    getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
+    getRowIndexByKey(key: TKey): number;
+    getScrollable(): Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
-    isAdaptiveDetailRowExpanded(key: any): boolean;
-    isRowFocused(key: any): boolean;
-    isRowSelected(key: any): boolean;
-    keyOf(obj: any): any;
-    navigateToRow(key: any): void;
+    isAdaptiveDetailRowExpanded(key: TKey): boolean;
+    isRowFocused(key: TKey): boolean;
+    isRowSelected(key: TKey): boolean;
+    keyOf(obj: TRowData): TKey;
+    navigateToRow(key: TKey): DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
-    pageIndex(newIndex: number): Promise<void> & JQueryPromise<void>;
+    pageIndex(newIndex: number): DxPromise<void>;
     pageSize(): number;
     pageSize(value: number): void;
-    refresh(): Promise<void> & JQueryPromise<void>;
-    refresh(changesOnly: boolean): Promise<void> & JQueryPromise<void>;
+    refresh(): DxPromise<void>;
+    refresh(changesOnly: boolean): DxPromise<void>;
     repaintRows(rowIndexes: Array<number>): void;
-    saveEditData(): Promise<void> & JQueryPromise<void>;
+    saveEditData(): DxPromise<void>;
     searchByText(text: string): void;
-    selectAll(): Promise<void> & JQueryPromise<void>;
-    selectRows(keys: Array<any>, preserve: boolean): Promise<any> & JQueryPromise<any>;
-    selectRowsByIndexes(indexes: Array<number>): Promise<any> & JQueryPromise<any>;
+    selectAll(): DxPromise<void>;
+    selectRows(keys: Array<TKey>, preserve: boolean): DxPromise<Array<TRowData>>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<Array<TRowData>>;
     showColumnChooser(): void;
     state(): any;
     state(state: any): void;
@@ -797,270 +1141,615 @@ export default class dxTreeList extends Widget implements GridBase {
     updateDimensions(): void;
 }
 
+type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+export type dxTreeListToolbar = Toolbar;
+export type dxTreeListToolbarItem = ToolbarItem;
+
 /**
- * @docid
- * @inherits GridBaseColumn
- * @type object
+ * @docid dxTreeListToolbarItem
+ * @inherits dxToolbarItem
+ * @namespace DevExpress.ui.dxTreeList
  */
-export interface dxTreeListColumn extends GridBaseColumn {
+export interface ToolbarItem extends dxToolbarItem {
     /**
-     * @docid
-     * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
-     * @prevFileNamespace DevExpress.ui
+     * @docid dxTreeListToolbarItem.name
      * @public
      */
-    buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxTreeListColumnButton>;
+    name?: TreeListPredefinedToolbarItem | string;
     /**
-     * @docid
-     * @type_function_param1 cellElement:dxElement
-     * @type_function_param2 cellInfo:object
-     * @type_function_param2_field1 data:object
-     * @type_function_param2_field2 component:dxTreeList
-     * @type_function_param2_field3 value:any
-     * @type_function_param2_field4 oldValue:any
-     * @type_function_param2_field5 displayValue:any
-     * @type_function_param2_field6 text:string
-     * @type_function_param2_field7 columnIndex:number
-     * @type_function_param2_field8 rowIndex:number
-     * @type_function_param2_field9 column:dxTreeListColumn
-     * @type_function_param2_field10 row:dxTreeListRowObject
-     * @type_function_param2_field11 rowType:string
-     * @type_function_param2_field12 watch:function
-     * @prevFileNamespace DevExpress.ui
+     * @docid dxTreeListToolbarItem.location
+     * @default 'after'
      * @public
      */
-    cellTemplate?: template | ((cellElement: dxElement, cellInfo: { data?: any, component?: dxTreeList, value?: any, oldValue?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, row?: dxTreeListRowObject, rowType?: string, watch?: Function }) => any);
+    location?: ToolbarItemLocation;
+}
+
+/**
+ * @public
+ * @docid dxTreeListToolbar
+ * @namespace DevExpress.ui.dxTreeList
+ */
+export type Toolbar = {
     /**
-     * @docid
+     * @docid dxTreeListToolbar.items
+     * @type Array<dxTreeListToolbarItem,Enums.TreeListPredefinedToolbarItem>
+     * @public
+     */
+    items?: Array<TreeListPredefinedToolbarItem | ToolbarItem>;
+    /**
+     * @docid dxTreeListToolbar.visible
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    columns?: Array<dxTreeListColumn | string>;
+    visible?: boolean;
     /**
-     * @docid
-     * @type_function_param1 cellElement:dxElement
+     * @docid dxTreeListToolbar.disabled
+     * @default false
+     * @public
+     */
+    disabled?: boolean;
+};
+
+/**
+ * @public
+ */
+export type Column<TRowData = any, TKey = any> = dxTreeListColumn<TRowData, TKey>;
+
+/**
+ * @namespace DevExpress.ui
+ * @deprecated Use the Column type instead
+ */
+export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase<TRowData> {
+    /**
+     * @docid dxTreeListColumn.buttons
+     * @type Array<Enums.TreeListPredefinedColumnButton,dxTreeListColumnButton>
+     * @public
+     */
+    buttons?: Array<TreeListPredefinedColumnButton | ColumnButton<TRowData, TKey>>;
+    /**
+     * @docid dxTreeListColumn.cellTemplate
      * @type_function_param2 cellInfo:object
-     * @type_function_param2_field1 setValue(newValue, newText):any
-     * @type_function_param2_field2 data:object
-     * @type_function_param2_field3 component:dxTreeList
-     * @type_function_param2_field4 value:any
-     * @type_function_param2_field5 displayValue:any
-     * @type_function_param2_field6 text:string
-     * @type_function_param2_field7 columnIndex:number
-     * @type_function_param2_field8 rowIndex:number
-     * @type_function_param2_field9 column:dxTreeListColumn
-     * @type_function_param2_field10 row:dxTreeListRowObject
-     * @type_function_param2_field11 rowType:string
-     * @type_function_param2_field12 watch:function
-     * @prevFileNamespace DevExpress.ui
+     * @type_function_param2_field data:object
+     * @type_function_param2_field column:dxTreeListColumn
+     * @type_function_param2_field row:dxTreeListRowObject
      * @public
      */
-    editCellTemplate?: template | ((cellElement: dxElement, cellInfo: { setValue?: any, data?: any, component?: dxTreeList, value?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, row?: dxTreeListRowObject, rowType?: string, watch?: Function }) => any);
+    cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData<TRowData, TKey>) => any);
     /**
-     * @docid
-     * @type_function_param1 columnHeader:dxElement
+     * @docid dxTreeListColumn.columns
+     * @type Array<dxTreeListColumn|string>
+     * @default undefined
+     * @public
+     */
+    columns?: Array<Column<TRowData, TKey> | string>;
+    /**
+     * @docid dxTreeListColumn.editCellTemplate
+     * @type_function_param2 cellInfo:object
+     * @type_function_param2_field setValue(newValue, newText):any
+     * @type_function_param2_field data:object
+     * @type_function_param2_field column:dxTreeListColumn
+     * @type_function_param2_field row:dxTreeListRowObject
+     * @public
+     */
+    editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData<TRowData, TKey>) => any);
+    /**
+     * @docid dxTreeListColumn.headerCellTemplate
      * @type_function_param2 headerInfo:object
-     * @type_function_param2_field1 component:dxTreeList
-     * @type_function_param2_field2 columnIndex:number
-     * @type_function_param2_field3 column:dxTreeListColumn
-     * @prevFileNamespace DevExpress.ui
+     * @type_function_param2_field column:dxTreeListColumn
      * @public
      */
-    headerCellTemplate?: template | ((columnHeader: dxElement, headerInfo: { component?: dxTreeList, columnIndex?: number, column?: dxTreeListColumn }) => any);
+    headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData<TRowData, TKey>) => any);
     /**
-     * @docid
+     * @docid dxTreeListColumn.type
      * @publicName type
-     * @type Enums.TreeListCommandColumnType
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type?: 'adaptive' | 'buttons';
+    type?: TreeListCommandColumnType;
 }
 
 /**
- * @docid
- * @inherits GridBaseColumnButton
- * @type object
+ * @public
  */
-export interface dxTreeListColumnButton extends GridBaseColumnButton {
+export type ColumnButton<TRowData = any, TKey = any> = dxTreeListColumnButton<TRowData, TKey>;
+
+/**
+ * @namespace DevExpress.ui
+ * @deprecated Use the TreeList's ColumnButton type instead
+ */
+export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends ColumnButtonBase {
     /**
-     * @docid
-     * @type Enums.TreeListColumnButtonName|string
-     * @prevFileNamespace DevExpress.ui
+     * @docid dxTreeListColumnButton.name
      * @public
      */
-    name?: 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+    name?: TreeListPredefinedColumnButton | string;
     /**
-     * @docid
+     * @docid dxTreeListColumnButton.onClick
      * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:dxElement
-     * @type_function_param1_field3 model:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 row:dxTreeListRowObject
-     * @type_function_param1_field6 column:dxTreeListColumn
-     * @prevFileNamespace DevExpress.ui
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field event:event
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1_field column:dxTreeListColumn
      * @public
      */
-    onClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any) | string;
+    onClick?: ((e: ColumnButtonClickEvent<TRowData, TKey>) => void);
     /**
-     * @docid
-     * @type_function_param1 cellElement:dxElement
+     * @docid dxTreeListColumnButton.template
      * @type_function_param2 cellInfo:object
-     * @type_function_param2_field1 component:dxTreeList
-     * @type_function_param2_field2 data:object
-     * @type_function_param2_field3 key:any
-     * @type_function_param2_field4 columnIndex:number
-     * @type_function_param2_field5 column:dxTreeListColumn
-     * @type_function_param2_field6 rowIndex:number
-     * @type_function_param2_field7 rowType:string
-     * @type_function_param2_field8 row:dxTreeListRowObject
+     * @type_function_param2_field data:object
+     * @type_function_param2_field key:any
+     * @type_function_param2_field column:dxTreeListColumn
+     * @type_function_param2_field row:dxTreeListRowObject
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((cellElement: dxElement, cellInfo: { component?: dxTreeList, data?: any, key?: any, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject }) => string | Element | JQuery);
+    template?: template | ((cellElement: DxElement, cellInfo: ColumnButtonTemplateData<TRowData, TKey>) => string | UserDefinedElement);
     /**
-     * @docid
+     * @docid dxTreeListColumnButton.visible
      * @default true
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 row:dxTreeListRowObject
-     * @type_function_param1_field3 column:dxTreeListColumn
-     * @type_function_return Boolean
-     * @prevFileNamespace DevExpress.ui
+     * @type boolean | function
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1_field column:dxTreeListColumn
      * @public
      */
-    visible?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => boolean);
+    visible?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey>; readonly column: Column<TRowData, TKey> }) => boolean);
+    /**
+     * @docid dxTreeListColumnButton.disabled
+     * @default false
+     * @type boolean | function
+     * @type_function_param1_field component:dxTreeList
+     * @type_function_param1_field row:dxTreeListRowObject
+     * @type_function_param1_field column:dxTreeListColumn
+     * @public
+     */
+    disabled?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey>; readonly column: Column<TRowData, TKey> }) => boolean);
 }
 
 /**
- * @docid
- * @type object
+ * @namespace DevExpress.ui
+ * @deprecated Use Node instead
  */
-export interface dxTreeListNode {
+export type dxTreeListNode<TRowData = any, TKey = any> = Node<TRowData, TKey>;
+
+/**
+ * @public
+ * @docid dxTreeListNode
+ */
+export type Node<TRowData = any, TKey = any> = {
     /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
+     * @docid dxTreeListNode.children
+     * @type  Array<dxTreeListNode>
      * @public
      */
-    children?: Array<dxTreeListNode>;
+    children?: Array<Node<TRowData, TKey>>;
     /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
+     * @docid dxTreeListNode.data
      * @public
      */
-    data?: any;
+    data?: TRowData;
     /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
+     * @docid dxTreeListNode.hasChildren
      * @public
      */
     hasChildren?: boolean;
     /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
+     * @docid dxTreeListNode.key
      * @public
      */
-    key?: any;
+    key: TKey;
     /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
+     * @docid dxTreeListNode.level
      * @public
      */
-    level?: number;
+    level: number;
     /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
+     * @docid dxTreeListNode.parent
+     * @type dxTreeListNode
      * @public
      */
-    parent?: dxTreeListNode;
+    parent?: Node<TRowData, TKey>;
     /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
+     * @docid dxTreeListNode.visible
      * @public
      */
     visible?: boolean;
-}
+};
 
 /**
- * @docid
- * @type object
+ * @namespace DevExpress.ui
+ * @deprecated Use Row instead
  */
-export interface dxTreeListRowObject {
-    /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    isEditing?: boolean;
-    /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    isExpanded?: boolean;
-    /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    isNewRow?: boolean;
-    /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    isSelected?: boolean;
-    /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    key?: any;
-    /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    level?: number;
-    /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    node?: dxTreeListNode;
-    /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    rowIndex?: number;
-    /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    rowType?: string;
-    /**
-     * @docid
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    values?: Array<any>;
-}
+export type dxTreeListRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey>;
 
-declare global {
-interface JQuery {
-    dxTreeList(): JQuery;
-    dxTreeList(options: "instance"): dxTreeList;
-    dxTreeList(options: string): any;
-    dxTreeList(options: string, ...params: any[]): any;
-    dxTreeList(options: dxTreeListOptions): JQuery;
-}
-}
-export type Options = dxTreeListOptions;
+/**
+ * @public
+ * @docid dxTreeListRowObject
+ */
+export type Row<TRowData = any, TKey = any> = {
+    /**
+     * @docid dxTreeListRowObject.isEditing
+     * @public
+     */
+    readonly isEditing?: boolean;
+    /**
+     * @docid dxTreeListRowObject.isExpanded
+     * @public
+     */
+    readonly isExpanded?: boolean;
+    /**
+     * @docid dxTreeListRowObject.isNewRow
+     * @public
+     */
+    readonly isNewRow?: boolean;
+    /**
+     * @docid dxTreeListRowObject.isSelected
+     * @public
+     */
+    readonly isSelected?: boolean;
+    /**
+     * @docid dxTreeListRowObject.key
+     * @public
+     */
+    readonly key: TKey;
+    /**
+     * @docid dxTreeListRowObject.level
+     * @public
+     */
+    readonly level: number;
+    /**
+     * @docid dxTreeListRowObject.node
+     * @type dxTreeListNode
+     * @public
+     */
+    readonly node: Node<TRowData, TKey>;
+    /**
+     * @docid dxTreeListRowObject.rowIndex
+     * @public
+     */
+    readonly rowIndex: number;
+    /**
+     * @docid dxTreeListRowObject.rowType
+     * @public
+     */
+    readonly rowType: string;
+    /**
+     * @docid dxTreeListRowObject.values
+     * @public
+     */
+    readonly values: Array<any>;
+    /**
+     * @docid dxTreeListRowObject.data
+     * @public
+     */
+    readonly data: TRowData;
+};
 
-/** @deprecated use Options instead */
-export type IOptions = dxTreeListOptions;
+/** @public */
+export type ExplicitTypes<TRowData, TKey> = {
+  AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<TRowData, TKey>;
+  CellClickEvent: CellClickEvent<TRowData, TKey>;
+  CellDblClickEvent: CellDblClickEvent<TRowData, TKey>;
+  CellHoverChangedEvent: CellHoverChangedEvent<TRowData, TKey>;
+  CellPreparedEvent: CellPreparedEvent<TRowData, TKey>;
+  ColumnButtonClickEvent: ColumnButtonClickEvent<TRowData, TKey>;
+  ColumnButtonTemplateData: ColumnButtonTemplateData<TRowData, TKey>;
+  ColumnCellTemplateData: ColumnCellTemplateData<TRowData, TKey>;
+  ColumnEditCellTemplateData: ColumnEditCellTemplateData<TRowData, TKey>;
+  ContentReadyEvent: ContentReadyEvent<TRowData, TKey>;
+  ContextMenuPreparingEvent: ContextMenuPreparingEvent<TRowData, TKey>;
+  DataErrorOccurredEvent: DataErrorOccurredEvent<TRowData, TKey>;
+  DisposingEvent: DisposingEvent<TRowData, TKey>;
+  EditCanceledEvent: EditCanceledEvent<TRowData, TKey>;
+  EditCancelingEvent: EditCancelingEvent<TRowData, TKey>;
+  Editing: Editing<TRowData, TKey>;
+  EditingStartEvent: EditingStartEvent<TRowData, TKey>;
+  EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
+  EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
+  FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
+  FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
+  FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
+  FocusedRowChangingEvent: FocusedRowChangingEvent<TRowData, TKey>;
+  InitializedEvent: InitializedEvent<TRowData, TKey>;
+  InitNewRowEvent: InitNewRowEvent<TRowData, TKey>;
+  KeyDownEvent: KeyDownEvent<TRowData, TKey>;
+  NodesInitializedEvent: NodesInitializedEvent<TRowData, TKey>;
+  OptionChangedEvent: OptionChangedEvent<TRowData, TKey>;
+  Properties: Properties<TRowData, TKey>;
+  RowClickEvent: RowClickEvent<TRowData, TKey>;
+  RowCollapsedEvent: RowCollapsedEvent<TRowData, TKey>;
+  RowCollapsingEvent: RowCollapsingEvent<TRowData, TKey>;
+  RowDblClickEvent: RowDblClickEvent<TRowData, TKey>;
+  RowDraggingAddEvent: RowDraggingAddEvent<TRowData, TKey>;
+  RowDraggingChangeEvent: RowDraggingChangeEvent<TRowData, TKey>;
+  RowDraggingEndEvent: RowDraggingEndEvent<TRowData, TKey>;
+  RowDraggingMoveEvent: RowDraggingMoveEvent<TRowData, TKey>;
+  RowDraggingRemoveEvent: RowDraggingRemoveEvent<TRowData, TKey>;
+  RowDraggingReorderEvent: RowDraggingReorderEvent<TRowData, TKey>;
+  RowDraggingStartEvent: RowDraggingStartEvent<TRowData, TKey>;
+  RowDraggingTemplateData: RowDraggingTemplateData<TRowData>;
+  RowExpandedEvent: RowExpandedEvent<TRowData, TKey>;
+  RowExpandingEvent: RowExpandingEvent<TRowData, TKey>;
+  RowInsertedEvent: RowInsertedEvent<TRowData, TKey>;
+  RowInsertingEvent: RowInsertingEvent<TRowData, TKey>;
+  RowPreparedEvent: RowPreparedEvent<TRowData, TKey>;
+  RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
+  RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
+  RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
+  RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
+  RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
+  SavedEvent: SavedEvent<TRowData, TKey>;
+  SavingEvent: SavingEvent<TRowData, TKey>;
+  Scrolling: Scrolling;
+  Selection: Selection;
+  SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
+  Toolbar: Toolbar;
+  ToolbarItem: ToolbarItem;
+  ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
+};
+
+/** @public */
+export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
+
+/** @deprecated use Properties instead */
+export type Options<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxTreeListOptions.onAdaptiveDetailRowPreparing
+ * @type_function_param1 e:{ui/tree_list:AdaptiveDetailRowPreparingEvent}
+ */
+onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onCellClick
+ * @type_function_param1 e:{ui/tree_list:CellClickEvent}
+ */
+onCellClick?: ((e: CellClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onCellDblClick
+ * @type_function_param1 e:{ui/tree_list:CellDblClickEvent}
+ */
+onCellDblClick?: ((e: CellDblClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onCellHoverChanged
+ * @type_function_param1 e:{ui/tree_list:CellHoverChangedEvent}
+ */
+onCellHoverChanged?: ((e: CellHoverChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onCellPrepared
+ * @type_function_param1 e:{ui/tree_list:CellPreparedEvent}
+ */
+onCellPrepared?: ((e: CellPreparedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onContentReady
+ * @type_function_param1 e:{ui/tree_list:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onContextMenuPreparing
+ * @type_function_param1 e:{ui/tree_list:ContextMenuPreparingEvent}
+ */
+onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onDataErrorOccurred
+ * @type_function_param1 e:{ui/tree_list:DataErrorOccurredEvent}
+ */
+onDataErrorOccurred?: ((e: DataErrorOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onDisposing
+ * @type_function_param1 e:{ui/tree_list:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onEditCanceled
+ * @type_function_param1 e:{ui/tree_list:EditCanceledEvent}
+ */
+onEditCanceled?: ((e: EditCanceledEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onEditCanceling
+ * @type_function_param1 e:{ui/tree_list:EditCancelingEvent}
+ */
+onEditCanceling?: ((e: EditCancelingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onEditingStart
+ * @type_function_param1 e:{ui/tree_list:EditingStartEvent}
+ */
+onEditingStart?: ((e: EditingStartEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onEditorPrepared
+ * @type_function_param1 e:{ui/tree_list:EditorPreparedEvent}
+ */
+onEditorPrepared?: ((e: EditorPreparedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onEditorPreparing
+ * @type_function_param1 e:{ui/tree_list:EditorPreparingEvent}
+ */
+onEditorPreparing?: ((e: EditorPreparingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onFocusedCellChanged
+ * @type_function_param1 e:{ui/tree_list:FocusedCellChangedEvent}
+ */
+onFocusedCellChanged?: ((e: FocusedCellChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onFocusedCellChanging
+ * @type_function_param1 e:{ui/tree_list:FocusedCellChangingEvent}
+ */
+onFocusedCellChanging?: ((e: FocusedCellChangingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onFocusedRowChanged
+ * @type_function_param1 e:{ui/tree_list:FocusedRowChangedEvent}
+ */
+onFocusedRowChanged?: ((e: FocusedRowChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onFocusedRowChanging
+ * @type_function_param1 e:{ui/tree_list:FocusedRowChangingEvent}
+ */
+onFocusedRowChanging?: ((e: FocusedRowChangingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onInitialized
+ * @type_function_param1 e:{ui/tree_list:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onInitNewRow
+ * @type_function_param1 e:{ui/tree_list:InitNewRowEvent}
+ */
+onInitNewRow?: ((e: InitNewRowEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onKeyDown
+ * @type_function_param1 e:{ui/tree_list:KeyDownEvent}
+ */
+onKeyDown?: ((e: KeyDownEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onNodesInitialized
+ * @type_function_param1 e:{ui/tree_list:NodesInitializedEvent}
+ */
+onNodesInitialized?: ((e: NodesInitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onOptionChanged
+ * @type_function_param1 e:{ui/tree_list:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowClick
+ * @type_function_param1 e:{ui/tree_list:RowClickEvent}
+ */
+onRowClick?: ((e: RowClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowCollapsed
+ * @type_function_param1 e:{ui/tree_list:RowCollapsedEvent}
+ */
+onRowCollapsed?: ((e: RowCollapsedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowCollapsing
+ * @type_function_param1 e:{ui/tree_list:RowCollapsingEvent}
+ */
+onRowCollapsing?: ((e: RowCollapsingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowDblClick
+ * @type_function_param1 e:{ui/tree_list:RowDblClickEvent}
+ */
+onRowDblClick?: ((e: RowDblClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowExpanded
+ * @type_function_param1 e:{ui/tree_list:RowExpandedEvent}
+ */
+onRowExpanded?: ((e: RowExpandedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowExpanding
+ * @type_function_param1 e:{ui/tree_list:RowExpandingEvent}
+ */
+onRowExpanding?: ((e: RowExpandingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowInserted
+ * @type_function_param1 e:{ui/tree_list:RowInsertedEvent}
+ */
+onRowInserted?: ((e: RowInsertedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowInserting
+ * @type_function_param1 e:{ui/tree_list:RowInsertingEvent}
+ */
+onRowInserting?: ((e: RowInsertingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowPrepared
+ * @type_function_param1 e:{ui/tree_list:RowPreparedEvent}
+ */
+onRowPrepared?: ((e: RowPreparedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowRemoved
+ * @type_function_param1 e:{ui/tree_list:RowRemovedEvent}
+ */
+onRowRemoved?: ((e: RowRemovedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowRemoving
+ * @type_function_param1 e:{ui/tree_list:RowRemovingEvent}
+ */
+onRowRemoving?: ((e: RowRemovingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowUpdated
+ * @type_function_param1 e:{ui/tree_list:RowUpdatedEvent}
+ */
+onRowUpdated?: ((e: RowUpdatedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowUpdating
+ * @type_function_param1 e:{ui/tree_list:RowUpdatingEvent}
+ */
+onRowUpdating?: ((e: RowUpdatingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onRowValidating
+ * @type_function_param1 e:{ui/tree_list:RowValidatingEvent}
+ */
+onRowValidating?: ((e: RowValidatingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onSaved
+ * @type_function_param1 e:{ui/tree_list:SavedEvent}
+ */
+onSaved?: ((e: SavedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onSaving
+ * @type_function_param1 e:{ui/tree_list:SavingEvent}
+ */
+onSaving?: ((e: SavingEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/tree_list:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxTreeListOptions.onToolbarPreparing
+ * @type_function_param1 e:{ui/tree_list:ToolbarPreparingEvent}
+ */
+onToolbarPreparing?: ((e: ToolbarPreparingEvent) => void);
+};
+///#ENDDEBUG

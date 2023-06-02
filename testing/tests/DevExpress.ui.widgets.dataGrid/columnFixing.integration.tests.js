@@ -1,3 +1,15 @@
+import $ from 'jquery';
+import browser from 'core/utils/browser';
+import { DataSource } from 'data/data_source/data_source';
+import commonUtils from 'core/utils/common';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
+import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import pointerMock from '../../helpers/pointerMock.js';
+import 'ui/radio_group';
+
+const dataGridWrapper = new DataGridWrapper('#dataGrid');
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -6,25 +18,48 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(gridMarkup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
-import $ from 'jquery';
-import browser from 'core/utils/browser';
-import { DataSource } from 'data/data_source/data_source';
-import commonUtils from 'core/utils/common';
-import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-
-const dataGridWrapper = new DataGridWrapper('#dataGrid');
-
 QUnit.module('Fixed columns', baseModuleConfig, () => {
+    QUnit.test('The "Select All" cell should not have the "dx-col-fixed" class (T1120812)', function(assert) {
+        // arrange
+        const headersWrapper = dataGridWrapper.headers;
+
+        $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: {
+                store: [
+                    { id: 1, value: 'value 1' },
+                    { id: 2, value: 'value 2' }
+                ]
+            },
+            columns: ['id', {
+                dataField: 'value',
+                fixed: true
+            }],
+            columnFixing: {
+                enabled: true
+            },
+            selection: {
+                mode: 'multiple'
+            }
+        });
+
+        const selectAllCell = headersWrapper.getHeaderItem(0, 0);
+
+        // assert
+        assert.ok(selectAllCell.hasClass('dx-command-select'), 'cell contains the Select All checkbox');
+        assert.notOk(selectAllCell.hasClass('dx-col-fixed'), 'not dx-col-fixed');
+    });
+
     QUnit.test('Cells in fixed columns should have "dx-col-fixed" class if FF (T823783, T875201)', function(assert) {
         // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
         const filterRowWrapper = dataGridWrapper.filterRow;
 
         $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: {
                 store: [
                     { id: 1, value: 'value 1' },
@@ -70,7 +105,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
     QUnit.test('Rows with \'dx-row-alt\' should not have \'dx-col-fixed\' class on cells (T852898)', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             rowAlternationEnabled: true,
             dataSource: {
                 store: [
@@ -96,7 +131,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         $('#container').width(150);
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy', age: 40 }],
             columns: [{ dataField: 'firstName', fixed: true, fixedPosition: 'left' }, 'lastName', 'age']
@@ -105,7 +140,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         const adaptiveColumnsController = instance.getController('adaptiveColumns');
         let $cells;
 
-        this.clock.tick();
+        this.clock.tick(10);
         $cells = $(instance.$element().find('.dx-header-row').first().find('td'));
 
         // act
@@ -118,7 +153,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
 
         $('#container').width(800);
         instance.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
         $cells = $(instance.$element().find('.dx-header-row').first().find('td'));
         const $unfixedColumns = $(instance.$element().find('.dx-header-row').last().find('td'));
 
@@ -135,7 +170,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 400,
             height: 150,
             dataSource: [
@@ -168,11 +203,55 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         assert.equal($fixedRow.height(), $dataRow.height(), '2nd row height');
     });
 
+    QUnit.test('DataGrid - A fixed rows should be synchronized after edit form if editCellTemplate is asynchronous (T1013095)', function(assert) {
+        // arrange
+        const radioGroupEditCellTemplate = function(cellElement) {
+            commonUtils.deferUpdate(function() {
+                $('<div>').appendTo(cellElement).dxRadioGroup({
+                    dataSource: [1, 2, 3, 4],
+                });
+            });
+        };
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: null,
+            dataSource: [{ id: 1 }],
+            columnAutoWidth: true,
+            keyExpr: 'id',
+            editing: {
+                allowUpdating: true,
+                mode: 'form',
+                form: {
+                    colCount: 1
+                }
+            },
+            columnFixing: {
+                enabled: true
+            },
+            columns: [
+                {
+                    dataField: 'Foo1',
+                    editCellTemplate: radioGroupEditCellTemplate
+                },
+                {
+                    dataField: 'Foo2',
+                    editCellTemplate: radioGroupEditCellTemplate
+                }
+            ]
+        }).dxDataGrid('instance');
+
+        // act
+        dataGrid.editRow(0);
+
+        // arrange, assert
+        const $row = dataGrid.getRowElement(0);
+        assert.equal($row[0].clientHeight, $row[1].clientHeight, '1st row heights are synchronized');
+    });
+
     QUnit.test('Column widths should be correct after resize column to show scroll if fixed column is exists', function(assert) {
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [
                 { dataField: 'field1', width: 100 },
@@ -204,7 +283,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnAutoWidth: true,
             dataSource: [{}],
             columns: [
@@ -231,7 +310,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
     QUnit.test('fixed column should have correct width if all columns with disabled allowResizing and with width', function(assert) {
         // arrange, act
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [
                 { dataField: 'field1', width: 50, fixed: true },
@@ -250,7 +329,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
     QUnit.test('getRowElement when there is fixed column', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['field1', 'field2', 'field3', { dataField: 'fixedField', fixed: true, fixedPosition: 'right' }],
             dataSource: {
                 group: 'field3',
@@ -283,7 +362,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const columns = dataGrid.getController('columns').getVisibleColumns();
         const adaptiveColumnWidth = columns[3].visibleWidth;
@@ -298,7 +377,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         QUnit.test(`keyboardNavigation "isValidCell" works well with handling of fixed "edit" command column if useLegacyKeyboardNavigation: ${useLegacyKeyboardNavigation}`, function(assert) {
             // arrange, act
             const dataGrid = createDataGrid({
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 width: 300,
                 columns: [
                     { dataField: 'field1', width: 200 },
@@ -340,7 +419,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
             }
         });
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: dataSource,
             columns: [
                 { dataField: 'field1', fixed: true },
@@ -371,7 +450,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         // arrange
         const rowsViewWrapper = dataGridWrapper.rowsView;
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             width: 400,
             height: 150,
             dataSource: [
@@ -430,7 +509,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($dataGrid.find('.dx-datagrid-rowsview table').length, 2, 'two rowsview tables');
         assert.equal($dataGrid.dxDataGrid('instance').getView('rowsView').getTableElements().length, 2, 'two rowsview tables');
@@ -438,7 +517,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         // act
         $dataGrid.dxDataGrid('instance').option('columnFixing.enabled', false);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal($dataGrid.find('.dx-datagrid-rowsview table').length, 1, 'one main rowsview table');
@@ -448,7 +527,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
     QUnit.test('getCellElement', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['field1', 'field2', 'field3', { dataField: 'fixedField', fixed: true, fixedPosition: 'right' }],
             dataSource: {
                 group: 'field3',
@@ -467,5 +546,183 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         assert.equal(dataGrid.getCellElement(5, 1), undefined, 'wrong rowIndex');
         assert.equal(dataGrid.getCellElement(1, 'field5'), undefined, 'wrong column field name');
         assert.equal(dataGrid.getCellElement(1, 100), undefined, 'wrong column visible index');
+    });
+
+    QUnit.testInActiveWindow('Cells in fixed band columns should be editable on click (T996394)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 5; i++) {
+                items.push({
+                    id: i + 1,
+                    field1: `${i + 1}_1`,
+                    field2: `${i + 1}_2`,
+                    field3: `${i + 1}_3`,
+                    field4: `${i + 1}_4`,
+                    field5: `${i + 1}_5`,
+                    field6: `${i + 1}_6`,
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+                startEditAction: 'click'
+            },
+            columns: [
+                {
+                    fixed: true,
+                    caption: 'A',
+                    columns: ['field1', 'field2', 'field3']
+                },
+                'field4',
+                {
+                    fixed: true,
+                    fixedPosition: 'right',
+                    caption: 'B',
+                    columns: ['field5', 'field6']
+                }
+            ]
+        });
+        this.clock.tick(10);
+
+        for(let rowIndex = 0; rowIndex < 5; rowIndex++) {
+            for(let columnIndex = 0; columnIndex < 5; columnIndex++) {
+                let $cell = $(dataGrid.getCellElement(rowIndex, columnIndex));
+
+                // act
+                $cell.trigger('dxclick');
+                this.clock.tick(10);
+                $cell = $(dataGrid.getCellElement(rowIndex, columnIndex));
+
+                // assert
+                assert.ok($cell.hasClass('dx-editor-cell'), `${rowIndex} ${columnIndex} editor cell`);
+                assert.ok($cell.hasClass('dx-focused'), `${rowIndex} ${columnIndex} focused`);
+                assert.ok($cell.find('.dx-texteditor-input').is(':focus'), `${rowIndex} ${columnIndex} input focused`);
+            }
+        }
+    });
+
+    QUnit.test('Master grid should scroll its content on mousewheel of an element in a detail grid (T1004881)', function(assert) {
+        // arrange, act
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 9; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Test ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            columnFixing: {
+                enabled: true
+            },
+            columns: [{
+                dataField: 'id',
+                fixed: true
+            }, 'name'],
+            scrolling: {
+                useNative: false,
+            },
+            masterDetail: {
+                enabled: true,
+                template: function(container) {
+                    const $detailGridContainer = $('<div>').addClass('mygrid');
+                    createDataGrid({
+                        loadingTimeout: null,
+                        dataSource: getData(),
+                        keyExpr: 'id',
+                        columns: ['id', 'name'],
+                        scrolling: {
+                            useNative: false,
+                        },
+                        columnAutoWidth: true,
+                    }, $detailGridContainer);
+                    $detailGridContainer.appendTo(container);
+                }
+            }
+        });
+        this.clock.tick(10);
+
+        // act
+        dataGrid.expandRow(1);
+        this.clock.tick(10);
+        const $detailGridContainer = $(dataGrid.element()).find('.mygrid');
+
+        // assert
+        assert.strictEqual($detailGridContainer.length, 1, 'one detail grid');
+        assert.strictEqual(dataGrid.getScrollable().scrollTop(), 0, 'initial scroll top');
+
+        // act
+        const pointer = pointerMock($detailGridContainer.find('.dx-data-row:eq(0)'));
+        pointer.start().wheel(-50);
+
+        // assert
+        assert.equal(dataGrid.getScrollable().scrollTop(), 50, 'scroll top on mousewheel');
+    });
+
+    QUnit.test('Column should be fixed on column fixed option change inside onContentReady if scrolling mode is virtual (T1066060)', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: [{
+                ID: 1,
+                FirstName: 'John'
+            }],
+            scrolling: {
+                mode: 'virtual',
+            },
+            columnFixing: {
+                enabled: true
+            },
+            selection: {
+                mode: 'multiple'
+            },
+            onContentReady: function(e) {
+                e.component.columnOption(0, 'fixed', true);
+            },
+        });
+        this.clock.tick(10);
+
+        // act
+        const $rows = $(dataGrid.getRowElement(0));
+        assert.equal($rows.eq(1).children().eq(1).text(), '1');
+    });
+
+    // Regression after T1090735
+    QUnit.test('The fixed cell value should not be empty when columns are generated from data and scrolling.columnRenderingMode is \'virtual\'', function(assert) {
+        // arrange, act
+        const data = {};
+
+        for(let i = 1; i <= 50; i++) {
+            data[`field${i}`] = i;
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 900,
+            columnWidth: 100,
+            dataSource: [data],
+            customizeColumns: function(columns) {
+                columns[0].fixed = true;
+            },
+            scrolling: {
+                columnRenderingMode: 'virtual',
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick(100);
+
+        // assert
+        const $fixedCell = $(dataGrid.getCellElement(0, 0));
+        assert.strictEqual($fixedCell.text(), '1', 'fixed cell value');
     });
 });

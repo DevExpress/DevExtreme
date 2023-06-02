@@ -1,13 +1,13 @@
-import * as sass from 'sass';
-import fiber from 'fibers';
+import * as sass from 'sass-embedded';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
-import DartClient from './dart-client';
+import { parse } from './parse-value';
+import { optimizeCss } from './post-compiler';
 
 export enum ImportType {
   Index,
   Color,
-  Unknown
+  Unknown,
 }
 
 export default class Compiler {
@@ -21,91 +21,60 @@ export default class Compiler {
 
   indexFileContent: string;
 
-  dartClient = new DartClient();
+  static getImportType = (url: string): ImportType => {
+    if (url.endsWith('tb_index')) return ImportType.Index;
+    if (url.startsWith('tb_')) return ImportType.Color;
+    return ImportType.Unknown;
+  };
 
-  async compile(
+  compile = async (
+    file: string,
     items: ConfigMetaItem[],
-    options: sass.Options,
-  ): Promise<CompilerResult> {
+    options: sass.Options<'async'>,
+  ): Promise<CompilerResult> => this.sassCompile(file, items, options, sass.compileAsync);
+
+  compileString = async (
+    content: string,
+    items: ConfigMetaItem[],
+    options: sass.Options<'async'>,
+  ): Promise<CompilerResult> => this.sassCompile(content, items, options, sass.compileStringAsync);
+
+  sassCompile = async (
+    source: string,
+    items: ConfigMetaItem[],
+    options: sass.Options<'async'>,
+    compile: (source: string, options?: sass.Options<'async'>) => Promise<sass.CompileResult>,
+  ): Promise<CompilerResult> => {
     this.changedVariables = {};
     this.userItems = items || [];
 
-    let compilerOptions: sass.Options = {
-      importer: this.setter.bind(this),
+    let compilerOptions: sass.Options<'async'> = {
+      importers: [{
+        // eslint-disable-next-line spellcheck/spell-checker
+        canonicalize: this.canonicalize,
+        load: this.load,
+      }],
       functions: {
-        'collector($map)': this.collector.bind(this),
+        'collector($map)': this.collector,
       },
-      fiber,
     };
 
     compilerOptions = { ...compilerOptions, ...options };
 
-    await this.dartClient.check();
-
     return new Promise((resolve, reject) => {
-      const compiler = this.dartClient.isServerAvailable
-        ? this.dartCompiler
-        : this.nodeCompiler;
-
-      compiler.bind(this)(compilerOptions, resolve, reject);
+      compile(source, compilerOptions)
+        .then((data) => {
+          resolve({
+            result: {
+              ...data,
+              css: optimizeCss(data.css),
+            },
+            changedVariables: this.changedVariables,
+          });
+        })
+        .catch((error) => reject(error));
     });
-  }
-
-  dartCompiler(
-    options: sass.Options,
-    resolve: (result: CompilerResult) => void,
-    reject: (result?: sass.SassError) => void,
-  ): void {
-    this.dartClient.send({
-      items: this.userItems,
-      index: this.indexFileContent,
-      file: options.file,
-      data: options.data,
-    }).then((reply) => {
-      if (reply.error) {
-        reject({
-          message: reply.error,
-          line: null,
-          file: null,
-          name: null,
-          column: null,
-          status: null,
-        });
-      } else {
-        resolve({
-          result: {
-            css: Buffer.from(reply.css),
-            map: null,
-            stats: null,
-          },
-          changedVariables: reply.changedVariables,
-        });
-      }
-    });
-  }
-
-  nodeCompiler(
-    options: sass.Options,
-    resolve: (result: CompilerResult) => void,
-    reject: (result: sass.SassError) => void,
-  ): void {
-    sass.render(options, (error, result) => {
-      this.importerCache = {};
-      if (error) reject(error);
-      else {
-        resolve({
-          result,
-          changedVariables: this.changedVariables,
-        });
-      }
-    });
-  }
-
-  static getImportType(url: string): ImportType {
-    if (url.endsWith('tb_index')) return ImportType.Index;
-    if (url.startsWith('tb_')) return ImportType.Color;
-    return ImportType.Unknown;
-  }
+  };
 
   getMatchingUserItemsAsString(theme: string): string {
     const meta = theme === 'generic' ? this.meta.generic : this.meta.material;
@@ -117,36 +86,47 @@ export default class Compiler {
       .join('');
   }
 
-  setter(url: string): sass.ImporterReturnType {
-    const importType = Compiler.getImportType(url);
+  // eslint-disable-next-line spellcheck/spell-checker
+  canonicalize = (url: string): URL => (url.includes('tb_') ? new URL(`db:${url}`) : null);
 
-    if (importType === ImportType.Unknown) {
-      return null;
-    }
+  load = (url: URL): sass.ImporterResult => {
+    const { pathname: path } = url;
+    const importType = Compiler.getImportType(path);
 
-    let content = this.importerCache[url];
-
+    let content = this.importerCache[path];
     if (!content) {
       content = importType === ImportType.Index
         ? this.indexFileContent
-        : this.getMatchingUserItemsAsString(url.replace('tb_', ''));
+        : this.getMatchingUserItemsAsString(path.replace('tb_', ''));
 
-      this.importerCache[url] = content;
+      this.importerCache[path] = content;
     }
 
-    return { contents: content };
-  }
+    return {
+      contents: content,
+      syntax: 'scss',
+    } as sass.ImporterResult;
+  };
 
-  collector(map: sass.types.Map): sass.types.ReturnValue {
-    for (let mapIndex = 0; mapIndex < map.getLength(); mapIndex += 1) {
-      const variableKey = (map.getKey(mapIndex) as sass.types.String).getValue();
-      const variableValue = map.getValue(mapIndex).toString();
+  collector = (maps: sass.SassMap[]): sass.Value => {
+    maps.forEach((map) => {
+      map.asList.forEach((value) => {
+        if (value.get(1) === sass.sassNull) {
+          return;
+        }
 
-      // eslint-disable-next-line no-continue
-      if (variableValue === 'null') continue;
+        const key = value.get(0);
+        if (!(key instanceof sass.SassString)) {
+          return;
+        }
 
-      this.changedVariables[variableKey] = variableValue;
-    }
-    return sass.types.Null.NULL;
-  }
+        const variableKey = key.text;
+        const variableValue = parse(value.get(1));
+
+        this.changedVariables[variableKey] = variableValue;
+      });
+    });
+
+    return sass.sassNull;
+  };
 }

@@ -1,4 +1,3 @@
-import Promise from '../../core/polyfills/promise';
 import Class from '../../core/class';
 import { map } from '../../core/utils/iterator';
 import { isPlainObject, isNumeric } from '../../core/utils/type';

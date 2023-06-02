@@ -1,7 +1,11 @@
+import { CSSAttributes } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../utils/combine_classes';
-import { GroupedViewData } from './types.d';
-import { GroupOrientation, Style } from '../types.d';
-import { VERTICAL_GROUP_ORIENTATION } from '../consts';
+import { Group } from './types';
+import { GroupOrientation } from '../types';
+import {
+  HORIZONTAL_GROUP_ORIENTATION,
+  VERTICAL_GROUP_ORIENTATION,
+} from '../consts';
 
 export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string => {
   const key = date.getTime();
@@ -12,35 +16,47 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
   return (key + groupIndex).toString();
 };
 
-export const getKeyByGroup = (groupIndex: number): string => groupIndex.toString();
+export const getKeyByGroup = (
+  groupIndex: number | undefined, isVerticalGrouping: boolean,
+): string => {
+  if (isVerticalGrouping && !!groupIndex) {
+    return groupIndex.toString();
+  }
 
-const addToStyle = (
-  attr: string,
-  value: string,
-  style?: object,
-): Style => {
-  const nextStyle = style || {};
+  return '0';
+};
+
+export const addToStyles = (
+  options: {
+    attr: string;
+    value: string | number;
+  } [],
+  style?: CSSAttributes,
+): CSSAttributes => {
+  const nextStyle = style ?? {};
   const result = { ...nextStyle };
 
-  result[attr] = value || nextStyle[value];
+  options.forEach(({ attr, value }) => {
+    result[attr] = value || nextStyle[attr];
+  });
 
   return result;
 };
 
 export const addHeightToStyle = (
   value: number | undefined,
-  style?: object,
-): Style => {
+  style?: CSSAttributes,
+): CSSAttributes => {
   const height = value ? `${value}px` : '';
-  return addToStyle('height', height, style);
+  return addToStyles([{ attr: 'height', value: height }], style);
 };
 
 export const addWidthToStyle = (
   value: number | undefined,
-  style?: object,
-): Style => {
+  style?: CSSAttributes,
+): CSSAttributes => {
   const width = value ? `${value}px` : '';
-  return addToStyle('width', width, style);
+  return addToStyles([{ attr: 'width', value: width }], style);
 };
 
 export const getGroupCellClasses = (
@@ -54,16 +70,25 @@ export const getGroupCellClasses = (
 });
 
 export const getIsGroupedAllDayPanel = (
-  viewData: GroupedViewData, index: number,
-): boolean => {
-  const { groupedData } = viewData;
-  const groupData = groupedData[index];
-  const isAllDayPanel = !!(groupData?.allDayPanel?.length);
-  const isGroupedAllDayPanel = !!(groupData?.isGroupedAllDayPanel);
+  hasAllDayRow: boolean, isVerticalGrouping: boolean,
+): boolean => hasAllDayRow && isVerticalGrouping;
 
-  return isAllDayPanel && isGroupedAllDayPanel;
-};
-
-export const isVerticalGroupOrientation = (
+export const isVerticalGroupingApplied = (
+  groups: Group[],
   groupOrientation?: GroupOrientation,
-): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION;
+): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION
+  && !!groups.length;
+
+export const isHorizontalGroupingApplied = (
+  groups: Group[], groupOrientation?: GroupOrientation,
+): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;
+
+export const isGroupingByDate = (
+  groups: Group[],
+  groupOrientation: GroupOrientation | undefined,
+  groupByDate: boolean,
+): boolean => {
+  const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation);
+
+  return groupByDate && isHorizontalGrouping;
+};

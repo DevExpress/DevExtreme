@@ -24,6 +24,10 @@ export const remove = (zIndex) => {
     }
 };
 
+export const isLastZIndexInStack = (zIndex) => {
+    return zIndexStack.length && zIndexStack[zIndexStack.length - 1] === zIndex;
+};
+
 export const clearStack = () => {
     zIndexStack = [];
 };

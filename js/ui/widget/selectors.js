@@ -10,7 +10,7 @@ const focusableFn = function(element, tabIndex) {
     const isDisabled = element.disabled;
     const isDefaultFocus = /^(input|select|textarea|button|object|iframe)$/.test(nodeName);
     const isHyperlink = nodeName === 'a';
-    let isFocusable = true;
+    let isFocusable;
     const isContentEditable = element.isContentEditable;
 
     if(isDefaultFocus || isContentEditable) {
@@ -41,6 +41,6 @@ export const tabbable = function(index, element) {
     // note: use this method instead of is(":focus")
 export const focused = function($element) {
     const element = $($element).get(0);
-    return domAdapter.getActiveElement() === element;
+    return domAdapter.getActiveElement(element) === element;
 };
 

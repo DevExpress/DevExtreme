@@ -2,9 +2,6 @@ const $ = require('jquery');
 const themeModule = require('viz/themes');
 const uiThemeModule = require('ui/themes');
 
-require('viz/core/themes/generic.light');
-require('viz/core/themes/generic.dark');
-
 uiThemeModule.setDefaultTimeout(0);
 
 QUnit.moduleStart(function() {

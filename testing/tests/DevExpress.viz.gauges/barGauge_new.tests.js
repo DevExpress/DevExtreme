@@ -8,9 +8,34 @@ import loadingIndicatorModule from 'viz/core/loading_indicator';
 
 import 'viz/gauges/bar_gauge';
 
+const environment = {
+    beforeEach() {
+        this.renderer = new vizMocks.Renderer();
+
+        sinon.stub(rendererModule, 'Renderer').callsFake(() => {
+            return this.renderer;
+        });
+    },
+    afterEach() {
+        rendererModule.Renderer.restore();
+    },
+
+    createGauge(options) {
+        return $('<div>')
+            .appendTo($('#qunit-fixture'))
+            .dxBarGauge(options)
+            .dxBarGauge('instance');
+    }
+};
+
 const stubLegend = stubClass(Legend);
 
-$('<div id="test-container" style="width: 400px; height: 400px;"></div>').appendTo('#qunit-fixture');
+$('<div id="test-container"></div>')
+    .css({
+        width: '400px',
+        height: '400px'
+    })
+    .appendTo('#qunit-fixture');
 
 const _LoadingIndicator = loadingIndicatorModule.LoadingIndicator;
 
@@ -63,7 +88,6 @@ QUnit.test('palette in blend mode', function(assert) {
     assert.deepEqual(this.bar(2).attr.getCall(1).args[0].fill, '#80c000', 'bar 3 color');
     assert.deepEqual(this.bar(3).attr.getCall(1).args[0].fill, 'yellow', 'bar 4 color');
 });
-
 
 QUnit.test('palette extension mode can be changed', function(assert) {
     this.create({
@@ -138,7 +162,7 @@ QUnit.module('Legend', {
     beforeEach() {
         this.renderer = new vizMocks.Renderer();
 
-        sinon.stub(rendererModule, 'Renderer', () => {
+        sinon.stub(rendererModule, 'Renderer').callsFake(() => {
             return this.renderer;
         });
 
@@ -291,4 +315,65 @@ QUnit.test('Format legend with custom type', function(assert) {
 
     const passedItems = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
     assert.deepEqual(passedItems[0].text, '6K');
+});
+
+QUnit.module('Center Template', environment);
+
+QUnit.test('Should create group for center template on widget creating', function(assert) {
+    const centerTemplate = sinon.stub();
+    this.createGauge({ centerTemplate });
+
+    const centerTemplateGroup = this.renderer.g.getCall(6).returnValue;
+
+    assert.deepEqual(centerTemplateGroup.attr.args[0][0], { class: 'dxg-hole-template' });
+    assert.deepEqual(centerTemplateGroup.linkOn.args[0][0], this.renderer.root);
+    assert.strictEqual(centerTemplateGroup.linkOn.args[0][1], 'center-template');
+    assert.ok(centerTemplateGroup.linkAppend.called);
+});
+
+QUnit.test('Should render center template in group on widget creating', function(assert) {
+    const centerTemplate = sinon.stub();
+    this.createGauge({ centerTemplate });
+
+    const centerTemplateGroup = this.renderer.g.getCall(6).returnValue;
+
+    assert.deepEqual(centerTemplateGroup.css.args[0][0], {
+        cursor: 'default',
+        fill: '#767676',
+        'font-family': '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+        'font-size': 12,
+        'font-weight': 400
+    }, 'styles applied on group');
+    assert.deepEqual(centerTemplateGroup.attr.args[1][0], { visibility: 'hidden' }, 'group was hidden on start render');
+    assert.deepEqual(centerTemplateGroup.attr.args[2][0], { visibility: 'visible' }, 'group start visible after render');
+    assert.ok(centerTemplate.called, 'template function is called');
+    assert.deepEqual(centerTemplateGroup.move.args[0], [489, 167], 'group was moved to center');
+});
+
+QUnit.test('Should render center template on option update', function(assert) {
+    const firstCenterTemplate = sinon.stub();
+    const secondCenterTemplate = sinon.stub();
+    const gauge = this.createGauge({ centerTemplate: firstCenterTemplate });
+
+    const centerTemplateGroup = this.renderer.g.getCall(6).returnValue;
+    centerTemplateGroup.clear.reset();
+
+    gauge.option('centerTemplate', secondCenterTemplate);
+
+    assert.ok(centerTemplateGroup.clear.called, 'group was cleared');
+    assert.strictEqual(secondCenterTemplate.callCount, 1, 'new template function is called');
+});
+
+QUnit.module('Disposing', environment);
+
+QUnit.test('Should dispose center template on dispose widget', function(assert) {
+    const centerTemplate = sinon.stub();
+    const gauge = this.createGauge({ centerTemplate });
+
+    const centerTemplateGroup = this.renderer.g.getCall(6).returnValue;
+
+    gauge.dispose();
+
+    assert.ok(centerTemplateGroup.linkOff.called);
+    assert.ok(centerTemplateGroup.dispose.called);
 });

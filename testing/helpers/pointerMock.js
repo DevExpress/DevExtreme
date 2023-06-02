@@ -4,13 +4,14 @@
         define(function(require, exports, module) {
             root.pointerMock = module.exports = factory(
                 require('jquery'),
+                require('inferno'),
                 require('events/gesture/emitter.gesture'),
                 require('events/click'));
         });
     } else {
         root.pointerMock = factory(jQuery, DevExpress.events.GestureEmitter, DevExpress.events.click);
     }
-}(window, function($, GestureEmitter, clickEvent) {
+}(window, function($, inferno, GestureEmitter, clickEvent) {
 
     GestureEmitter.touchBoundary(0);
 
@@ -96,6 +97,9 @@
                         pointers: [{ pointerId: 1 }]
                     });
                 }
+
+                // eslint-disable-next-line spellcheck/spell-checker
+                inferno.rerender();
                 return this;
             },
 
@@ -109,6 +113,8 @@
                 requestAnimationFrameCallback();
 
                 this.nativeClick();
+                // eslint-disable-next-line spellcheck/spell-checker
+                inferno.rerender();
 
                 return this;
             },
@@ -133,12 +139,14 @@
                 triggerEvent('click');
             },
 
-            wheel: function(d, shiftKey) {
-                triggerEvent('dxmousewheel', {
-                    delta: d,
-                    shiftKey: shiftKey
-                });
+            wheel: function(d, args) {
+                triggerEvent('dxmousewheel', $.extend({
+                    delta: d
+                }, args));
                 triggerEvent('scroll');
+
+                // eslint-disable-next-line spellcheck/spell-checker
+                inferno.rerender();
 
                 return this;
             },

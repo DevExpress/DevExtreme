@@ -188,30 +188,30 @@ $button-success-text-bg-active: null !default;
   $button-default-contained-bg-active: $button-default-bg !default;
   $button-default-outlined-bg-hover: $base-inverted-bg !default;
   $button-default-outlined-bg-focused: $base-inverted-bg !default;
-  $button-default-outlined-bg-active: $button-default-bg !default;
+  $button-default-outlined-bg-active: $base-bg !default;
   $button-default-text-bg-hover: $base-inverted-bg !default;
   $button-default-text-bg-focused: $base-inverted-bg !default;
-  $button-default-text-bg-active: $button-default-bg !default;
+  $button-default-text-bg-active: $base-bg !default;
   $button-danger-border-color: $base-danger !default;
   $button-danger-contained-bg-hover: $base-inverted-bg !default;
   $button-danger-contained-bg-focused: $base-inverted-bg !default;
   $button-danger-contained-bg-active: $button-danger-bg !default;
   $button-danger-outlined-bg-hover: $base-inverted-bg !default;
   $button-danger-outlined-bg-focused: $base-inverted-bg !default;
-  $button-danger-outlined-bg-active: $button-danger-bg !default;
+  $button-danger-outlined-bg-active: $base-bg !default;
   $button-danger-text-bg-hover: $base-inverted-bg !default;
   $button-danger-text-bg-focused: $base-inverted-bg !default;
-  $button-danger-text-bg-active: $button-danger-bg !default;
+  $button-danger-text-bg-active: $base-bg !default;
   $button-success-border-color: $base-success !default;
   $button-success-contained-bg-hover: $base-inverted-bg !default;
   $button-success-contained-bg-focused: $base-inverted-bg !default;
   $button-success-contained-bg-active: $button-success-bg !default;
   $button-success-outlined-bg-hover: $base-inverted-bg !default;
   $button-success-outlined-bg-focused: $base-inverted-bg !default;
-  $button-success-outlined-bg-active: $button-success-bg !default;
+  $button-success-outlined-bg-active: $base-bg !default;
   $button-success-text-bg-hover: $base-inverted-bg !default;
   $button-success-text-bg-focused: $base-inverted-bg !default;
-  $button-success-text-bg-active: $button-success-bg !default;
+  $button-success-text-bg-active: $base-bg !default;
 }
 
 @if $color == "dark" {

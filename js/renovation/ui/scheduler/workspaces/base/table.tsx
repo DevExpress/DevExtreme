@@ -1,15 +1,21 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot,
-} from 'devextreme-generator/component_declaration/common';
-import { Style } from '../../types.d';
-import { addHeightToStyle } from '../utils';
-import { VirtualRow } from './virtual-row';
+  Component,
+  ComponentBindings,
+  CSSAttributes,
+  ForwardRef,
+  JSXComponent,
+  OneWay,
+  Ref,
+  RefObject,
+  Slot,
+} from '@devextreme-generator/declarations';
+import { addHeightToStyle, addWidthToStyle } from '../utils';
+import { VirtualRow } from './virtual_row';
 
 export const viewFunction = ({
   hasBottomVirtualRow,
   hasTopVirtualRow,
   style,
-  restAttributes,
   props: {
     virtualCellsCount,
     className,
@@ -18,13 +24,15 @@ export const viewFunction = ({
     bottomVirtualRowHeight,
     leftVirtualCellWidth,
     rightVirtualCellWidth,
+    leftVirtualCellCount,
+    rightVirtualCellCount,
+    tableRef,
   },
 }: Table): JSX.Element => (
   <table
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     className={className}
     style={style}
+    ref={tableRef}
   >
     <tbody>
       {hasTopVirtualRow && (
@@ -33,6 +41,8 @@ export const viewFunction = ({
           cellsCount={virtualCellsCount}
           leftVirtualCellWidth={leftVirtualCellWidth}
           rightVirtualCellWidth={rightVirtualCellWidth}
+          leftVirtualCellCount={leftVirtualCellCount}
+          rightVirtualCellCount={rightVirtualCellCount}
         />
       )}
       {children}
@@ -42,6 +52,8 @@ export const viewFunction = ({
           cellsCount={virtualCellsCount}
           leftVirtualCellWidth={leftVirtualCellWidth}
           rightVirtualCellWidth={rightVirtualCellWidth}
+          leftVirtualCellCount={leftVirtualCellCount}
+          rightVirtualCellCount={rightVirtualCellCount}
         />
       )}
     </tbody>
@@ -60,11 +72,19 @@ export class TableProps {
 
   @OneWay() rightVirtualCellWidth = 0;
 
+  @OneWay() leftVirtualCellCount?: number;
+
+  @OneWay() rightVirtualCellCount?: number;
+
   @OneWay() virtualCellsCount = 0;
 
   @OneWay() height?: number;
 
+  @OneWay() width?: number;
+
   @Slot() children?: JSX.Element | JSX.Element[];
+
+  @ForwardRef() tableRef?: RefObject<HTMLTableElement>;
 }
 
 @Component({
@@ -72,11 +92,16 @@ export class TableProps {
   view: viewFunction,
 })
 export class Table extends JSXComponent(TableProps) {
-  get style(): Style {
-    const { height } = this.props;
+  @Ref()
+  elementRef!: RefObject<HTMLTableElement>;
+
+  get style(): CSSAttributes {
+    const { height, width } = this.props;
     const { style } = this.restAttributes;
 
-    return addHeightToStyle(height, style);
+    const heightAdded = addHeightToStyle(height, style);
+
+    return addWidthToStyle(width, heightAdded);
   }
 
   get hasTopVirtualRow(): boolean {

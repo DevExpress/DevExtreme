@@ -1,119 +1,115 @@
+import {
+    UserDefinedElement,
+} from '../core/element';
+
+import {
+    HorizontalAlignment,
+    PositionAlignment,
+    VerticalAlignment,
+} from '../common';
+
+/** @public */
+export type CollisionResolution = 'fit' | 'flip' | 'flipfit' | 'none';
+/** @public */
+export type CollisionResolutionCombination = 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit';
+
 /**
-* @docid
-* @namespace DevExpress
-* @type object
-*/
-export interface positionConfig {
+ * @docid
+ * @namespace DevExpress
+ * @type object
+ * @public
+ */
+export interface PositionConfig {
     /**
      * @docid
-     * @type Enums.PositionAlignment|object
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    at?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | {
+    at?: PositionAlignment | {
       /**
-      * @docid
-      * @type Enums.HorizontalAlignment
-      * @prevFileNamespace DevExpress.animation
-      */
-      x?: 'center' | 'left' | 'right',
+       * @docid
+       */
+      x?: HorizontalAlignment;
       /**
-      * @docid
-      * @type Enums.VerticalAlignment
-      * @prevFileNamespace DevExpress.animation
-      */
-      y?: 'bottom' | 'center' | 'top'
+       * @docid
+       */
+      y?: VerticalAlignment;
     };
     /**
      * @docid
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    boundary?: string | Element | JQuery | Window;
+    boundary?: string | UserDefinedElement | Window;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     boundaryOffset?: string | {
       /**
-      * @docid
-      * @default 0
-      * @prevFileNamespace DevExpress.animation
-      */
-      x?: number,
+       * @docid
+       * @default 0
+       */
+      x?: number;
       /**
-      * @docid
-      * @default 0
-      * @prevFileNamespace DevExpress.animation
-      */
-      y?: number
+       * @docid
+       * @default 0
+       */
+      y?: number;
     };
     /**
      * @docid
-     * @type Enums.PositionResolveCollisionXY|object
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    collision?: 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit' | {
+    collision?: CollisionResolutionCombination | {
       /**
-      * @docid
-      * @type Enums.PositionResolveCollision
-      * @default 'none'
-      * @prevFileNamespace DevExpress.animation
-      */
-      x?: 'fit' | 'flip' | 'flipfit' | 'none',
+       * @docid
+       * @default 'none'
+       */
+      x?: CollisionResolution;
       /**
-      * @docid
-      * @type Enums.PositionResolveCollision
-      * @default 'none'
-      * @prevFileNamespace DevExpress.animation
-      */
-      y?: 'fit' | 'flip' | 'flipfit' | 'none'
+       * @docid
+       * @default 'none'
+       */
+      y?: CollisionResolution;
     };
     /**
      * @docid
-     * @type Enums.PositionAlignment|object
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    my?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | {
+    my?: PositionAlignment | {
       /**
-      * @docid
-      * @type Enums.HorizontalAlignment
-      * @prevFileNamespace DevExpress.animation
-      */
-      x?: 'center' | 'left' | 'right',
+       * @docid
+       */
+      x?: HorizontalAlignment;
       /**
-      * @docid
-      * @type Enums.VerticalAlignment
-      * @prevFileNamespace DevExpress.animation
-      */
-      y?: 'bottom' | 'center' | 'top'
+       * @docid
+       */
+      y?: VerticalAlignment;
     };
     /**
      * @docid
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
-    of?: string | Element | JQuery | Window;
+    of?: string | UserDefinedElement | Window;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.animation
      * @public
      */
     offset?: string | {
       /**
-      * @docid
-      * @default 0
-      * @prevFileNamespace DevExpress.animation
-      */
-      x?: number,
+       * @docid
+       * @default 0
+       */
+      x?: number;
       /**
-      * @docid
-      * @default 0
-      * @prevFileNamespace DevExpress.animation
-      */
-      y?: number
+       * @docid
+       * @default 0
+       */
+      y?: number;
     };
 }
+
+/**
+ * @public
+ * @deprecated Use the PositionConfig type instead
+ */
+export interface positionConfig extends PositionConfig { }

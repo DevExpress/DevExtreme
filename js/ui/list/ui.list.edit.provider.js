@@ -6,15 +6,6 @@ import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
 import { registry } from './ui.list.edit.decorator_registry';
 
-import './ui.list.edit.decorator.static';
-import './ui.list.edit.decorator.switchable.button';
-import './ui.list.edit.decorator.switchable.slide';
-import './ui.list.edit.decorator.swipe';
-import './ui.list.edit.decorator.context';
-import './ui.list.edit.decorator.selection';
-import './ui.list.edit.decorator.reorder';
-
-
 const editOptionsRegistry = [];
 
 const registerOption = function(enabledFunc, decoratorTypeFunc, decoratorSubTypeFunc) {
@@ -51,10 +42,6 @@ registerOption(
 
         if(mode === 'slideItem') {
             mode = 'slide';
-        }
-
-        if(mode === 'hold') {
-            mode = 'context';
         }
 
         return mode;
@@ -131,7 +118,7 @@ const EditProvider = Class.inherit({
     },
 
     _findDecorator: function(type, subType) {
-        const foundDecorator = registry[type][subType];
+        const foundDecorator = registry[type]?.[subType];
 
         if(!foundDecorator) {
             throw errors.Error('E1012', type, subType);
@@ -230,8 +217,8 @@ const EditProvider = Class.inherit({
         return this._eventHandler('handleKeyboardEvents', currentFocusedIndex, moveFocusUp);
     },
 
-    handleEnterPressing: function() {
-        return this._eventHandler('handleEnterPressing');
+    handleEnterPressing: function(e) {
+        return this._eventHandler('handleEnterPressing', e);
     },
 
     contextMenuHandlerExists: function() {

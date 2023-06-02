@@ -7,6 +7,7 @@ import { Crosshair } from 'viz/chart_components/crosshair';
 import trackers from 'viz/chart_components/tracker';
 import { MockAxis } from '../../helpers/chartMocks.js';
 import holdEvent from 'events/hold';
+import errors from 'core/errors';
 
 function getEvent(type, params) {
     $.Event(type, params);
@@ -223,7 +224,11 @@ QUnit.module('Root events', $.extend({}, chartEnvironment, {
     beforeEach() {
         chartEnvironment.beforeEach.call(this);
         this.tracker = this.createTracker(this.options);
-
+        this.logStub = sinon.stub(errors, 'log');
+    },
+    afterEach() {
+        chartEnvironment.afterEach.call(this);
+        this.logStub.restore();
     }
 }));
 
@@ -472,6 +477,7 @@ QUnit.test('dxpointermove on series, mouse out of the chart', function(assert) {
 });
 
 QUnit.test('Mouseout from chart after dxpointermove on series. Curson on the interactive tooltip', function(assert) {
+    this.options.tooltip.stub('isEnabled').returns(true);
     this.options.tooltip.stub('isCursorOnTooltip').returns(true);
     // arrange
     this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
@@ -484,7 +490,27 @@ QUnit.test('Mouseout from chart after dxpointermove on series. Curson on the int
     // assert
     assert.ok(this.options.tooltip.show.calledOnce);
     assert.ok(!this.options.tooltip.stub('hide').called);
+    assert.ok(this.options.tooltip.stub('isEnabled').called);
     assert.deepEqual(this.options.tooltip.stub('isCursorOnTooltip').args[0], [500, 500]);
+});
+
+QUnit.test('Mouseout from chart after dxpointermove on series. Tooltip is not enabled', function(assert) {
+    this.options.tooltip.stub('isEnabled').returns(false);
+    this.options.tooltip.stub('isCursorOnTooltip').returns(false);
+    // arrange
+    this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
+
+    // act
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    this.clock.tick(this.tracker.__trackerDelay);
+    $(document).trigger(getEvent('dxpointermove', { pageX: 500, pageY: 500 }));
+
+    // assert
+    assert.ok(!this.options.tooltip.show.called);
+    assert.ok(!this.options.tooltip.stub('hide').called);
+    assert.equal(this.options.tooltip.stub('isEnabled').callCount, 3);
+    assert.ok(!this.options.tooltip.stub('isCursorOnTooltip').called);
+    assert.equal(this.series.clearHover.callCount, 1, 'series was unhover');
 });
 
 QUnit.test('dxpointermove over point', function(assert) {
@@ -979,7 +1005,7 @@ QUnit.test('dxpointermove on series, click', function(assert) {
     assert.deepEqual(this.options.eventTrigger.withArgs('seriesClick').lastCall.args[1], { target: this.point.series, event: clickEvent }, 'series event arg');
 });
 
-QUnit.test('dxpointermove on series, click, pointClick with cancel seriesClick', function(assert) {
+QUnit.test('dxpointermove on series, click, pointClick with cancel (DEPRECATED) seriesClick', function(assert) {
     const clickEvent = getEvent('dxclick', { pageX: 100, pageY: 50, target: this.seriesGroup.element });
     this.series.getPointByCoord.withArgs(97, 45).returns(this.point);
 
@@ -991,6 +1017,39 @@ QUnit.test('dxpointermove on series, click, pointClick with cancel seriesClick',
     assert.deepEqual(this.options.eventTrigger.withArgs('pointClick').lastCall.args[1], { target: this.point, event: clickEvent });
     assert.ok(!this.options.eventTrigger.withArgs('seriesClick').calledOnce);
     clickEvent.cancel = true;
+    this.options.eventTrigger.withArgs('pointClick').lastCall.args[2]();
+
+    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
+    assert.deepEqual(errors.log.lastCall.args, [
+        'W0003',
+        'pointClick handler argument',
+        'event.cancel',
+        '22.1',
+        'Use the \'cancel\' field instead'
+    ], 'args of the log method');
+});
+
+QUnit.test('dxpointermove on series, click, pointClick with cancel seriesClick', function(assert) {
+    this.options.eventTrigger = sinon.spy((eventName, eventArgs) => {
+        if(eventName === 'pointClick') {
+            eventArgs.cancel = true;
+        }
+    });
+    this.tracker = this.createTracker(this.options, this.canvases);
+    const clickEvent = getEvent('dxclick', { pageX: 100, pageY: 50, target: this.seriesGroup.element });
+    this.series.getPointByCoord.withArgs(97, 45).returns(this.point);
+
+    // Act
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    $(this.renderer.root.element).trigger(clickEvent);
+
+    assert.ok(this.options.eventTrigger.withArgs('pointClick').calledOnce);
+    assert.deepEqual(this.options.eventTrigger.withArgs('pointClick').lastCall.args[1], {
+        cancel: true,
+        target: this.point,
+        event: clickEvent
+    });
+    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').calledOnce);
     this.options.eventTrigger.withArgs('pointClick').lastCall.args[2]();
 
     assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
@@ -1339,7 +1398,7 @@ QUnit.test('legendClick', function(assert) {
     assert.deepEqual(this.options.eventTrigger.withArgs('seriesClick').lastCall.args[1], { target: this.series, event: event }, 'series event arg');
 });
 
-QUnit.test('click on legend with chancel in legendClick handler', function(assert) {
+QUnit.test('click on legend with chancel (DEPRECATED) in legendClick handler', function(assert) {
     const event = getEvent('dxclick', { pageX: 100, pageY: 50 });
 
     this.tracker = this.createTracker(this.options, this.canvases);
@@ -1358,6 +1417,43 @@ QUnit.test('click on legend with chancel in legendClick handler', function(asser
     event.cancel = true;
     this.options.eventTrigger.withArgs('legendClick').lastCall.args[2]();
 
+
+    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
+    assert.deepEqual(errors.log.lastCall.args, [
+        'W0003',
+        'legendClick handler argument',
+        'event.cancel',
+        '22.1',
+        'Use the \'cancel\' field instead'
+    ], 'args of the log method');
+});
+
+QUnit.test('click on legend with chancel in legendClick handler', function(assert) {
+    this.options.eventTrigger = sinon.spy((eventName, eventArgs) => {
+        if(eventName === 'legendClick') {
+            eventArgs.cancel = true;
+        }
+    });
+    const event = getEvent('dxclick', { pageX: 100, pageY: 50 });
+
+    this.tracker = this.createTracker(this.options, this.canvases);
+    this.legend.coordsIn.withArgs(97, 45).returns(true);
+    this.legend.getItemByCoord.withArgs(97, 45).returns({
+        id: 0
+    });
+
+    $(this.renderer.root.element).trigger(event);
+
+    assert.ok(this.options.eventTrigger.withArgs('legendClick').calledOnce);
+    assert.deepEqual(this.options.eventTrigger.withArgs('legendClick').lastCall.args[1], {
+        target: this.series,
+        event: event,
+        cancel: true
+    });
+
+    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').calledOnce);
+
+    this.options.eventTrigger.withArgs('legendClick').lastCall.args[2]();
 
     assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
 });
@@ -1961,8 +2057,8 @@ QUnit.test('repairTooltip', function(assert) {
     const point = createPoint(this.series);
 
     $(this.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), point);
-    this.options.tooltip.show.reset();
-    point.getTooltipParams.reset();
+    this.options.tooltip.show.resetHistory();
+    point.getTooltipParams.resetHistory();
 
     // act
     this.tracker.repairTooltip();
@@ -2590,14 +2686,14 @@ QUnit.test('Tooltip is disabled. Show tooltip on point, stopCurrentHandling, sho
 
 QUnit.test('show Tooltip event when there is tooltip on another point. TooltipHidden fired, TooltipShown fired', function(assert) {
     this.environment.options.seriesGroup.trigger(getEvent('showpointtooltip'), this.environment.point2);
-    this.tooltip.stub('hide').reset();
-    this.tooltip.stub('show').reset();
+    this.tooltip.stub('hide').resetHistory();
+    this.tooltip.stub('show').resetHistory();
 
     // act
     this.environment.options.seriesGroup.trigger(getEvent('showpointtooltip'), this.environment.point1);
 
     assert.ok(this.tooltip.stub('hide').calledOnce);
-    assert.deepEqual(this.tooltip.stub('hide').lastCall.args, []);
+    assert.deepEqual(this.tooltip.stub('hide').lastCall.args, [false]);
 
     const showTooltip = this.tooltip.stub('show');
     assert.equal(showTooltip.callCount, 1, 'tooltip showing was calling once');
@@ -2639,7 +2735,7 @@ QUnit.test('hide Tooltip event. TooltipHidden fired', function(assert) {
     $(this.environment.options.seriesGroup.element).trigger(getEvent('hidepointtooltip'), this.environment.point1);
 
     assert.ok(this.tooltip.stub('hide').calledOnce);
-    assert.deepEqual(this.tooltip.stub('hide').lastCall.args, []);
+    assert.deepEqual(this.tooltip.stub('hide').lastCall.args, [true]);
 });
 
 QUnit.test('tooltipShown call', function(assert) {
@@ -2663,7 +2759,7 @@ QUnit.test('tooltipHidden from chart', function(assert) {
     $(this.environment.options.seriesGroup.element).trigger(getEvent('hidepointtooltip'));
 
     assert.equal(this.tooltip.hide.callCount, 1);
-    assert.deepEqual(this.tooltip.hide.lastCall.args, []);
+    assert.deepEqual(this.tooltip.hide.lastCall.args, [true]);
 });
 
 QUnit.test('repairTooltip. Point got invisible, tooltipHidden not fired', function(assert) {
@@ -2676,7 +2772,7 @@ QUnit.test('repairTooltip. Point got invisible, tooltipHidden not fired', functi
     this.tracker.repairTooltip();
 
     assert.equal(this.tooltip.hide.callCount, 1);
-    assert.deepEqual(this.tooltip.hide.lastCall.args, []);
+    assert.deepEqual(this.tooltip.hide.lastCall.args, [false]);
     assert.equal(this.tooltip.stub('show').callCount, 0);
 });
 
@@ -2707,7 +2803,7 @@ QUnit.test('show tooltip on point. Point with tooltip is invisible', function(as
     $(this.environment.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.environment.point2);
 
     assert.equal(this.tooltip.hide.callCount, 1);
-    assert.deepEqual(this.tooltip.hide.lastCall.args, []);
+    assert.deepEqual(this.tooltip.hide.lastCall.args, [false]);
 
     assert.equal(this.tooltip.show.callCount, 1);
     strictEqualForAllFields(assert, this.tooltip.show.lastCall.args[2], { target: this.environment.point2 });
@@ -2762,14 +2858,6 @@ function createCompleteTracker(options) {
     that.options = $.extend(true, that.options, options);
 
     that.tracker = createTracker('dxChart', that.options);
-
-    if(options._eventHandlerMock) {
-        const eventHandler = that.tracker._eventHandler;
-        that.tracker._eventHandler = function() {
-            options._eventHandlerMock.apply(that, arguments);
-            eventHandler.apply(that.tracker, arguments);
-        };
-    }
 
     that.eventsConsts = eventsConsts;
     that.tracker.__legend = legend;

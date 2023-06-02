@@ -2,10 +2,17 @@ const $ = require('jquery');
 const ko = require('knockout');
 
 require('integration/knockout');
-require('ui/scheduler');
+const Scheduler = require('ui/scheduler');
 
-require('common.css!');
 require('generic_light.css!');
+
+if(QUnit.urlParams['nocsp']) {
+    QUnit.module('scheduler');
+} else {
+    QUnit.module.skip('scheduler');
+}
+
+const isRenovatedScheduler = !!Scheduler.IS_RENOVATED_WIDGET;
 
 QUnit.test('Appointment should have right date format', function(assert) {
     const $element = $('<div data-bind=\'dxScheduler: {dataSource: schedulerDataSource, currentDate: new Date(2016, 6, 10)}\'></div>').appendTo('#qunit-fixture');
@@ -28,7 +35,7 @@ QUnit.test('Appointment should have right date format', function(assert) {
     assert.deepEqual(endDate, new Date(2016, 6, 10, 3));
 });
 
-QUnit.test('Appointment template should be render once(T947938)', function(assert) {
+QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment template should be render once(T947938)', function(assert) {
     const markupText = `<div class='dx-viewport demo-container'>
         <div id='scheduler-demo'>
             <div data-bind='dxScheduler: schedulerOptions'></div>
@@ -43,6 +50,36 @@ QUnit.test('Appointment template should be render once(T947938)', function(asser
                 text: ko.observable('Website Re-Design Plan'),
                 startDate: ko.observable(new Date(2021, 4, 25, 1)),
                 endDate: ko.observable(new Date(2021, 4, 25, 2))
+            }],
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2021, 4, 25),
+            height: 600
+        };
+    }
+
+    ko.applyBindings(new PageViewModel(), $element.get(0));
+
+    assert.equal($('.dx-scheduler-appointment-title').length, 1, 'title should be render once');
+    assert.equal($('.dx-scheduler-appointment-content-details').length, 1, 'details should be render once');
+});
+
+QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment DnD with disabled property (T1046067)', function(assert) {
+    const markupText = `<div class='dx-viewport demo-container'>
+        <div id='scheduler-demo'>
+            <div data-bind='dxScheduler: schedulerOptions'></div>
+        </div>
+    </div>`;
+
+    const $element = $(markupText).appendTo('#qunit-fixture');
+
+    function PageViewModel() {
+        this.schedulerOptions = {
+            dataSource: [{
+                text: ko.observable('Website Re-Design Plan'),
+                startDate: ko.observable(new Date(2021, 4, 25, 1)),
+                endDate: ko.observable(new Date(2021, 4, 25, 2)),
+                disabled: ko.observable(true),
             }],
             views: ['week'],
             currentView: 'week',

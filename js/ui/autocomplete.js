@@ -21,7 +21,7 @@ const Autocomplete = DropDownList.inherit({
 
         return extend({}, parent, {
             upArrow: function(e) {
-                if(!isCommandKeyPressed(e)) {
+                if(parent.upArrow.apply(this, arguments) && !isCommandKeyPressed(e)) {
                     e.preventDefault();
                     e.stopPropagation();
                     if(item && !this._calcNextItem(-1)) {
@@ -32,7 +32,7 @@ const Autocomplete = DropDownList.inherit({
                 return true;
             },
             downArrow: function(e) {
-                if(!isCommandKeyPressed(e)) {
+                if(parent.downArrow.apply(this, arguments) && !isCommandKeyPressed(e)) {
                     e.preventDefault();
                     e.stopPropagation();
                     if(item && !this._calcNextItem(1)) {
@@ -42,12 +42,15 @@ const Autocomplete = DropDownList.inherit({
                 }
                 return true;
             },
-            enter: function() {
+            enter: function(e) {
                 if(!item) {
                     this.close();
                 }
-                parent.enter.apply(this, arguments);
-                return this.option('opened');
+                const opened = this.option('opened');
+                if(opened) {
+                    e.preventDefault();
+                }
+                return opened;
             }
         });
     },
@@ -114,17 +117,15 @@ const Autocomplete = DropDownList.inherit({
         return this.option('valueExpr');
     },
 
-    _popupConfig: function() {
-        return extend(this.callBase(), {
-            closeOnOutsideClick: (function(e) {
-                return !$(e.target).closest(this.$element()).length;
-            }).bind(this)
-        });
+    _closeOutsideDropDownHandler: function({ target }) {
+        return !$(target).closest(this.$element()).length;
     },
 
     _renderDimensions: function() {
         this.callBase();
-        this._dimensionChanged();
+
+        this._updatePopupWidth();
+        this._updateListDimensions();
     },
 
     _popupWrapperClass: function() {
@@ -133,11 +134,15 @@ const Autocomplete = DropDownList.inherit({
 
     _listConfig: function() {
         return extend(this.callBase(), {
-            pageLoadMode: 'none'
+            pageLoadMode: 'none',
+            onSelectionChanged: (e) => {
+                this._setSelectedItem(e.addedItems[0]);
+            }
         });
     },
 
     _listItemClickHandler: function(e) {
+        this._saveValueChangeEvent(e.event);
         const value = this._displayGetter(e.itemData);
         this.option('value', value);
         this.close();
@@ -172,9 +177,9 @@ const Autocomplete = DropDownList.inherit({
         };
     },
 
-    _searchDataSource: function() {
+    _searchDataSource: function(searchValue) {
         this._dataSource.pageSize(this.option('maxItemCount'));
-        this.callBase();
+        this.callBase(searchValue);
         this._clearFocusedItem();
     },
 

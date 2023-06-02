@@ -5,8 +5,16 @@
       "name": "DevExtreme"
     },
     {
+      "path": "testing/testcafe",
+      "name": "TestCafe Tests"
+    },
+    {
+      "path": "testing/tests",
+      "name": "QUnit Tests"
+    },
+    {
       "path": "testing/runner",
-      "name": "Test Runner"
+      "name": "QUnit Test Runner"
     }
   ],
   "settings": {

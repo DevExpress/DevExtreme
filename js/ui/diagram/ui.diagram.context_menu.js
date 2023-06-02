@@ -45,7 +45,7 @@ class DiagramContextMenuWrapper extends Widget {
         this._contextMenuInstance = this._createComponent($contextMenu, DiagramContextMenu, {
             isTouchBarMode: this._isTouchBarMode(),
             cssClass: this._isTouchBarMode() ? DIAGRAM_TOUCHBAR_CLASS : DiagramMenuHelper.getContextMenuCssClass(),
-            closeOnOutsideClick: false,
+            hideOnOutsideClick: false,
             showEvent: '',
             focusStateEnabled: false,
             items: this._commands,

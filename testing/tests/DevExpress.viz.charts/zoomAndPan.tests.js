@@ -1747,7 +1747,7 @@ QUnit.test('Drag by touch pans chart, even if dragToZoom = true', function(asser
     assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 3, endValue: 5 });
 });
 
-QUnit.test('Reject pinch zoom-in both axes by default minVisualRangeLength option', function(assert) {
+QUnit.test('Reject pinch zoom-in both axes', function(assert) {
     const onZoomStart = sinon.spy();
     const onZoomEnd = sinon.spy();
     const chart = this.createChart({
@@ -1792,7 +1792,20 @@ QUnit.test('Reject pinch zoom-in both axes by default minVisualRangeLength optio
     assert.equal(onZoomStart.getCall(1).args[0].axis, valueAxis);
     assert.deepEqual(onZoomStart.getCall(1).args[0].range, valVisualRange);
 
-    assert.equal(onZoomEnd.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 2);
+    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, argVisualRange);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, argVisualRange);
+    assert.equal(onZoomEnd.getCall(0).args[0].actionType, 'zoom');
+    assert.equal(onZoomEnd.getCall(0).args[0].event.type, 'dxpinchend');
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, 0);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1);
+
+    assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis);
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, valVisualRange);
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, valVisualRange);
+    assert.equal(onZoomEnd.getCall(1).args[0].shift, 0);
+    assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 1);
 });
 
 QUnit.test('Pinch zoom-in both axes', function(assert) {
@@ -2521,6 +2534,36 @@ QUnit.test('Pinch zoom. Big chart rendering time on start and small time in the 
 
 QUnit.module('Misc', environment);
 
+// T1049139
+QUnit.test('visualRange updating after zoomming', function(assert) {
+    const dataSource = [{ arg: 1960, val: 10, }, { arg: 2020, val: 20, }];
+    const chart = this.createChart({
+        dataSource,
+        legend: {
+            visible: false,
+        },
+        series: { type: 'bar' },
+        argumentAxis: {
+            visualRange: {
+                length: 20
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: 'both'
+        }
+    });
+
+    this.pointer.start({ x: 200, y: 250 }).wheel(10);
+
+    dataSource.push({ arg: 2030, val: 1 });
+    chart.option('dataSource', dataSource);
+
+    const visualRange = chart.getArgumentAxis().visualRange();
+
+    assert.strictEqual(Math.floor(visualRange.startValue), 2000);
+    assert.strictEqual(Math.floor(visualRange.endValue), 2018);
+});
+
 QUnit.test('Do nothing if no actions allowed', function(assert) {
     const onZoomStart = sinon.spy();
     const onZoomEnd = sinon.spy();
@@ -2617,7 +2660,7 @@ QUnit.test('allowTouchGestures = true, only zoom allowed, touch drag - do nothin
     assert.equal(onZoomEnd.callCount, 0);
 });
 
-QUnit.test('Reject API zoom-in both axes by default minVisualRangeLength option', function(assert) {
+QUnit.test('Reject API zoom-in both axes', function(assert) {
     const onZoomStart = sinon.spy();
     const onZoomEnd = sinon.spy();
     const chart = this.createChart({
@@ -2955,9 +2998,9 @@ QUnit.test('On panning by drag (goes from the edge)', function(assert) {
 
     assert.equal(onZoomStart.callCount, 1);
     assert.equal(onZoomEnd.callCount, 1);
-    assert.equal(preventDefault.callCount, 2);
-    assert.equal(stopPropagation.callCount, 2);
-    assert.equal(this.trackerStopHandling.callCount, 2);
+    assert.equal(preventDefault.callCount, 1);
+    assert.equal(stopPropagation.callCount, 1);
+    assert.equal(this.trackerStopHandling.callCount, 1);
 });
 
 // T249548
@@ -3104,36 +3147,6 @@ QUnit.test('Default behavior - no prevent. On pinch-out zoom', function(assert) 
     assert.equal(preventDefault.callCount, 1);
     assert.equal(stopPropagation.callCount, 1);
     assert.equal(this.trackerStopHandling.callCount, 1);
-});
-
-QUnit.test('Default behavior - prevent. On pinch-out zoom when zoomed out to whole range', function(assert) {
-    const preventDefault = sinon.spy();
-    const stopPropagation = sinon.spy();
-    const onZoomStart = sinon.spy();
-    const onZoomEnd = sinon.spy();
-    const chart = this.createChart({
-        argumentAxis: {
-            visualRange: {
-                startValue: 0,
-                endValue: 10
-            }
-        },
-        zoomAndPan: {
-            argumentAxis: 'zoom',
-            allowTouchGestures: true
-        },
-        onZoomStart: onZoomStart,
-        onZoomEnd: onZoomEnd
-    });
-
-    // act
-    const $root = $(chart._renderer.root.element);
-    $root.trigger($.Event('dxpointerdown', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
-    $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
-    $root.trigger($.Event('dxpointerup', { pointerType: 'touch', pointers: [], preventDefault: preventDefault, stopPropagation: stopPropagation }));
-
-    assert.equal(onZoomStart.callCount, 1);
-    assert.equal(onZoomEnd.callCount, 0);
 });
 
 QUnit.test('Default behavior - no prevent. On panning by drag (full visualRange)', function(assert) {

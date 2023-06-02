@@ -2,4 +2,5 @@
 
 // adduse
 
-$material-actionsheet-item-margin: 0 0 10px 0 !default;
+$material-actionsheet-item-margin-value: 20px;
+$material-actionsheet-item-margin: 0 0 $material-actionsheet-item-margin-value 0 !default;

@@ -1,3 +1,4 @@
+import { getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import { move } from '../../animation/translator';
@@ -22,9 +23,9 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     _init: function(scrollView) {
         this.callBase(scrollView);
         this._$topPocket = scrollView._$topPocket;
-        this._$bottomPocket = scrollView._$bottomPocket;
         this._$pullDown = scrollView._$pullDown;
-        this._$scrollViewContent = scrollView.content();
+        this._$scrollViewContent = $(scrollView.content());
+        this._$container = $(scrollView.container());
         this._initCallbacks();
 
         this._location = 0;
@@ -69,9 +70,11 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     _updateDimensions: function() {
         this.callBase();
-        this._topPocketSize = this._$topPocket.height();
-        this._bottomPocketSize = this._$bottomPocket.height();
-        this._scrollOffset = this._$container.height() - this._$content.height();
+        this._topPocketSize = this._$topPocket.get(0).clientHeight;
+
+        const contentEl = this._$scrollViewContent.get(0);
+        const containerEl = this._$container.get(0);
+        this._bottomBoundary = Math.max(contentEl.clientHeight - containerEl.clientHeight, 0);
     },
 
     _allowedDirections: function() {
@@ -130,11 +133,11 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _getPullDownHeight: function() {
-        return Math.round(this._$element.outerHeight() * 0.05);
+        return Math.round(getOuterHeight(this._$element) * 0.05);
     },
 
     _getPullDownStartPosition: function() {
-        return -Math.round(this._$pullDown.outerHeight() * 1.5);
+        return -Math.round(getOuterHeight(this._$pullDown) * 1.5);
     },
 
     handleEnd: function() {
@@ -176,7 +179,7 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && this._location <= this._scrollOffset + this._bottomPocketSize;
+        return this._reachBottomEnabled && Math.round(this._bottomBoundary + Math.floor(this._location)) <= 1;
     },
 
     _reachBottom: function() {

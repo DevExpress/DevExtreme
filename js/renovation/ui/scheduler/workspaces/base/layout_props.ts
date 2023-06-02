@@ -3,20 +3,21 @@ import {
   OneWay,
   Template,
   JSXTemplate,
-} from 'devextreme-generator/component_declaration/common';
-import { GroupedViewData, DataCellTemplateProps } from '../types.d';
-import { GroupOrientation } from '../../types.d';
+} from '@devextreme-generator/declarations';
+import { GroupedViewData, DataCellTemplateProps } from '../types';
+import { GroupOrientation } from '../../types';
 
 @ComponentBindings()
 export class LayoutProps {
   @OneWay() viewData: GroupedViewData = {
     groupedData: [],
-    cellCountInGroupRow: 0,
+    leftVirtualCellCount: 0,
+    rightVirtualCellCount: 0,
+    topVirtualRowCount: 0,
+    bottomVirtualRowCount: 0,
   };
 
   @OneWay() groupOrientation?: GroupOrientation;
-
-  @OneWay() isVirtual?: boolean;
 
   @OneWay() leftVirtualCellWidth = 0;
 
@@ -25,6 +26,12 @@ export class LayoutProps {
   @OneWay() topVirtualRowHeight = 0;
 
   @OneWay() bottomVirtualRowHeight = 0;
+
+  @OneWay() addDateTableClass = true;
+
+  @OneWay() addVerticalSizesClassToRows = true;
+
+  @OneWay() width?: number;
 
   @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }

@@ -1,14 +1,14 @@
 import $ from '../../core/renderer';
 import Action from '../../core/action';
 import DOMComponent from '../../core/dom_component';
-import { active, dxClick, focus, hover, keyboard } from '../../events/short';
+import { active, focus, hover, keyboard } from '../../events/short';
 import { deferRender, deferRenderer, noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { focusable as focusableSelector } from './selectors';
-import { inArray } from '../../core/utils/array';
-import { isFakeClickEvent } from '../../events/utils/index';
 import { isPlainObject, isDefined } from '../../core/utils/type';
+import devices from '../../core/devices';
+import { compare as compareVersions } from '../../core/utils/version';
 
 import '../../events/click';
 import '../../events/core/emitter.feedback';
@@ -51,26 +51,53 @@ const Widget = DOMComponent.inherit({
 
             tabIndex: 0,
 
-            accessKey: null,
+            accessKey: undefined,
 
             /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @name WidgetOptions.onFocusIn
-            * @extends Action
             * @action
             * @hidden
             */
             onFocusIn: null,
 
             /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
             * @name WidgetOptions.onFocusOut
-            * @extends Action
             * @action
             * @hidden
             */
             onFocusOut: null,
             onKeyboardHandled: null,
-            ignoreParentReadOnly: false
+            ignoreParentReadOnly: false,
+            useResizeObserver: true
         });
+    },
+
+    _defaultOptionsRules: function() {
+        return this.callBase().concat([{
+            device: function() {
+                const device = devices.real();
+                const platform = device.platform;
+                const version = device.version;
+                return platform === 'ios' && compareVersions(version, '13.3') <= 0;
+            },
+            options: {
+                useResizeObserver: false
+            }
+        }]);
     },
 
     _init() {
@@ -160,7 +187,6 @@ const Widget = DOMComponent.inherit({
 
     _toggleVisibility(visible) {
         this.$element().toggleClass('dx-state-invisible', !visible);
-        this.setAria('hidden', !visible || void 0);
     },
 
     _renderFocusState() {
@@ -176,16 +202,8 @@ const Widget = DOMComponent.inherit({
     _renderAccessKey() {
         const $el = this._focusTarget();
         const { accessKey } = this.option();
-        const namespace = 'UIFeedback';
 
         $el.attr('accesskey', accessKey);
-        dxClick.off($el, { namespace });
-        accessKey && dxClick.on($el, e => {
-            if(isFakeClickEvent(e)) {
-                e.stopImmediatePropagation();
-                this.focus();
-            }
-        }, { namespace });
     },
 
     _isFocusable() {
@@ -202,13 +220,20 @@ const Widget = DOMComponent.inherit({
         return this._getActiveElement();
     },
 
+    _isFocusTarget: function(element) {
+        const focusTargets = $(this._focusTarget()).toArray();
+        return focusTargets.includes(element);
+    },
+
+    _findActiveTarget($element) {
+        return $element.find(this._activeStateUnit).not('.dx-state-disabled');
+    },
+
     _getActiveElement() {
         const activeElement = this._eventBindingTarget();
 
         if(this._activeStateUnit) {
-            return activeElement
-                .find(this._activeStateUnit)
-                .not('.dx-state-disabled');
+            return this._findActiveTarget(activeElement);
         }
 
         return activeElement;
@@ -252,7 +277,7 @@ const Widget = DOMComponent.inherit({
     },
 
     _updateFocusState({ target }, isFocused) {
-        if(inArray(target, this._focusTarget()) !== -1) {
+        if(this._isFocusTarget(target)) {
             this._toggleFocusClass(isFocused, $(target));
         }
     },
@@ -490,6 +515,7 @@ const Widget = DOMComponent.inherit({
                 break;
             case 'onFocusIn':
             case 'onFocusOut':
+            case 'useResizeObserver':
                 break;
             case 'accessKey':
                 this._renderAccessKey();

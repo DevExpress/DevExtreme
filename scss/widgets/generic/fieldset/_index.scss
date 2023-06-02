@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -13,15 +14,8 @@
 
 // adduse
 
-
 $generic-field-min-height: $generic-base-inline-widget-height;
 $generic-fieldset-attention-icon-offset: $generic-base-inline-horizontal-padding + $generic-invalid-badge-size;
-
-$generic-mobile-fieldset-vertical-margin: 20px;
-$generic-mobile-fieldset-horizontal-margin: 15px;
-$generic-mobile-fieldset-header-vertical-margin: 20px;
-$generic-mobile-field-vertical-margin: 10px;
-
 
 @mixin dx-fieldset-styling() {
   .dx-field {
@@ -53,7 +47,7 @@ $generic-mobile-field-vertical-margin: 10px;
 @mixin dx-field-value-widget-position($name, $size) {
   &.#{$name},
   &:not(.dx-widget) > .#{$name} {
-    margin: ($generic-field-min-height - $size) / 2 0;
+    margin: math.div($generic-field-min-height - $size, 2) 0;
   }
 }
 
@@ -145,12 +139,3 @@ $generic-mobile-field-vertical-margin: 10px;
   $generic-fieldset-header-vertical-margin,
   $generic-field-vertical-margin
 );
-
-.dx-device-mobile {
-  @include dx-fieldset-sizing(
-    $generic-mobile-fieldset-vertical-margin,
-    $generic-mobile-fieldset-horizontal-margin,
-    $generic-mobile-fieldset-header-vertical-margin,
-    $generic-mobile-field-vertical-margin
-  );
-}

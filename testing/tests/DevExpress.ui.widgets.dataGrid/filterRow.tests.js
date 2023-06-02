@@ -1,42 +1,35 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div id="container">\
-        <div class="dx-datagrid"></div>\
-    </div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-import 'common.css!';
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'ui/tag_box';
-
-import hogan from '../../../node_modules/hogan.js/dist/hogan-3.0.2.js';
-
-window.Hogan = hogan;
+import ArrayStore from 'data/array_store';
 
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import { value as viewPort } from 'core/utils/view_port';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import devices from 'core/devices';
 import fx from 'animation/fx';
-import { setTemplateEngine } from 'core/templates/template_engine_registry';
 import dateLocalization from 'localization/date';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
-import browser from 'core/utils/browser';
 
 const device = devices.real();
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
-viewPort($('#qunit-fixture').addClass('dx-viewport'));
+QUnit.testStart(function() {
+    viewPort($('#qunit-fixture').addClass('dx-viewport'));
 
-setTemplateEngine('hogan');
+    const markup =
+        `<div>
+            <div id="container">
+                <div class="dx-datagrid"></div>
+            </div>
+        </div>`;
 
+    $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
+});
 
 QUnit.module('Filter Row', {
     beforeEach: function() {
@@ -770,7 +763,7 @@ QUnit.module('Filter Row', {
         ]);
 
         // act
-        this.columnHeadersView.render('.dx-datagrid');
+        this.columnHeadersView.render($('.dx-datagrid'));
 
         const filterRow = testElement.find('.dx-datagrid-filter-row');
 
@@ -946,7 +939,7 @@ QUnit.module('Filter Row', {
         const filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
         filterRowInput.find('input').val(90);
         filterRowInput.find('input').trigger('keyup');
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         const $button = testElement.find('.dx-apply-button');
         assert.ok(!$button.hasClass('dx-state-disabled'), 'button is enabled');
@@ -1052,7 +1045,7 @@ QUnit.module('Filter Row', {
         const filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
         filterRowInput.find('input').val(90);
         filterRowInput.find('input').trigger('keyup');
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         const $editorContainer = filterRowInput.closest('.dx-editor-container');
         const $filterCellContainer = filterRowInput.closest('.dx-editor-cell');
@@ -1081,7 +1074,7 @@ QUnit.module('Filter Row', {
         const filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
         filterRowInput.find('input').val(90);
         filterRowInput.find('input').trigger('keyup');
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         $button = testElement.find('.dx-apply-button');
         $($button).trigger('dxclick');
@@ -1252,7 +1245,7 @@ QUnit.module('Filter Row', {
         const filterRowInput = $testElement.find('.dx-datagrid-filter-row .dx-texteditor input').first();
         filterRowInput.val(90);
         filterRowInput.trigger('keyup');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.headerPanel.render();
@@ -1284,7 +1277,7 @@ QUnit.module('Filter Row', {
         const $filterMenu = $('.dx-filter-menu').first();
 
         $filterMenu.trigger('focusin');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $rootMenuItem = $filterMenu.find('.dx-menu-item');
         $rootMenuItem.trigger('mouseenter');
@@ -1312,8 +1305,7 @@ QUnit.module('Filter Row', {
 
     // T904124
     [true, false].forEach(rtlEnabled => {
-        const leftTextAlign = browser.msie ? 'left' : 'start';
-        const textAlign = rtlEnabled ? 'right' : leftTextAlign;
+        const textAlign = rtlEnabled ? 'right' : 'start';
         QUnit.test(`input's textAlign should be ${textAlign} if column's alignment is 'center' (rtlEnabled=${rtlEnabled})`, function(assert) {
             // arrange
             const $testElement = $('#container');
@@ -1493,7 +1485,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             .find('input')
             .focus();
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok($filterMenu.parent().find('input').is(':focus'), 'filter input is focused');
 
         const rootMenuItem = $filterMenu.find('.dx-menu-item').eq(0);
@@ -1509,7 +1501,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             .find('.dx-menu-item')
             .trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok($filterMenu.parent().find('input').is(':focus'), 'filter input is focused');
     });
@@ -1529,7 +1521,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // act
         that.editorFactoryController.focus(that.gridContainer.find('td').first());
-        that.clock.tick();
+        that.clock.tick(10);
 
         assert.roughEqual(that.gridContainer.find('.dx-datagrid-focus-overlay').outerHeight(), that.gridContainer.find('td').first().outerHeight(), 1.01, 'height focus overlay');
     });
@@ -1687,7 +1679,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // act
         $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has overlay wrapper');
@@ -1713,7 +1705,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // act
         $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $startRange = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').first();
@@ -1878,7 +1870,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
     // T306826
     QUnit.test('Apply filter by range when entering the filter value quickly', function(assert) {
-    // arrange
+        // arrange
         const that = this;
         const $testElement = $('#container').addClass('dx-datagrid-borders');
 
@@ -1894,7 +1886,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         // arrange
         $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const $startRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').first().find(TEXTEDITOR_INPUT_SELECTOR);
@@ -1920,6 +1912,42 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         assert.strictEqual(filter[1], 'and');
         assert.strictEqual(filter[2][1], '<=', 'selectedFilterOperation of the second filter');
         assert.equal(filter[2][2], 18, 'value of the second filter');
+    });
+
+    // T1013123
+    QUnit.test('changed event should be fired once on entering filter by range', function(assert) {
+        // arrange
+        const that = this;
+        const $testElement = $('#container').addClass('dx-datagrid-borders');
+
+        that.options.columns[1] = { dataField: 'age', selectedFilterOperation: 'between' };
+        setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+
+        that.columnHeadersView.render($testElement);
+
+        $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
+        that.clock.tick(10);
+
+        const $startRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').first().find(TEXTEDITOR_INPUT_SELECTOR);
+        assert.equal($startRangeInput.length, 1, 'has input');
+        const $endRangeInput = $('.dx-viewport').children('.dx-datagrid-filter-range-overlay').find('.dx-numberbox').last().find(TEXTEDITOR_INPUT_SELECTOR);
+        assert.equal($endRangeInput.length, 1, 'has input');
+
+        const changedSpy = sinon.spy();
+        that.dataController.changed.add(changedSpy);
+
+        // act
+        $startRangeInput.val(17);
+        $($startRangeInput).trigger('change');
+        $endRangeInput.val(18);
+        $($endRangeInput).trigger('change');
+        that.clock.tick(750);
+
+        // assert
+        assert.strictEqual(changedSpy.callCount, 1, 'changed is called once');
+        assert.ok(that.getCombinedFilter(), 'has filter');
     });
 
     // T318603
@@ -2140,7 +2168,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         that.columnHeadersView.render($testElement);
 
         $($testElement.find('td').last().find('.dx-filter-range-content')).trigger('focusin');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has overlay wrapper');
@@ -2169,12 +2197,614 @@ QUnit.module('Filter Row with real dataController and columnsController', {
 
         const $menuItem = $filterMenu.find('.dx-menu-item');
         $($menuItem).trigger('dxclick');
-        $('.dx-menu-item:contains(\'Between\')').trigger('dxclick');
+        $('.dx-menu-item').filter(':contains(\'Between\')').trigger('dxclick');
 
         const $filterRangeContent = $('.dx-filter-range-content');
 
         // assert
         assert.equal($filterRangeContent.attr('tabIndex'), '3', 'tabIndex of filter range content');
+    });
+
+    ['repaint', 'reshape', 'full'].forEach((refreshMode) => {
+        [true, false].forEach((hasLookupOptimization) => {
+            QUnit.test(`Lookup select box should show only relevant values, lookup optimization = ${hasLookupOptimization}, refreshMode = ${refreshMode}`, function(assert) {
+            // arrange
+                const $testElement = $('#container');
+
+                this.options.columns = [{
+                    dataField: 'column1',
+                    allowFiltering: true,
+                    lookup: {
+                        dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                        valueExpr: 'id',
+                        displayExpr: 'value'
+                    }
+                }, {
+                    dataField: 'column2',
+                    allowFiltering: true,
+                    lookup: {
+                        dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                        valueExpr: 'id',
+                        displayExpr: 'value',
+                    },
+                    calculateDisplayValue: hasLookupOptimization ? 'text' : undefined,
+                }];
+                this.options.dataSource = [
+                    { column1: 1, column2: 1, text: 'value1' },
+                    { column1: 2, column2: 2, text: 'value2' },
+                ];
+                this.options.syncLookupFilterValues = true;
+                this.options.editing = {
+                    refreshMode
+                };
+
+                setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+                    initViews: true
+                });
+                this.columnHeadersView.render($testElement);
+
+                // act
+                const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+                const dropDown2 = $('.dx-dropdowneditor-button').eq(1);
+
+                dropDown1.trigger('dxclick');
+                dropDown2.trigger('dxclick');
+
+                // assert
+                const dropDownList1 = $('.dx-list').eq(0);
+                const dropDownList2 = $('.dx-list').eq(1);
+
+                assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+                assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+                assert.strictEqual(dropDownList1.find('.dx-item').eq(2).text(), 'value2');
+
+                assert.strictEqual(dropDownList2.find('.dx-item').length, 3);
+                assert.strictEqual(dropDownList2.find('.dx-item').eq(1).text(), 'value1');
+                assert.strictEqual(dropDownList2.find('.dx-item').eq(2).text(), 'value2');
+
+                // act
+                dropDownList1.find('.dx-item').eq(1).trigger('dxclick');
+
+                // assert
+                assert.strictEqual(dropDownList2.find('.dx-item').length, 2);
+                assert.strictEqual(dropDownList2.find('.dx-item').eq(1).text(), 'value1');
+            });
+
+            QUnit.test(`Lookup select box should show only relevant values after initialization, lookup optimization = ${hasLookupOptimization}, refreshMode = ${refreshMode}`, function(assert) {
+            // arrange
+                const $testElement = $('#container');
+
+                this.options.columns = [{
+                    dataField: 'column1',
+                    allowFiltering: true,
+                    lookup: {
+                        dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                        valueExpr: 'id',
+                        displayExpr: 'value'
+                    },
+                    filterValue: 1,
+                }, {
+                    dataField: 'column2',
+                    allowFiltering: true,
+                    lookup: {
+                        dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                        valueExpr: 'id',
+                        displayExpr: 'value'
+                    },
+                    calculateDisplayValue: hasLookupOptimization ? 'text' : undefined,
+                }];
+                this.options.dataSource = [
+                    { column1: 1, column2: 1, text: 'value1' },
+                    { column1: 2, column2: 2, text: 'value2' },
+                ];
+                this.options.syncLookupFilterValues = true;
+                this.options.editing = {
+                    refreshMode
+                };
+
+                setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+                    initViews: true
+                });
+                this.columnHeadersView.render($testElement);
+
+                // act
+                const dropDown = $('.dx-dropdowneditor-button').eq(1);
+                dropDown.trigger('dxclick');
+                const dropDownList = $('.dx-list');
+
+                // assert
+                assert.strictEqual(dropDownList.find('.dx-item').length, 2);
+                assert.strictEqual(dropDownList.find('.dx-item').eq(1).text(), 'value1');
+            });
+
+            QUnit.test(`Lookup select box should be empty if no rows are displayed, lookup optimization = ${hasLookupOptimization}, refreshMode = ${refreshMode}`, function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.options.columns = [{
+                    dataField: 'column1',
+                    allowFiltering: true,
+                    lookup: {
+                        dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                        valueExpr: 'id',
+                        displayExpr: 'value'
+                    },
+                    filterValue: 2,
+                }, {
+                    dataField: 'column2',
+                    allowFiltering: true,
+                    lookup: {
+                        dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                        valueExpr: 'id',
+                        displayExpr: 'value'
+                    },
+                    calculateDisplayValue: hasLookupOptimization ? 'text' : undefined,
+                }];
+
+                this.options.dataSource = [
+                    { column1: 1, column2: 1, text: 'value1' },
+                ];
+                this.options.syncLookupFilterValues = true;
+                this.options.editing = { refreshMode };
+                this.options.filterRow.showAllText = '(All)';
+
+                setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+                    initViews: true
+                });
+                this.columnHeadersView.render($testElement);
+
+                // act
+                const dropDown = $('.dx-dropdowneditor-button').eq(1);
+                dropDown.trigger('dxclick');
+                const dropDownList = $('.dx-list');
+
+                // assert
+                assert.strictEqual(dropDownList.find('.dx-item').length, 1);
+                assert.strictEqual(dropDownList.find('.dx-item:eq(0)').text(), '(All)');
+            });
+        });
+    });
+
+
+    QUnit.test('Lookup select box should not show only relevant values if syncLookupFilterValues = false', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }, {
+            dataField: 'column2',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [
+            { column1: 1, column2: 1 },
+            { column1: 2, column2: 2 },
+        ];
+        this.options.syncLookupFilterValues = false;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+        const dropDown2 = $('.dx-dropdowneditor-button').eq(1);
+
+        dropDown1.trigger('dxclick');
+        dropDown2.trigger('dxclick');
+
+        // assert
+        const dropDownList1 = $('.dx-list').eq(0);
+        const dropDownList2 = $('.dx-list').eq(1);
+
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(2).text(), 'value2');
+
+        assert.strictEqual(dropDownList2.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList2.find('.dx-item').eq(1).text(), 'value1');
+        assert.strictEqual(dropDownList2.find('.dx-item').eq(2).text(), 'value2');
+
+        // act
+        dropDownList1.find('.dx-item').eq(1).trigger('dxclick');
+
+        // assert
+        assert.strictEqual(dropDownList2.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList2.find('.dx-item').eq(1).text(), 'value1');
+    });
+
+    // T1103389
+    QUnit.test('Lookup select box should not show only relevant values for unbound columns', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            calculateCellValue() {
+                return 1;
+            },
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [ { }, { } ];
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+
+        dropDown1.trigger('dxclick');
+
+        // assert
+        const dropDownList1 = $('.dx-list').eq(0);
+
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(2).text(), 'value2');
+    });
+
+    // T1099516
+    QUnit.test('Lookup select box should have actual values after dataSource reload', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        let loadCount = 0;
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = {
+            load() {
+                loadCount++;
+                if(loadCount === 1) {
+                    return [{ column1: 1, column2: 1 }];
+                } else {
+                    return [
+                        { column1: 1, column2: 1 },
+                        { column1: 2, column2: 2 }
+                    ];
+                }
+            }
+        },
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+
+        dropDown1.trigger('dxclick');
+
+        // assert
+        const dropDownList1 = $('.dx-list').eq(0);
+
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 2);
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+
+        // act
+        this.getDataSource().reload();
+
+        // assert
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(2).text(), 'value2');
+    });
+
+    [
+        false, // T1098872
+        true, // T1111398
+    ].forEach(groupPaging => {
+        QUnit.test(`Lookup select box should pass correct group load options for dataGrid dataSource, groupPaging = ${groupPaging}`, function(assert) {
+        // arrange
+            const loadSpy = sinon.spy((loadOptions) => {
+                const d = $.Deferred();
+                new ArrayStore([
+                    { column1: 1, text: 1 },
+                    { column1: 2, text: 2 },
+                ]).load(loadOptions).done(items => {
+                    d.resolve({
+                        data: items,
+                        totalCount: 2,
+                    });
+                });
+
+                return d;
+            });
+
+            const $testElement = $('#container');
+
+            this.options.columns = [{
+                dataField: 'column1',
+                allowFiltering: true,
+                calculateDisplayValue: 'text',
+                lookup: {
+                    dataSource: {
+                        store: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                        paginate: true,
+                    },
+                    valueExpr: 'id',
+                    displayExpr: 'value'
+                }
+            }];
+            this.options.dataSource = { load: loadSpy };
+            this.options.remoteOperations = groupPaging ? { groupPaging: true } : true;
+            this.options.syncLookupFilterValues = true;
+
+            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+                initViews: true
+            });
+            this.columnHeadersView.render($testElement);
+
+            // act
+            const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+            dropDown1.trigger('dxclick');
+
+            // assert
+            const loadOptions = loadSpy.getCall(1).args[0];
+            assert.deepEqual(loadOptions.group, [{
+                isExpanded: true,
+                selector: 'column1'
+            },
+            {
+                isExpanded: false,
+                selector: 'text'
+            }]);
+
+            if(groupPaging) {
+                assert.strictEqual(loadOptions.skip, 0);
+                assert.strictEqual(loadOptions.take, 20);
+            }
+        });
+    });
+
+
+    // T1100782
+    [true, false].forEach((hasLookupOptimization) => {
+        QUnit.test(`Lookup select box should pass correct load options (skip, take, filter) for lookup dataSource, hasLookupOptimization: ${hasLookupOptimization}`, function(assert) {
+            // arrange
+            const loadSpy = sinon.spy((loadOptions) => {
+                const d = $.Deferred();
+                new ArrayStore(
+                    [...new Array(100).keys()].map(i => ({ id: i, value: `value${i}` }))
+                ).load(loadOptions).done(items => d.resolve({
+                    data: items,
+                    totalCount: 100,
+                }));
+
+                return d;
+            });
+
+            const $testElement = $('#container');
+
+            this.options.columns = [{
+                dataField: 'column1',
+                allowFiltering: true,
+                calculateDisplayValue: hasLookupOptimization ? 'text' : undefined,
+                lookup: {
+                    dataSource: {
+                        load: loadSpy,
+                        filter: ['id', '>=', 10]
+                    },
+                    valueExpr: 'id',
+                    displayExpr: 'value'
+                }
+            }];
+            this.options.dataSource = [...new Array(100).keys()].map(i => ({ column1: i, text: `value${i}` }));
+            this.options.syncLookupFilterValues = true;
+
+            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+                initViews: true
+            });
+            this.columnHeadersView.render($testElement);
+
+            // act
+            const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+            dropDown1.trigger('dxclick');
+
+            // assert
+            if(!hasLookupOptimization) {
+                assert.deepEqual(loadSpy.getCall(0).args[0].filter, ['id', '>=', 10]);
+                assert.strictEqual(loadSpy.getCall(0).args[0].take, undefined);
+                assert.strictEqual(loadSpy.getCall(0).args[0].skip, undefined);
+            }
+
+            const dropDownList1 = $('.dx-list').eq(0);
+            assert.strictEqual(dropDownList1.find('.dx-item').length, 91); // 90 rows + (All)
+            assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value10');
+            assert.strictEqual(dropDownList1.find('.dx-item:eq(-1)').text(), 'value99');
+        });
+    });
+
+    // T1107543
+    QUnit.test('Lookup should show all relevant values in case one cell can contain multiple values', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [
+            { column1: [1, 2] },
+        ];
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        const dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+        dropDown1.trigger('dxclick');
+
+        // assert
+        const dropDownList1 = $('.dx-list').eq(0);
+
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(1)').text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item:eq(2)').text(), 'value2');
+    });
+
+    QUnit.test('It should be possible to turn off syncLookupFilterValues option in runtime', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [
+            { column1: 1 },
+        ];
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // act
+        let dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+        dropDown1.trigger('dxclick');
+
+        // assert
+        let dropDownList1 = $('.dx-list').eq(0);
+
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 2);
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+
+        // act
+        this.option('syncLookupFilterValues', false);
+        dropDown1 = $('.dx-dropdowneditor-button').eq(0);
+        dropDown1.trigger('dxclick');
+
+        // assert
+        dropDownList1 = $('.dx-list').eq(0);
+        assert.strictEqual(dropDownList1.find('.dx-item').length, 3);
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(1).text(), 'value1');
+        assert.strictEqual(dropDownList1.find('.dx-item').eq(2).text(), 'value2');
+    });
+
+    // T1097980
+    QUnit.test('Filtering should not throw an exception when there is hidden column', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            visible: false,
+        }, {
+            dataField: 'column2',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = [
+            { column1: 1, column2: 1 },
+            { column1: 2, column2: 2 },
+        ];
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+        this.clock.tick(100);
+
+        // act
+        this.columnOption('column2', 'filterValue', 1);
+        this.clock.tick(100);
+
+        // assert
+        assert.ok(true, 'no exceptions');
+    });
+
+    // T1097980
+    QUnit.test('Filtering should not throw an exception when dataSource is null', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns = [{
+            dataField: 'column1',
+            allowFiltering: true,
+            visible: false,
+        }, {
+            dataField: 'column2',
+            allowFiltering: true,
+            lookup: {
+                dataSource: [{ id: 1, value: 'value1' }, { id: 2, value: 'value2' }],
+                valueExpr: 'id',
+                displayExpr: 'value'
+            }
+        }];
+        this.options.dataSource = null;
+        this.options.syncLookupFilterValues = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+        this.clock.tick(100);
+
+        // assert
+        assert.ok(true, 'no exceptions');
+    });
+
+    // T1047481
+    QUnit.test('Search box should render aria-label attribute', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        this.options.filterRow.visible = true;
+
+        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+            initViews: true
+        });
+        this.columnHeadersView.render($testElement);
+
+        // assert
+        assert.equal(this.columnHeadersView.element().find('.dx-menu').first().attr('aria-label'), 'Search box');
     });
 
     if(device.deviceType === 'desktop') {

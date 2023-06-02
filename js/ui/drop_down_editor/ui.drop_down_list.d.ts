@@ -1,34 +1,51 @@
-import '../../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import DataSource from '../../data/data_source';
 
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    ItemInfo,
 } from '../../events/index';
 
 import {
-    DataExpressionMixinOptions
+    ValueChangedInfo,
+} from '../editor/editor';
+
+import {
+    DataExpressionMixinOptions,
 } from '../editor/ui.data_expression';
 
 import dxDropDownEditor, {
-    dxDropDownEditorOptions
+    dxDropDownEditorOptions,
 } from './ui.drop_down_editor';
 
-export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressionMixinOptions<T>, dxDropDownEditorOptions<T> {
+import {
+    SimplifiedSearchMode,
+} from '../../common';
+
+export interface SelectionChangedInfo<T = any> {
+    readonly selectedItem: T;
+}
+
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
+export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOptions<TComponent>, dxDropDownEditorOptions<TComponent> {
     /**
      * @docid
      * @readonly
      * @default undefined
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     displayValue?: string;
@@ -36,73 +53,66 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @docid
      * @default "group"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
+    groupTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     grouped?: boolean;
     /**
      * @docid
      * @default 0
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     minSearchLength?: number;
     /**
      * @docid
      * @default "No data to display"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     noDataText?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:object
-     * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field itemElement:object
+     * @type_function_param1_field itemIndex:number | object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onItemClick?: ((e: { component?: T, element?: dxElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: event }) => any);
+    onItemClick?: ((e: NativeEventInfo<TComponent, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 selectedItem:object
+     * @type_function_param1_field selectedItem:object
+     * @type_function_param1_field component:this
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onSelectionChanged?: ((e: { component?: T, element?: dxElement, model?: any, selectedItem?: any }) => any);
+    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 value:object
-     * @type_function_param1_field5 previousValue:object
-     * @type_function_param1_field6 event:event
+     * @type_function_param1_field value:object
+     * @type_function_param1_field previousValue:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field component:this
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
+    onValueChanged?: ((e: NativeEventInfo<TComponent, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchEnabled?: boolean;
@@ -110,22 +120,18 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @docid
      * @type getter|Array<getter>
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchExpr?: string | Function | Array<string | Function>;
     /**
      * @docid
-     * @type Enums.DropDownSearchMode
      * @default "contains"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    searchMode?: 'contains' | 'startswith';
+    searchMode?: SimplifiedSearchMode;
     /**
      * @docid
      * @default 500
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     searchTimeout?: number;
@@ -134,49 +140,47 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @readonly
      * @default null
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedItem?: any;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDataBeforeSearch?: boolean;
     /**
      * @docid
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;
     /**
      * @docid
      * @default "input change keyup"
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     valueChangeEvent?: string;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     wrapItemText?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    useItemTextAsTitle?: boolean;
 }
 /**
  * @docid
  * @inherits DataExpressionMixin, dxDropDownEditor
- * @module ui/drop_down_editor/ui.drop_down_list
- * @export default
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
+ * @options dxDropDownListOptions
  */
-export default class dxDropDownList extends dxDropDownEditor {
-    constructor(element: Element, options?: dxDropDownListOptions)
-    constructor(element: JQuery, options?: dxDropDownListOptions)
+export default class dxDropDownList<TProperties> extends dxDropDownEditor<TProperties> {
     getDataSource(): DataSource;
 }

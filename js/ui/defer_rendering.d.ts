@@ -1,60 +1,81 @@
 import {
-    animationConfig
+    AnimationConfig,
 } from '../animation/fx';
 
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    DxElement,
 } from '../core/element';
 
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+/** @public */
+export type ContentReadyEvent = EventInfo<dxDeferRendering>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxDeferRendering>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxDeferRendering>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxDeferRendering> & ChangedOptionInfo;
+
+/** @public */
+export type RenderedEvent = EventInfo<dxDeferRendering>;
+
+/** @public */
+export type ShownEvent = EventInfo<dxDeferRendering>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    animation?: animationConfig;
+    animation?: AnimationConfig;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRendered?: ((e: { component?: dxDeferRendering, element?: dxElement, model?: any }) => any);
+    onRendered?: ((e: { component?: dxDeferRendering; element?: DxElement; model?: any }) => void);
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onShown?: ((e: { component?: dxDeferRendering, element?: dxElement, model?: any }) => any);
+    onShown?: ((e: { component?: dxDeferRendering; element?: DxElement; model?: any }) => void);
     /**
      * @docid
-     * @type Promise<void> | bool
+     * @type DxPromise|bool
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    renderWhen?: Promise<void> | JQueryPromise<void> | boolean;
+    renderWhen?: PromiseLike<void> | boolean;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showLoadIndicator?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     staggerItemSelector?: string;
@@ -62,26 +83,64 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
 /**
  * @docid
  * @inherits Widget
- * @module ui/defer_rendering
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxDeferRendering extends Widget {
-    constructor(element: Element, options?: dxDeferRenderingOptions)
-    constructor(element: JQuery, options?: dxDeferRenderingOptions)
-}
+export default class dxDeferRendering extends Widget<dxDeferRenderingOptions> { }
 
-declare global {
-interface JQuery {
-    dxDeferRendering(): JQuery;
-    dxDeferRendering(options: "instance"): dxDeferRendering;
-    dxDeferRendering(options: string): any;
-    dxDeferRendering(options: string, ...params: any[]): any;
-    dxDeferRendering(options: dxDeferRenderingOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxDeferRenderingOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxDeferRenderingOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxDeferRenderingOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxDeferRenderingOptions.onContentReady
+ * @type_function_param1 e:{ui/defer_rendering:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxDeferRenderingOptions.onDisposing
+ * @type_function_param1 e:{ui/defer_rendering:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxDeferRenderingOptions.onInitialized
+ * @type_function_param1 e:{ui/defer_rendering:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxDeferRenderingOptions.onOptionChanged
+ * @type_function_param1 e:{ui/defer_rendering:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxDeferRenderingOptions.onRendered
+ * @type_function_param1 e:{ui/defer_rendering:RenderedEvent}
+ */
+onRendered?: ((e: RenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxDeferRenderingOptions.onShown
+ * @type_function_param1 e:{ui/defer_rendering:ShownEvent}
+ */
+onShown?: ((e: ShownEvent) => void);
+};
+///#ENDDEBUG

@@ -454,6 +454,18 @@ module('equalByValue', () => {
 
         assert.ok(equalByValue(guid1, guid2));
     });
+
+    test('The `equalByValue` should return false if one of objects is null (T1150251)', function(assert) {
+        const orig = Object.prototype.toString;
+
+        /* eslint-disable */
+        Object.prototype.toString = (obj) => orig(obj === null ? top : obj);
+
+        assert.strictEqual(equalByValue(null, {}), false);
+
+        Object.prototype.toString = orig;
+        /* eslint-enable */
+    });
 });
 
 

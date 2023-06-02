@@ -1,3 +1,13 @@
+import $ from 'jquery';
+import typeUtils from 'core/utils/type';
+import browser from 'core/utils/browser';
+import { DataSource } from 'data/data_source/data_source';
+import config from 'core/config';
+import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+
+const dataGridWrapper = new DataGridWrapper('#dataGrid');
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -16,24 +26,14 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import $ from 'jquery';
-import typeUtils from 'core/utils/type';
-import browser from 'core/utils/browser';
-import { DataSource } from 'data/data_source/data_source';
-import config from 'core/config';
-import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
-
-const dataGridWrapper = new DataGridWrapper('#dataGrid');
-
 QUnit.module('Adaptive columns', baseModuleConfig, () => {
-    QUnit.test('Form item of adaptive detail row is rendered with the underscore template', function(assert) {
+    QUnit.test('Form item of adaptive detail row is rendered with the jquery template', function(assert) {
         // arrange
         $('#container').width(200);
 
         const data = [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }];
         const $dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: data,
             columns: ['firstName', { dataField: 'lastName', cellTemplate: $('#scriptTestTemplate1') }]
@@ -45,7 +45,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         // assert
         assert.equal($dataGrid.find('.dx-adaptive-detail-row .dx-form').length, 1, 'adaptive detail form is opened');
-        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the underscore template is rendered correctly');
+        assert.equal($dataGrid.find('.dx-form #template1').text(), 'Template1', 'the jquery template is rendered correctly');
 
         instance.collapseAdaptiveDetailRow(data[0]);
     });
@@ -70,7 +70,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
             columnWidth: 100,
             columnHidingEnabled: true,
             repaintChangesOnly: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             keyExpr: 'id',
             dataSource: dataSource
         });
@@ -87,46 +87,53 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         assert.strictEqual($cell.text(), 'test updated', 'field1 text is updated');
     });
 
-    QUnit.test('Columns hiding - columnHidingEnabled is true', function(assert) {
-        // arrange
-        $('#container').width(200);
+    [false, true].forEach((usingCssStringInWidth) => {
+        QUnit.test(`Columns hiding - columnHidingEnabled is true (usingCssStringInWidth: ${usingCssStringInWidth})`, function(assert) {
+            // arrange
+            const columnWidth = usingCssStringInWidth ? '100px' : 100;
 
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            columnHidingEnabled: true,
-            dataSource: [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }],
-            columns: ['firstName', 'lastName']
+            $('#container').width(250);
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                loadingTimeout: null,
+                columnHidingEnabled: true,
+                dataSource: [{ value1: '1', value2: '2', value3: '3' }],
+                columns: [{ dataField: 'value1', minWidth: 100 }, { dataField: 'value2', width: columnWidth }, { dataField: 'value3', width: columnWidth }]
+            });
+            const instance = dataGrid.dxDataGrid('instance');
+            const adaptiveColumnsController = instance.getController('adaptiveColumns');
+            let $visibleColumns;
+
+            this.clock.tick(10);
+            $visibleColumns = $(instance.$element().find('.dx-header-row td:not(.dx-datagrid-hidden-column)'));
+
+            // act
+            assert.equal($visibleColumns.length, 3, 'only 3 column is visible');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(0), 'first column is shown');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(1), 'second column is shown');
+            assert.ok(dataGridWrapper.headers.isColumnHidden(2), 'third column is hidden');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(3), 'adaptive column is shown');
+            assert.equal($visibleColumns.eq(0).text(), 'Value 1', 'it is 1st column');
+            assert.equal(adaptiveColumnsController.getHiddenColumns()[0].dataField, 'value3', '\'3rd\' column is hidden');
+
+            $('#container').width(450);
+            instance.updateDimensions();
+            this.clock.tick(10);
+
+            $visibleColumns = $(instance.$element().find('.dx-header-row td:not(.dx-datagrid-hidden-column)'));
+
+            // assert
+            assert.equal($visibleColumns.length, 4, '2 columns are visible');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(0), 'first column is shown');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(1), 'second column is shown');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(2), 'third column is shown');
+            assert.ok(dataGridWrapper.headers.isColumnHidden(3), 'adaptive column is hidden');
+            assert.equal($visibleColumns.eq(0).text(), 'Value 1', 'First is \'value1\' column');
+            assert.equal($visibleColumns.eq(1).text(), 'Value 2', 'Second is \'value2\' column');
+            assert.equal($visibleColumns.eq(2).text(), 'Value 3', 'Second is \'value3\' column');
+            assert.equal(adaptiveColumnsController.getHiddenColumns().length, 0, 'There is no hidden columns');
+            assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 3, 'There is 3 columns in hiding queue');
         });
-        const instance = dataGrid.dxDataGrid('instance');
-        const adaptiveColumnsController = instance.getController('adaptiveColumns');
-        let $visibleColumns;
-
-        this.clock.tick();
-        $visibleColumns = $(instance.$element().find('.dx-header-row td'));
-
-        // act
-        assert.equal($visibleColumns.length, 3, 'only 1 column is visible');
-        assert.ok(!dataGridWrapper.headers.isColumnHidden(0), 'first column is shown');
-        assert.ok(dataGridWrapper.headers.isColumnHidden(1), 'second column is hidden');
-        assert.ok(!dataGridWrapper.headers.isColumnHidden(2), 'adaptive column is shown');
-        assert.equal($visibleColumns.eq(0).text(), 'First Name', 'it is \'firstName\' column');
-        assert.equal(adaptiveColumnsController.getHiddenColumns()[0].dataField, 'lastName', '\'lastName\' column is hidden');
-
-        $('#container').width(450);
-        instance.updateDimensions();
-        this.clock.tick();
-
-        $visibleColumns = $(instance.$element().find('.dx-header-row td'));
-
-        // assert
-        assert.equal($visibleColumns.length, 3, '2 columns are visible');
-        assert.ok(!dataGridWrapper.headers.isColumnHidden(0), 'first column is shown');
-        assert.ok(!dataGridWrapper.headers.isColumnHidden(1), 'second column is shown');
-        assert.ok(dataGridWrapper.headers.isColumnHidden(2), 'adaptive column is hidden');
-        assert.equal($visibleColumns.eq(0).text(), 'First Name', 'First is \'firstName\' column');
-        assert.equal($visibleColumns.eq(1).text(), 'Last Name', 'Second is \'lastName\' column');
-        assert.equal(adaptiveColumnsController.getHiddenColumns().length, 0, 'There is no hidden columns');
-        assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 2, 'There is 2 columns in hiding queue');
     });
 
     QUnit.test('Columns hiding - hidingPriority', function(assert) {
@@ -134,7 +141,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         $('#container').width(200);
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }],
             columns: [{ dataField: 'firstName', hidingPriority: 0 }, { dataField: 'lastName', hidingPriority: 1 }]
         });
@@ -142,7 +149,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         const adaptiveColumnsController = instance.getController('adaptiveColumns');
         let $visibleColumns;
 
-        this.clock.tick();
+        this.clock.tick(10);
         $visibleColumns = $(instance.$element().find('.dx-header-row td'));
         const $hiddenColumn = $('.dx-datagrid-hidden-column').eq(0);
 
@@ -154,14 +161,14 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         assert.equal($visibleColumns.eq(1).text(), 'Last Name', 'it is \'lastName\' column');
         assert.equal(adaptiveColumnsController.getHiddenColumns()[0].dataField, 'firstName', '\'firstName\' column is hidden');
         // T824145
-        if(browser.msie || browser.chrome) {
+        if(browser.chrome) {
             assert.equal(parseInt($hiddenColumn.css('border-right-width')), 0, 'no right border');
             assert.equal(parseInt($hiddenColumn.css('border-left-width')), 0, 'no left border');
         }
 
         $('#container').width(450);
         instance.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
         $visibleColumns = $(instance.$element().find('.dx-header-row td'));
 
         // assert
@@ -179,7 +186,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         // arrange
         $('#container').width(80);
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy van Dyk', age: 40, country: 'India' }],
             columns: [{ dataField: 'firstName', hidingPriority: 0 }, { dataField: 'lastName', hidingPriority: 1 }, 'age', 'country']
         });
@@ -187,7 +194,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         const adaptiveColumnsController = instance.getController('adaptiveColumns');
         let $visibleColumns;
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $visibleColumns = $(instance.$element().find('.dx-header-row td'));
 
@@ -207,7 +214,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         $('#container').width(900);
         instance.updateDimensions();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $visibleColumns = $(instance.$element().find('.dx-header-row td'));
 
@@ -230,7 +237,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             width: 300,
             columnWidth: 100,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: [{}],
             columns: ['field1', 'field2', 'field3', 'field4']
@@ -253,7 +260,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         const dataSource = [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }];
         const eventArgs = [];
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: dataSource,
             columns: ['firstName', 'lastName'],
@@ -269,7 +276,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         // act
         instance.expandAdaptiveDetailRow(dataSource[0]);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.find('.dx-field-item-content').first().trigger('mouseover');
         dataGrid.find('.dx-field-item-content').first().trigger('mouseout');
 
@@ -289,7 +296,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         let column;
         let columnIndex;
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: dataSource,
             columns: ['firstName', 'lastName'],
@@ -303,7 +310,7 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
 
         // act
         instance.expandAdaptiveDetailRow(dataSource[0]);
-        this.clock.tick();
+        this.clock.tick(10);
         dataGrid.find('.dx-field-item-content').trigger('dxclick');
 
         // assert
@@ -311,36 +318,149 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         assert.equal(columnIndex, 1, 'index of column');
     });
 
-    if(browser.msie && parseInt(browser.version) <= 11) {
-        QUnit.test('Update the scrollable for IE browsers when the adaptive column is hidden', function(assert) {
-            // arrange
-
-
-            const dataGrid = createDataGrid({
-                dataSource: [{
-                    'ID': 4,
-                    'OrderNumber': 35711,
-                    'OrderDate': '2014/01/12'
-                }],
-                columnAutoWidth: true,
-                columnHidingEnabled: true,
-                columns: ['ID', 'OrderNumber', 'OrderDate']
-            });
-
-            this.clock.tick();
-
-            // act
-            const scrollable = dataGrid.$element().find('.dx-scrollable').data('dxScrollable');
-            sinon.spy(scrollable, 'update');
-            dataGrid.updateDimensions();
-            this.clock.tick();
-
-            // assert
-            const $lastDataCell = dataGrid.$element().find('.dx-last-data-cell');
-            assert.equal($lastDataCell.text(), '2014/01/12', 'text of last data cell');
-            assert.equal(scrollable.update.callCount, 2);
-
-
+    // T1107108
+    QUnit.test('Adaptive detail row should preserve item order in a banded layout', function(assert) {
+        // arrange
+        const items = [
+            { id: '1', value1: '1', value2: '2', value3: '3', value4: '4', value5: '5' },
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: items,
+            columns: [
+                {
+                    caption: 'Band 1', columns: [
+                        { dataField: 'id' }
+                    ]
+                }, {
+                    caption: 'Band 2', columns: [
+                        { dataField: 'value1', hidingPriority: 5 },
+                        { dataField: 'value2', hidingPriority: 4 }
+                    ]
+                },
+                {
+                    caption: 'Band 3', columns: [
+                        { dataField: 'value3', hidingPriority: 3 },
+                        { dataField: 'value4', hidingPriority: 2 },
+                        { dataField: 'value5', hidingPriority: 1 }
+                    ]
+                }
+            ],
+            width: 200,
+            columnAutoWidth: true,
+            columnHidingEnabled: true,
+            masterDetail: null
         });
-    }
+        // act
+        const instance = dataGrid.dxDataGrid('instance');
+
+        instance.expandAdaptiveDetailRow(items[0]);
+        this.clock.tick(10);
+
+        // assert
+        const detailRowItems = $(instance.element()).find('.dx-adaptive-item-text')
+            .map(function() { return this.innerHTML; })
+            .toArray()
+            .join('');
+        // assert
+        assert.equal(detailRowItems, '2345');
+    });
+
+
+    // T1112866
+    QUnit.test('Adaptive detail column should not be navigable while hidden', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columnHidingEnabled: true,
+            dataSource: [
+                { id: 1, field1: 'string', field2: 'string', field3: 'string', field4: 'string', field5: 'string' },
+                { id: 2, field1: 'string', field2: 'string', field3: 'string', field4: 'string', field5: 'string' }
+            ],
+        }).dxDataGrid('instance');
+
+        const fireKeyDown = (target, key, shift = false) => {
+            const e = $.Event('keydown');
+            e.key = key;
+            e.shiftKey = shift;
+            target.trigger(e);
+        };
+        this.clock.tick(10);
+        let $lastDataCell = $(dataGrid.getCellElement(0, 5));
+        const $commandCell = $(dataGrid.getCellElement(0, 6));
+        const $firstNextRow = $(dataGrid.getCellElement(1, 0));
+
+        // act
+        dataGrid.focus($lastDataCell);
+        fireKeyDown($lastDataCell, 'Tab');
+        this.clock.tick(10);
+
+        // assert
+        // tab
+        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell has appropriate class');
+        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
+
+        // act
+        dataGrid.focus($firstNextRow);
+        fireKeyDown($firstNextRow, 'Tab', true);
+        this.clock.tick(10);
+
+        // assert
+        // shift tab
+        assert.ok($lastDataCell.hasClass('dx-focused', 'last cell in row should be focused'));
+        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
+
+        // act
+        dataGrid.focus($lastDataCell);
+        fireKeyDown($lastDataCell, 'ArrowRight');
+        this.clock.tick(10);
+
+        // assert
+        // right arrow
+        assert.notOk($commandCell.hasClass('dx-focused', 'command cell should not be focused'));
+
+        // act
+        dataGrid.option('width', 400);
+        $lastDataCell = $(dataGrid.getCellElement(0, 4));
+        dataGrid.focus($lastDataCell);
+        fireKeyDown($lastDataCell, 'Tab');
+        this.clock.tick(10);
+
+        // assert
+        // tab to visible
+        assert.notOk($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell is visible');
+        assert.ok($commandCell.hasClass('dx-focused'), 'command cell is focused');
+
+        // act
+        dataGrid.option('width', 600);
+        this.clock.tick(10);
+
+        // assert
+        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell is hidden after subsequent width increase');
+    });
+
+    // T1112866
+    QUnit.test('Hidden command cell accessibility attributes', function(assert) {
+
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columnHidingEnabled: true,
+            dataSource: [
+                { id: 1, field1: 'string', field2: 'string', field3: 'string', field4: 'string', field5: 'string' }
+            ],
+        }).dxDataGrid('instance');
+        this.clock.tick(10);
+        const $commandCell = $(dataGrid.getCellElement(0, 6));
+        // assert
+        assert.ok($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell is hidden');
+        assert.ok($commandCell.attr('aria-hidden'), 'command cell has hidden aria attribute');
+        assert.equal($commandCell.attr('tabindex'), -1, 'command cell has negative tab index');
+
+        // act
+        dataGrid.option('width', 400);
+        this.clock.tick(10);
+
+        // assert
+        assert.notOk($commandCell.hasClass('dx-command-adaptive-hidden'), 'command cell is not hidden');
+        assert.notOk($commandCell.attr('aria-hidden'), 'command cell doesn\'t have hidden aria attribute');
+        assert.notEqual($commandCell.attr('tabindex'), -1, 'command cell doesn\'t have negative tab index');
+    });
 });

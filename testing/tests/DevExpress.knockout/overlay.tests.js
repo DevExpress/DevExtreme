@@ -2,12 +2,13 @@ const $ = require('jquery');
 const fx = require('animation/fx');
 const ko = require('knockout');
 
-require('ui/overlay');
+require('ui/overlay/ui.overlay');
 require('ui/slider');
 require('integration/knockout');
 
-require('common.css!');
 require('generic_light.css!');
+
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 
 QUnit.testStart(function() {
     const markup =
@@ -29,7 +30,7 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('integration tests', moduleConfig);
+moduleWithoutCsp('integration tests', moduleConfig);
 
 QUnit.test('slider within overlay does not properly display its current position properly (Q509956)', function(assert) {
     const $container = $('#Q509956');

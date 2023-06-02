@@ -1,3 +1,4 @@
+// TODO: Doesn this test cases still alive?
 define(function(require) {
     if('callPhantom' in window) return;
 
@@ -6,16 +7,14 @@ define(function(require) {
         return;
     }
 
+    const $ = require('jquery');
     const browser = require('core/utils/browser');
     const devices = require('core/devices');
+    const pivotGridUtils = require('__internal/grids/pivot_grid/module_widget_utils');
+    const pivotGridDataSourceUtils = require('__internal/grids/pivot_grid/data_source/module_utils');
+    const { XmlaStore } = require('__internal/grids/pivot_grid/xmla_store/module');
+
     const PivotGridTestSettings = require('../../helpers/pivotGridTestSettings.js').default;
-
-    if(browser.msie && parseInt(browser.version) >= 17) return;
-
-    const $ = require('jquery');
-    const pivotGridUtils = require('ui/pivot_grid/ui.pivot_grid.utils');
-    const pivotGridDataSourceUtils = require('ui/pivot_grid/data_source.utils');
-    const XmlaStore = require('ui/pivot_grid/xmla_store');
 
     const CATEGORIES_DATA = [
         { key: '[Product].[Category].&[4]', value: 'Accessories', text: 'Accessories', index: 1 },
@@ -788,7 +787,7 @@ define(function(require) {
 
         QUnit.test('T677334. Correct parse result with empty member value', function(assert) {
             const send = pivotGridUtils.sendRequest;
-            sinon.stub(pivotGridUtils, 'sendRequest', function() {
+            sinon.stub(pivotGridUtils, 'sendRequest').callsFake(function() {
                 const deferred = $.Deferred();
                 send.apply(this, arguments)
                     .then(function() {
@@ -3914,9 +3913,9 @@ define(function(require) {
 
             store.load({
                 columns: [
-                    { dataField: '[Агрегация по дате].[Агрегация по дате]', area: 'column' }
+                    { dataField: '[Agrégation par date].[Agrégation par date]', area: 'column' }
                 ],
-                values: [{ dataField: '[Measures].[Опер_Колво]' }]
+                values: [{ dataField: '[Measures].[Fon_nombre]' }]
             }).done(function(data) {
                 assert.deepEqual(data.rows, []);
                 assert.strictEqual(data.columns.length, 3);
@@ -3942,10 +3941,10 @@ define(function(require) {
             });
             store.load({
                 columns: [
-                    { dataField: '[Агрегация по дате].[Агрегация по дате]', area: 'column', expanded: true },
-                    { dataField: '[Дата].[Год]' }
+                    { dataField: '[Agrégation par date].[Agrégation par date]', area: 'column', expanded: true },
+                    { dataField: '[Date].[L\'année]' }
                 ],
-                values: [{ dataField: '[Measures].[Опер_Колво]' }]
+                values: [{ dataField: '[Measures].[Fon_nombre]' }]
             }).done(function(data) {
                 assert.deepEqual(data.rows, []);
                 assert.strictEqual(data.columns.length, 3);

@@ -1,5 +1,4 @@
 import $ from '../../core/renderer';
-import { noop } from '../../core/utils/common';
 import eventsEngine from '../../events/core/events_engine';
 import { isDefined, isObject, isFunction } from '../../core/utils/type';
 import variableWrapper from '../../core/utils/variable_wrapper';
@@ -35,7 +34,7 @@ const EditorFactoryMixin = (function() {
     };
 
     const checkEnterBug = function() {
-        return browser.msie || browser.mozilla || devices.real().ios;// Workaround for T344096, T249363, T314719, caused by https://connect.microsoft.com/IE/feedback/details/1552272/
+        return browser.mozilla || devices.real().ios;// Workaround for T344096, T249363, T314719, caused by https://connect.microsoft.com/IE/feedback/details/1552272/
     };
 
     const getTextEditorConfig = function(options) {
@@ -82,10 +81,12 @@ const EditorFactoryMixin = (function() {
             onValueChanged: function(args) {
                 options.setValue(args.value);
             },
-            onKeyDown: function(e) {
-                if(checkEnterBug() && normalizeKeyName(e.event) === 'enter') {
-                    e.component.blur();
-                    e.component.focus();
+            onKeyDown: function({ component, event }) {
+                const useMaskBehavior = component.option('useMaskBehavior');
+
+                if((checkEnterBug() || useMaskBehavior) && normalizeKeyName(event) === 'enter') {
+                    component.blur();
+                    component.focus();
                 }
             },
             displayFormat: options.format,
@@ -126,7 +127,7 @@ const EditorFactoryMixin = (function() {
 
     const prepareBooleanEditor = function(options) {
         if(options.parentType === 'filterRow' || options.parentType === 'filterBuilder') {
-            prepareSelectBox(extend(options, {
+            prepareLookupEditor(extend(options, {
                 lookup: {
                     displayExpr: function(data) {
                         if(data === true) {
@@ -169,7 +170,7 @@ const EditorFactoryMixin = (function() {
         }
     }
 
-    function prepareSelectBox(options) {
+    function prepareLookupEditor(options) {
         const lookup = options.lookup;
         let displayGetter;
         let dataSource;
@@ -205,7 +206,7 @@ const EditorFactoryMixin = (function() {
 
             const allowClearing = Boolean(lookup.allowClearing && !isFilterRow);
 
-            options.editorName = 'dxSelectBox';
+            options.editorName = options.editorType ?? 'dxSelectBox';
             options.editorOptions = getResultConfig({
                 searchEnabled: true,
                 value: options.value,
@@ -258,12 +259,17 @@ const EditorFactoryMixin = (function() {
 
             that._createComponent($editorElement, options.editorName, options.editorOptions);
 
-            if(options.editorName === 'dxTextBox') {
-                $editorElement.dxTextBox('instance').registerKeyHandler('enter', noop);
-            }
-
             if(options.editorName === 'dxDateBox') {
-                $editorElement.dxDateBox('instance').registerKeyHandler('enter', () => true);
+                const dateBox = $editorElement.dxDateBox('instance');
+                const defaultEnterKeyHandler = dateBox._supportedKeys()['enter'];
+
+                dateBox.registerKeyHandler('enter', (e) => {
+                    if(dateBox.option('opened')) {
+                        defaultEnterKeyHandler(e);
+                    }
+
+                    return true;
+                });
             }
 
             if(options.editorName === 'dxTextArea') {
@@ -272,6 +278,47 @@ const EditorFactoryMixin = (function() {
                         event.stopPropagation();
                     }
                 });
+            }
+        }
+    };
+
+    const prepareCustomEditor = (options) => {
+        options.editorName = options.editorType;
+        options.editorOptions = getResultConfig({
+            value: options.value,
+            onValueChanged: function(args) {
+                options.setValue(args.value);
+            },
+        }, options);
+    };
+
+    const prepareEditor = (options) => {
+        const prepareDefaultEditor = {
+            'dxDateBox': prepareDateBox,
+            'dxCheckBox': prepareCheckBox,
+            'dxNumberBox': prepareNumberBox,
+            'dxTextBox': prepareTextBox,
+        };
+
+        if(options.lookup) {
+            prepareLookupEditor(options);
+        } else if(options.editorType) {
+            (prepareDefaultEditor[options.editorType] ?? prepareCustomEditor)(options);
+        } else {
+            switch(options.dataType) {
+                case 'date':
+                case 'datetime':
+                    prepareDateBox(options);
+                    break;
+                case 'boolean':
+                    prepareBooleanEditor(options);
+                    break;
+                case 'number':
+                    prepareNumberBox(options);
+                    break;
+                default:
+                    prepareTextBox(options);
+                    break;
             }
         }
     };
@@ -284,33 +331,12 @@ const EditorFactoryMixin = (function() {
                 options.tabIndex = this.option('tabIndex');
             }
 
-            if(options.lookup) {
-                prepareSelectBox(options);
-            } else {
-                switch(options.dataType) {
-                    case 'date':
-                    case 'datetime':
-                        prepareDateBox(options);
-                        break;
-                    case 'boolean':
-                        prepareBooleanEditor(options);
-                        break;
-                    case 'number':
-                        prepareNumberBox(options);
-                        break;
-                    default:
-                        prepareTextBox(options);
-                        break;
-                }
-            }
+            prepareEditor(options);
 
-            const editorName = options.editorName;
             this.executeAction('onEditorPreparing', options);
 
             if(options.cancel) {
                 return;
-            } else if(options.parentType === 'dataRow' && options.editorType && editorName === options.editorName) {
-                options.editorName = options.editorType;
             }
 
             if(options.parentType === 'dataRow' && !options.isOnForm && !isDefined(options.editorOptions.showValidationMark)) {

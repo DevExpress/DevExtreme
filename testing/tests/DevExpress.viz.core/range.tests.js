@@ -14,6 +14,7 @@ QUnit.test('Create empty', function(assert) {
     assert.strictEqual(range.maxVisible, undefined);
     assert.strictEqual(range.startCategories, undefined);
     assert.strictEqual(range.endCategories, undefined);
+    assert.strictEqual(range.containsConstantLine, undefined);
 });
 
 QUnit.test('Create with range', function(assert) {
@@ -58,6 +59,27 @@ QUnit.test('Merge invert', function(assert) {
         // assert
         assert.strictEqual(that.range, returnValue);
         assert.strictEqual(that.range.invert, expected);
+    };
+
+    checkRules(true, true, true);
+    checkRules(false, true, true);
+    checkRules(true, false, true);
+    checkRules(false, false, false);
+});
+
+QUnit.test('Merge containsConstantLine', function(assert) {
+    const that = this;
+
+    const checkRules = function(value, otherValue, expected) {
+        // arrange
+        that.createRange({ containsConstantLine: value });
+
+        // act
+        const returnValue = that.range.addRange({ containsConstantLine: otherValue });
+
+        // assert
+        assert.strictEqual(that.range, returnValue);
+        assert.strictEqual(that.range.containsConstantLine, expected);
     };
 
     checkRules(true, true, true);
@@ -1098,36 +1120,6 @@ QUnit.test('min < 0, max > 0, minVisible < 0, maxVisible > 0', function(assert) 
         max: 100,
         minVisible: -80,
         maxVisible: 80
-    });
-});
-
-QUnit.test('min > 0, max > 0, minVisible > 0, maxVisible > 0. Logarithmic axis', function(assert) {
-    this.checkRanges(assert, {
-        min: 10,
-        max: 100,
-        minVisible: 20,
-        maxVisible: 80,
-        axisType: 'logarithmic'
-    }, {
-        min: 10,
-        max: 100,
-        minVisible: 20,
-        maxVisible: 80
-    });
-});
-
-QUnit.test('min < 0, max < 0, minVisible < 0, maxVisible < 0. Logarithmic axis', function(assert) {
-    this.checkRanges(assert, {
-        min: -100,
-        max: -10,
-        minVisible: -80,
-        maxVisible: -20,
-        axisType: 'logarithmic'
-    }, {
-        min: -100,
-        max: -10,
-        minVisible: -80,
-        maxVisible: -20
     });
 });
 

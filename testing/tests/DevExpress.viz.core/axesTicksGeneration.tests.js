@@ -25,7 +25,7 @@ const environment = {
     beforeEach: function() {
 
         const that = this;
-        sinon.stub(translator2DModule, 'Translator2D', function() {
+        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return that.translator;
         });
         this.renderer = new vizMocks.Renderer();
@@ -35,7 +35,7 @@ const environment = {
     },
     createAxis: function(options) {
         const stripsGroup = this.renderer.g();
-        const labelAxesGroup = this.renderer.g();
+        const stripLabelAxesGroup = this.renderer.g();
         const constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() };
         const axesContainerGroup = this.renderer.g();
         const gridGroup = this.renderer.g();
@@ -46,7 +46,7 @@ const environment = {
         this.axis = new Axis($.extend(true, {
             renderer: this.renderer,
             stripsGroup: stripsGroup,
-            labelAxesGroup: labelAxesGroup,
+            stripLabelAxesGroup: stripLabelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
             gridGroup: gridGroup,
@@ -3589,4 +3589,16 @@ QUnit.test('Do not take into account aggregateByCategory if axis is not discrete
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.equal(aggregationInfo.interval, 2);
+});
+
+QUnit.test('Should return one tick if business range delta is 0', function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: 'numeric',
+    });
+    this.axis.setBusinessRange({ min: 1, max: 1 });
+
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, { min: 1, max: 1 });
+
+    assert.deepEqual(aggregationInfo.ticks, [1]);
 });

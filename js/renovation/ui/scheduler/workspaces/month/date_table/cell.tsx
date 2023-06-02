@@ -1,13 +1,13 @@
 import {
   Component,
   JSXComponent,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import {
   DateTableCellBase,
   DateTableCellBaseProps,
 } from '../../base/date_table/cell';
-import { ContentTemplateProps } from '../../types.d';
+import { ContentTemplateProps } from '../../types';
 
 export const viewFunction = ({
   props: {
@@ -19,15 +19,14 @@ export const viewFunction = ({
     index,
     isLastGroupCell,
     isFirstGroupCell,
+    isSelected,
+    isFocused,
     text,
   },
   contentTemplateProps,
   classes,
-  restAttributes,
 }: MonthDateTableCell): JSX.Element => (
   <DateTableCellBase
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
     className={classes}
     dataCellTemplate={dataCellTemplate}
     startDate={startDate}
@@ -38,6 +37,8 @@ export const viewFunction = ({
     index={index}
     isFirstGroupCell={isFirstGroupCell}
     isLastGroupCell={isLastGroupCell}
+    isSelected={isSelected}
+    isFocused={isFocused}
     contentTemplateProps={contentTemplateProps}
   >
     <div className="dx-scheduler-date-table-cell-text">

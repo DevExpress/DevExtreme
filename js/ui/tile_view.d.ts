@@ -1,146 +1,265 @@
-import DataSource, {
-    DataSourceOptions
-} from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
+
+import {
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+    ItemInfo,
+} from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
+import {
+    Orientation,
+    ScrollbarMode,
+} from '../common';
+
+type ItemLike = string | Item | any;
+
+export {
+    Orientation,
+    ScrollbarMode,
+};
+
+/** @public */
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTileView<TItem, TKey>>;
+
+/** @public */
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTileView<TItem, TKey>>;
+
+/** @public */
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxTileView<TItem, TKey>>;
+
+/** @public */
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTileView<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTileView<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTileView<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTileView<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTileView<TItem, TKey>> & ChangedOptionInfo;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ * @docid
+ */
+export interface dxTileViewOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxTileView<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
      * @docid
      * @default 100
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     baseItemHeight?: number;
     /**
      * @docid
      * @default 100
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     baseItemWidth?: number;
     /**
      * @docid
+     * @type string | Array<string | dxTileViewItem | any> | Store | DataSource | DataSourceOptions | null
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    dataSource?: string | Array<string | dxTileViewItem | any> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
-     * @type Enums.Orientation
      * @default 'horizontal'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    direction?: 'horizontal' | 'vertical';
+    direction?: Orientation;
     /**
      * @docid
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default 500
-     * @type_function_return number|string
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
      * @docid
      * @default 20
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemMargin?: number;
     /**
      * @docid
+     * @type Array<string | dxTileViewItem | any>
      * @fires dxTileViewOptions.onOptionChanged
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    items?: Array<string | dxTileViewItem | any>;
+    items?: Array<TItem>;
     /**
      * @docid
-     * @default false
-     * @prevFileNamespace DevExpress.ui
+     * @default 'never'
+     * @default 'onScroll' &for(Mac|Android|iOS)
      * @public
      */
-    showScrollbar?: boolean;
+    showScrollbar?: ScrollbarMode;
 }
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/tile_view
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxTileView extends CollectionWidget {
-    constructor(element: Element, options?: dxTileViewOptions)
-    constructor(element: JQuery, options?: dxTileViewOptions)
+export default class dxTileView<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidget<dxTileViewOptions<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @publicName scrollPosition()
      * @return numeric
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollPosition(): number;
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxTileView
+ */
+export type Item = dxTileViewItem;
+
+/**
+ * @deprecated Use Item instead
+ * @namespace DevExpress.ui
  */
 export interface dxTileViewItem extends CollectionWidgetItem {
     /**
      * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     heightRatio?: number;
     /**
      * @docid
      * @default 1
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     widthRatio?: number;
 }
 
-declare global {
-interface JQuery {
-    dxTileView(): JQuery;
-    dxTileView(options: "instance"): dxTileView;
-    dxTileView(options: string): any;
-    dxTileView(options: string, ...params: any[]): any;
-    dxTileView(options: dxTileViewOptions): JQuery;
-}
-}
-export type Options = dxTileViewOptions;
+/** @public */
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+};
 
-/** @deprecated use Options instead */
-export type IOptions = dxTileViewOptions;
+/** @public */
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxTileViewOptions<TItem, TKey>;
+
+/** @deprecated use Properties instead */
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered' | 'onSelectionChanged'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxTileViewOptions.onContentReady
+ * @type_function_param1 e:{ui/tile_view:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxTileViewOptions.onDisposing
+ * @type_function_param1 e:{ui/tile_view:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxTileViewOptions.onInitialized
+ * @type_function_param1 e:{ui/tile_view:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxTileViewOptions.onItemClick
+ * @type_function_param1 e:{ui/tile_view:ItemClickEvent}
+ */
+onItemClick?: ((e: ItemClickEvent) => void);
+/**
+ * @skip
+ * @docid dxTileViewOptions.onItemContextMenu
+ * @type_function_param1 e:{ui/tile_view:ItemContextMenuEvent}
+ */
+onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+/**
+ * @skip
+ * @docid dxTileViewOptions.onItemHold
+ * @type_function_param1 e:{ui/tile_view:ItemHoldEvent}
+ */
+onItemHold?: ((e: ItemHoldEvent) => void);
+/**
+ * @skip
+ * @docid dxTileViewOptions.onItemRendered
+ * @type_function_param1 e:{ui/tile_view:ItemRenderedEvent}
+ */
+onItemRendered?: ((e: ItemRenderedEvent) => void);
+/**
+ * @skip
+ * @docid dxTileViewOptions.onOptionChanged
+ * @type_function_param1 e:{ui/tile_view:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

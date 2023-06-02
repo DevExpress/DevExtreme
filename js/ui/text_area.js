@@ -1,14 +1,14 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import { noop, ensureDefined } from '../core/utils/common';
-import { getWindow } from '../core/utils/window';
+import { getWindow, hasWindow } from '../core/utils/window';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import { isDefined } from '../core/utils/type';
 import { addNamespace, eventData } from '../events/utils/index';
 import pointerEvents from '../events/pointer';
-import scrollEvents from '../ui/scroll_view/ui.events.emitter.gesture.scroll';
-import { getVerticalOffsets, getElementBoxParams, parseHeight } from '../core/utils/size';
+import scrollEvents from '../events/gesture/emitter.gesture.scroll';
+import { getVerticalOffsets, getElementBoxParams, parseHeight, getOuterHeight } from '../core/utils/size';
 import { allowScroll, prepareScrollData } from './text_box/utils.scroll';
 import TextBox from './text_box';
 
@@ -177,17 +177,22 @@ const TextArea = TextBox.inherit({
     },
 
     _updateInputHeight: function() {
-        const $input = this._input();
-        const autoHeightResizing = this.option('height') === undefined && this.option('autoResizeEnabled');
-
-        if(!autoHeightResizing) {
-            $input.css('height', '');
+        if(!hasWindow()) {
             return;
-        } else {
-            this._resetDimensions();
-            this._$element.css('height', this._$element.outerHeight());
         }
 
+        const $input = this._input();
+        const height = this.option('height');
+        const autoHeightResizing = height === undefined && this.option('autoResizeEnabled');
+        const shouldCalculateInputHeight = autoHeightResizing || (height === undefined && this.option('minHeight'));
+
+        if(!shouldCalculateInputHeight) {
+            $input.css('height', '');
+            return;
+        }
+
+        this._resetDimensions();
+        this._$element.css('height', getOuterHeight(this._$element));
         $input.css('height', 0);
 
         const heightDifference = this._getHeightDifference($input);
@@ -221,7 +226,7 @@ const TextArea = TextBox.inherit({
         const boundaryValue = this.option(optionName);
 
         if(isDefined(boundaryValue)) {
-            return typeof boundaryValue === 'number' ? boundaryValue : parseHeight(boundaryValue, this._$textEditorContainer.get(0));
+            return typeof boundaryValue === 'number' ? boundaryValue : parseHeight(boundaryValue, this.$element().get(0).parentElement, this._$element.get(0));
         }
     },
 
@@ -238,6 +243,12 @@ const TextArea = TextBox.inherit({
             const autoResizeEnabled = ensureDefined(isAutoResizeEnabled, this.option('autoResizeEnabled'));
 
             $input.toggleClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE, autoResizeEnabled);
+        }
+    },
+
+    _dimensionChanged: function() {
+        if(this.option('visible')) {
+            this._updateInputHeight();
         }
     },
 

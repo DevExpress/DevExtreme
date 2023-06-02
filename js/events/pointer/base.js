@@ -26,14 +26,22 @@ const BaseStrategy = Class.inherit({
     _handler: function(e) {
         const delegateTarget = this._getDelegateTarget(e);
 
-        return this._fireEvent({
+        const event = {
             type: this._eventName,
             pointerType: e.pointerType || eventSource(e),
             originalEvent: e,
             delegateTarget: delegateTarget,
             // NOTE: TimeStamp normalization (FF bug #238041) (T277118)
             timeStamp: browser.mozilla ? (new Date()).getTime() : e.timeStamp
-        });
+        };
+
+        const originalEvent = e.originalEvent;
+        if(originalEvent?.target?.shadowRoot) {
+            const path = originalEvent.path ?? originalEvent.composedPath?.();
+            event.target = path[0];
+        }
+
+        return this._fireEvent(event);
     },
 
     _getDelegateTarget: function(e) {

@@ -10,7 +10,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
@@ -20,7 +19,7 @@ QUnit.module('State Storing', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options) {
-            setupTreeListModules(this, ['data', 'columns', 'stateStoring', 'filterRow', 'search', 'selection'], {
+            setupTreeListModules(this, ['data', 'columns', 'stateStoring', 'filterRow', 'search', 'selection', 'filterSync'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: $.extend({
@@ -35,13 +34,13 @@ QUnit.module('State Storing', {
                     columns: [{ dataField: 'name', dataType: 'string' }, { dataField: 'age', dataType: 'number' }],
                     keyExpr: 'id',
                     parentIdExpr: 'parentId',
-                    loadingTimeout: undefined,
+                    loadingTimeout: null,
                     scrolling: {
                         mode: 'virtual'
                     }
                 }, options)
             });
-            this.clock.tick();
+            this.clock.tick(10);
         };
     },
     afterEach: function() {
@@ -155,7 +154,8 @@ QUnit.module('State Storing', {
             expandedRowKeys: [1],
             pageIndex: 0,
             pageSize: 20,
-            searchText: ''
+            searchText: '',
+            selectedRowKeys: [],
         };
         let customSaveCallCount = 0;
 
@@ -176,12 +176,12 @@ QUnit.module('State Storing', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.strictEqual(customSaveCallCount, 0, 'customSave is not called');
 
         // act
         this.expandRow(2);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(customSaveCallCount, 1, 'customSave is called once after expandRow');
@@ -209,7 +209,7 @@ QUnit.module('State Storing', {
 
         // act
         this.expandRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         let expandedRowKeys = this.option('expandedRowKeys');
@@ -219,13 +219,29 @@ QUnit.module('State Storing', {
 
         // act
         this.collapseRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         expandedRowKeys = this.option('expandedRowKeys');
         assert.deepEqual(expandedRowKeys, [], 'expandedRowKeys');
         assert.deepEqual(state.expandedRowKeys, [], 'expandedRowKeys has been updated in the state storage');
         assert.notStrictEqual(state.expandedRowKeys, this.option('expandedRowKeys'), 'expandedRowKeys has a different instance in the state storage');
+    });
+
+    [null, {}].forEach(emptyState => {
+        QUnit.test(`expandedRowKeys should be cleared after calling state(${emptyState})`, function(assert) {
+            // arrange
+            this.setupDataGridModules({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                expandedRowKeys: [1]
+            });
+
+            // act
+            this.state(emptyState);
+
+            // assert
+            assert.deepEqual(this.option('expandedRowKeys'), []);
+        });
     });
 });
 

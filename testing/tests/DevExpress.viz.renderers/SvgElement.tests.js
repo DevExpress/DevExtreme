@@ -379,44 +379,47 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('smartAttr', function(assert) {
-        const lock = this.rendererStub.lockHatching = sinon.stub().returns('test-pattern');
+        const lock = this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
         const element = (new this.Element(this.rendererStub, 'rect'));
+        const attr = { fill: 'red', hatching: { direction: 'left' } };
 
-        element.smartAttr({ fill: 'red', hatching: { direction: 'left' } });
+        element.smartAttr(attr);
 
-        assert.strictEqual(element._settings.fill, 'test-pattern', 'fill');
-        assert.deepEqual(lock.lastCall.args, ['red', { direction: 'left' }, undefined], 'lock');
+        assert.deepEqual(element._settings, { fill: 'test-pattern' }, 'attrs');
+        assert.deepEqual(lock.lastCall.args, [{
+            color: attr.fill, hatching: attr.hatching
+        }, undefined, 'pattern'], 'lock');
     });
 
     QUnit.test('smartAttr / no hatching', function(assert) {
-        const lock = this.rendererStub.lockHatching = sinon.spy();
+        const lock = this.rendererStub.lockDefsElements = sinon.spy();
         const element = (new this.Element(this.rendererStub, 'rect'));
 
         element.smartAttr({ fill: 'red' });
 
-        assert.strictEqual(element._settings.fill, 'red', 'fill');
+        assert.deepEqual(element._settings, { fill: 'red' }, 'attrs');
         assert.strictEqual(lock.lastCall, null, 'lock');
     });
 
     QUnit.test('smartAttr with \'none\' hatching', function(assert) {
-        const lock = this.rendererStub.lockHatching = sinon.stub().returns('test-pattern');
+        const lock = this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
         const element = (new this.Element(this.rendererStub, 'rect'));
 
         element.smartAttr({ fill: 'red', hatching: { direction: 'NoNe' } });
 
-        assert.strictEqual(element._settings.fill, 'red', 'fill');
+        assert.deepEqual(element._settings, { fill: 'red' }, 'attrs');
         assert.ok(!lock.called, 'lock');
     });
 
     QUnit.test('smartAttr / no hatching and previous hatching', function(assert) {
-        const release = this.rendererStub.releaseHatching = sinon.spy();
+        const release = this.rendererStub.releaseDefsElements = sinon.spy();
         const element = (new this.Element(this.rendererStub, 'rect'));
-        this.rendererStub.lockHatching = function() { return 'test-pattern'; };
+        this.rendererStub.lockDefsElements = function() { return 'test-pattern'; };
         element.smartAttr({ fill: 'red', hatching: { direction: 'left' } });
 
         element.smartAttr({ fill: 'blue' });
 
-        assert.strictEqual(element._settings.fill, 'blue', 'fill');
+        assert.deepEqual(element._settings, { fill: 'blue' }, 'attrs');
         assert.deepEqual(release.lastCall.args, ['test-pattern'], 'release');
     });
 
@@ -424,11 +427,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         const element = (new this.Element(this.rendererStub, 'rect'));
         const attrs = { fill: 'red', hatching: { direction: 'left' } };
 
-        this.rendererStub.lockHatching = function() { return 'test-pattern'; };
+        this.rendererStub.lockDefsElements = function() { return 'test-pattern'; };
 
         element.smartAttr(attrs);
 
-        assert.strictEqual(attrs.fill, 'red');
+        assert.deepEqual(attrs.fill, 'red');
         assert.strictEqual(attrs.hatching.direction, 'left');
     });
 
@@ -436,12 +439,50 @@ function checkDashStyle(assert, elem, result, style, value) {
         const element = (new this.Element(this.rendererStub, 'rect'));
         const attrs = { fill: 'red', stroke: 'green' };
 
-        this.rendererStub.lockHatching = function() { return 'test-pattern'; };
+        this.rendererStub.lockDefsElements = function() { return 'test-pattern'; };
         element.attr = sinon.spy();
 
         element.smartAttr(attrs);
 
         assert.deepEqual(element.attr.lastCall.args, [{ fill: 'red', stroke: 'green' }]);
+    });
+
+    QUnit.test('smartAttr, filter', function(assert) {
+        const lock = this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
+        const element = (new this.Element(this.rendererStub, 'rect'));
+
+        element.smartAttr({ fill: 'red', filter: true });
+
+        assert.deepEqual(element._settings, { fill: 'red', filter: 'test-pattern' }, 'attrs');
+        assert.deepEqual(lock.lastCall.args, [{}, undefined, 'filter'], 'lock');
+    });
+
+    QUnit.test('smartAttr, dispose filter', function(assert) {
+        const release = this.rendererStub.releaseDefsElements = sinon.spy();
+        this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
+        const element = (new this.Element(this.rendererStub, 'rect'));
+
+        element.smartAttr({ filter: true });
+        element.smartAttr({ filter: false });
+
+        assert.deepEqual(release.lastCall.args, ['test-pattern'], 'release');
+    });
+
+    QUnit.test('smartAttr should not raise exception when filter applied on element with hatching', function(assert) {
+        this.rendererStub.lockDefsElements = sinon.stub().returns('test-pattern');
+        this.rendererStub.releaseDefsElements = sinon.spy();
+        const element = (new this.Element(this.rendererStub, 'rect'));
+        const hatchingAttrs = { fill: 'red', hatching: { direction: 'left' } };
+        const filterAttrs = { filter: true };
+
+        element.smartAttr(hatchingAttrs);
+
+        try {
+            element.smartAttr(filterAttrs);
+            assert.strictEqual(Object.hasOwnProperty.call(filterAttrs, 'filter'), false);
+        } catch(e) {
+            assert.ok(false, `error: ${e.message}`);
+        }
     });
 
     QUnit.module('SvgElement markup method');
@@ -535,7 +576,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.eventsEngine = eventsEngine;
             this.rendererStub = { fake: 'fake', root: { element: document.createElement('div') } };
             this.$emptyStub = sinon.stub($.fn, 'empty');
-            this.$removeStub = sinon.stub($.fn, 'remove', function() { return this; });
+            this.$removeStub = sinon.stub($.fn, 'remove').callsFake(function() { return this; });
             this.$onStub = sinon.stub(this.eventsEngine, 'on');
             this.$offStub = sinon.stub(this.eventsEngine, 'off');
             this.$triggerStub = sinon.stub(this.eventsEngine, 'trigger');
@@ -1521,7 +1562,6 @@ function checkDashStyle(assert, elem, result, style, value) {
             const svg = (new Element({}, 'svg')).append(parent);
 
             this.rect = (new Element({}, 'rect')).append(svg);
-            this.rect.element.setAttribute = sinon.spy();
         }
     });
 
@@ -1531,9 +1571,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         // assert
         assert.equal(result, this.rect);
-        assert.strictEqual(this.rect.element.setAttribute.callCount, 1);
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[0], 'style');
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[1], 'font-size:13px;cursor:pointer;');
+        assert.strictEqual(this.rect.element.style['font-size'], '13px');
+        assert.strictEqual(this.rect.element.style['cursor'], 'pointer');
     });
 
     QUnit.test('Compose styles, set zero value', function(assert) {
@@ -1541,82 +1580,74 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.rect.css({ 'font-size': 0, opacity: 0 });
 
         // assert
-        assert.deepEqual(this.rect.element.setAttribute.lastCall.args, ['style', 'font-size:0px;opacity:0;']);
+        assert.strictEqual(this.rect.element.style['font-size'], '0px');
+        assert.strictEqual(this.rect.element.style['opacity'], '0');
     });
 
     QUnit.test('Merge existing styles with new ones', function(assert) {
         // arrange
         this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
-        this.rect.element.setAttribute.reset();
 
         // act
         const result = this.rect.css({ 'font-family': 'SegoeUI', cursor: 'default' });
 
         // assert
         assert.equal(result, this.rect);
-        assert.strictEqual(this.rect.element.setAttribute.callCount, 1);
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[0], 'style');
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[1], 'font-size:13px;cursor:default;font-family:SegoeUI;');
+        assert.strictEqual(this.rect.element.style['font-size'], '13px');
+        assert.strictEqual(this.rect.element.style['cursor'], 'default');
+        assert.strictEqual(this.rect.element.style['font-family'], 'SegoeUI');
     });
 
     QUnit.test('Empty styles do not clear existing ones', function(assert) {
         // arrange
         this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
-        this.rect.element.setAttribute.reset();
 
         // act
         const result = this.rect.css();
 
         // assert
         assert.equal(result, this.rect);
-        assert.strictEqual(this.rect.element.setAttribute.callCount, 1);
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[0], 'style');
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[1], 'font-size:13px;cursor:pointer;');
+        assert.strictEqual(this.rect.element.style['font-size'], '13px');
+        assert.strictEqual(this.rect.element.style['cursor'], 'pointer');
     });
 
     QUnit.test('Special cases. value is undefined (does not take effect)', function(assert) {
         // arrange
         this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
-        this.rect.element.setAttribute.reset();
 
         // act
         const result = this.rect.css({ 'font-size': undefined, cursor: 'default' });
 
         // assert
         assert.equal(result, this.rect);
-        assert.strictEqual(this.rect.element.setAttribute.callCount, 1);
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[0], 'style');
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[1], 'font-size:13px;cursor:default;');
+        assert.strictEqual(this.rect.element.style['font-size'], '13px');
+        assert.strictEqual(this.rect.element.style['cursor'], 'default');
     });
 
     QUnit.test('Special cases. value is null (does not take effect)', function(assert) {
         // arrange
         this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
-        this.rect.element.setAttribute.reset();
 
         // act
         const result = this.rect.css({ 'font-size': null, cursor: 'default' });
 
         // assert
         assert.equal(result, this.rect);
-        assert.strictEqual(this.rect.element.setAttribute.callCount, 1);
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[0], 'style');
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[1], 'font-size:13px;cursor:default;');
+        assert.strictEqual(this.rect.element.style['font-size'], '13px');
+        assert.strictEqual(this.rect.element.style['cursor'], 'default');
     });
 
     QUnit.test('Special cases. value is empty string (deletes style)', function(assert) {
         // arrange
         this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
-        this.rect.element.setAttribute.reset();
 
         // act
         const result = this.rect.css({ 'font-size': '', cursor: 'default' });
 
         // assert
         assert.equal(result, this.rect);
-        assert.strictEqual(this.rect.element.setAttribute.callCount, 1);
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[0], 'style');
-        assert.deepEqual(this.rect.element.setAttribute.firstCall.args[1], 'cursor:default;');
+        assert.strictEqual(this.rect.element.style['font-size'], '');
+        assert.strictEqual(this.rect.element.style['cursor'], 'default');
     });
 
     QUnit.test('Special cases. apply unit name', function(assert) {
@@ -1625,7 +1656,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             'fill-opacity': 0.2,
             'flex-grow': 1,
             'flex-shrink': 1,
-            'font-weight': 2,
+            'font-weight': 800,
             'line-height': 3,
             'opacity': 0.3,
             'order': 2,
@@ -1637,25 +1668,29 @@ function checkDashStyle(assert, elem, result, style, value) {
             'left': 30,
             'width': 400
         };
-        const expectedStyleStrings = [
-            'column-count:2;',
-            'fill-opacity:0.2;',
-            'flex-grow:1;',
-            'flex-shrink:1;',
-            'font-weight:2;',
-            'line-height:3;',
-            'opacity:0.3;',
-            'order:2;',
-            'orphans:3;',
-            'widows:1;',
-            'z-index:4;',
-            'zoom:2;',
-            'font-size:12pt;',
-            'left:30px;',
-            'width:400px;'
-        ];
+        const expectedStyleStrings = {
+            'column-count': '2',
+            'fill-opacity': '0.2',
+            'flex-grow': '1',
+            'flex-shrink': '1',
+            'font-weight': '800',
+            'line-height': '3',
+            'opacity': '0.3',
+            'order': '2',
+            'orphans': '3',
+            'widows': '1',
+            'z-index': '4',
+            'zoom': '2',
+            'font-size': '12pt',
+            'left': '30px',
+            'width': '400px'
+        };
 
-        assert.deepEqual(this.rect.css(cssStyles).element.setAttribute.firstCall.args[1], expectedStyleStrings.join(''));
+        this.rect.css(cssStyles);
+
+        for(const key in expectedStyleStrings) {
+            assert.strictEqual(this.rect.element.style[key].toString(), expectedStyleStrings[key]);
+        }
     });
 
     QUnit.module('SvgElement. getBBox API', {
@@ -5757,6 +5792,21 @@ function checkDashStyle(assert, elem, result, style, value) {
 
             assert.equal(text.element.childNodes[4].style.fontWeight, 'bold');
             assert.equal(text.element.childNodes[5].style.fontWeight, '');
+        });
+
+        // T982300
+        QUnit.test('Wordwrap long text with too small width', function(assert) {
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'Thereislong text' });
+
+            this.prepareRenderBeforeEllipsis();
+
+            // act
+            const result = text.setMaxSize(3, undefined, {
+                wordWrap: 'breakWord',
+                textOverflow: 'ellipsis'
+            });
+
+            assert.deepEqual(result, { rowCount: 2, textChanged: true, textIsEmpty: false });
         });
 
         QUnit.test('Complex text. wordWrap: none, text overflow: ellipsis - remove test next to ellipsis', function(assert) {

@@ -1,7 +1,7 @@
 import DropDownEditor from './drop_down_editor/ui.drop_down_editor';
 import DataExpressionMixin from './editor/ui.data_expression';
-import { ensureDefined, noop, grep } from '../core/utils/common';
-import { isObject } from '../core/utils/type';
+import { noop, grep } from '../core/utils/common';
+import { isDefined, isObject } from '../core/utils/type';
 import { map } from '../core/utils/iterator';
 import { tabbable } from './widget/selectors';
 import { when, Deferred } from '../core/utils/deferred';
@@ -130,32 +130,42 @@ const DropDownBox = DropDownEditor.inherit({
     },
 
     _renderInputValue: function() {
-        const callBase = this.callBase.bind(this);
+        this._rejectValueLoading();
         const values = [];
 
         if(!this._dataSource) {
-            callBase(values);
+            this.callBase(values);
             return new Deferred().resolve();
         }
 
         const currentValue = this._getCurrentValue();
-        let keys = ensureDefined(currentValue, []);
+        let keys = currentValue ?? [];
 
         keys = Array.isArray(keys) ? keys : [keys];
 
-        const itemLoadDeferreds = map(keys, (function(key) {
-            return this._loadItem(key).always((function(item) {
-                const displayValue = this._displayGetter(item);
-                values.push(ensureDefined(displayValue, key));
-            }).bind(this));
-        }).bind(this));
+        const itemLoadDeferreds = map(keys, key => {
+            const deferred = new Deferred();
+            this
+                ._loadItem(key)
+                .always(item => {
+                    const displayValue = this._displayGetter(item);
+                    if(isDefined(displayValue)) {
+                        values.push(displayValue);
+                    } else if(this.option('acceptCustomValue')) {
+                        values.push(key);
+                    }
+                    deferred.resolve();
+                });
+            return deferred;
+        });
 
+        const callBase = this.callBase.bind(this);
         return when
             .apply(this, itemLoadDeferreds)
-            .always((function() {
+            .always(() => {
                 this.option('displayValue', values);
                 callBase(values.length && values);
-            }).bind(this));
+            });
     },
 
     _loadItem: function(value) {
@@ -174,6 +184,10 @@ const DropDownBox = DropDownEditor.inherit({
                     deferred.resolve(item);
                 })
                 .fail(function(args) {
+                    if(args?.shouldSkipCallback) {
+                        return;
+                    }
+
                     if(that.option('acceptCustomValue')) {
                         deferred.resolve(value);
                     } else {
@@ -246,7 +260,7 @@ const DropDownBox = DropDownEditor.inherit({
         return activeElement && this._popup.$content().get(0).contains(activeElement);
     },
 
-    _shouldCloseOnTargetScroll: function() {
+    _shouldHideOnParentScroll: function() {
         return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
     },
 
@@ -279,11 +293,12 @@ const DropDownBox = DropDownEditor.inherit({
             dragEnabled: false,
             focusStateEnabled,
             contentTemplate: ANONYMOUS_TEMPLATE_NAME,
-            closeOnTargetScroll: this._shouldCloseOnTargetScroll.bind(this),
+            hideOnParentScroll: this._shouldHideOnParentScroll.bind(this),
             position: extend(this.option('popupPosition'), {
                 of: this.$element(),
             }),
             onKeyboardHandled: opts => this.option('focusStateEnabled') && this._popupElementTabHandler(opts),
+            _ignoreFunctionValueDeprecation: true,
             maxHeight: function() {
                 const popupLocation = this._popupPosition?.v.location;
 

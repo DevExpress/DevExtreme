@@ -71,7 +71,7 @@ const environmentWithSinonStubPoint = {
         environment.beforeEach.call(this);
         let mockPointIndex = 0;
 
-        this.createPoint = sinon.stub(pointModule, 'Point', function(series, data) {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(series, data) {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.angle = -data.argument;
@@ -591,24 +591,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -648,24 +649,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 0
+                'stroke-width': 0,
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 0,
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 0
+                'stroke-width': 0,
             }
         });
     });
@@ -700,24 +702,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'containerColor',
                 r: 1,
                 stroke: 'n-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'n-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -753,24 +756,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'seriesColor',
             hover: {
                 fill: 'containerColor',
                 r: 1,
                 stroke: 'seriesColor',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'seriesColor',
                 r: 2.5,
                 stroke: 'seriesColor',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 'containerColor',
                 r: 2,
                 stroke: 'seriesColor',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -819,24 +823,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -877,24 +882,25 @@ function setDiscreteType(series) {
         series.createPoints();
 
         assert.deepEqual((series._getPointOptions().styles), {
+            labelColor: 'n-color',
             hover: {
                 fill: 'h-color',
                 r: 1,
                 stroke: 'h-b-color',
-                'stroke-width': 'h-b-width'
+                'stroke-width': 'h-b-width',
             },
             normal: {
                 fill: 'n-color',
                 r: 2.5,
                 stroke: 'n-b-color',
                 'stroke-width': 'n-b-width',
-                visibility: 'hidden'
+                visibility: 'hidden',
             },
             selection: {
                 fill: 's-color',
                 r: 2,
                 stroke: 's-b-color',
-                'stroke-width': 's-b-width'
+                'stroke-width': 's-b-width',
             }
         });
     });
@@ -1284,6 +1290,44 @@ function setDiscreteType(series) {
         });
     });
 
+    QUnit.test('Custom styles should not apply, normal state', function(assert) {
+        const series = this.createSeries({ ...this.options, ...{ color: { fillId: 'id_color', base: 'n-color' } } });
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+
+        assert.deepEqual(series._elementsGroup._stored_settings.stroke, 'n-color');
+    });
+
+    QUnit.test('Custom styles should not apply, hover state', function(assert) {
+        const series = this.createSeries({ ...this.options, ...{
+            color: { fillId: 'id_color', base: 'n-color' },
+            hoverStyle: { color: { fillId: 'id_color', base: 'n-color' } }
+        } });
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+        series.hover();
+
+        assert.deepEqual(series._elementsGroup._stored_settings.stroke, 'n-color');
+    });
+
+    QUnit.test('Custom styles should not apply, selection state', function(assert) {
+        const series = this.createSeries({ ...this.options, ...{
+            color: { fillId: 'id_color', base: 'n-color' },
+            selectionStyle: { color: { fillId: 'id_color', base: 'n-color' } }
+        } });
+        series.updateData(this.data);
+        series.createPoints();
+
+        series.draw();
+        series.select();
+
+        assert.deepEqual(series._elementsGroup._stored_settings.stroke, 'n-color');
+    });
+
     QUnit.test('Undefined dashStyle', function(assert) {
         this.options.dashStyle = undefined;
         const series = this.createSeries(this.options);
@@ -1311,7 +1355,7 @@ function setDiscreteType(series) {
             this.options = {
                 type: 'line'
             };
-            this.createPoint = sinon.stub(pointModule, 'Point', function() {
+            this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
                 const stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);
@@ -2290,7 +2334,7 @@ function setDiscreteType(series) {
         series.draw();
 
         assert.equal(this.renderer.stub('path').callCount, 1);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 361);
         assert.equal(this.renderer.stub('path').getCall(0).args[1], 'line');
 
         $.each(this.renderer.stub('path').getCall(0).args[0], function(_, pt) {
@@ -2376,10 +2420,10 @@ function setDiscreteType(series) {
         series.draw();
 
         assert.equal(this.renderer.stub('path').callCount, 1);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 4);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 3);
         assert.equal(this.renderer.stub('path').getCall(0).args[1], 'line');
         assert.deepEqual(getPositionRendererPoints(this.renderer.stub('path').getCall(0).args[0]),
-            [{ x: 20, y: 20 }, { x: 30, y: 30 }, { x: 30, y: 30 }, { x: 40, y: 40 }]);
+            [{ x: 30, y: 30 }, { x: 30, y: 30 }, { x: 40, y: 40 }]);
     });
 
     QUnit.test('draw polar line. Two point with equal angle', function(assert) {
@@ -2447,7 +2491,7 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 361);
         $.each(this.renderer.stub('path').getCall(0).args[0], function(_, pt) {
             assert.equal(pt.x, pt.y);
         });
@@ -2470,7 +2514,7 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 361);
         assert.equal(this.renderer.stub('path').getCall(0).args[0][20].x, 40);
         $.each(this.renderer.stub('path').getCall(0).args[0], function(_, pt) {
             assert.equal(pt.x, pt.y);
@@ -2494,9 +2538,9 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 363);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, 0.30009999999998627);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][362].angle, -359.6999);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, -0.6999000000000137);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][361].angle, -359.6999);
     });
 
     QUnit.test('draw polar line. inverted (T248175)', function(assert) {
@@ -2516,9 +2560,9 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 363);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
         assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, -359.9995);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][362].angle, 0.0005);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][361].angle, 0.0005);
     });
 
     QUnit.test('draw polar line. difference between normalize angle of the first and the last points are zero', function(assert) {
@@ -2538,9 +2582,9 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 363);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, 0);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][362].angle, -360);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 362);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, -1);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][361].angle, -360);
     });
 
     QUnit.test('draw polar line. angle of last point is more than 360', function(assert) {
@@ -2560,9 +2604,9 @@ function setDiscreteType(series) {
         series.createPoints();
         series.draw();
 
-        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 722);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, 0);
-        assert.equal(this.renderer.stub('path').getCall(0).args[0][721].angle, -720);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0].length, 721);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][0].angle, -1);
+        assert.equal(this.renderer.stub('path').getCall(0).args[0][720].angle, -720);
     });
 })();
 

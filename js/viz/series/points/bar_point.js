@@ -45,6 +45,12 @@ export default _extend({}, symbolPoint, {
         }
     },
 
+    _calculateVisibility: function(x, y, width, height) {
+        const { minX, maxX, minY, maxY } = this._getVisibleArea();
+
+        this.inVisibleArea = minX < x + width && maxX > x && minY < y + height && maxY > y;
+    },
+
     _getGraphicBBox: function(location) {
         const bBox = {
             x: this.x,
@@ -262,7 +268,7 @@ export default _extend({}, symbolPoint, {
         const valVisibleArea = that.series.getValueAxis().getVisibleArea();
         let arg = argTranslator.translate(that.argument);
         let val = valTranslator.translate(that.value, 1);
-        let minVal = valTranslator.translate(that.minValue);
+        let minVal = valTranslator.translate(that.minValue, -1);
 
         that[argAxis] = arg = arg === null ? arg : arg + (that[argAxis + 'Correction'] || 0);
         that['v' + valAxis] = val;

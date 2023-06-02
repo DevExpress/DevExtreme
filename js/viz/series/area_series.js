@@ -5,7 +5,7 @@ import { chart as scatterSeries } from './scatter_series';
 import { chart as lineSeriesChart, polar as lineSeriesPolar } from './line_series';
 const chartLineSeries = lineSeriesChart.line;
 const polarLineSeries = lineSeriesPolar.line;
-import { map as _map } from '../core/utils';
+import { map as _map, extractColor } from '../core/utils';
 const _extend = extend;
 const calculateBezierPoints = lineSeriesChart['spline']._calculateBezierPoints;
 
@@ -18,10 +18,15 @@ const baseAreaMethods = {
 
     _createLegendState: function(styleOptions, defaultColor) {
         return {
-            fill: styleOptions.color || defaultColor,
+            fill: extractColor(styleOptions.color) || defaultColor,
             opacity: styleOptions.opacity,
-            hatching: styleOptions.hatching
+            hatching: styleOptions.hatching,
+            filter: styleOptions.highlight
         };
+    },
+
+    _getColorId: function(options) {
+        return options.color?.fillId;
     },
 
     getValueRangeInitialValue: function() {
@@ -84,9 +89,10 @@ const baseAreaMethods = {
             border: borderStyle,
             elements: {
                 stroke: 'none',
-                fill: options.color || defaultColor,
+                fill: extractColor(options.color) || defaultColor,
                 hatching: options.hatching,
-                opacity: options.opacity
+                opacity: options.opacity,
+                filter: options.highlight ?? null
             }
         };
     },

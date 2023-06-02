@@ -1,20 +1,24 @@
+import { getHeight, getWidth, getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import fixtures from '../../helpers/positionFixtures.js';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import positionUtils from 'animation/position';
+import uiErrors from 'ui/widget/ui.errors';
 import Popover from 'ui/popover';
 import { getBoundingRect } from 'core/utils/position';
 
-import 'common.css!';
 import 'generic_light.css!';
 
-$('<style>.dx-popup-content { padding: 10px; }</style>').appendTo($('head'));
+$('<style nonce="qunit-test">.dx-popup-content { padding: 10px; }</style>').appendTo($('head'));
 
 const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
 const POPOVER_ARROW_CLASS = 'dx-popover-arrow';
 const POPOVER_WITHOUT_TITLE_CLASS = 'dx-popover-without-title';
+const POPOVER_TITLE_CLASS = 'dx-popup-title';
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 
 const positionAtWindowCenter = function(element) {
     positionUtils.setup(element, {
@@ -32,15 +36,19 @@ const wrapper = function() {
     return $('body').find(toSelector(POPOVER_WRAPPER_CLASS));
 };
 
+const getArrow = function() {
+    return wrapper().find(`.${POPOVER_ARROW_CLASS}`);
+};
+
 const getElementsPositionAndSize = function($popover, $target) {
-    const $content = wrapper().find('.dx-overlay-content');
-    const $popupContent = wrapper().find('.dx-popup-content');
+    const $content = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
+    const $popupContent = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
     const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
 
     return {
         arrow: {
-            height: $arrow.height(),
-            width: $arrow.width(),
+            height: getHeight($arrow),
+            width: getWidth($arrow),
             offsetTop: $arrow.offset().top,
             offsetLeft: $arrow.offset().left,
             positionTop: $arrow.position().top,
@@ -49,22 +57,22 @@ const getElementsPositionAndSize = function($popover, $target) {
         target: {
             offsetTop: $target.offset().top,
             offsetLeft: $target.offset().left,
-            width: $target.width(),
-            height: $target.height(),
+            width: getWidth($target),
+            height: getHeight($target),
             positionTop: $target.position().top,
             positionLeft: $target.position().left,
         },
         content: {
-            height: $content.outerHeight(true),
-            width: $content.width(),
+            height: getOuterHeight($content, true),
+            width: getWidth($content),
             offsetTop: $content.offset().top,
             offsetLeft: $content.offset().left,
             borderWidth: parseInt($content.css('borderBottomWidth'))
         },
         popupContent: {
-            height: $popupContent.outerHeight(true),
-            width: $popupContent.width(),
-            outerWidth: $popupContent.outerWidth(),
+            height: getOuterHeight($popupContent, true),
+            width: getWidth($popupContent),
+            outerWidth: getOuterWidth($popupContent),
             offsetTop: $popupContent.offset().top,
             offsetLeft: $popupContent.offset().left
         }
@@ -135,21 +143,21 @@ QUnit.module('render', () => {
         fixtures.simple.drop();
     });
 
-    QUnit.test('popup should not render arrow when the position side is center (T701940)', function(assert) {
+    QUnit.test('popover should not render arrow when the position side is center (T701940)', function(assert) {
         fixtures.simple.create();
 
         const popover = new Popover($('#what'), {
             position: { my: 'top left', at: 'center', of: window },
             visible: true
         });
-        const arrow = popover.$element().find(`.${POPOVER_ARROW_CLASS}`);
+        const arrow = popover.$wrapper().find(`.${POPOVER_ARROW_CLASS}`);
 
-        assert.strictEqual(arrow.height(), 0);
-        assert.strictEqual(arrow.width(), 0);
+        assert.strictEqual(getHeight(arrow), 0);
+        assert.strictEqual(getWidth(arrow), 0);
         fixtures.simple.drop();
     });
 
-    QUnit.test('popup should render correctly when it\'s position.of is event', function(assert) {
+    QUnit.test('popover should render correctly when it\'s position.of is event', function(assert) {
         fixtures.collisionBottomLeft.create();
         try {
             const $target = $('#where');
@@ -229,6 +237,64 @@ QUnit.module('render', () => {
         } finally {
             fixtures.simple.drop();
         }
+    });
+
+    QUnit.test('popover title should have border-top-radius style (T1010399)', function(assert) {
+        fixtures.simple.create();
+        try {
+            const $popover = $('#what');
+            new Popover($popover, {
+                visible: true,
+                showTitle: true,
+                title: 'title'
+            });
+            const $popoverTitle = wrapper().find('.' + POPOVER_TITLE_CLASS);
+
+            assert.strictEqual($popoverTitle.css('border-top-left-radius'), '6px', 'popover has border-top-left-radius');
+            assert.strictEqual($popoverTitle.css('border-top-right-radius'), '6px', 'popover has border-top-right-radius');
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
+
+    QUnit.module('Breaking change t1123711 - warning W1021', () => {
+        QUnit.test('should be logged if container is invalid', function(assert) {
+            fixtures.simple.create();
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                new Popover($('#what'), {
+                    visible: true,
+                    container: 'invalid',
+                });
+
+                assert.ok(uiErrors.log.calledOnce, 'only one warning is logged');
+                assert.deepEqual(uiErrors.log.lastCall.args, [
+                    'W1021',
+                    'dxPopover',
+                ], 'args of the log method');
+            } finally {
+                fixtures.simple.drop();
+                uiErrors.log.restore();
+            }
+        });
+
+        QUnit.test('should not not be logged if container is valid', function(assert) {
+            fixtures.simple.create();
+            sinon.spy(uiErrors, 'log');
+
+            try {
+                new Popover($('#what'), {
+                    visible: true,
+                    container: 'body',
+                });
+
+                assert.ok(uiErrors.log.notCalled, 'no warning is logged');
+            } finally {
+                fixtures.simple.drop();
+                uiErrors.log.restore();
+            }
+        });
     });
 });
 
@@ -327,9 +393,9 @@ QUnit.module('options change', () => {
             popover.option('arrowPosition', 'end');
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
-            const arrowOffsetTop = $content.offset().top + $content.outerHeight() - $arrow.outerHeight();
-            const arrowOffsetLeft = $target.offset().left + $target.width();
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
+            const arrowOffsetTop = $content.offset().top + getOuterHeight($content) - getOuterHeight($arrow);
+            const arrowOffsetLeft = $target.offset().left + getWidth($target);
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'arrow top offset is correct');
             assert.equal($arrow.offset().left, arrowOffsetLeft, 'arrow left offset is correct');
@@ -353,8 +419,8 @@ QUnit.module('arrow positioning', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const arrowOffsetTop = $target.offset().top + $target.height();
-            const arrowOffsetLeft = Math.round($target.offset().left + $target.width() / 2 - $arrow.width() / 2);
+            const arrowOffsetTop = $target.offset().top + getHeight($target);
+            const arrowOffsetLeft = Math.round($target.offset().left + getWidth($target) / 2 - getWidth($arrow) / 2);
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'popover arrow positioned at the bottom of the target vertically');
             assert.equal($arrow.offset().left, arrowOffsetLeft, 'popover arrow positioned at the center of the target horizontally');
@@ -379,13 +445,13 @@ QUnit.module('arrow positioning', () => {
             });
 
             $popover.hide();
-            $popover.find('.dx-overlay-content').hide();
+            $popover.find(`.${OVERLAY_CONTENT_CLASS}`).hide();
             popover.option('visible', true);
             $popover.show();
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const arrowOffsetTop = $target.offset().top + $target.height();
-            const arrowOffsetLeft = $target.offset().left + $target.width() / 2 - $arrow.width() / 2;
+            const arrowOffsetTop = $target.offset().top + getHeight($target);
+            const arrowOffsetLeft = $target.offset().left + getWidth($target) / 2 - getWidth($arrow) / 2;
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'popover arrow positioned at the bottom of the target vertically');
             assert.ok(Math.abs($arrow.offset().left - arrowOffsetLeft) <= 0.5, 'popover arrow positioned at the center of the target horizontally');
@@ -408,8 +474,8 @@ QUnit.module('arrow positioning', () => {
             const $content = popover.$content();
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const arrowOffsetTop = $target.offset().top + $target.height();
-            const arrowOffsetLeft = Math.round($content.offset().left + ($content.outerWidth() - $arrow.width()) / 2);
+            const arrowOffsetTop = $target.offset().top + getHeight($target);
+            const arrowOffsetLeft = Math.round($content.offset().left + (getOuterWidth($content) - getWidth($arrow)) / 2);
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'arrow top offset');
             assert.equal($arrow.offset().left, arrowOffsetLeft, 'arrow left offset');
@@ -433,8 +499,8 @@ QUnit.module('arrow positioning', () => {
             const $content = popover.$content();
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const arrowOffsetTop = Math.round($content.offset().top + ($content.outerHeight() - $arrow.height()) / 2);
-            const arrowOffsetLeft = $target.offset().left + $target.width();
+            const arrowOffsetTop = Math.round($content.offset().top + (getOuterHeight($content) - getHeight($arrow)) / 2);
+            const arrowOffsetLeft = $target.offset().left + getWidth($target);
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'arrow top offset');
             assert.equal($arrow.offset().left, arrowOffsetLeft, 'arrow left offset');
@@ -460,7 +526,7 @@ QUnit.module('arrow positioning', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-overlay-content');
+            const $content = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
             const arrowOffsetTop = $content.offset().top + 10;
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'arrow top offset is correct');
@@ -481,7 +547,7 @@ QUnit.module('arrow positioning', () => {
                 visible: true
             });
             const $arrow = $(toSelector(POPOVER_ARROW_CLASS));
-            const $content = $('.dx-popup-content');
+            const $content = $(`.${POPUP_CONTENT_CLASS}`);
 
             const positions = [
                 { at: 'right top', my: 'left bottom' },
@@ -492,9 +558,9 @@ QUnit.module('arrow positioning', () => {
 
             $.each(positions, function(_, position) {
                 const contentLeft = $content.offset().left;
-                const contentRight = contentLeft + $content.outerWidth();
+                const contentRight = contentLeft + getOuterWidth($content);
                 const arrowLeft = $arrow.offset().left;
-                const arrowRight = arrowLeft + $arrow.outerWidth();
+                const arrowRight = arrowLeft + getOuterWidth($arrow);
 
                 popover.option('position', position);
                 assert.ok(arrowLeft >= contentLeft && arrowRight <= contentRight, 'arrow is between left and right popover\'s side');
@@ -557,7 +623,7 @@ QUnit.module('arrow positioning', () => {
                 }
             });
 
-            assert.ok(wrapper().find('.' + POPOVER_ARROW_CLASS).offset().top >= $target.offset().top + $target.outerHeight(), 'arrow positioned correctly');
+            assert.ok(wrapper().find('.' + POPOVER_ARROW_CLASS).offset().top >= $target.offset().top + getOuterHeight($target), 'arrow positioned correctly');
         } finally {
             fixtures.frameAdapted.drop();
         }
@@ -581,13 +647,13 @@ QUnit.module('arrow positioning', () => {
             assert.equal($arrow.offset().top, $target.offset().top, 'arrow top position is correct');
 
             popover.option('position', { at: 'bottom', my: 'bottom', boundaryOffset: '0 0' });
-            assert.equal($arrow.offset().top + $arrow.outerHeight(), $target.offset().top + $target.outerHeight(), 'arrow bottom position is correct');
+            assert.equal($arrow.offset().top + getOuterHeight($arrow), $target.offset().top + getOuterHeight($target), 'arrow bottom position is correct');
 
             popover.option('position', { at: 'left', my: 'left', boundaryOffset: '0 0' });
             assert.equal($arrow.offset().left, $target.offset().left, 'arrow left position is correct');
 
             popover.option('position', { at: 'right', my: 'right', boundaryOffset: '0 0' });
-            assert.equal($arrow.offset().left + $arrow.outerWidth(), $target.offset().left + $target.outerWidth(), 'arrow right position is correct');
+            assert.equal($arrow.offset().left + getOuterWidth($arrow), $target.offset().left + getOuterWidth($target), 'arrow right position is correct');
         } finally {
             fixtures.frameAdapted.drop();
         }
@@ -612,10 +678,10 @@ QUnit.module('arrow positioning', () => {
             popover.show();
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
 
-            assert.equal($arrow.offset().top, $target.offset().top + $target.outerHeight(), 'arrow rendered correctly');
-            assert.equal($content.offset().top, $target.offset().top + $target.outerHeight() + $arrow.outerHeight(), 'content rendered correctly');
+            assert.equal($arrow.offset().top, $target.offset().top + getOuterHeight($target), 'arrow rendered correctly');
+            assert.equal($content.offset().top, $target.offset().top + getOuterHeight($target) + getOuterHeight($arrow), 'content rendered correctly');
         } finally {
             fixtures.collisionTopLeft.drop();
         }
@@ -638,10 +704,10 @@ QUnit.module('content positioning', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
 
-            const contentOffsetTop = $arrow.offset().top + $arrow.height();
-            const contentOffsetLeft = Math.round($target.offset().left + $target.width() / 2 - $content.outerWidth() / 2);
+            const contentOffsetTop = $arrow.offset().top + getHeight($arrow);
+            const contentOffsetLeft = Math.round($target.offset().left + getWidth($target) / 2 - getOuterWidth($content) / 2);
 
             assert.equal($content.offset().top, contentOffsetTop, 'popover content positioned at the bottom of the arrow vertically');
             assert.equal($content.offset().left, contentOffsetLeft, 'popover content positioned at the center of the arrow horizontally');
@@ -668,12 +734,12 @@ QUnit.module('content positioning', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
             const targetRect = getBoundingRect($target.get(0));
 
-            const contentOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - $content.outerHeight() / 2);
-            const contentOffsetLeft = Math.round($target.offset().left + targetRect.width + $arrow.width());
-            const arrowOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - $arrow.height() / 2);
+            const contentOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - getOuterHeight($content) / 2);
+            const contentOffsetLeft = Math.round($target.offset().left + targetRect.width + getWidth($arrow));
+            const arrowOffsetTop = Math.round($target.offset().top + targetRect.height / 2 - getHeight($arrow) / 2);
             const arrowOffsetLeft = Math.round($target.offset().left + targetRect.width);
 
             assert.strictEqual($content.offset().top, contentOffsetTop, 'popover content top offset is correct');
@@ -702,13 +768,13 @@ QUnit.module('content positioning', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
             const targetRect = getBoundingRect($target.get(0));
 
-            const contentOffsetTop = Math.round($target.offset().top + targetRect.height + $arrow.outerHeight());
-            const contentOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - $content.outerWidth() / 2);
+            const contentOffsetTop = Math.round($target.offset().top + targetRect.height + getOuterHeight($arrow));
+            const contentOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - getOuterWidth($content) / 2);
             const arrowOffsetTop = Math.round($target.offset().top + targetRect.height);
-            const arrowOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - $arrow.width() / 2);
+            const arrowOffsetLeft = Math.round($target.offset().left + targetRect.width / 2 - getWidth($arrow) / 2);
 
             assert.strictEqual($content.offset().top, contentOffsetTop, 'popover content top offset is correct');
             assert.strictEqual($content.offset().left, contentOffsetLeft, 'popover content left offset is correct');
@@ -734,12 +800,12 @@ QUnit.module('content positioning', () => {
                 position: { at: 'bottom left', my: 'top left', boundaryOffset: '0 0' }
             });
 
-            const $popupContent = wrapper().find('.dx-popup-content');
-            const $overlayContent = wrapper().find('.dx-overlay-content');
+            const $popupContent = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
 
             assert.equal($overlayContent.offset().left, 0, 'popover content left offset');
-            assert.equal($popupContent.offset().top, $target.height() + $arrow.height(), 'popover content top offset');
+            assert.equal($popupContent.offset().top, getHeight($target) + getHeight($arrow), 'popover content top offset');
         } finally {
             fixtures.collisionTopLeft.drop();
         }
@@ -760,12 +826,12 @@ QUnit.module('content positioning', () => {
                 position: { at: 'bottom left', my: 'top left', boundaryOffset: '25 25', collision: 'fit' }
             });
 
-            const $popupContent = wrapper().find('.dx-popup-content');
-            const $overlayContent = wrapper().find('.dx-overlay-content');
+            const $popupContent = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
 
             assert.equal($overlayContent.offset().left, 25, 'popover content left offset');
-            assert.equal($popupContent.offset().top, $target.height() + $arrow.height(), 'popover content top offset');
+            assert.equal($popupContent.offset().top, getHeight($target) + getHeight($arrow), 'popover content top offset');
         } finally {
             fixtures.collisionTopLeft.drop();
         }
@@ -786,11 +852,11 @@ QUnit.module('content positioning', () => {
                 position: { at: 'right top', my: 'left top', boundaryOffset: '0 0' }
             });
 
-            const $popupContent = wrapper().find('.dx-popup-content');
-            const $overlayContent = wrapper().find('.dx-overlay-content');
+            const $popupContent = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
 
-            assert.equal($popupContent.offset().left, $target.width() + $arrow.width(), 'popover content left offset');
+            assert.equal($popupContent.offset().left, getWidth($target) + getWidth($arrow), 'popover content left offset');
             assert.equal($overlayContent.offset().top, 0, 'popover content top offset');
         } finally {
             fixtures.collisionTopLeft.drop();
@@ -812,11 +878,11 @@ QUnit.module('content positioning', () => {
                 position: { at: 'right top', my: 'left top', boundaryOffset: '20 20', collision: 'fit' }
             });
 
-            const $popupContent = wrapper().find('.dx-popup-content');
-            const $overlayContent = wrapper().find('.dx-overlay-content');
+            const $popupContent = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
 
-            assert.equal($popupContent.offset().left, $target.width() + $arrow.width(), 'popover content left offset');
+            assert.equal($popupContent.offset().left, getWidth($target) + getWidth($arrow), 'popover content left offset');
             assert.equal($overlayContent.offset().top, 20, 'popover content top offset');
         } finally {
             fixtures.collisionTopLeft.drop();
@@ -828,7 +894,7 @@ QUnit.module('content positioning', () => {
         try {
             const $target = $('#where');
             const $popover = $('#what');
-            const popover = new Popover($popover, {
+            new Popover($popover, {
                 target: $target,
                 width: 800,
                 height: 50,
@@ -836,10 +902,9 @@ QUnit.module('content positioning', () => {
                 visible: true
             });
 
-            const $content = wrapper().find('.dx-overlay-content');
-            const left = popover.option('boundaryOffset').h;
+            const $content = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
 
-            assert.equal($content.offset().left, left, 'popover content positioned considering fit option');
+            assert.equal($content.offset().left, 10, 'popover content positioned considering fit option');
         } finally {
             fixtures.collisionTopLeft.drop();
         }
@@ -859,7 +924,7 @@ QUnit.module('content positioning', () => {
             const $popoverBottom = popover.bottomToolbar();
 
             popover.show().done(function() {
-                assert.equal($popoverBottom.offset().top, $popoverContent.offset().top + $popoverContent.outerHeight(true), 'content doesn\'t overlap bottom buttons');
+                assert.equal($popoverBottom.offset().top, $popoverContent.offset().top + getOuterHeight($popoverContent, true), 'content doesn\'t overlap bottom buttons');
             });
         } finally {
             fixtures.collisionBottomLeft.drop();
@@ -874,7 +939,7 @@ QUnit.module('content positioning', () => {
             const popover = new Popover($popover, {
                 target: $where,
                 visible: true,
-                toolbarItems: [{ toolbar: 'bottom', location: 'center', html: '<div style="height: 30px;"></div>' }],
+                toolbarItems: [{ toolbar: 'bottom', location: 'center', template: $('<div>').css('height', '30px') }],
                 height: 100,
                 position: {
                     my: 'top center',
@@ -882,15 +947,15 @@ QUnit.module('content positioning', () => {
                     collision: 'fit'
                 }
             });
-            const $overlayContent = $('.dx-overlay-content');
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
             const $popoverContent = popover.$content();
-            const $popoverBottom = $popover.find('.dx-popup-bottom');
+            const $popoverBottom = popover.$wrapper().find('.dx-popup-bottom');
 
-            $where.css('top', $(window).height() - $where.height() - $overlayContent.height());
+            $where.css('top', getHeight($(window)) - getHeight($where) - getHeight($overlayContent));
             popover.repaint();
 
             popover.show().done(function() {
-                assert.equal($popoverContent.outerHeight() + $popoverBottom.outerHeight(true), $overlayContent.height(), 'content doesn\'t overlap bottom buttons');
+                assert.equal(getOuterHeight($popoverContent) + getOuterHeight($popoverBottom, true), getHeight($overlayContent), 'content doesn\'t overlap bottom buttons');
             });
         } finally {
             fixtures.collisionTopLeft.drop();
@@ -910,22 +975,58 @@ QUnit.module('content positioning', () => {
                 position: { at: 'top', my: 'top', boundaryOffset: '0 0' }
             });
 
-            const $content = wrapper().find('.dx-popup-content');
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
 
-            assert.equal($content.offset().top - $arrow.outerHeight(), $target.offset().top, 'popover top position is correct');
+            assert.equal($content.offset().top - getOuterHeight($arrow), $target.offset().top, 'popover top position is correct');
 
             popover.option('position', { at: 'bottom', my: 'bottom', boundaryOffset: '0 0' });
-            assert.equal($content.offset().top + $content.outerHeight() + $arrow.outerHeight(), $target.offset().top + $target.outerHeight(), 'popover bottom position is correct');
+            assert.equal($content.offset().top + getOuterHeight($content) + getOuterHeight($arrow), $target.offset().top + getOuterHeight($target), 'popover bottom position is correct');
 
             popover.option('position', { at: 'left', my: 'left', boundaryOffset: '0 0' });
-            assert.equal($content.offset().left - $arrow.outerWidth(), $target.offset().left, 'popover left position is correct');
+            assert.equal($content.offset().left - getOuterWidth($arrow), $target.offset().left, 'popover left position is correct');
 
             popover.option('position', { at: 'right', my: 'right', boundaryOffset: '0 0' });
-            assert.equal($content.offset().left + $content.outerWidth() + $arrow.outerWidth(), $target.offset().left + $target.outerWidth(), 'popover right position is correct');
+            assert.equal($content.offset().left + getOuterWidth($content) + getOuterWidth($arrow), $target.offset().left + getOuterWidth($target), 'popover right position is correct');
         } finally {
             fixtures.frameAdapted.drop();
         }
+    });
+
+    QUnit.test('content should be positioned taking into account arrow size after popover content dimension change (T1123018)', function(assert) {
+        fixtures.collisionTopLeft.create();
+
+        const timeToWaitResizeObserver = 50;
+        const repositionOnOpeningIsDone = assert.async();
+        const repositionOnDraggingIsDone = assert.async();
+
+        const $target = $('#where');
+        const $popover = $('#what');
+        const $popoverContent = $('<div>')
+            .attr('id', 'content')
+            .height(100)
+            .width(200);
+
+        new Popover($popover, {
+            visible: true,
+            target: $target,
+            contentTemplate: () => $popoverContent,
+        });
+
+        const $popupContent = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
+        const $arrow = wrapper().find(`.${POPOVER_ARROW_CLASS}`);
+
+        setTimeout(() => {
+            $popoverContent.height(200);
+            setTimeout(() => {
+                const expectedContentTop = getHeight($target) + getHeight($arrow);
+                assert.strictEqual($popupContent.offset().top, expectedContentTop, 'popover content top offset is correct');
+
+                fixtures.collisionTopLeft.drop();
+                repositionOnDraggingIsDone();
+            }, timeToWaitResizeObserver);
+            repositionOnOpeningIsDone();
+        }, timeToWaitResizeObserver);
     });
 });
 
@@ -945,8 +1046,8 @@ QUnit.module('positioning', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
-            const arrowOffsetTop = $target.offset().top - $arrow.height();
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
+            const arrowOffsetTop = $target.offset().top - getHeight($arrow);
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'arrow position above target');
             assert.equal($content[0].getBoundingClientRect().bottom, arrowOffsetTop, 'content position above arrow');
@@ -970,9 +1071,9 @@ QUnit.module('positioning', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
-            const arrowOffsetLeft = $target.offset().left + $target.outerWidth();
-            const contentOffsetLeft = arrowOffsetLeft + $arrow.width();
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
+            const arrowOffsetLeft = $target.offset().left + getOuterWidth($target);
+            const contentOffsetLeft = arrowOffsetLeft + getWidth($arrow);
 
             assert.equal($arrow.offset().left, arrowOffsetLeft, 'arrow right position');
             assert.equal($content.offset().left, contentOffsetLeft, 'content right position');
@@ -1057,8 +1158,8 @@ QUnit.module('positioning', () => {
 
             const $shader = $('.dx-overlay-shader');
 
-            assert.roughEqual($shader.height(), $(window).height(), 1.01, 'shader height is equal to window height');
-            assert.roughEqual($shader.width(), $(window).width(), 1.01, 'shader width is equal to window width');
+            assert.roughEqual(getHeight($shader), getHeight($(window)), 1.01, 'shader height is equal to window height');
+            assert.roughEqual(getWidth($shader), getWidth($(window)), 1.01, 'shader width is equal to window width');
         } finally {
             $scrollElement.remove();
             fixtures.simple.drop();
@@ -1149,15 +1250,15 @@ QUnit.module('flipping', () => {
 
             new Popover($popover, {
                 target: $target,
-                height: $target.height(),
+                height: getHeight($target),
                 animation: null,
                 visible: true
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
 
-            const arrowOffsetTop = $target.offset().top - $arrow.height();
+            const arrowOffsetTop = $target.offset().top - getHeight($arrow);
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'arrow position above target');
             assert.equal($content[0].getBoundingClientRect().bottom, arrowOffsetTop, 'content position above arrow');
@@ -1174,7 +1275,7 @@ QUnit.module('flipping', () => {
 
             new Popover($popover, {
                 target: $target,
-                height: $target.height(),
+                height: getHeight($target),
                 animation: null,
                 visible: true,
                 position: {
@@ -1185,9 +1286,9 @@ QUnit.module('flipping', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
 
-            const arrowOffsetTop = $target.offset().top - $arrow.height() - 10;
+            const arrowOffsetTop = $target.offset().top - getHeight($arrow) - 10;
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'arrow position above target');
             assert.equal($content[0].getBoundingClientRect().bottom, arrowOffsetTop, 'content position above arrow');
@@ -1208,6 +1309,7 @@ QUnit.module('flipping', () => {
                 animation: null,
                 visible: true,
                 position: {
+                    collision: 'flip',
                     my: 'right center',
                     at: 'left center',
                     offset: '10 0'
@@ -1215,10 +1317,10 @@ QUnit.module('flipping', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
 
-            const arrowOffsetLeft = $target.offset().left + $target.outerWidth() - 10;
-            const contentOffsetLeft = $arrow.offset().left + $arrow.outerWidth();
+            const arrowOffsetLeft = $target.offset().left + getOuterWidth($target) - 10;
+            const contentOffsetLeft = $arrow.offset().left + getOuterWidth($arrow);
 
             assert.equal($arrow.offset().left, arrowOffsetLeft, 'arrow position above target');
             assert.equal($content.offset().left, contentOffsetLeft, 'content position above arrow');
@@ -1246,9 +1348,9 @@ QUnit.module('flipping', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-overlay-content');
+            const $content = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
 
-            assert.ok($content.offset().top + $arrow.outerHeight() < $target.offset().top, 'popover is not flipped vertically');
+            assert.ok($content.offset().top + getOuterHeight($arrow) < $target.offset().top, 'popover is not flipped vertically');
         } finally {
             fixtures.collisionBottomLeft.drop();
         }
@@ -1262,13 +1364,13 @@ QUnit.module('flipping', () => {
 
             new Popover($popover, {
                 target: $target,
-                height: $target.height() - 15,
+                height: getHeight($target) - 15,
                 animation: null,
                 visible: true
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $content = wrapper().find('.dx-popup-content');
+            const $content = wrapper().find(`.${POPUP_CONTENT_CLASS}`);
 
             assert.equal($content[0].getBoundingClientRect().bottom, $arrow.offset().top, 'content position above arrow');
         } finally {
@@ -1296,10 +1398,10 @@ QUnit.module('flipping', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $overlayContent = wrapper().find('.dx-overlay-content');
-            const arrowOffsetTop = $target.offset().top - $arrow.height();
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
+            const arrowOffsetTop = $target.offset().top - getHeight($arrow);
             const overlayContentBorderWidth = parseInt($overlayContent.css('borderBottomWidth'));
-            const contentOffsetTop = arrowOffsetTop + overlayContentBorderWidth - $overlayContent.outerHeight();
+            const contentOffsetTop = arrowOffsetTop + overlayContentBorderWidth - getOuterHeight($overlayContent);
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'arrow position above target');
             assert.equal($overlayContent.offset().top, contentOffsetTop, 'content position above arrow');
@@ -1344,8 +1446,8 @@ QUnit.module('flipping', () => {
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
 
             assert.ok(wrapper().hasClass('dx-position-bottom'), 'arrow has flipping css class');
-            assert.equal($arrow.offset().top, $target.height());
-            assert.equal($('.dx-popup-content').offset().top, $target.height() + $arrow.height());
+            assert.equal($arrow.offset().top, getHeight($target));
+            assert.equal($(`.${POPUP_CONTENT_CLASS}`).offset().top, getHeight($target) + getHeight($arrow));
         } finally {
             fixtures.collisionTopLeft.drop();
         }
@@ -1365,11 +1467,11 @@ QUnit.module('flipping', () => {
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const $overlayContent = $('.dx-overlay-content');
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
 
-            const arrowOffsetTop = $(window).height() - $target.height() - $arrow.height();
+            const arrowOffsetTop = getHeight($(window)) - getHeight($target) - getHeight($arrow);
             const overlayContentBorderWidth = parseInt($overlayContent.css('borderBottomWidth'));
-            const overlayContentOffsetTop = arrowOffsetTop + overlayContentBorderWidth - $overlayContent.outerHeight();
+            const overlayContentOffsetTop = arrowOffsetTop + overlayContentBorderWidth - getOuterHeight($overlayContent);
 
             assert.ok(wrapper().hasClass('dx-position-top'), 'arrow has flipping css class');
             assert.equal($arrow.offset().top, arrowOffsetTop);
@@ -1391,15 +1493,15 @@ QUnit.module('flipping', () => {
                 width: 200,
                 animation: null,
                 visible: true,
-                position: { my: 'right center', at: 'left center' }
+                position: { my: 'right center', at: 'left center', collision: 'flip' }
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
 
             assert.ok(wrapper().hasClass('dx-position-right'), 'arrow has flipping css class');
-            assert.equal($arrow.offset().left, $target.width());
+            assert.equal($arrow.offset().left, getWidth($target));
 
-            assert.equal($('.dx-popup-content').offset().left, $target.width() + $arrow.width());
+            assert.equal($(`.${POPUP_CONTENT_CLASS}`).offset().left, getWidth($target) + getWidth($arrow));
 
         } finally {
             fixtures.collisionBottomLeft.drop();
@@ -1417,14 +1519,14 @@ QUnit.module('flipping', () => {
                 width: 200,
                 animation: null,
                 visible: true,
-                position: { my: 'left center', at: 'right center' }
+                position: { my: 'left center', at: 'right center', collision: 'flip' }
             });
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
 
             assert.ok(wrapper().hasClass('dx-position-left'), 'arrow has flipping css class');
-            assert.equal($arrow.offset().left, $(window).width() - $target.width() - $arrow.width());
-            assert.equal($('.dx-popup-content').offset().left, $(window).width() - $target.width() - $arrow.width() - $('.dx-popup-content').outerWidth());
+            assert.equal($arrow.offset().left, getWidth($(window)) - getWidth($target) - getWidth($arrow));
+            assert.equal($(`.${POPUP_CONTENT_CLASS}`).offset().left, getWidth($(window)) - getWidth($target) - getWidth($arrow) - getOuterWidth($(`.${POPUP_CONTENT_CLASS}`)));
 
         } finally {
             fixtures.collisionBottomRight.drop();
@@ -1455,8 +1557,8 @@ QUnit.module('animation', () => {
             popover.option('visible', true);
 
             const $arrow = wrapper().find('.' + POPOVER_ARROW_CLASS);
-            const arrowOffsetTop = $target.offset().top + $target.height();
-            const arrowOffsetLeft = Math.round($target.offset().left + $target.width() / 2 - $arrow.width() / 2);
+            const arrowOffsetTop = $target.offset().top + getHeight($target);
+            const arrowOffsetLeft = Math.round($target.offset().left + getWidth($target) / 2 - getWidth($arrow) / 2);
 
             assert.equal($arrow.offset().top, arrowOffsetTop, 'popover arrow positioned at the bottom of the target vertically');
             assert.equal($arrow.offset().left, arrowOffsetLeft, 'popover arrow positioned at the center of the target horizontally');
@@ -1480,7 +1582,7 @@ QUnit.module('behavior', () => {
                 visible: true
             });
 
-            const $content = wrapper().find('.dx-overlay-content');
+            const $content = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
 
             pointerMock($target)
                 .start()
@@ -1489,7 +1591,7 @@ QUnit.module('behavior', () => {
 
             assert.ok($content.is(':visible'), 'content is visible when click on target element');
 
-            pointerMock($('.dx-popup-content', $content))
+            pointerMock($(`.${POPUP_CONTENT_CLASS}`, $content))
                 .start()
                 .wait(600)
                 .click();
@@ -1507,6 +1609,26 @@ QUnit.module('behavior', () => {
         }
     });
 
+    QUnit.test('popover should be hidden on position.of parents scroll', function(assert) {
+        fixtures.collisionTopLeft.create();
+
+        try {
+            const positionOfElement = $('<div>').appendTo('#where');
+            const popover = $('#what').dxPopover({
+                hideOnParentScroll: true,
+                visible: true,
+                animation: null,
+                'position.of': positionOfElement,
+            }).dxPopover('instance');
+
+            $('#where').triggerHandler('scroll');
+
+            assert.strictEqual(popover.option('visible'), false, 'popover was hidden');
+        } finally {
+            fixtures.collisionTopLeft.drop();
+        }
+    });
+
     QUnit.test('popover should be visible on start when visible and deferRendering is false', function(assert) {
         fixtures.collisionTopLeft.create();
 
@@ -1516,6 +1638,43 @@ QUnit.module('behavior', () => {
         } finally {
             fixtures.collisionTopLeft.drop();
         }
+    });
+
+    QUnit.module('show "W0018" warning when "shading" is true and "hideEvent" is set', {
+        beforeEach: function() {
+            fixtures.simple.create();
+            this.$target = $('#where');
+            this.$popover = $('#what');
+            this.stub = sinon.stub(uiErrors, 'log');
+            this.popover = new Popover(this.$popover, {
+                target: this.$target,
+                hideEvent: 'mouseleave',
+                shading: true,
+            });
+        },
+        afterEach: function() {
+            fixtures.simple.drop();
+            this.stub.restore();
+        }
+    }, () => {
+        QUnit.test('on init', function(assert) {
+            assert.ok(this.stub.calledOnce, 'the log method is called once');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W1020');
+        });
+
+        QUnit.test('at runtime', function(assert) {
+            this.popover.option('hideEvent', 'click');
+
+            assert.strictEqual(this.stub.callCount, 2, 'the log method is called twice');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W1020');
+        });
+
+        QUnit.test('at runtime to null', function(assert) {
+            this.popover.option('hideEvent', null);
+
+            assert.ok(this.stub.calledOnce, 'the log method is called once');
+            assert.strictEqual(this.stub.lastCall.args[0], 'W1020');
+        });
     });
 });
 
@@ -1673,7 +1832,7 @@ QUnit.module('popover content size', () => {
             const target = elements.target;
             const arrow = elements.arrow;
 
-            assert.equal(content.height, $boundary.height() - target.positionTop - target.height - arrow.height + content.borderWidth, 'content shrunk to available space by height');
+            assert.equal(content.height, getHeight($boundary) - target.positionTop - target.height - arrow.height + content.borderWidth, 'content shrunk to available space by height');
 
         } finally {
             fixtures.customBoundary.drop();
@@ -1707,7 +1866,7 @@ QUnit.module('popover content size', () => {
 
             const $popupContent = popover.$content();
             const overlayContentBordersHeight = 2;
-            assert.equal(content.height - overlayContentBordersHeight, contentSize + $popupContent.outerHeight() - $popupContent.height(), 'content shrunk to available space by height');
+            assert.equal(content.height - overlayContentBordersHeight, contentSize + getOuterHeight($popupContent) - getHeight($popupContent), 'content shrunk to available space by height');
         } finally {
             fixtures.customBoundary.drop();
         }
@@ -1741,7 +1900,7 @@ QUnit.module('popover content size', () => {
             const target = elements.target;
             const arrow = elements.arrow;
 
-            assert.equal(content.height, $boundary.height() - target.positionTop - target.height - verticalOffset - arrow.height + content.borderWidth, 'content shrunk to available space by height');
+            assert.equal(content.height, getHeight($boundary) - target.positionTop - target.height - verticalOffset - arrow.height + content.borderWidth, 'content shrunk to available space by height');
 
         } finally {
             fixtures.customBoundary.drop();
@@ -2034,28 +2193,118 @@ QUnit.module('renderGeometry', () => {
         fixtures.simple.create();
         try {
             const $popover = $('#what');
-            const instance = new Popover($popover, { visible: true });
+            const instance = new Popover($popover, {
+                visible: true,
+            });
+            const renderGeometrySpy = sinon.spy(instance, '_renderGeometry');
             const newOptions = {
-                boundaryOffset: { h: 40, v: 40 },
                 arrowPosition: {
                     boundaryOffset: { h: 30, v: 20 },
                     collision: 'fit'
                 },
                 arrowOffset: 24
             };
-            const renderGeometrySpy = sinon.spy(instance, '_renderGeometry');
 
             for(const optionName in newOptions) {
                 const initialCallCount = renderGeometrySpy.callCount;
 
                 instance.option(optionName, newOptions[optionName]);
 
-                const isDimensionChanged = !!renderGeometrySpy.lastCall.args[0];
                 assert.ok(initialCallCount < renderGeometrySpy.callCount, 'renderGeomentry callCount has increased');
-                assert.notOk(isDimensionChanged);
             }
         } finally {
             fixtures.simple.drop();
         }
+    });
+});
+
+QUnit.module('shading', () => {
+    QUnit.test('overlay wrapper should be positioned at {top: 0, left: 0}', function(assert) {
+        fixtures.simple.create();
+        try {
+            const popover = new Popover($('#what'), {
+                shading: true,
+                target: '#where',
+                visible: true
+            });
+
+            const $wrapper = popover.$wrapper();
+            assert.deepEqual($wrapper.position(), { top: 0, left: 0 }, 'wrapper is positioned correctly');
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
+});
+
+QUnit.module('target option', {
+    beforeEach: function() {
+        fixtures.differentTargets.create();
+
+        this.popover = new Popover($('#what'), { visible: true });
+        this.getMiddleX = (rect) => {
+            return (rect.left + rect.right) / 2;
+        };
+    },
+    afterEach: function() {
+        fixtures.differentTargets.drop();
+    }
+}, () => {
+    QUnit.test('content should be positioned regard of target', function(assert) {
+        const target = $('#there');
+
+        this.popover.option({
+            target: target
+        });
+
+        const $arrow = getArrow();
+        const targetRect = target.get(0).getBoundingClientRect();
+        const arrowRect = $arrow.get(0).getBoundingClientRect();
+
+        assert.roughEqual(arrowRect.top, targetRect.bottom, 0.1, 'y coordinate is correct');
+        assert.roughEqual(this.getMiddleX(arrowRect), this.getMiddleX(targetRect), 0.1, 'y coordinate is correct');
+    });
+
+    QUnit.test('content should be positioned regard of position.of if it is specified', function(assert) {
+        const positionOf = $('#there');
+        const target = $('#where');
+
+        this.popover.option({
+            target: target,
+            position: {
+                of: positionOf
+            }
+        });
+
+        const $arrow = getArrow();
+        const positionOfRect = positionOf.get(0).getBoundingClientRect();
+        const arrowRect = $arrow.get(0).getBoundingClientRect();
+
+        assert.roughEqual(arrowRect.top, positionOfRect.bottom, 0.1, 'y coordinate is correct');
+        assert.roughEqual(this.getMiddleX(arrowRect), this.getMiddleX(positionOfRect), 0.1, 'y coordinate is correct');
+    });
+});
+
+QUnit.module('aria accessibility', {
+    beforeEach: function() {
+        fixtures.simple.create();
+    },
+    afterEach: function() {
+        fixtures.simple.drop();
+    }
+}, () => {
+    QUnit.test('role="tooltip" attribute should be added to popover by default', function(assert) {
+        const $popover = $('#what');
+        new Popover($popover);
+        const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.strictEqual($overlay.attr('role'), 'tooltip');
+    });
+
+    QUnit.test('role="dialog" attribute should be set if popover has toolbarItems', function(assert) {
+        const $popover = $('#what');
+        new Popover($popover, { toolbarItems: [{ text: 'Title', location: 'before' }] });
+        const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.strictEqual($overlay.attr('role'), 'dialog');
     });
 });

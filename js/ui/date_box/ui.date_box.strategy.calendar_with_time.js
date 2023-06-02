@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -5,11 +6,13 @@ import CalendarStrategy from './ui.date_box.strategy.calendar';
 import TimeView from './ui.time_view';
 import dateLocalization from '../../localization/date';
 import { extend } from '../../core/utils/extend';
+import dateUtils from '../../core/utils/date';
 import Box from '../box';
 import uiDateUtils from './ui.date_utils';
 
 const SHRINK_VIEW_SCREEN_WIDTH = 573;
 const DATEBOX_ADAPTIVITY_MODE_CLASS = 'dx-datebox-adaptivity-mode';
+const DATEBOX_TIMEVIEW_SIDE_CLASS = 'dx-datebox-datetime-time-side';
 
 const CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
@@ -23,12 +26,21 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         });
     },
 
+    _closeDropDownByEnter: function() {
+        return dateUtils.sameDate(this._getContouredValue(), this.widgetOption('value'));
+    },
+
     getDisplayFormat: function(displayFormat) {
         return displayFormat || 'shortdateshorttime';
     },
 
     _is24HourFormat: function() {
         return dateLocalization.is24HourFormat(this.getDisplayFormat(this.dateBox.option('displayFormat')));
+    },
+
+    _getContouredValue: function() {
+        const viewDate = this.callBase();
+        return this._updateDateTime(viewDate);
     },
 
     _renderWidget: function() {
@@ -50,7 +62,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         const popup = this._getPopup();
 
         if(popup) {
-            popup._wrapper().toggleClass(DATEBOX_ADAPTIVITY_MODE_CLASS, this._isSmallScreen());
+            popup.$wrapper().toggleClass(DATEBOX_ADAPTIVITY_MODE_CLASS, this._isSmallScreen());
         }
 
         clearTimeout(this._repaintTimer);
@@ -89,7 +101,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     _isSmallScreen: function() {
-        return $(window).width() <= SHRINK_VIEW_SCREEN_WIDTH;
+        return getWidth(window) <= SHRINK_VIEW_SCREEN_WIDTH;
     },
 
     _isShrinkView: function() {
@@ -114,18 +126,22 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
         this._box = this.dateBox._createComponent($('<div>').appendTo($popupContent), Box, {
             direction: 'row',
-            crossAlign: 'start',
+            crossAlign: 'stretch',
             items: this._getBoxItems(),
-            itemTemplate: (function(data) {
+            itemTemplate: (function(data, i, element) {
                 const $container = $('<div>');
 
                 switch(data.name) {
                     case 'calendar':
                         $container.append(this._widget.$element());
-                        if(this._isShrinkView()) $container.append(this._timeView.$element());
+                        if(this._isShrinkView()) {
+                            this._timeView.$element().addClass(DATEBOX_TIMEVIEW_SIDE_CLASS);
+                            $container.append(this._timeView.$element());
+                        }
                         break;
                     case 'time':
                         $container.append(this._timeView.$element());
+                        $(element).addClass(DATEBOX_TIMEVIEW_SIDE_CLASS);
                         break;
                 }
 
@@ -138,18 +154,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
     popupConfig: function(popupConfig) {
         const calendarPopupConfig = this.callBase(popupConfig);
-        const result = extend(calendarPopupConfig, {
-            width: 'auto',
-            onShowing: (function() {
-                if(this._box.option('_layoutStrategy') === 'fallback') {
-                    const clockMinWidth = this._getPopup().$content().find('.dx-timeview-clock').css('minWidth');
-
-                    this._timeView.$element().css('maxWidth', clockMinWidth);
-                }
-            }).bind(this),
-        });
-
-        return result;
+        return extend(calendarPopupConfig, { width: 'auto' });
     },
 
     getFirstPopupElement: function() {
@@ -177,14 +182,18 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         }
     },
 
-    getValue: function() {
-        let date = this._widget.option('value');
+    _updateDateTime: function(date) {
         const time = this._timeView.option('value');
-
-        date = date ? new Date(date) : new Date();
         date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
 
         return date;
+    },
+
+    getValue: function() {
+        let date = this._widget.option('value') ?? this._widget.getContouredDate();
+        date = date ? new Date(date) : new Date();
+
+        return this._updateDateTime(date);
     },
 
     dispose: function() {

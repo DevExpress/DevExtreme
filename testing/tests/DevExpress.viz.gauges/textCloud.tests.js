@@ -140,10 +140,8 @@ $.each(data, function(type, expected) {
             x: 400,
             y: 300,
             tailLength: 120,
-            textWidth: 74,
-            textHeight: 48,
-            horMargin: 8,
-            verMargin: 6,
+            cloudWidth: 90,
+            cloudHeight: 60,
             type: type
         }), expected);
     });

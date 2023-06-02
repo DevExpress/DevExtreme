@@ -1,30 +1,54 @@
 import FileSystemProviderBase, {
-    FileSystemProviderBaseOptions
+    FileSystemProviderBaseOptions,
 } from './provider_base';
 
+/** @public */
+export type Options = RemoteFileSystemProviderOptions;
+
+/**
+ * @deprecated Use Options instead
+ * @namespace DevExpress.fileManagement
+ * @docid
+ */
 export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
     /**
      * @docid
-     * @prevFileNamespace DevExpress.fileManagement
+     * @type_function_param1_field headers:object
+     * @type_function_param1_field xhrFields:object
+     * @type_function_param1_field formData:object
+     * @public
+     */
+    beforeAjaxSend?: ((options: { headers?: any; xhrFields?: any; formData?: any }) => void);
+    /**
+     * @docid
+     * @type_function_param1_field formData:object
+     * @public
+     */
+    beforeSubmit?: ((options: { formData?: any }) => void);
+    /**
+     * @docid
      * @public
      */
     endpointUrl?: string;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     hasSubDirectoriesExpr?: string | Function;
+    /**
+     * @docid
+     * @default {}
+     * @public
+     */
+    requestHeaders?: any;
 }
 /**
  * @docid
  * @inherits FileSystemProviderBase
- * @module file_management/remote_provider
  * @namespace DevExpress.fileManagement
- * @export default
- * @prevFileNamespace DevExpress.fileManagement
  * @public
+ * @options RemoteFileSystemProviderOptions
  */
 export default class RemoteFileSystemProvider extends FileSystemProviderBase {
-    constructor(options?: RemoteFileSystemProviderOptions)
+    constructor(options?: Options);
 }

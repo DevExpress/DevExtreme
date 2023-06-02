@@ -5,7 +5,6 @@ import Validator from 'ui/validator';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import '../../helpers/ignoreQuillTimers.js';
 
-import 'common.css!';
 import 'generic_light.css!';
 import 'ui/text_box';
 import 'ui/date_box';
@@ -151,8 +150,18 @@ QUnit.module('Regression', {
         const validator = this.fixture.createTextBoxWithValidator({ validationRules: [{ type: 'required' }] });
         const topDiff = 22;
 
-        $('<div style=\'height: 100px\'/>').insertAfter(
-            this.fixture.$element.wrap('<div id=\'bingo\' style=\'overflow-y: scroll; height: 100px\' />')
+        const $element = $('<div />');
+        $element.css('height', '100px');
+
+        const $bingo = $('<div id=\'bingo\' />');
+
+        $bingo.css({
+            'overflow-y': 'scroll',
+            height: '100px'
+        });
+
+        $element.insertAfter(
+            this.fixture.$element.wrap($bingo)
         );
         const $scrollableWrapper = validator.$element().parent().appendTo('body');
 

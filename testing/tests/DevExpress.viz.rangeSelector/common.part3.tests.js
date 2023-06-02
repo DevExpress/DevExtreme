@@ -1,3 +1,4 @@
+import { setHeight, getHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { DEBUG_stub_createIncidentOccurred, DEBUG_restore_createIncidentOccurred } from 'viz/core/base_widget.utils';
 import commons from './rangeSelectorParts/commons.js';
@@ -1049,6 +1050,8 @@ QUnit.test('Axis creation - check axis parameters', function(assert) {
     assert.equal(axisModule.Axis.getCall(0).args[0].axesContainerGroup.attr.firstCall.args[0].class, 'dxrs-scale');
     assert.equal(axisModule.Axis.getCall(0).args[0].scaleBreaksGroup.attr.firstCall.args[0].class, 'dxrs-scale-breaks');
     assert.equal(axisModule.Axis.getCall(0).args[0].scaleBreaksGroup.append.lastCall.args[0], this.renderer.root);
+    assert.equal(axisModule.Axis.getCall(0).args[0].labelsAxesGroup.attr.firstCall.args[0].class, 'dxrs-scale-elements');
+    assert.equal(axisModule.Axis.getCall(0).args[0].labelsAxesGroup.append.lastCall.args[0], this.renderer.root);
     assert.equal(axisModule.Axis.getCall(0).args[0].isArgumentAxis, true);
 });
 
@@ -1664,7 +1667,7 @@ QUnit.test('Render. Container size is changed - redraw widget', function(assert)
     const spy = sinon.spy();
     const widget = this.createWidget({ onDrawn: spy });
 
-    widget.$element().height(widget.$element().height() + 1);
+    setHeight(widget.$element(), getHeight(widget.$element()) + 1);
     spy.reset();
     widget.render();
 

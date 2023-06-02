@@ -54,6 +54,7 @@ registerDecorator(
                 .appendTo($container);
             new this._controlWidget($control, extend(this._commonOptions(), {
                 value: this._isSelected($itemElement),
+                elementAttr: { 'aria-label': 'Check State' },
                 focusStateEnabled: false,
                 hoverStateEnabled: false,
                 onValueChanged: (function(e) {
@@ -114,8 +115,10 @@ registerDecorator(
             return false;
         },
 
-        handleEnterPressing: function() {
+        handleEnterPressing: function(e) {
             if(this._$selectAll && this._$selectAll.hasClass(FOCUSED_STATE_CLASS)) {
+                e.target = this._$selectAll.get(0);
+                this._list._saveSelectionChangeEvent(e);
                 this._selectAllCheckBox.option('value', !this._selectAllCheckBox.option('value'));
                 return true;
             }
@@ -131,6 +134,7 @@ registerDecorator(
                     .addClass(SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS)
                     .appendTo($selectAll),
                 CheckBox, {
+                    elementAttr: { 'aria-label': 'Select All' },
                     focusStateEnabled: false,
                     hoverStateEnabled: false
                 }
@@ -160,24 +164,21 @@ registerDecorator(
 
             const isSelectedAll = this._selectAllCheckBox.option('value');
 
-            const result = this._list._createActionByOption('onSelectAllValueChanged')({ value: isSelectedAll });
-            if(result === false) {
-                return;
-            }
-
             e.event && this._list._saveSelectionChangeEvent(e.event);
             if(isSelectedAll === true) {
                 this._selectAllItems();
             } else if(isSelectedAll === false) {
                 this._unselectAllItems();
             }
+
+            this._list._createActionByOption('onSelectAllValueChanged')({ value: isSelectedAll });
         },
 
         _checkSelectAllCapability: function() {
             const list = this._list;
-            const dataSource = list.getDataSource();
+            const dataController = list._dataController;
 
-            if(list.option('selectAllMode') === 'allPages' && list.option('grouped') && (!dataSource || !dataSource.group())) {
+            if(list.option('selectAllMode') === 'allPages' && list.option('grouped') && !dataController.group()) {
                 errors.log('W1010');
                 return false;
             }

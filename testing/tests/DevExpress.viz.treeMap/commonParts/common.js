@@ -14,7 +14,12 @@ loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.LoadingIndicator);
 
 require('viz/tree_map/tree_map.base');
 
-$('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
+$('#qunit-fixture').append('<div id="test-container"></div>');
+
+$('#test-container').css({
+    width: '600px',
+    height: '400px'
+});
 
 const createRenderer = exports.createRenderer = function() {
     const renderer = new vizMocks.Renderer();

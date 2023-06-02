@@ -1,30 +1,35 @@
 import $ from 'jquery';
 import TextBox from 'ui/text_box';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import keyboardMock from '../../helpers/keyboardMock.js';
+import { getWidth, getOuterWidth } from 'core/utils/size';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
-import 'common.css!';
+import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
+
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
         '<div id="qunit-fixture">\
             <div id="textbox"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
+            <div id="widthRootStyle"></div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
+    addShadowDomStyles($('#qunit-fixture'));
 });
-
-const internals = TextBox.__internals;
 
 const TEXTBOX_CLASS = 'dx-textbox';
 const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const SEARCHBOX_CLASS = 'dx-searchbox';
 const SEARCH_ICON_CLASS = 'dx-icon-search';
+const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
+
+const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
+const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 QUnit.module('common', {}, () => {
     QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
@@ -45,93 +50,6 @@ QUnit.module('common', {}, () => {
 
         assert.ok(element.has(SEARCHBOX_CLASS));
         assert.equal(element.find('.' + SEARCH_ICON_CLASS).length, 1);
-    });
-
-    QUnit.test('\'maxLength\' option on android 2.3 and 4.1', function(assert) {
-        const originalDevices = devices.real();
-        devices.real({
-            platform: 'android',
-            version: ['2', '3']
-        });
-
-        const originalUA = internals.uaAccessor();
-        internals.uaAccessor('default android browser');
-
-        try {
-            const $element = $('#textbox').dxTextBox({ maxLength: 1 });
-            const $input = $element.find('.' + INPUT_CLASS);
-            let event = $.Event('keydown', { key: '1' });
-
-            $input.trigger(event);
-            $input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '2' });
-            $input.trigger(event);
-            assert.ok(event.isDefaultPrevented());
-        } finally {
-            devices.real(originalDevices);
-            internals.uaAccessor(originalUA);
-        }
-    });
-
-    QUnit.test('\'maxLength\' option on IE', function(assert) {
-        const originalIE = browser.msie;
-
-        try {
-            browser.msie = true;
-            const $element = $('#textbox').dxTextBox({ maxLength: 1 });
-            const $input = $element.find('.' + INPUT_CLASS);
-            let event = $.Event('keydown', { key: '1' });
-
-            $input.trigger(event);
-            $input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '2' });
-            $input.trigger(event);
-            assert.ok(event.isDefaultPrevented());
-        } finally {
-            browser.msie = originalIE;
-        }
-    });
-
-    QUnit.test('"maxLength" option on IE should works correctly with the hotkeys (T944726, T944493)', function(assert) {
-        const originalIE = browser.msie;
-
-        try {
-            browser.msie = true;
-            const $element = $('#textbox').dxTextBox({ maxLength: 1, value: 'b' });
-            const $input = $element.find(`.${INPUT_CLASS}`);
-            let event = $.Event('keydown', { key: 'a', ctrlKey: true });
-
-            $input.trigger(event);
-            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
-
-            event = $.Event('keydown', { key: 'z', ctrlKey: true });
-            $input.trigger(event);
-            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
-        } finally {
-            browser.msie = originalIE;
-        }
-    });
-
-    QUnit.test('"maxLength" option on IE should works correctly with selected range', function(assert) {
-        const originalIE = browser.msie;
-
-        try {
-            browser.msie = true;
-            const $element = $('#textbox').dxTextBox({ maxLength: 1, value: 'b' });
-            const $input = $element.find(`.${INPUT_CLASS}`);
-
-            keyboardMock($input, true)
-                .caret({ start: 0, end: 1 })
-                .type('a');
-
-            assert.strictEqual($input.val(), 'a', 'new text correctly applies');
-        } finally {
-            browser.msie = originalIE;
-        }
     });
 
     QUnit.test('call focus() method', function(assert) {
@@ -166,65 +84,25 @@ QUnit.module('common', {}, () => {
         const instance = $element.dxTextBox('instance');
 
         assert.ok(!instance.option('showClearButton'), 'the \'showClearButton\' options is correct');
-        assert.equal($('.dx-clear-button-area').length, 0, 'clear button is not rendered');
+        assert.equal($(`.${CLEAR_BUTTON_AREA_CLASS}`).length, 0, 'clear button is not rendered');
     });
 
-    QUnit.test('clear button should save valueChangeEvent', function(assert) {
-        const valueChangedHandler = sinon.spy();
-
-        const $element = $('#textbox').dxTextBox({
-            showClearButton: true,
-            value: '123',
-            onValueChanged: valueChangedHandler
-        });
-
-        const $clearButton = $element.find('.dx-clear-button-area');
-        $clearButton.trigger('dxclick');
-
-        assert.equal(valueChangedHandler.callCount, 1, 'valueChangedHandler has been called');
-        assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
-    });
-
-    QUnit.test('T810808 - should be possible to type characters in IE in TextBox with maxLength and mask', function(assert) {
-        const originalIE = browser.msie;
-
+    QUnit.test('should have no errors if textBox has custom buttons and "visible" option is false (T998843)', function(assert) {
         try {
-            browser.msie = true;
-            const $element = $('#textbox').dxTextBox({ maxLength: 1, mask: '0' });
-            const $input = $element.find('.' + INPUT_CLASS);
-            const event = $.Event('keydown', { key: '1' });
-
-            $input.trigger(event);
-            $input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-        } finally {
-            browser.msie = originalIE;
-        }
-    });
-
-    QUnit.test('TextBox shouldn\'t lose last characters on change event in IE', function(assert) {
-        const originalIE = browser.msie;
-
-        try {
-            browser.msie = true;
-            const $element = $('#textbox').dxTextBox({ maxLength: 1, mask: '00' });
-            const $input = $element.find('.' + INPUT_CLASS);
-
-            let event = $.Event('keydown', { key: '1' });
-            $input.trigger(event);
-            $input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '2' });
-            $input.trigger(event);
-            $input.val('12');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('change');
-            $input.trigger(event);
-            assert.equal($input.val(), '12');
-        } finally {
-            browser.msie = originalIE;
+            $('#textbox').dxTextBox({
+                visible: false,
+                buttons: [
+                    {
+                        name: 'password',
+                        options: {
+                            type: 'default',
+                        },
+                    },
+                ],
+            });
+            assert.ok(true);
+        } catch(e) {
+            assert.ok(false, `the error is thrown: ${e.message}`);
         }
     });
 });
@@ -275,12 +153,10 @@ QUnit.module('options changing', {
 
     QUnit.test('\'maxLength\' option', function(assert) {
         const originalDevices = devices.real();
-        const originalIE = browser.msie;
         devices.real({
             platform: 'not android and not IE',
             version: ['24']
         });
-        browser.msie = false;
 
         try {
             this.instance.option('maxLength', 5);
@@ -293,51 +169,15 @@ QUnit.module('options changing', {
             assert.equal(this.input.attr('maxLength'), 3);
         } finally {
             devices.real(originalDevices);
-            browser.msie = originalIE;
-        }
-    });
-
-    QUnit.test('\'maxLength\' on android 2.3 and 4.1 ', function(assert) {
-        const originalDevices = devices.real();
-        devices.real({
-            platform: 'android',
-            version: ['4', '1']
-        });
-
-        const originalUA = internals.uaAccessor();
-        internals.uaAccessor('default android browser');
-
-        try {
-            this.instance.option('maxLength', 2);
-
-            let event = $.Event('keydown', { key: '1' });
-
-            this.input.trigger(event);
-            this.input.val('1');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '2' });
-            this.input.trigger(event);
-            this.input.val('12');
-            assert.ok(!event.isDefaultPrevented());
-
-            event = $.Event('keydown', { key: '3' });
-            this.input.trigger(event);
-            assert.ok(event.isDefaultPrevented());
-        } finally {
-            devices.real(originalDevices);
-            internals.uaAccessor(originalUA);
         }
     });
 
     QUnit.test('\'maxLength\' should be ignored if mask is specified', function(assert) {
         const originalDevices = devices.real();
-        const originalIE = browser.msie;
         devices.real({
             platform: 'not android and not IE',
             version: ['24']
         });
-        browser.msie = false;
 
         try {
             this.instance.option('maxLength', 4);
@@ -348,7 +188,6 @@ QUnit.module('options changing', {
             assert.equal(this.input.attr('maxLength'), 4);
         } finally {
             devices.real(originalDevices);
-            browser.msie = originalIE;
         }
     });
 
@@ -428,5 +267,120 @@ QUnit.module('widget sizing render', {}, () => {
         instance.option('width', customWidth);
 
         assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
+    });
+});
+
+QUnit.module('valueChanged should receive correct event parameter', {
+    beforeEach: function() {
+        this.valueChangedHandler = sinon.stub();
+        this.$element = $('#textbox').dxTextBox({
+            onValueChanged: this.valueChangedHandler
+        });
+        this.instance = this.$element.dxTextBox('instance');
+
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', 'custom text');
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+    }
+}, () => {
+    QUnit.test('on click on clear button', function(assert) {
+        this.instance.option({ showClearButton: true, value: 'text' });
+
+        const $clearButton = this.$element.find(`.${CLEAR_BUTTON_AREA_CLASS}`);
+        $clearButton.trigger('dxclick');
+
+        const event = this.valueChangedHandler.getCall(1).args[0].event;
+        assert.strictEqual(event.type, 'dxclick', 'event type is correct');
+        assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
+
+        this.testProgramChange(assert);
+    });
+});
+
+QUnit.module('label integration', {
+    beforeEach: function() {
+        const initialOptions = {
+            label: 'some'
+        };
+        this.init = (options = {}) => {
+            this.$textBox = $('#textbox').dxTextBox($.extend(initialOptions, options));
+            this.textBox = this.$textBox.dxTextBox('instance');
+        };
+
+        const that = this;
+
+        class TextEditorLabelMock extends TextEditorLabel {
+            constructor(args) {
+                super(args);
+                that.labelArgs = args;
+                that.labelMock = this;
+            }
+
+            updateMaxWidth = sinon.stub();
+            updateBeforeWidth = sinon.stub();
+        }
+
+        TextBox.mockTextEditorLabel(TextEditorLabelMock);
+    },
+    afterEach: function() {
+        Object.values(this.labelMock, (stub) => {
+            stub.reset();
+        });
+
+        TextBox.restoreTextEditorLabel();
+    }
+},
+() => {
+    QUnit.test('editor should pass beforeWidth equal to buttons container width + search icon outer width', function(assert) {
+        this.init({
+            buttons: [{
+                name: 'button',
+                location: 'before'
+            }],
+            mode: 'search'
+        });
+
+        const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+        const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
+        const expectedBeforeWidth = buttonsContainerWidth + searchIconOuterWidth;
+
+        assert.strictEqual(this.labelArgs.beforeWidth, expectedBeforeWidth);
+    });
+
+    QUnit.test('editor should pass containerWidth equal to input container width - buttons container width - search icon outer width', function(assert) {
+        this.init({
+            buttons: [{
+                name: 'button',
+                location: 'before'
+            }],
+            mode: 'search'
+        });
+
+        const inputContainerWidth = getWidth(this.$textBox.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
+        const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+        const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
+        const expectedContainerWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
+        const borderWidth = 2;
+
+        assert.strictEqual(this.labelArgs.containerWidth + borderWidth, expectedContainerWidth);
+    });
+
+    QUnit.test('mode option change should call label updateMaxWidth and updateBeforeWidth methods with correct parameters', function(assert) {
+        this.init();
+        this.textBox.option('mode', 'search');
+
+        const inputContainerWidth = getWidth(this.$textBox.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
+        const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+        const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
+
+        const newLabelMaxWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
+        const newLabelBeforeWidth = buttonsContainerWidth + searchIconOuterWidth;
+
+        assert.strictEqual(this.labelMock.updateMaxWidth.getCall(0).args[0], newLabelMaxWidth, 'updateMaxWidth parameter is correct');
+        assert.strictEqual(this.labelMock.updateBeforeWidth.getCall(0).args[0], newLabelBeforeWidth, 'updateBeforeWidth parameter is correct');
     });
 });

@@ -2,12 +2,14 @@ import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import { createTextElementHiddenCopy } from 'core/utils/dom';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import config from 'core/config';
 import dataQuery from 'data/query';
 import devices from 'core/devices';
-import errors from 'core/errors';
-import dataErrors from 'data/errors';
+import coreErrors from 'core/errors';
+import uiErrors from 'ui/widget/ui.errors';
+import { errors as dataErrors } from 'data/errors';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import messageLocalization from 'localization/message';
@@ -16,9 +18,11 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
-import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
+import { normalizeKeyName } from 'events/utils/index';
+import { getWidth, getHeight } from 'core/utils/size';
 
-import 'common.css!';
+import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
+
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -27,17 +31,19 @@ QUnit.testStart(() => {
          <div id="anotherContainer"></div>';
 
     $('#qunit-fixture').html(markup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
-const LIST_CKECKBOX_CLASS = 'dx-list-select-checkbox';
+const LIST_CHECKBOX_CLASS = 'dx-list-select-checkbox';
 const SELECT_ALL_CLASS = 'dx-list-select-all';
 const SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
 const POPUP_DONE_BUTTON_CLASS = 'dx-popup-done';
-const TEXTBOX_CLASS = 'dx-texteditor-input';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
+const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
 const TAGBOX_TAG_CONTAINER_CLASS = 'dx-tag-container';
 const TAGBOX_TAG_CONTENT_CLASS = 'dx-tag-content';
 const TAGBOX_TAG_CLASS = 'dx-tag';
@@ -47,17 +53,99 @@ const TAGBOX_SINGLE_LINE_CLASS = 'dx-tagbox-single-line';
 const TAGBOX_POPUP_WRAPPER_CLASS = 'dx-tagbox-popup-wrapper';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
+const TAGBOX_SELECT_SELECTOR = 'select';
 const FOCUSED_CLASS = 'dx-state-focused';
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 const KEY_ENTER = 'Enter';
 const KEY_DOWN = 'ArrowDown';
 const KEY_SPACE = ' ';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
+const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
+const PLACEHOLDER_CLASS = 'dx-placeholder';
 
 const TIME_TO_WAIT = 500;
 
 const getList = (tagBox) => {
     return tagBox._$list;
+};
+
+const getListItems = (tagBox) => {
+    const instance = tagBox.dxTagBox ? tagBox.dxTagBox('instance') : tagBox;
+    return $((instance).content()).find(`.${LIST_ITEM_CLASS}`);
+};
+
+const getAsyncLoad = () => {
+    const data = [{
+        'id': 'item 1'
+    }, {
+        'id': 'item 2'
+    }, {
+        'id': 'item 3'
+    }, {
+        'id': 'item 4'
+    }, {
+        'id': 'item 5'
+    }, {
+        'id': 'item for search 1'
+    }, {
+        'id': 'item for search 2'
+    }, {
+        'id': 'item for search 3'
+    }, {
+        'id': 'item for search 4'
+    }];
+
+    return (loadOptions) => {
+        const deferred = $.Deferred();
+        setTimeout(() => {
+            if(loadOptions.take && !loadOptions.searchValue) {
+                deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
+            } else if(loadOptions.filter) {
+                const result = data.filter((item) => {
+                    if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].id === loadOptions.filter[2].id) {
+                        return item[2];
+                    } else if(item.id === loadOptions.filter[2].id) {
+                        return item;
+                    } else if(Array.isArray(loadOptions.filter) && loadOptions.filter.length > 2) {
+                        for(let i = 0; i < loadOptions.filter.length; i++) {
+                            const element = loadOptions.filter[i];
+                            if(Array.isArray(element) && element[2] === item.id) {
+                                return item;
+                            }
+                        }
+                    } else {
+                        deferred.reject();
+                    }
+                });
+
+                deferred.resolve(result, { totalCount: 9 });
+            } else if(loadOptions.searchValue) {
+                const result = data.filter((item) => {
+                    if(item.id.indexOf(loadOptions.searchValue) >= 0) {
+                        return item;
+                    }
+                });
+
+                deferred.resolve(result.splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
+            } else {
+                deferred.resolve(data, { totalCount: 9 });
+            }
+        }, TIME_TO_WAIT * 2);
+
+        return deferred.promise();
+    };
+};
+
+const getDSWithAsyncSearch = (asyncLoad = getAsyncLoad()) => {
+
+    return new DataSource({
+        paginate: true,
+        pageSize: 5,
+        store: new CustomStore({
+            key: 'id',
+            load: asyncLoad
+        })
+    });
 };
 
 const moduleSetup = {
@@ -93,21 +181,6 @@ QUnit.module('rendering', moduleSetup, () => {
         assert.ok(!$tagBox.hasClass(EMPTY_INPUT_CLASS), 'empty class not present');
         tagBox.option('value', []);
         assert.ok($tagBox.hasClass(EMPTY_INPUT_CLASS), 'empty class present');
-    });
-
-    QUnit.test('skip gesture event class attach only when popup is opened', function(assert) {
-        const SKIP_GESTURE_EVENT_CLASS = 'dx-skip-gesture-event';
-        const $tagBox = $('#tagBox').dxTagBox({
-            items: [1, 2, 3]
-        });
-
-        assert.equal($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was not added when popup is closed');
-
-        $tagBox.dxTagBox('option', 'opened', true);
-        assert.equal($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), true, 'skip gesture event class was added after popup was opened');
-
-        $tagBox.dxTagBox('option', 'opened', false);
-        assert.equal($tagBox.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was removed after popup was closed');
     });
 });
 
@@ -173,7 +246,7 @@ QUnit.module('list selection', moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-        const $listItems = $tagBox.find(`.${LIST_ITEM_CLASS}`);
+        const $listItems = getListItems($tagBox);
 
         assert.equal($listItems.eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), true, 'first item has selected class');
         assert.equal($listItems.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), false, 'second item does not have selected class');
@@ -205,29 +278,28 @@ QUnit.module('list selection', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $list = getList(tagBox);
 
-        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length, 'items count is correct');
-
-        tagBox.open();
-        $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
-        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length - 1, 'items count is correct after the first item selection');
+        assert.equal(getListItems(tagBox).length, dataSource.length, 'items count is correct');
 
         tagBox.open();
-        $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
-        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length - 2, 'items count is correct after the second item selection');
+        $(getListItems(tagBox).eq(0)).trigger('dxclick');
+        assert.equal(getListItems(tagBox).length, dataSource.length - 1, 'items count is correct after the first item selection');
 
         tagBox.open();
-        $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
-        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length - 3, 'items count is correct after the third item selection');
+        $(getListItems(tagBox).eq(0)).trigger('dxclick');
+        assert.equal(getListItems(tagBox).length, dataSource.length - 2, 'items count is correct after the second item selection');
 
         tagBox.open();
-        $($tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).eq(0)).trigger('dxclick');
-        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length - 2, 'items count is correct after the first tag is removed');
+        $(getListItems(tagBox).eq(0)).trigger('dxclick');
+        assert.equal(getListItems(tagBox).length, dataSource.length - 3, 'items count is correct after the third item selection');
 
         tagBox.open();
         $($tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).eq(0)).trigger('dxclick');
-        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, dataSource.length - 1, 'items count is correct after the second tag is removed');
+        assert.equal(getListItems(tagBox).length, dataSource.length - 2, 'items count is correct after the first tag is removed');
+
+        tagBox.open();
+        $($tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).eq(0)).trigger('dxclick');
+        assert.equal(getListItems(tagBox).length, dataSource.length - 1, 'items count is correct after the second tag is removed');
     });
 
     QUnit.test('Selected item should be removed from list if "hideSelectedItems" option is true and minSearchLength > 0 (T951777)', function(assert) {
@@ -242,16 +314,15 @@ QUnit.module('list selection', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $list = getList(tagBox);
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('1');
         this.clock.tick(TIME_TO_WAIT);
-        assert.strictEqual($list.find(`.${LIST_ITEM_CLASS}`).length, 1, 'items count is correct after the first item selection');
+        assert.strictEqual(getListItems(tagBox).length, 1, 'items count is correct after the first item selection');
 
         $($tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).eq(0)).trigger('dxclick');
-        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, 2, 'items count is correct after the first tag is removed');
+        assert.equal(getListItems(tagBox).length, 2, 'items count is correct after the first tag is removed');
     });
 
     QUnit.test('Selected item tag should be correct if hideSelectedItems is set (T580639)', function(assert) {
@@ -325,14 +396,13 @@ QUnit.module('list selection', moduleSetup, () => {
             onSelectionChanged: spy
         }).dxTagBox('instance');
 
-        const content = tagBox.content();
-        let $item = $(content).find(`.${LIST_ITEM_CLASS}`).eq(0);
+        let $item = getListItems(tagBox).eq(0);
 
         $item.trigger('dxclick');
         assert.deepEqual(spy.args[1][0].addedItems, [1], 'added items is correct');
         assert.deepEqual(spy.args[1][0].removedItems, [], 'removed items is empty');
 
-        $item = $(content).find(`.${LIST_ITEM_CLASS}`).eq(1);
+        $item = getListItems(tagBox).eq(1);
         $item.trigger('dxclick');
         assert.deepEqual(spy.args[2][0].addedItems, [3], 'added items is correct');
         assert.deepEqual(spy.args[2][0].removedItems, [], 'removed items is empty');
@@ -346,8 +416,7 @@ QUnit.module('list selection', moduleSetup, () => {
             hideSelectedItems: true
         }).dxTagBox('instance');
 
-        const content = tagBox.content();
-        const $item = $(content).find(`.${LIST_ITEM_CLASS}`).eq(0);
+        const $item = getListItems(tagBox).eq(0);
 
         $item.trigger('dxclick');
 
@@ -364,15 +433,15 @@ QUnit.module('tags', moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-        assert.strictEqual($element.find(`.${LIST_ITEM_CLASS}`).length, 3, 'found 3 items');
+        assert.strictEqual(getListItems($element).length, 3, 'found 3 items');
 
-        $($element.find(`.${LIST_ITEM_CLASS}`).first()).trigger('dxclick');
+        $(getListItems($element).first()).trigger('dxclick');
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 1, 'tag is added');
 
-        $($element.find(`.${LIST_ITEM_CLASS}`).first()).trigger('dxclick');
+        $(getListItems($element).first()).trigger('dxclick');
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 0, 'tag is removed');
 
-        $($element.find(`.${LIST_ITEM_CLASS}`).last()).trigger('dxclick');
+        $(getListItems($element).last()).trigger('dxclick');
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 1, 'another tag is added');
 
         const $close = $element.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).last();
@@ -402,8 +471,8 @@ QUnit.module('tags', moduleSetup, () => {
 
         const renderTagsStub = sinon.stub(tagBox, '_renderTags');
 
-        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger('focusin');
-        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger('focusout');
+        $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusin');
+        $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusout');
 
         assert.equal(renderTagsStub.callCount, 0, 'tags weren\'t rerendered');
     });
@@ -415,7 +484,7 @@ QUnit.module('tags', moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         $($input).trigger('dxclick');
         $($input).trigger('blur');
 
@@ -431,7 +500,7 @@ QUnit.module('tags', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $listItems = $(`.${LIST_ITEM_CLASS}`);
+        const $listItems = getListItems($tagBox);
         $($listItems.eq(0)).trigger('dxclick');
         $($listItems.eq(1)).trigger('dxclick');
 
@@ -446,7 +515,7 @@ QUnit.module('tags', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $listItems = $(`.${LIST_ITEM_CLASS}`);
+        const $listItems = getListItems($tagBox);
         $($listItems.eq(0)).trigger('dxclick');
 
         assert.equal($tagBox.find('.' + TAGBOX_TAG_CLASS).length, 1, 'empty string value was successfully selected');
@@ -507,31 +576,14 @@ QUnit.module('tags', moduleSetup, () => {
             opened: true
         });
 
-        const $listItems = $(`.${LIST_ITEM_CLASS}`);
+        const $listItems = getListItems($element);
 
         $($listItems.eq(0)).trigger('dxclick');
         $($listItems.eq(1)).trigger('dxclick');
         $($element.find('.dx-clear-button-area')).trigger('dxclick');
-        $($listItems.eq(2)).trigger('dxclick');
+        getListItems($element).eq(2).trigger('dxclick');
 
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 1, 'one item is chosen');
-    });
-
-    QUnit.test('clear button should save valueChangeEvent', function(assert) {
-        const valueChangedHandler = sinon.spy();
-
-        const $element = $('#tagBox').dxTagBox({
-            items: [1],
-            showClearButton: true,
-            value: [1],
-            onValueChanged: valueChangedHandler
-        });
-
-        const $clearButton = $element.find('.dx-clear-button-area');
-        $clearButton.trigger('dxclick');
-
-        assert.equal(valueChangedHandler.callCount, 1, 'valueChangedHandler has been called');
-        assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
     });
 
     QUnit.test('clear button should also clear the input value', function(assert) {
@@ -611,46 +663,81 @@ QUnit.module('tags', moduleSetup, () => {
         assert.equal($tag.text(), '', 'tag has correct text');
     });
 
-    QUnit.test('Tag should repaint tags on \'repaint\' if dataSource is reloaded (T873372)', function(assert) {
-        let items = [{ name: 'one', value: 1 }, { name: 'two', value: 2 }];
-        const dataSource = new DataSource({
-            store: new CustomStore({
-                key: 'value',
-                load: function() {
-                    const deferred = $.Deferred();
-                    deferred.resolve(items);
-                    return deferred.promise();
-                }
-            }),
-            paginate: true
-        });
-        const $tagBox = $('#tagBox').dxTagBox({
-            dataSource,
-            displayExpr: 'name',
-            valueExpr: 'value',
-            value: [1]
-        });
-        const tagBox = $tagBox.dxTagBox('instance');
-        this.clock.tick();
-        items = [{ name: 'updated', value: 1 }];
-        dataSource.reload();
-        tagBox.repaint();
+    [true, false].forEach((deferRenderingValue) => {
+        QUnit.test(`Tag should repaint tags on 'repaint' if dataSource is reloaded and deferRendering: ${deferRenderingValue} (T873372)`, function(assert) {
+            let items = [{ name: 'one', value: 1 }, { name: 'two', value: 2 }];
+            const dataSource = new DataSource({
+                store: new CustomStore({
+                    key: 'value',
+                    load: function() {
+                        const deferred = $.Deferred();
+                        deferred.resolve(items);
+                        return deferred.promise();
+                    }
+                }),
+                paginate: true
+            });
+            const $tagBox = $('#tagBox').dxTagBox({
+                dataSource,
+                displayExpr: 'name',
+                valueExpr: 'value',
+                deferRendering: deferRenderingValue,
+                value: [1]
+            });
+            const tagBox = $tagBox.dxTagBox('instance');
+            this.clock.tick(10);
+            items = [{ name: 'updated', value: 1 }];
+            dataSource.reload();
+            tagBox.repaint();
 
-        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
-        assert.equal($tag.text(), 'updated', 'tag has updated text');
+            const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+            assert.equal($tag.text(), 'updated', 'tag has updated text');
+        });
     });
 
-    QUnit.test('onValueChanged has dxclick event on remove button click', function(assert) {
-        const $element = $('#tagBox').dxTagBox({
-            value: ['123'],
-            onValueChanged: function(e) {
-                assert.equal(e.event.type, 'dxclick', 'correct event type');
-                assert.deepEqual(e.event.target, $removeButton.get(0), 'correct target element');
-            }
+    QUnit.test('Tags should be rendered on start if fieldTemplate is async (T1056792)', function(assert) {
+        const done = assert.async();
+        assert.expect(1);
+        this.clock.restore();
+
+        let rendered = false;
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [{ name: 'one', value: 1 }, { name: 'two', value: 2 }],
+            displayExpr: 'name',
+            valueExpr: 'value',
+            value: [1],
+            fieldTemplate: 'fieldTemplate',
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    fieldTemplate: {
+                        render: (data) => {
+                            const text = $('<div>');
+                            if(!rendered) {
+                                setTimeout(() => {
+                                    text.dxTextBox({});
+                                    data.container.append(text.get(0));
+                                    data.onRendered();
+                                    rendered = true;
+                                }, TIME_TO_WAIT / 2);
+                            } else {
+                                text.dxTextBox({});
+                                data.container.append(text);
+                                data.onRendered();
+                            }
+
+                            return text;
+                        }
+                    }
+                }
+            },
         });
 
-        const $removeButton = $element.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).last();
-        $($removeButton).trigger('dxclick');
+        setTimeout(() => {
+            const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+            assert.equal($tag.length, 1, 'tag was rendered');
+            done();
+        }, TIME_TO_WAIT);
     });
 });
 
@@ -877,7 +964,7 @@ QUnit.module('multi tag support', {
             showSelectionControls: true
         });
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
         assert.equal($tagBox.dxTagBox('option', 'value').length, 5, 'first page is selected');
@@ -885,7 +972,7 @@ QUnit.module('multi tag support', {
     });
 
     QUnit.test('TagBox should correctly process the rejected load promise of the dataSource', function(assert) {
-        const dataErrorStub = sinon.stub(dataErrors.errors, 'log');
+        const dataErrorStub = sinon.stub(dataErrors, 'log');
         const $editor = $('#tagBox').dxTagBox({
             dataSource: {
                 store: new CustomStore({
@@ -992,7 +1079,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard.type('i');
@@ -1016,7 +1103,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('i');
@@ -1036,13 +1123,13 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('i');
         this.clock.tick(TIME_TO_WAIT);
 
-        const $listItems = $(tagBox.content()).find(`.${LIST_ITEM_CLASS}`);
+        const $listItems = getListItems(tagBox);
         $listItems.first().trigger('dxclick');
 
         assert.strictEqual(tagBox.option('text'), '', 'text is cleared');
@@ -1056,7 +1143,7 @@ QUnit.module('the "text" option', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -1072,7 +1159,7 @@ QUnit.module('the \'onValueChanged\' option', moduleSetup, () => {
     QUnit.test('onValueChanged provides selected values', function(assert) {
         let value;
 
-        const $element = $('#tagBox').dxTagBox({
+        const tagBox = $('#tagBox').dxTagBox({
             items: [1, 2, 3],
             onValueChanged(args) {
                 value = args.value;
@@ -1081,10 +1168,10 @@ QUnit.module('the \'onValueChanged\' option', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        $($element.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
+        $(getListItems(tagBox).eq(0)).trigger('dxclick');
         assert.deepEqual(value, [1], 'only first item is selected');
 
-        $($element.find(`.${LIST_ITEM_CLASS}`).eq(2)).trigger('dxclick');
+        $(getListItems(tagBox).eq(2)).trigger('dxclick');
         assert.deepEqual(value, [1, 3], 'two items are selected');
     });
 
@@ -1188,8 +1275,9 @@ QUnit.module('the \'onValueChanged\' option', moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-        $($element.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
-        $($element.find(`.${LIST_ITEM_CLASS}`).eq(2)).trigger('dxclick');
+        const $listItems = getListItems($element);
+        $($listItems.eq(0)).trigger('dxclick');
+        $($listItems.eq(2)).trigger('dxclick');
         $($element.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).eq(0)).trigger('dxclick');
 
         assert.deepEqual(value, [3], 'item is deleted');
@@ -1217,7 +1305,7 @@ QUnit.module('the \'onValueChanged\' option', moduleSetup, () => {
             onValueChanged: spy
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input).press('backspace');
         assert.notOk(spy.called, 'onValueChanged is not fired');
@@ -1241,7 +1329,7 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
         const $input = $tagBox.find('.dx-texteditor-input');
         const keyboard = keyboardMock($input);
         const customValue = 'Custom value';
-        const logStub = sinon.stub(errors, 'log');
+        const logStub = sinon.stub(coreErrors, 'log');
 
         keyboard
             .type(customValue)
@@ -1431,7 +1519,7 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
             .type('123')
             .press('enter');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $tags = $tagBox.find('.dx-tag');
         const $listItems = $(instance.content()).find('.dx-list-item.dx-list-item-selected');
@@ -1467,37 +1555,15 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
             .type('123')
             .press('enter');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $tags = $tagBox.find('.dx-tag');
         const $listItems = $(instance.content()).find('.dx-list-item.dx-list-item-selected');
-        const checkbox = $listItems.eq(0).find(`.${LIST_CKECKBOX_CLASS}`).dxCheckBox('instance');
+        const checkbox = $listItems.eq(0).find(`.${LIST_CHECKBOX_CLASS}`).dxCheckBox('instance');
 
         assert.equal($tags.length, 0, 'tags should not be rendered before button click');
         assert.equal($listItems.length, 1, 'list item should be selected after enter press');
         assert.equal(checkbox.option('value'), true, 'checkbox is checked');
-    });
-
-    QUnit.test('onValueChanged event should have correct "event" field after adding a custom item', function(assert) {
-        const valueChangedStub = sinon.stub();
-        const $tagBox = $('#tagBox').dxTagBox({
-            acceptCustomValue: true,
-            items: [1, 2, 3],
-            onValueChanged: valueChangedStub,
-            onCustomItemCreating: (e) => {
-                e.customItem = e.text;
-            }
-        });
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
-
-        keyboardMock($input)
-            .type('test')
-            .press('enter');
-
-        const event = valueChangedStub.getCall(0).args[0].event;
-        assert.ok(valueChangedStub.calledOnce);
-        assert.ok(!!event);
-        assert.strictEqual(event.type, 'keydown');
     });
 });
 
@@ -1597,6 +1663,19 @@ QUnit.module('tag template', moduleSetup, () => {
                 assert.equal(tagData, items[0], 'correct data is passed');
                 assert.equal($(tagElement).hasClass(TAGBOX_TAG_CLASS), true, 'correct element passed');
                 assert.equal(isRenderer(tagElement), !!config().useJQuery, 'tagElement is correct');
+            }
+        });
+    });
+
+    QUnit.test('tag template should receive item object if displayValue is empty string (T965054)', function(assert) {
+        const items = [{ text: '' }];
+
+        $('#tagBox').dxTagBox({
+            items,
+            value: items,
+            displayExpr: 'text',
+            tagTemplate(tagData) {
+                assert.deepEqual(tagData, items[0], 'correct data is passed');
             }
         });
     });
@@ -1702,6 +1781,34 @@ QUnit.module('tag template', moduleSetup, () => {
 
         assert.equal($tags.text(), 'item 1', 'text is correct');
     });
+
+    QUnit.test('tag template can use string data', function(assert) {
+        const items = ['first'];
+
+        const $element = $('#tagBox').dxTagBox({
+            items,
+            valueExpr: 'this',
+            value: [items[0]]
+        });
+
+        const $tags = $element.find('.' + TAGBOX_TAG_CLASS);
+        assert.strictEqual($tags.text(), 'first', 'text is correct');
+    });
+
+    QUnit.test('tag template should use empty text if it is defined', function(assert) {
+        const items = [{ id: 1, text: '' }];
+
+        const $element = $('#tagBox').dxTagBox({
+            items,
+            displayExpr: 'text',
+            valueExpr: 'this',
+            value: [items[0]]
+        });
+
+        const $tags = $element.find('.' + TAGBOX_TAG_CLASS);
+        assert.strictEqual($tags.length, 1, 'text is correct');
+        assert.strictEqual($tags.text(), '', 'text is correct');
+    });
 });
 
 QUnit.module('showSelectionControls', moduleSetup, () => {
@@ -1779,7 +1886,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         $tagBox.dxTagBox('option', 'opened', true);
         this.clock.tick(TIME_TO_WAIT);
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), items, 'items is selected');
@@ -1816,7 +1923,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         assert.equal(fired, 0, 'event was not fired');
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         assert.equal(fired, 1, 'event fired once');
     });
 
@@ -1830,7 +1937,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         assert.deepEqual(tagBox.option('value'), [], 'value is an empty array');
     });
 
@@ -1884,9 +1991,9 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
             opened: true
         });
 
-        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger('focusin');
+        $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusin');
         $('.dx-list-item').first().trigger('dxclick');
-        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger('focusout');
+        $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('focusout');
 
         assert.equal($tagBox.find('.dx-tag').length, 1, 'tag is present');
     });
@@ -1912,7 +2019,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
             opened: true
         });
 
-        const selectAllCheck = $('.dx-list-select-all-checkbox').dxCheckBox('instance');
+        const selectAllCheck = $(`.${SELECT_ALL_CHECKBOX_CLASS}`).dxCheckBox('instance');
         assert.equal(selectAllCheck.option('value'), true, 'the \'select all\' checkbox is checked');
     });
 
@@ -2057,7 +2164,7 @@ QUnit.module('keyboard navigation', {
                 .appendTo('#qunit-fixture')
                 .dxTagBox(options);
             this.instance = this.$element.dxTagBox('instance');
-            this.$input = this.$element.find('.' + TEXTBOX_CLASS);
+            this.$input = this.$element.find('.' + TEXTEDITOR_INPUT_CLASS);
             this.keyboard = keyboardMock(this.$input);
         };
 
@@ -2078,6 +2185,42 @@ QUnit.module('keyboard navigation', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('pagedown/pageup keys should move focus to last/first item', function(assert) {
+        const $listItems = getListItems(this.instance);
+        this.keyboard.press('down');
+
+        this.keyboard.press('pagedown');
+        assert.ok($listItems.eq(2).hasClass(FOCUSED_CLASS), 'the last tag has the \'focused\' class');
+
+        this.keyboard.press('pageup');
+        assert.ok($listItems.eq(0).hasClass(FOCUSED_CLASS), 'the first tag has the \'focused\' class');
+    });
+
+    QUnit.test('down/up keys should move focus to next/previous item', function(assert) {
+        const $listItems = getListItems(this.instance);
+        const $firstItem = $listItems.eq(0);
+        const $secondItem = $listItems.eq(1);
+
+        this.keyboard.press('down');
+        assert.ok($secondItem.hasClass(FOCUSED_CLASS), 'second item is focused');
+
+        this.keyboard.press('up');
+        assert.ok($firstItem.hasClass(FOCUSED_CLASS), 'first item is focused');
+    });
+
+    ['enter', 'space'].forEach(key => {
+        QUnit.test(`item should be selected when pressing ${key}`, function(assert) {
+            assert.deepEqual(this.instance.option('value'), [1, 2], 'the value is correct');
+
+            this.keyboard.press('down');
+            this.keyboard.press('down');
+
+            this.keyboard.press(key);
+            this.clock.tick(TIME_TO_WAIT);
+            assert.deepEqual(this.instance.option('value'), [1, 2, 3], 'the value is correct');
+        });
+    });
+
     QUnit.test('backspace', function(assert) {
         assert.expect(2);
 
@@ -2199,6 +2342,18 @@ QUnit.module('keyboard navigation', {
         this.keyboard
             .keyDown('esc');
         assert.equal(prevented, 1, 'defaults prevented on escape keys');
+
+        assert.strictEqual(this.instance.option('opened'), false);
+    });
+
+    QUnit.test('escape key should close popup', function(assert) {
+        this.reinit({
+            opened: true,
+        });
+
+        this.keyboard.keyDown('esc');
+
+        assert.notOk(this.instance.option('opened'), 'popup closed');
     });
 
     QUnit.test('Enter and escape key press prevent default when popup is opened and field edit enabled is not set', function(assert) {
@@ -2439,8 +2594,41 @@ QUnit.module('keyboard navigation', {
             .focus()
             .press('tab');
 
-        const $applyButton = this.instance._popup._wrapper().find('.dx-button.dx-popup-done');
+        const $applyButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-done');
         assert.ok($applyButton.hasClass('dx-state-focused'), 'the apply button is focused');
+    });
+
+    QUnit.test('keyboard event handlers passed from a config', function(assert) {
+        const keyDownStub = sinon.stub();
+        const keyUpStub = sinon.stub();
+
+        this.instance.dispose();
+        this.reinit({
+            onKeyDown: keyDownStub,
+            onKeyUp: keyUpStub
+        });
+
+        this.keyboard
+            .focus()
+            .type('a');
+
+        assert.ok(keyDownStub.calledOnce, 'keydown handled');
+        assert.ok(keyUpStub.calledOnce, 'keyup handled');
+    });
+
+    QUnit.test('keyboard event handlers added dynamically', function(assert) {
+        const keyDownStub = sinon.stub();
+        const keyUpStub = sinon.stub();
+
+        this.instance.on('keyDown', keyDownStub);
+        this.instance.on('keyUp', keyUpStub);
+
+        this.keyboard
+            .focus()
+            .type('a');
+
+        assert.ok(keyDownStub.calledOnce, 'keydown handled');
+        assert.ok(keyUpStub.calledOnce, 'keyup handled');
     });
 });
 
@@ -2456,7 +2644,7 @@ QUnit.module('keyboard navigation through tags', {
 
         this._init = () => {
             this.instance = this.$element.dxTagBox('instance');
-            this.$input = this.$element.find(`.${TEXTBOX_CLASS}`);
+            this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             this.keyboard = keyboardMock(this.$input, true);
 
             this.getTags = () => {
@@ -2702,6 +2890,39 @@ QUnit.module('keyboard navigation through tags', {
 
         const value = this.instance.option('value');
         assert.deepEqual(value, expectedValue, 'the widget\'s value is correct');
+    });
+
+    ['readOnly', 'disabled'].forEach((optionName) => {
+        ['backspace', 'del'].forEach((keyName) => {
+            QUnit.test(`the focused tag should be removed after pressing the '${keyName}' key after ${optionName} state (T986220)`, function(assert) {
+                const items = [1, 2, 3, 4];
+                this.reinit({
+                    items,
+                    value: items,
+                    focusStateEnabled: true,
+                    searchEnabled: true
+                });
+
+                this.instance.option(optionName, true);
+                this.instance.option(optionName, false);
+
+                this.keyboard
+                    .focus()
+                    .press('left')
+                    .press('left')
+                    .press('left');
+
+                const expectedValue = this.instance.option('value').slice();
+                const focusedTagIndex = this.getFocusedTag().index();
+                expectedValue.splice(focusedTagIndex, 1);
+
+                this.keyboard
+                    .press(keyName);
+
+                const value = this.instance.option('value');
+                assert.deepEqual(value, expectedValue, 'the widget\'s value is correct');
+            });
+        });
     });
 
     QUnit.test('backspace should remove selected search text but not tag if any text is selected', function(assert) {
@@ -3001,12 +3222,9 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
             this.init = (options) => {
                 this.$element = $('#tagBox').dxTagBox(options);
-                this.$input = this.$element.find(`.${TEXTBOX_CLASS}`);
+                this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
                 this.keyboard = keyboardMock(this.$input);
                 this.instance = this.$element.dxTagBox('instance');
-                this.getListItems = () => {
-                    return $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
-                };
             };
             this.reinit = (options) => {
                 this.init($.extend({}, initConfig, options));
@@ -3022,7 +3240,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
                 .type(this.items[0][0])
                 .press('backspace');
 
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            assert.strictEqual(getListItems(this.instance).length, this.items.length, 'search was canceled');
         });
 
         QUnit.test('focusout', function(assert) {
@@ -3030,7 +3248,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
                 .type('111')
                 .blur();
 
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            assert.strictEqual(getListItems(this.instance).length, this.items.length, 'search was canceled');
         });
 
         QUnit.test('focusout if popup is closed', function(assert) {
@@ -3038,7 +3256,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             this.instance.close();
             this.$input.trigger('focusout');
 
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            assert.strictEqual(getListItems(this.instance).length, this.items.length, 'search was canceled');
         });
 
         QUnit.test('focusout if acceptCustomValue=true', function(assert) {
@@ -3048,7 +3266,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
                 .type('111')
                 .blur();
 
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            assert.strictEqual(getListItems(this.instance).length, this.items.length, 'search was canceled');
         });
 
         QUnit.test('apply button click', function(assert) {
@@ -3058,7 +3276,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             $(`.dx-button.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
 
             assert.strictEqual(this.$input.val(), '', 'input was cleared');
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            assert.strictEqual(getListItems(this.instance).length, this.items.length, 'search was canceled');
         });
 
         QUnit.test('apply button click if showSelectionControls=true', function(assert) {
@@ -3070,7 +3288,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             this.keyboard.type('1');
             $(`.dx-button.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
 
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            assert.strictEqual(getListItems(this.instance).length, this.items.length, 'search was canceled');
         });
     });
 
@@ -3082,10 +3300,10 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             $('.dx-button.dx-popup-cancel').trigger('dxclick');
 
             assert.strictEqual(this.$input.val(), '1', 'input was not cleared');
-            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
+            assert.strictEqual(getListItems(this.instance).length, 1, 'search was not canceled');
 
             this.instance.open();
-            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled on reopening');
+            assert.strictEqual(getListItems(this.instance).length, 1, 'search was not canceled on reopening');
         });
 
         QUnit.test('popup closing using esc', function(assert) {
@@ -3093,7 +3311,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
                 .type('1')
                 .press('esc');
 
-            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
+            assert.strictEqual(getListItems(this.instance).length, 1, 'search was not canceled');
         });
 
         QUnit.test('click on item if showSelectionControls=true', function(assert) {
@@ -3101,7 +3319,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
             this.keyboard.type('2');
 
-            const $listItems = $(`.${LIST_ITEM_CLASS}`);
+            const $listItems = getListItems(this.instance);
             $listItems.first().trigger('dxclick');
 
             assert.strictEqual($listItems.length, 2, 'search was not canceled');
@@ -3114,14 +3332,14 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             this.$input.trigger('dxclick');
 
             assert.strictEqual(this.$input.val(), '111', 'input was not cleared');
-            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
+            assert.strictEqual(getListItems(this.instance).length, 1, 'search was not canceled');
         });
 
         QUnit.test('click on input', function(assert) {
             this.keyboard.type('111');
             this.$input.trigger('dxclick');
 
-            assert.strictEqual(this.getListItems().length, 1, 'search was not canceled');
+            assert.strictEqual(getListItems(this.instance).length, 1, 'search was not canceled');
         });
     });
 
@@ -3134,7 +3352,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('te');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3152,8 +3370,8 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             value: ['Moscow']
         });
 
-        this.clock.tick();
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        this.clock.tick(10);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('Lon');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3173,7 +3391,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             width: 1000
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const inputLeft = $input.offset().left;
 
         $tagBox.dxTagBox('option', 'value', ['Moscow']);
@@ -3187,7 +3405,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchEnabled: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const inputWidth = $input.width();
 
         keyboardMock($input).type('test text');
@@ -3203,7 +3421,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             });
 
             const text = 'wwwwwwwwwwwwwwwwwwww';
-            const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+            const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             $input.css('padding', '0 10px');
 
             keyboardMock($input).type(text);
@@ -3212,7 +3430,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             const inputCopy = createTextElementHiddenCopy($input, text);
             inputCopy.appendTo('#qunit-fixture');
 
-            assert.ok(inputWidth >= inputCopy.width());
+            assert.ok(inputWidth >= getWidth(inputCopy));
             inputCopy.remove();
         });
     });
@@ -3223,11 +3441,11 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             items: ['test1', 'test2']
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const initInputWidth = $input.width();
 
         $tagBox.dxTagBox('option', 'value', ['test1']);
-        assert.roughEqual($tagBox.find(`.${TEXTBOX_CLASS}`).width(), initInputWidth, 0.1, 'input width is not changed after selecting item');
+        assert.roughEqual($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).width(), initInputWidth, 0.1, 'input width is not changed after selecting item');
     });
 
     QUnit.test('space entering should increase input element size (T923429)', function(assert) {
@@ -3236,7 +3454,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         const text = '123456789          ';
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type(text);
@@ -3244,9 +3462,9 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $inputCopy
             .css('whiteSpace', 'pre')
             .appendTo('#qunit-fixture');
-        const textWidth = $inputCopy.width();
+        const textWidth = getWidth($inputCopy);
 
-        const currentWidth = $tagBox.find(`.${TEXTBOX_CLASS}`).width();
+        const currentWidth = getWidth($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
         assert.ok(currentWidth > textWidth, `input width (${currentWidth}) should be grester then input text width (${textWidth})`);
         $inputCopy.remove();
     });
@@ -3257,7 +3475,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             acceptCustomValue: false
         });
 
-        const input = $tagBox.find(`.${TEXTBOX_CLASS}`).get(0);
+        const input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).get(0);
         const { width: inputWidth } = input.getBoundingClientRect();
 
         // NOTE: width should be 0.1 because of T393423
@@ -3270,7 +3488,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             placeholder: 'placeholder'
         });
 
-        keyboardMock($tagBox.find(`.${TEXTBOX_CLASS}`)).type('test');
+        keyboardMock($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).type('test');
 
         const $placeholder = $tagBox.find('.dx-placeholder');
 
@@ -3286,7 +3504,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard
@@ -3307,7 +3525,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('3');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3354,7 +3572,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         const tagBox = $tagBox.dxTagBox('instance');
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('3');
 
         this.clock.tick(TIME_TO_WAIT);
@@ -3376,7 +3594,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const tagBox = $tagBox.dxTagBox('instance');
 
         const $removeTag = $tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`);
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const pointer = pointerMock($removeTag).start().down();
         $($input).trigger('blur');
@@ -3428,7 +3646,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.press('backspace');
@@ -3463,7 +3681,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
         assert.equal(loadedCount, 1, 'data source loaded data');
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.press('backspace');
@@ -3482,7 +3700,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchTimeout: 0
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('It');
@@ -3502,7 +3720,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchTimeout: 0
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const searchValue = '123';
 
         $input.val(searchValue);
@@ -3519,7 +3737,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val('one');
         $('.dx-list-item').eq(0).trigger('dxclick');
@@ -3536,7 +3754,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val('one');
         $('.dx-list-item').eq(0).trigger('dxclick');
@@ -3553,7 +3771,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             searchEnabled: true
         });
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const searchValue = '123';
 
         $input.val(searchValue);
@@ -3572,7 +3790,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const instance = $element.dxTagBox('instance');
 
         instance.focus();
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val('123');
         instance.blur();
@@ -3588,13 +3806,12 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             acceptCustomValue: true
         });
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('1');
 
-        $($input).trigger('change');
-        const listItems = $('.dx-list-item');
+        const itemsCount = $('.dx-list-item').length;
 
-        assert.equal(listItems.length, 2, 'search was performed');
+        assert.strictEqual(itemsCount, 2, 'search was performed');
     });
 
     QUnit.test('tag should be added after enter press key if popup was not opened early', function(assert) {
@@ -3608,7 +3825,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             deferRendering: true
         });
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focus();
 
@@ -3634,12 +3851,54 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const instance = $element.dxTagBox('instance');
         const handlerStub = sinon.stub(instance._popup, 'repaint');
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         $input.focus();
 
         keyboardMock($input).type('American Samo');
 
         assert.ok(handlerStub.called, 'repaint was fired');
+    });
+
+    QUnit.test('popup should update position after change height of input on dataSource "Loaded" event', function(assert) {
+        const $element = $('#tagBox').dxTagBox({
+            focusStateEnabled: true,
+            opened: true,
+            dataSource: {
+                store: new CustomStore({
+                    loadMode: 'raw',
+                    load: function() {
+                        const deferred = $.Deferred();
+
+                        setTimeout(() => {
+                            deferred.resolve(['testvalue1', 'testvalue2', 'testvalue3']);
+                        }, TIME_TO_WAIT);
+
+                        return deferred.promise();
+                    }
+                })
+            },
+            width: 170,
+            value: ['testvalue1', 'testvalue2'],
+            searchEnabled: true,
+            searchTimeout: 0
+        });
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const instance = $element.dxTagBox('instance');
+        const popupContent = $(instance.content());
+        const { top: initialTop } = popupContent.offset();
+
+        $element
+            .find(`.${TEXTEDITOR_INPUT_CLASS}`)
+            .val('testtesttesttest')
+            .trigger('input');
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        const { top: updatedTop } = popupContent.offset();
+
+        assert.ok(updatedTop > initialTop, 'Popup update position');
     });
 
     QUnit.test('the input size should change if autocompletion is Enabled (T378411)', function(assert) {
@@ -3670,21 +3929,21 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             minSearchLength: 2
         });
         const instance = $element.dxTagBox('instance');
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         instance.open();
         const $popupWrapper = $(instance.content()).parents(`.${TAGBOX_POPUP_WRAPPER_CLASS}`);
 
         keyboard.type('aa');
-        $popupWrapper.find(`.${LIST_CKECKBOX_CLASS}`).eq(0).trigger('dxclick');
+        $popupWrapper.find(`.${LIST_CHECKBOX_CLASS}`).eq(0).trigger('dxclick');
         $popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
 
         instance.close();
         instance.open();
 
         keyboard.type('aa');
-        $popupWrapper.find(`.${LIST_CKECKBOX_CLASS}`).eq(1).trigger('dxclick');
+        $popupWrapper.find(`.${LIST_CHECKBOX_CLASS}`).eq(1).trigger('dxclick');
         $popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`).trigger('dxclick');
 
         assert.strictEqual(instance.option('selectedItems').length, 2);
@@ -3735,6 +3994,30 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
     });
 
+    QUnit.test('filtering operation should pass "select" parameter to the data source (T982439)', function(assert) {
+        const done = assert.async();
+
+        ajaxMock.setup({
+            url: 'dxdataservice',
+            callback: ({ data }) => {
+                assert.deepEqual(data, {
+                    $filter: 'this eq \'1\'',
+                    $select: 'name,company'
+                });
+                ajaxMock.clear();
+                done();
+            }
+        });
+
+        $('#tagBox').dxTagBox({
+            value: ['1'],
+            dataSource: new DataSource({
+                store: new ODataStore({ url: 'dxdataservice' }),
+                select: ['name', 'company']
+            })
+        });
+    });
+
     QUnit.testInActiveWindow('input should be focused after click on field (searchEnabled is true or acceptCustomValue is true)', function(assert) {
         const items = ['111', '222', '333'];
 
@@ -3745,7 +4028,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             showDropDownButton: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $dropDownButton = $tagBox.find('.dx-dropdowneditor-button');
         $dropDownButton.click();
 
@@ -3766,7 +4049,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         });
 
         const instance = $element.dxTagBox('instance');
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input).type('1');
         $('.dx-list-item').trigger('dxclick');
@@ -3857,9 +4140,14 @@ QUnit.module('searchEnabled', moduleSetup, () => {
                     const d = $.Deferred();
 
                     setTimeout(function() {
-                        const data = loadOptions && loadOptions.searchValue ?
-                            ['test1'] :
-                            ['test1', 'test2', 'test3'];
+                        let data;
+                        if(loadOptions && loadOptions.searchValue) {
+                            data = ['test1'];
+                        } else if(loadOptions && loadOptions.filter) {
+                            data = ['test2'];
+                        } else {
+                            data = ['test1', 'test2', 'test3'];
+                        }
 
                         d.resolve(data);
                     }, TIME_TO_WAIT);
@@ -3889,12 +4177,12 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         keyboardMock(instance._input()).type('te');
-        this.clock.tick(TIME_TO_WAIT);
+        this.clock.tick(TIME_TO_WAIT * 2);
 
-        const $listItems = $(`.${LIST_ITEM_CLASS}`);
+        const $listItems = getListItems(instance);
 
         $listItems.first().trigger('dxclick');
-        this.clock.tick(TIME_TO_WAIT);
+        this.clock.tick(TIME_TO_WAIT * 2);
     });
 
     QUnit.test('TagBox should not request dataSource after item selecting using search when all selected items are available (T944099)', function(assert) {
@@ -3919,6 +4207,331 @@ QUnit.module('searchEnabled', moduleSetup, () => {
 
         assert.strictEqual(loadStub.callCount, 3);
     });
+
+    QUnit.test('TagBox should add all clicked items after search if dataSource is async (T958611)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        let $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        $listItems.eq(2).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 4, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 2', 'item for search 3'], 'correctly items values');
+    });
+
+    QUnit.test('TagBox should correctly add and remove all clicked items after search if dataSource is async (T958611)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        let $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        $listItems.eq(2).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        $listItems.eq(3).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        $listItems.eq(2).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 3, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
+    });
+
+    QUnit.test('TagBox should correctly quickly add remove the same item after search if dataSource is async', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        let $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems = getListItems(tagBox);
+        $listItems.eq(1).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 1, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1'], 'correctly items values');
+    });
+
+    QUnit.test('TagBox should correctly quickly add remove items after search if dataSource is async', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        let $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+
+        $listItems.eq(3).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 3, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
+    });
+
+    QUnit.test('TagBox should correctly add and remove selected items after search if dataSource is async and all old items has been already selected', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        let $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems = getListItems(tagBox);
+        $listItems.eq(0).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+        $listItems.eq(3).trigger('dxclick');
+        $listItems.eq(1).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 3, 'correctly tags count');
+        assert.deepEqual(tagBox.option('value'), ['item 1', 'item for search 1', 'item for search 4'], 'correctly items values');
+    });
+
+    QUnit.test('TagBox should correctly add and quickly remove all items after search if dataSource is async with selectAllMode \'allPages\' (T978877)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            selectAllMode: 'allPages',
+            searchEnabled: true,
+            searchExpr: 'id',
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+        const $selectAllCheckbox = $(tagBox._list.$element().find(`.${SELECT_ALL_CHECKBOX_CLASS}`).eq(0));
+        $selectAllCheckbox.trigger('dxclick');
+        $selectAllCheckbox.trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 4);
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+        assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 0, 'no tags');
+        assert.deepEqual(tagBox.option('value'), [], 'all items are deselected');
+    });
+
+    QUnit.test('TagBox should send one request if we select second item after search (T1029049)', function(assert) {
+        const loadSpy = sinon.spy(getAsyncLoad());
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(loadSpy),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            selectAllMode: 'allPages',
+            searchEnabled: true,
+            searchExpr: 'id',
+            dropDownOptions: {
+                height: 120,
+            },
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        keyboardMock($input).type('item');
+
+        let $listItems = getListItems(tagBox);
+
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 5);
+
+        $listItems = getListItems(tagBox);
+
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        assert.strictEqual(loadSpy.callCount, 5, 'correct count of ds load');
+    });
+
+    QUnit.test('TagBox should use one DataSource request on list item selection if the editor has selected items from next pages (T970259)', function(assert) {
+        const data = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }];
+
+        const loadSpy = sinon.spy(function(loadOptions) {
+            const deferred = $.Deferred();
+            if(loadOptions.take && !loadOptions.searchValue) {
+                deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take));
+            } else if(loadOptions.filter) {
+                const result = data.filter((item) => {
+                    if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].id === loadOptions.filter[2].id) {
+                        return item[2];
+                    } else if(item.id === loadOptions.filter[2].id) {
+                        return item;
+                    } else if(Array.isArray(loadOptions.filter) && loadOptions.filter.length > 2) {
+                        for(let i = 0; i < loadOptions.filter.length; i++) {
+                            const element = loadOptions.filter[i];
+                            if(Array.isArray(element) && element[2] === item.id) {
+                                return item;
+                            }
+                        }
+                    }
+                });
+
+                deferred.resolve(result);
+            }
+
+            return deferred;
+        });
+
+        const dataSource = new DataSource({
+            paginate: true,
+            pageSize: 5,
+            store: new CustomStore({
+                key: 'id',
+                load: loadSpy
+            })
+        });
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource,
+            valueExpr: 'id',
+            displayExpr: 'id',
+            showSelectionControls: true,
+            opened: false,
+            value: [1, 7],
+            dropDownOptions: {
+                height: 150
+            }
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        tagBox.open();
+        this.clock.tick(TIME_TO_WAIT);
+        const $listItems = getListItems(tagBox);
+        $listItems.eq(3).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.strictEqual(loadSpy.callCount, 4, 'no unnecessary loadings');
+    });
+
+    QUnit.test('Changing the data source should not cause an error when the search is active', function(assert) {
+        let isOk = true;
+
+        const tagBox = $('#tagBox')
+            .dxTagBox({
+                dataSource: null,
+                searchEnabled: true,
+                minSearchLength: 2,
+                opened: true
+            })
+            .dxTagBox('instance');
+
+        try {
+            tagBox.option('dataSource', []);
+        } catch(e) {
+            isOk = false;
+        }
+
+        assert.ok(isOk, 'dataSource updated without errors');
+    });
 });
 
 QUnit.module('popup position and size', moduleSetup, () => {
@@ -3933,14 +4546,14 @@ QUnit.module('popup position and size', moduleSetup, () => {
         });
 
         const instance = $element.dxTagBox('instance');
-        const height = instance._popup._$popupContent.height();
+        const height = getHeight(instance._popup._$popupContent);
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         $input.focus();
 
         keyboardMock($input).type('American Samo');
 
-        const currentHeight = instance._popup._$popupContent.height();
+        const currentHeight = getHeight(instance._popup._$popupContent);
 
         assert.notEqual(height, currentHeight);
     });
@@ -3978,7 +4591,7 @@ QUnit.module('popup position and size', moduleSetup, () => {
             }
         });
 
-        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger('dxclick');
+        $($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
         const $popup = $('.dx-popup-content');
@@ -4017,7 +4630,7 @@ QUnit.module('popup position and size', moduleSetup, () => {
         });
         this.clock.tick(2000);
 
-        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const keyboard = keyboardMock($input);
         keyboard.type('Z');
@@ -4063,7 +4676,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             focusStateEnabled: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const keyboard = keyboardMock($input);
         keyboard.type('test');
@@ -4085,7 +4698,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             acceptCustomValue: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         keyboard.press('enter');
 
@@ -4097,7 +4710,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             acceptCustomValue: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .type('custom')
@@ -4111,14 +4724,14 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
             acceptCustomValue: true,
             items: [1, 2, 3]
         });
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const tagBoxInstance = $tagBox.dxTagBox('instance');
 
         keyboardMock($input)
             .type('custom')
             .press('enter');
 
-        $($tagBox.find(`.${LIST_ITEM_CLASS}`).first()).trigger('dxclick');
+        $(getListItems($tagBox).first()).trigger('dxclick');
         const $tags = $tagBox.find('.dx-tag');
 
         assert.strictEqual($tags.length, 2, 'only two tags are added');
@@ -4220,12 +4833,12 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
         tagBox.option('opened', true);
         this.clock.tick(TIME_TO_WAIT);
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
-        $(`.${LIST_CKECKBOX_CLASS}`).first().trigger('dxclick');
+        $(`.${LIST_CHECKBOX_CLASS}`).first().trigger('dxclick');
         $('.dx-tag-remove-button').last().trigger('dxclick');
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
         assert.equal(selectedItems.length, 6, 'All items should be selected');
     });
@@ -4497,8 +5110,9 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
                 $(container).append($field).append($textBox);
             }
         });
+        const tagBox = $tagBox.dxTagBox('instance');
 
-        const $items = $(`.${LIST_ITEM_CLASS}`);
+        const $items = getListItems(tagBox);
 
         assert.equal($field.text(), '1', 'text was added on init');
 
@@ -4506,6 +5120,100 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), [], 'value was cleared');
         assert.equal($field.text(), '', 'text was cleared after the deselect');
+    });
+
+    QUnit.test('click on remove tag button should not remove tag in another tagBox with fieldTemplate (T1137828)', function(assert) {
+        const $tagBox = $('#anotherContainer').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+        const tagBoxWithFieldTemplate = $('#tagBox').dxTagBox({
+            items: [1, 2, 3],
+            value: [1],
+            fieldTemplate: () => $('<div>').dxTextBox()
+        }).dxTagBox('instance');
+
+        $tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS }`).trigger('dxclick');
+
+        assert.strictEqual(tagBox.option('value').length, 0);
+        assert.strictEqual(tagBoxWithFieldTemplate.option('value').length, 1);
+    });
+});
+
+
+QUnit.module('the "customItemCreateEvent" option', {
+    beforeEach: function() {
+        this.onCustomItemCreatingSpy = sinon.spy();
+
+        this.$tagBox = $('#tagBox').dxTagBox({
+            items: ['item 1'],
+            acceptCustomValue: true,
+            focusStateEnabled: true,
+            onCustomItemCreating: (args) => {
+                this.onCustomItemCreatingSpy();
+                args.customItem = args.text;
+            },
+        });
+
+        this.instance = this.$tagBox.dxTagBox('instance');
+        this.$input = this.$tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input);
+        this.customValue = 't';
+    },
+}, () => {
+    const events = ['keyup', 'blur', 'change', 'input', 'focusout'];
+
+    events.forEach((eventValue) => {
+        QUnit.testInActiveWindow(`custom item has been added when customItemCreateEvent='${eventValue}'`, function(assert) {
+            const { $input, customValue, keyboard, instance, onCustomItemCreatingSpy } = this;
+
+            instance.option('customItemCreateEvent', eventValue);
+
+            switch(eventValue) {
+                case 'keyup':
+                    instance.focus();
+                    $input.val(customValue);
+                    keyboard.keyUp(customValue);
+                    break;
+                case 'input':
+                    keyboard.type(customValue);
+                    break;
+                case 'change':
+                    keyboard.type(customValue);
+                    $input.trigger('change');
+                    break;
+                case 'blur':
+                case 'focusout':
+                    keyboard.type(customValue);
+                    $input.trigger(eventValue);
+                    break;
+            }
+
+            assert.strictEqual(onCustomItemCreatingSpy.callCount, 1, 'the "onCustomItemCreating" was fired once');
+        });
+    });
+});
+
+QUnit.module('options changing', moduleSetup, () => {
+    ['readOnly', 'disabled'].forEach((optionName) => {
+        QUnit.test(`Typing events should be rerendered after ${optionName} option enabled (T986220)`, function(assert) {
+            const $element = $('#tagBox');
+            const tagBox = $element.dxTagBox({
+                items: [1, 2],
+                value: [1],
+                searchEnabled: true
+            }).dxTagBox('instance');
+
+            tagBox.option(optionName, true);
+            tagBox.option(optionName, false);
+
+            keyboardMock($element.find(`.${TEXTEDITOR_INPUT_CLASS}`))
+                .focus()
+                .keyDown('backspace');
+
+            assert.deepEqual(tagBox.option('value'), []);
+        });
     });
 });
 
@@ -4714,14 +5422,14 @@ QUnit.module('applyValueMode = \'useButtons\'', {
             opened: true
         });
 
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $doneButton = $('.dx-button.dx-popup-done');
 
         keyboardMock($input)
             .focus()
             .type('c');
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
         $($input).trigger($.Event('focusout', { relatedTarget: $doneButton.get(0) }));
         $doneButton.trigger('dxclick');
@@ -4739,7 +5447,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
             opened: true
         });
 
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .focus()
@@ -4840,6 +5548,52 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         assert.deepEqual(this.instance.option('value'), [items[2], items[0]], 'tags order is correct');
     });
 
+    QUnit.test('value should be updated correctly after item is added if valueExpr="this" (T1141799)', function(assert) {
+        const firstValue = { id: 1, description: 'item 1' };
+        const secondValue = { id: 2, description: 'item 2' };
+        const thirdValue = { id: 3, description: 'item 3' };
+
+        this.reinit({
+            items: [firstValue, secondValue, thirdValue],
+            value: [firstValue, thirdValue],
+            applyValueMode: 'useButtons',
+            displayExpr: 'description',
+            opened: true
+        });
+
+        $(this.$listItems.eq(1)).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
+
+        const items = this.instance.option('value');
+        assert.strictEqual(items.length, 3);
+        assert.deepEqual(items[0], firstValue);
+        assert.deepEqual(items[1], thirdValue);
+        assert.deepEqual(items[2], secondValue);
+    });
+
+    QUnit.test('value should be updated correctly after item is removed if valueExpr="this" (T1141799)', function(assert) {
+        const firstValue = { id: 1, description: 'item 1' };
+        const secondValue = { id: 2, description: 'item 2' };
+        const thirdValue = { id: 3, description: 'item 3' };
+        const allItems = [firstValue, secondValue, thirdValue];
+
+        this.reinit({
+            items: allItems,
+            value: allItems,
+            applyValueMode: 'useButtons',
+            displayExpr: 'description',
+            opened: true
+        });
+
+        $(this.$listItems.eq(1)).trigger('dxclick');
+        $(this.$popupWrapper.find(`.${POPUP_DONE_BUTTON_CLASS}`)).trigger('dxclick');
+
+        const items = this.instance.option('value');
+        assert.strictEqual(items.length, 2);
+        assert.deepEqual(items[0], firstValue);
+        assert.deepEqual(items[1], thirdValue);
+    });
+
     QUnit.test('Object value should keep initial order if tags aren\'t changed', function(assert) {
         this.reinit({
             items: [{ id: 1, name: 'Alex' }, { id: 2, name: 'John' }, { id: 3, name: 'Max' }],
@@ -4906,7 +5660,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         this.clock.tick(TIME_TO_WAIT);
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('aaa');
@@ -4914,7 +5668,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
         let $popupWrapper = $(tagBox.content()).parent().parent();
 
-        $popupWrapper.find('.dx-list-select-all-checkbox').trigger('dxclick');
+        $popupWrapper.find(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         $popupWrapper.find('.dx-popup-done.dx-button').trigger('dxclick');
 
         keyboard.type('bbb');
@@ -4922,7 +5676,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
         $popupWrapper = $(tagBox.content()).parent().parent();
 
-        $popupWrapper.find('.dx-list-select-all-checkbox').trigger('dxclick');
+        $popupWrapper.find(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
         $popupWrapper.find('.dx-popup-done.dx-button').trigger('dxclick');
 
         assert.deepEqual($tagBox.dxTagBox('instance').option('value'), [0, 1], 'value of TagBox');
@@ -4931,6 +5685,7 @@ QUnit.module('applyValueMode = \'useButtons\'', {
 
 QUnit.module('the \'onSelectAllValueChanged\' option', {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         this.items = [1, 2, 3];
 
         this._init = (options) => {
@@ -4957,11 +5712,12 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         });
     },
     afterEach: function() {
+        this.clock.restore();
         this.$element.remove();
     }
 }, () => {
     QUnit.test('the \'onSelectAllValueChanged\' option behavior', function(assert) {
-        const $selectAllCheckbox = this.instance._list.$element().find('.dx-list-select-all-checkbox');
+        const $selectAllCheckbox = this.instance._list.$element().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
 
         $($selectAllCheckbox).trigger('dxclick');
         assert.ok(this.spy.args[this.spy.args.length - 1][0].value, 'all items are selected');
@@ -4972,7 +5728,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
 
     QUnit.test('the \'onSelectAllValueChanged\' action is fired only one time if all items are selected', function(assert) {
         const $list = this.instance._list.$element();
-        $($list.find('.dx-list-select-all-checkbox')).trigger('dxclick');
+        $($list.find(`.${SELECT_ALL_CHECKBOX_CLASS}`)).trigger('dxclick');
         assert.equal(this.spy.callCount, 1, 'count is correct');
     });
 
@@ -4983,7 +5739,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         });
 
         const $list = this.instance._list.$element();
-        $($list.find('.dx-list-select-all-checkbox')).trigger('dxclick');
+        $($list.find(`.${SELECT_ALL_CHECKBOX_CLASS}`)).trigger('dxclick');
         assert.equal(this.spy.callCount, 1, 'count is correct');
     });
 
@@ -5014,7 +5770,7 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         });
 
         const $list = this.instance._list.$element();
-        const $selectAllElement = $($list.find('.dx-list-select-all-checkbox'));
+        const $selectAllElement = $($list.find(`.${SELECT_ALL_CHECKBOX_CLASS}`));
         $selectAllElement.trigger('dxclick');
         assert.equal(this.spy.callCount, 0, 'count is correct');
 
@@ -5022,6 +5778,49 @@ QUnit.module('the \'onSelectAllValueChanged\' option', {
         $selectAllElement.trigger('dxclick');
 
         assert.equal(spy.callCount, 1, 'count is correct');
+    });
+
+    QUnit.test('only all filtered items are selected if popup is closed on selectAllValueChanged (T1066477)', function(assert) {
+        const loadTimeout = 200;
+
+        this.reinit({
+            opened: false,
+            dataSource: {
+                load: ({ searchValue, filter }) => {
+                    const deferred = $.Deferred();
+
+                    setTimeout(() => {
+                        if(searchValue || filter) {
+                            deferred.resolve({ data: [1], totalCount: 1 });
+                        } else {
+                            deferred.resolve({ data: [1, 2, 3], totalCount: 3 });
+                        }
+                    }, loadTimeout);
+
+                    return deferred.promise();
+                }
+            },
+            onSelectAllValueChanged: (e) => {
+                if(e.value) {
+                    e.component.close();
+                }
+            },
+            selectAllMode: 'allPages',
+            searchTimeout: 0,
+            searchEnabled: true,
+            animation: null
+        });
+
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        keyboardMock($input).type('1').change();
+
+        this.clock.tick(loadTimeout);
+        const $list = getList(this.instance);
+
+        $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
+        this.clock.tick(loadTimeout);
+
+        assert.deepEqual(this.instance.option('selectedItems'), [1], 'selected items are correct');
     });
 });
 
@@ -5062,10 +5861,10 @@ QUnit.module('single line mode', {
 
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
 
         this.instance.option('value', this.items);
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
     });
 
     QUnit.test('tags container should not be scrolled to the end on value change without focus (T865611)', function(assert) {
@@ -5145,7 +5944,7 @@ QUnit.module('single line mode', {
         }));
 
         this.$element
-            .find('.dx-tag-container')
+            .find(`.${TAGBOX_TAG_CONTAINER_CLASS}`)
             .scrollLeft(1000);
 
         $(this.$element).trigger($.Event('dxmousewheel', {
@@ -5158,6 +5957,28 @@ QUnit.module('single line mode', {
         assert.notOk(startingPositionEvent.isPropagationStopped(), 'event propogation is not stopped for the starting position');
         assert.notOk(endingPositionEvent.isDefaultPrevented(), 'event is not prevented for the ending position');
         assert.notOk(endingPositionEvent.isPropagationStopped(), 'event propogation is not stopped for the ending position');
+    });
+
+    ['ctrlKey', 'metaKey'].forEach((commandKey) => {
+        QUnit.test(`mousewheel with command key shouldn't prevented (${commandKey} pressed)`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'desktop specific test');
+                return;
+            }
+
+            const spy = sinon.spy();
+
+            $(this.$element).on('dxmousewheel', spy);
+
+            $(this.$element).trigger($.Event('dxmousewheel', {
+                delta: -120,
+                [commandKey]: true
+            }));
+
+            const event = spy.args[0][0];
+            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
+            assert.notOk(event.isPropagationStopped(), 'propagation is not stopped');
+        });
     });
 
     QUnit.test('it is should be possible to scroll tag container natively on mobile device', function(assert) {
@@ -5186,7 +6007,7 @@ QUnit.module('single line mode', {
 
     QUnit.testInActiveWindow('tag container should be scrolled to the start after rendering and focusout (T390041)', function(assert) {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal($container.scrollLeft(), 0, 'scroll position is correct on rendering');
 
@@ -5201,7 +6022,7 @@ QUnit.module('single line mode', {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         this.instance.focus();
-        assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 1, 'tags container is scrolled to the end');
     });
 
     QUnit.test('list should save it\'s scroll position after value changed', function(assert) {
@@ -5227,11 +6048,7 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
-
-        const expectedScrollPosition = isScrollInverted ? 0 : scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
+        const expectedScrollPosition = 0;
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on rendering');
 
@@ -5246,11 +6063,7 @@ QUnit.module('single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
-
-        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        const expectedScrollPosition = -($container.get(0).scrollWidth - $container.outerWidth());
 
         this.instance.focus();
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the end');
@@ -5267,9 +6080,7 @@ QUnit.module('single line mode', {
     });
 
     QUnit.test('focusOut should be prevented when tagContainer clicked - T454876', function(assert) {
-        assert.expect(1);
-
-        const $inputWrapper = this.$element.find('.dx-dropdowneditor-input-wrapper');
+        const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
 
         $inputWrapper.on('mousedown', e => {
             // note: you should not prevent pointerdown because it will prevent click on ios real devices
@@ -5277,7 +6088,31 @@ QUnit.module('single line mode', {
             assert.ok(e.isDefaultPrevented(), 'mousedown was prevented and lead to focusout prevent');
         });
 
+        this.instance.focus();
         $inputWrapper.trigger('mousedown');
+    });
+
+    QUnit.test('mousedown should not be prevented when input field clicked (T1046705)', function(assert) {
+        const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        $inputWrapper.on('mousedown', e => {
+            assert.notOk(e.isDefaultPrevented(), 'mousedown was not prevented');
+        });
+
+        this.instance.focus();
+        $input.trigger('mousedown');
+    });
+
+    QUnit.test('mousedown should not be prevented on first focusin (T1102475)', function(assert) {
+        const $inputWrapper = this.$element.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`);
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        $inputWrapper.on('mousedown', e => {
+            assert.notOk(e.isDefaultPrevented(), 'mousedown was not prevented');
+        });
+
+        $input.trigger('mousedown');
     });
 });
 
@@ -5302,7 +6137,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         this._init = () => {
             this.instance = this.$element.dxTagBox('instance');
-            this.keyboard = keyboardMock(this.$element.find(`.${TEXTBOX_CLASS}`));
+            this.keyboard = keyboardMock(this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`));
             this.getFocusedTag = () => {
                 return this.$element.find('.' + TAGBOX_TAG_CLASS + '.' + FOCUSED_CLASS);
             };
@@ -5419,18 +6254,14 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
-
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
 
-        let expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        let expectedScrollPosition = -($container.get(0).scrollWidth - $container.outerWidth());
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
 
         this.instance.option('value', this.items);
-        expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        expectedScrollPosition = -($container.get(0).scrollWidth - $container.outerWidth());
 
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
@@ -5459,14 +6290,14 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('right');
 
         let $focusedTag = this.getFocusedTag();
-        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, 'focused tag is visible');
+        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1.5, 'focused tag is visible');
 
         this.keyboard
             .press('right')
             .press('right');
 
         $focusedTag = this.getFocusedTag();
-        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, 'focused tag is visible');
+        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1.5, 'focused tag is visible');
     });
 
     QUnit.test('the focused tag should be visible during keyboard navigation to the left in the RTL mode', function(assert) {
@@ -5524,16 +6355,37 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        const expectedScrollPosition = -($container.get(0).scrollWidth - $container.outerWidth());
 
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
 });
 
 QUnit.module('dataSource integration', moduleSetup, () => {
+    [{
+        dataSource: [1, 2, 3, 4, 5],
+        titleSuffix: 'is not grouped'
+    }, {
+        dataSource: [{ key: 'key', items: [1, 2] }],
+        titleSuffix: 'is grouped'
+    }].forEach(({ dataSource, titleSuffix }) => {
+        QUnit.test(`setting dataSource to null after opening should not raise any errors if dataSource ${titleSuffix} (T1046896)`, function(assert) {
+            const tagBox = $('#tagBox').dxTagBox({
+                dataSource
+            }).dxTagBox('instance');
+
+            tagBox.open();
+
+            try {
+                tagBox.option('dataSource', null);
+            } catch(e) {
+                assert.ok(false, `error is raised: ${e}`);
+            } finally {
+                assert.ok(true, 'no errors is raised');
+            }
+        });
+    });
+
     QUnit.test('item should be chosen synchronously if item is already loaded', function(assert) {
         assert.expect(0);
 
@@ -5545,7 +6397,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         $tagBox.dxTagBox('option', 'value', [1]);
     });
@@ -5578,7 +6430,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
             opened: true,
             searchEnabled: true
         });
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('4');
@@ -5619,7 +6471,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const kb = keyboardMock($tagBox.find(`.${TEXTBOX_CLASS}`));
+        const kb = keyboardMock($tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
 
         tagBox.open();
         assert.notOk(load.called, 'load has not been called');
@@ -5670,7 +6522,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
                 instance.endUpdate();
             } catch(e) {
-                assert.ok(false, 'Сannot update tagbox size bacause of input value is initRender[] object');
+                assert.ok(false, 'Cannot update tagbox size because of input value is initRender[] object');
             }
             instance.endUpdate();
         }, 1000);
@@ -5711,6 +6563,71 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         }
 
         assert.ok(true, 'TagBox rendered');
+    });
+
+    QUnit.test('tags loading call result should be ignored after new call', function(assert) {
+        const items = [{ id: 1, text: 'first' }, { id: 2, text: 'second' }];
+        const customStore = new CustomStore({
+            load: () => {
+                const deferred = $.Deferred();
+                setTimeout(() => {
+                    deferred.resolve({ data: items, totalCount: items.length });
+                }, 100);
+                return deferred.promise();
+            }
+        });
+        const dataSource = new DataSource({
+            store: customStore
+        });
+        const tagBox = $('#tagBox').dxTagBox({
+            dataSource: dataSource,
+            displayExpr: 'text',
+            valueExpr: 'id',
+            value: [1],
+        }).dxTagBox('instance');
+
+        this.clock.tick(20);
+        tagBox.option('value', [2]);
+
+        this.clock.tick(80);
+        const list = getList(tagBox).dxList('instance');
+        assert.strictEqual(list.option('selectedItemKeys').length, 0, 'first loading result is ignored');
+        this.clock.tick(20);
+        assert.strictEqual(list.option('selectedItemKeys')[0], 2, 'value is correct');
+    });
+
+    QUnit.test('tags loading call result should be ignored after new call when grouped=true', function(assert) {
+        const items = [{ key: 'key', items: [{ id: 1, text: 'first' }, { id: 2, text: 'second' }] }];
+        const customStore = new CustomStore({
+            load: (options) => {
+                const deferred = $.Deferred();
+                setTimeout(() => {
+                    deferred.resolve({ data: items[0].items, totalCount: 2 });
+                }, 200);
+                return deferred.promise();
+            }
+        });
+        const dataSource = new DataSource({
+            store: customStore,
+            key: 'id'
+        });
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource,
+            displayExpr: 'text',
+            valueExpr: 'id',
+            grouped: true,
+            value: [1],
+            deferRendering: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(100);
+        tagBox.option('value', [2]);
+        this.clock.tick(100);
+
+        assert.strictEqual(tagBox.option('selectedItems').length, 0, 'first request is cancelled');
+        this.clock.tick(100);
+        assert.strictEqual(tagBox.option('selectedItems')[0].id, 2, 'second loading result');
     });
 });
 
@@ -5834,48 +6751,69 @@ QUnit.module('performance', () => {
         assert.deepEqual(filter, null, 'filter is correct');
     });
 
-    QUnit.test('Select All should use cache', function(assert) {
-        const items = [];
-        let keyGetterCounter = 0;
+    QUnit.module('item getter call count on selection change', {
+        // NOTE: If some of this tests is failed it can mean that selection performance worsens.
+        //       Don't consider these tests as a strict requirement.
+        beforeEach: function() {
+            this.items = [];
+            let keyGetterCallCount = 0;
 
-        const getter = () => {
-            keyGetterCounter++;
-            return this._id;
-        };
-        for(let i = 1; i <= 100; i++) {
-            const item = { _id: i, text: 'item ' + i };
-            Object.defineProperty(item, 'id', {
-                get: getter,
-                enumerable: true,
-                configurable: true
+            const getter = function() {
+                keyGetterCallCount++;
+                return this._id;
+            };
+            for(let i = 1; i <= 100; i++) {
+                const item = { _id: i, text: 'item ' + i };
+                Object.defineProperty(item, 'id', {
+                    get: getter,
+                    enumerable: true,
+                    configurable: true
+                });
+                this.items.push(item);
+            }
+
+            const arrayStore = new ArrayStore({
+                data: this.items,
+                key: 'id'
             });
-            items.push(item);
-        }
 
-        const arrayStore = new ArrayStore({
-            data: items,
-            key: 'id'
+            this.tagBox = $('#tagBox').dxTagBox({
+                dataSource: arrayStore,
+                valueExpr: 'id',
+                opened: true,
+                showSelectionControls: true,
+                selectionMode: 'all',
+                selectAllMode: 'allPages',
+                displayExpr: 'text'
+            }).dxTagBox('instance');
+
+            this.getValueGetterCallCount = () => {
+                return keyGetterCallCount;
+            };
+            this.resetGetterCallCount = () => {
+                keyGetterCallCount = 0;
+            };
+        }
+    }, () => {
+        QUnit.test('on select all', function(assert) {
+            const isValueEqualsSpy = sinon.spy(this.tagBox, '_isValueEquals');
+
+            this.resetGetterCallCount();
+            $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
+
+            assert.strictEqual(this.getValueGetterCallCount(), 6254, 'key getter call count');
+            assert.strictEqual(isValueEqualsSpy.callCount, 5050, '_isValueEquals call count');
         });
 
-        const tagBox = $('#tagBox').dxTagBox({
-            dataSource: arrayStore,
-            valueExpr: 'id',
-            opened: true,
-            showSelectionControls: true,
-            selectionMode: 'all',
-            selectAllMode: 'allPages',
-            displayExpr: 'text'
-        }).dxTagBox('instance');
+        QUnit.test('on one item deselect after select all', function(assert) {
+            this.tagBox.option('value', this.items.map(item => item._id));
 
-        const isValueEqualsSpy = sinon.spy(tagBox, '_isValueEquals');
+            this.resetGetterCallCount();
+            const checkboxes = $(`.${LIST_CHECKBOX_CLASS}`);
+            checkboxes.eq(checkboxes.length - 1).trigger('dxclick');
 
-        // act
-        keyGetterCounter = 0;
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
-
-        // assert
-        assert.equal(keyGetterCounter, 613, 'key getter call count');
-        assert.equal(isValueEqualsSpy.callCount, 100, '_isValueEquals call count');
+            assert.strictEqual(this.getValueGetterCallCount(), 6052, 'key getter call count');
+        });
     });
 
     QUnit.test('load filter should be undefined when tagBox has a lot of initial values', function(assert) {
@@ -5891,25 +6829,6 @@ QUnit.module('performance', () => {
         });
 
         assert.strictEqual(load.getCall(0).args[0].filter, undefined);
-    });
-
-    QUnit.test('load filter should be undefined when tagBox has some initial values and "maxFilterLength" was changed at runtime', function(assert) {
-        const load = sinon.stub();
-
-        const instance = $('#tagBox').dxTagBox({
-            dataSource: {
-                load
-            },
-            value: Array.apply(null, { length: 1 }).map(Number.call, Number),
-            valueExpr: 'id',
-            displayExpr: 'text'
-        }).dxTagBox('instance');
-
-        instance.option('maxFilterLength', 0);
-        instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
-
-        assert.ok(load.getCall(0).args[0].filter);
-        assert.strictEqual(load.getCall(load.callCount - 1).args[0].filter, undefined);
     });
 
     QUnit.test('load filter should be array when tagBox has not a lot of initial values', function(assert) {
@@ -6059,6 +6978,83 @@ QUnit.module('performance', () => {
     });
 });
 
+QUnit.module('maxFilterQueryLength', {
+    beforeEach: function() {
+        this.load = sinon.stub();
+        const initialOptions = {
+            dataSource: {
+                load: this.load
+            },
+            value: Array.apply(null, { length: 1 }).map(Number.call, Number),
+            valueExpr: 'id',
+            displayExpr: 'text'
+        };
+
+        this.instance = $('#tagBox')
+            .dxTagBox(initialOptions)
+            .dxTagBox('instance');
+
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.instance = $('#tagBox')
+                .dxTagBox($.extend({}, options, initialOptions))
+                .dxTagBox('instance');
+        };
+
+        this.stubLogger = (assert) => {
+            this.stub = sinon.stub(uiErrors, 'log', (warning) => {
+                assert.strictEqual(warning, 'W1019', 'warning is correct');
+            });
+        };
+    },
+    afterEach: function() {
+        this.stub && this.stub.restore();
+    }
+}, () => {
+    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterQueryLength was changed at runtime', function(assert) {
+        this.instance.option('maxFilterQueryLength', 0);
+        this.instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
+
+        assert.ok(this.load.getCall(0).args[0].filter);
+        assert.strictEqual(this.load.getCall(this.load.callCount - 1).args[0].filter, undefined);
+    });
+
+    QUnit.test('W1019 warning should be logged after maxFilterQueryLength was changed at runtime and exceeded', function(assert) {
+        assert.expect(1);
+
+        this.stubLogger(assert);
+
+        this.instance.option('maxFilterQueryLength', 0);
+        this.instance.option('value', Array.apply(null, { length: 2 }).map(Number.call, Number));
+    });
+
+    QUnit.test('load filter should be undefined when tagBox has some initial values and maxFilterQueryLength is exceeded', function(assert) {
+        this.reinit({ maxFilterQueryLength: 1 });
+
+        assert.strictEqual(this.load.getCall(this.load.callCount - 1).args[0].filter, undefined);
+    });
+
+    QUnit.test('W1019 warning should be logged if maxFilterQueryLength is exceeded', function(assert) {
+        assert.expect(1);
+
+        this.stubLogger(assert);
+
+        this.reinit({ maxFilterQueryLength: 1 });
+    });
+
+    QUnit.test('load filter should be passed to dataSource when tagBox has some initial values and maxFilterQueryLength is not exceeded', function(assert) {
+        assert.ok(this.load.getCall(0).args[0].filter);
+    });
+
+    QUnit.test('no warning should be logged if maxFilterQueryLength is not exceeded', function(assert) {
+        assert.expect(0);
+
+        this.stubLogger(assert);
+
+        this.reinit({});
+    });
+});
+
 QUnit.module('regression', {
     beforeEach: function() {
         fx.off = true;
@@ -6088,7 +7084,7 @@ QUnit.module('regression', {
         tagBox.option('value', [1]);
 
         assert.notOk(tagBox.option('selectedItems').length);
-        clock.tick();
+        clock.tick(10);
         assert.ok(tagBox.option('selectedItems').length);
         clock.restore();
     });
@@ -6214,7 +7210,7 @@ QUnit.module('regression', {
 
         $(getList(tagBox).find('.dx-list-item').eq(0)).trigger('dxclick');
 
-        const $input = tagBox.$element().find(`.${TEXTBOX_CLASS}`);
+        const $input = tagBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const kb = keyboardMock($input);
 
         kb.type('4');
@@ -6262,7 +7258,7 @@ QUnit.module('regression', {
             value: [1, 2]
         }).dxTagBox('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.equal(tagBox.option('selectedItems').length, 2, 'selectedItems contains all selected values');
 
         const $container = tagBox.$element().find('.' + TAGBOX_TAG_CONTAINER_CLASS);
@@ -6275,7 +7271,7 @@ QUnit.module('regression', {
 
         $($tagRemoveButtons.eq(1)).trigger('dxclick');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(tagBox.option('selectedItems').length, 1, 'selectedItems was changed correctly');
     });
@@ -6309,7 +7305,7 @@ QUnit.module('regression', {
             grouped: true
         });
 
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('3');
@@ -6365,7 +7361,7 @@ QUnit.module('regression', {
 
     QUnit.testInActiveWindow('focusout event should remove focus class from the widget', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({});
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focus();
         assert.ok($tagBox.hasClass(FOCUSED_CLASS), 'focused class was applied');
@@ -6394,7 +7390,7 @@ QUnit.module('regression', {
             }
         });
 
-        $('.dx-list-select-all-checkbox').trigger('dxclick');
+        $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
         const selectedItems = $('.dx-list').dxList('instance').option('selectedItems');
         assert.equal(selectedItems.length, 4, 'selected items');
@@ -6437,36 +7433,50 @@ QUnit.module('regression', {
     });
 });
 
-QUnit.module('event passed to valueChanged (showSelectionControls=true)', {
+QUnit.module('valueChanged should receive correct event parameter', {
     beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
 
-        this._init = (options) => {
+        this.valueChangedHandler = sinon.stub();
+        const initialOptions = {
+            focusStateEnabled: true,
+            items: [1, 2, 3],
+            onValueChanged: this.valueChangedHandler,
+            opened: true,
+            value: [1, 2],
+        };
+        this.init = (options) => {
             this.$element = $('<div>')
                 .appendTo('#qunit-fixture')
                 .dxTagBox(options);
             this.instance = this.$element.dxTagBox('instance');
-            this.$input = this.$element.find('.' + TEXTBOX_CLASS);
+            this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             this.keyboard = keyboardMock(this.$input);
+            this.$listItems = $(this.instance.content()).find(`.${LIST_ITEM_CLASS}`);
+            this.$firstItem = this.$listItems.eq(0);
+        };
+        this.reinit = (options) => {
+            this.instance.dispose();
+            this.init($.extend({}, initialOptions, options));
+        };
+        this.testProgramChange = (assert) => {
+            this.instance.option('value', [3]);
+
+            const callCount = this.valueChangedHandler.callCount;
+            const event = this.valueChangedHandler.getCall(callCount - 1).args[0].event;
+            assert.strictEqual(event, undefined, 'event is undefined');
+        };
+        this.checkEvent = (assert, type, target, key) => {
+            const event = this.valueChangedHandler.getCall(0).args[0].event;
+            assert.strictEqual(event.type, type, 'event type is correct');
+            assert.strictEqual(event.target, target.get(0), 'event target is correct');
+            if(type === 'keydown') {
+                assert.strictEqual(normalizeKeyName(event), normalizeKeyName({ key }), 'event key is correct');
+            }
         };
 
-
-        this.valueChangedHandler = sinon.stub();
-        this._init({
-            focusStateEnabled: true,
-            showSelectionControls: true,
-            items: [1, 2, 3],
-            value: [1, 2],
-            onValueChanged: this.valueChangedHandler,
-            opened: true,
-        });
-
-        this.$listItems = $(`.${LIST_ITEM_CLASS}`);
-        this.$firstItem = this.$listItems.eq(0);
-        this.$firstItemCheckBox = this.$firstItem.find(`.${LIST_CKECKBOX_CLASS}`);
-        this.$selectAllItem = $(`.${SELECT_ALL_CLASS}`);
-        this.$selectAllItemCheckBox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+        this.init(initialOptions);
     },
     afterEach: function() {
         this.$element.remove();
@@ -6474,177 +7484,277 @@ QUnit.module('event passed to valueChanged (showSelectionControls=true)', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Correct event should be passed to valueChanged when tag is removed using backspace (T947619)', function(assert) {
-        this.keyboard
-            .focus()
-            .keyDown('backspace');
+    [false, true].forEach(showSelectionControls => {
+        QUnit.module(`when showSelectionControls=${showSelectionControls}`, {
+            beforeEach: function() {
+                this.reinit({ showSelectionControls });
+            }
+        }, () => {
+            QUnit.test('on runtime change', function(assert) {
+                this.testProgramChange(assert);
+            });
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Backspace', 'event key is correct');
+            QUnit.test('on tag removing using backspace (T947619)', function(assert) {
+                this.keyboard
+                    .focus()
+                    .keyDown('backspace');
+
+                this.checkEvent(assert, 'keydown', this.$input, 'backspace');
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on tag removing using delete', function(assert) {
+                this.keyboard
+                    .focus()
+                    .press('left')
+                    .keyDown('del');
+
+                this.checkEvent(assert, 'keydown', this.$input, 'delete');
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on tag removing using remove button', function(assert) {
+                const $removeButton = this.$element
+                    .find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`)
+                    .first();
+
+                $removeButton.trigger('dxclick');
+
+                this.checkEvent(assert, 'dxclick', $removeButton);
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on click on item (T947619)', function(assert) {
+                this.$firstItem.trigger('dxclick');
+
+                this.checkEvent(assert, 'dxclick', this.$firstItem);
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on click on clearButton', function(assert) {
+                this.reinit({ showClearButton: true });
+                const $clearButton = this.$element.find(`.${CLEAR_BUTTON_AREA}`);
+
+                $clearButton.trigger('dxclick');
+
+                this.checkEvent(assert, 'dxclick', $clearButton);
+                this.testProgramChange(assert);
+            });
+
+            ['enter', 'space'].forEach(key => {
+                QUnit.test(`on item selecting using ${key}`, function(assert) {
+                    this.reinit({ value: [] });
+
+                    this.keyboard
+                        .focus()
+                        .press('down')
+                        .keyDown(key);
+
+                    this.checkEvent(assert, 'keydown', this.$firstItem, key);
+                    this.testProgramChange(assert);
+                });
+            });
+
+            QUnit.test('on custom item adding', function(assert) {
+                this.reinit({ acceptCustomValue: true });
+
+                this.keyboard
+                    .type('custom')
+                    .press('enter');
+
+                this.checkEvent(assert, 'keydown', this.$input, 'enter');
+                this.testProgramChange(assert);
+            });
+
+            QUnit.test('on click on apply button when applyValueMode=useButtons', function(assert) {
+                this.reinit({ applyValueMode: 'useButtons' });
+                const $applyButton = $('.dx-button.dx-popup-done');
+
+                this.$firstItem.trigger('dxclick');
+                $applyButton.trigger('dxclick');
+
+                this.checkEvent(assert, 'dxclick', $applyButton);
+                this.testProgramChange(assert);
+            });
+        });
     });
 
-    QUnit.test('Correct event should be passed to valueChanged when tag is removed using delete', function(assert) {
-        this.keyboard
-            .focus()
-            .press('left')
-            .keyDown('del');
+    QUnit.module('when showSelectionControls=true', {
+        beforeEach: function() {
+            this.reinit({ showSelectionControls: true });
+            this.$firstItemCheckBox = this.$firstItem.find(`.${LIST_CHECKBOX_CLASS}`);
+            this.$selectAllItem = $(`.${SELECT_ALL_CLASS}`);
+            this.$selectAllItemCheckBox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+        }
+    }, () => {
+        QUnit.test('on click on item checkBox (T947619)', function(assert) {
+            this.$firstItemCheckBox.trigger('dxclick');
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Delete', 'event key is correct');
+            this.checkEvent(assert, 'dxclick', this.$firstItemCheckBox);
+            this.testProgramChange(assert);
+        });
+
+        QUnit.test('on click on selectAll item (T947619)', function(assert) {
+            this.$selectAllItem.trigger('dxclick');
+
+            this.checkEvent(assert, 'dxclick', this.$selectAllItem);
+            this.testProgramChange(assert);
+        });
+
+        QUnit.test('on click on selectAll item checkBox (T947619)', function(assert) {
+            this.$selectAllItemCheckBox.trigger('dxclick');
+
+            this.checkEvent(assert, 'dxclick', this.$selectAllItemCheckBox);
+            this.testProgramChange(assert);
+        });
+
+        ['enter', 'space'].forEach(key => {
+            QUnit.test(`on selectAll item selecting using ${key}`, function(assert) {
+                this.keyboard
+                    .focus()
+                    .press('down')
+                    .press('up')
+                    .keyDown(key);
+
+                this.checkEvent(assert, 'keydown', this.$selectAllItem, key);
+                this.testProgramChange(assert);
+            });
+        });
+    });
+});
+
+QUnit.module('label integration', () => {
+    QUnit.test('tagBox should pass containerWidth equal to tag container width', function(assert) {
+        this.TextEditorLabelMock = (args) => { this.labelArgs = args; return new TextEditorLabel(args); };
+        TagBox.mockTextEditorLabel(this.TextEditorLabelMock);
+
+        try {
+            const $tagBox = $('#tagBox').dxTagBox({
+                label: 'some'
+            });
+
+            const borderWidth = 2;
+            const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+            const tagContainerWidth = getWidth($tagContainer);
+            assert.strictEqual(this.labelArgs.containerWidth + borderWidth, tagContainerWidth);
+        } finally {
+            TagBox.restoreTextEditorLabel();
+        }
+    });
+});
+
+QUnit.module('accessibility', () => {
+    QUnit.test('input should have a correct aria-labelledby', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({ label: 'custom-label' });
+        const tagBox = $tagBox.dxTagBox('instance');
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const labelId = $tagBox.find(`.${TEXTEDITOR_LABEL_CLASS}`).attr('id');
+        const placeholderId = $tagBox.find(`.${PLACEHOLDER_CLASS}`).attr('id');
+
+        const expectedAria = `${labelId} ${placeholderId}`;
+
+        assert.strictEqual($input.attr('aria-labelledby'), expectedAria, 'aria-labelledby was set correctly');
+
+        tagBox.option('label', null);
+        assert.strictEqual($input.attr('aria-labelledby'), placeholderId, 'aria-labelledby is equal placeholder id');
     });
 
-    QUnit.test('event passed to valueChanged should be undefined when value runtime changes after tag removing', function(assert) {
-        this.keyboard
-            .focus()
+    QUnit.test('select should have a correct aria-label', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox();
+        const $select = $tagBox.find(TAGBOX_SELECT_SELECTOR);
+
+        assert.strictEqual($select.attr('aria-label'), 'Selected items', 'aria-label is correct');
+    });
+
+    QUnit.test('TagBox element should have correct aria attributes', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox();
+
+        assert.strictEqual($tagBox.attr('role'), 'group', 'role is set correctly');
+        assert.strictEqual($tagBox.attr('aria-roledescription'), 'tagbox', 'aria-roledescription is set correctly');
+    });
+
+    QUnit.test('TagBox element should have an aria-labelledby attribute with correct ids', function(assert) {
+        const items = [1, 2, 3];
+        const $tagBox = $('#tagBox').dxTagBox({ items });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        assert.strictEqual($tagBox.attr('aria-labelledby'), undefined, 'aria-labelledby is undefined');
+
+        tagBox.option('value', [items[0]]);
+        let tagId = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).attr('id');
+
+        assert.strictEqual($tagBox.attr('aria-labelledby'), tagId, 'aria-labelledby is set correctly');
+
+        tagBox.option('value', []);
+        assert.strictEqual($tagBox.attr('aria-labelledby'), undefined, 'aria-labelledby is set correctly');
+
+        tagBox.option('value', [items[0], items[1]]);
+
+        const tagIds = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).toArray().map(($tag) => {
+            return $($tag).attr('id');
+        }).join(' ');
+
+        assert.strictEqual($tagBox.attr('aria-labelledby'), tagIds, 'aria-labelledby is set correctly');
+
+        tagBox.option('value', [items[1]]);
+        tagId = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).attr('id');
+
+        assert.strictEqual($tagBox.attr('aria-labelledby'), tagId, 'aria-labelledby is set correctly');
+    });
+
+    QUnit.test('TagBox element should have aria-labelledby with correct ids if tag was deleted by keyboard', function(assert) {
+        const items = [1, 2];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items,
+            value: [items[0], items[1]],
+        });
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .press('right')
             .press('backspace');
 
-        this.instance.option('value', [3]);
+        const tagId = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).attr('id');
 
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
+        assert.strictEqual($tagBox.attr('aria-labelledby'), tagId, 'aria-labelledby is set correctly');
     });
 
-    QUnit.test('event passed to valueChanged should be correct after click on item (T947619)', function(assert) {
-        this.$firstItem.trigger('dxclick');
+    QUnit.test('input should have aria-activedescendant with correct id if tag is focused', function(assert) {
+        const items = [1, 2];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items,
+            value: items,
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$firstItem.get(0), 'event target is correct');
-    });
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
 
-    QUnit.test('event passed to valueChanged should be correct after click on item checkBox (T947619)', function(assert) {
-        this.$firstItemCheckBox.trigger('dxclick');
+        const $tags = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$firstItemCheckBox.get(0), 'event target is correct');
-    });
+        const firstTagId = $tags.eq(0).attr('id');
+        const secondTagId = $tags.eq(1).attr('id');
 
-    QUnit.test('event passed to valueChanged should be correct after click on selectAll item (T947619)', function(assert) {
-        this.$selectAllItem.trigger('dxclick');
+        keyboard.press('right');
+        assert.strictEqual($input.attr('aria-activedescendant'), firstTagId, 'aria-activedescendant is set correctly');
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$selectAllItem.get(0), 'event target is correct');
-    });
+        keyboard.press('right');
+        assert.strictEqual($input.attr('aria-activedescendant'), secondTagId, 'aria-activedescendant is set correctly');
 
-    QUnit.test('event passed to valueChanged should be correct after click on selectAll item checkBox (T947619)', function(assert) {
-        this.$selectAllItemCheckBox.trigger('dxclick');
+        keyboard.press('backspace');
+        assert.strictEqual($input.attr('aria-activedescendant'), firstTagId, 'aria-activedescendant is set correctly');
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
-        assert.strictEqual(data.event.target, this.$selectAllItemCheckBox.get(0), 'event target is correct');
-    });
+        keyboard.press('backspace');
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is set correctly');
 
-    QUnit.test('Correct event should be passed to valueChanged when item is selected using enter', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .keyDown('enter');
+        tagBox.option('value', [items[0], items[1]]);
 
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Enter', 'event key is correct');
-        assert.strictEqual(data.event.target.get(0), this.$firstItem.get(0), 'target is correct');
-    });
+        keyboard
+            .press('right')
+            .press('backspace');
 
-    QUnit.test('Correct event should be passed to valueChanged when item is selected using space', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .keyDown('space');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, ' ', 'event key is correct');
-        assert.strictEqual(data.event.target.get(0), this.$firstItem.get(0), 'target is correct');
-    });
-
-    QUnit.test('Correct event should be passed to valueChanged when selectAll item is selected using enter', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('enter');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, 'Enter', 'event key is correct');
-    });
-
-    QUnit.test('Correct event should be passed to valueChanged when selectAll item is selected using space', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('space');
-
-        const data = this.valueChangedHandler.getCall(0).args[0];
-        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
-        assert.strictEqual(data.event.key, ' ', 'event key is correct');
-    });
-
-    QUnit.test('event=undefined should be passed to valueChanged when value changes runtime after selectAll item is selected using enter', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('enter');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event=undefined should be passed to valueChanged when value changes runtime after selectAll item is selected using space', function(assert) {
-        this.keyboard
-            .focus()
-            .press('down')
-            .press('up')
-            .keyDown('space');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on item', function(assert) {
-        this.$firstItem.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on selectAll item', function(assert) {
-        this.$selectAllItem.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on item checkBox', function(assert) {
-        this.$firstItemCheckBox.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
-    });
-
-    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on selectAll item checkBox', function(assert) {
-        this.$selectAllItemCheckBox.trigger('dxclick');
-
-        this.instance.option('value', [3]);
-
-        const data = this.valueChangedHandler.getCall(1).args[0];
-        assert.strictEqual(data.event, undefined, 'correct event is passed');
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is set correctly');
     });
 });

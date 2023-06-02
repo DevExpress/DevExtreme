@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
@@ -10,28 +11,28 @@ import { getBoundingRect } from '../../core/utils/position';
 import { resetPosition, move, locate } from '../../animation/translator';
 import Class from '../../core/class';
 import Animator from './animator';
-import devices from '../../core/devices';
-import { isDxMouseWheelEvent, addNamespace as addEventNamespace, normalizeKeyName } from '../../events/utils/index';
+import {
+    isDxMouseWheelEvent,
+    addNamespace as addEventNamespace,
+    normalizeKeyName,
+    isCommandKeyPressed
+} from '../../events/utils/index';
 import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
 import Scrollbar from './ui.scrollbar';
 import { when, Deferred } from '../../core/utils/deferred';
-
-const realDevice = devices.real;
-const isSluggishPlatform = realDevice.platform === 'android';
 
 const SCROLLABLE_SIMULATED = 'dxSimulatedScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
 const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
 const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
 const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
-const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
 const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
 const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
-const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
+const ACCELERATION = 0.92;
 const OUT_BOUNDS_ACCELERATION = 0.5;
 const MIN_VELOCITY_LIMIT = 1;
 const FRAME_DURATION = Math.round(1000 / 60);
@@ -39,7 +40,7 @@ const SCROLL_LINE_HEIGHT = 40;
 const VALIDATE_WHEEL_TIMEOUT = 500;
 
 const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
-const BOUNCE_DURATION = isSluggishPlatform ? 300 : 400;
+const BOUNCE_DURATION = 400;
 const BOUNCE_FRAMES = BOUNCE_DURATION / FRAME_DURATION;
 const BOUNCE_ACCELERATION_SUM = (1 - Math.pow(ACCELERATION, BOUNCE_FRAMES)) / (1 - ACCELERATION);
 
@@ -79,10 +80,6 @@ const InertiaAnimator = Animator.inherit({
     _complete: function() {
         this.scroller._scrollComplete();
     },
-
-    _stop: function() {
-        this.scroller._stopComplete();
-    }
 });
 
 const BounceAnimator = InertiaAnimator.inherit({
@@ -280,10 +277,8 @@ export const Scroller = Class.inherit({
     },
 
     _initHandler: function(e) {
-        this._stopDeferred = new Deferred();
         this._stopScrolling();
         this._prepareThumbScrolling(e);
-        return this._stopDeferred.promise();
     },
 
     _stopScrolling: deferRenderer(function() {
@@ -318,15 +313,9 @@ export const Scroller = Class.inherit({
 
     _moveToMouseLocation: function(e) {
         const mouseLocation = e['page' + this._axis.toUpperCase()] - this._$element.offset()[this._prop];
-        const location = this._location + mouseLocation / this._containerToContentRatio() - this._$container.height() / 2;
+        const location = this._location + mouseLocation / this._containerToContentRatio() - getHeight(this._$container) / 2;
 
         this._scrollStep(-Math.round(location));
-    },
-
-    _stopComplete: function() {
-        if(this._stopDeferred) {
-            this._stopDeferred.resolve();
-        }
     },
 
     _startHandler: function() {
@@ -427,8 +416,8 @@ export const Scroller = Class.inherit({
     },
 
     _updateBounds: function() {
-        this._maxOffset = Math.round(this._getMaxOffset());
-        this._minOffset = Math.round(this._getMinOffset());
+        this._maxOffset = this._getMaxOffset();
+        this._minOffset = this._getMinOffset();
     },
 
     _getMaxOffset: function() {
@@ -507,7 +496,7 @@ export const Scroller = Class.inherit({
     _validateEvent: function(e) {
         const $target = $(e.originalEvent.target);
 
-        return this._isThumb($target) || this._isScrollbar($target) || this._isContent($target);
+        return this._isThumb($target) || this._isScrollbar($target);
     },
 
     _isThumb: function($element) {
@@ -518,16 +507,12 @@ export const Scroller = Class.inherit({
         return this._scrollByThumb && $element && $element.is(this._$scrollbar);
     },
 
-    _isContent: function($element) {
-        return this._scrollByContent && !!$element.closest(this._$element).length;
-    },
-
     _reachedMin: function() {
-        return this._location <= this._minOffset;
+        return Math.round(this._location - this._minOffset) <= 0;
     },
 
     _reachedMax: function() {
-        return this._location >= this._maxOffset;
+        return Math.round(this._location - this._maxOffset) >= 0;
     },
 
     _cursorEnterHandler: function() {
@@ -557,15 +542,15 @@ export const SimulatedStrategy = Class.inherit({
     _init: function(scrollable) {
         this._component = scrollable;
         this._$element = scrollable.$element();
-        this._$container = scrollable._$container;
+        this._$container = $(scrollable.container());
         this._$wrapper = scrollable._$wrapper;
-        this._$content = scrollable._$content;
+        this._$content = scrollable.$content();
         this.option = scrollable.option.bind(scrollable);
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
-        this._getScrollOffset = scrollable._getScrollOffset.bind(scrollable);
+        this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
     },
 
     render: function() {
@@ -590,7 +575,6 @@ export const SimulatedStrategy = Class.inherit({
         }
 
         this._$element.toggleClass(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE, this.option('showScrollbar') === 'always');
-        this._$element.toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this.option('showScrollbar'));
     },
 
     _createScroller: function(direction) {
@@ -604,7 +588,6 @@ export const SimulatedStrategy = Class.inherit({
             $container: this._$container,
             $wrapper: this._$wrapper,
             $element: this._$element,
-            scrollByContent: this.option('scrollByContent'),
             scrollByThumb: this.option('scrollByThumb'),
             scrollbarVisible: this.option('showScrollbar'),
             bounceEnabled: this.option('bounceEnabled'),
@@ -638,7 +621,7 @@ export const SimulatedStrategy = Class.inherit({
     handleInit: function(e) {
         this._suppressDirections(e);
         this._eventForUserAction = e;
-        this._eventHandler('init', e).done(this._stopAction);
+        this._eventHandler('init', e);
     },
 
     _suppressDirections: function(e) {
@@ -649,9 +632,15 @@ export const SimulatedStrategy = Class.inherit({
 
         this._prepareDirections();
         this._eachScroller(function(scroller, direction) {
-            const isValid = scroller._validateEvent(e);
+            const $target = $(e.originalEvent.target);
+
+            const isValid = scroller._validateEvent(e) || (this.option('scrollByContent') && this._isContent($target));
             this._validDirections[direction] = isValid;
         });
+    },
+
+    _isContent: function($element) {
+        return !!$element.closest(this._$element).length;
     },
 
     _prepareDirections: function(value) {
@@ -735,7 +724,7 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     handleScroll: function() {
-        this._component._updateRtlConfig();
+        this._updateRtlConfig();
         this._scrollAction();
     },
 
@@ -757,7 +746,7 @@ export const SimulatedStrategy = Class.inherit({
             }
         });
 
-        if(!this._$container.is(domAdapter.getActiveElement())) {
+        if(!this._$container.is(domAdapter.getActiveElement(this._$container.get(0)))) {
             return;
         }
 
@@ -816,7 +805,8 @@ export const SimulatedStrategy = Class.inherit({
         const dimension = this._dimensionByProp(prop);
 
         const distance = {};
-        distance[prop] = page * -this._$container[dimension]();
+        const getter = dimension === 'width' ? getWidth : getHeight;
+        distance[prop] = page * -getter(this._$container);
         this.scrollBy(distance);
     },
 
@@ -841,13 +831,13 @@ export const SimulatedStrategy = Class.inherit({
         const dimension = this._dimensionByProp(prop);
 
         const distance = {};
-        distance[prop] = this._$content[dimension]() - this._$container[dimension]();
+        const getter = dimension === 'width' ? getWidth : getHeight;
+        distance[prop] = getter(this._$content) - getter(this._$container);
         this._component.scrollTo(distance);
     },
 
     createActions: function() {
         this._startAction = this._createActionHandler('onStart');
-        this._stopAction = this._createActionHandler('onStop');
         this._endAction = this._createActionHandler('onEnd');
         this._updateAction = this._createActionHandler('onUpdated');
 
@@ -888,6 +878,13 @@ export const SimulatedStrategy = Class.inherit({
             reachedRight: scrollerX && scrollerX._reachedMin(),
             reachedTop: scrollerY && scrollerY._reachedMax(),
             reachedBottom: scrollerY && scrollerY._reachedMin()
+        };
+    },
+
+    _getScrollOffset() {
+        return {
+            top: -this.location().top,
+            left: -this.location().left
         };
     },
 
@@ -996,8 +993,56 @@ export const SimulatedStrategy = Class.inherit({
         };
     },
 
-    updateBounds: function() {
+    _updateBounds: function() {
         this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
+    },
+
+    _isHorizontalAndRtlEnabled: function() {
+        return this.option('rtlEnabled') && this.option('direction') !== VERTICAL;
+    },
+
+    updateRtlPosition: function(needInitializeRtlConfig) {
+        if(needInitializeRtlConfig) {
+            this._rtlConfig = {
+                scrollRight: 0,
+                clientWidth: this._$container.get(0).clientWidth,
+                windowPixelRatio: this._getWindowDevicePixelRatio()
+            };
+        }
+
+        this._updateBounds();
+        if(this._isHorizontalAndRtlEnabled()) {
+            let scrollLeft = this._getMaxOffset().left - this._rtlConfig.scrollRight;
+
+            if(scrollLeft <= 0) {
+                scrollLeft = 0;
+                this._rtlConfig.scrollRight = this._getMaxOffset().left;
+            }
+
+            if(this._getScrollOffset().left !== scrollLeft) {
+                this._rtlConfig.skipUpdating = true;
+                this._component.scrollTo({ left: scrollLeft });
+                this._rtlConfig.skipUpdating = false;
+            }
+        }
+    },
+
+    _updateRtlConfig: function() {
+        if(this._isHorizontalAndRtlEnabled() && !this._rtlConfig.skipUpdating) {
+            const { clientWidth, scrollLeft } = this._$container.get(0);
+            const windowPixelRatio = this._getWindowDevicePixelRatio();
+            if(this._rtlConfig.windowPixelRatio === windowPixelRatio && this._rtlConfig.clientWidth === clientWidth) {
+                this._rtlConfig.scrollRight = (this._getMaxOffset().left - scrollLeft);
+            }
+            this._rtlConfig.clientWidth = clientWidth;
+            this._rtlConfig.windowPixelRatio = windowPixelRatio;
+        }
+    },
+
+    _getWindowDevicePixelRatio: function() {
+        return hasWindow()
+            ? getWindow().devicePixelRatio
+            : 1;
     },
 
     scrollBy: function(distance) {
@@ -1015,9 +1060,15 @@ export const SimulatedStrategy = Class.inherit({
         this._startAction();
         this._eventHandler('scrollBy', { x: distance.left, y: distance.top });
         this._endAction();
+
+        this._updateRtlConfig();
     },
 
     validate: function(e) {
+        if(isDxMouseWheelEvent(e) && isCommandKeyPressed(e)) {
+            return false;
+        }
+
         if(this.option('disabled')) {
             return false;
         }
@@ -1077,10 +1128,6 @@ export const SimulatedStrategy = Class.inherit({
             default:
                 return e && e.shiftKey ? HORIZONTAL : VERTICAL;
         }
-    },
-
-    verticalOffset: function() {
-        return 0;
     },
 
     dispose: function() {

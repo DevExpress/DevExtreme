@@ -65,19 +65,30 @@ let helper;
             helper.checkItemsAttributes([0], { });
         });
 
+        test('Selected: ["Item_2"], selectionMode: "single", disabled: true', function() {
+            this.items[1].selected = true;
+            this.items[1].disabled = true;
+
+            helper.createWidget({ items: [this.items[1]], selectionMode: 'single' });
+
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
+            helper.checkItemsAttributes([0], { attributes: [ 'aria-disabled' ] });
+        });
+
         test('Selected: ["Item_1_1"], selectionMode: "single", Item_1.expanded: true, collapseItem(["Item_1"]) -> expand(["Item_1"])', function() {
             this.items[0].items[0].selected = true;
 
             helper.createWidget({ items: this.items, selectionMode: 'single' });
             helper.widget.collapseItem(1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([1], { });
 
             helper.widget.expandItem(1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
@@ -90,14 +101,14 @@ let helper;
 
             helper.createWidget({ items: this.items, selectionMode: 'single' });
             helper.widget.expandItem(1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([0], { });
 
             helper.widget.collapseItem(1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
@@ -109,14 +120,14 @@ let helper;
 
             helper.createWidget({ items: this.items, selectionMode: 'single' });
             helper.widget.collapseItem(1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([1], { });
 
             helper.widget.expandItem(1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });

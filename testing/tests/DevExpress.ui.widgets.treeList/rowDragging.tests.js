@@ -16,11 +16,10 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-import 'common.css!';
 import 'generic_light.css!';
 
-import 'ui/data_grid/ui.data_grid';
-import 'ui/tree_list/ui.tree_list';
+import 'ui/data_grid';
+import 'ui/tree_list';
 
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';

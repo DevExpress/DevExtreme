@@ -11,7 +11,7 @@ const checkDigit = function(char) {
     return zeroCode <= code && code < zeroCode + 10;
 };
 
-const checkPatternContinue = function(text, index, isDigit) {
+const checkPatternContinue = function(text, patterns, index, isDigit) {
     const char = text[index];
     const nextChar = text[index + 1];
 
@@ -23,7 +23,8 @@ const checkPatternContinue = function(text, index, isDigit) {
             return true;
         }
     }
-    return FORMAT_SEPARATORS.indexOf(char) < 0 && (isDigit === checkDigit(char));
+    const isDigitChanged = isDigit && patterns.some(pattern => text[index] !== pattern[index]);
+    return FORMAT_SEPARATORS.indexOf(char) < 0 && (isDigit === checkDigit(char) && (!isDigit || isDigitChanged));
 };
 
 const getPatternStartIndex = function(defaultPattern, index) {
@@ -61,7 +62,7 @@ const getDifference = function(defaultPattern, patterns, processedIndexes, isDig
                 result.push(i);
                 processedIndexes.unshift(i);
                 i++;
-            } while(defaultPattern[i] && checkPatternContinue(defaultPattern, i, isDigit));
+            } while(defaultPattern[i] && checkPatternContinue(defaultPattern, patterns, i, isDigit));
             break;
         }
     }
@@ -173,7 +174,7 @@ export const getFormat = function(formatter) {
     let result = defaultPattern;
     const replacedPatterns = {};
     const datePatterns = [
-        { date: new Date(2009, 8, 8, 6, 5, 4, 100), pattern: 'S' },
+        { date: new Date(2009, 8, 8, 6, 5, 4, 111), pattern: 'S' },
         { date: new Date(2009, 8, 8, 6, 5, 2), pattern: 's' },
         { date: new Date(2009, 8, 8, 6, 2, 4), pattern: 'm' },
         { date: new Date(2009, 8, 8, 18, 5, 4), pattern: 'H', isDigit: true },

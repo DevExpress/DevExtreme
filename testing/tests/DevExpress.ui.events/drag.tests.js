@@ -2,7 +2,6 @@ const $ = require('jquery');
 const noop = require('core/utils/common').noop;
 const dragEvents = require('events/drag');
 const support = require('core/utils/support');
-const browser = require('core/utils/browser');
 const GestureEmitter = require('events/gesture/emitter.gesture');
 const dropTargets = dragEvents.dropTargets;
 const pointerMock = require('../../helpers/pointerMock.js');
@@ -10,7 +9,7 @@ const pointerMock = require('../../helpers/pointerMock.js');
 $('#qunit-fixture').addClass('qunit-fixture-visible');
 QUnit.testStart(function() {
     const markup =
-        '<style>\
+        '<style nonce="qunit-test">\
             #container {\
                 position: relative;\
             }\
@@ -37,6 +36,13 @@ QUnit.testStart(function() {
                 width: 100%;\
                 height: 100%;\
             }\
+            #runtime {\
+                width: 100px;\
+                height: 100px;\
+                position: absolute;\
+                top: 200px; \
+                left: 400px; \
+            } \
         </style>\
         <div id="container">\
             <div id="element"></div>\
@@ -231,6 +237,36 @@ QUnit.test('maxBottomOffset', function(assert) {
     pointer.start().down().move(0, 200).up();
 });
 
+QUnit.test('Should be possible to drag into created in runtime element', function(assert) {
+    const $element = $('#element');
+    const pointer = pointerMock($element);
+    const clock = sinon.useFakeTimers();
+    let dragEnterCount = 0;
+    const subscribeToDragEnterAndLeaveEvents = function(elements) {
+        elements.on('dxdragenter', function(e) {
+            dragEnterCount = 1;
+        });
+    };
+
+    $element.on('dxdragstart', function(e) {
+        setTimeout(() => {
+            $('#container').append($('<div id="runtime"/>'));
+            subscribeToDragEnterAndLeaveEvents($('#runtime'));
+        }, 50);
+
+    });
+    $element.on('dxdragend', function(e) {
+        $('#runtime').remove();
+    });
+
+    pointer.start().down().move(50, 50);
+    clock.tick(50);
+    pointer.move(400, 200);
+
+    assert.equal(dragEnterCount, 1);
+    pointer.up();
+    clock.restore();
+});
 
 QUnit.module('drop targets registration');
 
@@ -729,7 +765,7 @@ QUnit.test('default behaviour on dxpointermove should be prevented to reduce use
 });
 
 QUnit.test('drag should not crash with multiple touches', function(assert) {
-    if(!support.touchEvents || browser.msie) {
+    if(!support.touchEvents) {
         assert.ok(true);
         return;
     }
@@ -759,7 +795,7 @@ QUnit.test('drag should not crash with multiple touches', function(assert) {
 });
 
 QUnit.test('drag correctly works with FireFox on touch-based devices (T602186)', function(assert) {
-    if(!support.touchEvents || browser.msie) {
+    if(!support.touchEvents) {
         assert.ok(true);
         return;
     }

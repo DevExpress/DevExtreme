@@ -1,3 +1,4 @@
+import { getOuterHeight, setHeight, getHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import fx from '../animation/fx';
@@ -57,7 +58,7 @@ const Accordion = CollectionWidget.inherit({
             deferRendering: true,
 
 
-            selectionByClick: true,
+            selectByClick: true,
             activeStateEnabled: true,
             _itemAttributes: { role: 'tab' },
             _animationEasing: 'ease'
@@ -294,10 +295,17 @@ const Accordion = CollectionWidget.inherit({
             fx.stop($item);
         }
 
-        const startItemHeight = $item.outerHeight();
-        const finalItemHeight = $item.hasClass(ACCORDION_ITEM_OPENED_CLASS)
-            ? itemHeight + $title.outerHeight() || $item.height('auto').outerHeight()
-            : $title.outerHeight();
+        const startItemHeight = getOuterHeight($item);
+        let finalItemHeight;
+        if($item.hasClass(ACCORDION_ITEM_OPENED_CLASS)) {
+            finalItemHeight = itemHeight + getOuterHeight($title);
+            if(!finalItemHeight) {
+                setHeight($item, 'auto');
+                finalItemHeight = getOuterHeight($item);
+            }
+        } else {
+            finalItemHeight = getOuterHeight($title);
+        }
 
         return this._animateItem($item, startItemHeight, finalItemHeight, skipAnimation, !!itemHeight);
     },
@@ -346,10 +354,10 @@ const Accordion = CollectionWidget.inherit({
         let itemsHeight = 0;
 
         iteratorUtils.each($titles, function(_, title) {
-            itemsHeight += $(title).outerHeight();
+            itemsHeight += getOuterHeight(title);
         });
 
-        return this.$element().height() - itemsHeight;
+        return getHeight(this.$element()) - itemsHeight;
     },
 
     _visibilityChanged: function(visible) {
@@ -385,6 +393,10 @@ const Accordion = CollectionWidget.inherit({
                 }
                 if(this._tryParseItemPropertyName(args.fullName) === 'visible') {
                     this._updateItemHeightsWrapper(true);
+                }
+                if(this.option('repaintChangesOnly') === true && args.fullName === 'items') {
+                    this._updateItemHeightsWrapper(true);
+                    this._renderSelection(this._getSelectedItemIndices(), []);
                 }
                 break;
             case 'animationDuration':
@@ -432,3 +444,9 @@ const Accordion = CollectionWidget.inherit({
 registerComponent('dxAccordion', Accordion);
 
 export default Accordion;
+
+/**
+ * @name dxAccordionItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

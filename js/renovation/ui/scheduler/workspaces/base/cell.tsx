@@ -2,33 +2,20 @@ import {
   Component,
   ComponentBindings,
   JSXComponent,
-  JSXTemplate,
   OneWay,
   Slot,
-  Template,
-} from 'devextreme-generator/component_declaration/common';
+} from '@devextreme-generator/declarations';
 import { getGroupCellClasses } from '../utils';
-import { ContentTemplateProps } from '../types.d';
+import { ContentTemplateProps } from '../types';
 
-export const viewFunction = (viewModel: CellBase): JSX.Element => {
-  const ContentTemplate = viewModel.props.contentTemplate;
-
-  return (
-    <td
-    // eslint-disable-next-line react/jsx-props-no-spreading
-      {...viewModel.restAttributes}
-      className={viewModel.classes}
-    >
-      {!ContentTemplate && viewModel.props.children}
-      {ContentTemplate && (
-        <ContentTemplate
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          {...viewModel.props.contentTemplateProps}
-        />
-      )}
-    </td>
-  );
-};
+export const viewFunction = (viewModel: CellBase): JSX.Element => (
+  <td
+    className={viewModel.classes}
+    aria-label={viewModel.props.ariaLabel}
+  >
+    {viewModel.props.children}
+  </td>
+);
 
 @ComponentBindings()
 export class CellBaseProps {
@@ -38,13 +25,13 @@ export class CellBaseProps {
 
   @OneWay() isLastGroupCell? = false;
 
-  @OneWay() startDate: Date = new Date();
+  @OneWay() startDate = new Date();
 
-  @OneWay() endDate?: Date = new Date();
+  @OneWay() endDate = new Date();
 
   @OneWay() allDay?: boolean = false;
 
-  @OneWay() groups?: object;
+  @OneWay() groups?: Record<string, unknown>;
 
   @OneWay() groupIndex?: number;
 
@@ -57,9 +44,9 @@ export class CellBaseProps {
     index: 0,
   };
 
-  @Template() contentTemplate?: JSXTemplate;
+  @OneWay() ariaLabel?: string;
 
-  @Slot() children?: JSX.Element;
+  @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 }
 
 @Component({

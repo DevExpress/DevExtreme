@@ -1,21 +1,6 @@
 import $ from 'jquery';
 
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-        <div id="container"  class="dx-datagrid">\
-            <table id="columnHeaders"><tr class="dx-row"><td></td><td></td></tr></table>\
-            <table id="rows"><tr class="dx-row"><td></td><td></td></tr></table>\
-        </div>\
-        <div id="secondContainer"  class="dx-datagrid"></div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-import 'common.css!';
-
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
@@ -23,6 +8,18 @@ const MockColumnsController = dataGridMocks.MockColumnsController;
 const MockDataController = dataGridMocks.MockDataController;
 const setupDataGridModules = dataGridMocks.setupDataGridModules;
 
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div id="container"  class="dx-datagrid">
+                <table id="columnHeaders"><tr class="dx-row"><td></td><td></td></tr></table>
+                <table id="rows"><tr class="dx-row"><td></td><td></td></tr></table>
+            </div>
+            <div id="secondContainer"  class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Context menu', {
     beforeEach: function() {
@@ -283,6 +280,41 @@ QUnit.module('Context menu with rowsView', {
         assert.strictEqual(contextMenuOptions.column.dataField, 'Column2', 'dataField');
     });
 
+    // T1084959
+    QUnit.test('Context menu should work if `cells` is empty array', function(assert) {
+        // arrange
+        const $testElement = $('#secondContainer');
+
+        this.options = {
+            dataRowTemplate: function(container, options) {
+                const data = options.data;
+                $(container).append('<tr class=\'main-row\'>' +
+                            '<td class=\'click-me\'>CLICK ME</td>' +
+                        '</tr>' +
+                        '<tr class=\'notes-row\'>' +
+                            '<td><div>' + data.id + '</div></td>' +
+                        '</tr>');
+            }
+        };
+
+        this.items = [
+            { data: { id: 1 }, values: [1], rowType: 'data', dataIndex: 0, cells: [] },
+            { data: { id: 2 }, values: [2], rowType: 'data', dataIndex: 1, cells: [] },
+        ];
+
+        this.columns = [{ dataField: 'Column1' }];
+
+        this.setupDataGrid();
+        this.rowsView.render($testElement);
+        this.contextMenuView.render($testElement);
+
+        // act
+        $('.click-me').eq(1).trigger('contextmenu');
+
+        // assert
+        assert.ok(true, 'no error thrown');
+    });
+
     // T403458
     QUnit.test('Context menu with option onContextMenuPreparing when no data and scrollbar', function(assert) {
     // arrange
@@ -486,6 +518,51 @@ QUnit.module('Context menu with rowsView', {
         assert.strictEqual(contextMenuPreparingArg.rowIndex, 1, 'rowIndex');
         assert.strictEqual(contextMenuPreparingArg.row.rowType, 'data', 'rowType');
         assert.strictEqual(contextMenuPreparingArg.columnIndex, undefined, 'columnIndex');
+    });
+
+    QUnit.test('Context menu should works if dataRowTemplate is defined', function(assert) {
+        // arrange
+        const that = this;
+        let contextMenuPreparingArg;
+        const $testElement = $('#secondContainer');
+
+        that.options = {
+            onContextMenuPreparing: function(options) {
+                if(options.target === 'content') {
+                    contextMenuPreparingArg = options;
+                }
+            },
+            dataRowTemplate: function(container, options) {
+                const data = options.data;
+                $(container).append('<tr class=\'main-row\'>' +
+                        '<td class=\'click-me\'>CLICK ME</td>' +
+                    '</tr>' +
+                    '<tr class=\'notes-row\'>' +
+                        '<td><div>' + data.id + '</div></td>' +
+                    '</tr>');
+            }
+        };
+
+        that.items = [
+            { data: { id: 1 }, values: [1], rowType: 'data', dataIndex: 0 },
+            { data: { id: 2 }, values: [2], rowType: 'data', dataIndex: 1 },
+        ];
+
+        that.columns = [{ dataField: 'Column1' }];
+
+        that.setupDataGrid();
+        that.rowsView.render($testElement);
+        that.contextMenuView.render($testElement);
+
+        // act
+        $('.click-me').eq(1).trigger('contextmenu');
+
+        // assert
+        assert.ok(contextMenuPreparingArg, 'onContextMenuPreparing is called');
+        assert.strictEqual(contextMenuPreparingArg.rowIndex, 1, 'rowIndex');
+        assert.strictEqual(contextMenuPreparingArg.row.rowType, 'data', 'rowType');
+        assert.strictEqual(contextMenuPreparingArg.columnIndex, undefined, 'columnIndex');
+        assert.strictEqual(contextMenuPreparingArg.column, undefined, 'column');
     });
 });
 

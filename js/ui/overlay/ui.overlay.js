@@ -1,50 +1,45 @@
+import { getOuterWidth, getOuterHeight } from '../../core/utils/size';
 import fx from '../../animation/fx';
-import positionUtils from '../../animation/position';
-import { locate, move, resetPosition } from '../../animation/translator';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import domAdapter from '../../core/dom_adapter';
 import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
 import { EmptyTemplate } from '../../core/templates/empty_template';
-import { inArray } from '../../core/utils/array';
-import browser from '../../core/utils/browser';
 import { noop } from '../../core/utils/common';
 import { Deferred } from '../../core/utils/deferred';
 import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { fitIntoRange } from '../../core/utils/math';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isString, isDefined, isFunction, isPlainObject, isWindow, isEvent } from '../../core/utils/type';
-import { compare as compareVersions } from '../../core/utils/version';
-import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
-import { getNavigator, getWindow, hasWindow } from '../../core/utils/window';
+import { isFunction, isObject, isPromise, isWindow } from '../../core/utils/type';
+import { changeCallback } from '../../core/utils/view_port';
+import { getWindow, hasWindow } from '../../core/utils/window';
+import errors from '../../core/errors';
+import uiErrors from '../widget/ui.errors';
 import eventsEngine from '../../events/core/events_engine';
 import {
-    start as dragEventStart,
     move as dragEventMove
 } from '../../events/drag';
 import pointerEvents from '../../events/pointer';
 import { keyboard } from '../../events/short';
-import { addNamespace, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../events/utils/index';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
-import Resizable from '../resizable';
 import { tabbable } from '../widget/selectors';
-import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
+import browser from '../../core/utils/browser';
 import * as zIndexPool from './z_index';
+import { OverlayPositionController, OVERLAY_POSITION_ALIASES } from './overlay_position_controller';
+
 const ready = readyCallbacks.add;
 const window = getWindow();
-const navigator = getNavigator();
 const viewPortChanged = changeCallback;
 
 const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
-const OVERLAY_MODAL_CLASS = 'dx-overlay-modal';
 const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
@@ -52,62 +47,11 @@ const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 const RTL_DIRECTION_CLASS = 'dx-rtl';
 
-const ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned', 'onResizeStart', 'onResize', 'onResizeEnd'];
-
 const OVERLAY_STACK = [];
-
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const TAB_KEY = 'tab';
-
-const POSITION_ALIASES = {
-    'top': { my: 'top center', at: 'top center' },
-    'bottom': { my: 'bottom center', at: 'bottom center' },
-    'right': { my: 'right center', at: 'right center' },
-    'left': { my: 'left center', at: 'left center' },
-    'center': { my: 'center', at: 'center' },
-    'right bottom': { my: 'right bottom', at: 'right bottom' },
-    'right top': { my: 'right top', at: 'right top' },
-    'left bottom': { my: 'left bottom', at: 'left bottom' },
-    'left top': { my: 'left top', at: 'left top' }
-};
-
-const realDevice = devices.real();
-const realVersion = realDevice.version;
-const firefoxDesktop = browser.mozilla && realDevice.deviceType === 'desktop';
-const iOS = realDevice.platform === 'ios';
-const hasSafariAddressBar = browser.safari && realDevice.deviceType !== 'desktop';
-const android4_0nativeBrowser = realDevice.platform === 'android' && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf('Chrome') === -1;
-
-const forceRepaint = $element => {
-    // NOTE: force layout recalculation on FF desktop (T581681)
-    if(firefoxDesktop) {
-        $element.width();
-    }
-
-    // NOTE: force rendering on buggy android (T112083)
-    if(android4_0nativeBrowser) {
-        const $parents = $element.parents();
-        const inScrollView = $parents.is('.dx-scrollable-native');
-
-        if(!inScrollView) {
-            $parents.css('backfaceVisibility', 'hidden');
-            $parents.css('backfaceVisibility');
-            $parents.css('backfaceVisibility', 'visible');
-        }
-    }
-};
-
-
-const getElement = value => {
-    if(isEvent(value)) {
-        value = value.target;
-    }
-
-    return $(value);
-};
 
 ready(() => {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, e => {
@@ -120,32 +64,11 @@ ready(() => {
 });
 
 const Overlay = Widget.inherit({
-
     _supportedKeys: function() {
-        const offsetSize = 5;
-        const move = function(top, left, e) {
-            if(!this.option('dragEnabled')) {
-                return;
-            }
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            const allowedOffsets = this._allowedOffsets();
-            const offset = {
-                top: fitIntoRange(top, -allowedOffsets.top, allowedOffsets.bottom),
-                left: fitIntoRange(left, -allowedOffsets.left, allowedOffsets.right)
-            };
-            this._changePosition(offset);
-        };
         return extend(this.callBase(), {
             escape: function() {
                 this.hide();
             },
-            upArrow: move.bind(this, -offsetSize, 0),
-            downArrow: move.bind(this, offsetSize, 0),
-            leftArrow: move.bind(this, 0, -offsetSize),
-            rightArrow: move.bind(this, 0, offsetSize)
         });
     },
 
@@ -165,18 +88,17 @@ const Overlay = Widget.inherit({
 
             shadingColor: '',
 
-            position: {
-                my: 'center',
-                at: 'center'
-            },
+            wrapperAttr: {},
 
-            width: function() { return $(window).width() * 0.8; },
+            position: extend({}, OVERLAY_POSITION_ALIASES.center),
+
+            width: '80vw',
 
             minWidth: null,
 
             maxWidth: null,
 
-            height: function() { return $(window).height() * 0.8; },
+            height: '80vh',
 
             minHeight: null,
 
@@ -193,18 +115,27 @@ const Overlay = Widget.inherit({
                 hide: {
                     type: 'pop',
                     duration: 300,
-                    to: {
-                        opacity: 0,
-                        scale: 0.55
-                    },
                     from: {
                         opacity: 1,
                         scale: 1
+                    },
+                    to: {
+                        opacity: 0,
+                        scale: 0.55
                     }
                 }
             },
 
             closeOnOutsideClick: false,
+            hideOnOutsideClick: false,
+
+            copyRootClassesToWrapper: false,
+
+            _ignoreCopyRootClassesToWrapperDeprecation: false,
+
+            _ignoreElementAttrDeprecation: false,
+
+            _ignorePreventScrollEventsDeprecation: false,
 
             onShowing: null,
 
@@ -216,58 +147,30 @@ const Overlay = Widget.inherit({
 
             contentTemplate: 'content',
 
-            dragEnabled: false,
-
-            resizeEnabled: false,
-            onResizeStart: null,
-            onResize: null,
-            onResizeEnd: null,
             innerOverlay: false,
 
-            // NOTE: private options
+            restorePosition: true,
 
-            target: undefined,
             container: undefined,
 
+            visualContainer: undefined,
+
+            // NOTE: private options
             hideTopOverlayHandler: () => { this.hide(); },
-            closeOnTargetScroll: false,
+            hideOnParentScroll: false,
+
+            preventScrollEvents: true,
+
             onPositioned: null,
-            boundaryOffset: { h: 0, v: 0 },
             propagateOutsideClick: false,
             ignoreChildEvents: true,
             _checkParentVisibility: true,
-            _fixedPosition: false
+            _fixWrapperPosition: false
         });
     },
 
     _defaultOptionsRules: function() {
         return this.callBase().concat([{
-            device: function() {
-                const realDevice = devices.real();
-                const realPlatform = realDevice.platform;
-                const realVersion = realDevice.version;
-
-                return realPlatform === 'android' && compareVersions(realVersion, [4, 2]) < 0;
-            },
-            options: {
-                animation: {
-                    show: {
-                        type: 'fade',
-                        duration: 400
-                    },
-                    hide: {
-                        type: 'fade',
-                        duration: 400,
-                        to: {
-                            opacity: 0
-                        },
-                        from: {
-                            opacity: 1
-                        }
-                    }
-                }
-            }
-        }, {
             device: function() {
                 return !hasWindow();
             },
@@ -288,117 +191,118 @@ const Overlay = Widget.inherit({
         });
     },
 
-    _wrapper: function() {
+    $wrapper: function() {
         return this._$wrapper;
-    },
-
-    _container: function() {
-        return this._$content;
     },
 
     _eventBindingTarget: function() {
         return this._$content;
     },
 
+    _setDeprecatedOptions() {
+        this.callBase();
+        extend(this._deprecatedOptions, {
+            'closeOnOutsideClick': { since: '22.1', alias: 'hideOnOutsideClick' }
+        });
+    },
+
+    ctor: function(element, options) {
+        this.callBase(element, options);
+
+        function createWrapperAttrDeprecationInfo() {
+            return {
+                since: '21.2',
+                message: 'Use the "wrapperAttr" option instead'
+            };
+        }
+
+        if(options) {
+            if(options.copyRootClassesToWrapper && !options._ignoreCopyRootClassesToWrapperDeprecation) {
+                this._logDeprecatedOptionWarning('copyRootClassesToWrapper', createWrapperAttrDeprecationInfo());
+            }
+            if(options.elementAttr && !options._ignoreElementAttrDeprecation) {
+                this._logDeprecatedOptionWarning('elementAttr', createWrapperAttrDeprecationInfo());
+            }
+            if('preventScrollEvents' in options && !options._ignorePreventScrollEventsDeprecation) {
+                this._logDeprecatedPreventScrollEventsInfo();
+            }
+        }
+    },
+
+    _logDeprecatedPreventScrollEventsInfo() {
+        this._logDeprecatedOptionWarning('preventScrollEvents', {
+            since: '23.1',
+            message: 'If you enable this option, end-users may experience scrolling issues.'
+        });
+    },
+
     _init: function() {
         this.callBase();
-
         this._initActions();
-        this._initCloseOnOutsideClickHandler();
+        this._initHideOnOutsideClickHandler();
         this._initTabTerminatorHandler();
 
+        this._customWrapperClass = null;
         this._$wrapper = $('<div>').addClass(OVERLAY_WRAPPER_CLASS);
         this._$content = $('<div>').addClass(OVERLAY_CONTENT_CLASS);
         this._initInnerOverlayClass();
 
         const $element = this.$element();
-        this._$wrapper.addClass($element.attr('class'));
+        if(this.option('copyRootClassesToWrapper')) {
+            this._$wrapper.addClass($element.attr('class'));
+        }
         $element.addClass(OVERLAY_CLASS);
 
         this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
 
-        // NOTE: hack to fix B251087
-        eventsEngine.on(this._$wrapper, 'MSPointerDown', noop);
-        // NOTE: bootstrap integration T342292
-        eventsEngine.on(this._$wrapper, 'focusin', e => { e.stopPropagation(); });
-
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
+        this._parentsScrollSubscriptionInfo = {
+            handler: e => { this._hideOnParentsScrollHandler(e); }
+        };
+
+        this.warnPositionAsFunction();
     },
 
-    _initOptions: function(options) {
-        this._initTarget(options.target);
-        const container = options.container === undefined ? this.option('container') : options.container;
-        this._initContainer(container);
-
-        this.callBase(options);
+    warnPositionAsFunction() {
+        if(isFunction(this.option('position'))) { // position as function deprecated in 21.2
+            errors.log('W0018');
+        }
     },
 
     _initInnerOverlayClass: function() {
         this._$content.toggleClass(INNER_OVERLAY_CLASS, this.option('innerOverlay'));
     },
 
-    _initTarget: function(target) {
-        if(!isDefined(target)) {
-            return;
-        }
-
-        const options = this.option();
-        each([
-            'position.of',
-            'animation.show.from.position.of',
-            'animation.show.to.position.of',
-            'animation.hide.from.position.of',
-            'animation.hide.to.position.of'
-        ], (_, path) => {
-            const pathParts = path.split('.');
-
-            let option = options;
-            while(option) {
-                if(pathParts.length === 1) {
-                    if(isPlainObject(option)) {
-                        option[pathParts.shift()] = target;
-                    }
-                    break;
-                } else {
-                    option = option[pathParts.shift()];
-                }
-            }
-        });
-    },
-
-    _initContainer: function(container) {
-        container = container === undefined ? viewPort() : container;
-
-        const $element = this.$element();
-        let $container = $element.closest(container);
-
-        if(!$container.length) {
-            $container = $(container).first();
-        }
-
-        this._$container = $container.length ? $container : $element.parent();
-    },
-
     _initHideTopOverlayHandler: function(handler) {
         this._hideTopOverlayHandler = handler;
     },
 
+    _getActionsList: function() {
+        return ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned', 'onVisualPositionChanged'];
+    },
+
     _initActions: function() {
         this._actions = {};
+        const actions = this._getActionsList();
 
-        each(ACTIONS, (_, action) => {
+        each(actions, (_, action) => {
             this._actions[action] = this._createActionByOption(action, {
                 excludeValidators: ['disabled', 'readOnly']
             }) || noop;
         });
     },
 
-    _initCloseOnOutsideClickHandler: function() {
-        const that = this;
-        this._proxiedDocumentDownHandler = function() {
-            return that._documentDownHandler(...arguments);
+    _initHideOnOutsideClickHandler: function() {
+        this._proxiedDocumentDownHandler = (...args) => {
+            return this._documentDownHandler(...args);
         };
+    },
+
+    _initMarkup() {
+        this.callBase();
+        this._renderWrapperAttributes();
+        this._initPositionController();
     },
 
     _documentDownHandler: function(e) {
@@ -406,22 +310,26 @@ const Overlay = Widget.inherit({
             this._stopAnimation();
         }
 
-        let closeOnOutsideClick = this.option('closeOnOutsideClick');
-
-        if(isFunction(closeOnOutsideClick)) {
-            closeOnOutsideClick = closeOnOutsideClick(e);
-        }
-
-        const $container = this._$content;
         const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
-        const isInnerOverlay = $(e.target).closest('.' + INNER_OVERLAY_CLASS).length;
-        const outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || contains($container.get(0), e.target));
+        const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
+        const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
+            || contains(this._$content.get(0), e.target));
 
-        if(outsideClick && closeOnOutsideClick) {
+        if(outsideClick && this._shouldHideOnOutsideClick(e)) {
             this._outsideClickHandler(e);
         }
 
         return this.option('propagateOutsideClick');
+    },
+
+    _shouldHideOnOutsideClick: function(e) {
+        const { hideOnOutsideClick } = this.option();
+
+        if(isFunction(hideOnOutsideClick)) {
+            return hideOnOutsideClick(e);
+        }
+
+        return hideOnOutsideClick;
     },
 
     _outsideClickHandler(e) {
@@ -469,14 +377,29 @@ const Overlay = Widget.inherit({
         viewPortChanged.remove(this._viewPortChangeHandle);
 
         if(toggle) {
-            this._viewPortChangeHandle = this._viewPortChangeHandler.bind(this);
+            this._viewPortChangeHandle = (...args) => { this._viewPortChangeHandler(...args); };
             viewPortChanged.add(this._viewPortChangeHandle);
         }
     },
 
     _viewPortChangeHandler: function() {
-        this._initContainer(this.option('container'));
+        this._positionController.updateContainer(this.option('container'));
         this._refresh();
+    },
+
+    _renderWrapperAttributes() {
+        const { wrapperAttr } = this.option();
+        const attributes = extend({}, wrapperAttr);
+        const classNames = attributes.class;
+
+        delete attributes.class;
+
+        this.$wrapper()
+            .attr(attributes)
+            .removeClass(this._customWrapperClass)
+            .addClass(classNames);
+
+        this._customWrapperClass = classNames;
     },
 
     _renderVisibilityAnimate: function(visible) {
@@ -485,99 +408,168 @@ const Overlay = Widget.inherit({
         return visible ? this._show() : this._hide();
     },
 
-    _normalizePosition: function() {
-        const position = this.option('position');
-        this._position = typeof position === 'function' ? position() : position;
+    _getAnimationConfig: function() {
+        return this._getOptionValue('animation', this);
     },
 
-    _getAnimationConfig: function() {
-        let animation = this.option('animation');
-        if(isFunction(animation)) animation = animation.call(this);
-        return animation;
+    _toggleBodyScroll: noop,
+
+    _animateShowing: function() {
+        const animation = this._getAnimationConfig() ?? {};
+        const showAnimation = this._normalizeAnimation(animation.show, 'to');
+        const startShowAnimation = showAnimation?.start ?? noop;
+        const completeShowAnimation = showAnimation?.complete ?? noop;
+
+        this._animate(
+            showAnimation,
+            (...args) => {
+                if(this._isAnimationPaused) {
+                    return;
+                }
+                if(this.option('focusStateEnabled')) {
+                    eventsEngine.trigger(this._focusTarget(), 'focus');
+                }
+
+                completeShowAnimation.call(this, ...args);
+                this._showAnimationProcessing = false;
+                this._isHidden = false;
+                this._actions.onShown();
+                this._toggleSafariScrolling();
+                this._showingDeferred.resolve();
+            },
+            (...args) => {
+                if(this._isAnimationPaused) {
+                    return;
+                }
+                startShowAnimation.call(this, ...args);
+                this._showAnimationProcessing = true;
+            });
+    },
+
+    _processShowingHidingCancel: function(cancelArg, applyFunction, cancelFunction) {
+        if(isPromise(cancelArg)) {
+            cancelArg
+                .then(shouldCancel => {
+                    if(shouldCancel) {
+                        cancelFunction();
+                    } else {
+                        applyFunction();
+                    }
+                })
+                .catch(() => applyFunction());
+        } else {
+            cancelArg ? cancelFunction() : applyFunction();
+        }
     },
 
     _show: function() {
-        const that = this;
-        const deferred = new Deferred();
+        this._showingDeferred = new Deferred();
 
         this._parentHidden = this._isParentHidden();
-        deferred.done(() => {
-            delete that._parentHidden;
+        this._showingDeferred.done(() => {
+            delete this._parentHidden;
         });
 
         if(this._parentHidden) {
             this._isHidden = true;
-            return deferred.resolve();
+            return this._showingDeferred.resolve();
         }
 
         if(this._currentVisible) {
             return new Deferred().resolve().promise();
         }
         this._currentVisible = true;
-        this._isShown = false;
-
-        this._normalizePosition();
-
-        const animation = that._getAnimationConfig() || {};
-        const showAnimation = this._normalizeAnimation(animation.show, 'to');
-        const startShowAnimation = (showAnimation && showAnimation.start) || noop;
-        const completeShowAnimation = (showAnimation && showAnimation.complete) || noop;
 
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;
-            deferred.resolve();
+            this._showingDeferred.reject();
         } else {
             const show = () => {
-                this._renderVisibility(true);
+                this._toggleBodyScroll(this.option('enableBodyScroll'));
 
-                if(this._isShowingActionCanceled) {
-                    delete this._isShowingActionCanceled;
-                    deferred.resolve();
-                    return;
-                }
+                this._stopAnimation();
+                this._toggleVisibility(true);
+                this._$content.css('visibility', 'hidden');
+                this._$content.toggleClass(INVISIBLE_STATE_CLASS, false);
+                this._updateZIndexStackPosition(true);
+                this._positionController.openingHandled();
+                this._renderContent();
 
-                this._animate(showAnimation, function() {
-                    if(that.option('focusStateEnabled')) {
-                        eventsEngine.trigger(that._focusTarget(), 'focus');
-                    }
+                const showingArgs = { cancel: false };
+                this._actions.onShowing(showingArgs);
 
-                    completeShowAnimation.apply(this, arguments);
-                    that._showAnimationProcessing = false;
-                    that._isShown = true;
-                    that._actions.onShown();
-                    that._toggleSafariScrolling(false);
-                    deferred.resolve();
-                }, function() {
-                    startShowAnimation.apply(this, arguments);
-                    that._showAnimationProcessing = true;
-                });
+                const cancelShow = () => {
+                    this._toggleVisibility(false);
+                    this._$content.css('visibility', '');
+                    this._$content.toggleClass(INVISIBLE_STATE_CLASS, true);
+                    this._isShowingActionCanceled = true;
+                    this._moveFromContainer();
+                    this.option('visible', false);
+                    this._showingDeferred.resolve();
+                };
+
+                const applyShow = () => {
+                    this._$content.css('visibility', '');
+                    this._renderVisibility(true);
+                    this._animateShowing();
+                };
+
+                this._processShowingHidingCancel(showingArgs.cancel, applyShow, cancelShow);
             };
 
             if(this.option('templatesRenderAsynchronously')) {
                 this._stopShowTimer();
+                // NOTE: T390360, T386038
                 this._asyncShowTimeout = setTimeout(show);
             } else {
                 show();
             }
         }
 
-        return deferred.promise();
+        return this._showingDeferred.promise();
     },
 
-    _normalizeAnimation: function(animation, prop) {
-        if(animation) {
-            animation = extend({
-                type: 'slide'
-            }, animation);
+    _normalizeAnimation: function(showHideConfig, direction) {
+        if(showHideConfig) {
+            showHideConfig = extend({
+                type: 'slide',
+                skipElementInitialStyles: true, // NOTE: for fadeIn animation
+            }, showHideConfig);
 
-            if(animation[prop] && typeof animation[prop] === 'object') {
-                extend(animation[prop], {
-                    position: this._position
+            if(isObject(showHideConfig[direction])) {
+                extend(showHideConfig[direction], {
+                    position: this._positionController.position
                 });
             }
         }
 
-        return animation;
+        return showHideConfig;
+    },
+
+    _animateHiding: function() {
+        const animation = this._getAnimationConfig() ?? {};
+        const hideAnimation = this._normalizeAnimation(animation.hide, 'from');
+        const startHideAnimation = hideAnimation?.start ?? noop;
+        const completeHideAnimation = hideAnimation?.complete ?? noop;
+
+        this._animate(
+            hideAnimation,
+            (...args) => {
+                this._$content.css('pointerEvents', '');
+                this._renderVisibility(false);
+
+                completeHideAnimation.call(this, ...args);
+                this._hideAnimationProcessing = false;
+                this._actions?.onHidden();
+
+                this._hidingDeferred.resolve();
+            },
+            (...args) => {
+                this._$content.css('pointerEvents', 'none');
+                startHideAnimation.call(this, ...args);
+                this._hideAnimationProcessing = true;
+            }
+        );
     },
 
     _hide: function() {
@@ -586,52 +578,35 @@ const Overlay = Widget.inherit({
         }
         this._currentVisible = false;
 
-        const that = this;
-        const deferred = new Deferred();
-        const animation = that._getAnimationConfig() || {};
-        const hideAnimation = this._normalizeAnimation(animation.hide, 'from');
-        const startHideAnimation = (hideAnimation && hideAnimation.start) || noop;
-        const completeHideAnimation = (hideAnimation && hideAnimation.complete) || noop;
+        this._hidingDeferred = new Deferred();
         const hidingArgs = { cancel: false };
 
         if(this._isShowingActionCanceled) {
-            deferred.resolve();
+            delete this._isShowingActionCanceled;
+            this._hidingDeferred.reject();
         } else {
             this._actions.onHiding(hidingArgs);
 
-            that._toggleSafariScrolling(true);
+            this._toggleSafariScrolling();
+            this._toggleBodyScroll(true);
 
-            if(hidingArgs.cancel) {
+            const cancelHide = () => {
                 this._isHidingActionCanceled = true;
                 this.option('visible', true);
-                deferred.resolve();
-            } else {
+                this._hidingDeferred.resolve();
+            };
+
+            const applyHide = () => {
                 this._forceFocusLost();
                 this._toggleShading(false);
                 this._toggleSubscriptions(false);
                 this._stopShowTimer();
+                this._animateHiding();
+            };
 
-                this._animate(hideAnimation,
-                    function() {
-                        that._$content.css('pointerEvents', '');
-                        that._renderVisibility(false);
-
-                        completeHideAnimation.apply(this, arguments);
-                        that._hideAnimationProcessing = false;
-                        that._actions?.onHidden();
-
-                        deferred.resolve();
-                    },
-
-                    function() {
-                        that._$content.css('pointerEvents', 'none');
-                        startHideAnimation.apply(this, arguments);
-                        that._hideAnimationProcessing = true;
-                    }
-                );
-            }
+            this._processShowingHidingCancel(hidingArgs.cancel, applyHide, cancelHide);
         }
-        return deferred.promise();
+        return this._hidingDeferred.promise();
     },
 
     _forceFocusLost: function() {
@@ -673,32 +648,17 @@ const Overlay = Widget.inherit({
             triggerHidingEvent(this._$content);
         }
 
-        this._toggleVisibility(visible);
-
-        this._$content.toggleClass(INVISIBLE_STATE_CLASS, !visible);
-        this._updateZIndexStackPosition(visible);
-
         if(visible) {
-            this._renderContent();
-
-            const showingArgs = { cancel: false };
-            this._actions.onShowing(showingArgs);
-            if(showingArgs.cancel) {
-                this._toggleVisibility(false);
-                this._$content.toggleClass(INVISIBLE_STATE_CLASS, true);
-                this._updateZIndexStackPosition(false);
-                this._moveFromContainer();
-                this._isShowingActionCanceled = true;
-                this.option('visible', false);
-                return;
-            }
-
+            this._checkContainerExists();
             this._moveToContainer();
             this._renderGeometry();
 
             triggerShownEvent(this._$content);
             triggerResizeEvent(this._$content);
         } else {
+            this._toggleVisibility(visible);
+            this._$content.toggleClass(INVISIBLE_STATE_CLASS, !visible);
+            this._updateZIndexStackPosition(visible);
             this._moveFromContainer();
         }
         this._toggleShading(visible);
@@ -708,7 +668,7 @@ const Overlay = Widget.inherit({
 
     _updateZIndexStackPosition: function(pushToStack) {
         const overlayStack = this._overlayStack();
-        const index = inArray(this, overlayStack);
+        const index = overlayStack.indexOf(this);
 
         if(pushToStack) {
             if(index === -1) {
@@ -726,7 +686,6 @@ const Overlay = Widget.inherit({
     },
 
     _toggleShading: function(visible) {
-        this._$wrapper.toggleClass(OVERLAY_MODAL_CLASS, this.option('shading') && !this.option('container'));
         this._$wrapper.toggleClass(OVERLAY_SHADER_CLASS, visible && this.option('shading'));
 
         this._$wrapper.css('backgroundColor', this.option('shading') ? this.option('shadingColor') : '');
@@ -735,9 +694,8 @@ const Overlay = Widget.inherit({
     },
 
     _initTabTerminatorHandler: function() {
-        const that = this;
-        this._proxiedTabTerminatorHandler = function() {
-            that._tabKeyHandler(...arguments);
+        this._proxiedTabTerminatorHandler = (...args) => {
+            this._tabKeyHandler(...args);
         };
     },
 
@@ -802,7 +760,7 @@ const Overlay = Widget.inherit({
     _toggleSubscriptions: function(enabled) {
         if(hasWindow()) {
             this._toggleHideTopOverlayCallback(enabled);
-            this._toggleParentsScrollSubscription(enabled);
+            this._toggleHideOnParentsScrollSubscription(enabled);
         }
     },
 
@@ -818,34 +776,26 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _toggleParentsScrollSubscription: function(subscribe) {
-        if(!this._position) {
-            return;
-        }
-
-        const target = this._position.of || $();
-        const closeOnScroll = this.option('closeOnTargetScroll');
-        let $parents = getElement(target).parents();
+    _toggleHideOnParentsScrollSubscription: function(needSubscribe) {
         const scrollEvent = addNamespace('scroll', this.NAME);
+        const { prevTargets, handler } = this._parentsScrollSubscriptionInfo ?? {};
 
-        if(devices.real().deviceType === 'desktop') {
-            $parents = $parents.add(window);
-        }
+        eventsEngine.off(prevTargets, scrollEvent, handler);
 
-        this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
-            || (e => { this._targetParentsScrollHandler(e); });
-
-        eventsEngine.off($().add(this._$prevTargetParents), scrollEvent, this._proxiedTargetParentsScrollHandler);
-
-        if(subscribe && closeOnScroll) {
-            eventsEngine.on($parents, scrollEvent, this._proxiedTargetParentsScrollHandler);
-            this._$prevTargetParents = $parents;
+        const closeOnScroll = this.option('hideOnParentScroll');
+        if(needSubscribe && closeOnScroll) {
+            let $parents = this._hideOnParentScrollTarget().parents();
+            if(devices.real().deviceType === 'desktop') {
+                $parents = $parents.add(window);
+            }
+            eventsEngine.on($parents, scrollEvent, handler);
+            this._parentsScrollSubscriptionInfo.prevTargets = $parents;
         }
     },
 
-    _targetParentsScrollHandler: function(e) {
+    _hideOnParentsScrollHandler: function(e) {
         let closeHandled = false;
-        const closeOnScroll = this.option('closeOnTargetScroll');
+        const closeOnScroll = this.option('hideOnParentScroll');
         if(isFunction(closeOnScroll)) {
             closeHandled = closeOnScroll(e);
         }
@@ -853,6 +803,10 @@ const Overlay = Widget.inherit({
         if(!closeHandled && !this._showAnimationProcessing) {
             this.hide();
         }
+    },
+
+    _hideOnParentScrollTarget: function() {
+        return this._$wrapper;
     },
 
     _render: function() {
@@ -926,12 +880,15 @@ const Overlay = Widget.inherit({
             transclude,
             onRendered: () => {
                 whenContentRendered.resolve();
+
+                // NOTE: T1114344
+                if(this.option('templatesRenderAsynchronously')) {
+                    this._dimensionChanged();
+                }
             }
         });
 
-        this._renderDrag();
-        this._renderResize();
-        this._renderScrollTerminator();
+        this._toggleWrapperScrollEventsSubscription(this.option('preventScrollEvents'));
 
         whenContentRendered.done(() => {
             if(this.option('visible')) {
@@ -942,293 +899,159 @@ const Overlay = Widget.inherit({
         return whenContentRendered.promise();
     },
 
-    _renderDrag: function() {
-        const $dragTarget = this._getDragTarget();
+    _getPositionControllerConfig() {
+        const { container, visualContainer, _fixWrapperPosition, restorePosition } = this.option();
+        // NOTE: position is passed to controller in renderGeometry to prevent window field using in server side mode
 
-        if(!$dragTarget) {
-            return;
-        }
-
-        const startEventName = addNamespace(dragEventStart, this.NAME);
-        const updateEventName = addNamespace(dragEventMove, this.NAME);
-
-        eventsEngine.off($dragTarget, startEventName);
-        eventsEngine.off($dragTarget, updateEventName);
-
-        if(!this.option('dragEnabled')) {
-            return;
-        }
-
-        eventsEngine.on($dragTarget, startEventName, this._dragStartHandler.bind(this));
-        eventsEngine.on($dragTarget, updateEventName, this._dragUpdateHandler.bind(this));
+        return {
+            container,
+            visualContainer,
+            $root: this.$element(),
+            $content: this._$content,
+            $wrapper: this._$wrapper,
+            onPositioned: this._actions.onPositioned,
+            onVisualPositionChanged: this._actions.onVisualPositionChanged,
+            restorePosition,
+            _fixWrapperPosition
+        };
     },
 
-    _renderResize: function() {
-        this._resizable = this._createComponent(this._$content, Resizable, {
-            handles: this.option('resizeEnabled') ? 'all' : 'none',
-            onResizeEnd: this._resizeEndHandler.bind(this),
-            onResize: this._actions.onResize.bind(this),
-            onResizeStart: this._actions.onResizeStart.bind(this),
-            minHeight: 100,
-            minWidth: 100,
-            area: this._getDragResizeContainer()
-        });
+    _initPositionController() {
+        this._positionController = new OverlayPositionController(
+            this._getPositionControllerConfig()
+        );
     },
 
-    _resizeEndHandler: function() {
-        this._positionChangeHandled = true;
+    _toggleWrapperScrollEventsSubscription: function(enabled) {
+        const eventName = addNamespace(dragEventMove, this.NAME);
 
-        const width = this._resizable.option('width');
-        const height = this._resizable.option('height');
+        eventsEngine.off(this._$wrapper, eventName);
 
-        width && this.option('width', width);
-        height && this.option('height', height);
+        if(enabled) {
+            eventsEngine.on(this._$wrapper, eventName, {
+                validate: function() {
+                    return true;
+                },
+                getDirection: function() {
+                    return 'both';
+                },
+                _toggleGestureCover: function(toggle) {
+                    if(!toggle) {
+                        this._toggleGestureCoverImpl(toggle);
+                    }
+                },
+                _clearSelection: noop,
+                isNative: true
+            }, e => {
+                const originalEvent = e.originalEvent.originalEvent;
+                const { type } = originalEvent || {};
+                const isWheel = type === 'wheel';
+                const isMouseMove = type === 'mousemove';
+                const isScrollByWheel = isWheel && !isCommandKeyPressed(e);
+                e._cancelPreventDefault = true;
 
-        this._actions.onResizeEnd();
-    },
-
-    _renderScrollTerminator: function() {
-        const $scrollTerminator = this._wrapper();
-        const terminatorEventName = addNamespace(dragEventMove, this.NAME);
-
-        eventsEngine.off($scrollTerminator, terminatorEventName);
-        eventsEngine.on($scrollTerminator, terminatorEventName, {
-            validate: function() {
-                return true;
-            },
-            getDirection: function() {
-                return 'both';
-            },
-            _toggleGestureCover: function(toggle) {
-                if(!toggle) {
-                    this._toggleGestureCoverImpl(toggle);
+                if(originalEvent && e.cancelable !== false && (!isMouseMove && !isWheel || isScrollByWheel)) {
+                    e.preventDefault();
                 }
-            },
-            _clearSelection: noop,
-            isNative: true
-        }, e => {
-            const originalEvent = e.originalEvent.originalEvent;
-            e._cancelPreventDefault = true;
-
-            if(originalEvent && originalEvent.type !== 'mousemove' && e.cancelable !== false) {
-                e.preventDefault();
-            }
-        });
-    },
-
-    _getDragTarget: function() {
-        return this.$content();
-    },
-
-    _dragStartHandler: function(e) {
-        e.targetElements = [];
-
-        this._prevOffset = { x: 0, y: 0 };
-
-        const allowedOffsets = this._allowedOffsets();
-        e.maxTopOffset = allowedOffsets.top;
-        e.maxBottomOffset = allowedOffsets.bottom;
-        e.maxLeftOffset = allowedOffsets.left;
-        e.maxRightOffset = allowedOffsets.right;
-    },
-
-    _getDragResizeContainer: function() {
-        const isContainerDefined = originalViewPort().get(0) || this.option('container');
-        const $container = !isContainerDefined ? $(window) : this._$container;
-
-        return $container;
-    },
-
-    _deltaSize: function() {
-        const $content = this._$content;
-        const $container = this._getDragResizeContainer();
-
-        const contentWidth = $content.outerWidth();
-        const contentHeight = $content.outerHeight();
-        let containerWidth = $container.outerWidth();
-        let containerHeight = $container.outerHeight();
-
-        if(this._isWindow($container)) {
-            const document = domAdapter.getDocument();
-            const fullPageHeight = Math.max($(document).outerHeight(), containerHeight);
-            const fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
-
-            containerHeight = fullPageHeight;
-            containerWidth = fullPageWidth;
+            });
         }
-
-        return {
-            width: containerWidth - contentWidth,
-            height: containerHeight - contentHeight
-        };
-    },
-
-    _dragUpdateHandler: function(e) {
-        const offset = e.offset;
-        const prevOffset = this._prevOffset;
-        const targetOffset = {
-            top: offset.y - prevOffset.y,
-            left: offset.x - prevOffset.x
-        };
-
-        this._changePosition(targetOffset);
-
-        this._prevOffset = offset;
-    },
-
-    _changePosition: function(offset) {
-        const position = locate(this._$content);
-
-        move(this._$content, {
-            left: position.left + offset.left,
-            top: position.top + offset.top
-        });
-
-        this._positionChangeHandled = true;
-    },
-
-    _allowedOffsets: function() {
-        const position = locate(this._$content);
-        const deltaSize = this._deltaSize();
-        const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
-        const shaderOffset = this.option('shading') && !this.option('container') && !this._isWindow(this._getContainer()) ? locate(this._$wrapper) : { top: 0, left: 0 };
-        const boundaryOffset = this.option('boundaryOffset');
-
-        return {
-            top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v : 0,
-            bottom: isAllowedDrag ? -position.top - shaderOffset.top + deltaSize.height - boundaryOffset.v : 0,
-            left: isAllowedDrag ? position.left + shaderOffset.left + boundaryOffset.h : 0,
-            right: isAllowedDrag ? -position.left - shaderOffset.left + deltaSize.width - boundaryOffset.h : 0
-        };
     },
 
     _moveFromContainer: function() {
         this._$content.appendTo(this.$element());
-
-        this._detachWrapperToContainer();
-    },
-
-    _detachWrapperToContainer: function() {
         this._$wrapper.detach();
     },
 
-    _moveToContainer: function() {
-        this._attachWrapperToContainer();
+    _checkContainerExists() {
+        const $wrapperContainer = this._positionController.$container;
 
+        // NOTE: The container is undefined when DOM is not ready yet. See T1143527
+        if($wrapperContainer === undefined) {
+            return;
+        }
+
+        const containerExists = $wrapperContainer.length > 0;
+
+        if(!containerExists) {
+            uiErrors.log('W1021', this.NAME);
+        }
+    },
+
+    _moveToContainer: function() {
+        const $wrapperContainer = this._positionController.$container;
+
+        this._$wrapper.appendTo($wrapperContainer);
         this._$content.appendTo(this._$wrapper);
     },
 
-    _attachWrapperToContainer: function() {
-        const $element = this.$element();
-        const containerDefined = this.option('container') !== undefined;
-        let renderContainer = containerDefined ? this._$container : swatch.getSwatchContainer($element);
+    _renderGeometry: function(options) {
+        const { visible } = this.option();
 
-        if(renderContainer && renderContainer[0] === $element.parent()[0]) {
-            renderContainer = $element;
-        }
-
-        this._$wrapper.appendTo(renderContainer);
-    },
-
-    _fixHeightAfterSafariAddressBarResizing: function() {
-        if(this._isWindow(this._getContainer()) && hasSafariAddressBar) {
-            this._$wrapper.css('minHeight', window.innerHeight);
+        if(visible && hasWindow()) {
+            this._stopAnimation();
+            this._renderGeometryImpl();
         }
     },
 
-    _renderGeometry: function(isDimensionChanged) {
-        if(this.option('visible') && hasWindow()) {
-            this._renderGeometryImpl(isDimensionChanged);
-        }
-    },
-
-    _renderGeometryImpl: function(isDimensionChanged) {
-        this._stopAnimation();
-        this._normalizePosition();
+    _renderGeometryImpl: function() {
+        // NOTE: position can be specified as a function which needs to be called strict on render start
+        this._positionController.updatePosition(this._getOptionValue('position'));
         this._renderWrapper();
-        this._fixHeightAfterSafariAddressBarResizing();
         this._renderDimensions();
-        const resultPosition = this._renderPosition();
-
-        this._actions.onPositioned({ position: resultPosition });
+        this._renderPosition();
     },
 
-    _fixWrapperPosition: function() {
-        this._$wrapper.css('position', this._useFixedPosition() ? 'fixed' : 'absolute');
+    _renderPosition() {
+        this._positionController.positionContent();
     },
 
-    _useFixedPosition: function() {
-        return this._shouldFixBodyPosition()
-            || this.option('_fixedPosition');
+    _isAllWindowCovered: function() {
+        return isWindow(this._positionController.$visualContainer.get(0)) && this.option('shading');
     },
 
-    _shouldFixBodyPosition: function() {
-        const $container = this._getContainer();
-        return this._isWindow($container)
-            && (!iOS || this._bodyScrollTop !== undefined);
-    },
+    _toggleSafariScrolling: function() {
+        const visible = this.option('visible');
+        const $body = $(domAdapter.getBody());
+        const isIosSafari = devices.real().platform === 'ios' && browser.safari;
+        const isAllWindowCovered = this._isAllWindowCovered();
+        const isScrollingPrevented = $body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS);
 
-    _toggleSafariScrolling: function(scrollingEnabled) {
-        if(iOS && this._shouldFixBodyPosition()) {
-            const body = domAdapter.getBody();
-            if(scrollingEnabled) {
-                $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
-                window.scrollTo(0, this._bodyScrollTop);
-                this._bodyScrollTop = undefined;
-            } else if(this.option('visible')) {
-                this._bodyScrollTop = window.pageYOffset;
-                $(body).addClass(PREVENT_SAFARI_SCROLLING_CLASS);
+        const shouldPreventScrolling = !isScrollingPrevented
+            && visible
+            && isAllWindowCovered;
+        const shouldEnableScrolling = isScrollingPrevented
+            && (!visible || !isAllWindowCovered || this._disposed);
+
+        if(isIosSafari) {
+            if(shouldEnableScrolling) {
+                $body.removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
+                window.scrollTo(0, this._cachedBodyScrollTop);
+                this._cachedBodyScrollTop = undefined;
+            } else if(shouldPreventScrolling) {
+                this._cachedBodyScrollTop = window.pageYOffset;
+                $body.addClass(PREVENT_SAFARI_SCROLLING_CLASS);
             }
         }
     },
 
     _renderWrapper: function() {
-        this._fixWrapperPosition();
+        this._positionController.styleWrapperPosition();
         this._renderWrapperDimensions();
-        this._renderWrapperPosition();
+        this._positionController.positionWrapper();
     },
 
     _renderWrapperDimensions: function() {
-        let wrapperWidth;
-        let wrapperHeight;
-        const $container = this._getContainer();
-        if(!$container) {
-            return;
-        }
+        const $visualContainer = this._positionController.$visualContainer;
+        const documentElement = domAdapter.getDocumentElement();
+        const isVisualContainerWindow = isWindow($visualContainer.get(0));
 
-        const isWindow = this._isWindow($container);
-
-        wrapperWidth = isWindow ? '' : $container.outerWidth(),
-        wrapperHeight = isWindow ? '' : $container.outerHeight();
+        const wrapperWidth = isVisualContainerWindow ? documentElement.clientWidth : getOuterWidth($visualContainer);
+        const wrapperHeight = isVisualContainerWindow ? window.innerHeight : getOuterHeight($visualContainer);
 
         this._$wrapper.css({
             width: wrapperWidth,
             height: wrapperHeight
         });
-    },
-
-    _isWindow: function($element) {
-        return !!$element && isWindow($element.get(0));
-    },
-
-    _renderWrapperPosition: function() {
-        const $container = this._getContainer();
-
-        if($container) {
-            positionUtils.setup(this._$wrapper, { my: 'top left', at: 'top left', of: $container });
-        }
-    },
-
-    _getContainer: function() {
-        const position = this._position;
-        const container = this.option('container');
-        let positionOf = null;
-
-        if(!container && position) {
-            positionOf = isEvent(position.of) ? window : (position.of || window);
-        }
-
-        return getElement(container || positionOf);
     },
 
     _renderDimensions: function() {
@@ -1242,42 +1065,6 @@ const Overlay = Widget.inherit({
             width: this._getOptionValue('width', content),
             height: this._getOptionValue('height', content)
         });
-    },
-
-    _renderPosition: function() {
-        if(this._positionChangeHandled) {
-            const allowedOffsets = this._allowedOffsets();
-
-            this._changePosition({
-                top: fitIntoRange(0, -allowedOffsets.top, allowedOffsets.bottom),
-                left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
-            });
-        } else {
-            this._renderOverlayBoundaryOffset();
-
-            resetPosition(this._$content);
-
-            const position = this._transformStringPosition(this._position, POSITION_ALIASES);
-            const resultPosition = positionUtils.setup(this._$content, position);
-
-            forceRepaint(this._$content);
-
-            return resultPosition;
-        }
-    },
-
-    _transformStringPosition: function(position, positionAliases) {
-        if(isString(position)) {
-            position = extend({}, positionAliases[position]);
-        }
-
-        return position;
-    },
-
-    _renderOverlayBoundaryOffset: function() {
-        const boundaryOffset = this.option('boundaryOffset');
-
-        this._$content.css('margin', boundaryOffset.v + 'px ' + boundaryOffset.h + 'px');
     },
 
     _focusTarget: function() {
@@ -1316,17 +1103,17 @@ const Overlay = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        this._renderGeometry(true);
+        this._renderGeometry();
     },
 
     _clean: function() {
-        if(!this._contentAlreadyRendered) {
+        const options = this.option();
+        if(!this._contentAlreadyRendered && !options.isRenovated) {
             this.$content().empty();
         }
 
         this._renderVisibility(false);
         this._stopShowTimer();
-
         this._cleanFocusState();
     },
 
@@ -1346,20 +1133,16 @@ const Overlay = Widget.inherit({
         this._toggleSubscriptions(false);
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
-        this._toggleSafariScrolling(true);
 
         this._actions = null;
+        this._parentsScrollSubscriptionInfo = null;
 
         this.callBase();
 
-        zIndexPool.remove(this._zIndex);
+        this._toggleSafariScrolling();
+        this.option('visible') && zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
-    },
-
-    _toggleDisabledState: function(value) {
-        this.callBase(...arguments);
-        this._$content.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
     },
 
     _toggleRTLDirection: function(rtl) {
@@ -1367,55 +1150,53 @@ const Overlay = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        const value = args.value;
+        const { value, name } = args;
 
-        if(inArray(args.name, ACTIONS) > -1) {
+        if(this._getActionsList().includes(name)) {
             this._initActions();
             return;
         }
 
-        switch(args.name) {
-            case 'dragEnabled':
-                this._renderDrag();
-                this._renderGeometry();
-                break;
-            case 'resizeEnabled':
-                this._renderResize();
-                this._renderGeometry();
+        switch(name) {
+            case 'animation':
                 break;
             case 'shading':
+                this._toggleShading(this.option('visible'));
+                this._toggleSafariScrolling();
+                break;
             case 'shadingColor':
                 this._toggleShading(this.option('visible'));
                 break;
             case 'width':
             case 'height':
+                this._renderGeometry();
+                break;
             case 'minWidth':
             case 'maxWidth':
             case 'minHeight':
             case 'maxHeight':
-            case 'boundaryOffset':
                 this._renderGeometry();
                 break;
             case 'position':
-                this._positionChangeHandled = false;
+                this._positionController.updatePosition(this.option('position'));
+                this._positionController.restorePositionOnNextRender(true);
                 this._renderGeometry();
+                this._toggleSafariScrolling();
                 break;
             case 'visible':
-                this._renderVisibilityAnimate(value).done(() => {
-                    if(!this._animateDeferred) {
-                        return;
-                    }
-
-                    this._animateDeferred.resolveWith(this);
-                });
-                break;
-            case 'target':
-                this._initTarget(value);
-                this._invalidate();
+                this._renderVisibilityAnimate(value)
+                    .done(() => this._animateDeferred?.resolveWith(this))
+                    .fail(() => this._animateDeferred?.reject());
                 break;
             case 'container':
-                this._initContainer(value);
+                this._positionController.updateContainer(value);
                 this._invalidate();
+                this._toggleSafariScrolling();
+                break;
+            case 'visualContainer':
+                this._positionController.updateVisualContainer(value);
+                this._renderWrapper();
+                this._toggleSafariScrolling();
                 break;
             case 'innerOverlay':
                 this._initInnerOverlayClass();
@@ -1428,22 +1209,32 @@ const Overlay = Widget.inherit({
                 break;
             case 'hideTopOverlayHandler':
                 this._toggleHideTopOverlayCallback(false);
-                this._initHideTopOverlayHandler(args.value);
+                this._initHideTopOverlayHandler(value);
                 this._toggleHideTopOverlayCallback(this.option('visible'));
                 break;
-            case 'closeOnTargetScroll':
-                this._toggleParentsScrollSubscription(this.option('visible'));
+            case 'hideOnParentScroll':
+                this._toggleHideOnParentsScrollSubscription(this.option('visible'));
                 break;
             case 'closeOnOutsideClick':
-            case 'animation':
+            case 'hideOnOutsideClick':
             case 'propagateOutsideClick':
                 break;
             case 'rtlEnabled':
                 this._contentAlreadyRendered = false;
                 this.callBase(args);
                 break;
-            case '_fixedPosition':
-                this._fixWrapperPosition();
+            case '_fixWrapperPosition':
+                this._positionController.fixWrapperPosition = value;
+                break;
+            case 'wrapperAttr':
+                this._renderWrapperAttributes();
+                break;
+            case 'restorePosition':
+                this._positionController.restorePosition = value;
+                break;
+            case 'preventScrollEvents':
+                this._logDeprecatedPreventScrollEventsInfo();
+                this._toggleWrapperScrollEventsSubscription(value);
                 break;
             default:
                 this.callBase(args);
@@ -1462,10 +1253,15 @@ const Overlay = Widget.inherit({
         this._animateDeferred = animateDeferred;
         this.option('visible', showing);
 
-        animateDeferred.promise().done(() => {
-            delete this._animateDeferred;
-            result.resolveWith(this, [this.option('visible')]);
-        });
+        animateDeferred.promise()
+            .done(() => {
+                delete this._animateDeferred;
+                result.resolveWith(this, [this.option('visible')]);
+            })
+            .fail(() => {
+                delete this._animateDeferred;
+                result.reject();
+            });
 
         return result.promise();
     },
@@ -1488,7 +1284,8 @@ const Overlay = Widget.inherit({
 
     repaint: function() {
         if(this._contentAlreadyRendered) {
-            this._renderGeometry();
+            this._positionController.restorePositionOnNextRender(true);
+            this._renderGeometry({ forceStopAnimation: true });
             triggerResizeEvent(this._$content);
         } else {
             this.callBase();

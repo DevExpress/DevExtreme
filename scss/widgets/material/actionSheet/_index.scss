@@ -3,12 +3,13 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/actionSheet";
 
 // adduse
 
 
 .dx-actionsheet-container {
-  .dx-actionsheet-item {
+  .dx-actionsheet-item:not(:last-child) {
     margin: $material-actionsheet-item-margin;
   }
 
@@ -19,4 +20,5 @@
 
 .dx-button.dx-actionsheet-cancel {
   margin: 0;
+  margin-top: $material-actionsheet-item-margin-value;
 }

@@ -1,14 +1,16 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+@use "../../base/checkBox";
 
 // adduse
 
-
 $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+$icon-position: relative;
 
 .dx-checkbox {
   line-height: 0;
@@ -72,8 +74,8 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     height: $material-checkbox-ripple-size;
     top: 50%;
     left: 50%;
-    margin-top: -$material-checkbox-ripple-size / 2;
-    margin-left: -$material-checkbox-ripple-size / 2;
+    margin-top: math.div(-$material-checkbox-ripple-size, 2);
+    margin-left: math.div(-$material-checkbox-ripple-size, 2);
     border-radius: 50%;
     display: block;
     position: absolute;
@@ -92,7 +94,9 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     border: none;
 
     @include dx-icon(check);
-    @include dx-icon-font-centered-sizing($material-checkbox-arrow-icon-size);
+    @include dx-icon-font-centered-sizing($material-checkbox-arrow-icon-size, $icon-position);
+
+    font-size: $material-checkbox-arrow-font-size;
   }
 
   .dx-checkbox-indeterminate & {
@@ -101,18 +105,9 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     border: none;
 
     @include dx-font-icon("\f074");
-    @include dx-icon-font-centered-sizing($material-checkbox-intermidiate-icon-size);
-  }
-}
+    @include dx-icon-font-centered-sizing($material-checkbox-indeterminate-icon-size, $icon-position);
 
-.dx-checkbox-text {
-  margin-left: -$material-checkbox-size;
-  padding-left: $material-checkbox-size + 5px;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    margin-right: -$material-checkbox-size;
-    padding-right: $material-checkbox-size + 5px;
+    font-size: $material-checkbox-indeterminate-font-size;
   }
 }
 

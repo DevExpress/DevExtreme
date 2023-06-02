@@ -1,10 +1,20 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { createRef } from 'react';
 import { mount, shallow } from 'enzyme';
+import { RefObject } from '@devextreme-generator/declarations';
+// eslint-disable-next-line import/no-relative-packages
+import { renderTemplate } from '../../../../../node_modules/@devextreme/runtime/cjs/declarations/index';
 import { DomComponentWrapper, DomComponentWrapperProps, viewFunction as DomComponentWrapperView } from '../dom_component_wrapper';
-import { renderTemplate } from '../../../utils/render_template';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { getUpdatedOptions } from '../utils/get_updated_options';
 
-jest.mock('../../../utils/render_template', () => ({ renderTemplate: jest.fn() }));
+jest.mock('../../../../../node_modules/@devextreme/runtime/esm/declarations/index', () => ({ hasTemplate: jest.fn(() => true), renderTemplate: jest.fn() }));
+jest.mock('../../../../../node_modules/@devextreme/runtime/cjs/declarations/index', () => ({ hasTemplate: jest.fn(() => true), renderTemplate: jest.fn() }));
+
+jest.mock('../utils/get_updated_options', () => {
+  const defaultImplementation = jest.requireActual('../utils/get_updated_options');
+  return defaultImplementation;
+});
 
 describe('DomComponentWrapper', () => {
   describe('View', () => {
@@ -46,24 +56,41 @@ describe('DomComponentWrapper', () => {
     describe('properties', () => {
       it('itemTemplate', () => {
         const component = new DomComponentWrapper({
+          templateNames: ['itemTemplate'],
           componentProps: {
-            itemTemplate: 'some template',
+            itemTemplate: () => 'some Template',
             tabIndex: 2,
             disabled: true,
           },
         } as Partial<DomComponentWrapperProps> as any);
 
         const { properties } = component;
-        expect(renderTemplate).not.toBeCalled();
+        expect(renderTemplate).not.toHaveBeenCalled();
         (properties as any).itemTemplate();
-        expect(renderTemplate).toBeCalledTimes(1);
+        expect(renderTemplate).toHaveBeenCalledTimes(1);
         expect('itemTemplate' in properties).toStrictEqual(true);
         expect(properties.tabIndex).toStrictEqual(2);
         expect(properties.disabled).toStrictEqual(true);
       });
 
+      it('haven`t template', () => {
+        jest.resetAllMocks();
+        const component = new DomComponentWrapper({
+          templateNames: ['itemTemplate'],
+          componentProps: {
+            itemTemplate: () => 'some Template',
+          },
+        } as Partial<DomComponentWrapperProps> as any);
+
+        const { properties } = component;
+        expect(renderTemplate).not.toHaveBeenCalled();
+        (properties as any).itemTemplate();
+        expect(renderTemplate).not.toHaveBeenCalled();
+      });
+
       it('picks props except valueChange', () => {
         const component = new DomComponentWrapper({
+          templateNames: [],
           componentProps: {
             valueChange: () => { },
             tabIndex: 2,
@@ -81,6 +108,7 @@ describe('DomComponentWrapper', () => {
       describe('rtlEnabled', () => {
         it('get from props', () => {
           const component = new DomComponentWrapper({
+            templateNames: [],
             componentProps: { rtlEnabled: true },
           } as Partial<DomComponentWrapperProps> as any);
           component.config = { rtlEnabled: false };
@@ -89,24 +117,40 @@ describe('DomComponentWrapper', () => {
 
         it('get from context', () => {
           const component = new DomComponentWrapper({
+            templateNames: [],
             componentProps: {},
-          } as DomComponentWrapperProps);
+          } as Partial<DomComponentWrapperProps> as any);
           component.config = { rtlEnabled: true };
           expect(component.properties.rtlEnabled).toBe(true);
         });
 
         it('should be undefined', () => {
           const component = new DomComponentWrapper({
+            templateNames: [],
             componentProps: {},
-          } as DomComponentWrapperProps);
+          } as Partial<DomComponentWrapperProps> as any);
           expect(component.properties.rtlEnabled).toBe(false);
+        });
+
+        it('should be false when it is passed as undefined', () => {
+          const component = new DomComponentWrapper({
+            templateNames: [],
+            componentProps: { rtlEnabled: undefined },
+          } as any);
+
+          expect(component.properties)
+            .toEqual({
+              isRenovated: true,
+              rtlEnabled: false,
+            });
         });
       });
 
       it('default onValueChange', () => {
         const component = new DomComponentWrapper({
+          templateNames: [],
           componentProps: {},
-        } as DomComponentWrapperProps);
+        } as Partial<DomComponentWrapperProps> as any);
 
         const { onValueChanged } = component.properties;
 
@@ -116,13 +160,27 @@ describe('DomComponentWrapper', () => {
       it('onValueChange wraps valueChange prop', () => {
         const fn = jest.fn();
         const component = new DomComponentWrapper({
+          templateNames: [],
           componentProps: { valueChange: fn },
         } as Partial<DomComponentWrapperProps> as any);
         const { onValueChanged } = component.properties;
 
-        (onValueChanged as Function)({ value: 5 });
+        (onValueChanged as (({ value: number }) => any))({ value: 5 });
 
         expect(fn.mock.calls).toEqual([[5]]);
+      });
+
+      it('should remove undefined properties', () => {
+        const component = new DomComponentWrapper({
+          templateNames: [],
+          componentProps: { valueChange: undefined },
+        } as any);
+
+        expect(component.properties)
+          .toEqual({
+            isRenovated: true,
+            rtlEnabled: false,
+          });
       });
     });
 
@@ -136,20 +194,21 @@ describe('DomComponentWrapper', () => {
         const component = new DomComponentWrapper({
           componentProps: {},
           componentType: DomComponentMock as any,
+          templateNames: [],
         } as DomComponentWrapperProps);
         return component;
       };
 
       it('setupWidget', () => {
-        const widgetRef = {} as HTMLDivElement;
+        const widgetRef = { current: {} } as RefObject<HTMLDivElement>;
         const component = createWidget();
         const spy = jest.spyOn(component, 'properties', 'get');
         component.widgetRef = widgetRef;
 
         component.setupWidget();
 
-        expect(DomComponentMock).toBeCalledTimes(1);
-        expect(DomComponentMock).toBeCalledWith(widgetRef, spy.mock.results[0].value);
+        expect(DomComponentMock).toHaveBeenCalledTimes(1);
+        expect(DomComponentMock).toHaveBeenCalledWith(widgetRef.current, spy.mock.results[0].value);
       });
 
       it('setupWidget returns dispose widget callback', () => {
@@ -157,10 +216,11 @@ describe('DomComponentWrapper', () => {
         DomComponentMock.mockImplementation(() => ({ dispose: disposeDom }));
 
         const component = createWidget();
+        component.widgetRef = { current: {} } as RefObject<HTMLDivElement>;
         const dispose = component.setupWidget();
         dispose();
 
-        expect((disposeDom as any).mock.instances[0].dispose).toBeCalledTimes(1);
+        expect((disposeDom as any).mock.instances[0].dispose).toHaveBeenCalledTimes(1);
       });
 
       it('updateWidget. Widget is not initialized', () => {
@@ -169,37 +229,50 @@ describe('DomComponentWrapper', () => {
 
         component.updateWidget();
 
-        expect(DomComponentMock).toBeCalledTimes(0);
-        expect(spy).toBeCalledTimes(0);
+        expect(DomComponentMock).toHaveBeenCalledTimes(0);
+        expect(spy).toHaveBeenCalledTimes(0);
       });
 
       it('updateWidget. Widget is initialized', () => {
         const component = createWidget();
         const spy = jest.spyOn(component, 'properties', 'get');
-        const instance = { option: jest.fn() };
+        const instance = { option: jest.fn(), beginUpdate: jest.fn(), endUpdate: jest.fn() };
         component.instance = instance as any;
 
         component.updateWidget();
 
-        expect(instance.option).toBeCalledWith(spy.mock.results[0].value);
+        expect(instance.beginUpdate).toHaveBeenCalledTimes(1);
+        expect(spy.mock.results[0].value).toEqual(component.properties);
+        expect(instance.endUpdate).toHaveBeenCalledTimes(1);
       });
 
-      it('setRootElementRef, set rootElementRef to div ref', () => {
-        const widgetRef = {} as HTMLDivElement;
-        const component = new DomComponentWrapper({
-          rootElementRef: {} as HTMLDivElement,
-        } as DomComponentWrapperProps);
-        component.widgetRef = widgetRef;
-        component.setRootElementRef();
+      it('updateWidget. Properties are not changed', () => {
+        const component = createWidget();
+        const instance = { option: jest.fn(), beginUpdate: jest.fn(), endUpdate: jest.fn() };
+        component.instance = instance as any;
 
-        expect(component.props.rootElementRef).toBe(component.widgetRef);
+        (getUpdatedOptions as jest.Mock) = jest.fn(() => []);
+        component.updateWidget();
+
+        expect(instance.beginUpdate).toHaveBeenCalledTimes(0);
+        expect(instance.option).toHaveBeenCalledTimes(0);
+        expect(instance.endUpdate).toHaveBeenCalledTimes(0);
       });
 
-      it('setRootElementRef, hasnt rootElementRef', () => {
-        const component = new DomComponentWrapper({ } as DomComponentWrapperProps);
-        component.widgetRef = {} as HTMLDivElement;
-        component.setRootElementRef();
-        expect(component.props.rootElementRef).toBeUndefined();
+      it('updateWidget. Properties are changed', () => {
+        const component = createWidget();
+        const instance = { option: jest.fn(), beginUpdate: jest.fn(), endUpdate: jest.fn() };
+        component.instance = instance as any;
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (getUpdatedOptions as jest.Mock) = jest.fn(() => [
+          { path: 'someProp', value: 'someValue' },
+        ]);
+        component.updateWidget();
+
+        expect(instance.beginUpdate).toHaveBeenCalledTimes(1);
+        expect(instance.option).toHaveBeenCalledWith('someProp', 'someValue');
+        expect(instance.endUpdate).toHaveBeenCalledTimes(1);
       });
     });
   });

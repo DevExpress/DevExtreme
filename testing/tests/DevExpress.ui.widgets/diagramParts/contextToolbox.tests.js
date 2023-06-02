@@ -1,6 +1,5 @@
 import $ from 'jquery';
 const { test } = QUnit;
-import 'common.css!';
 import 'ui/diagram';
 
 import { Consts } from '../../../helpers/diagramHelpers.js';
@@ -33,15 +32,15 @@ QUnit.module('Context Toolbox', {
         assert.equal($contextToolbox.length, 0);
     });
     test('should set contextToolbox width', function(assert) {
-        let $contextToolbox = $('body').find(Consts.CONTEXT_TOOLBOX_CONTENT_SELECTOR);
+        let $contextToolbox = $('#qunit-fixture').find(Consts.CONTEXT_TOOLBOX_CONTENT_SELECTOR);
         assert.equal($contextToolbox.length, 0);
         this.instance._contextToolbox._show(0, 0, 0, 'general', () => {});
-        $contextToolbox = $('body').find(Consts.CONTEXT_TOOLBOX_CONTENT_SELECTOR);
+        $contextToolbox = $('#qunit-fixture').find(Consts.CONTEXT_TOOLBOX_CONTENT_SELECTOR);
         assert.equal($contextToolbox.length, 1);
         assert.notEqual($contextToolbox.width(), 300);
         this.instance.option('contextToolbox.width', 300);
         this.instance._contextToolbox._show(0, 0, 0, 'general', () => {});
-        $contextToolbox = $('body').find(Consts.CONTEXT_TOOLBOX_CONTENT_SELECTOR);
+        $contextToolbox = $('#qunit-fixture').find(Consts.CONTEXT_TOOLBOX_CONTENT_SELECTOR);
         assert.equal($contextToolbox.length, 1);
         assert.equal($contextToolbox.width(), 300);
     });

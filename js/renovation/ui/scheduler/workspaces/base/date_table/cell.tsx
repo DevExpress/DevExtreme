@@ -5,22 +5,39 @@ import {
   JSXTemplate,
   Template,
   OneWay,
-} from 'devextreme-generator/component_declaration/common';
+  Slot,
+} from '@devextreme-generator/declarations';
 import { CellBase as Cell, CellBaseProps } from '../cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
-import { ContentTemplateProps, DataCellTemplateProps } from '../../types.d';
+import { DataCellTemplateProps } from '../../types';
+import { DATE_TABLE_CELL_CLASS } from '../../const';
 
-export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
+const ADD_APPOINTMENT_LABEL = 'Add appointment';
+
+export const viewFunction = ({
+  props: {
+    isFirstGroupCell,
+    isLastGroupCell,
+    dataCellTemplate: DataCellTemplate,
+    children,
+  },
+  classes,
+  dataCellTemplateProps,
+  ariaLabel,
+}: DateTableCellBase): JSX.Element => (
   <Cell
-      // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    isFirstGroupCell={viewModel.props.isFirstGroupCell}
-    isLastGroupCell={viewModel.props.isLastGroupCell}
-    contentTemplate={viewModel.props.dataCellTemplate}
-    contentTemplateProps={viewModel.dataCellTemplateProps}
-    className={viewModel.classes}
+    isFirstGroupCell={isFirstGroupCell}
+    isLastGroupCell={isLastGroupCell}
+    className={classes}
+    ariaLabel={ariaLabel}
   >
-    {viewModel.props.children}
+    {!DataCellTemplate && children}
+    {!!DataCellTemplate && (
+      <DataCellTemplate
+        index={dataCellTemplateProps.index}
+        data={dataCellTemplateProps.data}
+      />
+    )}
   </Cell>
 );
 
@@ -33,6 +50,12 @@ export class DateTableCellBaseProps extends CellBaseProps {
   @OneWay() today?: boolean = false;
 
   @OneWay() firstDayOfMonth?: boolean = false;
+
+  @OneWay() isSelected = false;
+
+  @OneWay() isFocused = false;
+
+  @Slot() children?: JSX.Element;
 }
 
 @Component({
@@ -41,16 +64,23 @@ export class DateTableCellBaseProps extends CellBaseProps {
 })
 export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
   get classes(): string {
-    const { className = '', allDay } = this.props;
+    const {
+      className = '',
+      allDay,
+      isSelected,
+      isFocused,
+    } = this.props;
     return combineClasses({
       'dx-scheduler-cell-sizes-horizontal': true,
       'dx-scheduler-cell-sizes-vertical': !allDay,
-      'dx-scheduler-date-table-cell': !allDay,
+      [DATE_TABLE_CELL_CLASS]: !allDay,
+      'dx-state-focused': isSelected,
+      'dx-scheduler-focused-cell': isFocused,
       [className]: true,
     });
   }
 
-  get dataCellTemplateProps(): ContentTemplateProps {
+  get dataCellTemplateProps(): DataCellTemplateProps {
     const {
       index, startDate, endDate, groups, groupIndex, allDay, contentTemplateProps,
     } = this.props;
@@ -62,10 +92,14 @@ export class DateTableCellBase extends JSXComponent(DateTableCellBaseProps) {
         groups,
         groupIndex: groups ? groupIndex : undefined,
         text: '',
-        allDay: allDay || undefined,
+        allDay: !!allDay || undefined,
         ...contentTemplateProps.data,
       },
       index,
     };
+  }
+
+  get ariaLabel(): string | undefined {
+    return this.props.isSelected ? ADD_APPOINTMENT_LABEL : undefined;
   }
 }

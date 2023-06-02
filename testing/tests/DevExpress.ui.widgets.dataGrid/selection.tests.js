@@ -1,24 +1,14 @@
-QUnit.testStart(function() {
-    const markup =
-'<div>\
-    <div id="container" class="dx-datagrid"></div>\
-</div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-import 'common.css!';
-
-import 'ui/data_grid/ui.data_grid';
+import 'ui/data_grid';
 import 'data/odata/store';
 
 import $ from 'jquery';
-import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
+import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks.js';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import clickEvent from 'events/click';
+import errors from 'ui/widget/ui.errors';
 
 const dataGridWrapper = new DataGridWrapper('#container');
 
@@ -68,6 +58,15 @@ const setupSelectionModule = function() {
 const teardownSelectionModule = function() {
     teardownModule.apply(this);
 };
+
+QUnit.testStart(function() {
+    const markup =
+        `<div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardownSelectionModule }, () => {
 
@@ -163,7 +162,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
             finalized = true;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(finalized);
@@ -493,7 +492,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         this.selectionController.selectRows([]);
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(loadingCount, 0, 'no loadings');
@@ -571,13 +570,9 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         this.selectionController.selectRows([{ name: 'Kate', age: 20 }]);
 
-        this.selectionController.optionChanged({
-            name: 'selectedRowKeys',
-            value: [
-                { name: 'Dan', age: 16 },
-                { name: 'Dmitry', age: 18 }
-            ]
-        });
+        this.option('selectedRowKeys', [
+            { name: 'Dan', age: 16 },
+            { name: 'Dmitry', age: 18 }]);
 
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
 
@@ -680,12 +675,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         const keys = [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }];
 
-        this.options.selectedRowKeys = keys;
-
-        this.selectionController.optionChanged({
-            name: 'selectedRowKeys',
-            value: keys
-        });
+        this.option('selectedRowKeys', keys);
 
         assert.deepEqual(this.selectionController.option('selectedRowKeys'), keys, 'selectedRowKeys instance is not changed');
         assert.deepEqual(this.selectionController.getSelectedRowsData(), keys, 'selectRowsData equal keys by deep equal');
@@ -889,7 +879,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         // act
         this.options.selectedRowKeys = [{ name: 'Dan', age: 16 }];
         this.dataController.init();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         assert.strictEqual(onSelectionChangedCounter, 0, 'onSelectionChanged not called');
@@ -1026,14 +1016,14 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         this.dataController.optionChanged({ name: 'dataSource' });
 
-        this.clock.tick();
+        this.clock.tick(10);
         this.dataController.store().on('loading', function(options) {
             loadOptions = options;
         });
 
         // act
         this.selectionController.selectAll();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(loadOptions.expand, 'testExpand', 'dataSource expand options sent correctly');
@@ -1096,8 +1086,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(selectionChangedCount, 1);
 
         // act
-        this.options.dataSource = [{ name: 'Dan', age: 16 }];
-        this.dataController.optionChanged({ name: 'dataSource' });
+        this.option('dataSource', [{ name: 'Dan', age: 16 }]);
 
         // assert
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
@@ -1378,7 +1367,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
             isSelectAllStates.push(that.selectionController.isSelectAll());
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(loadingCount, 1, 'one loading after init dataSource');
@@ -1405,13 +1394,13 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
 
         this.dataController.optionChanged({ name: 'dataSource' });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.selectRows(['Dan1', 'Dan3']);
         this.clearSelection();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(this.getSelectedRowKeys(), []);
@@ -1495,6 +1484,73 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(this.getSelectedRowKeys().length, 6, 'selected row count');
         assert.strictEqual(this.selectionController.isSelectAll(), true, 'isSelectAll');
     });
+
+    QUnit.test('selectAll when calculateCellValue is defined for filtered column (T1021412)', function(assert) {
+        this.applyOptions({
+            columns: [{
+                dataField: 'age',
+                calculateCellValue() { return 99; },
+                filterValue: 99
+            }]
+        });
+
+        // act
+        this.selectionController.selectAll();
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), ['age', '=', 99], 'filter');
+        assert.strictEqual(this.getVisibleRows().length, 7, 'visible row count');
+        assert.strictEqual(this.totalCount(), 7, 'total count');
+        assert.strictEqual(this.getSelectedRowKeys().length, 7, 'selected row count');
+        assert.strictEqual(this.selectionController.isSelectAll(), true, 'isSelectAll');
+    });
+
+    ['single', 'multiple'].forEach(selectionMode => {
+        QUnit.test(`Disabled item should be selected when mode = ${selectionMode} (T1015840)`, function(assert) {
+            this.applyOptions({
+                selection: {
+                    mode: selectionMode
+                }
+            });
+            this.array[0].disabled = true;
+
+            // act
+            this.selectionController.changeItemSelection(0, { control: selectionMode === 'multiple' });
+
+            // assert
+            assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', age: 15, disabled: true }]);
+        });
+    });
+
+    QUnit.module('W1018', () => {
+        [true, false].forEach(deferred => {
+            ['infinite', 'virtual', 'standard'].forEach(scrollingMode => {
+                ['multiple', 'single', 'none'].forEach(selectionMode => {
+                    ['page', 'allPages'].forEach(selectAllMode => {
+                        QUnit.test(`scrolling mode = ${scrollingMode}, deferred = ${deferred}, selection mode = ${selectionMode}, selectAllMode = ${selectAllMode}`, function(assert) {
+                            // arrange
+                            sinon.spy(errors, 'log');
+
+                            this.applyOptions({
+                                selection: { mode: selectionMode, deferred, selectAllMode },
+                                scrolling: { mode: scrollingMode }
+                            });
+
+                            // assert
+                            if(scrollingMode === 'infinite' && selectionMode === 'multiple' && !deferred && selectAllMode === 'allPages') {
+                                assert.equal(errors.log.callCount, 1, 'warning was thrown');
+                                assert.equal(errors.log.lastCall.args[0], 'W1018', 'warning code');
+                            } else {
+                                assert.equal(errors.log.callCount, 0, 'warning was not thrown');
+                            }
+
+                            errors.log.restore();
+                        });
+                    });
+                });
+            });
+        });
+    });
 });
 
 QUnit.module('Selection without dataSource', { beforeEach: setupModule, afterEach: teardownModule }, () => {
@@ -1538,7 +1594,7 @@ QUnit.module('Selection without dataSource', { beforeEach: setupModule, afterEac
             changeCallCount++;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changeCallCount, 1);
@@ -1569,7 +1625,7 @@ QUnit.module('Selection without dataSource', { beforeEach: setupModule, afterEac
 
         selectionController.selectAll();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual(selectionController.getSelectedRowKeys().length, 2);
@@ -2105,6 +2161,31 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
 
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 3]);
         assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ id: 2, name: 'Dan', age: 16 }, { id: 3, name: 'Vadim', age: 17 }]);
+    });
+
+    QUnit.test('Select all state should be correct after removing a selected row via the push API', function(assert) {
+        // arrange
+        this.applyOptions({
+            selection: {
+                mode: 'multiple',
+                allowSelectAll: true
+            }
+        });
+        const store = this.dataController.dataSource().store();
+
+        this.selectionController.selectRows([2]);
+
+        // assert
+        assert.deepEqual(this.option('selectedRowKeys'), [2]);
+        assert.strictEqual(this.selectionController.isSelectAll(), undefined, 'select all state is indeterminate');
+
+        // act
+        store.push([{ type: 'remove', key: 2 }]);
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(this.selectionController.isSelectAll(), false, 'nothing is selected');
+        assert.deepEqual(this.option('selectedRowKeys'), [], 'selectedRowKeys is empty');
     });
 });
 
@@ -2914,7 +2995,7 @@ QUnit.module('Selection SelectAllMode', {
 
         this.applyOptions({
             columns: ['id', 'field1', 'field3'],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             selection: {
                 mode: 'multiple',
                 maxFilterLengthInRequest: 1
@@ -3276,7 +3357,7 @@ QUnit.module('Selection with views', {
         };
 
         this.setup = function() {
-            setupDataGridModules(this, ['data', 'columns', 'selection', 'columnHeaders', 'rows', 'editorFactory', 'editing'], {
+            setupDataGridModules(this, ['data', 'columns', 'selection', 'columnHeaders', 'rows', 'editorFactory', 'editing', 'editingCellBased'], {
                 initViews: true
             });
         };
@@ -3398,7 +3479,7 @@ QUnit.module('Selection with views', {
             const $selectCheckBox = dataRow0.getSelectCheckBox(0).getElement();
             $selectCheckBox.trigger(clickEvent.name);
 
-            clock.tick();
+            clock.tick(10);
 
             clock.restore();
         });
@@ -3691,11 +3772,6 @@ QUnit.module('Selection with views', {
         this.selectionController.selectAll();
 
         this.option('selection.selectAllMode', 'page');
-        this.selectionController.optionChanged({
-            name: 'selection',
-            fullName: 'selectAllMode',
-            value: 'page'
-        });
 
         const $checkbox = testElement.find('.dx-checkbox');
 
@@ -3731,11 +3807,6 @@ QUnit.module('Selection with views', {
         this.dataController.pageIndex(1);
 
         this.option('selection.selectAllMode', 'allPages');
-        this.selectionController.optionChanged({
-            name: 'selection',
-            fullName: 'selectAllMode',
-            value: 'allPages'
-        });
 
         const $checkbox = testElement.find('.dx-checkbox');
 
@@ -3826,12 +3897,99 @@ QUnit.module('Selection with views', {
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: 'Alex' }], 'one item is selected');
         assert.strictEqual($selectionCell.find('.dx-checkbox').dxCheckBox('instance').option('value'), true, 'checkbox is checked');
     });
+
+    // T1093760
+    QUnit.test('Check aria-selected attribute when select and deselect row', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        const firstRowKey = { name: 'Alex', age: 15 };
+
+        this.setup();
+        this.rowsView.render($testElement);
+
+        // assert
+        let $rowElement = $(this.rowsView.getRowElement(0));
+        let cellElements = $rowElement.children().toArray();
+        assert.strictEqual($rowElement.attr('aria-selected'), 'false', 'first row - aria-selected = false');
+        assert.strictEqual(cellElements.length, 3, 'cell count');
+
+        cellElements.forEach((cellElement) => {
+            assert.notOk(cellElement.hasAttribute('aria-selected'), 'cell has no aria-selected attribute');
+        });
+
+        // act
+        this.selectionController.selectRows([firstRowKey]);
+
+        // assert
+        $rowElement = $(this.rowsView.getRowElement(0));
+        cellElements = $rowElement.children().toArray();
+        assert.strictEqual($rowElement.attr('aria-selected'), 'true', 'first row - aria-selected = true');
+        assert.strictEqual(cellElements.length, 3, 'cell count');
+
+        cellElements.forEach((cellElement) => {
+            assert.notOk(cellElement.hasAttribute('aria-selected'), 'cell has no aria-selected attribute');
+        });
+
+        // act
+        this.selectionController.deselectRows([firstRowKey]);
+
+        // assert
+        $rowElement = $(this.rowsView.getRowElement(0));
+        cellElements = $rowElement.children().toArray();
+        assert.strictEqual($rowElement.attr('aria-selected'), 'false', 'first row - aria-selected = false');
+        assert.strictEqual(cellElements.length, 3, 'cell count');
+
+        cellElements.forEach((cellElement) => {
+            assert.notOk(cellElement.hasAttribute('aria-selected'), 'cell has no aria-selected attribute');
+        });
+    });
+
+    // T1141405
+    QUnit.test('The Select All state should be updated after all async templates have rendered (React)', function(assert) {
+        // arrange
+        const clock = sinon.useFakeTimers();
+
+        try {
+            const d = $.Deferred();
+            const $testElement = $('#container');
+
+            this.options.loadingTimeout = 30;
+            this.options.renderAsync = false;
+            this.options.templatesRenderAsynchronously = true;
+            this.setup();
+            this.columnHeadersView._templateDeferreds.add(d);
+            sinon.spy(this.columnHeadersView, '_updateSelectAllValue');
+
+            // act
+            this.columnHeadersView.render($testElement);
+
+            // assert
+            assert.strictEqual(this.columnHeadersView._updateSelectAllValue.callCount, 0, 'select all state isn\'t updated');
+
+            // act
+            clock.tick(30);
+
+            // assert
+            assert.strictEqual(this.columnHeadersView._updateSelectAllValue.callCount, 0, 'select all state isn\'t updated');
+
+            // act
+            this.columnHeadersView._templateDeferreds.delete(d);
+            d.resolve();
+
+            // assert
+            const $selectAllCheckbox = $('.dx-header-row .dx-command-select').find('.dx-checkbox');
+            assert.strictEqual(this.columnHeadersView._updateSelectAllValue.callCount, 1, 'select all state is updated');
+            assert.strictEqual($selectAllCheckbox.dxCheckBox('option', 'visible'), true, 'select all checkbox is visible');
+        } finally {
+            clock.restore();
+        }
+    });
 });
 
 QUnit.module('Deferred selection', {
     beforeEach: function() {
         this.setupDataGrid = function(options) {
-            setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow'], { initDefaultOptions: true, options: options });
+            setupDataGridModules(this, ['data', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow', 'editing'], { initDefaultOptions: true, options: options });
         };
 
         this.data = [
@@ -3862,7 +4020,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(!this.dataController.items()[0].isSelected);
         assert.ok(!this.dataController.items()[1].isSelected);
@@ -3879,7 +4037,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.ok(!this.dataController.items()[0].isSelected);
         assert.ok(this.dataController.items()[1].isSelected);
@@ -3898,7 +4056,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -3918,7 +4076,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -3938,7 +4096,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
@@ -3960,13 +4118,59 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const items = this.dataController.items();
         assert.ok(items[1].isSelected, 'second item is selected');
         assert.ok(items[6].isSelected, 'seventh item is selected');
         assert.ok(this.selectionController.isSelectionWithCheckboxes(), 'checkboxes is visible');
+    });
+
+    // T1116383
+    QUnit.test('The selectionFilter should be saved to correctly to state storage', function(assert) {
+        // arrange
+        const customSave = sinon.spy();
+
+        this.setupDataGrid({
+            dataSource: [
+                { id: 1, value: 1 },
+                { id: 2, value: 2 },
+                { id: 3, value: 3 },
+                { id: 4, value: 4 },
+                { id: 5, value: 5 },
+                { id: 6, value: 6 },
+            ],
+            keyExpr: 'id',
+            columns: [
+                { dataField: 'id', dataType: 'number' },
+                { dataField: 'value', filterValue: 1, dataType: 'number' },
+            ],
+            selection: { mode: 'multiple', deferred: true },
+            stateStoring: {
+                enabled: true,
+                savingTimeout: 0,
+                type: 'custom',
+                customSave
+            }
+        });
+
+        this.clock.tick(10);
+
+        this.selectRows([1, 3, 4, 6], true);
+        this.clock.tick(10);
+        this.deselectRows([3, 6]);
+        this.clock.tick(10);
+        this.selectRows([1, 2, 4, 5]);
+        this.clock.tick(10);
+
+        // assert
+        const expectedSelectionFilter = [
+            ['id', '=', 1], 'or', ['id', '=', 2], 'or', ['id', '=', 4], 'or', ['id', '=', 5]
+        ];
+
+        const savedState = customSave.args[3][0];
+        assert.deepEqual(savedState.selectionFilter, expectedSelectionFilter, 'selectionFilter is correct');
     });
 
     QUnit.test('selectRows', function(assert) {
@@ -3985,7 +4189,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.selectionController.selectRows([0]);
@@ -4017,7 +4221,7 @@ QUnit.module('Deferred selection', {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.selectionController.selectionChanged.add(selectionChanged);
 
@@ -4047,15 +4251,13 @@ QUnit.module('Deferred selection', {
             onSelectionChanged: selectionChangedStub
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         selectionChangedStub.reset();
 
-        this.selectionController.optionChanged({
-            name: 'selectionFilter',
-            value: ['id', '>', 5]
-        });
+        this.option('selectionFilter', ['id', '>', 5]);
+
         // assert
         let selectedKeys = [];
 
@@ -4063,7 +4265,7 @@ QUnit.module('Deferred selection', {
             selectedKeys = keys;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(selectedKeys, [6, 7]);
         assert.strictEqual(selectionChangedStub.callCount, 1);
@@ -4087,7 +4289,7 @@ QUnit.module('Deferred selection', {
             loadingCount++;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.strictEqual(loadingCount, 1, 'one loading count');
 
@@ -4116,7 +4318,7 @@ QUnit.module('Deferred selection', {
             selection: { mode: 'selectAll', deferred: true }
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         let items = this.dataController.items();
         assert.equal(items.length, 2, 'filtered items');
@@ -4135,7 +4337,7 @@ QUnit.module('Deferred selection', {
         let selectedRowsData = [];
 
         this.setupDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: createDataSource(this.data, { key: 'id', pageSize: 2 }),
             remoteOperations: { filtering: true, sorting: true, paging: true },
             columns: [
@@ -4150,7 +4352,7 @@ QUnit.module('Deferred selection', {
         this.getSelectedRowsData().done((selectedData) => {
             selectedRowsData = selectedData;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(selectedRowsData.length, 5, 'selected rows data count');
@@ -4163,7 +4365,7 @@ QUnit.module('Deferred selection', {
         this.getSelectedRowsData().done((selectedData) => {
             selectedRowsData = selectedData;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(selectedRowsData.length, 5, 'selected rows data count');
@@ -4175,7 +4377,7 @@ QUnit.module('Deferred selection', {
         let selectedRowsData = [];
 
         this.setupDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: createDataSource(this.data, { key: 'id', pageSize: 2 }),
             remoteOperations: { filtering: true, sorting: true, paging: true },
             columns: [
@@ -4190,7 +4392,7 @@ QUnit.module('Deferred selection', {
         this.getSelectedRowsData().done((selectedData) => {
             selectedRowsData = selectedData;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(selectedRowsData.length, 5, 'selected rows data count');
@@ -4200,10 +4402,183 @@ QUnit.module('Deferred selection', {
         this.getSelectedRowsData().done((selectedData) => {
             selectedRowsData = selectedData;
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(selectedRowsData.length, 0, 'selected rows data count');
+    });
+
+    // T959045
+    QUnit.test('The selectionFilter should be correctly after select all -> deselect row when there is filter', function(assert) {
+        // arrange
+        this.setupDataGrid({
+            dataSource: [
+                { id: 1, name: 'Alex' },
+                { id: 5, name: 'Sergey' }
+            ],
+            keyExpr: 'id',
+            columns: [{ dataField: 'id', filterValue: 1, dataType: 'number' }],
+            selection: { mode: 'multiple', deferred: true }
+        });
+
+        this.clock.tick(10);
+
+        const items = this.dataController.items();
+        assert.equal(items.length, 1, 'filtered items');
+
+        // act
+        this.selectionController.selectAll();
+
+        // assert
+        assert.deepEqual(this.option('selectionFilter'), ['id', '=', 1], 'selectionFilter');
+
+        // act
+        this.selectionController.deselectRows(1);
+
+        // assert
+        assert.deepEqual(this.option('selectionFilter'), [], 'selectionFilter');
+    });
+
+    // T1063462
+    QUnit.test('The selectionFilter should be correctly after multiple selections', function(assert) {
+        // arrange
+        this.setupDataGrid({
+            dataSource: [
+                { id: 1, value: 1 },
+            ],
+            keyExpr: 'id',
+            columns: [
+                { dataField: 'id', dataType: 'number' },
+                { dataField: 'value', filterValue: 1, dataType: 'number' },
+            ],
+            selection: { mode: 'multiple', deferred: true }
+        });
+
+        this.clock.tick(10);
+
+        this.selectRows([1], true);
+        this.selectionController.selectAll();
+        this.selectionController.deselectAll();
+        this.selectRows([1], true);
+        this.deselectRows([1], true);
+
+        // assert
+        assert.deepEqual(this.option('selectionFilter'), [], 'selectionFilter is empty');
+    });
+
+    QUnit.test('Selecting multiple rows with deffered selection and preserve:false should not check for filter duplication (T1147676)', function(assert) {
+        const data = generateItems(100);
+        this.setupDataGrid({
+            dataSource: data,
+            keyExpr: 'id',
+            height: 400,
+            selection: {
+                deferred: true,
+                mode: 'multiple'
+            },
+        });
+        this.clock.tick(10);
+        const spy = sinon.spy(this.selectionController._selection._selectionStrategy, '_removeSameFilter');
+        this.selectRows(data.map(data => data.id).slice(2));
+        this.clock.tick(100);
+        assert.equal(spy.callCount, 0, 'no extra calls');
+        this.selectRows([0]);
+        this.clock.tick(10);
+        this.selectRows([1], true);
+        this.clock.tick(10);
+        assert.notEqual(spy.callCount, 0, 'called for preserved selection');
+        spy.restore();
+    });
+
+    QUnit.test('Deleting unselected row with refreshMode=repaint should not select all other rows (T1153564)', function(assert) {
+        const data = generateItems(100);
+        this.setupDataGrid({
+            dataSource: data,
+            keyExpr: 'id',
+            height: 400,
+            selection: {
+                deferred: true,
+                mode: 'multiple'
+            },
+            editing: {
+                refreshMode: 'repaint',
+                allowDeleting: true,
+                confirmDelete: false,
+            }
+        });
+        this.clock.tick();
+
+        // act
+        this.deleteRow(0);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(this.option('selectionFilter'), []);
+    });
+});
+
+QUnit.module('Selection with virtual scrolling', {
+    beforeEach: function() {
+        this.setupDataGrid = function(options) {
+            setupDataGridModules(this, ['data', 'columns', 'selection', 'virtualScrolling'], { initDefaultOptions: true, options: options });
+        };
+
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        teardownModule.apply(this);
+    }
+}, () => {
+    // T1130614
+    QUnit.test('Select rows with shift when data of complex structure', function(assert) {
+        // arrange
+        const data = generateItems(100).map((item) => ({
+            id: item.id,
+            data: {
+                field1: item.field1,
+                field2: item.field2
+            }
+        }));
+
+        this.setupDataGrid({
+            dataSource: createDataSource(data, { key: 'id' }),
+            selection: {
+                mode: 'multiple'
+            },
+            scrolling: {
+                mode: 'virtual'
+            },
+            paging: {
+                pageSize: 2
+            },
+            columns: ['field1', 'fiedl2']
+        });
+
+        this.clock.tick(100);
+
+        // act
+        this.selectionController.changeItemSelection(1);
+
+        // assert
+        assert.deepEqual(this.option('selectedRowKeys'), [2], 'selectedRowKeys');
+
+        // act
+        // scroll simulation
+        this.dataController._repaintChangesOnly = true;
+        this.pageIndex(2);
+        this.clock.tick(100);
+        this.dataController._repaintChangesOnly = undefined;
+
+        // assert
+        assert.deepEqual(this.option('selectedRowKeys'), [2], 'selectedRowKeys');
+        assert.strictEqual(this.pageIndex(), 2, 'pageIndex');
+
+        // act
+        this.selectionController.changeItemSelection(1, { shift: true });
+        this.clock.tick(100);
+
+        // assert
+        assert.deepEqual(this.option('selectedRowKeys'), [2, 6, 5, 4, 3], 'selectedRowKeys');
     });
 });
 

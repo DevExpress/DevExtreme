@@ -13,3 +13,15 @@ $material-pager-pagesize-padding-top: 7px !default;
 $material-pager-pagesize-padding-bottom: 8px !default;
 $material-pager-pagesize-padding-left: 10px !default;
 $material-pager-pagesize-padding-right: 9px !default;
+$material-pager-light-pagesizes-min-width: null !default;
+$material-pager-light-pageindex-min-width: null !default;
+
+@if $size == "default" {
+  $material-pager-light-pagesizes-min-width: 62px !default;
+  $material-pager-light-pageindex-min-width: 32px !default;
+}
+
+@else if $size == "compact" {
+  $material-pager-light-pagesizes-min-width: 42px !default;
+  $material-pager-light-pageindex-min-width: 27px !default;
+}

@@ -12,10 +12,10 @@
 $calendar-color: $base-text-color !default;
 
 /**
-* $name 10. Header text color
+* $name 20. Header text color
 * $type color
 */
-$calendar-header-color: null !default;
+$calendar-header-color: $base-text-color !default;
 
 /**
 * $name 30. Other month text color
@@ -42,195 +42,98 @@ $calendar-cell-hover-color: null !default;
 * $type color
 */
 $calendar-cell-selected-bg: null !default;
+$calendar-cell-selected-color: $base-inverted-text-color !default;
 
 /**
 * $name 70. Active state background Color
 * $type color
 */
 $calendar-cell-active-bg: null !default;
-
-/**
-* $name 80. Border color
-* $type color
-*/
-$calendar-border-color: $base-border-color !default;
-
-/**
-* $name 40. Date navigator border color
-* $type color
-*/
-$calendar-navigator-border-color: null !default;
-$calendar-navigator-border-radius: null !default;
-
-/**
-* $name 50. Hovered state date navigator border color
-* $type color
-*/
-$calendar-navigator-hover-border-color: null !default;
 $calendar-cell-contoured-border-color: null !default;
-$calendar-button-caption-active-bg: null !default;
-$calendar-button-footer-active-bg: null !default;
-$calendar-button-caption-color: null !default;
 $calendar-cell-contoured-border-radius: $base-border-radius !default;
 $calendar-invalid-focused-border-color: $base-invalid-color !default;
 $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-
-/**
-* $name 60. Shevron icon color
-* $type color
-*/
-$calendar-shevron-icon-color: null !default;
-$calendar-cell-empty-bg: null !default;
+$calendar-week-number-cell-color: color.change($calendar-color, $alpha: 0.56) !default;
+$calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.5) !default;
+$calendar-cell-hover-border-color: color.change($base-accent, $alpha: 0.6) !default;
 
 @if $color == "carmine" {
-  $calendar-header-color: $base-header-color !default;
-  $calendar-cell-other-color: lighten($calendar-color, 35%) !default; // #627789 => #c7d1d9
-  $calendar-cell-other-hover-color: lighten($calendar-color, 49%) !default;
-  $calendar-hover-bg: $base-hover-bg !default;
+  $calendar-cell-other-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-cell-other-hover-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
-  $calendar-cell-active-bg: lighten($base-accent, 14%) !default; // #f05b41 => #fa9887
-  $calendar-navigator-border-color: $base-border-color !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $base-accent !default;
-  $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat !default;
+  $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
+  $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
 @if $color == "contrast" {
-  $calendar-header-color: $base-text-color !default;
   $calendar-cell-other-color: $base-accent !default;
   $calendar-hover-bg: $base-hover-color !default;
   $calendar-cell-hover-color: $base-text-color !default;
   $calendar-cell-other-hover-color: $base-text-color !default;
   $calendar-cell-selected-bg: $base-inverted-bg !default;
   $calendar-cell-active-bg: $base-accent !default;
-  $calendar-navigator-border-color: $calendar-border-color !default;
-  $calendar-navigator-border-radius: $base-border-radius !default;
-  $calendar-navigator-hover-border-color: $calendar-border-color !default;
-  $calendar-cell-contoured-border-color: $calendar-border-color !default;
-  $calendar-button-caption-active-bg: $base-inverted-bg !default;
-  $calendar-button-footer-active-bg: $base-inverted-bg !default;
-  $calendar-button-caption-color: $base-text-color !default;
-  $calendar-shevron-icon-color: $base-icon-color !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/contrast/calendar/empty-cell.png') center center no-repeat !default;
+  $calendar-cell-contoured-border-color: $base-border-color !default;
 }
 
 @if $color == "dark" {
-  $calendar-header-color: darken($calendar-color, 40%) !default;
-  $calendar-cell-other-color: darken($calendar-color, 49%) !default;
-  $calendar-cell-other-hover-color: darken($calendar-color, 49%) !default;
-  $calendar-hover-bg: $base-hover-bg !default;
+  $calendar-cell-other-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-cell-other-hover-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
-  $calendar-cell-active-bg: color.change(lighten($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $button-normal-border-color !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $button-normal-border-color !default;
-  $calendar-cell-contoured-border-color: lighten($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/calendar/empty-cell.png') center center no-repeat !default;
+  $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
+  $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
 @if $color == "darkmoon" {
-  $calendar-header-color: $screen-text-color !default;
-  $calendar-cell-other-color: darken($calendar-color, 49%) !default;
-  $calendar-cell-other-hover-color: darken($calendar-color, 49%) !default;
-  $calendar-hover-bg: $base-hover-bg !default;
+  $calendar-cell-other-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-cell-other-hover-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
-  $calendar-cell-active-bg: color.change(lighten($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $button-normal-border-color !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $button-normal-border-color !default;
-  $calendar-cell-contoured-border-color: lighten($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/calendar/empty-cell.png') center center no-repeat !default;
-  $calendar-shevron-icon-color: $base-accent !default;
+  $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
+  $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
 @if $color == "darkviolet" {
-  $calendar-header-color: $base-header-color !default;
-  $calendar-cell-other-color: darken($calendar-color, 49%) !default;
-  $calendar-cell-other-hover-color: darken($calendar-color, 49%) !default;
-  $calendar-hover-bg: $base-hover-bg !default;
+  $calendar-cell-other-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-cell-other-hover-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
-  $calendar-cell-active-bg: color.change(lighten($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $base-border-color !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $button-normal-border-color !default;
-  $calendar-cell-contoured-border-color: lighten($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: lighten($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-icon-color !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/calendar/empty-cell.png') center center no-repeat !default;
+  $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
+  $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
 @if $color == "greenmist" {
-  $calendar-header-color: lighten($calendar-color, 40%) !default;
-  $calendar-cell-other-color: lighten($calendar-color, 49%) !default;
-  $calendar-cell-other-hover-color: lighten($calendar-color, 49%) !default;
-  $calendar-hover-bg: $base-hover-bg !default;
+  $calendar-cell-other-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-cell-other-hover-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
-  $calendar-cell-active-bg: color.change(darken($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $button-normal-border-color !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $button-normal-border-color !default;
-  $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat !default;
+  $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
+  $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
 @if $color == "light" {
-  $calendar-header-color: lighten($calendar-color, 40%) !default;
-  $calendar-cell-other-color: lighten($calendar-color, 49%) !default;
-  $calendar-cell-other-hover-color: lighten($calendar-color, 49%) !default;
-  $calendar-hover-bg: $base-hover-bg !default;
+  $calendar-cell-other-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-cell-other-hover-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
-  $calendar-cell-active-bg: color.change(darken($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $button-normal-border-color !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $button-normal-border-color !default;
-  $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat !default;
+  $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
+  $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
 @if $color == "softblue" {
-  $calendar-header-color: $base-icon-color !default;
-  $calendar-cell-other-color: lighten($calendar-color, 49%) !default;
-  $calendar-cell-other-hover-color: lighten($calendar-color, 49%) !default;
-  $calendar-hover-bg: $base-webwidget-hover-background !default;
+  $calendar-cell-other-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-cell-other-hover-color: color.change($calendar-color, $alpha: 0.38) !default;
+  $calendar-hover-bg: color.change($base-accent, $alpha: 0.24) !default;
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
-  $calendar-cell-active-bg: color.change(darken($calendar-bg, 62.5%), $alpha: 0.2) !default;
-  $calendar-navigator-border-color: $base-border-color !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
-  $calendar-navigator-hover-border-color: $base-border-color !default;
-  $calendar-cell-contoured-border-color: darken($base-border-color, 12%) !default;
-  $calendar-button-caption-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-footer-active-bg: darken($base-bg, 17%) !default;
-  $calendar-button-caption-color: $base-accent !default;
-  $calendar-shevron-icon-color: $base-accent !default;
-  $calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/light/calendar/empty-cell.png') center center no-repeat !default;
+  $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
+  $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 

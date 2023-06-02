@@ -4,9 +4,11 @@ import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
 import { getImageContainer } from '../../core/utils/icon';
-import Overlay from '../overlay';
+import Overlay from '../overlay/ui.overlay';
 import { render } from '../widget/utils.ink_ripple';
 import { isMaterial } from '../themes';
+import { isPlainObject } from '../../core/utils/type';
+import { getWindow } from '../../core/utils/window';
 
 const FAB_CLASS = 'dx-fa-button';
 const FAB_ICON_CLASS = 'dx-fa-button-icon';
@@ -22,7 +24,10 @@ class SpeedDialItem extends Overlay {
             useInkRipple: false,
             callOverlayRenderShading: false,
             width: 'auto',
-            zIndex: 1500
+            zIndex: 1500,
+            _observeContentResize: false,
+            container: this.$element(),
+            visualContainer: getWindow()
         });
     }
 
@@ -69,11 +74,21 @@ class SpeedDialItem extends Overlay {
     }
 
     _isPositionLeft(position) {
-        const currentLocation = position ?
-            (position.at ?
-                (position.at.x ? position.at.x : position.at) :
-                (typeof position === 'string' ? position : '')) :
-            '';
+        let currentLocation = '';
+
+        if(position) {
+            if(isPlainObject(position) && position.at) {
+                if(position.at.x) {
+                    currentLocation = position.at.x;
+                } else {
+                    currentLocation = position.at;
+                }
+            } else {
+                if(typeof position === 'string') {
+                    currentLocation = position;
+                }
+            }
+        }
 
         return currentLocation.split(' ')[0] === 'left';
     }
@@ -135,12 +150,6 @@ class SpeedDialItem extends Overlay {
         this._$content.css('zIndex', zIndex);
     }
 
-    _fixWrapperPosition() {
-        const $wrapper = this._$wrapper;
-        const $container = this._getContainer();
-
-        $wrapper.css('position', this._isWindow($container) ? 'fixed' : 'absolute');
-    }
 
     _setClickAction() {
         const eventName = addNamespace(clickEventName, this.NAME);

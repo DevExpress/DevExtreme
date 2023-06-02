@@ -1,14 +1,20 @@
-import { fitIntoRange } from '../../core/utils/math';
+import { fitIntoRange, multiplyInExponentialForm } from '../../core/utils/math';
 import { toFixed } from '../utils';
 
 const DEFAULT_CONFIG = { thousandsSeparator: ',', decimalSeparator: '.' };
 const ESCAPING_CHAR = '\'';
 const MAXIMUM_NUMBER_LENGTH = 15;
+const PERCENT_EXPONENT_SHIFT = 2; // '1e2'
 
 function getGroupSizes(formatString) {
     return formatString.split(',').slice(1).map(function(str) {
-        return str.split('').filter(function(char) {
-            return char === '#' || char === '0';
+        let singleQuotesLeft = 0;
+        return str.split('').filter(function(char, index) {
+            singleQuotesLeft += char === '\'';
+
+            const isDigit = char === '#' || char === '0';
+            const isInStub = singleQuotesLeft % 2;
+            return isDigit && !isInStub;
         }).length;
     });
 }
@@ -121,18 +127,19 @@ export function getFormatter(format, config) {
         const isPositive = value > 0 || isPositiveZero;
         const numberFormat = signFormatParts[isPositive ? 0 : 1];
 
+        const floatPointIndex = getFloatPointIndex(numberFormat);
+        const floatFormatParts = [numberFormat.substr(0, floatPointIndex), numberFormat.substr(floatPointIndex + 1)];
+        const minFloatPrecision = getRequiredDigitCount(floatFormatParts[1]);
+        const maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]);
+
         if(isPercentFormat(numberFormat)) {
-            value = value * 100;
+            value = multiplyInExponentialForm(value, PERCENT_EXPONENT_SHIFT);
         }
 
         if(!isPositive) {
             value = -value;
         }
 
-        const floatPointIndex = getFloatPointIndex(numberFormat);
-        const floatFormatParts = [numberFormat.substr(0, floatPointIndex), numberFormat.substr(floatPointIndex + 1)];
-        const minFloatPrecision = getRequiredDigitCount(floatFormatParts[1]);
-        const maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]);
         const minIntegerPrecision = getRequiredDigitCount(floatFormatParts[0]);
         const maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) || config.unlimitedIntegerDigits ? undefined : minIntegerPrecision;
         const integerLength = Math.floor(value).toString().length;
@@ -203,7 +210,7 @@ function getFormatByValueText(valueText, formatter, isPercent, isNegative) {
     format = format.replace(/1+/, '1').replace(/1/g, '#');
 
     if(!isPercent) {
-        format = format.replace('%', '\'%\'');
+        format = format.replace('%', '\'%\''); // lgtm[js/incomplete-sanitization]
     }
 
     return format;

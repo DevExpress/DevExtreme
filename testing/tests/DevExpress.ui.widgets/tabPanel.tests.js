@@ -1,8 +1,6 @@
 import fx from 'animation/fx';
-import 'common.css!css';
 import config from 'core/config';
 import devices from 'core/devices';
-import browser from 'core/utils/browser';
 import { deferUpdate } from 'core/utils/common';
 import support from 'core/utils/support';
 import { isRenderer } from 'core/utils/type';
@@ -34,12 +32,14 @@ QUnit.testStart(() => {
 
 const TABS_CLASS = 'dx-tabs';
 const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
+const MULTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
 const TABS_ITEM_CLASS = 'dx-tab';
 const SELECTED_TAB_CLASS = 'dx-tab-selected';
 const SELECTED_ITEM_CLASS = 'dx-item-selected';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 const TABS_TITLE_TEXT_CLASS = 'dx-tab-text';
 const ICON_CLASS = 'dx-icon';
+const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -83,7 +83,7 @@ QUnit.module('rendering', {
             const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
             const $tabs = $tabPanel.find('.' + TABS_CLASS);
 
-            clock.tick();
+            clock.tick(10);
 
             assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
             assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
@@ -103,7 +103,7 @@ QUnit.module('rendering', {
             const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
             const $tabs = $tabPanel.find('.' + TABS_CLASS);
 
-            clock.tick();
+            clock.tick(10);
 
             assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
             assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
@@ -164,7 +164,7 @@ QUnit.module('rendering', {
             const iconRect = $title.find(`.${ICON_CLASS}`).get(0).getBoundingClientRect();
             const textRect = $title.find('span').get(0).getBoundingClientRect();
 
-            const epsilon = browser.msie ? 2.3 : 2.1;
+            const epsilon = 2.1;
             assert.roughEqual((iconRect.top + iconRect.height / 2), textRect.top + textRect.height / 2, epsilon, `correct vertical centering of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
 
             const horizontalMargin = rtlEnabled
@@ -589,7 +589,7 @@ QUnit.module('keyboard navigation', {
 
         this.instance.focus();
         $(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1).trigger('dxpointerdown');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const multiViewFocusedIndex = $(this.instance.option('focusedElement')).index();
 
@@ -603,8 +603,8 @@ QUnit.module('keyboard navigation', {
         assert.expect(3);
 
         this.instance.focus();
-        $(toSelector(TABS_ITEM_CLASS)).eq(1).trigger('dxpointerdown');
-        this.clock.tick();
+        $(toSelector(TABS_ITEM_CLASS)).eq(1).trigger('dxpointerup');
+        this.clock.tick(10);
 
         const tabsFocusedIndex = $(this.instance.option('focusedElement')).index();
         assert.equal(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
@@ -628,6 +628,72 @@ QUnit.module('keyboard navigation', {
         registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, keyPressTargetElement: (widget) => widget._tabs.$element().eq(0), checkInitialize: false, testNamePrefix: 'Tabs: ' });
     }
 });
+
+
+QUnit.module('Disabled items', {
+    beforeEach() {
+        const items = [
+            { text: 'user', title: 'Personal Data' },
+            { text: 'comment', title: 'Contacts' },
+        ];
+
+        fx.off = true;
+
+        this.$element = $('#tabPanel').dxTabPanel({
+            focusStateEnabled: true,
+            items
+        });
+
+        this.instance = this.$element.dxTabPanel('instance');
+        this.$tabs = this.$element.find(toSelector(TABS_CLASS));
+
+        this.instance.option('items[1].disabled', true);
+        this.instance.focus();
+    },
+    afterEach() {
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('disabled item can be focused by keyboard', function(assert) {
+        const $disabledItem = $(toSelector(TABS_ITEM_CLASS)).eq(1);
+        const keyboard = keyboardMock(this.$tabs);
+
+        keyboard.press('right');
+
+        assert.strictEqual($disabledItem.hasClass('dx-state-focused'), true, 'disabled item is focused');
+        assert.strictEqual($disabledItem.attr('aria-disabled'), 'true', 'disabled item aria-disabled is correct');
+    });
+
+    QUnit.test('multiview wrapper should have focused class if item is available', function(assert) {
+        const multiViewWrapper = this.$element.find(toSelector(MULTIVIEW_WRAPPER_CLASS));
+        const keyboard = keyboardMock(this.$tabs);
+
+        assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), true, 'focused class set');
+
+        keyboard.press('right');
+        assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), false, 'focused class not set');
+    });
+
+    QUnit.test(`element has ${DISABLED_FOCUSED_TAB_CLASS} class when disabled item has focus`, function(assert) {
+        const keyboard = keyboardMock(this.$tabs);
+
+        assert.strictEqual($(this.$element).hasClass(DISABLED_FOCUSED_TAB_CLASS), false, 'class not set');
+
+        keyboard.press('right');
+        assert.strictEqual($(this.$element).hasClass(DISABLED_FOCUSED_TAB_CLASS), true, 'class set');
+    });
+
+    QUnit.test(`element does not have ${DISABLED_FOCUSED_TAB_CLASS} class when widget lost focus`, function(assert) {
+        const keyboard = keyboardMock(this.$tabs);
+
+        keyboard.press('right');
+        assert.strictEqual($(this.$element).hasClass(DISABLED_FOCUSED_TAB_CLASS), true, 'class set');
+
+        this.$element.focusout();
+        assert.strictEqual($(this.$element).hasClass(DISABLED_FOCUSED_TAB_CLASS), false, 'class not set');
+    });
+});
+
 
 QUnit.module('aria accessibility', () => {
     QUnit.test('active tab should have aria-controls attribute pointing to active multiview item', function(assert) {

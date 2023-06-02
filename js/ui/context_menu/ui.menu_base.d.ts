@@ -1,24 +1,34 @@
+import { DataSourceLike } from '../../data/data_source';
 import {
-    animationConfig
+    AnimationConfig,
 } from '../../animation/fx';
 
-import DataSource, {
-    DataSourceOptions
-} from '../../data/data_source';
-
 import HierarchicalCollectionWidget, {
-    HierarchicalCollectionWidgetOptions
+    HierarchicalCollectionWidgetOptions,
 } from '../hierarchical_collection/ui.hierarchical_collection_widget';
 
 import {
-    dxMenuBaseItem
+    dxMenuBaseItem,
 } from '../menu';
 
-export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectionWidgetOptions<T> {
+import {
+    SingleOrNone,
+    SubmenuShowMode,
+} from '../../common';
+
+/**
+ * @namespace DevExpress.ui
+ * @docid
+ * @hidden
+ */
+export interface dxMenuBaseOptions<
+  TComponent extends dxMenuBase<any, TItem, TKey>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+  TKey = any,
+> extends Omit<HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>, 'dataSource'> {
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
@@ -26,116 +36,101 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
      * @docid
      * @default { show: { type: "fade", from: 0, to: 1, duration: 100 }, hide: { type: "fade", from: 1, to: 0, duration: 100 } }
      * @ref
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     animation?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default { type: "fade", from: 1, to: 0, duration: 100 }
-      */
-      hide?: animationConfig,
+       * @docid
+       * @default { type: "fade", from: 1, to: 0, duration: 100 }
+       */
+      hide?: AnimationConfig;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default { type: "fade", from: 0, to: 1, duration: 100 }
-      */
-      show?: animationConfig
+       * @docid
+       * @default { type: "fade", from: 0, to: 1, duration: 100 }
+       */
+      show?: AnimationConfig;
     };
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     cssClass?: string;
     /**
      * @docid
      * @default null
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<dxMenuBaseItem>|null
      */
-    dataSource?: string | Array<dxMenuBaseItem> | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey> | null;
     /**
      * @docid
-     * @prevFileNamespace DevExpress.ui
      * @public
+     * @type Array<dxMenuBaseItem>
      */
-    items?: Array<dxMenuBaseItem>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectByClick?: boolean;
     /**
      * @docid
-     * @type Enums.MenuSelectionMode
      * @default none
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    selectionMode?: 'none' | 'single';
+    selectionMode?: SingleOrNone;
     /**
      * @docid
-     * @type Object|Enums.ShowSubmenuMode
      * @default { name: "onHover", delay: { show: 50, hide: 300 } }
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     showSubmenuMode?: {
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @default { show: 50, hide: 300 }
-      */
+       * @docid
+       * @default { show: 50, hide: 300 }
+       */
       delay?: {
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default 300
-        */
-        hide?: number,
+         * @docid
+         * @default 300
+         */
+        hide?: number;
         /**
-        * @docid
-        * @prevFileNamespace DevExpress.ui
-        * @default 50
-        */
-        show?: number
-      } | number,
+         * @docid
+         * @default 50
+         */
+        show?: number;
+      } | number;
       /**
-      * @docid
-      * @prevFileNamespace DevExpress.ui
-      * @type Enums.ShowSubmenuMode
-      * @default "onHover"
-      */
-      name?: 'onClick' | 'onHover'
-    } | 'onClick' | 'onHover';
+       * @docid
+       * @default "onHover"
+       */
+      name?: SubmenuShowMode;
+    } | SubmenuShowMode;
 }
 /**
  * @docid
  * @inherits HierarchicalCollectionWidget
  * @hidden
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
+ * @options dxMenuBaseOptions
  */
-export default class dxMenuBase extends HierarchicalCollectionWidget {
-    constructor(element: Element, options?: dxMenuBaseOptions)
-    constructor(element: JQuery, options?: dxMenuBaseOptions)
+export default class dxMenuBase<
+  TProperties extends dxMenuBaseOptions<any, TItem, TKey>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+  TKey = any,
+> extends HierarchicalCollectionWidget<TProperties, TItem, TKey> {
     /**
      * @docid
      * @publicName selectItem(itemElement)
-     * @param1 itemElement:Element
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectItem(itemElement: Element): void;
     /**
      * @docid
      * @publicName unselectItem(itemElement)
-     * @param1 itemElement:Element
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     unselectItem(itemElement: Element): void;

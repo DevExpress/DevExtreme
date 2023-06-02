@@ -1,4 +1,3 @@
-import 'common.css!';
 import 'generic_light.css!';
 
 import { runThemesSharedTests } from './accordionParts/accordion.themes.sharedTests.js';

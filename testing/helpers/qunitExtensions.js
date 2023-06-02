@@ -50,6 +50,18 @@
 
     };
 
+    QUnit.isInShadowDomMode = function() {
+        return QUnit.urlParams['shadowDom'] && QUnit.urlParams['nojquery'];
+    };
+
+    QUnit.skipInShadowDomMode = function(name, callback) {
+        if(QUnit.isInShadowDomMode()) {
+            QUnit.skip(name + ' [Skipped in the ShadowDOM mode]');
+        } else {
+            QUnit.test.apply(this, arguments);
+        }
+    };
+
     window.waitFor = function(predicate, timeout, interval) {
         timeout = timeout || 30000;
         interval = interval || 15;
@@ -119,21 +131,6 @@
         return QUnit.config.current.assert;
     };
 
-    window.includeThemesLinks = function() {
-        const head = document.head;
-
-        [
-            'generic.light',
-            'material.blue.light'
-        ].forEach(function(theme) {
-            const link = document.createElement('link');
-            link.setAttribute('rel', 'dx-theme');
-            link.setAttribute('data-theme', theme);
-            link.setAttribute('href', SystemJS.normalizeSync(theme.replace(/\./g, '_') + '.css'));
-            head.appendChild(link);
-        });
-    };
-
     const beforeTestDoneCallbacks = [];
 
     QUnit.beforeTestDone = function(callback) {
@@ -153,6 +150,104 @@
 
 }();
 
+(function setupShadowDomMode() {
+    function getRoot() {
+        return document.querySelector('#qunit-fixture').shadowRoot;
+    }
+
+    function get(selector) {
+        return typeof selector === 'string' && selector ? getRoot().querySelectorAll(selector) : selector;
+    }
+
+    function addShadowRootTree() {
+        const root = document.querySelector('#qunit-fixture');
+
+        if(!root.shadowRoot) {
+            root.attachShadow({ mode: 'open' });
+        }
+
+        const shadowContainer = document.createElement('div');
+        const style = document.createElement('style');
+        style.setAttribute('nonce', 'qunit-extension');
+
+        shadowContainer.className = 'shadow-container';
+
+        style.innerHTML = `
+            :host {
+                position: static!important;
+                top: 0!important;
+                left: 0!important;
+            }
+            :scope .shadow-container {
+                position: absolute;
+                top: -10000px;
+                left: -10000px;
+                width: 1000px;
+                height: 1000px;
+            }
+
+            :scope .shadow-container.qunit-fixture-visible {
+                position: fixed !important;
+                left: 0 !important;
+                top: 0 !important;
+            }
+        `;
+
+        root.shadowRoot.appendChild(style);
+        root.shadowRoot.appendChild(shadowContainer);
+    }
+
+    function clearShadowRootTree() {
+        const container = get(':scope div')[0];
+        const style = get(':scope style')[0];
+
+        jQuery(container).remove();
+        jQuery(style).remove();
+    }
+
+    let jQueryInit;
+
+    QUnit.testStart(function() {
+        if(!QUnit.isInShadowDomMode()) {
+            return;
+        }
+
+        addShadowRootTree();
+
+        jQueryInit = jQuery.fn.init;
+
+        jQuery.fn.init = function(selector, context, root) {
+            const result = new jQueryInit(selector, context, root);
+            const resultElement = result.get(0);
+
+            if(!resultElement) {
+                return new jQueryInit(get(selector), context, root);
+            }
+
+            if(resultElement === getRoot().host) {
+                return new jQueryInit(get(':scope div')[0], context, root);
+            }
+
+            return result;
+        };
+    });
+
+    QUnit.beforeTestDone(function() {
+        if(!QUnit.isInShadowDomMode()) {
+            return;
+        }
+
+        jQuery.fn.init = jQueryInit != null ? jQueryInit : jQuery.fn.init;
+
+        clearShadowRootTree();
+    });
+
+    QUnit.config.urlConfig.push({
+        id: 'shadowDom',
+        label: 'Shadow DOM',
+        tooltip: 'Enabling this will test the target control inside the ShadowDOM.'
+    });
+})();
 
 (function clearQUnitFixtureByJQuery() {
     const isMsEdge = 'CollectGarbage' in window && !('ActiveXObject' in window);
@@ -423,9 +518,6 @@
                 return true;
             }
         }
-
-        if(callback.match(/function\(\)\{clearTimeout\(\w+\),(\w+&&)*cancelAnimationFrame\(\w+\),setTimeout\(\w+\)\}/)) return true; // NOTE: Preact hooks
-        if(callback.match(/\.__H\.\w+\.forEach\(/)) return true; // NOTE: Preact hooks
     });
 
     const logTestFailure = function(timerInfo) {

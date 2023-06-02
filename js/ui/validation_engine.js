@@ -1,6 +1,5 @@
 import Class from '../core/class';
 import { extend } from '../core/utils/extend';
-import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
 import { EventsStrategy } from '../core/events_strategy';
 import errors from '../core/errors';
@@ -16,7 +15,6 @@ import {
     isNumeric } from '../core/utils/type';
 import numberLocalization from '../localization/number';
 import messageLocalization from '../localization/message';
-import Promise from '../core/polyfills/promise';
 import { fromPromise, Deferred } from '../core/utils/deferred';
 
 // STYLE validation
@@ -134,7 +132,7 @@ class StringLengthRuleValidator extends BaseRuleValidator {
     }
 
     _validate(value, rule) {
-        value = isDefined(value) ? String(value) : '';
+        value = String(value ?? '');
         if(rule.trim || !isDefined(rule.trim)) {
             value = value.trim();
         }
@@ -292,7 +290,7 @@ class EmailRuleValidator extends BaseRuleValidator {
             extend({},
                 rule,
                 {
-                    pattern: /^[\d\w._-]+@([\d\w._-]+\.)+[\w]+$/i
+                    pattern: /^[\d\w._-]+@[\d\w._-]+\.[\w]+$/i
                 }));
     }
 }
@@ -398,7 +396,7 @@ const GroupConfig = Class.inherit({
     },
 
     _removePendingValidator(validator) {
-        const index = inArray(validator, this._pendingValidators);
+        const index = this._pendingValidators.indexOf(validator);
         if(index >= 0) {
             this._pendingValidators.splice(index, 1);
         }
@@ -451,7 +449,7 @@ const GroupConfig = Class.inherit({
             this._validationInfo.result.isValid = this._validationInfo.result.status === STATUS.valid;
             const res = extend({}, this._validationInfo.result, { complete: null });
             const deferred = this._validationInfo.deferred;
-            this._resetValidationInfo();
+            this._validationInfo.deferred = null;
             this._raiseValidatedEvent(res);
             deferred && setTimeout(() => {
                 deferred.resolve(res);
@@ -477,7 +475,7 @@ const GroupConfig = Class.inherit({
     },
 
     removeRegisteredValidator(validator) {
-        const index = inArray(validator, this.validators);
+        const index = this.validators.indexOf(validator);
         if(index > -1) {
             this.validators.splice(index, 1);
             this._synchronizeValidationInfo();
@@ -486,7 +484,7 @@ const GroupConfig = Class.inherit({
     },
 
     registerValidator(validator) {
-        if(inArray(validator, this.validators) < 0) {
+        if(!this.validators.includes(validator)) {
             this.validators.push(validator);
             this._synchronizeValidationInfo();
         }
@@ -524,6 +522,12 @@ const ValidationEngine = {
     },
 
     findGroup($element, model) {
+        const hasValidationGroup = $element.data()?.dxComponents?.includes('dxValidationGroup');
+        const validationGroup = hasValidationGroup && $element.dxValidationGroup('instance');
+
+        if(validationGroup) {
+            return validationGroup;
+        }
         // try to find out if this control is child of validation group
         const $dxGroup = $element.parents('.dx-validationgroup').first();
 
@@ -551,7 +555,7 @@ const ValidationEngine = {
 
     removeGroup(group) {
         const config = this.getGroupConfig(group);
-        const index = inArray(config, this.groups);
+        const index = this.groups.indexOf(config);
         if(index > -1) {
             this.groups.splice(index, 1);
         }
@@ -592,6 +596,8 @@ const ValidationEngine = {
             status: STATUS.valid,
             complete: null
         };
+        const validator = rules?.[0]?.validator;
+
         const asyncRuleItems = [];
         each(rules || [], (_, rule) => {
             const ruleValidator = rulesValidators[rule.type];
@@ -645,8 +651,19 @@ const ValidationEngine = {
                 name
             });
         }
+
+        this._synchronizeGroupValidationInfo(validator, result);
+
         result.status = result.pendingRules ? STATUS.pending : (result.isValid ? STATUS.valid : STATUS.invalid);
         return result;
+    },
+
+    _synchronizeGroupValidationInfo(validator, result) {
+        if(!validator) {
+            return;
+        }
+        const groupConfig = ValidationEngine.getGroupConfig(validator._validationGroup);
+        groupConfig._updateBrokenRules.call(groupConfig, { validator, brokenRules: result.brokenRules ?? [] });
     },
 
     _validateAsyncRules({ result, value, items, name }) {

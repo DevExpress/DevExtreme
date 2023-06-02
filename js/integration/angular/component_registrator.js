@@ -8,7 +8,6 @@ import Class from '../../core/class';
 import Callbacks from '../../core/utils/callbacks';
 import { type, isDefined, isNumeric } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import { inArray } from '../../core/utils/array';
 import Locker from '../../core/utils/locker';
 import Editor from '../../ui/editor/editor';
 import { NgTemplate } from './template';
@@ -20,7 +19,7 @@ import { equals } from '../../core/utils/comparator';
 import { dasherize } from '../../core/utils/inflector';
 
 const ITEM_ALIAS_ATTRIBUTE_NAME = 'dxItemAlias';
-const SKIP_APPLY_ACTION_CATEGORIES = ['rendering'];
+const SKIP_APPLY_ACTION_CATEGORY = 'rendering';
 const NG_MODEL_OPTION = 'value';
 
 if(angular) {
@@ -408,7 +407,7 @@ if(angular) {
             result._optionChangedCallbacks = this._optionChangedCallbacks;
             result._disposingCallbacks = this._componentDisposing;
             result.onActionCreated = (component, action, config) => {
-                if(config && inArray(config.category, SKIP_APPLY_ACTION_CATEGORIES) > -1) {
+                if(config && config.category === SKIP_APPLY_ACTION_CATEGORY) {
                     return action;
                 }
 
@@ -510,7 +509,7 @@ if(angular) {
         },
 
         _isNgModelRequired() {
-            return (this._componentClass.subclassOf(Editor) || this._componentClass.prototype instanceof Editor) && this._ngModel;
+            return Editor.isEditor(this._componentClass.prototype) && this._ngModel;
         },
 
         _initComponentBindings(...args) {

@@ -7,6 +7,8 @@ require('ui/validation_group');
 require('ui/validator');
 require('integration/knockout');
 
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
 QUnit.testStart(function() {
     const markup =
         '<div id="testcaseSingleGroup" data-bind="dxValidationGroup: {}">\
@@ -24,7 +26,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('Integration');
+moduleWithoutCsp('Integration');
 
 QUnit.test('Knockout widgets can be created inside of dxValidationGroup', function(assert) {
     ko.applyBindings({}, document.getElementById('testcaseSingleGroup'));

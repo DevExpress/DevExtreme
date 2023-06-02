@@ -1,4 +1,7 @@
-export default function getElementComputedStyle(el: Element| undefined):
+import { getWindow } from '../../core/utils/window';
+
+export default function getElementComputedStyle(el: Element | undefined | null):
 CSSStyleDeclaration | null {
-  return el ? window.getComputedStyle && window.getComputedStyle(el) : null;
+  const window = getWindow();
+  return el ? window.getComputedStyle?.(el) : null;
 }

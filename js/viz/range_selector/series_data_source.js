@@ -2,7 +2,6 @@ import { Series } from '../series/base_series';
 import { SeriesFamily } from '../core/series_family';
 import { isNumeric, isDate, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
 import { mergeMarginOptions, processSeriesTemplate } from '../core/utils';
 import { Range } from '../translators/range';
@@ -22,7 +21,7 @@ const processSeriesFamilies = function(series, minBubbleSize, maxBubbleSize, bar
     const types = [];
 
     each(series, function(i, item) {
-        if(inArray(item.type, types) === -1) {
+        if(!types.includes(item.type)) {
             types.push(item.type);
         }
     });

@@ -271,18 +271,18 @@ function makeHeader(header, weakElement) {
                     return;
                 }
 
-                const weakRect = processBackwardHeaderRect(weakElement, fitRect, fitRect);
+                const weakRect = processBackwardHeaderRect(weakElement, fitRect);
                 fitRect[2 + weakElement.primary] = weakRect[weakElement.primary];
-                const headerFitReact = processBackwardHeaderRect(header, fitRect, fitRect);
+                const headerFitReact = processBackwardHeaderRect(header, fitRect);
 
                 if(fitRect[2 + weakElement.primary] < rect[2 + weakElement.primary] && header.size[header.primary] > rect[2 + header.primary] - rect[header.primary]) {
                     rect[2 + weakElement.primary] = fitRect[2 + weakElement.primary];
                 }
 
-                let headerRect = processBackwardHeaderRect(header, rect, rect);
+                let headerRect = processBackwardHeaderRect(header, rect);
                 if(headerRect[2 + weakElement.primary] > fitRect[2 + weakElement.primary]) {
                     rect[2 + weakElement.primary] = fitRect[2 + weakElement.primary];
-                    headerRect = processBackwardHeaderRect(header, rect, rect);
+                    headerRect = processBackwardHeaderRect(header, rect);
                 }
 
                 weakElement.element.move(weakRect);

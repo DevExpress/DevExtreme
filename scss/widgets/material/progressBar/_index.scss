@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -7,7 +8,6 @@
 @use "../../base/progressBar";
 
 // adduse
-
 
 $material-bar-height: 4px;
 $material-background-width: 90%;
@@ -43,7 +43,7 @@ $material-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $
 
   .dx-progressbar-animating-container {
     animation: none;
-    background-position-x: $material-background-width / 2;
+    background-position-x: math.div($material-background-width, 2);
   }
 }
 

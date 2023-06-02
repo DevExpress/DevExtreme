@@ -1,3 +1,9 @@
+import $ from 'jquery';
+import commonUtils from 'core/utils/common';
+import { baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { getWidth } from 'core/utils/size';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
+
 QUnit.testStart(function() {
     const gridMarkup = `
         <div id='container'>
@@ -6,12 +12,9 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(gridMarkup);
+    // $('body').html(gridMarkup);
+    addShadowDomStyles($('#qunit-fixture'));
 });
-
-import $ from 'jquery';
-import commonUtils from 'core/utils/common';
-import { baseModuleConfig } from '../../helpers/dataGridHelper.js';
-
 
 QUnit.module('Column Resizing', baseModuleConfig, () => {
     QUnit.test('Resize columns', function(assert) {
@@ -22,7 +25,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
             commonColumnSettings: {
                 allowResizing: true
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}, {}, {}, {}],
             columns: [{ dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }, { dataField: 'room', width: 100 }, { dataField: 'birthDay', width: 100 }]
         });
@@ -54,7 +57,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
     // T804582
     QUnit.test('Cursor should switch style when it was moved to columns separator if grid has only one row and big header panel', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             allowColumnResizing: true,
             columnChooser: {
@@ -84,7 +87,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
             dataSource: [{}],
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax'],
             showBorders: true,
             allowColumnResizing: true
@@ -178,7 +181,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
             height: 300,
             wordWrapEnabled: true,
             allowColumnResizing: true,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}],
             columns: [{ dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }]
         });
@@ -212,7 +215,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         $('#container').width(200);
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             allowColumnResizing: true,
             dataSource: [{}],
             columns: ['firstName', 'lastName']
@@ -238,7 +241,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         instance.updateDimensions();
 
         // assert
-        assert.strictEqual(instance.$element().width(), 400);
+        assert.strictEqual(getWidth(instance.$element()), 400);
         assert.strictEqual(instance.columnOption(0, 'width'), '60.000%');
         assert.strictEqual(instance.columnOption(1, 'width'), '40.000%');
 
@@ -258,7 +261,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         $('#container').width(200);
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             adaptColumnWidthByRatio: false,
             allowColumnResizing: true,
             dataSource: [{}],
@@ -285,7 +288,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         instance.updateDimensions();
 
         // assert
-        assert.strictEqual(instance.$element().width(), 200);
+        assert.strictEqual(getWidth(instance.$element()), 200);
         assert.strictEqual(instance.columnOption(0, 'width'), 120);
         assert.strictEqual(instance.columnOption(1, 'width'), 80);
 
@@ -306,7 +309,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         $('#container').width(300);
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnResizingMode: 'widget',
             allowColumnResizing: true,
             dataSource: [{}],
@@ -331,7 +334,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         });
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 280);
+        assert.strictEqual(getWidth(instance.$element().children()), 280);
         assert.strictEqual(instance.columnOption(0, 'width'), 80);
         assert.strictEqual(instance.columnOption(1, 'width'), 100);
         assert.strictEqual(instance.columnOption(2, 'width'), 100);
@@ -354,7 +357,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             width: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnResizingMode: 'widget',
             allowColumnResizing: true,
             dataSource: [{}],
@@ -407,7 +410,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             width: 400,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnResizingMode: 'widget',
             allowColumnResizing: true,
             dataSource: [{}],
@@ -459,7 +462,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         $('#container').width(300);
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnResizingMode: 'widget',
             allowColumnResizing: true,
             dataSource: [{}],
@@ -493,7 +496,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
 
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 250);
+        assert.strictEqual(getWidth(instance.$element().children()), 250);
         assert.strictEqual(instance.columnOption(0, 'width'), 50);
         assert.strictEqual(instance.columnOption(1, 'width'), 100);
         assert.strictEqual(instance.columnOption(2, 'width'), 100);
@@ -515,7 +518,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         $('#container').width(200);
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnResizingMode: 'nextColumn',
             allowColumnResizing: true,
             dataSource: [{}],
@@ -550,7 +553,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         instance.updateDimensions();
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 200);
+        assert.strictEqual(getWidth(instance.$element().children()), 200);
         assert.strictEqual(instance.columnOption(0, 'width'), '75.000%');
         assert.strictEqual(instance.columnOption(1, 'width'), '25.000%');
 
@@ -571,7 +574,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         $('#container').width(200);
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnResizingMode: 'nextColumn',
             allowColumnResizing: true,
             dataSource: [{}],
@@ -603,7 +606,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         instance.updateDimensions();
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 200);
+        assert.strictEqual(getWidth(instance.$element().children()), 200);
         assert.strictEqual(instance.columnOption(0, 'width'), '75.000%');
         assert.strictEqual(instance.columnOption(1, 'width'), '25.000%');
 
@@ -624,7 +627,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             width: '100%',
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnResizingMode: 'widget',
             allowColumnResizing: true,
             dataSource: [{}],
@@ -649,7 +652,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         });
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 300);
+        assert.strictEqual(getWidth(instance.$element().children()), 300);
         assert.strictEqual(instance.columnOption(0, 'width'), 80);
         assert.strictEqual(instance.columnOption(1, 'width'), 100);
         assert.strictEqual(instance.columnOption(2, 'width'), 100);
@@ -671,7 +674,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         $('#container').width(300);
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnResizingMode: 'widget',
             allowColumnResizing: true,
             dataSource: [{}],
@@ -696,7 +699,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         });
 
         // assert
-        assert.strictEqual(instance.$element().children().width(), 300);
+        assert.strictEqual(getWidth(instance.$element().children()), 300);
         assert.strictEqual(instance.columnOption(0, 'width'), 220);
         assert.strictEqual(instance.columnOption(1, 'width'), 100);
         assert.strictEqual(instance.columnOption(2, 'width'), 100);
@@ -722,7 +725,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
             commonColumnSettings: {
                 allowResizing: true
             },
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             dataSource: [{}, {}, {}, {}],
             columns: [{ type: 'selection' }, { dataField: 'firstName', width: 100 }, { dataField: 'lastName', width: 100 }, { dataField: 'room', width: 100 }, { dataField: 'birthDay', width: 100 }]
         });
@@ -753,7 +756,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         const resizedWidths = [];
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
-            loadingTimeout: undefined,
+            loadingTimeout: null,
             columnAutoWidth: true,
             dataSource: [{}],
             columns: [
@@ -810,7 +813,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
         const $cols = $dataGrid.find('colgroup').first().find('col');
 
         // assert
@@ -821,9 +824,127 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         assert.equal($dataGrid.width(), $dataGrid.parent().width());
     });
 
+    // T964493
+    QUnit.test('Band columns with columnAutoWidth and grouping should be shown correctly after updateDimensions if all groups are collapsed', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{}],
+            loadingTimeout: null,
+            columnAutoWidth: true,
+            showBorders: true,
+            grouping: {
+                autoExpandAll: false,
+            },
+            columns: [{ caption: 'Band column 1', columns: ['Column1', 'Column2', 'Column3'] }, { dataField: 'City', groupIndex: 0 }]
+        }).dxDataGrid('instance');
+
+        // act
+        dataGrid.updateDimensions();
+        this.clock.tick(10);
+
+        // assert
+        const $headerRowsCells = dataGrid.$element().find('.dx-header-row').children();
+        for(let i = 0; i < $headerRowsCells.length; i++) {
+            assert.ok(getWidth($headerRowsCells.eq(i)) > 0, 'width is more than zero');
+        }
+    });
+
+    QUnit.test('Cell widths in group and data rows should be synchronized (T1078605)', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{
+                ID: 1,
+                CompanyName: 'Super Mart of the West',
+                City: 'Bentonville',
+                State: 'Arkansas',
+            }],
+            keyExpr: 'ID',
+            loadingTimeout: null,
+            allowColumnResizing: true,
+            showBorders: true,
+            columnResizingMode: 'widget',
+            columnMinWidth: 50,
+            width: 1000,
+            columnAutoWidth: true,
+            selection: {
+                mode: 'multiple'
+            },
+            columns: ['CompanyName', 'City', { dataField: 'State', groupIndex: 0 }],
+        });
+        const instance = dataGrid.dxDataGrid('instance');
+        const offset = $('#dataGrid').offset();
+
+        // act
+        const resizeController = instance.getController('columnsResizer');
+        resizeController._startResizing({
+            event: {
+                data: resizeController,
+                type: 'touchstart',
+                pageX: offset.left + 689,
+                pageY: offset.top + 15,
+                preventDefault: function() { },
+                stopPropagation: function() { }
+            }
+        });
+        resizeController._moveSeparator({
+            event: {
+                data: resizeController,
+                pageX: offset.left + 300,
+                preventDefault: commonUtils.noop
+            }
+        });
+        resizeController._endResizing({
+            event: {
+                data: resizeController
+            }
+        });
+
+        let headerSelectCellWidth = $('#dataGrid').find('.dx-datagrid-headers .dx-command-select').width();
+        let groupRowSelectCellWidth = $('#dataGrid').find('.dx-group-row .dx-command-select').width();
+        let dataRowSelectCellWidth = $('#dataGrid').find('.dx-data-row .dx-command-select').width();
+
+        // assert
+        assert.ok(instance.columnOption('CompanyName', 'width') < 250, 'column is resized');
+        assert.roughEqual(headerSelectCellWidth, groupRowSelectCellWidth, 1.1, 'select cells in header and group rows are equal');
+        assert.strictEqual(headerSelectCellWidth, dataRowSelectCellWidth, 'select cells in header and data rows are equal');
+
+        // act
+        resizeController._startResizing({
+            event: {
+                data: resizeController,
+                type: 'touchstart',
+                pageX: offset.left + 363,
+                pageY: offset.top + 15,
+                preventDefault: function() { },
+                stopPropagation: function() { }
+            }
+        });
+        resizeController._moveSeparator({
+            event: {
+                data: resizeController,
+                pageX: offset.left + 600,
+                preventDefault: commonUtils.noop
+            }
+        });
+        resizeController._endResizing({
+            event: {
+                data: resizeController
+            }
+        });
+
+        headerSelectCellWidth = $('#dataGrid').find('.dx-datagrid-headers .dx-command-select').width();
+        groupRowSelectCellWidth = $('#dataGrid').find('.dx-group-row .dx-command-select').width();
+        dataRowSelectCellWidth = $('#dataGrid').find('.dx-data-row .dx-command-select').width();
+
+        // assert
+        assert.ok(instance.columnOption('CompanyName', 'width') > 400, 'column is resized');
+        assert.roughEqual(headerSelectCellWidth, groupRowSelectCellWidth, 1.1, 'select cells in header and group rows are equal');
+        assert.strictEqual(headerSelectCellWidth, dataRowSelectCellWidth, 'select cells in header and data rows are equal');
+    });
+
     QUnit.module('RTL mode', () => {
         QUnit.test('The separator position should be correct when a parent grid container in RTL mode', function(assert) {
-            // arrange
+        // arrange
             const $testElement = $('#dataGrid');
 
             $testElement.parent().attr('dir', 'rtl').css({ width: '1000px', height: '500px' });
@@ -835,7 +956,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
                 rtlEnabled: true,
                 columnResizingMode: 'widget',
                 allowColumnResizing: true,
-                loadingTimeout: undefined,
+                loadingTimeout: null,
                 dataSource: [{}],
                 columns: [
                     { caption: 'Column 1', width: '125px' },
@@ -848,6 +969,7 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
             // act
             const resizeController = instance.getController('columnsResizer');
             resizeController._isResizing = true;
+            resizeController._scrollRight = 0;
             resizeController._targetPoint = { columnIndex: 0 };
             resizeController._setupResizingInfo(-9125);
             resizeController._moveSeparator({

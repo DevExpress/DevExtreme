@@ -1,107 +1,132 @@
-import '../jquery_augmentation';
-
 import {
-    dxElement
+    UserDefinedElement,
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    event
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+    ButtonType,
+    ButtonStyle,
+} from '../common';
+
+export {
+    ButtonType,
+    ButtonStyle,
+};
+
+/** @public */
+export type ClickEvent = NativeEventInfo<dxButton, KeyboardEvent | MouseEvent | PointerEvent> & {
+    validationGroup?: any;
+};
+
+/** @public */
+export type ContentReadyEvent = EventInfo<dxButton>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxButton>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxButton>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxButton> & ChangedOptionInfo;
+
+/** @public */
+export type TemplateData = {
+    readonly text?: string;
+    readonly icon?: string;
+};
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @docid
+ */
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
      * @docid
-     * @extends Action
+     * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 validationGroup:object
+     * @type_function_param1_field event:event
+     * @type_function_param1_field validationGroup:object
+     * @type_function_param1_field component:dxButton
      * @action
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxButton, element?: dxElement, model?: any, event?: event, validationGroup?: any }) => any);
+    onClick?: ((e: ClickEvent) => void);
     /**
      * @docid
-     * @type Enums.ButtonStylingMode
      * @default 'contained'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    stylingMode?: 'text' | 'outlined' | 'contained';
+    stylingMode?: ButtonStyle;
     /**
      * @docid
      * @default "content"
      * @type_function_param1 buttonData:object
-     * @type_function_param1_field1 text:string
-     * @type_function_param1_field2 icon:string
-     * @type_function_param2 contentElement:dxElement
      * @type_function_return string|Element|jQuery
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: dxElement) => string | Element | JQuery);
+    template?: template | ((data: TemplateData, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default ""
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
      * @docid
-     * @type Enums.ButtonType
      * @default 'normal'
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
-    type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    type?: ButtonType;
     /**
      * @docid
      * @default false
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     useSubmitBehavior?: boolean;
     /**
      * @docid
      * @default undefined
-     * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationGroup?: string;
@@ -110,26 +135,58 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
  * @docid
  * @inherits Widget
  * @hasTranscludedContent
- * @module ui/button
- * @export default
- * @prevFileNamespace DevExpress.ui
+ * @namespace DevExpress.ui
  * @public
  */
-export default class dxButton extends Widget {
-    constructor(element: Element, options?: dxButtonOptions)
-    constructor(element: JQuery, options?: dxButtonOptions)
-}
+export default class dxButton extends Widget<dxButtonOptions> { }
 
-declare global {
-interface JQuery {
-    dxButton(): JQuery;
-    dxButton(options: "instance"): dxButton;
-    dxButton(options: string): any;
-    dxButton(options: string, ...params: any[]): any;
-    dxButton(options: dxButtonOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxButtonOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxButtonOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxButtonOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxButtonOptions.onClick
+ * @type_function_param1 e:{ui/button:ClickEvent}
+ */
+onClick?: ((e: ClickEvent) => void);
+/**
+ * @skip
+ * @docid dxButtonOptions.onContentReady
+ * @type_function_param1 e:{ui/button:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @skip
+ * @docid dxButtonOptions.onDisposing
+ * @type_function_param1 e:{ui/button:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxButtonOptions.onInitialized
+ * @type_function_param1 e:{ui/button:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxButtonOptions.onOptionChanged
+ * @type_function_param1 e:{ui/button:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG

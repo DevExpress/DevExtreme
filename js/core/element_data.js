@@ -1,4 +1,3 @@
-import WeakMap from './polyfills/weak_map';
 import domAdapter from './dom_adapter';
 import eventsEngine from '../events/core/events_engine';
 import MemorizedCallbacks from './memorized_callbacks';

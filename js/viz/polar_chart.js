@@ -35,6 +35,10 @@ const dxPolarChart = AdvancedChart.inherit({
         };
     },
 
+    _executeAppendBeforeSeries(append) {
+        append();
+    },
+
     _prepareAxisOptions: function(typeSelector, axisOptions) {
         const isArgumentAxis = typeSelector === 'argumentAxis';
         const themeManager = this._themeManager;
@@ -52,7 +56,12 @@ const dxPolarChart = AdvancedChart.inherit({
     },
 
     _optionChangesMap: {
-        useSpiderWeb: 'AXES_AND_PANES'
+        useSpiderWeb: 'USE_SPIDER_WEB'
+    },
+
+    _change_USE_SPIDER_WEB() {
+        this._disposeAxes();
+        this._requestChange(['AXES_AND_PANES']);
     },
 
     _getExtraOptions: function() {

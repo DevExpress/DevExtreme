@@ -9,9 +9,25 @@ import eventsEngine from '../events/core/events_engine';
 
 import FileSystemProviderBase from './provider_base';
 import { compileGetter } from '../core/utils/data';
+import { isDefined, isEmptyObject, isFunction } from '../core/utils/type';
 
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = 'chunk';
+const FILE_SYSTEM_COMMNAD = {
+    GET_DIR_CONTENTS: 'GetDirContents',
+    CREATE_DIR: 'CreateDir',
+    RENAME: 'Rename',
+    MOVE: 'Move',
+    COPY: 'Copy',
+    REMOVE: 'Remove',
+    UPLOAD_CHUNK: 'UploadChunk',
+    ABORT_UPLOAD: 'AbortUpload',
+    DOWLOAD: 'Download'
+};
+const REQUEST_METHOD = {
+    GET: 'GET',
+    POST: 'POST'
+};
 
 class RemoteFileSystemProvider extends FileSystemProviderBase {
 
@@ -19,17 +35,20 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         options = ensureDefined(options, { });
         super(options);
         this._endpointUrl = options.endpointUrl;
+        this._beforeAjaxSend = options.beforeAjaxSend;
+        this._beforeSubmit = options.beforeSubmit;
+        this._requestHeaders = options.requestHeaders;
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
     }
 
     getItems(parentDir) {
         const pathInfo = parentDir.getFullPathInfo();
-        return this._getEntriesByPath(pathInfo)
+        return this._executeRequest(FILE_SYSTEM_COMMNAD.GET_DIR_CONTENTS, { pathInfo })
             .then(result => this._convertDataObjectsToFileItems(result.result, pathInfo));
     }
 
     renameItem(item, name) {
-        return this._executeRequest('Rename', {
+        return this._executeRequest(FILE_SYSTEM_COMMNAD.RENAME, {
             pathInfo: item.getFullPathInfo(),
             isDirectory: item.isDirectory,
             name
@@ -37,25 +56,21 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     }
 
     createDirectory(parentDir, name) {
-        return this._executeRequest('CreateDir', {
+        return this._executeRequest(FILE_SYSTEM_COMMNAD.CREATE_DIR, {
             pathInfo: parentDir.getFullPathInfo(),
             name
-        }).done(() => {
-            if(parentDir && !parentDir.isRoot()) {
-                parentDir.hasSubDirectories = true;
-            }
         });
     }
 
     deleteItems(items) {
-        return items.map(item => this._executeRequest('Remove', {
+        return items.map(item => this._executeRequest(FILE_SYSTEM_COMMNAD.REMOVE, {
             pathInfo: item.getFullPathInfo(),
             isDirectory: item.isDirectory
         }));
     }
 
     moveItems(items, destinationDirectory) {
-        return items.map(item => this._executeRequest('Move', {
+        return items.map(item => this._executeRequest(FILE_SYSTEM_COMMNAD.MOVE, {
             sourcePathInfo: item.getFullPathInfo(),
             sourceIsDirectory: item.isDirectory,
             destinationPathInfo: destinationDirectory.getFullPathInfo()
@@ -63,7 +78,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     }
 
     copyItems(items, destinationFolder) {
-        return items.map(item => this._executeRequest('Copy', {
+        return items.map(item => this._executeRequest(FILE_SYSTEM_COMMNAD.COPY, {
             sourcePathInfo: item.getFullPathInfo(),
             sourceIsDirectory: item.isDirectory,
             destinationPathInfo: destinationFolder.getFullPathInfo()
@@ -85,25 +100,28 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
                 FileSize: fileData.size
             })
         };
-
-        const formData = new window.FormData();
-        formData.append(FILE_CHUNK_BLOB_NAME, chunksInfo.chunkBlob);
-        formData.append('arguments', JSON.stringify(args));
-        formData.append('command', 'UploadChunk');
-
-        const deferred = new Deferred();
-        ajax.sendRequest({
+        const ajaxSettings = {
             url: this._endpointUrl,
-            method: 'POST',
+            headers: this._requestHeaders || {},
+            method: REQUEST_METHOD.POST,
             dataType: 'json',
-            data: formData,
+            data: {
+                [FILE_CHUNK_BLOB_NAME]: chunksInfo.chunkBlob,
+                arguments: JSON.stringify(args),
+                command: FILE_SYSTEM_COMMNAD.UPLOAD_CHUNK
+            },
             upload: {
                 onprogress: noop,
                 onloadstart: noop,
                 onabort: noop
             },
+            xhrFields: {},
             cache: false
-        })
+        };
+        const deferred = new Deferred();
+
+        this._beforeSendInternal(ajaxSettings);
+        ajax.sendRequest(ajaxSettings)
             .done(result => {
                 !result.success && deferred.reject(result) || deferred.resolve();
             })
@@ -113,7 +131,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
     }
 
     abortFileUpload(fileData, chunksInfo, destinationDirectory) {
-        return this._executeRequest('AbortUpload', { uploadId: chunksInfo.customData.uploadId });
+        return this._executeRequest(FILE_SYSTEM_COMMNAD.ABORT_UPLOAD, { uploadId: chunksInfo.customData.uploadId });
     }
 
     downloadItems(items) {
@@ -122,17 +140,16 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         const $form = $('<form>')
             .css({ display: 'none' })
             .attr({
-                method: 'post',
+                method: REQUEST_METHOD.POST,
                 action: args.url
             });
+        const formDataEntries = {
+            command: args.command,
+            arguments: args.arguments
+        };
 
-        ['command', 'arguments'].forEach(name => {
-            $('<input>').attr({
-                type: 'hidden',
-                name,
-                value: args[name]
-            }).appendTo($form);
-        });
+        this._beforeSubmitInternal(formDataEntries);
+        this._appendFormDataInputsToForm(formDataEntries, $form);
 
         $form.appendTo('body');
 
@@ -143,23 +160,26 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
 
     getItemsContent(items) {
         const args = this._getDownloadArgs(items);
-
-        const formData = new window.FormData();
-        formData.append('command', args.command);
-        formData.append('arguments', args.arguments);
-
-        return ajax.sendRequest({
+        const ajaxSettings = {
             url: args.url,
-            method: 'POST',
+            headers: this._requestHeaders || {},
+            method: REQUEST_METHOD.POST,
             responseType: 'arraybuffer',
-            data: formData,
+            data: {
+                command: args.command,
+                arguments: args.arguments
+            },
             upload: {
                 onprogress: noop,
                 onloadstart: noop,
                 onabort: noop
             },
+            xhrFields: {},
             cache: false
-        });
+        };
+
+        this._beforeSendInternal(ajaxSettings);
+        return ajax.sendRequest(ajaxSettings);
     }
 
     _getDownloadArgs(items) {
@@ -169,7 +189,7 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         return {
             url: this._endpointUrl,
             arguments: argsStr,
-            command: 'Download'
+            command: FILE_SYSTEM_COMMNAD.DOWLOAD
         };
     }
 
@@ -177,24 +197,77 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
         return items.map(it => it.relativeName);
     }
 
-    _getEntriesByPath(pathInfo) {
-        return this._executeRequest('GetDirContents', { pathInfo });
-    }
-
     _executeRequest(command, args) {
-        const method = command === 'GetDirContents' ? 'GET' : 'POST';
-
+        const method = command === FILE_SYSTEM_COMMNAD.GET_DIR_CONTENTS ? REQUEST_METHOD.GET : REQUEST_METHOD.POST;
         const deferred = new Deferred();
-        ajax.sendRequest({
+        const ajaxSettings = {
             url: this._getEndpointUrl(command, args),
+            headers: this._requestHeaders || {},
             method,
             dataType: 'json',
+            data: {},
+            xhrFields: {},
             cache: false
-        }).then(result => {
+        };
+
+        this._beforeSendInternal(ajaxSettings);
+        ajax.sendRequest(ajaxSettings).then(result => {
             !result.success && deferred.reject(result) || deferred.resolve(result);
         },
         e => deferred.reject(e));
         return deferred.promise();
+    }
+
+    _beforeSubmitInternal(formDataEntries) {
+        if(isFunction(this._beforeSubmit)) {
+            this._beforeSubmit({ formData: formDataEntries });
+        }
+    }
+
+    _beforeSendInternal(ajaxSettings) {
+        if(isFunction(this._beforeAjaxSend)) {
+            const ajaxArguments = {
+                headers: ajaxSettings.headers,
+                formData: ajaxSettings.data,
+                xhrFields: ajaxSettings.xhrFields
+            };
+
+            this._beforeAjaxSend(ajaxArguments);
+            ajaxSettings.headers = ajaxArguments.headers;
+            ajaxSettings.data = ajaxArguments.formData;
+            ajaxSettings.xhrFields = ajaxArguments.xhrFields;
+        }
+        if(isEmptyObject(ajaxSettings.data)) {
+            delete ajaxSettings.data;
+        } else {
+            if(ajaxSettings.responseType || ajaxSettings.upload) {
+                // if using core.utils.ajax
+                ajaxSettings.data = this._createFormData(ajaxSettings.data);
+            }
+            // else using jQuery.ajax, keep plain object
+        }
+    }
+
+    _createFormData(formDataEntries) {
+        const formData = new window.FormData();
+        for(const entryName in formDataEntries) {
+            if(Object.prototype.hasOwnProperty.call(formDataEntries, entryName) && isDefined(formDataEntries[entryName])) {
+                formData.append(entryName, formDataEntries[entryName]);
+            }
+        }
+        return formData;
+    }
+
+    _appendFormDataInputsToForm(formDataEntries, formElement) {
+        for(const entryName in formDataEntries) {
+            if(Object.prototype.hasOwnProperty.call(formDataEntries, entryName) && isDefined(formDataEntries[entryName])) {
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: entryName,
+                    value: formDataEntries[entryName]
+                }).appendTo(formElement);
+            }
+        }
     }
 
     _getEndpointUrl(command, args) {

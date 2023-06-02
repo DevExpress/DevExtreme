@@ -2,12 +2,15 @@ import $ from '../../core/renderer';
 import Draggable from '../draggable';
 import { extend } from '../../core/utils/extend';
 import { LIST_ITEM_DATA_KEY } from './constants';
+import { isSchedulerComponent } from './utils/isSchedulerComponent';
+import { Deferred } from '../../core/utils/deferred';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
 export default class AppointmentDragBehavior {
     constructor(scheduler) {
         this.scheduler = scheduler;
+        this.workspace = scheduler._workSpace;
         this.appointments = scheduler._appointments;
 
         this.initialPosition = {
@@ -16,6 +19,8 @@ export default class AppointmentDragBehavior {
         };
 
         this.appointmentInfo = null;
+
+        this.dragBetweenComponentsPromise = null;
     }
 
     isAllDay(appointment) {
@@ -46,19 +51,27 @@ export default class AppointmentDragBehavior {
         return $(itemElement);
     }
 
-    onDragEnd(e) {
-        const element = this.getAppointmentElement(e);
+    onDragEnd(event) {
+        const element = this.getAppointmentElement(event);
 
         const rawAppointment = this.appointments._getItemData(element);
         const container = this.appointments._getAppointmentContainer(this.isAllDay(element));
         container.append(element);
 
+        const newCellIndex = this.workspace.getDroppableCellIndex();
+        const oldCellIndex = this.workspace.getCellIndexByCoordinates(this.initialPosition);
+
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
-            event: e,
+            event,
             element,
             rawAppointment,
-            coordinates: this.initialPosition
+            newCellIndex,
+            oldCellIndex
         });
+    }
+
+    onDragCancel() {
+        this.removeDroppableClasses();
     }
 
     getItemData(appointmentElement) {
@@ -108,6 +121,16 @@ export default class AppointmentDragBehavior {
                     appointmentDragging.onRemove && appointmentDragging.onRemove(e);
                 }
             }
+
+            // NOTE: event.cancel may be promise or different type, so we need strict check here.
+            if(e.cancel === true) {
+                this.removeDroppableClasses();
+            }
+
+            if(e.cancel !== true && isSchedulerComponent(e.toComponent)) {
+                const targetDragBehavior = e.toComponent._getDragBehavior();
+                targetDragBehavior.dragBetweenComponentsPromise = new Deferred();
+            }
         };
     }
 
@@ -118,6 +141,10 @@ export default class AppointmentDragBehavior {
 
             if(e.fromComponent !== e.toComponent) {
                 appointmentDragging.onAdd && appointmentDragging.onAdd(e);
+            }
+
+            if(this.dragBetweenComponentsPromise) {
+                this.dragBetweenComponentsPromise.resolve();
             }
         };
     }
@@ -131,7 +158,8 @@ export default class AppointmentDragBehavior {
             immediate: false,
             onDragStart: this.onDragStart.bind(this),
             onDragMove: this.onDragMove.bind(this),
-            onDragEnd: this.onDragEnd.bind(this)
+            onDragEnd: this.onDragEnd.bind(this),
+            onDragCancel: this.onDragCancel.bind(this)
         }, config);
 
         this.appointments._createComponent(container, Draggable, extend({}, options, appointmentDragging, {
@@ -139,6 +167,7 @@ export default class AppointmentDragBehavior {
             onDragMove: this.createDragMoveHandler(options, appointmentDragging),
             onDragEnd: this.createDragEndHandler(options, appointmentDragging),
             onDrop: this.createDropHandler(appointmentDragging),
+            onCancelByEsc: true
         }));
     }
 
@@ -152,5 +181,10 @@ export default class AppointmentDragBehavior {
                 currentAppointment, currentSettings,
             );
         }
+    }
+
+    removeDroppableClasses() {
+        this.appointments._removeDragSourceClassFromDraggedAppointment();
+        this.workspace.removeDroppableCellClass();
     }
 }

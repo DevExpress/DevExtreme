@@ -3,9 +3,20 @@ import { each } from '../../core/utils/iterator';
 import config from '../../core/config';
 import { extend } from '../../core/utils/extend';
 import queryAdapters from '../query_adapters';
-import { sendRequest, generateSelect, generateExpand, serializeValue, convertPrimitiveValue, serializePropName } from './utils';
-import errorsUtils from '../errors';
-import dataUtils from '../utils';
+import {
+    sendRequest,
+    generateSelect,
+    generateExpand,
+    serializeValue,
+    convertPrimitiveValue,
+    serializePropName
+} from './utils';
+import { errors } from '../errors';
+import {
+    isConjunctiveOperator,
+    normalizeBinaryCriterion,
+    isUnaryOperation
+} from '../utils';
 
 const DEFAULT_PROTOCOL_VERSION = 2;
 const STRING_FUNCTIONS = ['contains', 'notcontains', 'startswith', 'endswith'];
@@ -61,14 +72,14 @@ const compileCriteria = (() => {
     });
 
     const compileBinary = (criteria) => {
-        criteria = dataUtils.normalizeBinaryCriterion(criteria);
+        criteria = normalizeBinaryCriterion(criteria);
 
         const op = criteria[1];
         const fieldName = criteria[0];
         const fieldType = fieldTypes && fieldTypes[fieldName];
 
         if(fieldType && isStringFunction(op) && fieldType !== 'String') {
-            throw new errorsUtils.errors.Error('E4024', op, fieldName, fieldType);
+            throw new errors.Error('E4024', op, fieldName, fieldType);
         }
 
         const formatters = protocolVersion === 4
@@ -77,7 +88,7 @@ const compileCriteria = (() => {
         const formatter = formatters[op.toLowerCase()];
 
         if(!formatter) {
-            throw errorsUtils.errors.Error('E4003', op);
+            throw errors.Error('E4003', op);
         }
 
         let value = criteria[2];
@@ -101,7 +112,7 @@ const compileCriteria = (() => {
             return `not (${crit})`;
         }
 
-        throw errorsUtils.errors.Error('E4003', op);
+        throw errors.Error('E4003', op);
     };
 
     const compileGroup = (criteria) => {
@@ -113,7 +124,7 @@ const compileCriteria = (() => {
             if(Array.isArray(criterion)) {
 
                 if(bag.length > 1 && groupOperator !== nextGroupOperator) {
-                    throw new errorsUtils.errors.Error('E4019');
+                    throw new errors.Error('E4019');
                 }
 
                 bag.push(`(${compileCore(criterion)})`);
@@ -121,7 +132,7 @@ const compileCriteria = (() => {
                 groupOperator = nextGroupOperator;
                 nextGroupOperator = 'and';
             } else {
-                nextGroupOperator = dataUtils.isConjunctiveOperator(this) ? 'and' : 'or';
+                nextGroupOperator = isConjunctiveOperator(this) ? 'and' : 'or';
             }
         });
 
@@ -133,7 +144,7 @@ const compileCriteria = (() => {
             return compileGroup(criteria);
         }
 
-        if(dataUtils.isUnaryOperation(criteria)) {
+        if(isUnaryOperation(criteria)) {
             return compileUnary(criteria);
         }
 

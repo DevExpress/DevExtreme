@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import 'ui/button';
-import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =
@@ -27,6 +26,7 @@ const BUTTON_BACK_CLASS = 'dx-button-back';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const BUTTON_TEXT_STYLE_CLASS = 'dx-button-mode-text';
 const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
+const BUTTON_SUBMIT_INPUT_CLASS = 'dx-button-submit-input';
 
 QUnit.module('Button markup', function() {
     QUnit.test('markup init', function(assert) {
@@ -209,6 +209,30 @@ QUnit.module('Button markup', function() {
         assert.equal($element.text(), 'button text', 'container is correct');
     });
 
+    QUnit.test('dxButton template content has input element', function(assert) {
+        const $element = $('#button').dxButton({
+            template: 'test',
+            useSubmitBehavior: true,
+            integrationOptions: {
+                templates: {
+                    'test': {
+                        render: function(args) {
+                            const $element = $('<span>')
+                                .addClass('dx-template-wrapper')
+                                .text('button text');
+
+                            return $element.get(0);
+                        }
+                    }
+                }
+            }
+        });
+
+        const $templateContent = $element.find(`.${TEMPLATE_WRAPPER_CLASS}`);
+
+        assert.ok($templateContent.children(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 'template has submit input');
+    });
+
     QUnit.module('aria accessibility', () => {
         QUnit.test('aria role', function(assert) {
             const $element = $('#button').dxButton({});
@@ -236,12 +260,35 @@ QUnit.module('Button markup', function() {
             assert.equal($element.attr('aria-label'), undefined, 'aria label without text and icon is correct');
         });
 
-        QUnit.test('icon-type base64 should not be parsed for aria-label creation (T281454)', function(assert) {
+        QUnit.test('aria-label attribute should be overriden by custom value via elementAttr option (T1115877)', function(assert) {
+            const $element = $('#button').dxButton({
+                icon: 'find',
+                type: 'danger',
+                elementAttr: { 'aria-label': 'custom' },
+            });
+            const instance = $element.dxButton('instance');
+
+            assert.strictEqual($element.attr('aria-label'), 'custom', 'aria label is correct');
+
+            instance.option('text', '');
+            assert.strictEqual($element.attr('aria-label'), 'custom', 'custom aria label is correct after text is changed');
+
+            instance.option('icon', '/path/file.png');
+            assert.strictEqual($element.attr('aria-label'), 'custom', 'custom aria label is correct after icon is changed');
+
+            instance.option('icon', '');
+            assert.strictEqual($element.attr('aria-label'), 'custom', 'custom aria label is correct after icon is changed');
+
+            instance.option('elementAttr', { 'aria-label': 'new custom value' });
+            assert.strictEqual($element.attr('aria-label'), 'new custom value', 'custom aria label was overridden via elementAttr option');
+        });
+
+        QUnit.test('aria-label should be empty if icon is set as a base64 (T281454)', function(assert) {
             const $element = $('#button').dxButton({
                 icon: 'data:image/png;base64,'
             });
 
-            assert.equal($element.attr('aria-label'), 'Base64', 'aria label is not exist');
+            assert.equal($element.attr('aria-label'), undefined, 'aria label does not exist');
         });
 
         QUnit.test('after change the button type to \'back\' and then change to \'normal\' arrow should be disappear', function(assert) {

@@ -5,7 +5,6 @@ import 'ui/tree_view';
 import 'ui/box';
 import 'ui/responsive_box';
 
-import 'common.css!';
 
 const TREEVIEW_ID = 'treeView_id';
 const PLACEMENT_STANDALONE = 'standalone';
@@ -47,7 +46,7 @@ const itemsOverflowXY = [{
 }];
 
 function appendTreeViewTo(appendToElement, id, items, width, height) {
-    const $treeView = $(`<div id="${id}" style="background-color: orange"></div>`);
+    const $treeView = $(`<div id="${id}"></div>`).css('background-color', 'orange');
 
     $(appendToElement).append($treeView);
 
@@ -61,7 +60,7 @@ function appendTreeViewTo(appendToElement, id, items, width, height) {
 
 QUnit.module('Size of one TreeView standalone/inside Box/inside ResponsiveBox', {
     beforeEach: function() {
-        this.$container = $('<div style="background-color: blue"></div>');
+        this.$container = $('<div></div>').css('background-color', 'blue');
         $('#qunit-fixture').append(this.$container);
     },
     afterEach: function() {
@@ -76,7 +75,6 @@ QUnit.module('Size of one TreeView standalone/inside Box/inside ResponsiveBox', 
         function appendOneTreeViewTo($appendTo, { id, width, height, items }) {
             if(placement === PLACEMENT_INSIDE_RESPONSIVE_BOX) {
                 $appendTo.dxResponsiveBox({
-                    _layoutStrategy: 'flex',
                     width,
                     height,
                     dataSource: [{
@@ -88,7 +86,6 @@ QUnit.module('Size of one TreeView standalone/inside Box/inside ResponsiveBox', 
                 });
             } else if(placement === PLACEMENT_INSIDE_BOX) {
                 $appendTo.dxBox({
-                    _layoutStrategy: 'flex',
                     width,
                     height,
                     direction: 'row',
@@ -208,7 +205,6 @@ QUnit.module('Size of two TreeViews inside Box/ResponsiveBox', {
         const testContext = `[placement: ${placement}]`;
 
         function appendTreeViewsToResponsiveBox($responsiveBox, treeViewItems, responsiveBoxConfig) {
-            responsiveBoxConfig._layoutStrategy = 'flex';
             responsiveBoxConfig.itemTemplate = function(data, index, element) {
                 appendTreeViewTo(element, TREEVIEW_ID + index, treeViewItems);
             };
@@ -217,7 +213,6 @@ QUnit.module('Size of two TreeViews inside Box/ResponsiveBox', {
         }
 
         function appendTreeViewsToBox($box, treeViewItems, boxConfig) {
-            boxConfig._layoutStrategy = 'flex';
             boxConfig.items = [{ ratio: 1 }, { ratio: 1 }];
             boxConfig.itemTemplate = function(data, index, element) {
                 appendTreeViewTo(element, TREEVIEW_ID + index, treeViewItems);

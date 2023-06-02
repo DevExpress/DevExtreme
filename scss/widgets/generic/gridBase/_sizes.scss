@@ -19,6 +19,7 @@ $generic-grid-base-treeview-search-margin: null !default;
 $generic-command-edit-icon-size: null !default;
 $generic-command-edit-icon-margin: null !default;
 $generic-grid-base-nodata-font-size: null !default;
+$generic-grid-base-checkbox-padding-bottom: null !default;
 
 @if $size == "default" {
   $generic-grid-base-cell-padding: 7px !default;
@@ -38,6 +39,7 @@ $generic-grid-base-nodata-font-size: null !default;
   $generic-command-edit-icon-size: 18px !default;
   $generic-command-edit-icon-margin: 3px !default;
   $generic-grid-base-nodata-font-size: 17px !default;
+  $generic-grid-base-checkbox-padding-bottom: 2px;
 }
 
 @else if $size == "compact" {
@@ -58,6 +60,7 @@ $generic-grid-base-nodata-font-size: null !default;
   $generic-command-edit-icon-size: 14px !default;
   $generic-command-edit-icon-margin: 1px !default;
   $generic-grid-base-nodata-font-size: 14px !default;
+  $generic-grid-base-checkbox-padding-bottom: 0;
 }
 
 $generic-grid-base-column-chooser-paddings: 0 $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding !default;

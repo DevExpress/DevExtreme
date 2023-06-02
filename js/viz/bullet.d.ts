@@ -1,12 +1,58 @@
+import {
+    EventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
+import {
+    FileSavingEventInfo,
+    ExportInfo,
+    IncidentInfo,
+} from './core/base_widget';
+
 import BaseSparkline, {
-    BaseSparklineOptions
+    BaseSparklineOptions,
 } from './sparklines/base_sparkline';
 
+/** @public */
+export type DisposingEvent = EventInfo<dxBullet>;
+
+/** @public */
+export type DrawnEvent = EventInfo<dxBullet>;
+
+/** @public */
+export type ExportedEvent = EventInfo<dxBullet>;
+
+/** @public */
+export type ExportingEvent = EventInfo<dxBullet> & ExportInfo;
+
+/** @public */
+export type FileSavingEvent = FileSavingEventInfo<dxBullet>;
+
+/** @public */
+export type IncidentOccurredEvent = EventInfo<dxBullet> & IncidentInfo;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxBullet>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxBullet> & ChangedOptionInfo;
+
+/** @public */
+export type TooltipHiddenEvent = EventInfo<dxBullet>;
+
+/** @public */
+export type TooltipShownEvent = EventInfo<dxBullet>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.viz
+ * @docid
+ */
 export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
     /**
      * @docid
      * @default '#e8c267'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     color?: string;
@@ -14,21 +60,18 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      * @docid
      * @default undefined
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     endScaleValue?: number;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     showTarget?: boolean;
     /**
      * @docid
      * @default true
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     showZeroLevel?: boolean;
@@ -36,7 +79,6 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      * @docid
      * @default 0
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     startScaleValue?: number;
@@ -44,21 +86,18 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      * @docid
      * @default 0
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     target?: number;
     /**
      * @docid
      * @default '#666666'
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     targetColor?: string;
     /**
      * @docid
      * @default 4
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     targetWidth?: number;
@@ -66,7 +105,6 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
      * @docid
      * @default 0
      * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
      * @public
      */
     value?: number;
@@ -74,26 +112,86 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
 /**
  * @docid
  * @inherits BaseSparkline
- * @module viz/bullet
- * @export default
- * @prevFileNamespace DevExpress.viz
+ * @namespace DevExpress.viz
  * @public
  */
-export default class dxBullet extends BaseSparkline {
-    constructor(element: Element, options?: dxBulletOptions)
-    constructor(element: JQuery, options?: dxBulletOptions)
-}
+export default class dxBullet extends BaseSparkline<dxBulletOptions> { }
 
-declare global {
-interface JQuery {
-    dxBullet(): JQuery;
-    dxBullet(options: "instance"): dxBullet;
-    dxBullet(options: string): any;
-    dxBullet(options: string, ...params: any[]): any;
-    dxBullet(options: dxBulletOptions): JQuery;
-}
-}
+/** @public */
+export type Properties = dxBulletOptions;
+
+/** @deprecated use Properties instead */
 export type Options = dxBulletOptions;
 
-/** @deprecated use Options instead */
-export type IOptions = dxBulletOptions;
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @skip
+ * @docid dxBulletOptions.onDisposing
+ * @type_function_param1 e:{viz/bullet:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @skip
+ * @docid dxBulletOptions.onDrawn
+ * @type_function_param1 e:{viz/bullet:DrawnEvent}
+ */
+onDrawn?: ((e: DrawnEvent) => void);
+/**
+ * @skip
+ * @docid dxBulletOptions.onExported
+ * @type_function_param1 e:{viz/bullet:ExportedEvent}
+ */
+onExported?: ((e: ExportedEvent) => void);
+/**
+ * @skip
+ * @docid dxBulletOptions.onExporting
+ * @type_function_param1 e:{viz/bullet:ExportingEvent}
+ */
+onExporting?: ((e: ExportingEvent) => void);
+/**
+ * @skip
+ * @docid dxBulletOptions.onFileSaving
+ * @type_function_param1 e:{viz/bullet:FileSavingEvent}
+ */
+onFileSaving?: ((e: FileSavingEvent) => void);
+/**
+ * @skip
+ * @docid dxBulletOptions.onIncidentOccurred
+ * @type_function_param1 e:{viz/bullet:IncidentOccurredEvent}
+ */
+onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
+/**
+ * @skip
+ * @docid dxBulletOptions.onInitialized
+ * @type_function_param1 e:{viz/bullet:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @skip
+ * @docid dxBulletOptions.onOptionChanged
+ * @type_function_param1 e:{viz/bullet:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @skip
+ * @docid dxBulletOptions.onTooltipHidden
+ * @type_function_param1 e:{viz/bullet:TooltipHiddenEvent}
+ */
+onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
+/**
+ * @skip
+ * @docid dxBulletOptions.onTooltipShown
+ * @type_function_param1 e:{viz/bullet:TooltipShownEvent}
+ */
+onTooltipShown?: ((e: TooltipShownEvent) => void);
+};
+///#ENDDEBUG

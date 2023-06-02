@@ -1,7 +1,6 @@
 import { noop } from '../../core/utils/common';
 import DateBoxStrategy from './ui.date_box.strategy';
 import { inputType } from '../../core/utils/support';
-import { inArray } from '../../core/utils/array';
 import dateUtils from './ui.date_utils';
 import dateSerialization from '../../core/utils/date_serialization';
 import { extend } from '../../core/utils/extend';
@@ -15,7 +14,7 @@ const NativeStrategy = DateBoxStrategy.inherit({
         return extend({}, popupConfig, { width: 'auto' });
     },
 
-    getParsedText: function(text, format) {
+    getParsedText: function(text) {
         if(!text) {
             return null;
         }
@@ -25,16 +24,7 @@ const NativeStrategy = DateBoxStrategy.inherit({
             return new Date(text.replace(/-/g, '/').replace('T', ' ').split('.')[0]);
         }
 
-        if(this._isTextInput()) {
-            return this.callBase(text, format);
-        } else {
-            return dateUtils.fromStandardDateFormat(text);
-        }
-    },
-
-    // IE11 fallback (T902036)
-    _isTextInput: function() {
-        return this.dateBox._input().prop('type') === 'text';
+        return dateUtils.fromStandardDateFormat(text);
     },
 
     renderPopupContent: noop,
@@ -46,7 +36,7 @@ const NativeStrategy = DateBoxStrategy.inherit({
     _getDateBoxType: function() {
         let type = this.dateBox.option('type');
 
-        if(inArray(type, dateUtils.SUPPORTED_FORMATS) === -1) {
+        if(!dateUtils.SUPPORTED_FORMATS.includes(type)) {
             type = 'date';
         } else if(type === 'datetime' && !inputType(type)) {
             type = 'datetime-local';

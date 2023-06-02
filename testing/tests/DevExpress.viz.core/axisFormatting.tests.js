@@ -37,12 +37,12 @@ const environment = {
         };
 
         const that = this;
-        sinon.stub(translator2DModule, 'Translator2D', function() {
+        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return that.translator;
         });
         this.renderer = new vizMocks.Renderer();
 
-        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator', function() {
+        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
             return function() {
                 return {
                     ticks: that.generatedTicks || [],
@@ -60,7 +60,7 @@ const environment = {
         this.axis = new Axis({
             renderer: this.renderer,
             stripsGroup: this.renderer.g(),
-            labelAxesGroup: this.renderer.g(),
+            stripLabelAxesGroup: this.renderer.g(),
             constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup: this.renderer.g(),
             gridGroup: this.renderer.g(),
@@ -159,7 +159,7 @@ QUnit.test('format numbers with non zero precision', function(assert) {
 });
 
 QUnit.test('formatting numbers wtih multiplier of tickInterval === 2.5', function(assert) {
-    this.testTickLabelFormat(assert, [1250, 8000, 160000, 165250], 250, ['1.25K', '8.00K', '160.00K', '165.25K']);
+    this.testTickLabelFormat(assert, [1250, 8000, 160000, 165250], 250, ['1.25K', '8.00K', '160,000', '165,250']);
     this.testTickLabelFormat(assert, [2500, 30000], 2500, ['2.5K', '30.0K']);
 });
 
@@ -167,7 +167,7 @@ QUnit.test('index of tickInterval is not equal index of tick', function(assert) 
     this.testTickLabelFormat(assert, [1002], 2, ['1,002']);
 });
 
-QUnit.test('tiсk with a decimal point does not depend on the tickInterval', function(assert) {
+QUnit.test('tick with a decimal point does not depend on the tickInterval', function(assert) {
     this.testTickLabelFormat(assert, [0.25], 1, ['0.25']);
 });
 
@@ -193,7 +193,7 @@ QUnit.test('format float number. tickInterval = 2.5', function(assert) {
 });
 
 QUnit.test('Misc', function(assert) {
-    this.testTickLabelFormat(assert, [10100], 100, ['10.1K']);
+    this.testTickLabelFormat(assert, [10100], 100, ['10,100']);
     this.testTickLabelFormat(assert, [10000000000000000000], 1000000000000000000, ['1E+19']);
     this.testTickLabelFormat(assert, [0], 0.5, ['0']);
 });
@@ -310,7 +310,7 @@ QUnit.test('format is calculated by ticks and tickInterval in quartes (odd)', fu
         new Date(1953, 6, 1),
         new Date(1954, 3, 1)
     ], { quarters: 3 },
-    ['July', 'April 1951', '1952', 'October', 'July 1953', 'April 1954']);
+    ['July 1950', 'April 1951', 'January 1952', 'October', 'July 1953', 'April 1954']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in years and months', function(assert) {
@@ -420,7 +420,7 @@ QUnit.test('format is calculated by ticks and tickInterval in months (second tic
         new Date(2012, 5, 1),
         new Date(2012, 9, 1),
     ], { months: 4 },
-    ['October', 'February 2011', 'June', 'October', 'February 2012', 'June', 'October']);
+    ['October 2010', 'February 2011', 'June', 'October', 'February 2012', 'June', 'October']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in months and days (years, months and days changed)', function(assert) {
@@ -441,7 +441,7 @@ QUnit.test('format is calculated by ticks and tickInterval in months and days (y
         new Date(1953, 0, 17),
         new Date(1953, 5, 1),
     ], { months: 4, days: 15 },
-    ['January 1950', 'May 31', 'Oct 16', 'March 1951', 'Jul 18', 'Dec 3', 'April 1952', 'Sep 2', 'January 1953', 'June']);
+    ['January 1950', 'May 31', 'Oct 16', 'March 1951', 'Jul 18', 'Dec 3', 'April 1952', 'Sep 2', 'January 1953', 'Jun 1']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in weeks', function(assert) {
@@ -497,7 +497,7 @@ QUnit.test('format is calculated by ticks and tickInterval in days (month change
         new Date(1950, 4, 11),
         new Date(1950, 4, 21)
     ], { days: 10 },
-    ['Mar 12', '22', 'April', '11', '21', 'May', '11', '21']);
+    ['Mar 12', '22', 'Apr 1', '11', '21', 'May 1', '11', '21']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in days (year, month changed)', function(assert) {
@@ -518,7 +518,7 @@ QUnit.test('format is calculated by ticks and tickInterval in days (year, month 
         new Date(2016, 0, 31),
         new Date(2016, 1, 8)
     ], { days: 8 },
-    ['29', 'Dec 6', '14', '22', '30', '2016', '15', '23', '31', 'Feb 8']);
+    ['Nov 29', 'Dec 6', '14', '22', '30', 'January 2016', '15', '23', '31', 'Feb 8']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in days (year, month changed) 2', function(assert) {
@@ -538,7 +538,7 @@ QUnit.test('format is calculated by ticks and tickInterval in days (year, month 
         new Date(2009, 1, 1),
         new Date(2009, 1, 8)
     ], { days: 7 },
-    ['Dec 14', '21', '28', '2009', '11', '18', '25', 'February', '8']);
+    ['Dec 14', '21', '28', 'January 2009', '11', '18', '25', 'Feb 1', '8']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in hours', function(assert) {
@@ -595,7 +595,7 @@ QUnit.test('format is calculated by ticks and tickInterval in hours (days change
         new Date(2015, 11, 15, 18),
         new Date(2015, 11, 16, 0)
     ], { hours: 6 },
-    ['14 6:00 AM', '12:00 PM', '6:00 PM', '15', '6:00 AM', '12:00 PM', '6:00 PM', '16']);
+    ['14 6:00 AM', '12:00 PM', '6:00 PM', '15 12:00 AM', '6:00 AM', '12:00 PM', '6:00 PM', '16 12:00 AM']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in days and hours', function(assert) {
@@ -632,7 +632,7 @@ QUnit.test('format is calculated by ticks and tickInterval in days and hours (ye
         new Date(2016, 0, 2, 16),
         new Date(2016, 0, 3, 22)
     ], { days: 1, hours: 6 },
-    ['Dec 28 10:00 AM', '29 4:00 PM', '30 10:00 PM', '31 4:00 AM', '2016', '2 4:00 PM', '3 10:00 PM']);
+    ['Dec 28 10:00 AM', '29 4:00 PM', '30 10:00 PM', '31 4:00 AM', 'January 2016', '2 4:00 PM', '3 10:00 PM']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in years, days and hours', function(assert) {
@@ -701,7 +701,7 @@ QUnit.test('format is calculated by ticks and tickInterval in hours and minutes 
         new Date(2015, 5, 1, 3, 10),
         new Date(2015, 5, 1, 5, 25)
     ], { hours: 2, minutes: 15 },
-    ['31 6:10 PM', '8:25 PM', '10:40 PM', 'June', '3:10 AM', '5:25 AM']);
+    ['31 6:10 PM', '8:25 PM', '10:40 PM', 'Jun 1', '3:10 AM', '5:25 AM']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in days, hours and minutes (years changed)', function(assert) {
@@ -718,7 +718,7 @@ QUnit.test('format is calculated by ticks and tickInterval in days, hours and mi
         new Date(2016, 0, 3, 3, 10),
         new Date(2016, 0, 5, 5, 25)
     ], { days: 2, hours: 2, minutes: 15 },
-    ['Dec 26 6:10 PM', '28 8:25 PM', '30 10:40 PM', '2016', '3 3:10 AM', '5 5:25 AM']);
+    ['Dec 26 6:10 PM', '28 8:25 PM', '30 10:40 PM', 'January 2016', '3 3:10 AM', '5 5:25 AM']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in minutes and seconds', function(assert) {
@@ -764,7 +764,7 @@ QUnit.test('format is calculated by ticks and tickInterval in minutes and second
         new Date(2015, 4, 28, 0, 26, 50),
         new Date(2015, 4, 28, 0, 42, 10)
     ], { minutes: 15, seconds: 20 },
-    ['11:56:10 PM', '28 12:11:30 AM', '12:26:50 AM', '12:42:10 AM']);
+    ['27 11:56:10 PM', '28 12:11:30 AM', '12:26:50 AM', '12:42:10 AM']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in minutes and seconds (month, day changed)', function(assert) {
@@ -780,7 +780,7 @@ QUnit.test('format is calculated by ticks and tickInterval in minutes and second
         new Date(2015, 5, 1, 0, 11, 30),
         new Date(2015, 5, 1, 0, 26, 50)
     ], { minutes: 15, seconds: 20 },
-    ['11:25:30 PM', '11:40:50 PM', '11:56:10 PM', 'June', '12:26:50 AM']);
+    ['11:25:30 PM', '11:40:50 PM', '11:56:10 PM', 'Jun 1', '12:26:50 AM']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in seconds (minutes changed)', function(assert) {
@@ -851,7 +851,7 @@ QUnit.test('format is calculated by ticks and tickInterval in milliseconds (minu
         new Date(2015, 4, 30, 23, 13, 0, 100),
         new Date(2015, 4, 30, 23, 13, 0, 200)
     ], { milliseconds: 100 },
-    [ '11:12 PM 59.7s', '59.8s', '59.9s', '11:13 PM', '0.1s', '0.2s']);
+    [ '11:12 PM 59.7s', '59.8s', '59.9s', '11:13:00 PM', '0.1s', '0.2s']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in milliseconds (day, hour, minute, seconds changed)', function(assert) {
@@ -871,7 +871,7 @@ QUnit.test('format is calculated by ticks and tickInterval in milliseconds (day,
         new Date(2015, 4, 31, 0, 0, 0, 700),
         new Date(2015, 4, 31, 0, 0, 1, 0)
     ], { milliseconds: 300 },
-    ['11:59 PM 58.6s', '58.9s', '59.2s', '59.5s', '59.8s', '31 12:00 AM', '0.4s', '0.7s', '1s']);
+    ['11:59 PM 58.6s', '58.9s', '59.2s', '59.5s', '59.8s', '31 12:00:00 AM', '0.4s', '0.7s', '1s']);
 });
 
 QUnit.test('format is calculated by ticks and tickInterval in milliseconds (month ant etc. changed)', function(assert) {
@@ -888,7 +888,7 @@ QUnit.test('format is calculated by ticks and tickInterval in milliseconds (mont
         new Date(2015, 5, 1, 0, 0, 0, 0),
         new Date(2015, 5, 1, 0, 0, 0, 200)
     ], { milliseconds: 200 },
-    ['11:59 PM 59.2s', '59.4s', '59.6s', '59.8s', 'Jun 1 12:00 AM', '0.2s']);
+    ['11:59 PM 59.2s', '59.4s', '59.6s', '59.8s', 'Jun 1 12:00:00 AM', '0.2s']);
 });
 
 QUnit.module('Auto formatting. Tick labels. Discrete axis', environment);
@@ -980,6 +980,22 @@ QUnit.test('Currency format', function(assert) {
     assert.equal(this.renderer.text.getCall(0).args[0], '$0.000');
     assert.equal(this.renderer.text.getCall(1).args[0], '$1.000');
     assert.equal(this.renderer.text.getCall(2).args[0], '$2.000');
+});
+
+QUnit.test('Fixed point format. Negative zero', function(assert) {
+    this.createAxis({
+        label: {
+            format: { type: 'fixedPoint', precision: 3 },
+            visible: true
+        }
+    });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
+    this.generatedTicks = [-0, 1, 2];
+
+    this.axis.draw(this.canvas);
+
+    assert.equal(this.renderer.text.callCount, 3, 'number of rendered labels');
+    assert.equal(this.renderer.text.getCall(0).args[0], '0.000');
 });
 
 QUnit.test('Date format with custom', function(assert) {
@@ -1109,7 +1125,7 @@ QUnit.test('format datetime - difference is measured in longtime', function(asse
         new Date(2010, 5, 4),
         new Date(2010, 5, 11),
         new Date(2010, 5, 18)
-    ], { days: 7 }, '12:00:15 AM', new Date(2010, 4, 28, 0, 0, 15), true);
+    ], { days: 7 }, '28 12:00:15 AM', new Date(2010, 4, 28, 0, 0, 15), true);
 });
 
 QUnit.test('format datetime - difference is measured in shorttime', function(assert) {
@@ -1503,6 +1519,7 @@ QUnit.test('Numeric axis. Format range', function(assert) {
     // act
     this.createAxis();
     assert.strictEqual(this.axis.formatRange(10000, 15000, 5000), '10K - 15K');
+    assert.strictEqual(this.axis.formatRange(10000, 15000, 5000, 'currency'), '$10,000 - $15,000');
 });
 
 QUnit.test('Logarithmic axis. Format range', function(assert) {
