@@ -778,6 +778,21 @@ QUnit.module('Views integration', {
         this.calendar.option('value', new Date(2013, 5, 16));
         assert.equal(getCurrentViewInstance(this.calendar).option('contouredDate'), null, 'view contouredDate is null');
     });
+
+    QUnit.test('contoredDate class should not be added to the January 1970 cell when contouredDate is set to null', function(assert) {
+        this.reinit({
+            value: new Date(0),
+            zoomLevel: 'year',
+        });
+
+        const view = getCurrentViewInstance(this.calendar);
+
+        view.option('contouredDate', null);
+
+        const $contouredCell = getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_CONTOURED_DATE_CLASS));
+
+        assert.strictEqual($contouredCell.length, 0, 'there is no contoured date cell');
+    });
 });
 
 
