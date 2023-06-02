@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import { BrowserSizeType, DEFAULT_BROWSER_SIZE, restoreBrowserSize } from './restoreBrowserSize';
 
 type TestCafeFn = (t: TestController) => Promise<any>;
@@ -16,10 +17,13 @@ const setBrowserSize = async (
 ) => {
   const [width, height] = size;
 
-  const { visualViewport } = window;
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  await ClientFunction((width, height, callback) => {
+    const { visualViewport } = window as any;
 
-  setVisualViewportSize(visualViewport, 'width', width);
-  setVisualViewportSize(visualViewport, 'height', height);
+    callback(visualViewport, 'width', width);
+    callback(visualViewport, 'height', height);
+  })(width, height, setVisualViewportSize);
 
   await t.resizeWindow(width, height);
 };
