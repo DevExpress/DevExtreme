@@ -134,7 +134,10 @@ export function getComplexOptionType(
     }
 
     function formatFunctionDescriptor(functionDescriptor: IFunctionDescr): string {
-      const parameters = functionDescriptor.params?.map((p) => `${p.name}: ${getComplexOptionType(p.types, resolveCustomType) || BaseTypes.Any}`)
+      const parameters = functionDescriptor.params?.map((p) => {
+        const parameterType = getComplexOptionType(p.types, resolveCustomType) || BaseTypes.Any;
+        return `${p.name}: ${parameterType === BaseTypes.Object ? BaseTypes.Any : parameterType}`;
+      })
         .join(', ') || '';
       const returnType = (
         functionDescriptor.returnValueType && (formatTypeDescriptor(functionDescriptor.returnValueType) || (functionDescriptor.returnValueType.type === 'void' && 'void'))
