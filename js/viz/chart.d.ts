@@ -80,7 +80,7 @@ import {
  * @docid
  * @hidden
  */
-interface SeriesInteractionInfo {
+export interface SeriesInteractionInfo {
     target: chartSeriesObject;
 }
 

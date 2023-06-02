@@ -51,7 +51,7 @@ interface AppointmentDraggingEvent {
  * @docid
  * @hidden
  */
-interface TargetedAppointmentInfo {
+export interface TargetedAppointmentInfo {
   readonly appointmentData: Appointment;
   readonly targetedAppointmentData?: Appointment;
 }

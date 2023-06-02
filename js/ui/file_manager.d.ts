@@ -45,7 +45,7 @@ import {
  * @docid
  * @hidden
  */
-interface ActionEventInfo {
+export interface ActionEventInfo {
     errorCode?: number;
     errorText: string;
     cancel: boolean | PromiseLike<void>;
