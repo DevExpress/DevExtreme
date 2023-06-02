@@ -444,7 +444,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:{viz/sankey:LinkHoverChangedEvent}
+     * @type_function_param1 e:{viz/sankey:LinkHoverEvent}
      * @notUsedInTheme
      * @action
      * @public
