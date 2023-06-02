@@ -4,11 +4,23 @@ type TestCafeFn = (t: TestController) => Promise<any>;
 
 const emptyFunction = () => Promise.resolve();
 
+const setVisualViewportSize = (object: any, propertyName: string, value: number) => {
+  Object.defineProperty(object, propertyName, {
+    get: () => value,
+  });
+};
+
 const setBrowserSize = async (
   t: TestController,
   size: BrowserSizeType,
 ) => {
   const [width, height] = size;
+
+  const { visualViewport } = window;
+
+  setVisualViewportSize(visualViewport, 'width', width);
+  setVisualViewportSize(visualViewport, 'height', height);
+
   await t.resizeWindow(width, height);
 };
 

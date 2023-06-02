@@ -1,6 +1,6 @@
 import { hasWindow, getWindow } from '../../core/utils/window';
 
-const visualViewportListenerNames = {
+const visualViewportEventMap = {
     resize: 'resize',
     scroll: 'scroll',
 };
@@ -49,14 +49,14 @@ const getVisualViewportSizes = () => {
 
 const subscribeOnVisualViewportEvent = (eventName, callback) => {
     const visualViewport = getVisualViewport();
-    const event = visualViewportListenerNames[eventName];
+    const event = visualViewportEventMap[eventName];
 
     visualViewport.addEventListener(event, callback);
 };
 
 const unSubscribeOnVisualViewportEvent = (eventName, callback) => {
     const visualViewport = getVisualViewport();
-    const event = visualViewportListenerNames[eventName];
+    const event = visualViewportEventMap[eventName];
 
     visualViewport.removeEventListener(event, callback);
 };
@@ -65,7 +65,7 @@ export {
     hasVisualViewport,
     getVisualViewport,
     getVisualViewportSizes,
-    visualViewportListenerNames,
+    visualViewportEventMap,
     subscribeOnVisualViewportEvent,
     unSubscribeOnVisualViewportEvent,
 };

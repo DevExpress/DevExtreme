@@ -7,7 +7,7 @@ import {
     hasVisualViewport,
     subscribeOnVisualViewportEvent,
     unSubscribeOnVisualViewportEvent,
-    visualViewportListenerNames,
+    visualViewportEventMap,
 } from '../../core/utils/visual_viewport';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
 import { getPublicElement } from '../../core/element';
@@ -818,7 +818,7 @@ const Overlay = Widget.inherit({
         this._pendingUpdate = false;
 
         const callback = this._visualViewportResizeHandler.bind(this);
-        const eventNames = Object.keys(visualViewportListenerNames);
+        const eventNames = Object.keys(visualViewportEventMap);
 
         if(subscribe) {
             eventNames.forEach(eventName => subscribeOnVisualViewportEvent(eventName, callback));
