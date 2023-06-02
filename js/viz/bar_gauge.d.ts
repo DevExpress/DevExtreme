@@ -415,7 +415,7 @@ export type Options = dxBarGaugeOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onTooltipHidden', 'onTooltipShown'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onTooltipHidden' | 'onTooltipShown'>;
 
 /**
 * @hidden

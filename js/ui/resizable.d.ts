@@ -140,7 +140,7 @@ export type Options = dxResizableOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onResize', 'onResizeEnd', 'onResizeStart'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onResize' | 'onResizeEnd' | 'onResizeStart'>;
 
 /**
 * @hidden

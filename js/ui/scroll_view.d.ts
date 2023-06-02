@@ -118,7 +118,7 @@ export type Options = dxScrollViewOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onPullDown', 'onReachBottom'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onPullDown' | 'onReachBottom'>;
 
 /**
 * @hidden

@@ -5150,7 +5150,7 @@ export type Options = dxChartOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onArgumentAxisClick', 'onLegendClick', 'onSeriesClick', 'onSeriesHoverChanged', 'onSeriesSelectionChanged', 'onZoomEnd', 'onZoomStart'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onArgumentAxisClick' | 'onLegendClick' | 'onSeriesClick' | 'onSeriesHoverChanged' | 'onSeriesSelectionChanged' | 'onZoomEnd' | 'onZoomStart'>;
 
 /**
 * @hidden

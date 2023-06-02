@@ -814,7 +814,7 @@ export type Options = dxFormOptions;
 
 // type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onEditorEnterKey', 'onFieldDataChanged'>;
+// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onEditorEnterKey' | 'onFieldDataChanged'>;
 
 /**
 * @hidden

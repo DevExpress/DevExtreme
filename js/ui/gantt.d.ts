@@ -1574,7 +1574,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onContextMenuPreparing', 'onCustomCommand', 'onDependencyDeleted', 'onDependencyDeleting', 'onDependencyInserted', 'onDependencyInserting', 'onResourceAssigned', 'onResourceAssigning', 'onResourceDeleted', 'onResourceDeleting', 'onResourceInserted', 'onResourceInserting', 'onResourceManagerDialogShowing', 'onResourceUnassigned', 'onResourceUnassigning', 'onScaleCellPrepared', 'onSelectionChanged', 'onTaskClick', 'onTaskDblClick', 'onTaskDeleted', 'onTaskDeleting', 'onTaskEditDialogShowing', 'onTaskInserted', 'onTaskInserting', 'onTaskMoving', 'onTaskUpdated', 'onTaskUpdating'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onContextMenuPreparing' | 'onCustomCommand' | 'onDependencyDeleted' | 'onDependencyDeleting' | 'onDependencyInserted' | 'onDependencyInserting' | 'onResourceAssigned' | 'onResourceAssigning' | 'onResourceDeleted' | 'onResourceDeleting' | 'onResourceInserted' | 'onResourceInserting' | 'onResourceManagerDialogShowing' | 'onResourceUnassigned' | 'onResourceUnassigning' | 'onScaleCellPrepared' | 'onSelectionChanged' | 'onTaskClick' | 'onTaskDblClick' | 'onTaskDeleted' | 'onTaskDeleting' | 'onTaskEditDialogShowing' | 'onTaskInserted' | 'onTaskInserting' | 'onTaskMoving' | 'onTaskUpdated' | 'onTaskUpdating'>;
 
 /**
 * @hidden

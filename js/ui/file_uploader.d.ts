@@ -458,7 +458,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onBeforeSend', 'onDropZoneEnter', 'onDropZoneLeave', 'onFilesUploaded', 'onProgress', 'onUploadAborted', 'onUploaded', 'onUploadError', 'onUploadStarted', 'onValueChanged'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onBeforeSend' | 'onDropZoneEnter' | 'onDropZoneLeave' | 'onFilesUploaded' | 'onProgress' | 'onUploadAborted' | 'onUploaded' | 'onUploadError' | 'onUploadStarted' | 'onValueChanged'>;
 
 /**
 * @hidden

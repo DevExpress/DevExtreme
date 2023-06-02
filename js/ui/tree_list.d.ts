@@ -1423,7 +1423,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCellClick', 'onCellDblClick', 'onCellHoverChanged', 'onCellPrepared', 'onContextMenuPreparing', 'onEditingStart', 'onEditorPrepared', 'onEditorPreparing', 'onFocusedCellChanged', 'onFocusedCellChanging', 'onFocusedRowChanged', 'onFocusedRowChanging', 'onNodesInitialized', 'onRowClick', 'onRowDblClick', 'onRowPrepared'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
 
 /**
 * @hidden

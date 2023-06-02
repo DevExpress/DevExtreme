@@ -638,7 +638,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onItemClick', 'onItemCollapsed', 'onItemContextMenu', 'onItemExpanded', 'onItemHold', 'onItemRendered', 'onItemSelectionChanged', 'onSelectAllValueChanged', 'onSelectionChanged'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onItemClick' | 'onItemCollapsed' | 'onItemContextMenu' | 'onItemExpanded' | 'onItemHold' | 'onItemRendered' | 'onItemSelectionChanged' | 'onSelectAllValueChanged' | 'onSelectionChanged'>;
 
 /**
 * @hidden

@@ -712,7 +712,7 @@ export type Options = dxTreeMapOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onClick', 'onDrill', 'onHoverChanged', 'onNodesInitialized', 'onNodesRendering', 'onSelectionChanged'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onClick' | 'onDrill' | 'onHoverChanged' | 'onNodesInitialized' | 'onNodesRendering' | 'onSelectionChanged'>;
 
 /**
 * @hidden
