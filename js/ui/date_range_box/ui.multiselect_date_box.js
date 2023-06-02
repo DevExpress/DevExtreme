@@ -3,6 +3,7 @@ import DateBox from '../date_box/ui.date_box.mask';
 import RangeCalendarStrategy from './strategy/rangeCalendar';
 import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
+import { getDeserializedDate, monthDifference } from './ui.date_range.utils';
 
 const START_DATEBOX_CLASS = 'dx-start-datebox';
 class MultiselectDateBox extends DateBox {
@@ -122,22 +123,39 @@ class MultiselectDateBox extends DateBox {
             return;
         }
 
-        const value = this._strategy.dateRangeBox.getStartDateBox()._strategy._widget.option('values');
+        const calendar = this._strategy.dateRangeBox.getStartDateBox()._strategy._widget;
+        const value = calendar.option('values');
+        const startDate = getDeserializedDate(value[0]);
+        const endDate = getDeserializedDate(value[1]);
 
         if($(target).is(startDateInput)) {
+            if(startDate) {
+                calendar._skipNavigate = true;
+                calendar.option('currentDate', startDate);
+            }
             this._strategy.setActiveStartDateBox();
-            this._strategy._widget.option('_currentSelection', 'startDate');
+            calendar.option('_currentSelection', 'startDate');
 
             if(this._strategy.dateRangeBox.option('disableOutOfRangeSelection')) {
-                this._strategy._widget._setViewsMaxOption(value[1]);
+                calendar._setViewsMaxOption(endDate);
             }
         }
         if($(target).is(endDateInput)) {
+            if(endDate) {
+                if(startDate && monthDifference(startDate, endDate) > 1) {
+                    calendar.option('currentDate', calendar._getDateByOffset(null, endDate));
+                    calendar.option('currentDate', calendar._getDateByOffset(-1, endDate));
+                }
+
+                calendar._skipNavigate = true;
+                calendar.option('currentDate', endDate);
+
+            }
             this._strategy.dateRangeBox.getStartDateBox()._strategy.setActiveEndDateBox();
-            this._strategy.dateRangeBox.getStartDateBox()._strategy._widget.option('_currentSelection', 'endDate');
+            calendar.option('_currentSelection', 'endDate');
 
             if(this._strategy.dateRangeBox.option('disableOutOfRangeSelection')) {
-                this._strategy.dateRangeBox.getStartDateBox()._strategy._widget._setViewsMinOption(value[0]);
+                calendar._setViewsMinOption(startDate);
             }
         }
     }
