@@ -1,6 +1,8 @@
 import { ClientFunction } from 'testcafe';
 import { BrowserSizeType, DEFAULT_BROWSER_SIZE, restoreBrowserSize } from './restoreBrowserSize';
 
+const SCROLLBAR_SIZE = 15;
+
 type TestCafeFn = (t: TestController) => Promise<any>;
 
 const emptyFunction = () => Promise.resolve();
@@ -23,8 +25,8 @@ const setBrowserSize = async (
   await ClientFunction(() => {
     const { visualViewport } = window as any;
 
-    setVisualViewportSize(visualViewport, 'width', width);
-    setVisualViewportSize(visualViewport, 'height', height);
+    setVisualViewportSize(visualViewport, 'width', width - SCROLLBAR_SIZE);
+    setVisualViewportSize(visualViewport, 'height', height - SCROLLBAR_SIZE);
   }, {
     dependencies: {
       width,

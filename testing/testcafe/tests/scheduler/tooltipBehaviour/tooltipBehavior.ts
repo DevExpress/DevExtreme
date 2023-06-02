@@ -97,7 +97,6 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Brochure Design Review');
     const tooltipNamePrefix = adaptivityEnabled ? 'mobile' : 'desktop';
-    const screenshotArea = adaptivityEnabled ? '#container' : scheduler.element;
 
     const expectedSelector = adaptivityEnabled
       ? scheduler.appointmentTooltip.mobileElement
@@ -106,7 +105,7 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
     await t
       .click(appointment.element)
       // act
-      .expect(await takeScreenshot(`appointment-${tooltipNamePrefix}-tooltip-screenshot.png`, screenshotArea))
+      .expect(await takeScreenshot(`appointment-${tooltipNamePrefix}-tooltip-screenshot.png`, scheduler.element))
       .ok()
       // assert
       .expect(expectedSelector.exists)
