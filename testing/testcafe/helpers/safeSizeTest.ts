@@ -18,15 +18,20 @@ const setBrowserSize = async (
 ) => {
   const [width, height] = size;
 
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  await ClientFunction((width, height, callback) => {
+  await t.resizeWindow(width, height);
+
+  await ClientFunction(() => {
     const { visualViewport } = window as any;
 
-    callback(visualViewport, 'width', width);
-    callback(visualViewport, 'height', height);
-  })(width, height, setVisualViewportSize);
-
-  await t.resizeWindow(width, height);
+    setVisualViewportSize(visualViewport, 'width', width);
+    setVisualViewportSize(visualViewport, 'height', height);
+  }, {
+    dependencies: {
+      width,
+      height,
+      setVisualViewportSize,
+    },
+  })();
 };
 
 const decorateTestCafeBefore = (
