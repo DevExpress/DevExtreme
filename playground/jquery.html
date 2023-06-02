@@ -32,48 +32,12 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="container"></div>
+    <div id="button"></div>
     <script>
-        $(() => {
-            const resources = [
-                { id: 0, color: '#e01e38' },
-                { id: 1, color: '#f98322' },
-                { id: 2, color: '#1e65e8' },
-            ];
-
-            $("#container").dxScheduler({                
-                views: ['week'],
-                currentView: 'week',
-                firstDayOfWeek: 2,
-                startDayHour: 4,
-                maxAppointmentsPerCell: 1,
-                width: 1666,
-                height: 833,
-                resources: [
-                    {
-                        fieldExpr: 'resourceId',
-                        dataSource: resources,
-                        label: 'Color',
-                    },
-                ],
-                dataSource: [{
-                    text: 'Recurrence one',
-                    startDate: new Date(2019, 2, 26, 8, 0),
-                    endDate: new Date(2019, 2, 26, 10, 0),
-                    recurrenceException: '',
-                    recurrenceRule: 'FREQ=DAILY',
-                }, {
-                    text: 'Non-recurrent appointment',
-                    startDate: new Date(2019, 2, 26, 7, 0),
-                    endDate: new Date(2019, 2, 26, 11, 0),
-                }, {
-                    text: 'Recurrence two',
-                    startDate: new Date(2019, 2, 26, 8, 0),
-                    endDate: new Date(2019, 2, 26, 10, 0),
-                    recurrenceException: '',
-                    recurrenceRule: 'FREQ=DAILY',
-                }],
-                currentDate: new Date(2019, 2, 26),
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
