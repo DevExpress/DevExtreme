@@ -812,9 +812,9 @@ export type Options = dxFormOptions;
 // eslint-disable-next-line import/first
 // import { CheckedEvents } from '../core';
 
-// type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+// type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onEditorEnterKey' | 'onFieldDataChanged'>;
 
-// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onEditorEnterKey', 'onFieldDataChanged'>;
+// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

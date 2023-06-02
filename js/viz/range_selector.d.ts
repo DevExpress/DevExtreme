@@ -795,7 +795,9 @@ export type Options = dxRangeSelectorOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onValueChanged'>;
+type FilterOutHidden<T> = Omit<T, 'onValueChanged'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

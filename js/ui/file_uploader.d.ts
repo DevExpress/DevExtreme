@@ -456,9 +456,9 @@ export type Options = dxFileUploaderOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onBeforeSend' | 'onDropZoneEnter' | 'onDropZoneLeave' | 'onFilesUploaded' | 'onProgress' | 'onUploadAborted' | 'onUploaded' | 'onUploadError' | 'onUploadStarted' | 'onValueChanged'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onBeforeSend', 'onDropZoneEnter', 'onDropZoneLeave', 'onFilesUploaded', 'onProgress', 'onUploadAborted', 'onUploaded', 'onUploadError', 'onUploadStarted', 'onValueChanged'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

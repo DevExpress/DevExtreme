@@ -231,9 +231,9 @@ export type Options = dxTagBoxOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onCopy' | 'onCut' | 'onPaste'>;
+type FilterOutHidden<T> = Omit<T, 'onCopy' | 'onCut' | 'onPaste' | 'onMultiTagPreparing' | 'onSelectAllValueChanged' | 'onSelectionChanged'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMultiTagPreparing', 'onSelectAllValueChanged', 'onSelectionChanged'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

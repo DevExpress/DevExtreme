@@ -248,9 +248,9 @@ export type Options = dxPivotGridFieldChooserOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onContextMenuPreparing'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onContextMenuPreparing'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

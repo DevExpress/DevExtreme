@@ -897,7 +897,9 @@ export type Options = dxVectorMapOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onCenterChanged', 'onClick', 'onSelectionChanged', 'onTooltipHidden', 'onTooltipShown', 'onZoomFactorChanged'>;
+type FilterOutHidden<T> = Omit<T, 'onCenterChanged' | 'onClick' | 'onSelectionChanged' | 'onTooltipHidden' | 'onTooltipShown' | 'onZoomFactorChanged'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

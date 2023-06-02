@@ -795,9 +795,9 @@ export type Options = dxFileManagerOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onContextMenuItemClick' | 'onContextMenuShowing' | 'onCurrentDirectoryChanged' | 'onDirectoryCreated' | 'onDirectoryCreating' | 'onErrorOccurred' | 'onFileUploaded' | 'onFileUploading' | 'onFocusedItemChanged' | 'onItemCopied' | 'onItemCopying' | 'onItemDeleted' | 'onItemDeleting' | 'onItemDownloading' | 'onItemMoved' | 'onItemMoving' | 'onItemRenamed' | 'onItemRenaming' | 'onSelectedFileOpened' | 'onSelectionChanged' | 'onToolbarItemClick'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onContextMenuItemClick', 'onContextMenuShowing', 'onCurrentDirectoryChanged', 'onDirectoryCreated', 'onDirectoryCreating', 'onErrorOccurred', 'onFileUploaded', 'onFileUploading', 'onFocusedItemChanged', 'onItemCopied', 'onItemCopying', 'onItemDeleted', 'onItemDeleting', 'onItemDownloading', 'onItemMoved', 'onItemMoving', 'onItemRenamed', 'onItemRenaming', 'onSelectedFileOpened', 'onSelectionChanged', 'onToolbarItemClick'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

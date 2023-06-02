@@ -913,7 +913,9 @@ export type Options = dxPieChartOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onLegendClick'>;
+type FilterOutHidden<T> = Omit<T, 'onLegendClick'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

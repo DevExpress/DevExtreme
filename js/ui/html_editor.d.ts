@@ -677,7 +677,9 @@ export type Options = dxHtmlEditorOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onFocusIn', 'onFocusOut'>;
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

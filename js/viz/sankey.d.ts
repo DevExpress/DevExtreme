@@ -705,7 +705,9 @@ export type Options = dxSankeyOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onLinkClick', 'onLinkHoverChanged', 'onNodeClick', 'onNodeHoverChanged'>;
+type FilterOutHidden<T> = Omit<T, 'onLinkClick' | 'onLinkHoverChanged' | 'onNodeClick' | 'onNodeHoverChanged'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

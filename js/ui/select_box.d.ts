@@ -198,7 +198,9 @@ export type Options = Properties;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onCustomItemCreating'>;
+type FilterOutHidden<T> = Omit<T, 'onCustomItemCreating'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

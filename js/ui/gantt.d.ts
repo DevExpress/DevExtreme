@@ -1572,9 +1572,9 @@ export type dxGanttColumn<TRowData = any, TKey = any> = Omit<dxGanttColumnBlank<
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onContextMenuPreparing' | 'onCustomCommand' | 'onDependencyDeleted' | 'onDependencyDeleting' | 'onDependencyInserted' | 'onDependencyInserting' | 'onResourceAssigned' | 'onResourceAssigning' | 'onResourceDeleted' | 'onResourceDeleting' | 'onResourceInserted' | 'onResourceInserting' | 'onResourceManagerDialogShowing' | 'onResourceUnassigned' | 'onResourceUnassigning' | 'onScaleCellPrepared' | 'onSelectionChanged' | 'onTaskClick' | 'onTaskDblClick' | 'onTaskDeleted' | 'onTaskDeleting' | 'onTaskEditDialogShowing' | 'onTaskInserted' | 'onTaskInserting' | 'onTaskMoving' | 'onTaskUpdated' | 'onTaskUpdating'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onContextMenuPreparing', 'onCustomCommand', 'onDependencyDeleted', 'onDependencyDeleting', 'onDependencyInserted', 'onDependencyInserting', 'onResourceAssigned', 'onResourceAssigning', 'onResourceDeleted', 'onResourceDeleting', 'onResourceInserted', 'onResourceInserting', 'onResourceManagerDialogShowing', 'onResourceUnassigned', 'onResourceUnassigning', 'onScaleCellPrepared', 'onSelectionChanged', 'onTaskClick', 'onTaskDblClick', 'onTaskDeleted', 'onTaskDeleting', 'onTaskEditDialogShowing', 'onTaskInserted', 'onTaskInserting', 'onTaskMoving', 'onTaskUpdated', 'onTaskUpdating'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

@@ -272,9 +272,9 @@ export type Options = dxSortableOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onPlaceholderPrepared'>;
+type FilterOutHidden<T> = Omit<T, 'onPlaceholderPrepared' | 'onAdd' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAdd', 'onDragChange', 'onDragEnd', 'onDragMove', 'onDragStart', 'onRemove', 'onReorder'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

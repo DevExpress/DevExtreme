@@ -1421,9 +1421,9 @@ export type Options<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TK
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onNodesInitialized' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCellClick', 'onCellDblClick', 'onCellHoverChanged', 'onCellPrepared', 'onContextMenuPreparing', 'onEditingStart', 'onEditorPrepared', 'onEditorPreparing', 'onFocusedCellChanged', 'onFocusedCellChanging', 'onFocusedRowChanged', 'onFocusedRowChanging', 'onNodesInitialized', 'onRowClick', 'onRowDblClick', 'onRowPrepared'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden

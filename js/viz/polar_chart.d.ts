@@ -2290,7 +2290,9 @@ export type Options = dxPolarChartOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onArgumentAxisClick', 'onLegendClick', 'onSeriesClick', 'onSeriesHoverChanged', 'onSeriesSelectionChanged', 'onZoomEnd', 'onZoomStart'>;
+type FilterOutHidden<T> = Omit<T, 'onArgumentAxisClick' | 'onLegendClick' | 'onSeriesClick' | 'onSeriesHoverChanged' | 'onSeriesSelectionChanged' | 'onZoomEnd' | 'onZoomStart'>;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
 
 /**
 * @hidden
