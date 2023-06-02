@@ -100,3 +100,79 @@ test('Should correctly change values (T1161941)', async (t) => {
   },
   columns: ['Name', 'Amount'],
 }));
+
+test('Header filter should be applied correctly with the enabled filterSyncEnabled option (T1168739)', async (t) => {
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+  const customColumnHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1);
+  const headerFilter = new HeaderFilter();
+  const buttons = headerFilter.getButtons();
+  const list = headerFilter.getList();
+
+  await t
+    // act
+    .click(customColumnHeaderCell.getFilterIcon())
+    .click(list.selectAll.element)
+    .click(list.getItem(1).element)
+    .click(buttons.nth(0))
+
+    // assert
+    .expect(dataGrid.getDataCell(0, 1).element.innerText)
+    .eql('Yes')
+
+    .expect(dataGrid.getDataCell(1, 1).element.innerText)
+    .eql('Yes');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    ID: 1,
+    text: 'Hello World',
+  }, {
+    ID: 2,
+    text: 'Hello',
+  }, {
+    ID: 3,
+    text: 'World',
+  }],
+  width: 300,
+  keyExpr: 'ID',
+  filterSyncEnabled: true,
+  headerFilter: {
+    visible: true,
+  },
+  columns: [{
+    dataField: 'text',
+    caption: 'Invoice Number',
+    width: 140,
+  }, {
+    name: 'Custom',
+    caption: 'custom',
+    allowHeaderFiltering: true,
+    calculateCellValue: (row) => (row.text.includes('World') ? 'Yes' : 'No'),
+    alignment: 'right',
+    dataType: 'string',
+    calculateFilterExpression(filterValue) {
+      const filter = ['text', 'contains', 'World'];
+      return filterValue ? filter : ['!', filter];
+    },
+    lookup: {
+      dataSource: [{
+        text: 'Yes',
+        value: 'Yes',
+      }, {
+        text: 'No',
+        value: 'No',
+      }],
+      valueExpr: 'value',
+      displayExpr: 'text',
+    },
+    headerFilter: {
+      dataSource: [{
+        text: 'Yes',
+        value: true,
+      }, {
+        text: 'No',
+        value: false,
+      }],
+      allowSearch: false,
+    },
+  }],
+}));
