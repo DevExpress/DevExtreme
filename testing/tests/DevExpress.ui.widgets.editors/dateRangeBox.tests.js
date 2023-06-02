@@ -282,12 +282,24 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 label: 'Start Date',
                 opened: false,
                 stylingMode: this.instance.option('stylingMode'),
-                _showValidationIcon: false
+                _showValidationIcon: false,
+                dropDownOptions: {
+                    showTitle: false,
+                    title: '',
+                    hideOnParentScroll: false,
+                    preventScrollEvents: false,
+                },
             };
             const startDateBox = getStartDateBoxInstance(this.instance);
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
-                assert.deepEqual(value, startDateBox.option(key), `${key} default value is correct`);
+                if(key === 'dropDownOptions') {
+                    Object.entries(startDateBox.option(key)).forEach(([dropDownOptionKey, dropDownOptionValue]) => {
+                        assert.deepEqual(dropDownOptionValue, startDateBox.option(`${key}.${dropDownOptionKey}`), `${key}.${dropDownOptionKey} default value is correct`);
+                    });
+                } else {
+                    assert.deepEqual(value, startDateBox.option(key), `${key} default value is correct`);
+                }
             });
         });
 
@@ -300,7 +312,7 @@ QUnit.module('DateRangeBox Initialization', moduleConfig, () => {
                 invalidDateMessage: 'End value must be a date',
                 label: 'End Date',
                 stylingMode: this.instance.option('stylingMode'),
-                _showValidationIcon: true
+                _showValidationIcon: true,
             };
             const endDateBox = getEndDateBoxInstance(this.instance);
 
