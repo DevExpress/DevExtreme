@@ -810,7 +810,7 @@ function syncConditionIntoGroup(filter, addedFilter, canPush) {
 }
 
 export function syncFilters(filter, addedFilter) {
-    if(filter === null || filter.length === 0) {
+    if(!isDefined(filter) || filter.length === 0) {
         return addedFilter;
     }
 

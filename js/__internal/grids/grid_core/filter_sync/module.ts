@@ -220,7 +220,7 @@ const FilterSyncController = modules.Controller.inherit((function () {
     },
 
     syncHeaderFilter(column) {
-      this.option('filterValue', this._getSyncHeaderFilter(this.option('filterValue'), column));
+      this.option('filterValues', this._getSyncHeaderFilter(this.option('filterValues'), column));
     },
 
     getCustomFilterOperations() {
