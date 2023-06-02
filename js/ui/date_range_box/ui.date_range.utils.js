@@ -28,3 +28,7 @@ export const sortDatesArray = (value) => {
         return value;
     }
 };
+
+export const monthDifference = (date1, date2) => {
+    return (date2.getFullYear() - date1.getFullYear()) * 12 - date1.getMonth() + date2.getMonth();
+};

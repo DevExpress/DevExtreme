@@ -293,7 +293,9 @@ const BaseView = Widget.inherit({
         const $newContouredCell = this._getCellByDate(contouredDate);
 
         $oldContouredCell.removeClass(CALENDAR_CONTOURED_DATE_CLASS);
-        $newContouredCell.addClass(CALENDAR_CONTOURED_DATE_CLASS);
+        if(contouredDate) {
+            $newContouredCell.addClass(CALENDAR_CONTOURED_DATE_CLASS);
+        }
     },
 
     _getContouredCell: function() {
@@ -378,7 +380,7 @@ const BaseView = Widget.inherit({
         let date = this.option('date');
         const min = this.option('min');
 
-        date = coreDateUtils.getFirstDateView(this._getViewName(), date);
+        date = coreDateUtils.getViewFirstCellDate(this._getViewName(), date);
         return new Date(min && date < min ? min : date);
     },
 

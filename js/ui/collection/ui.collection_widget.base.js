@@ -691,26 +691,35 @@ const CollectionWidget = Widget.inherit({
         this._attachContextMenuEvent();
     },
 
-    _attachClickEvent: function() {
-        const itemSelector = this._itemSelector();
-        const clickEventNamespace = addNamespace(clickEventName, this.NAME);
-        const pointerUpEventNamespace = addNamespace(pointerEvents.up, this.NAME);
-        const that = this;
+    _getPointerEvent() {
+        return pointerEvents.down;
+    },
 
-        const pointerUpAction = new Action(function(args) {
-            const event = args.event;
-            that._itemPointerDownHandler(event);
+    _attachClickEvent() {
+        const itemSelector = this._itemSelector();
+        const pointerEvent = this._getPointerEvent();
+
+        const clickEventNamespace = addNamespace(clickEventName, this.NAME);
+        const pointerEventNamespace = addNamespace(pointerEvent, this.NAME);
+
+        const pointerAction = new Action((args) => {
+            const { event } = args;
+
+            this._itemPointerDownHandler(event);
         });
+
+        const clickEventCallback = (e) => this._itemClickHandler(e);
+        const pointerEventCallback = (e) => {
+            pointerAction.execute({
+                element: $(e.target),
+                event: e,
+            });
+        };
 
         eventsEngine.off(this._itemContainer(), clickEventNamespace, itemSelector);
-        eventsEngine.off(this._itemContainer(), pointerUpEventNamespace, itemSelector);
-        eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, (function(e) { this._itemClickHandler(e); }).bind(this));
-        eventsEngine.on(this._itemContainer(), pointerUpEventNamespace, itemSelector, function(e) {
-            pointerUpAction.execute({
-                element: $(e.target),
-                event: e
-            });
-        });
+        eventsEngine.off(this._itemContainer(), pointerEventNamespace, itemSelector);
+        eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, clickEventCallback);
+        eventsEngine.on(this._itemContainer(), pointerEventNamespace, itemSelector, pointerEventCallback);
     },
 
     _itemClickHandler: function(e, args, config) {

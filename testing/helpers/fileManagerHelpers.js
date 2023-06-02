@@ -563,7 +563,8 @@ export class FileManagerWrapper {
         }
         $element.trigger($.Event(eventType, {
             clientX: $element.offset().left + elementOffset.left - this.getDocumentScrollLeft(),
-            clientY: $element.offset().top + elementOffset.top - this.getDocumentScrollTop()
+            clientY: $element.offset().top + elementOffset.top - this.getDocumentScrollTop(),
+            originalEvent: $.Event(eventType, { dataTransfer: { types: ['Files'] } })
         }));
     }
 

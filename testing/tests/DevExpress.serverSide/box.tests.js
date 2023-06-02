@@ -2,8 +2,6 @@ import '../DevExpress.ui.widgets/box.markup.tests.js';
 import Box from 'ui/box';
 import DOMAdapter from 'core/dom_adapter';
 
-QUnit.test = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
-
 const BOX_ITEM_CLASS = 'dx-box-item';
 
 const emulateServerSideFlexBehavior = function(element) {
@@ -59,8 +57,6 @@ QUnit.test('Flex props should exist in style attribute', function(assert) {
 
     [
         'display: flex;',
-        'flex-basis: 3px;',
-        'flex-grow: 4;',
-        'flex-shrink: 5;'
+        'flex: 4 5 3px;'
     ].forEach(style => assert.ok(itemElement.attributes.style.value.indexOf(style) > -1));
 });
