@@ -8,6 +8,7 @@ const emptyFunction = () => Promise.resolve();
 const setVisualViewportSize = (object: any, propertyName: string, value: number) => {
   Object.defineProperty(object, propertyName, {
     get: () => value,
+    configurable: true,
   });
 };
 

@@ -7,6 +7,7 @@ const DEFAULT_BROWSER_SIZE: BrowserSizeType = [1200, 800];
 const setVisualViewportSize = (object: any, propertyName: string, value: number) => {
   Object.defineProperty(object, propertyName, {
     get: () => value,
+    configurable: true,
   });
 };
 
