@@ -93,9 +93,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxResizable
+     * @type_function_param1 e:{ui/resizable:ResizeEvent}
      * @action
      * @public
      */
@@ -103,9 +101,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxResizable
+     * @type_function_param1 e:{ui/resizable:ResizeEndEvent}
      * @action
      * @public
      */
@@ -113,9 +109,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxResizable
+     * @type_function_param1 e:{ui/resizable:ResizeStartEvent}
      * @action
      * @public
      */
@@ -146,7 +140,7 @@ export type Options = dxResizableOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onResize' | 'onResizeEnd' | 'onResizeStart'>;
 
 /**
 * @hidden
@@ -170,23 +164,5 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{ui/resizable:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxResizableOptions.onResize
- * @type_function_param1 e:{ui/resizable:ResizeEvent}
- */
-onResize?: ((e: ResizeEvent) => void);
-/**
- * @skip
- * @docid dxResizableOptions.onResizeEnd
- * @type_function_param1 e:{ui/resizable:ResizeEndEvent}
- */
-onResizeEnd?: ((e: ResizeEndEvent) => void);
-/**
- * @skip
- * @docid dxResizableOptions.onResizeStart
- * @type_function_param1 e:{ui/resizable:ResizeStartEvent}
- */
-onResizeStart?: ((e: ResizeStartEvent) => void);
 };
 ///#ENDDEBUG

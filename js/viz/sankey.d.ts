@@ -435,9 +435,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSankey
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/sankey:LinkClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -446,8 +444,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSankey
+     * @type_function_param1 e:{viz/sankey:LinkHoverEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -457,9 +454,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSankey
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/sankey:NodeClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -468,8 +463,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSankey
+     * @type_function_param1 e:{viz/sankey:NodeHoverEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -711,7 +705,7 @@ export type Options = dxSankeyOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onLinkClick' | 'onLinkHoverChanged' | 'onNodeClick' | 'onNodeHoverChanged'>;
 
 /**
 * @hidden
@@ -759,30 +753,6 @@ onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
  * @type_function_param1 e:{viz/sankey:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
-/**
- * @skip
- * @docid dxSankeyOptions.onLinkClick
- * @type_function_param1 e:{viz/sankey:LinkClickEvent}
- */
-onLinkClick?: ((e: LinkClickEvent) => void);
-/**
- * @skip
- * @docid dxSankeyOptions.onLinkHoverChanged
- * @type_function_param1 e:{viz/sankey:LinkHoverChangedEvent}
- */
-onLinkHoverChanged?: ((e: LinkHoverEvent) => void);
-/**
- * @skip
- * @docid dxSankeyOptions.onNodeClick
- * @type_function_param1 e:{viz/sankey:NodeClickEvent}
- */
-onNodeClick?: ((e: NodeClickEvent) => void);
-/**
- * @skip
- * @docid dxSankeyOptions.onNodeHoverChanged
- * @type_function_param1 e:{viz/sankey:NodeHoverChangedEvent}
- */
-onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
 /**
  * @skip
  * @docid dxSankeyOptions.onOptionChanged

@@ -347,9 +347,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxRangeSelector
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/range_selector:ValueChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -797,7 +795,7 @@ export type Options = dxRangeSelectorOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onValueChanged'>;
 
 /**
 * @hidden
@@ -851,11 +849,5 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{viz/range_selector:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxRangeSelectorOptions.onValueChanged
- * @type_function_param1 e:{viz/range_selector:ValueChangedEvent}
- */
-onValueChanged?: ((e: ValueChangedEvent) => void);
 };
 ///#ENDDEBUG

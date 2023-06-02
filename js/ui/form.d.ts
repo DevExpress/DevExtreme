@@ -186,8 +186,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxForm
+     * @type_function_param1 e:{ui/form:EditorEnterKeyEvent}
      * @action
      * @public
      */
@@ -195,9 +194,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field value:object
-     * @type_function_param1_field component:dxForm
+     * @type_function_param1 e:{ui/form:FieldDataChangedEvent}
      * @action
      * @public
      */
@@ -817,7 +814,7 @@ export type Options = dxFormOptions;
 
 // type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onEditorEnterKey' | 'onFieldDataChanged'>;
 
 /**
 * @hidden
@@ -835,18 +832,6 @@ onContentReady?: ((e: ContentReadyEvent) => void);
  * @type_function_param1 e:{ui/form:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
-/**
- * @skip
- * @docid dxFormOptions.onEditorEnterKey
- * @type_function_param1 e:{ui/form:EditorEnterKeyEvent}
- */
-onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
-/**
- * @skip
- * @docid dxFormOptions.onFieldDataChanged
- * @type_function_param1 e:{ui/form:FieldDataChangedEvent}
- */
-onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
 /**
  * @skip
  * @docid dxFormOptions.onInitialized

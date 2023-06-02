@@ -143,9 +143,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxHtmlEditor
+     * @type_function_param1 e:{ui/html_editor:FocusInEvent}
      * @action
      * @public
      */
@@ -153,9 +151,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxHtmlEditor
+     * @type_function_param1 e:{ui/html_editor:FocusOutEvent}
      * @action
      * @public
      */
@@ -681,7 +677,7 @@ export type Options = dxHtmlEditorOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onFocusIn' | 'onFocusOut'>;
 
 /**
 * @hidden
@@ -699,18 +695,6 @@ onContentReady?: ((e: ContentReadyEvent) => void);
  * @type_function_param1 e:{ui/html_editor:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
-/**
- * @skip
- * @docid dxHtmlEditorOptions.onFocusIn
- * @type_function_param1 e:{ui/html_editor:FocusInEvent}
- */
-onFocusIn?: ((e: FocusInEvent) => void);
-/**
- * @skip
- * @docid dxHtmlEditorOptions.onFocusOut
- * @type_function_param1 e:{ui/html_editor:FocusOutEvent}
- */
-onFocusOut?: ((e: FocusOutEvent) => void);
 /**
  * @skip
  * @docid dxHtmlEditorOptions.onInitialized
