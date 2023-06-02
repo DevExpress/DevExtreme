@@ -25,6 +25,7 @@ export default class TooltipBase {
 
     return ClientFunction(() => {
       const element = getElement() as any;
+      debugger;
       return element && !element.classList.contains(invisibleStateClass);
     }, {
       dependencies: {
