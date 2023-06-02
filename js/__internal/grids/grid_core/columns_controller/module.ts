@@ -1370,13 +1370,11 @@ export class ColumnsController extends modules.Controller {
 
     that._columns.push(column);
 
-    // @ts-expect-error
     if (column.isBand) {
       that._columns = createColumnsFromOptions(that, that._columns);
       column = that._columns[index];
     }
 
-    // @ts-expect-error
     column.added = options;
     updateIndexes(that, column);
     that.updateColumns(that._dataSource);
