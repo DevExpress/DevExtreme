@@ -446,7 +446,7 @@
         "dxFileManager-editingRenameSingleItemSuccessMessage": "Elemento rinominato {0}",
         "dxFileManager-editingRenameSingleItemErrorMessage": "Elemento non rinominato",
         "dxFileManager-editingRenameCommonErrorMessage": "Elemento non rinominato",
-        
+
         "dxFileManager-editingDeleteSingleItemProcessingMessage": "Cancellazione di un elemento da {0}",
         "dxFileManager-editingDeleteMultipleItemsProcessingMessage": "Cancellazione di {0} elementi da {1}",
         "dxFileManager-editingDeleteSingleItemSuccessMessage": "Cancellazione di un elemento da {0}",
@@ -534,7 +534,7 @@
         "dxDiagram-commandPageOrientationLandscape": "Orient. orizzonatale",
         "dxDiagram-commandPageOrientationPortrait": "Orient. verticale",
         "dxDiagram-commandPageColor": "Colore",
-        "dxDiagram-commandShowGrid": "Mostra griglia",      
+        "dxDiagram-commandShowGrid": "Mostra griglia",
         "dxDiagram-commandSnapToGrid": "Aggancia alla grigia",
         "dxDiagram-commandGridSize": "Grandezza griglia",
         "dxDiagram-commandZoomLevel": "Livello dettaglio",
@@ -543,7 +543,7 @@
         "dxDiagram-commandFitToWidth": "Fit to Width",
         "dxDiagram-commandAutoZoomByContent": "Auto Zoom by Content",
         "dxDiagram-commandAutoZoomByWidth": "Auto Zoom by Width",
-        "dxDiagram-commandSimpleView": "Simple View",        
+        "dxDiagram-commandSimpleView": "Simple View",
         "dxDiagram-commandCut": "Taglia",
         "dxDiagram-commandCopy": "Copia",
         "dxDiagram-commandPaste": "Incolla",
