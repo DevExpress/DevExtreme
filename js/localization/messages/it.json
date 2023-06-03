@@ -561,9 +561,9 @@
         "dxDiagram-commandLayoutTopToBottom": "Top-to-bottom",
         "dxDiagram-commandLayoutBottomToTop": "Bottom-to-top",
 
-        "dxDiagram-unitIn": "inch",
-        "dxDiagram-unitCm": "Cent-",
-        "dxDiagram-unitPx": "Pixel",
+        "dxDiagram-unitIn": "in",
+        "dxDiagram-unitCm": "cm",
+        "dxDiagram-unitPx": "px",
 
         "dxDiagram-dialogButtonOK": "Conferma",
         "dxDiagram-dialogButtonCancel": "Annulla",
