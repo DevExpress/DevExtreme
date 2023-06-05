@@ -12,34 +12,19 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent<
-    TItem extends ItemLike = any,
-    TKey = any,
-> = EventInfo<dxValidationSummary<TItem, TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxValidationSummary<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent<
-    TItem extends ItemLike = any,
-    TKey = any,
-> = EventInfo<dxValidationSummary<TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxValidationSummary<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent<
-    TItem extends ItemLike = any,
-    TKey = any,
-> = InitializedEventInfo<dxValidationSummary<TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxValidationSummary<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent<
-    TItem extends ItemLike = any,
-    TKey = any,
-> = NativeEventInfo<dxValidationSummary<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxValidationSummary<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent<
-    TItem extends ItemLike = any,
-    TKey = any,
-> = EventInfo<dxValidationSummary<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxValidationSummary<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @deprecated use Properties instead

@@ -72,9 +72,7 @@ export type OptionChangedEvent = EventInfo<dxDateRangeBox> & ChangedOptionInfo;
 export type PasteEvent = NativeEventInfo<dxDateRangeBox, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent =
-    NativeEventInfo<dxDateRangeBox, KeyboardEvent | MouseEvent | PointerEvent | Event>
-    & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxDateRangeBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
