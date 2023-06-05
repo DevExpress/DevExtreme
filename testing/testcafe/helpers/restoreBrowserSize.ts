@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 type BrowserSizeType = [width: number, height: number];
 const DEFAULT_BROWSER_SIZE: BrowserSizeType = [1200, 800];
 
