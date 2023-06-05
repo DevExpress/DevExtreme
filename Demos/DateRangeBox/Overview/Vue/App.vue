@@ -113,7 +113,7 @@ export default {
 </script>
 <style scoped>
 .demo-container {
-  height: 650px;
+  height: 690px;
 }
 
 .dx-field {
