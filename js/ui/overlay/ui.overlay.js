@@ -820,6 +820,7 @@ const Overlay = Widget.inherit({
         const callback = this._visualViewportResizeHandler.bind(this);
         const eventNames = Object.keys(visualViewportEventMap);
 
+        // Unsubscribe, if another overlay has no visible state
         if(subscribe) {
             eventNames.forEach(eventName => subscribeOnVisualViewportEvent(eventName, callback));
         } else {
@@ -839,19 +840,23 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _toggleHideOnParentsScrollSubscription: function(needSubscribe) {
+    _toggleHideOnParentsScrollSubscription(needSubscribe) {
         const scrollEvent = addNamespace('scroll', this.NAME);
         const { prevTargets, handler } = this._parentsScrollSubscriptionInfo ?? {};
 
         eventsEngine.off(prevTargets, scrollEvent, handler);
 
         const closeOnScroll = this.option('hideOnParentScroll');
+
         if(needSubscribe && closeOnScroll) {
             let $parents = this._hideOnParentScrollTarget().parents();
+
             if(devices.real().deviceType === 'desktop') {
                 $parents = $parents.add(window);
             }
+
             eventsEngine.on($parents, scrollEvent, handler);
+
             this._parentsScrollSubscriptionInfo.prevTargets = $parents;
         }
     },
@@ -882,9 +887,11 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _hideOnParentsScrollHandler: function(e) {
+    _hideOnParentsScrollHandler(e) {
         let closeHandled = false;
+
         const closeOnScroll = this.option('hideOnParentScroll');
+
         if(isFunction(closeOnScroll)) {
             closeHandled = closeOnScroll(e);
         }

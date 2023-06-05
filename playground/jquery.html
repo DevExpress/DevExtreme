@@ -35,9 +35,48 @@
     <div id="button"></div>
     <script>
         $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+            $("#button").dxScheduler({
+                width: 600,
+                height: 600,
+                firstDayOfWeek: 1,
+                maxAppointmentsPerCell: 5,
+                views: [{
+                    type: 'week',
+                    name: 'week',
+                    maxAppointmentsPerCell: '0',
+                }],
+                currentDate: new Date(2017, 4, 25),
+                startDayHour: 9,
+                currentView: 'week',
+                dataSource: [{
+                    text: 'A',
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30),
+                }, {
+                    text: 'B',
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30),
+                }, {
+                    text: 'C',
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30),
+                }, {
+                    text: 'D',
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30),
+                }, {
+                    text: 'E',
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30),
+                }, {
+                    text: 'F',
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30),
+                }, {
+                    text: 'G',
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30),
+                }],
             });
         });
     </script>

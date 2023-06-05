@@ -13,10 +13,9 @@ fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the 
 safeSizeTest('The tooltip of collector should not scroll page and immediately hide', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  await t
-    .click(scheduler.collectors.find('7').element)
-    .expect(scheduler.appointmentTooltip.isVisible())
-    .ok();
+  await t.click(scheduler.collectors.find('7').element);
+  const isVisible = await scheduler.appointmentTooltip.isVisible();
+  await t.expect(isVisible).ok();
 }, [600, 450]).before(async () => createScheduler({
   views: [{
     type: 'week',
@@ -61,10 +60,9 @@ safeSizeTest('The tooltip should not hide after automatic scrolling during an ap
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Brochure Design Review');
 
-  await t
-    .click(appointment.element)
-    .expect(scheduler.appointmentTooltip.isVisible())
-    .ok();
+  await t.click(appointment.element);
+  const isVisible = await scheduler.appointmentTooltip.isVisible();
+  await t.expect(isVisible).ok();
 }, [600, 400]).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
@@ -75,14 +73,15 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Brochure Design Review');
 
-  await t
-    .click(appointment.element)
-    .expect(scheduler.appointmentTooltip.isVisible())
-    .ok();
+  await t.click(appointment.element);
+  let isVisible = await scheduler.appointmentTooltip.isVisible();
+  await t.expect(isVisible).ok();
+
   await scroll(0, 100);
-  await t
-    .wait(500)
-    .expect(scheduler.appointmentTooltip.isVisible()).notOk();
+
+  await t.wait(500);
+  isVisible = await scheduler.appointmentTooltip.isVisible();
+  await t.expect(isVisible).notOk();
 }, [600, 400]).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
