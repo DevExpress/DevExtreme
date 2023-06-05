@@ -116,6 +116,8 @@ export class ColumnsController extends modules.Controller {
 
   _skipProcessingColumnsChange: any;
 
+  _columnChanges: any;
+
   _getExpandColumnOptions() {
     return {
       type: 'expand',
@@ -767,7 +769,7 @@ export class ColumnsController extends modules.Controller {
     return result;
   }
 
-  getChooserColumns(getAllColumns) {
+  getChooserColumns(getAllColumns?) {
     const columns = getAllColumns ? this.getColumns() : this.getInvisibleColumns();
     const columnChooserColumns = columns.filter((column) => column.showInColumnChooser);
 
@@ -1371,13 +1373,11 @@ export class ColumnsController extends modules.Controller {
 
     that._columns.push(column);
 
-    // @ts-expect-error
     if (column.isBand) {
       that._columns = createColumnsFromOptions(that, that._columns);
       column = that._columns[index];
     }
 
-    // @ts-expect-error
     column.added = options;
     updateIndexes(that, column);
     that.updateColumns(that._dataSource);
