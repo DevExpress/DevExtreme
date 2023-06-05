@@ -29,16 +29,10 @@ export class TooltipStrategyBase {
     }
 
     _showCore(target, dataList) {
-        // const tooltip = this._tooltip;
-
-        // debugger;
-
         if(!this._tooltip) {
             this._tooltip = this._createTooltip(target, dataList);
         } else {
             const shouldUseTarget = this._shouldUseTarget();
-
-            // debugger;
 
             if(shouldUseTarget) {
                 this._tooltip.option('target', target);

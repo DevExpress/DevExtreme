@@ -429,6 +429,19 @@ const Overlay = Widget.inherit({
             return false;
         }
 
+        // const device = devices.real();
+        // const isIOS = device.platform === 'ios';
+
+        // const windowInnerHeight = window.innerHeight;
+        // const documentClientHeight = domAdapter.getDocumentElement().clientHeight;
+
+        // const clientHeightTarget = isIOS ? windowInnerHeight : documentClientHeight;
+
+        // const $visualContainer = this._positionController.$visualContainer;
+        // const visualViewportHeight = getHeight($visualContainer);
+
+        // const isOpen = clientHeightTarget > visualViewportHeight;
+
         const window = getWindow();
 
         const $visualContainer = this._positionController.$visualContainer;
