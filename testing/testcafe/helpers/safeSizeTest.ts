@@ -32,6 +32,7 @@ const setBrowserSize = async (
       width,
       height,
       setVisualViewportSize,
+      SCROLLBAR_SIZE,
     },
   })();
 };
