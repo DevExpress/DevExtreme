@@ -1,18 +1,18 @@
-import { ClientFunction } from 'testcafe';
+// import { ClientFunction } from 'testcafe';
 import { BrowserSizeType, DEFAULT_BROWSER_SIZE, restoreBrowserSize } from './restoreBrowserSize';
 
-const SCROLLBAR_SIZE = 15;
+// const SCROLLBAR_SIZE = 15;
 
 type TestCafeFn = (t: TestController) => Promise<any>;
 
 const emptyFunction = () => Promise.resolve();
 
-const setVisualViewportSize = (object: any, propertyName: string, value: number) => {
-  Object.defineProperty(object, propertyName, {
-    get: () => value,
-    configurable: true,
-  });
-};
+// const setVisualViewportSize = (object: any, propertyName: string, value: number) => {
+//   Object.defineProperty(object, propertyName, {
+//     get: () => value,
+//     configurable: true,
+//   });
+// };
 
 const setBrowserSize = async (
   t: TestController,
@@ -22,19 +22,19 @@ const setBrowserSize = async (
 
   await t.resizeWindow(width, height);
 
-  await ClientFunction(() => {
-    const { visualViewport } = window as any;
+  // await ClientFunction(() => {
+  //   const { visualViewport } = window as any;
 
-    setVisualViewportSize(visualViewport, 'width', width - SCROLLBAR_SIZE);
-    setVisualViewportSize(visualViewport, 'height', height - SCROLLBAR_SIZE);
-  }, {
-    dependencies: {
-      width,
-      height,
-      setVisualViewportSize,
-      SCROLLBAR_SIZE,
-    },
-  })();
+  //   setVisualViewportSize(visualViewport, 'width', width - SCROLLBAR_SIZE);
+  //   setVisualViewportSize(visualViewport, 'height', height - SCROLLBAR_SIZE);
+  // }, {
+  //   dependencies: {
+  //     width,
+  //     height,
+  //     setVisualViewportSize,
+  //     SCROLLBAR_SIZE,
+  //   },
+  // })();
 };
 
 const decorateTestCafeBefore = (
