@@ -1,5 +1,7 @@
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { setStyleAttribute } from '../../../helpers/domUtils';
 import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
@@ -104,16 +106,14 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
 
     await t
       .click(appointment.element)
-      // act
       .expect(await takeScreenshot(`appointment-${tooltipNamePrefix}-tooltip-screenshot.png`, scheduler.element))
       .ok()
-      // assert
       .expect(expectedSelector.exists)
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [600, 400]).before(async (t) => {
-    await t.debug();
+  }, [600, 400]).before(async () => {
+    await setStyleAttribute(Selector('body'), 'margin: 0; padding: 0;');
 
     return createScheduler({
       views: ['week'],
