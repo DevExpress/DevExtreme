@@ -56,8 +56,6 @@ const ANONYMOUS_TEMPLATE_NAME = 'content';
 const OVERLAY_STACK = [];
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 const TAB_KEY = 'tab';
-const VISUAL_VIEWPORT_SUPPORTED_DEVICE_TYPES = ['phone', 'tablet'];
-const VISUAL_VIEWPORT_SUPPORTED_PLATFORMS = ['ios'];
 
 ready(() => {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, e => {
@@ -423,11 +421,9 @@ const Overlay = Widget.inherit({
         const isVisualContainerWindow = this._isVisualContainerWindow();
 
         const device = devices.real();
+        const isIOS = device.platform === 'ios';
 
-        const isPhoneOrTablet = VISUAL_VIEWPORT_SUPPORTED_DEVICE_TYPES.includes(device.deviceType);
-        const isIOS = VISUAL_VIEWPORT_SUPPORTED_PLATFORMS.includes(device.platform);
-
-        const shouldUseVisualViewport = isPhoneOrTablet && isIOS && isVisualContainerWindow;
+        const shouldUseVisualViewport = isIOS && isVisualContainerWindow;
 
         if(!shouldUseVisualViewport) {
             return false;
