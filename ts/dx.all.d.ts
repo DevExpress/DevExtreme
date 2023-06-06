@@ -1693,6 +1693,24 @@ declare module DevExpress.common {
   export type SubmenuShowMode = 'onClick' | 'onHover';
   export type TextBoxPredefinedButton = 'clear';
 
+  /**
+   * [descr:dxTextEditorButton]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type TextEditorButton = {
+    /**
+     * [descr:dxTextEditorButton.location]
+     */
+    location?: TextEditorButtonLocation;
+    /**
+     * [descr:dxTextEditorButton.name]
+     */
+    name?: string;
+    /**
+     * [descr:dxTextEditorButton.options]
+     */
+    options?: DevExpress.ui.dxButton.Properties;
+  };
   export type TextEditorButtonLocation = 'after' | 'before';
   export type ToolbarItemComponent =
     | 'dxAutocomplete'
@@ -22643,23 +22661,10 @@ declare module DevExpress.ui {
     interface TextEditorInstance extends dxTextEditor<Properties> {}
   }
   /**
-   * [descr:dxTextEditorButton]
+   * @deprecated Use DevExpress.common.TextEditorButton from 'devextreme/common' instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxTextEditorButton {
-    /**
-     * [descr:dxTextEditorButton.location]
-     */
-    location?: DevExpress.common.TextEditorButtonLocation;
-    /**
-     * [descr:dxTextEditorButton.name]
-     */
-    name?: string;
-    /**
-     * [descr:dxTextEditorButton.options]
-     */
-    options?: dxButtonOptions;
-  }
+  export type dxTextEditorButton = DevExpress.common.TextEditorButton;
   /**
    * [descr:dxTextEditorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
