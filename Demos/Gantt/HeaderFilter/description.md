@@ -5,7 +5,7 @@ Set the **headerFilter**.[visible](/Documentation/ApiReference/UI_Components/dxG
 
 ## Enable Search in Header Filters
 
-Users can search for values in a header filter. To display the search bar, set the [allowSearch](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/#allowSearch) property to **true** in the global [headerFilter](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/) object or in a column’s [headerFilter](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/headerFilter/) object. At the column level, use the [searchMode](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/headerFilter/#searchMode) property to specify the comparison type.
+Users can search for values in a header filter. To display the search bar, set the **search.**[enabled](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/search/#enabled) property to **true** in the global [headerFilter](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/) object or in a column’s [headerFilter](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/headerFilter/) object. Use the **search.**[mode](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/search/#mode) property to specify the comparison type.
 
 ## Change Available Filter Values
 
