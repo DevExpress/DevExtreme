@@ -5,9 +5,7 @@ import 'integration/knockout';
 
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 
-const shouldRunTest = QUnit.urlParams['nojquery'] && QUnit.urlParams['nocsp'];
-
-if(shouldRunTest) {
+if(QUnit.urlParams['nojquery']) {
     QUnit.module('textBox');
 } else {
     QUnit.module.skip('textBox');
