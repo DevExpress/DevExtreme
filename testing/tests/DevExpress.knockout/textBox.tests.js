@@ -1,10 +1,13 @@
-const $ = require('jquery');
-const ko = require('knockout');
+import ko from 'knockout';
+import TextBox from 'ui/text_box';
 
-const TextBox = require('ui/text_box');
-require('integration/knockout');
+import 'integration/knockout';
 
-if(QUnit.urlParams['nojquery'] && QUnit.urlParams['nocsp']) {
+const PLACEHOLDER_CLASS = 'dx-placeholder';
+
+const shouldRunTest = QUnit.urlParams['nojquery'] && QUnit.urlParams['nocsp'];
+
+if(shouldRunTest) {
     QUnit.module('textBox');
 } else {
     QUnit.module.skip('textBox');
@@ -13,17 +16,15 @@ if(QUnit.urlParams['nojquery'] && QUnit.urlParams['nocsp']) {
 QUnit.testStart(function() {
     const markup = '<div id="text-box">';
 
-    $('#qunit-fixture').html(markup);
+    document.getElementById('qunit-fixture').innerHTML = markup;
 });
 
-const PLACEHOLDER_CLASS = 'dx-placeholder';
-
 QUnit.test('text box placeholder must have a string value', function(assert) {
-    const $textBox = $('#text-box');
+    const $textBox = document.getElementById('text-box');
 
     new TextBox($textBox, { placeholder: ko.computed(_ => 'CUSTOM') });
 
-    const $placeholder = $textBox.find(`.${PLACEHOLDER_CLASS}`);
+    const $placeholder = document.getElementsByClassName(PLACEHOLDER_CLASS)[0];
 
-    assert.strictEqual($placeholder.attr('data-dx_placeholder'), 'CUSTOM',);
+    assert.strictEqual($placeholder.getAttribute('data-dx_placeholder'), 'CUSTOM');
 });
