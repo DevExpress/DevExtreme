@@ -27,7 +27,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default undefined
      * @public
      */
-    buttons?: Array<string | TextBoxPredefinedButton | dxTextEditorButton>;
+    buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
     /**
      * @docid
      * @default true
