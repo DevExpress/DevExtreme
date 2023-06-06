@@ -45,7 +45,23 @@
     <script>
         $(() => {
             const popupContentTemplate = function () {
-                return $('<div id="popup2">');
+                return $('<div id="date-by-picker">');
+
+                const now = new Date();
+
+                const dateBox = $('#date-by-picker').dxDateBox({
+                    pickerType: 'rollers',
+                    type: 'datetime',
+                    value: now,
+                    dropDownOptions: {
+                        shadingColor: '#000000ab',
+                        onShown(e) {
+                            const options = e.component.option();
+
+                            debugger
+                        },
+                    },
+                }).dxDateBox('instance');
             };
 
             const popup = $('#popup').dxPopup({
@@ -59,26 +75,12 @@
                 }
             }).dxPopup('instance');
 
-            const popup2 = $('#popup').dxPopup({
-                // deferRendering: true,
-                width: '100%',
-                position: {
-                    my: 'bottom',
-                    at: 'bottom',
-                    of: window,
-                }
-            }).dxPopup('instance');
-
-
             $('#button').dxButton({
                 text: 'Details',
                 onClick() {
                     popup.show();
                 },
             })
-
-
-            // const now = new Date();
 
             // const simpleProducts = [
             //     'HD Video Player',
@@ -98,20 +100,6 @@
             // ];
 
             // const names = ['James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Charles', 'Joseph', 'Thomas', 'Christopher', 'Daniel', 'Paul', 'Mark', 'Donald', 'George', 'Kenneth', 'Steven', 'Edward', 'Brian', 'Ronald', 'Anthony', 'Kevin', 'Jason', 'Jeff', 'Mary', 'Patricia', 'Linda', 'Barbara', 'Elizabeth', 'Jennifer', 'Maria', 'Susan', 'Margaret', 'Dorothy', 'Lisa', 'Nancy', 'Karen', 'Betty', 'Helen', 'Sandra', 'Donna', 'Carol', 'Ruth', 'Sharon', 'Michelle', 'Laura', 'Sarah', 'Kimberly', 'Deborah'];
-
-            // const dateBox = $('#date-by-picker').dxDateBox({
-            //     pickerType: 'rollers',
-            //     type: 'datetime',
-            //     value: now,
-            //     dropDownOptions: {
-            //         shadingColor: '#000000ab',
-            //         onShown(e) {
-            //             const options = e.component.option();
-
-            //             debugger
-            //         },
-            //     },
-            // }).dxDateBox('instance');
 
             // $('#simple').dxTextBox({
             //     value: 'John Smith',
