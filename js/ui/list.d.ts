@@ -49,7 +49,11 @@ export {
 
 type ItemLike = string | Item | any;
 
-interface ListItemInfo<TItem extends ItemLike> {
+/**
+ * @docid
+ * @hidden
+ */
+export interface ListItemInfo<TItem extends ItemLike> {
     readonly itemData?: TItem;
     readonly itemElement: DxElement;
     readonly itemIndex: number | { group: number; item: number };

@@ -70,7 +70,11 @@ import dxScrollable from './scroll_view/ui.scrollable';
 
 import Widget from './widget/ui.widget';
 
-interface CellInfo<TRowData = any, TKey = any> {
+/**
+ * @docid
+ * @hidden
+ */
+export interface CellInfo<TRowData = any, TKey = any> {
     readonly data: TRowData;
     readonly key: TKey;
     readonly value?: any;

@@ -775,6 +775,8 @@ export type DataChange<TRowData = any, TKey = any> = {
 };
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export type DataChangeInfo<TRowData = any, TKey = any> = {
@@ -2394,6 +2396,8 @@ export type LoadPanel = {
 };
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface NewRowInfo<TRowData = any> {
@@ -2690,6 +2694,8 @@ export type RowDraggingTemplateData<TRowData = any> = {
 };
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export type RowInsertedInfo<TRowData = any, TKey = any> = {
@@ -2699,6 +2705,8 @@ export type RowInsertedInfo<TRowData = any, TKey = any> = {
 };
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export type RowInsertingInfo<TRowData = any> = {
@@ -2707,6 +2715,8 @@ export type RowInsertingInfo<TRowData = any> = {
 };
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export type RowKeyInfo<TKey = any> = {
@@ -2714,6 +2724,8 @@ export type RowKeyInfo<TKey = any> = {
 };
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface RowRemovedInfo<TRowData = any, TKey = any> {
@@ -2723,6 +2735,8 @@ export interface RowRemovedInfo<TRowData = any, TKey = any> {
 }
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface RowRemovingInfo<TRowData = any, TKey = any> {
@@ -2732,6 +2746,8 @@ export interface RowRemovingInfo<TRowData = any, TKey = any> {
 }
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface RowUpdatedInfo<TRowData = any, TKey = any> {
@@ -2741,6 +2757,8 @@ export interface RowUpdatedInfo<TRowData = any, TKey = any> {
 }
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface RowUpdatingInfo<TRowData = any, TKey = any> {
@@ -2751,6 +2769,8 @@ export interface RowUpdatingInfo<TRowData = any, TKey = any> {
 }
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface RowValidatingInfo<TRowData = any, TKey = any> {
@@ -2764,6 +2784,8 @@ export interface RowValidatingInfo<TRowData = any, TKey = any> {
 }
 
 /**
+ * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface SavingInfo<TRowData = any, TKey = any> {

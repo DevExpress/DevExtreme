@@ -27,7 +27,11 @@ import dxMultiView, {
 
 type ItemLike = string | Item | any;
 
-interface TabPanelItemInfo<TItem extends ItemLike> {
+/**
+ * @docid
+ * @hidden
+ */
+export interface TabPanelItemInfo<TItem extends ItemLike> {
     readonly itemData?: TItem;
     readonly itemElement?: DxElement;
 }
