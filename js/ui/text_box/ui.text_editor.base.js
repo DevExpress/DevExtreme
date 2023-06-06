@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { focused } from '../widget/selectors';
-import { isDefined, isFunction } from '../../core/utils/type';
+import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { current, isMaterial } from '../themes';
@@ -526,14 +526,10 @@ const TextEditorBase = Editor.inherit({
         }
 
         const $input = this._input();
-
-        const { placeholder } = this.option();
-        // NOTE: Knockout can use a computed function for getting placholder
-        const placeholderText = isFunction(placeholder) ? placeholder() : placeholder;
-
+        const placeholder = this.option('placeholder');
         const placeholderAttributes = {
-            'id': placeholderText ? `dx-${new Guid()}` : undefined,
-            'data-dx_placeholder': placeholderText,
+            'id': placeholder ? `dx-${new Guid()}` : undefined,
+            'data-dx_placeholder': placeholder,
         };
 
         const $placeholder = this._$placeholder = $('<div>')
