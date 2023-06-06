@@ -21,7 +21,11 @@ const PLACEHOLDER_CLASS = 'dx-placeholder';
 QUnit.test('text box placeholder must have a string value', function(assert) {
     const $textBox = $('#text-box');
 
-    ko.applyBindings({ placeholder: ko.computed(_ => 'CUSTOM') }, $textBox.get(0));
+    function viewModel() {
+        this.placeholder = ko.computed(_ => 'CUSTOM');
+    }
+
+    ko.applyBindings(new viewModel(), $textBox.get(0));
 
     const $placeholder = $textBox.find(`.${PLACEHOLDER_CLASS}`);
 
