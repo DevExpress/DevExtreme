@@ -2313,6 +2313,33 @@ QUnit.module('dxPivotGrid dataSource with Store', {
         }], 'load args');
     });
 
+    // T1169225
+    QUnit.test('Changed field should not contain circular \'_initProperties\' property', function(assert) {
+        // arrange
+        this.testStore.load.returns($.Deferred().reject());
+
+        const dataSource = createDataSource({
+            fields: [
+                { dataField: 'field1', area: 'row', areaIndex: 0, visible: false },
+            ],
+            store: this.testStore
+        });
+
+        // act
+        let field = dataSource.field(0);
+
+        field.visible = true;
+
+        dataSource.field(0, field);
+
+        // assert
+        field = dataSource.field(0);
+
+        const hasCircularInitProperties = Object.prototype.hasOwnProperty.call(field._initProperties, '_initProperties');
+
+        assert.ok(!hasCircularInitProperties, 'field contains circular _initProperties');
+    });
+
     QUnit.test('Reset calculated field\'s properties on changed', function(assert) {
         this.testStore.load.returns($.Deferred().reject());
 
