@@ -1694,20 +1694,20 @@ declare module DevExpress.common {
   export type TextBoxPredefinedButton = 'clear';
 
   /**
-   * [descr:dxTextEditorButton]
+   * [descr:TextEditorButton]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type TextEditorButton = {
     /**
-     * [descr:dxTextEditorButton.location]
+     * [descr:TextEditorButton.location]
      */
     location?: TextEditorButtonLocation;
     /**
-     * [descr:dxTextEditorButton.name]
+     * [descr:TextEditorButton.name]
      */
     name?: string;
     /**
-     * [descr:dxTextEditorButton.options]
+     * [descr:TextEditorButton.options]
      */
     options?: DevExpress.ui.dxButton.Properties;
   };

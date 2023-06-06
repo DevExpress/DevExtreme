@@ -711,26 +711,26 @@ export type SubmenuShowMode = 'onClick' | 'onHover';
 export type TextBoxPredefinedButton = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
 
 /**
- * @docid dxTextEditorButton
+ * @docid
  * @type object
  * @namespace DevExpress.common
  */
 export type TextEditorButton = {
   /**
    * @public
-   * @docid dxTextEditorButton.location
+   * @docid
    * @default "after"
    */
   location?: TextEditorButtonLocation;
   /**
    * @public
-   * @docid dxTextEditorButton.name
+   * @docid
    * @default undefined
    */
   name?: string;
   /**
    * @public
-   * @docid dxTextEditorButton.options
+   * @docid
    * @type dxButtonOptions
    * @default undefined
    */
