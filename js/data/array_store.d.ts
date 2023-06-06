@@ -2,6 +2,8 @@ import Store, {
     Options as StoreOptions,
 } from './abstract_store';
 import { Query } from './query';
+import { DxPromise } from '../core/utils/deferred';
+import { LoadOptions } from './index';
 
 /** @public */
 export type Options<
@@ -35,6 +37,13 @@ export default class ArrayStore<
     TKey = any,
 > extends Store<TItem, TKey> {
     constructor(options?: Options<TItem, TKey>);
+    byKey(key: TKey): DxPromise<TItem>;
+    /**
+     * @docid
+     * @publicName byKey(key, extraOptions)
+     * @hidden
+     */
+    byKey(key: TKey, extraOptions: LoadOptions<TItem>): DxPromise<TItem>;
     /**
      * @docid
      * @publicName clear()
