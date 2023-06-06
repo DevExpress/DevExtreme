@@ -527,7 +527,6 @@ const TextEditorBase = Editor.inherit({
 
         const $input = this._input();
 
-
         const { placeholder } = this.option();
         // NOTE: Knockout can use a computed function for getting placholder
         const placeholderText = isFunction(placeholder) ? placeholder() : placeholder;
