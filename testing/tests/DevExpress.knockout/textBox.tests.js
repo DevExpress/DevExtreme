@@ -14,9 +14,11 @@ if(shouldRunTest) {
 }
 
 QUnit.testStart(function() {
-    const markup = '<div id="text-box">';
+    const textBoxContainer = document.createElement('div');
 
-    document.getElementById('qunit-fixture').innerHTML = markup;
+    textBoxContainer.setAttribute('id', 'text-box');
+
+    document.getElementById('qunit-fixture').appendChild(textBoxContainer);
 });
 
 QUnit.test('text box placeholder must have a string value', function(assert) {
