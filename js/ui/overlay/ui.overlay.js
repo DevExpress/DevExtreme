@@ -420,22 +420,21 @@ const Overlay = Widget.inherit({
     _isVirtualKeyboardOpen() {
         const isVisualContainerWindow = this._isVisualContainerWindow();
 
-        if(!isVisualContainerWindow) {
-            return false;
-        }
-
         const device = devices.real();
         const isIOS = device.platform === 'ios';
 
-        const windowInnerHeight = window.innerHeight;
-        const documentClientHeight = domAdapter.getDocumentElement().clientHeight;
+        const shouldUseVisualViewport = isIOS && isVisualContainerWindow;
 
-        const clientHeightTarget = isIOS ? windowInnerHeight : documentClientHeight;
+        if(!shouldUseVisualViewport) {
+            return false;
+        }
+
+        const windowInnerHeight = window.innerHeight;
 
         const $visualContainer = this._positionController.$visualContainer;
         const visualViewportHeight = getHeight($visualContainer);
 
-        const isOpen = clientHeightTarget > visualViewportHeight;
+        const isOpen = windowInnerHeight > visualViewportHeight;
 
         return isOpen;
     },
@@ -445,8 +444,6 @@ const Overlay = Widget.inherit({
         this._toggleVisualViewportCallback(visible);
 
         const isVirtualKeyboardOpen = this._isVirtualKeyboardOpen();
-
-        // debugger;
 
         if(isVirtualKeyboardOpen) {
             return new Deferred().resolve().promise();
@@ -1135,7 +1132,6 @@ const Overlay = Widget.inherit({
         }
     },
 
-    // Needs to remove dependencies on window resize (this._dimensionChanged).
     _renderWrapper() {
         this._positionController.styleWrapperPosition();
         this._renderWrapperDimensions();
