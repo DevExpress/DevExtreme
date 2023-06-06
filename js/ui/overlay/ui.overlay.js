@@ -6,7 +6,6 @@ import domAdapter from '../../core/dom_adapter';
 import {
     hasVisualViewport,
     subscribeOnVisualViewportEvent,
-    unSubscribeOnVisualViewportEvent,
     visualViewportEventMap,
 } from '../../core/utils/visual_viewport';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
@@ -821,11 +820,24 @@ const Overlay = Widget.inherit({
         const callback = this._visualViewportResizeHandler.bind(this);
         const eventNames = Object.keys(visualViewportEventMap);
 
-        // Unsubscribe, if another overlay has no visible state
         if(subscribe) {
-            eventNames.forEach(eventName => subscribeOnVisualViewportEvent(eventName, callback));
+            eventNames.forEach(eventName => {
+                if(!this._unSubscribeCallbacks) {
+                    this._unSubscribeCallbacks = {};
+                }
+
+                this._unSubscribeCallbacks[eventName] = subscribeOnVisualViewportEvent(eventName, callback);
+            });
         } else {
-            eventNames.forEach(eventName => unSubscribeOnVisualViewportEvent(eventName, callback));
+            eventNames.forEach(eventName => {
+                if(this._unSubscribeCallbacks) {
+                    const unSubscribeCallback = this._unSubscribeCallbacks[eventName];
+
+                    unSubscribeCallback?.();
+
+                    this._unSubscribeCallbacks[eventName] = null;
+                }
+            });
         }
     },
 

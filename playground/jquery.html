@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -32,89 +31,15 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
-
 <body>
-    <!-- <div id="simple"></div> -->
-    <!-- <div id="first-name"></div> -->
-    <!-- <div id="date-by-picker"></div> -->
-    <!-- <div id="products-simple"></div> -->
-
     <div id="button"></div>
-    <div id="popup"></div>
-
     <script>
-        $(() => {
-            const popupContentTemplate = function () {
-                return $('<div id="date-by-picker">');
-
-                const now = new Date();
-
-                const dateBox = $('#date-by-picker').dxDateBox({
-                    pickerType: 'rollers',
-                    type: 'datetime',
-                    value: now,
-                    dropDownOptions: {
-                        shadingColor: '#000000ab',
-                        onShown(e) {
-                            const options = e.component.option();
-
-                            debugger
-                        },
-                    },
-                }).dxDateBox('instance');
-            };
-
-            const popup = $('#popup').dxPopup({
-                contentTemplate: popupContentTemplate,
-                // deferRendering: true,
-                width: '100%',
-                position: {
-                    my: 'bottom',
-                    at: 'bottom',
-                    of: window,
-                }
-            }).dxPopup('instance');
-
-            $('#button').dxButton({
-                text: 'Details',
-                onClick() {
-                    popup.show();
-                },
-            })
-
-            // const simpleProducts = [
-            //     'HD Video Player',
-            //     'SuperHD Video Player',
-            //     'SuperPlasma 50',
-            //     'SuperLED 50',
-            //     'SuperLED 42',
-            //     'SuperLCD 55',
-            //     'SuperLCD 42',
-            //     'SuperPlasma 65',
-            //     'SuperLCD 70',
-            //     'Projector Plus',
-            //     'Projector PlusHT',
-            //     'ExcelRemote IR',
-            //     'ExcelRemote BT',
-            //     'ExcelRemote IP',
-            // ];
-
-            // const names = ['James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Charles', 'Joseph', 'Thomas', 'Christopher', 'Daniel', 'Paul', 'Mark', 'Donald', 'George', 'Kenneth', 'Steven', 'Edward', 'Brian', 'Ronald', 'Anthony', 'Kevin', 'Jason', 'Jeff', 'Mary', 'Patricia', 'Linda', 'Barbara', 'Elizabeth', 'Jennifer', 'Maria', 'Susan', 'Margaret', 'Dorothy', 'Lisa', 'Nancy', 'Karen', 'Betty', 'Helen', 'Sandra', 'Donna', 'Carol', 'Ruth', 'Sharon', 'Michelle', 'Laura', 'Sarah', 'Kimberly', 'Deborah'];
-
-            // $('#simple').dxTextBox({
-            //     value: 'John Smith',
-            // });
-
-            // $('#products-simple').dxSelectBox({
-            //     items: simpleProducts,
-            // });
-
-            // $('#first-name').dxAutocomplete({
-            //     dataSource: names,
-            //     placeholder: 'Type first name...',
-            // });
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
+            });
         });
     </script>
 </body>
-
 </html>
