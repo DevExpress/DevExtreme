@@ -1,4 +1,4 @@
 // deprecated
-export * from '../../__internal/grids/pivot_grid/remote_store/module_utils';
+export * from '../../__internal/grids/pivot_grid/remote_store/m_remote_store_utils';
 
 
