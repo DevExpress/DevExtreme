@@ -284,7 +284,7 @@ export type SeriesSelectionChangedEvent = EventInfo<dxChart> & SeriesInteraction
  * @docid _viz_chart_TooltipHiddenEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
 export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
 
@@ -292,7 +292,7 @@ export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
  * @docid _viz_chart_TooltipShownEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
 export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo;
 

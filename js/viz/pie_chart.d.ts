@@ -200,7 +200,7 @@ export type PointSelectionChangedEvent = EventInfo<dxPieChart> & PointInteractio
  * @docid _viz_pie_chart_TooltipHiddenEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
 export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo;
 
@@ -208,7 +208,7 @@ export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo;
  * @docid _viz_pie_chart_TooltipShownEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
 export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo;
 

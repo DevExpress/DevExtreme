@@ -178,7 +178,7 @@ export type SelectionChangedEvent = EventInfo<dxVectorMap> & {
  * @docid _viz_vector_map_TooltipHiddenEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_vector_map_TooltipInfo
  */
 export type TooltipHiddenEvent = EventInfo<dxVectorMap> & TooltipInfo;
 
@@ -186,7 +186,7 @@ export type TooltipHiddenEvent = EventInfo<dxVectorMap> & TooltipInfo;
  * @docid _viz_vector_map_TooltipShownEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_vector_map_TooltipInfo
  */
 export type TooltipShownEvent = EventInfo<dxVectorMap> & TooltipInfo;
 
