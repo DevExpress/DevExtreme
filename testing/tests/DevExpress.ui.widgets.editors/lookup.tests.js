@@ -1618,8 +1618,8 @@ QUnit.module('options', {
             const width = popup.option('width');
             const height = popup.option('height');
 
-            assert.strictEqual(width, 405 * WINDOW_RATIO);
-            assert.strictEqual(height, 510 * WINDOW_RATIO);
+            assert.strictEqual(width(), 405 * WINDOW_RATIO);
+            assert.strictEqual(height(), 510 * WINDOW_RATIO);
 
         } finally {
             visualViewportStub.restore();
