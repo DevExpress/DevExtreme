@@ -1,4 +1,5 @@
 import { hasWindow, getWindow } from '../../core/utils/window';
+import domAdapter from '../dom_adapter';
 
 const visualViewportEventMap = {
     resize: 'resize',
@@ -47,20 +48,13 @@ const getVisualViewportSizes = () => {
     };
 };
 
-const unSubscribeOnVisualViewportEvent = (eventName, callback, options) => {
-    const visualViewport = getVisualViewport();
-    const event = visualViewportEventMap[eventName];
-
-    visualViewport.removeEventListener(event, callback, options);
-};
-
 const subscribeOnVisualViewportEvent = (eventName, callback, options) => {
     const visualViewport = getVisualViewport();
     const event = visualViewportEventMap[eventName];
 
-    visualViewport.addEventListener(event, callback, options);
+    const unSubscribeOnVisualViewportCallback = domAdapter.listen(visualViewport, event, callback, options);
 
-    return () => unSubscribeOnVisualViewportEvent(event, callback, options);
+    return unSubscribeOnVisualViewportCallback;
 };
 
 export {
