@@ -168,10 +168,7 @@ const Overlay = Widget.inherit({
             propagateOutsideClick: false,
             ignoreChildEvents: true,
             _checkParentVisibility: true,
-            _fixWrapperPosition: false,
-
-            _updateGeometryByScroll: false,
-            _updateGeometryByResize: false,
+            _fixWrapperPosition: false
         });
     },
 
@@ -829,14 +826,7 @@ const Overlay = Widget.inherit({
                     this._unSubscribeCallbacks = {};
                 }
 
-                const shouldUpdateGeometryByScroll = this._updateGeometryByScroll;
-                const shouldUpdateGeometryByResize = this._updateGeometryByResize;
-
-                const options = {
-                    once: eventName === visualViewportEventMap.scroll ? !shouldUpdateGeometryByScroll : !shouldUpdateGeometryByResize
-                };
-
-                this._unSubscribeCallbacks[eventName] = subscribeOnVisualViewportEvent(eventName, callback, options);
+                this._unSubscribeCallbacks[eventName] = subscribeOnVisualViewportEvent(eventName, callback);
             });
         } else {
             eventNames.forEach(eventName => {

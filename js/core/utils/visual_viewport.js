@@ -47,20 +47,20 @@ const getVisualViewportSizes = () => {
     };
 };
 
-const unSubscribeOnVisualViewportEvent = (eventName, callback) => {
+const unSubscribeOnVisualViewportEvent = (eventName, callback, options) => {
     const visualViewport = getVisualViewport();
     const event = visualViewportEventMap[eventName];
 
-    visualViewport.removeEventListener(event, callback);
+    visualViewport.removeEventListener(event, callback, options);
 };
 
-const subscribeOnVisualViewportEvent = (eventName, callback) => {
+const subscribeOnVisualViewportEvent = (eventName, callback, options) => {
     const visualViewport = getVisualViewport();
     const event = visualViewportEventMap[eventName];
 
-    visualViewport.addEventListener(event, callback);
+    visualViewport.addEventListener(event, callback, options);
 
-    return () => unSubscribeOnVisualViewportEvent(event, callback);
+    return () => unSubscribeOnVisualViewportEvent(event, callback, options);
 };
 
 export {
