@@ -32,35 +32,24 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="container"></div>
+    <div id="container" style="width: 300px; height: 300px;">
+        <div id="speed-dial-action"></div>
+    </div>
 
     <script>
         $(() => {
-            const $element = $('#container');
-
-            const windowHeight = $(window).height();
-            const elementHeight = $element.height();
-
-            const top = windowHeight - elementHeight;
-
-            $element.css({ top })
-
-            $("#container").dxLookup({
-                items: [1, 2, 3],
-                usePopover: false,
-                opened: true,
-                dropDownOptions: {
-                    hideOnParentScroll: false,
+            $('#speed-dial-action').dxSpeedDialAction({
+                label: 'Add Row',
+                icon: 'home',
+                shading: false,
+                visible: true,
+                position: {
+                    of: '#container',
+                    my: 'right bottom',
+                    at: 'right bottom',
+                    offset: '-16 -16',
                 },
-            });
-
-            const popupWrapper = $('.dx-overlay-wrapper')[0];
-            const popupContent = $('.dx-overlay-content')[0];
-
-            const popupWrapperTop = popupWrapper.getBoundingClientRect().top // 640
-            const popupContentTop = popupContent.getBoundingClientRect().top // 539
-
-            // debugger
+            }).dxSpeedDialAction('instance');
         });
     </script>
 </body>
