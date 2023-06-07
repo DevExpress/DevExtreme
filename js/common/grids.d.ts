@@ -2921,8 +2921,6 @@ export interface SelectionBase {
 }
 
 /**
- * @docid
- * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface SelectionChangedInfo<TRowData = any, TKey = any> {
