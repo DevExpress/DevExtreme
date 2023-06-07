@@ -473,42 +473,21 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _subscribeOnVisualViewportResize() {
-        const event = visualViewportEventMap.resize;
-        // We can use different callbacks
+    _subscribeOnVisualViewportEvent(event) {
         const callback = this._visualViewportEventHandler.bind(this);
 
         this._unSubscribeCallbacks[event] = subscribeOnVisualViewportEvent(event, callback);
     },
 
-    _subscribeOnVisualViewportScroll() {
-        const event = visualViewportEventMap.scroll;
-        // We can use different callbacks
-        const callback = this._visualViewportEventHandler.bind(this);
-
-        this._unSubscribeCallbacks[event] = subscribeOnVisualViewportEvent(event, callback);
-    },
-
-    _toggleVisualViewportResizeSubscription(subscribe) {
+    _toggleVisualViewportSubscription(subscribe, event) {
         if(subscribe) {
-            this._subscribeOnVisualViewportResize();
+            this._subscribeOnVisualViewportEvent(event);
 
             return;
         }
 
-        this._unSubscribeCallbacks[visualViewportEventMap.resize]();
-        this._unSubscribeCallbacks[visualViewportEventMap.resize] = null;
-    },
-
-    _toggleVisualViewportScrollSubscription(subscribe) {
-        if(subscribe) {
-            this._subscribeOnVisualViewportScroll();
-
-            return;
-        }
-
-        this._unSubscribeCallbacks[visualViewportEventMap.scroll]();
-        this._unSubscribeCallbacks[visualViewportEventMap.scroll] = null;
+        this._unSubscribeCallbacks[event]();
+        this._unSubscribeCallbacks[event] = null;
     },
 
     _toggleVisualViewportCallbacks(subscribe) {
@@ -524,8 +503,8 @@ const Overlay = Widget.inherit({
             this._unSubscribeCallbacks = {};
         }
 
-        this._toggleVisualViewportResizeSubscription(subscribe);
-        this._toggleVisualViewportScrollSubscription(subscribe);
+        this._toggleVisualViewportSubscription(subscribe, visualViewportEventMap.resize);
+        this._toggleVisualViewportSubscription(subscribe, visualViewportEventMap.scroll);
     },
 
     _renderVisibilityAnimate: function(visible) {
