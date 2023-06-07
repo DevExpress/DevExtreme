@@ -1,4 +1,4 @@
-import TreeList from '../../__internal/grids/tree_list/module_widget_base';
+import TreeList from '../../__internal/grids/tree_list/m_widget_base';
 
 // STYLE treeList
 
