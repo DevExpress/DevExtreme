@@ -265,7 +265,14 @@ describe('validation', () => {
 });
 
 describe('Integration test', () => {
+  const sortDependencies = (dependencies: Record<string, string[]>): void => {
+    Object.keys(dependencies).forEach((key) => { dependencies[key].sort(); });
+  };
+
   test('Check if dependensies is good', () => {
+    sortDependencies(builtDependencies);
+    sortDependencies(idealDependencies);
+
     expect(builtDependencies).toEqual(idealDependencies);
   });
 });
