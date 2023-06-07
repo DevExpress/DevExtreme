@@ -421,7 +421,7 @@ const Popup = Overlay.inherit({
         return 'dxToolbarBase';
     },
 
-    _renderVisibilityAnimate: function(visible) {
+    _toggleVisibilityAnimate(visible) {
         return this.callBase(visible);
     },
 
@@ -876,6 +876,12 @@ const Popup = Overlay.inherit({
     },
 
     _dimensionChanged: function() {
+        const shouldUseVisualViewport = this._shouldUseVisualViewport();
+
+        if(shouldUseVisualViewport) {
+            return;
+        }
+
         this._renderGeometry({ isDimensionChange: true });
     },
 

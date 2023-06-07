@@ -467,7 +467,7 @@ const Overlay = Widget.inherit({
                 if(isCurrentVisible) {
                     this._renderGeometry();
                 } else {
-                    this._renderVisibilityAnimate(true);
+                    this._toggleVisibilityAnimate(true);
                 }
             });
         }
@@ -507,8 +507,18 @@ const Overlay = Widget.inherit({
         this._toggleVisualViewportSubscription(subscribe, visualViewportEventMap.scroll);
     },
 
-    _renderVisibilityAnimate: function(visible) {
+    _toggleVisibilityAnimate(visible) {
         this._stopAnimation();
+        this._toggleVisualViewportCallbacks(visible);
+        this._renderVisibilityAnimate(visible);
+    },
+
+    _renderVisibilityAnimate(visible) {
+        const isVirtualKeyboardOpen = this._isVirtualKeyboardOpen();
+
+        if(isVirtualKeyboardOpen) {
+            return new Deferred().resolve().promise();
+        }
 
         return visible ? this._show() : this._hide();
     },
@@ -918,7 +928,7 @@ const Overlay = Widget.inherit({
         this.callBase();
 
         this._appendContentToElement();
-        this._renderVisibilityAnimate(this.option('visible'));
+        this._toggleVisibilityAnimate(this.option('visible'));
     },
 
     _appendContentToElement: function() {
@@ -1148,10 +1158,15 @@ const Overlay = Widget.inherit({
     _renderWrapperDimensions: function() {
         const $visualContainer = this._positionController.$visualContainer;
         const documentElement = domAdapter.getDocumentElement();
-        const isVisualContainerWindow = isWindow($visualContainer.get(0));
+        const isVisualContainerWindow = this._isVisualContainerWindow();
 
-        const wrapperWidth = isVisualContainerWindow ? documentElement.clientWidth : getOuterWidth($visualContainer);
-        const wrapperHeight = isVisualContainerWindow ? window.innerHeight : getOuterHeight($visualContainer);
+        const shouldUseVisualViewport = this.__shouldUseVisualViewport();
+
+        const getWindowWidth = () => shouldUseVisualViewport ? getVisualViewportSizes().width : documentElement.clientWidth;
+        const getWindowHeight = () => shouldUseVisualViewport ? getVisualViewportSizes().height : window.innerHeight;
+
+        const wrapperWidth = isVisualContainerWindow ? getWindowWidth() : getOuterWidth($visualContainer);
+        const wrapperHeight = isVisualContainerWindow ? getWindowHeight() : getOuterHeight($visualContainer);
 
         this._$wrapper.css({
             width: wrapperWidth,
@@ -1200,10 +1215,10 @@ const Overlay = Widget.inherit({
     _visibilityChanged: function(visible) {
         if(visible) {
             if(this.option('visible')) {
-                this._renderVisibilityAnimate(visible);
+                this._toggleVisibilityAnimate(visible);
             }
         } else {
-            this._renderVisibilityAnimate(visible);
+            this._toggleVisibilityAnimate(visible);
         }
     },
 
@@ -1212,6 +1227,12 @@ const Overlay = Widget.inherit({
     },
 
     _dimensionChanged: function() {
+        const shouldUseVisualViewport = this._shouldUseVisualViewport();
+
+        if(shouldUseVisualViewport) {
+            return;
+        }
+
         this._renderGeometry();
     },
 
@@ -1297,7 +1318,7 @@ const Overlay = Widget.inherit({
                 this._toggleSafariScrolling();
                 break;
             case 'visible':
-                this._renderVisibilityAnimate(value)
+                this._toggleVisibilityAnimate(value)
                     .done(() => this._animateDeferred?.resolveWith(this))
                     .fail(() => this._animateDeferred?.reject());
                 break;
