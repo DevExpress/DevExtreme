@@ -1237,6 +1237,7 @@ const Overlay = Widget.inherit({
         this._cleanFocusState();
         this._pendingUpdate = null;
         this._resizeAnimationFrameId = null;
+        this._unSubscribeCallbacks = null;
     },
 
     _stopShowTimer() {
