@@ -486,6 +486,10 @@ const Overlay = Widget.inherit({
             return;
         }
 
+        if(!this._unSubscribeCallbacks?.[event]) {
+            return;
+        }
+
         this._unSubscribeCallbacks[event]();
         this._unSubscribeCallbacks[event] = null;
     },
