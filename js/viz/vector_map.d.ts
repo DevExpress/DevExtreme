@@ -65,12 +65,7 @@ export type VectorMapMarkerShape = 'circle' | 'square';
 /** @public */
 export type VectorMapMarkerType = 'bubble' | 'dot' | 'image' | 'pie';
 
-/**
- * @docid _viz_vector_map_TooltipInfo
- * @hidden
- */
 export interface TooltipInfo {
-    /** @docid _viz_vector_map_TooltipInfo.target */
     target?: MapLayerElement | dxVectorMapAnnotationConfig;
 }
 

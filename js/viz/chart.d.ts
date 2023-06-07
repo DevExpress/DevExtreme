@@ -77,11 +77,10 @@ import {
 } from '../common/charts';
 
 /**
- * @docid _viz_chart_SeriesInteractionInfo
+ * @docid
  * @hidden
  */
 export interface SeriesInteractionInfo {
-    /** @docid _viz_chart_SeriesInteractionInfo.target */
     target: chartSeriesObject;
 }
 

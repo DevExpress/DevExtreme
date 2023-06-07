@@ -70,12 +70,7 @@ import {
     ChartsColor,
 } from '../common/charts';
 
-/**
- * @docid _viz_polar_chart_SeriesInteractionInfo
- * @hidden
- */
-export interface SeriesInteractionInfo {
-    /** @docid _viz_polar_chart_SeriesInteractionInfo.target */
+interface SeriesInteractionInfo {
     target: polarChartSeriesObject;
 }
 
