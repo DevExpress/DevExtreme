@@ -37,19 +37,22 @@ const FilterPanelView = modules.View.inherit({
   _renderCore() {
     const $element = this.element();
 
+    $element.empty();
+
+    const isColumnsDefined = !!this._columnsController.getColumns().length;
+
+    if (!isColumnsDefined) {
+      return;
+    }
+
     $element
-      .empty()
       .addClass(this.addWidgetPrefix(FILTER_PANEL_CLASS));
 
     const $leftContainer = $('<div>')
       .addClass(this.addWidgetPrefix(FILTER_PANEL_LEFT_CONTAINER))
       .appendTo($element);
 
-    const isColumnsDefined = !!this._columnsController.getColumns().length;
-
-    if (isColumnsDefined) {
-      this._renderFilterBuilderText($element, $leftContainer);
-    }
+    this._renderFilterBuilderText($element, $leftContainer);
   },
 
   _renderFilterBuilderText($element: dxElementWrapper, $leftContainer: dxElementWrapper): void {
