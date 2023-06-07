@@ -4,108 +4,31 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/radioButton/mixins" as *;
 @use "../radioGroup/colors" as *;
 @use "../../base/radioButton";
 
 // adduse
 
-$generic-radiobutton-border-width: 1px;
-$generic-radiobutton-inner-size: $generic-radiobutton-size - $generic-radiobutton-border-width * 2;
-
-.dx-radiobutton-icon {
-  width: $generic-radiobutton-size;
-  height: $generic-radiobutton-size;
-}
-
-.dx-radiobutton-icon::before {
-  display: block;
-  width: $generic-radiobutton-inner-size;
-  height: $generic-radiobutton-inner-size;
-  border: $generic-radiobutton-border-width solid $radiogroup-border-color;
-  background-color: $radiogroup-bg;
-  content: "";
-  border-radius: math.div($generic-radiobutton-size, 2);
-  box-sizing: content-box;
-}
-
-.dx-radiobutton-icon-checked .dx-radiobutton-icon-dot {
-  display: block;
-  margin-top: math.div(-$generic-radiobutton-size, 2) - math.div($generic-radiobutton-dot-size, 2);
-  margin-left: math.div($generic-radiobutton-size, 2) - math.div($generic-radiobutton-dot-size, 2);
-  width: $generic-radiobutton-dot-size;
-  height: $generic-radiobutton-dot-size;
-  background: $radiogroup-checked-bg;
-  content: "";
-  border-radius: math.div($generic-radiobutton-dot-size, 2);
-}
-
-.dx-radiobutton {
-  line-height: $generic-radiobutton-size;
-
-  &.dx-state-readonly {
-    .dx-radiobutton-icon::before {
-      border-color: $radiogroup-readonly-border-color;
-      background-color: $radiogroup-readonly-bg;
-    }
-  }
-
-  &.dx-state-hover {
-    .dx-radiobutton-icon::before {
-      border-color: $radiogroup-hover-border-color;
-    }
-  }
-
-  &.dx-state-active {
-    .dx-radiobutton-icon::before {
-      background-color: $radiobutton-active-bg;
-    }
-  }
-
-  &.dx-state-focused {
-    &:not(.dx-state-active) {
-      .dx-radiobutton-icon::before {
-        border: $generic-radiobutton-border-width solid $radiobutton-focused-border-color;
-      }
-    }
-  }
-
-  &.dx-state-disabled {
-    opacity: $base-disabled-opacity;
-  }
-}
-
-.dx-invalid {
-  .dx-radiobutton-icon::before {
-    border-color: $radiobutton-invalid-faded-border-color;
-  }
-
-  .dx-state-hover {
-    &.dx-radiobutton .dx-radiobutton-icon::before {
-      border-color: $radiobutton-invalid-hover-border-color;
-    }
-  }
-
-  .dx-state-focused {
-    &.dx-radiobutton {
-      .dx-radiobutton-icon::before {
-        border-color: $radiobutton-invalid-focused-border-color;
-      }
-    }
-  }
-}
-
-.dx-state-disabled {
-  .dx-radiobutton {
-    &.dx-state-disabled {
-      opacity: 1;
-    }
-  }
-}
-
-.dx-rtl .dx-radiobutton,
-.dx-rtl.dx-radiobutton {
-  &.dx-radiobutton-checked .dx-radiobutton-icon-dot {
-    margin-right: math.div($generic-radiobutton-inner-size, 4) + $generic-radiobutton-border-width;
-    margin-left: 0;
-  }
-}
+@include dx-radiobutton-icon-mixin(
+  $generic-radiobutton-size,
+  $generic-radiobutton-border-width,
+  $radiogroup-border-color,
+  $radiogroup-bg,
+  $radiogroup-checked-bg,
+  $generic-radiobutton-dot-size,
+);
+@include dx-radiobutton-states-mixin(
+  $generic-radiobutton-size,
+  $radiogroup-border-color,
+  $radiogroup-readonly-border-color,
+  $radiogroup-readonly-bg,
+  $radiogroup-hover-border-color,
+  $radiobutton-active-bg,
+  $radiobutton-focused-border-color,
+  $radiogroup-checked-bg,
+  $radiobutton-invalid-faded-border-color,
+  $radiobutton-invalid-hover-border-color,
+  $radiobutton-invalid-focused-border-color,
+  $base-disabled-opacity,
+);

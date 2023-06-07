@@ -1,0 +1,15 @@
+@use "../mixins" as *;
+
+// adduse
+
+.dx-radiobutton {
+  @include user-select(none);
+
+  &.dx-state-disabled {
+    cursor: default;
+
+    .dx-state-disabled & {
+      opacity: 1;
+    }
+  }
+}

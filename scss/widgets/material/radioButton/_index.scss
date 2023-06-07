@@ -4,142 +4,38 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/radioButton/mixins" as *;
 @use "../radioGroup/colors" as *;
 @use "../../base/radioButton";
 
 // adduse
 
-$material-radiobutton-border-width: 2px;
-$material-radiobutton-inner-size: $material-radiobutton-size - $material-radiobutton-border-width * 2;
 $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
-.dx-radiobutton-icon {
-  width: $material-radiobutton-size;
-  height: $material-radiobutton-size;
-  position: relative;
-
-  &::after {
-    content: "";
-    width: $material-radiobutton-ripple-size;
-    height: $material-radiobutton-ripple-size;
-    top: 50%;
-    left: 50%;
-    margin-top: math.div(-$material-radiobutton-ripple-size, 2);
-    margin-left: math.div(-$material-radiobutton-ripple-size, 2);
-    border-radius: 50%;
-    display: block;
-    position: absolute;
-    z-index: 1;
-    transform: scale(0.5);
-    transition: $material-radiobutton-ripple-transition;
-  }
-
-  &::before {
-    display: block;
-    width: $material-radiobutton-inner-size;
-    height: $material-radiobutton-inner-size;
-    border: $material-radiobutton-border-width solid $radiogroup-border-color;
-    background-color: $radiogroup-bg;
-    content: "";
-    border-radius: math.div($material-radiobutton-size, 2);
-    box-sizing: content-box;
-  }
-}
-
-.dx-radiobutton-icon-checked {
-  &::before {
-    border-color: $radiogroup-checked-bg;
-  }
-
-  .dx-radiobutton-icon-dot {
-    display: block;
-    margin-top: math.div(-$material-radiobutton-size, 2) - math.div($material-radiobutton-dot-size, 2);
-    margin-left: math.div($material-radiobutton-size, 2) - math.div($material-radiobutton-dot-size, 2);
-    width: $material-radiobutton-dot-size;
-    height: $material-radiobutton-dot-size;
-    background: $radiogroup-checked-bg;
-    content: "";
-    border-radius: math.div($material-radiobutton-dot-size, 2);
-  }
-}
-
-.dx-radiobutton {
-  line-height: $material-radiobutton-size;
-
-  &.dx-state-active,
-  &.dx-state-focused {
-    .dx-radiobutton-icon::after {
-      background-color: color.change($base-text-color, $alpha: 0.1);
-      transform: scale(1);
-    }
-  }
-
-  &.dx-radiobutton-checked {
-    &.dx-state-active,
-    &.dx-state-focused {
-      .dx-radiobutton-icon-checked::after {
-        background-color: color.change($radiogroup-checked-bg, $alpha: 0.1);
-        transform: scale(1);
-      }
-    }
-  }
-
-  &.dx-state-disabled {
-    opacity: $base-disabled-opacity;
-  }
-}
-
-.dx-state-readonly,
-.dx-state-disabled {
-  .dx-radiobutton-icon-dot {
-    background-color: $radiogroup-border-color;
-  }
-
-  .dx-radiobutton-icon::before {
-    border-color: $radiogroup-border-color;
-  }
-}
-
-.dx-invalid {
-  .dx-radiobutton-icon::before {
-    border-color: $radiobutton-invalid-faded-border-color;
-  }
-
-  .dx-radiobutton-icon-dot {
-    background-color: $radiobutton-invalid-faded-border-color;
-  }
-
-  .dx-state-active,
-  .dx-state-focused {
-    &.dx-radiobutton {
-      .dx-radiobutton-icon::before {
-        border-color: $radiobutton-invalid-focused-border-color;
-      }
-
-      .dx-radiobutton-icon-dot {
-        background-color: $radiobutton-invalid-focused-border-color;
-      }
-
-      .dx-radiobutton-icon::after {
-        background-color: color.change($radiobutton-invalid-focused-border-color, $alpha: 0.1);
-        transform: scale(1);
-      }
-    }
-  }
-}
-
-.dx-state-disabled {
-  .dx-radiobutton {
-    &.dx-state-disabled {
-      opacity: 1;
-    }
-  }
-}
-
-.dx-rtl .dx-radiobutton,
-.dx-rtl.dx-radiobutton {
-  &.dx-radiobutton-checked .dx-radiobutton-icon-dot {
-    margin-right: math.div($material-radiobutton-size, 2) - math.div($material-radiobutton-dot-size, 2);
-    margin-left: 0;
-  }
-}
+@include dx-radiobutton-icon-mixin(
+  $material-radiobutton-size,
+  $material-radiobutton-border-width,
+  $radiogroup-border-color,
+  $radiogroup-bg,
+  $radiogroup-checked-bg,
+  $material-radiobutton-dot-size,
+  true,
+  $material-radiobutton-ripple-size,
+  $material-radiobutton-ripple-transition,
+);
+@include dx-radiobutton-states-mixin(
+  $material-radiobutton-size,
+  $radiogroup-border-color,
+  $radiogroup-readonly-border-color,
+  $radiogroup-readonly-bg,
+  null,
+  null,
+  $radiobutton-focused-bg,
+  $radiogroup-checked-bg,
+  $radiobutton-invalid-faded-border-color,
+  null,
+  $radiobutton-invalid-focused-border-color,
+  $base-disabled-opacity,
+  true,
+  $radiobutton-focused-ripple-bg,
+);

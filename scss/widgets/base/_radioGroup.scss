@@ -14,7 +14,6 @@
   padding-left: 5px;
   vertical-align: middle;
 
-  @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
     padding-right: 5px;
     padding-left: 10px;
