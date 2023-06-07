@@ -1,1 +1,1 @@
-import '../../__internal/grids/tree_list/selection/module';
+import '../../__internal/grids/tree_list/selection/m_selection';

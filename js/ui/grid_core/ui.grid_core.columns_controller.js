@@ -1,5 +1,5 @@
 // deprecated
-export * from '../../__internal/grids/grid_core/columns_controller/module';
+export * from '../../__internal/grids/grid_core/columns_controller/m_columns_controller';
 
 /**
  * @name dxDataGridColumn.grouped
