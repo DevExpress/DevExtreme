@@ -1,25 +1,26 @@
-import $ from '@js/core/renderer';
-import registerComponent from '@js/core/component_registrator';
-import { deferRender, noop } from '@js/core/utils/common';
-import { isFunction, isString } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
-import { logger } from '@js/core/utils/console';
-import browser from '@js/core/utils/browser';
-import Widget from '@js/ui/widget/ui.widget';
-import { isMaterial } from '@js/ui/themes';
-import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
-import gridCore from './module_core';
-
 import './module_not_extended/column_headers';
-import './module_columns_controller';
-import './module_data_controller';
+import './m_columns_controller';
+import './m_data_controller';
 import './module_not_extended/sorting';
 import './module_not_extended/rows';
 import './module_not_extended/context_menu';
 import './module_not_extended/error_handling';
 import './module_not_extended/grid_view';
 import './module_not_extended/header_panel';
+
+import registerComponent from '@js/core/component_registrator';
+import $ from '@js/core/renderer';
+import browser from '@js/core/utils/browser';
+import { deferRender, noop } from '@js/core/utils/common';
+import { logger } from '@js/core/utils/console';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { isFunction, isString } from '@js/core/utils/type';
+import { isMaterial } from '@js/ui/themes';
+import Widget from '@js/ui/widget/ui.widget';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+
+import gridCore from './m_core';
 
 const DATAGRID_ROW_SELECTOR = '.dx-row';
 const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
@@ -148,7 +149,8 @@ const DataGrid = (Widget as any).inherit({
 
     gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(that);
 
-    gridCore.processModules(that, gridCore);
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    gridCore.processModules(that, gridCore as any);
 
     gridCore.callModuleItemsMethod(that, 'init');
   },

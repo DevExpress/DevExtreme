@@ -1,21 +1,22 @@
-import { getHeight, getOuterHeight, getWidth } from '@js/core/utils/size';
 import $ from '@js/core/renderer';
-import { getWindow, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
+import browser from '@js/core/utils/browser';
 import { deferRender, deferUpdate } from '@js/core/utils/common';
+import { compileGetter } from '@js/core/utils/data';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { getBoundingRect, getDefaultAlignment } from '@js/core/utils/position';
+import { getHeight, getOuterHeight, getWidth } from '@js/core/utils/size';
+import { isEmpty } from '@js/core/utils/string';
 import { setHeight } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
-import { getBoundingRect, getDefaultAlignment } from '@js/core/utils/position';
-import { isEmpty } from '@js/core/utils/string';
-import { compileGetter } from '@js/core/utils/data';
+import { getWindow, hasWindow } from '@js/core/utils/window';
+import eventsEngine from '@js/events/core/events_engine';
 import { removeEvent } from '@js/events/remove';
 import messageLocalization from '@js/localization/message';
-import browser from '@js/core/utils/browser';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
-import gridCoreUtils from '../module_utils';
-import { ColumnsView } from '../columns_view/module';
+
+import gridCoreUtils from '../m_utils';
+import { ColumnsView } from './m_columns_view';
 
 const ROWS_VIEW_CLASS = 'rowsview';
 const CONTENT_CLASS = 'content';

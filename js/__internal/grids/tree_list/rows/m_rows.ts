@@ -1,6 +1,7 @@
 import $ from '@js/core/renderer';
-import { rowsModule } from '@js/ui/grid_core/ui.grid_core.rows';
-import treeListCore from '../module_core';
+import { rowsModule } from '@ts/grids/grid_core/views/m_rows_view';
+
+import treeListCore from '../m_core';
 
 const TREELIST_TEXT_CONTENT = 'dx-treelist-text-content';
 const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';

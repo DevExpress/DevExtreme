@@ -1,13 +1,14 @@
-import eventsEngine from '@js/events/core/events_engine';
-import { getWindow } from '@js/core/utils/window';
-import errors from '@js/ui/widget/ui.errors';
-import { sessionStorage } from '@js/core/utils/storage';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { isDefined, isPlainObject, isEmptyObject } from '@js/core/utils/type';
 // @ts-expect-error
 import { fromPromise } from '@js/core/utils/deferred';
-import modules from '../modules';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { sessionStorage } from '@js/core/utils/storage';
+import { isDefined, isEmptyObject, isPlainObject } from '@js/core/utils/type';
+import { getWindow } from '@js/core/utils/window';
+import eventsEngine from '@js/events/core/events_engine';
+import errors from '@js/ui/widget/ui.errors';
+
+import modules from '../m_modules';
 
 const DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
 

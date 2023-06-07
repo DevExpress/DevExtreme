@@ -1,13 +1,13 @@
-import { isDefined } from '@js/core/utils/type';
 import { map } from '@js/core/utils/iterator';
+import { isDefined } from '@js/core/utils/type';
 
 import {
-  foreachTree,
-  findField,
-  getCompareFunction,
   createPath,
+  findField,
   foreachDataLevel,
-} from '../module_widget_utils';
+  foreachTree,
+  getCompareFunction,
+} from '../m_widget_utils';
 
 function sort(loadOptions, dataSource, getAscOrder) {
   sortDimension(dataSource, loadOptions, 'rows', getAscOrder);

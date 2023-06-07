@@ -1,7 +1,8 @@
 import { extend } from '@js/core/utils/extend';
-import { virtualScrollingModule } from '@js/ui/grid_core/ui.grid_core.virtual_scrolling';
-import gridCore from './module_core';
-import dataSourceAdapter from './data_source_adapter/module';
+import { virtualScrollingModule } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
+
+import dataSourceAdapter from './data_source_adapter/m_data_source_adapter';
+import gridCore from './m_core';
 
 const oldDefaultOptions = virtualScrollingModule.defaultOptions;
 const originalDataControllerExtender = virtualScrollingModule.extenders.controllers.data;

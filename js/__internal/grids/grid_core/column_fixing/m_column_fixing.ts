@@ -1,16 +1,17 @@
-import { getOuterWidth } from '@js/core/utils/size';
+import { move } from '@js/animation/translator';
 import $ from '@js/core/renderer';
+import browser from '@js/core/utils/browser';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { getBoundingRect } from '@js/core/utils/position';
+import { getOuterWidth } from '@js/core/utils/size';
+import { isDefined } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import { name as wheelEventName } from '@js/events/core/wheel';
 import messageLocalization from '@js/localization/message';
-import { isDefined } from '@js/core/utils/type';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import browser from '@js/core/utils/browser';
-import { getBoundingRect } from '@js/core/utils/position';
-import { move } from '@js/animation/translator';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
-import gridCoreUtils from '../module_utils';
+
+import gridCoreUtils from '../m_utils';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';

@@ -1,7 +1,7 @@
-import { isFunction, isDefined, isObject } from '@js/core/utils/type';
 import { extend } from '@js/core/utils/extend';
+import { isDefined, isFunction, isObject } from '@js/core/utils/type';
 
-import pivotGridUtils, { findField, foreachTree } from '../module_widget_utils';
+import pivotGridUtils, { findField, foreachTree } from '../m_widget_utils';
 
 const COLUMN = 'column';
 const ROW = 'row';
@@ -574,10 +574,10 @@ export default {
   applyDisplaySummaryMode,
 };
 export {
-  SummaryCell as Cell,
-  summaryDictionary,
-  getExpression,
-  applyRunningTotal,
-  createMockSummaryCell,
   applyDisplaySummaryMode,
+  applyRunningTotal,
+  SummaryCell as Cell,
+  createMockSummaryCell,
+  getExpression,
+  summaryDictionary,
 };

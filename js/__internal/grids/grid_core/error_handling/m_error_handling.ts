@@ -1,8 +1,9 @@
 import $ from '@js/core/renderer';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as clickEventName } from '@js/events/click';
 import { each } from '@js/core/utils/iterator';
-import modules from '../modules';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+
+import modules from '../m_modules';
 
 const ERROR_ROW_CLASS = 'dx-error-row';
 const ERROR_MESSAGE_CLASS = 'dx-error-message';

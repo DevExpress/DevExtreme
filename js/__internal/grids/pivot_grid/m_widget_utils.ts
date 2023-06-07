@@ -1,15 +1,16 @@
 import domAdapter from '@js/core/dom_adapter';
-import callOnce from '@js/core/utils/call_once';
-import { isNumeric, isDefined, type } from '@js/core/utils/type';
 import coreAjaxUtils from '@js/core/utils/ajax';
+import callOnce from '@js/core/utils/call_once';
 import { compileGetter } from '@js/core/utils/data';
-import { each, map } from '@js/core/utils/iterator';
+import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import localizationDate from '@js/localization/date';
-import formatHelper from '@js/format_helper';
-import { DataSource } from '@js/data/data_source/data_source';
+import { each, map } from '@js/core/utils/iterator';
+import { isDefined, isNumeric, type } from '@js/core/utils/type';
 import ArrayStore from '@js/data/array_store';
-import { when, Deferred } from '@js/core/utils/deferred';
+import { DataSource } from '@js/data/data_source/data_source';
+import formatHelper from '@js/format_helper';
+import localizationDate from '@js/localization/date';
+
 import { CLASSES } from './const';
 
 const setFieldProperty = function (field, property, value, isInitialization?) {
@@ -409,23 +410,23 @@ export default {
 };
 
 export {
-  setFieldProperty,
-  sendRequest,
+  calculateScrollbarWidth,
+  capitalizeFirstLetter,
+  createPath,
+  discoverObjectFields,
+  findField,
+  foreachDataLevel,
   foreachTree,
   foreachTreeAsync,
-  findField,
   formatValue,
   getCompareFunction,
-  createPath,
-  foreachDataLevel,
-  mergeArraysByMaxValue,
   getExpandedLevel,
-  discoverObjectFields,
   getFieldsDataType,
-  setDefaultFieldValueFormatting,
   getFiltersByPath,
-  storeDrillDownMixin,
-  capitalizeFirstLetter,
   getScrollbarWidth,
-  calculateScrollbarWidth,
+  mergeArraysByMaxValue,
+  sendRequest,
+  setDefaultFieldValueFormatting,
+  setFieldProperty,
+  storeDrillDownMixin,
 };

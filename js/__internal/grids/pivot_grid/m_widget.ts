@@ -1,34 +1,35 @@
-import $ from '@js/core/renderer';
-import { getWindow, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
-import { format as formatString } from '@js/core/utils/string';
-import { noop, deferRender, deferUpdate } from '@js/core/utils/common';
-import { each } from '@js/core/utils/iterator';
-import { isDefined } from '@js/core/utils/type';
+import $ from '@js/core/renderer';
+import { deferRender, deferUpdate, noop } from '@js/core/utils/common';
+import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { name as clickEventName } from '@js/events/click';
-import localizationMessage from '@js/localization/message';
-import Widget from '@js/ui/widget/ui.widget';
-import { addNamespace } from '@js/events/utils/index';
-import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
+import { each } from '@js/core/utils/iterator';
 import {
-  setHeight, getHeight, getWidth, getOuterHeight,
+  getHeight, getOuterHeight,
+  getWidth, setHeight,
 } from '@js/core/utils/size';
-import Popup from '@js/ui/popup/ui.popup';
+import { format as formatString } from '@js/core/utils/string';
+import { isDefined } from '@js/core/utils/type';
+import { getWindow, hasWindow } from '@js/core/utils/window';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+import { addNamespace } from '@js/events/utils/index';
+import localizationMessage from '@js/localization/message';
 import ContextMenu from '@js/ui/context_menu';
-import { when, Deferred } from '@js/core/utils/deferred';
+import Popup from '@js/ui/popup/ui.popup';
+import Widget from '@js/ui/widget/ui.widget';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
-import { setFieldProperty, findField, mergeArraysByMaxValue } from './module_widget_utils';
-import DataControllerImport from './data_controller/module';
-import DataAreaImport from './data_area/module';
-import HeadersArea from './headers_area/module';
-import { FieldsArea } from './fields_area/module';
-import { FieldChooser } from './field_chooser/module';
-import { FieldChooserBase } from './field_chooser/module_base';
-import { ExportController } from './export/module';
-import { ChartIntegrationMixin } from './chart_integration/module';
+import { ChartIntegrationMixin } from './chart_integration/m_chart_integration';
+import DataAreaImport from './data_area/m_data_area';
+import DataControllerImport from './data_controller/m_data_controller';
+import { ExportController } from './export/m_export';
+import { FieldChooser } from './field_chooser/m_field_chooser';
+import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
+import { FieldsArea } from './fields_area/m_fields_area';
+import HeadersArea from './headers_area/m_headers_area';
+import { findField, mergeArraysByMaxValue, setFieldProperty } from './m_widget_utils';
 
 const window = getWindow();
 

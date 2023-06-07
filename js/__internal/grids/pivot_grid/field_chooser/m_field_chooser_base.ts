@@ -1,30 +1,29 @@
+import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
-import eventsEngine from '@js/events/core/events_engine';
-import ArrayStore from '@js/data/array_store';
-import { name as clickEventName } from '@js/events/click';
 import { noop } from '@js/core/utils/common';
-import { isDefined } from '@js/core/utils/type';
+import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
+import { isDefined } from '@js/core/utils/type';
+import ArrayStore from '@js/data/array_store';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
 import localizationMessage from '@js/localization/message';
-import registerComponent from '@js/core/component_registrator';
 import Widget from '@js/ui/widget/ui.widget';
+import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 import {
+  headerFilterMixin,
   HeaderFilterView as HeaderFilterViewBase,
   updateHeaderFilterItemSelectionState,
-  headerFilterMixin,
-} from '@js/ui/grid_core/ui.grid_core.header_filter_core';
-import columnStateMixin from '@js/ui/grid_core/ui.grid_core.column_state_mixin';
-import sortingMixin from '@js/ui/grid_core/ui.grid_core.sorting_mixin';
-import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
-import { Deferred } from '@js/core/utils/deferred';
+} from '@ts/grids/grid_core/header_filter/m_header_filter_core';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import sortingMixin from '@ts/grids/grid_core/sorting/m_sorting_mixin';
 
-import { reverseSortOrder } from './utils';
-import { foreachTree, createPath } from '../module_widget_utils';
-import { Sortable } from '../sortable/module';
-
+import { createPath, foreachTree } from '../m_widget_utils';
+import { Sortable } from '../sortable/m_sortable';
 import { ATTRIBUTES, CLASSES } from './const';
 import { dragAndDropItemRender } from './dom';
+import { reverseSortOrder } from './utils';
 
 const DIV = '<div>';
 

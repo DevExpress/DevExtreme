@@ -1,19 +1,19 @@
-import Callbacks from '@js/core/utils/callbacks';
-import { when, Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
-import { map, each } from '@js/core/utils/iterator';
 import Class from '@js/core/class';
-import { format } from '@js/core/utils/string';
+import Callbacks from '@js/core/utils/callbacks';
 import { deferUpdate } from '@js/core/utils/common';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { each, map } from '@js/core/utils/iterator';
+import { format } from '@js/core/utils/string';
 import { isDefined, isString } from '@js/core/utils/type';
-import VirtualScrollControllerModule from '@js/__internal/grids/grid_core/virtual_scrolling/module_core';
-import { foreachColumnInfo, createColumnsInfo } from '@js/ui/grid_core/ui.grid_core.virtual_columns_core';
-import stateStoring from '@js/ui/grid_core/ui.grid_core.state_storing_core';
+import stateStoring from '@ts/grids/grid_core/state_storing/m_state_storing_core';
+import { createColumnsInfo, foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
+import VirtualScrollControllerModule from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 
-import { PivotGridDataSource } from '../data_source/module';
+import { PivotGridDataSource } from '../data_source/m_data_source';
 import {
-  findField, foreachTree, foreachTreeAsync, createPath, formatValue,
-} from '../module_widget_utils';
+  createPath, findField, foreachTree, foreachTreeAsync, formatValue,
+} from '../m_widget_utils';
 
 const math = Math;
 const GRAND_TOTAL_TYPE = 'GT';

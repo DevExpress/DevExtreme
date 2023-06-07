@@ -1,14 +1,15 @@
 import { isDefined } from '@js/core/utils/type';
 import {
-  getDefaultOperation, getMatchedConditions, syncFilters,
-  removeFieldConditionsFromFilter, addItem, getNormalizedFilter,
-  getFilterExpression, filterHasField,
+  addItem, filterHasField,
+  getDefaultOperation, getFilterExpression, getMatchedConditions, getNormalizedFilter,
+  removeFieldConditionsFromFilter, syncFilters,
 } from '@js/ui/filter_builder/utils';
-import errors from '@js/ui/widget/ui.errors';
 import filterUtils from '@js/ui/shared/filtering';
-import { anyOf, noneOf } from '../filter_custom_operations/module';
-import modules from '../modules';
-import gridCoreUtils from '../module_utils';
+import errors from '@js/ui/widget/ui.errors';
+
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
+import { anyOf, noneOf } from './m_filter_custom_operations';
 
 const FILTER_ROW_OPERATIONS = ['=', '<>', '<', '<=', '>', '>=', 'notcontains', 'contains', 'startswith', 'endswith', 'between'];
 const FILTER_TYPES_INCLUDE = 'include';

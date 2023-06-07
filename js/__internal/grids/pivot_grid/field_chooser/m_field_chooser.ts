@@ -1,19 +1,19 @@
-import $ from '@js/core/renderer';
-import { getImageContainer } from '@js/core/utils/icon';
-import { hasWindow as hasWindowFn } from '@js/core/utils/window';
-import { isDefined } from '@js/core/utils/type';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import localizationMessage from '@js/localization/message';
+import '../data_source/m_data_source';
+
 import registerComponent from '@js/core/component_registrator';
-import TreeView from '@js/ui/tree_view';
+import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import { getImageContainer } from '@js/core/utils/icon';
+import { each } from '@js/core/utils/iterator';
+import { isDefined } from '@js/core/utils/type';
+import { hasWindow as hasWindowFn } from '@js/core/utils/window';
+import localizationMessage from '@js/localization/message';
 import ContextMenu from '@js/ui/context_menu';
+import TreeView from '@js/ui/tree_view';
 
-import { getCompareFunction, foreachDataLevel } from '../module_widget_utils';
-import { FieldChooserBase } from './module_base';
-
-import '../data_source/module';
+import { foreachDataLevel, getCompareFunction } from '../m_widget_utils';
 import { ATTRIBUTES, CLASSES, ICONS } from './const';
+import { FieldChooserBase } from './m_field_chooser_base';
 
 const DIV = '<div>';
 const hasWindow = hasWindowFn();

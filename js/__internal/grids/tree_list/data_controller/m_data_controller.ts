@@ -1,9 +1,10 @@
-import { extend } from '@js/core/utils/extend';
-import { Deferred } from '@js/core/utils/deferred';
 import { equalByValue } from '@js/core/utils/common';
-import { dataControllerModule } from '@js/ui/grid_core/ui.grid_core.data_controller';
-import treeListCore from '../module_core';
-import dataSourceAdapterProvider from '../data_source_adapter/module';
+import { Deferred } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { dataControllerModule } from '@ts/grids/grid_core/data_controller/m_data_controller';
+
+import dataSourceAdapterProvider from '../data_source_adapter/m_data_source_adapter';
+import treeListCore from '../m_core';
 
 export const DataController = (dataControllerModule.controllers as any).data.inherit((function () {
   return {

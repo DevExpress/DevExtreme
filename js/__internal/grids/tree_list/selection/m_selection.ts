@@ -1,9 +1,10 @@
 import $ from '@js/core/renderer';
-import { noop, equalByValue } from '@js/core/utils/common';
+import { equalByValue, noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import { selectionModule } from '@js/ui/grid_core/ui.grid_core.selection';
-import treeListCore from '../module_core';
+import { selectionModule } from '@ts/grids/grid_core/selection/m_selection';
+
+import treeListCore from '../m_core';
 
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';

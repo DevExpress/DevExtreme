@@ -1,24 +1,24 @@
 // @ts-check
 
-import { getHeight } from '@js/core/utils/size';
 import $ from '@js/core/renderer';
-import { isDefined, isFunction, isString } from '@js/core/utils/type';
-import { when, Deferred } from '@js/core/utils/deferred';
-import { format } from '@js/core/utils/string';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
-import { getBoundingRect } from '@js/core/utils/position';
-// @ts-expect-error
-import { toComparable } from '@js/core/utils/data';
 import { equalByValue } from '@js/core/utils/common';
 // @ts-expect-error
-import { normalizeSortingInfo as normalizeSortingInfoUtility } from '@js/data/utils';
-import formatHelper from '@js/format_helper';
+import { toComparable } from '@js/core/utils/data';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { getBoundingRect } from '@js/core/utils/position';
+import { getHeight } from '@js/core/utils/size';
+import { format } from '@js/core/utils/string';
+import { isDefined, isFunction, isString } from '@js/core/utils/type';
+import variableWrapper from '@js/core/utils/variable_wrapper';
 import { getWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
 import { DataSource } from '@js/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
-import variableWrapper from '@js/core/utils/variable_wrapper';
+// @ts-expect-error
+import { normalizeSortingInfo as normalizeSortingInfoUtility } from '@js/data/utils';
+import eventsEngine from '@js/events/core/events_engine';
+import formatHelper from '@js/format_helper';
 import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
 
@@ -254,7 +254,7 @@ export default {
     return index;
   },
 
-  combineFilters(filters, operation?) {
+  combineFilters(filters, operation?): any {
     let resultFilter: any[] = [];
 
     operation = operation || 'and';

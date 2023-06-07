@@ -1,14 +1,16 @@
-import TreeList from './module_widget_base';
+// NOTE: Order of imports important here and shouldn't be changed.
+/* eslint-disable simple-import-sort/imports */
+import TreeList from './m_widget_base';
 
-import './module_state_storing';
+import './m_state_storing';
 import './module_not_extended/column_chooser';
-import './module_master_detail';
-import './editing/module';
+import './m_master_detail';
+import './editing/m_editing';
 import './module_not_extended/editing_row_based';
 import './module_not_extended/editing_form_based';
 import './module_not_extended/editing_cell_based';
-import './module_validating';
-import './module_virtual_scrolling';
+import './m_validating';
+import './m_virtual_scrolling';
 import './module_not_extended/filter_row';
 import './module_not_extended/header_filter';
 import './module_not_extended/filter_sync';
@@ -18,11 +20,11 @@ import './module_not_extended/pager';
 import './module_not_extended/columns_resizing_reordering';
 import './module_not_extended/column_fixing';
 import './module_not_extended/adaptivity';
-import './selection/module';
+import './selection/m_selection';
 import './module_not_extended/search';
-import './module_keyboard_navigation';
+import './m_keyboard_navigation';
 import './module_not_extended/virtual_columns';
-import './module_focus';
+import './m_focus';
 import './module_not_extended/row_dragging';
 
 export default TreeList;
