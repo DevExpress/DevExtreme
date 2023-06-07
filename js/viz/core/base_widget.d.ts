@@ -54,6 +54,7 @@ export interface IncidentInfo {
 /**
  * @docid
  * @hidden
+ * @inherits Cancelable
  */
 export type FileSavingEventInfo<T> = Cancelable & {
   /**
@@ -136,8 +137,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
     onExporting?: ((e: EventInfo<TComponent> & ExportInfo) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:{viz/core/base_widget:FileSavingEventInfo}
      * @default null
      * @action
      * @public
