@@ -63,7 +63,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+        return extend(this.callBase(), extend(true, {
             placeholder: messageLocalization.format('Select'),
 
             searchPlaceholder: messageLocalization.format('Search'),
@@ -217,7 +217,7 @@ const Lookup = DropDownList.inherit({
 
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
-        }, { dropDownOptions: this._getDropDownSizes() });
+        }, { dropDownOptions: this._getDropDownSizes() }));
     },
 
     _getDropDownSizes() {
