@@ -70,7 +70,12 @@ import {
     ChartsColor,
 } from '../common/charts';
 
-interface SeriesInteractionInfo {
+/**
+ * @docid _viz_polar_chart_SeriesInteractionInfo
+ * @hidden
+ */
+export interface SeriesInteractionInfo {
+    /** @docid _viz_polar_chart_SeriesInteractionInfo.target */
     target: polarChartSeriesObject;
 }
 
@@ -231,7 +236,7 @@ export type SeriesClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | Pointe
  * @docid _viz_polar_chart_SeriesHoverChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SeriesInteractionInfo
+ * @inherits EventInfo,_viz_polar_chart_SeriesInteractionInfo
  */
 export type SeriesHoverChangedEvent = EventInfo<dxPolarChart> & SeriesInteractionInfo;
 
@@ -239,7 +244,7 @@ export type SeriesHoverChangedEvent = EventInfo<dxPolarChart> & SeriesInteractio
  * @docid _viz_polar_chart_SeriesSelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SeriesInteractionInfo
+ * @inherits EventInfo,_viz_polar_chart_SeriesInteractionInfo
  */
 export type SeriesSelectionChangedEvent = EventInfo<dxPolarChart> & SeriesInteractionInfo;
 

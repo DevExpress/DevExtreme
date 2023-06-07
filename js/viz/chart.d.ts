@@ -77,10 +77,11 @@ import {
 } from '../common/charts';
 
 /**
- * @docid
+ * @docid _viz_chart_SeriesInteractionInfo
  * @hidden
  */
 export interface SeriesInteractionInfo {
+    /** @docid _viz_chart_SeriesInteractionInfo.target */
     target: chartSeriesObject;
 }
 
@@ -268,7 +269,7 @@ export type SeriesClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEven
  * @docid _viz_chart_SeriesHoverChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SeriesInteractionInfo
+ * @inherits EventInfo,_viz_chart_SeriesInteractionInfo
  */
 export type SeriesHoverChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
@@ -276,7 +277,7 @@ export type SeriesHoverChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo
  * @docid _viz_chart_SeriesSelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SeriesInteractionInfo
+ * @inherits EventInfo,_viz_chart_SeriesInteractionInfo
  */
 export type SeriesSelectionChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
