@@ -1160,7 +1160,7 @@ const Overlay = Widget.inherit({
         const documentElement = domAdapter.getDocumentElement();
         const isVisualContainerWindow = this._isVisualContainerWindow();
 
-        const shouldUseVisualViewport = this.__shouldUseVisualViewport();
+        const shouldUseVisualViewport = this._shouldUseVisualViewport();
 
         const getWindowWidth = () => shouldUseVisualViewport ? getVisualViewportSizes().width : documentElement.clientWidth;
         const getWindowHeight = () => shouldUseVisualViewport ? getVisualViewportSizes().height : window.innerHeight;
