@@ -16,7 +16,9 @@ const setFieldProperty = function (field, property, value, isInitialization?) {
   const initProperties = field._initProperties = field._initProperties || {};
   const initValue = isInitialization ? value : field[property];
 
-  if (!Object.prototype.hasOwnProperty.call(initProperties, property) || isInitialization) {
+  const needInitProperty = !Object.prototype.hasOwnProperty.call(initProperties, property) || isInitialization;
+
+  if (needInitProperty && property !== '_initProperties') {
     initProperties[property] = initValue;
   }
 
