@@ -2,7 +2,8 @@ import { getWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import ScrollView from '../scroll_view';
-import { calculateScrollbarWidth } from '../../__internal/grids/pivot_grid/module_widget_utils';
+// TODO: Can we get rid of this dependency of the PivotGrid here?
+import { calculateScrollbarWidth } from '../../__internal/grids/pivot_grid/m_widget_utils';
 
 import { getDiagram } from './diagram.importer';
 
