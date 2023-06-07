@@ -6,6 +6,7 @@ import { each } from '../core/utils/iterator';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import domAdapter from '../core/dom_adapter';
+import { getVisualViewportSizes, hasVisualViewport } from '../core/utils/visual_viewport';
 import { isWindow, isDefined } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { getBoundingRect } from '../core/utils/position';
@@ -249,14 +250,22 @@ const calculatePosition = function(what, options) {
         v.atSize = 0;
     } else {
         of = $(of);
+
         if(isWindow(of[0])) {
             h.atLocation = of.scrollLeft();
             v.atLocation = of.scrollTop();
-            if(devices.real().deviceType === 'phone' && of[0].visualViewport) {
-                h.atLocation = Math.max(h.atLocation, of[0].visualViewport.offsetLeft);
-                v.atLocation = Math.max(v.atLocation, of[0].visualViewport.offsetTop);
-                h.atSize = of[0].visualViewport.width;
-                v.atSize = of[0].visualViewport.height;
+
+            const isPhone = devices.real().deviceType === 'phone';
+            const isVisualViewportAvailable = hasVisualViewport();
+
+            if(isPhone && isVisualViewportAvailable) {
+                const { offsetLeft, offsetTop, width, height } = getVisualViewportSizes();
+
+                h.atLocation = Math.max(h.atLocation, offsetLeft);
+                v.atLocation = Math.max(v.atLocation, offsetTop);
+
+                h.atSize = width;
+                v.atSize = height;
             } else {
                 h.atSize = of[0].innerWidth > of[0].outerWidth ? of[0].innerWidth : getWidth(of);
                 v.atSize = of[0].innerHeight > of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : getHeight(of);
