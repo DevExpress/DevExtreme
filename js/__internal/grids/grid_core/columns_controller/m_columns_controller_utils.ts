@@ -2,18 +2,18 @@
 import { normalizeIndexes } from '@js/core/utils/array';
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
+import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
-import dateSerialization from '@js/core/utils/date_serialization';
-import variableWrapper from '@js/core/utils/variable_wrapper';
 import { deepExtendArraySafe } from '@js/core/utils/object';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import {
-  isDefined, isString, isNumeric, isFunction, isObject, type,
+  isDefined, isFunction, isNumeric, isObject, isString, type,
 } from '@js/core/utils/type';
+import variableWrapper from '@js/core/utils/variable_wrapper';
 import numberLocalization from '@js/localization/number';
-import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
 
+import gridCoreUtils from '../m_utils';
 import {
   COLUMN_CHOOSER_LOCATION,
   COLUMN_INDEX_OPTIONS,
@@ -24,7 +24,7 @@ import {
   USER_STATE_FIELD_NAMES,
   USER_STATE_FIELD_NAMES_15_1,
 } from './const';
-import type { ColumnsController } from './module';
+import type { ColumnsController } from './m_columns_controller';
 
 export const setFilterOperationsAsDefaultValues = function (column) {
   column.filterOperations = column.defaultFilterOperations;

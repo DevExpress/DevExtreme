@@ -1,22 +1,24 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 /* eslint-disable class-methods-use-this */
 import $ from '@js/core/renderer';
-import ArrayStore from '@js/data/array_store';
-import CustomStore from '@js/data/custom_store';
+import { findChanges } from '@js/core/utils/array_compare';
 import { deferRender, equalByValue } from '@js/core/utils/common';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
-import { extend } from '@js/core/utils/extend';
+import ArrayStore from '@js/data/array_store';
+import CustomStore from '@js/data/custom_store';
 import DataHelperMixin from '@js/data_helper';
-import { when, Deferred } from '@js/core/utils/deferred';
-import { findChanges } from '@js/core/utils/array_compare';
 import errors from '@js/ui/widget/ui.errors';
-import gridCoreUtils from '../module_utils';
-import modules from '../modules';
+
+import modules from '../m_modules';
 import type {
-  Module, ModuleType, Controllers, Controller as ControllerType,
-} from '../module_types';
-import type { SearchDataControllerExtension } from '../search/module';
+  Controller as ControllerType,
+  Controllers, Module, ModuleType,
+} from '../m_types';
+import gridCoreUtils from '../m_utils';
+import type { SearchDataControllerExtension } from '../search/m_search';
 
 const changePaging = function (that, optionName, value) {
   const dataSource = that._dataSource;
@@ -139,6 +141,10 @@ export class DataController extends ControllerWithDataMixin {
   dataSourceChanged: any;
 
   _adaptiveExpandedKey: any;
+
+  adaptiveExpandedKey: any;
+
+  toggleExpandAdaptiveDetailRow: any;
 
   _lastRenderingPageIndex: any;
 

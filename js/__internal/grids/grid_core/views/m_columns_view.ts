@@ -1,29 +1,32 @@
-import {
-  getOuterWidth, getWidth, getOuterHeight, getHeight,
-} from '@js/core/utils/size';
-import $ from '@js/core/renderer';
 import domAdapter from '@js/core/dom_adapter';
-import { getWindow, hasWindow } from '@js/core/utils/window';
-import eventsEngine from '@js/events/core/events_engine';
+import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
-import pointerEvents from '@js/events/pointer';
-import { name as clickEventName } from '@js/events/click';
-import { name as dblclickEvent } from '@js/events/double_click';
+import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
-import { setWidth } from '@js/core/utils/style';
-import { getPublicElement } from '@js/core/element';
-import {
-  isRenderer, isFunction, isString, isDefined, isNumeric,
-} from '@js/core/utils/type';
-import { getBoundingRect, getDefaultAlignment } from '@js/core/utils/position';
-import * as iteratorUtils from '@js/core/utils/iterator';
+import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { when, Deferred } from '@js/core/utils/deferred';
+import * as iteratorUtils from '@js/core/utils/iterator';
+import { getBoundingRect, getDefaultAlignment } from '@js/core/utils/position';
+import {
+  getHeight,
+  getOuterHeight, getOuterWidth, getWidth,
+} from '@js/core/utils/size';
+import { setWidth } from '@js/core/utils/style';
 import { nativeScrolling } from '@js/core/utils/support';
-import columnStateMixin from '@js/ui/grid_core/ui.grid_core.column_state_mixin';
-import modules from '../modules';
-import gridCoreUtils from '../module_utils';
+import {
+  isDefined, isFunction, isNumeric,
+  isRenderer, isString,
+} from '@js/core/utils/type';
+import { getWindow, hasWindow } from '@js/core/utils/window';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+import { name as dblclickEvent } from '@js/events/double_click';
+import pointerEvents from '@js/events/pointer';
+import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
+
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
 const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';

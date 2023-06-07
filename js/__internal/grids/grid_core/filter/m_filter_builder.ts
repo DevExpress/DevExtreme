@@ -1,11 +1,12 @@
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import FilterBuilder from '@js/ui/filter_builder';
 import messageLocalization from '@js/localization/message';
-import ScrollView from '@js/ui/scroll_view';
+import FilterBuilder from '@js/ui/filter_builder';
 import Popup from '@js/ui/popup/ui.popup';
+import ScrollView from '@js/ui/scroll_view';
 import { restoreFocus } from '@js/ui/shared/accessibility';
-import modules from '../modules';
+
+import modules from '../m_modules';
 
 const FilterBuilderView = modules.View.inherit({
   _renderCore() {

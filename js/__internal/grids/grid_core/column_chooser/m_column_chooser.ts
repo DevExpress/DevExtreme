@@ -1,18 +1,19 @@
-import { getOuterWidth, getOuterHeight } from '@js/core/utils/size';
+import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { deferUpdate, noop } from '@js/core/utils/common';
-import messageLocalization from '@js/localization/message';
-import devices from '@js/core/devices';
-import { isDefined } from '@js/core/utils/type';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-// @ts-expect-error
-import { isMaterial as isMaterialTheme, isGeneric, current } from '@js/ui/themes';
-import TreeView from '@js/ui/tree_view';
-import Popup from '@js/ui/popup/ui.popup';
+import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
+import { isDefined } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
-import { ColumnsView } from '../columns_view/module';
-import modules from '../modules';
+import Popup from '@js/ui/popup/ui.popup';
+// @ts-expect-error
+import { current, isGeneric, isMaterial as isMaterialTheme } from '@js/ui/themes';
+import TreeView from '@js/ui/tree_view';
+
+import modules from '../m_modules';
+import { ColumnsView } from '../views/m_columns_view';
 
 const COLUMN_CHOOSER_CLASS = 'column-chooser';
 const COLUMN_CHOOSER_BUTTON_CLASS = 'column-chooser-button';
@@ -213,8 +214,8 @@ const columnChooserMembers = {
     const searchTimeout = isDefined(columnChooser.searchTimeout) ? columnChooser.searchTimeout : columnChooser.search?.timeout;
 
     /**
-         * @type {import('../tree_view').Options}
-         */
+     * @type {import('../tree_view').Options}
+     */
     const treeViewConfig: any = {
       dataStructure: 'plain',
       activeStateEnabled: true,

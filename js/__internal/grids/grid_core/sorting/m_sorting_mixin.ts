@@ -1,5 +1,5 @@
-import { isDefined } from '@js/core/utils/type';
 import $ from '@js/core/renderer';
+import { isDefined } from '@js/core/utils/type';
 
 const SORT_CLASS = 'dx-sort';
 const SORT_NONE_CLASS = 'dx-sort-none';

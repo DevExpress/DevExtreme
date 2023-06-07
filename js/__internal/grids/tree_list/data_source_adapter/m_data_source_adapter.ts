@@ -1,17 +1,18 @@
 import { equalByValue } from '@js/core/utils/common';
-import { isFunction, isDefined } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
-import { extend } from '@js/core/utils/extend';
-import { createObjectWithChanges } from '@js/data/array_utils';
-import ArrayStore from '@js/data/array_store';
-import query from '@js/data/query';
 import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { isDefined, isFunction } from '@js/core/utils/type';
+import ArrayStore from '@js/data/array_store';
+import { createObjectWithChanges } from '@js/data/array_utils';
+import query from '@js/data/query';
 import storeHelper from '@js/data/store_helper';
-import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
 import errors from '@js/ui/widget/ui.errors';
-import DataSourceAdapter from '../../grid_core/data_source_adapter/module';
-import treeListCore from '../module_core';
+import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+
+import treeListCore from '../m_core';
 
 const { queryByOptions } = storeHelper;
 

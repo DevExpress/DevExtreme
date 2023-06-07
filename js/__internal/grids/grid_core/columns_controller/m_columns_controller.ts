@@ -1,81 +1,81 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable class-methods-use-this */
+import config from '@js/core/config';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
-import variableWrapper from '@js/core/utils/variable_wrapper';
 import { compileGetter } from '@js/core/utils/data';
-import {
-  isDefined, isString, isNumeric, isFunction, isObject, isPlainObject,
-} from '@js/core/utils/type';
-import { each, map } from '@js/core/utils/iterator';
+import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import config from '@js/core/config';
-import { orderEach } from '@js/core/utils/object';
-import errors from '@js/ui/widget/ui.errors';
 import { captionize } from '@js/core/utils/inflector';
-import dateLocalization from '@js/localization/date';
-import messageLocalization from '@js/localization/message';
-import { when, Deferred } from '@js/core/utils/deferred';
+import { each, map } from '@js/core/utils/iterator';
+import { orderEach } from '@js/core/utils/object';
+import {
+  isDefined, isFunction, isNumeric, isObject, isPlainObject,
+  isString,
+} from '@js/core/utils/type';
+import variableWrapper from '@js/core/utils/variable_wrapper';
 import Store from '@js/data/abstract_store';
 import { DataSource } from '@js/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
+import dateLocalization from '@js/localization/date';
+import messageLocalization from '@js/localization/message';
 import filterUtils from '@js/ui/shared/filtering';
-import gridCoreUtils from '../module_utils';
-import modules from '../modules';
-import { Module } from '../module_types';
+import errors from '@js/ui/widget/ui.errors';
 
+import modules from '../m_modules';
+import { Module } from '../m_types';
+import gridCoreUtils from '../m_utils';
 import {
-  fireColumnsChanged,
-  createColumnsFromOptions,
-  applyUserState,
-  addExpandColumn,
-  updateIndexes,
-  getColumnByIndexes,
-  createColumnsFromDataSource,
-  updateColumnChanges,
-  resetBandColumnsCache,
-  getFixedPosition,
-  mergeColumns,
-  digitsCount,
-  processBandColumns,
-  getParentBandColumns,
-  isCustomCommandColumn,
-  numberToString, processExpandColumns,
-  getDataColumns,
-  sortColumns,
-  getColumnIndexByVisibleIndex,
-  updateColumnGroupIndexes,
-  moveColumnToGroup,
-  isColumnFixed,
-  resetColumnsCache,
-  updateSerializers,
-  getAlignmentByDataType,
-  getCustomizeTextByDataType,
-  setFilterOperationsAsDefaultValues,
-  getValueDataType,
-  getSerializationFormat,
-  findColumn,
-  columnOptionCore,
-  createColumn,
-  convertOwnerBandToColumnReference,
-  defaultSetCellValue,
-  strictParseNumber,
-  getRowCount,
-  getChildrenByBandColumn,
-  assignColumns,
-  isSortOrderValid,
-} from './module_utils';
-
-import {
-  COMMAND_EXPAND_CLASS,
-  GROUP_COMMAND_COLUMN_NAME,
   COLUMN_CHOOSER_LOCATION,
+  COLUMN_OPTION_REGEXP,
+  COMMAND_EXPAND_CLASS,
+  DATATYPE_OPERATIONS,
+  GROUP_COMMAND_COLUMN_NAME,
   GROUP_LOCATION,
   MAX_SAFE_INTEGER,
-  DATATYPE_OPERATIONS,
   USER_STATE_FIELD_NAMES,
-  COLUMN_OPTION_REGEXP,
 } from './const';
+import {
+  addExpandColumn,
+  applyUserState,
+  assignColumns,
+  columnOptionCore,
+  convertOwnerBandToColumnReference,
+  createColumn,
+  createColumnsFromDataSource,
+  createColumnsFromOptions,
+  defaultSetCellValue,
+  digitsCount,
+  findColumn,
+  fireColumnsChanged,
+  getAlignmentByDataType,
+  getChildrenByBandColumn,
+  getColumnByIndexes,
+  getColumnIndexByVisibleIndex,
+  getCustomizeTextByDataType,
+  getDataColumns,
+  getFixedPosition,
+  getParentBandColumns,
+  getRowCount,
+  getSerializationFormat,
+  getValueDataType,
+  isColumnFixed,
+  isCustomCommandColumn,
+  isSortOrderValid,
+  mergeColumns,
+  moveColumnToGroup,
+  numberToString, processBandColumns,
+  processExpandColumns,
+  resetBandColumnsCache,
+  resetColumnsCache,
+  setFilterOperationsAsDefaultValues,
+  sortColumns,
+  strictParseNumber,
+  updateColumnChanges,
+  updateColumnGroupIndexes,
+  updateIndexes,
+  updateSerializers,
+} from './m_columns_controller_utils';
 
 export class ColumnsController extends modules.Controller {
   _skipProcessingColumnsChange: any;

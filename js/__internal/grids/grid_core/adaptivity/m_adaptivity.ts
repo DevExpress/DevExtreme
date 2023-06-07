@@ -1,24 +1,23 @@
-// @ts-check
-
-import { getWidth } from '@js/core/utils/size';
-import $ from '@js/core/renderer';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
-import { name as clickEventName } from '@js/events/click';
-import { isDefined, isString } from '@js/core/utils/type';
 import Guid from '@js/core/guid';
-import Form from '@js/ui/form';
-import { isMaterial } from '@js/ui/themes';
+import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { getWidth } from '@js/core/utils/size';
+import { isDefined, isString } from '@js/core/utils/type';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
-import gridCoreUtils from '../module_utils';
-import modules from '../modules';
-import type { KeyboardNavigationController } from '../keyboard_navigation/module';
-import type { ModuleType } from '../module_types';
+import Form from '@js/ui/form';
+import { isMaterial } from '@js/ui/themes';
+
+import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
+import modules from '../m_modules';
+import type { ModuleType } from '../m_types';
+import gridCoreUtils from '../m_utils';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 const ROWS_VIEW = 'rowsView';
@@ -85,7 +84,7 @@ function focusCellHandler(e) {
   eventsEngine.trigger($nextCell, 'dxclick');
 }
 
-const adaptiveColumnsControllerMembers: Partial<import('../adaptivity/module_types').AdaptiveColumnsController> = {
+const adaptiveColumnsControllerMembers: Partial<import('../adaptivity/m_adaptivity_types').AdaptiveColumnsController> = {
   _isRowEditMode() {
     const editMode = this._getEditMode();
     return editMode === EDIT_MODE_ROW;
@@ -94,7 +93,7 @@ const adaptiveColumnsControllerMembers: Partial<import('../adaptivity/module_typ
   _isItemModified(item, cellOptions) {
     const columnIndex = this._columnsController.getVisibleIndex(item.column.index);
     const rowIndex = this._dataController.getRowIndexByKey(cellOptions.key);
-    const row = this._dataController.items()[rowIndex + 1] as any;
+    const row: any = this._dataController.items()[rowIndex + 1];
 
     return row && row.modifiedValues && isDefined(row.modifiedValues[columnIndex]);
   },
@@ -341,11 +340,11 @@ const adaptiveColumnsControllerMembers: Partial<import('../adaptivity/module_typ
 
     if (this._isRowEditMode()) {
       const editRowKey = this.option('editing.editRowKey');
-      if (equalByValue(editRowKey, (this._dataController as any).adaptiveExpandedKey())) {
+      if (equalByValue(editRowKey, this._dataController.adaptiveExpandedKey())) {
         return true;
       }
     } else {
-      const rowIndex = this._dataController.getRowIndexByKey((this._dataController as any).adaptiveExpandedKey()) + 1;
+      const rowIndex = this._dataController.getRowIndexByKey(this._dataController.adaptiveExpandedKey()) + 1;
       const columnIndex = this._columnsController.getVisibleIndex(item.column.index);
 
       return this._editingController.isEditCell(rowIndex, columnIndex);
@@ -594,7 +593,7 @@ const adaptiveColumnsControllerMembers: Partial<import('../adaptivity/module_typ
 
   toggleExpandAdaptiveDetailRow(key, alwaysExpanded) {
     if (!(this.isFormOrPopupEditMode() && this._editingController.isEditing())) {
-      (this.getController('data') as any).toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
+      this.getController('data').toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
     }
   },
 
@@ -631,7 +630,7 @@ const adaptiveColumnsControllerMembers: Partial<import('../adaptivity/module_typ
   },
 
   hasAdaptiveDetailRowExpanded() {
-    return isDefined((this._dataController as any).adaptiveExpandedKey());
+    return isDefined(this._dataController.adaptiveExpandedKey());
   },
 
   updateForm(hiddenColumns) {
@@ -733,7 +732,7 @@ const adaptiveColumnsControllerMembers: Partial<import('../adaptivity/module_typ
   },
 
   isAdaptiveDetailRowExpanded(key) {
-    const dataController = this._dataController as any;
+    const dataController = this._dataController;
     return dataController.adaptiveExpandedKey() && equalByValue(dataController.adaptiveExpandedKey(), key);
   },
 
@@ -809,7 +808,7 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
     this._adaptiveController = this.getController('adaptiveColumns');
   }
 };
-export const adaptivityModule: import('../module_types').Module = {
+export const adaptivityModule: import('../m_types').Module = {
   defaultOptions() {
     return {
       columnHidingEnabled: false,

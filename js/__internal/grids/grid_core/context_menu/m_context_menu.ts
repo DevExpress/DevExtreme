@@ -1,9 +1,10 @@
-import $ from '@js/core/renderer';
 import { getPublicElement } from '@js/core/element';
+import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
 import ContextMenu from '@js/ui/context_menu';
-import modules from '../modules';
+
+import modules from '../m_modules';
 
 const CONTEXT_MENU = 'dx-context-menu';
 

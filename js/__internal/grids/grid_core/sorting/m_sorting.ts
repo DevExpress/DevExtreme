@@ -1,11 +1,12 @@
 import $ from '@js/core/renderer';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as clickEventName } from '@js/events/click';
-import { isDefined } from '@js/core/utils/type';
 import { extend } from '@js/core/utils/extend';
-import sortingMixin from '@js/ui/grid_core/ui.grid_core.sorting_mixin';
-import messageLocalization from '@js/localization/message';
+import { isDefined } from '@js/core/utils/type';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
+import messageLocalization from '@js/localization/message';
+
+import sortingMixin from './m_sorting_mixin';
 
 const COLUMN_HEADERS_VIEW_NAMESPACE = 'dxDataGridColumnHeadersView';
 

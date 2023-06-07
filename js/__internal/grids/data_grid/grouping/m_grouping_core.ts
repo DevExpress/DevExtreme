@@ -1,9 +1,10 @@
-import $ from '@js/core/renderer';
 import Class from '@js/core/class';
+import $ from '@js/core/renderer';
+import { when } from '@js/core/utils/deferred';
 // @ts-expect-error
 import { normalizeSortingInfo } from '@js/data/utils';
-import { when } from '@js/core/utils/deferred';
-import gridCore from '../module_core';
+
+import gridCore from '../m_core';
 
 export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly?) {
   const groups = normalizeSortingInfo(storeLoadOptions.group);

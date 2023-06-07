@@ -1,12 +1,13 @@
-import { setWidth } from '@js/core/utils/size';
-import $ from '@js/core/renderer';
 import Class from '@js/core/class';
+import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
+import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
-import { isDefined } from '@js/core/utils/type';
+import { setWidth } from '@js/core/utils/size';
 import { setStyle } from '@js/core/utils/style';
-import domAdapter from '@js/core/dom_adapter';
+import { isDefined } from '@js/core/utils/type';
+
 // TODO: Move this function to the __internal scope
 import { getMemoizeScrollTo } from '../../../../renovation/ui/common/utils/scroll/getMemoizeScrollTo';
 
