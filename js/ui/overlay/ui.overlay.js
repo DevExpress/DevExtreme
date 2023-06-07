@@ -3,6 +3,13 @@ import fx from '../../animation/fx';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
 import domAdapter from '../../core/dom_adapter';
+import {
+    visualViewportEventMap,
+    hasVisualViewport,
+    getVisualViewportSizes,
+    subscribeOnVisualViewportEvent,
+} from '../../core/utils/visual_viewport';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
 import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
 import { EmptyTemplate } from '../../core/templates/empty_template';
@@ -400,6 +407,125 @@ const Overlay = Widget.inherit({
             .addClass(classNames);
 
         this._customWrapperClass = classNames;
+    },
+
+    _isVisualContainerWindow() {
+        if(!hasWindow()) {
+            return false;
+        }
+
+        const $visualContainer = this._positionController.$visualContainer;
+        const isVisualContainerWindow = isWindow($visualContainer.get(0));
+
+        return isVisualContainerWindow;
+    },
+
+    _shouldUseVisualViewport() {
+        const isVisualContainerWindow = this._isVisualContainerWindow();
+        const isVisualViewportAvailable = hasVisualViewport();
+
+        const device = devices.real();
+        const isIOS = device.platform === 'ios';
+
+        const shouldUseVisualViewport = isIOS && isVisualContainerWindow && isVisualViewportAvailable;
+
+        return shouldUseVisualViewport;
+    },
+
+    _isVirtualKeyboardOpen() {
+        const shouldUseVisualViewport = this._shouldUseVisualViewport();
+
+        if(!shouldUseVisualViewport) {
+            return false;
+        }
+
+        const windowInnerHeight = window.innerHeight;
+        const { height: visualViewportHeight } = getVisualViewportSizes();
+
+        const isOpen = windowInnerHeight > visualViewportHeight;
+
+        return isOpen;
+    },
+
+    _visualViewportEventHandler() {
+        const pendingUpdate = this._pendingUpdate;
+
+        if(pendingUpdate) {
+            cancelAnimationFrame(this._resizeAnimationFrameId);
+        }
+
+        this._pendingUpdate = true;
+
+        const { visible } = this.option();
+
+        if(visible) {
+            this._resizeAnimationFrameId = requestAnimationFrame(() => {
+                this._pendingUpdate = false;
+
+                const isCurrentVisible = this._currentVisible;
+
+                if(isCurrentVisible) {
+                    this._renderGeometry();
+                } else {
+                    this._renderVisibilityAnimate(true);
+                }
+            });
+        }
+    },
+
+    _subscribeOnVisualViewportResize() {
+        const event = visualViewportEventMap.resize;
+        // We can use different callbacks
+        const callback = this._visualViewportEventHandler.bind(this);
+
+        this._unSubscribeCallbacks[event] = subscribeOnVisualViewportEvent(event, callback);
+    },
+
+    _subscribeOnVisualViewportScroll() {
+        const event = visualViewportEventMap.scroll;
+        // We can use different callbacks
+        const callback = this._visualViewportEventHandler.bind(this);
+
+        this._unSubscribeCallbacks[event] = subscribeOnVisualViewportEvent(event, callback);
+    },
+
+    _toggleVisualViewportResizeSubscription(subscribe) {
+        if(subscribe) {
+            this._subscribeOnVisualViewportResize();
+
+            return;
+        }
+
+        this._unSubscribeCallbacks[visualViewportEventMap.resize]();
+        this._unSubscribeCallbacks[visualViewportEventMap.resize] = null;
+    },
+
+    _toggleVisualViewportScrollSubscription(subscribe) {
+        if(subscribe) {
+            this._subscribeOnVisualViewportScroll();
+
+            return;
+        }
+
+        this._unSubscribeCallbacks[visualViewportEventMap.scroll]();
+        this._unSubscribeCallbacks[visualViewportEventMap.scroll] = null;
+    },
+
+    _toggleVisualViewportCallbacks(subscribe) {
+        const shouldUseVisualViewport = this._shouldUseVisualViewport();
+
+        if(!shouldUseVisualViewport) {
+            return false;
+        }
+
+        this._pendingUpdate = false;
+
+        if(subscribe && !this._unSubscribeCallbacks) {
+            this._unSubscribeCallbacks = {};
+        }
+
+        this._toggleVisualViewportResizeSubscription(subscribe);
+        this._toggleVisualViewportScrollSubscription(subscribe);
     },
 
     _renderVisibilityAnimate: function(visible) {
@@ -883,7 +1009,7 @@ const Overlay = Widget.inherit({
 
                 // NOTE: T1114344
                 if(this.option('templatesRenderAsynchronously')) {
-                    this._dimensionChanged();
+                    this._renderGeometryAsynchronously();
                 }
             }
         });
@@ -1102,6 +1228,10 @@ const Overlay = Widget.inherit({
         }
     },
 
+    _renderGeometryAsynchronously() {
+        this._renderGeometry();
+    },
+
     _dimensionChanged: function() {
         this._renderGeometry();
     },
@@ -1115,6 +1245,10 @@ const Overlay = Widget.inherit({
         this._renderVisibility(false);
         this._stopShowTimer();
         this._cleanFocusState();
+
+        this._pendingUpdate = null;
+        this._resizeAnimationFrameId = null;
+        this._unSubscribeCallbacks = null;
     },
 
     _stopShowTimer() {

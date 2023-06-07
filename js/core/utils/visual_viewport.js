@@ -48,9 +48,8 @@ const getVisualViewportSizes = () => {
     };
 };
 
-const subscribeOnVisualViewportEvent = (eventName, callback, options) => {
+const subscribeOnVisualViewportEvent = (event, callback, options) => {
     const visualViewport = getVisualViewport();
-    const event = visualViewportEventMap[eventName];
 
     const unSubscribeOnVisualViewportCallback = domAdapter.listen(visualViewport, event, callback, options);
 

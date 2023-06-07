@@ -871,6 +871,10 @@ const Popup = Overlay.inherit({
         }
     },
 
+    _renderGeometryAsynchronously() {
+        this._renderGeometry({ isDimensionChange: true });
+    },
+
     _dimensionChanged: function() {
         this._renderGeometry({ isDimensionChange: true });
     },
