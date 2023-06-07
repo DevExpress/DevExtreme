@@ -16,6 +16,18 @@ import Config from './config';
 const navigator = getNavigator();
 const window = getWindow();
 
+const DEVICE_TYPE = {
+    desktop: 'desktop',
+    tablet: 'tablet',
+    phone: 'phone',
+};
+
+const PLATFORM = {
+    generic: 'generic',
+    ios: 'ios',
+    android: 'android',
+};
+
 const KNOWN_UA_TABLE = {
     'iPhone': 'iPhone',
     'iPhone5': 'iPhone',
@@ -30,8 +42,8 @@ const KNOWN_UA_TABLE = {
 };
 
 const DEFAULT_DEVICE = {
-    deviceType: 'desktop',
-    platform: 'generic',
+    deviceType: DEVICE_TYPE.desktop,
+    platform: PLATFORM.generic,
     version: [],
     phone: false,
     tablet: false,
@@ -56,8 +68,8 @@ const uaParsers = {
         }
 
         return {
-            deviceType: isPhone ? 'phone' : isTablet ? 'tablet' : 'desktop',
-            platform: 'generic',
+            deviceType: isPhone ? DEVICE_TYPE.phone : isTablet ? DEVICE_TYPE.tablet : DEVICE_TYPE.desktop,
+            platform: PLATFORM.generic,
             version: [],
             grade: 'A',
             mac: isMac
@@ -76,8 +88,8 @@ const uaParsers = {
         const grade = isIPhone4 ? 'B' : 'A';
 
         return {
-            deviceType: isPhone ? 'phone' : 'tablet',
-            platform: 'ios',
+            deviceType: isPhone ? DEVICE_TYPE.phone : DEVICE_TYPE.tablet,
+            platform: PLATFORM.ios,
             version,
             grade
         };
@@ -95,8 +107,8 @@ const uaParsers = {
         const grade = worseThan4_4 ? 'B' : 'A';
 
         return {
-            deviceType: isPhone ? 'phone' : 'tablet',
-            platform: 'android',
+            deviceType: isPhone ? DEVICE_TYPE.phone : DEVICE_TYPE.tablet,
+            platform: PLATFORM.android,
             version,
             grade
         };
@@ -186,7 +198,7 @@ class Devices {
         // TODO: use real device here?
         if(device.deviceType) {
             result.push(`dx-device-${device.deviceType}`);
-            if(device.deviceType !== 'desktop') {
+            if(device.deviceType !== DEVICE_TYPE.desktop) {
                 result.push('dx-device-mobile');
             }
         }
@@ -233,8 +245,8 @@ class Devices {
     _getDevice(deviceName) {
         if(deviceName === 'genericPhone') {
             deviceName = {
-                deviceType: 'phone',
-                platform: 'generic',
+                deviceType: DEVICE_TYPE.phone,
+                platform: PLATFORM.generic,
                 generic: true
             };
         }
@@ -284,11 +296,11 @@ class Devices {
     _fromConfig(config) {
         const result = extend({}, DEFAULT_DEVICE, this._currentDevice, config);
         const shortcuts = {
-            phone: result.deviceType === 'phone',
-            tablet: result.deviceType === 'tablet',
-            android: result.platform === 'android',
-            ios: result.platform === 'ios',
-            generic: result.platform === 'generic'
+            phone: result.deviceType === DEVICE_TYPE.phone,
+            tablet: result.deviceType === DEVICE_TYPE.tablet,
+            android: result.platform === PLATFORM.android,
+            ios: result.platform === PLATFORM.ios,
+            generic: result.platform === PLATFORM.generic
         };
 
         return extend(result, shortcuts);

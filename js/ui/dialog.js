@@ -155,9 +155,16 @@ export const custom = function(options) {
         .addClass(DX_DIALOG_ROOT_CLASSNAME);
 
     function show() {
-        if(devices.real().deviceType === 'phone') {
-            const isPortrait = getHeight(window) > getWidth(window);
+        const isPhone = devices.real().deviceType === 'phone';
+
+        if(isPhone) {
+            const windowHeight = getHeight(window);
+            const windowWidth = getWidth(window);
+
+            const isPortrait = windowHeight > windowWidth;
+
             const width = isPortrait ? '90%' : '60%';
+
             popupInstance.option({ width });
         }
 
@@ -171,8 +178,8 @@ export const custom = function(options) {
     }
 
     return {
-        show: show,
-        hide: hide
+        show,
+        hide,
     };
 };
 
