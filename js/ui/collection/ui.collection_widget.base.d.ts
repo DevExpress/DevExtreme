@@ -21,10 +21,6 @@ import Widget, {
 
 export type ItemLike = string | CollectionWidgetItem | any;
 
-/**
- * @docid
- * @hidden
- */
 export interface SelectionChangedInfo<TItem extends ItemLike = any> {
     readonly addedItems: Array<TItem>;
     readonly removedItems: Array<TItem>;
