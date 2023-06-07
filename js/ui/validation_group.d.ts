@@ -29,13 +29,28 @@ export {
     ValidationStatus,
 };
 
-/** @public */
+/**
+ * @docid _ui_validation_group_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxValidationGroup>;
 
-/** @public */
+/**
+ * @docid _ui_validation_group_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxValidationGroup>;
 
-/** @public */
+/**
+ * @docid _ui_validation_group_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxValidationGroup> & ChangedOptionInfo;
 
 /**

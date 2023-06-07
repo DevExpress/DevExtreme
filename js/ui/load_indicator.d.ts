@@ -8,16 +8,36 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
-/** @public */
+/**
+ * @docid _ui_load_indicator_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxLoadIndicator>;
 
-/** @public */
+/**
+ * @docid _ui_load_indicator_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxLoadIndicator>;
 
-/** @public */
+/**
+ * @docid _ui_load_indicator_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxLoadIndicator>;
 
-/** @public */
+/**
+ * @docid _ui_load_indicator_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxLoadIndicator> & ChangedOptionInfo;
 
 /**

@@ -9,19 +9,44 @@ import {
     NativeEventInfo,
 } from '../events/index';
 
-/** @public */
+/**
+ * @docid _ui_recurrence_editor_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxRecurrenceEditor>;
 
-/** @public */
+/**
+ * @docid _ui_recurrence_editor_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxRecurrenceEditor>;
 
-/** @public */
+/**
+ * @docid _ui_recurrence_editor_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxRecurrenceEditor>;
 
-/** @public */
+/**
+ * @docid _ui_recurrence_editor_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxRecurrenceEditor> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_recurrence_editor_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxRecurrenceEditor, Event> & ValueChangedInfo;
 
 /**

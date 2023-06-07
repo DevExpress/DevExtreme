@@ -33,55 +33,135 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_ChangeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ChangeEvent = NativeEventInfo<dxDropDownBox, Event>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_ClosedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ClosedEvent = EventInfo<dxDropDownBox>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_CopyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CopyEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_CutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CutEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxDropDownBox>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_EnterKeyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type EnterKeyEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxDropDownBox>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_InputEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type InputEvent = NativeEventInfo<dxDropDownBox, UIEvent & { target: HTMLInputElement }>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_KeyDownEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyDownEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
 /** @public */
 export type KeyPressEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_KeyUpEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyUpEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_OpenedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type OpenedEvent = EventInfo<dxDropDownBox>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxDropDownBox> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_PasteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type PasteEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */

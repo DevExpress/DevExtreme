@@ -49,56 +49,153 @@ export type PivotGridRowHeaderLayout = 'standard' | 'tree';
 /** @public */
 export type PivotGridTotalDisplayMode = 'both' | 'columns' | 'none' | 'rows';
 
-/** @public */
+/**
+ * @docid _ui_pivot_grid_CellClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid, MouseEvent | PointerEvent> & {
+    /** @docid _ui_pivot_grid_CellClickEvent.area */
     readonly area?: string;
+    /** @docid _ui_pivot_grid_CellClickEvent.cellElement */
     readonly cellElement?: DxElement;
+    /**
+     * @docid _ui_pivot_grid_CellClickEvent.cell
+     * @type dxPivotGridPivotGridCell
+     */
     readonly cell?: Cell;
+    /** @docid _ui_pivot_grid_CellClickEvent.rowIndex */
     readonly rowIndex?: number;
+    /** @docid _ui_pivot_grid_CellClickEvent.columnIndex */
     readonly columnIndex?: number;
+    /**
+     * @docid _ui_pivot_grid_CellClickEvent.columnFields
+     * @type Array<PivotGridDataSourceOptions.fields>
+     */
     readonly columnFields?: Array<Field>;
+    /**
+     * @docid _ui_pivot_grid_CellClickEvent.rowFields
+     * @type Array<PivotGridDataSourceOptions.fields>
+     */
     readonly rowFields?: Array<Field>;
+    /**
+     * @docid _ui_pivot_grid_CellClickEvent.dataFields
+     * @type Array<PivotGridDataSourceOptions.fields>
+     */
     readonly dataFields?: Array<Field>;
 };
 
-/** @public */
+/**
+ * @docid _ui_pivot_grid_CellPreparedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type CellPreparedEvent = EventInfo<dxPivotGrid> & {
+    /** @docid _ui_pivot_grid_CellPreparedEvent.area */
     readonly area?: string;
+    /** @docid _ui_pivot_grid_CellPreparedEvent.cellElement */
     readonly cellElement?: DxElement;
+    /**
+     * @docid _ui_pivot_grid_CellPreparedEvent.cell
+     * @type dxPivotGridPivotGridCell
+     */
     readonly cell?: Cell;
+    /** @docid _ui_pivot_grid_CellPreparedEvent.rowIndex */
     readonly rowIndex?: number;
+    /** @docid _ui_pivot_grid_CellPreparedEvent.columnIndex */
     readonly columnIndex?: number;
 };
 
-/** @public */
+/**
+ * @docid _ui_pivot_grid_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxPivotGrid>;
 
-/** @public */
+/**
+ * @docid _ui_pivot_grid_ContextMenuPreparingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContextMenuPreparingEvent = EventInfo<dxPivotGrid> & {
+    /** @docid _ui_pivot_grid_ContextMenuPreparingEvent.area */
     readonly area?: string;
+    /**
+     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.cell
+     * @type dxPivotGridPivotGridCell
+     */
     readonly cell?: Cell;
+    /** @docid _ui_pivot_grid_ContextMenuPreparingEvent.cellElement */
     readonly cellElement?: DxElement;
+    /** @docid _ui_pivot_grid_ContextMenuPreparingEvent.columnIndex */
     readonly columnIndex?: number;
+    /** @docid _ui_pivot_grid_ContextMenuPreparingEvent.rowIndex */
     readonly rowIndex?: number;
+    /**
+     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.dataFields
+     * @type Array<PivotGridDataSourceOptions.fields>
+     */
     readonly dataFields?: Array<Field>;
+    /**
+     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.rowFields
+     * @type Array<PivotGridDataSourceOptions.fields>
+     */
     readonly rowFields?: Array<Field>;
+    /**
+     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.columnFields
+     * @type Array<PivotGridDataSourceOptions.fields>
+     */
     readonly columnFields?: Array<Field>;
+    /**
+     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.field
+     * @type PivotGridDataSourceOptions.fields
+     */
     readonly field?: Field;
+    /**
+     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.items
+     * @type Array<Object>
+     */
     items?: Array<any>;
 };
 
-/** @public */
+/**
+ * @docid _ui_pivot_grid_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxPivotGrid>;
 
-/** @public */
+/**
+ * @docid _ui_pivot_grid_ExportingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type ExportingEvent = Cancelable & EventInfo<dxPivotGrid> & {
+    /** @docid _ui_pivot_grid_ExportingEvent.fileName */
     fileName?: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_pivot_grid_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxPivotGrid>;
 
-/** @public */
+/**
+ * @docid _ui_pivot_grid_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxPivotGrid> & ChangedOptionInfo;
 
 /**

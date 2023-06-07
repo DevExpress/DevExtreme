@@ -52,45 +52,111 @@ export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
 /** @public */
 export type TreeViewExpandEvent = 'dblclick' | 'click';
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent<TKey = any> = InitializedEventInfo<dxTreeView<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemClickEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemCollapsedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemContextMenuEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemExpandedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemExpandedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemHoldEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemHoldEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemRenderedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ItemInfo
+ */
 export type ItemRenderedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemSelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ItemInfo
+ */
 export type ItemSelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_SelectAllValueChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type SelectAllValueChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & {
+    /** @docid _ui_tree_view_SelectAllValueChangedEvent.value */
     readonly value?: boolean | undefined;
 };
 
-/** @public */
+/**
+ * @docid _ui_tree_view_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type SelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
 /**

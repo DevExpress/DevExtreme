@@ -42,16 +42,36 @@ export type WeekNumberRule = 'auto' | 'firstDay' | 'fullWeek' | 'firstFourDays';
 /** @public */
 export type ContentReadyEvent = EventInfo<dxCalendar>;
 
-/** @public */
+/**
+ * @docid _ui_calendar_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxCalendar>;
 
-/** @public */
+/**
+ * @docid _ui_calendar_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxCalendar>;
 
-/** @public */
+/**
+ * @docid _ui_calendar_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxCalendar> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_calendar_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxCalendar, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /** @public */

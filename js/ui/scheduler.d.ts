@@ -71,49 +71,124 @@ export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentAddedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentAddedEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /** @docid _ui_scheduler_AppointmentAddedEvent.error */
   readonly error?: Error;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentAddingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentAddingEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /**
+   * @docid _ui_scheduler_AppointmentAddingEvent.cancel
+   * @type Boolean|Promise<Boolean>
+   */
   cancel: boolean | PromiseLike<boolean>;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,TargetedAppointmentInfo
+ */
 export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardEvent | MouseEvent | PointerEvent> & TargetedAppointmentInfo & {
+  /** @docid _ui_scheduler_AppointmentClickEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentContextMenuEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,TargetedAppointmentInfo
+ */
 export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & TargetedAppointmentInfo & {
+  /** @docid _ui_scheduler_AppointmentContextMenuEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentDblClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,TargetedAppointmentInfo
+ */
 export type AppointmentDblClickEvent = Cancelable & NativeEventInfo<dxScheduler, MouseEvent | PointerEvent> & TargetedAppointmentInfo & {
+  /** @docid _ui_scheduler_AppointmentDblClickEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentDeletedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentDeletedEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentDeletedEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /** @docid _ui_scheduler_AppointmentDeletedEvent.error */
   readonly error?: Error;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentDeletingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentDeletingEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentDeletingEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /**
+   * @docid _ui_scheduler_AppointmentDeletingEvent.cancel
+   * @type Boolean|Promise<Boolean>
+   */
   cancel: boolean | PromiseLike<boolean>;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentFormOpeningEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentFormOpeningEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData?: Appointment;
+  /** @docid _ui_scheduler_AppointmentFormOpeningEvent.form */
   readonly form: dxForm;
+  /** @docid _ui_scheduler_AppointmentFormOpeningEvent.popup */
   readonly popup: dxPopup;
 };
 
@@ -127,52 +202,135 @@ export type AppointmentTooltipShowingAppointmentInfo = {
   readonly color: PromiseLike<string>;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentTooltipShowingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type AppointmentTooltipShowingEvent = Cancelable & EventInfo<dxScheduler> & {
+  /** @docid _ui_scheduler_AppointmentTooltipShowingEvent.targetElement */
   readonly targetElement: DxElement;
+  /**
+   * @docid _ui_scheduler_AppointmentTooltipShowingEvent.appointments
+   * @type Array<object>
+   */
   readonly appointments: AppointmentTooltipShowingAppointmentInfo[];
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentRenderedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,TargetedAppointmentInfo
+ */
 export type AppointmentRenderedEvent = EventInfo<dxScheduler> & TargetedAppointmentInfo & {
+  /** @docid _ui_scheduler_AppointmentRenderedEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentUpdatedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentUpdatedEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /** @docid _ui_scheduler_AppointmentUpdatedEvent.error */
   readonly error?: Error;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentUpdatingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentUpdatingEvent.oldData
+   * @type Object
+   */
   readonly oldData: any;
+  /**
+   * @docid _ui_scheduler_AppointmentUpdatingEvent.newData
+   * @type Object
+   */
   readonly newData: any;
+  /**
+   * @docid _ui_scheduler_AppointmentUpdatingEvent.cancel
+   * @type Boolean|Promise<Boolean>
+   */
   cancel?: boolean | PromiseLike<boolean>;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_CellClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardEvent | MouseEvent | PointerEvent> & {
+  /**
+   * @docid _ui_scheduler_CellClickEvent.cellData
+   * @type object
+   */
   readonly cellData: any;
+  /** @docid _ui_scheduler_CellClickEvent.cellElement */
   readonly cellElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_CellContextMenuEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CellContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & {
+  /**
+   * @docid _ui_scheduler_CellContextMenuEvent.cellData
+   * @type object
+   */
   readonly cellData: any;
+  /** @docid _ui_scheduler_CellContextMenuEvent.cellElement */
   readonly cellElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxScheduler>;
 
-/** @public */
+/**
+ * @docid _ui_scheduler_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxScheduler>;
 
-/** @public */
+/**
+ * @docid _ui_scheduler_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxScheduler>;
 
-/** @public */
+/**
+ * @docid _ui_scheduler_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxScheduler> & ChangedOptionInfo;
 
 /** @public */

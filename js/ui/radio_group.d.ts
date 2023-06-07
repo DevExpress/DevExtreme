@@ -24,19 +24,44 @@ export {
     Orientation,
 };
 
-/** @public */
+/**
+ * @docid _ui_radio_group_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxRadioGroup>;
 
-/** @public */
+/**
+ * @docid _ui_radio_group_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxRadioGroup>;
 
-/** @public */
+/**
+ * @docid _ui_radio_group_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxRadioGroup>;
 
-/** @public */
+/**
+ * @docid _ui_radio_group_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxRadioGroup> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_radio_group_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxRadioGroup, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /**

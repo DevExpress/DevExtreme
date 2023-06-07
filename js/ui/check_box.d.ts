@@ -10,19 +10,44 @@ import Editor, {
     ValueChangedInfo,
 } from './editor/editor';
 
-/** @public */
+/**
+ * @docid _ui_check_box_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxCheckBox>;
 
-/** @public */
+/**
+ * @docid _ui_check_box_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxCheckBox>;
 
-/** @public */
+/**
+ * @docid _ui_check_box_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxCheckBox>;
 
-/** @public */
+/**
+ * @docid _ui_check_box_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxCheckBox> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_check_box_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxCheckBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /**

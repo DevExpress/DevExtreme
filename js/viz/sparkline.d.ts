@@ -27,34 +27,84 @@ export {
 /** @public */
 export type SparklineType = 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
 
-/** @public */
+/**
+ * @docid _viz_sparkline_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxSparkline>;
 
-/** @public */
+/**
+ * @docid _viz_sparkline_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxSparkline>;
 
-/** @public */
+/**
+ * @docid _viz_sparkline_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxSparkline>;
 
-/** @public */
+/**
+ * @docid _viz_sparkline_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxSparkline> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_sparkline_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxSparkline>;
 
-/** @public */
+/**
+ * @docid _viz_sparkline_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxSparkline> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_sparkline_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxSparkline>;
 
-/** @public */
+/**
+ * @docid _viz_sparkline_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxSparkline> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_sparkline_TooltipHiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TooltipHiddenEvent = EventInfo<dxSparkline>;
 
-/** @public */
+/**
+ * @docid _viz_sparkline_TooltipShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TooltipShownEvent = EventInfo<dxSparkline>;
 
 /**

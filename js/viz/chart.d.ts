@@ -135,85 +135,210 @@ export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
 /** @public */
 export type FinancialChartReductionLevel = 'close' | 'high' | 'low' | 'open';
 
-/** @public */
+/**
+ * @docid _viz_chart_ArgumentAxisClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
+    /** @docid _viz_chart_ArgumentAxisClickEvent.argument */
     readonly argument: Date | number | string;
 };
 
-/** @public */
+/**
+ * @docid _viz_chart_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_DoneEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DoneEvent = EventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxChart> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxChart> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_LegendClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type LegendClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
+    /** @docid _viz_chart_LegendClickEvent.target */
     readonly target: chartSeriesObject;
 };
 
-/** @public */
+/**
+ * @docid _viz_chart_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxChart> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_PointClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,PointInteractionInfo
+ */
 export type PointClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_PointHoverChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,PointInteractionInfo
+ */
 export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_PointSelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,PointInteractionInfo
+ */
 export type PointSelectionChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_SeriesClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type SeriesClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
+    /** @docid _viz_chart_SeriesClickEvent.target */
     readonly target: chartSeriesObject;
 };
 
-/** @public */
+/**
+ * @docid _viz_chart_SeriesHoverChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SeriesInteractionInfo
+ */
 export type SeriesHoverChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_SeriesSelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SeriesInteractionInfo
+ */
 export type SeriesSelectionChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_TooltipHiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_TooltipShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_ZoomEndEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
+    /** @docid _viz_chart_ZoomEndEvent.rangeStart */
     readonly rangeStart: Date | number;
+    /** @docid _viz_chart_ZoomEndEvent.rangeEnd */
     readonly rangeEnd: Date | number;
+    /** @docid _viz_chart_ZoomEndEvent.axis */
     readonly axis: chartAxisObject;
+    /** @docid _viz_chart_ZoomEndEvent.range */
     readonly range: VisualRange;
+    /** @docid _viz_chart_ZoomEndEvent.previousRange */
     readonly previousRange: VisualRange;
+    /**
+     * @docid _viz_chart_ZoomEndEvent.actionType
+     * @type Enums.ZoomPanAction
+     */
     readonly actionType: ZoomPanAction;
+    /** @docid _viz_chart_ZoomEndEvent.zoomFactor */
     readonly zoomFactor: number;
+    /** @docid _viz_chart_ZoomEndEvent.shift */
     readonly shift: number;
 };
 
-/** @public */
+/**
+ * @docid _viz_chart_ZoomStartEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
+    /** @docid _viz_chart_ZoomStartEvent.axis */
     readonly axis: chartAxisObject;
+    /** @docid _viz_chart_ZoomStartEvent.range */
     readonly range: VisualRange;
+    /**
+     * @docid _viz_chart_ZoomStartEvent.actionType
+     * @type Enums.ZoomPanAction
+     */
     readonly actionType?: ZoomPanAction;
 };
 

@@ -33,34 +33,84 @@ export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
 /** @public */
 export type CircularGaugeLabelOverlap = 'first' | 'last';
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxCircularGauge>;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxCircularGauge>;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxCircularGauge>;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxCircularGauge> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxCircularGauge>;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxCircularGauge> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxCircularGauge>;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxCircularGauge> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_TooltipHiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TooltipHiddenEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_TooltipShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
 /**

@@ -9,28 +9,68 @@ import dxPopover, {
     dxPopoverOptions,
 } from './popover';
 
-/** @public */
+/**
+ * @docid _ui_tooltip_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_HidingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type HidingEvent = Cancelable & EventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_HiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type HiddenEvent = EventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxTooltip> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_ShowingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type ShowingEvent = Cancelable & EventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_ShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ShownEvent = EventInfo<dxTooltip>;
 
 /**

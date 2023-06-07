@@ -46,29 +46,70 @@ export {
 /** @public */
 export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
 
-/** @public */
+/**
+ * @docid _viz_sankey_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxSankey>;
 
-/** @public */
+/**
+ * @docid _viz_sankey_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxSankey>;
 
-/** @public */
+/**
+ * @docid _viz_sankey_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxSankey>;
 
-/** @public */
+/**
+ * @docid _viz_sankey_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxSankey> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_sankey_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxSankey>;
 
-/** @public */
+/**
+ * @docid _viz_sankey_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxSankey> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_sankey_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxSankey>;
 
-/** @public */
+/**
+ * @docid _viz_sankey_LinkClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type LinkClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
+    /** @docid _viz_sankey_LinkClickEvent.target */
     readonly target: dxSankeyLink;
 };
 /**
@@ -81,8 +122,14 @@ export type LinkHoverEvent = EventInfo<dxSankey> & {
     /** @docid _viz_sankey_LinkHoverEvent.target */
     readonly target: dxSankeyLink;
 };
-/** @public */
+/**
+ * @docid _viz_sankey_NodeClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type NodeClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
+    /** @docid _viz_sankey_NodeClickEvent.target */
     readonly target: dxSankeyNode;
 };
 /**
@@ -96,7 +143,12 @@ export type NodeHoverEvent = EventInfo<dxSankey> & {
     readonly target: dxSankeyNode;
 };
 
-/** @public */
+/**
+ * @docid _viz_sankey_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
 
 /**

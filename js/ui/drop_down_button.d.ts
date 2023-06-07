@@ -40,32 +40,84 @@ export {
     ButtonStyle,
 };
 
-/** @public */
+/**
+ * @docid _ui_drop_down_button_ButtonClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ButtonClickEvent = NativeEventInfo<dxDropDownButton, KeyboardEvent | MouseEvent | PointerEvent> & {
+    /**
+     * @docid _ui_drop_down_button_ButtonClickEvent.selectedItem
+     * @type object
+     */
     readonly selectedItem?: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_drop_down_button_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxDropDownButton>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_button_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxDropDownButton>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_button_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxDropDownButton>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_button_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ItemClickEvent = NativeEventInfo<dxDropDownButton, KeyboardEvent | MouseEvent | PointerEvent> & {
+    /**
+     * @docid _ui_drop_down_button_ItemClickEvent.itemData
+     * @type object
+     */
     readonly itemData?: any;
+    /** @docid _ui_drop_down_button_ItemClickEvent.itemElement */
     readonly itemElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_drop_down_button_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxDropDownButton> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_button_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type SelectionChangedEvent = EventInfo<dxDropDownButton> & {
+    /**
+     * @docid _ui_drop_down_button_SelectionChangedEvent.item
+     * @type object
+     */
     readonly item: any;
+    /**
+     * @docid _ui_drop_down_button_SelectionChangedEvent.previousItem
+     * @type object
+     */
     readonly previousItem: any;
 };
 

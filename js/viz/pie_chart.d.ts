@@ -84,52 +84,132 @@ export type PieChartType = 'donut' | 'doughnut' | 'pie';
 /** @public */
 export type SmallValuesGroupingMode = 'none' | 'smallValueThreshold' | 'topN';
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxPieChart>;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_DoneEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DoneEvent = EventInfo<dxPieChart>;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxPieChart>;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxPieChart>;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxPieChart> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxPieChart>;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxPieChart> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxPieChart>;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_LegendClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type LegendClickEvent = NativeEventInfo<dxPieChart, MouseEvent | PointerEvent> & {
+  /** @docid _viz_pie_chart_LegendClickEvent.target */
   readonly target: string | number;
+  /**
+   * @docid _viz_pie_chart_LegendClickEvent.points
+   * @type Array<piePointObject>
+   */
   readonly points: Array<piePointObject>;
 };
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxPieChart> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_PointClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,PointInteractionInfo
+ */
 export type PointClickEvent = NativeEventInfo<dxPieChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_PointHoverChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,PointInteractionInfo
+ */
 export type PointHoverChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_PointSelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,PointInteractionInfo
+ */
 export type PointSelectionChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_TooltipHiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TooltipHiddenEvent = EventInfo<dxPieChart> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_pie_chart_TooltipShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo;
 
 /**

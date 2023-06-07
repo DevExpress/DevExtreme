@@ -28,21 +28,50 @@ export {
     ButtonStyle,
 };
 
-/** @public */
+/**
+ * @docid _ui_button_ClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ClickEvent = NativeEventInfo<dxButton, KeyboardEvent | MouseEvent | PointerEvent> & {
+    /**
+     * @docid _ui_button_ClickEvent.validationGroup
+     * @type object
+     */
     validationGroup?: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_button_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxButton>;
 
-/** @public */
+/**
+ * @docid _ui_button_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxButton>;
 
-/** @public */
+/**
+ * @docid _ui_button_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxButton>;
 
-/** @public */
+/**
+ * @docid _ui_button_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxButton> & ChangedOptionInfo;
 
 /** @public */

@@ -13,23 +13,50 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
-/** @public */
+/**
+ * @docid _ui_speed_dial_action_ClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ClickEvent = NativeEventInfo<dxSpeedDialAction, MouseEvent | PointerEvent> & {
+    /** @docid _ui_speed_dial_action_ClickEvent.actionElement */
     actionElement?: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_speed_dial_action_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxSpeedDialAction> & {
+    /** @docid _ui_speed_dial_action_ContentReadyEvent.actionElement */
     actionElement?: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_speed_dial_action_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxSpeedDialAction>;
 
-/** @public */
+/**
+ * @docid _ui_speed_dial_action_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxSpeedDialAction>;
 
-/** @public */
+/**
+ * @docid _ui_speed_dial_action_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxSpeedDialAction> & ChangedOptionInfo;
 
 /**

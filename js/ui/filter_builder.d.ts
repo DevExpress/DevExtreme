@@ -39,52 +39,121 @@ export type FilterBuilderOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'con
 /** @public */
 export type GroupOperation = 'and' | 'or' | 'notAnd' | 'notOr';
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxFilterBuilder>;
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_EditorPreparedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
+    /** @docid _ui_filter_builder_EditorPreparedEvent.value */
     readonly value?: any;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.setValue */
     readonly setValue: any;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.editorElement */
     readonly editorElement: DxElement;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.editorName */
     readonly editorName: string;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.dataField */
     readonly dataField?: string;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.filterOperation */
     readonly filterOperation?: string;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.updateValueTimeout */
     readonly updateValueTimeout?: number;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.width */
     readonly width?: number;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.readOnly */
     readonly readOnly: boolean;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.disabled */
     readonly disabled: boolean;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.rtlEnabled */
     readonly rtlEnabled: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_EditorPreparingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type EditorPreparingEvent = Cancelable & EventInfo<dxFilterBuilder> & {
+    /** @docid _ui_filter_builder_EditorPreparingEvent.value */
     readonly value?: any;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.setValue */
     readonly setValue: any;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.editorElement */
     readonly editorElement?: DxElement;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.editorName */
     editorName: string;
+    /**
+     * @docid _ui_filter_builder_EditorPreparingEvent.editorOptions
+     * @type object
+     */
     editorOptions?: any;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.dataField */
     readonly dataField?: string;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.filterOperation */
     readonly filterOperation?: string;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.updateValueTimeout */
     updateValueTimeout?: number;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.width */
     readonly width?: number;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.readOnly */
     readonly readOnly: boolean;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.disabled */
     readonly disabled: boolean;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.rtlEnabled */
     readonly rtlEnabled: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxFilterBuilder>;
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxFilterBuilder> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ValueChangedEvent = EventInfo<dxFilterBuilder> & {
+    /**
+     * @docid _ui_filter_builder_ValueChangedEvent.value
+     * @type object
+     */
     readonly value?: any;
+    /**
+     * @docid _ui_filter_builder_ValueChangedEvent.previousValue
+     * @type object
+     */
     readonly previousValue?: any;
 };
 

@@ -62,33 +62,80 @@ export type AxisScale = 'continuous' | 'discrete' | 'logarithmic' | 'semidiscret
 /** @public */
 export type ChartAxisScale = 'continuous' | 'logarithmic';
 
-/** @public */
+/**
+ * @docid _viz_range_selector_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxRangeSelector>;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxRangeSelector>;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxRangeSelector>;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxRangeSelector> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxRangeSelector>;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxRangeSelector> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxRangeSelector>;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxRangeSelector> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxRangeSelector, MouseEvent | TouchEvent> & {
+  /** @docid _viz_range_selector_ValueChangedEvent.value */
   readonly value: Array<number | string | Date>;
+  /** @docid _viz_range_selector_ValueChangedEvent.previousValue */
   readonly previousValue: Array<number | string | Date>;
 };
 

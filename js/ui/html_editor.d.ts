@@ -53,25 +53,60 @@ export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 
 /** @public */
 export type MarkupType = 'html' | 'markdown';
 
-/** @public */
+/**
+ * @docid _ui_html_editor_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxHtmlEditor>;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxHtmlEditor, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxHtmlEditor, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxHtmlEditor>;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxHtmlEditor> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxHtmlEditor, KeyboardEvent | ClipboardEvent | Event> & ValueChangedInfo;
 
 /** @public */

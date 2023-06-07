@@ -28,13 +28,28 @@ export type PanelLocation = 'left' | 'right' | 'top' | 'bottom' | 'before' | 'af
 /** @public */
 export type RevealMode = 'slide' | 'expand';
 
-/** @public */
+/**
+ * @docid _ui_drawer_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxDrawer>;
 
-/** @public */
+/**
+ * @docid _ui_drawer_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxDrawer>;
 
-/** @public */
+/**
+ * @docid _ui_drawer_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxDrawer> & ChangedOptionInfo;
 
 /**

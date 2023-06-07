@@ -24,22 +24,52 @@ export interface ResizeInfo {
     readonly height: number;
 }
 
-/** @public */
+/**
+ * @docid _ui_resizable_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxResizable>;
 
-/** @public */
+/**
+ * @docid _ui_resizable_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxResizable>;
 
-/** @public */
+/**
+ * @docid _ui_resizable_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxResizable> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_resizable_ResizeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ResizeInfo
+ */
 export type ResizeEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
-/** @public */
+/**
+ * @docid _ui_resizable_ResizeStartEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ResizeInfo
+ */
 export type ResizeStartEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
-/** @public */
+/**
+ * @docid _ui_resizable_ResizeEndEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ResizeInfo
+ */
 export type ResizeEndEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
 /**

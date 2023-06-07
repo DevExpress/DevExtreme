@@ -94,34 +94,84 @@ export interface TooltipInfo {
     target?: any;
 }
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxBarGauge>;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxBarGauge>;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxBarGauge>;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxBarGauge> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxBarGauge>;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxBarGauge> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxBarGauge>;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxBarGauge> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_TooltipHiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TooltipHiddenEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_TooltipShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
 /**

@@ -10,19 +10,44 @@ import Editor, {
     EditorOptions,
 } from './editor/editor';
 
-/** @public */
+/**
+ * @docid _ui_switch_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxSwitch>;
 
-/** @public */
+/**
+ * @docid _ui_switch_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxSwitch>;
 
-/** @public */
+/**
+ * @docid _ui_switch_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxSwitch>;
 
-/** @public */
+/**
+ * @docid _ui_switch_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_switch_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxSwitch, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
 
 /**

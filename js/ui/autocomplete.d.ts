@@ -23,64 +23,159 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_ChangeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ChangeEvent = NativeEventInfo<dxAutocomplete, Event>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_ClosedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ClosedEvent = EventInfo<dxAutocomplete>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxAutocomplete>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_CopyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CopyEvent = NativeEventInfo<dxAutocomplete, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_CutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CutEvent = NativeEventInfo<dxAutocomplete, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxAutocomplete>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_EnterKeyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type EnterKeyEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxAutocomplete, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxAutocomplete, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxAutocomplete>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_InputEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type InputEvent = NativeEventInfo<dxAutocomplete, UIEvent & { target: HTMLInputElement }>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemClickEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_KeyDownEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyDownEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent>;
 
 /** @public */
 export type KeyPressEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_KeyUpEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyUpEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_OpenedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type OpenedEvent = EventInfo<dxAutocomplete>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxAutocomplete> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_PasteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type PasteEvent = NativeEventInfo<dxAutocomplete, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SelectionChangedInfo
+ */
 export type SelectionChangedEvent = EventInfo<dxAutocomplete> & SelectionChangedInfo;
 
-/** @public */
+/**
+ * @docid _ui_autocomplete_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */

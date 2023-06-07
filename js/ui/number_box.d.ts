@@ -23,52 +23,127 @@ export type NumberBoxPredefinedButton = 'clear' | 'spins';
 /** @public */
 export type NumberBoxType = 'number' | 'text' | 'tel';
 
-/** @public */
+/**
+ * @docid _ui_number_box_ChangeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ChangeEvent = NativeEventInfo<dxNumberBox, Event>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxNumberBox>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_CopyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CopyEvent = NativeEventInfo<dxNumberBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_CutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CutEvent = NativeEventInfo<dxNumberBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxNumberBox>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_EnterKeyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type EnterKeyEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxNumberBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxNumberBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxNumberBox>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_InputEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type InputEvent = NativeEventInfo<dxNumberBox, UIEvent & { target: HTMLInputElement }>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_KeyDownEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyDownEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
 
 /** @public */
 export type KeyPressEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_KeyUpEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyUpEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxNumberBox> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_number_box_PasteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type PasteEvent = NativeEventInfo<dxNumberBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_number_box_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxNumberBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /**

@@ -57,184 +57,426 @@ export type GanttRenderScaleType = 'minutes' | 'hours' | 'sixHours' | 'days' | '
 export type GanttScaleType = 'auto' | 'minutes' | 'hours' | 'sixHours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
 export type GanttTaskTitlePosition = 'inside' | 'outside' | 'none';
 
-/** @public */
+/**
+ * @docid _ui_gantt_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxGantt>;
 
-/** @public */
+/**
+ * @docid _ui_gantt_ContextMenuPreparingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable
+ */
 export type ContextMenuPreparingEvent = Cancelable & {
+    /**
+     * @docid _ui_gantt_ContextMenuPreparingEvent.component
+     * @type this
+     * @default Widget
+     */
     readonly component?: dxGantt;
+    /** @docid _ui_gantt_ContextMenuPreparingEvent.element */
     readonly element?: DxElement;
+    /**
+     * @docid _ui_gantt_ContextMenuPreparingEvent.event
+     * @type event
+     */
     readonly event?: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
+    /** @docid _ui_gantt_ContextMenuPreparingEvent.targetKey */
     readonly targetKey?: any;
+    /** @docid _ui_gantt_ContextMenuPreparingEvent.targetType */
     readonly targetType?: string;
+    /** @docid _ui_gantt_ContextMenuPreparingEvent.data */
     readonly data?: any;
+    /**
+     * @docid _ui_gantt_ContextMenuPreparingEvent.items
+     * @type Array<object>
+     */
     readonly items?: Array<any>;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_CustomCommandEvent
+ * @public
+ * @type object
+ */
 export type CustomCommandEvent = {
+    /**
+     * @docid _ui_gantt_CustomCommandEvent.component
+     * @type this
+     * @default Widget
+     */
     readonly component?: dxGantt;
+    /** @docid _ui_gantt_CustomCommandEvent.element */
     readonly element?: DxElement;
+    /** @docid _ui_gantt_CustomCommandEvent.name */
     readonly name: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_DependencyDeletedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DependencyDeletedEvent = EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_DependencyDeletedEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_DependencyDeletedEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_DependencyDeletingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type DependencyDeletingEvent = Cancelable & EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_DependencyDeletingEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_DependencyDeletingEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_DependencyInsertedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DependencyInsertedEvent = EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_DependencyInsertedEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_DependencyInsertedEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_DependencyInsertingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type DependencyInsertingEvent = Cancelable & EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_DependencyInsertingEvent.values */
     readonly values: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxGantt>;
 
-/** @public */
+/**
+ * @docid _ui_gantt_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxGantt>;
 
-/** @public */
+/**
+ * @docid _ui_gantt_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxGantt> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_gantt_ResourceAssignedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ResourceAssignedEvent = EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_ResourceAssignedEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_ResourceAssignedEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_ResourceAssigningEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type ResourceAssigningEvent = Cancelable & EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_ResourceAssigningEvent.values */
     readonly values: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_ResourceDeletedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ResourceDeletedEvent = EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_ResourceDeletedEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_ResourceDeletedEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_ResourceDeletingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type ResourceDeletingEvent = Cancelable & EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_ResourceDeletingEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_ResourceDeletingEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_ResourceInsertedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ResourceInsertedEvent = EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_ResourceInsertedEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_ResourceInsertedEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_ResourceInsertingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type ResourceInsertingEvent = Cancelable & EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_ResourceInsertingEvent.values */
     readonly values: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_ResourceUnassignedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ResourceUnassignedEvent = EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_ResourceUnassignedEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_ResourceUnassignedEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_ResourceUnassigningEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type ResourceUnassigningEvent = Cancelable & EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_ResourceUnassigningEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_ResourceUnassigningEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type SelectionChangedEvent = EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_SelectionChangedEvent.selectedRowKey */
     readonly selectedRowKey?: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_TaskClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type TaskClickEvent = NativeEventInfo<dxGantt, PointerEvent | MouseEvent> & {
+    /** @docid _ui_gantt_TaskClickEvent.key */
     readonly key?: any;
+    /** @docid _ui_gantt_TaskClickEvent.data */
     readonly data?: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_TaskDblClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type TaskDblClickEvent = Cancelable & NativeEventInfo<dxGantt, PointerEvent | MouseEvent> & {
+    /** @docid _ui_gantt_TaskDblClickEvent.key */
     readonly key?: any;
+    /** @docid _ui_gantt_TaskDblClickEvent.data */
     readonly data?: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_TaskDeletedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TaskDeletedEvent = EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_TaskDeletedEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_TaskDeletedEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_TaskDeletingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type TaskDeletingEvent = Cancelable & EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_TaskDeletingEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_TaskDeletingEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_TaskEditDialogShowingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type TaskEditDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_TaskEditDialogShowingEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_TaskEditDialogShowingEvent.key */
     readonly key: any;
+    /**
+     * @docid _ui_gantt_TaskEditDialogShowingEvent.readOnlyFields
+     * @type Array<string>
+     */
     readonly readOnlyFields?: Array<string>;
+    /**
+     * @docid _ui_gantt_TaskEditDialogShowingEvent.hiddenFields
+     * @type Array<string>
+     */
     readonly hiddenFields?: Array<string>;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_ResourceManagerDialogShowingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type ResourceManagerDialogShowingEvent = Cancelable & EventInfo<dxGantt> & {
+    /**
+     * @docid _ui_gantt_ResourceManagerDialogShowingEvent.values
+     * @type Array<any>
+     */
     readonly values: Array<any>;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_TaskInsertedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TaskInsertedEvent = EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_TaskInsertedEvent.values */
     readonly values?: any;
+    /** @docid _ui_gantt_TaskInsertedEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_TaskInsertingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type TaskInsertingEvent = Cancelable & EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_TaskInsertingEvent.values */
     readonly values: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_TaskMovingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type TaskMovingEvent = Cancelable & EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_TaskMovingEvent.newValues */
     readonly newValues: any;
+    /** @docid _ui_gantt_TaskMovingEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_TaskMovingEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_TaskUpdatedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type TaskUpdatedEvent = EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_TaskUpdatedEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_TaskUpdatedEvent.key */
     readonly key: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_gantt_TaskUpdatingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type TaskUpdatingEvent = Cancelable & EventInfo<dxGantt> & {
+    /** @docid _ui_gantt_TaskUpdatingEvent.newValues */
     readonly newValues: any;
+    /** @docid _ui_gantt_TaskUpdatingEvent.values */
     readonly values: any;
+    /** @docid _ui_gantt_TaskUpdatingEvent.key */
     readonly key: any;
 };
-/** @public */
+/**
+ * @docid _ui_gantt_ScaleCellPreparedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type ScaleCellPreparedEvent = InitializedEventInfo<dxGantt> & {
+    /** @docid _ui_gantt_ScaleCellPreparedEvent.scaleIndex */
     readonly scaleIndex: number;
+    /**
+     * @docid _ui_gantt_ScaleCellPreparedEvent.scaleType
+     * @type Enums.GanttRenderScaleType
+     */
     readonly scaleType: GanttRenderScaleType;
+    /** @docid _ui_gantt_ScaleCellPreparedEvent.scaleElement */
     readonly scaleElement: DxElement;
+    /** @docid _ui_gantt_ScaleCellPreparedEvent.separatorElement */
     readonly separatorElement: DxElement;
+    /** @docid _ui_gantt_ScaleCellPreparedEvent.startDate */
     readonly startDate: Date;
+    /** @docid _ui_gantt_ScaleCellPreparedEvent.endDate */
     readonly endDate: Date;
 };
 

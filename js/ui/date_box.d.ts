@@ -33,58 +33,143 @@ export type DateType = 'date' | 'datetime' | 'time';
 /** @public */
 export type DatePickerType = 'calendar' | 'list' | 'native' | 'rollers';
 
-/** @public */
+/**
+ * @docid _ui_date_box_ChangeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ChangeEvent = NativeEventInfo<dxDateBox, Event>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_ClosedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ClosedEvent = EventInfo<dxDateBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxDateBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_CopyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CopyEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_CutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CutEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxDateBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_EnterKeyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type EnterKeyEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxDateBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_InputEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type InputEvent = NativeEventInfo<dxDateBox, UIEvent & { target: HTMLInputElement }>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_KeyDownEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyDownEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /** @public */
 export type KeyPressEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_KeyUpEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyUpEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_OpenedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type OpenedEvent = EventInfo<dxDateBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxDateBox> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_date_box_PasteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type PasteEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxDateBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
