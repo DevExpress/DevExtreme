@@ -711,6 +711,7 @@ export type SubmenuShowMode = 'onClick' | 'onHover';
 export type TextBoxPredefinedButton = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
 
 /**
+ * @public
  * @docid
  * @type object
  * @namespace DevExpress.common
