@@ -130,6 +130,18 @@ const Lookup = DropDownList.inherit({
 
             focusStateEnabled: false,
 
+            dropDownOptions: {
+                animation: {},
+                fullScreen: false,
+                hideOnOutsideClick: false,
+                onTitleRendered: null,
+                position: undefined,
+                shading: true,
+                showTitle: true,
+                title: '',
+                titleTemplate: 'title',
+            },
+
             /**
             * @name dxLookupOptions.acceptCustomValue
             * @hidden
@@ -205,22 +217,10 @@ const Lookup = DropDownList.inherit({
 
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
-        }, this._getDropDownOptions());
+        }, { dropDownOptions: this._getDropDownSizes() });
     },
 
-    _getDropDownOptions() {
-        const options = {
-            animation: {},
-            fullScreen: false,
-            hideOnOutsideClick: false,
-            onTitleRendered: null,
-            position: undefined,
-            shading: true,
-            showTitle: true,
-            title: '',
-            titleTemplate: 'title',
-        };
-
+    _getDropDownSizes() {
         const isPhone = devices.real().deviceType === 'phone';
         const isVisualViewportAvailable = hasVisualViewport();
 
@@ -229,10 +229,10 @@ const Lookup = DropDownList.inherit({
         const windowWidth = shouldUseVisualViewport ? getVisualViewportSizes().width : getWidth(window);
         const windowHeight = shouldUseVisualViewport ? getVisualViewportSizes().height : getWidth(window);
 
-        options.width = windowWidth * WINDOW_RATIO;
-        options.height = windowHeight * WINDOW_RATIO;
+        const width = windowWidth * WINDOW_RATIO;
+        const height = windowHeight * WINDOW_RATIO;
 
-        return options;
+        return { width, height };
     },
 
     _setDeprecatedOptions() {
