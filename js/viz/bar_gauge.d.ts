@@ -91,10 +91,11 @@ export interface BarGaugeLegendItem extends BaseLegendItem {
 }
 
 /**
- * @docid
+ * @docid _viz_bar_gauge_TooltipInfo
  * @hidden
  */
 export interface TooltipInfo {
+    /** @docid _viz_bar_gauge_TooltipInfo.target */
     target?: any;
 }
 

@@ -56,10 +56,19 @@ export interface IncidentInfo {
  * @hidden
  */
 export type FileSavingEventInfo<T> = Cancelable & {
+  /**
+   * @docid
+   * @type this
+   * @default Widget
+   */
   readonly component: T;
+  /** @docid */
   readonly element: DxElement;
+  /** @docid */
   readonly fileName: string;
+  /** @docid */
   readonly format: string;
+  /** @docid */
   readonly data: Blob;
 };
 

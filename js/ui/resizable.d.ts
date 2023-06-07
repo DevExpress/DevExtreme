@@ -18,7 +18,9 @@ export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
  * @hidden
  */
 export interface ResizeInfo {
+    /** @docid */
     readonly width: number;
+    /** @docid */
     readonly height: number;
 }
 

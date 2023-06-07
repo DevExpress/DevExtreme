@@ -46,8 +46,14 @@ import {
  * @hidden
  */
 export interface ActionEventInfo {
+    /** @docid */
     errorCode?: number;
+    /** @docid */
     errorText: string;
+    /**
+     * @docid
+     * @type boolean|Promise<void>
+     */
     cancel: boolean | PromiseLike<void>;
 }
 

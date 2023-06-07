@@ -54,8 +54,11 @@ type ItemLike = string | Item | any;
  * @hidden
  */
 export interface ListItemInfo<TItem extends ItemLike> {
+    /** @docid */
     readonly itemData?: TItem;
+    /** @docid */
     readonly itemElement: DxElement;
+    /** @docid */
     readonly itemIndex: number | { group: number; item: number };
 }
 
@@ -69,10 +72,15 @@ export type ListMenuMode = 'context' | 'slide';
  * @hidden
  */
 export interface ScrollInfo {
+    /** @docid */
     readonly scrollOffset?: any;
+    /** @docid */
     readonly reachedLeft: boolean;
+    /** @docid */
     readonly reachedRight: boolean;
+    /** @docid */
     readonly reachedTop: boolean;
+    /** @docid */
     readonly reachedBottom: boolean;
 }
 

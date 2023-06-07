@@ -56,6 +56,7 @@ export type TreeMapLayoutDirection = 'leftBottomRightTop' | 'leftTopRightBottom'
  * @hidden
  */
 export interface InteractionInfo {
+  /** @docid */
   readonly node: dxTreeMapNode;
 }
 

@@ -37,7 +37,12 @@ import {
  * @hidden
  */
 export interface CustomItemCreatingInfo {
+    /** @docid */
     readonly text?: string;
+    /**
+     * @docid
+     * @type string|object|Promise<any>
+     */
     customItem?: string | any | PromiseLike<any>;
 }
 

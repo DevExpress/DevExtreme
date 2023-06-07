@@ -75,16 +75,33 @@ import Widget from './widget/ui.widget';
  * @hidden
  */
 export interface CellInfo<TRowData = any, TKey = any> {
+    /** @docid */
     readonly data: TRowData;
+    /** @docid */
     readonly key: TKey;
+    /** @docid */
     readonly value?: any;
+    /** @docid */
     readonly displayValue?: any;
+    /** @docid */
     readonly text: string;
+    /** @docid */
     readonly columnIndex: number;
+    /**
+     * @docid
+     * @type dxTreeListColumn
+     */
     readonly column: Column<TRowData, TKey>;
+    /** @docid */
     readonly rowIndex: number;
+    /** @docid */
     readonly rowType: string;
+    /** @docid */
     readonly cellElement: DxElement;
+    /**
+     * @docid
+     * @type dxTreeListRowObject
+     */
     readonly row: Row<TRowData, TKey>;
 }
 

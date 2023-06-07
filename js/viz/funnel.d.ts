@@ -96,6 +96,10 @@ export interface FunnelLegendItem extends BaseLegendItem {
  * @hidden
  */
 export interface FunnelItemInfo {
+  /**
+   * @docid
+   * @type dxFunnelItem
+   */
   readonly item: Item;
 }
 
