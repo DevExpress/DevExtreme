@@ -71,16 +71,28 @@ export type InitializedEvent = InitializedEventInfo<dxSankey>;
 export type LinkClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
     readonly target: dxSankeyLink;
 };
-/** @public */
+/**
+ * @docid _viz_sankey_LinkHoverEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type LinkHoverEvent = EventInfo<dxSankey> & {
+    /** @docid _viz_sankey_LinkHoverEvent.target */
     readonly target: dxSankeyLink;
 };
 /** @public */
 export type NodeClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
     readonly target: dxSankeyNode;
 };
-/** @public */
+/**
+ * @docid _viz_sankey_NodeHoverEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type NodeHoverEvent = EventInfo<dxSankey> & {
+    /** @docid _viz_sankey_NodeHoverEvent.target */
     readonly target: dxSankeyNode;
 };
 
