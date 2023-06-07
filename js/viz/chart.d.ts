@@ -201,31 +201,20 @@ export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo;
 
 /** @public */
 export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
-    /** @docid */
     readonly rangeStart: Date | number;
-    /** @docid */
     readonly rangeEnd: Date | number;
-    /** @docid */
     readonly axis: chartAxisObject;
-    /** @docid */
     readonly range: VisualRange;
-    /** @docid */
     readonly previousRange: VisualRange;
-    /** @docid */
     readonly actionType: ZoomPanAction;
-    /** @docid */
     readonly zoomFactor: number;
-    /** @docid */
     readonly shift: number;
 };
 
 /** @public */
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
-    /** @docid */
     readonly axis: chartAxisObject;
-    /** @docid */
     readonly range: VisualRange;
-    /** @docid */
     readonly actionType?: ZoomPanAction;
 };
 
