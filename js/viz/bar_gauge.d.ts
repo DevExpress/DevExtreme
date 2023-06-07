@@ -90,7 +90,13 @@ export interface BarGaugeLegendItem extends BaseLegendItem {
     item?: BarGaugeBarInfo;
 }
 
+/**
+ * @docid _viz_bar_gauge_TooltipInfo
+ * @hidden
+ */
+
 export interface TooltipInfo {
+    /** @docid _viz_bar_gauge_TooltipInfo.target */
     target?: any;
 }
 
@@ -162,7 +168,7 @@ export type OptionChangedEvent = EventInfo<dxBarGauge> & ChangedOptionInfo;
  * @docid _viz_bar_gauge_TooltipHiddenEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_bar_gauge_TooltipInfo
  */
 export type TooltipHiddenEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
@@ -170,7 +176,7 @@ export type TooltipHiddenEvent = EventInfo<dxBarGauge> & TooltipInfo;
  * @docid _viz_bar_gauge_TooltipShownEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_bar_gauge_TooltipInfo
  */
 export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 

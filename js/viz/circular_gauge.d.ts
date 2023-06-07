@@ -101,7 +101,7 @@ export type OptionChangedEvent = EventInfo<dxCircularGauge> & ChangedOptionInfo;
  * @docid _viz_circular_gauge_TooltipHiddenEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_base_gauge_TooltipInfo
  */
 export type TooltipHiddenEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
@@ -109,7 +109,7 @@ export type TooltipHiddenEvent = EventInfo<dxCircularGauge> & TooltipInfo;
  * @docid _viz_circular_gauge_TooltipShownEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_base_gauge_TooltipInfo
  */
 export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 

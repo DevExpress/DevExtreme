@@ -100,7 +100,7 @@ export type OptionChangedEvent = EventInfo<dxLinearGauge> & ChangedOptionInfo;
  * @docid _viz_linear_gauge_TooltipHiddenEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_base_gauge_TooltipInfo
  */
 export type TooltipHiddenEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 
@@ -108,7 +108,7 @@ export type TooltipHiddenEvent = EventInfo<dxLinearGauge> & TooltipInfo;
  * @docid _viz_linear_gauge_TooltipShownEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_base_gauge_TooltipInfo
  */
 export type TooltipShownEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 

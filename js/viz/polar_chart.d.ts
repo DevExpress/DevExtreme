@@ -247,7 +247,7 @@ export type SeriesSelectionChangedEvent = EventInfo<dxPolarChart> & SeriesIntera
  * @docid _viz_polar_chart_TooltipHiddenEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
 export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo;
 
@@ -255,7 +255,7 @@ export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo;
  * @docid _viz_polar_chart_TooltipShownEvent
  * @public
  * @type object
- * @inherits EventInfo
+ * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
 export type TooltipShownEvent = EventInfo<dxPolarChart> & TooltipInfo;
 

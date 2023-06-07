@@ -56,7 +56,12 @@ export interface PointInteractionInfo {
     readonly target: basePointObject;
 }
 
+/**
+ * @docid _viz_chart_components_base_chart_TooltipInfo
+ * @hidden
+ */
 export interface TooltipInfo {
+    /** @docid _viz_chart_components_base_chart_TooltipInfo.target */
     target?: basePointObject | dxChartAnnotationConfig | any;
 }
 
