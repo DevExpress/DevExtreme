@@ -151,10 +151,6 @@ export type ContextMenuPreparingEvent = EventInfo<dxPivotGrid> & {
      * @type Array<PivotGridDataSourceOptions.fields>
      */
     readonly columnFields?: Array<Field>;
-    /**
-     * @docid _ui_pivot_grid_ContextMenuPreparingEvent.field
-     * @type PivotGridDataSourceOptions.fields
-     */
     readonly field?: Field;
     /**
      * @docid _ui_pivot_grid_ContextMenuPreparingEvent.items

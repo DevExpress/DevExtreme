@@ -44,10 +44,6 @@ export type ContentReadyEvent = EventInfo<dxPivotGridFieldChooser>;
 export type ContextMenuPreparingEvent = EventInfo<dxPivotGridFieldChooser> & {
     /** @docid _ui_pivot_grid_field_chooser_ContextMenuPreparingEvent.area */
     readonly area?: string;
-    /**
-     * @docid _ui_pivot_grid_field_chooser_ContextMenuPreparingEvent.field
-     * @type PivotGridDataSourceOptions.fields
-     */
     readonly field?: Field;
     /**
      * @docid _ui_pivot_grid_field_chooser_ContextMenuPreparingEvent.event
