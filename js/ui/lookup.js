@@ -22,6 +22,7 @@ import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 import { locate, move, resetPosition } from '../animation/translator';
 import { isDefined } from '../core/utils/type';
 import { getElementWidth } from './drop_down_editor/utils';
+import { getVisualViewportSizes, hasVisualViewport } from '../core/utils/visual_viewport';
 
 // STYLE lookup
 
@@ -62,16 +63,6 @@ const Lookup = DropDownList.inherit({
     },
 
     _getDefaultOptions: function() {
-        const getSize = (side) => {
-            let size;
-            if(devices.real().deviceType === 'phone' && window.visualViewport) {
-                size = window.visualViewport[side];
-            } else {
-                size = side === 'width' ? getWidth(window) : getHeight(window);
-            }
-            return size * WINDOW_RATIO;
-        };
-
         return extend(this.callBase(), {
             placeholder: messageLocalization.format('Select'),
 
@@ -138,34 +129,6 @@ const Lookup = DropDownList.inherit({
 
 
             focusStateEnabled: false,
-
-            dropDownOptions: {
-                showTitle: true,
-
-                width: function() {
-                    return getSize('width');
-                },
-
-                height: function() {
-                    return getSize('height');
-                },
-
-                shading: true,
-
-                hideOnOutsideClick: false,
-
-                position: undefined,
-
-                animation: {},
-
-                title: '',
-
-                titleTemplate: 'title',
-
-                onTitleRendered: null,
-
-                fullScreen: false
-            },
 
             /**
             * @name dxLookupOptions.acceptCustomValue
@@ -242,7 +205,34 @@ const Lookup = DropDownList.inherit({
 
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
-        });
+        }, this._getDropDownOptions());
+    },
+
+    _getDropDownOptions() {
+        const options = {
+            animation: {},
+            fullScreen: false,
+            hideOnOutsideClick: false,
+            onTitleRendered: null,
+            position: undefined,
+            shading: true,
+            showTitle: true,
+            title: '',
+            titleTemplate: 'title',
+        };
+
+        const isPhone = devices.real().deviceType === 'phone';
+        const isVisualViewportAvailable = hasVisualViewport();
+
+        const shouldUseVisualViewport = isPhone && isVisualViewportAvailable;
+
+        const windowWidth = shouldUseVisualViewport ? getVisualViewportSizes().width : getWidth(window);
+        const windowHeight = shouldUseVisualViewport ? getVisualViewportSizes().height : getWidth(window);
+
+        options.width = windowWidth * WINDOW_RATIO;
+        options.height = windowHeight * WINDOW_RATIO;
+
+        return options;
     },
 
     _setDeprecatedOptions() {
