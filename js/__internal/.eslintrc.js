@@ -5,7 +5,16 @@ module.exports = {
         es6: true,
         node: false,
     },
+    plugins: [
+        'simple-import-sort',
+        // TODO Vinogradov: Move this plugin to this package:
+        //   https://github.com/DevExpress/eslint-config-devextreme
+        // This custom plugin clones the @typescript-eslint/no-restricted-imports rule
+        // See issue: https://github.com/eslint/eslint/issues/14061
+        'forbidden-imports',
+    ],
     overrides: [
+        // General TS rules.
         {
             files: [
                 '**/*.ts'
@@ -28,13 +37,53 @@ module.exports = {
                         'message': 'Use setInterval only if there is absolutely no another way. If it is, ignore this rule and leave a comment why setInterval is used here.'
                     }
                 ],
+                'no-restricted-imports': 'off',
+                'forbidden-imports/no-restricted-imports': [
+                    'error',
+                    {
+                        paths: [{
+                            name: '@js/core/utils/iterator',
+                            message: 'Please use @dom_utils/element_wrapper_iterator or native js methods instead.',
+                        }],
+                        patterns: [
+                            {
+                                group: ['../'],
+                                message: 'Please try to avoid import of modules from upper directories.',
+                            }
+                        ]
+                    }
+                ],
+                '@typescript-eslint/no-restricted-imports': [
+                    'error',
+                    {
+                        patterns: [
+                            {
+                                group: [
+                                    '@js/ui/data_grid/*',
+                                    '@js/ui/pivot_grid/*',
+                                    '@js/ui/tree_list/*',
+                                    '@js/ui/grid_core/*',
+                                ],
+                                message: 'Please use import from TS modules instead.'
+                            },
+                            {
+                                group: [
+                                    '@js/__internal/*',
+                                ],
+                                message: 'Please use @ts instead.'
+                            }],
+                    }
+                ],
+                'simple-import-sort/imports': 'error',
+                'simple-import-sort/exports': 'error'
             }
         },
+        // Rules for a new TS files.
         {
             files: [
                 '**/*.ts',
             ],
-            excludedFiles: '**/module*.ts',
+            excludedFiles: '**/m_*.ts',
             parser: '@typescript-eslint/parser',
             parserOptions: {
                 createDefaultProgram: true,
@@ -44,22 +93,12 @@ module.exports = {
             rules: {
                 'max-depth': ['error', 3],
                 'no-inner-declarations': ['error', 'both'],
-                'no-restricted-imports': 'off',
-                '@typescript-eslint/no-restricted-imports': [
-                    'error',
-                    {
-                        paths: [{
-                            name: '@js/core/utils/iterator',
-                            message: 'Please use @dom_utils/element_wrapper_iterator or native js methods instead.',
-                        }],
-                        patterns: ['../'],
-                    }
-                ]
             },
         },
+        // Rules for migrated from JS files.
         {
             files: [
-                '**/module*.ts',
+                '**/m_*.ts',
                 '**/module*/**.ts',
             ],
             parser: '@typescript-eslint/parser',
@@ -100,7 +139,7 @@ module.exports = {
                 '@typescript-eslint/no-implied-eval': 'warn',
                 '@typescript-eslint/ban-ts-comment': 'warn',
                 '@typescript-eslint/prefer-for-of': 'warn',
-                '@typescript-eslint/no-restricted-imports': 'warn',
+                'forbidden-imports/no-restricted-imports': 'warn',
             }
         },
     ],
