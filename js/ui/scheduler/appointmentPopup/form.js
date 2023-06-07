@@ -362,6 +362,7 @@ export class AppointmentForm {
             editorType: 'dxRecurrenceEditor',
             editorOptions: {
                 firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
+                timeZoneCalculator: this.scheduler.getTimeZoneCalculator(),
             },
             label: {
                 text: ' ',

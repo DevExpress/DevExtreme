@@ -13,6 +13,7 @@ import Editor from '../editor/editor';
 import NumberBox from '../number_box';
 import { getRecurrenceProcessor } from './recurrence';
 import '../radio_group';
+import { PathTimeZoneConversion } from '../../renovation/ui/scheduler/timeZoneCalculator/types';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
 const LABEL_POSTFIX = '-label';
@@ -168,6 +169,7 @@ class RecurrenceEditor extends Editor {
     _init() {
         super._init();
         this._recurrenceRule = new RecurrenceRule(this.option('value'));
+        this._timeZoneCalculator = this.option('timeZoneCalculator');
     }
 
     _render() {
@@ -624,9 +626,13 @@ class RecurrenceEditor extends Editor {
 
     _repeatUntilValueChangeHandler(args) {
         if(this._recurrenceRule.getRepeatEndRule() === 'until') {
-            const untilDate = this._formatUntilDate(new Date(args.value));
+            const untilDateInLocalTimeZone = this._formatUntilDate(new Date(args.value));
+            const untilDate = this._timeZoneCalculator.createDate(
+                untilDateInLocalTimeZone,
+                { path: PathTimeZoneConversion.fromGridToSource }
+            );
 
-            this._repeatUntilDate.option('value', untilDate);
+            this._repeatUntilDate.option('value', untilDateInLocalTimeZone);
 
             this._recurrenceRule.makeRule('until', untilDate);
             this._changeEditorValue();
@@ -803,7 +809,16 @@ class RecurrenceEditor extends Editor {
     }
 
     _getUntilValue() {
-        return this._recurrenceRule.getRules().until || this._formatUntilDate(new Date());
+        const untilDate = this._recurrenceRule.getRules().until;
+
+        if(!untilDate) {
+            return this._formatUntilDate(new Date());
+        }
+
+        return this._timeZoneCalculator.createDate(
+            untilDate,
+            { path: PathTimeZoneConversion.fromSourceToGrid },
+        );
     }
 
     toggle() {
