@@ -63,7 +63,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _getDefaultOptions: function() {
-        return extend(this.callBase(), extend(true, {
+        return extend(this.callBase(), {
             placeholder: messageLocalization.format('Select'),
 
             searchPlaceholder: messageLocalization.format('Search'),
@@ -140,6 +140,8 @@ const Lookup = DropDownList.inherit({
                 showTitle: true,
                 title: '',
                 titleTemplate: 'title',
+                width: () => this._getDropDownSize('width'),
+                height: () => this._getDropDownSize('height'),
             },
 
             /**
@@ -217,22 +219,22 @@ const Lookup = DropDownList.inherit({
 
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
-        }, { dropDownOptions: this._getDropDownSizes() }));
+        });
     },
 
-    _getDropDownSizes() {
+    _getDropDownSize(size) {
         const isPhone = devices.real().deviceType === 'phone';
         const isVisualViewportAvailable = hasVisualViewport();
 
         const shouldUseVisualViewport = isPhone && isVisualViewportAvailable;
 
-        const windowWidth = shouldUseVisualViewport ? getVisualViewportSizes().width : getWidth(window);
-        const windowHeight = shouldUseVisualViewport ? getVisualViewportSizes().height : getHeight(window);
+        if(shouldUseVisualViewport) {
+            const windowSize = getVisualViewportSizes()[size];
 
-        const width = windowWidth * WINDOW_RATIO;
-        const height = windowHeight * WINDOW_RATIO;
+            return windowSize * WINDOW_RATIO;
+        }
 
-        return { width, height };
+        return (size === 'width' ? getWidth(window) : getHeight(window)) * WINDOW_RATIO;
     },
 
     _setDeprecatedOptions() {
