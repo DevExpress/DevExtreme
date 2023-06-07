@@ -227,7 +227,7 @@ const Lookup = DropDownList.inherit({
         const shouldUseVisualViewport = isPhone && isVisualViewportAvailable;
 
         const windowWidth = shouldUseVisualViewport ? getVisualViewportSizes().width : getWidth(window);
-        const windowHeight = shouldUseVisualViewport ? getVisualViewportSizes().height : getWidth(window);
+        const windowHeight = shouldUseVisualViewport ? getVisualViewportSizes().height : getHeight(window);
 
         const width = windowWidth * WINDOW_RATIO;
         const height = windowHeight * WINDOW_RATIO;
