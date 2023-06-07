@@ -21,7 +21,7 @@ import {
 
 /**
  * @docid
- * @hidden
+ * @type object
  */
 export interface ScrollEventInfo<T> extends NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
     /** @docid */
@@ -64,10 +64,7 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field scrollOffset:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/scroll_view/ui.scrollable:ScrollEventInfo}
      * @action
      * @public
      */
@@ -75,10 +72,7 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field scrollOffset:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/scroll_view/ui.scrollable:ScrollEventInfo}
      * @action
      * @public
      */
