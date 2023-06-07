@@ -53,6 +53,14 @@
                     hideOnParentScroll: false,
                 },
             });
+
+            const popupWrapper = $('.dx-overlay-wrapper')[0];
+            const popupContent = $('.dx-overlay-content')[0];
+
+            const popupWrapperTop = popupWrapper.getBoundingClientRect().top // 640
+            const popupContentTop = popupContent.getBoundingClientRect().top // 539
+
+            debugger
         });
     </script>
 </body>
