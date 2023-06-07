@@ -510,7 +510,8 @@ const Overlay = Widget.inherit({
     _toggleVisibilityAnimate(visible) {
         this._stopAnimation();
         this._toggleVisualViewportCallbacks(visible);
-        this._renderVisibilityAnimate(visible);
+
+        return this._renderVisibilityAnimate(visible);
     },
 
     _renderVisibilityAnimate(visible) {
