@@ -833,7 +833,7 @@ const Overlay = Widget.inherit({
                 const shouldUpdateGeometryByResize = this._updateGeometryByResize;
 
                 const options = {
-                    once: eventName === 'scroll' ? !shouldUpdateGeometryByScroll : !shouldUpdateGeometryByResize
+                    once: eventName === visualViewportEventMap.scroll ? !shouldUpdateGeometryByScroll : !shouldUpdateGeometryByResize
                 };
 
                 this._unSubscribeCallbacks[eventName] = subscribeOnVisualViewportEvent(eventName, callback, options);
