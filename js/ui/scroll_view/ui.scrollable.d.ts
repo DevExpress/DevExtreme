@@ -24,10 +24,15 @@ import {
  * @hidden
  */
 export interface ScrollEventInfo<T> extends NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
+    /** @docid */
     readonly scrollOffset?: any;
+    /** @docid */
     readonly reachedLeft?: boolean;
+    /** @docid */
     readonly reachedRight?: boolean;
+    /** @docid */
     readonly reachedTop?: boolean;
+    /** @docid */
     readonly reachedBottom?: boolean;
 }
 
