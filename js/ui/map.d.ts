@@ -421,19 +421,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxMapOptions.onDisposing
  * @type_function_param1 e:{ui/map:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxMapOptions.onInitialized
  * @type_function_param1 e:{ui/map:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxMapOptions.onOptionChanged
  * @type_function_param1 e:{ui/map:OptionChangedEvent}
  */

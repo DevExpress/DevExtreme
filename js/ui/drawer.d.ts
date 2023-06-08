@@ -183,19 +183,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxDrawerOptions.onDisposing
  * @type_function_param1 e:{ui/drawer:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDrawerOptions.onInitialized
  * @type_function_param1 e:{ui/drawer:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDrawerOptions.onOptionChanged
  * @type_function_param1 e:{ui/drawer:OptionChangedEvent}
  */

@@ -397,49 +397,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxLookupOptions.onClosed
  * @type_function_param1 e:{ui/lookup:ClosedEvent}
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onContentReady
  * @type_function_param1 e:{ui/lookup:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onDisposing
  * @type_function_param1 e:{ui/lookup:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onInitialized
  * @type_function_param1 e:{ui/lookup:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onItemClick
  * @type_function_param1 e:{ui/lookup:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onOpened
  * @type_function_param1 e:{ui/lookup:OpenedEvent}
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onOptionChanged
  * @type_function_param1 e:{ui/lookup:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onSelectionChanged
  * @type_function_param1 e:{ui/lookup:SelectionChangedEvent}
  */

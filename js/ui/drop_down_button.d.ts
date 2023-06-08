@@ -374,25 +374,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxDropDownButtonOptions.onContentReady
  * @type_function_param1 e:{ui/drop_down_button:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxDropDownButtonOptions.onDisposing
  * @type_function_param1 e:{ui/drop_down_button:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDropDownButtonOptions.onInitialized
  * @type_function_param1 e:{ui/drop_down_button:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDropDownButtonOptions.onOptionChanged
  * @type_function_param1 e:{ui/drop_down_button:OptionChangedEvent}
  */

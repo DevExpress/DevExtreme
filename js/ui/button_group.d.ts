@@ -225,25 +225,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxButtonGroupOptions.onContentReady
  * @type_function_param1 e:{ui/button_group:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxButtonGroupOptions.onDisposing
  * @type_function_param1 e:{ui/button_group:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxButtonGroupOptions.onInitialized
  * @type_function_param1 e:{ui/button_group:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxButtonGroupOptions.onOptionChanged
  * @type_function_param1 e:{ui/button_group:OptionChangedEvent}
  */

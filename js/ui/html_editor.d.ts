@@ -719,31 +719,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxHtmlEditorOptions.onContentReady
  * @type_function_param1 e:{ui/html_editor:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxHtmlEditorOptions.onDisposing
  * @type_function_param1 e:{ui/html_editor:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxHtmlEditorOptions.onInitialized
  * @type_function_param1 e:{ui/html_editor:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxHtmlEditorOptions.onOptionChanged
  * @type_function_param1 e:{ui/html_editor:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxHtmlEditorOptions.onValueChanged
  * @type_function_param1 e:{ui/html_editor:ValueChangedEvent}
  */

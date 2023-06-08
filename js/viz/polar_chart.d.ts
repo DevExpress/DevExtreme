@@ -2425,85 +2425,71 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxPolarChartOptions.onDisposing
  * @type_function_param1 e:{viz/polar_chart:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onDone
  * @type_function_param1 e:{viz/polar_chart:DoneEvent}
  */
 onDone?: ((e: DoneEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onDrawn
  * @type_function_param1 e:{viz/polar_chart:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onExported
  * @type_function_param1 e:{viz/polar_chart:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onExporting
  * @type_function_param1 e:{viz/polar_chart:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onFileSaving
  * @type_function_param1 e:{viz/polar_chart:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/polar_chart:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onInitialized
  * @type_function_param1 e:{viz/polar_chart:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onOptionChanged
  * @type_function_param1 e:{viz/polar_chart:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onPointClick
  * @type_function_param1 e:{viz/polar_chart:PointClickEvent}
  */
 onPointClick?: ((e: PointClickEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onPointHoverChanged
  * @type_function_param1 e:{viz/polar_chart:PointHoverChangedEvent}
  */
 onPointHoverChanged?: ((e: PointHoverChangedEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onPointSelectionChanged
  * @type_function_param1 e:{viz/polar_chart:PointSelectionChangedEvent}
  */
 onPointSelectionChanged?: ((e: PointSelectionChangedEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onTooltipHidden
  * @type_function_param1 e:{viz/polar_chart:TooltipHiddenEvent}
  */
 onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onTooltipShown
  * @type_function_param1 e:{viz/polar_chart:TooltipShownEvent}
  */

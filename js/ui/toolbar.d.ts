@@ -246,49 +246,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxToolbarOptions.onContentReady
  * @type_function_param1 e:{ui/toolbar:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxToolbarOptions.onDisposing
  * @type_function_param1 e:{ui/toolbar:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxToolbarOptions.onInitialized
  * @type_function_param1 e:{ui/toolbar:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxToolbarOptions.onItemClick
  * @type_function_param1 e:{ui/toolbar:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxToolbarOptions.onItemContextMenu
  * @type_function_param1 e:{ui/toolbar:ItemContextMenuEvent}
  */
 onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
 /**
- * @skip
  * @docid dxToolbarOptions.onItemHold
  * @type_function_param1 e:{ui/toolbar:ItemHoldEvent}
  */
 onItemHold?: ((e: ItemHoldEvent) => void);
 /**
- * @skip
  * @docid dxToolbarOptions.onItemRendered
  * @type_function_param1 e:{ui/toolbar:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
- * @skip
  * @docid dxToolbarOptions.onOptionChanged
  * @type_function_param1 e:{ui/toolbar:OptionChangedEvent}
  */

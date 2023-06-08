@@ -1012,25 +1012,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxFileManagerOptions.onContentReady
  * @type_function_param1 e:{ui/file_manager:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxFileManagerOptions.onDisposing
  * @type_function_param1 e:{ui/file_manager:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxFileManagerOptions.onInitialized
  * @type_function_param1 e:{ui/file_manager:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxFileManagerOptions.onOptionChanged
  * @type_function_param1 e:{ui/file_manager:OptionChangedEvent}
  */

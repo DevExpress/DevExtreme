@@ -140,31 +140,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxCheckBoxOptions.onContentReady
  * @type_function_param1 e:{ui/check_box:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxCheckBoxOptions.onDisposing
  * @type_function_param1 e:{ui/check_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxCheckBoxOptions.onInitialized
  * @type_function_param1 e:{ui/check_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxCheckBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/check_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxCheckBoxOptions.onValueChanged
  * @type_function_param1 e:{ui/check_box:ValueChangedEvent}
  */

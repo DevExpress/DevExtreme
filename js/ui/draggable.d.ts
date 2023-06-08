@@ -288,19 +288,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxDraggableOptions.onDisposing
  * @type_function_param1 e:{ui/draggable:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDraggableOptions.onInitialized
  * @type_function_param1 e:{ui/draggable:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDraggableOptions.onOptionChanged
  * @type_function_param1 e:{ui/draggable:OptionChangedEvent}
  */

@@ -124,31 +124,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxValidationSummaryOptions.onContentReady
  * @type_function_param1 e:{ui/validation_summary:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxValidationSummaryOptions.onDisposing
  * @type_function_param1 e:{ui/validation_summary:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxValidationSummaryOptions.onInitialized
  * @type_function_param1 e:{ui/validation_summary:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxValidationSummaryOptions.onItemClick
  * @type_function_param1 e:{ui/validation_summary:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxValidationSummaryOptions.onOptionChanged
  * @type_function_param1 e:{ui/validation_summary:OptionChangedEvent}
  */

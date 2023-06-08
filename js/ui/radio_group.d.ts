@@ -138,31 +138,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxRadioGroupOptions.onContentReady
  * @type_function_param1 e:{ui/radio_group:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxRadioGroupOptions.onDisposing
  * @type_function_param1 e:{ui/radio_group:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxRadioGroupOptions.onInitialized
  * @type_function_param1 e:{ui/radio_group:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxRadioGroupOptions.onOptionChanged
  * @type_function_param1 e:{ui/radio_group:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxRadioGroupOptions.onValueChanged
  * @type_function_param1 e:{ui/radio_group:ValueChangedEvent}
  */

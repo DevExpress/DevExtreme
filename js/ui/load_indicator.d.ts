@@ -80,25 +80,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxLoadIndicatorOptions.onContentReady
  * @type_function_param1 e:{ui/load_indicator:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxLoadIndicatorOptions.onDisposing
  * @type_function_param1 e:{ui/load_indicator:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxLoadIndicatorOptions.onInitialized
  * @type_function_param1 e:{ui/load_indicator:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxLoadIndicatorOptions.onOptionChanged
  * @type_function_param1 e:{ui/load_indicator:OptionChangedEvent}
  */

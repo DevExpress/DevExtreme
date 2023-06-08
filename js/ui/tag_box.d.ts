@@ -342,97 +342,81 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxTagBoxOptions.onChange
  * @type_function_param1 e:{ui/tag_box:ChangeEvent}
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onClosed
  * @type_function_param1 e:{ui/tag_box:ClosedEvent}
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onContentReady
  * @type_function_param1 e:{ui/tag_box:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onCustomItemCreating
  * @type_function_param1 e:{ui/tag_box:CustomItemCreatingEvent}
  */
 onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onDisposing
  * @type_function_param1 e:{ui/tag_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onEnterKey
  * @type_function_param1 e:{ui/tag_box:EnterKeyEvent}
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onFocusIn
  * @type_function_param1 e:{ui/tag_box:FocusInEvent}
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onFocusOut
  * @type_function_param1 e:{ui/tag_box:FocusOutEvent}
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onInitialized
  * @type_function_param1 e:{ui/tag_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onInput
  * @type_function_param1 e:{ui/tag_box:InputEvent}
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onItemClick
  * @type_function_param1 e:{ui/tag_box:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onKeyDown
  * @type_function_param1 e:{ui/tag_box:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onKeyUp
  * @type_function_param1 e:{ui/tag_box:KeyUpEvent}
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onOpened
  * @type_function_param1 e:{ui/tag_box:OpenedEvent}
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/tag_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxTagBoxOptions.onValueChanged
  * @type_function_param1 e:{ui/tag_box:ValueChangedEvent}
  */

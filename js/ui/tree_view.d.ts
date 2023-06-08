@@ -725,25 +725,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxTreeViewOptions.onContentReady
  * @type_function_param1 e:{ui/tree_view:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxTreeViewOptions.onDisposing
  * @type_function_param1 e:{ui/tree_view:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxTreeViewOptions.onInitialized
  * @type_function_param1 e:{ui/tree_view:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxTreeViewOptions.onOptionChanged
  * @type_function_param1 e:{ui/tree_view:OptionChangedEvent}
  */

@@ -396,103 +396,86 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>
 */
 type Events = {
 /**
- * @skip
  * @docid dxDateBoxOptions.onChange
  * @type_function_param1 e:{ui/date_box:ChangeEvent}
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onClosed
  * @type_function_param1 e:{ui/date_box:ClosedEvent}
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onContentReady
  * @type_function_param1 e:{ui/date_box:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onCopy
  * @type_function_param1 e:{ui/date_box:CopyEvent}
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onCut
  * @type_function_param1 e:{ui/date_box:CutEvent}
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onDisposing
  * @type_function_param1 e:{ui/date_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onEnterKey
  * @type_function_param1 e:{ui/date_box:EnterKeyEvent}
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onFocusIn
  * @type_function_param1 e:{ui/date_box:FocusInEvent}
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onFocusOut
  * @type_function_param1 e:{ui/date_box:FocusOutEvent}
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onInitialized
  * @type_function_param1 e:{ui/date_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onInput
  * @type_function_param1 e:{ui/date_box:InputEvent}
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onKeyDown
  * @type_function_param1 e:{ui/date_box:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onKeyUp
  * @type_function_param1 e:{ui/date_box:KeyUpEvent}
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onOpened
  * @type_function_param1 e:{ui/date_box:OpenedEvent}
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/date_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onPaste
  * @type_function_param1 e:{ui/date_box:PasteEvent}
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onValueChanged
  * @type_function_param1 e:{ui/date_box:ValueChangedEvent}
  */

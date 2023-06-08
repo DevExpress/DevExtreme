@@ -268,97 +268,81 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onChange
  * @type_function_param1 e:{ui/drop_down_box:ChangeEvent}
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onClosed
  * @type_function_param1 e:{ui/drop_down_box:ClosedEvent}
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onCopy
  * @type_function_param1 e:{ui/drop_down_box:CopyEvent}
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onCut
  * @type_function_param1 e:{ui/drop_down_box:CutEvent}
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onDisposing
  * @type_function_param1 e:{ui/drop_down_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onEnterKey
  * @type_function_param1 e:{ui/drop_down_box:EnterKeyEvent}
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onFocusIn
  * @type_function_param1 e:{ui/drop_down_box:FocusInEvent}
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onFocusOut
  * @type_function_param1 e:{ui/drop_down_box:FocusOutEvent}
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onInitialized
  * @type_function_param1 e:{ui/drop_down_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onInput
  * @type_function_param1 e:{ui/drop_down_box:InputEvent}
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onKeyDown
  * @type_function_param1 e:{ui/drop_down_box:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onKeyUp
  * @type_function_param1 e:{ui/drop_down_box:KeyUpEvent}
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onOpened
  * @type_function_param1 e:{ui/drop_down_box:OpenedEvent}
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/drop_down_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onPaste
  * @type_function_param1 e:{ui/drop_down_box:PasteEvent}
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onValueChanged
  * @type_function_param1 e:{ui/drop_down_box:ValueChangedEvent}
  */

@@ -777,49 +777,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxFunnelOptions.onDisposing
  * @type_function_param1 e:{viz/funnel:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onDrawn
  * @type_function_param1 e:{viz/funnel:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onExported
  * @type_function_param1 e:{viz/funnel:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onExporting
  * @type_function_param1 e:{viz/funnel:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onFileSaving
  * @type_function_param1 e:{viz/funnel:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/funnel:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onInitialized
  * @type_function_param1 e:{viz/funnel:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onOptionChanged
  * @type_function_param1 e:{viz/funnel:OptionChangedEvent}
  */

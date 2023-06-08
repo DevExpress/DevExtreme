@@ -291,25 +291,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxPivotGridFieldChooserOptions.onContentReady
  * @type_function_param1 e:{ui/pivot_grid_field_chooser:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxPivotGridFieldChooserOptions.onDisposing
  * @type_function_param1 e:{ui/pivot_grid_field_chooser:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxPivotGridFieldChooserOptions.onInitialized
  * @type_function_param1 e:{ui/pivot_grid_field_chooser:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxPivotGridFieldChooserOptions.onOptionChanged
  * @type_function_param1 e:{ui/pivot_grid_field_chooser:OptionChangedEvent}
  */

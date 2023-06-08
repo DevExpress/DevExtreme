@@ -354,49 +354,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxContextMenuOptions.onContentReady
  * @type_function_param1 e:{ui/context_menu:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onDisposing
  * @type_function_param1 e:{ui/context_menu:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onInitialized
  * @type_function_param1 e:{ui/context_menu:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onItemClick
  * @type_function_param1 e:{ui/context_menu:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onItemContextMenu
  * @type_function_param1 e:{ui/context_menu:ItemContextMenuEvent}
  */
 onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onItemRendered
  * @type_function_param1 e:{ui/context_menu:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onOptionChanged
  * @type_function_param1 e:{ui/context_menu:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onSelectionChanged
  * @type_function_param1 e:{ui/context_menu:SelectionChangedEvent}
  */

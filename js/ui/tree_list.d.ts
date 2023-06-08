@@ -1851,151 +1851,126 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxTreeListOptions.onAdaptiveDetailRowPreparing
  * @type_function_param1 e:{ui/tree_list:AdaptiveDetailRowPreparingEvent}
  */
 onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onContentReady
  * @type_function_param1 e:{ui/tree_list:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onDataErrorOccurred
  * @type_function_param1 e:{ui/tree_list:DataErrorOccurredEvent}
  */
 onDataErrorOccurred?: ((e: DataErrorOccurredEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onDisposing
  * @type_function_param1 e:{ui/tree_list:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onEditCanceled
  * @type_function_param1 e:{ui/tree_list:EditCanceledEvent}
  */
 onEditCanceled?: ((e: EditCanceledEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onEditCanceling
  * @type_function_param1 e:{ui/tree_list:EditCancelingEvent}
  */
 onEditCanceling?: ((e: EditCancelingEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onInitialized
  * @type_function_param1 e:{ui/tree_list:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onInitNewRow
  * @type_function_param1 e:{ui/tree_list:InitNewRowEvent}
  */
 onInitNewRow?: ((e: InitNewRowEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onKeyDown
  * @type_function_param1 e:{ui/tree_list:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onOptionChanged
  * @type_function_param1 e:{ui/tree_list:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onRowCollapsed
  * @type_function_param1 e:{ui/tree_list:RowCollapsedEvent}
  */
 onRowCollapsed?: ((e: RowCollapsedEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onRowCollapsing
  * @type_function_param1 e:{ui/tree_list:RowCollapsingEvent}
  */
 onRowCollapsing?: ((e: RowCollapsingEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onRowExpanded
  * @type_function_param1 e:{ui/tree_list:RowExpandedEvent}
  */
 onRowExpanded?: ((e: RowExpandedEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onRowExpanding
  * @type_function_param1 e:{ui/tree_list:RowExpandingEvent}
  */
 onRowExpanding?: ((e: RowExpandingEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onRowInserted
  * @type_function_param1 e:{ui/tree_list:RowInsertedEvent}
  */
 onRowInserted?: ((e: RowInsertedEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onRowInserting
  * @type_function_param1 e:{ui/tree_list:RowInsertingEvent}
  */
 onRowInserting?: ((e: RowInsertingEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onRowRemoved
  * @type_function_param1 e:{ui/tree_list:RowRemovedEvent}
  */
 onRowRemoved?: ((e: RowRemovedEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onRowRemoving
  * @type_function_param1 e:{ui/tree_list:RowRemovingEvent}
  */
 onRowRemoving?: ((e: RowRemovingEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onRowUpdated
  * @type_function_param1 e:{ui/tree_list:RowUpdatedEvent}
  */
 onRowUpdated?: ((e: RowUpdatedEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onRowUpdating
  * @type_function_param1 e:{ui/tree_list:RowUpdatingEvent}
  */
 onRowUpdating?: ((e: RowUpdatingEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onRowValidating
  * @type_function_param1 e:{ui/tree_list:RowValidatingEvent}
  */
 onRowValidating?: ((e: RowValidatingEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onSaved
  * @type_function_param1 e:{ui/tree_list:SavedEvent}
  */
 onSaved?: ((e: SavedEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onSaving
  * @type_function_param1 e:{ui/tree_list:SavingEvent}
  */
 onSaving?: ((e: SavingEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onSelectionChanged
  * @type_function_param1 e:{ui/tree_list:SelectionChangedEvent}
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 /**
- * @skip
  * @docid dxTreeListOptions.onToolbarPreparing
  * @type_function_param1 e:{ui/tree_list:ToolbarPreparingEvent}
  */

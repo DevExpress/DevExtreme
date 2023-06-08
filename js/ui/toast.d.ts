@@ -231,49 +231,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxToastOptions.onContentReady
  * @type_function_param1 e:{ui/toast:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onDisposing
  * @type_function_param1 e:{ui/toast:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onHidden
  * @type_function_param1 e:{ui/toast:HiddenEvent}
  */
 onHidden?: ((e: HiddenEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onHiding
  * @type_function_param1 e:{ui/toast:HidingEvent}
  */
 onHiding?: ((e: HidingEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onInitialized
  * @type_function_param1 e:{ui/toast:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onOptionChanged
  * @type_function_param1 e:{ui/toast:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onShowing
  * @type_function_param1 e:{ui/toast:ShowingEvent}
  */
 onShowing?: ((e: ShowingEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onShown
  * @type_function_param1 e:{ui/toast:ShownEvent}
  */

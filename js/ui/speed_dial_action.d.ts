@@ -131,19 +131,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxSpeedDialActionOptions.onDisposing
  * @type_function_param1 e:{ui/speed_dial_action:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSpeedDialActionOptions.onInitialized
  * @type_function_param1 e:{ui/speed_dial_action:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSpeedDialActionOptions.onOptionChanged
  * @type_function_param1 e:{ui/speed_dial_action:OptionChangedEvent}
  */

@@ -1299,25 +1299,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxSchedulerOptions.onContentReady
  * @type_function_param1 e:{ui/scheduler:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxSchedulerOptions.onDisposing
  * @type_function_param1 e:{ui/scheduler:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSchedulerOptions.onInitialized
  * @type_function_param1 e:{ui/scheduler:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSchedulerOptions.onOptionChanged
  * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
  */

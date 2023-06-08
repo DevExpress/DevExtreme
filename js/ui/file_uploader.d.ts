@@ -565,25 +565,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxFileUploaderOptions.onContentReady
  * @type_function_param1 e:{ui/file_uploader:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxFileUploaderOptions.onDisposing
  * @type_function_param1 e:{ui/file_uploader:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxFileUploaderOptions.onInitialized
  * @type_function_param1 e:{ui/file_uploader:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxFileUploaderOptions.onOptionChanged
  * @type_function_param1 e:{ui/file_uploader:OptionChangedEvent}
  */

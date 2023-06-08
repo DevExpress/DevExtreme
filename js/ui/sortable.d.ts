@@ -450,19 +450,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxSortableOptions.onDisposing
  * @type_function_param1 e:{ui/sortable:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSortableOptions.onInitialized
  * @type_function_param1 e:{ui/sortable:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSortableOptions.onOptionChanged
  * @type_function_param1 e:{ui/sortable:OptionChangedEvent}
  */

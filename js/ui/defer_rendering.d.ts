@@ -137,25 +137,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxDeferRenderingOptions.onContentReady
  * @type_function_param1 e:{ui/defer_rendering:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxDeferRenderingOptions.onDisposing
  * @type_function_param1 e:{ui/defer_rendering:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDeferRenderingOptions.onInitialized
  * @type_function_param1 e:{ui/defer_rendering:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDeferRenderingOptions.onOptionChanged
  * @type_function_param1 e:{ui/defer_rendering:OptionChangedEvent}
  */

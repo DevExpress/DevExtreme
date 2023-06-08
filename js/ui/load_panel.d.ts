@@ -230,49 +230,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxLoadPanelOptions.onContentReady
  * @type_function_param1 e:{ui/load_panel:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxLoadPanelOptions.onDisposing
  * @type_function_param1 e:{ui/load_panel:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxLoadPanelOptions.onHidden
  * @type_function_param1 e:{ui/load_panel:HiddenEvent}
  */
 onHidden?: ((e: HiddenEvent) => void);
 /**
- * @skip
  * @docid dxLoadPanelOptions.onHiding
  * @type_function_param1 e:{ui/load_panel:HidingEvent}
  */
 onHiding?: ((e: HidingEvent) => void);
 /**
- * @skip
  * @docid dxLoadPanelOptions.onInitialized
  * @type_function_param1 e:{ui/load_panel:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxLoadPanelOptions.onOptionChanged
  * @type_function_param1 e:{ui/load_panel:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxLoadPanelOptions.onShowing
  * @type_function_param1 e:{ui/load_panel:ShowingEvent}
  */
 onShowing?: ((e: ShowingEvent) => void);
 /**
- * @skip
  * @docid dxLoadPanelOptions.onShown
  * @type_function_param1 e:{ui/load_panel:ShownEvent}
  */

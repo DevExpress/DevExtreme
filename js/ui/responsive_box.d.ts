@@ -282,49 +282,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxResponsiveBoxOptions.onContentReady
  * @type_function_param1 e:{ui/responsive_box:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxResponsiveBoxOptions.onDisposing
  * @type_function_param1 e:{ui/responsive_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxResponsiveBoxOptions.onInitialized
  * @type_function_param1 e:{ui/responsive_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxResponsiveBoxOptions.onItemClick
  * @type_function_param1 e:{ui/responsive_box:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxResponsiveBoxOptions.onItemContextMenu
  * @type_function_param1 e:{ui/responsive_box:ItemContextMenuEvent}
  */
 onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
 /**
- * @skip
  * @docid dxResponsiveBoxOptions.onItemHold
  * @type_function_param1 e:{ui/responsive_box:ItemHoldEvent}
  */
 onItemHold?: ((e: ItemHoldEvent) => void);
 /**
- * @skip
  * @docid dxResponsiveBoxOptions.onItemRendered
  * @type_function_param1 e:{ui/responsive_box:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
- * @skip
  * @docid dxResponsiveBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/responsive_box:OptionChangedEvent}
  */

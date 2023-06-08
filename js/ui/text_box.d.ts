@@ -192,91 +192,76 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>
 */
 type Events = {
 /**
- * @skip
  * @docid dxTextBoxOptions.onChange
  * @type_function_param1 e:{ui/text_box:ChangeEvent}
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onContentReady
  * @type_function_param1 e:{ui/text_box:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onCopy
  * @type_function_param1 e:{ui/text_box:CopyEvent}
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onCut
  * @type_function_param1 e:{ui/text_box:CutEvent}
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onDisposing
  * @type_function_param1 e:{ui/text_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onEnterKey
  * @type_function_param1 e:{ui/text_box:EnterKeyEvent}
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onFocusIn
  * @type_function_param1 e:{ui/text_box:FocusInEvent}
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onFocusOut
  * @type_function_param1 e:{ui/text_box:FocusOutEvent}
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onInitialized
  * @type_function_param1 e:{ui/text_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onInput
  * @type_function_param1 e:{ui/text_box:InputEvent}
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onKeyDown
  * @type_function_param1 e:{ui/text_box:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onKeyUp
  * @type_function_param1 e:{ui/text_box:KeyUpEvent}
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/text_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onPaste
  * @type_function_param1 e:{ui/text_box:PasteEvent}
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @skip
  * @docid dxTextBoxOptions.onValueChanged
  * @type_function_param1 e:{ui/text_box:ValueChangedEvent}
  */

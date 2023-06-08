@@ -776,49 +776,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxSankeyOptions.onDisposing
  * @type_function_param1 e:{viz/sankey:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onDrawn
  * @type_function_param1 e:{viz/sankey:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onExported
  * @type_function_param1 e:{viz/sankey:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onExporting
  * @type_function_param1 e:{viz/sankey:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onFileSaving
  * @type_function_param1 e:{viz/sankey:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/sankey:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onInitialized
  * @type_function_param1 e:{viz/sankey:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onOptionChanged
  * @type_function_param1 e:{viz/sankey:OptionChangedEvent}
  */

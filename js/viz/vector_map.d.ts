@@ -986,49 +986,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxVectorMapOptions.onDisposing
  * @type_function_param1 e:{viz/vector_map:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onDrawn
  * @type_function_param1 e:{viz/vector_map:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onExported
  * @type_function_param1 e:{viz/vector_map:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onExporting
  * @type_function_param1 e:{viz/vector_map:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onFileSaving
  * @type_function_param1 e:{viz/vector_map:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/vector_map:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onInitialized
  * @type_function_param1 e:{viz/vector_map:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onOptionChanged
  * @type_function_param1 e:{viz/vector_map:OptionChangedEvent}
  */

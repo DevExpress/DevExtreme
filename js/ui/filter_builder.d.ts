@@ -557,25 +557,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxFilterBuilderOptions.onContentReady
  * @type_function_param1 e:{ui/filter_builder:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxFilterBuilderOptions.onDisposing
  * @type_function_param1 e:{ui/filter_builder:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxFilterBuilderOptions.onInitialized
  * @type_function_param1 e:{ui/filter_builder:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxFilterBuilderOptions.onOptionChanged
  * @type_function_param1 e:{ui/filter_builder:OptionChangedEvent}
  */

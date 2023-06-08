@@ -325,55 +325,46 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxTabPanelOptions.onContentReady
  * @type_function_param1 e:{ui/tab_panel:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onDisposing
  * @type_function_param1 e:{ui/tab_panel:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onInitialized
  * @type_function_param1 e:{ui/tab_panel:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onItemClick
  * @type_function_param1 e:{ui/tab_panel:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onItemContextMenu
  * @type_function_param1 e:{ui/tab_panel:ItemContextMenuEvent}
  */
 onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onItemHold
  * @type_function_param1 e:{ui/tab_panel:ItemHoldEvent}
  */
 onItemHold?: ((e: ItemHoldEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onItemRendered
  * @type_function_param1 e:{ui/tab_panel:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onOptionChanged
  * @type_function_param1 e:{ui/tab_panel:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onSelectionChanged
  * @type_function_param1 e:{ui/tab_panel:SelectionChangedEvent}
  */

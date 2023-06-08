@@ -241,91 +241,76 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>
 */
 type Events = {
 /**
- * @skip
  * @docid dxNumberBoxOptions.onChange
  * @type_function_param1 e:{ui/number_box:ChangeEvent}
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onContentReady
  * @type_function_param1 e:{ui/number_box:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onCopy
  * @type_function_param1 e:{ui/number_box:CopyEvent}
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onCut
  * @type_function_param1 e:{ui/number_box:CutEvent}
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onDisposing
  * @type_function_param1 e:{ui/number_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onEnterKey
  * @type_function_param1 e:{ui/number_box:EnterKeyEvent}
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onFocusIn
  * @type_function_param1 e:{ui/number_box:FocusInEvent}
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onFocusOut
  * @type_function_param1 e:{ui/number_box:FocusOutEvent}
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onInitialized
  * @type_function_param1 e:{ui/number_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onInput
  * @type_function_param1 e:{ui/number_box:InputEvent}
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onKeyDown
  * @type_function_param1 e:{ui/number_box:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onKeyUp
  * @type_function_param1 e:{ui/number_box:KeyUpEvent}
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/number_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onPaste
  * @type_function_param1 e:{ui/number_box:PasteEvent}
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @skip
  * @docid dxNumberBoxOptions.onValueChanged
  * @type_function_param1 e:{ui/number_box:ValueChangedEvent}
  */

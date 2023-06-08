@@ -857,25 +857,21 @@ export type Options = dxFormOptions;
 */
 type Events = {
 /**
- * @skip
  * @docid dxFormOptions.onContentReady
  * @type_function_param1 e:{ui/form:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxFormOptions.onDisposing
  * @type_function_param1 e:{ui/form:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxFormOptions.onInitialized
  * @type_function_param1 e:{ui/form:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxFormOptions.onOptionChanged
  * @type_function_param1 e:{ui/form:OptionChangedEvent}
  */

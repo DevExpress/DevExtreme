@@ -1670,25 +1670,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxDiagramOptions.onContentReady
  * @type_function_param1 e:{ui/diagram:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxDiagramOptions.onDisposing
  * @type_function_param1 e:{ui/diagram:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDiagramOptions.onInitialized
  * @type_function_param1 e:{ui/diagram:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDiagramOptions.onOptionChanged
  * @type_function_param1 e:{ui/diagram:OptionChangedEvent}
  */

@@ -160,31 +160,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxScrollViewOptions.onDisposing
  * @type_function_param1 e:{ui/scroll_view:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxScrollViewOptions.onInitialized
  * @type_function_param1 e:{ui/scroll_view:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxScrollViewOptions.onOptionChanged
  * @type_function_param1 e:{ui/scroll_view:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxScrollViewOptions.onScroll
  * @type_function_param1 e:{ui/scroll_view:ScrollEvent}
  */
 onScroll?: ((e: ScrollEvent) => void);
 /**
- * @skip
  * @docid dxScrollViewOptions.onUpdated
  * @type_function_param1 e:{ui/scroll_view:UpdatedEvent}
  */

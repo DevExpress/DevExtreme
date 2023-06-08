@@ -127,31 +127,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxSwitchOptions.onContentReady
  * @type_function_param1 e:{ui/switch:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxSwitchOptions.onDisposing
  * @type_function_param1 e:{ui/switch:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSwitchOptions.onInitialized
  * @type_function_param1 e:{ui/switch:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSwitchOptions.onOptionChanged
  * @type_function_param1 e:{ui/switch:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxSwitchOptions.onValueChanged
  * @type_function_param1 e:{ui/switch:ValueChangedEvent}
  */

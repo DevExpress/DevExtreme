@@ -121,31 +121,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxProgressBarOptions.onContentReady
  * @type_function_param1 e:{ui/progress_bar:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onDisposing
  * @type_function_param1 e:{ui/progress_bar:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onInitialized
  * @type_function_param1 e:{ui/progress_bar:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onOptionChanged
  * @type_function_param1 e:{ui/progress_bar:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onValueChanged
  * @type_function_param1 e:{ui/progress_bar:ValueChangedEvent}
  */

@@ -320,55 +320,46 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxAccordionOptions.onContentReady
  * @type_function_param1 e:{ui/accordion:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxAccordionOptions.onDisposing
  * @type_function_param1 e:{ui/accordion:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxAccordionOptions.onInitialized
  * @type_function_param1 e:{ui/accordion:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxAccordionOptions.onItemClick
  * @type_function_param1 e:{ui/accordion:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxAccordionOptions.onItemContextMenu
  * @type_function_param1 e:{ui/accordion:ItemContextMenuEvent}
  */
 onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
 /**
- * @skip
  * @docid dxAccordionOptions.onItemHold
  * @type_function_param1 e:{ui/accordion:ItemHoldEvent}
  */
 onItemHold?: ((e: ItemHoldEvent) => void);
 /**
- * @skip
  * @docid dxAccordionOptions.onItemRendered
  * @type_function_param1 e:{ui/accordion:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
- * @skip
  * @docid dxAccordionOptions.onOptionChanged
  * @type_function_param1 e:{ui/accordion:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxAccordionOptions.onSelectionChanged
  * @type_function_param1 e:{ui/accordion:SelectionChangedEvent}
  */

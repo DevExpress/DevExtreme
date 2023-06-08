@@ -135,25 +135,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxRangeSliderOptions.onContentReady
  * @type_function_param1 e:{ui/range_slider:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxRangeSliderOptions.onDisposing
  * @type_function_param1 e:{ui/range_slider:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxRangeSliderOptions.onInitialized
  * @type_function_param1 e:{ui/range_slider:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxRangeSliderOptions.onOptionChanged
  * @type_function_param1 e:{ui/range_slider:OptionChangedEvent}
  */

@@ -387,49 +387,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxMenuOptions.onContentReady
  * @type_function_param1 e:{ui/menu:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxMenuOptions.onDisposing
  * @type_function_param1 e:{ui/menu:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxMenuOptions.onInitialized
  * @type_function_param1 e:{ui/menu:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxMenuOptions.onItemClick
  * @type_function_param1 e:{ui/menu:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxMenuOptions.onItemContextMenu
  * @type_function_param1 e:{ui/menu:ItemContextMenuEvent}
  */
 onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
 /**
- * @skip
  * @docid dxMenuOptions.onItemRendered
  * @type_function_param1 e:{ui/menu:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
- * @skip
  * @docid dxMenuOptions.onOptionChanged
  * @type_function_param1 e:{ui/menu:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxMenuOptions.onSelectionChanged
  * @type_function_param1 e:{ui/menu:SelectionChangedEvent}
  */

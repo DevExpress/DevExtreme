@@ -138,19 +138,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>
 */
 type Events = {
 /**
- * @skip
  * @docid dxValidationGroupOptions.onDisposing
  * @type_function_param1 e:{ui/validation_group:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxValidationGroupOptions.onInitialized
  * @type_function_param1 e:{ui/validation_group:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxValidationGroupOptions.onOptionChanged
  * @type_function_param1 e:{ui/validation_group:OptionChangedEvent}
  */

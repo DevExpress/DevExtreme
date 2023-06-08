@@ -1823,25 +1823,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxGanttOptions.onContentReady
  * @type_function_param1 e:{ui/gantt:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxGanttOptions.onDisposing
  * @type_function_param1 e:{ui/gantt:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxGanttOptions.onInitialized
  * @type_function_param1 e:{ui/gantt:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxGanttOptions.onOptionChanged
  * @type_function_param1 e:{ui/gantt:OptionChangedEvent}
  */

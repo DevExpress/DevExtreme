@@ -107,49 +107,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxTooltipOptions.onContentReady
  * @type_function_param1 e:{ui/tooltip:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onDisposing
  * @type_function_param1 e:{ui/tooltip:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onHidden
  * @type_function_param1 e:{ui/tooltip:HiddenEvent}
  */
 onHidden?: ((e: HiddenEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onHiding
  * @type_function_param1 e:{ui/tooltip:HidingEvent}
  */
 onHiding?: ((e: HidingEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onInitialized
  * @type_function_param1 e:{ui/tooltip:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onOptionChanged
  * @type_function_param1 e:{ui/tooltip:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onShowing
  * @type_function_param1 e:{ui/tooltip:ShowingEvent}
  */
 onShowing?: ((e: ShowingEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onShown
  * @type_function_param1 e:{ui/tooltip:ShownEvent}
  */

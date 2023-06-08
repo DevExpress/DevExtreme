@@ -295,49 +295,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxActionSheetOptions.onContentReady
  * @type_function_param1 e:{ui/action_sheet:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxActionSheetOptions.onDisposing
  * @type_function_param1 e:{ui/action_sheet:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxActionSheetOptions.onInitialized
  * @type_function_param1 e:{ui/action_sheet:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxActionSheetOptions.onItemClick
  * @type_function_param1 e:{ui/action_sheet:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxActionSheetOptions.onItemContextMenu
  * @type_function_param1 e:{ui/action_sheet:ItemContextMenuEvent}
  */
 onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
 /**
- * @skip
  * @docid dxActionSheetOptions.onItemHold
  * @type_function_param1 e:{ui/action_sheet:ItemHoldEvent}
  */
 onItemHold?: ((e: ItemHoldEvent) => void);
 /**
- * @skip
  * @docid dxActionSheetOptions.onItemRendered
  * @type_function_param1 e:{ui/action_sheet:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
- * @skip
  * @docid dxActionSheetOptions.onOptionChanged
  * @type_function_param1 e:{ui/action_sheet:OptionChangedEvent}
  */

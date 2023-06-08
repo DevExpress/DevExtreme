@@ -229,55 +229,46 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxMultiViewOptions.onContentReady
  * @type_function_param1 e:{ui/multi_view:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxMultiViewOptions.onDisposing
  * @type_function_param1 e:{ui/multi_view:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxMultiViewOptions.onInitialized
  * @type_function_param1 e:{ui/multi_view:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxMultiViewOptions.onItemClick
  * @type_function_param1 e:{ui/multi_view:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxMultiViewOptions.onItemContextMenu
  * @type_function_param1 e:{ui/multi_view:ItemContextMenuEvent}
  */
 onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
 /**
- * @skip
  * @docid dxMultiViewOptions.onItemHold
  * @type_function_param1 e:{ui/multi_view:ItemHoldEvent}
  */
 onItemHold?: ((e: ItemHoldEvent) => void);
 /**
- * @skip
  * @docid dxMultiViewOptions.onItemRendered
  * @type_function_param1 e:{ui/multi_view:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
- * @skip
  * @docid dxMultiViewOptions.onOptionChanged
  * @type_function_param1 e:{ui/multi_view:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxMultiViewOptions.onSelectionChanged
  * @type_function_param1 e:{ui/multi_view:SelectionChangedEvent}
  */

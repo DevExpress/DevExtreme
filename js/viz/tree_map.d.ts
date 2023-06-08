@@ -798,49 +798,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxTreeMapOptions.onDisposing
  * @type_function_param1 e:{viz/tree_map:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxTreeMapOptions.onDrawn
  * @type_function_param1 e:{viz/tree_map:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxTreeMapOptions.onExported
  * @type_function_param1 e:{viz/tree_map:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxTreeMapOptions.onExporting
  * @type_function_param1 e:{viz/tree_map:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxTreeMapOptions.onFileSaving
  * @type_function_param1 e:{viz/tree_map:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxTreeMapOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/tree_map:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxTreeMapOptions.onInitialized
  * @type_function_param1 e:{viz/tree_map:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxTreeMapOptions.onOptionChanged
  * @type_function_param1 e:{viz/tree_map:OptionChangedEvent}
  */

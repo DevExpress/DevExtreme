@@ -229,25 +229,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxCalendarOptions.onDisposing
  * @type_function_param1 e:{ui/calendar:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxCalendarOptions.onInitialized
  * @type_function_param1 e:{ui/calendar:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxCalendarOptions.onOptionChanged
  * @type_function_param1 e:{ui/calendar:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxCalendarOptions.onValueChanged
  * @type_function_param1 e:{ui/calendar:ValueChangedEvent}
  */
