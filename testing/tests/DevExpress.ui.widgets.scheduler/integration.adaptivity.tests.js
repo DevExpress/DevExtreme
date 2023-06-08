@@ -7,6 +7,7 @@ import {
     TOOLBAR_TOP_LOCATION,
     TOOLBAR_BOTTOM_LOCATION } from '../../helpers/scheduler/helpers.js';
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
+import { hasVisualViewport } from 'core/utils/visual_viewport';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from 'core/devices';
 import 'ui/switch';
@@ -41,14 +42,34 @@ const moduleConfig = {
     }
 };
 
-const setWindowWidth = width => {
-    Object.defineProperty(document.documentElement, 'clientWidth', {
-        get: () => width,
-        configurable: true
+const setConfigurableProperty = (object, propertyName, value) => {
+    Object.defineProperty(object, propertyName, {
+        get: () => value,
+        configurable: true,
     });
 };
 
-const resetWindowWidth = () => delete document.documentElement.clientWidth;
+const setWindowWidth = width => {
+    setConfigurableProperty(document.documentElement, 'clientWidth', width);
+
+    const shouldUseVisualViewport = hasVisualViewport();
+
+    if(shouldUseVisualViewport) {
+        setConfigurableProperty(window, 'innerWidth', width);
+        setConfigurableProperty(window.visualViewport, 'width', width);
+    }
+};
+
+const resetWindowWidth = () => {
+    delete document.documentElement.clientWidth;
+
+    const wasVisualViewportUsed = hasVisualViewport();
+
+    if(wasVisualViewportUsed) {
+        delete window.innerWidth;
+        delete window.visualViewport.width;
+    }
+};
 
 module('Mobile tooltip', moduleConfig, () => {
     test('Tooltip should be render scroll, if count of items in list is a lot', function(assert) {
