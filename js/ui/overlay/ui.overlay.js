@@ -425,9 +425,9 @@ const Overlay = Widget.inherit({
         const isVisualViewportAvailable = hasVisualViewport();
 
         const device = devices.real();
-        const isIOS = device.platform === 'ios';
+        const isMobile = ['phone', 'tablet'].includes(device.deviceType);
 
-        const shouldUseVisualViewport = isIOS && isVisualContainerWindow && isVisualViewportAvailable;
+        const shouldUseVisualViewport = isMobile && isVisualContainerWindow && isVisualViewportAvailable;
 
         return shouldUseVisualViewport;
     },
@@ -1160,7 +1160,7 @@ const Overlay = Widget.inherit({
         this._positionController.positionWrapper();
     },
 
-    _renderWrapperDimensions: function() {
+    _renderWrapperDimensions() {
         const $visualContainer = this._positionController.$visualContainer;
         const documentElement = domAdapter.getDocumentElement();
         const isVisualContainerWindow = this._isVisualContainerWindow();
