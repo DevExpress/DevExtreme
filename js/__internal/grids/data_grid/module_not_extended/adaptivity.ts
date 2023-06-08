@@ -1,4 +1,5 @@
-import { adaptivityModule } from '@js/ui/grid_core/ui.grid_core.adaptivity';
-import gridCore from '../module_core';
+import { adaptivityModule } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
+
+import gridCore from '../m_core';
 
 gridCore.registerModule('adaptivity', adaptivityModule);

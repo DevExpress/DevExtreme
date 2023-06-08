@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
-import $ from '@js/core/renderer';
 import domAdapter from '@js/core/dom_adapter';
-import { isDefined } from '@js/core/utils/type';
+import $ from '@js/core/renderer';
 import { compileGetter } from '@js/core/utils/data';
-import messageLocalization from '@js/localization/message';
+import { isDefined } from '@js/core/utils/type';
 import dataQuery from '@js/data/query';
-import gridCoreUtils from '../module_utils';
+import messageLocalization from '@js/localization/message';
+
+import gridCoreUtils from '../m_utils';
 
 const SEARCH_PANEL_CLASS = 'search-panel';
 const SEARCH_TEXT_CLASS = 'search-text';

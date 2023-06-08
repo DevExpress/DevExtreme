@@ -1,8 +1,10 @@
-import { isDefined } from '@js/core/utils/type';
 import devices from '@js/core/devices';
-import { EDITOR_CELL_CLASS } from '@js/ui/grid_core/ui.grid_core.editing_constants';
+import { isDefined } from '@js/core/utils/type';
+
+import { EDITOR_CELL_CLASS } from '../editing/const';
 import {
-  GROUP_ROW_CLASS, MASTER_DETAIL_ROW_CLASS, FREESPACE_ROW_CLASS, VIRTUAL_ROW_CLASS, COMMAND_SELECT_CLASS, HEADER_ROW_CLASS,
+  COMMAND_SELECT_CLASS, FREESPACE_ROW_CLASS, GROUP_ROW_CLASS, HEADER_ROW_CLASS,
+  MASTER_DETAIL_ROW_CLASS, VIRTUAL_ROW_CLASS,
 } from './const';
 
 export function isGroupRow($row) {

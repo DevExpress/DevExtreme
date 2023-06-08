@@ -1,23 +1,24 @@
-import { getWidth } from '@js/core/utils/size';
-import $ from '@js/core/renderer';
-import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
-import { name as clickEventName } from '@js/events/click';
-import { isDefined, isString } from '@js/core/utils/type';
 import Guid from '@js/core/guid';
-import { getWindow } from '@js/core/utils/window';
+import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
 // @ts-expect-error
 import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { getWidth } from '@js/core/utils/size';
+import { isDefined, isString } from '@js/core/utils/type';
+import { getWindow } from '@js/core/utils/window';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
-import { isMaterial } from '@js/ui/themes';
 import Form from '@js/ui/form';
-import gridCoreUtils from '../module_utils';
-import modules from '../modules';
-import type { KeyboardNavigationController } from '../keyboard_navigation/module';
-import type { ModuleType } from '../module_types';
+import { isMaterial } from '@js/ui/themes';
+
+import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
+import modules from '../m_modules';
+import type { ModuleType } from '../m_types';
+import gridCoreUtils from '../m_utils';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 const ROWS_VIEW = 'rowsView';
@@ -802,7 +803,7 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
     this._adaptiveController = this.getController('adaptiveColumns');
   }
 };
-export const adaptivityModule: import('../module_types').Module = {
+export const adaptivityModule: import('../m_types').Module = {
   defaultOptions(): any {
     return {
       columnHidingEnabled: false,

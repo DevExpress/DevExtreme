@@ -1,6 +1,7 @@
 import { extend } from '@js/core/utils/extend';
-import { masterDetailModule } from '@js/ui/grid_core/ui.grid_core.master_detail';
-import treeListCore from './module_core';
+import { masterDetailModule } from '@ts/grids/grid_core/master_detail/m_master_detail';
+
+import treeListCore from './m_core';
 
 treeListCore.registerModule('masterDetail', extend(true, {}, masterDetailModule, {
   extenders: {

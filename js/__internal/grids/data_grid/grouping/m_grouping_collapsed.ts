@@ -1,13 +1,14 @@
+// @ts-expect-error
+import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import errors from '@js/ui/widget/ui.errors';
 // @ts-expect-error
 import { errors as dataErrors } from '@js/data/errors';
-// @ts-expect-error
-import { when, Deferred } from '@js/core/utils/deferred';
-import dataGridCore from '../module_core';
-import { GroupingHelper as GroupingHelperCore, createOffsetFilter } from './module_core';
-import { createGroupFilter } from '../module_utils';
+import errors from '@js/ui/widget/ui.errors';
+
+import dataGridCore from '../m_core';
+import { createGroupFilter } from '../m_utils';
+import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
 
 function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {
   groupIndex = groupIndex || 0;

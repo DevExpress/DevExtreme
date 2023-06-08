@@ -1,18 +1,19 @@
 import $ from '@js/core/renderer';
+// @ts-expect-error
+import { Deferred, when } from '@js/core/utils/deferred';
+import { captionize } from '@js/core/utils/inflector';
 import { isDefined } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import messageLocalization from '@js/localization/message';
 import CheckBox from '@js/ui/check_box';
 import {
-  getCurrentLookupValueText, getCustomOperation, getCurrentValueText,
-  getField, getCaptionByOperation, getGroupValue, isCondition, isGroup,
+  getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
+  getCustomOperation, getField, getGroupValue, isCondition, isGroup,
 } from '@js/ui/filter_builder/utils';
-// @ts-expect-error
-import { when, Deferred } from '@js/core/utils/deferred';
-import { captionize } from '@js/core/utils/inflector';
-import { registerKeyboardAction } from '../module_accessibility';
-import gridUtils from '../module_utils';
-import modules from '../modules';
+
+import { registerKeyboardAction } from '../m_accessibility';
+import modules from '../m_modules';
+import gridUtils from '../m_utils';
 
 const FILTER_PANEL_CLASS = 'filter-panel';
 const FILTER_PANEL_TEXT_CLASS = `${FILTER_PANEL_CLASS}-text`;

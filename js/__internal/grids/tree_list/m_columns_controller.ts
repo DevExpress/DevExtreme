@@ -1,6 +1,7 @@
 import { isDefined } from '@js/core/utils/type';
-import { columnsControllerModule } from '../grid_core/columns_controller/module';
-import treeListCore from './module_core';
+import { columnsControllerModule } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+
+import treeListCore from './m_core';
 
 export const ColumnsController = (columnsControllerModule as any).controllers.columns.inherit((function () {
   return {

@@ -1,19 +1,20 @@
-import $ from '@js/core/renderer';
-import Class from '@js/core/class';
-import { isDefined, isFunction } from '@js/core/utils/type';
-import { extend } from '@js/core/utils/extend';
-import { getDefaultAlignment } from '@js/core/utils/position';
-import { export as clientExport, excel } from '@js/exporter';
-import { format } from '@js/core/utils/string';
-import messageLocalization from '@js/localization/message';
-
 import '@js/ui/button';
 import '@js/ui/drop_down_button';
+
+import Class from '@js/core/class';
+import $ from '@js/core/renderer';
 // @ts-expect-error
-import { when, Deferred } from '@js/core/utils/deferred';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { getDefaultAlignment } from '@js/core/utils/position';
+import { format } from '@js/core/utils/string';
+import { isDefined, isFunction } from '@js/core/utils/type';
+import { excel, export as clientExport } from '@js/exporter';
+import messageLocalization from '@js/localization/message';
 import List from '@js/ui/list_light';
-import { prepareItems } from '@js/ui/grid_core/ui.grid_core.export';
-import dataGridCore from '../module_core';
+import { prepareItems } from '@ts/grids/grid_core/m_export';
+
+import dataGridCore from '../m_core';
 
 const DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu';
 const DATAGRID_EXPORT_BUTTON_CLASS = 'dx-datagrid-export-button';

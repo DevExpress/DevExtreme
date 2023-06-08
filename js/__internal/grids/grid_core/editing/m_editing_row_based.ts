@@ -1,8 +1,8 @@
 import {
+  EDIT_FORM_CLASS,
   EDIT_MODE_ROW,
   MODES_WITH_DELAYED_FOCUS,
   ROW_SELECTED_CLASS,
-  EDIT_FORM_CLASS,
 } from './const';
 
 const EDIT_ROW = 'dx-edit-row';

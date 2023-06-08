@@ -1,5 +1,5 @@
-import { isDate, isFunction } from '@js/core/utils/type';
 import dateSerialization from '@js/core/utils/date_serialization';
+import { isDate, isFunction } from '@js/core/utils/type';
 
 // TODO Vinogradov: Move it to ts and cover with unit tests.
 const getSortFilterValue = (

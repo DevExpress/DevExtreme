@@ -1,15 +1,15 @@
 import Class from '@js/core/class';
-import { isDefined } from '@js/core/utils/type';
+// @ts-expect-error
+import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { hasWindow } from '@js/core/utils/window';
 import { getDefaultAlignment } from '@js/core/utils/position';
+import { isDefined } from '@js/core/utils/type';
+import { hasWindow } from '@js/core/utils/window';
+import { excel as excelExporter, export as exportMethod } from '@js/exporter';
 import formatHelper from '@js/format_helper';
 import localizationNumber from '@js/localization/number';
-import { excel as excelExporter, export as exportMethod } from '@js/exporter';
-import { prepareItems } from '@js/ui/grid_core/ui.grid_core.export';
-// @ts-expect-error
-import { when, Deferred } from '@js/core/utils/deferred';
+import { prepareItems } from '@ts/grids/grid_core/m_export';
 
 const DEFAULT_DATA_TYPE = 'string';
 const DEFAUL_COLUMN_WIDTH = 100;
@@ -367,4 +367,4 @@ const PivotGridExport = {
 };
 
 export default { ExportController, PivotGridExport, DataProvider };
-export { ExportController, PivotGridExport, DataProvider };
+export { DataProvider, ExportController, PivotGridExport };

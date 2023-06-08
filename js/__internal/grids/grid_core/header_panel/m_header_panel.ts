@@ -1,13 +1,13 @@
+import '@js/ui/drop_down_menu';
+
 import $ from '@js/core/renderer';
-import Toolbar from '@js/ui/toolbar';
-import { ColumnsView } from '@js/ui/grid_core/ui.grid_core.columns_view';
 import { noop } from '@js/core/utils/common';
+import { getPathParts } from '@js/core/utils/data';
+import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
-
-import '@js/ui/drop_down_menu';
-import { extend } from '@js/core/utils/extend';
-import { getPathParts } from '@js/core/utils/data';
+import Toolbar from '@js/ui/toolbar';
+import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
 const HEADER_PANEL_CLASS = 'header-panel';
 const TOOLBAR_BUTTON_CLASS = 'toolbar-button';

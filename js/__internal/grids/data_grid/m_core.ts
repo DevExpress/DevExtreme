@@ -1,8 +1,9 @@
-import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
-import modules from '@js/ui/grid_core/ui.grid_core.modules';
+import modules from '@ts/grids/grid_core/m_modules';
+import { Module } from '@ts/grids/grid_core/m_types';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 export default {
   ...modules,
   ...gridCoreUtils,
-  modules: [],
-} as any;
+  modules: [] as Module[],
+};

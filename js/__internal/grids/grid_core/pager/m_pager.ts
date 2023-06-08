@@ -1,8 +1,9 @@
-import Pager from '@js/ui/pager';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
-import modules from '../modules';
+import Pager from '@js/ui/pager';
+
+import modules from '../m_modules';
 
 const PAGER_CLASS = 'pager';
 const MAX_PAGES_COUNT = 10;
