@@ -1,13 +1,14 @@
+import '../field_chooser/m_field_chooser_base';
+
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setWidth } from '@js/core/utils/style';
-import Popup from '@js/ui/popup/ui.popup';
 import Button from '@js/ui/button';
+import Popup from '@js/ui/popup/ui.popup';
 
-import { AreaItem } from '../area_item/module';
-import { capitalizeFirstLetter } from '../module_widget_utils';
-import '../field_chooser/module_base';
+import { AreaItem } from '../area_item/m_area_item';
+import { capitalizeFirstLetter } from '../m_widget_utils';
 
 const DIV = '<div>';
 

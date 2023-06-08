@@ -1,12 +1,13 @@
-import { getHeight } from '@js/core/utils/size';
 import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { getHeight } from '@js/core/utils/size';
+import { isDefined } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import messageLocalization from '@js/localization/message';
-import { isDefined } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
-import { ColumnsView } from '../columns_view/module';
-import { registerKeyboardAction } from '../module_accessibility';
+
+import { registerKeyboardAction } from '../m_accessibility';
+import { ColumnsView } from '../views/m_columns_view';
 
 const CELL_CONTENT_CLASS = 'text-content';
 const HEADERS_CLASS = 'headers';

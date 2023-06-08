@@ -1,28 +1,29 @@
-import {
-  getOuterWidth, getWidth, getOuterHeight, setHeight,
-} from '@js/core/utils/size';
 import $ from '@js/core/renderer';
-import eventsEngine from '@js/events/core/events_engine';
-import { createObjectWithChanges } from '@js/data/array_utils';
+import browser from '@js/core/utils/browser';
 import { deferUpdate, equalByValue, getKeyHash } from '@js/core/utils/common';
-import { each } from '@js/core/utils/iterator';
-import { isDefined, isEmptyObject, isObject } from '@js/core/utils/type';
+// @ts-expect-error
+import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { focused } from '@js/ui/widget/selectors';
+import { each } from '@js/core/utils/iterator';
+import {
+  getOuterHeight, getOuterWidth, getWidth, setHeight,
+} from '@js/core/utils/size';
+import { encodeHtml } from '@js/core/utils/string';
+import { isDefined, isEmptyObject, isObject } from '@js/core/utils/type';
+import { createObjectWithChanges } from '@js/data/array_utils';
+import eventsEngine from '@js/events/core/events_engine';
+import pointerEvents from '@js/events/pointer';
 import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
-import pointerEvents from '@js/events/pointer';
+import LoadIndicator from '@js/ui/load_indicator';
+import Overlay from '@js/ui/overlay/ui.overlay';
 import ValidationEngine from '@js/ui/validation_engine';
 import Validator from '@js/ui/validator';
-import Overlay from '@js/ui/overlay/ui.overlay';
+import { focused } from '@js/ui/widget/selectors';
 import errors from '@js/ui/widget/ui.errors';
-// @ts-expect-error
-import { Deferred, when, fromPromise } from '@js/core/utils/deferred';
-import LoadIndicator from '@js/ui/load_indicator';
-import { encodeHtml } from '@js/core/utils/string';
-import browser from '@js/core/utils/browser';
-import gridCoreUtils from '../module_utils';
-import modules from '../modules';
+
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
 
 const INVALIDATE_CLASS = 'invalid';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';

@@ -1,7 +1,8 @@
-import { getWidth, getOuterWidth } from '@js/core/utils/size';
-import { hasWindow } from '@js/core/utils/window';
+import { getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import { createColumnsInfo } from './module_core';
+import { hasWindow } from '@js/core/utils/window';
+
+import { createColumnsInfo } from './m_virtual_columns_core';
 
 const DEFAULT_COLUMN_WIDTH = 50;
 

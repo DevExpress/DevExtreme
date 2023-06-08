@@ -1,13 +1,15 @@
 import '../module_not_extended/editor_factory';
+
 import $ from '@js/core/renderer';
-import { isDefined } from '@js/core/utils/type';
-import { extend } from '@js/core/utils/extend';
 import { Deferred } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
-import gridCoreUtils from '@js/ui/grid_core/ui.grid_core.utils';
-import { editingModule } from '@js/ui/grid_core/ui.grid_core.editing';
-import treeListCore from '../module_core';
+import { editingModule } from '@ts/grids/grid_core/editing/m_editing';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+
+import treeListCore from '../m_core';
 
 const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
 const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';

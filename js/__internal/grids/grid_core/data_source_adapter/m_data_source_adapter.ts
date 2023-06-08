@@ -1,13 +1,14 @@
 import Callbacks from '@js/core/utils/callbacks';
 import { executeAsync, getKeyHash } from '@js/core/utils/common';
-import { isDefined, isPlainObject, isFunction } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
+import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import ArrayStore from '@js/data/array_store';
 import { applyBatch } from '@js/data/array_utils';
-import { when, Deferred } from '@js/core/utils/deferred';
-import modules from '../modules';
-import gridCoreUtils from '../module_utils';
+
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
 
 export default modules.Controller.inherit((function () {
   function cloneItems(items, groupCount) {

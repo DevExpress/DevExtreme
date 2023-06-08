@@ -1,21 +1,23 @@
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
-import {
-  isDefined, isPlainObject, isEmptyObject, isString, isFunction,
-} from '@js/core/utils/type';
-import { each, map } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
 import { compileGetter } from '@js/core/utils/data';
-import messageLocalization from '@js/localization/message';
-import { ColumnsView } from '@js/ui/grid_core/ui.grid_core.columns_view';
+import { extend } from '@js/core/utils/extend';
+import { each, map } from '@js/core/utils/iterator';
+import {
+  isDefined, isEmptyObject, isFunction,
+  isPlainObject, isString,
+} from '@js/core/utils/type';
 import dataQuery from '@js/data/query';
 import storeHelper from '@js/data/store_helper';
 // @ts-expect-error
 import { normalizeSortingInfo } from '@js/data/utils';
+import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
-import AggregateCalculator from '../module_aggregate_calculator';
-import dataSourceAdapter from '../module_data_source_adapter';
-import gridCore from '../module_core';
+import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
+
+import AggregateCalculator from '../m_aggregate_calculator';
+import gridCore from '../m_core';
+import dataSourceAdapter from '../m_data_source_adapter';
 
 const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
 const DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item';

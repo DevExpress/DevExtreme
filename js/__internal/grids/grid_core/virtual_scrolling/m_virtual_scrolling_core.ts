@@ -1,15 +1,16 @@
+import positionUtils from '@js/animation/position';
+import Class from '@js/core/class';
 import $ from '@js/core/renderer';
+import browser from '@js/core/utils/browser';
+import Callbacks from '@js/core/utils/callbacks';
+import { Deferred } from '@js/core/utils/deferred';
+import { each } from '@js/core/utils/iterator';
+import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
-import browser from '@js/core/utils/browser';
-import positionUtils from '@js/animation/position';
-import { each } from '@js/core/utils/iterator';
-import Class from '@js/core/class';
-import { Deferred } from '@js/core/utils/deferred';
-import Callbacks from '@js/core/utils/callbacks';
-import { isDefined } from '@js/core/utils/type';
-import { VirtualDataLoader } from '../virtual_data_loader/module';
-import gridCoreUtils from '../module_utils';
+
+import gridCoreUtils from '../m_utils';
+import { VirtualDataLoader } from '../virtual_data_loader/m_virtual_data_loader';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
@@ -420,4 +421,4 @@ const VirtualScrollController = Class.inherit((function () {
 })());
 
 export default { VirtualScrollController };
-export { VirtualScrollController, subscribeToExternalScrollers };
+export { subscribeToExternalScrollers, VirtualScrollController };

@@ -1,6 +1,7 @@
 import { extend } from '@js/core/utils/extend';
-import { keyboardNavigationModule } from '@js/ui/grid_core/ui.grid_core.keyboard_navigation';
-import core from './module_core';
+import { keyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
+
+import core from './m_core';
 
 core.registerModule('keyboardNavigation', extend(true, {}, keyboardNavigationModule, {
   extenders: {

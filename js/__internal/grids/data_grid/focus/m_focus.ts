@@ -1,15 +1,16 @@
 /* eslint-disable class-methods-use-this */
-import { focusModule } from '@js/ui/grid_core/ui.grid_core.focus';
-import { Deferred } from '@js/core/utils/deferred';
-import { isDefined } from '@js/core/utils/type';
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
+import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { createGroupFilter } from '../module_utils';
-import gridCore from '../module_core';
-import type { ModuleType } from '../../grid_core/module_types';
-import type { DataController } from '../../grid_core/data_controller/module';
-import type { GroupingDataControllerExtension } from '../grouping/module';
+import { isDefined } from '@js/core/utils/type';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
+import { focusModule } from '@ts/grids/grid_core/focus/m_focus';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
+
+import type { GroupingDataControllerExtension } from '../grouping/m_grouping';
+import gridCore from '../m_core';
+import { createGroupFilter } from '../m_utils';
 
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
 
@@ -29,6 +30,7 @@ gridCore.registerModule('focus', extend(true, {}, focusModule, {
   extenders: {
     controllers: {
       data: (Base: DataControllerBase): DataControllerBase => class FocusDataControllerExtender
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         extends (Base.inherit(focusModule.extenders.controllers.data) as DataControllerBase) {
         changeRowExpand(path, isRowClick) {
           if (this.option('focusedRowEnabled') && Array.isArray(path) && this.isRowExpanded(path)) {

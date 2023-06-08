@@ -1,6 +1,7 @@
 import { extend } from '@js/core/utils/extend';
-import { stateStoringModule } from '@js/ui/grid_core/ui.grid_core.state_storing';
-import treeListCore from './module_core';
+import { stateStoringModule } from '@ts/grids/grid_core/state_storing/m_state_storing';
+
+import treeListCore from './m_core';
 
 const origApplyState = stateStoringModule.extenders.controllers.stateStoring.applyState;
 
