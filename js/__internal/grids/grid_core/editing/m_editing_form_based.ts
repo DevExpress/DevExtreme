@@ -64,7 +64,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     this._editForm = null;
     this._updateEditFormDeferred = null;
 
-    this.callBase.apply(this, arguments);
+    super.init();
   }
 
   isFormOrPopupEditMode() {
@@ -91,15 +91,15 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       return this._rowsView._getEditFormEditorVisibleIndex($editFormElements, firstFormItem.column);
     }
 
-    return this.callBase.apply(this, arguments);
+    return super.getFirstEditableColumnIndex();
   }
 
   getEditFormRowIndex() {
-    return this.isFormOrPopupEditMode() ? this._getVisibleEditRowIndex() : this.callBase.apply(this, arguments);
+    return this.isFormOrPopupEditMode() ? this._getVisibleEditRowIndex() : super.getEditFormRowIndex();
   }
 
   _isEditColumnVisible() {
-    const result = this.callBase.apply(this, arguments);
+    const result = super._isEditColumnVisible();
     const editingOptions: any = this.option('editing');
 
     return this.isFormOrPopupEditMode() ? editingOptions.allowUpdating || result : result;
@@ -117,7 +117,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       }
     }
 
-    this.callBase.apply(this, arguments);
+    super._handleDataChanged(args);
   }
 
   getPopupContent() {
@@ -132,12 +132,12 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     if (this.isPopupEditMode()) {
       this._showEditPopup(rowIndex);
     } else {
-      this.callBase.apply(this, arguments);
+      super._showAddedRow(rowIndex);
     }
   }
 
   _cancelEditDataCore() {
-    this.callBase.apply(this, arguments);
+    super._cancelEditDataCore();
 
     if (this.isPopupEditMode()) {
       this._hideEditPopup();
@@ -160,7 +160,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         }
       }
     } else {
-      this.callBase.apply(this, arguments);
+      super._updateEditRowCore(row, skipCurrentRow, isCustomSetCellValue);
     }
   }
 
@@ -205,7 +205,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     this._editPopup.option(popupOptions);
     this._editPopup.show();
 
-    this.callBase.apply(this, arguments);
+    super._showEditPopup(rowIndex, repaintForm);
   }
 
   _getPopupEditFormTemplate(rowIndex) {
@@ -265,7 +265,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       }
     }
 
-    this.callBase.apply(this, arguments);
+    super.optionChanged(args);
   }
 
   _handleFormOptionChange(args) {
@@ -464,26 +464,28 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     this._updateEditFormDeferred?.resolve();
   }
 
-  _beforeEndSaving() {
-    this.callBase.apply(this, arguments);
+  _beforeEndSaving(changes) {
+    super._beforeEndSaving(changes);
 
     if (this.isPopupEditMode()) {
       this._editPopup?.hide();
     }
   }
 
-  _processDataItemCore(item, { type }) {
+  _processDataItemCore(item, change, key, columns, generateDataValues) {
+    const { type } = change;
+
     if (this.isPopupEditMode() && type === DATA_EDIT_DATA_INSERT_TYPE) {
       item.visible = false;
     }
 
-    this.callBase.apply(this, arguments);
+    super._processDataItemCore(item, change, key, columns, generateDataValues);
   }
 
   _editRowFromOptionChangedCore(rowIndices, rowIndex) {
     const isPopupEditMode = this.isPopupEditMode();
 
-    this.callBase(rowIndices, rowIndex, isPopupEditMode);
+    super._editRowFromOptionChangedCore(rowIndices, rowIndex, isPopupEditMode);
 
     if (isPopupEditMode) {
       this._showEditPopup(rowIndex);
