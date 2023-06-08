@@ -18,7 +18,6 @@ import errors from './widget/ui.errors';
 import Popup from './popup/ui.popup';
 
 import { ensureDefined } from '../core/utils/common';
-import { getVisualViewportSizes } from '../core/utils/visual_viewport';
 
 const window = getWindow();
 
@@ -159,10 +158,8 @@ export const custom = function(options) {
         const isPhone = devices.real().deviceType === 'phone';
 
         if(isPhone) {
-            const shouldUseVisualViewport = popupInstance._shouldUseVisualViewport();
-
-            const windowHeight = shouldUseVisualViewport ? getVisualViewportSizes().height : getHeight(window);
-            const windowWidth = shouldUseVisualViewport ? getVisualViewportSizes().width : getWidth(window);
+            const windowHeight = getHeight(window);
+            const windowWidth = getWidth(window);
 
             const isPortrait = windowHeight > windowWidth;
 
