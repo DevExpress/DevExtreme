@@ -25,8 +25,7 @@ const DEVICE_TYPE = {
 const PLATFORM = {
     generic: 'generic',
     ios: 'ios',
-    // eslint-disable-next-line spellcheck/spell-checker
-    ipados: 'ipados',
+    ipad: 'ipad',
     android: 'android',
 };
 
@@ -108,8 +107,7 @@ const uaParsers = {
 
         return {
             deviceType: DEVICE_TYPE.tablet,
-            // eslint-disable-next-line spellcheck/spell-checker
-            platform: PLATFORM.ipados,
+            platform: PLATFORM.ipad,
             grade: 'A',
         };
     },
