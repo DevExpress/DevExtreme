@@ -50,6 +50,7 @@ const DEFAULT_DEVICE = {
     tablet: false,
     android: false,
     ios: false,
+    ipad: false,
     generic: true,
     grade: 'A',
 
@@ -75,6 +76,7 @@ const uaParsers = {
         return {
             deviceType: DEVICE_TYPE.tablet,
             platform: PLATFORM.ipad,
+            ipad: isIpadOS,
             grade: 'A',
         };
     },

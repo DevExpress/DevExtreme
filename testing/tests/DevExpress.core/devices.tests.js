@@ -164,6 +164,18 @@ QUnit.test('method current sets necessary flags', function(assert) {
     assert.ok(device.tablet, 'correct tablet flag');
 });
 
+QUnit.test('method current sets correct ipad shortcut', function(assert) {
+    devices.current({
+        platform: 'ipad',
+    });
+
+    const device = devices.current();
+
+    assert.strictEqual(device.ipad, true, 'correct ipad flag');
+    assert.strictEqual(device.deviceType, 'tablet', 'correct deviceType value');
+    assert.strictEqual(device.tablet, true, 'correct tablet flag');
+});
+
 QUnit.test('method current sets correct shortcuts if deviceType was not forced (T268185)', function(assert) {
     devices.current({
         platform: 'android',
