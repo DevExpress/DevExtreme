@@ -26,7 +26,10 @@ testStart(() => {
     $('#qunit-fixture').html('<div id="recurrence-editor"></div>');
 });
 
-const createInstance = options => new RecurrenceEditor($('#recurrence-editor'), options);
+const createInstance = options => new RecurrenceEditor($('#recurrence-editor'), {
+    timeZoneCalculator: { createDate: (date) => date },
+    ...options
+});
 
 const getFreqEditor = instance => instance.getRecurrenceForm().getEditor('freq');
 const getRepeatEndEditor = instance => instance.getEditorByField('repeatEnd');
