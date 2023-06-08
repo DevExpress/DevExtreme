@@ -9,7 +9,7 @@
   $dot-size,
   $useRipple: false,
   $ripple-size: 0,
-  $ripple-transition: none,
+  $ripple-transition: all 0s ease 0s,
 ) {
   $border-radius: 50%;
   $dot-icon-border-width: math.div($icon-size - $border-width * 2 - $dot-size, 2);
@@ -23,7 +23,10 @@
     border-color: $border-color;
     background-color: $radiogroup-bg;
     border-radius: 50%;
-    transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
+    @if $useRipple {
+      transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    }
 
     .dx-radiobutton-icon-dot {
       width: 100%;
@@ -32,8 +35,11 @@
       border-width: 0;
       border-style: solid;
       border-color: $radiogroup-bg;
-      transform: scale(0);
-      transition: transform 150ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+
+      @if $useRipple {
+        transform: scale(0);
+        transition: transform 150ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+      }
     }
 
     @if $useRipple {
@@ -62,7 +68,10 @@
     .dx-radiobutton-icon-dot {
       background-color: $checked-color;
       border-width: $dot-icon-border-width;
-      transform: scale(1);
+
+      @if $useRipple {
+        transform: scale(1);
+      }
     }
   }
 }
