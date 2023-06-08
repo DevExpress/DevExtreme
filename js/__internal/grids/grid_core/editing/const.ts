@@ -105,3 +105,5 @@ export const FOCUSABLE_ELEMENT_CLASS = isRenovatedScrollable ? 'dx-scrollable' :
 export const BUTTON_CLASS = 'dx-button';
 
 export const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
+
+export const EDIT_ROW = 'dx-edit-row';

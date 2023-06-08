@@ -4,13 +4,12 @@ import { ModuleType } from '../m_types';
 import {
   EDIT_FORM_CLASS,
   EDIT_MODE_ROW,
+  EDIT_ROW,
   EDITING_EDITROWKEY_OPTION_NAME,
   MODES_WITH_DELAYED_FOCUS,
   ROW_SELECTED_CLASS,
 } from './const';
 import { EditingController } from './m_editing';
-
-const EDIT_ROW = 'dx-edit-row';
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class RowBasedEditingControllerExtender extends Base {
   isRowEditMode() {
