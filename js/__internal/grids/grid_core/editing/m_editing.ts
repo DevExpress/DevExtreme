@@ -462,8 +462,10 @@ export class EditingController extends modules.ViewController {
     if (name === 'editing.changes') {
       this._changes = deepExtendArraySafe([], value);
     }
+
     // @ts-expect-error
     super._silentOption(name, value);
+    // this.callBase.apply(this, arguments);
   }
 
   optionChanged(args) {
@@ -1503,7 +1505,7 @@ export class EditingController extends modules.ViewController {
     });
   }
 
-  _processRemoveIfError(changes, editIndex) {
+  _processRemoveIfError(changes, editIndex): any {
     const change = changes[editIndex];
 
     if (change?.type === DATA_EDIT_DATA_REMOVE_TYPE) {
@@ -1515,7 +1517,6 @@ export class EditingController extends modules.ViewController {
     return true;
   }
 
-  // @ts-expect-error
   _processRemove(changes, editIndex, cancel) {
     const change = changes[editIndex];
 
@@ -1524,7 +1525,7 @@ export class EditingController extends modules.ViewController {
     }
   }
 
-  _processRemoveCore(changes, editIndex, processIfBatch?) {
+  _processRemoveCore(changes, editIndex, processIfBatch?): any {
     if (editIndex >= 0) {
       changes.splice(editIndex, 1);
     }
@@ -2272,6 +2273,8 @@ export class EditingController extends modules.ViewController {
 
     return visibleEditRowIndex >= 0 ? rows[visibleEditRowIndex].isNewRow : false;
   }
+
+  _isRowDeleteAllowed(): any {}
 
   shouldHighlightCell(parameters) {
     const cellModified = this.isCellModified(parameters);

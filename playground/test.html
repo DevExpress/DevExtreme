@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DevExtreme jQuery Example</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+
+    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+    <!-- HtmlEditor -->
+    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+
+    <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>-->
+
+    <!--
+    <script type="text/javascript" src="../artifacts/js/exceljs.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
+    <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
+    -->
+
+    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+</head>
+<body>
+
+    <div class="dx-viewport demo-container">
+        <div id="gridContainer"></div>
+      </div>
+    
+
+    <script>
+        $(() => {
+  $('#gridContainer').dxDataGrid({
+    width: 600,
+    dataSource: items,
+    height: 300,
+    keyExpr: 'id',
+    columns: [{
+      dataField: "value",
+      dataType: "boolean",
+    }, 'name'],
+    editing:{
+      mode: "cell",
+      allowUpdating: true
+    },
+    showBorders: true,
+  });
+});
+
+
+const items = [
+      {
+        id: 1,
+        name: 'Name 1',
+        value: false
+      },
+      {
+        id: 2,
+        name: 'Name 2',
+        value: false
+      },
+      {
+        id: 3,
+        name: 'Name 3',
+        value: false
+      },
+      {
+        id: 4,
+        name: 'Name 4',
+        value: false
+      },
+      {
+        id: 5,
+        name: 'Name 5',
+        value: false
+      },
+      {
+        id: 6,
+        name: 'Name 6',
+        value: false
+      },
+      {
+        id: 7,
+        name: 'Name 7',
+        value: false
+      },
+      {
+        id: 8,
+        name: 'Name 8',
+        value: false
+      },
+      {
+        id: 9,
+        name: 'Name 9',
+        value: false
+      },
+      {
+        id: 10,
+        name: 'Name 10',
+        value: false
+      },
+      {
+        id: 11,
+        name: 'Name 11',
+        value: false
+      },
+      {
+        id: 12,
+        name: 'Name 12',
+        value: false
+      },
+      {
+        id: 13,
+        name: 'Name 13',
+        value: false
+      },
+      {
+        id: 14,
+        name: 'Name 14',
+        value: false
+      },
+      {
+        id: 15,
+        name: 'Name 15',
+        value: false
+      },
+      {
+        id: 16,
+        name: 'Name 16',
+        value: false
+      },
+      {
+        id: 17,
+        name: 'Name 17',
+        value: false
+      },
+      {
+        id: 18,
+        name: 'Name 18',
+        value: false
+      },
+      {
+        id: 19,
+        name: 'Name 19',
+        value: false
+      },
+      {
+        id: 20,
+        name: 'Name 20',
+        value: false
+      }
+    ]
+    </script>
+</body>
+</html>

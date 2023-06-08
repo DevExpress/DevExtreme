@@ -35,7 +35,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   init() {
     const needCreateHandlers = !this._saveEditorHandler;
 
-    this.callBase.apply(this, arguments);
+    super.init();
 
     if (needCreateHandlers) {
       // chrome 73+
@@ -114,7 +114,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       }
     }
 
-    return result || this.callBase.apply(this, arguments);
+    return result || super._needToCloseEditableCell($targetElement);
   }
 
   _closeEditItem($targetElement) {
@@ -138,7 +138,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
       this._needFocusEditor = false;
     } else {
-      this.callBase.apply(this, arguments);
+      super._focusEditorIfNeed();
     }
   }
 
@@ -150,7 +150,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       return isEditRowKeyDefined && isEditColumnNameDefined;
     }
 
-    return this.callBase.apply(this, arguments);
+    return super.isEditing();
   }
 
   _handleEditColumnNameChange(args) {
@@ -180,7 +180,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       return deferred.promise();
     }
 
-    return this.callBase.apply(this, arguments);
+    return super._addRow(parentKey);
   }
 
   editCell(rowIndex, columnIndex) {
@@ -252,7 +252,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   publicMethods() {
-    const publicMethods = this.callBase.apply(this, arguments);
+    const publicMethods = super.publicMethods();
 
     return publicMethods.concat(['editCell', 'closeEditCell']);
   }
@@ -389,10 +389,10 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       this._applyModified($cellElement, options);
     }
 
-    return this.callBase.apply(this, arguments);
+    return super._prepareChange(options, value, text);
   }
 
-  _cancelSaving() {
+  _cancelSaving(result) {
     const dataController = this._dataController;
 
     if (this.isCellOrBatchEditMode()) {
@@ -403,7 +403,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       dataController.updateItems();
     }
 
-    this.callBase.apply(this, arguments);
+    super._cancelSaving(result);
   }
 
   optionChanged(args) {
@@ -413,7 +413,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       this._handleEditColumnNameChange(args);
       args.handled = true;
     } else {
-      this.callBase(args);
+      super.optionChanged(args);
     }
   }
 
@@ -437,7 +437,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         this._editCellFromOptionChanged?.(columnIndex, columnIndex, oldRowIndex);
       }
     } else {
-      this.callBase.apply(this, arguments);
+      super._handleEditRowKeyChange(args);
     }
   }
 
@@ -452,7 +452,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         this._checkAndDeleteRow(rowIndex);
       });
     } else {
-      this.callBase.apply(this, arguments);
+      super.deleteRow(rowIndex);
     }
   }
 
@@ -460,7 +460,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     if (this.isBatchEditMode()) {
       this._deleteRowCore(rowIndex);
     } else {
-      this.callBase.apply(this, arguments);
+      super._checkAndDeleteRow(rowIndex);
     }
   }
 
@@ -474,7 +474,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         this._resetEditRowKey();
       }
     } else {
-      this.callBase.apply(this, arguments);
+      super._refreshCore(params);
     }
   }
 
@@ -484,7 +484,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       return true;
     }
 
-    return this.callBase.apply(this, arguments);
+    return super._allowRowAdding(params);
   }
 
   _afterDeleteRow(rowIndex, oldEditRowIndex) {
@@ -500,14 +500,14 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       return new Deferred().resolve();
     }
 
-    return this.callBase.apply(this, arguments);
+    return super._afterDeleteRow(rowIndex, oldEditRowIndex);
   }
 
   _updateEditRow(row, forceUpdateRow, isCustomSetCellValue) {
     if (this.isCellOrBatchEditMode()) {
       this._updateRowImmediately(row, forceUpdateRow, isCustomSetCellValue);
     } else {
-      this.callBase.apply(this, arguments);
+      super._updateEditRow(row, forceUpdateRow, isCustomSetCellValue);
     }
   }
 
@@ -521,39 +521,39 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         case 'edit':
           return false;
         case 'delete':
-          return this.callBase.apply(this, arguments) && (!isBatchMode || !options.row.removed);
+          return super._isDefaultButtonVisible(button, options) && (!isBatchMode || !options.row.removed);
         case 'undelete':
           return isBatchMode && this.allowDeleting(options) && options.row.removed;
         default:
-          return this.callBase.apply(this, arguments);
+          return super._isDefaultButtonVisible(button, options);
       }
     }
 
-    return this.callBase.apply(this, arguments);
+    return super._isDefaultButtonVisible(button, options);
   }
 
   _isRowDeleteAllowed() {
-    const callBase = this.callBase.apply(this, arguments);
+    const callBaseResult = super._isRowDeleteAllowed();
 
-    return callBase || this.isBatchEditMode();
+    return callBaseResult || this.isBatchEditMode();
   }
 
   _beforeEndSaving(changes) {
     if (this.isCellEditMode()) {
       if (changes[0]?.type !== 'update') {
-        this.callBase.apply(this, arguments);
+        super._beforeEndSaving(changes);
       }
     } else {
       if (this.isBatchEditMode()) {
         this._resetModifiedClassCells(changes);
       }
-      this.callBase.apply(this, arguments);
+      super._beforeEndSaving(changes);
     }
   }
 
   prepareEditButtons(headerPanel) {
     const editingOptions: any = this.option('editing') || {};
-    const buttonItems = this.callBase.apply(this, arguments);
+    const buttonItems = super.prepareEditButtons(headerPanel);
 
     if ((editingOptions.allowUpdating || editingOptions.allowAdding || editingOptions.allowDeleting) && this.isBatchEditMode()) {
       buttonItems.push(this.prepareButtonItem(headerPanel, 'save', 'saveEditData', 21));
@@ -576,7 +576,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       this.addDeferred(deferred);
     }
 
-    return this.callBase.apply(this, arguments).always(deferred?.resolve);
+    return super._saveEditDataInner().always(deferred?.resolve);
   }
 
   _applyChange(options, params, forceUpdateRow) {
@@ -591,7 +591,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       return;
     }
 
-    return this.callBase.apply(this, arguments);
+    return super._applyChange(options, params, forceUpdateRow);
   }
 
   _applyChangeCore(options, forceUpdateRow) {
@@ -607,39 +607,39 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       } if (this.isBatchEditMode()) {
         forceUpdateRow = this._needUpdateRow(options.column);
 
-        return this.callBase(options, forceUpdateRow);
+        return super._applyChangeCore(options, forceUpdateRow);
       }
     }
 
-    return this.callBase.apply(this, arguments);
+    return super._applyChangeCore(options, forceUpdateRow);
   }
 
-  _processDataItemCore(item, { data, type }) {
+  _processDataItemCore(item, { data, type }, key, columns, generateDataValues) {
     if (this.isBatchEditMode() && type === DATA_EDIT_DATA_REMOVE_TYPE) {
       item.data = createObjectWithChanges(item.data, data);
     }
 
-    this.callBase.apply(this, arguments);
+    super._processDataItemCore(item, { data, type }, key, columns, generateDataValues);
   }
 
-  _processRemoveCore(changes, editIndex, processIfBatch) {
+  _processRemoveCore(changes, editIndex, processIfBatch): any {
     if (this.isBatchEditMode() && !processIfBatch) {
       return;
     }
 
-    return this.callBase.apply(this, arguments);
+    return super._processRemoveCore(changes, editIndex, processIfBatch);
   }
 
-  _processRemoveIfError() {
+  _processRemoveIfError(changes, editIndex): any {
     if (this.isBatchEditMode()) {
       return;
     }
 
-    return this.callBase.apply(this, arguments);
+    return super._processRemoveIfError(changes, editIndex);
   }
 
   _beforeFocusElementInRow(rowIndex) {
-    this.callBase.apply(this, arguments);
+    super._beforeFocusElementInRow(rowIndex);
 
     const editRowIndex = rowIndex >= 0 ? rowIndex : 0;
     const columnIndex = this.getFirstEditableColumnIndex();
