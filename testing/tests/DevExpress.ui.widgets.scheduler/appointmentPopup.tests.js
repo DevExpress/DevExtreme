@@ -8,9 +8,7 @@ import SelectBox from 'ui/select_box';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import domAdapter from 'core/dom_adapter';
-import windowUtils from 'core/utils/window';
-import visualViewport from 'core/utils/visual_viewport';
+import { hasVisualViewport } from 'core/utils/visual_viewport';
 import messageLocalization from 'localization/message';
 import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/appointmentPopup/form';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
@@ -615,58 +613,44 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
 });
 
 if(isDesktopEnvironment()) {
-    // const setConfigurableProperty = (object, property, value) => {
-    //     Object.defineProperty(object, property, {
-    //         get: () => value,
-    //         configurable: true,
-    //     });
-    // };
+    const setConfigurableProperty = (object, property, value) => {
+        Object.defineProperty(object, property, {
+            get: () => value,
+            configurable: true,
+        });
+    };
 
-    // const setWindowWidth = (width) => {
-    //     setConfigurableProperty(document.documentElement, 'clientWidth', width);
+    const setWindowWidth = (width) => {
+        setConfigurableProperty(document.documentElement, 'clientWidth', width);
 
-    //     const shouldUseVisualViewport = hasVisualViewport();
+        const shouldUseVisualViewport = hasVisualViewport();
 
-    //     if(shouldUseVisualViewport) {
-    //         setConfigurableProperty(window, 'innerWidth', width);
-    //         setConfigurableProperty(window.visualViewport, 'width', width);
-    //     }
-    // };
+        if(shouldUseVisualViewport) {
+            setConfigurableProperty(window, 'innerWidth', width);
+            setConfigurableProperty(window.visualViewport, 'width', width);
+        }
+    };
 
-    // const resetWindowWidth = (size) => {
-    //     document.documentElement.clientWidth = size;
+    const resetWindowWidth = () => {
+        delete document.documentElement.clientWidth;
 
-    //     const isVisualViewportUsed = hasVisualViewport();
+        const wasVisualViewportUsed = hasVisualViewport();
 
-    //     if(isVisualViewportUsed) {
-    //         window.innerWidth = size;
-    //         window.visualViewport.width = size;
-    //     }
-    // };
+        if(wasVisualViewportUsed) {
+            delete window.innerWidth;
+            delete window.visualViewport.width;
+        }
+    };
 
     QUnit.module('Appointment Popup and Recurrence Editor visibility', {
         beforeEach() {
             fx.off = true;
-
-            this.documentStub = sinon.stub(domAdapter, 'getDocumentElement');
-            this.windowStub = sinon.stub(windowUtils, 'getWindow');
-            this.visualViewportStub = sinon.stub(visualViewport, 'getVisualViewportSizes');
-
-            const setStubReturnsOptions = ({ width }) => {
-                this.documentStub.returns({ clientWidth: width });
-                this.windowStub.returns({ innerWidth: width });
-                this.visualViewportStub.returns({ width });
-            };
-
-            setStubReturnsOptions(1000);
+            setWindowWidth(1000);
         },
 
         afterEach() {
             fx.off = false;
-
-            this.documentStub.restore();
-            this.windowStub.restore();
-            this.visualViewportStub.restore();
+            resetWindowWidth();
         }
     });
 
