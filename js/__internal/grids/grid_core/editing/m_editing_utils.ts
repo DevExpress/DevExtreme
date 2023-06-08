@@ -1,3 +1,5 @@
+import { isObject } from '@js/core/utils/type';
+
 export const createFailureHandler = function (deferred) {
   return function (arg) {
     const error = arg instanceof Error ? arg : new Error(arg && String(arg) || 'Unknown error');
