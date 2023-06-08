@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import sizeUtils, { getHeight, getWidth, getInnerHeight, getInnerWidth, getOuterHeight, getOuterWidth } from 'core/utils/size';
+import { setWindow } from 'core/utils/window';
+import { getVisualViewportSizes } from 'core/utils/visual_viewport';
 import browser from 'core/utils/browser';
 
 const testStyles = [
@@ -493,4 +495,28 @@ QUnit.test('height helpers should return the same value as jquery. Params: (box-
 
     assert.strictEqual(getOuterHeight($target, true), 78, 'getOuterHeight(true)');
     assert.strictEqual(getOuterWidth($target, true), 88, 'getOuterWidth(true)');
+});
+
+
+QUnit.module('window sizes', {
+    beforeEach() {
+        this.visualViewport = { height: 500, width: 500 };
+        this.fakeWindow = { visualViewport: this.visualViewport };
+        this.fakeWindow.window = this.fakeWindow;
+
+        setWindow(this.fakeWindow, true);
+    },
+    afterEach() {
+        setWindow(window);
+    }
+}, () => {
+    QUnit.test('getHeigth and getWidth should return visualViewport sizes if argument is window', function(assert) {
+        const { height, width } = getVisualViewportSizes();
+
+        const windowHeight = getHeight(this.fakeWindow);
+        const windowWidth = getWidth(this.fakeWindow);
+
+        assert.strictEqual(windowHeight, height, 'getHeight returns correct value');
+        assert.strictEqual(windowWidth, width, 'getWidth returns correct value');
+    });
 });
