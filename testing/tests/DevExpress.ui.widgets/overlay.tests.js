@@ -3983,7 +3983,7 @@ testModule('renderGeometry', {
             deferRendering: false,
         }).dxOverlay('instance');
         this.renderGeometrySpy = sinon.spy(this.overlayInstance, '_renderGeometry');
-        this.renderVisibilityAnimateSpy = sinon.spy(this.overlayInstance, '_toggleVisibilityAnimate');
+        this.toggleVisibilityAnimateSpy = sinon.spy(this.overlayInstance, '_toggleVisibilityAnimate');
         this.checkNoExcessResizeHandle = (assert) => {
             const done = assert.async();
             const renderGeometryInitialCallCount = this.renderGeometrySpy.callCount;
@@ -4000,6 +4000,10 @@ testModule('renderGeometry', {
     afterEach: function() {
         zIndex.clearStack();
         Overlay.baseZIndex(1500);
+
+        this.renderGeometrySpy.restore();
+        this.toggleVisibilityAnimateSpy.restore();
+
         fx.off = false;
     }
 }, () => {
@@ -4022,7 +4026,7 @@ testModule('renderGeometry', {
 
         setTimeout(() => {
             resizeCallbacks.fire();
-            assert.strictEqual(this.renderVisibilityAnimateSpy.callCount, 1);
+            assert.strictEqual(this.toggleVisibilityAnimateSpy.callCount, 1);
             showingResizeHandled();
         }, this.timeToWaitResize);
     });
