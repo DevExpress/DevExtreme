@@ -548,7 +548,7 @@ export class EditingController extends modules.ViewController {
     return isEditRowKeyDefined;
   }
 
-  isEditRow() {
+  isEditRow(rowIndex) {
     return false;
   }
 
@@ -2056,7 +2056,6 @@ export class EditingController extends modules.ViewController {
     const rowIndex = options.row && options.row.rowIndex;
     let template;
     const isRowMode = this.isRowBasedEditMode();
-    // @ts-expect-error
     const isRowEditing = this.isEditRow(rowIndex);
     const isCellEditing = this.isEditCell(rowIndex, options.columnIndex);
     let editingStartOptions;
