@@ -1,27 +1,27 @@
+import Class from '@js/core/class';
+import { noop } from '@js/core/utils/common';
 // @ts-expect-error
-import { when, Deferred } from '@js/core/utils/deferred';
+import { compileGetter, toComparable } from '@js/core/utils/data';
+import dateSerialization from '@js/core/utils/date_serialization';
+// @ts-expect-error
+import { Deferred, when } from '@js/core/utils/deferred';
+import { each } from '@js/core/utils/iterator';
+import { isDefined, isNumeric, isString } from '@js/core/utils/type';
+import ArrayStore from '@js/data/array_store';
+import CustomStore from '@js/data/custom_store';
+import { DataSource } from '@js/data/data_source/data_source';
+import dataQuery from '@js/data/query';
 // eslint-disable-next-line import/extensions
 // @ts-expect-error
 import { aggregators } from '@js/data/utils';
-import dataQuery from '@js/data/query';
-import dateSerialization from '@js/core/utils/date_serialization';
-import { DataSource } from '@js/data/data_source/data_source';
-import CustomStore from '@js/data/custom_store';
-// @ts-expect-error
-import { compileGetter, toComparable } from '@js/core/utils/data';
-import Class from '@js/core/class';
-import { noop } from '@js/core/utils/common';
-import { isNumeric, isDefined, isString } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
-import ArrayStore from '@js/data/array_store';
 
 import {
-  getFiltersByPath,
-  setFieldProperty,
-  setDefaultFieldValueFormatting,
-  storeDrillDownMixin,
   discoverObjectFields,
-} from '../module_widget_utils';
+  getFiltersByPath,
+  setDefaultFieldValueFormatting,
+  setFieldProperty,
+  storeDrillDownMixin,
+} from '../m_widget_utils';
 
 const PATH_DELIMETER = '/./';
 

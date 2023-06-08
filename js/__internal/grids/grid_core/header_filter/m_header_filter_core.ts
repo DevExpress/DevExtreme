@@ -1,16 +1,17 @@
-import $ from '@js/core/renderer';
-import { isDefined, isFunction } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
-import Popup from '@js/ui/popup';
-import TreeView from '@js/ui/tree_view';
-import List from '@js/ui/list_light';
 import '@js/ui/list/modules/search';
 import '@js/ui/list/modules/selection';
-import messageLocalization from '@js/localization/message';
 
-import modules from '../modules';
-import gridCoreUtils from '../module_utils';
+import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { isDefined, isFunction } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
+import List from '@js/ui/list_light';
+import Popup from '@js/ui/popup';
+import TreeView from '@js/ui/tree_view';
+
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
 
 const HEADER_FILTER_CLASS = 'dx-header-filter';
 const HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';

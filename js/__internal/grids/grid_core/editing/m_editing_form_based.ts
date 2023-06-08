@@ -1,25 +1,26 @@
+import devices from '@js/core/devices';
+import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
+import { equalByValue } from '@js/core/utils/common';
+import { Deferred } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { isDefined, isString } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
-import Guid from '@js/core/guid';
-import { isDefined, isString } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
 import Button from '@js/ui/button';
-import devices from '@js/core/devices';
 import Form from '@js/ui/form';
-import { Deferred } from '@js/core/utils/deferred';
-import { equalByValue } from '@js/core/utils/common';
-import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import Popup from '@js/ui/popup';
+import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+
 import {
+  DATA_EDIT_DATA_INSERT_TYPE,
   EDIT_MODE_FORM,
   EDIT_MODE_POPUP,
-  FOCUSABLE_ELEMENT_SELECTOR,
   EDITING_EDITROWKEY_OPTION_NAME,
-  EDITING_POPUP_OPTION_NAME,
-  DATA_EDIT_DATA_INSERT_TYPE,
   EDITING_FORM_OPTION_NAME,
+  EDITING_POPUP_OPTION_NAME,
+  FOCUSABLE_ELEMENT_SELECTOR,
 } from './const';
 
 const isRenovatedScrollable = !!(Scrollable as any).IS_RENOVATED_WIDGET;

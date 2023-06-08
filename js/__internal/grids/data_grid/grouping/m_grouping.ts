@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
-import { getHeight } from '@js/core/utils/size';
-import $ from '@js/core/renderer';
-import messageLocalization from '@js/localization/message';
-import { isDefined, isString } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
 import devices from '@js/core/devices';
+import $ from '@js/core/renderer';
 // @ts-expect-error
-import { when, Deferred } from '@js/core/utils/deferred';
-import { registerKeyboardAction } from '@js/ui/grid_core/ui.grid_core.accessibility';
-import { setTabIndex, restoreFocus } from '@js/ui/shared/accessibility';
-import dataSourceAdapter from '../module_data_source_adapter';
-import { GroupingHelper as CollapsedGroupingHelper } from './module_collapsed';
-import { GroupingHelper as ExpandedGroupingHelper } from './module_expanded';
-import gridCore from '../module_core';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { each } from '@js/core/utils/iterator';
+import { getHeight } from '@js/core/utils/size';
+import { isDefined, isString } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
+import { restoreFocus, setTabIndex } from '@js/ui/shared/accessibility';
+import { registerKeyboardAction } from '@ts/grids/grid_core/m_accessibility';
+
+import gridCore from '../m_core';
+import dataSourceAdapter from '../m_data_source_adapter';
+import { GroupingHelper as CollapsedGroupingHelper } from './m_grouping_collapsed';
+import { GroupingHelper as ExpandedGroupingHelper } from './m_grouping_expanded';
 
 const DATAGRID_GROUP_PANEL_CLASS = 'dx-datagrid-group-panel';
 const DATAGRID_GROUP_PANEL_MESSAGE_CLASS = 'dx-group-panel-message';

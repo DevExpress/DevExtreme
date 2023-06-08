@@ -1,19 +1,21 @@
-import {
-  setOuterWidth, getOuterWidth, setOuterHeight, getOuterHeight,
-} from '@js/core/utils/size';
-import $ from '@js/core/renderer';
-import domAdapter from '@js/core/dom_adapter';
-import eventsEngine from '@js/events/core/events_engine';
-import { name as clickEventName } from '@js/events/click';
-import pointerEvents from '@js/events/pointer';
 import positionUtils from '@js/animation/position';
-import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
+import domAdapter from '@js/core/dom_adapter';
+import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
+import {
+  getOuterHeight,
+  getOuterWidth, setOuterHeight, setOuterWidth,
+} from '@js/core/utils/size';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+import pointerEvents from '@js/events/pointer';
+import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
-import modules from '../modules';
-import gridCoreUtils from '../module_utils';
+
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
 
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';

@@ -1,22 +1,23 @@
-import $ from '@js/core/renderer';
-import { getWindow } from '@js/core/utils/window';
 import Class from '@js/core/class';
+import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
+// @ts-expect-error
+import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { each, map } from '@js/core/utils/iterator';
 import { format as stringFormat } from '@js/core/utils/string';
+import {
+  isDefined, isFunction, isNumeric, isString,
+} from '@js/core/utils/type';
+import { getWindow } from '@js/core/utils/window';
 // @ts-expect-error
 import { errors } from '@js/data/errors';
-import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import {
-  isFunction, isNumeric, isDefined, isString,
-} from '@js/core/utils/type';
-import { map, each } from '@js/core/utils/iterator';
-// @ts-expect-error
-import { when, Deferred } from '@js/core/utils/deferred';
 import { getLanguageId } from '@js/localization/language_codes';
 
 import pivotGridUtils, {
-  getExpandedLevel, storeDrillDownMixin, foreachTree,
-} from '../module_widget_utils';
+  foreachTree,
+  getExpandedLevel, storeDrillDownMixin,
+} from '../m_widget_utils';
 
 const window = getWindow();
 

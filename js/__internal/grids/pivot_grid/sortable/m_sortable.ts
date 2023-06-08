@@ -1,22 +1,23 @@
-import {
-  getOuterWidth, getOuterHeight, getHeight, getWidth, setWidth, setHeight,
-} from '@js/core/utils/size';
-import $ from '@js/core/renderer';
-import eventsEngine from '@js/events/core/events_engine';
-import { isDefined } from '@js/core/utils/type';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { addNamespace } from '@js/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import DOMComponent from '@js/core/dom_component';
+import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
 import {
-  start as dragEventStart,
-  move as dragEventMove,
+  getHeight, getOuterHeight, getOuterWidth, getWidth, setHeight,
+  setWidth,
+} from '@js/core/utils/size';
+import { isDefined } from '@js/core/utils/type';
+import eventsEngine from '@js/events/core/events_engine';
+import {
+  drop as dragEventDrop,
   end as dragEventEnd,
   enter as dragEventEnter,
   leave as dragEventLeave,
-  drop as dragEventDrop,
+  move as dragEventMove,
+  start as dragEventStart,
 } from '@js/events/drag';
+import { addNamespace } from '@js/events/utils/index';
 import swatchContainer from '@js/ui/widget/swatch_container';
 
 const { getSwatchContainer } = swatchContainer;

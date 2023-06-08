@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
-import $ from '@js/core/renderer';
 import Class from '@js/core/class';
+import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { grep } from '@js/core/utils/common';
-import { isFunction } from '@js/core/utils/type';
 import { each } from '@js/core/utils/iterator';
-import messageLocalization from '@js/localization/message';
+import { isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
+
 import type {
-  Module, ModuleType,
   Controller as ControllerType,
-  ViewController as ViewControllerType,
+  Module, ModuleType,
   View as ViewType,
-} from './module_types';
+  ViewController as ViewControllerType,
+} from './m_types';
 
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
@@ -420,7 +421,7 @@ export function processModules(
   componentInstance._views = createModuleItems(viewTypes);
 }
 
-const callModuleItemsMethod = function (that, methodName, args) {
+const callModuleItemsMethod = function (that, methodName, args?) {
   args = args || [];
   if (that._controllers) {
     each(that._controllers, function () {

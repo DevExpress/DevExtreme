@@ -1,16 +1,17 @@
 // @ts-expect-error
 import { toComparable } from '@js/core/utils/data';
 // @ts-expect-error
-import { keysEqual } from '@js/data/utils';
-import { each } from '@js/core/utils/iterator';
+import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import storeHelper from '@js/data/store_helper';
+import { each } from '@js/core/utils/iterator';
 import dataQuery from '@js/data/query';
+import storeHelper from '@js/data/store_helper';
 // @ts-expect-error
-import { when, Deferred } from '@js/core/utils/deferred';
-import dataGridCore from '../module_core';
-import { GroupingHelper as GroupingHelperCore, createOffsetFilter } from './module_core';
-import { createGroupFilter } from '../module_utils';
+import { keysEqual } from '@js/data/utils';
+
+import dataGridCore from '../m_core';
+import { createGroupFilter } from '../m_utils';
+import { createOffsetFilter, GroupingHelper as GroupingHelperCore } from './m_grouping_core';
 
 const loadTotalCount = function (dataSource, options) {
   // @ts-expect-error
@@ -176,7 +177,8 @@ export const GroupingHelper = GroupingHelperCore.inherit((function () {
       }
       filter.push(dataGridCore.combineFilters(filterElement));
     }
-    filter = dataGridCore.combineFilters(filter, 'or');
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    filter = dataGridCore.combineFilters(filter, 'or') as any;
 
     return dataGridCore.combineFilters([filter, storeLoadOptions.filter]);
   };

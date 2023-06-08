@@ -1,11 +1,12 @@
-import { getHeight, getWidth } from '@js/core/utils/size';
 import $ from '@js/core/renderer';
 import { grep } from '@js/core/utils/common';
-import { each } from '@js/core/utils/iterator';
-import { isDefined } from '@js/core/utils/type';
 // @ts-expect-error
-import { when, Deferred } from '@js/core/utils/deferred';
-import gridCoreUtils from '../module_utils';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { each } from '@js/core/utils/iterator';
+import { getHeight, getWidth } from '@js/core/utils/size';
+import { isDefined } from '@js/core/utils/type';
+
+import gridCoreUtils from '../m_utils';
 
 const MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell';
 const MASTER_DETAIL_ROW_CLASS = 'dx-master-detail-row';

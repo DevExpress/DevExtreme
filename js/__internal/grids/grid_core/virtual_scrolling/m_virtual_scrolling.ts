@@ -1,15 +1,16 @@
-import { getOuterHeight } from '@js/core/utils/size';
 import $ from '@js/core/renderer';
-import { getWindow } from '@js/core/utils/window';
-import { each } from '@js/core/utils/iterator';
-// @ts-expect-error
-import { when, Deferred } from '@js/core/utils/deferred';
 import browser from '@js/core/utils/browser';
+// @ts-expect-error
+import { Deferred, when } from '@js/core/utils/deferred';
+import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
+import { getOuterHeight } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
+import { getWindow } from '@js/core/utils/window';
 import LoadIndicator from '@js/ui/load_indicator';
-import { VirtualScrollController, subscribeToExternalScrollers } from './module_core';
-import gridCoreUtils from '../module_utils';
+
+import gridCoreUtils from '../m_utils';
+import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
 
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
 const TABLE_CONTENT_CLASS = 'table-content';

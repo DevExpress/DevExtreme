@@ -1,10 +1,11 @@
-import $ from '@js/core/renderer';
 import Class from '@js/core/class';
-// @ts-expect-error
-import { normalizeSortingInfo } from '@js/data/utils';
+import $ from '@js/core/renderer';
 // @ts-expect-error
 import { when } from '@js/core/utils/deferred';
-import gridCore from '../module_core';
+// @ts-expect-error
+import { normalizeSortingInfo } from '@js/data/utils';
+
+import gridCore from '../m_core';
 
 export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly?) {
   const groups = normalizeSortingInfo(storeLoadOptions.group);
@@ -34,8 +35,8 @@ export function createOffsetFilter(path, storeLoadOptions, lastLevelOnly?) {
     }
     filter.push(gridCore.combineFilters(filterElement));
   }
-
-  filter = gridCore.combineFilters(filter, 'or');
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  filter = gridCore.combineFilters(filter, 'or') as any;
 
   return gridCore.combineFilters([filter, storeLoadOptions.filter]);
 }

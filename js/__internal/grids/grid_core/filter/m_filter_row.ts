@@ -1,18 +1,19 @@
-import { getOuterWidth } from '@js/core/utils/size';
 import $ from '@js/core/renderer';
-import eventsEngine from '@js/events/core/events_engine';
-import { isDefined } from '@js/core/utils/type';
+import { equalByValue } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
-import { normalizeKeyName } from '@js/events/utils/index';
 import { each, map } from '@js/core/utils/iterator';
+import { getOuterWidth } from '@js/core/utils/size';
+import { isDefined } from '@js/core/utils/type';
+import eventsEngine from '@js/events/core/events_engine';
+import { normalizeKeyName } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import Editor from '@js/ui/editor/editor';
-import Overlay from '@js/ui/overlay/ui.overlay';
 import Menu from '@js/ui/menu';
+import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
-import { equalByValue } from '@js/core/utils/common';
-import modules from '../modules';
-import gridCoreUtils from '../module_utils';
+
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
 
 const OPERATION_ICONS = {
   '=': 'filter-operation-equals',
