@@ -494,7 +494,7 @@ const columnsViewMembers = {
                     && (column.renderAsync !== false && (column.command || column.showEditorAlways) && isDataRow || options.rowType === 'filter')
       );
 
-      const async = isDefined(options.renderAsync) ? options.renderAsync : columnAsync;
+      const async = options.renderAsync ?? columnAsync;
 
       if ((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
         renderingTemplate.render(templateOptions);
