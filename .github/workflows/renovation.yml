@@ -32,11 +32,11 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
+    - name: Build localization
+      run: npx gulp localization
+
     - name: Jest test
-      run: |
-        npm i
-        npx gulp localization
-        npm run test-jest
+      run: npm run test-jest
   generation:
     runs-on: devextreme-shr2
     timeout-minutes: 60

@@ -454,9 +454,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFunnel
-     * @type_function_param1_field item:dxFunnelItem
+     * @type_function_param1 e:{viz/funnel:HoverChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -466,10 +464,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFunnel
-     * @type_function_param1_field event:event
-     * @type_function_param1_field item:dxFunnelItem
+     * @type_function_param1 e:{viz/funnel:ItemClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -479,10 +474,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFunnel
-     * @type_function_param1_field event:event
-     * @type_function_param1_field item:dxFunnelItem
+     * @type_function_param1 e:{viz/funnel:LegendClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -491,9 +483,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFunnel
-     * @type_function_param1_field item:dxFunnelItem
+     * @type_function_param1 e:{viz/funnel:SelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -712,7 +702,7 @@ export type Options = dxFunnelOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onHoverChanged' | 'onItemClick' | 'onLegendClick' | 'onSelectionChanged'>;
 
 /**
 * @hidden
@@ -750,12 +740,6 @@ onExporting?: ((e: ExportingEvent) => void);
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
  * @skip
- * @docid dxFunnelOptions.onHoverChanged
- * @type_function_param1 e:{viz/funnel:HoverChangedEvent}
- */
-onHoverChanged?: ((e: HoverChangedEvent) => void);
-/**
- * @skip
  * @docid dxFunnelOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/funnel:IncidentOccurredEvent}
  */
@@ -768,27 +752,9 @@ onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 onInitialized?: ((e: InitializedEvent) => void);
 /**
  * @skip
- * @docid dxFunnelOptions.onItemClick
- * @type_function_param1 e:{viz/funnel:ItemClickEvent}
- */
-onItemClick?: ((e: ItemClickEvent) => void);
-/**
- * @skip
- * @docid dxFunnelOptions.onLegendClick
- * @type_function_param1 e:{viz/funnel:LegendClickEvent}
- */
-onLegendClick?: ((e: LegendClickEvent) => void);
-/**
- * @skip
  * @docid dxFunnelOptions.onOptionChanged
  * @type_function_param1 e:{viz/funnel:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxFunnelOptions.onSelectionChanged
- * @type_function_param1 e:{viz/funnel:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
 ///#ENDDEBUG

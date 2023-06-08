@@ -526,6 +526,8 @@ class DateRangeBox extends Editor {
                 showTitle: false,
                 title: '',
                 hideOnOutsideClick: (e) => this._hideOnOutsideClickHandler(e),
+                hideOnParentScroll: false,
+                preventScrollEvents: false,
                 ...options.dropDownOptions,
             },
             invalidDateMessage: options.invalidStartDateMessage,

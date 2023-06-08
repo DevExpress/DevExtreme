@@ -115,8 +115,7 @@ export interface dxMenuOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxMenu
+     * @type_function_param1 e:{ui/menu:SubmenuHiddenEvent}
      * @action
      * @public
      */
@@ -124,8 +123,7 @@ export interface dxMenuOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxMenu
+     * @type_function_param1 e:{ui/menu:SubmenuHidingEvent}
      * @action
      * @public
      */
@@ -133,8 +131,7 @@ export interface dxMenuOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxMenu
+     * @type_function_param1 e:{ui/menu:SubmenuShowingEvent}
      * @action
      * @public
      */
@@ -142,8 +139,7 @@ export interface dxMenuOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxMenu
+     * @type_function_param1 e:{ui/menu:SubmenuShownEvent}
      * @action
      * @public
      */
@@ -320,7 +316,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemHold' | 'onItemReordered' | 'onSelectionChange'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onSubmenuHidden' | 'onSubmenuHiding' | 'onSubmenuShowing' | 'onSubmenuShown'>;
 
 /**
 * @hidden
@@ -374,29 +370,5 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  * @type_function_param1 e:{ui/menu:SelectionChangedEvent}
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-/**
- * @skip
- * @docid dxMenuOptions.onSubmenuHidden
- * @type_function_param1 e:{ui/menu:SubmenuHiddenEvent}
- */
-onSubmenuHidden?: ((e: SubmenuHiddenEvent) => void);
-/**
- * @skip
- * @docid dxMenuOptions.onSubmenuHiding
- * @type_function_param1 e:{ui/menu:SubmenuHidingEvent}
- */
-onSubmenuHiding?: ((e: SubmenuHidingEvent) => void);
-/**
- * @skip
- * @docid dxMenuOptions.onSubmenuShowing
- * @type_function_param1 e:{ui/menu:SubmenuShowingEvent}
- */
-onSubmenuShowing?: ((e: SubmenuShowingEvent) => void);
-/**
- * @skip
- * @docid dxMenuOptions.onSubmenuShown
- * @type_function_param1 e:{ui/menu:SubmenuShownEvent}
- */
-onSubmenuShown?: ((e: SubmenuShownEvent) => void);
 };
 ///#ENDDEBUG

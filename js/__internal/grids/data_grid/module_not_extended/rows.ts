@@ -1,5 +1,6 @@
-import { rowsModule } from '@js/ui/grid_core/ui.grid_core.rows';
-import gridCore from '../module_core';
+import { rowsModule } from '@ts/grids/grid_core/views/m_rows_view';
+
+import gridCore from '../m_core';
 
 export const RowsView = rowsModule.views.rowsView;
 

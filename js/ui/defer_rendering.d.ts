@@ -100,7 +100,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onRendered' | 'onShown'>;
 
 /**
 * @hidden
@@ -130,17 +130,5 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{ui/defer_rendering:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxDeferRenderingOptions.onRendered
- * @type_function_param1 e:{ui/defer_rendering:RenderedEvent}
- */
-onRendered?: ((e: RenderedEvent) => void);
-/**
- * @skip
- * @docid dxDeferRenderingOptions.onShown
- * @type_function_param1 e:{ui/defer_rendering:ShownEvent}
- */
-onShown?: ((e: ShownEvent) => void);
 };
 ///#ENDDEBUG

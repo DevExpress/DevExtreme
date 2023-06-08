@@ -127,10 +127,7 @@ export interface dxSelectBoxOptions<TComponent> extends dxDropDownListOptions<TC
      * @section Utils
      * @type function
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field customItem:string|object|Promise<any>
-     * @type_function_param1_field model:any
+     * @type_function_param1 e:{ui/select_box:CustomItemCreatingEvent}
      * @action
      * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
      * @public
@@ -201,7 +198,7 @@ export type Options = Properties;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onCustomItemCreating'>;
 
 /**
 * @hidden
@@ -231,12 +228,6 @@ onContentReady?: ((e: ContentReadyEvent) => void);
  * @type_function_param1 e:{ui/select_box:CopyEvent}
  */
 onCopy?: ((e: CopyEvent) => void);
-/**
- * @skip
- * @docid dxSelectBoxOptions.onCustomItemCreating
- * @type_function_param1 e:{ui/select_box:CustomItemCreatingEvent}
- */
-onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
 /**
  * @skip
  * @docid dxSelectBoxOptions.onCut

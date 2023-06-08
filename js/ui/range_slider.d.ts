@@ -59,7 +59,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     endName?: string;
     /**
      * @docid
-     * @type_function_param1 e:_ui_range_slider_ValueChangedEvent
+     * @type_function_param1 e:{ui/range_slider:ValueChangedEvent}
      * @action
      * @default null
      * @public

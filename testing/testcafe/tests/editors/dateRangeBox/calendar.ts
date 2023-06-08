@@ -371,7 +371,11 @@ test('Selected range if endDate = startDate, currentSelection: startDate', async
 
     await t
       .click(calendar.getCellByDate('2021/10/01'))
-      .click(dateRangeBox.getStartDateBox().input)
+      .click(dateRangeBox.getStartDateBox().input);
+
+    await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 8, 1));
+
+    await t
       .hover(calendar.getCellByDate('2021/09/30'));
 
     await testScreenshot(t, takeScreenshot, `DRB range, startDate is start in view, hover is end in view${screenshotPostfix}.png`, { element: '#container' });
@@ -389,7 +393,11 @@ test('Selected range if endDate = startDate, currentSelection: startDate', async
 
     await t
       .click(calendar.getCellByDate('2021/09/15'))
-      .click(dateRangeBox.getStartDateBox().input)
+      .click(dateRangeBox.getStartDateBox().input);
+
+    await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 7, 1));
+
+    await t
       .hover(calendar.getCellByDate('2021/08/01'));
 
     await testScreenshot(t, takeScreenshot, `DRB range, startDate inside row, hover is start in view & row${screenshotPostfix}.png`, { element: '#container' });
@@ -398,14 +406,22 @@ test('Selected range if endDate = startDate, currentSelection: startDate', async
 
     await t
       .click(calendar.getCellByDate('2021/08/01'))
-      .click(dateRangeBox.getStartDateBox().input)
+      .click(dateRangeBox.getStartDateBox().input);
+
+    await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 6, 1));
+
+    await t
       .hover(calendar.getCellByDate('2021/07/31'));
 
     await testScreenshot(t, takeScreenshot, `DRB range, startDate is start view & row, hover is end view & row${screenshotPostfix}.png`, { element: '#container' });
 
     await t
       .click(calendar.getCellByDate('2021/07/31'))
-      .click(dateRangeBox.getStartDateBox().input)
+      .click(dateRangeBox.getStartDateBox().input);
+
+    await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 6, 1));
+
+    await t
       .hover(calendar.getCellByDate('2021/07/02'));
 
     await testScreenshot(t, takeScreenshot, `DRB range, startDate is end in view & row, hover inside row${screenshotPostfix}.png`, { element: '#container' });

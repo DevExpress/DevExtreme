@@ -200,6 +200,16 @@ QUnit.module('API', moduleConfig, () => {
             assert.ok(instance.$content().is(':visible'));
         });
     });
+
+    QUnit.test('message option runtime change should update the message of a visible toast (T1169347)', function(assert) {
+        this.instance.option('visible', true);
+
+        const newMessage = 'new message';
+        this.instance.option('message', newMessage);
+
+        const toastText = this.instance.$content().text();
+        assert.strictEqual(toastText, newMessage, 'message was changed');
+    });
 });
 
 QUnit.module('regression', moduleConfig, () => {

@@ -43,8 +43,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScrollView
+     * @type_function_param1 e:{ui/scroll_view:PullDownEvent}
      * @action
      * @public
      */
@@ -52,8 +51,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScrollView
+     * @type_function_param1 e:{ui/scroll_view:ReachBottomEvent}
      * @action
      * @public
      */
@@ -120,7 +118,7 @@ export type Options = dxScrollViewOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onPullDown' | 'onReachBottom'>;
 
 /**
 * @hidden
@@ -144,18 +142,6 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{ui/scroll_view:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxScrollViewOptions.onPullDown
- * @type_function_param1 e:{ui/scroll_view:PullDownEvent}
- */
-onPullDown?: ((e: PullDownEvent) => void);
-/**
- * @skip
- * @docid dxScrollViewOptions.onReachBottom
- * @type_function_param1 e:{ui/scroll_view:ReachBottomEvent}
- */
-onReachBottom?: ((e: ReachBottomEvent) => void);
 /**
  * @skip
  * @docid dxScrollViewOptions.onScroll

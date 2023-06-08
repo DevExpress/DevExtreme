@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 import dataUtils from 'core/element_data';
+import devices from 'core/devices.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/date_range_box';
@@ -19,6 +20,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const POPUP_APPLY_BUTTON_CLASS = 'dx-popup-done';
 const POPUP_DONE_BUTTON = `${POPUP_APPLY_BUTTON_CLASS}.dx-button`;
 const POPUP_CANCEL_BUTTON = 'dx-popup-cancel.dx-button';
+const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
@@ -348,7 +350,7 @@ QUnit.module('Strategy', moduleConfig, () => {
 
             keyboard.caret(100).press('arrowright').press('enter');
 
-            assert.deepEqual(new Date(this.getCalendar().option('values')[1]), new Date('2023/05/11'), 'value from end date input aplied');
+            assert.deepEqual(new Date(this.getCalendar().option('values')[1]), new Date('2023/05/24'), 'value from end date input aplied');
         });
 
         [
@@ -395,6 +397,158 @@ QUnit.module('Strategy', moduleConfig, () => {
                 assert.strictEqual(this.instance.option('opened'), applyValueMode === 'useButtons', `Popup is ${applyValueMode === 'useButtons' ? 'opened' : 'closed'}`);
                 assert.deepEqual(this.getCalendar().option('values')[secondSelect === 'startDate' ? 0 : 1], secondCellDate, `${secondSelect} is selected correctly`);
             });
+        });
+    });
+
+    QUnit.module('Calendar currentDate', () => {
+        QUnit.test('CurrentDate should be equal to startDate when open by click on startDate input', function(assert) {
+            this.reinit({
+                multiView: true,
+                value: [new Date('2023/06/01'), new Date('2023/07/13')],
+            });
+
+            $(this.instance.startDateField()).trigger('dxclick');
+
+            const calendar = this.getCalendar();
+
+            assert.deepEqual(calendar.option('currentDate'), this.instance.option('startDate'));
+        });
+
+        QUnit.test('CurrentDate should be equal to endDate when open by click on endDate input', function(assert) {
+            this.reinit({
+                multiView: true,
+                value: [new Date('2023/06/01'), new Date('2023/07/13')],
+            });
+
+            $(this.instance.endDateField()).trigger('dxclick');
+
+            const calendar = this.getCalendar();
+
+            assert.deepEqual(calendar.option('currentDate'), this.instance.option('endDate'));
+        });
+
+        QUnit.test('CurrentDate should be equal to endDate when open by click on startDate input but startDate is not defined', function(assert) {
+            this.reinit({
+                multiView: true,
+                value: [null, new Date('2023/07/13')],
+            });
+
+            $(this.instance.startDateField()).trigger('dxclick');
+
+            const calendar = this.getCalendar();
+
+            assert.deepEqual(calendar.option('currentDate'), this.instance.option('endDate'));
+        });
+
+        QUnit.test('CurrentDate should be equal to startDate when open by click on endDate input but endDate is not defined', function(assert) {
+            this.reinit({
+                multiView: true,
+                value: [new Date('2023/06/01'), null],
+            });
+
+            $(this.instance.endDateField()).trigger('dxclick');
+
+            const calendar = this.getCalendar();
+
+            assert.deepEqual(calendar.option('currentDate'), this.instance.option('startDate'));
+        });
+
+        QUnit.test('CurrentDate should be updated after changing focus from startDate input to endDate input and vice verta', function(assert) {
+            this.reinit({
+                multiView: true,
+                value: [new Date('2023/06/01'), new Date('2023/07/13')],
+            });
+
+            $(this.instance.startDateField()).trigger('dxclick');
+            $(this.instance.endDateField()).trigger('dxclick');
+
+            const calendar = this.getCalendar();
+
+            assert.deepEqual(calendar.option('currentDate'), this.instance.option('endDate'), 'currentDate equals endDate');
+
+            $(this.instance.startDateField()).trigger('dxclick');
+
+            assert.deepEqual(calendar.option('currentDate'), this.instance.option('startDate'), 'currentDate equals startDate');
+
+            $(this.instance.endDateField()).trigger('dxclick');
+
+            assert.deepEqual(calendar.option('currentDate'), this.instance.option('endDate'), 'currentDate equals endDate');
+        });
+
+        QUnit.test('CurrentDate should be on the additional view when focus endDate field and endDate is bigger than startDate on 2+ months', function(assert) {
+            this.reinit({
+                multiView: true,
+                value: [new Date('2023/06/01'), new Date('2023/11/13')],
+            });
+
+            $(this.instance.startDateField()).trigger('dxclick');
+            $(this.instance.endDateField()).trigger('dxclick');
+
+            const calendar = this.getCalendar();
+            const $additionalView = $(calendar._additionalView.$element());
+            const $currentDateCell = $($additionalView.find('td[data-value=\'2023/11/13\']'));
+
+            assert.deepEqual(calendar.option('currentDate'), this.instance.option('endDate'));
+            assert.ok($currentDateCell.length, 'currentDate is on additional view');
+        });
+
+        QUnit.test('Calendar should not swipe views on focus endDate when startDate is on main view and endDate is on additional view', function(assert) {
+            this.reinit({
+                multiView: true,
+                value: [new Date('2023/06/12'), new Date('2023/07/13')],
+            });
+
+            $(this.instance.startDateField()).trigger('dxclick');
+            $(this.instance.endDateField()).trigger('dxclick');
+
+            const calendar = this.getCalendar();
+            const $mainView = $(calendar._view.$element());
+            const $additionalView = $(calendar._additionalView.$element());
+            const $startDateCell = $($mainView.find('td[data-value=\'2023/06/12\']'));
+            const $endDateCell = $($additionalView.find('td[data-value=\'2023/07/13\']'));
+
+            assert.ok($startDateCell.length, 'startDate is on main view');
+            assert.ok($endDateCell.length, 'endDate is on additional view');
+        });
+
+        QUnit.test('startDate should be contoured after moving focus from endDate to startDate', function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
+            this.reinit({
+                multiView: true,
+                value: [new Date('2023/06/12'), new Date('2023/11/13')],
+            });
+
+            $(this.instance.endDateField()).trigger('dxclick');
+            $(this.instance.startDateField()).trigger('dxclick');
+
+            const $calendar = this.getCalendar().$element();
+            const $startDateCell = $($calendar.find('td[data-value=\'2023/06/12\']'));
+
+            assert.ok($startDateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
+        });
+
+        QUnit.test('endDate should be contoured after moving focus from startDate to endDate', function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
+            this.reinit({
+                multiView: true,
+                value: [new Date('2023/06/12'), new Date('2023/11/13')],
+            });
+
+            $(this.instance.startDateField()).trigger('dxclick');
+            $(this.instance.endDateField()).trigger('dxclick');
+
+            const $calendar = this.getCalendar().$element();
+            const $endDateCell = $($calendar.find('td[data-value=\'2023/11/13\']'));
+
+            assert.ok($endDateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
         });
     });
 });
