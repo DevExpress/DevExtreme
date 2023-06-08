@@ -271,7 +271,7 @@ export class EditingController extends modules.ViewController {
 
   _closeEditItem($targetElement): any {}
 
-  _handleDataChanged(): any {}
+  _handleDataChanged(args): any {}
 
   _isDefaultButtonVisible(button, options) {
     let result = true;
@@ -1154,7 +1154,7 @@ export class EditingController extends modules.ViewController {
 
   _focusEditorIfNeed(): any {}
 
-  _showEditPopup(): any {}
+  _showEditPopup(rowIndex, repaintForm?): any {}
 
   _repaintEditPopup(): any {}
 
@@ -1166,7 +1166,7 @@ export class EditingController extends modules.ViewController {
     };
   }
 
-  _getPopupEditFormTemplate(): any {}
+  _getPopupEditFormTemplate(rowIndex): any {}
 
   _getSaveButtonConfig() {
     return {
