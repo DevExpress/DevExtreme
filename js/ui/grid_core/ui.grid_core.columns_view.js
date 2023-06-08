@@ -1,2 +1,2 @@
 // deprecated
-export * from '../../__internal/grids/grid_core/columns_view/module';
+export * from '../../__internal/grids/grid_core/views/m_columns_view';
