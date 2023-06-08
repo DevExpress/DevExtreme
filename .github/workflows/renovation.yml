@@ -36,7 +36,7 @@ jobs:
       run: npx gulp localization
 
     - name: Jest test
-      run: npm run test-jest --runInBand
+      run: npm run test-jest
   generation:
     runs-on: devextreme-shr2
     timeout-minutes: 60
