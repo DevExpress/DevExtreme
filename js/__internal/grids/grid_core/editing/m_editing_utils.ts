@@ -48,3 +48,7 @@ export function getButtonName(button) {
   // @ts-expect-error
   return isObject(button) ? button.name : button;
 }
+
+export function isEditable($element) {
+  return $element && ($element.is('input') || $element.is('textarea'));
+}

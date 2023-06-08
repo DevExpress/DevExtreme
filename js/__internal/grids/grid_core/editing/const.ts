@@ -87,3 +87,9 @@ export const ACTION_OPTION_NAMES = {
 export const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
 
 export const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
+
+export const FOCUS_OVERLAY_CLASS = 'focus-overlay';
+export const ADD_ROW_BUTTON_CLASS = 'addrow-button';
+export const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
+export const DATA_ROW_CLASS = 'dx-data-row';
+export const ROW_REMOVED = 'dx-row-removed';
