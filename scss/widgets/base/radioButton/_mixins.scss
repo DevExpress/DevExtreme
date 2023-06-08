@@ -55,7 +55,9 @@
   }
 
   .dx-radiobutton-icon-checked {
-    border-color: $checked-color;
+    @if $useRipple {
+      border-color: $checked-color;
+    }
 
     .dx-radiobutton-icon-dot {
       background-color: $checked-color;
@@ -80,6 +82,7 @@
   $disabled-opacity,
   $useRipple: false,
   $focused-ripple-bg: transparent,
+  $invalid-focused-ripple-bg: transparent,
 ) {
   .dx-radiobutton {
     line-height: $size;
@@ -153,7 +156,7 @@
           }
 
           .dx-radiobutton-icon::after {
-            background-color: $invalid-focused-border-color;
+            background-color: $invalid-focused-ripple-bg;
             transform: scale(1);
           }
         }
