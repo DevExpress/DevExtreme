@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'generic_light.css!';
-import { FieldsArea } from '__internal/grids/pivot_grid/fields_area/module';
-import { AreaItem } from '__internal/grids/pivot_grid/area_item/module';
+import { FieldsArea } from '__internal/grids/pivot_grid/fields_area/m_fields_area';
+import { AreaItem } from '__internal/grids/pivot_grid/area_item/m_area_item';
 
 
 QUnit.testStart(function() {
