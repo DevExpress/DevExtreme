@@ -69,6 +69,8 @@ import {
   VIEWPORT_BOTTOM_NEW_ROW_POSITION,
   VIEWPORT_TOP_NEW_ROW_POSITION,
 } from './const';
+import type { ICellBasedEditingControllerExtender } from './m_editing_cell_based';
+import type { IFormBasedEditingControllerExtender } from './m_editing_form_based';
 import {
   createFailureHandler,
   getButtonIndex,
@@ -78,7 +80,7 @@ import {
   isEditingOrShowEditorAlwaysDataCell,
 } from './m_editing_utils';
 
-export class EditingController extends modules.ViewController {
+class EditingControllerImpl extends modules.ViewController {
   _columnsController!: Controllers['columns'];
 
   _dataController!: Controllers['data'];
@@ -2269,6 +2271,11 @@ export class EditingController extends modules.ViewController {
   }
 }
 
+export type EditingController =
+  EditingControllerImpl
+  & ICellBasedEditingControllerExtender
+  & IFormBasedEditingControllerExtender;
+
 export const editingModule = {
   defaultOptions() {
     return {
@@ -2312,7 +2319,7 @@ export const editingModule = {
     };
   },
   controllers: {
-    editing: EditingController,
+    editing: EditingControllerImpl,
   },
   extenders: {
     controllers: {

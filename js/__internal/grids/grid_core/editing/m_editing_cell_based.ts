@@ -31,7 +31,18 @@ import {
 import { EditingController } from './m_editing';
 import { isEditable } from './m_editing_utils';
 
-const editingControllerExtender = (Base: ModuleType<EditingController>) => class CellBasedEditingControllerExtender extends Base {
+export interface ICellBasedEditingControllerExtender {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  isCellOrBatchEditMode(): any;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  closeEditCell(isError?, withoutSaveEditData?): any;
+
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  editCell(rowIndex, columnIndex): any;
+}
+
+const editingControllerExtender = (Base: ModuleType<EditingController>) => class CellBasedEditingControllerExtender extends Base implements ICellBasedEditingControllerExtender {
   _pointerUpEditorHandler: any;
 
   _pointerDownEditorHandler: any;
@@ -93,7 +104,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return this.option('editing.mode') === EDIT_MODE_BATCH;
   }
 
-  isCellOrBatchEditMode() {
+  isCellOrBatchEditMode(): any {
     return this.isCellEditMode() || this.isBatchEditMode();
   }
 
