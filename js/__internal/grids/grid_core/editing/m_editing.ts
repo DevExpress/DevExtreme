@@ -26,132 +26,57 @@ import { confirm } from '@js/ui/dialog';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
 import {
+  ACTION_OPTION_NAMES,
+  BUTTON_NAMES,
+  CELL_FOCUS_DISABLED_CLASS,
+  CELL_MODIFIED,
+  COMMAND_EDIT_CLASS,
+  COMMAND_EDIT_WITH_ICONS_CLASS,
   DATA_EDIT_DATA_INSERT_TYPE,
   DATA_EDIT_DATA_REMOVE_TYPE,
+  DATA_EDIT_DATA_UPDATE_TYPE,
+  DEFAULT_START_EDIT_ACTION,
+  EDIT_BUTTON_CLASS,
   EDIT_FORM_CLASS,
+  EDIT_ICON_CLASS,
+  EDIT_LINK_CLASS,
   EDIT_MODE_ROW,
   EDIT_MODES,
+  EDITING_CHANGES_OPTION_NAME,
   EDITING_EDITCOLUMNNAME_OPTION_NAME,
   EDITING_EDITROWKEY_OPTION_NAME,
+  EDITING_NAMESPACE,
   EDITING_POPUP_OPTION_NAME,
   EDITOR_CELL_CLASS,
   EDITORS_INPUT_SELECTOR,
   FIRST_NEW_ROW_POSITION,
   FOCUSABLE_ELEMENT_SELECTOR,
+  INSERT_INDEX,
   LAST_NEW_ROW_POSITION,
+  LINK_CLASS,
+  METHOD_NAMES,
   PAGE_BOTTOM_NEW_ROW_POSITION,
   PAGE_TOP_NEW_ROW_POSITION,
+  READONLY_CLASS,
   ROW_BASED_MODES,
   ROW_CLASS,
+  ROW_INSERTED,
+  ROW_MODIFIED,
+  ROW_SELECTED,
   TARGET_COMPONENT_NAME,
   VIEWPORT_BOTTOM_NEW_ROW_POSITION,
   VIEWPORT_TOP_NEW_ROW_POSITION,
 } from './const';
-
-const READONLY_CLASS = 'readonly';
-const LINK_CLASS = 'dx-link';
-const ROW_SELECTED = 'dx-selection';
-const EDIT_BUTTON_CLASS = 'dx-edit-button';
-const COMMAND_EDIT_CLASS = 'dx-command-edit';
-const COMMAND_EDIT_WITH_ICONS_CLASS = `${COMMAND_EDIT_CLASS}-with-icons`;
-
-const INSERT_INDEX = '__DX_INSERT_INDEX__';
-const ROW_INSERTED = 'dx-row-inserted';
-const ROW_MODIFIED = 'dx-row-modified';
-const CELL_MODIFIED = 'dx-cell-modified';
-const EDITING_NAMESPACE = 'dxDataGridEditing';
-
-const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
-
-const DATA_EDIT_DATA_UPDATE_TYPE = 'update';
-
-const DEFAULT_START_EDIT_ACTION = 'click';
-
-const EDIT_LINK_CLASS = {
-  save: 'dx-link-save',
-  cancel: 'dx-link-cancel',
-  edit: 'dx-link-edit',
-  undelete: 'dx-link-undelete',
-  delete: 'dx-link-delete',
-  add: 'dx-link-add',
-};
-const EDIT_ICON_CLASS = {
-  save: 'save',
-  cancel: 'revert',
-  edit: 'edit',
-  undelete: 'revert',
-  delete: 'trash',
-  add: 'add',
-};
-const METHOD_NAMES = {
-  edit: 'editRow',
-  delete: 'deleteRow',
-  undelete: 'undeleteRow',
-  save: 'saveEditData',
-  cancel: 'cancelEditData',
-  add: 'addRowByRowIndex',
-};
-const ACTION_OPTION_NAMES = {
-  add: 'allowAdding',
-  edit: 'allowUpdating',
-  delete: 'allowDeleting',
-};
-const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
-
-const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
-
-const createFailureHandler = function (deferred) {
-  return function (arg) {
-    const error = arg instanceof Error ? arg : new Error(arg && String(arg) || 'Unknown error');
-    deferred.reject(error);
-  };
-};
-
-const isEditingCell = function (isEditRow, cellOptions) {
-  return cellOptions.isEditing || isEditRow && cellOptions.column.allowEditing;
-};
-
-const isEditingOrShowEditorAlwaysDataCell = function (isEditRow, cellOptions) {
-  const isCommandCell = !!cellOptions.column.command;
-  const isEditing = isEditingCell(isEditRow, cellOptions);
-  const isEditorCell = !isCommandCell && (isEditing || cellOptions.column.showEditorAlways);
-  return cellOptions.rowType === 'data' && isEditorCell;
-};
+import {
+  createFailureHandler,
+  getButtonIndex,
+  getButtonName,
+  getEditingTexts,
+  isEditingCell,
+  isEditingOrShowEditorAlwaysDataCell,
+} from './m_editing_utils';
 
 const EditingController = modules.ViewController.inherit((function () {
-  const getEditingTexts = (options) => {
-    const editingTexts = options.component.option('editing.texts') || {};
-
-    return {
-      save: editingTexts.saveRowChanges,
-      cancel: editingTexts.cancelRowChanges,
-      edit: editingTexts.editRow,
-      undelete: editingTexts.undeleteRow,
-      delete: editingTexts.deleteRow,
-      add: editingTexts.addRowToNode,
-    };
-  };
-
-  const getButtonIndex = (buttons, name) => {
-    let result = -1;
-
-    // @ts-expect-error
-    // eslint-disable-next-line consistent-return, array-callback-return
-    buttons.some((button, index) => {
-      if (getButtonName(button) === name) {
-        result = index;
-        return true;
-      }
-    });
-
-    return result;
-  };
-
-  function getButtonName(button) {
-    // @ts-expect-error
-    return isObject(button) ? button.name : button;
-  }
-
   const members = {
     init() {
       this._columnsController = this.getController('columns');
