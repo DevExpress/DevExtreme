@@ -2,7 +2,7 @@ import { getHeight, getWidth } from './utils/size';
 import $ from '../core/renderer';
 import { getWindow, getNavigator, hasWindow } from './utils/window';
 import { extend } from './utils/extend';
-import { isPlainObject } from './utils/type';
+import { isPlainObject, isDefined } from './utils/type';
 import { each } from './utils/iterator';
 import errors from './errors';
 import Callbacks from './utils/callbacks';
@@ -58,6 +58,27 @@ const DEFAULT_DEVICE = {
 };
 
 const uaParsers = {
+    ipad(_, navigator) {
+        const maxTouchPoints = navigator?.maxTouchPoints;
+        const platform = navigator?.platform;
+
+        if(!(isDefined(maxTouchPoints) && platform)) {
+            return;
+        }
+
+        const isIpadOS = (maxTouchPoints > 0 && platform === 'MacIntel') || platform === 'iPad';
+
+        if(!isIpadOS) {
+            return;
+        }
+
+        return {
+            deviceType: DEVICE_TYPE.tablet,
+            platform: PLATFORM.ipad,
+            grade: 'A',
+        };
+    },
+
     generic(userAgent) {
         const isPhone = /windows phone/i.test(userAgent) || userAgent.match(/WPDesktop/);
         const isTablet = !isPhone && /Windows(.*)arm(.*)Tablet PC/i.test(userAgent);
@@ -93,27 +114,6 @@ const uaParsers = {
             platform: PLATFORM.ios,
             version,
             grade
-        };
-    },
-
-    ipad(_, navigator) {
-        const maxTouchPoints = navigator?.maxTouchPoints;
-        const platform = navigator?.platform;
-
-        if(!(maxTouchPoints && platform)) {
-            return;
-        }
-
-        const isIpadOS = (maxTouchPoints > 0 && platform === 'MacIntel') || platform === 'iPad';
-
-        if(!isIpadOS) {
-            return;
-        }
-
-        return {
-            deviceType: DEVICE_TYPE.tablet,
-            platform: PLATFORM.ipad,
-            grade: 'A',
         };
     },
 

@@ -18,6 +18,7 @@ const userAgents = {
     android_9: 'Mozilla/5.0 (Linux; Android 9; Mi A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.143 Mobile Safari/537.36',
     android_tablet_7_1_1: 'Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Safari/537.36',
     win_phone_10: 'Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; NOKIA; Lumia 920) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Mobile Safari/537.36 Edge/12.0',
+    ipad_pro: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0 Safari/605.1.15)',
 };
 
 themes.setDefaultTimeout(0);
@@ -45,6 +46,13 @@ QUnit.test('ios by userAgent', function(assert) {
     assert.equal(device.platform, 'ios', 'platform is ios');
     assert.equal(device.version.toString(), '10,3,3', 'correct version');
     assert.equal(device.deviceType, 'tablet', 'deviceType is tablet');
+});
+
+QUnit.test('ipad by navigator', function(assert) {
+    const device = fromUA(userAgents.ipad_pro, { maxTouchPoints: 5, platform: 'MacIntel' });
+
+    assert.strictEqual(device.deviceType, 'tablet', 'deviceType is tablet');
+    assert.strictEqual(device.platform, 'ipad', 'platform is ipad');
 });
 
 QUnit.test('android by userAgent', function(assert) {
