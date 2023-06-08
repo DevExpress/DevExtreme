@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
@@ -152,3 +153,121 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
       mode: 'virtual',
     },
   }));
+
+[true, false].forEach((useNative) => {
+  // T1169962
+  safeSizeTest(`The master detail row should display correctly after scrolling when renderAsync, column fixing are enabled and virtual scrolling with useNative=${useNative}`, async (t) => {
+    // arrange
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+    const triggerScrollEvent = ClientFunction((grid) => {
+      const instance = grid.getInstance();
+
+      $(instance.getScrollable().container()).trigger('scroll');
+    });
+    const scrollUp = async () => {
+      let scrollTop = await dataGrid.getScrollTop();
+
+      while (scrollTop > 0) {
+        scrollTop -= 25;
+
+        await dataGrid.scrollTo({ y: scrollTop });
+        await triggerScrollEvent(dataGrid);
+      }
+    };
+
+    await t.wait(100);
+
+    // assert
+    await takeScreenshot(`T1169962-master-detail-with-scrolling.useNative=${useNative}-1.png`, dataGrid.element);
+
+    // act
+    await dataGrid.scrollTo({ y: 1000 });
+    await t.wait(100);
+
+    // assert
+    await takeScreenshot(`T1169962-master-detail-with-scrolling.useNative=${useNative}-2.png`, dataGrid.element);
+
+    // act
+    await scrollUp();
+    await t.wait(100);
+
+    // assert
+    await takeScreenshot(`T1169962-master-detail-with-scrolling.useNative=${useNative}-3.png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [800, 800])
+    .before(async (t) => {
+      await createWidget('dxDataGrid', {
+        dataSource: [...new Array(200)].map((_, index) => ({ id: index, text: `item ${index}` })),
+        keyExpr: 'id',
+        showBorders: true,
+        height: 800,
+        renderAsync: true,
+        templatesRenderAsynchronously: true,
+        columnFixing: {
+          enabled: true,
+        },
+        masterDetail: {
+          enabled: true,
+          template: '#test',
+        },
+        scrolling: {
+          mode: 'virtual',
+          useNative,
+        },
+        onContentReady(e) {
+          // eslint-disable-next-line no-underscore-dangle
+          if (!e.component.__initExpand) {
+          // eslint-disable-next-line no-underscore-dangle
+            e.component.__initExpand = true;
+            e.component.beginUpdate();
+            e.component.expandRow(3);
+            e.component.expandRow(5);
+            e.component.expandRow(7);
+            e.component.expandRow(9);
+            e.component.expandRow(11);
+            e.component.expandRow(13);
+            e.component.expandRow(15);
+            e.component.endUpdate();
+          }
+        },
+      });
+
+      await t.wait(100);
+
+      // simulating async rendering in React
+      await ClientFunction(() => {
+        const dataGrid = ($('#container') as any).dxDataGrid('instance');
+
+        // eslint-disable-next-line no-underscore-dangle
+        dataGrid.getView('rowsView')._templatesCache = {};
+
+        // eslint-disable-next-line no-underscore-dangle
+        dataGrid._getTemplate = () => ({
+          render(options) {
+            setTimeout(() => {
+              if ($(options.container).closest(document).length) {
+                $(options.container).append($('<div/>').html(`
+                    <p>${options.model.data.id}</p>
+                    <p>${options.model.data.text}</p>
+                `));
+                options.deferred?.resolve();
+              }
+            }, 30);
+          },
+        });
+
+        dataGrid.repaint();
+      })();
+    })
+    .after(async () => {
+      await ClientFunction(() => {
+        const dataGrid = ($('#container') as any).dxDataGrid('instance');
+
+        dataGrid?.dispose();
+      })();
+    });
+});

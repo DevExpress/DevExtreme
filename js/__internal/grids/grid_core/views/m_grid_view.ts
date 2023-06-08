@@ -531,9 +531,9 @@ const ResizingController = modules.ViewController.inherit({
 
   _waitAsyncTemplates() {
     return when(
-      this._columnHeadersView?.waitAsyncTemplates(),
-      this._rowsView?.waitAsyncTemplates(),
-      this._footerView?.waitAsyncTemplates(),
+      this._columnHeadersView?.waitAsyncTemplates(true),
+      this._rowsView?.waitAsyncTemplates(true),
+      this._footerView?.waitAsyncTemplates(true),
     );
   },
 
