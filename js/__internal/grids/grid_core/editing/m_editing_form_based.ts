@@ -32,7 +32,12 @@ import {
 import { EditingController } from './m_editing';
 import { forEachFormItems, getEditorType } from './m_editing_utils';
 
-const editingControllerExtender = (Base: ModuleType<EditingController>) => class FormBasedEditingControllerExtender extends Base {
+export interface IFormBasedEditingControllerExtender {
+  // eslint-disable-next-line @typescript-eslint/method-signature-style
+  renderFormEditorTemplate(detailCellOptions, item, formTemplateOptions, container, isReadOnly?): any;
+}
+
+const editingControllerExtender = (Base: ModuleType<EditingController>) => class FormBasedEditingControllerExtender extends Base implements IFormBasedEditingControllerExtender {
   _updateEditFormDeferred: any;
 
   _firstFormItem: any;
