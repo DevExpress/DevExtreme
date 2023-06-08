@@ -425,9 +425,9 @@ const Overlay = Widget.inherit({
         const isVisualViewportAvailable = hasVisualViewport();
 
         const device = devices.real();
-        const isMobile = ['phone', 'tablet'].includes(device.deviceType);
+        const isAppleMobileDevice = ['ios', 'ipados'].includes(device.platform);
 
-        const shouldUseVisualViewport = isMobile && isVisualContainerWindow && isVisualViewportAvailable;
+        const shouldUseVisualViewport = isAppleMobileDevice && isVisualContainerWindow && isVisualViewportAvailable;
 
         return shouldUseVisualViewport;
     },

@@ -25,6 +25,8 @@ const DEVICE_TYPE = {
 const PLATFORM = {
     generic: 'generic',
     ios: 'ios',
+    // eslint-disable-next-line spellcheck/spell-checker
+    ipados: 'ipados',
     android: 'android',
 };
 
@@ -92,6 +94,23 @@ const uaParsers = {
             platform: PLATFORM.ios,
             version,
             grade
+        };
+    },
+
+    ipad(_, navigator) {
+        const { maxTouchPoints, platform } = navigator;
+
+        const isIpadOS = (maxTouchPoints > 0 && platform === 'MacIntel') || platform === 'iPad';
+
+        if(!isIpadOS) {
+            return;
+        }
+
+        return {
+            deviceType: DEVICE_TYPE.tablet,
+            // eslint-disable-next-line spellcheck/spell-checker
+            platform: PLATFORM.ipados,
+            grade: 'A',
         };
     },
 
@@ -254,16 +273,19 @@ class Devices {
         if(isPlainObject(deviceName)) {
             return this._fromConfig(deviceName);
         } else {
-            let ua;
+            let userAgent;
+
             if(deviceName) {
-                ua = KNOWN_UA_TABLE[deviceName];
-                if(!ua) {
+                userAgent = KNOWN_UA_TABLE[deviceName];
+
+                if(!userAgent) {
                     throw errors.Error('E0005');
                 }
             } else {
-                ua = navigator.userAgent;
+                userAgent = navigator.userAgent;
             }
-            return this._fromUA(ua);
+
+            return this._fromUA(userAgent, navigator);
         }
     }
 
@@ -306,11 +328,12 @@ class Devices {
         return extend(result, shortcuts);
     }
 
-    _fromUA(ua) {
+    _fromUA(userAgent, navigator) {
         let config;
 
         each(uaParsers, (platform, parser) => {
-            config = parser(ua);
+            config = parser(userAgent, navigator);
+
             return !config;
         });
 
