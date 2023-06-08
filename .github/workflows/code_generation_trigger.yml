@@ -1,0 +1,21 @@
+name: Code generation trigger
+
+# TODO: think about concurrency!
+#concurrency:
+#  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+#  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches: [23_1]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger code generation
+        run: |
+          gh workflow run update-generated-code.yml -R DevExpress/devextreme-vue
+    env:
+      GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
