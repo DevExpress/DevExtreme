@@ -19,6 +19,6 @@ jobs:
           gh workflow run update-generated-code.yml -R DevExpress/devextreme-vue
           sleep 5
           latestRunId=$(gh run list -w update-generated-code.yml -R DevExpress/devextreme-vue --json databaseId --jq .[0].databaseId)
-          gh run watch -R org/repo $latestRunId
+          gh run watch -R DevExpress/devextreme-vue $latestRunId
     env:
       GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
