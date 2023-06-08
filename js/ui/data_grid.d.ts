@@ -45,15 +45,15 @@ import {
 
 import {
     AdaptiveDetailRowPreparingInfo,
-    ColumnBase,
-    ColumnButtonBase,
+    ColumnBase as ComponentColumnBase,
+    ColumnButtonBase as ComponentColumnButtonBase,
+    EditingBase as ComponentEditingBase,
+    EditingTextsBase as ComponentEditingTextsBase,
     DataChangeInfo,
     DataErrorOccurredInfo,
     DragDropInfo,
     DragReorderInfo,
     DragStartEventInfo,
-    EditingBase,
-    EditingTextsBase,
     FilterPanel as ComponentFilterPanel,
     FilterPanelCustomizeTextArg as ComponentFilterPanelCustomizeTextArg,
     GridBase,
@@ -62,7 +62,7 @@ import {
     KeyDownInfo,
     NewRowInfo,
     NewRowPosition,
-    PagingBase,
+    PagingBase as ComponentPagingBase,
     ReducedNativeEventInfo,
     RowDragging as ComponentRowDragging,
     RowDraggingEventInfo,
@@ -76,8 +76,8 @@ import {
     RowUpdatingInfo,
     RowValidatingInfo,
     SavingInfo,
-    ScrollingBase,
-    SelectionBase,
+    ScrollingBase as ComponentScrollingBase,
+    SelectionBase as ComponentSelectionBase,
     SelectionChangedInfo,
     SelectionColumnDisplayMode,
     SummaryType,
@@ -150,18 +150,13 @@ export {
 
 export {
     AdaptiveDetailRowPreparingInfo,
-    ColumnBase,
-    ColumnButtonBase,
     DataChangeInfo,
     DataErrorOccurredInfo,
     DragDropInfo,
     DragReorderInfo,
     DragStartEventInfo,
-    EditingBase,
-    EditingTextsBase,
     KeyDownInfo,
     NewRowInfo,
-    PagingBase,
     RowDraggingEventInfo,
     RowInsertedInfo,
     RowInsertingInfo,
@@ -172,11 +167,24 @@ export {
     RowUpdatingInfo,
     RowValidatingInfo,
     SavingInfo,
-    ScrollingBase,
-    SelectionBase,
     SelectionChangedInfo,
     ToolbarPreparingInfo,
 } from '../common/grids';
+
+/** @deprecated Use Column instead */
+export type ColumnBase<TRowData = any> = ComponentColumnBase<TRowData>;
+/** @deprecated Use ColumnButton instead */
+export type ColumnButtonBase = ComponentColumnButtonBase;
+/** @deprecated Use Editing instead */
+export type EditingBase<TRowData = any, TKey = any> = ComponentEditingBase<TRowData, TKey>;
+/** @deprecated Use EditingTexts instead */
+export type EditingTextsBase = ComponentEditingTextsBase;
+/** @deprecated Use Paging instead */
+export type PagingBase = ComponentPagingBase;
+/** @deprecated Use Scrolling instead */
+export type ScrollingBase = ComponentScrollingBase;
+/** @deprecated Use Selection instead */
+export type SelectionBase = ComponentSelectionBase;
 
 /** @public */
 export type DataGridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
@@ -229,7 +237,7 @@ export type GridBaseEditingTexts = EditingTextsBase;
  * @namespace DevExpress.ui
  * @deprecated
  */
-export type GridBasePaging = PagingBase;
+export type GridBasePaging = ComponentPagingBase;
 
 /**
  * @public
@@ -1633,6 +1641,11 @@ export type CustomSummaryInfo<TRowData = any, TKey = any> = {
   readonly groupIndex?: number;
 };
 
+/**
+* @public
+*/
+export type ƒ = ComponentPagingBase;
+
 /** @public */
 export type RowDragging<TRowData = any, TKey = any> = ComponentRowDragging<dxDataGrid, TRowData, TKey>;
 
@@ -1933,7 +1946,7 @@ export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & 
      * @docid dxDataGridOptions.editing.texts
      * @public
      */
-    texts?: any;
+    texts?: EditingTextsBase;
     /**
      * @docid dxDataGridOptions.editing.newRowPosition
      * @default "viewportTop"
@@ -1941,6 +1954,11 @@ export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & 
      */
     newRowPosition?: NewRowPosition;
 };
+
+/**
+ * @public
+ */
+export type EditingTexts = ComponentEditingTextsBase;
 
 /**
  * @public

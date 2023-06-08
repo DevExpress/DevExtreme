@@ -97,6 +97,7 @@ export type ApplyChangesMode = 'instantly' | 'onDemand';
  * @docid GridBaseColumn
  * @namespace DevExpress.common.grids
  * @type object
+ * @hidden
  */
 export interface ColumnBase<TRowData = any> {
   /**
@@ -437,6 +438,7 @@ export interface ColumnBase<TRowData = any> {
  * @docid GridBaseColumnButton
  * @namespace DevExpress.common.grids
  * @type object
+ * @hidden
  */
 export interface ColumnButtonBase {
   /**
@@ -838,6 +840,7 @@ export interface DragStartEventInfo<TRowData = any> {
 /**
  * @docid
  * @namespace DevExpress.common.grids
+ * @hidden
  */
 export interface EditingBase<TRowData = any, TKey = any> {
   /**
@@ -922,6 +925,7 @@ export interface EditingBase<TRowData = any, TKey = any> {
 /**
  * @docid
  * @namespace DevExpress.common.grids
+ * @hidden
  */
 export interface EditingTextsBase {
   /**
@@ -2484,10 +2488,11 @@ export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
 export type PagerPageSize = 'all' | 'auto';
 
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.common.grids
  */
-export interface PagingBase {
+export type PagingBase = {
   /**
    * @docid GridBaseOptions.paging.enabled
    * @default true
@@ -2508,7 +2513,7 @@ export interface PagingBase {
    * @public
    */
   pageSize?: number;
-}
+};
 
 export type ReducedNativeEventInfo<TComponent extends GridBase> = Required<Pick<NativeEventInfo<TComponent, PointerEvent | MouseEvent | TouchEvent>, 'component' | 'event'>>;
 
@@ -2869,6 +2874,7 @@ export interface SavingInfo<TRowData = any, TKey = any> {
 /**
  * @docid
  * @namespace DevExpress.common.grids
+ * @hidden
  */
 export interface ScrollingBase {
   /**
@@ -2976,6 +2982,7 @@ export type SelectedFilterOperation = '<' | '<=' | '<>' | '=' | '>' | '>=' | 'be
 /**
  * @docid
  * @namespace DevExpress.common.grids
+ * @hidden
  */
 export interface SelectionBase {
   /**
