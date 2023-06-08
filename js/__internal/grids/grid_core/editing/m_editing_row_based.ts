@@ -26,7 +26,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         rowIndices: [rowIndex, rowIndex + 1],
       });
     } else {
-      this.callBase.apply(this, arguments);
+      super._afterCancelEditData(rowIndex);
     }
   }
 
@@ -39,30 +39,30 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         case 'edit':
           return !isEditRow && this.allowUpdating(options);
         case 'delete':
-          return this.callBase.apply(this, arguments) && !isEditRow;
+          return super._isDefaultButtonVisible(button, options) && !isEditRow;
         case 'save':
         case 'cancel':
           return isEditRow;
         default:
-          return this.callBase.apply(this, arguments);
+          return super._isDefaultButtonVisible(button, options);
       }
     }
 
-    return this.callBase.apply(this, arguments);
+    return super._isDefaultButtonVisible(button, options);
   }
 
   isEditRow(rowIndex) {
     return this.isRowBasedEditMode() && this.isEditRowByIndex(rowIndex);
   }
 
-  _cancelSaving() {
+  _cancelSaving(result) {
     if (this.isRowBasedEditMode()) {
       if (!this.hasChanges()) {
         this._cancelEditDataCore();
       }
     }
 
-    this.callBase.apply(this, arguments);
+    super._cancelSaving(result);
   }
 
   _refreshCore(params) {
@@ -74,11 +74,11 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       allowCancelEditing && hasUpdateChanges && this._cancelEditDataCore();
     }
 
-    this.callBase.apply(this, arguments);
+    super._refreshCore(params);
   }
 
   _isEditColumnVisible() {
-    const result = this.callBase.apply(this, arguments);
+    const result = super._isEditColumnVisible();
     const editingOptions: any = this.option('editing');
     const isRowEditMode = this.isRowEditMode();
     const isVisibleInRowEditMode = editingOptions.allowUpdating || editingOptions.allowAdding;
