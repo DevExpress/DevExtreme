@@ -99,6 +99,10 @@ const uaParsers = {
     ipad(_, navigator) {
         const { maxTouchPoints, platform } = navigator;
 
+        if(!(maxTouchPoints && platform)) {
+            return;
+        }
+
         const isIpadOS = (maxTouchPoints > 0 && platform === 'MacIntel') || platform === 'iPad';
 
         if(!isIpadOS) {
