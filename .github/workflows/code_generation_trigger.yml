@@ -18,6 +18,6 @@ jobs:
         run: |
           gh workflow run update-generated-code.yml -R DevExpress/devextreme-vue
           sleep 5
-          gh run list -w update-generated-code.yml -R DevExpress/devextreme-vue --json
+          gh run list -w update-generated-code.yml -R DevExpress/devextreme-vue --json databaseId
     env:
       GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
