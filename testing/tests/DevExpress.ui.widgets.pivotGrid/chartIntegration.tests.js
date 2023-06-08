@@ -2,7 +2,7 @@
 import '../../helpers/noIntl.js';
 
 import $ from 'jquery';
-import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/module';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
