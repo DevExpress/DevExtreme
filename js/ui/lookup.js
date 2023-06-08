@@ -22,7 +22,6 @@ import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 import { locate, move, resetPosition } from '../animation/translator';
 import { isDefined } from '../core/utils/type';
 import { getElementWidth } from './drop_down_editor/utils';
-import { getVisualViewportSizes, hasVisualViewport } from '../core/utils/visual_viewport';
 
 // STYLE lookup
 
@@ -140,8 +139,8 @@ const Lookup = DropDownList.inherit({
                 showTitle: true,
                 title: '',
                 titleTemplate: 'title',
-                width: () => this._getDropDownSize('width'),
-                height: () => this._getDropDownSize('height'),
+                width: () => getWidth(window) * WINDOW_RATIO,
+                height: () => getHeight(window) * WINDOW_RATIO,
             },
 
             /**
@@ -220,21 +219,6 @@ const Lookup = DropDownList.inherit({
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
         });
-    },
-
-    _getDropDownSize(size) {
-        const isPhone = devices.real().deviceType === 'phone';
-        const isVisualViewportAvailable = hasVisualViewport();
-
-        const shouldUseVisualViewport = isPhone && isVisualViewportAvailable;
-
-        if(shouldUseVisualViewport) {
-            const windowSize = getVisualViewportSizes()[size];
-
-            return windowSize * WINDOW_RATIO;
-        }
-
-        return (size === 'width' ? getWidth(window) : getHeight(window)) * WINDOW_RATIO;
     },
 
     _setDeprecatedOptions() {
