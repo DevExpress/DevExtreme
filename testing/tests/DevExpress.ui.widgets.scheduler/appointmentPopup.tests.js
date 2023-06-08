@@ -652,13 +652,13 @@ if(isDesktopEnvironment()) {
             this.windowStub = sinon.stub(windowUtils, 'getWindow');
             this.visualViewportStub = sinon.stub(visualViewport, 'getVisualViewportSizes');
 
-            this.setStubReturnsOptions = ({ width }) => {
+            const setStubReturnsOptions = ({ width }) => {
                 this.documentStub.returns({ clientWidth: width });
                 this.windowStub.returns({ innerWidth: width });
                 this.visualViewportStub.returns({ width });
             };
 
-            this.setStubReturnsOptions(1000);
+            setStubReturnsOptions(1000);
         },
 
         afterEach() {
