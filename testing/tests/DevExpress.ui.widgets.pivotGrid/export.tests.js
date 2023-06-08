@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { DataProvider } from '__internal/grids/pivot_grid/export/module';
+import { DataProvider } from '__internal/grids/pivot_grid/export/m_export';
 import clientExporter from 'exporter';
 import dateLocalization from 'localization/date';
 
