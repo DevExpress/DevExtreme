@@ -1,8 +1,9 @@
-import { getKeyHash, equalByValue } from '@js/core/utils/common';
-import { isDefined } from '@js/core/utils/type';
-import { extend } from '@js/core/utils/extend';
+import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
-import stateStoringCore from './module_core';
+import { extend } from '@js/core/utils/extend';
+import { isDefined } from '@js/core/utils/type';
+
+import stateStoringCore from './m_state_storing_core';
 
 const getDataState = (that) => {
   const pagerView = that.getView('pagerView');

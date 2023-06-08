@@ -1,20 +1,20 @@
-import $ from '@js/core/renderer';
 import domAdapter from '@js/core/dom_adapter';
-import eventsEngine from '@js/events/core/events_engine';
-import { isDefined, isString } from '@js/core/utils/type';
+import $ from '@js/core/renderer';
+import { deferRender } from '@js/core/utils/common';
+import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
+import { isDefined, isString } from '@js/core/utils/type';
+import { createObjectWithChanges } from '@js/data/array_utils';
 import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+import holdEvent from '@js/events/hold';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
-import holdEvent from '@js/events/hold';
-import { when, Deferred } from '@js/core/utils/deferred';
-import { deferRender } from '@js/core/utils/common';
-import { createObjectWithChanges } from '@js/data/array_utils';
+
 import {
   EDIT_MODE_BATCH,
   EDIT_MODE_CELL,
   TARGET_COMPONENT_NAME,
-
 } from './const';
 
 const FOCUS_OVERLAY_CLASS = 'focus-overlay';

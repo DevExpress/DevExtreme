@@ -1,19 +1,21 @@
-import {
-  getOuterWidth, getInnerWidth, getWidth, getHeight,
-} from '@js/core/utils/size';
-import $ from '@js/core/renderer';
-import { deferRender, deferUpdate } from '@js/core/utils/common';
-import { hasWindow, getWindow } from '@js/core/utils/window';
-import { each } from '@js/core/utils/iterator';
-import { isString, isDefined, isNumeric } from '@js/core/utils/type';
-import { getBoundingRect } from '@js/core/utils/position';
-import messageLocalization from '@js/localization/message';
-import { when, Deferred } from '@js/core/utils/deferred';
 import domAdapter from '@js/core/dom_adapter';
+import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
+import { deferRender, deferUpdate } from '@js/core/utils/common';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { each } from '@js/core/utils/iterator';
+import { getBoundingRect } from '@js/core/utils/position';
+import {
+  getHeight,
+  getInnerWidth, getOuterWidth, getWidth,
+} from '@js/core/utils/size';
+import { isDefined, isNumeric, isString } from '@js/core/utils/type';
+import { getWindow, hasWindow } from '@js/core/utils/window';
+import messageLocalization from '@js/localization/message';
 import * as accessibility from '@js/ui/shared/accessibility';
-import gridCoreUtils from '../module_utils';
-import modules from '../modules';
+
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
 
 const BORDERS_CLASS = 'borders';
 const TABLE_FIXED_CLASS = 'table-fixed';

@@ -1,7 +1,8 @@
-import { extend } from '@js/core/utils/extend';
 import { Deferred } from '@js/core/utils/deferred';
-import { focusModule } from '@js/ui/grid_core/ui.grid_core.focus';
-import core from './module_core';
+import { extend } from '@js/core/utils/extend';
+import { focusModule } from '@ts/grids/grid_core/focus/m_focus';
+
+import core from './m_core';
 
 function findIndex(items, callback) {
   let result = -1;

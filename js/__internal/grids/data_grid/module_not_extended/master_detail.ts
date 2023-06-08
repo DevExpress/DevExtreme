@@ -1,4 +1,5 @@
-import { masterDetailModule } from '@js/ui/grid_core/ui.grid_core.master_detail';
-import gridCore from '../module_core';
+import { masterDetailModule } from '@ts/grids/grid_core/master_detail/m_master_detail';
+
+import gridCore from '../m_core';
 
 gridCore.registerModule('masterDetail', masterDetailModule);

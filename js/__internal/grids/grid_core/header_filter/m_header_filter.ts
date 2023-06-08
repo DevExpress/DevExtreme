@@ -1,24 +1,25 @@
-import eventsEngine from '@js/events/core/events_engine';
-import filterUtils from '@js/ui/shared/filtering';
-import messageLocalization from '@js/localization/message';
-import { name as clickEventName } from '@js/events/click';
 import { compileGetter } from '@js/core/utils/data';
-import { each } from '@js/core/utils/iterator';
-import { isDefined, isObject, isFunction } from '@js/core/utils/type';
-import { getDefaultAlignment } from '@js/core/utils/position';
-import { extend } from '@js/core/utils/extend';
-import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
-import dateLocalization from '@js/localization/date';
 import { Deferred } from '@js/core/utils/deferred';
-import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { getDefaultAlignment } from '@js/core/utils/position';
+import { isDefined, isFunction, isObject } from '@js/core/utils/type';
+import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import dataQuery from '@js/data/query';
 import storeHelper from '@js/data/store_helper';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+import dateLocalization from '@js/localization/date';
+import messageLocalization from '@js/localization/message';
+import { restoreFocus, saveFocusedElementInfo } from '@js/ui/shared/accessibility';
+import filterUtils from '@js/ui/shared/filtering';
 
-import modules from '../modules';
-import gridCoreUtils from '../module_utils';
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
 import {
-  headerFilterMixin, HeaderFilterView, updateHeaderFilterItemSelectionState, allowHeaderFiltering,
-} from './module_core';
+  allowHeaderFiltering,
+  headerFilterMixin, HeaderFilterView, updateHeaderFilterItemSelectionState,
+} from './m_header_filter_core';
 
 const DATE_INTERVAL_FORMATS = {
   month(value) {
@@ -498,7 +499,7 @@ const DataControllerFilterRowExtender = {
           filterValues.push(filter);
         });
 
-        filterValues = gridCoreUtils.combineFilters(filterValues, 'or') as any;
+        filterValues = gridCoreUtils.combineFilters(filterValues, 'or');
 
         filters.push(column.filterType === 'exclude' ? ['!', filterValues] : filterValues);
       }

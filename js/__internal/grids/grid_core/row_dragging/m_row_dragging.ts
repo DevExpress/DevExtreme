@@ -1,11 +1,12 @@
-import { setWidth, getWidth } from '@js/core/utils/size';
 import $ from '@js/core/../core/renderer';
 import { extend } from '@js/core/../core/utils/extend';
-import Sortable from '@js/ui/sortable';
 import { deferUpdate } from '@js/core/utils/common';
-import gridCoreUtils from '../module_utils';
-import { GridCoreRowDraggingDom } from './dom';
+import { getWidth, setWidth } from '@js/core/utils/size';
+import Sortable from '@js/ui/sortable';
+
+import gridCoreUtils from '../m_utils';
 import { CLASSES } from './const';
+import { GridCoreRowDraggingDom } from './dom';
 
 const RowDraggingExtender = {
   init() {

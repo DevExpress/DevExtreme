@@ -1,10 +1,10 @@
-import { setWidth, setHeight } from '@js/core/utils/size';
 import $ from '@js/core/renderer';
-import { isDefined } from '@js/core/utils/type';
 import { each } from '@js/core/utils/iterator';
+import { setHeight, setWidth } from '@js/core/utils/size';
+import { isDefined } from '@js/core/utils/type';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 
-import { AreaItem } from '../area_item/module';
+import { AreaItem } from '../area_item/m_area_item';
 
 const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
 const PIVOTGRID_AREA_COLUMN_CLASS = 'dx-pivotgrid-horizontal-headers';

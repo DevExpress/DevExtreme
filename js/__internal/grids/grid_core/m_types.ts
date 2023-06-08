@@ -1,9 +1,9 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable max-classes-per-file */
-import { PropertyType } from '@js/core/index';
-import { Component } from '@js/core/component';
-import { dxElementWrapper } from '@js/core/renderer';
 import { GridBase, GridBaseOptions } from '@js/common/grids';
+import { Component } from '@js/core/component';
+import { PropertyType } from '@js/core/index';
+import { dxElementWrapper } from '@js/core/renderer';
 import Widget from '@js/ui/widget/ui.widget';
 
 // Data types
@@ -113,14 +113,14 @@ export type OptionChanged = {
 }[OptionNames];
 
 export interface Controllers {
-  data: import('./data_controller/module').DataController;
-  columns: import('./columns_controller/module').ColumnsController;
+  data: import('./data_controller/m_data_controller').DataController;
+  columns: import('./columns_controller/m_columns_controller').ColumnsController;
   resizing: any;
   adaptiveColumns: any;
   columnChooser: any;
   editorFactory: any; // import('./editor_factory/module').EditorFactory;
   editing: any;
-  keyboardNavigation: import('./keyboard_navigation/module').KeyboardNavigationController;
+  keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
   focus: any;
   columnsResizer: any;
   validating: any;

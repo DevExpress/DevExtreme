@@ -1,11 +1,11 @@
 import { equalByValue } from '@js/core/utils/common';
+
 import {
+  EDIT_FORM_CLASS,
   EDIT_MODE_ROW,
+  EDITING_EDITROWKEY_OPTION_NAME,
   MODES_WITH_DELAYED_FOCUS,
   ROW_SELECTED_CLASS,
-  EDIT_FORM_CLASS,
-  EDITING_EDITROWKEY_OPTION_NAME,
-
 } from './const';
 
 const EDIT_ROW = 'dx-edit-row';

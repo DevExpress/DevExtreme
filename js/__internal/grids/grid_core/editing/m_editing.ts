@@ -1,50 +1,52 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import $ from '@js/core/renderer';
-import domAdapter from '@js/core/dom_adapter';
-import eventsEngine from '@js/events/core/events_engine';
-import Guid from '@js/core/guid';
-import { resetActiveElement } from '@js/core/utils/dom';
-import {
-  isDefined, isObject, isFunction, isEmptyObject,
-} from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
-import { name as clickEventName } from '@js/events/click';
-import pointerEvents from '@js/events/pointer';
-import { createObjectWithChanges } from '@js/data/array_utils';
-import { addNamespace } from '@js/events/utils/index';
-import { confirm } from '@js/ui/dialog';
-import messageLocalization from '@js/localization/message';
 import devices from '@js/core/devices';
-// @ts-expect-error
-import { when, Deferred, fromPromise } from '@js/core/utils/deferred';
+import domAdapter from '@js/core/dom_adapter';
+import Guid from '@js/core/guid';
+import $ from '@js/core/renderer';
 import { equalByValue, noop } from '@js/core/utils/common';
+// @ts-expect-error
+import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
+import { resetActiveElement } from '@js/core/utils/dom';
+import { extend } from '@js/core/utils/extend';
 import * as iconUtils from '@js/core/utils/icon';
+import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
 import {
-  EDITOR_CELL_CLASS,
-  ROW_CLASS,
-  EDIT_FORM_CLASS,
+  isDefined, isEmptyObject,
+  isFunction, isObject,
+} from '@js/core/utils/type';
+import { createObjectWithChanges } from '@js/data/array_utils';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+import pointerEvents from '@js/events/pointer';
+import { addNamespace } from '@js/events/utils/index';
+import messageLocalization from '@js/localization/message';
+import { confirm } from '@js/ui/dialog';
+
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
+import {
   DATA_EDIT_DATA_INSERT_TYPE,
   DATA_EDIT_DATA_REMOVE_TYPE,
-  EDITING_POPUP_OPTION_NAME,
-  EDITING_EDITROWKEY_OPTION_NAME,
-  EDITING_EDITCOLUMNNAME_OPTION_NAME,
-  TARGET_COMPONENT_NAME,
-  EDITORS_INPUT_SELECTOR,
-  FOCUSABLE_ELEMENT_SELECTOR,
+  EDIT_FORM_CLASS,
   EDIT_MODE_ROW,
   EDIT_MODES,
-  ROW_BASED_MODES,
+  EDITING_EDITCOLUMNNAME_OPTION_NAME,
+  EDITING_EDITROWKEY_OPTION_NAME,
+  EDITING_POPUP_OPTION_NAME,
+  EDITOR_CELL_CLASS,
+  EDITORS_INPUT_SELECTOR,
   FIRST_NEW_ROW_POSITION,
+  FOCUSABLE_ELEMENT_SELECTOR,
   LAST_NEW_ROW_POSITION,
   PAGE_BOTTOM_NEW_ROW_POSITION,
   PAGE_TOP_NEW_ROW_POSITION,
+  ROW_BASED_MODES,
+  ROW_CLASS,
+  TARGET_COMPONENT_NAME,
   VIEWPORT_BOTTOM_NEW_ROW_POSITION,
   VIEWPORT_TOP_NEW_ROW_POSITION,
 } from './const';
-import gridCoreUtils from '../module_utils';
-import modules from '../modules';
 
 const READONLY_CLASS = 'readonly';
 const LINK_CLASS = 'dx-link';

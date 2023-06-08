@@ -1,21 +1,22 @@
-import registerComponent from '@js/core/component_registrator';
-import { noop, deferRender } from '@js/core/utils/common';
-import { isFunction, isDefined } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
-import Widget from '@js/ui/widget/ui.widget';
-import { isMaterial } from '@js/ui/themes';
-import treeListCore from './module_core';
-
 import './module_not_extended/column_headers';
-import './module_columns_controller';
-import './data_controller/module';
+import './m_columns_controller';
+import './data_controller/m_data_controller';
 import './module_not_extended/sorting';
-import './rows/module';
+import './rows/m_rows';
 import './module_not_extended/context_menu';
 import './module_not_extended/error_handling';
-import './module_grid_view';
+import './m_grid_view';
 import './module_not_extended/header_panel';
+
+import registerComponent from '@js/core/component_registrator';
+import { deferRender, noop } from '@js/core/utils/common';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { isDefined, isFunction } from '@js/core/utils/type';
+import { isMaterial } from '@js/ui/themes';
+import Widget from '@js/ui/widget/ui.widget';
+
+import treeListCore from './m_core';
 
 const { callModuleItemsMethod } = treeListCore;
 

@@ -1,25 +1,27 @@
-import {
-  setHeight, getHeight, setWidth, getWidth,
-} from '@js/core/utils/size';
-import $ from '@js/core/renderer';
-import domAdapter from '@js/core/dom_adapter';
-import eventsEngine from '@js/events/core/events_engine';
-import Callbacks from '@js/core/utils/callbacks';
-import { isDefined, isString, isObject } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
-import { getBoundingRect } from '@js/core/utils/position';
-import { addNamespace, eventData as getEventData, isTouchEvent } from '@js/events/utils/index';
-import pointerEvents from '@js/events/pointer';
-import {
-  start as dragEventStart,
-  move as dragEventMove,
-  end as dragEventEnd,
-} from '@js/events/drag';
 import fx from '@js/animation/fx';
+import domAdapter from '@js/core/dom_adapter';
+import $ from '@js/core/renderer';
+import Callbacks from '@js/core/utils/callbacks';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { getBoundingRect } from '@js/core/utils/position';
+import {
+  getHeight, getWidth,
+  setHeight, setWidth,
+} from '@js/core/utils/size';
+import { isDefined, isObject, isString } from '@js/core/utils/type';
+import eventsEngine from '@js/events/core/events_engine';
+import {
+  end as dragEventEnd,
+  move as dragEventMove,
+  start as dragEventStart,
+} from '@js/events/drag';
+import pointerEvents from '@js/events/pointer';
+import { addNamespace, eventData as getEventData, isTouchEvent } from '@js/events/utils/index';
 import swatchContainer from '@js/ui/widget/swatch_container';
-import modules from '../modules';
-import gridCoreUtils from '../module_utils';
+
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
 
 const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
 const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';

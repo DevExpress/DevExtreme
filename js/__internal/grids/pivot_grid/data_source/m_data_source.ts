@@ -1,31 +1,32 @@
-import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
-import Store from '@js/data/abstract_store';
-import { executeAsync } from '@js/core/utils/common';
-import {
-  isFunction, isNumeric, isDefined, isString, isPlainObject,
-} from '@js/core/utils/type';
-import { extend } from '@js/core/utils/extend';
-import { normalizeIndexes } from '@js/core/utils/array';
-import { each } from '@js/core/utils/iterator';
-import { when, Deferred } from '@js/core/utils/deferred';
 import Class from '@js/core/class';
 import { EventsStrategy } from '@js/core/events_strategy';
+import { normalizeIndexes } from '@js/core/utils/array';
+import { executeAsync } from '@js/core/utils/common';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { titleize } from '@js/core/utils/inflector';
-
-import { LocalStore } from '../local_store/module';
-import { RemoteStore } from '../remote_store/module';
-import { sort } from './module_utils';
-import xmlaStore from '../xmla_store/module';
-import summaryUtils from '../summary_display_modes/module';
+import { each } from '@js/core/utils/iterator';
 import {
+  isDefined, isFunction, isNumeric, isPlainObject,
+  isString,
+} from '@js/core/utils/type';
+import Store from '@js/data/abstract_store';
+import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
+
+import { LocalStore } from '../local_store/m_local_store';
+import {
+  createPath,
+  findField,
   foreachTree,
   foreachTreeAsync,
-  findField,
   formatValue,
-  createPath,
-  setFieldProperty,
   getFieldsDataType,
-} from '../module_widget_utils';
+  setFieldProperty,
+} from '../m_widget_utils';
+import { RemoteStore } from '../remote_store/m_remote_store';
+import summaryUtils from '../summary_display_modes/m_summary_display_modes';
+import xmlaStore from '../xmla_store/m_xmla_store';
+import { sort } from './m_data_source_utils';
 
 const DESCRIPTION_NAME_BY_AREA = {
   row: 'rows',

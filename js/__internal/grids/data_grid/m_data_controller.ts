@@ -1,9 +1,11 @@
 import errors from '@js/ui/widget/ui.errors';
-import { dataControllerModule } from '@js/ui/grid_core/ui.grid_core.data_controller';
-import gridCore from './module_core';
-import dataSourceAdapterProvider from './module_data_source_adapter';
+import { dataControllerModule } from '@ts/grids/grid_core/data_controller/m_data_controller';
 
-export const DataController = (dataControllerModule.controllers?.data as any).inherit((function () {
+import gridCore from './m_core';
+import dataSourceAdapterProvider from './m_data_source_adapter';
+
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+export const DataController = (dataControllerModule.controllers?.data as any)?.inherit((function () {
   return {
     _getDataSourceAdapter() {
       return dataSourceAdapterProvider;

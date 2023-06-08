@@ -2,7 +2,7 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 
-import { foreachTree, formatValue, createPath } from '../module_widget_utils';
+import { createPath, foreachTree, formatValue } from '../m_widget_utils';
 
 const FORMAT_DICTIONARY = {
   number: 'numeric',

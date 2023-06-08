@@ -1,19 +1,20 @@
 import $ from '@js/core/renderer';
-import eventsEngine from '@js/events/core/events_engine';
-import { isDefined } from '@js/core/utils/type';
-import { each } from '@js/core/utils/iterator';
-import { extend } from '@js/core/utils/extend';
-import { touch } from '@js/core/utils/support';
-import { name as clickEventName } from '@js/events/click';
-import messageLocalization from '@js/localization/message';
-import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
-import holdEvent from '@js/events/hold';
-import Selection from '@js/ui/selection/selection';
-import { Deferred } from '@js/core/utils/deferred';
-import errors from '@js/ui/widget/ui.errors';
 import { equalByValue } from '@js/core/utils/common';
-import gridCoreUtils from '../module_utils';
-import modules from '../modules';
+import { Deferred } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { touch } from '@js/core/utils/support';
+import { isDefined } from '@js/core/utils/type';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+import holdEvent from '@js/events/hold';
+import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
+import messageLocalization from '@js/localization/message';
+import Selection from '@js/ui/selection/selection';
+import errors from '@js/ui/widget/ui.errors';
+
+import modules from '../m_modules';
+import gridCoreUtils from '../m_utils';
 
 const EDITOR_CELL_CLASS = 'dx-editor-cell';
 const ROW_CLASS = 'dx-row';

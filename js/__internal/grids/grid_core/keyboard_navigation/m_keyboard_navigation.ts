@@ -1,81 +1,81 @@
-import { Deferred, when } from '@js/core/utils/deferred';
-import { focused } from '@js/ui/widget/selectors';
 import { noop } from '@js/core//utils/common';
-
+import domAdapter from '@js/core/dom_adapter';
+import $, { dxElementWrapper } from '@js/core/renderer';
+import browser from '@js/core/utils/browser';
+import { Deferred, when } from '@js/core/utils/deferred';
 /* eslint-disable class-methods-use-this */
 import {
-  getOuterHeight,
   getHeight,
-  getWidth,
+  getOuterHeight,
   getOuterWidth,
+  getWidth,
 } from '@js/core/utils/size';
-import $, { dxElementWrapper } from '@js/core/renderer';
-import domAdapter from '@js/core/dom_adapter';
-import eventsEngine from '@js/events/core/events_engine';
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+import pointerEvents from '@js/events/pointer';
+import { keyboard } from '@js/events/short';
 import {
   addNamespace,
   createEvent,
   isCommandKeyPressed,
 } from '@js/events/utils/index';
-import pointerEvents from '@js/events/pointer';
-import { name as clickEventName } from '@js/events/click';
 import * as accessibility from '@js/ui/shared/accessibility';
-import browser from '@js/core/utils/browser';
-import { keyboard } from '@js/events/short';
+import { focused } from '@js/ui/widget/selectors';
+import { memoize } from '@ts/utils/memoize';
+
 import {
-  ROW_CLASS,
-  EDITOR_CELL_CLASS,
-  EDIT_MODE_CELL,
-  EDIT_MODE_BATCH,
-  EDIT_MODE_ROW,
-  EDIT_MODE_FORM,
   EDIT_FORM_CLASS,
-} from '@js/ui/grid_core/ui.grid_core.editing_constants';
-import { memoize } from '../../../utils/memoize';
-import gridCoreUtils from '../module_utils';
-import { GridCoreKeyboardNavigationDom } from './dom';
+  EDIT_MODE_BATCH,
+  EDIT_MODE_CELL,
+  EDIT_MODE_FORM,
+  EDIT_MODE_ROW,
+  EDITOR_CELL_CLASS,
+  ROW_CLASS,
+} from '../editing/const';
+import modules from '../m_modules';
 import {
-  ROWS_VIEW_CLASS,
-  DROPDOWN_EDITOR_OVERLAY_CLASS,
-  FOCUS_TYPE_ROW,
-  FOCUS_TYPE_CELL,
-  FUNCTIONAL_KEYS,
+  Controllers, OptionChanged, RowKey, Views,
+} from '../m_types';
+import gridCoreUtils from '../m_utils';
+import {
+  CELL_FOCUS_DISABLED_CLASS,
+  COLUMN_HEADERS_VIEW,
+  COMMAND_CELL_SELECTOR,
+  COMMAND_EDIT_CLASS,
+  COMMAND_EXPAND_CLASS,
   COMMAND_SELECT_CLASS,
   DATA_ROW_CLASS,
-  FOCUS_STATE_CLASS,
-  COMMAND_CELL_SELECTOR,
-  COMMAND_EXPAND_CLASS,
-  FAST_EDITING_DELETE_KEY,
-  INTERACTIVE_ELEMENTS_SELECTOR,
-  REVERT_BUTTON_CLASS,
-  FREESPACE_ROW_CLASS,
-  NON_FOCUSABLE_ELEMENTS_SELECTOR,
-  CELL_FOCUS_DISABLED_CLASS,
-  EDIT_FORM_ITEM_CLASS,
-  MASTER_DETAIL_CELL_CLASS,
-  WIDGET_CLASS,
-  GROUP_FOOTER_CLASS,
-  COLUMN_HEADERS_VIEW,
-  COMMAND_EDIT_CLASS,
   DATEBOX_WIDGET_NAME,
+  DROPDOWN_EDITOR_OVERLAY_CLASS,
+  EDIT_FORM_ITEM_CLASS,
+  FAST_EDITING_DELETE_KEY,
+  FOCUS_STATE_CLASS,
+  FOCUS_TYPE_CELL,
+  FOCUS_TYPE_ROW,
+  FREESPACE_ROW_CLASS,
+  FUNCTIONAL_KEYS,
+  GROUP_FOOTER_CLASS,
+  INTERACTIVE_ELEMENTS_SELECTOR,
+  MASTER_DETAIL_CELL_CLASS,
+  NON_FOCUSABLE_ELEMENTS_SELECTOR,
+  REVERT_BUTTON_CLASS,
+  ROWS_VIEW_CLASS,
+  WIDGET_CLASS,
 } from './const';
+import { GridCoreKeyboardNavigationDom } from './dom';
 import {
-  isElementDefined,
-  isMobile,
+  isCellInHeaderRow,
   isDataRow,
   isDetailRow,
   isEditorCell,
-  isGroupRow,
-  isNotFocusedRow,
+  isElementDefined,
   isFixedColumnIndexOffsetRequired,
-  isCellInHeaderRow,
+  isGroupRow,
+  isMobile,
+  isNotFocusedRow,
   shouldPreventScroll,
-} from './module_utils';
-import {
-  Controllers, OptionChanged, RowKey, Views,
-} from '../module_types';
-import modules from '../modules';
+} from './m_keyboard_navigation_utils';
 
 export class KeyboardNavigationController extends modules.ViewController {
   _updateFocusTimeout: any;
@@ -2398,7 +2398,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 }
 
-export const keyboardNavigationModule: import('../module_types').Module = {
+export const keyboardNavigationModule: import('../m_types').Module = {
   defaultOptions() {
     return {
       useLegacyKeyboardNavigation: false,

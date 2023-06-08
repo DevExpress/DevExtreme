@@ -1,4 +1,4 @@
-import DataSourceAdapter from '../grid_core/data_source_adapter/module';
+import DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 
 let dataSourceAdapterType: any = DataSourceAdapter;
 

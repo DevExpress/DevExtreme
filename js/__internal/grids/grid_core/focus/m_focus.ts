@@ -1,12 +1,12 @@
 import $ from '@js/core/renderer';
-import { each } from '@js/core/utils/iterator';
 import { equalByValue } from '@js/core/utils/common';
-import { isDefined, isBoolean } from '@js/core/utils/type';
 import { Deferred, when } from '@js/core/utils/deferred';
+import { each } from '@js/core/utils/iterator';
+import { isBoolean, isDefined } from '@js/core/utils/type';
 
-import core from '../modules';
-import gridCoreUtils from '../module_utils';
-import { UiGridCoreFocusUtils } from './module_utils';
+import core from '../m_modules';
+import gridCoreUtils from '../m_utils';
+import { UiGridCoreFocusUtils } from './m_focus_utils';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
 const FOCUSED_ROW_SELECTOR = `.dx-row.${ROW_FOCUSED_CLASS}`;
