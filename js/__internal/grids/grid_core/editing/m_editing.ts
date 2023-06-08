@@ -109,6 +109,10 @@ export class EditingController extends modules.ViewController {
 
   _editForm: any;
 
+  _pageIndex: any;
+
+  _inputFocusTimeoutID: any;
+
   init() {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
@@ -439,22 +443,10 @@ export class EditingController extends modules.ViewController {
 
   dispose() {
     super.dispose();
-    clearTimeout(this._inputFocusTimeoutID as any);
-    eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
-    eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
+    clearTimeout(this._inputFocusTimeoutID);
+    eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, (this as any)._pointerUpEditorHandler);
+    eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, (this as any)._pointerDownEditorHandler);
     eventsEngine.off(domAdapter.getDocument(), clickEventName, this._saveEditorHandler);
-  }
-
-  _inputFocusTimeoutID(_inputFocusTimeoutID: any) {
-    throw new Error('Method not implemented.');
-  }
-
-  _pointerUpEditorHandler(arg0: Document, up: string, _pointerUpEditorHandler: any) {
-    throw new Error('Method not implemented.');
-  }
-
-  _pointerDownEditorHandler(arg0: Document, down: string, _pointerDownEditorHandler: any) {
-    throw new Error('Method not implemented.');
   }
 
   // @ts-expect-error
@@ -539,16 +531,13 @@ export class EditingController extends modules.ViewController {
   }
 
   refresh() {
+    console.log('aboba', !isDefined(this._pageIndex), this._pageIndex);
     if (!isDefined(this._pageIndex)) {
       return;
     }
 
     // @ts-expect-error
     this._refreshCore.apply(this, arguments);
-  }
-
-  _pageIndex(_pageIndex: any) {
-    throw new Error('Method not implemented.');
   }
 
   _refreshCore(params): any {}
@@ -1292,14 +1281,12 @@ export class EditingController extends modules.ViewController {
     } else {
       if (this._beforeFocusCallback) this._beforeFocusCallback();
 
-      // @ts-expect-error
       clearTimeout(this._inputFocusTimeoutID);
 
       if (callBeforeFocusCallbackAlways) {
         this._beforeFocusCallback = beforeFocusCallback;
       }
 
-      // @ts-expect-error
       this._inputFocusTimeoutID = setTimeout(inputFocus);
     }
   }
@@ -2095,14 +2082,10 @@ export class EditingController extends modules.ViewController {
       }
       template = column.editCellTemplate || this._getDefaultEditorTemplate();
     } else if (column.command === 'detail' && options.rowType === 'detail' && isRowEditing) {
-      template = this?.getEditFormTemplate(options);
+      template = (this as any)?.getEditFormTemplate(options);
     }
 
     return template;
-  }
-
-  getEditFormTemplate(options: any): any {
-    throw new Error('Method not implemented.');
   }
 
   _createButton($container, button, options, change) {

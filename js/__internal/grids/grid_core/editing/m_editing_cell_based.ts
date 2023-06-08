@@ -32,6 +32,10 @@ import { EditingController } from './m_editing';
 import { isEditable } from './m_editing_utils';
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class CellBasedEditingControllerExtender extends Base {
+  _pointerUpEditorHandler: any;
+
+  _pointerDownEditorHandler: any;
+
   init() {
     const needCreateHandlers = !this._saveEditorHandler;
 
