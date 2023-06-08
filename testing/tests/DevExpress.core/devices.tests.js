@@ -167,6 +167,7 @@ QUnit.test('method current sets necessary flags', function(assert) {
 QUnit.test('method current sets correct ipad shortcut', function(assert) {
     devices.current({
         platform: 'ipad',
+        deviceType: 'tablet',
     });
 
     const device = devices.current();
