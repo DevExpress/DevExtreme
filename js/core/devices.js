@@ -315,11 +315,13 @@ class Devices {
 
     _fromConfig(config) {
         const result = extend({}, DEFAULT_DEVICE, this._currentDevice, config);
+
         const shortcuts = {
             phone: result.deviceType === DEVICE_TYPE.phone,
             tablet: result.deviceType === DEVICE_TYPE.tablet,
             android: result.platform === PLATFORM.android,
             ios: result.platform === PLATFORM.ios,
+            ipad: result.platform === PLATFORM.ipad,
             generic: result.platform === PLATFORM.generic
         };
 
