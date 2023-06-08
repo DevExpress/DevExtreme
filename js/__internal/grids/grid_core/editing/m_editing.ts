@@ -438,7 +438,7 @@ export class EditingController extends modules.ViewController {
   }
 
   dispose() {
-    this.callBase();
+    super.dispose();
     clearTimeout(this._inputFocusTimeoutID as any);
     eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this._pointerUpEditorHandler);
     eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, this._pointerDownEditorHandler);
@@ -462,8 +462,8 @@ export class EditingController extends modules.ViewController {
     if (name === 'editing.changes') {
       this._changes = deepExtendArraySafe([], value);
     }
-
-    this.callBase.apply(this, arguments);
+    // @ts-expect-error
+    super._silentOption(name, value);
   }
 
   optionChanged(args) {
@@ -489,7 +489,7 @@ export class EditingController extends modules.ViewController {
       }
       args.handled = true;
     } else {
-      this.callBase(args);
+      super.optionChanged(args);
     }
   }
 
