@@ -54,3 +54,19 @@ export function getButtonName(button) {
 export function isEditable($element) {
   return $element && ($element.is('input') || $element.is('textarea'));
 }
+
+export const getEditorType = (item) => {
+  const { column } = item;
+
+  return item.isCustomEditorType ? item.editorType : column.formItem?.editorType;
+};
+
+export const forEachFormItems = (items, callBack) => {
+  items.forEach((item) => {
+    if (item.items || item.tabs) {
+      forEachFormItems(item.items || item.tabs, callBack);
+    } else {
+      callBack(item);
+    }
+  });
+};

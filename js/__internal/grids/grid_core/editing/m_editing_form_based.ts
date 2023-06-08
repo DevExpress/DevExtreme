@@ -15,41 +15,22 @@ import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 
 import { ModuleType } from '../m_types';
 import {
+  BUTTON_CLASS,
   DATA_EDIT_DATA_INSERT_TYPE,
+  EDIT_FORM_ITEM_CLASS,
   EDIT_MODE_FORM,
   EDIT_MODE_POPUP,
+  EDIT_POPUP_CLASS,
+  EDIT_POPUP_FORM_CLASS,
   EDITING_EDITROWKEY_OPTION_NAME,
   EDITING_FORM_OPTION_NAME,
   EDITING_POPUP_OPTION_NAME,
+  FOCUSABLE_ELEMENT_CLASS,
   FOCUSABLE_ELEMENT_SELECTOR,
+  FORM_BUTTONS_CONTAINER_CLASS,
 } from './const';
 import { EditingController } from './m_editing';
-
-const isRenovatedScrollable = !!(Scrollable as any).IS_RENOVATED_WIDGET;
-
-const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
-const EDIT_POPUP_CLASS = 'edit-popup';
-const EDIT_POPUP_FORM_CLASS = 'edit-popup-form';
-const FOCUSABLE_ELEMENT_CLASS = isRenovatedScrollable ? 'dx-scrollable' : 'dx-scrollable-container';
-const BUTTON_CLASS = 'dx-button';
-
-const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
-
-const getEditorType = (item) => {
-  const { column } = item;
-
-  return item.isCustomEditorType ? item.editorType : column.formItem?.editorType;
-};
-
-const forEachFormItems = (items, callBack) => {
-  items.forEach((item) => {
-    if (item.items || item.tabs) {
-      forEachFormItems(item.items || item.tabs, callBack);
-    } else {
-      callBack(item);
-    }
-  });
-};
+import { forEachFormItems, getEditorType } from './m_editing_utils';
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class FormBasedEditingControllerExtender extends Base {
   _updateEditFormDeferred: any;
