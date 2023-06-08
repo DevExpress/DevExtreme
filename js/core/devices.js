@@ -97,7 +97,8 @@ const uaParsers = {
     },
 
     ipad(_, navigator) {
-        const { maxTouchPoints, platform } = navigator;
+        const maxTouchPoints = navigator?.maxTouchPoints;
+        const platform = navigator?.platform;
 
         if(!(maxTouchPoints && platform)) {
             return;
