@@ -246,7 +246,7 @@
     "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-testcafe-inprogress": "node ./testing/testcafe/runner --meta=renovation",
-    "test-jest": "jest --coverage --maxWorkers=8",
+    "test-jest": "jest --coverage --runInBand",
     "test-jest:watch": "jest --watch",
     "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false",
     "qunit-in-docker": "gulp qunit-in-docker --constel",
