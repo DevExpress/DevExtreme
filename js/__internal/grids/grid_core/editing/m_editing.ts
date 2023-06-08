@@ -263,9 +263,9 @@ export class EditingController extends modules.ViewController {
     this._dataController.dataErrorOccurred.fire(arg, $popupContent);
   }
 
-  _needToCloseEditableCell(): any {}
+  _needToCloseEditableCell($targetElement): any {}
 
-  _closeEditItem(): any {}
+  _closeEditItem($targetElement): any {}
 
   _handleDataChanged(): any {}
 
@@ -549,7 +549,7 @@ export class EditingController extends modules.ViewController {
     throw new Error('Method not implemented.');
   }
 
-  _refreshCore(): any {}
+  _refreshCore(params): any {}
 
   isEditing() {
     const isEditRowKeyDefined = isDefined(this.option(EDITING_EDITROWKEY_OPTION_NAME));
@@ -919,7 +919,7 @@ export class EditingController extends modules.ViewController {
     return deferred.promise();
   }
 
-  _allowRowAdding() {
+  _allowRowAdding(params?) {
     const insertIndex = this._getInsertIndex();
 
     if (insertIndex > 1) {
@@ -999,7 +999,7 @@ export class EditingController extends modules.ViewController {
     this._focusFirstEditableCellInRow(rowIndex);
   }
 
-  _beforeFocusElementInRow(): any {}
+  _beforeFocusElementInRow(rowIndex): any {}
 
   _focusFirstEditableCellInRow(rowIndex) {
     const dataController = this._dataController;
@@ -1014,7 +1014,6 @@ export class EditingController extends modules.ViewController {
     this._delayedInputFocus($firstCell, () => {
       rowIndex = dataController.getRowIndexByKey(key);
       this._editCellInProgress = false;
-      // @ts-expect-error
       this._beforeFocusElementInRow(rowIndex);
     });
   }
@@ -1037,7 +1036,7 @@ export class EditingController extends modules.ViewController {
     return this._columnsController.getVisibleColumnIndex(editColumnName);
   }
 
-  _setEditColumnNameByIndex(index, silent) {
+  _setEditColumnNameByIndex(index, silent?) {
     const visibleColumns = this._columnsController.getVisibleColumns();
     this._setEditColumnName(visibleColumns[index]?.name, silent);
   }
@@ -1516,16 +1515,16 @@ export class EditingController extends modules.ViewController {
     return true;
   }
 
+  // @ts-expect-error
   _processRemove(changes, editIndex, cancel) {
     const change = changes[editIndex];
 
     if (!cancel || !change || change.type === DATA_EDIT_DATA_REMOVE_TYPE) {
-      // @ts-expect-error
       return this._processRemoveCore(changes, editIndex, !cancel || !change);
     }
   }
 
-  _processRemoveCore(changes, editIndex) {
+  _processRemoveCore(changes, editIndex, processIfBatch?) {
     if (editIndex >= 0) {
       changes.splice(editIndex, 1);
     }
@@ -1765,11 +1764,11 @@ export class EditingController extends modules.ViewController {
     }
   }
 
-  _applyModified($element) {
+  _applyModified($element, options) {
     $element && $element.addClass(CELL_MODIFIED);
   }
 
-  _beforeCloseEditCellInBatchMode(): any {}
+  _beforeCloseEditCellInBatchMode(rowIndices): any {}
 
   cancelEditData() {
     const changes = this.getChanges();
