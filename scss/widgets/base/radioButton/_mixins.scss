@@ -68,10 +68,8 @@
 }
 
 @mixin dx-radiobutton-states-mixin(
-  $size,
   $border-color,
   $readonly-border-color,
-  $readonly-bg,
   $hover-border-color,
   $active-bg,
   $focused-border-color,
@@ -85,8 +83,6 @@
   $invalid-focused-ripple-bg: transparent,
 ) {
   .dx-radiobutton {
-    line-height: $size;
-
     &.dx-state-disabled {
       opacity: $disabled-opacity;
     }
@@ -108,7 +104,6 @@
       &.dx-state-readonly {
         .dx-radiobutton-icon {
           border-color: $readonly-border-color;
-          background-color: $readonly-bg;
         }
       }
 
@@ -178,13 +173,21 @@
     }
   }
 
+  .dx-state-readonly {
+    .dx-radiobutton-icon {
+      border-color: $readonly-border-color;
+    }
+  }
+
   @if $useRipple {
-    .dx-state-readonly,
     .dx-state-disabled {
       .dx-radiobutton-icon {
         border-color: $border-color;
       }
+    }
 
+    .dx-state-readonly,
+    .dx-state-disabled {
       .dx-radiobutton-icon-dot {
         background-color: $border-color;
       }

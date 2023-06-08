@@ -5,6 +5,9 @@
 .dx-radiobutton {
   @include user-select(none);
 
+  display: flex;
+  align-items: center;
+
   &.dx-state-disabled {
     cursor: default;
 

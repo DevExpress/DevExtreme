@@ -19,10 +19,8 @@
   $generic-radiobutton-dot-size,
 );
 @include dx-radiobutton-states-mixin(
-  $generic-radiobutton-size,
   $radiogroup-border-color,
   $radiogroup-readonly-border-color,
-  $radiogroup-readonly-bg,
   $radiogroup-hover-border-color,
   $radiobutton-active-bg,
   $radiobutton-focused-border-color,

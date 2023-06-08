@@ -1,0 +1,16 @@
+@mixin dx-radiogroup-mixin(
+  $radio-button-vertical-margin,
+  $radio-button-icon-vertical-margin,
+) {
+  .dx-radiogroup {
+    .dx-radiobutton {
+      margin-top: $radio-button-vertical-margin;
+      margin-bottom: $radio-button-vertical-margin;
+    }
+
+    .dx-radiobutton-icon {
+      margin-top: $radio-button-icon-vertical-margin;
+      margin-bottom: $radio-button-icon-vertical-margin;
+    }
+  }
+}

@@ -5,14 +5,13 @@
 // adduse
 
 $radiogroup-checked-bg: $base-accent !default;
-$radiogroup-border-color: color.change($base-text-color, $alpha: 0.54) !default;
+$radiogroup-border-color: $base-icon-color !default;
 $radiogroup-bg: $base-element-bg !default;
 
 $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
 $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 
 $radiogroup-readonly-border-color: $radiogroup-border-color !default;
-$radiogroup-readonly-bg: $radiogroup-bg !default;
 
 $radiobutton-focused-bg: color.change($base-text-color, $alpha: 0.1) !default;
 $radiobutton-focused-ripple-bg: color.change($radiogroup-checked-bg, $alpha: 0.1) !default;

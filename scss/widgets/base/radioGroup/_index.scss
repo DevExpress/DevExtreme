@@ -1,0 +1,21 @@
+@use "./mixins" as *;
+
+// adduse
+
+
+.dx-radiobutton {
+  display: table;
+  cursor: pointer;
+}
+
+.dx-radio-value-container {
+  padding-inline-end: 10px;
+}
+
+.dx-radiogroup-horizontal {
+  .dx-collection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 17px;
+  }
+}
