@@ -69,13 +69,13 @@ QUnit.module('VisualViewport API', () => {
     QUnit.test('VisualViewport resize fires VisualViewport resize callback the correct number of times', function(assert) {
         let counter = 0;
 
-        const resizeRemoveCallback = subscribeOnVisualViewportEvent(visualViewportEventMap.resize, () => counter++);
+        const resizeRemoveEventListenerCallback = subscribeOnVisualViewportEvent(visualViewportEventMap.resize, () => counter++);
         const visualViewport = getOriginalVisualViewport();
 
         visualViewport.dispatchEvent(new Event('resize'));
         assert.strictEqual(counter, 1, 'there is event listener');
 
-        resizeRemoveCallback();
+        resizeRemoveEventListenerCallback();
 
         visualViewport.dispatchEvent(new Event('resize'));
         assert.strictEqual(counter, 1, 'there are no event listeners');
@@ -84,13 +84,13 @@ QUnit.module('VisualViewport API', () => {
     QUnit.test('VisualViewport scroll fires VisualViewport scroll callback the correct number of times', function(assert) {
         let counter = 0;
 
-        const scrollRemoveCallback = subscribeOnVisualViewportEvent(visualViewportEventMap.scroll, () => counter++);
+        const scrollRemoveEventListenerCallback = subscribeOnVisualViewportEvent(visualViewportEventMap.scroll, () => counter++);
         const visualViewport = getOriginalVisualViewport();
 
         visualViewport.dispatchEvent(new Event('scroll'));
         assert.strictEqual(counter, 1, 'there is event listener');
 
-        scrollRemoveCallback();
+        scrollRemoveEventListenerCallback();
 
         visualViewport.dispatchEvent(new Event('scroll'));
         assert.strictEqual(counter, 1, 'there are no event listeners');
