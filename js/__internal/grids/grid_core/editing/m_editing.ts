@@ -434,7 +434,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   dispose() {
-    this.callBase();
+    super.dispose();
     clearTimeout(this._inputFocusTimeoutID);
     eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, (this as any)._pointerUpEditorHandler);
     eventsEngine.off(domAdapter.getDocument(), pointerEvents.down, (this as any)._pointerDownEditorHandler);
@@ -447,7 +447,8 @@ class EditingControllerImpl extends modules.ViewController {
       this._changes = deepExtendArraySafe([], value);
     }
 
-    this.callBase.apply(this, arguments);
+    // @ts-expect-error
+    super._silentOption(name, value);
   }
 
   optionChanged(args) {
@@ -473,7 +474,7 @@ class EditingControllerImpl extends modules.ViewController {
       }
       args.handled = true;
     } else {
-      this.callBase(args);
+      super.optionChanged(args);
     }
   }
 
