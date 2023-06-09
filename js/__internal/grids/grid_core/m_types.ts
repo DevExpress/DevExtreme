@@ -119,7 +119,7 @@ export interface Controllers {
   adaptiveColumns: any;
   columnChooser: any;
   editorFactory: any;
-  editing: any;
+  editing: any; // import('./editing/m_editing').EditingController;
   keyboardNavigation: import('./keyboard_navigation/m_keyboard_navigation').KeyboardNavigationController;
   focus: any;
   columnsResizer: any;
