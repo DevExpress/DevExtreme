@@ -333,7 +333,6 @@ const adaptiveColumnsControllerMembers: Partial<import('../adaptivity/m_adaptivi
     return colWidth;
   },
 
-  // @ts-expect-error
   _isItemEdited(item) {
     if (this.isFormOrPopupEditMode()) {
       return false;
