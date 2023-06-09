@@ -1359,7 +1359,7 @@ export class ColumnsController extends modules.Controller {
     return visibleColumns.indexOf(visibleColumn);
   }
 
-  getVisibleColumnIndex(id, rowIndex) {
+  getVisibleColumnIndex(id, rowIndex?) {
     const index = this.columnOption(id, 'index');
 
     return this.getVisibleIndex(index, rowIndex);

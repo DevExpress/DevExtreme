@@ -47,6 +47,7 @@ export const getButtonIndex = (buttons, name) => {
 };
 
 export function getButtonName(button) {
+  // @ts-expect-error
   return isObject(button) ? button.name : button;
 }
 
