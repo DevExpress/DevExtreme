@@ -474,7 +474,7 @@ export class EditingController extends modules.ViewController {
         this._handleEditRowKeyChange(args);
       } else if (fullName === EDITING_CHANGES_OPTION_NAME) {
         // to prevent render on optionChanged called by two-way binding - T1128881
-        const isEqual = equalByValue(args.value, this._changes, { maxDepth: 4 });
+        const isEqual = equalByValue(args.value, this._changes, { maxDepth: 4 } as any);
 
         if (!isEqual) {
           this._changes = deepExtendArraySafe([], args.value);
