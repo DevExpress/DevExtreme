@@ -447,8 +447,8 @@
             ]
           },
           {
-            "Title": "Using Header Filter",
-            "Name": "UsingHeaderFilter",
+            "Title": "Column Header Filter",
+            "Name": "ColumnHeaderFilter",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/DataGrid/Employee.cs",
