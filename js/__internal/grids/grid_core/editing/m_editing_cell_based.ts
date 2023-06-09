@@ -13,28 +13,22 @@ import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
 
 import {
+  ADD_ROW_BUTTON_CLASS,
+  CELL_MODIFIED_CLASS,
+  DATA_EDIT_DATA_REMOVE_TYPE,
+  DATA_ROW_CLASS,
+  DROPDOWN_EDITOR_OVERLAY_CLASS,
   EDIT_MODE_BATCH,
   EDIT_MODE_CELL,
+  EDITING_EDITCOLUMNNAME_OPTION_NAME,
+  EDITING_EDITROWKEY_OPTION_NAME,
+  EDITOR_CELL_CLASS,
+  FOCUS_OVERLAY_CLASS,
+  ROW_CLASS,
+  ROW_REMOVED,
   TARGET_COMPONENT_NAME,
 } from './const';
-
-const FOCUS_OVERLAY_CLASS = 'focus-overlay';
-const ADD_ROW_BUTTON_CLASS = 'addrow-button';
-const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
-const EDITOR_CELL_CLASS = 'dx-editor-cell';
-const ROW_CLASS = 'dx-row';
-const CELL_MODIFIED_CLASS = 'dx-cell-modified';
-const DATA_ROW_CLASS = 'dx-data-row';
-const ROW_REMOVED = 'dx-row-removed';
-
-const EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
-const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
-
-const DATA_EDIT_DATA_REMOVE_TYPE = 'remove';
-
-function isEditable($element) {
-  return $element && ($element.is('input') || $element.is('textarea'));
-}
+import { isEditable } from './m_editing_utils';
 
 export const editingCellBasedModule = {
   extenders: {
