@@ -54,33 +54,45 @@ QUnit.module('VisualViewport API', () => {
     });
 
     QUnit.test('subscribeOnVisualViewportEvent returns a function', function(assert) {
+        const resizeRemoveEventListenerCallback = subscribeOnVisualViewportEvent(visualViewportEventMap.resize, () => {});
+        const scrollRemoveEventListenerCallback = subscribeOnVisualViewportEvent(visualViewportEventMap.scroll, () => {});
+
         try {
-            this.resizeUnScribeCallback = subscribeOnVisualViewportEvent(visualViewportEventMap.resize, () => {});
-            this.scrollUnScribeCallback = subscribeOnVisualViewportEvent(visualViewportEventMap.scroll, () => {});
-
-            assert.strictEqual(typeof this.resizeUnScribeCallback, 'function');
-            assert.strictEqual(typeof this.scrollUnScribeCallback, 'function');
+            assert.strictEqual(typeof resizeRemoveEventListenerCallback, 'function');
+            assert.strictEqual(typeof scrollRemoveEventListenerCallback, 'function');
         } finally {
-            this.resizeUnScribeCallback && this.resizeUnScribeCallback();
-            this.scrollUnScribeCallback && this.scrollUnScribeCallback();
-
-            this.resizeUnScribeCallback = null;
-            this.scrollUnScribeCallback = null;
+            resizeRemoveEventListenerCallback();
+            scrollRemoveEventListenerCallback();
         }
     });
 
     QUnit.test('VisualViewport resize fires VisualViewport resize callback the correct number of times', function(assert) {
         let counter = 0;
 
-        const resizeUnScribeCallback = subscribeOnVisualViewportEvent(visualViewportEventMap.resize, () => counter++);
+        const resizeRemoveCallback = subscribeOnVisualViewportEvent(visualViewportEventMap.resize, () => counter++);
         const visualViewport = getOriginalVisualViewport();
 
         visualViewport.dispatchEvent(new Event('resize'));
-        assert.strictEqual(counter, 1, 'callback was fired once');
+        assert.strictEqual(counter, 1, 'there is event listener');
 
-        resizeUnScribeCallback();
+        resizeRemoveCallback();
 
         visualViewport.dispatchEvent(new Event('resize'));
-        assert.strictEqual(counter, 1, 'there are no callbacks');
+        assert.strictEqual(counter, 1, 'there are no event listeners');
+    });
+
+    QUnit.test('VisualViewport scroll fires VisualViewport scroll callback the correct number of times', function(assert) {
+        let counter = 0;
+
+        const scrollRemoveCallback = subscribeOnVisualViewportEvent(visualViewportEventMap.scroll, () => counter++);
+        const visualViewport = getOriginalVisualViewport();
+
+        visualViewport.dispatchEvent(new Event('scroll'));
+        assert.strictEqual(counter, 1, 'there is event listener');
+
+        scrollRemoveCallback();
+
+        visualViewport.dispatchEvent(new Event('scroll'));
+        assert.strictEqual(counter, 1, 'there are no event listeners');
     });
 });
