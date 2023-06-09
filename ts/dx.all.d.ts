@@ -21194,6 +21194,9 @@ declare module DevExpress.ui {
          * [descr:_ui_pivot_grid_ContextMenuPreparingEvent.columnFields]
          */
         readonly columnFields?: Array<DevExpress.data.PivotGridDataSource.Field>;
+        /**
+         * [descr:_ui_pivot_grid_ContextMenuPreparingEvent.field]
+         */
         readonly field?: DevExpress.data.PivotGridDataSource.Field;
         /**
          * [descr:_ui_pivot_grid_ContextMenuPreparingEvent.items]
@@ -21269,6 +21272,9 @@ declare module DevExpress.ui {
          * [descr:_ui_pivot_grid_field_chooser_ContextMenuPreparingEvent.area]
          */
         readonly area?: string;
+        /**
+         * [descr:_ui_pivot_grid_field_chooser_ContextMenuPreparingEvent.field]
+         */
         readonly field?: DevExpress.data.PivotGridDataSource.Field;
         /**
          * [descr:_ui_pivot_grid_field_chooser_ContextMenuPreparingEvent.event]
