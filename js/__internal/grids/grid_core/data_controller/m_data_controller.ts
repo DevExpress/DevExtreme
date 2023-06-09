@@ -152,7 +152,7 @@ export class DataController extends ControllerWithDataMixin {
 
   _columnsController!: Controllers['columns'];
 
-  _editingController: any;
+  _editingController!: Controllers['editing'];
 
   _rowsScrollController: any;
 
