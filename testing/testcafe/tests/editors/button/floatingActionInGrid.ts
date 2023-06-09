@@ -44,6 +44,14 @@ fixture`FloatingAction with Grid`
 
     const dataGrid = new DataGrid('#grid');
 
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    await ClientFunction(() => {
+      (window as any).DevExpress.ui.repaintFloatingActionButton();
+    })();
+
     await testScreenshot(t, takeScreenshot, `FAB with grid, position.of is ${positionOf}, before scrolling.png`);
 
     await scrollWindowTo({ top: 10000000 });
