@@ -354,25 +354,27 @@ export class DataController extends ControllerWithDataMixin {
   }
 
   combinedFilter(filter, returnDataField?) {
-    const that = this;
-    const dataSource = that._dataSource;
-    const columnsController = that._columnsController;
-
-    if (dataSource) {
-      if (filter === undefined) {
-        filter = dataSource.filter();
-      }
-
-      const additionalFilter = that._calculateAdditionalFilter();
-      if (additionalFilter) {
-        if (columnsController.isDataSourceApplied() || columnsController.isAllDataTypesDefined()) {
-          filter = gridCoreUtils.combineFilters([additionalFilter, filter]);
-        }
-      }
-
-      filter = columnsController.updateFilter(filter, returnDataField || dataSource.remoteOperations().filtering);
+    if (!this._dataSource) {
+      return filter;
     }
-    return filter;
+
+    let combinedFilter = filter ?? this._dataSource.filter();
+
+    const isColumnsTypesDefined = this._columnsController.isDataSourceApplied() || this._columnsController.isAllDataTypesDefined();
+
+    if (isColumnsTypesDefined) {
+      const additionalFilter = this._calculateAdditionalFilter();
+
+      combinedFilter = additionalFilter
+        ? gridCoreUtils.combineFilters([additionalFilter, combinedFilter])
+        : combinedFilter;
+    }
+
+    const isRemoteFiltering = this._dataSource.remoteOperations().filtering || returnDataField;
+
+    combinedFilter = this._columnsController.updateFilter(combinedFilter, isRemoteFiltering);
+
+    return combinedFilter;
   }
 
   waitReady() {
