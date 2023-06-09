@@ -1,10 +1,5 @@
 name: Code generation trigger
 
-# TODO: think about concurrency!
-#concurrency:
-#  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
-#  cancel-in-progress: true
-
 on:
   pull_request:
   push:
@@ -17,8 +12,8 @@ jobs:
       - name: Trigger code generation
         run: |
           gh workflow run update-generated-code.yml -R DevExpress/devextreme-vue
-          sleep 5
-          latestRunId=$(gh run list -w update-generated-code.yml -R DevExpress/devextreme-vue --json databaseId --jq .[0].databaseId)
-          gh run watch -R DevExpress/devextreme-vue $latestRunId
+#          sleep 5
+#          latestRunId=$(gh run list -w update-generated-code.yml -R DevExpress/devextreme-vue --json databaseId --jq .[0].databaseId)
+#          gh run watch -R DevExpress/devextreme-vue $latestRunId
     env:
       GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}
