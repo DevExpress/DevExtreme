@@ -21,7 +21,9 @@ import {
 
 /**
  * @docid
+ * @hidden
  * @type object
+ * @inherits NativeEventInfo
  */
 export interface ScrollEventInfo<T> extends NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
     /** @docid */
