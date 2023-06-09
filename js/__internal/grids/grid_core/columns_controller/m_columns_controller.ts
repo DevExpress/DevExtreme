@@ -1342,7 +1342,7 @@ export class ColumnsController extends modules.Controller {
     that.endUpdate();
   }
 
-  getVisibleIndex(index, rowIndex) {
+  getVisibleIndex(index, rowIndex?) {
     const columns = this.getVisibleColumns(rowIndex);
 
     for (let i = columns.length - 1; i >= 0; i--) {

@@ -69,6 +69,7 @@ import {
   VIEWPORT_BOTTOM_NEW_ROW_POSITION,
   VIEWPORT_TOP_NEW_ROW_POSITION,
 } from './const';
+import type { ICellBasedEditingControllerExtender } from './m_editing_cell_based';
 import {
   createFailureHandler, getButtonIndex, getButtonName, getEditingTexts, isEditingCell, isEditingOrShowEditorAlwaysDataCell,
 } from './m_editing_utils';
@@ -262,9 +263,9 @@ class EditingControllerImpl extends modules.ViewController {
     this._dataController.dataErrorOccurred.fire(arg, $popupContent);
   }
 
-  _needToCloseEditableCell(): any {}
+  _needToCloseEditableCell($targetElement): any {}
 
-  _closeEditItem(): any {}
+  _closeEditItem($targetElement): any {}
 
   _handleDataChanged(): any {}
 
@@ -530,7 +531,7 @@ class EditingControllerImpl extends modules.ViewController {
     this._refreshCore.apply(this, arguments);
   }
 
-  _refreshCore(): any {}
+  _refreshCore(params): any {}
 
   isEditing() {
     const isEditRowKeyDefined = isDefined(this.option(EDITING_EDITROWKEY_OPTION_NAME));
@@ -899,7 +900,7 @@ class EditingControllerImpl extends modules.ViewController {
     return deferred.promise();
   }
 
-  _allowRowAdding() {
+  _allowRowAdding(params?) {
     const insertIndex = this._getInsertIndex();
 
     if (insertIndex > 1) {
@@ -1016,7 +1017,7 @@ class EditingControllerImpl extends modules.ViewController {
     return this._columnsController.getVisibleColumnIndex(editColumnName);
   }
 
-  _setEditColumnNameByIndex(index, silent) {
+  _setEditColumnNameByIndex(index, silent?) {
     const visibleColumns = this._columnsController.getVisibleColumns();
     this._setEditColumnName(visibleColumns[index]?.name, silent);
   }
@@ -1481,7 +1482,7 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
-  _processRemoveIfError(changes, editIndex) {
+  _processRemoveIfError(changes, editIndex): any {
     const change = changes[editIndex];
 
     if (change?.type === DATA_EDIT_DATA_REMOVE_TYPE) {
@@ -1493,7 +1494,6 @@ class EditingControllerImpl extends modules.ViewController {
     return true;
   }
 
-  // @ts-expect-error
   _processRemove(changes, editIndex, cancel) {
     const change = changes[editIndex];
 
@@ -1502,7 +1502,7 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  _processRemoveCore(changes, editIndex, processIfBatch?) {
+  _processRemoveCore(changes, editIndex, processIfBatch?): any {
     if (editIndex >= 0) {
       changes.splice(editIndex, 1);
     }
@@ -1742,11 +1742,11 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  _applyModified($element) {
+  _applyModified($element, options) {
     $element && $element.addClass(CELL_MODIFIED);
   }
 
-  _beforeCloseEditCellInBatchMode(): any {}
+  _beforeCloseEditCellInBatchMode(rowIndices): any {}
 
   cancelEditData() {
     const changes = this.getChanges();
@@ -2240,6 +2240,8 @@ class EditingControllerImpl extends modules.ViewController {
     return visibleEditRowIndex >= 0 ? rows[visibleEditRowIndex].isNewRow : false;
   }
 
+  _isRowDeleteAllowed(): any {}
+
   shouldHighlightCell(parameters) {
     const cellModified = this.isCellModified(parameters);
     return cellModified
@@ -2250,6 +2252,10 @@ class EditingControllerImpl extends modules.ViewController {
               );
   }
 }
+
+export type EditingController =
+  EditingControllerImpl
+  & ICellBasedEditingControllerExtender;
 
 export const editingModule = {
   defaultOptions() {
