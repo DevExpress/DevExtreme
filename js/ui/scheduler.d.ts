@@ -52,7 +52,15 @@ interface AppointmentDraggingEvent {
  * @hidden
  */
 export interface TargetedAppointmentInfo {
+  /**
+   * @docid
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /**
+   * @docid
+   * @type dxSchedulerAppointment
+   */
   readonly targetedAppointmentData?: Appointment;
 }
 
@@ -363,11 +371,22 @@ export type AppointmentDraggingRemoveEvent = AppointmentDraggingEvent & {
   readonly toComponent?: dxSortable | dxDraggable;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ * @inherits TargetedAppointmentInfo
+ */
 export type AppointmentTemplateData = TargetedAppointmentInfo;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ * @inherits TargetedAppointmentInfo
+ */
 export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
+  /**
+   * @docid
+   */
   readonly isButtonClicked: boolean;
 };
 
@@ -472,16 +491,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default "item"
-     * @type_function_param1_field appointmentData:object
-     * @type_function_param1_field targetedAppointmentData:object
+     * @type_function_param1 model:{ui/scheduler:AppointmentTemplateData}
      * @public
      */
     appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default "appointmentTooltip"
-     * @type_function_param1_field appointmentData:object
-     * @type_function_param1_field targetedAppointmentData:object
+     * @type_function_param1 model:{ui/scheduler:AppointmentTooltipTemplateData}
      * @public
      */
     appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
@@ -968,15 +985,13 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default "item"
-       * @type_function_param1_field appointmentData:object
-       * @type_function_param1_field targetedAppointmentData:object
+       * @type_function_param1 model:{ui/scheduler:AppointmentTemplateData}
        */
       appointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
        * @default "appointmentTooltip"
-       * @type_function_param1_field appointmentData:object
-       * @type_function_param1_field targetedAppointmentData:object
+       * @type_function_param1 model:{ui/scheduler:AppointmentTooltipTemplateData}
        */
       appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**

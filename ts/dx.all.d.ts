@@ -23100,6 +23100,9 @@ declare module DevExpress.ui {
            */
           readonly appointmentElement: DevExpress.core.DxElement;
         };
+    /**
+     * [descr:AppointmentTemplateData]
+     */
     export type AppointmentTemplateData = TargetedAppointmentInfo;
     /**
      * [descr:AppointmentTooltipShowingAppointmentInfo]
@@ -23123,7 +23126,13 @@ declare module DevExpress.ui {
          */
         readonly appointments: AppointmentTooltipShowingAppointmentInfo[];
       };
+    /**
+     * [descr:AppointmentTooltipTemplateData]
+     */
     export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
+      /**
+       * [descr:AppointmentTooltipTemplateData.isButtonClicked]
+       */
       readonly isButtonClicked: boolean;
     };
     /**
@@ -23222,7 +23231,13 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface TargetedAppointmentInfo {
+      /**
+       * [descr:TargetedAppointmentInfo.appointmentData]
+       */
       readonly appointmentData: Appointment;
+      /**
+       * [descr:TargetedAppointmentInfo.targetedAppointmentData]
+       */
       readonly targetedAppointmentData?: Appointment;
     }
     export type ViewType =
