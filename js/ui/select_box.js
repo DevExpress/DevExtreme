@@ -580,12 +580,17 @@ const SelectBox = DropDownList.inherit({
     },
 
     _clearTextValue: function() {
-        if(this.option('selectedItem')) {
+        const selectedItem = this.option('selectedItem');
+        const selectedItemText = this._displayGetter(selectedItem);
+        const shouldRestoreValue = selectedItem && selectedItemText !== '';
+
+        if(shouldRestoreValue) {
             if(this._savedTextRemoveEvent) {
                 this._saveValueChangeEvent(this._savedTextRemoveEvent);
             }
             this.option('value', null);
         }
+
         delete this._savedTextRemoveEvent;
     },
 

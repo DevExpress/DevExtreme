@@ -2907,6 +2907,29 @@ QUnit.module('search', moduleSetup, () => {
         });
     });
 
+    QUnit.test('focusout should not restore the value to null if selected item has an empty string as a display value (T1161443)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: [{ ID: 0, Name: '' }, { ID: 1, Name: 'One' }],
+            searchEnabled: true,
+            displayExpr: 'Name',
+            valueExpr: 'ID',
+            value: 1
+        });
+        const selectBox = $selectBox.dxSelectBox('instance');
+
+        selectBox.open();
+
+        const $items = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`);
+        $items.eq(0).trigger('dxclick');
+
+        assert.strictEqual(selectBox.option('value'), 0, 'input value is correct');
+
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        $input.trigger('focusout');
+
+        assert.strictEqual(selectBox.option('value'), 0, 'input value is not changed to null');
+    });
+
     QUnit.test('data is not displayed before min search length is exceeded', function(assert) {
         $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'three'],
