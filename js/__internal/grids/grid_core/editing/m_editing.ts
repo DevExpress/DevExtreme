@@ -459,7 +459,6 @@ class EditingControllerImpl extends modules.ViewController {
 
     // @ts-expect-error
     super._silentOption(name, value);
-    // this.callBase.apply(this, arguments);
   }
 
   optionChanged(args) {
@@ -533,7 +532,6 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   refresh() {
-    console.log('aboba', !isDefined(this._pageIndex), this._pageIndex);
     if (!isDefined(this._pageIndex)) {
       return;
     }
