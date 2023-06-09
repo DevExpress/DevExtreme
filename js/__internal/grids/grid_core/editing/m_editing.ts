@@ -70,6 +70,7 @@ import {
   VIEWPORT_TOP_NEW_ROW_POSITION,
 } from './const';
 import type { ICellBasedEditingControllerExtender } from './m_editing_cell_based';
+import type { IFormBasedEditingControllerExtender } from './m_editing_form_based';
 import {
   createFailureHandler, getButtonIndex, getButtonName, getEditingTexts, isEditingCell, isEditingOrShowEditorAlwaysDataCell,
 } from './m_editing_utils';
@@ -267,7 +268,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   _closeEditItem($targetElement): any {}
 
-  _handleDataChanged(): any {}
+  _handleDataChanged(args): any {}
 
   _isDefaultButtonVisible(button, options) {
     let result = true;
@@ -1144,7 +1145,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   _focusEditorIfNeed(): any {}
 
-  _showEditPopup(): any {}
+  _showEditPopup(rowIndex, repaintForm?): any {}
 
   _repaintEditPopup(): any {}
 
@@ -1156,7 +1157,7 @@ class EditingControllerImpl extends modules.ViewController {
     };
   }
 
-  _getPopupEditFormTemplate(): any {}
+  _getPopupEditFormTemplate(rowIndex): any {}
 
   _getSaveButtonConfig() {
     return {
@@ -2255,7 +2256,8 @@ class EditingControllerImpl extends modules.ViewController {
 
 export type EditingController =
   EditingControllerImpl
-  & ICellBasedEditingControllerExtender;
+  & ICellBasedEditingControllerExtender
+  & IFormBasedEditingControllerExtender;
 
 export const editingModule = {
   defaultOptions() {
