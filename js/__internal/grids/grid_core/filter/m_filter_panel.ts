@@ -1,4 +1,4 @@
-import $ from '@js/core/renderer';
+import $, { dxElementWrapper } from '@js/core/renderer';
 // @ts-expect-error
 import { Deferred, when } from '@js/core/utils/deferred';
 import { captionize } from '@js/core/utils/inflector';
@@ -30,28 +30,52 @@ const FilterPanelView = modules.View.inherit({
 
   init() {
     this.getController('data').dataSourceChanged.add(() => this.render());
+
+    this._columnsController = this.getController('columns');
   },
 
   _renderCore() {
-    const that = this;
-    const $element = that.element();
+    const $element = this.element();
+
+    $element.empty();
+
+    const isColumnsDefined = !!this._columnsController.getColumns().length;
+
+    if (!isColumnsDefined) {
+      return;
+    }
 
     $element
-      .empty()
-      .addClass(that.addWidgetPrefix(FILTER_PANEL_CLASS));
+      .addClass(this.addWidgetPrefix(FILTER_PANEL_CLASS));
+
     const $leftContainer = $('<div>')
-      .addClass(that.addWidgetPrefix(FILTER_PANEL_LEFT_CONTAINER))
+      .addClass(this.addWidgetPrefix(FILTER_PANEL_LEFT_CONTAINER))
       .appendTo($element);
 
-    if (that.option('filterValue') || that._filterValueBuffer) {
-      $leftContainer.append(that._getCheckElement())
-        .append(that._getFilterElement())
-        .append(that._getTextElement());
-      $element.append(that._getRemoveButtonElement());
-    } else {
-      $leftContainer.append(that._getFilterElement())
-        .append(that._getTextElement());
+    this._renderFilterBuilderText($element, $leftContainer);
+  },
+
+  _renderFilterBuilderText($element: dxElementWrapper, $leftContainer: dxElementWrapper): void {
+    const $filterElement = this._getFilterElement();
+    const $textElement = this._getTextElement();
+
+    if (this.option('filterValue') || this._filterValueBuffer) {
+      const $checkElement = this._getCheckElement();
+      const $removeButtonElement = this._getRemoveButtonElement();
+
+      $leftContainer
+        .append($checkElement)
+        .append($filterElement)
+        .append($textElement);
+
+      $element.append($removeButtonElement);
+
+      return;
     }
+
+    $leftContainer
+      .append($filterElement)
+      .append($textElement);
   },
 
   _getCheckElement() {
