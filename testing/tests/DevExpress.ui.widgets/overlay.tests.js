@@ -26,6 +26,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 import { getActiveElement } from '../../helpers/shadowDom.js';
 import browser from 'core/utils/browser';
+import animationFrame from 'animation/frame';
 
 QUnit.testStart(function() {
     viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
@@ -4382,6 +4383,11 @@ QUnit.module('Private API for VisualViewport', {
             QUnit.test(`visual viewport ${event} event fires _visualViewportEventHandler if ${device.platform}`, function(assert) {
                 const originalDevice = devices.real();
                 const clock = sinon.useFakeTimers();
+                const originalRAF = animationFrame.requestAnimationFrame;
+
+                animationFrame.requestAnimationFrame = callback => {
+                    return window.setTimeout(callback, 10);
+                };
 
                 const overlay = $('#overlay').dxOverlay({
                     visible: true,
@@ -4406,6 +4412,7 @@ QUnit.module('Private API for VisualViewport', {
                     devices.real(originalDevice);
                     clock.restore();
                     visualViewportEventHandlerStub.restore();
+                    animationFrame.requestAnimationFrame = originalRAF;
                 }
             });
         });
