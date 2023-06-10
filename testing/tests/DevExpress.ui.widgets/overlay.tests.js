@@ -7,6 +7,7 @@ import config from 'core/config';
 import devices from 'core/devices';
 import { Template } from 'core/templates/template';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import { getWindow, setWindow } from 'core/utils/window';
 import { isRenderer } from 'core/utils/type';
 import { value as viewPort } from 'core/utils/view_port';
 import eventsEngine from 'events/core/events_engine';
@@ -4308,5 +4309,68 @@ QUnit.module('wrapper covered element choice', {
         const containerLocation = $positionOf.position();
         assert.roughEqual(wrapperLocation.left, containerLocation.left, 0.51, 'wrapper is left positioned by position.of');
         assert.roughEqual(wrapperLocation.top, containerLocation.top, 0.51, 'wrapper is top positioned by position.of');
+    });
+});
+
+
+QUnit.module('Private API for VisualViewport', {
+}, () => {
+    QUnit.test('_isVisualContainerWindow returns correct value', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+        }).dxOverlay('instance');
+
+        const getValue = () => overlay._isVisualContainerWindow();
+
+        assert.strictEqual(getValue(), true, 'returns true, if visualContainer is window');
+
+        overlay.option('visualContainer', $('#container'));
+        assert.strictEqual(getValue(), false, 'returns false, if visualContainer is not window');
+
+        const originalWindow = getWindow();
+
+        try {
+            overlay.option('visualContainer', originalWindow);
+
+            setWindow(undefined, false);
+
+            assert.strictEqual(getValue(), false, 'returns false, if window is undefined');
+        } finally {
+            setWindow(originalWindow, true);
+        }
+    });
+
+    QUnit.test('_shouldUseVisualViewport returns correct value', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            visible: true,
+        }).dxOverlay('instance');
+
+        const getValue = () => overlay._shouldUseVisualViewport();
+
+        const originalDevice = devices.real();
+
+        const fakeDevices = [
+            { platform: 'generic', deviceType: 'desktop', expectedValue: false },
+            { platform: 'ios', deviceType: 'phone', expectedValue: true },
+            { platform: 'android', deviceType: 'phone', expectedValue: false },
+            { platform: 'ipad', deviceType: 'tablet', expectedValue: true }
+        ];
+
+        try {
+            fakeDevices.forEach((device) => {
+                devices.real(device);
+
+                const { platform, expectedValue } = device;
+
+                assert.strictEqual(devices.real().platform, platform, `device platform is ${platform}`);
+                assert.strictEqual(getValue(), expectedValue, `returns ${expectedValue} when platform is ${platform}`);
+            });
+        } finally {
+            devices.real(originalDevice);
+        }
+    });
+
+    QUnit.test('_isVirtualKeyboardOpen returns correct value', function(assert) {
+        assert.ok(true, 'can not test _isVirtualKeyboardOpen cause different behavior on platforms');
     });
 });
