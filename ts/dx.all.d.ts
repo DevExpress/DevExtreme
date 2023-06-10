@@ -24378,13 +24378,28 @@ declare module DevExpress.ui {
    */
   export class dxSlider extends dxTrackBar<dxSliderOptions> {}
   module dxSlider {
+    /**
+     * [descr:_ui_slider_ContentReadyEvent]
+     */
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxSlider>;
+    /**
+     * [descr:_ui_slider_DisposingEvent]
+     */
     export type DisposingEvent = DevExpress.events.EventInfo<dxSlider>;
+    /**
+     * [descr:_ui_slider_InitializedEvent]
+     */
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxSlider>;
+    /**
+     * [descr:_ui_slider_OptionChangedEvent]
+     */
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxSlider> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSliderOptions;
+    /**
+     * [descr:_ui_slider_ValueChangedEvent]
+     */
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxSlider,
       KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event
