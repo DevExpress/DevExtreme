@@ -73,12 +73,14 @@ const uaParsers = {
             return;
         }
 
-        return {
+        const config = {
             deviceType: DEVICE_TYPE.tablet,
             platform: PLATFORM.ipad,
             ipad: isIpadOS,
             grade: 'A',
         };
+
+        return config;
     },
 
     generic(userAgent) {
@@ -91,13 +93,15 @@ const uaParsers = {
             return;
         }
 
-        return {
+        const config = {
             deviceType: isPhone ? DEVICE_TYPE.phone : isTablet ? DEVICE_TYPE.tablet : DEVICE_TYPE.desktop,
             platform: PLATFORM.generic,
             version: [],
             grade: 'A',
             mac: isMac
         };
+
+        return config;
     },
 
     ios(userAgent) {
@@ -111,12 +115,14 @@ const uaParsers = {
         const isIPhone4 = (window.screen.height === (960 / 2));
         const grade = isIPhone4 ? 'B' : 'A';
 
-        return {
+        const config = {
             deviceType: isPhone ? DEVICE_TYPE.phone : DEVICE_TYPE.tablet,
             platform: PLATFORM.ios,
             version,
             grade
         };
+
+        return config;
     },
 
     android(userAgent) {
@@ -130,12 +136,14 @@ const uaParsers = {
         const worseThan4_4 = version.length > 1 && (version[0] < 4 || version[0] === 4 && version[1] < 4);
         const grade = worseThan4_4 ? 'B' : 'A';
 
-        return {
+        const config = {
             deviceType: isPhone ? DEVICE_TYPE.phone : DEVICE_TYPE.tablet,
             platform: PLATFORM.android,
             version,
             grade
         };
+
+        return config;
     }
 };
 
