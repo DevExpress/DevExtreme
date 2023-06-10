@@ -4353,7 +4353,7 @@ QUnit.module('Private API for VisualViewport', {
             { platform: 'generic', deviceType: 'desktop', expectedValue: false },
             { platform: 'ios', deviceType: 'phone', expectedValue: true },
             { platform: 'android', deviceType: 'phone', expectedValue: false },
-            { platform: 'ipad', deviceType: 'tablet', expectedValue: true }
+            { platform: 'ipad', deviceType: 'tablet', expectedValue: true },
         ];
 
         try {
@@ -4370,7 +4370,44 @@ QUnit.module('Private API for VisualViewport', {
         }
     });
 
-    QUnit.test('_isVirtualKeyboardOpen returns correct value', function(assert) {
-        assert.ok(true, 'can not test _isVirtualKeyboardOpen cause different behavior on platforms');
+    ['resize', 'scroll'].forEach(event => {
+        const fakeDevices = [
+            { platform: 'generic', deviceType: 'desktop' },
+            { platform: 'ios', deviceType: 'phone' },
+            { platform: 'android', deviceType: 'phone' },
+            { platform: 'ipad', deviceType: 'tablet' },
+        ];
+
+        fakeDevices.forEach(device => {
+            QUnit.test(`visual viewport ${event} event fires _visualViewportEventHandler if ${device.platform}`, function(assert) {
+                const originalDevice = devices.real();
+                const clock = sinon.useFakeTimers();
+
+                const overlay = $('#overlay').dxOverlay({
+                    visible: true,
+                }).dxOverlay('instance');
+
+                const visualViewportEventHandlerStub = sinon.stub(overlay, '_visualViewportEventHandler');
+
+                try {
+                    devices.real(device);
+
+                    const { visualViewport } = getWindow();
+
+                    visualViewport.dispatchEvent(new Event(event));
+
+                    clock.tick(10);
+
+                    const expectedValue = ['ios, ipad'].includes(device.platform) ? 1 : 0;
+                    const { callCount } = visualViewportEventHandlerStub;
+
+                    assert.strictEqual(callCount, expectedValue);
+                } finally {
+                    devices.real(originalDevice);
+                    clock.restore();
+                    visualViewportEventHandlerStub.restore();
+                }
+            });
+        });
     });
 });

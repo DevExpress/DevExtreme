@@ -467,7 +467,7 @@ const Overlay = Widget.inherit({
                 if(isCurrentVisible) {
                     this._renderGeometry();
                 } else {
-                    this._toggleVisibilityAnimate(true);
+                    this._renderVisibilityAnimate(true);
                 }
             });
         }
@@ -1253,7 +1253,6 @@ const Overlay = Widget.inherit({
 
         this._pendingUpdate = null;
         this._resizeAnimationFrameId = null;
-        this._unSubscribeCallbacks = null;
     },
 
     _stopShowTimer() {
@@ -1272,6 +1271,12 @@ const Overlay = Widget.inherit({
         this._toggleSubscriptions(false);
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
+
+        const visualViewportEventKeys = Object.keys(visualViewportEventMap);
+
+        visualViewportEventKeys.forEach(event => {
+            this._toggleVisualViewportSubscription(false, event);
+        });
 
         this._actions = null;
         this._parentsScrollSubscriptionInfo = null;
