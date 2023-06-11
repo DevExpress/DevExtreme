@@ -4380,7 +4380,7 @@ QUnit.module('Private API for VisualViewport', {
         ];
 
         fakeDevices.forEach(device => {
-            QUnit.test(`visual viewport ${event} event fires _visualViewportEventHandler if ${device.platform}`, function(assert) {
+            QUnit.test(`visual viewport ${event} fires _visualViewportEventHandler and _scrollActiveElementIntoView on ${device.platform}`, function(assert) {
                 const originalDevice = devices.real();
                 const clock = sinon.useFakeTimers();
                 const originalRAF = animationFrame.requestAnimationFrame;
@@ -4394,6 +4394,7 @@ QUnit.module('Private API for VisualViewport', {
                 }).dxOverlay('instance');
 
                 const visualViewportEventHandlerStub = sinon.stub(overlay, '_visualViewportEventHandler');
+                const scrollActiveElementIntoViewStub = sinon.stub(overlay, '_scrollActiveElementIntoView');
 
                 try {
                     devices.real(device);
@@ -4405,13 +4406,17 @@ QUnit.module('Private API for VisualViewport', {
                     clock.tick(10);
 
                     const expectedValue = ['ios, ipad'].includes(device.platform) ? 1 : 0;
-                    const { callCount } = visualViewportEventHandlerStub;
 
-                    assert.strictEqual(callCount, expectedValue);
+                    const { callCount: eventHandlerCallCount } = visualViewportEventHandlerStub;
+                    const { callCount: intoViewCallCount } = scrollActiveElementIntoViewStub;
+
+                    assert.strictEqual(eventHandlerCallCount, expectedValue);
+                    assert.strictEqual(intoViewCallCount, expectedValue);
                 } finally {
                     devices.real(originalDevice);
                     clock.restore();
                     visualViewportEventHandlerStub.restore();
+                    scrollActiveElementIntoViewStub.restore();
                     animationFrame.requestAnimationFrame = originalRAF;
                 }
             });
