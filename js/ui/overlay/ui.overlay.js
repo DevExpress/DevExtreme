@@ -447,6 +447,36 @@ const Overlay = Widget.inherit({
         return isOpen;
     },
 
+    _initResizeRequestAnimationFrame() {
+        this._resizeAnimationFrameId = requestAnimationFrame(() => {
+            this._pendingUpdate = false;
+
+            const isCurrentVisible = this._currentVisible;
+
+            if(isCurrentVisible) {
+                this._renderGeometry();
+            } else {
+                this._renderVisibilityAnimate(true);
+            }
+
+            this._scrollActiveElementIntoView();
+        });
+    },
+
+    _scrollActiveElementIntoView() {
+        const activeElement = domAdapter.getActiveElement();
+
+        const { scrollIntoViewIfNeeded } = activeElement;
+
+        if(scrollIntoViewIfNeeded) {
+            activeElement.scrollIntoViewIfNeeded();
+
+            return;
+        }
+
+        activeElement.scrollIntoView(false);
+    },
+
     _visualViewportEventHandler() {
         const pendingUpdate = this._pendingUpdate;
 
@@ -459,17 +489,7 @@ const Overlay = Widget.inherit({
         const { visible } = this.option();
 
         if(visible) {
-            this._resizeAnimationFrameId = requestAnimationFrame(() => {
-                this._pendingUpdate = false;
-
-                const isCurrentVisible = this._currentVisible;
-
-                if(isCurrentVisible) {
-                    this._renderGeometry();
-                } else {
-                    this._renderVisibilityAnimate(true);
-                }
-            });
+            this._initResizeRequestAnimationFrame();
         }
     },
 
