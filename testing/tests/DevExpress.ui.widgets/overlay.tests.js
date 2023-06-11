@@ -4371,54 +4371,51 @@ QUnit.module('Private API for VisualViewport', {
         }
     });
 
-    ['resize', 'scroll'].forEach(event => {
-        const fakeDevices = [
-            { platform: 'generic', deviceType: 'desktop' },
-            { platform: 'ios', deviceType: 'phone' },
-            { platform: 'android', deviceType: 'phone' },
-            { platform: 'ipad', deviceType: 'tablet' },
-        ];
+    const events = ['resize', 'scroll'];
+    const fakeDevices = [
+        { platform: 'generic', deviceType: 'desktop', expectedValue: 0 },
+        { platform: 'ios', deviceType: 'phone', expectedValue: 1 },
+        { platform: 'android', deviceType: 'phone', expectedValue: 0 },
+        { platform: 'ipad', deviceType: 'tablet', expectedValue: 1 },
+    ];
+    const methods = ['_visualViewportEventHandler', '_scrollActiveElementIntoView'];
 
+    events.forEach(event => {
         fakeDevices.forEach(device => {
-            QUnit.test(`visual viewport ${event} fires _visualViewportEventHandler and _scrollActiveElementIntoView on ${device.platform}`, function(assert) {
-                const originalDevice = devices.real();
-                const clock = sinon.useFakeTimers();
-                const originalRAF = animationFrame.requestAnimationFrame;
+            methods.forEach(method => {
+                QUnit.test(`Using ${method} on visual viewport ${event} on ${device.platform}`, function(assert) {
+                    const originalDevice = devices.real();
+                    const clock = sinon.useFakeTimers();
+                    const originalRAF = animationFrame.requestAnimationFrame;
 
-                animationFrame.requestAnimationFrame = callback => {
-                    return window.setTimeout(callback, 10);
-                };
+                    animationFrame.requestAnimationFrame = callback => {
+                        return window.setTimeout(callback, 10);
+                    };
 
-                const overlay = $('#overlay').dxOverlay({
-                    visible: true,
-                }).dxOverlay('instance');
-
-                const visualViewportEventHandlerStub = sinon.stub(overlay, '_visualViewportEventHandler');
-                const scrollActiveElementIntoViewStub = sinon.stub(overlay, '_scrollActiveElementIntoView');
-
-                try {
                     devices.real(device);
 
-                    const { visualViewport } = getWindow();
+                    const overlay = $('#overlay').dxOverlay().dxOverlay('instance');
+                    const stub = sinon.stub(overlay, method);
 
-                    visualViewport.dispatchEvent(new Event(event));
+                    try {
+                        overlay.show();
 
-                    clock.tick(10);
+                        const { visualViewport } = getWindow();
 
-                    const expectedValue = ['ios, ipad'].includes(device.platform) ? 1 : 0;
+                        visualViewport.dispatchEvent(new Event(event));
+                        clock.tick(10);
 
-                    const { callCount: eventHandlerCallCount } = visualViewportEventHandlerStub;
-                    const { callCount: intoViewCallCount } = scrollActiveElementIntoViewStub;
+                        const { callCount } = stub;
+                        const { expectedValue } = device;
 
-                    assert.strictEqual(eventHandlerCallCount, expectedValue);
-                    assert.strictEqual(intoViewCallCount, expectedValue);
-                } finally {
-                    devices.real(originalDevice);
-                    clock.restore();
-                    visualViewportEventHandlerStub.restore();
-                    scrollActiveElementIntoViewStub.restore();
-                    animationFrame.requestAnimationFrame = originalRAF;
-                }
+                        assert.strictEqual(callCount, expectedValue);
+                    } finally {
+                        devices.real(originalDevice);
+                        clock.restore();
+                        stub.restore();
+                        animationFrame.requestAnimationFrame = originalRAF;
+                    }
+                });
             });
         });
     });
