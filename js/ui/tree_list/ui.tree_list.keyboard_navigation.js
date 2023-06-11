@@ -1,1 +1,1 @@
-import '../../__internal/grids/tree_list/module_keyboard_navigation';
+import '../../__internal/grids/tree_list/m_keyboard_navigation';

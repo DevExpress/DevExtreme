@@ -1,4 +1,5 @@
-import { sortingModule } from '@js/ui/grid_core/ui.grid_core.sorting';
-import gridCore from '../module_core';
+import { sortingModule } from '@ts/grids/grid_core/sorting/m_sorting';
+
+import gridCore from '../m_core';
 
 gridCore.registerModule('sorting', sortingModule);

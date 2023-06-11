@@ -242,9 +242,10 @@ class DateRangeBox extends Editor {
         this._renderStylingMode();
         // TODO: probably it need to update styling mode for dropDown in buttons container. It depends from design decision
 
-        this._renderStartDateBox();
-        this._renderSeparator();
         this._renderEndDateBox();
+        this._renderSeparator();
+        this._renderStartDateBox();
+
 
         this._toggleEmptinessState();
         this._renderEmptinessEvent();
@@ -308,7 +309,7 @@ class DateRangeBox extends Editor {
     _renderStartDateBox() {
         this._$startDateBox = $('<div>')
             .addClass(START_DATEBOX_CLASS)
-            .appendTo(this.$element());
+            .prependTo(this.$element());
 
         this._startDateBox = this._createComponent(this._$startDateBox, MultiselectDateBox, this._getStartDateBoxConfig());
         this._startDateBox.NAME = '_StartDateBox';
@@ -327,7 +328,7 @@ class DateRangeBox extends Editor {
         const $icon = getImageContainer(SEPARATOR_ICON_NAME);
         this._$separator = $('<div>')
             .addClass(DATERANGEBOX_SEPARATOR_CLASS)
-            .appendTo(this.$element());
+            .prependTo(this.$element());
 
         this._renderPreventBlurOnSeparatorClick();
 
@@ -525,6 +526,8 @@ class DateRangeBox extends Editor {
                 showTitle: false,
                 title: '',
                 hideOnOutsideClick: (e) => this._hideOnOutsideClickHandler(e),
+                hideOnParentScroll: false,
+                preventScrollEvents: false,
                 ...options.dropDownOptions,
             },
             invalidDateMessage: options.invalidStartDateMessage,
@@ -667,6 +670,28 @@ class DateRangeBox extends Editor {
 
     _isActiveElement(input) {
         return $(input).is(domAdapter.getActiveElement(input));
+    }
+
+    _popupContentIdentifier(identifier) {
+        if(identifier) {
+            this._popupContentId = identifier;
+        }
+
+        return this._popupContentId;
+    }
+
+    _setAriaAttributes() {
+        const { opened } = this.option();
+
+        const arias = {
+            'expanded': opened,
+            'controls': this._popupContentIdentifier(),
+        };
+
+        const ariaOwns = opened ? this._popupContentIdentifier() : undefined;
+
+        this.setAria(arias);
+        this.setAria('owns', ariaOwns, this.$element());
     }
 
     _cleanButtonContainers() {

@@ -13,9 +13,9 @@ import renderer from 'core/renderer';
 import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/module';
-import '__internal/grids/pivot_grid/field_chooser/module';
-import '__internal/grids/pivot_grid/module_widget';
+import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';
+import '__internal/grids/pivot_grid/field_chooser/m_field_chooser';
+import '__internal/grids/pivot_grid/m_widget';
 
 import pointerMock from '../../helpers/pointerMock.js';
 

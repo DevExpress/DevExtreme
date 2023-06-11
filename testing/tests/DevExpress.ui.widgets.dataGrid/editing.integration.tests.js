@@ -6525,7 +6525,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
         });
 
-        QUnit.test(`editRowKey in init configuration (editMode = ${editMode})`, function(assert) {
+        QUnit.test(`editColumnName in init configuration (editMode = ${editMode})`, function(assert) {
             // arrange
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: [{ id: 1 }, { id: 2 }],

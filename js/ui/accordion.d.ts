@@ -145,10 +145,7 @@ export interface dxAccordionOptions<
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxAccordion
+     * @type_function_param1 e:{ui/accordion:ItemTitleClickEvent}
      * @action
      * @public
      */
@@ -266,7 +263,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onItemTitleClick'>;
 
 /**
 * @hidden
@@ -314,12 +311,6 @@ onItemHold?: ((e: ItemHoldEvent) => void);
  * @type_function_param1 e:{ui/accordion:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
-/**
- * @skip
- * @docid dxAccordionOptions.onItemTitleClick
- * @type_function_param1 e:{ui/accordion:ItemTitleClickEvent}
- */
-onItemTitleClick?: ((e: ItemTitleClickEvent) => void);
 /**
  * @skip
  * @docid dxAccordionOptions.onOptionChanged

@@ -192,8 +192,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/sortable:AddEvent}
      * @action
      * @public
      */
@@ -201,9 +200,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSortable
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/sortable:DragChangeEvent}
      * @action
      * @public
      */
@@ -211,9 +208,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSortable
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/sortable:DragEndEvent}
      * @action
      * @public
      */
@@ -221,9 +216,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSortable
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/sortable:DragMoveEvent}
      * @action
      * @public
      */
@@ -231,9 +224,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSortable
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/sortable:DragStartEvent}
      * @action
      * @public
      */
@@ -241,9 +232,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSortable
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/sortable:RemoveEvent}
      * @action
      * @public
      */
@@ -251,10 +240,7 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSortable
-     * @type_function_param1_field event:event
-     * @type_function_param1_field promise:Promise<void>
+     * @type_function_param1 e:{ui/sortable:ReorderEvent}
      * @action
      * @public
      */
@@ -288,7 +274,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onPlaceholderPrepared'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAdd' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder'>;
 
 /**
 * @hidden
@@ -296,40 +282,10 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 type Events = {
 /**
  * @skip
- * @docid dxSortableOptions.onAdd
- * @type_function_param1 e:{ui/sortable:AddEvent}
- */
-onAdd?: ((e: AddEvent) => void);
-/**
- * @skip
  * @docid dxSortableOptions.onDisposing
  * @type_function_param1 e:{ui/sortable:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
-/**
- * @skip
- * @docid dxSortableOptions.onDragChange
- * @type_function_param1 e:{ui/sortable:DragChangeEvent}
- */
-onDragChange?: ((e: DragChangeEvent) => void);
-/**
- * @skip
- * @docid dxSortableOptions.onDragEnd
- * @type_function_param1 e:{ui/sortable:DragEndEvent}
- */
-onDragEnd?: ((e: DragEndEvent) => void);
-/**
- * @skip
- * @docid dxSortableOptions.onDragMove
- * @type_function_param1 e:{ui/sortable:DragMoveEvent}
- */
-onDragMove?: ((e: DragMoveEvent) => void);
-/**
- * @skip
- * @docid dxSortableOptions.onDragStart
- * @type_function_param1 e:{ui/sortable:DragStartEvent}
- */
-onDragStart?: ((e: DragStartEvent) => void);
 /**
  * @skip
  * @docid dxSortableOptions.onInitialized
@@ -342,17 +298,5 @@ onInitialized?: ((e: InitializedEvent) => void);
  * @type_function_param1 e:{ui/sortable:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxSortableOptions.onRemove
- * @type_function_param1 e:{ui/sortable:RemoveEvent}
- */
-onRemove?: ((e: RemoveEvent) => void);
-/**
- * @skip
- * @docid dxSortableOptions.onReorder
- * @type_function_param1 e:{ui/sortable:ReorderEvent}
- */
-onReorder?: ((e: ReorderEvent) => void);
 };
 ///#ENDDEBUG

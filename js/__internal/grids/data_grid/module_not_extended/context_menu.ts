@@ -1,4 +1,5 @@
-import { contextMenuModule } from '@js/ui/grid_core/ui.grid_core.context_menu';
-import treeListCore from '../module_core';
+import { contextMenuModule } from '@ts/grids/grid_core/context_menu/m_context_menu';
+
+import treeListCore from '../m_core';
 
 treeListCore.registerModule('contextMenu', contextMenuModule);

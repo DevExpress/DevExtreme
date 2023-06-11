@@ -1,5 +1,6 @@
-import { columnChooserModule } from '@js/ui/grid_core/ui.grid_core.column_chooser';
-import gridCore from '../module_core';
+import { columnChooserModule } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
+
+import gridCore from '../m_core';
 
 export const ColumnChooserController = columnChooserModule.controllers.columnChooser;
 export const ColumnChooserView = columnChooserModule.views.columnChooserView;

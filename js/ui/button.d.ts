@@ -84,10 +84,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field validationGroup:object
-     * @type_function_param1_field component:dxButton
+     * @type_function_param1 e:{ui/button:ClickEvent}
      * @action
      * @public
      */
@@ -152,18 +149,12 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onClick'>;
 
 /**
 * @hidden
 */
 type Events = {
-/**
- * @skip
- * @docid dxButtonOptions.onClick
- * @type_function_param1 e:{ui/button:ClickEvent}
- */
-onClick?: ((e: ClickEvent) => void);
 /**
  * @skip
  * @docid dxButtonOptions.onContentReady

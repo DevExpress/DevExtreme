@@ -111,8 +111,20 @@ const setHeight = function(elements, value) {
     setDimensionProperty(elements, 'height', value);
 };
 
-const setStyle = function(element, value) {
-    element.style.cssText = value;
+const setStyle = function(element, styleString, resetStyle = true) {
+    if(resetStyle) {
+        const styleList = [].slice.call(element.style);
+        styleList.forEach((propertyName) => {
+            element.style.removeProperty(propertyName);
+        });
+    }
+    styleString.split(';').forEach((style) => {
+        const parts = style.split(':').map(stylePart => stylePart.trim());
+        if(parts.length === 2) {
+            const [property, value] = parts;
+            element.style[property] = value;
+        }
+    });
 };
 
 export {

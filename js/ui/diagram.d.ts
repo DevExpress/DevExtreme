@@ -164,8 +164,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     };
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:{ui/diagram:CustomCommandEvent}
      * @action
      * @public
      */
@@ -708,9 +707,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDiagram
-     * @type_function_param1_field item:dxDiagramItem
+     * @type_function_param1 e:{ui/diagram:ItemClickEvent}
      * @action
      * @public
      */
@@ -718,9 +715,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDiagram
-     * @type_function_param1_field item:dxDiagramItem
+     * @type_function_param1 e:{ui/diagram:ItemDblClickEvent}
      * @action
      * @public
      */
@@ -728,9 +723,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDiagram
-     * @type_function_param1_field items:Array<dxDiagramItem>
+     * @type_function_param1 e:{ui/diagram:SelectionChangedEvent}
      * @action
      * @public
      */
@@ -738,10 +731,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDiagram
-     * @type_function_param1_field operation:Enums.DiagramModelOperation
-     * @type_function_param1_field reason:Enums.DiagramRequestEditOperationReason
+     * @type_function_param1 e:{ui/diagram:RequestEditOperationEvent}
      * @action
      * @public
      */
@@ -749,9 +739,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDiagram
-     * @type_function_param1_field changes:Array<any>
+     * @type_function_param1 e:{ui/diagram:RequestLayoutUpdateEvent}
      * @action
      * @public
      */
@@ -1592,7 +1580,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCustomCommand' | 'onItemClick' | 'onItemDblClick' | 'onRequestEditOperation' | 'onRequestLayoutUpdate' | 'onSelectionChanged'>;
 
 /**
 * @hidden
@@ -1604,12 +1592,6 @@ type Events = {
  * @type_function_param1 e:{ui/diagram:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
-/**
- * @skip
- * @docid dxDiagramOptions.onCustomCommand
- * @type_function_param1 e:{ui/diagram:CustomCommandEvent}
- */
-onCustomCommand?: ((e: CustomCommandEvent) => void);
 /**
  * @skip
  * @docid dxDiagramOptions.onDisposing
@@ -1624,39 +1606,9 @@ onDisposing?: ((e: DisposingEvent) => void);
 onInitialized?: ((e: InitializedEvent) => void);
 /**
  * @skip
- * @docid dxDiagramOptions.onItemClick
- * @type_function_param1 e:{ui/diagram:ItemClickEvent}
- */
-onItemClick?: ((e: ItemClickEvent) => void);
-/**
- * @skip
- * @docid dxDiagramOptions.onItemDblClick
- * @type_function_param1 e:{ui/diagram:ItemDblClickEvent}
- */
-onItemDblClick?: ((e: ItemDblClickEvent) => void);
-/**
- * @skip
  * @docid dxDiagramOptions.onOptionChanged
  * @type_function_param1 e:{ui/diagram:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxDiagramOptions.onRequestEditOperation
- * @type_function_param1 e:{ui/diagram:RequestEditOperationEvent}
- */
-onRequestEditOperation?: ((e: RequestEditOperationEvent) => void);
-/**
- * @skip
- * @docid dxDiagramOptions.onRequestLayoutUpdate
- * @type_function_param1 e:{ui/diagram:RequestLayoutUpdateEvent}
- */
-onRequestLayoutUpdate?: ((e: RequestLayoutUpdateEvent) => void);
-/**
- * @skip
- * @docid dxDiagramOptions.onSelectionChanged
- * @type_function_param1 e:{ui/diagram:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
 ///#ENDDEBUG
