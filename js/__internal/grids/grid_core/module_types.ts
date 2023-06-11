@@ -1,12 +1,12 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable max-classes-per-file */
-import { PropertyType as _PropertyType } from '@js/core/index';
+import { PropertyType } from '@js/core/index';
 import { Component } from '@js/core/component';
 import { dxElementWrapper } from '@js/core/renderer';
 import { GridBase, GridBaseOptions } from '@js/common/grids';
 import Widget from '@js/ui/widget/ui.widget';
 
-type PropertyType<T, TProp extends string> = _PropertyType<T, TProp> | undefined;
+type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> | undefined;
 
 // Data types
 export type RowKey = unknown;
@@ -18,11 +18,11 @@ type OptionsMethod<TOptions> =
   (
     <TPropertyName extends string>(
       optionName: TPropertyName
-    ) => PropertyType<TOptions, TPropertyName>
+    ) => GridPropertyType<TOptions, TPropertyName>
   ) & (
     <TPropertyName extends string>(
       optionName: TPropertyName,
-      optionValue: PropertyType<TOptions, TPropertyName>
+      optionValue: GridPropertyType<TOptions, TPropertyName>
     ) => void
   );
 
@@ -107,8 +107,8 @@ type DotNestedKeys<T, RLIMIT extends number = 10> =
 interface OptionChangedArgs<T extends string = string> {
   name: T extends `${infer TName}.${string}` ? TName : T;
   fullName: T;
-  previousValue: PropertyType<InternalGridOptions, T>;
-  value: PropertyType<InternalGridOptions, T>;
+  previousValue: GridPropertyType<InternalGridOptions, T>;
+  value: GridPropertyType<InternalGridOptions, T>;
   handled: boolean;
 }
 
@@ -152,7 +152,7 @@ type ViewTypes = {
 
 type SilentOptionType = <TPropertyName extends string>(
   optionName: TPropertyName,
-  optionValue: PropertyType<InternalGridOptions, TPropertyName>
+  optionValue: GridPropertyType<InternalGridOptions, TPropertyName>
 ) => void;
 
 export interface ClassStaticMembers {

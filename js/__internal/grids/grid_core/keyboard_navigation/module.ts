@@ -546,8 +546,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     if (
       this.option('selection')
-      // @ts-expect-error
-      && this.option('selection').mode !== 'none'
+      && (this.option('selection') as any).mode !== 'none'
       && !isEditing
     ) {
       const isFocusedRowElement = this._getElementType($target) === 'row'

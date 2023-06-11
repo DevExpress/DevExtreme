@@ -544,8 +544,7 @@ export class DataController extends ControllerWithDataMixin {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fireError(...args: any[]) {
-    // @ts-expect-error
-    this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
+    this.dataErrorOccurred.fire(errors.Error.apply(errors, args));
   }
 
   _setPagingOptions(dataSource): any {
@@ -1258,8 +1257,7 @@ export class DataController extends ControllerWithDataMixin {
     return dataSourceAdapter;
   }
 
-  isLocalStore(store?) {
-    store = store || this.store();
+  isLocalStore(store = this.store()) {
     return store instanceof ArrayStore;
   }
 
