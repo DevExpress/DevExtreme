@@ -4069,6 +4069,36 @@ QUnit.module('Editing', baseModuleConfig, () => {
         $textArea = $firstCell.find('textarea');
         assert.equal($textArea.length, 1, 'textarea should not disappear');
     });
+
+    // T1169962
+    QUnit.test('Not focus last checkbox after focusing out first checkbox', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            keyExpr: 'id',
+            dataSource: [
+                { value: false, id: 1 },
+                { value: false, id: 2 },
+                { value: false, id: 3 }
+            ],
+            columns: ['value', 'id'],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+            },
+        });
+        this.clock.tick(10);
+
+        // act
+        const checkbox1 = $('.dx-checkbox').eq(0);
+        checkbox1.trigger('dxclick');
+        this.clock.tick(10);
+
+        $('body').trigger('dxclick');
+        this.clock.tick(10);
+
+        // assert
+        assert.equal(document.activeElement, document.body, 'focus is set to body');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
