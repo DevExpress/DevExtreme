@@ -616,4 +616,14 @@ QUnit.module('API methods', {
         assert.strictEqual(promise1.state(), 'resolved', 'promise1 is resolved');
         assert.strictEqual(promise2.state(), 'resolved', 'promise2 is resolved');
     });
+
+    QUnit.test('getCellElements', function(assert) {
+        // act
+        const $row1 = this.columnsView.getCellElements(0);
+        const $row2 = this.columnsView.getCellElements(-1);
+
+        // assert
+        assert.notEqual($row1, undefined);
+        assert.strictEqual($row2, undefined);
+    });
 });
