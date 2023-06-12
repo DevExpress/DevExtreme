@@ -7,6 +7,7 @@ import RadioGroup from 'ui/radio_group';
 import ButtonGroup from 'ui/button_group';
 import DateBox from 'ui/date_box';
 import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
+import { createTimeZoneCalculator } from 'renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
 import dateLocalization from 'localization/date';
 
 const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
@@ -369,6 +370,44 @@ module('Repeat-end editor', () => {
             const ruleParts = recurrenceString.split(';');
             assert.deepEqual(untilDate.option('value'), getRecurrenceProcessor().getDateByAsciiString(ruleParts[1].split('=')[1]), 'value of until-date editor is correct');
         });
+    });
+
+    test('Repeat-until dateBox should get date considering scheduler timeZone', function(assert) {
+        const timeZoneCalculator = createTimeZoneCalculator('Europe/London');
+        const instance = createInstance({
+            value: 'FREQ=WEEKLY;UNTIL=20151007',
+            timeZoneCalculator,
+        });
+
+        const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
+        const untilDate = $repeatUntilDate.dxDateBox('instance');
+
+        const rightDate = timeZoneCalculator.createDate(
+            getRecurrenceProcessor().getDateByAsciiString('20151007'),
+            { path: 'toGrid' },
+        );
+
+        assert.deepEqual(untilDate.option('value'), rightDate, 'dateBox has right value');
+    });
+
+    test('Repeat-until dateBox should apply date considering scheduler timeZone', function(assert) {
+        const timeZoneCalculator = createTimeZoneCalculator('Europe/London');
+        const instance = createInstance({
+            value: 'FREQ=WEEKLY;UNTIL=20151007',
+            timeZoneCalculator,
+        });
+
+        const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
+        const untilDate = $repeatUntilDate.dxDateBox('instance');
+
+        untilDate.option('value', getRecurrenceProcessor().getDateByAsciiString('20151007'));
+
+        const rightDate = timeZoneCalculator.createDate(
+            getRecurrenceProcessor().getDateByAsciiString('20151007'),
+            { path: 'fromGrid' },
+        );
+
+        assert.equal(instance.option('value'), `FREQ=WEEKLY;UNTIL=${getRecurrenceProcessor().getAsciiStringByDate(rightDate)}`, 'Recurrence editor has right value');
     });
 
     test('Recurrence editor should correctly process values from until-date editor', function(assert) {

@@ -598,7 +598,7 @@ class RecurrenceEditor extends Editor {
     }
 
     _renderRepeatUntilEditor() {
-        const repeatUntil = this._recurrenceRule.getRules().until || this._formatUntilDate(new Date());
+        const repeatUntil = this._getUntilValue();
         const $editorWrapper = $('<div>').addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
 
         $('<div>')
