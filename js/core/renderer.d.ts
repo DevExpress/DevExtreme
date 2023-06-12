@@ -97,7 +97,7 @@ export interface dxElementWrapper {
 
   scrollLeft(value?: string | undefined): this;
 
-  scrollTop(value: string | undefined): this;
+  scrollTop(value?: string | undefined): this;
 
   show(): this;
 

@@ -19,7 +19,7 @@ import {
   getOuterWidth, getWidth,
 } from '@js/core/utils/size';
 import { quadToObject } from '@js/core/utils/string';
-import { isFunction, isObject } from '@js/core/utils/type';
+import { isFunction, isNumeric, isObject } from '@js/core/utils/type';
 import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
@@ -622,8 +622,11 @@ const Draggable = (DOMComponent as any).inherit({
     this._setSourceDraggable();
 
     this._$sourceElement = $element;
-    const initialOffset = $element.offset();
+    const elementOffset = $element.offset();
+    const initialOffset = this._getDraggableElementOffset({ x: elementOffset.left, y: elementOffset.top });
     const $dragElement = this._$dragElement = this._createDragElement($element);
+
+    this._initScrollTop = this._getScrollable($(this.element())).scrollTop();
 
     this._toggleDraggingClass(true);
     this._toggleDragSourceClass(true);
@@ -711,24 +714,37 @@ const Draggable = (DOMComponent as any).inherit({
     return $(container);
   },
 
-  _dragMoveHandler(e, scrollBy) {
+  _getDraggableElementOffset(offset) {
+    const startPosition = this._startPosition;
+    const initScrollTop = this._initScrollTop ?? 0;
+    const isFixedPosition = ($(this.element()) as any).css('position') === 'fixed';
+    const scrollTop = this._getScrollable($(this.element())).scrollTop();
+    const result = {
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      left: (startPosition?.left ?? 0) + offset.x,
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      top: (startPosition?.top ?? 0) + offset.y,
+    };
+
+    if (!isFixedPosition && !this.option('clone') && isNumeric(scrollTop)) {
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      result.top += scrollTop - initScrollTop;
+    }
+
+    return result;
+  },
+
+  _dragMoveHandler(e) {
     this._dragMoveArgs = e;
     if (!this._$dragElement) {
       e.cancel = true;
       return;
     }
 
-    const { offset } = e;
-    const startPosition = this._startPosition;
+    const offset = this._getDraggableElementOffset(e.offset);
 
-    this._move({
-      left: startPosition.left + offset.x,
-      top: startPosition.top + offset.y,
-    });
-
-    if (!scrollBy) {
-      this._updateScrollable(e);
-    }
+    this._move(offset);
+    this._updateScrollable(e);
 
     const eventArgs = this._getEventArgs(e);
     this._getAction('onDragMove')(eventArgs);

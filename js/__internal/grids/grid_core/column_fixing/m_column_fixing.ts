@@ -678,7 +678,6 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
           clearTimeout(this._fixedScrollTimeout);
           this._fixedScrollTimeout = setTimeout(() => {
-            // @ts-expect-error
             scrollTop = $(target).scrollTop();
             scrollable.scrollTo({ y: scrollTop });
           }, scrollDelay);
