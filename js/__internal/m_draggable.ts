@@ -64,6 +64,11 @@ const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 
+interface Offset {
+  left: number;
+  top: number;
+}
+
 class ScrollHelper {
   private _preventScroll: boolean;
 
@@ -623,10 +628,12 @@ const Draggable = (DOMComponent as any).inherit({
 
     this._$sourceElement = $element;
     const elementOffset = $element.offset();
-    const initialOffset = this._getDraggableElementOffset({ x: elementOffset.left, y: elementOffset.top });
-    const $dragElement = this._$dragElement = this._createDragElement($element);
 
-    this._initScrollTop = this._getScrollable($(this.element())).scrollTop();
+    if (!this.option('clone') && this.option('autoScroll')) {
+      this._initScrollTop = this._getScrollable($(this.element()))?.scrollTop() ?? 0;
+    }
+    const initialOffset = this._getDraggableElementOffset(elementOffset.left, elementOffset.top);
+    const $dragElement = this._$dragElement = this._createDragElement($element);
 
     this._toggleDraggingClass(true);
     this._toggleDragSourceClass(true);
@@ -714,20 +721,18 @@ const Draggable = (DOMComponent as any).inherit({
     return $(container);
   },
 
-  _getDraggableElementOffset(offset) {
+  _getDraggableElementOffset(initialOffsetX: number, initialOffsetY: number): Offset {
     const startPosition = this._startPosition;
     const initScrollTop = this._initScrollTop ?? 0;
     const isFixedPosition = ($(this.element()) as any).css('position') === 'fixed';
-    const scrollTop = this._getScrollable($(this.element())).scrollTop();
-    const result = {
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      left: (startPosition?.left ?? 0) + offset.x,
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      top: (startPosition?.top ?? 0) + offset.y,
+    const scrollTop = this._getScrollable($(this.element()))?.scrollTop() ?? 0;
+
+    const result: Offset = {
+      left: (startPosition?.left ?? 0) + initialOffsetX,
+      top: (startPosition?.top ?? 0) + initialOffsetY,
     };
 
     if (!isFixedPosition && !this.option('clone') && isNumeric(scrollTop)) {
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       result.top += scrollTop - initScrollTop;
     }
 
@@ -741,7 +746,7 @@ const Draggable = (DOMComponent as any).inherit({
       return;
     }
 
-    const offset = this._getDraggableElementOffset(e.offset);
+    const offset = this._getDraggableElementOffset(e.offset.x, e.offset.y);
 
     this._move(offset);
     this._updateScrollable(e);
