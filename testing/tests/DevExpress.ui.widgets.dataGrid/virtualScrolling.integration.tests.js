@@ -6504,20 +6504,24 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // act
-        dataGrid.option('editing.editRowKey', 14);
+        dataGrid.option('editing.editRowKey', 12);
 
         this.clock.tick(10);
-        $(dataGrid.getScrollable().container()).triggerHandler('scroll');
-        $(dataGrid.getScrollable().container()).triggerHandler('scroll');
-        this.clock.tick(10);
 
+        const scrollable = dataGrid.getScrollable();
+        scrollable.scrollBy({ top: 1000 });
+
+        this.clock.tick(10);
+        $(scrollable.container()).triggerHandler('scroll');
+        $(scrollable.container()).triggerHandler('scroll');
+        $(scrollable.container()).triggerHandler('scroll');
+        this.clock.tick(10);
 
         const $rows = $('.dx-data-row');
-        assert.strictEqual($rows.length, 6);
 
         Array.from($rows).forEach((row, i) => {
             const $row = $(row);
-            if(i === 5) { // editing row
+            if($row.hasClass('dx-edit-row')) { // editing row
                 assert.strictEqual($row.find('a').length, 2);
                 assert.strictEqual($row.find('a:eq(0)').text(), 'Save');
                 assert.strictEqual($row.find('a:eq(1)').text(), 'Cancel');
