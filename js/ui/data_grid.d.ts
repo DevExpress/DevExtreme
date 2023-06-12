@@ -1007,7 +1007,7 @@ export type SavingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowD
  * @docid _ui_data_grid_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,_common_grids_SelectionChangedInfo
  */
 export type SelectionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & SelectionChangedInfo<TRowData, TKey>;
 

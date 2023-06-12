@@ -797,7 +797,7 @@ export type SavingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowD
  * @docid _ui_tree_list_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,_common_grids_SelectionChangedInfo
  */
 export type SelectionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & SelectionChangedInfo<TRowData, TKey>;
 

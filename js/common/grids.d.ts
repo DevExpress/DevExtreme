@@ -77,6 +77,7 @@ import { PositionConfig } from '../animation/position';
  * @namespace DevExpress.common.grids
  */
 export type AdaptiveDetailRowPreparingInfo = {
+  /** @docid */
   readonly formOptions: any;
 };
 
@@ -780,6 +781,10 @@ export type DataChange<TRowData = any, TKey = any> = {
  * @namespace DevExpress.common.grids
  */
 export type DataChangeInfo<TRowData = any, TKey = any> = {
+  /**
+   * @docid
+   * @type Array<DataChange>
+   */
   readonly changes: Array<DataChange<TRowData, TKey>>;
 };
 
@@ -795,6 +800,7 @@ export type DataChangeType = 'insert' | 'update' | 'remove';
  * @namespace DevExpress.common.grids
  */
 export type DataErrorOccurredInfo = {
+  /** @docid */
   readonly error?: Error;
 };
 
@@ -2339,6 +2345,7 @@ export type KeyboardNavigation = {
  * @namespace DevExpress.common.grids
  */
 export type KeyDownInfo = {
+  /** @docid */
   handled: boolean;
 };
 
@@ -2401,7 +2408,12 @@ export type LoadPanel = {
  * @namespace DevExpress.common.grids
  */
 export interface NewRowInfo<TRowData = any> {
+  /** @docid */
   data: TRowData;
+  /**
+   * @docid
+   * @type Promise<void>
+   */
   promise?: PromiseLike<void>;
 }
 
@@ -2699,8 +2711,11 @@ export type RowDraggingTemplateData<TRowData = any> = {
  * @namespace DevExpress.common.grids
  */
 export type RowInsertedInfo<TRowData = any, TKey = any> = {
+  /** @docid */
   readonly data: TRowData;
+  /** @docid */
   readonly key: TKey;
+  /** @docid */
   readonly error: Error;
 };
 
@@ -2710,7 +2725,12 @@ export type RowInsertedInfo<TRowData = any, TKey = any> = {
  * @namespace DevExpress.common.grids
  */
 export type RowInsertingInfo<TRowData = any> = {
+  /** @docid */
   data: TRowData;
+  /**
+   * @docid
+   * @type Promise<void>
+   */
   cancel: boolean | PromiseLike<void>;
 };
 
@@ -2720,6 +2740,7 @@ export type RowInsertingInfo<TRowData = any> = {
  * @namespace DevExpress.common.grids
  */
 export type RowKeyInfo<TKey = any> = {
+  /** @docid */
   readonly key: TKey;
 };
 
@@ -2729,8 +2750,11 @@ export type RowKeyInfo<TKey = any> = {
  * @namespace DevExpress.common.grids
  */
 export interface RowRemovedInfo<TRowData = any, TKey = any> {
+  /** @docid */
   readonly data: TRowData;
+  /** @docid */
   readonly key: TKey;
+  /** @docid */
   readonly error: Error;
 }
 
@@ -2740,8 +2764,14 @@ export interface RowRemovedInfo<TRowData = any, TKey = any> {
  * @namespace DevExpress.common.grids
  */
 export interface RowRemovingInfo<TRowData = any, TKey = any> {
+  /** @docid */
   readonly data: TRowData;
+  /** @docid */
   readonly key: TKey;
+  /**
+   * @docid
+   * @type boolean|Promise<void>
+   */
   cancel: boolean | PromiseLike<void>;
 }
 
@@ -2751,8 +2781,11 @@ export interface RowRemovingInfo<TRowData = any, TKey = any> {
  * @namespace DevExpress.common.grids
  */
 export interface RowUpdatedInfo<TRowData = any, TKey = any> {
+  /** @docid */
   readonly data: TRowData;
+  /** @docid */
   readonly key: TKey;
+  /** @docid */
   readonly error: Error;
 }
 
@@ -2762,9 +2795,22 @@ export interface RowUpdatedInfo<TRowData = any, TKey = any> {
  * @namespace DevExpress.common.grids
  */
 export interface RowUpdatingInfo<TRowData = any, TKey = any> {
+  /**
+   * @docid
+   * @type object
+   */
   readonly oldData: TRowData;
+  /**
+   * @docid
+   * @type object
+   */
   newData: DeepPartial<TRowData>;
+  /** @docid */
   readonly key: TKey;
+  /**
+   * @docid
+   * @type boolean|Promise<void>
+   */
   cancel: boolean | PromiseLike<void>;
 }
 
@@ -2774,12 +2820,29 @@ export interface RowUpdatingInfo<TRowData = any, TKey = any> {
  * @namespace DevExpress.common.grids
  */
 export interface RowValidatingInfo<TRowData = any, TKey = any> {
+  /** @docid */
   readonly brokenRules: Array<ValidationRule>;
+  /** @docid */
   isValid: boolean;
+  /** @docid */
   readonly key: TKey;
+  /**
+   * @docid
+   * @type object
+   */
   readonly newData: DeepPartial<TRowData>;
+  /**
+   * @docid
+   * @type object
+   */
+  /** @docid */
   readonly oldData: TRowData;
+  /** @docid */
   errorText: string;
+  /**
+   * @docid
+   * @type Promise<void>
+   */
   promise?: PromiseLike<void>;
 }
 
@@ -2789,8 +2852,17 @@ export interface RowValidatingInfo<TRowData = any, TKey = any> {
  * @namespace DevExpress.common.grids
  */
 export interface SavingInfo<TRowData = any, TKey = any> {
+  /**
+   * @docid
+   * @type Array<DataChange>
+   */
   changes: Array<DataChange<TRowData, TKey>>;
+  /**
+   * @docid
+   * @type Promise<void>
+   */
   promise?: PromiseLike<void>;
+  /** @docid */
   cancel: boolean;
 }
 
@@ -2921,12 +2993,30 @@ export interface SelectionBase {
 }
 
 /**
+ * @docid _common_grids_SelectionChangedInfo
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface SelectionChangedInfo<TRowData = any, TKey = any> {
+  /**
+   * @docid _common_grids_SelectionChangedInfo.currentSelectedRowKeys
+   * @type Array<any>
+   */
   readonly currentSelectedRowKeys: Array<TKey>;
+  /**
+   * @docid _common_grids_SelectionChangedInfo.currentDeselectedRowKeys
+   * @type Array<any>
+   */
   readonly currentDeselectedRowKeys: Array<TKey>;
+  /**
+   * @docid _common_grids_SelectionChangedInfo.selectedRowKeys
+   * @type Array<any>
+   */
   readonly selectedRowKeys: Array<TKey>;
+  /**
+   * @docid _common_grids_SelectionChangedInfo.selectedRowsData
+   * @type Array<Object>
+   */
   readonly selectedRowsData: Array<TRowData>;
 }
 
@@ -3033,5 +3123,9 @@ export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
  * @namespace DevExpress.common.grids
  */
 export interface ToolbarPreparingInfo {
+  /**
+   * @docid
+   * @type dxToolbarOptions
+   */
   toolbarOptions: ToolbarProperties;
 }
