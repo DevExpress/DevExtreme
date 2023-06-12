@@ -305,7 +305,8 @@ const baseFixedColumns = {
 
   _getCellElementsCore(rowIndex) {
     const cellElements = this.callBase.apply(this, arguments);
-    const isGroupRow = cellElements.parent().hasClass(GROUP_ROW_CLASS);
+
+    const isGroupRow = cellElements?.parent().hasClass(GROUP_ROW_CLASS);
     const headerRowIndex = this.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
 
     if (this._fixedTableElement && cellElements) {
