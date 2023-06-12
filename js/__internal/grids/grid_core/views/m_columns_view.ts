@@ -1086,7 +1086,12 @@ const columnsViewMembers = {
   },
 
   _getCellElementsCore(rowIndex) {
+    if (rowIndex < 0) {
+      return undefined;
+    }
+
     const $row = this._getRowElements().eq(rowIndex);
+
     return $row.children();
   },
 
@@ -1096,7 +1101,7 @@ const columnsViewMembers = {
     const $cells = that.getCellElements(rowIndex);
     const columnVisibleIndex = that._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
 
-    if ($cells.length && columnVisibleIndex >= 0) {
+    if ($cells?.length && columnVisibleIndex >= 0) {
       $cell = $cells.eq(columnVisibleIndex);
     }
 
@@ -1164,7 +1169,7 @@ const columnsViewMembers = {
         cellPosition.rowIndex = cellPosition.rowIndex < $rows.length ? cellPosition.rowIndex : $rows.length - 1;
       }
       $cells = cells || this.getCellElements(cellPosition.rowIndex);
-      if ($cells && $cells.length > 0) {
+      if ($cells?.length > 0) {
         return $cells.eq($cells.length > cellPosition.columnIndex ? cellPosition.columnIndex : $cells.length - 1);
       }
     }
