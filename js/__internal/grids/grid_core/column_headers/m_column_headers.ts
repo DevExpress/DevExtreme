@@ -571,7 +571,10 @@ export const columnHeadersModule = {
             rowIndex = rowIndex || 0;
             for (i = rowIndex; i < rowCount; i++) {
               columnElements = that.getCellElements(i);
-              each(that.getColumns(i), setColumnOpacity);
+
+              if (columnElements) {
+                each(that.getColumns(i), setColumnOpacity);
+              }
             }
           }
         },
