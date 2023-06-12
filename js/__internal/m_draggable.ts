@@ -630,7 +630,7 @@ const Draggable = (DOMComponent as any).inherit({
     const elementOffset = $element.offset();
 
     if (!this.option('clone') && this.option('autoScroll')) {
-      this._initScrollTop = this._getScrollable($(this.element()))?.scrollTop() ?? 0;
+      this._initScrollTop = this._getScrollableScrollTop();
     }
     const initialOffset = this._getDraggableElementOffset(elementOffset.left, elementOffset.top);
     const $dragElement = this._$dragElement = this._createDragElement($element);
@@ -725,7 +725,7 @@ const Draggable = (DOMComponent as any).inherit({
     const startPosition = this._startPosition;
     const initScrollTop = this._initScrollTop ?? 0;
     const isFixedPosition = ($(this.element()) as any).css('position') === 'fixed';
-    const scrollTop = this._getScrollable($(this.element()))?.scrollTop() ?? 0;
+    const scrollTop = this._getScrollableScrollTop();
 
     const result: Offset = {
       left: (startPosition?.left ?? 0) + initialOffsetX,
@@ -790,6 +790,9 @@ const Draggable = (DOMComponent as any).inherit({
     });
 
     return $scrollable;
+  },
+  _getScrollableScrollTop() {
+    return this._getScrollable(this.element())?.scrollTop() ?? 0;
   },
 
   _defaultActionArgs() {
