@@ -1086,6 +1086,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   _resetEditRowKey() {
+    this._refocusEditCell = false;
     this._setEditRowKey(null, true);
   }
 
