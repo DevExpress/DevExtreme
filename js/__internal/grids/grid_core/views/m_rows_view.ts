@@ -292,7 +292,7 @@ class RowsView extends ColumnsView {
 
   _renderLoadPanel(...args: any[]) {
     // @ts-expect-error
-    return gridCoreUtils.renderLoadPanel(...args);
+    return gridCoreUtils.renderLoadPanel.apply(this, ...args);
   }
 
   _renderContent(contentElement, tableElement, isFixedTableRendering?: boolean) {
@@ -765,7 +765,7 @@ class RowsView extends ColumnsView {
 
   renderNoDataText(...args: any[]) {
     // @ts-expect-error
-    return gridCoreUtils.renderNoDataText(...args);
+    return gridCoreUtils.renderNoDataText.apply(this, ...args);
   }
 
   getCellOptions(rowIndex, columnIdentifier) {
