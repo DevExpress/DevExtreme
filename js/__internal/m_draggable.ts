@@ -792,7 +792,7 @@ const Draggable = (DOMComponent as any).inherit({
     return $scrollable;
   },
   _getScrollableScrollTop() {
-    return this._getScrollable(this.element())?.scrollTop() ?? 0;
+    return this._getScrollable($(this.element()))?.scrollTop() ?? 0;
   },
 
   _defaultActionArgs() {
