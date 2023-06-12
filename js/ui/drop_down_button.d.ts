@@ -350,6 +350,12 @@ export interface dxDropDownButtonItem extends dxListItem {
      * @default null
      * @type function
      * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
+     * @type_function_param1_field component:dxDropDownButton
+     * @type_function_param1_field element:any
+     * @type_function_param1_field event:event
+     * @type_function_param1_field itemData:object
+     * @type_function_param1_field itemElement:DxElement
+     * @type_function_param1_field model:any
      * @public
      */
      onClick?: ((e: ItemClickEvent) => void) | string;
