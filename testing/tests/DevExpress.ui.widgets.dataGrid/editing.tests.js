@@ -7864,6 +7864,9 @@ QUnit.module('Editing with real dataController', {
                 {
                     cssClass: 'mybutton',
                     template: function($cellElement, options) {
+                        // TODO: remove after adding typings to editing module
+                        assert.ok(options.column);
+
                         return $('<div/>').addClass('mybuttontext').text('My button');
                     }
                 }

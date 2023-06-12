@@ -2139,7 +2139,8 @@ class EditingControllerImpl extends modules.ViewController {
       $container.append($button, '&nbsp;');
 
       if (button.template) {
-        this._rowsView.renderTemplate($button, button.template, { ...options, column: undefined }, true, change);
+        options.renderAsync = false;
+        this._rowsView.renderTemplate($button, button.template, options, true, change);
       }
     }
   }
