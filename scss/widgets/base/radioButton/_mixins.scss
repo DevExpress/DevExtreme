@@ -126,13 +126,15 @@
         .dx-radiobutton-icon {
           background-color: $active-bg;
         }
+
+        .dx-radiobutton-icon-dot {
+          border-color: $border-color;
+        }
       }
 
       &.dx-state-focused {
-        &:not(.dx-state-active) {
-          .dx-radiobutton-icon {
-            border-color: $focused-border-color;
-          }
+        .dx-radiobutton-icon {
+          border-color: $focused-border-color;
         }
       }
     }
