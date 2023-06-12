@@ -546,7 +546,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     if (
       this.option('selection')
-      && this.option('selection').mode !== 'none'
+      && (this.option('selection') as any).mode !== 'none'
       && !isEditing
     ) {
       const isFocusedRowElement = this._getElementType($target) === 'row'
@@ -2181,6 +2181,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   _applyTabIndexToElement($element) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const tabIndex = this.option('tabIndex') || 0;
     $element.attr('tabindex', isDefined(tabIndex) ? tabIndex : 0);
   }

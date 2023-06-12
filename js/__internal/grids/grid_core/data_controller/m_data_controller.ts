@@ -550,9 +550,9 @@ export class DataController extends ControllerWithDataMixin {
     this.pushed.fire(changes);
   }
 
-  fireError() {
-    // @ts-expect-error
-    this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  fireError(...args: any[]) {
+    this.dataErrorOccurred.fire(errors.Error.apply(errors, args));
   }
 
   _setPagingOptions(dataSource): any {
@@ -562,6 +562,7 @@ export class DataController extends ControllerWithDataMixin {
     const scrollingMode = this.option('scrolling.mode');
     const appendMode = scrollingMode === 'infinite';
     const virtualMode = scrollingMode === 'virtual';
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const paginate = pagingEnabled || virtualMode || appendMode;
     let isPaginateChanged = false;
     let isPageSizeChanged = false;
@@ -1264,8 +1265,7 @@ export class DataController extends ControllerWithDataMixin {
     return dataSourceAdapter;
   }
 
-  isLocalStore(store) {
-    store = store || this.store();
+  isLocalStore(store = this.store()) {
     return store instanceof ArrayStore;
   }
 
