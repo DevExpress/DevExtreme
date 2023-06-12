@@ -2205,6 +2205,9 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type AdaptiveDetailRowPreparingInfo = {
+    /**
+     * [descr:AdaptiveDetailRowPreparingInfo.formOptions]
+     */
     readonly formOptions: any;
   };
   export type ApplyChangesMode = 'instantly' | 'onDemand';
@@ -2696,6 +2699,9 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type DataChangeInfo<TRowData = any, TKey = any> = {
+    /**
+     * [descr:DataChangeInfo.changes]
+     */
     readonly changes: Array<DataChange<TRowData, TKey>>;
   };
   export type DataChangeType = 'insert' | 'update' | 'remove';
@@ -2704,6 +2710,9 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type DataErrorOccurredInfo = {
+    /**
+     * [descr:DataErrorOccurredInfo.error]
+     */
     readonly error?: Error;
   };
   export type DataRenderMode = 'standard' | 'virtual';
@@ -3764,6 +3773,9 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type KeyDownInfo = {
+    /**
+     * [descr:KeyDownInfo.handled]
+     */
     handled: boolean;
   };
   /**
@@ -3812,7 +3824,13 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface NewRowInfo<TRowData = any> {
+    /**
+     * [descr:NewRowInfo.data]
+     */
     data: TRowData;
+    /**
+     * [descr:NewRowInfo.promise]
+     */
     promise?: PromiseLike<void>;
   }
   export type NewRowPosition =
@@ -4049,8 +4067,17 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type RowInsertedInfo<TRowData = any, TKey = any> = {
+    /**
+     * [descr:RowInsertedInfo.data]
+     */
     readonly data: TRowData;
+    /**
+     * [descr:RowInsertedInfo.key]
+     */
     readonly key: TKey;
+    /**
+     * [descr:RowInsertedInfo.error]
+     */
     readonly error: Error;
   };
   /**
@@ -4058,7 +4085,13 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type RowInsertingInfo<TRowData = any> = {
+    /**
+     * [descr:RowInsertingInfo.data]
+     */
     data: TRowData;
+    /**
+     * [descr:RowInsertingInfo.cancel]
+     */
     cancel: boolean | PromiseLike<void>;
   };
   /**
@@ -4066,6 +4099,9 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type RowKeyInfo<TKey = any> = {
+    /**
+     * [descr:RowKeyInfo.key]
+     */
     readonly key: TKey;
   };
   /**
@@ -4073,8 +4109,17 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface RowRemovedInfo<TRowData = any, TKey = any> {
+    /**
+     * [descr:RowRemovedInfo.data]
+     */
     readonly data: TRowData;
+    /**
+     * [descr:RowRemovedInfo.key]
+     */
     readonly key: TKey;
+    /**
+     * [descr:RowRemovedInfo.error]
+     */
     readonly error: Error;
   }
   /**
@@ -4082,8 +4127,17 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface RowRemovingInfo<TRowData = any, TKey = any> {
+    /**
+     * [descr:RowRemovingInfo.data]
+     */
     readonly data: TRowData;
+    /**
+     * [descr:RowRemovingInfo.key]
+     */
     readonly key: TKey;
+    /**
+     * [descr:RowRemovingInfo.cancel]
+     */
     cancel: boolean | PromiseLike<void>;
   }
   /**
@@ -4091,8 +4145,17 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface RowUpdatedInfo<TRowData = any, TKey = any> {
+    /**
+     * [descr:RowUpdatedInfo.data]
+     */
     readonly data: TRowData;
+    /**
+     * [descr:RowUpdatedInfo.key]
+     */
     readonly key: TKey;
+    /**
+     * [descr:RowUpdatedInfo.error]
+     */
     readonly error: Error;
   }
   /**
@@ -4100,9 +4163,21 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface RowUpdatingInfo<TRowData = any, TKey = any> {
+    /**
+     * [descr:RowUpdatingInfo.oldData]
+     */
     readonly oldData: TRowData;
+    /**
+     * [descr:RowUpdatingInfo.newData]
+     */
     newData: DevExpress.core.DeepPartial<TRowData>;
+    /**
+     * [descr:RowUpdatingInfo.key]
+     */
     readonly key: TKey;
+    /**
+     * [descr:RowUpdatingInfo.cancel]
+     */
     cancel: boolean | PromiseLike<void>;
   }
   /**
@@ -4110,12 +4185,37 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface RowValidatingInfo<TRowData = any, TKey = any> {
+    /**
+     * [descr:RowValidatingInfo.brokenRules]
+     */
     readonly brokenRules: Array<ValidationRule>;
+    /**
+     * [descr:RowValidatingInfo.isValid]
+     */
     isValid: boolean;
+    /**
+     * [descr:RowValidatingInfo.key]
+     */
     readonly key: TKey;
+    /**
+     * [descr:RowValidatingInfo.newData]
+     */
     readonly newData: DevExpress.core.DeepPartial<TRowData>;
+    /**
+     * @docid
+     * @type object
+     */
+    /**
+     * [descr:RowValidatingInfo.oldData]
+     */
     readonly oldData: TRowData;
+    /**
+     * [descr:RowValidatingInfo.errorText]
+     */
     errorText: string;
+    /**
+     * [descr:RowValidatingInfo.promise]
+     */
     promise?: PromiseLike<void>;
   }
   /**
@@ -4123,8 +4223,17 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface SavingInfo<TRowData = any, TKey = any> {
+    /**
+     * [descr:SavingInfo.changes]
+     */
     changes: Array<DataChange<TRowData, TKey>>;
+    /**
+     * [descr:SavingInfo.promise]
+     */
     promise?: PromiseLike<void>;
+    /**
+     * [descr:SavingInfo.cancel]
+     */
     cancel: boolean;
   }
   /**
@@ -4225,12 +4334,25 @@ declare module DevExpress.common.grids {
     mode?: SingleMultipleOrNone;
   }
   /**
+   * [descr:_common_grids_SelectionChangedInfo]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface SelectionChangedInfo<TRowData = any, TKey = any> {
+    /**
+     * [descr:_common_grids_SelectionChangedInfo.currentSelectedRowKeys]
+     */
     readonly currentSelectedRowKeys: Array<TKey>;
+    /**
+     * [descr:_common_grids_SelectionChangedInfo.currentDeselectedRowKeys]
+     */
     readonly currentDeselectedRowKeys: Array<TKey>;
+    /**
+     * [descr:_common_grids_SelectionChangedInfo.selectedRowKeys]
+     */
     readonly selectedRowKeys: Array<TKey>;
+    /**
+     * [descr:_common_grids_SelectionChangedInfo.selectedRowsData]
+     */
     readonly selectedRowsData: Array<TRowData>;
   }
   export type SelectionColumnDisplayMode =
@@ -4300,6 +4422,9 @@ declare module DevExpress.common.grids {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface ToolbarPreparingInfo {
+    /**
+     * [descr:ToolbarPreparingInfo.toolbarOptions]
+     */
     toolbarOptions: DevExpress.ui.dxToolbar.Properties;
   }
 }
