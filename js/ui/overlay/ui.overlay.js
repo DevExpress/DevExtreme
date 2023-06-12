@@ -447,6 +447,20 @@ const Overlay = Widget.inherit({
         return isOpen;
     },
 
+    _scrollActiveElementIntoView() {
+        const activeElement = domAdapter.getActiveElement();
+
+        const { scrollIntoViewIfNeeded } = activeElement;
+
+        if(scrollIntoViewIfNeeded) {
+            activeElement.scrollIntoViewIfNeeded();
+
+            return;
+        }
+
+        activeElement.scrollIntoView(false);
+    },
+
     _initResizeRequestAnimationFrame() {
         this._resizeAnimationFrameId = requestAnimationFrame(() => {
             this._pendingUpdate = false;
@@ -461,20 +475,6 @@ const Overlay = Widget.inherit({
 
             this._scrollActiveElementIntoView();
         });
-    },
-
-    _scrollActiveElementIntoView() {
-        const activeElement = domAdapter.getActiveElement();
-
-        const { scrollIntoViewIfNeeded } = activeElement;
-
-        if(scrollIntoViewIfNeeded) {
-            activeElement.scrollIntoViewIfNeeded();
-
-            return;
-        }
-
-        activeElement.scrollIntoView(false);
     },
 
     _visualViewportEventHandler() {
@@ -1291,12 +1291,8 @@ const Overlay = Widget.inherit({
         this._toggleSubscriptions(false);
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
-
-        const visualViewportEventKeys = Object.keys(visualViewportEventMap);
-
-        visualViewportEventKeys.forEach(event => {
-            this._toggleVisualViewportSubscription(false, event);
-        });
+        this._toggleVisualViewportSubscription(false, visualViewportEventMap.resize);
+        this._toggleVisualViewportSubscription(false, visualViewportEventMap.scroll);
 
         this._actions = null;
         this._parentsScrollSubscriptionInfo = null;
