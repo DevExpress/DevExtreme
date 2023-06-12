@@ -4073,7 +4073,6 @@ QUnit.module('Editing', baseModuleConfig, () => {
     // T1169962
     QUnit.test('Not focus last checkbox after focusing out first checkbox', function(assert) {
         // arrange
-        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
         const dataGrid = createDataGrid({
             keyExpr: 'id',
             dataSource: [
