@@ -78,7 +78,7 @@ test('Radio buttons placed into the template should not be selected after clicki
   }, '#template');
 });
 
-test('component in scaled container(T1165339)', async (t) => {
+test('Dot of Radio button placed in scaled container should have valid centering(T1165339)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'RadioGroup in scaled container.png', { element: '#scaled' });
