@@ -233,7 +233,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     };
 
     if (item.key === undefined) {
-      // @ts-expect-error
       this._dataController.fireError('E1043');
       return;
     }
@@ -570,7 +569,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   prepareEditButtons(headerPanel) {
-    const editingOptions: any = this.option('editing') || {};
+    const editingOptions: any = this.option('editing') ?? {};
     const buttonItems = super.prepareEditButtons(headerPanel);
 
     if ((editingOptions.allowUpdating || editingOptions.allowAdding || editingOptions.allowDeleting) && this.isBatchEditMode()) {

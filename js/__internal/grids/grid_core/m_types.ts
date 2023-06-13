@@ -6,6 +6,8 @@ import { dxElementWrapper } from '@js/core/renderer';
 import { GridBase, GridBaseOptions } from '@js/ui/data_grid';
 import Widget from '@js/ui/widget/ui.widget';
 
+type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
+
 // Data types
 export type RowKey = unknown;
 
@@ -16,11 +18,11 @@ type OptionsMethod<TOptions> =
   (
     <TPropertyName extends string>(
       optionName: TPropertyName
-    ) => PropertyType<TOptions, TPropertyName>
+    ) => GridPropertyType<TOptions, TPropertyName>
   ) & (
     <TPropertyName extends string>(
       optionName: TPropertyName,
-      optionValue: PropertyType<TOptions, TPropertyName>
+      optionValue: GridPropertyType<TOptions, TPropertyName>
     ) => void
   );
 
@@ -59,9 +61,15 @@ export interface InternalGrid extends GridBaseType {
 }
 
 export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown> {
+  dataRowTemplate?: any;
+
   loadingTimeout?: number;
 
   useLegacyKeyboardNavigation?: boolean;
+
+  rowTemplate?: any;
+
+  forceApplyBindings?: any;
 }
 
 // todo: move to upper .d.ts files
@@ -99,8 +107,8 @@ type DotNestedKeys<T, RLIMIT extends number = 10> =
 interface OptionChangedArgs<T extends string = string> {
   name: T extends `${infer TName}.${string}` ? TName : T;
   fullName: T;
-  previousValue: PropertyType<InternalGridOptions, T>;
-  value: PropertyType<InternalGridOptions, T>;
+  previousValue: GridPropertyType<InternalGridOptions, T>;
+  value: GridPropertyType<InternalGridOptions, T>;
   handled: boolean;
 }
 
@@ -144,7 +152,7 @@ type ViewTypes = {
 
 type SilentOptionType = <TPropertyName extends string>(
   optionName: TPropertyName,
-  optionValue: PropertyType<InternalGridOptions, TPropertyName>
+  optionValue: GridPropertyType<InternalGridOptions, TPropertyName>
 ) => void;
 
 export interface ClassStaticMembers {
@@ -158,8 +166,6 @@ declare class ModuleItem {
   component: InternalGrid;
 
   name: string;
-
-  callBase: any;
 
   _createComponent: InternalGrid['_createComponent'];
 
