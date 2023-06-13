@@ -10,7 +10,6 @@
 // adduse
 
 $material-radiobutton-border-width: 2px;
-$material-radiobutton-inner-size: $material-radiobutton-size - $material-radiobutton-border-width * 2;
 $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 $dot-icon-border-width: math.div($material-radiobutton-size - $material-radiobutton-border-width * 2 - $material-radiobutton-dot-size, 2);
 

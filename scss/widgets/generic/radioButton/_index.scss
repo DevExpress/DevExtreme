@@ -10,7 +10,6 @@
 // adduse
 
 $generic-radiobutton-border-width: 1px;
-$generic-radiobutton-inner-size: $generic-radiobutton-size - $generic-radiobutton-border-width * 2;
 $dot-icon-border-width: math.div($generic-radiobutton-size - $generic-radiobutton-border-width * 2 - $generic-radiobutton-dot-size, 2);
 
 .dx-radiobutton-icon {
@@ -65,7 +64,7 @@ $dot-icon-border-width: math.div($generic-radiobutton-size - $generic-radiobutto
 
   &.dx-state-focused {
     .dx-radiobutton-icon {
-      border: $generic-radiobutton-border-width solid $radiobutton-focused-border-color;
+      border-color: $radiobutton-focused-border-color;
     }
   }
 
