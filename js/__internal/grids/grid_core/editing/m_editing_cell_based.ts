@@ -127,8 +127,9 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
           const visibleColumns = this._columnsController.getVisibleColumns();
           // TODO jsdmitry: Move this code to _rowClick method of rowsView
           const allowEditing = visibleColumns[columnIndex]?.allowEditing;
+          const isEditingCell = this.isEditCell(rowIndex, columnIndex);
 
-          result = result && !allowEditing && !this.isEditCell(rowIndex, columnIndex);
+          result = result && !allowEditing && !isEditingCell;
         }
       }
     }
@@ -391,7 +392,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       changes.forEach(({ key }) => {
         const rowIndex = this._dataController.getRowIndexByKey(key);
         for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
-          this._rowsView._getCellElement(rowIndex, columnIndex)?.removeClass(CELL_MODIFIED_CLASS);
+          const cellElement = this._rowsView._getCellElement(rowIndex, columnIndex);
+          cellElement?.removeClass(CELL_MODIFIED_CLASS);
         }
       });
     }

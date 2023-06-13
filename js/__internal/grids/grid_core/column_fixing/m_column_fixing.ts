@@ -1,5 +1,5 @@
 import { move } from '@js/animation/translator';
-import $ from '@js/core/renderer';
+import $, { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -303,7 +303,7 @@ const baseFixedColumns = {
     }
   },
 
-  _getCellElementsCore(rowIndex) {
+  _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
     const cellElements = this.callBase.apply(this, arguments);
 
     const isGroupRow = cellElements?.parent().hasClass(GROUP_ROW_CLASS);
