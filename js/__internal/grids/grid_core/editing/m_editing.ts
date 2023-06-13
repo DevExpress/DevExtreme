@@ -159,7 +159,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   getEditMode() {
-    const editMode = this.option('editing.mode');
+    const editMode: any = this.option('editing.mode');
 
     if (EDIT_MODES.includes(editMode)) {
       return editMode;
@@ -203,12 +203,12 @@ class EditingControllerImpl extends modules.ViewController {
     return newRowPosition;
   }
 
-  getChanges() {
+  getChanges(): any {
     return this.option(EDITING_CHANGES_OPTION_NAME);
   }
 
   getInsertRowCount() {
-    const changes = this.option(EDITING_CHANGES_OPTION_NAME);
+    const changes: any = this.option(EDITING_CHANGES_OPTION_NAME);
     return changes.filter((change) => change.type === 'insert').length;
   }
 
@@ -311,7 +311,7 @@ class EditingControllerImpl extends modules.ViewController {
     const buttonName = getButtonName(button);
     const editingTexts = getEditingTexts(options);
     const methodName = METHOD_NAMES[buttonName];
-    const editingOptions = this.option('editing');
+    const editingOptions: any = this.option('editing');
     const actionName = ACTION_OPTION_NAMES[buttonName];
     const allowAction = actionName ? editingOptions[actionName] : true;
 
@@ -569,7 +569,6 @@ class EditingControllerImpl extends modules.ViewController {
     const key = this._dataController.getKeyByRowIndex(rowIndex);
 
     if (key === undefined) {
-      // @ts-expect-error
       this._dataController.fireError('E1043');
       return;
     }
@@ -868,7 +867,6 @@ class EditingControllerImpl extends modules.ViewController {
     const store = dataController.store();
 
     if (!store) {
-      // @ts-expect-error
       dataController.fireError('E1052', this.component.NAME);
       // @ts-expect-error
       return new Deferred().reject();
@@ -1112,7 +1110,6 @@ class EditingControllerImpl extends modules.ViewController {
     }
 
     if (item.key === undefined) {
-      // @ts-expect-error
       this._dataController.fireError('E1043');
       return;
     }
@@ -1882,7 +1879,6 @@ class EditingControllerImpl extends modules.ViewController {
     const deferred = new Deferred();
 
     if (rowKey === undefined) {
-      // @ts-expect-error
       this._dataController.fireError('E1043');
     }
 
@@ -2155,7 +2151,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   prepareButtonItem(headerPanel, name, methodName, sortIndex) {
-    const editingTexts = this.option('editing.texts') || {};
+    const editingTexts = this.option('editing.texts') ?? {};
 
     const titleButtonTextByClassNames = {
       revert: editingTexts.cancelAllChanges,
@@ -2198,7 +2194,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   prepareEditButtons(headerPanel) {
-    const editingOptions: any = this.option('editing') || {};
+    const editingOptions: any = this.option('editing') ?? {};
     const buttonItems: any = [];
 
     if (editingOptions.allowAdding) {
@@ -2234,7 +2230,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   allowUpdating(options, eventName?) {
-    const startEditAction = this.option('editing.startEditAction') || DEFAULT_START_EDIT_ACTION;
+    const startEditAction = this.option('editing.startEditAction') ?? DEFAULT_START_EDIT_ACTION;
     const needCallback = arguments.length > 1 ? startEditAction === eventName || eventName === 'down' : true;
 
     return needCallback && this._allowEditAction('allowUpdating', options);
