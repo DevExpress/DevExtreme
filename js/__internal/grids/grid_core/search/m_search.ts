@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-import { compileGetter } from '@js/core/utils/data';
+// @ts-expect-error
+import { compileGetter, toComparable } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
 import dataQuery from '@js/data/query';
 import messageLocalization from '@js/localization/message';
@@ -232,8 +233,10 @@ export const searchModule = {
 
         _getStringNormalizer() {
           const isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
-          return function (str) {
-            return isCaseSensitive ? str : str.toLowerCase();
+          const langParams = this.getController('data')?.getDataSource?.()?.loadOptions?.()?.langParams;
+
+          return function (str: string): string {
+            return toComparable(str, isCaseSensitive, langParams);
           };
         },
 
