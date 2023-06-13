@@ -1383,7 +1383,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   _fireOnSaving() {
-    const onSavingParams = {
+    const onSavingParams: any = {
       cancel: false,
       promise: null,
       changes: [...this.getChanges()],
