@@ -49,7 +49,8 @@ export type WidgetName =
 'dxValidator' |
 'dxHtmlEditor' |
 'dxFileUploader' |
-'dxDropDownBox';
+'dxDropDownBox' |
+'dxSpeedDialAction';
 
 export default async function createWidget(
   componentName: WidgetName,
