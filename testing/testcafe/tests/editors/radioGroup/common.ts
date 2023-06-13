@@ -9,7 +9,7 @@ fixture.disablePageReloads`Radio Group`
   .page(url(__dirname, '../../container.html'));
 
 test('Radio buttons placed into the template should not be selected after clicking the parent radio button (T816449)', async (t) => {
-  const parentGroup = new RadioGroup('#container');
+  const parentGroup = new RadioGroup('#template');
   const firstChildGroup = new RadioGroup(parentGroup.getItem().content.child().nth(0));
   const secondChildGroup = new RadioGroup(parentGroup.getItem(1).content.child());
   const thirdChildGroup = new RadioGroup(parentGroup.getItem(2).content.child());
