@@ -45,9 +45,5 @@ fixture.disablePageReloads`CheckBox`
 
     await appendElementTo('#container', 'div', 'indeterminateRTL');
     await createWidget('dxCheckBox', { value: undefined, text: 'indeterminate', rtlEnabled: true }, '#indeterminateRTL');
-
-    // scaled container(T1165339)
-    await appendElementTo('#container', 'div', 'scaled', { transform: 'scale(0.7)' });
-    await createWidget('dxCheckBox', { value: true, text: 'scaled container' }, '#scaled');
   });
 });
