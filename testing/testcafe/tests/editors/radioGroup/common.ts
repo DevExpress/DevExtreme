@@ -90,7 +90,7 @@ test('component in scaled container(T1165339)', async (t) => {
   await appendElementTo('#container', 'div', 'scaled', { transform: 'scale(0.7)' });
 
   await createWidget('dxRadioGroup', {
-    value: true,
-    text: 'in scaled container',
+    items: ['One', 'Two', 'Three'],
+    value: 'Two',
   }, '#scaled');
 });
