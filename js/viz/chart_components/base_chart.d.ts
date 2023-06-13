@@ -53,6 +53,7 @@ import {
  * @hidden
  */
 export interface PointInteractionInfo {
+    /** @docid */
     readonly target: basePointObject;
 }
 

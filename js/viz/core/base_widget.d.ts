@@ -39,7 +39,9 @@ import {
  * @hidden
  */
 export interface ExportInfo {
+  /** @docid */
   readonly fileName: string;
+  /** @docid */
   readonly format: string;
 }
 
@@ -48,6 +50,7 @@ export interface ExportInfo {
  * @hidden
  */
 export interface IncidentInfo {
+  /** @docid */
   readonly target: any;
 }
 

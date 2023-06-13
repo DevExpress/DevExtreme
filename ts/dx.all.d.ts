@@ -30068,6 +30068,9 @@ declare module DevExpress.viz {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface PointInteractionInfo {
+      /**
+       * [descr:PointInteractionInfo.target]
+       */
       readonly target: basePointObject;
     }
     /**
@@ -30924,7 +30927,13 @@ declare module DevExpress.viz {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface ExportInfo {
+      /**
+       * [descr:ExportInfo.fileName]
+       */
       readonly fileName: string;
+      /**
+       * [descr:ExportInfo.format]
+       */
       readonly format: string;
     }
     /**
@@ -30958,6 +30967,9 @@ declare module DevExpress.viz {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface IncidentInfo {
+      /**
+       * [descr:IncidentInfo.target]
+       */
       readonly target: any;
     }
   }
