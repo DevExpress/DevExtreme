@@ -81,7 +81,7 @@ test('Radio buttons placed into the template should not be selected after clicki
 test('Dot of Radio button placed in scaled container should have valid centering(T1165339)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'RadioGroup in scaled container.png', { element: '#scaled' });
+  await testScreenshot(t, takeScreenshot, 'RadioGroup in scaled container.png', { element: '#scaled', shouldTestInCompact: true });
 
   await t
     .expect(compareResults.isValid())
