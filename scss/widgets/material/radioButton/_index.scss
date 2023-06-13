@@ -48,6 +48,7 @@ $dot-icon-border-width: math.div($material-radiobutton-size - $material-radiobut
   border-color: $radiogroup-bg;
   background-color: $radiogroup-bg;
   border-style: solid;
+  transform: scale(0);
 }
 
 .dx-radiobutton-icon-checked {
@@ -56,6 +57,7 @@ $dot-icon-border-width: math.div($material-radiobutton-size - $material-radiobut
   .dx-radiobutton-icon-dot {
     background-color: $radiogroup-checked-bg;
     border-width: $dot-icon-border-width;
+    transform: scale(1);
   }
 }
 
