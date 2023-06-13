@@ -16,9 +16,8 @@
     "@angular/platform-browser": "~12.2.17",
     "@angular/platform-browser-dynamic": "~12.2.17",
     "@angular/router": "~12.2.17",
-    "devextreme": "23.1-next",
-    "devextreme-angular": "~23.1.0",
     "core-js": "^2.6.12",
+    "devextreme-angular": "~23.1.0",
     "rxjs": "^6.6.7",
     "tslib": "^1.14.1",
     "zone.js": "^0.13.0"
@@ -29,6 +28,7 @@
     "@angular/compiler-cli": "~12.2.17",
     "@angular/language-service": "~12.2.17",
     "@types/node": "~8.10.66",
+    "devextreme": "23.1-next",
     "ts-node": "~7.0.1",
     "typescript": "~4.2.3"
   }

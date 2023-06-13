@@ -25,6 +25,12 @@ module.exports = function(config) {
             'junit'
         ],
 
+        client: {
+            jasmine: {
+              random: false,
+            }
+        },
+
         junitReporter: {
             outputFile: 'test-results.xml'
         },

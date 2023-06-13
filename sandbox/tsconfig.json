@@ -19,8 +19,8 @@
       "dom"
     ],
     "paths": {
-      "devextreme-angular": ["./node_modules/devextreme-angular/npm/dist"],
-      "devextreme-angular/*": ["./node_modules/devextreme-angular/npm/dist/*"]
+      "devextreme-angular": ["../../node_modules/devextreme-angular/npm/dist"],
+      "devextreme-angular/*": ["../../node_modules/devextreme-angular/npm/dist/*"]
     }
   }
 }
