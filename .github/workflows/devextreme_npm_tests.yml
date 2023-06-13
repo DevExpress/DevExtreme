@@ -204,11 +204,11 @@ jobs:
 
     - name: Build with Angular 12
       working-directory: ../devextreme-angular-repo
-      run: npm run build --workspace devextreme-angular
+      run: npm run build
 
     - name: Run tests with Angular 12
       working-directory: ../devextreme-angular-repo
-      run: npm run test:dev --workspace devextreme-angular
+      run: npm run test:dev --workspace=devextreme-angular
 
   test_bundlers:
     name: Bundlers tests
