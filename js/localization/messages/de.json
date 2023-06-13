@@ -144,7 +144,7 @@
         "dxDataGrid-ariaFilterCell": "Filterzelle",
         "dxDataGrid-ariaCollapse": "Zusammenklappen",
         "dxDataGrid-ariaExpand": "Aufklappen",
-        "dxDataGrid-ariaDataGrid": "Datentabelle",
+        "dxDataGrid-ariaDataGrid": "Datentabelle mit {0} Zeilen und {1} Spalten",
         "dxDataGrid-ariaSearchInGrid": "Suchen in der Datentabelle",
         "dxDataGrid-ariaSelectAll": "Alle auswählen",
         "dxDataGrid-ariaSelectRow": "Zeile auswählen",
