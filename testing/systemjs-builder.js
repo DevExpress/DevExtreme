@@ -220,7 +220,11 @@ const transpileJsVendors = async() => {
 
             return writeFileSync(
                 destPath,
-                buildSystemJSModule('', code.replaceAll('module.exports', '_exports'))
+                buildSystemJSModule(
+                    '',
+                    code.replaceAll('exports', '_exports')
+                        .replaceAll('module.exports', '_exports')
+                )
             );
         }),
     );
