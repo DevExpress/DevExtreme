@@ -558,7 +558,7 @@ const resizingControllerMembers = {
     that._initPostRenderHandlers();
 
     // T335767
-    if (!that._checkSize(checkSize)) {
+    if (checkSize && !this._isSizeChanged()) {
       return;
     }
 
@@ -595,18 +595,19 @@ const resizingControllerMembers = {
       groupElement.style.height = '';
     }
   },
-  _checkSize(checkSize) {
+  _isSizeChanged(needCheckHeight = true): boolean {
     const $rootElement = this.component.$element();
 
-    if (checkSize && (
-      this._lastWidth === getWidth($rootElement)
-            && this._lastHeight === getHeight($rootElement)
-            && this._devicePixelRatio === getWindow().devicePixelRatio
-            || !$rootElement.is(':visible')
-    )) {
-      return false;
+    const widthChanged = this._lastWidth !== getWidth($rootElement);
+    const heightChanged = this._lastHeight !== getHeight($rootElement) && needCheckHeight;
+    const pixelRationChanged = this._devicePixelRatio !== getWindow().devicePixelRatio;
+    const visible = $rootElement.is(':visible');
+
+    if ((widthChanged || heightChanged || pixelRationChanged) && visible) {
+      return true;
     }
-    return true;
+
+    return false;
   },
   _setScrollerSpacingCore() {
     const that = this;

@@ -228,7 +228,11 @@ export const headerPanelModule = {
         _updateDimensionsCore() {
           this.callBase.apply(this, arguments);
 
-          this.getView('headerPanel').updateToolbarDimensions();
+          const isSizeChanged = this._isSizeChanged(false);
+
+          if (isSizeChanged) {
+            this.getView('headerPanel').updateToolbarDimensions();
+          }
         },
       },
     },
