@@ -556,7 +556,7 @@ export const columnHeadersModule = {
           const columns = this._columnsController.getColumns();
           const column = columns && columns[columnIndex];
           const columnID = column && column.isBand && column.index;
-          const setColumnOpacity = function (column, index) {
+          const setColumnOpacity = (column, index) => {
             if (column.ownerBand === columnID) {
               columnElements.eq(index).css({ opacity: value });
 
