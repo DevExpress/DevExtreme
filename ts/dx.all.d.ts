@@ -4645,7 +4645,10 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
-    byKey?: (key: TKey) => PromiseLike<TItem>;
+    byKey?: (
+      key: TKey,
+      extraOptions?: LoadOptions<TItem>
+    ) => PromiseLike<TItem>;
     /**
      * [descr:CustomStoreOptions.cacheRawData]
      */

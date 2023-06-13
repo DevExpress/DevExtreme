@@ -54,10 +54,11 @@ export interface CustomStoreOptions<
     /**
      * @docid
      * @type_function_param1 key:object|string|number
+     * @type_function_param2 extraOptions:LoadOptions
      * @type_function_return Promise<any>
      * @public
      */
-    byKey?: ((key: TKey) => PromiseLike<TItem>);
+    byKey?: ((key: TKey, extraOptions?: LoadOptions<TItem>) => PromiseLike<TItem>);
     /**
      * @docid
      * @default true
