@@ -179,7 +179,6 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
 
   await takeScreenshot('T1155453-expanded-groups-with-fixed-content', dataGrid.element);
 
-  // act
   await dataGrid.apiCollapseAllGroups();
   await t.wait(200);
 
@@ -219,4 +218,45 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
   });
 
   await makeColumnHeadersViewTemplatesAsync(DATA_GRID_SELECTOR);
+});
+
+test('Group panel should set correct "max-width" after clear grouping', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.apiColumnOption('field2', 'groupIndex', 0);
+
+  await takeScreenshot('group-panel_all-toolbar-items-shown.png', dataGrid.element);
+
+  await dataGrid.apiClearGrouping();
+
+  await takeScreenshot('group-panel_all-toolbar-items-hidden.png', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: {
+      store: [
+        {
+          field1: '1', field2: '2', field3: '3', field4: '4', field5: '5',
+        },
+        {
+          field1: '11', field2: '22', field3: '33', field4: '44', field5: '55',
+        },
+      ],
+    },
+    width: 460,
+    groupPanel: {
+      emptyPanelText: 'Long long long long long long long long long long long text',
+      visible: true,
+    },
+    editing: { allowAdding: true, mode: 'batch' },
+    columnChooser: {
+      enabled: true,
+    },
+  });
 });

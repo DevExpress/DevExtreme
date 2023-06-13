@@ -472,6 +472,19 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiClearGrouping(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).clearGrouping(),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 

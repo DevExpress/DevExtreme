@@ -227,38 +227,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(dataGrid.columnOption('field2', 'groupIndex'), undefined, 'field2 has no groupIndex');
     });
 
-    QUnit.test('Group panel should set correct \'max-width\' after clear grouping', function(assert) {
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            dataSource: {
-                store: [
-                    { field1: '1', field2: '2', field3: '3', field4: '4', field5: '5' },
-                    { field1: '11', field2: '22', field3: '33', field4: '44', field5: '55' }]
-            },
-            width: 460,
-            groupPanel: {
-                emptyPanelText: 'Long long long long long long long long long long long text',
-                visible: true
-            },
-            editing: { allowAdding: true, mode: 'batch' },
-            columnChooser: {
-                enabled: true
-            }
-        }).dxDataGrid('instance');
-        const $dataGrid = $(dataGrid.element());
-
-        this.clock.tick(10);
-        assert.equal($dataGrid.find('.dx-toolbar-item-invisible').length, 4, '4 toolbar items are hidden, group panel has a long message');
-
-        dataGrid.columnOption('field2', 'groupIndex', 0);
-        this.clock.tick(10);
-
-        assert.equal($dataGrid.find('.dx-toolbar-item-invisible').length, 0, 'all toolbar items are visible, group panel has a group with short name');
-
-        dataGrid.clearGrouping();
-        this.clock.tick(10);
-        assert.equal($dataGrid.find('.dx-toolbar-item-invisible').length, 4, '4 toolbar items are hidden after clear grouping');
-    });
-
     QUnit.test('Check grouping context menu operability (ungroup one column)', function(assert) {
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: ['field1', { dataField: 'field2', groupIndex: 1, showWhenGrouped: true }, { dataField: 'field3', groupIndex: 0, showWhenGrouped: true }],
