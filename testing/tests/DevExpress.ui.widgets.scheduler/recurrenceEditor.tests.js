@@ -393,17 +393,17 @@ module('Repeat-end editor', () => {
     test('Repeat-until dateBox should apply date considering scheduler timeZone', function(assert) {
         const timeZoneCalculator = createTimeZoneCalculator('Europe/London');
         const instance = createInstance({
-            value: 'FREQ=WEEKLY;UNTIL=20151007',
+            value: 'FREQ=WEEKLY;UNTIL=20231007',
             timeZoneCalculator,
         });
 
         const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
         const untilDate = $repeatUntilDate.dxDateBox('instance');
 
-        untilDate.option('value', getRecurrenceProcessor().getDateByAsciiString('20151007'));
+        untilDate.option('value', getRecurrenceProcessor().getDateByAsciiString('20231007'));
 
         const rightDate = timeZoneCalculator.createDate(
-            getRecurrenceProcessor().getDateByAsciiString('20151007'),
+            getRecurrenceProcessor().getDateByAsciiString('20231007'),
             { path: 'fromGrid' },
         );
 
