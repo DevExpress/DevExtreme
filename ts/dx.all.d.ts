@@ -14445,9 +14445,13 @@ declare module DevExpress.ui {
   }
   module dxDropDownList {
     /**
+     * [descr:_ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export interface SelectionChangedInfo<T = any> {
+      /**
+       * [descr:_ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo.selectedItem]
+       */
       readonly selectedItem: T;
     }
   }

@@ -197,7 +197,7 @@ export type PasteEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
  * @docid _ui_select_box_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo
  */
 export type SelectionChangedEvent = EventInfo<dxSelectBox> & SelectionChangedInfo;
 

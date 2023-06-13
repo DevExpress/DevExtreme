@@ -166,7 +166,7 @@ export type PasteEvent = NativeEventInfo<dxAutocomplete, ClipboardEvent>;
  * @docid _ui_autocomplete_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo
  */
 export type SelectionChangedEvent = EventInfo<dxAutocomplete> & SelectionChangedInfo;
 
