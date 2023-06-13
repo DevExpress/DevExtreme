@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
-
-import $ from '@js/core/renderer';
+import $, { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { deferRender, deferUpdate } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
@@ -1091,16 +1090,18 @@ class RowsView extends ColumnsView {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getCellElementsCore(rowIndex) {
-    // @ts-expect-error
-    const $cells = super._getCellElementsCore.apply(this, arguments);
+  _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
+    const $cells = super._getCellElementsCore.apply(this, arguments as any);
 
     if ($cells) {
+      // @ts-expect-error
       const groupCellIndex = $cells.filter(`.${GROUP_CELL_CLASS}`).index();
+
       if (groupCellIndex >= 0 && $cells.length > groupCellIndex + 1) {
         return $cells.slice(0, groupCellIndex + 1);
       }
     }
+
     return $cells;
   }
 

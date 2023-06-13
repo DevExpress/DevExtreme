@@ -1,5 +1,5 @@
 import Guid from '@js/core/guid';
-import $ from '@js/core/renderer';
+import $, { dxElementWrapper } from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 // @ts-expect-error
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -881,7 +881,7 @@ export const adaptivityModule: import('../m_types').Module = {
           return this.callBase.apply(this, arguments);
         },
 
-        _getCellElement(rowIndex, columnIdentifier) {
+        _getCellElement(rowIndex, columnIdentifier): dxElementWrapper | undefined {
           const item = this._dataController.items()[rowIndex];
 
           if (item && item.rowType === ADAPTIVE_ROW_TYPE) {
