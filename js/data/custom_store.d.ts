@@ -53,6 +53,13 @@ export interface CustomStoreOptions<
 > extends StoreOptions<TItem, TKey> {
     /**
      * @docid
+     * @type_function_param1 key:object|string|number
+     * @type_function_return Promise<any>
+     * @public
+     */
+    byKey?: ((key: TKey) => PromiseLike<TItem>);
+    /**
+     * @docid
      * @default true
      * @public
      */

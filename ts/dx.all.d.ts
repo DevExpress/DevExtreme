@@ -4535,13 +4535,7 @@ declare module DevExpress.data {
   > {
     constructor(options?: DevExpress.data.ArrayStore.Options<TItem, TKey>);
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TItem>;
-    /**
-     * [descr:ArrayStore.byKey(key, extraOptions)]
-     */
-    byKey(
-      key: TKey,
-      extraOptions: LoadOptions<TItem>
-    ): DevExpress.core.utils.DxPromise<TItem>;
+
     /**
      * [descr:ArrayStore.clear()]
      */
@@ -4648,6 +4642,10 @@ declare module DevExpress.data {
    */
   export interface CustomStoreOptions<TItem = any, TKey = any>
     extends DevExpress.data.AbstractStore.Options<TItem, TKey> {
+    /**
+     * [descr:CustomStoreOptions.byKey]
+     */
+    byKey?: (key: TKey) => PromiseLike<TItem>;
     /**
      * [descr:CustomStoreOptions.cacheRawData]
      */
@@ -5946,15 +5944,11 @@ declare module DevExpress.data {
   export class Store<TItem = any, TKey = any> {
     constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
     /**
-     * [descr:Store.byKey(key)]
-     */
-    byKey(key: TKey): DevExpress.core.utils.DxPromise<TItem>;
-    /**
      * [descr:Store.byKey(key, extraOptions)]
      */
     byKey(
       key: TKey,
-      extraOptions: LoadOptions<TItem>
+      extraOptions?: LoadOptions<TItem>
     ): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:Store.insert(values)]

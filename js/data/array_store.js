@@ -5,6 +5,12 @@ import Store from './abstract_store';
 import { indexByKey, insert, applyBatch, update, remove } from './array_utils';
 
 const ArrayStore = Store.inherit({
+    /**
+     * @name ArrayStore.byKey
+     * @publicName byKey(key, extraOptions)
+     * @hidden
+     */
+
     ctor: function(options) {
         if(Array.isArray(options)) {
             options = { data: options };
