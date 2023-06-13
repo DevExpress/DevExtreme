@@ -146,7 +146,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '14'
+        node-version: '18'
 
     - name: Get sources
       uses: actions/checkout@v3
@@ -190,32 +190,25 @@ jobs:
         name: devextreme-npm
         path: ../devextreme-angular-repo/devextreme-setup
 
+    - name: Install packages for devextreme-angular
+      working-directory: ../devextreme-angular-repo
+      run: npm install --no-audit --no-fund
+
     - name: Install devextreme package
       working-directory: ../devextreme-angular-repo
       run: |
         pushd devextreme-setup
         installerName=$(realpath .)/devextreme-installer.tgz
         popd
-        cd ./packages/devextreme-angular
-        npm install --save-dev $installerName
-        cd ../sandbox
-        npm install --save-dev $installerName
-        cd ../../
-        npm install --save-dev $installerName
+        npm install --save-dev --legacy-peer-deps $installerName
 
-    - name: Install packages for devextreme-angular
+    - name: Build with Angular 12
       working-directory: ../devextreme-angular-repo
-      run: npm install --no-audit --no-fund
+      run: npm run build --workspace devextreme-angular
 
-    - name: Build with Angular 7
-      run: |
-        cd ../devextreme-angular-repo
-        npm run build
-
-    - name: Run tests with Angular 7
-      run: |
-        cd ../devextreme-angular-repo
-        npx lerna run --scope devextreme-angular gulp -- run.tests
+    - name: Run tests with Angular 12
+      working-directory: ../devextreme-angular-repo
+      run: npm run test:dev --workspace devextreme-angular
 
   test_bundlers:
     name: Bundlers tests
