@@ -7,16 +7,16 @@ import type { PlatformType } from './platform-type';
 
 const platformsSiteRootPath = resolve('./testing/renovation/platforms');
 export class MultiPlatformTest {
-  beforeFn!: (t: TestController, { platform: PlatformType }) => Promise<void>;
+  beforeFn!: (t: TestController, { platform }: { platform: PlatformType }) => Promise<void>;
 
-  afterFn!: (t: TestController, { platform: PlatformType }) => Promise<void>;
+  afterFn!: (t: TestController, { platform }: { platform: PlatformType }) => Promise<void>;
 
-  before(fn: (t: TestController, { platform: PlatformType }) => Promise<void>): this {
+  before(fn: (t: TestController, { platform }: { platform: PlatformType }) => Promise<void>): this {
     this.beforeFn = fn;
     return this;
   }
 
-  after(fn: (t: TestController, { platform: PlatformType }) => Promise<void>): this {
+  after(fn: (t: TestController, { platform }: { platform: PlatformType }) => Promise<void>): this {
     this.afterFn = fn;
     return this;
   }
@@ -68,7 +68,7 @@ export const multiPlatformTest = ({
       },
     };
     test
-      .meta({ renovation: true })
+      .meta({ renovation: 'true' })
       .page(pathToFileURL(pageUrl).href)(
         `${platform}:${testName}`,
         (t) => testBody(t, testOptions),
