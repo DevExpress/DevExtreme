@@ -157,7 +157,7 @@
         "dxDataGrid-ariaFilterCell": "フィルター セル",
         "dxDataGrid-ariaCollapse": "折りたたむ",
         "dxDataGrid-ariaExpand": "展開",
-        "dxDataGrid-ariaDataGrid": "データ グリッド",
+        "dxDataGrid-ariaDataGrid": "{0} 行と {1} 列のデータ グリッド",
         "dxDataGrid-ariaSearchInGrid": "データ グリッド内で検索",
         "dxDataGrid-ariaSelectAll": "すべてを選択",
         "dxDataGrid-ariaSelectRow": "行の選択",

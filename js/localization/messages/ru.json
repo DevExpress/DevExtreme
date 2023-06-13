@@ -157,7 +157,7 @@
         "dxDataGrid-ariaFilterCell": "Фильтр",
         "dxDataGrid-ariaCollapse": "Свернуть",
         "dxDataGrid-ariaExpand": "Развернуть",
-        "dxDataGrid-ariaDataGrid": "Таблица данных",
+        "dxDataGrid-ariaDataGrid": "Таблица данных с {0} строками и {1} колонками",
         "dxDataGrid-ariaSearchInGrid": "Искать в таблице данных",
         "dxDataGrid-ariaSelectAll": "Выбрать всё",
         "dxDataGrid-ariaSelectRow": "Выбрать строку",
