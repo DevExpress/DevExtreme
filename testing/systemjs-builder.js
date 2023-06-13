@@ -83,7 +83,7 @@ define(function(require, exports, module) {
 `;
 
 const buildSystemJSModule = (body, pre = '') => `
-SystemJS.register([], function(_exports) {
+SystemJS.register([], function(exports) {
     ${pre}
 
     return {
@@ -222,8 +222,7 @@ const transpileJsVendors = async() => {
                 destPath,
                 buildSystemJSModule(
                     '',
-                    code.replaceAll('exports', '_exports')
-                        .replaceAll('module.exports', '_exports')
+                    code.replaceAll('module.exports', 'exports')
                 )
             );
         }),
