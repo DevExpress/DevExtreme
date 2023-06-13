@@ -103,10 +103,8 @@ $dot-icon-border-width: math.div($material-radiobutton-size - $material-radiobut
     border-color: $radiobutton-invalid-faded-border-color;
   }
 
-  .dx-radiobutton-icon-checked {
-    .dx-radiobutton-icon-dot {
-      background-color: $radiobutton-invalid-faded-border-color;
-    }
+  .dx-radiobutton-icon-dot {
+    background-color: $radiobutton-invalid-faded-border-color;
   }
 
   .dx-state-active,
