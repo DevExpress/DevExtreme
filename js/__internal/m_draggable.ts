@@ -334,6 +334,9 @@ const Draggable = (DOMComponent as any).inherit({
 
     this._horizontalScrollHelper = new ScrollHelper('horizontal', this);
     this._verticalScrollHelper = new ScrollHelper('vertical', this);
+
+    this._initScrollTop = 0;
+    this._initScrollLeft = 0;
   },
 
   _normalizeCursorOffset(offset) {
@@ -631,6 +634,7 @@ const Draggable = (DOMComponent as any).inherit({
 
     if (!this._hasClonedDraggable() && this.option('autoScroll')) {
       this._initScrollTop = this._getScrollableScrollTop();
+      this._initScrollLeft = this._getScrollableScrollLeft();
       initialOffset = this._getDraggableElementOffset(initialOffset.left, initialOffset.top);
     }
 
@@ -723,18 +727,26 @@ const Draggable = (DOMComponent as any).inherit({
   },
 
   _getDraggableElementOffset(initialOffsetX: number, initialOffsetY: number): Offset {
-    const startPosition = this._startPosition;
     const initScrollTop = this._initScrollTop ?? 0;
-    const isFixedPosition = ($(this.element()) as any).css('position') === 'fixed';
+    const initScrollLeft = this._initScrollLeft ?? 0;
+
     const scrollTop = this._getScrollableScrollTop();
+    const scrollLeft = this._getScrollableScrollLeft();
+
+    const isFixedPosition = ($(this.element()) as any).css('position') === 'fixed';
 
     const result: Offset = {
-      left: (startPosition?.left ?? 0) + initialOffsetX,
-      top: (startPosition?.top ?? 0) + initialOffsetY,
+      left: (this._startPosition?.left ?? 0) + initialOffsetX,
+      top: (this._startPosition?.top ?? 0) + initialOffsetY,
     };
 
-    if (!isFixedPosition && !this._hasClonedDraggable() && isNumeric(scrollTop)) {
-      result.top += scrollTop - initScrollTop;
+    if (!isFixedPosition && !this._hasClonedDraggable()) {
+      if (isNumeric(scrollTop)) {
+        result.top += scrollTop - initScrollTop;
+      }
+      if (isNumeric(scrollLeft)) {
+        result.left += scrollLeft - initScrollLeft;
+      }
     }
 
     return result;
@@ -797,6 +809,9 @@ const Draggable = (DOMComponent as any).inherit({
   },
   _getScrollableScrollTop() {
     return this._getScrollable($(this.element()))?.scrollTop() ?? 0;
+  },
+  _getScrollableScrollLeft() {
+    return this._getScrollable($(this.element()))?.scrollLeft() ?? 0;
   },
 
   _defaultActionArgs() {

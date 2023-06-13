@@ -17,6 +17,18 @@ test('dxDraggable element should not loose its position on dragging with auto-sc
   await t
     .expect((await draggable().boundingClientRect).top)
     .gt(400);
+
+  await t.scrollIntoView(draggable);
+
+  await t
+    .drag(draggable, 400, 0, { speed: 0.1 })
+
+    .expect(Selector('.dx-scrollable-container')().scrollLeft)
+    .gt(95);
+
+  await t
+    .expect((await draggable().boundingClientRect).left)
+    .gt(400);
 }).before(async () => {
   const init = ClientFunction(() => {
     $('<div>', {
@@ -28,6 +40,7 @@ test('dxDraggable element should not loose its position on dragging with auto-sc
     $('<div>', {
       id: 'scrollview-content',
       height: 500,
+      width: 500,
     }).appendTo('#scrollview');
 
     $('<div>', {
@@ -35,6 +48,7 @@ test('dxDraggable element should not loose its position on dragging with auto-sc
     })
       .css({
         'background-color': 'blue',
+        display: 'inline-block',
       })
       .appendTo('#scrollview-content');
     $('#drag-me').append('DRAG ME!!!');
@@ -50,6 +64,8 @@ test('dxDraggable element should not loose its position on dragging with auto-sc
   });
 
   await init();
-  await createWidget('dxScrollView', { }, '#scrollview');
+  await createWidget('dxScrollView', {
+    direction: 'both',
+  }, '#scrollview');
   await createWidget('dxDraggable', { }, '#drag-me');
 });
