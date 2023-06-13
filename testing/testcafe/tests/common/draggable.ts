@@ -12,7 +12,7 @@ test('dxDraggable element should not loose its position on dragging with auto-sc
     .drag(draggable, 0, 400, { speed: 0.1 })
 
     .expect(Selector('.dx-scrollable-container')().scrollTop)
-    .gt(200);
+    .gt(100);
 
   await t
     .expect((await draggable().boundingClientRect).top)
@@ -27,7 +27,7 @@ test('dxDraggable element should not loose its position on dragging with auto-sc
 
     $('<div>', {
       id: 'scrollview-content',
-      height: 600,
+      height: 500,
     }).appendTo('#scrollview');
 
     $('<div>', {

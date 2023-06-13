@@ -627,12 +627,13 @@ const Draggable = (DOMComponent as any).inherit({
     this._setSourceDraggable();
 
     this._$sourceElement = $element;
-    const elementOffset = $element.offset();
+    let initialOffset = $element.offset();
 
-    if (!this.option('clone') && this.option('autoScroll')) {
+    if (!this._hasClonedDraggable() && this.option('autoScroll')) {
       this._initScrollTop = this._getScrollableScrollTop();
+      initialOffset = this._getDraggableElementOffset(initialOffset.left, initialOffset.top);
     }
-    const initialOffset = this._getDraggableElementOffset(elementOffset.left, elementOffset.top);
+
     const $dragElement = this._$dragElement = this._createDragElement($element);
 
     this._toggleDraggingClass(true);
@@ -732,11 +733,14 @@ const Draggable = (DOMComponent as any).inherit({
       top: (startPosition?.top ?? 0) + initialOffsetY,
     };
 
-    if (!isFixedPosition && !this.option('clone') && isNumeric(scrollTop)) {
+    if (!isFixedPosition && !this._hasClonedDraggable() && isNumeric(scrollTop)) {
       result.top += scrollTop - initScrollTop;
     }
 
     return result;
+  },
+  _hasClonedDraggable() {
+    return this.option('clone') || this.option('dragTemplate');
   },
 
   _dragMoveHandler(e) {
