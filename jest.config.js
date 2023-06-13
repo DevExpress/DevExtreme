@@ -57,5 +57,8 @@ module.exports = {
         'test_components.+\\.tsx$': path.resolve('./js/renovation/test_utils/transformers/declaration.js'),
         '\\.(js|jsx|ts)$': resolve.sync('ts-jest'),
         '\\.(tsx)$': path.resolve('./js/renovation/test_utils/transformers/tsx.js')
-    }
+    },
+    modulePathIgnorePatterns: [
+        'node_modules'
+    ]
 };

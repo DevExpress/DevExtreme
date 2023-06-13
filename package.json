@@ -257,11 +257,6 @@
     "ios > 9",
     "> 1%"
   ],
-  "jest": {
-    "modulePathIgnorePatterns": [
-      "node_modules"
-    ]
-  },
   "pre-commit": [
     "lint-staged",
     "pre-commit"
