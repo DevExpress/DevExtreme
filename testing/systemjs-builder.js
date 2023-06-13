@@ -72,6 +72,7 @@ const transpileCommonJSFile = (source, pathToFile) => {
         pathToFile,
         buildAmdModule(
             `${pre}${source}${post}`.replace(/(\n|\r)/g, '$1    ')
+                .replace('require(\'./angular\');', 'require(\'./angular.js\');')
         )
     );
 };
