@@ -523,11 +523,13 @@ export class ColumnsView extends viewWithColumnStateMixin {
     if (renderingTemplate) {
       options.component = this.component;
 
-      const async = column && (
+      const columnAsync = column && (
         (column.renderAsync && isDataRow)
                 || this.option('renderAsync')
                     && (column.renderAsync !== false && (column.command || column.showEditorAlways) && isDataRow || options.rowType === 'filter')
       );
+
+      const async = options.renderAsync ?? columnAsync;
 
       if ((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
         renderingTemplate.render(templateOptions);
