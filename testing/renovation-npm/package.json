@@ -25,7 +25,7 @@
   "devDependencies": {
     "cross-env": "7.0.3",
     "del": "6.1.1",
-    "devextreme-screenshot-comparer": "2.0.14",
+    "devextreme-screenshot-comparer": "https://github.com/aleks-pro/temp/raw/main/devextreme-screenshot-comparer-2.0.14.tgz",
     "eslint-plugin-testcafe": "0.2.1",
     "glob": "7.2.3",
     "gulp": "4.0.2",
