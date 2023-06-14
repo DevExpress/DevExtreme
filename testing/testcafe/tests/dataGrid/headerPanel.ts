@@ -76,3 +76,42 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
     ],
   },
 }));
+
+test('Search panel in toolbar should not lose focus after data filtered (T1170081)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headerPanel = dataGrid.getHeaderPanel();
+
+  // act
+  await t.click(headerPanel.getDropDownMenuButton());
+
+  const getSearchPanelInput = () => headerPanel.getDropDownSelectPopup().menuContent().find('input');
+
+  const input = getSearchPanelInput();
+
+  await t
+    .click(input)
+    .wait(100)
+    .typeText(input, 'aaa');
+
+  // assert
+  await t
+    .expect(await getSearchPanelInput().focused).ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { ID: 1, field: 'aaa' },
+    { ID: 2, field: 'bbb' },
+  ],
+  keyExpr: 'ID',
+  columns: ['id', 'field'],
+  showBorders: true,
+  searchPanel: {
+    visible: true,
+    width: 240,
+  },
+  toolbar: {
+    items: [{
+      name: 'searchPanel',
+      locateInMenu: 'always',
+    }],
+  },
+}));
