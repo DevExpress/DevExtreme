@@ -26,7 +26,7 @@ fixture.disablePageReloads`Scheduler: long appointments in month view`
       const scheduler = new Scheduler('#container');
       await t.expect(await compareScreenshot(t, `month-long-appointment(rtl=${rtlEnabled}, text=${appointment.text}).png`, scheduler.workSpace)).ok();
     })
-      .meta({ renovation: true })
+      .meta({ renovation: 'true' })
       .before(async () => createWidget('dxScheduler', {
         dataSource: [appointment],
         views: ['month'],

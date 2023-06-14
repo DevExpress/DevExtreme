@@ -28,7 +28,7 @@ jobs:
         node-version: '18'
 
     - name: Run npm install
-      run: npm install --no-audit --no-fund
+      run: npm install --no-audit --no-fund --force
 
     - name: Build
       run: npm run build:testcafe
@@ -89,7 +89,7 @@ jobs:
         node-version: '18'
 
     - name: Run npm install
-      run: npm install --no-audit --no-fund
+      run: npm install --no-audit --no-fund --force
 
     - name: Download artifacts
       uses: actions/download-artifact@v3

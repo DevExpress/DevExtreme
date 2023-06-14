@@ -68,7 +68,7 @@ export const multiPlatformTest = ({
       },
     };
     test
-      .meta({ renovation: true })
+      .meta({ renovation: 'true' })
       .page(pathToFileURL(pageUrl).href)(
         `${platform}:${testName}`,
         (t) => testBody(t, testOptions),

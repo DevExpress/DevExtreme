@@ -88,7 +88,6 @@ createTestCafe({
 
         const runOptions = {
             quarantineMode: { successThreshold: 1, attemptLimit: 3 },
-            nativeAutomation: true,
         };
 
         if(args.componentFolder.trim() !== 'renovation') {
