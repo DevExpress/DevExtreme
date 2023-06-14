@@ -2056,11 +2056,10 @@ export class KeyboardNavigationController extends modules.ViewController {
     const columnIndex = this._rowsView.getCellIndex($cell);
     const rowIndex = this._getRowIndex($cell?.parent());
 
-    this._memoFireFocusedCellChanged($cell, rowIndex, columnIndex);
+    this._memoFireFocusedCellChanged(rowIndex, columnIndex);
   }
 
   _memoFireFocusedCellChanged(
-    $cell: dxElementWrapper | undefined,
     rowIndex: number,
     columnIndex: number,
   ): void {
@@ -2080,7 +2079,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     const row = this._dataController.items()[localRowIndex];
     const column = this._columnsController.getVisibleColumns()[columnIndex];
     this.executeAction('onFocusedCellChanged', {
-      cellElement: $cell,
+      cellElement: this._getFocusedCell(),
       columnIndex,
       rowIndex,
       row,
