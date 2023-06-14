@@ -6412,7 +6412,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         Array.from($rows).forEach((row, i) => {
             const $row = $(row);
-            if($row.hasClass('dx-edit-row')) { // editing row
+
+            if(i === 2) { // editing row
                 assert.strictEqual($row.find('a').length, 2);
                 assert.strictEqual($row.find('a:eq(0)').text(), 'Save');
                 assert.strictEqual($row.find('a:eq(1)').text(), 'Cancel');
