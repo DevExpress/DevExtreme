@@ -32,34 +32,84 @@ export {
     VerticalAlignment,
 };
 
-/** @public */
+/**
+ * @docid _viz_linear_gauge_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxLinearGauge>;
 
-/** @public */
+/**
+ * @docid _viz_linear_gauge_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxLinearGauge>;
 
-/** @public */
+/**
+ * @docid _viz_linear_gauge_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxLinearGauge>;
 
-/** @public */
+/**
+ * @docid _viz_linear_gauge_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxLinearGauge> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_linear_gauge_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxLinearGauge>;
 
-/** @public */
+/**
+ * @docid _viz_linear_gauge_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxLinearGauge> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_linear_gauge_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxLinearGauge>;
 
-/** @public */
+/**
+ * @docid _viz_linear_gauge_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxLinearGauge> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_linear_gauge_TooltipHiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_base_gauge_TooltipInfo
+ */
 export type TooltipHiddenEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_linear_gauge_TooltipShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_base_gauge_TooltipInfo
+ */
 export type TooltipShownEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 
 /**
@@ -205,61 +255,51 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>
 */
 type Events = {
 /**
- * @skip
  * @docid dxLinearGaugeOptions.onDisposing
  * @type_function_param1 e:{viz/linear_gauge:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxLinearGaugeOptions.onDrawn
  * @type_function_param1 e:{viz/linear_gauge:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxLinearGaugeOptions.onExported
  * @type_function_param1 e:{viz/linear_gauge:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxLinearGaugeOptions.onExporting
  * @type_function_param1 e:{viz/linear_gauge:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxLinearGaugeOptions.onFileSaving
  * @type_function_param1 e:{viz/linear_gauge:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxLinearGaugeOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/linear_gauge:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxLinearGaugeOptions.onInitialized
  * @type_function_param1 e:{viz/linear_gauge:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxLinearGaugeOptions.onOptionChanged
  * @type_function_param1 e:{viz/linear_gauge:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxLinearGaugeOptions.onTooltipHidden
  * @type_function_param1 e:{viz/linear_gauge:TooltipHiddenEvent}
  */
 onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
 /**
- * @skip
  * @docid dxLinearGaugeOptions.onTooltipShown
  * @type_function_param1 e:{viz/linear_gauge:TooltipShownEvent}
  */

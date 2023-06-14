@@ -259,285 +259,764 @@ export type GridBaseColumn<TRowData = any> = ColumnBase<TRowData>;
  */
 export type GridBaseColumnButton = ColumnButtonBase;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_AdaptiveDetailRowPreparingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,AdaptiveDetailRowPreparingInfo
+ */
 export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_CellClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerEvent | MouseEvent> & {
+  /**
+   * @docid _ui_data_grid_CellClickEvent.data
+   * @type object
+   */
   readonly data: TRowData;
+  /**
+   * @docid _ui_data_grid_CellClickEvent.key
+   * @type any
+   */
   readonly key: TKey;
+  /** @docid _ui_data_grid_CellClickEvent.value */
   readonly value?: any;
+  /** @docid _ui_data_grid_CellClickEvent.displayValue */
   readonly displayValue?: any;
+  /** @docid _ui_data_grid_CellClickEvent.text */
   readonly text: string;
+  /** @docid _ui_data_grid_CellClickEvent.columnIndex */
   readonly columnIndex: number;
+  /**
+   * @docid _ui_data_grid_CellClickEvent.column
+   * @type object
+   */
   readonly column: Column<TRowData, TKey>;
+  /** @docid _ui_data_grid_CellClickEvent.rowIndex */
   readonly rowIndex: number;
+  /** @docid _ui_data_grid_CellClickEvent.rowType */
   readonly rowType: string;
+  /** @docid _ui_data_grid_CellClickEvent.cellElement */
   readonly cellElement: DxElement;
+  /**
+   * @docid _ui_data_grid_CellClickEvent.row
+   * @type dxDataGridRowObject
+   */
   readonly row: Row<TRowData, TKey>;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_CellDblClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerEvent | MouseEvent> & {
+  /**
+   * @docid _ui_data_grid_CellDblClickEvent.data
+   * @type object
+   */
   readonly data: TRowData;
+  /**
+   * @docid _ui_data_grid_CellDblClickEvent.key
+   * @type any
+   */
   readonly key: TKey;
+  /** @docid _ui_data_grid_CellDblClickEvent.value */
   readonly value?: any;
+  /** @docid _ui_data_grid_CellDblClickEvent.displayValue */
   readonly displayValue?: any;
+  /** @docid _ui_data_grid_CellDblClickEvent.text */
   readonly text: string;
+  /** @docid _ui_data_grid_CellDblClickEvent.columnIndex */
   readonly columnIndex: number;
+  /**
+   * @docid _ui_data_grid_CellDblClickEvent.column
+   * @type dxDataGridColumn
+   */
   readonly column: Column<TRowData, TKey>;
+  /** @docid _ui_data_grid_CellDblClickEvent.rowIndex */
   readonly rowIndex: number;
+  /** @docid _ui_data_grid_CellDblClickEvent.rowType */
   readonly rowType: string;
+  /** @docid _ui_data_grid_CellDblClickEvent.cellElement */
   readonly cellElement: DxElement;
+  /**
+   * @docid _ui_data_grid_CellDblClickEvent.row
+   * @type dxDataGridRowObject
+   */
   readonly row: Row<TRowData, TKey>;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_CellHoverChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
+  /** @docid _ui_data_grid_CellHoverChangedEvent.eventType */
   readonly eventType: string;
+  /**
+   * @docid _ui_data_grid_CellHoverChangedEvent.data
+   * @type object
+   */
   readonly data: TRowData;
+  /**
+   * @docid _ui_data_grid_CellHoverChangedEvent.key
+   * @type any
+   */
   readonly key: TKey;
+  /** @docid _ui_data_grid_CellHoverChangedEvent.value */
   readonly value?: any;
+  /** @docid _ui_data_grid_CellHoverChangedEvent.text */
   readonly text: string;
+  /** @docid _ui_data_grid_CellHoverChangedEvent.displayValue */
   readonly displayValue?: any;
+  /** @docid _ui_data_grid_CellHoverChangedEvent.columnIndex */
   readonly columnIndex: number;
+  /** @docid _ui_data_grid_CellHoverChangedEvent.rowIndex */
   readonly rowIndex: number;
+  /**
+   * @docid _ui_data_grid_CellHoverChangedEvent.column
+   * @type dxDataGridColumn
+   */
   readonly column: Column<TRowData, TKey>;
+  /** @docid _ui_data_grid_CellHoverChangedEvent.rowType */
   readonly rowType: string;
+  /** @docid _ui_data_grid_CellHoverChangedEvent.cellElement */
   readonly cellElement: DxElement;
+  /**
+   * @docid _ui_data_grid_CellHoverChangedEvent.row
+   * @type dxDataGridRowObject
+   */
   readonly row: Row<TRowData, TKey>;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_CellPreparedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
+  /**
+   * @docid _ui_data_grid_CellPreparedEvent.data
+   * @type object
+   */
   readonly data: TRowData;
+  /**
+   * @docid _ui_data_grid_CellPreparedEvent.key
+   * @type any
+   */
   readonly key: TKey;
+  /** @docid _ui_data_grid_CellPreparedEvent.value */
   readonly value?: any;
+  /** @docid _ui_data_grid_CellPreparedEvent.displayValue */
   readonly displayValue?: any;
+  /** @docid _ui_data_grid_CellPreparedEvent.text */
   readonly text: string;
+  /** @docid _ui_data_grid_CellPreparedEvent.columnIndex */
   readonly columnIndex: number;
+  /**
+   * @docid _ui_data_grid_CellPreparedEvent.column
+   * @type dxDataGridColumn
+   */
   readonly column: Column<TRowData, TKey>;
+  /** @docid _ui_data_grid_CellPreparedEvent.rowIndex */
   readonly rowIndex: number;
+  /** @docid _ui_data_grid_CellPreparedEvent.rowType */
   readonly rowType: string;
+  /**
+   * @docid _ui_data_grid_CellPreparedEvent.row
+   * @type dxDataGridRowObject
+   */
   readonly row: Row<TRowData, TKey>;
+  /** @docid _ui_data_grid_CellPreparedEvent.isSelected */
   readonly isSelected?: boolean;
+  /** @docid _ui_data_grid_CellPreparedEvent.isExpanded */
   readonly isExpanded?: boolean;
+  /** @docid _ui_data_grid_CellPreparedEvent.isNewRow */
   readonly isNewRow?: boolean;
+  /** @docid _ui_data_grid_CellPreparedEvent.cellElement */
   readonly cellElement: DxElement;
+  /** @docid _ui_data_grid_CellPreparedEvent.watch */
   readonly watch?: Function;
+  /** @docid _ui_data_grid_CellPreparedEvent.oldValue */
   readonly oldValue?: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_ContextMenuPreparingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
+  /**
+   * @docid _ui_data_grid_ContextMenuPreparingEvent.items
+   * @type Array<Object>
+   */
   items?: Array<any>;
+  /** @docid _ui_data_grid_ContextMenuPreparingEvent.target */
   readonly target: string;
+  /** @docid _ui_data_grid_ContextMenuPreparingEvent.targetElement */
   readonly targetElement: DxElement;
+  /** @docid _ui_data_grid_ContextMenuPreparingEvent.columnIndex */
   readonly columnIndex: number;
+  /**
+   * @docid _ui_data_grid_ContextMenuPreparingEvent.column
+   * @type dxDataGridColumn
+   */
   readonly column?: Column<TRowData, TKey>;
+  /** @docid _ui_data_grid_ContextMenuPreparingEvent.rowIndex */
   readonly rowIndex: number;
+  /**
+   * @docid _ui_data_grid_ContextMenuPreparingEvent.row
+   * @type dxDataGridRowObject
+   */
   readonly row?: Row<TRowData, TKey>;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_DataErrorOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,DataErrorOccurredInfo
+ */
 export type DataErrorOccurredEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & DataErrorOccurredInfo;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_EditCanceledEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,DataChangeInfo
+ */
 export type EditCanceledEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_EditCancelingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo,DataChangeInfo
+ */
 export type EditCancelingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_EditingStartEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type EditingStartEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & {
+  /**
+   * @docid _ui_data_grid_EditingStartEvent.data
+   * @type object
+   */
   readonly data: TRowData;
+  /**
+   * @docid _ui_data_grid_EditingStartEvent.key
+   * @type any
+   */
   readonly key: TKey;
+  /**
+   * @docid _ui_data_grid_EditingStartEvent.column
+   * @type object
+   */
   readonly column?: Column<TRowData, TKey>;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_EditorPreparedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
+  /** @docid _ui_data_grid_EditorPreparedEvent.parentType */
   readonly parentType: string;
+  /** @docid _ui_data_grid_EditorPreparedEvent.value */
   readonly value?: any;
+  /** @docid _ui_data_grid_EditorPreparedEvent.setValue */
   readonly setValue?: any;
+  /** @docid _ui_data_grid_EditorPreparedEvent.updateValueTimeout */
   readonly updateValueTimeout?: number;
+  /** @docid _ui_data_grid_EditorPreparedEvent.width */
   readonly width?: number;
+  /** @docid _ui_data_grid_EditorPreparedEvent.disabled */
   readonly disabled: boolean;
+  /** @docid _ui_data_grid_EditorPreparedEvent.rtlEnabled */
   readonly rtlEnabled: boolean;
+  /** @docid _ui_data_grid_EditorPreparedEvent.editorElement */
   readonly editorElement: DxElement;
+  /** @docid _ui_data_grid_EditorPreparedEvent.readOnly */
   readonly readOnly: boolean;
+  /** @docid _ui_data_grid_EditorPreparedEvent.dataField */
   readonly dataField?: string;
+  /**
+   * @docid _ui_data_grid_EditorPreparedEvent.row
+   * @type dxDataGridRowObject
+   */
   readonly row?: Row<TRowData, TKey>;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_EditorPreparingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type EditorPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
+  /** @docid _ui_data_grid_EditorPreparingEvent.parentType */
   readonly parentType: string;
+  /** @docid _ui_data_grid_EditorPreparingEvent.value */
   readonly value?: any;
+  /** @docid _ui_data_grid_EditorPreparingEvent.setValue */
   readonly setValue?: any;
+  /** @docid _ui_data_grid_EditorPreparingEvent.updateValueTimeout */
   readonly updateValueTimeout?: number;
+  /** @docid _ui_data_grid_EditorPreparingEvent.width */
   readonly width?: number;
+  /** @docid _ui_data_grid_EditorPreparingEvent.disabled */
   readonly disabled: boolean;
+  /** @docid _ui_data_grid_EditorPreparingEvent.rtlEnabled */
   readonly rtlEnabled: boolean;
+  /** @docid _ui_data_grid_EditorPreparingEvent.cancel */
   cancel: boolean;
+  /** @docid _ui_data_grid_EditorPreparingEvent.editorElement */
   readonly editorElement: DxElement;
+  /** @docid _ui_data_grid_EditorPreparingEvent.readOnly */
   readonly readOnly: boolean;
+  /** @docid _ui_data_grid_EditorPreparingEvent.editorName */
   editorName: string;
+  /**
+   * @docid _ui_data_grid_EditorPreparingEvent.editorOptions
+   * @type object
+   */
   editorOptions: any;
+  /** @docid _ui_data_grid_EditorPreparingEvent.dataField */
   readonly dataField?: string;
+  /**
+   * @docid _ui_data_grid_EditorPreparingEvent.row
+   * @type dxDataGridRowObject
+   */
   readonly row?: Row<TRowData, TKey>;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_ExportingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type ExportingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & {
+  /** @docid _ui_data_grid_ExportingEvent.fileName */
   fileName?: string;
+  /** @docid _ui_data_grid_ExportingEvent.selectedRowsOnly */
   selectedRowsOnly: boolean;
+  /**
+   * @docid _ui_data_grid_ExportingEvent.format
+   * @type Enums.DataGridExportFormat|string
+   */
   format: DataGridExportFormat | string;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_FocusedCellChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
+  /** @docid _ui_data_grid_FocusedCellChangedEvent.cellElement */
   readonly cellElement: DxElement;
+  /** @docid _ui_data_grid_FocusedCellChangedEvent.columnIndex */
   readonly columnIndex: number;
+  /** @docid _ui_data_grid_FocusedCellChangedEvent.rowIndex */
   readonly rowIndex: number;
+  /**
+   * @docid _ui_data_grid_FocusedCellChangedEvent.row
+   * @type dxDataGridRowObject
+   */
   readonly row?: Row<TRowData, TKey>;
+  /**
+   * @docid _ui_data_grid_FocusedCellChangedEvent.column
+   * @type dxDataGridColumn
+   */
   readonly column?: Column<TRowData, TKey>;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_FocusedCellChangingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+  /** @docid _ui_data_grid_FocusedCellChangingEvent.cellElement */
   readonly cellElement: DxElement;
+  /** @docid _ui_data_grid_FocusedCellChangingEvent.prevColumnIndex */
   readonly prevColumnIndex: number;
+  /** @docid _ui_data_grid_FocusedCellChangingEvent.prevRowIndex */
   readonly prevRowIndex: number;
+  /** @docid _ui_data_grid_FocusedCellChangingEvent.newColumnIndex */
   newColumnIndex: number;
+  /** @docid _ui_data_grid_FocusedCellChangingEvent.newRowIndex */
   newRowIndex: number;
+  /**
+   * @docid _ui_data_grid_FocusedCellChangingEvent.rows
+   * @type Array<dxDataGridRowObject>
+   */
   readonly rows: Array<Row<TRowData, TKey>>;
+  /**
+   * @docid _ui_data_grid_FocusedCellChangingEvent.columns
+   * @type Array<dxDataGridColumn>
+   */
   readonly columns: Array<Column<TRowData, TKey>>;
+  /** @docid _ui_data_grid_FocusedCellChangingEvent.isHighlighted */
   isHighlighted: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_FocusedRowChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
+  /** @docid _ui_data_grid_FocusedRowChangedEvent.rowElement */
   readonly rowElement: DxElement;
+  /** @docid _ui_data_grid_FocusedRowChangedEvent.rowIndex */
   readonly rowIndex: number;
+  /**
+   * @docid _ui_data_grid_FocusedRowChangedEvent.row
+   * @type dxDataGridRowObject
+   */
   readonly row?: Row<TRowData, TKey>;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_FocusedRowChangingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+  /** @docid _ui_data_grid_FocusedRowChangingEvent.rowElement */
   readonly rowElement: DxElement;
+  /** @docid _ui_data_grid_FocusedRowChangingEvent.prevRowIndex */
   readonly prevRowIndex: number;
+  /** @docid _ui_data_grid_FocusedRowChangingEvent.newRowIndex */
   newRowIndex: number;
+  /**
+   * @docid _ui_data_grid_FocusedRowChangingEvent.rows
+   * @type Array<dxDataGridRowObject>
+   */
   readonly rows: Array<Row<TRowData, TKey>>;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent<TRowData = any, TKey = any> = InitializedEventInfo<dxDataGrid<TRowData, TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_InitNewRowEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,NewRowInfo
+ */
 export type InitNewRowEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & NewRowInfo<TRowData>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_KeyDownEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,KeyDownInfo
+ */
 export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent> & KeyDownInfo;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerEvent | MouseEvent> & {
+  /**
+   * @docid _ui_data_grid_RowClickEvent.data
+   * @type object
+   */
   readonly data: TRowData;
+  /**
+   * @docid _ui_data_grid_RowClickEvent.key
+   * @type any
+   */
   readonly key: TKey;
+  /**
+   * @docid _ui_data_grid_RowClickEvent.values
+   * @type Array<any>
+   */
   readonly values: Array<any>;
+  /**
+   * @docid _ui_data_grid_RowClickEvent.columns
+   * @type Array<Object>
+   */
   readonly columns: Array<Column<TRowData, TKey>>;
+  /** @docid _ui_data_grid_RowClickEvent.rowIndex */
   readonly rowIndex: number;
+  /** @docid _ui_data_grid_RowClickEvent.rowType */
   readonly rowType: string;
+  /** @docid _ui_data_grid_RowClickEvent.isSelected */
   readonly isSelected?: boolean;
+  /** @docid _ui_data_grid_RowClickEvent.isExpanded */
   readonly isExpanded?: boolean;
+  /** @docid _ui_data_grid_RowClickEvent.isNewRow */
   readonly isNewRow?: boolean;
+  /** @docid _ui_data_grid_RowClickEvent.groupIndex */
   readonly groupIndex?: number;
+  /** @docid _ui_data_grid_RowClickEvent.rowElement */
   readonly rowElement: DxElement;
+  /** @docid _ui_data_grid_RowClickEvent.handled */
   readonly handled: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowCollapsedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,RowKeyInfo
+ */
 export type RowCollapsedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & RowKeyInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowCollapsingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo,RowKeyInfo
+ */
 export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & RowKeyInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowDblClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerEvent | MouseEvent> & {
+  /**
+   * @docid _ui_data_grid_RowDblClickEvent.data
+   * @type object
+   */
   readonly data: TRowData;
+  /**
+   * @docid _ui_data_grid_RowDblClickEvent.key
+   * @type any
+   */
   readonly key: TKey;
+  /**
+   * @docid _ui_data_grid_RowDblClickEvent.values
+   * @type Array<any>
+   */
   readonly values: Array<any>;
+  /**
+   * @docid _ui_data_grid_RowDblClickEvent.columns
+   * @type Array<dxDataGridColumn>
+   */
   readonly columns: Array<Column<TRowData, TKey>>;
+  /** @docid _ui_data_grid_RowDblClickEvent.rowIndex */
   readonly rowIndex: number;
+  /** @docid _ui_data_grid_RowDblClickEvent.rowType */
   readonly rowType: string;
+  /** @docid _ui_data_grid_RowDblClickEvent.isSelected */
   readonly isSelected?: boolean;
+  /** @docid _ui_data_grid_RowDblClickEvent.isExpanded */
   readonly isExpanded?: boolean;
+  /** @docid _ui_data_grid_RowDblClickEvent.isNewRow */
   readonly isNewRow?: boolean;
+  /** @docid _ui_data_grid_RowDblClickEvent.groupIndex */
   readonly groupIndex?: number;
+  /** @docid _ui_data_grid_RowDblClickEvent.rowElement */
   readonly rowElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowExpandedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,RowKeyInfo
+ */
 export type RowExpandedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & RowKeyInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowExpandingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo,RowKeyInfo
+ */
 export type RowExpandingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & RowKeyInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowInsertedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,RowInsertedInfo
+ */
 export type RowInsertedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & RowInsertedInfo<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowInsertingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,RowInsertingInfo
+ */
 export type RowInsertingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & RowInsertingInfo<TRowData>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowPreparedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type RowPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
+  /**
+   * @docid _ui_data_grid_RowPreparedEvent.data
+   * @type object
+   */
   readonly data: TRowData;
+  /**
+   * @docid _ui_data_grid_RowPreparedEvent.key
+   * @type any
+   */
   readonly key: TKey;
+  /**
+   * @docid _ui_data_grid_RowPreparedEvent.values
+   * @type Array<any>
+   */
   readonly values: Array<any>;
+  /**
+   * @docid _ui_data_grid_RowPreparedEvent.columns
+   * @type Array<dxDataGridColumn>
+   */
   readonly columns: Array<Column<TRowData, TKey>>;
+  /** @docid _ui_data_grid_RowPreparedEvent.rowIndex */
   readonly rowIndex: number;
+  /** @docid _ui_data_grid_RowPreparedEvent.rowType */
   readonly rowType: string;
+  /** @docid _ui_data_grid_RowPreparedEvent.groupIndex */
   readonly groupIndex?: number;
+  /** @docid _ui_data_grid_RowPreparedEvent.isSelected */
   readonly isSelected?: boolean;
+  /** @docid _ui_data_grid_RowPreparedEvent.isExpanded */
   readonly isExpanded?: boolean;
+  /** @docid _ui_data_grid_RowPreparedEvent.isNewRow */
   readonly isNewRow?: boolean;
+  /** @docid _ui_data_grid_RowPreparedEvent.rowElement */
   readonly rowElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowRemovedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,RowRemovedInfo
+ */
 export type RowRemovedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & RowRemovedInfo<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowRemovingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,RowRemovingInfo
+ */
 export type RowRemovingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & RowRemovingInfo<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowUpdatedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,RowUpdatedInfo
+ */
 export type RowUpdatedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & RowUpdatedInfo<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowUpdatingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,RowUpdatingInfo
+ */
 export type RowUpdatingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & RowUpdatingInfo<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_RowValidatingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,RowValidatingInfo
+ */
 export type RowValidatingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & RowValidatingInfo<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_SavedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,DataChangeInfo
+ */
 export type SavedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_SavingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SavingInfo
+ */
 export type SavingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & SavingInfo<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_common_grids_SelectionChangedInfo
+ */
 export type SelectionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & SelectionChangedInfo<TRowData, TKey>;
 
-/** @public */
+/**
+ * @docid _ui_data_grid_ToolbarPreparingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ToolbarPreparingInfo
+ */
 export type ToolbarPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & ToolbarPreparingInfo;
 
 /** @public */
@@ -2028,151 +2507,126 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxDataGridOptions.onAdaptiveDetailRowPreparing
  * @type_function_param1 e:{ui/data_grid:AdaptiveDetailRowPreparingEvent}
  */
 onAdaptiveDetailRowPreparing?: ((e: AdaptiveDetailRowPreparingEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onContentReady
  * @type_function_param1 e:{ui/data_grid:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onDataErrorOccurred
  * @type_function_param1 e:{ui/data_grid:DataErrorOccurredEvent}
  */
 onDataErrorOccurred?: ((e: DataErrorOccurredEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onDisposing
  * @type_function_param1 e:{ui/data_grid:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onEditCanceled
  * @type_function_param1 e:{ui/data_grid:EditCanceledEvent}
  */
 onEditCanceled?: ((e: EditCanceledEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onEditCanceling
  * @type_function_param1 e:{ui/data_grid:EditCancelingEvent}
  */
 onEditCanceling?: ((e: EditCancelingEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onInitialized
  * @type_function_param1 e:{ui/data_grid:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onInitNewRow
  * @type_function_param1 e:{ui/data_grid:InitNewRowEvent}
  */
 onInitNewRow?: ((e: InitNewRowEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onKeyDown
  * @type_function_param1 e:{ui/data_grid:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onOptionChanged
  * @type_function_param1 e:{ui/data_grid:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onRowCollapsed
  * @type_function_param1 e:{ui/data_grid:RowCollapsedEvent}
  */
 onRowCollapsed?: ((e: RowCollapsedEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onRowCollapsing
  * @type_function_param1 e:{ui/data_grid:RowCollapsingEvent}
  */
 onRowCollapsing?: ((e: RowCollapsingEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onRowExpanded
  * @type_function_param1 e:{ui/data_grid:RowExpandedEvent}
  */
 onRowExpanded?: ((e: RowExpandedEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onRowExpanding
  * @type_function_param1 e:{ui/data_grid:RowExpandingEvent}
  */
 onRowExpanding?: ((e: RowExpandingEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onRowInserted
  * @type_function_param1 e:{ui/data_grid:RowInsertedEvent}
  */
 onRowInserted?: ((e: RowInsertedEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onRowInserting
  * @type_function_param1 e:{ui/data_grid:RowInsertingEvent}
  */
 onRowInserting?: ((e: RowInsertingEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onRowRemoved
  * @type_function_param1 e:{ui/data_grid:RowRemovedEvent}
  */
 onRowRemoved?: ((e: RowRemovedEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onRowRemoving
  * @type_function_param1 e:{ui/data_grid:RowRemovingEvent}
  */
 onRowRemoving?: ((e: RowRemovingEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onRowUpdated
  * @type_function_param1 e:{ui/data_grid:RowUpdatedEvent}
  */
 onRowUpdated?: ((e: RowUpdatedEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onRowUpdating
  * @type_function_param1 e:{ui/data_grid:RowUpdatingEvent}
  */
 onRowUpdating?: ((e: RowUpdatingEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onRowValidating
  * @type_function_param1 e:{ui/data_grid:RowValidatingEvent}
  */
 onRowValidating?: ((e: RowValidatingEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onSaved
  * @type_function_param1 e:{ui/data_grid:SavedEvent}
  */
 onSaved?: ((e: SavedEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onSaving
  * @type_function_param1 e:{ui/data_grid:SavingEvent}
  */
 onSaving?: ((e: SavingEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onSelectionChanged
  * @type_function_param1 e:{ui/data_grid:SelectionChangedEvent}
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 /**
- * @skip
  * @docid dxDataGridOptions.onToolbarPreparing
  * @type_function_param1 e:{ui/data_grid:ToolbarPreparingEvent}
  */

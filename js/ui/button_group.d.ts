@@ -36,22 +36,52 @@ export {
     SingleMultipleOrNone,
 };
 
-/** @public */
+/**
+ * @docid _ui_button_group_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxButtonGroup>;
 
-/** @public */
+/**
+ * @docid _ui_button_group_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxButtonGroup>;
 
-/** @public */
+/**
+ * @docid _ui_button_group_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxButtonGroup>;
 
-/** @public */
+/**
+ * @docid _ui_button_group_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemClickEvent = NativeEventInfo<dxButtonGroup, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
-/** @public */
+/**
+ * @docid _ui_button_group_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_button_group_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SelectionChangedInfo
+ */
 export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedInfo;
 
 /**
@@ -195,25 +225,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxButtonGroupOptions.onContentReady
  * @type_function_param1 e:{ui/button_group:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxButtonGroupOptions.onDisposing
  * @type_function_param1 e:{ui/button_group:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxButtonGroupOptions.onInitialized
  * @type_function_param1 e:{ui/button_group:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxButtonGroupOptions.onOptionChanged
  * @type_function_param1 e:{ui/button_group:OptionChangedEvent}
  */

@@ -15,27 +15,50 @@ import {
 
 import dxTrackBar from './track_bar';
 
-/** @public */
+/**
+ * @docid _ui_range_slider_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxRangeSlider>;
 
-/** @public */
+/**
+ * @docid _ui_range_slider_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxRangeSlider>;
 
-/** @public */
+/**
+ * @docid _ui_range_slider_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxRangeSlider>;
 
-/** @public */
+/**
+ * @docid _ui_range_slider_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxRangeSlider> & ChangedOptionInfo;
 
 /**
  * @docid _ui_range_slider_ValueChangedEvent
  * @public
  * @type object
- * @inherits NativeEventInfo, ValueChangedInfo
+ * @inherits NativeEventInfo,ValueChangedInfo
  */
 export type ValueChangedEvent = NativeEventInfo<dxRangeSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo & {
+    /** @docid _ui_range_slider_ValueChangedEvent.start */
     readonly start?: number;
+    /** @docid _ui_range_slider_ValueChangedEvent.end */
     readonly end?: number;
+    /** @docid _ui_range_slider_ValueChangedEvent.value */
     readonly value?: Array<number>;
 };
 
@@ -112,25 +135,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxRangeSliderOptions.onContentReady
  * @type_function_param1 e:{ui/range_slider:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxRangeSliderOptions.onDisposing
  * @type_function_param1 e:{ui/range_slider:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxRangeSliderOptions.onInitialized
  * @type_function_param1 e:{ui/range_slider:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxRangeSliderOptions.onOptionChanged
  * @type_function_param1 e:{ui/range_slider:OptionChangedEvent}
  */

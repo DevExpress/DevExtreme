@@ -29,13 +29,28 @@ export {
     ValidationStatus,
 };
 
-/** @public */
+/**
+ * @docid _ui_validation_group_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxValidationGroup>;
 
-/** @public */
+/**
+ * @docid _ui_validation_group_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxValidationGroup>;
 
-/** @public */
+/**
+ * @docid _ui_validation_group_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxValidationGroup> & ChangedOptionInfo;
 
 /**
@@ -123,19 +138,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>
 */
 type Events = {
 /**
- * @skip
  * @docid dxValidationGroupOptions.onDisposing
  * @type_function_param1 e:{ui/validation_group:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxValidationGroupOptions.onInitialized
  * @type_function_param1 e:{ui/validation_group:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxValidationGroupOptions.onOptionChanged
  * @type_function_param1 e:{ui/validation_group:OptionChangedEvent}
  */

@@ -36,45 +36,111 @@ import {
 /** @public */
 export type ContextSubmenuDirection = 'auto' | 'left' | 'right';
 
-/** @public */
+/**
+ * @docid _ui_context_menu_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_context_menu_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_context_menu_HiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type HiddenEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_context_menu_HidingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type HidingEvent<TKey = any> = Cancelable & EventInfo<dxContextMenu<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_context_menu_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent<TKey = any> = InitializedEventInfo<dxContextMenu<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_context_menu_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemClickEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<Item>;
 
-/** @public */
+/**
+ * @docid _ui_context_menu_ItemContextMenuEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<Item>;
 
-/** @public */
+/**
+ * @docid _ui_context_menu_ItemRenderedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ItemInfo
+ */
 export type ItemRenderedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & ItemInfo<Item>;
 
-/** @public */
+/**
+ * @docid _ui_context_menu_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_context_menu_PositioningEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type PositioningEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & {
+    /** @docid _ui_context_menu_PositioningEvent.position */
     readonly position: PositionConfig;
 };
 
-/** @public */
+/**
+ * @docid _ui_context_menu_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SelectionChangedInfo
+ */
 export type SelectionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & SelectionChangedInfo<Item>;
 
-/** @public */
+/**
+ * @docid _ui_context_menu_ShowingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type ShowingEvent<TKey = any> = Cancelable & EventInfo<dxContextMenu<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_context_menu_ShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ShownEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
 
 /**
@@ -288,49 +354,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxContextMenuOptions.onContentReady
  * @type_function_param1 e:{ui/context_menu:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onDisposing
  * @type_function_param1 e:{ui/context_menu:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onInitialized
  * @type_function_param1 e:{ui/context_menu:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onItemClick
  * @type_function_param1 e:{ui/context_menu:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onItemContextMenu
  * @type_function_param1 e:{ui/context_menu:ItemContextMenuEvent}
  */
 onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onItemRendered
  * @type_function_param1 e:{ui/context_menu:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onOptionChanged
  * @type_function_param1 e:{ui/context_menu:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxContextMenuOptions.onSelectionChanged
  * @type_function_param1 e:{ui/context_menu:SelectionChangedEvent}
  */

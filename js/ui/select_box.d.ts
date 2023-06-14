@@ -32,72 +32,181 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface CustomItemCreatingInfo {
+    /** @docid */
     readonly text?: string;
+    /**
+     * @docid
+     * @type string|object|Promise<any>
+     */
     customItem?: string | any | PromiseLike<any>;
 }
 
-/** @public */
+/**
+ * @docid _ui_select_box_ChangeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ChangeEvent = NativeEventInfo<dxSelectBox, Event>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_ClosedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ClosedEvent = EventInfo<dxSelectBox>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxSelectBox>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_CopyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CopyEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_CustomItemCreatingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,CustomItemCreatingInfo
+ */
 export type CustomItemCreatingEvent = EventInfo<dxSelectBox> & CustomItemCreatingInfo;
 
-/** @public */
+/**
+ * @docid _ui_select_box_CutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CutEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxSelectBox>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_EnterKeyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type EnterKeyEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxSelectBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxSelectBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxSelectBox>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_InputEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type InputEvent = NativeEventInfo<dxSelectBox, UIEvent & { target: HTMLInputElement }>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemClickEvent = NativeEventInfo<dxSelectBox, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
-/** @public */
+/**
+ * @docid _ui_select_box_KeyDownEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyDownEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
 
 /** @public */
 export type KeyPressEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_KeyUpEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyUpEvent = NativeEventInfo<dxSelectBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_OpenedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type OpenedEvent = EventInfo<dxSelectBox>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxSelectBox> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_select_box_PasteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type PasteEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_select_box_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo
+ */
 export type SelectionChangedEvent = EventInfo<dxSelectBox> & SelectionChangedInfo;
 
-/** @public */
+/**
+ * @docid _ui_select_box_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxSelectBox, KeyboardEvent | MouseEvent | Event> & ValueChangedInfo;
 
 /** @public */
@@ -205,115 +314,96 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxSelectBoxOptions.onChange
  * @type_function_param1 e:{ui/select_box:ChangeEvent}
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onClosed
  * @type_function_param1 e:{ui/select_box:ClosedEvent}
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onContentReady
  * @type_function_param1 e:{ui/select_box:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onCopy
  * @type_function_param1 e:{ui/select_box:CopyEvent}
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onCut
  * @type_function_param1 e:{ui/select_box:CutEvent}
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onDisposing
  * @type_function_param1 e:{ui/select_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onEnterKey
  * @type_function_param1 e:{ui/select_box:EnterKeyEvent}
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onFocusIn
  * @type_function_param1 e:{ui/select_box:FocusInEvent}
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onFocusOut
  * @type_function_param1 e:{ui/select_box:FocusOutEvent}
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onInitialized
  * @type_function_param1 e:{ui/select_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onInput
  * @type_function_param1 e:{ui/select_box:InputEvent}
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onItemClick
  * @type_function_param1 e:{ui/select_box:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onKeyDown
  * @type_function_param1 e:{ui/select_box:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onKeyUp
  * @type_function_param1 e:{ui/select_box:KeyUpEvent}
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onOpened
  * @type_function_param1 e:{ui/select_box:OpenedEvent}
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/select_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onPaste
  * @type_function_param1 e:{ui/select_box:PasteEvent}
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onSelectionChanged
  * @type_function_param1 e:{ui/select_box:SelectionChangedEvent}
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 /**
- * @skip
  * @docid dxSelectBoxOptions.onValueChanged
  * @type_function_param1 e:{ui/select_box:ValueChangedEvent}
  */

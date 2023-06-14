@@ -27,45 +27,111 @@ import dxMultiView, {
 
 type ItemLike = string | Item | any;
 
-interface TabPanelItemInfo<TItem extends ItemLike> {
+/**
+ * @docid
+ * @hidden
+ */
+export interface TabPanelItemInfo<TItem extends ItemLike> {
+    /** @docid */
     readonly itemData?: TItem;
+    /** @docid */
     readonly itemElement?: DxElement;
 }
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxTabPanel<TItem, TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_ItemContextMenuEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_ItemHoldEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_ItemRenderedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ItemInfo
+ */
 export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & ItemInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SelectionChangedInfo
+ */
 export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_TitleClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,TabPanelItemInfo
+ */
 export type TitleClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & TabPanelItemInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_TitleHoldEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,TabPanelItemInfo
+ */
 export type TitleHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & TabPanelItemInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_tab_panel_TitleRenderedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,TabPanelItemInfo
+ */
 export type TitleRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & TabPanelItemInfo<TItem>;
 
 /**
@@ -259,55 +325,46 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxTabPanelOptions.onContentReady
  * @type_function_param1 e:{ui/tab_panel:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onDisposing
  * @type_function_param1 e:{ui/tab_panel:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onInitialized
  * @type_function_param1 e:{ui/tab_panel:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onItemClick
  * @type_function_param1 e:{ui/tab_panel:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onItemContextMenu
  * @type_function_param1 e:{ui/tab_panel:ItemContextMenuEvent}
  */
 onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onItemHold
  * @type_function_param1 e:{ui/tab_panel:ItemHoldEvent}
  */
 onItemHold?: ((e: ItemHoldEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onItemRendered
  * @type_function_param1 e:{ui/tab_panel:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onOptionChanged
  * @type_function_param1 e:{ui/tab_panel:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxTabPanelOptions.onSelectionChanged
  * @type_function_param1 e:{ui/tab_panel:SelectionChangedEvent}
  */
