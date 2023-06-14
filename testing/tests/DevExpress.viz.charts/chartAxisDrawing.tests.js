@@ -67,9 +67,9 @@ const environment = {
             return this.legend;
         });
 
-        titleModule.DEBUG_set_title(() => {
+        titleModule.DEBUG_set_title(sinon.spy(() => {
             return this.title;
-        });
+        }));
     },
     afterEach: function() {
         this.renderer = null;
