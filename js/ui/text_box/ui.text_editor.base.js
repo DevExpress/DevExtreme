@@ -526,7 +526,7 @@ const TextEditorBase = Editor.inherit({
         }
 
         const $input = this._input();
-        const { placeholder } = this.option();
+        const placeholder = this.option('placeholder');
         const placeholderAttributes = {
             'id': placeholder ? `dx-${new Guid()}` : undefined,
             'data-dx_placeholder': placeholder,
