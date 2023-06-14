@@ -112,6 +112,9 @@ jobs:
         npm run build:react
         npx gulp build-renovation-testing
 
+    - name: TestCafe version
+      run: npx testcafe -v
+
     - name: Run TestCafe tests
       run: |
         [ "${{ matrix.ARGS.theme }}" == "material.blue.light" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
