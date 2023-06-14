@@ -159,10 +159,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field selectedItem:object
-     * @type_function_param1_field component:dxDropDownButton
+     * @type_function_param1 e:{ui/drop_down_button:ButtonClickEvent}
      * @action
      * @public
      */
@@ -171,10 +168,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field component:dxDropDownButton
+     * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
      * @action
      * @public
      */
@@ -183,10 +177,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field item:object
-     * @type_function_param1_field previousItem:object
-     * @type_function_param1_field component:dxDropDownButton
+     * @type_function_param1 e:{ui/drop_down_button:SelectionChangedEvent}
      * @action
      * @public
      */
@@ -327,18 +318,12 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onButtonClick' | 'onItemClick' | 'onSelectionChanged'>;
 
 /**
 * @hidden
 */
 type Events = {
-/**
- * @skip
- * @docid dxDropDownButtonOptions.onButtonClick
- * @type_function_param1 e:{ui/drop_down_button:ButtonClickEvent}
- */
-onButtonClick?: ((e: ButtonClickEvent) => void);
 /**
  * @skip
  * @docid dxDropDownButtonOptions.onContentReady
@@ -359,21 +344,9 @@ onDisposing?: ((e: DisposingEvent) => void);
 onInitialized?: ((e: InitializedEvent) => void);
 /**
  * @skip
- * @docid dxDropDownButtonOptions.onItemClick
- * @type_function_param1 e:{ui/drop_down_button:ItemClickEvent}
- */
-onItemClick?: ((e: ItemClickEvent) => void);
-/**
- * @skip
  * @docid dxDropDownButtonOptions.onOptionChanged
  * @type_function_param1 e:{ui/drop_down_button:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxDropDownButtonOptions.onSelectionChanged
- * @type_function_param1 e:{ui/drop_down_button:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
 ///#ENDDEBUG

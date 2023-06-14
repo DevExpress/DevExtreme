@@ -58,9 +58,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
     label?: string;
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/speed_dial_action:ClickEvent}
      * @action
      * @public
      */
@@ -68,8 +66,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSpeedDialAction
+     * @type_function_param1 e:{ui/speed_dial_action:ContentReadyEvent}
      * @action
      * @public
      */
@@ -100,24 +97,12 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onClick' | 'onContentReady'>;
 
 /**
 * @hidden
 */
 type Events = {
-/**
- * @skip
- * @docid dxSpeedDialActionOptions.onClick
- * @type_function_param1 e:{ui/speed_dial_action:ClickEvent}
- */
-onClick?: ((e: ClickEvent) => void);
-/**
- * @skip
- * @docid dxSpeedDialActionOptions.onContentReady
- * @type_function_param1 e:{ui/speed_dial_action:ContentReadyEvent}
- */
-onContentReady?: ((e: ContentReadyEvent) => void);
 /**
  * @skip
  * @docid dxSpeedDialActionOptions.onDisposing

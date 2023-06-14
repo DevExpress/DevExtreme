@@ -314,7 +314,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
      * @public
@@ -324,11 +323,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
-     * @type_function_param1_field element:DxElement
-     * @type_function_param1_field model:any
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/polar_chart:LegendClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -338,10 +333,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
-     * @type_function_param1_field model:any
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/polar_chart:SeriesClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -350,8 +342,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
+     * @type_function_param1 e:{viz/polar_chart:SeriesHoverChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -360,8 +351,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
+     * @type_function_param1 e:{viz/polar_chart:SeriesSelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -370,10 +360,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
-     * @type_function_param1_field event:event
-     * @type_function_param1_field actionType:Enums.ZoomPanAction
+     * @type_function_param1 e:{viz/polar_chart:ZoomEndEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -382,10 +369,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
-     * @type_function_param1_field event:event
-     * @type_function_param1_field actionType:Enums.ZoomPanAction
+     * @type_function_param1 e:{viz/polar_chart:ZoomStartEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -2306,18 +2290,12 @@ export type Options = dxPolarChartOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onArgumentAxisClick' | 'onLegendClick' | 'onSeriesClick' | 'onSeriesHoverChanged' | 'onSeriesSelectionChanged' | 'onZoomEnd' | 'onZoomStart'>;
 
 /**
 * @hidden
 */
 type Events = {
-/**
- * @skip
- * @docid dxPolarChartOptions.onArgumentAxisClick
- * @type_function_param1 e:{viz/polar_chart:ArgumentAxisClickEvent}
- */
-onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void);
 /**
  * @skip
  * @docid dxPolarChartOptions.onDisposing
@@ -2368,12 +2346,6 @@ onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 onInitialized?: ((e: InitializedEvent) => void);
 /**
  * @skip
- * @docid dxPolarChartOptions.onLegendClick
- * @type_function_param1 e:{viz/polar_chart:LegendClickEvent}
- */
-onLegendClick?: ((e: LegendClickEvent) => void);
-/**
- * @skip
  * @docid dxPolarChartOptions.onOptionChanged
  * @type_function_param1 e:{viz/polar_chart:OptionChangedEvent}
  */
@@ -2398,24 +2370,6 @@ onPointHoverChanged?: ((e: PointHoverChangedEvent) => void);
 onPointSelectionChanged?: ((e: PointSelectionChangedEvent) => void);
 /**
  * @skip
- * @docid dxPolarChartOptions.onSeriesClick
- * @type_function_param1 e:{viz/polar_chart:SeriesClickEvent}
- */
-onSeriesClick?: ((e: SeriesClickEvent) => void);
-/**
- * @skip
- * @docid dxPolarChartOptions.onSeriesHoverChanged
- * @type_function_param1 e:{viz/polar_chart:SeriesHoverChangedEvent}
- */
-onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void);
-/**
- * @skip
- * @docid dxPolarChartOptions.onSeriesSelectionChanged
- * @type_function_param1 e:{viz/polar_chart:SeriesSelectionChangedEvent}
- */
-onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void);
-/**
- * @skip
  * @docid dxPolarChartOptions.onTooltipHidden
  * @type_function_param1 e:{viz/polar_chart:TooltipHiddenEvent}
  */
@@ -2426,17 +2380,5 @@ onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
  * @type_function_param1 e:{viz/polar_chart:TooltipShownEvent}
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
-/**
- * @skip
- * @docid dxPolarChartOptions.onZoomEnd
- * @type_function_param1 e:{viz/polar_chart:ZoomEndEvent}
- */
-onZoomEnd?: ((e: ZoomEndEvent) => void);
-/**
- * @skip
- * @docid dxPolarChartOptions.onZoomStart
- * @type_function_param1 e:{viz/polar_chart:ZoomStartEvent}
- */
-onZoomStart?: ((e: ZoomStartEvent) => void);
 };
 ///#ENDDEBUG

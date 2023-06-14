@@ -269,9 +269,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field groupData:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:GroupRenderedEvent}
      * @action
      * @public
      */
@@ -280,10 +278,7 @@ export interface dxListOptions<
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
+     * @type_function_param1 e:{ui/list:ItemClickEvent}
      * @action
      * @public
      */
@@ -291,10 +286,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
+     * @type_function_param1 e:{ui/list:ItemContextMenuEvent}
      * @action
      * @public
      */
@@ -302,9 +294,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:ItemDeletedEvent}
      * @action
      * @hidden false
      * @public
@@ -313,10 +303,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field cancel:boolean | Promise<boolean> | Promise<void>
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:ItemDeletingEvent}
      * @action
      * @hidden false
      * @public
@@ -325,10 +312,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
+     * @type_function_param1 e:{ui/list:ItemHoldEvent}
      * @action
      * @public
      */
@@ -336,9 +320,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:ItemReorderedEvent}
      * @action
      * @hidden false
      * @public
@@ -347,10 +329,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:ItemSwipeEvent}
      * @action
      * @public
      */
@@ -358,8 +337,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:PageLoadingEvent}
      * @action
      * @public
      */
@@ -367,8 +345,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:PullRefreshEvent}
      * @action
      * @public
      */
@@ -376,10 +353,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field scrollOffset:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:ScrollEvent}
      * @action
      * @public
      */
@@ -387,8 +361,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:SelectAllValueChangedEvent}
      * @action
      * @public
      */
@@ -751,7 +724,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onGroupRendered' | 'onItemClick' | 'onItemContextMenu' | 'onItemDeleted' | 'onItemDeleting' | 'onItemHold' | 'onItemReordered' | 'onItemSwipe' | 'onPageLoading' | 'onPullRefresh' | 'onScroll' | 'onSelectAllValueChanged'>;
 
 /**
 * @hidden
@@ -771,46 +744,10 @@ onContentReady?: ((e: ContentReadyEvent) => void);
 onDisposing?: ((e: DisposingEvent) => void);
 /**
  * @skip
- * @docid dxListOptions.onGroupRendered
- * @type_function_param1 e:{ui/list:GroupRenderedEvent}
- */
-onGroupRendered?: ((e: GroupRenderedEvent) => void);
-/**
- * @skip
  * @docid dxListOptions.onInitialized
  * @type_function_param1 e:{ui/list:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onItemClick
- * @type_function_param1 e:{ui/list:ItemClickEvent}
- */
-onItemClick?: ((e: ItemClickEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onItemContextMenu
- * @type_function_param1 e:{ui/list:ItemContextMenuEvent}
- */
-onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onItemDeleted
- * @type_function_param1 e:{ui/list:ItemDeletedEvent}
- */
-onItemDeleted?: ((e: ItemDeletedEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onItemDeleting
- * @type_function_param1 e:{ui/list:ItemDeletingEvent}
- */
-onItemDeleting?: ((e: ItemDeletingEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onItemHold
- * @type_function_param1 e:{ui/list:ItemHoldEvent}
- */
-onItemHold?: ((e: ItemHoldEvent) => void);
 /**
  * @skip
  * @docid dxListOptions.onItemRendered
@@ -819,46 +756,10 @@ onItemHold?: ((e: ItemHoldEvent) => void);
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
  * @skip
- * @docid dxListOptions.onItemReordered
- * @type_function_param1 e:{ui/list:ItemReorderedEvent}
- */
-onItemReordered?: ((e: ItemReorderedEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onItemSwipe
- * @type_function_param1 e:{ui/list:ItemSwipeEvent}
- */
-onItemSwipe?: ((e: ItemSwipeEvent) => void);
-/**
- * @skip
  * @docid dxListOptions.onOptionChanged
  * @type_function_param1 e:{ui/list:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onPageLoading
- * @type_function_param1 e:{ui/list:PageLoadingEvent}
- */
-onPageLoading?: ((e: PageLoadingEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onPullRefresh
- * @type_function_param1 e:{ui/list:PullRefreshEvent}
- */
-onPullRefresh?: ((e: PullRefreshEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onScroll
- * @type_function_param1 e:{ui/list:ScrollEvent}
- */
-onScroll?: ((e: ScrollEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onSelectAllValueChanged
- * @type_function_param1 e:{ui/list:SelectAllValueChangedEvent}
- */
-onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
 /**
  * @skip
  * @docid dxListOptions.onSelectionChanged

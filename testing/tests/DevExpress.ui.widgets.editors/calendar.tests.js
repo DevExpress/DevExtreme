@@ -762,6 +762,37 @@ QUnit.module('Views integration', {
         });
     });
 
+    ['month', 'year', 'decade', 'century'].forEach((zoomLevel) => {
+        QUnit.test(`contouredDate should correctly move from main view to additiona view (zoomLevel=${zoomLevel})`, function(assert) {
+            this.reinit({
+                focusStateEnabled: true,
+                viewsCount: 2,
+                zoomLevel,
+            });
+
+            this.calendar.option('currentDate', new Date('2099/12/31'));
+            this.calendar.focus();
+
+            const keyboard = keyboardMock(this.$element);
+            const $mainView = $(getCurrentViewInstance(this.calendar).$element());
+            const $additionalView = $(getAdditionalViewInstance(this.calendar).$element());
+
+            let $contouredCellOnMainView = $mainView.find(toSelector(CALENDAR_CONTOURED_DATE_CLASS));
+            let $contouredCellOnAdditionalView = $additionalView.find(toSelector(CALENDAR_CONTOURED_DATE_CLASS));
+
+            assert.strictEqual($contouredCellOnMainView.length, 1, 'contoured date is on main view');
+            assert.strictEqual($contouredCellOnAdditionalView.length, 0, 'contoured date is not on additional view');
+
+            keyboard.press('right');
+
+            $contouredCellOnMainView = $mainView.find(toSelector(CALENDAR_CONTOURED_DATE_CLASS));
+            $contouredCellOnAdditionalView = $additionalView.find(toSelector(CALENDAR_CONTOURED_DATE_CLASS));
+
+            assert.strictEqual($contouredCellOnMainView.length, 0, 'contoured date is not on main view');
+            assert.strictEqual($contouredCellOnAdditionalView.length, 1, 'contoured date is on additional view');
+        });
+    });
+
     QUnit.test('view contouredDate should be set on calendar focusin and should be removed on focusout', function(assert) {
         const view = getCurrentViewInstance(this.calendar);
 
@@ -777,6 +808,21 @@ QUnit.module('Views integration', {
     QUnit.test('contouredDate should not be passed to view if widget is not in focus', function(assert) {
         this.calendar.option('value', new Date(2013, 5, 16));
         assert.equal(getCurrentViewInstance(this.calendar).option('contouredDate'), null, 'view contouredDate is null');
+    });
+
+    QUnit.test('contoredDate class should not be added to the January 1970 cell when contouredDate is set to null', function(assert) {
+        this.reinit({
+            value: new Date(0),
+            zoomLevel: 'year',
+        });
+
+        const view = getCurrentViewInstance(this.calendar);
+
+        view.option('contouredDate', null);
+
+        const $contouredCell = getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_CONTOURED_DATE_CLASS));
+
+        assert.strictEqual($contouredCell.length, 0, 'there is no contoured date cell');
     });
 });
 

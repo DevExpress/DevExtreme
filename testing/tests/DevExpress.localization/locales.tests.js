@@ -26,13 +26,14 @@ dictionaries['tr'] = require('localization/messages/tr.json!');
 dictionaries['vi'] = require('localization/messages/vi.json!');
 dictionaries['zh-tw'] = require('localization/messages/zh-tw.json!');
 dictionaries['zh'] = require('localization/messages/zh.json!');
+dictionaries['fa'] = require('localization/messages/fa.json!');
 
 const LOCALES = [
     'ar', 'ca', 'cs', 'de', 'el',
-    'es', 'fi', 'fr', 'hu', 'it',
-    'ja', 'lt', 'nb', 'nl', 'pt',
-    'ro', 'ru', 'sl', 'sv', 'tr',
-    'vi', 'zh-tw', 'zh'
+    'es', 'fa', 'fi', 'fr', 'hu',
+    'it', 'ja', 'lt', 'nb', 'nl',
+    'pt', 'ro', 'ru', 'sl', 'sv',
+    'tr', 'vi', 'zh-tw', 'zh'
 ];
 
 LOCALES.forEach(locale => {

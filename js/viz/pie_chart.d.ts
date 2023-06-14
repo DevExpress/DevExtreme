@@ -245,10 +245,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPieChart
-     * @type_function_param1_field event:event
-     * @type_function_param1_field points:Array<piePointObject>
+     * @type_function_param1 e:{viz/pie_chart:LegendClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -916,7 +913,7 @@ export type Options = dxPieChartOptions;
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onLegendClick'>;
 
 /**
 * @hidden
@@ -970,12 +967,6 @@ onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
  * @type_function_param1 e:{viz/pie_chart:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
-/**
- * @skip
- * @docid dxPieChartOptions.onLegendClick
- * @type_function_param1 e:{viz/pie_chart:LegendClickEvent}
- */
-onLegendClick?: ((e: LegendClickEvent) => void);
 /**
  * @skip
  * @docid dxPieChartOptions.onOptionChanged
