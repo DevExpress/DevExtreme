@@ -104,7 +104,11 @@ const transpileFile = async(sourcePath, targetPath) => {
         return;
     }
 
-    if(/(^|\s)System(JS)?\.register/gm.test(code) || /(^|\s)define\(/gm.test(code)) {
+    if(
+        /(^|\s)System(JS)?\.register/gm.test(code) ||
+        /(^|\s)define\(/gm.test(code) ||
+        sourcePath.includes('helpers/forMap')
+    ) {
         writeFileSync(targetPath, code);
     } else if(/(\(|\s|^)require\(/.test(code) || /(module\.)?exports(\.\w+)?\s?=/.test(code)) {
         transpileCommonJSFile(code, targetPath);
@@ -262,6 +266,7 @@ const transpileTesting = async() => {
     const testsList = getFileList(path.join(root, 'testing/tests'));
 
     [].concat(contentList, helpersList, testsList)
+        .filter(fp => fp.includes('DevExpress.ui.widgets') || fp.includes('helpers'))
         .forEach((filePath) => {
             transpileFile(filePath, filePath.replace('/testing/', '/artifacts/transpiled-testing/'));
         });
