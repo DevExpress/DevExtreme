@@ -234,8 +234,8 @@ export const searchModule = {
 
         _getStringNormalizer() {
           const isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
-          const dataSource = this._dataController?.getDataSource();
-          const langParams = dataSource?.loadOptions().langParams;
+          const dataSource = this._dataController?.getDataSource?.();
+          const langParams = dataSource?.loadOptions?.()?.langParams;
 
           return (str: string): string => toComparable(str, isCaseSensitive, langParams);
         },
