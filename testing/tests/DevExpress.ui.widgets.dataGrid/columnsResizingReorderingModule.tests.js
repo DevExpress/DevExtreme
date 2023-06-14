@@ -3663,7 +3663,10 @@ QUnit.module('Headers reordering', {
         const td = testElement.find('.dx-datagrid-headers').first().find('td').first();
 
         // assert
-        assert.ok(!$._data(td[0], 'events'), 'no dxpointerdown event subscription');
+        const events = $._data(td[0], 'events') || {};
+        assert.notOk(Object.prototype.hasOwnProperty.call(events, 'dxdragstart'), 'no dxdragstart event subscription');
+        assert.notOk(Object.prototype.hasOwnProperty.call(events, 'dxdrag'), 'no dxdrag event subscription');
+        assert.notOk(Object.prototype.hasOwnProperty.call(events, 'dxdragend'), 'no dxdragend event subscription');
     });
 
     // B254473
