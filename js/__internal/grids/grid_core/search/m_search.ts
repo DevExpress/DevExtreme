@@ -223,6 +223,7 @@ export const searchModule = {
         init() {
           this.callBase.apply(this, arguments);
           this._searchParams = [];
+          this._dataController = this.getController('data');
         },
 
         _getFormattedSearchText(column, searchText) {
@@ -233,11 +234,10 @@ export const searchModule = {
 
         _getStringNormalizer() {
           const isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
-          const langParams = this.getController('data')?.getDataSource?.()?.loadOptions?.()?.langParams;
+          const dataSource = this._dataController?.getDataSource();
+          const langParams = dataSource?.loadOptions().langParams;
 
-          return function (str: string): string {
-            return toComparable(str, isCaseSensitive, langParams);
-          };
+          return (str: string): string => toComparable(str, isCaseSensitive, langParams);
         },
 
         _findHighlightingTextNodes(column, cellElement, searchText) {
