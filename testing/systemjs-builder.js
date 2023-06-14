@@ -266,7 +266,6 @@ const transpileTesting = async() => {
     const testsList = getFileList(path.join(root, 'testing/tests'));
 
     [].concat(contentList, helpersList, testsList)
-        .filter(fp => fp.includes('DevExpress.ui.widgets') || fp.includes('helpers'))
         .forEach((filePath) => {
             transpileFile(filePath, filePath.replace('/testing/', '/artifacts/transpiled-testing/'));
         });

@@ -63,7 +63,8 @@ jobs:
       fail-fast: false
       matrix:
         constel: [
-          'misc',
+          'misc(1/2)',
+          'misc(2/2)',
           'ui.editors(1/2)',
           'ui.editors(2/2)',
           'ui.grid(1/2)',
