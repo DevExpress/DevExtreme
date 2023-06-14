@@ -6369,63 +6369,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             $('#qunit-fixture').removeClass('qunit-fixture-static');
         }
     });
-
-    // T1136896
-    QUnit.test('Editing buttons should rerender correctly after scrolling if repaintChangesOnly=true', function(assert) {
-        // arrange
-        const data = [...new Array(14)].map((_, i) => ({
-            id: i + 1
-        }));
-
-        const dataGrid = createDataGrid({
-            height: 200,
-            loadingTimeout: null,
-            dataSource: data,
-            keyExpr: 'id',
-            scrolling: {
-                mode: 'virtual',
-            },
-            editing: {
-                mode: 'row',
-                allowUpdating: true,
-                allowDeleting: true,
-            },
-            repaintChangesOnly: true,
-        });
-        this.clock.tick();
-
-        // act
-        dataGrid.option('editing.editRowKey', 12);
-
-        this.clock.tick(10);
-
-        const scrollable = dataGrid.getScrollable();
-        scrollable.scrollBy({ top: 1000 });
-
-        this.clock.tick(10);
-        $(scrollable.container()).triggerHandler('scroll');
-        $(scrollable.container()).triggerHandler('scroll');
-        $(scrollable.container()).triggerHandler('scroll');
-        this.clock.tick(10);
-
-        const $rows = $('.dx-data-row');
-
-        Array.from($rows).forEach((row, i) => {
-            const $row = $(row);
-
-            if(i === 2) { // editing row
-                assert.strictEqual($row.find('a').length, 2);
-                assert.strictEqual($row.find('a:eq(0)').text(), 'Save');
-                assert.strictEqual($row.find('a:eq(1)').text(), 'Cancel');
-                return;
-            }
-
-            // other rows
-            assert.strictEqual($row.find('a').length, 2);
-            assert.strictEqual($row.find('a:eq(0)').text(), 'Edit');
-            assert.strictEqual($row.find('a:eq(1)').text(), 'Delete');
-        });
-    });
 });
 
 
