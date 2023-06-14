@@ -4469,7 +4469,7 @@ QUnit.module('Rows view with real dataController and columnController', {
                 });
             } else {
                 const scrollTop = e.top;
-                const timeoutID = timeoutID || setTimeout(function() {
+                setTimeout(function() {
                     assert.equal(scrollTop, 0, 'scroll position is 0');
                     done();
                 });
