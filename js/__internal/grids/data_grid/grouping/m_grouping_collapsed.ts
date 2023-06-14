@@ -236,7 +236,6 @@ export const GroupingHelper = GroupingHelperCore.inherit((function () {
           group: groups,
         }),
         select: options.storeLoadOptions.select,
-        // eslint-disable-next-line spellcheck/spell-checker
         langParams: options.storeLoadOptions?.langParams,
       };
 
