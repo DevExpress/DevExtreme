@@ -22,8 +22,6 @@ createTestCafe({
     hostname: 'localhost',
     port1: 1437,
     port2: 1438,
-    // eslint-disable-next-line spellcheck/spell-checker
-    experimentalProxyless: true,
 })
     .then(tc => {
         testCafe = tc;
@@ -90,6 +88,7 @@ createTestCafe({
 
         const runOptions = {
             quarantineMode: { successThreshold: 1, attemptLimit: 3 },
+            nativeAutomation: true,
         };
 
         if(args.componentFolder.trim() !== 'renovation') {
@@ -108,9 +107,7 @@ createTestCafe({
             }
         }
 
-        if(args.browsers === 'chrome:docker') {
-            runOptions.disableScreenshots = true;
-        }
+        runOptions.disableScreenshots = true;
 
         return runner.run(runOptions);
     })
