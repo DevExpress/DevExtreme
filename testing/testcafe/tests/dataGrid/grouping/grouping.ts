@@ -179,6 +179,7 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
 
   await takeScreenshot('T1155453-expanded-groups-with-fixed-content', dataGrid.element);
 
+  // act
   await dataGrid.apiCollapseAllGroups();
   await t.wait(200);
 
