@@ -1152,7 +1152,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
     const $cell = $cells.eq(columnVisibleIndex);
 
-    return $cell;
+    return $cell.length > 0 ? $cell : undefined;
   }
 
   _getRowElement(rowIndex) {
