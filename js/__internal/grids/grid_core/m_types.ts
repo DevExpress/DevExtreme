@@ -225,7 +225,10 @@ declare class ModuleItem {
 
   createAction(...args: any[]): void;
 
-  executeAction<T extends keyof InternalGridOptions>(actionName: T, args: ActionParameters<T>): void;
+  executeAction<T extends keyof InternalGridOptions>(
+    actionName: T,
+    args: ActionParameters<T>
+  ): void;
 
   dispose(): void;
 

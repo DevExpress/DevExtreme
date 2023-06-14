@@ -2081,7 +2081,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     const row = this._dataController.items()[localRowIndex];
     const column = this._columnsController.getVisibleColumns()[columnIndex];
     this.executeAction('onFocusedCellChanged', {
-      cellElement: getPublicElement($cell!),
+      cellElement: ($cell ? getPublicElement($cell) : undefined)!,
       columnIndex,
       rowIndex,
       row: row as any,
