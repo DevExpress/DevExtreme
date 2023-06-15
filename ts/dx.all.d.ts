@@ -4484,7 +4484,6 @@ declare module DevExpress.data {
     TKey
   > {
     constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
-
     /**
      * [descr:Store.load()]
      */
@@ -4578,6 +4577,13 @@ declare module DevExpress.data {
    */
   export class CustomStore<TItem = any, TKey = any> extends Store<TItem, TKey> {
     constructor(options?: DevExpress.data.CustomStore.Options<TItem, TKey>);
+    /**
+     * [descr:CustomStore.byKey(key, extraOptions)]
+     */
+    byKey(
+      key: TKey,
+      extraOptions?: LoadOptions<TItem>
+    ): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:CustomStore.clearRawDataCache()]
      */
@@ -5307,16 +5313,12 @@ declare module DevExpress.data {
     TKey
   > {
     constructor(options?: DevExpress.data.ODataStore.Options<TItem, TKey>);
-    byKey(key: TKey): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:ODataStore.byKey(key, extraOptions)]
      */
     byKey(
       key: TKey,
-      extraOptions: {
-        expand?: string | Array<string>;
-        select?: string | Array<string>;
-      }
+      extraOptions?: LoadOptions<TItem>
     ): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:ODataStore.createQuery(loadOptions)]
@@ -5947,12 +5949,9 @@ declare module DevExpress.data {
   export class Store<TItem = any, TKey = any> {
     constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
     /**
-     * [descr:Store.byKey(key, extraOptions)]
+     * [descr:Store.byKey(key)]
      */
-    byKey(
-      key: TKey,
-      extraOptions?: LoadOptions<TItem>
-    ): DevExpress.core.utils.DxPromise<TItem>;
+    byKey(key: TKey): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:Store.insert(values)]
      */
