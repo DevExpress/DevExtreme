@@ -14,14 +14,6 @@ import { isEmptyObject } from '../core/utils/type';
 const storeImpl = {};
 
 const Store = Class.inherit({
-    /**
-     * @name Store.byKey
-     * @publicName byKey(key)
-     * @param1 key:object|string|number
-     * @return Promise<any>
-     * @public
-     */
-
     _langParams: {},
     ctor: function(options) {
         const that = this;

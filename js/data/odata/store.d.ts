@@ -101,15 +101,15 @@ export default class ODataStore<
     TKey = any,
 > extends Store<TItem, TKey> {
     constructor(options?: Options<TItem, TKey>);
-    byKey(key: TKey): DxPromise<TItem>;
     /**
      * @docid
      * @publicName byKey(key, extraOptions)
-     * @param1 key:object|string|number
-     * @return Promise<any>
+     * @type_function_param1 key:object|string|number
+     * @type_function_param2 extraOptions:LoadOptions
+     * @type_function_return Promise<any>
      * @public
      */
-    byKey(key: TKey, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<TItem>;
+    byKey(key: TKey, extraOptions?: LoadOptions<TItem>): DxPromise<TItem>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)

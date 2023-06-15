@@ -53,9 +53,6 @@ export interface CustomStoreOptions<
 > extends StoreOptions<TItem, TKey> {
     /**
      * @docid
-     * @type_function_param1 key:object|string|number
-     * @type_function_param2 extraOptions:LoadOptions
-     * @type_function_return Promise<any>
      * @public
      */
     byKey?: ((key: TKey, extraOptions?: LoadOptions<TItem>) => PromiseLike<TItem>);
@@ -126,6 +123,15 @@ export default class CustomStore<
     TKey = any,
 > extends Store<TItem, TKey> {
     constructor(options?: Options<TItem, TKey>);
+    /**
+     * @docid
+     * @publicName byKey(key, extraOptions)
+     * @type_function_param1 key:object|string|number
+     * @type_function_param2 extraOptions:LoadOptions
+     * @type_function_return Promise<any>
+     * @public
+     */
+    byKey(key: TKey, extraOptions?: LoadOptions<TItem>): DxPromise<TItem>;
     /**
      * @docid
      * @publicName clearRawDataCache()
