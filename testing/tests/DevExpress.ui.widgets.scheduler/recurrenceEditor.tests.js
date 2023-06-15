@@ -400,10 +400,10 @@ module('Repeat-end editor', () => {
         const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
         const untilDate = $repeatUntilDate.dxDateBox('instance');
 
-        untilDate.option('value', getRecurrenceProcessor().getDateByAsciiString('20231007'));
+        untilDate.option('value', getRecurrenceProcessor().getDateByAsciiString('20230615T0000'));
 
         const rightDate = timeZoneCalculator.createDate(
-            getRecurrenceProcessor().getDateByAsciiString('20231007'),
+            getRecurrenceProcessor().getDateByAsciiString('20230615T0000'),
             { path: 'fromGrid' },
         );
 
