@@ -5,8 +5,11 @@ import {
     ChangedOptionInfo,
 } from '../events/index';
 
+import {
+    TextEditorButton,
+} from '../common';
+
 import dxTextEditor, {
-    dxTextEditorButton,
     dxTextEditorOptions,
 } from './text_box/ui.text_editor.base';
 
@@ -157,7 +160,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      * @default undefined
      * @public
      */
-    buttons?: Array<NumberBoxPredefinedButton | dxTextEditorButton>;
+    buttons?: Array<NumberBoxPredefinedButton | TextEditorButton>;
     /**
      * @docid
      * @default ""

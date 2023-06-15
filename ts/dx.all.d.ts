@@ -1693,6 +1693,23 @@ declare module DevExpress.common {
   export type SubmenuShowMode = 'onClick' | 'onHover';
   export type TextBoxPredefinedButton = 'clear';
 
+  /**
+   * [descr:TextEditorButton]
+   */
+  export type TextEditorButton = {
+    /**
+     * [descr:TextEditorButton.location]
+     */
+    location?: TextEditorButtonLocation;
+    /**
+     * [descr:TextEditorButton.name]
+     */
+    name?: string;
+    /**
+     * [descr:TextEditorButton.options]
+     */
+    options?: DevExpress.ui.dxButton.Properties;
+  };
   export type TextEditorButtonLocation = 'after' | 'before';
   export type ToolbarItemComponent =
     | 'dxAutocomplete'
@@ -14388,7 +14405,7 @@ declare module DevExpress.ui {
      */
     buttons?: Array<
       | DevExpress.ui.dxDropDownEditor.DropDownPredefinedButton
-      | dxTextEditorButton
+      | DevExpress.common.TextEditorButton
     >;
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
@@ -20982,7 +20999,8 @@ declare module DevExpress.ui {
      * [descr:dxNumberBoxOptions.buttons]
      */
     buttons?: Array<
-      DevExpress.ui.dxNumberBox.NumberBoxPredefinedButton | dxTextEditorButton
+      | DevExpress.ui.dxNumberBox.NumberBoxPredefinedButton
+      | DevExpress.common.TextEditorButton
     >;
     /**
      * [descr:dxNumberBoxOptions.format]
@@ -26141,24 +26159,6 @@ declare module DevExpress.ui {
     interface TextEditorInstance extends dxTextEditor<Properties> {}
   }
   /**
-   * [descr:dxTextEditorButton]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxTextEditorButton {
-    /**
-     * [descr:dxTextEditorButton.location]
-     */
-    location?: DevExpress.common.TextEditorButtonLocation;
-    /**
-     * [descr:dxTextEditorButton.name]
-     */
-    name?: string;
-    /**
-     * [descr:dxTextEditorButton.options]
-     */
-    options?: dxButtonOptions;
-  }
-  /**
    * [descr:dxTextEditorOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -26168,7 +26168,9 @@ declare module DevExpress.ui {
      * [descr:dxTextEditorOptions.buttons]
      */
     buttons?: Array<
-      string | DevExpress.common.TextBoxPredefinedButton | dxTextEditorButton
+      | string
+      | DevExpress.common.TextBoxPredefinedButton
+      | DevExpress.common.TextEditorButton
     >;
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
