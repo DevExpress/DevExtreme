@@ -200,6 +200,11 @@ jobs:
         pushd devextreme-setup
         installerName=$(realpath .)/devextreme-installer.tgz
         popd
+        cd ./packages/devextreme-angular
+        npm install --save-dev --legacy-peer-deps $installerName
+        cd ../sandbox
+        npm install --save-dev --legacy-peer-deps $installerName
+        cd ../../
         npm install --save-dev --legacy-peer-deps $installerName
 
     - name: Build with Angular 12
