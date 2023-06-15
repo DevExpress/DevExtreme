@@ -6,7 +6,7 @@ import 'bundles/modules/parts/widgets-web';
 
 GoogleProvider.remapConstant('http://fakeUrl');
 
-QUnit.module.skip('eventsOnRefresh', {
+QUnit.module('eventsOnRefresh', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
