@@ -1,2 +1,2 @@
 // deprecated
-export * from '../../__internal/grids/grid_core/filter_custom_operations/module';
+export * from '../../__internal/grids/grid_core/filter/m_filter_custom_operations';

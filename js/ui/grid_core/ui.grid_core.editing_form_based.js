@@ -1,2 +1,2 @@
 // deprecated
-export * from '../../__internal/grids/grid_core/editing/module_form_based';
+export * from '../../__internal/grids/grid_core/editing/m_editing_form_based';
