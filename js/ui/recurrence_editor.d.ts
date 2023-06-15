@@ -9,19 +9,44 @@ import {
     NativeEventInfo,
 } from '../events/index';
 
-/** @public */
+/**
+ * @docid _ui_recurrence_editor_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxRecurrenceEditor>;
 
-/** @public */
+/**
+ * @docid _ui_recurrence_editor_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxRecurrenceEditor>;
 
-/** @public */
+/**
+ * @docid _ui_recurrence_editor_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxRecurrenceEditor>;
 
-/** @public */
+/**
+ * @docid _ui_recurrence_editor_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxRecurrenceEditor> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_recurrence_editor_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxRecurrenceEditor, Event> & ValueChangedInfo;
 
 /**
@@ -65,31 +90,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxRecurrenceEditorOptions.onContentReady
  * @type_function_param1 e:{ui/recurrence_editor:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxRecurrenceEditorOptions.onDisposing
  * @type_function_param1 e:{ui/recurrence_editor:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxRecurrenceEditorOptions.onInitialized
  * @type_function_param1 e:{ui/recurrence_editor:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxRecurrenceEditorOptions.onOptionChanged
  * @type_function_param1 e:{ui/recurrence_editor:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxRecurrenceEditorOptions.onValueChanged
  * @type_function_param1 e:{ui/recurrence_editor:ValueChangedEvent}
  */

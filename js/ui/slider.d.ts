@@ -28,19 +28,44 @@ export {
     VerticalEdge,
 };
 
-/** @public */
+/**
+ * @docid _ui_slider_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxSlider>;
 
-/** @public */
+/**
+ * @docid _ui_slider_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxSlider>;
 
-/** @public */
+/**
+ * @docid _ui_slider_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxSlider>;
 
-/** @public */
+/**
+ * @docid _ui_slider_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_slider_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
 
 /**
@@ -202,31 +227,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxSliderOptions.onContentReady
  * @type_function_param1 e:{ui/slider:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxSliderOptions.onDisposing
  * @type_function_param1 e:{ui/slider:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSliderOptions.onInitialized
  * @type_function_param1 e:{ui/slider:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSliderOptions.onOptionChanged
  * @type_function_param1 e:{ui/slider:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxSliderOptions.onValueChanged
  * @type_function_param1 e:{ui/slider:ValueChangedEvent}
  */

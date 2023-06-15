@@ -13,25 +13,60 @@ import dxScrollable, {
     ScrollEventInfo,
 } from './scroll_view/ui.scrollable';
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxScrollView>;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxScrollView>;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxScrollView> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_PullDownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type PullDownEvent = EventInfo<dxScrollView>;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_ReachBottomEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ReachBottomEvent = EventInfo<dxScrollView>;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_ScrollEvent
+ * @public
+ * @type object
+ * @inherits ScrollEventInfo
+ */
 export type ScrollEvent = ScrollEventInfo<dxScrollView>;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_UpdatedEvent
+ * @public
+ * @type object
+ * @inherits ScrollEventInfo
+ */
 export type UpdatedEvent = ScrollEventInfo<dxScrollView>;
 
 /**
@@ -125,31 +160,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxScrollViewOptions.onDisposing
  * @type_function_param1 e:{ui/scroll_view:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxScrollViewOptions.onInitialized
  * @type_function_param1 e:{ui/scroll_view:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxScrollViewOptions.onOptionChanged
  * @type_function_param1 e:{ui/scroll_view:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxScrollViewOptions.onScroll
  * @type_function_param1 e:{ui/scroll_view:ScrollEvent}
  */
 onScroll?: ((e: ScrollEvent) => void);
 /**
- * @skip
  * @docid dxScrollViewOptions.onUpdated
  * @type_function_param1 e:{ui/scroll_view:UpdatedEvent}
  */

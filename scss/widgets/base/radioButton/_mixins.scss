@@ -1,0 +1,207 @@
+@use "sass:math";
+
+@mixin dx-radiobutton-icon-mixin(
+  $icon-size,
+  $border-width,
+  $border-color,
+  $radiogroup-bg,
+  $checked-color,
+  $dot-size,
+  $useRipple: false,
+  $ripple-size: 0,
+  $ripple-transition: all 0s ease 0s,
+) {
+  $border-radius: 50%;
+  $dot-icon-border-width: math.div($icon-size - $border-width * 2 - $dot-size, 2);
+
+  .dx-radiobutton-icon {
+    position: relative;
+    width: $icon-size;
+    height: $icon-size;
+    border-width: $border-width;
+    border-style: solid;
+    border-color: $border-color;
+    background-color: $radiogroup-bg;
+    border-radius: 50%;
+
+    @if $useRipple {
+      transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    }
+
+    .dx-radiobutton-icon-dot {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border-width: 0;
+      border-style: solid;
+      border-color: $radiogroup-bg;
+
+      @if $useRipple {
+        transform: scale(0);
+        transition: transform 150ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+      }
+    }
+
+    @if $useRipple {
+      &::after {
+        content: '';
+        position: absolute;
+        width: $ripple-size;
+        height: $ripple-size;
+        top: 50%;
+        left: 50%;
+        margin-top: math.div(-$ripple-size, 2);
+        margin-left: math.div(-$ripple-size, 2);
+        border-radius: 50%;
+        z-index: 1;
+        transform: scale(0.5);
+        transition: $ripple-transition;
+      }
+    }
+  }
+
+  .dx-radiobutton-icon-checked {
+    @if $useRipple {
+      border-color: $checked-color;
+    }
+
+    .dx-radiobutton-icon-dot {
+      background-color: $checked-color;
+      border-width: $dot-icon-border-width;
+
+      @if $useRipple {
+        transform: scale(1);
+      }
+    }
+  }
+}
+
+@mixin dx-radiobutton-states-mixin(
+  $border-color,
+  $readonly-border-color,
+  $hover-border-color,
+  $active-bg,
+  $focused-border-color,
+  $checked-color,
+  $invalid-faded-border-color,
+  $invalid-hover-border-color,
+  $invalid-focused-border-color,
+  $disabled-opacity,
+  $useRipple: false,
+  $focused-ripple-bg: transparent,
+  $invalid-focused-ripple-bg: transparent,
+) {
+  .dx-radiobutton {
+    &.dx-state-disabled {
+      opacity: $disabled-opacity;
+    }
+
+    @if $useRipple {
+      &.dx-state-active,
+      &.dx-state-focused {
+        .dx-radiobutton-icon::after {
+          background-color: $focused-border-color;
+          transform: scale(1);
+        }
+
+        .dx-radiobutton-icon-checked::after {
+          background-color: $focused-ripple-bg;
+          transform: scale(1);
+        }
+      }
+    } @else {
+      &.dx-state-readonly {
+        .dx-radiobutton-icon {
+          border-color: $readonly-border-color;
+        }
+      }
+
+      &.dx-state-hover {
+        .dx-radiobutton-icon {
+          border-color: $hover-border-color;
+        }
+      }
+
+      &.dx-state-active {
+        .dx-radiobutton-icon {
+          background-color: $active-bg;
+        }
+
+        .dx-radiobutton-icon-dot {
+          border-color: $border-color;
+        }
+      }
+
+      &.dx-state-focused {
+        .dx-radiobutton-icon {
+          border-color: $focused-border-color;
+        }
+      }
+    }
+  }
+
+  .dx-invalid {
+    .dx-radiobutton-icon {
+      border-color: $invalid-faded-border-color;
+    }
+
+    @if $useRipple {
+      .dx-radiobutton-icon-dot {
+        background-color: $invalid-faded-border-color;
+      }
+
+      .dx-state-active,
+      .dx-state-focused {
+        &.dx-radiobutton {
+          .dx-radiobutton-icon {
+            border-color: $invalid-focused-border-color;
+          }
+
+          .dx-radiobutton-icon-dot {
+            background-color: $invalid-focused-border-color;
+          }
+
+          .dx-radiobutton-icon::after {
+            background-color: $invalid-focused-ripple-bg;
+            transform: scale(1);
+          }
+        }
+      }
+    } @else {
+      .dx-state-hover {
+        &.dx-radiobutton .dx-radiobutton-icon {
+          border-color: $invalid-hover-border-color;
+        }
+      }
+
+      .dx-state-focused {
+        &.dx-radiobutton {
+          .dx-radiobutton-icon {
+            border-color: $invalid-focused-border-color;
+          }
+        }
+      }
+    }
+  }
+
+  .dx-state-readonly {
+    .dx-radiobutton-icon {
+      border-color: $readonly-border-color;
+    }
+  }
+
+  @if $useRipple {
+    .dx-state-disabled {
+      .dx-radiobutton-icon {
+        border-color: $border-color;
+      }
+    }
+
+    .dx-state-readonly,
+    .dx-state-disabled {
+      .dx-radiobutton-icon-dot {
+        background-color: $border-color;
+      }
+    }
+  }
+}

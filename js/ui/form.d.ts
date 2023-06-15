@@ -65,27 +65,63 @@ export type LabelLocation = 'left' | 'right' | 'top';
 /** @public */
 export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 
-/** @public */
+/**
+ * @docid _ui_form_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxForm>;
 
-/** @public */
+/**
+ * @docid _ui_form_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxForm>;
 
-/** @public */
+/**
+ * @docid _ui_form_EditorEnterKeyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type EditorEnterKeyEvent = EventInfo<dxForm> & {
+    /** @docid _ui_form_EditorEnterKeyEvent.dataField */
     readonly dataField?: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_form_FieldDataChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type FieldDataChangedEvent = EventInfo<dxForm> & {
+    /** @docid _ui_form_FieldDataChangedEvent.dataField */
     readonly dataField?: string;
+    /**
+     * @docid _ui_form_FieldDataChangedEvent.value
+     * @type object
+     */
     readonly value?: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_form_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxForm>;
 
-/** @public */
+/**
+ * @docid _ui_form_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 
 /** @public */
@@ -821,25 +857,21 @@ export type Options = dxFormOptions;
 */
 type Events = {
 /**
- * @skip
  * @docid dxFormOptions.onContentReady
  * @type_function_param1 e:{ui/form:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxFormOptions.onDisposing
  * @type_function_param1 e:{ui/form:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxFormOptions.onInitialized
  * @type_function_param1 e:{ui/form:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxFormOptions.onOptionChanged
  * @type_function_param1 e:{ui/form:OptionChangedEvent}
  */

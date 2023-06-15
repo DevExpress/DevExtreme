@@ -46,43 +46,103 @@ export {
     PageLoadMode,
 };
 
-/** @public */
+/**
+ * @docid _ui_lookup_ClosedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ClosedEvent = EventInfo<dxLookup>;
 
-/** @public */
+/**
+ * @docid _ui_lookup_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxLookup>;
 
-/** @public */
+/**
+ * @docid _ui_lookup_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxLookup>;
 
-/** @public */
+/**
+ * @docid _ui_lookup_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxLookup>;
 
-/** @public */
+/**
+ * @docid _ui_lookup_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
 export type ItemClickEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
-/** @public */
+/**
+ * @docid _ui_lookup_OpenedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type OpenedEvent = EventInfo<dxLookup>;
 
-/** @public */
+/**
+ * @docid _ui_lookup_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxLookup> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_lookup_PageLoadingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type PageLoadingEvent = EventInfo<dxLookup>;
 
-/** @public */
+/**
+ * @docid _ui_lookup_PullRefreshEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type PullRefreshEvent = EventInfo<dxLookup>;
 
-/** @public */
+/**
+ * @docid _ui_lookup_ScrollEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ScrollInfo
+ */
 export type ScrollEvent = NativeEventInfo<dxLookup, MouseEvent | Event> & ScrollInfo;
 
-/** @public */
+/**
+ * @docid _ui_lookup_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SelectionChangedInfo
+ */
 export type SelectionChangedEvent = EventInfo<dxLookup> & SelectionChangedInfo;
 
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxLookup> & TitleRenderedInfo;
 
-/** @public */
+/**
+ * @docid _ui_lookup_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /**
@@ -337,49 +397,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxLookupOptions.onClosed
  * @type_function_param1 e:{ui/lookup:ClosedEvent}
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onContentReady
  * @type_function_param1 e:{ui/lookup:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onDisposing
  * @type_function_param1 e:{ui/lookup:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onInitialized
  * @type_function_param1 e:{ui/lookup:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onItemClick
  * @type_function_param1 e:{ui/lookup:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onOpened
  * @type_function_param1 e:{ui/lookup:OpenedEvent}
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onOptionChanged
  * @type_function_param1 e:{ui/lookup:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxLookupOptions.onSelectionChanged
  * @type_function_param1 e:{ui/lookup:SelectionChangedEvent}
  */

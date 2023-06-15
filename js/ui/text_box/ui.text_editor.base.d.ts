@@ -2,9 +2,7 @@ import {
     NativeEventInfo,
 } from '../../events/index';
 
-import dxButton, {
-    dxButtonOptions,
-} from '../button';
+import dxButton from '../button';
 
 import Editor, {
     EditorOptions,
@@ -15,7 +13,7 @@ import {
     EditorStyle,
     MaskMode,
     TextBoxPredefinedButton,
-    TextEditorButtonLocation,
+    TextEditorButton,
 } from '../../common';
 
 /**
@@ -29,7 +27,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default undefined
      * @public
      */
-    buttons?: Array<string | TextBoxPredefinedButton | dxTextEditorButton>;
+    buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
     /**
      * @docid
      * @default true
@@ -255,30 +253,10 @@ export default class dxTextEditor<TProperties = Properties> extends Editor<TProp
 }
 
 /**
- * @docid
- * @type object
  * @namespace DevExpress.ui
+ * @deprecated Use TextEditorButton from 'devextreme/common' instead
  */
-export interface dxTextEditorButton {
-    /**
-     * @docid
-     * @default "after"
-     * @public
-     */
-    location?: TextEditorButtonLocation;
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-    name?: string;
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-    options?: dxButtonOptions;
-}
+export type dxTextEditorButton = TextEditorButton;
 
 interface TextEditorInstance extends dxTextEditor<Properties> {}
 

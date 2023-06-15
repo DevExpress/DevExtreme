@@ -13,27 +13,63 @@ import {
 /** @public */
 export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface ResizeInfo {
+    /** @docid */
     readonly width: number;
+    /** @docid */
     readonly height: number;
 }
 
-/** @public */
+/**
+ * @docid _ui_resizable_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxResizable>;
 
-/** @public */
+/**
+ * @docid _ui_resizable_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxResizable>;
 
-/** @public */
+/**
+ * @docid _ui_resizable_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxResizable> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_resizable_ResizeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ResizeInfo
+ */
 export type ResizeEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
-/** @public */
+/**
+ * @docid _ui_resizable_ResizeStartEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ResizeInfo
+ */
 export type ResizeStartEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
-/** @public */
+/**
+ * @docid _ui_resizable_ResizeEndEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ResizeInfo
+ */
 export type ResizeEndEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
 /**
@@ -147,19 +183,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxResizableOptions.onDisposing
  * @type_function_param1 e:{ui/resizable:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxResizableOptions.onInitialized
  * @type_function_param1 e:{ui/resizable:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxResizableOptions.onOptionChanged
  * @type_function_param1 e:{ui/resizable:OptionChangedEvent}
  */

@@ -31,7 +31,12 @@ import {
     SimplifiedSearchMode,
 } from '../../common';
 
+/**
+ * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo
+ * @hidden
+ */
 export interface SelectionChangedInfo<T = any> {
+    /** @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo.selectedItem */
     readonly selectedItem: T;
 }
 

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-import { compileGetter } from '@js/core/utils/data';
+// @ts-expect-error
+import { compileGetter, toComparable } from '@js/core/utils/data';
 import { isDefined } from '@js/core/utils/type';
 import dataQuery from '@js/data/query';
 import messageLocalization from '@js/localization/message';
@@ -222,6 +223,7 @@ export const searchModule = {
         init() {
           this.callBase.apply(this, arguments);
           this._searchParams = [];
+          this._dataController = this.getController('data');
         },
 
         _getFormattedSearchText(column, searchText) {
@@ -232,9 +234,10 @@ export const searchModule = {
 
         _getStringNormalizer() {
           const isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
-          return function (str) {
-            return isCaseSensitive ? str : str.toLowerCase();
-          };
+          const dataSource = this._dataController?.getDataSource?.();
+          const langParams = dataSource?.loadOptions?.()?.langParams;
+
+          return (str: string): string => toComparable(str, isCaseSensitive, langParams);
         },
 
         _findHighlightingTextNodes(column, cellElement, searchText) {
