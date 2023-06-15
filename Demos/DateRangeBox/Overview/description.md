@@ -8,9 +8,12 @@ Date display format. You can use one of our [predefined formats](/Documentation/
 
 - [disabled](/Documentation/ApiReference/UI_Components/dxDateRangeBox/Configuration/#disabled)        
 Specifies whether the DateRangeBox responds to user interaction.
-Expand All
-	@@ -16,6 +17,6 @@ Displays the button that clears DateRangeBox **values**.
-Switches between a single-month and two-month dropdown calendar.
+
+- [showClearButton](/Documentation/ApiReference/UI_Components/dxDateBox/Configuration/#showClearButton)
+Displays a button that clears DateRangeBox values.
+
+- [multiView](/Documentation/ApiReference/UI_Components/dxDateBox/Configuration/#multiView)
+Switches between our single-month and two-month dropdown calendar.
 
 - [applyValueMode](/Documentation/ApiReference/UI_Components/dxDateBox/Configuration/#applyValueMode)     
 Defines whether the selected value is applied instantly or after a user clicks the **Apply** button.
