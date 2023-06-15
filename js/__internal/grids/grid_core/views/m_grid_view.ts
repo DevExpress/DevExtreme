@@ -103,7 +103,7 @@ const ResizingController = modules.ViewController.inherit({
 
     if (changeType && changeType !== 'updateSelection' && changeType !== 'updateFocusedRow' && changeType !== 'pageIndex' && !isDelayed) {
       when(resizeDeferred).done(() => {
-        that._setAriaRowColCount();
+        that._setAriaLabel();
         that.fireContentReadyAction();
       });
     }
@@ -113,12 +113,17 @@ const ResizingController = modules.ViewController.inherit({
     this.component._fireContentReadyAction();
   },
 
-  _setAriaRowColCount() {
-    const { component } = this;
-    component.setAria({
-      rowCount: this._dataController.totalItemsCount(),
-      colCount: component.columnCount(),
-    }, component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`));
+  _getWidgetAriaLabel() {
+    return 'dxDataGrid-ariaDataGrid';
+  },
+
+  _setAriaLabel() {
+    this.component.setAria('label', messageLocalization.format(
+      this._getWidgetAriaLabel(),
+      // @ts-expect-error
+      this._dataController.totalItemsCount(),
+      this.component.columnCount(),
+    ), this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`));
   },
 
   _getBestFitWidths() {
@@ -739,10 +744,6 @@ const GridView = modules.View.inherit({
     }
   },
 
-  _getWidgetAriaLabel() {
-    return 'dxDataGrid-ariaDataGrid';
-  },
-
   init() {
     const that = this;
     that._resizingController = that.getController('resizing');
@@ -780,33 +781,29 @@ const GridView = modules.View.inherit({
   },
 
   _getTableRoleName() {
-    return 'grid';
+    return 'group';
   },
 
   render($rootElement) {
-    const that = this;
-    const isFirstRender = !that._groupElement;
-    const $groupElement = that._groupElement || $('<div>').addClass(that.getWidgetContainerClass());
+    const isFirstRender = !this._groupElement;
+    const $groupElement = this._groupElement || $('<div>').addClass(this.getWidgetContainerClass());
 
     $groupElement.addClass(GRIDBASE_CONTAINER_CLASS);
-    $groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!that.option('showBorders'));
+    $groupElement.toggleClass(this.addWidgetPrefix(BORDERS_CLASS), !!this.option('showBorders'));
 
-    that.setAria('role', 'presentation', $rootElement);
+    this.setAria('role', 'presentation', $rootElement);
 
-    that.component.setAria({
-      role: this._getTableRoleName(),
-      label: messageLocalization.format(that._getWidgetAriaLabel()),
-    }, $groupElement);
+    this.component.setAria('role', this._getTableRoleName(), $groupElement);
 
-    that._rootElement = $rootElement || that._rootElement;
+    this._rootElement = $rootElement || this._rootElement;
 
     if (isFirstRender) {
-      that._groupElement = $groupElement;
-      hasWindow() && that.getController('resizing').updateSize($rootElement);
+      this._groupElement = $groupElement;
+      hasWindow() && this.getController('resizing').updateSize($rootElement);
       $groupElement.appendTo($rootElement);
     }
 
-    that._renderViews($groupElement);
+    this._renderViews($groupElement);
   },
 
   update() {

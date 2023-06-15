@@ -254,7 +254,6 @@ export class ColumnsView extends viewWithColumnStateMixin {
         // @ts-expect-error
         $table.append($('<thead>').append('<tr>'));
       }
-      that.setAria('role', 'presentation', $table);
     } else {
       that.setAria('hidden', true, $table);
     }
