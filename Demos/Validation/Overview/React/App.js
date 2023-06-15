@@ -17,12 +17,10 @@ import {
 } from 'devextreme-react/validator';
 
 import notify from 'devextreme/ui/notify';
-import service from './data.js';
 import {
-  nameLabel, passwordLabel, emailLabel, maskLabel, dateLabel, cityLabel, addressLabel,
-} from '../../../Common/EditorsRightToLeftSupport/React/data.js';
-
-const countryLabel = { 'aria-label': 'Country' };
+  countries, nameLabel, passwordLabel, emailLabel,
+  maskLabel, dateLabel, cityLabel, addressLabel, countryLabel,
+} from './data.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -30,7 +28,6 @@ class App extends React.Component {
     const currentDate = new Date();
     this.maxDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - 21));
     this.validatorInstance = null;
-    this.countries = service.getCountries();
     this.cityPattern = '^[^0-9]+$';
     this.namePattern = /^[^0-9]+$/;
     this.phonePattern = /^[02-9]\d{9}$/;
@@ -159,7 +156,7 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Country</div>
             <div className="dx-field-value">
-              <SelectBox dataSource={this.countries} validationMessagePosition="left" inputAttr={countryLabel}>
+              <SelectBox dataSource={countries} validationMessagePosition="left" inputAttr={countryLabel}>
                 <Validator>
                   <RequiredRule message="Country is required" />
                 </Validator>
