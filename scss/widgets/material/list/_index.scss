@@ -125,7 +125,7 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
       .dx-list-select-all,
       .dx-list-item {
         &.dx-state-hover {
-          .dx-radiobutton-icon::before {
+          .dx-radiobutton-icon {
             border-color: $checkbox-hover-border-color;
           }
         }

@@ -33,55 +33,135 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_ChangeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ChangeEvent = NativeEventInfo<dxDropDownBox, Event>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_ClosedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ClosedEvent = EventInfo<dxDropDownBox>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_CopyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CopyEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_CutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CutEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxDropDownBox>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_EnterKeyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type EnterKeyEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxDropDownBox>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_InputEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type InputEvent = NativeEventInfo<dxDropDownBox, UIEvent & { target: HTMLInputElement }>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_KeyDownEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyDownEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
 /** @public */
 export type KeyPressEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_KeyUpEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyUpEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_OpenedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type OpenedEvent = EventInfo<dxDropDownBox>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxDropDownBox> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_PasteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type PasteEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_drop_down_box_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
@@ -188,97 +268,81 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onChange
  * @type_function_param1 e:{ui/drop_down_box:ChangeEvent}
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onClosed
  * @type_function_param1 e:{ui/drop_down_box:ClosedEvent}
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onCopy
  * @type_function_param1 e:{ui/drop_down_box:CopyEvent}
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onCut
  * @type_function_param1 e:{ui/drop_down_box:CutEvent}
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onDisposing
  * @type_function_param1 e:{ui/drop_down_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onEnterKey
  * @type_function_param1 e:{ui/drop_down_box:EnterKeyEvent}
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onFocusIn
  * @type_function_param1 e:{ui/drop_down_box:FocusInEvent}
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onFocusOut
  * @type_function_param1 e:{ui/drop_down_box:FocusOutEvent}
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onInitialized
  * @type_function_param1 e:{ui/drop_down_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onInput
  * @type_function_param1 e:{ui/drop_down_box:InputEvent}
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onKeyDown
  * @type_function_param1 e:{ui/drop_down_box:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onKeyUp
  * @type_function_param1 e:{ui/drop_down_box:KeyUpEvent}
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onOpened
  * @type_function_param1 e:{ui/drop_down_box:OpenedEvent}
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/drop_down_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onPaste
  * @type_function_param1 e:{ui/drop_down_box:PasteEvent}
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @skip
  * @docid dxDropDownBoxOptions.onValueChanged
  * @type_function_param1 e:{ui/drop_down_box:ValueChangedEvent}
  */

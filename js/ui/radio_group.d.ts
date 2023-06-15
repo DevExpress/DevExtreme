@@ -24,19 +24,44 @@ export {
     Orientation,
 };
 
-/** @public */
+/**
+ * @docid _ui_radio_group_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxRadioGroup>;
 
-/** @public */
+/**
+ * @docid _ui_radio_group_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxRadioGroup>;
 
-/** @public */
+/**
+ * @docid _ui_radio_group_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxRadioGroup>;
 
-/** @public */
+/**
+ * @docid _ui_radio_group_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxRadioGroup> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_radio_group_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxRadioGroup, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /**
@@ -113,31 +138,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxRadioGroupOptions.onContentReady
  * @type_function_param1 e:{ui/radio_group:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxRadioGroupOptions.onDisposing
  * @type_function_param1 e:{ui/radio_group:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxRadioGroupOptions.onInitialized
  * @type_function_param1 e:{ui/radio_group:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxRadioGroupOptions.onOptionChanged
  * @type_function_param1 e:{ui/radio_group:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxRadioGroupOptions.onValueChanged
  * @type_function_param1 e:{ui/radio_group:ValueChangedEvent}
  */

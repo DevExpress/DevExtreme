@@ -46,45 +46,109 @@ export {
 /** @public */
 export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
 
-/** @public */
+/**
+ * @docid _viz_sankey_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxSankey>;
 
-/** @public */
+/**
+ * @docid _viz_sankey_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxSankey>;
 
-/** @public */
+/**
+ * @docid _viz_sankey_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxSankey>;
 
-/** @public */
+/**
+ * @docid _viz_sankey_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxSankey> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_sankey_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxSankey>;
 
-/** @public */
+/**
+ * @docid _viz_sankey_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxSankey> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_sankey_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxSankey>;
 
-/** @public */
+/**
+ * @docid _viz_sankey_LinkClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type LinkClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
+    /** @docid _viz_sankey_LinkClickEvent.target */
     readonly target: dxSankeyLink;
 };
-/** @public */
+/**
+ * @docid _viz_sankey_LinkHoverEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type LinkHoverEvent = EventInfo<dxSankey> & {
+    /** @docid _viz_sankey_LinkHoverEvent.target */
     readonly target: dxSankeyLink;
 };
-/** @public */
+/**
+ * @docid _viz_sankey_NodeClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type NodeClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
+    /** @docid _viz_sankey_NodeClickEvent.target */
     readonly target: dxSankeyNode;
 };
-/** @public */
+/**
+ * @docid _viz_sankey_NodeHoverEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type NodeHoverEvent = EventInfo<dxSankey> & {
+    /** @docid _viz_sankey_NodeHoverEvent.target */
     readonly target: dxSankeyNode;
 };
 
-/** @public */
+/**
+ * @docid _viz_sankey_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
 
 /**
@@ -712,49 +776,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxSankeyOptions.onDisposing
  * @type_function_param1 e:{viz/sankey:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onDrawn
  * @type_function_param1 e:{viz/sankey:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onExported
  * @type_function_param1 e:{viz/sankey:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onExporting
  * @type_function_param1 e:{viz/sankey:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onFileSaving
  * @type_function_param1 e:{viz/sankey:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/sankey:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onInitialized
  * @type_function_param1 e:{viz/sankey:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSankeyOptions.onOptionChanged
  * @type_function_param1 e:{viz/sankey:OptionChangedEvent}
  */

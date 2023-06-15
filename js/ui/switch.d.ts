@@ -10,19 +10,44 @@ import Editor, {
     EditorOptions,
 } from './editor/editor';
 
-/** @public */
+/**
+ * @docid _ui_switch_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxSwitch>;
 
-/** @public */
+/**
+ * @docid _ui_switch_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxSwitch>;
 
-/** @public */
+/**
+ * @docid _ui_switch_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxSwitch>;
 
-/** @public */
+/**
+ * @docid _ui_switch_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_switch_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxSwitch, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
 
 /**
@@ -102,31 +127,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxSwitchOptions.onContentReady
  * @type_function_param1 e:{ui/switch:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxSwitchOptions.onDisposing
  * @type_function_param1 e:{ui/switch:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSwitchOptions.onInitialized
  * @type_function_param1 e:{ui/switch:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSwitchOptions.onOptionChanged
  * @type_function_param1 e:{ui/switch:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxSwitchOptions.onValueChanged
  * @type_function_param1 e:{ui/switch:ValueChangedEvent}
  */

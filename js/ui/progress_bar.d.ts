@@ -13,22 +13,52 @@ import dxTrackBar, {
     dxTrackBarOptions,
 } from './track_bar';
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_CompleteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CompleteEvent = NativeEventInfo<dxProgressBar>;
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxProgressBar>;
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxProgressBar>;
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxProgressBar>;
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxProgressBar> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxProgressBar> & ValueChangedInfo;
 
 /**
@@ -91,31 +121,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxProgressBarOptions.onContentReady
  * @type_function_param1 e:{ui/progress_bar:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onDisposing
  * @type_function_param1 e:{ui/progress_bar:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onInitialized
  * @type_function_param1 e:{ui/progress_bar:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onOptionChanged
  * @type_function_param1 e:{ui/progress_bar:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onValueChanged
  * @type_function_param1 e:{ui/progress_bar:ValueChangedEvent}
  */

@@ -13,52 +13,127 @@ import dxTextBox, {
     dxTextBoxOptions,
 } from './text_box';
 
-/** @public */
+/**
+ * @docid _ui_text_area_ChangeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ChangeEvent = NativeEventInfo<dxTextArea, Event>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxTextArea>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_CopyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CopyEvent = NativeEventInfo<dxTextArea, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_CutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CutEvent = NativeEventInfo<dxTextArea, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxTextArea>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_EnterKeyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type EnterKeyEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxTextArea, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxTextArea, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxTextArea>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_InputEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type InputEvent = NativeEventInfo<dxTextArea, UIEvent & { target: HTMLInputElement }>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_KeyDownEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyDownEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
 /** @public */
 export type KeyPressEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_KeyUpEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyUpEvent = NativeEventInfo<dxTextArea, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxTextArea> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_text_area_PasteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type PasteEvent = NativeEventInfo<dxTextArea, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_text_area_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxTextArea, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /**
@@ -118,91 +193,76 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>
 */
 type Events = {
 /**
- * @skip
  * @docid dxTextAreaOptions.onChange
  * @type_function_param1 e:{ui/text_area:ChangeEvent}
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onContentReady
  * @type_function_param1 e:{ui/text_area:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onCopy
  * @type_function_param1 e:{ui/text_area:CopyEvent}
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onCut
  * @type_function_param1 e:{ui/text_area:CutEvent}
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onDisposing
  * @type_function_param1 e:{ui/text_area:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onEnterKey
  * @type_function_param1 e:{ui/text_area:EnterKeyEvent}
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onFocusIn
  * @type_function_param1 e:{ui/text_area:FocusInEvent}
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onFocusOut
  * @type_function_param1 e:{ui/text_area:FocusOutEvent}
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onInitialized
  * @type_function_param1 e:{ui/text_area:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onInput
  * @type_function_param1 e:{ui/text_area:InputEvent}
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onKeyDown
  * @type_function_param1 e:{ui/text_area:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onKeyUp
  * @type_function_param1 e:{ui/text_area:KeyUpEvent}
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onOptionChanged
  * @type_function_param1 e:{ui/text_area:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onPaste
  * @type_function_param1 e:{ui/text_area:PasteEvent}
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @skip
  * @docid dxTextAreaOptions.onValueChanged
  * @type_function_param1 e:{ui/text_area:ValueChangedEvent}
  */

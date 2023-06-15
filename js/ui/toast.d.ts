@@ -22,28 +22,68 @@ import dxOverlay, {
 /** @public */
 export type ToastType = 'custom' | 'error' | 'info' | 'success' | 'warning';
 
-/** @public */
+/**
+ * @docid _ui_toast_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxToast>;
 
-/** @public */
+/**
+ * @docid _ui_toast_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxToast>;
 
-/** @public */
+/**
+ * @docid _ui_toast_HidingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type HidingEvent = Cancelable & EventInfo<dxToast>;
 
-/** @public */
+/**
+ * @docid _ui_toast_HiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type HiddenEvent = EventInfo<dxToast>;
 
-/** @public */
+/**
+ * @docid _ui_toast_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxToast>;
 
-/** @public */
+/**
+ * @docid _ui_toast_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxToast> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_toast_ShowingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type ShowingEvent = Cancelable & EventInfo<dxToast>;
 
-/** @public */
+/**
+ * @docid _ui_toast_ShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ShownEvent = EventInfo<dxToast>;
 
 /**
@@ -191,49 +231,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxToastOptions.onContentReady
  * @type_function_param1 e:{ui/toast:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onDisposing
  * @type_function_param1 e:{ui/toast:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onHidden
  * @type_function_param1 e:{ui/toast:HiddenEvent}
  */
 onHidden?: ((e: HiddenEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onHiding
  * @type_function_param1 e:{ui/toast:HidingEvent}
  */
 onHiding?: ((e: HidingEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onInitialized
  * @type_function_param1 e:{ui/toast:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onOptionChanged
  * @type_function_param1 e:{ui/toast:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onShowing
  * @type_function_param1 e:{ui/toast:ShowingEvent}
  */
 onShowing?: ((e: ShowingEvent) => void);
 /**
- * @skip
  * @docid dxToastOptions.onShown
  * @type_function_param1 e:{ui/toast:ShownEvent}
  */
