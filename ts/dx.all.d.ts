@@ -10083,24 +10083,6 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>>;
     /**
-     * [descr:dxDataGridSortByGroupSummaryInfoItem]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface dxDataGridSortByGroupSummaryInfoItem {
-      /**
-       * [descr:dxDataGridOptions.sortByGroupSummaryInfo.groupColumn]
-       */
-      groupColumn?: string;
-      /**
-       * [descr:dxDataGridOptions.sortByGroupSummaryInfo.sortOrder]
-       */
-      sortOrder?: DevExpress.common.SortOrder;
-      /**
-       * [descr:dxDataGridOptions.sortByGroupSummaryInfo.summaryItem]
-       */
-      summaryItem?: string | number;
-    }
-    /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export type dxDataGridToolbar = Toolbar;
@@ -11201,6 +11183,23 @@ declare module DevExpress.ui {
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.SelectionChangedInfo<TRowData, TKey>;
     /**
+     * [descr:dxDataGridSortByGroupSummaryInfoItem]
+     */
+    export type SortByGroupSummaryInfoItem = {
+      /**
+       * [descr:dxDataGridOptions.sortByGroupSummaryInfo.groupColumn]
+       */
+      groupColumn?: string;
+      /**
+       * [descr:dxDataGridOptions.sortByGroupSummaryInfo.sortOrder]
+       */
+      sortOrder?: DevExpress.common.SortOrder;
+      /**
+       * [descr:dxDataGridOptions.sortByGroupSummaryInfo.summaryItem]
+       */
+      summaryItem?: string | number;
+    };
+    /**
      * [descr:Summary]
      */
     export type Summary<TRowData = any, TKey = any> = {
@@ -11735,7 +11734,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridOptions.sortByGroupSummaryInfo]
      */
-    sortByGroupSummaryInfo?: Array<DevExpress.ui.dxDataGrid.dxDataGridSortByGroupSummaryInfoItem>;
+    sortByGroupSummaryInfo?: Array<DevExpress.ui.dxDataGrid.SortByGroupSummaryInfoItem>;
     /**
      * [descr:dxDataGridOptions.summary]
      */
@@ -27421,16 +27420,14 @@ declare module DevExpress.ui {
         readonly column: Column<TRowData, TKey>;
       };
     /**
-     * [descr:EditingTexts]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     * [descr:dxTreeListEditingTexts]
      */
-    export interface EditingTexts
-      extends DevExpress.common.grids.EditingTextsBase {
+    export type EditingTexts = DevExpress.common.grids.EditingTextsBase & {
       /**
        * [descr:dxTreeListOptions.editing.texts.addRowToNode]
        */
       addRowToNode?: string;
-    }
+    };
     /**
      * [descr:_ui_tree_list_EditorPreparedEvent]
      */
@@ -27846,15 +27843,14 @@ declare module DevExpress.ui {
       | 'selection'
       | 'toolbar';
     /**
-     * [descr:Paging]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     * [descr:dxTreeListPaging]
      */
-    export interface Paging extends DevExpress.common.grids.PagingBase {
+    export type Paging = DevExpress.common.grids.PagingBase & {
       /**
        * [descr:dxTreeListOptions.paging.enabled]
        */
       enabled?: boolean;
-    }
+    };
     export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<
       TRowData,
       TKey
@@ -28404,10 +28400,6 @@ declare module DevExpress.ui {
     TKey = any
   > = DevExpress.ui.dxTreeList.Editing<TRowData, TKey>;
   /**
-   * @deprecated 
-   */
-  export type dxTreeListEditingTexts = DevExpress.ui.dxTreeList.EditingTexts;
-  /**
    * @deprecated Use DevExpress.ui.dxTreeList.Node instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -28613,10 +28605,6 @@ declare module DevExpress.ui {
      */
     toolbar?: DevExpress.ui.dxTreeList.Toolbar;
   };
-  /**
-   * @deprecated 
-   */
-  export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
   /**
    * @deprecated Use DevExpress.ui.dxTreeList.Row instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

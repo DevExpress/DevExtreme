@@ -136,6 +136,7 @@ export {
   Grouping,
   GroupingTexts,
   MasterDetail,
+  SortByGroupSummaryInfoItem,
   CustomSummaryInfo,
   ƒ,
   RowDragging,

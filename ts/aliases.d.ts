@@ -697,3 +697,20 @@ declare module DevExpress.viz {
     export type dxVectorMapTooltip = DevExpress.viz.dxVectorMap.Tooltip;
 
 }
+
+declare module DevExpress.ui {
+
+    /** @deprecated Use DevExpress.ui.dxTreeList.EditingTexts instead */
+    export type dxTreeListEditingTexts = DevExpress.ui.dxTreeList.EditingTexts;
+
+    /** @deprecated Use DevExpress.ui.dxTreeList.Paging instead */
+    export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
+
+}
+
+declare module DevExpress.ui.dxDataGrid {
+
+    /** @deprecated Use DevExpress.ui.dxDataGrid.SortByGroupSummaryInfoItem instead */
+    export type dxDataGridSortByGroupSummaryInfoItem = DevExpress.ui.dxDataGrid.SortByGroupSummaryInfoItem;
+
+}

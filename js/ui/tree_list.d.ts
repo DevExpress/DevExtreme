@@ -1199,42 +1199,42 @@ export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowDat
 }
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use EditingTexts instead
  */
 export type dxTreeListEditingTexts = EditingTexts;
 
 /**
- * @docid
+ * @public
+ * @docid dxTreeListEditingTexts
  */
-export interface EditingTexts extends EditingTextsBase {
+export type EditingTexts = EditingTextsBase & {
     /**
      * @docid dxTreeListOptions.editing.texts.addRowToNode
      * @default "Add"
      * @public
      */
     addRowToNode?: string;
-}
+};
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Paging instead
  */
 export type dxTreeListPaging = Paging;
 
 /**
- * @docid
+ * @public
+ * @docid dxTreeListPaging
  */
-export interface Paging extends PagingBase {
+export type Paging = PagingBase & {
     /**
      * @docid dxTreeListOptions.paging.enabled
      * @default false
      * @public
      */
     enabled?: boolean;
-}
+};
 
 /**
  * @public

@@ -1425,7 +1425,7 @@ export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
      * @default undefined
      * @public
      */
-    sortByGroupSummaryInfo?: Array<dxDataGridSortByGroupSummaryInfoItem>;
+    sortByGroupSummaryInfo?: Array<SortByGroupSummaryInfoItem>;
     /**
      * @docid
      * @type object
@@ -1610,9 +1610,10 @@ export type MasterDetail<TRowData = any, TKey = any> = {
 };
 
 /**
- * @docid
+ * @public
+ * @docid dxDataGridSortByGroupSummaryInfoItem
  */
-export interface dxDataGridSortByGroupSummaryInfoItem {
+export type SortByGroupSummaryInfoItem = {
     /**
      * @docid dxDataGridOptions.sortByGroupSummaryInfo.groupColumn
      * @default undefined
@@ -1629,7 +1630,7 @@ export interface dxDataGridSortByGroupSummaryInfoItem {
      * @default undefined
      */
     summaryItem?: string | number;
-}
+};
 
 /** @public */
 export type CustomSummaryInfo<TRowData = any, TKey = any> = {
