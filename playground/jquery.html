@@ -32,14 +32,51 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <!-- <div id="text-box" style="margin-bottom: 25px"></div>
+    <div id="text-box-second" style="margin-bottom: 25px"></div>
+    <div id="date-by-picker" style="margin-bottom: 25px"></div> -->
+
+    <div id="popup"></div>
+
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
-        });
+      $(() => {
+        // const now = new Date();
+
+        // $('#text-box').dxTextBox();
+
+        // $('#text-box-second').dxTextBox();
+
+        // $('#date-by-picker').dxDateBox({
+        //   pickerType: 'rollers',
+        //   type: 'datetime',
+        //   value: now,
+        // });
+
+        $('#popup').dxPopup({
+          // width: '100%',
+          // height: '100%',
+          // minWidth: 350,
+          // minHeight: 550,
+          fullScreen: true,
+          visible: true,
+          toolbarItems: [
+            {
+              widget: 'dxButton',
+              toolbar: 'top',
+              options: {
+                text: 'More info',
+              },
+            }, 
+            {
+              widget: 'dxButton',
+              toolbar: 'top',
+              options: {
+                text: 'More',
+              },
+            }
+          ],
+        })
+      });
     </script>
 </body>
 </html>
