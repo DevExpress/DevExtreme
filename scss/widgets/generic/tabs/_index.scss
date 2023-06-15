@@ -74,7 +74,7 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 
 @mixin boundary-tabs-shadow-mixin($accent-color) {
   &.dx-tabs-expanded {
-    .dx-tab:not(.dx-state-focused):not(.dx-tab-selected) {
+    .dx-tab:not(.dx-state-focused, .dx-tab-selected) {
       &:first-of-type {
         @include tabpanel-tab-shadow-mixin(
           get-tab-not-selected-not-focused-first-expanded-shadow($accent-color),
@@ -96,7 +96,7 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
   }
 
   &.dx-tabs-stretched {
-    .dx-tab:not(.dx-state-focused):not(.dx-tab-selected) {
+    .dx-tab:not(.dx-state-focused, .dx-tab-selected) {
       &:last-of-type {
         @include tabpanel-tab-shadow-mixin(
           get-tab-not-selected-not-focused-first-stretched-shadow($accent-color),

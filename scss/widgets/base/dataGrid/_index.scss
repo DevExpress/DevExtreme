@@ -323,7 +323,7 @@ $datagrid-text-stub-background-image-path: null !default;
 }
 
 @keyframes dx-datagrid-highlight-change {
-  0% {
+  from {
     background-color: color.change($datagrid-base-color, $alpha: 0.08);
   }
 

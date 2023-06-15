@@ -30,8 +30,9 @@
         "string-quotes": null,
         "value-no-vendor-prefix": true,
         "value-keyword-case": ["lower", {"camelCaseSvgKeywords": true}],
-        "selector-not-notation": "simple",
-        "media-feature-range-notation": "prefix",
+        "selector-not-notation": null,
+        "keyframe-selector-notation": null,
+        "media-feature-range-notation": null,
 
         "scss/at-else-empty-line-before": null,
         "scss/at-if-closing-brace-newline-after": null,
