@@ -391,9 +391,9 @@ module('Repeat-end editor', () => {
     });
 
     test('Repeat-until dateBox should apply date considering scheduler timeZone', function(assert) {
-        const timeZoneCalculator = createTimeZoneCalculator('Europe/London');
+        const timeZoneCalculator = createTimeZoneCalculator('America/Los_Angeles');
         const instance = createInstance({
-            value: 'FREQ=WEEKLY;UNTIL=20231007',
+            value: 'FREQ=WEEKLY;UNTIL=20230615T000000Z',
             timeZoneCalculator,
         });
 
