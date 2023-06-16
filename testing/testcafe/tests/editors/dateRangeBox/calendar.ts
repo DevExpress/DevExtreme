@@ -602,3 +602,127 @@ test('Cell in range', async (t) => {
     width: 500,
   }, '#dateRangeBox');
 });
+
+test('Disabled dates on start date select (disableOutOfRangeSelection: true)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dateRangeBox = new DateRangeBox('#dateRangeBox');
+
+  await t
+    .click(dateRangeBox.getStartDateBox().input);
+
+  const calendar = dateRangeBox.getCalendar();
+
+  await t
+    .click(calendar.getCellByDate('2020/02/20'));
+
+  await testScreenshot(t, takeScreenshot, 'DRB disabled dates before start date select.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'dateRangeBox');
+  await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
+
+  return createWidget('dxDateRangeBox', {
+    width: 500,
+    disableOutOfRangeSelection: true,
+    calendarOptions: {
+      currentDate: new Date('2020/02/20'),
+    },
+  }, '#dateRangeBox');
+});
+
+test('Disabled dates on end date select (disableOutOfRangeSelection: true)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dateRangeBox = new DateRangeBox('#dateRangeBox');
+
+  await t
+    .click(dateRangeBox.getEndDateBox().input);
+
+  const calendar = dateRangeBox.getCalendar();
+
+  await t
+    .click(calendar.getCellByDate('2020/02/22'));
+
+  await testScreenshot(t, takeScreenshot, 'DRB disabled dates after end date select.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'dateRangeBox');
+  await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
+
+  return createWidget('dxDateRangeBox', {
+    width: 500,
+    disableOutOfRangeSelection: true,
+    calendarOptions: {
+      currentDate: new Date('2020/02/20'),
+    },
+  }, '#dateRangeBox');
+});
+
+test('Disabled dates on inputs focus (disableOutOfRangeSelection: true)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dateRangeBox = new DateRangeBox('#dateRangeBox');
+
+  await t
+    .click(dateRangeBox.getStartDateBox().input);
+
+  await testScreenshot(t, takeScreenshot, 'DRB disabled dates on popup opening.png', { element: '#container' });
+
+  await t
+    .click(dateRangeBox.getEndDateBox().input);
+
+  await testScreenshot(t, takeScreenshot, 'DRB disabled dates on end date input focus.png', { element: '#container' });
+
+  await t
+    .click(dateRangeBox.getStartDateBox().input);
+
+  await testScreenshot(t, takeScreenshot, 'DRB disabled dates on start date input focus.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'dateRangeBox');
+  await setAttribute('#container', 'style', 'width: 800px; height: 500px; padding-top: 10px;');
+
+  return createWidget('dxDateRangeBox', {
+    value: [new Date('2020/02/20'), new Date('2020/02/22')],
+    width: 500,
+    disableOutOfRangeSelection: true,
+  }, '#dateRangeBox');
+});
+
+test('Dates selection with focusStateEnabled=false', async (t) => {
+  const dateRangeBox = new DateRangeBox('#dateRangeBox');
+  const calendar = dateRangeBox.getCalendar();
+
+  await t
+    .click(dateRangeBox.getStartDateBox().input);
+
+  await t
+    .click(calendar.getCellByDate('2020/02/10'));
+
+  await t
+    .click(calendar.getCellByDate('2020/02/25'));
+
+  const expectedStartDate = new Date('2020/02/10');
+  const expectedEndDate = new Date('2020/02/25');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(false)
+    .expect(dateRangeBox.option('value'))
+    .eql([expectedStartDate, expectedEndDate]);
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'dateRangeBox');
+
+  return createWidget('dxDateRangeBox', {
+    value: [new Date('2020/02/20'), new Date('2020/02/22')],
+    width: 500,
+    focusStateEnabled: false,
+  }, '#dateRangeBox');
+});
