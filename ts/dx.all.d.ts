@@ -4533,8 +4533,6 @@ declare module DevExpress.data {
     TKey
   > {
     constructor(options?: DevExpress.data.ArrayStore.Options<TItem, TKey>);
-    byKey(key: TKey): DevExpress.core.utils.DxPromise<TItem>;
-
     /**
      * [descr:ArrayStore.clear()]
      */
