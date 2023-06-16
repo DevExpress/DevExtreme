@@ -9,6 +9,8 @@ import {
     getVisualViewportSizes,
     subscribeOnVisualViewportEvent,
 } from '../../core/utils/visual_viewport';
+// eslint-disable-next-line spellcheck/spell-checker
+import { debounce } from '../../core/utils/debounce';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
 import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
@@ -51,14 +53,12 @@ const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
-
 const RTL_DIRECTION_CLASS = 'dx-rtl';
-
-const OVERLAY_STACK = [];
-
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 const TAB_KEY = 'tab';
+const OVERLAY_STACK = [];
+const VISUAL_VIEWPORT_TIMEOUT = 250;
 
 ready(() => {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, e => {
@@ -477,8 +477,19 @@ const Overlay = Widget.inherit({
         });
     },
 
-    _visualViewportEventHandler() {
+    _visualViewportEventHandler(event) {
         const pendingUpdate = this._pendingUpdate;
+        const { type: eventType } = event;
+        const { scroll, resize } = this._isPinchZoom || {};
+
+        if(scroll || resize) {
+            const newValue = { scroll, resize };
+
+            newValue[eventType] = false;
+
+            this._toggleIsPinchZoom(newValue);
+            return;
+        }
 
         if(pendingUpdate) {
             cancelAnimationFrame(this._resizeAnimationFrameId);
@@ -496,7 +507,11 @@ const Overlay = Widget.inherit({
     _subscribeOnVisualViewportEvent(event) {
         const callback = this._visualViewportEventHandler.bind(this);
 
-        this._unSubscribeCallbacks[event] = subscribeOnVisualViewportEvent(event, callback);
+        // eslint-disable-next-line spellcheck/spell-checker
+        const debouncedCallback = debounce(callback, VISUAL_VIEWPORT_TIMEOUT);
+
+        // eslint-disable-next-line spellcheck/spell-checker
+        this._unSubscribeCallbacks[event] = subscribeOnVisualViewportEvent(event, debouncedCallback);
     },
 
     _toggleVisualViewportSubscription(subscribe, event) {
@@ -531,8 +546,39 @@ const Overlay = Widget.inherit({
         this._toggleVisualViewportSubscription(subscribe, visualViewportEventMap.scroll);
     },
 
+    _toggleIsPinchZoom({ scroll, resize }) {
+        debugger;
+
+        this._isPinchZoom = {
+            scroll,
+            resize,
+        };
+    },
+
+    _subscribeOnPinchZoomEvent(subscribe) {
+        const pinchZoomEvent = 'gesturestart';
+
+        if(subscribe && !this._unSubscribeCallbacks) {
+            this._unSubscribeCallbacks = {};
+        } else {
+            if(!this._unSubscribeCallbacks?.[pinchZoomEvent]) {
+                return;
+            }
+
+            this._unSubscribeCallbacks[pinchZoomEvent]();
+            this._unSubscribeCallbacks[pinchZoomEvent] = null;
+
+            return;
+        }
+
+        const callback = this._toggleIsPinchZoom.bind(this, { scroll: true, resize: true });
+
+        this._unSubscribeCallbacks[pinchZoomEvent] = domAdapter.listen(window, pinchZoomEvent, callback);
+    },
+
     _toggleVisibilityAnimate(visible) {
         this._stopAnimation();
+        this._subscribeOnPinchZoomEvent(visible);
         this._toggleVisualViewportCallbacks(visible);
 
         return this._renderVisibilityAnimate(visible);
@@ -1293,6 +1339,7 @@ const Overlay = Widget.inherit({
         this._toggleTabTerminator(false);
         this._toggleVisualViewportSubscription(false, visualViewportEventMap.resize);
         this._toggleVisualViewportSubscription(false, visualViewportEventMap.scroll);
+        this._subscribeOnPinchZoomEvent(false);
 
         this._actions = null;
         this._parentsScrollSubscriptionInfo = null;
