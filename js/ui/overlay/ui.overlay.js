@@ -547,8 +547,6 @@ const Overlay = Widget.inherit({
     },
 
     _toggleIsPinchZoom({ scroll, resize }) {
-        debugger;
-
         this._isPinchZoom = {
             scroll,
             resize,
@@ -572,11 +570,16 @@ const Overlay = Widget.inherit({
         }
 
         const callback = this._toggleIsPinchZoom.bind(this, { scroll: true, resize: true });
+        const element = this._$content.get(0);
 
-        this._unSubscribeCallbacks[pinchZoomEvent] = domAdapter.listen(window, pinchZoomEvent, callback);
+        this._unSubscribeCallbacks[pinchZoomEvent] = domAdapter.listen(element, pinchZoomEvent, callback);
     },
 
     _toggleVisibilityAnimate(visible) {
+        const isCurrentVisible = this._currentVisible;
+
+        debugger;
+
         this._stopAnimation();
         this._subscribeOnPinchZoomEvent(visible);
         this._toggleVisualViewportCallbacks(visible);
