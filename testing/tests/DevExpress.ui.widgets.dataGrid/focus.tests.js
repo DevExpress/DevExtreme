@@ -3244,7 +3244,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             },
             onFocusedCellChanged: function(e) {
                 ++focusedCellChangedCount;
-                assert.deepEqual(e.cellElement.text(), rowsView.getRow(1).find('td').eq(1).text(), 'Cell element');
+                assert.deepEqual($(e.cellElement).text(), rowsView.getRow(1).find('td').eq(1).text(), 'Cell element');
                 assert.equal(e.columnIndex, 1, 'Column index');
                 assert.deepEqual(e.row.data, { name: 'Dan', phone: '2222222', room: 5 }, 'Row data');
                 assert.deepEqual(e.rowIndex, 1, 'Row index');
@@ -3284,7 +3284,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             },
             onFocusedCellChanged: function(e) {
                 ++focusedCellChangedCount;
-                assert.deepEqual(e.cellElement.text(), rowsView.getRow(3).find('td').eq(1).text(), 'Cell element');
+                assert.deepEqual($(e.cellElement).text(), rowsView.getRow(3).find('td').eq(1).text(), 'Cell element');
                 assert.equal(e.columnIndex, 1, 'Column index');
                 assert.deepEqual(e.row.data, { name: 'Sean', phone: '4545454', room: 3 }, 'Row data');
                 assert.deepEqual(e.rowIndex, 3, 'Row index');

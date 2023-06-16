@@ -38,5 +38,5 @@ export type dxElement = DxElement<HTMLElement>;
  */
 export type dxSVGElement = DxElement<SVGElement>;
 
-export function getPublicElement(element: InternalElement<Element>): DxElement<Element>;
+export function getPublicElement<TElement extends Element = Element>(element: InternalElement<Element>): DxElement<TElement>;
 export function setPublicElementWrapper(newStrategy: (element: InternalElement<Element>) => DxElement<Element>): void;

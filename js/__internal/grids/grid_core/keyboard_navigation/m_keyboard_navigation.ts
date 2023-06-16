@@ -1,5 +1,6 @@
 import { noop } from '@js/core//utils/common';
 import domAdapter from '@js/core/dom_adapter';
+import { getPublicElement } from '@js/core/element';
 import $, { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -2079,10 +2080,10 @@ export class KeyboardNavigationController extends modules.ViewController {
     const row = this._dataController.items()[localRowIndex];
     const column = this._columnsController.getVisibleColumns()[columnIndex];
     this.executeAction('onFocusedCellChanged', {
-      cellElement: $cell,
+      cellElement: ($cell ? getPublicElement($cell) : undefined)!,
       columnIndex,
       rowIndex,
-      row,
+      row: row as any,
       column,
     });
   }
@@ -2144,9 +2145,9 @@ export class KeyboardNavigationController extends modules.ViewController {
         ? undefined
         : this._rowsView.getRowElement(localRowIndex),
       rowIndex: focusedRowIndex,
-      row: focusedRowIndex < 0
+      row: (focusedRowIndex < 0
         ? undefined
-        : this._dataController.getVisibleRows()[localRowIndex],
+        : this._dataController.getVisibleRows()[localRowIndex]) as any,
     });
   }
 
