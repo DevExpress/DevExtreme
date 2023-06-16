@@ -1,8 +1,11 @@
+import { equalByValue } from '@js/core/utils/common';
+
 import { ModuleType } from '../m_types';
 import {
   EDIT_FORM_CLASS,
   EDIT_MODE_ROW,
   EDIT_ROW,
+  EDITING_EDITROWKEY_OPTION_NAME,
   MODES_WITH_DELAYED_FOCUS,
   ROW_SELECTED_CLASS,
 } from './const';
@@ -28,7 +31,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
   _isDefaultButtonVisible(button, options) {
     const isRowMode = this.isRowBasedEditMode();
-    const isEditRow = options.row && options.row.rowIndex === this._getVisibleEditRowIndex();
+    const isEditRow = options.row && equalByValue(options.row.key, this.option(EDITING_EDITROWKEY_OPTION_NAME));
 
     if (isRowMode) {
       switch (button.name) {
