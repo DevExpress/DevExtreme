@@ -5318,7 +5318,10 @@ declare module DevExpress.data {
      */
     byKey(
       key: TKey,
-      extraOptions?: LoadOptions<TItem>
+      extraOptions?: {
+        expand?: string | Array<string>;
+        select?: string | Array<string>;
+      }
     ): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:ODataStore.createQuery(loadOptions)]
