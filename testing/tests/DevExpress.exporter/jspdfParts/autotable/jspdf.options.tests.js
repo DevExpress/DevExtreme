@@ -57,8 +57,8 @@ const JSPdfOptionTests = {
                 });
             });
 
-            [undefined, null].forEach((autoTableOptions) => {
-                QUnit.test(`Get defaultAutoTableOptions, autoTableOptions: ${JSON.stringify(autoTableOptions)}`, function(assert) {
+            [undefined, null].forEach((autoTableTestOptions) => {
+                QUnit.test(`Get defaultAutoTableOptions, autoTableOptions: ${JSON.stringify(autoTableTestOptions)}`, function(assert) {
                     const defaultAutoTableOptions = {
                         theme: 'plain',
                         tableLineColor: 149,
@@ -81,7 +81,7 @@ const JSPdfOptionTests = {
                         body: []
                     };
 
-                    const { autoTableOptions } = _getFullOptions({ component: getComponent(), jsPDFDocument: this.jsPDFDocument, autoTableOptions });
+                    const { autoTableOptions } = _getFullOptions({ component: getComponent(), jsPDFDocument: this.jsPDFDocument, autoTableOptions: autoTableTestOptions });
 
                     assert.deepEqual(autoTableOptions, defaultAutoTableOptions, 'autoTableOptions');
                 });

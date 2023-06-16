@@ -1439,7 +1439,13 @@ QUnit.module('Lookup', {
 
 QUnit.module('label integration', () => {
     QUnit.test('lookup should pass containerWidth equal to field width', function(assert) {
-        this.TextEditorLabelMock = (args) => { this.labelArgs = args; return new TextEditorLabel(args); };
+        const that = this;
+
+        this.TextEditorLabelMock = function(args) {
+            that.labelArgs = args;
+            return new TextEditorLabel(args);
+        };
+
         Lookup.mockTextEditorLabel(this.TextEditorLabelMock);
 
         try {
