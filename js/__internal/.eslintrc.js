@@ -75,7 +75,9 @@ module.exports = {
                     }
                 ],
                 'simple-import-sort/imports': 'error',
-                'simple-import-sort/exports': 'error'
+                'simple-import-sort/exports': 'error',
+                'no-param-reassign': ['error', { 'props': false }],
+                'no-underscore-dangle': 'off'
             }
         },
         // Rules for a new TS files.
@@ -111,7 +113,6 @@ module.exports = {
                 'no-self-compare': 'warn',
                 'no-multi-assign': 'warn',
                 'no-param-reassign': 'warn',
-                'no-underscore-dangle': 'off',
                 'no-mixed-operators': 'warn',
                 'no-nested-ternary': 'warn',
                 'no-bitwise': 'warn',
@@ -122,6 +123,7 @@ module.exports = {
                 'max-len': 'warn',
                 'consistent-return': 'warn',
                 'array-callback-return': 'warn',
+                'class-methods-use-this': 'warn',
                 '@typescript-eslint/explicit-function-return-type': 'warn',
                 '@typescript-eslint/init-declarations': 'warn',
                 '@typescript-eslint/no-unsafe-return': 'warn',
