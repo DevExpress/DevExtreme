@@ -2178,7 +2178,7 @@ test('Popup EditForm screenshot', async (t) => {
   true,
   false,
 ].forEach((remoteOperations) => {
-  test.only(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
+  test(`Empty rows should not appear after rows are updated in batch editing mode when paging and validation are enabled and remoteOperations=${remoteOperations}`, async (t) => {
     const dataGrid = new DataGrid('#container');
 
     await t
