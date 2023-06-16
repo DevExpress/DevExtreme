@@ -1002,7 +1002,7 @@ test('The data should display correctly after changing the dataSource and focuse
 }));
 
 // T1166649
-test('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
+safeSizeTest('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1020,7 +1020,7 @@ test('The scroll position of a fixed table should be synchronized with the main 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
   // assert
-}).before(async () => createWidget('dxDataGrid', {
+}, [800, 800]).before(async () => createWidget('dxDataGrid', {
   dataSource: [...new Array(1000)].map((_, index) => ({ id: index, text: `item ${index}` })),
   keyExpr: 'id',
   showRowLines: true,
