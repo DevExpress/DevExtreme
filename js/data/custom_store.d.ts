@@ -54,6 +54,9 @@ export interface CustomStoreOptions<
     /**
      * @docid
      * @public
+     * @type_function_param1 key:object|string|number
+     * @type_function_param2 extraOptions:LoadOptions
+     * @type_function_return Promise<any>
      */
     byKey?: ((key: TKey, extraOptions?: LoadOptions<TItem>) => PromiseLike<TItem>);
     /**
@@ -126,9 +129,9 @@ export default class CustomStore<
     /**
      * @docid
      * @publicName byKey(key, extraOptions)
-     * @type_function_param1 key:object|string|number
-     * @type_function_param2 extraOptions:LoadOptions
-     * @type_function_return Promise<any>
+     * @param1 key:object|string|number
+     * @param2 extraOptions:LoadOptions
+     * @return Promise<any>
      * @public
      */
     byKey(key: TKey, extraOptions?: LoadOptions<TItem>): DxPromise<TItem>;
