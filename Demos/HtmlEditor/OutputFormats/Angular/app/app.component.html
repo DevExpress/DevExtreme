@@ -10,6 +10,7 @@
     <dxi-item
       name="size"
       [acceptedValues]="['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt']"
+      [options]="{ inputAttr: { 'aria-label': 'Font size' } }"
     ></dxi-item>
     <dxi-item
       name="font"
@@ -23,6 +24,7 @@
         'Times New Roman',
         'Verdana'
       ]"
+      [options]="{ inputAttr: { 'aria-label': 'Font family' } }"
     ></dxi-item>
     <dxi-item name="separator"></dxi-item>
     <dxi-item name="bold"></dxi-item>

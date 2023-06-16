@@ -5,7 +5,7 @@ export default function Field({
 }) {
   return (
     <div className="custom-field">
-      <img src={Picture} /><div>{`${Prefix} ${FirstName} ${LastName}`}</div>
+      <img alt={FirstName} src={Picture} /><div>{`${Prefix} ${FirstName} ${LastName}`}</div>
     </div>
   );
 }

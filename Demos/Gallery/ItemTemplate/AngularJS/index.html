@@ -18,7 +18,7 @@
       <div dx-gallery="galleryOptions" dx-item-alias="galleryItem">
         <div data-options="dxTemplate: {name: 'item'}">
           <div>
-            <img ng-src="{{galleryItem.Image}}" />
+            <img alt="{{galleryItem.Address}}" ng-src="{{galleryItem.Image}}" />
             <div class="item-price">{{galleryItem.Price | currency:undefined:0}}</div>
             <div class="item-address">{{galleryItem.Address + ', ' + galleryItem.City + ', ' + galleryItem.State}} </div>
           </div>

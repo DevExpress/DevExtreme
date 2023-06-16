@@ -4,6 +4,7 @@
     <div class="label">Default mode</div>
     <div>
       <img
+        alt="ExcelRemote IR"
         id="product1"
         src="../../../../images/products/17.png"
       >
@@ -21,6 +22,7 @@
     <div class="label">With template</div>
     <div>
       <img
+        alt="SuperPlasma 50"
         id="product2"
         src="../../../../images/products/3.png"
       >
@@ -33,6 +35,7 @@
         position="right"
       >
         <img
+          alt="SuperPlasma 50"
           :width="150"
           src="../../../../images/products/3.png"
         ><br>
@@ -43,6 +46,7 @@
     <div class="label">With animation</div>
     <div>
       <img
+        alt="Projector PlusHD"
         :id="'product3'"
         src="../../../../images/products/15.png"
       >

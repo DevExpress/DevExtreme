@@ -1,6 +1,14 @@
 import React from 'react';
 import { CheckBox } from 'devextreme-react/check-box';
 
+const checkedLabel = { 'aria-label': 'Checked' };
+const uncheckedLabel = { 'aria-label': 'Unchecked' };
+const indeterminateLabel = { 'aria-label': 'Indeterminate' };
+const threeStateModeLabel = { 'aria-label': 'Three state mode' };
+const handleValueChangeLabel = { 'aria-label': 'Handle value change' };
+const disabledLabel = { 'aria-label': 'Disabled' };
+const customSizeLabel = { 'aria-label': 'Custom size' };
+
 class App extends React.Component {
   constructor() {
     super();
@@ -23,19 +31,19 @@ class App extends React.Component {
           <div className="dx-field">
             <div className="dx-field-label">Checked</div>
             <div className="dx-field-value">
-              <CheckBox defaultValue={true} />
+              <CheckBox defaultValue={true} elementAttr={checkedLabel} />
             </div>
           </div>
           <div className="dx-field">
             <div className="dx-field-label">Unchecked</div>
             <div className="dx-field-value">
-              <CheckBox defaultValue={false} />
+              <CheckBox defaultValue={false} elementAttr={uncheckedLabel} />
             </div>
           </div>
           <div className="dx-field">
             <div className="dx-field-label">Indeterminate</div>
             <div className="dx-field-value">
-              <CheckBox defaultValue={null} />
+              <CheckBox defaultValue={null} elementAttr={indeterminateLabel} />
             </div>
           </div>
           <div className="dx-field">
@@ -44,13 +52,18 @@ class App extends React.Component {
               <CheckBox
                 enableThreeStateBehavior={true}
                 defaultValue={null}
+                elementAttr={threeStateModeLabel}
               />
             </div>
           </div>
           <div className="dx-field">
             <div className="dx-field-label">Handle value change</div>
             <div className="dx-field-value">
-              <CheckBox value={this.state.checkBoxValue} onValueChanged={this.onValueChanged} />
+              <CheckBox
+                value={this.state.checkBoxValue}
+                elementAttr={handleValueChangeLabel}
+                onValueChanged={this.onValueChanged}
+              />
             </div>
           </div>
           <div className="dx-field">
@@ -59,6 +72,7 @@ class App extends React.Component {
               <CheckBox
                 disabled={true}
                 value={this.state.checkBoxValue}
+                elementAttr={disabledLabel}
               />
             </div>
           </div>
@@ -68,6 +82,7 @@ class App extends React.Component {
               <CheckBox
                 defaultValue={null}
                 iconSize={30}
+                elementAttr={customSizeLabel}
               />
             </div>
           </div>

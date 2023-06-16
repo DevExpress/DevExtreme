@@ -8,7 +8,10 @@
   >
     <template #item="{ data }">
       <div class="content">
-        <img :src="data.Image">
+        <img
+          :alt="data.Address"
+          :src="data.Image"
+        >
         <div class="item-price">{{ formatCurrency(data.Price) }}</div>
         <div class="item-address">{{ data.Address + ", " + data.City + ", " + data.State }}</div>
       </div>

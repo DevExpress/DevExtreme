@@ -5,6 +5,7 @@
     </div>
     <img
       id="image"
+      alt="product"
       src="../../../../images/products/5.png"
     >
     <DxContextMenu

@@ -10,7 +10,7 @@ $(() => {
       const item = e.itemData;
       if (item.price) {
         $('#product-details').removeClass('hidden');
-        $('#product-details > img').attr('src', item.icon);
+        $('#product-details > img').attr('alt', item.name).attr('src', item.icon);
         $('#product-details > .price').text(`$${item.price}`);
         $('#product-details > .name').text(item.name);
       } else {

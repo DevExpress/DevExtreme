@@ -124,3 +124,4 @@ export const cityLabel = { 'aria-label': 'City' };
 export const addressLabel = { 'aria-label': 'Address' };
 export const languageLabel = { 'aria-label': 'Language' };
 export const europeanUnionDataLabel = { 'aria-label': 'European Union Data' };
+export const autocompleteLabel = { 'aria-label': 'Autocomplete' };

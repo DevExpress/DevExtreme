@@ -11,6 +11,7 @@
           >
             <template #imageIcon="{}">
               <img
+                alt="Custom icon"
                 src="../../../../images/icons/custom-dropbutton-icon.svg"
                 class="custom-icon"
               >
@@ -31,6 +32,7 @@
                 <DxLoadIndicator :visible="!isLoaded"/>
                 <span :hidden="!isLoaded">
                   <img
+                    alt="Custom icon"
                     src="../../../../images/icons/custom-dropbutton-icon.svg"
                     class="custom-icon"
                   >
@@ -58,6 +60,7 @@
               <div>
                 <img
                   v-if="selectedItem"
+                  alt="Custom icon"
                   :src="'../../../../images/icons/' + selectedItem.IconSrc"
                   class="custom-icon"
                 >
@@ -69,7 +72,10 @@
             </template>
             <template #customItem="{ data: itemData }">
               <div class="custom-item">
-                <img :src="'../../../../images/icons/' + itemData.IconSrc">
+                <img
+                  :alt="itemData.Name"
+                  :src="'../../../../images/icons/' + itemData.IconSrc"
+                >
                 <div class="product-name">
                   {{ itemData.Name }}
                 </div>

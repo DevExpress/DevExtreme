@@ -18,7 +18,7 @@ class App extends React.Component {
         <div className="label">
             Right click the image to show available actions:
         </div>
-        <img id="image" src="../../../../images/products/7.png" />
+        <img id="image" alt="product" src="../../../../images/products/7.png" />
         <ContextMenu
           dataSource={items}
           width={200}

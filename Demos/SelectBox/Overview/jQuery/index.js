@@ -43,7 +43,7 @@ $(() => {
     valueExpr: 'ID',
     value: products[3].ID,
     fieldTemplate(data, container) {
-      const result = $(`<div class='custom-item'><img src='${
+      const result = $(`<div class='custom-item'><img alt='Product name' src='${
         data ? data.ImageSrc : ''
       }' /><div class='product-name'></div></div>`);
       result
@@ -56,7 +56,7 @@ $(() => {
       container.append(result);
     },
     itemTemplate(data) {
-      return `<div class='custom-item'><img src='${
+      return `<div class='custom-item'><img alt='Product name' src='${
         data.ImageSrc}' /><div class='product-name'>${
         data.Name}</div></div>`;
     },

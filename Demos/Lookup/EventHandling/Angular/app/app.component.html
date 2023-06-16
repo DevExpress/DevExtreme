@@ -1,9 +1,10 @@
 <div class="dx-fieldset">
   <dx-lookup
+    placeholder="Select employee"
     [items]="employees"
     [displayExpr]="getDisplayExpr"
     [applyValueMode]="applyValueMode"
-    placeholder="Select employee"
+    [inputAttr]="{ 'aria-label': 'Lookup' }"
     (onValueChanged)="valueChanged($event)"
   >
     <dxo-drop-down-options [showTitle]="false"></dxo-drop-down-options>

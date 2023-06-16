@@ -30,7 +30,7 @@ class House extends React.PureComponent {
       <div>
         <div onClick={this.show} className="item-content">
 
-          <img src={house.Image} />
+          <img alt={house.Address} src={house.Image} />
 
           <div className="item-options">
             <div>
@@ -38,7 +38,7 @@ class House extends React.PureComponent {
               <div className="price large-text">{formatCurrency(house.Price)}</div>
               <div className="agent">
                 <div id={`house${house.ID}`}>
-                  <img src="../../../../images/icon-agent.svg" />
+                  <img alt="Listing agent" src="../../../../images/icon-agent.svg" />
                                     Listing agent
                 </div>
               </div>
@@ -61,7 +61,7 @@ class House extends React.PureComponent {
     const agent = this.props.house.Agent;
     return (
       <div className="agent-details">
-        <img src={agent.Picture} />
+        <img alt={agent.Name} src={agent.Picture} />
         <div>
           <div className="name large-text">{agent.Name}</div>
           <div className="phone">Tel: {agent.Phone}</div>

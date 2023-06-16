@@ -9,7 +9,7 @@ export function ProductItem(props) {
 
   return (
     <React.Fragment>
-      <img src={props.product.ImageSrc} alt="monitor" />
+      <img alt={props.product.Name} src={props.product.ImageSrc} />
       <div>{props.product.Name}</div>
       <CheckBox
         text="Available"

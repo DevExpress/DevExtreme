@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="product">
-      <img :src="item.ImageSrc">
+      <img
+        :alt="item.Name"
+        :src="item.ImageSrc"
+      >
       <div>{{ item.Name }}</div>
       <div class="price">{{ currency(item.Price) }}</div>
     </div>

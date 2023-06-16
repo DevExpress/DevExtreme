@@ -51,3 +51,4 @@ export const tasks = [{ id: 1, text: 'Prepare 2016 Financial' },
 
 export const selectionModeLabel = { 'aria-label': 'Selection Mode' };
 export const selectAllModeLabel = { 'aria-label': 'Select All Mode' };
+export const selectByClickLabel = { 'aria-label': 'Select By Click' };

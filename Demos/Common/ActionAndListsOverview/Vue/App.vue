@@ -57,6 +57,7 @@
         <template #item="{ data: item }">
           <img
             class="tile-image"
+            :alt="item.FileName"
             :src="'../../../../images/hotels/' + item.FileName"
           >
         </template>

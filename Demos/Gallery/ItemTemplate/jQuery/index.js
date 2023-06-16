@@ -14,7 +14,7 @@ $(() => {
     showIndicator: false,
     itemTemplate(item) {
       const result = $('<div>');
-      $('<img>').attr('src', item.Image).appendTo(result);
+      $('<img>').attr('alt', item.Address).attr('src', item.Image).appendTo(result);
       $('<div>').addClass('item-price').text(formatCurrency(item.Price, 'USD')).appendTo(result);
       $('<div>').addClass('item-address').text(`${item.Address}, ${item.City}, ${item.State}`).appendTo(result);
       return result;

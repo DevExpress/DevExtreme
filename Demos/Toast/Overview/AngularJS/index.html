@@ -19,7 +19,7 @@
         <h1>Product List</h1>
         <ul>
           <li ng-repeat="product in products">
-            <img ng-src="{{product.ImageSrc}}" />
+            <img alt="{{product.Name}}" ng-src="{{product.ImageSrc}}" />
             <div id="name">{{product.Name}}</div>
             <div
               dx-check-box="{

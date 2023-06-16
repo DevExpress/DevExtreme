@@ -4,9 +4,9 @@
       <div class="label">Title</div>
       <div class="value">
         <dx-text-box
+          valueChangeEvent="keyup"
           [(value)]="text"
           [inputAttr]="{ 'aria-label': 'Title' }"
-          valueChangeEvent="keyup"
           [maxLength]="40"
         ></dx-text-box>
       </div>
@@ -15,8 +15,9 @@
       <div class="label">Color</div>
       <div class="value">
         <dx-color-box
-          [(value)]="color"
           applyValueMode="instantly"
+          [(value)]="color"
+          [inputAttr]="{ 'aria-label': 'Color' }"
         ></dx-color-box>
       </div>
     </div>
@@ -26,11 +27,11 @@
       <div class="label">Width</div>
       <div class="value">
         <dx-number-box
+          format="#0px"
           [(value)]="width"
           [showSpinButtons]="true"
           [max]="700"
           [min]="70"
-          format="#0px"
           [inputAttr]="{ 'aria-label': 'Width' }"
         ></dx-number-box>
       </div>
@@ -39,11 +40,11 @@
       <div class="label">Height</div>
       <div class="value">
         <dx-number-box
+          format="#0px"
           [(value)]="height"
           [showSpinButtons]="true"
           [max]="700"
           [min]="70"
-          format="#0px"
           [inputAttr]="{ 'aria-label': 'Height' }"
         ></dx-number-box>
       </div>

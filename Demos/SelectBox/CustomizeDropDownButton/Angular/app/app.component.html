@@ -8,6 +8,7 @@
       >
         <div *dxTemplate="let data of 'dropDownButton'">
           <img
+            alt="Custom icon"
             src="../../../../images/icons/custom-dropbutton-icon.svg"
             class="custom-icon"
           />
@@ -27,6 +28,7 @@
           <dx-load-indicator [visible]="!isLoaded"></dx-load-indicator>
           <span [hidden]="!isLoaded">
             <img
+              alt="Custom icon"
               src="../../../../images/icons/custom-dropbutton-icon.svg"
               class="custom-icon"
             />
@@ -51,6 +53,7 @@
         <div *dxTemplate="let data of 'dropDownButton'">
           <img
             *ngIf="selectedItem"
+            alt="Custom icon"
             src="../../../../images/icons/{{ selectedItem.IconSrc }}"
             class="custom-icon"
           />
@@ -58,7 +61,10 @@
         </div>
 
         <div *dxTemplate="let data of 'item'" class="custom-item">
-          <img src="../../../../images/icons/{{ data.IconSrc }}" />
+          <img
+            alt="{{ data.Name }}"
+            src="../../../../images/icons/{{ data.IconSrc }}"
+          />
           <div class="product-name">{{ data.Name }}</div>
         </div>
       </dx-select-box>

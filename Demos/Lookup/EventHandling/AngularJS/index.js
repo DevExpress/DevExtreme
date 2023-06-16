@@ -16,6 +16,9 @@ DemoApp.controller('DemoController', ($scope) => {
       showTitle: false,
     },
     placeholder: 'Select employee',
+    inputAttr: {
+      'aria-label': 'Lookup',
+    },
     onValueChanged(data) {
       $scope.selectedEmployee = data.value;
     },

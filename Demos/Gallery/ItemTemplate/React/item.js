@@ -14,7 +14,7 @@ export default function Item({
 }) {
   return (
     <div>
-      <img src={Image} />
+      <img alt={Address} src={Image} />
       <div className='item-price'>{formatPrice(Price)}</div>
       <div className='item-address'>{`${Address}, ${City}, ${State}`}</div>
     </div>

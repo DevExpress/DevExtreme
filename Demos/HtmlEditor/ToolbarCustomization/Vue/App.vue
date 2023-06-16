@@ -8,8 +8,9 @@
         <DxItem name="redo"/>
         <DxItem name="separator"/>
         <DxItem
-          :accepted-values="headerValues"
           name="header"
+          :accepted-values="headerValues"
+          :options="headerOptions"
         />
         <DxItem name="separator"/>
         <DxItem name="bold"/>
@@ -61,6 +62,7 @@ export default {
       sizeValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
       fontValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
       headerValues: [false, 1, 2, 3, 4, 5],
+      headerOptions: { inputAttr: { 'aria-label': 'Header' } },
       toolbarButtonOptions: {
         text: 'Show markup',
         stylingMode: 'text',

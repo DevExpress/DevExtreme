@@ -12,7 +12,7 @@ $(() => {
     itemTemplate(data) {
       const result = $('<div>').addClass('product');
 
-      $('<img>').attr('src', data.ImageSrc).appendTo(result);
+      $('<img>').attr('alt', data.Name).attr('src', data.ImageSrc).appendTo(result);
       $('<div>').text(data.Name).appendTo(result);
       $('<div>').addClass('price')
         .html(formatCurrency(data.Price)).appendTo(result);
