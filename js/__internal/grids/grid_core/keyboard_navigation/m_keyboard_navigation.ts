@@ -3,7 +3,6 @@ import domAdapter from '@js/core/dom_adapter';
 import $, { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { Deferred, when } from '@js/core/utils/deferred';
-/* eslint-disable class-methods-use-this */
 import {
   getHeight,
   getOuterHeight,
