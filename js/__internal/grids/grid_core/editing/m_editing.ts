@@ -2,7 +2,7 @@
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
-import $ from '@js/core/renderer';
+import $, { dxElementWrapper } from '@js/core/renderer';
 import { equalByValue, noop } from '@js/core/utils/common';
 // @ts-expect-error
 import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
@@ -407,9 +407,11 @@ class EditingControllerImpl extends modules.ViewController {
     return columnIndex;
   }
 
-  getFirstEditableCellInRow(rowIndex) {
+  getFirstEditableCellInRow(rowIndex): dxElementWrapper | undefined {
     const rowsView = this.getView('rowsView');
-    return rowsView && rowsView._getCellElement(rowIndex || 0, this.getFirstEditableColumnIndex());
+    const columnIndex = this.getFirstEditableColumnIndex();
+
+    return rowsView?._getCellElement(rowIndex || 0, columnIndex);
   }
 
   getFocusedCellInRow(rowIndex) {

@@ -1441,3 +1441,44 @@ test('Editors should keep changes after being scrolled out of sight (T1145698)',
     await t.wait(300);
   });
 });
+
+// T1136896
+safeSizeTest('Editing buttons should rerender correctly after scrolling if repaintChangesOnly=true', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollBy({ top: 1000 });
+
+  await dataGrid.apiEditRow(3); // row with id=12
+
+  await dataGrid.scrollBy({ top: -1000 });
+  await dataGrid.scrollBy({ top: 1000 });
+
+  await dataGrid.scrollBy({ top: -1 });
+
+  await takeScreenshot('T1136896-virtual-scrolling_editing-buttons.png', '#container');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 200]).before(async () => {
+  const data = [...new Array(14)].map((_, i) => ({
+    id: i + 1,
+  }));
+
+  return createWidget('dxDataGrid', {
+    height: 200,
+    loadingTimeout: null,
+    dataSource: data,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
+    },
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+      allowDeleting: true,
+    },
+    repaintChangesOnly: true,
+  });
+});

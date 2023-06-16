@@ -2463,7 +2463,7 @@ export const keyboardNavigationModule = {
           }
 
           const cellElements = this.getCellElements(rowIndex);
-          if (keyboardController.isKeyboardEnabled() && cellElements.length) {
+          if (keyboardController.isKeyboardEnabled() && cellElements?.length) {
             this.updateFocusElementTabIndex(cellElements, preventScroll);
           }
         },

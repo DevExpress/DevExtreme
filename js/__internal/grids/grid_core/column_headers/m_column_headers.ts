@@ -520,19 +520,18 @@ export const columnHeadersModule = {
         },
 
         setRowsOpacity(columnIndex, value, rowIndex) {
-          const that = this;
           let i;
           let columnElements;
-          const rowCount = that.getRowCount();
-          const columns = that._columnsController.getColumns();
+          const rowCount = this.getRowCount();
+          const columns = this._columnsController.getColumns();
           const column = columns && columns[columnIndex];
           const columnID = column && column.isBand && column.index;
-          const setColumnOpacity = function (index, column) {
+          const setColumnOpacity = (column, index) => {
             if (column.ownerBand === columnID) {
               columnElements.eq(index).css({ opacity: value });
 
               if (column.isBand) {
-                that.setRowsOpacity(column.index, value, i + 1);
+                this.setRowsOpacity(column.index, value, i + 1);
               }
             }
           };
@@ -540,8 +539,12 @@ export const columnHeadersModule = {
           if (isDefined(columnID)) {
             rowIndex = rowIndex || 0;
             for (i = rowIndex; i < rowCount; i++) {
-              columnElements = that.getCellElements(i);
-              each(that.getColumns(i), setColumnOpacity);
+              columnElements = this.getCellElements(i);
+
+              if (columnElements) {
+                const rowColumns = this.getColumns(i);
+                rowColumns.forEach(setColumnOpacity);
+              }
             }
           }
         },

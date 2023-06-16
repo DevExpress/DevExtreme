@@ -1,6 +1,6 @@
 import devices from '@js/core/devices';
 import Guid from '@js/core/guid';
-import $ from '@js/core/renderer';
+import $, { dxElementWrapper } from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -508,7 +508,7 @@ export const editingFormBasedModule = {
 
           this.callBase.apply(this, arguments);
         },
-        getCellElements(rowIndex) {
+        getCellElements(rowIndex): dxElementWrapper | undefined {
           const $cellElements = this.callBase(rowIndex);
           const editingController = this._editingController;
           const editForm = editingController.getEditForm();
