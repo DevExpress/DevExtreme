@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import positionUtils from '@js/animation/position';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
