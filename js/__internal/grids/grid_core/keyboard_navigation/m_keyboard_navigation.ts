@@ -4,7 +4,6 @@ import $, { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 // @ts-expect-error
 import { Deferred, when } from '@js/core/utils/deferred';
-/* eslint-disable class-methods-use-this */
 import {
   getHeight,
   getOuterHeight,

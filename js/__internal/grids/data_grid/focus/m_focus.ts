@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import { equalByValue } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
