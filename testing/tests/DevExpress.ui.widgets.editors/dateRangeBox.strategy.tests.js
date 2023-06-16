@@ -296,6 +296,47 @@ QUnit.module('Strategy', moduleConfig, () => {
             assert.strictEqual(viewMin, calendarMin, 'view min option is not changed');
             assert.strictEqual(viewMax, calendarMax, 'view max option is not changed');
         });
+
+        QUnit.test('It should not be possible to focus disabled date before start date when end date field is focused', function(assert) {
+            this.reinit({
+                disableOutOfRangeSelection: true,
+            });
+            this.instance.open();
+
+            const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+            const startCellDate = dataUtils.data($startDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+            $startDateCell.trigger('dxclick');
+
+            const $endDateInput = $(this.instance.endDateField());
+            const keyboard = keyboardMock($endDateInput);
+
+            keyboard.press('arrowleft');
+
+            const currentDate = this.getCalendar().option('currentDate');
+
+            assert.deepEqual(startCellDate, currentDate, 'currentDate is not changed');
+        });
+
+        QUnit.test('It should not be possible to focus disabled date after end date when start date field is focused', function(assert) {
+            this.reinit({
+                disableOutOfRangeSelection: true,
+            });
+            this.instance.open();
+            $(this.instance.endDateField()).focusin();
+
+            const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+            const endCellDate = dataUtils.data($endDateCell.get(0), CALENDAR_DATE_VALUE_KEY);
+            $endDateCell.trigger('dxclick');
+
+            const $startDateInput = $(this.instance.startDateField());
+            const keyboard = keyboardMock($startDateInput);
+
+            keyboard.press('arrowright');
+
+            const currentDate = this.getCalendar().option('currentDate');
+
+            assert.deepEqual(currentDate, endCellDate, 'currentDate is not changed');
+        });
     });
 
     ['instantly', 'useButtons'].forEach((applyValueMode) => {

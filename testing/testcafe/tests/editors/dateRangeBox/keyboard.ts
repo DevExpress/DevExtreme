@@ -713,8 +713,7 @@ test('DateRangeBox should not be closed by press shift+tab key on endDate input'
     value: [initialValue[0], null],
   }));
 
-  // TODO: change currentDate value after select startDate to endDate in calendar was skipped
-  test.skip('Selection in calendar should be started with endDate value after select startDate if endDate is specified', async (t) => {
+  test('Selection in calendar should be started with endDate value after select startDate if endDate is specified', async (t) => {
     const dateRangeBox = new DateRangeBox('#container');
 
     await t
