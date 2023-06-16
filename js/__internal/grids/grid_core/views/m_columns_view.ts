@@ -2,7 +2,7 @@
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
-import $ from '@js/core/renderer';
+import $, { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -961,6 +961,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
   }
 
   needWaitAsyncTemplates() {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
   }
 
@@ -1118,28 +1119,31 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  getCellElements(rowIndex) {
+  getCellElements(rowIndex): dxElementWrapper | undefined {
     return this._getCellElementsCore(rowIndex);
   }
 
-  _getCellElementsCore(rowIndex) {
+  _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
+    if (rowIndex < 0) {
+      return undefined;
+    }
+
     const $row = this._getRowElements().eq(rowIndex);
+
     return $row.children();
   }
 
-  _getCellElement(rowIndex, columnIdentifier) {
-    const that = this;
-    let $cell;
-    const $cells = that.getCellElements(rowIndex);
-    const columnVisibleIndex = that._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
+  _getCellElement(rowIndex, columnIdentifier): dxElementWrapper | undefined {
+    const $cells = this.getCellElements(rowIndex);
+    const columnVisibleIndex = this._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
 
-    if ($cells.length && columnVisibleIndex >= 0) {
-      $cell = $cells.eq(columnVisibleIndex);
+    if (!$cells?.length || columnVisibleIndex < 0) {
+      return undefined;
     }
 
-    if ($cell && $cell.length) {
-      return $cell;
-    }
+    const $cell = $cells.eq(columnVisibleIndex);
+
+    return $cell.length > 0 ? $cell : undefined;
   }
 
   _getRowElement(rowIndex) {
@@ -1158,8 +1162,14 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return undefined;
   }
 
-  getCellElement(rowIndex, columnIdentifier) {
-    return getPublicElement(this._getCellElement(rowIndex, columnIdentifier));
+  getCellElement(rowIndex, columnIdentifier): Element | undefined {
+    const $cell = this._getCellElement(rowIndex, columnIdentifier);
+
+    if ($cell) {
+      return getPublicElement($cell);
+    }
+
+    return undefined;
   }
 
   getRowElement(rowIndex) {
@@ -1201,7 +1211,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
         cellPosition.rowIndex = cellPosition.rowIndex < $rows.length ? cellPosition.rowIndex : $rows.length - 1;
       }
       $cells = cells || this.getCellElements(cellPosition.rowIndex);
-      if ($cells && $cells.length > 0) {
+      if ($cells?.length > 0) {
         return $cells.eq($cells.length > cellPosition.columnIndex ? cellPosition.columnIndex : $cells.length - 1);
       }
     }
