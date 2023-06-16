@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
-/* eslint-disable class-methods-use-this */
 import $ from '@js/core/renderer';
 import { findChanges } from '@js/core/utils/array_compare';
 import { deferRender, equalByValue } from '@js/core/utils/common';
