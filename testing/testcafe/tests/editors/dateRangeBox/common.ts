@@ -97,21 +97,21 @@ fixture.disablePageReloads`DateRangeBox render`
 });
 
 labelModes.forEach((labelMode) => {
-  test(`Custom placeholders and labels (labelMode=${labelMode})`, async (t) => {
+  test(`Custom placeholders and labels appearance (labelMode=${labelMode})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dateRangeBox = new DateRangeBox('#dateRangeBox');
 
-    await testScreenshot(t, takeScreenshot, `Placeholders and labels appearance by default (labelMode=${labelMode}).png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `Placeholder and label by default labelMode=${labelMode}.png`, { element: '#container' });
 
     await t
       .click(dateRangeBox.getStartDateBox().input);
 
-    await testScreenshot(t, takeScreenshot, `Placeholders and labels appearance on start date input focus (labelMode=${labelMode}).png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `Placeholder and label on start date input focus labelMode=${labelMode}.png`, { element: '#container' });
 
     await t
       .click(dateRangeBox.getEndDateBox().input);
 
-    await testScreenshot(t, takeScreenshot, `Placeholders and labels appearance on end date input focus (labelMode=${labelMode}).png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `Placeholder and label on end date input focus labelMode=${labelMode}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
