@@ -93,6 +93,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         const $editingCell = this.getFocusedCellInRow(this._getVisibleEditRowIndex());
 
         this._delayedInputFocus($editingCell, () => {
+          // @ts-expect-error
           $editingCell && this.component.focus($editingCell);
         });
       }
