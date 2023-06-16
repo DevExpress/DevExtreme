@@ -373,41 +373,47 @@ module('Repeat-end editor', () => {
     });
 
     test('Repeat-until dateBox should get date considering scheduler timeZone', function(assert) {
-        const timeZoneCalculator = createTimeZoneCalculator('Europe/London');
+        const timeZoneCalculator = createTimeZoneCalculator('America/Los_Angeles');
+
+        const dateInSchedulerTimeZone = new Date('2023-06-16 23:59:59');
+        const dateInLocaleTimeZone = timeZoneCalculator.createDate(
+            dateInSchedulerTimeZone,
+            { path: 'fromGrid' },
+        );
+        const dateInUtcTimeZone = getRecurrenceProcessor().getAsciiStringByDate(dateInLocaleTimeZone);
+
         const instance = createInstance({
-            value: 'FREQ=WEEKLY;UNTIL=20151007',
+            value: `FREQ=WEEKLY;UNTIL=${dateInUtcTimeZone}`,
             timeZoneCalculator,
         });
 
         const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
         const untilDate = $repeatUntilDate.dxDateBox('instance');
 
-        const rightDate = timeZoneCalculator.createDate(
-            getRecurrenceProcessor().getDateByAsciiString('20151007'),
-            { path: 'toGrid' },
-        );
-
-        assert.deepEqual(untilDate.option('value'), rightDate, 'dateBox has right value');
+        assert.deepEqual(untilDate.option('value'), dateInSchedulerTimeZone, 'dateBox has right value');
     });
 
     test('Repeat-until dateBox should apply date considering scheduler timeZone', function(assert) {
         const timeZoneCalculator = createTimeZoneCalculator('America/Los_Angeles');
+
+        const dateInSchedulerTimeZone = new Date('2023-06-16 23:59:59');
+        const dateInLocaleTimeZone = timeZoneCalculator.createDate(
+            dateInSchedulerTimeZone,
+            { path: 'fromGrid' },
+        );
+        const dateInUtcTimeZone = getRecurrenceProcessor().getAsciiStringByDate(dateInLocaleTimeZone);
+
         const instance = createInstance({
-            value: 'FREQ=WEEKLY;UNTIL=20230615T000000Z',
+            value: 'FREQ=WEEKLY;UNTIL=20151007T000000Z', // some other date, we'll change it later in dateBox
             timeZoneCalculator,
         });
 
         const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
         const untilDate = $repeatUntilDate.dxDateBox('instance');
 
-        untilDate.option('value', getRecurrenceProcessor().getDateByAsciiString('20230615T0000'));
+        untilDate.option('value', dateInSchedulerTimeZone);
 
-        const rightDate = timeZoneCalculator.createDate(
-            getRecurrenceProcessor().getDateByAsciiString('20230615T0000'),
-            { path: 'fromGrid' },
-        );
-
-        assert.equal(instance.option('value'), `FREQ=WEEKLY;UNTIL=${getRecurrenceProcessor().getAsciiStringByDate(rightDate)}`, 'Recurrence editor has right value');
+        assert.equal(instance.option('value'), `FREQ=WEEKLY;UNTIL=${dateInUtcTimeZone}`, 'Recurrence editor has right value');
     });
 
     test('Recurrence editor should correctly process values from until-date editor', function(assert) {

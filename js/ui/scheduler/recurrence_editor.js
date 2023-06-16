@@ -626,15 +626,13 @@ class RecurrenceEditor extends Editor {
 
     _repeatUntilValueChangeHandler(args) {
         if(this._recurrenceRule.getRepeatEndRule() === 'until') {
-            const untilDateInLocalTimeZone = this._formatUntilDate(new Date(args.value));
-            const untilDate = this._timeZoneCalculator.createDate(
-                untilDateInLocalTimeZone,
+            const dateInSchedulerTimeZone = this._formatUntilDate(new Date(args.value));
+            const dateInLocaleTimeZone = this._timeZoneCalculator.createDate(
+                dateInSchedulerTimeZone,
                 { path: PathTimeZoneConversion.fromGridToSource }
             );
 
-            this._repeatUntilDate.option('value', untilDateInLocalTimeZone);
-
-            this._recurrenceRule.makeRule('until', untilDate);
+            this._recurrenceRule.makeRule('until', dateInLocaleTimeZone);
             this._changeEditorValue();
         }
     }
