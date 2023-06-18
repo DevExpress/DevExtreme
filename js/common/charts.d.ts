@@ -318,6 +318,7 @@ export function registerPattern(options: { width: number | string; height: numbe
 /**
  * @namespace DevExpress.common.charts
  * @public
+ * @docid
  */
 export type GradientColor = {
    /**

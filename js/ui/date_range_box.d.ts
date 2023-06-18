@@ -164,6 +164,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
  * @public
+ * @docid dxDateRangeBoxOptions
  */
 export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 'label' | 'maxLength' | 'name' | 'placeholder' | 'text'> & {
     /**

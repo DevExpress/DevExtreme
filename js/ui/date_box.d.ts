@@ -281,6 +281,8 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
 }
 
 /**
+ * @hidden
+ * @docid
  * @namespace DevExpress.ui
  */
 export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<TComponent> {
