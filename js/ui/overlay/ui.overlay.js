@@ -557,6 +557,7 @@ const Overlay = Widget.inherit({
         // const pinchZoomEvent = 'gesturestart';
         const pinchZoomEvent = 'touchmove';
 
+
         if(subscribe && !this._unSubscribeCallbacks) {
             this._unSubscribeCallbacks = {};
         }
