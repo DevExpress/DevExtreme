@@ -18,7 +18,6 @@ DemoApp.controller('DemoController', ($scope) => {
     bindingOptions: {
       text: 'checkBoxValue',
       rtlEnabled: 'rtlEnabled',
-      inputAttr: { 'aria-label': 'Language' },
     },
   };
   $scope.switchBoxOptions = {
@@ -28,7 +27,6 @@ DemoApp.controller('DemoController', ($scope) => {
   };
   $scope.textBoxOptions = {
     showClearButton: true,
-    inputAttr: { 'aria-label': 'Text Box' },
     bindingOptions: {
       text: 'textBoxValue',
       rtlEnabled: 'rtlEnabled',
@@ -37,7 +35,6 @@ DemoApp.controller('DemoController', ($scope) => {
   $scope.numberBoxOptions = {
     showSpinButtons: true,
     value: '123',
-    inputAttr: { 'aria-label': 'Number Box' },
     bindingOptions: {
       rtlEnabled: 'rtlEnabled',
     },
@@ -45,7 +42,6 @@ DemoApp.controller('DemoController', ($scope) => {
   $scope.selectBoxOptions = {
     items: europeanUnion,
     value: europeanUnion[0],
-    inputAttr: { 'aria-label': 'European Union' },
     bindingOptions: {
       displayExpr: 'displayExpr',
       rtlEnabled: 'rtlEnabled',
@@ -56,14 +52,12 @@ DemoApp.controller('DemoController', ($scope) => {
     value: [europeanUnion[0].id],
     placeholder: '...',
     valueExpr: 'id',
-    inputAttr: { 'aria-label': 'Name' },
     bindingOptions: {
       displayExpr: 'displayExpr',
       rtlEnabled: 'rtlEnabled',
     },
   };
   $scope.textAreaOptions = {
-    inputAttr: { 'aria-label': 'Notes' },
     bindingOptions: {
       text: 'textAreaValue',
       rtlEnabled: 'rtlEnabled',
@@ -71,7 +65,6 @@ DemoApp.controller('DemoController', ($scope) => {
   };
   $scope.autocompleteOptions = {
     items: europeanUnion,
-    inputAttr: { 'aria-label': 'Autocomplete' },
     bindingOptions: {
       valueExpr: 'displayExpr',
       rtlEnabled: 'rtlEnabled',
@@ -80,7 +73,6 @@ DemoApp.controller('DemoController', ($scope) => {
   $scope.selectLanguageOptions = {
     items: languages,
     value: languages[1],
-    inputAttr: { 'aria-label': 'Language' },
     bindingOptions: {
       rtlEnabled: 'rtlEnabled',
     },

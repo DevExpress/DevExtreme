@@ -7,7 +7,7 @@
 >
   <div *dxTemplate="let galleryItem of 'item'">
     <div>
-      <img alt="{{ galleryItem.Address }}" src="{{ galleryItem.Image }}" />
+      <img src="{{ galleryItem.Image }}" />
       <div class="item-price">{{
         galleryItem.Price | currency : "USD" : "symbol" : "1.0"
       }}</div>

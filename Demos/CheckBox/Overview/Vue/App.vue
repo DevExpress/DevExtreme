@@ -4,28 +4,19 @@
       <div class="dx-field">
         <div class="dx-field-label">Checked</div>
         <div class="dx-field-value">
-          <DxCheckBox
-            :value="true"
-            :element-attr="checkedLabel"
-          />
+          <DxCheckBox :value="true"/>
         </div>
       </div>
       <div class="dx-field">
         <div class="dx-field-label">Unchecked</div>
         <div class="dx-field-value">
-          <DxCheckBox
-            :value="false"
-            :element-attr="unCheckedLabel"
-          />
+          <DxCheckBox :value="false"/>
         </div>
       </div>
       <div class="dx-field">
         <div class="dx-field-label">Indeterminate</div>
         <div class="dx-field-value">
-          <DxCheckBox
-            :value="null"
-            :element-attr="indeterminateLabel"
-          />
+          <DxCheckBox :value="null"/>
         </div>
       </div>
       <div class="dx-field">
@@ -34,17 +25,13 @@
           <DxCheckBox
             :enable-three-state-behavior="true"
             :value="null"
-            :element-attr="threeStateModeLabel"
           />
         </div>
       </div>
       <div class="dx-field">
         <div class="dx-field-label">Handle value change</div>
         <div class="dx-field-value">
-          <DxCheckBox
-            v-model:value="checkBoxValue"
-            :element-attr="handleValueChangeLabel"
-          />
+          <DxCheckBox v-model:value="checkBoxValue"/>
         </div>
       </div>
       <div class="dx-field">
@@ -53,7 +40,6 @@
           <DxCheckBox
             :disabled="true"
             :value="checkBoxValue"
-            :element-attr="disabledLabel"
           />
         </div>
       </div>
@@ -63,7 +49,6 @@
           <DxCheckBox
             :value="null"
             :icon-size="30"
-            :element-attr="customSizeLabel"
           />
         </div>
       </div>
@@ -91,30 +76,6 @@ export default {
     return {
       checkBoxValue: null,
     };
-  },
-
-  computed: {
-    checkedLabel() {
-      return { 'aria-label': 'Checked' };
-    },
-    unCheckedLabel() {
-      return { 'aria-label': 'Unchecked' };
-    },
-    indeterminateLabel() {
-      return { 'aria-label': 'Indeterminate' };
-    },
-    threeStateModeLabel() {
-      return { 'aria-label': 'Three state mode' };
-    },
-    handleValueChangeLabel() {
-      return { 'aria-label': 'Handle value change' };
-    },
-    disabledLabel() {
-      return { 'aria-label': 'Disabled' };
-    },
-    customSizeLabel() {
-      return { 'aria-label': 'Custom size' };
-    },
   },
 };
 </script>

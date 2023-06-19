@@ -11,7 +11,6 @@
     <div class="right-content">
       <div class="title-container">
         <img
-          alt="country flag"
           :src="countryData.flag"
           class="flag"
         >
@@ -51,7 +50,6 @@
         <template #cityTemplate="{ data: city }">
           <div>
             <img
-              alt="country flag"
               :src="city.flag"
               class="flag"
             >

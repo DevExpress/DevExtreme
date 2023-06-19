@@ -1,9 +1,6 @@
 <template>
   <div class="custom-item">
-    <img
-      :alt="itemData.FirstName"
-      :src="itemData.Picture"
-    ><div>{{ itemData.Prefix }}
+    <img :src="itemData.Picture"><div>{{ itemData.Prefix }}
       {{ itemData.FirstName }} {{ itemData.LastName }}</div>
   </div>
 </template>

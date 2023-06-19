@@ -12,7 +12,6 @@ $(() => {
   $('#color-box').dxColorBox({
     value: '#f05b41',
     applyValueMode: 'instantly',
-    inputAttr: { 'aria-label': 'Color' },
     onValueChanged(e) {
       $('.color').css('fill', e.value);
       $('.text').css('color', e.value);

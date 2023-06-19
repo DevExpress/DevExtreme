@@ -11,16 +11,6 @@ import 'devextreme/ui/html_editor/converters/markdown';
 const sizeValues = ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'];
 const fontValues = ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'];
 const defaultSelectedItemKeys = ['Html'];
-const fontSizeOptions = {
-  inputAttr: {
-    'aria-label': 'Font size',
-  },
-};
-const fontFamilyOptions = {
-  inputAttr: {
-    'aria-label': 'Font family',
-  },
-};
 
 class App extends React.Component {
   constructor() {
@@ -54,12 +44,10 @@ class App extends React.Component {
             <Item
               name="size"
               acceptedValues={sizeValues}
-              options={fontSizeOptions}
             />
             <Item
               name="font"
               acceptedValues={fontValues}
-              options={fontFamilyOptions}
             />
             <Item name="separator" />
             <Item name="bold" />

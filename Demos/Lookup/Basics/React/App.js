@@ -3,9 +3,6 @@ import { Lookup, DropDownOptions } from 'devextreme-react/lookup';
 import DataSource from 'devextreme/data/data_source';
 import { employeesList, employeesTasks } from './data.js';
 
-const simpleLookupLabel = { 'aria-label': 'Simple lookup' };
-const groupedLookupLabel = { 'aria-label': 'Grouped lookup' };
-
 const groupedData = new DataSource({
   store: employeesTasks,
   key: 'ID',
@@ -22,7 +19,6 @@ class App extends React.Component {
             <Lookup
               items={employeesList}
               defaultValue={employeesList[0]}
-              inputAttr={simpleLookupLabel}
             >
               <DropDownOptions showTitle={false} />
             </Lookup>
@@ -35,7 +31,6 @@ class App extends React.Component {
               dataSource={groupedData}
               grouped={true}
               displayExpr="Subject"
-              inputAttr={groupedLookupLabel}
             >
               <DropDownOptions
                 hideOnOutsideClick={true}

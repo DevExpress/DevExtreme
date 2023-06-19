@@ -3,10 +3,7 @@
     <div id="chat-window">
       <div class="message dx-theme-background-color">
         <div class="photo">
-          <img
-            alt="Kevin Carter"
-            src="../../../../images/mentions/Kevin-Carter.png"
-          >
+          <img src="../../../../images/mentions/Kevin-Carter.png">
         </div>
         <div class="name">
           Kevin Carter
@@ -24,10 +21,7 @@
       <br>
       <div class="message dx-theme-background-color">
         <div class="photo">
-          <img
-            alt="John Heart"
-            src="../../../../images/mentions/John-Heart.png"
-          >
+          <img src="../../../../images/mentions/John-Heart.png">
         </div>
         <div class="name">
           John Heart
@@ -43,10 +37,7 @@
       <br>
       <div class="message dx-theme-background-color">
         <div class="photo">
-          <img
-            alt="Kevin Carter"
-            src="../../../../images/mentions/Kevin-Carter.png"
-          >
+          <img src="../../../../images/mentions/Kevin-Carter.png">
         </div>
         <div class="name">
           Kevin Carter

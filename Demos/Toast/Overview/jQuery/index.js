@@ -12,7 +12,7 @@ $(() => {
 
   $.each(products, (i, product) => {
     $('<li />').append(
-      $('<img />').attr('alt', product.Name).attr('src', product.ImageSrc),
+      $('<img />').attr('src', product.ImageSrc),
       $('<div />').attr('class', 'name').text(product.Name),
       $('<div />')
         .dxCheckBox({

@@ -4,7 +4,6 @@ $(() => {
     inputAttr: { 'aria-label': 'Simple Product' },
     dropDownButtonTemplate() {
       return $('<img>', {
-        alt: 'Custom icon',
         src: '../../../../images/icons/custom-dropbutton-icon.svg',
         class: 'custom-icon',
       });
@@ -13,7 +12,6 @@ $(() => {
 
   const $loadIndicator = $('<div>').dxLoadIndicator({ visible: false });
   const $dropDownButtonImage = $('<img>', {
-    alt: 'Custom icon',
     src: '../../../../images/icons/custom-dropbutton-icon.svg',
     class: 'custom-icon',
   });
@@ -46,7 +44,6 @@ $(() => {
     if (selectedItem) {
       return function () {
         return $('<img>', {
-          alt: 'Custom icon',
           src: `../../../../images/icons/${selectedItem.IconSrc}`,
           class: 'custom-icon',
         });
@@ -63,7 +60,7 @@ $(() => {
     valueExpr: 'ID',
     value: 1,
     itemTemplate(data) {
-      return `<div class='custom-item'><img alt='${data.Name}' src='../../../../images/icons/${
+      return `<div class='custom-item'><img src='../../../../images/icons/${
         data.IconSrc}' /><div class='product-name'>${
         data.Name}</div></div>`;
     },

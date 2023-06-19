@@ -2,13 +2,13 @@
   <div id="list-demo">
     <div class="widget-container">
       <DxList
-        v-model:selected-item-keys="selectedItemKeys"
         :data-source="dataSource"
         :height="400"
         :show-selection-controls="true"
         :selection-mode="selectionMode"
         :select-all-mode="selectAllMode"
         :select-by-click="selectByClick"
+        v-model:selected-item-keys="selectedItemKeys"
       />
       <div class="selected-data">
         <span class="caption">Selected IDs: </span>
@@ -20,25 +20,24 @@
       <div class="option">
         <span>Selection Mode </span>
         <DxSelectBox
-          v-model:value="selectionMode"
           :items="['none', 'single', 'multiple', 'all']"
           :input-attr="{ 'aria-label': 'Selection Mode' }"
+          v-model:value="selectionMode"
         />
       </div>
       <div class="option">
         <span>Select All Mode </span>
         <DxSelectBox
-          v-model:value="selectAllMode"
           :disabled="selectionMode !== 'all'"
           :input-attr="{ 'aria-label': 'Select All Mode' }"
           :items="['page', 'allPages']"
+          v-model:value="selectAllMode"
         />
       </div>
       <div class="option">
         <span>Select By Click</span>
         <DxCheckBox
           v-model:value="selectByClick"
-          :element-attr="{ 'aria-label': 'Selection By Click' }"
         />
       </div>
     </div>

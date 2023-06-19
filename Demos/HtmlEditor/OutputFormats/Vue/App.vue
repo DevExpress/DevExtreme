@@ -10,14 +10,12 @@
         <DxItem name="redo"/>
         <DxItem name="separator"/>
         <DxItem
-          name="size"
           :accepted-values="sizeValues"
-          :options="fontSizeOptions"
+          name="size"
         />
         <DxItem
-          name="font"
           :accepted-values="fontValues"
-          :options="fontFamilyOptions"
+          name="font"
         />
         <DxItem name="separator"/>
         <DxItem name="bold"/>
@@ -51,7 +49,6 @@ import {
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/html-editor';
-
 import {
   DxButtonGroup,
   DxItem as DxButtonGroupItem,
@@ -59,7 +56,9 @@ import {
 
 import prettier from 'prettier/standalone';
 import parserHtml from 'prettier/parser-html';
+
 import { markup } from './data.js';
+
 import 'devextreme/ui/html_editor/converters/markdown';
 
 export default {
@@ -70,24 +69,19 @@ export default {
     DxButtonGroup,
     DxButtonGroupItem,
   },
-
   data() {
     return {
       valueContent: markup,
       selectedItems: [{ text: 'Html' }],
       sizeValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
       fontValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
-      fontSizeOptions: { inputAttr: { 'aria-label': 'Font size' } },
-      fontFamilyOptions: { inputAttr: { 'aria-label': 'Font family' } },
     };
   },
-
   computed: {
     editorValueType() {
       return this.selectedItems[0].text.toLowerCase();
     },
   },
-
   methods: {
     prettierFormat(text) {
       if (this.editorValueType === 'html') {
@@ -96,7 +90,6 @@ export default {
           plugins: [parserHtml],
         });
       }
-
       return text;
     },
   },

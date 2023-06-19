@@ -9,7 +9,7 @@
   </div>
   <div class="right-content">
     <div class="title-container">
-      <img alt="country flag" class="flag" [src]="countryData.flag" />
+      <img class="flag" [src]="countryData.flag" />
       <div>
         <div class="country-name">{{ countryData.fullName }}</div>
         <div>{{ countryData.description }}</div>
@@ -44,7 +44,7 @@
         <span class="tab-panel-title">{{ item.text }}</span>
       </div>
       <div *dxTemplate="let city of 'city-template'">
-        <img alt="country flag" class="flag" [src]="city.flag" />
+        <img class="flag" [src]="city.flag" />
         <div class="right-content">
           <div
             ><b>{{ city.capital ? "Capital. " : "" }}</b

@@ -6,8 +6,6 @@ import Field from './Field.js';
 import Item from './Item.js';
 
 const searchExpression = ['FirstName', 'LastName', 'Prefix'];
-const customFieldLabel = { 'aria-label': 'Custom Field Template' };
-const customItemLabel = { 'aria-label': 'Custom Item Template' };
 
 class App extends React.Component {
   render() {
@@ -22,9 +20,7 @@ class App extends React.Component {
               valueExpr="ID"
               items={employees}
               searchEnabled={true}
-              fieldRender={Field}
-              inputAttr={customFieldLabel}
-            >
+              fieldRender={Field}>
               <DropDownOptions title="Select employee" />
             </Lookup>
           </div>
@@ -38,9 +34,7 @@ class App extends React.Component {
               searchExpr={searchExpression}
               valueExpr="ID"
               placeholder="Select employee"
-              itemRender={Item}
-              inputAttr={customItemLabel}
-            >
+              itemRender={Item}>
               <DropDownOptions title="Select employee" />
             </Lookup>
           </div>

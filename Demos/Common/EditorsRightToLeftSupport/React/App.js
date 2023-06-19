@@ -9,7 +9,7 @@ import { TextArea } from 'devextreme-react/text-area';
 import { TagBox } from 'devextreme-react/tag-box';
 import {
   europeanUnion, numberBoxLabel, notesLabel, nameLabel, textBoxLabel,
-  europeanUnionDataLabel, languageLabel, autocompleteLabel,
+  europeanUnionDataLabel, languageLabel,
 } from './data.js';
 
 class App extends React.Component {
@@ -123,7 +123,6 @@ class App extends React.Component {
                   items={europeanUnion}
                   rtlEnabled={this.state.rtlEnabled}
                   valueExpr={this.displayExpr}
-                  inputAttr={autocompleteLabel}
                 />
               </div>
             </div>

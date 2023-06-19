@@ -5,9 +5,6 @@ $(() => {
     },
     items: employeesList,
     value: employeesList[0],
-    inputAttr: {
-      'aria-label': 'Simple lookup',
-    },
   });
 
   $('#lookup-grouped').dxLookup({
@@ -22,8 +19,5 @@ $(() => {
     },
     grouped: true,
     displayExpr: 'Subject',
-    inputAttr: {
-      'aria-label': 'Grouped lookup',
-    },
   });
 });

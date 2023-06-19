@@ -77,10 +77,7 @@ $(() => {
 
   employees.forEach((currentEmployee) => {
     $('<li>').append(
-      $('<img>')
-        .attr('alt', `${currentEmployee.FirstName} ${currentEmployee.LastName}`)
-        .attr('src', currentEmployee.Picture)
-        .attr('id', `image${currentEmployee.ID}`),
+      $('<img>').attr('src', currentEmployee.Picture).attr('id', `image${currentEmployee.ID}`),
       $('<br>'),
       $('<span>').html(`<i>${currentEmployee.FirstName}</i>`),
       $('<span>').html(` <i>${currentEmployee.LastName}</i>`),

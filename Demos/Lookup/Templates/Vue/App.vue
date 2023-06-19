@@ -10,7 +10,6 @@
           class="field-customization"
           value-expr="ID"
           field-template="field-item"
-          :input-attr="{ 'aria-label': 'Custom Field Template' }"
         >
           <DxDropDownOptions title="Select employee"/>
           <template #field-item="{ data }">
@@ -29,7 +28,6 @@
           value-expr="ID"
           placeholder="Select employee"
           item-template="list-item"
-          :input-attr="{ 'aria-label': 'Custom Item Template' }"
         >
           <DxDropDownOptions title="Select employee"/>
           <template #list-item="{ data }">

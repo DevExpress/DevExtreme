@@ -15,7 +15,7 @@ DemoApp.controller('DemoController', ($scope) => {
     hideOnOutsideClick: false,
     position: 'right',
     contentTemplate(data) {
-      data.html("<img alt='SuperPlasma 50' width='150' src='../../../../images/products/3.png'><br/><b>SuperPlasma 50</b><br/>2400$");
+      data.html("<img width='150' src='../../../../images/products/3.png'><br/><b>SuperPlasma 50</b><br/>2400$");
     },
   };
 

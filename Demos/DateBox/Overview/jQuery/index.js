@@ -4,7 +4,6 @@ $(() => {
   $('#date').dxDateBox({
     type: 'date',
     value: now,
-    inputAttr: { 'aria-label': 'Date' },
   });
 
   $('#time').dxDateBox({

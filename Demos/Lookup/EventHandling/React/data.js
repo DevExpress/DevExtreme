@@ -100,4 +100,3 @@ export const employees = [{
 }];
 
 export const applyValueModeLabel = { 'aria-label': 'Apply Value Mode' };
-export const lookupLabel = { 'aria-label': 'Lookup' };

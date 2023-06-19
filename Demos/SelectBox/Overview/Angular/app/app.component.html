@@ -12,9 +12,9 @@
     <div class="dx-field-label">With a custom placeholder</div>
     <div class="dx-field-value">
       <dx-select-box
-        placeholder="Choose Product"
         [items]="simpleProducts"
         [inputAttr]="{ 'aria-label': 'Product With Placeholder' }"
+        placeholder="Choose Product"
         [showClearButton]="true"
       ></dx-select-box>
     </div>
@@ -45,10 +45,10 @@
     <div class="dx-field-label">Data source usage</div>
     <div class="dx-field-value">
       <dx-select-box
-        displayExpr="Name"
-        valueExpr="ID"
         [dataSource]="data"
         [inputAttr]="{ 'aria-label': 'Product ID' }"
+        displayExpr="Name"
+        valueExpr="ID"
         [value]="products[0].ID"
       ></dx-select-box>
     </div>
@@ -58,16 +58,16 @@
     <div class="dx-field-value">
       <dx-select-box
         id="custom-templates"
-        displayExpr="Name"
-        valueExpr="ID"
-        fieldTemplate="field"
         [dataSource]="products"
         [inputAttr]="{ 'aria-label': 'Templated Product' }"
+        displayExpr="Name"
+        valueExpr="ID"
         [value]="products[3].ID"
+        fieldTemplate="field"
       >
         <div *dxTemplate="let data of 'field'">
           <div class="custom-item">
-            <img alt="Product name" src="{{ data && data.ImageSrc }}" />
+            <img src="{{ data && data.ImageSrc }}" />
             <dx-text-box
               class="product-name"
               [value]="data && data.Name"
@@ -78,7 +78,7 @@
         </div>
         <div *dxTemplate="let data of 'item'">
           <div class="custom-item">
-            <img alt="Product name" src="{{ data.ImageSrc }}" />
+            <img src="{{ data.ImageSrc }}" />
             <div class="product-name">
               {{ data.Name }}
             </div>

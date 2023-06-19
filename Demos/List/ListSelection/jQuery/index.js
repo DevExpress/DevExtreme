@@ -41,7 +41,6 @@ $(() => {
 
   $('#selectByClick').dxCheckBox({
     value: false,
-    elementAttr: { 'aria-label': 'Selection By Click' },
     onValueChanged(e) {
       listWidget.option('selectByClick', e.value);
     },

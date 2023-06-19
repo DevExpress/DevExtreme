@@ -5,7 +5,6 @@ import Popup from 'devextreme-react/popup';
 import { markup } from './data.js';
 
 const headerValues = [false, 1, 2, 3, 4, 5];
-const headerOptions = { inputAttr: { 'aria-label': 'Header' } };
 
 class App extends React.Component {
   constructor() {
@@ -42,7 +41,6 @@ class App extends React.Component {
             <Item
               name="header"
               acceptedValues={headerValues}
-              options={headerOptions}
             />
             <Item name="separator" />
             <Item name="bold" />

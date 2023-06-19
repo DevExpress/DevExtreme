@@ -19,7 +19,7 @@
         <div dx-list="listOptions" dx-item-alias="product">
           <div data-options="dxTemplate: {name: 'item'}">
             <div class="product">
-              <img alt="{{product.Name}}" ng-src="{{product.ImageSrc}}" />
+              <img ng-src="{{product.ImageSrc}}" />
               <div>{{product.Name}}</div>
               <div class="price">{{product.Price | currency:undefined:0}} </div>
             </div>

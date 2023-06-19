@@ -21,7 +21,7 @@
           <div class="dx-field-value">
             <div dx-select-box="customIconOptions">
               <div data-options="dxTemplate: { name: 'dropDownButton' }">
-                <img alt="Custom icon" src="../../../../images/icons/custom-dropbutton-icon.svg" class="custom-icon" />
+                <img src="../../../../images/icons/custom-dropbutton-icon.svg" class="custom-icon" />
               </div>
             </div>
           </div>
@@ -33,7 +33,7 @@
             <div id="load-indicator" dx-select-box="loadIndicatorOptions">
               <div data-options="dxTemplate: { name: 'dropDownButton' }">
                 <div dx-load-indicator="{ bindingOptions: { visible: '!isLoaded' }}"></div>
-                <img alt="Custom icon" src="../../../../images/icons/custom-dropbutton-icon.svg" ng-show="isLoaded" class="custom-icon" />
+                <img src="../../../../images/icons/custom-dropbutton-icon.svg" ng-show="isLoaded" class="custom-icon" />
               </div>
             </div>
           </div>
@@ -44,12 +44,12 @@
           <div class="dx-field-value">
             <div id="dynamic-template" dx-select-box="dynamicDropDownButtonOptions" dx-item-alias="item">
               <div data-options="dxTemplate: { name: 'dropDownButton' }">
-                <img ng-if="selectedItem" alt="Custom icon" ng-src="../../../../images/icons/{{selectedItem.IconSrc}}" class="custom-icon" />
+                <img ng-if="selectedItem" ng-src="../../../../images/icons/{{selectedItem.IconSrc}}" class="custom-icon" />
                 <div ng-if="!selectedItem" class="dx-dropdowneditor-icon"></div>
               </div>
 
               <div data-options="dxTemplate: { name: 'item' }" class="custom-item">
-                <img alt="{{item.Name}}" ng-src="../../../../images/icons/{{item.IconSrc}}" />
+                <img ng-src="../../../../images/icons/{{item.IconSrc}}" />
                 <div class="product-name" ng-bind="item.Name"></div>
               </div>
             </div>

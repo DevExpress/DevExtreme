@@ -2,12 +2,7 @@
   <h1>Employees</h1>
   <ul>
     <li *ngFor="let employee of employees">
-      <img
-        [id]="'image' + employee.ID"
-        [alt]="employee.FirstName + ' ' + employee.LastName"
-        [src]="employee.Picture"
-      />
-      <br />
+      <img [src]="employee.Picture" [id]="'image' + employee.ID" /><br />
       <i>{{ employee.FirstName }} {{ employee.LastName }}</i
       ><br />
       <dx-button

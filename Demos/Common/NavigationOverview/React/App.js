@@ -32,7 +32,7 @@ class App extends React.Component {
         </div>
         <div className="right-content">
           <div className="title-container">
-            <img alt="country flag" className="flag" src={countryData.flag} />
+            <img className="flag" src={countryData.flag} />
             <div>
               <div className="country-name">{countryData.fullName}</div>
               <div>{countryData.description}</div>
@@ -95,7 +95,7 @@ function renderPanelItemTitle(item) {
 function renderPanelItem(city) {
   return (
     <React.Fragment>
-      <img alt="country flag" className="flag" src={city.flag} />
+      <img className="flag" src={city.flag} />
       <div className="right-content">
         <div>
           <b>{(city.capital) ? 'Capital. ' : ''}</b>{city.description}

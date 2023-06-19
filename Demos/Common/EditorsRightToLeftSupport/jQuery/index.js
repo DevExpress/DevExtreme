@@ -2,7 +2,6 @@ $(() => {
   const checkBoxWidget = $('#checkbox').dxCheckBox({
     value: true,
     text: 'text',
-    elementAttr: { 'aria-label': 'Language' },
   }).dxCheckBox('instance');
 
   const switchWidget = $('#switch').dxSwitch({}).dxSwitch('instance');
@@ -44,7 +43,6 @@ $(() => {
   const autocompleteWidget = $('#autocomplete').dxAutocomplete({
     items: europeanUnion,
     valueExpr: 'nameEn',
-    inputAttr: { 'aria-label': 'Autocomplete' },
   }).dxAutocomplete('instance');
 
   const languages = ['Arabic: Right-to-Left direction', 'English: Left-to-Right direction'];

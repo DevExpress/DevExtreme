@@ -13,9 +13,6 @@ $(() => {
       showTitle: false,
     },
     placeholder: 'Select employee',
-    inputAttr: {
-      'aria-label': 'Lookup',
-    },
     onValueChanged(e) {
       $('.selected').show();
       $('#selected-employee-img').attr('src', e.value.Picture);

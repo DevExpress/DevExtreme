@@ -22,14 +22,14 @@
     <script id="property-item" type="text/html">
       <div>
         <div class="item-content">
-          <img id="house-image{{ ID }}" alt="{{ Address }}" src="{{ Image }}" />
+          <img id="house-image{{ ID }}" src="{{ Image }}" />
           <div class="item-options">
             <div>
               <div class="address">{{ Address }}</div>
               <div class="price large-text">{{ #formatCurrency }}{{ Price }}{{ /formatCurrency }}</div>
               <div class="agent">
                 <div id="house{{ ID }}">
-                  <img alt="Listing agent" src="../../../../images/icon-agent.svg" />
+                  <img src="../../../../images/icon-agent.svg" />
                   Listing agent
                 </div>
               </div>
@@ -38,7 +38,7 @@
         </div>
         <div id="popover{{ ID }}">
           <div class="agent-details">
-            <img alt="{{ Agent.Name }}" src="{{ Agent.Picture }}" />
+            <img src="{{ Agent.Picture }}" />
             <div>
               <div class="name large-text">{{ Agent.Name }}</div>
               <div class="phone">Tel: {{ Agent.Phone }}</div>
@@ -54,8 +54,8 @@
         <div class="opacity">{{ Address }}, {{ City }}, {{ State }}</div>
         <div id="favorites" class="favorites"></div>
         <div class="images">
-          <img alt="{{ Address }} first photo" src="{{ Image }}" />
-          <img alt="{{ Address }} second photo" src="{{ #replaceFileExtension }}{{ Image }}{{ /replaceFileExtension }}" />
+          <img src="{{ Image }}" />
+          <img src="{{ #replaceFileExtension }}{{ Image }}{{ /replaceFileExtension }}" />
         </div>
         <div>{{ Features }}</div>
       </div>

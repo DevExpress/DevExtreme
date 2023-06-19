@@ -1,7 +1,7 @@
 <div class="images">
   <div *ngFor="let house of houses">
     <div (click)="showHouse(house)" class="item-content">
-      <img alt="{{ house.Address }}" src="{{ house.Image }}" />
+      <img src="{{ house.Image }}" />
       <div class="item-options">
         <div>
           <div class="address">{{ house.Address }}</div>
@@ -10,10 +10,7 @@
           }}</div>
           <div class="agent">
             <div id="house{{ house.ID }}">
-              <img
-                alt="Listing agent"
-                src="../../../../images/icon-agent.svg"
-              />
+              <img src="../../../../images/icon-agent.svg" />
               Listing agent
             </div>
           </div>
@@ -30,7 +27,7 @@
         </dxo-position>
         <div *dxTemplate="let data of 'popoverContent'">
           <div class="agent-details">
-            <img alt="{{ house.Agent.Name }}" src="{{ house.Agent.Picture }}" />
+            <img src="{{ house.Agent.Picture }}" />
             <div>
               <div class="name large-text">{{ house.Agent.Name }}</div>
               <div class="phone">Tel: {{ house.Agent.Phone }}</div>
@@ -61,24 +58,18 @@
         >
         <dx-button
           class="favorites"
-          icon="favorites"
           [text]="
             currentHouse.Favorite ? REMOVE_FROM_FAVORITES : ADD_TO_FAVORITES
           "
+          icon="favorites"
           [width]="260"
           [height]="44"
           (onClick)="changeFavoriteState($event)"
         >
         </dx-button>
         <div class="images">
-          <img
-            alt="{{ currentHouse.Address }}"
-            src="{{ currentHouse.Image }}"
-          />
-          <img
-            alt="{{ currentHouse.Address }}"
-            src="{{ currentHouse.Image.replace('.jpg', 'b.jpg') }}"
-          />
+          <img src="{{ currentHouse.Image }}" />
+          <img src="{{ currentHouse.Image.replace('.jpg', 'b.jpg') }}" />
         </div>
         <div>{{ currentHouse.Features }}</div>
       </div>

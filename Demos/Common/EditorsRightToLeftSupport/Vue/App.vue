@@ -86,7 +86,6 @@
               :items="europeanUnion"
               :rtl-enabled="rtlEnabled"
               :value-expr="displayExpr"
-              :input-attr="{ 'aria-label': 'Autocomplete' }"
             />
           </div>
         </div>

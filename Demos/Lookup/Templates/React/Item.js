@@ -5,7 +5,7 @@ export default function Item({
 }) {
   return (
     <div className="custom-item">
-      <img alt={FirstName} src={Picture} /><div>{`${Prefix} ${FirstName} ${LastName}`}</div>
+      <img src={Picture} /><div>{`${Prefix} ${FirstName} ${LastName}`}</div>
     </div>
   );
 }

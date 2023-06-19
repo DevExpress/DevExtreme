@@ -18,7 +18,7 @@ function EmployeeTemplate(props) {
   return (
     <React.Fragment>
       <div className="employeeInfo">
-        <img alt={`${FirstName} ${LastName}`} className="employeePhoto" src={Picture} />
+        <img className="employeePhoto" src={Picture} />
         <p className="employeeNotes">
           <b>{`Position: ${Position}`}</b>
           <br />

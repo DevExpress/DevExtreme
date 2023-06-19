@@ -1,13 +1,6 @@
 import React from 'react';
 import ColorBox from 'devextreme-react/color-box';
 
-const defaultModeLabel = { 'aria-label': 'Default mode' };
-const alphaChannelLabel = { 'aria-label': 'With alpha channel editing' };
-const customButtonCaptionsLabel = { 'aria-label': 'Custom button captions' };
-const readOnlyLabel = { 'aria-label': 'Read only' };
-const disabledLabel = { 'aria-label': 'Disabled' };
-const eventHandlingLabel = { 'aria-label': 'Event Handling' };
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -26,7 +19,6 @@ class App extends React.Component {
               <div className="dx-field-value">
                 <ColorBox
                   defaultValue="#f05b41"
-                  inputAttr={defaultModeLabel}
                 />
               </div>
             </div>
@@ -36,7 +28,6 @@ class App extends React.Component {
                 <ColorBox
                   defaultValue="#f05b41"
                   editAlphaChannel={true}
-                  inputAttr={alphaChannelLabel}
                 />
               </div>
             </div>
@@ -47,7 +38,6 @@ class App extends React.Component {
                   defaultValue="#f05b41"
                   applyButtonText="Apply"
                   cancelButtonText="Decline"
-                  inputAttr={customButtonCaptionsLabel}
                 />
               </div>
             </div>
@@ -57,7 +47,6 @@ class App extends React.Component {
                 <ColorBox
                   defaultValue="#f05b41"
                   readOnly={true}
-                  inputAttr={readOnlyLabel}
                 />
               </div>
             </div>
@@ -67,7 +56,6 @@ class App extends React.Component {
                 <ColorBox
                   defaultValue="#f05b41"
                   disabled={true}
-                  inputAttr={disabledLabel}
                 />
               </div>
             </div>
@@ -82,7 +70,6 @@ class App extends React.Component {
                 <ColorBox
                   value={this.state.color}
                   applyValueMode="instantly"
-                  inputAttr={eventHandlingLabel}
                   onValueChanged={this.handleColorChange}
                 />
               </div>

@@ -35,7 +35,6 @@ class App extends React.Component {
         <div className="label">Default mode</div>
         <div>
           <img
-            alt="ExcelRemote IR"
             id="product1"
             src="../../../../images/products/17.png"
           />
@@ -53,7 +52,6 @@ class App extends React.Component {
         <div className="label">With template</div>
         <div>
           <img
-            alt="SuperPlasma 50"
             id="product2"
             src="../../../../images/products/3.png"
           />
@@ -65,7 +63,7 @@ class App extends React.Component {
             position="right"
             hideOnOutsideClick={false}
           >
-            <img alt="SuperPlasma 50" width="150" src="../../../../images/products/3.png" /><br />
+            <img width="150" src="../../../../images/products/3.png" /><br />
             <b>SuperPlasma 50</b><br /> 2400$
           </Tooltip>
         </div>
@@ -73,7 +71,6 @@ class App extends React.Component {
         <div className="label">With animation</div>
         <div>
           <img
-            alt="Projector PlusHD"
             id="product3"
             src="../../../../images/products/15.png"
           />

@@ -19,7 +19,6 @@
             <DxColorBox
               v-model:value="color"
               apply-value-mode="instantly"
-              :input-attr="{ 'aria-label': 'Color' }"
             />
           </div>
         </div>

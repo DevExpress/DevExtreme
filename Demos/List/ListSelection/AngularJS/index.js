@@ -23,7 +23,6 @@ DemoApp.controller('DemoController', ($scope) => {
 
   $scope.selectAllModeOptions = {
     items: ['page', 'allPages'],
-    inputAttr: { 'aria-label': 'Selection All' },
     bindingOptions: {
       disabled: "selectionMode !== 'all'",
       value: 'selectAllMode',
@@ -32,7 +31,6 @@ DemoApp.controller('DemoController', ($scope) => {
 
   $scope.selectionModeOptions = {
     items: ['none', 'single', 'multiple', 'all'],
-    elementAttr: { 'aria-label': 'Selection By Click' },
     bindingOptions: {
       value: 'selectionMode',
     },

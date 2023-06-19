@@ -14,10 +14,7 @@
       v-if="currentItem.price"
       id="product-details"
     >
-      <img
-        :alt="currentItem.name"
-        :src="currentItem.icon"
-      >
+      <img :src="currentItem.icon">
       <div class="name">{{ currentItem.name }}</div>
       <div class="price">{{ "$" + currentItem.price }}</div>
     </div>

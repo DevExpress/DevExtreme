@@ -27,7 +27,7 @@ class App extends React.Component {
           onItemClick={this.selectItem} />
         {currentItem.price
           && <div id="product-details">
-            <img alt={currentItem.name} src={currentItem.icon} />
+            <img src={currentItem.icon} />
             <div className="name">{currentItem.name}</div>
             <div className="price">{`$${currentItem.price}`}</div>
           </div>

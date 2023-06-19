@@ -75,8 +75,8 @@ class App extends React.Component {
           onClick={this.changeFavoriteState}
         />
         <div className="images">
-          <img alt={currentHouse.Address} src={currentHouse.Image} />
-          <img alt={currentHouse.Address} src={currentHouse.Image.replace('.jpg', 'b.jpg')} />
+          <img src={currentHouse.Image} />
+          <img src={currentHouse.Image.replace('.jpg', 'b.jpg')} />
         </div>
         <div>{currentHouse.Features}</div>
       </div>
