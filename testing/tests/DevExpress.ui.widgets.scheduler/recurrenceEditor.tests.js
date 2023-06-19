@@ -29,6 +29,7 @@ testStart(() => {
 
 const createInstance = options => new RecurrenceEditor($('#recurrence-editor'), {
     timeZoneCalculator: { createDate: (date) => date },
+    getStartDateTimeZone: () => {},
     ...options
 });
 
