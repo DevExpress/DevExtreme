@@ -169,7 +169,6 @@ class RecurrenceEditor extends Editor {
     _init() {
         super._init();
         this._recurrenceRule = new RecurrenceRule(this.option('value'));
-        this._timeZoneCalculator = this.option('timeZoneCalculator');
     }
 
     _render() {
@@ -626,11 +625,14 @@ class RecurrenceEditor extends Editor {
 
     _repeatUntilValueChangeHandler(args) {
         if(this._recurrenceRule.getRepeatEndRule() === 'until') {
-            const dateInSchedulerTimeZone = this._formatUntilDate(new Date(args.value));
-            const dateInLocaleTimeZone = this._timeZoneCalculator.createDate(
-                dateInSchedulerTimeZone,
-                { path: PathTimeZoneConversion.fromGridToSource }
-            );
+            const dateInTimeZone = this._formatUntilDate(new Date(args.value));
+            const getStartDateTimeZone = this.option('getStartDateTimeZone');
+            const appointmentTimeZone = getStartDateTimeZone();
+
+            const path = appointmentTimeZone ?
+                PathTimeZoneConversion.fromAppointmentToSource : PathTimeZoneConversion.fromGridToSource;
+
+            const dateInLocaleTimeZone = this.option('timeZoneCalculator').createDate(dateInTimeZone, { path, appointmentTimeZone });
 
             this._recurrenceRule.makeRule('until', dateInLocaleTimeZone);
             this._changeEditorValue();
@@ -813,10 +815,13 @@ class RecurrenceEditor extends Editor {
             return this._formatUntilDate(new Date());
         }
 
-        return this._timeZoneCalculator.createDate(
-            untilDate,
-            { path: PathTimeZoneConversion.fromSourceToGrid },
-        );
+        const getStartDateTimeZone = this.option('getStartDateTimeZone');
+        const appointmentTimeZone = getStartDateTimeZone();
+
+        const path = appointmentTimeZone ?
+            PathTimeZoneConversion.fromSourceToAppointment : PathTimeZoneConversion.fromSourceToGrid;
+
+        return this.option('timeZoneCalculator').createDate(untilDate, { path, appointmentTimeZone });
     }
 
     toggle() {
