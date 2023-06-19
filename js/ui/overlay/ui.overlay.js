@@ -11,7 +11,6 @@ import {
 } from '../../core/utils/visual_viewport';
 // eslint-disable-next-line spellcheck/spell-checker
 import { debounce } from '../../core/utils/debounce';
-import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
 import { getPublicElement } from '../../core/element';
 import $ from '../../core/renderer';
 import { EmptyTemplate } from '../../core/templates/empty_template';
@@ -462,23 +461,19 @@ const Overlay = Widget.inherit({
     },
 
     _initResizeRequestAnimationFrame() {
-        this._resizeAnimationFrameId = requestAnimationFrame(() => {
-            this._pendingUpdate = false;
+        const isVisualViewportSizesChanged = this._isVisualViewportSizesChanged();
+        const isCurrentVisible = this._currentVisible;
 
-            const isCurrentVisible = this._currentVisible;
+        if([true, null].includes(isVisualViewportSizesChanged) && isCurrentVisible) {
+            this._renderGeometry();
+        } else {
+            this._renderVisibilityAnimate(true);
+        }
 
-            if(isCurrentVisible) {
-                this._renderGeometry();
-            } else {
-                this._renderVisibilityAnimate(true);
-            }
-
-            this._scrollActiveElementIntoView();
-        });
+        this._scrollActiveElementIntoView();
     },
 
     _visualViewportEventHandler(event) {
-        const pendingUpdate = this._pendingUpdate;
         const { type: eventType } = event;
         const { scroll, resize } = this._isPinchZoom || {};
 
@@ -490,12 +485,6 @@ const Overlay = Widget.inherit({
             this._toggleIsPinchZoom(newValue);
             return;
         }
-
-        if(pendingUpdate) {
-            cancelAnimationFrame(this._resizeAnimationFrameId);
-        }
-
-        this._pendingUpdate = true;
 
         const { visible } = this.option();
 
@@ -536,8 +525,6 @@ const Overlay = Widget.inherit({
             return false;
         }
 
-        this._pendingUpdate = false;
-
         if(subscribe && !this._unSubscribeCallbacks) {
             this._unSubscribeCallbacks = {};
         }
@@ -556,7 +543,6 @@ const Overlay = Widget.inherit({
     _subscribeOnPinchZoomEvent(subscribe) {
         // const pinchZoomEvent = 'gesturestart';
         const pinchZoomEvent = 'touchmove';
-
 
         if(subscribe && !this._unSubscribeCallbacks) {
             this._unSubscribeCallbacks = {};
@@ -1015,8 +1001,10 @@ const Overlay = Widget.inherit({
         const { height: currentHeight, width: currentWidth } = getVisualViewportSizes();
         const { height: savedHeight, width: savedWidth } = this._visualViewportSizes || {};
 
-        if(!isDefined(savedHeight) || !isDefined(savedWidth)) {
-            return false;
+        const isFirstRender = !(isDefined(savedHeight) && isDefined(savedWidth));
+
+        if(isFirstRender) {
+            return null;
         }
 
         const isChanged = currentHeight !== savedHeight || currentWidth !== savedWidth;
@@ -1341,7 +1329,6 @@ const Overlay = Widget.inherit({
         this._stopShowTimer();
         this._cleanFocusState();
 
-        this._pendingUpdate = null;
         this._resizeAnimationFrameId = null;
         this._unSubscribeCallbacks = null;
         this._visualViewportSizes = null;
