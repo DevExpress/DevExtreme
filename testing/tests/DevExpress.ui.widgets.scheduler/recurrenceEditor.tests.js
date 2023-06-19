@@ -392,9 +392,29 @@ module('Repeat-end editor', () => {
 
     module('timezone', () => {
         [
-            ['America/Los_Angeles', undefined],
-            [undefined, 'America/Los_Angeles'],
-            ['America/Los_Angeles', 'America/Los_Angeles']
+            [
+                'America/Los_Angeles',
+                undefined,
+                {
+                    appointmentTimeZone: undefined,
+                    path: 'Grid'
+                }],
+            [
+                undefined,
+                'America/Los_Angeles',
+                {
+                    appointmentTimeZone: 'America/Los_Angeles',
+                    path: 'Appointment'
+                },
+            ],
+            [
+                'America/Los_Angeles',
+                'America/Los_Angeles',
+                {
+                    appointmentTimeZone: 'America/Los_Angeles',
+                    path: 'Appointment'
+                },
+            ]
         ].forEach(testCase => {
             test('Repeat-until dateBox should get date considering scheduler timeZone', function(assert) {
                 const [gridTimeZone, startDateTimeZone] = testCase;
@@ -413,8 +433,10 @@ module('Repeat-end editor', () => {
             });
 
             test('Repeat-until dateBox should apply date considering scheduler timeZone', function(assert) {
-                const [gridTimeZone, startDateTimeZone] = testCase;
+                const [gridTimeZone, startDateTimeZone, result] = testCase;
+
                 const timeZoneCalculator = createTimeZoneCalculator(gridTimeZone);
+                const timeZoneCalculatorSpy = sinon.spy(timeZoneCalculator, 'createDate');
 
                 const instance = createInstance({
                     value: 'FREQ=WEEKLY;UNTIL=20151007T000000Z', // some other date, we'll change it later in dateBox
@@ -428,6 +450,8 @@ module('Repeat-end editor', () => {
                 untilDate.option('value', new Date('2023-06-16 23:59:59'));
 
                 assert.equal(instance.option('value'), 'FREQ=WEEKLY;UNTIL=20230617T065959Z', 'Recurrence editor has right value');
+                assert.deepEqual(timeZoneCalculatorSpy.getCall(0).args[1], { ...result, path: 'to' + result.path });
+                assert.deepEqual(timeZoneCalculatorSpy.getCall(1).args[1], { ...result, path: 'from' + result.path });
             });
         });
     });
