@@ -24,6 +24,7 @@ import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
+import { removeEvent } from '@js/events/remove';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 
 import { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -134,6 +135,10 @@ const copyAttributes = function (element, newElement) {
   for (i = 0; i < newAttributes.length; i++) {
     element.setAttribute(newAttributes[i].nodeName, newAttributes[i].nodeValue);
   }
+};
+
+const removeHandler = function (templateDeferred) {
+  templateDeferred.resolve();
 };
 
 const viewWithColumnStateMixin: ModuleType<View> = modules.View.inherit(columnStateMixin);
@@ -536,6 +541,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
       }
 
       this._templateDeferreds.add(templateDeferred);
+      eventsEngine.on(container, removeEvent, removeHandler.bind(null, templateDeferred));
     } else {
       templateDeferred.reject();
     }
