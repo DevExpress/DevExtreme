@@ -21,7 +21,7 @@ import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isFunction, isObject, isPromise, isWindow } from '../../core/utils/type';
+import { isDefined, isFunction, isObject, isPromise, isWindow } from '../../core/utils/type';
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import errors from '../../core/errors';
@@ -554,11 +554,14 @@ const Overlay = Widget.inherit({
     },
 
     _subscribeOnPinchZoomEvent(subscribe) {
-        const pinchZoomEvent = 'gesturestart';
+        // const pinchZoomEvent = 'gesturestart';
+        const pinchZoomEvent = 'touchmove';
 
         if(subscribe && !this._unSubscribeCallbacks) {
             this._unSubscribeCallbacks = {};
-        } else {
+        }
+
+        if(!subscribe) {
             if(!this._unSubscribeCallbacks?.[pinchZoomEvent]) {
                 return;
             }
@@ -576,10 +579,6 @@ const Overlay = Widget.inherit({
     },
 
     _toggleVisibilityAnimate(visible) {
-        const isCurrentVisible = this._currentVisible;
-
-        debugger;
-
         this._stopAnimation();
         this._subscribeOnPinchZoomEvent(visible);
         this._toggleVisualViewportCallbacks(visible);
@@ -1011,6 +1010,23 @@ const Overlay = Widget.inherit({
         }
     },
 
+    _isVisualViewportSizesChanged() {
+        const { height: currentHeight, width: currentWidth } = getVisualViewportSizes();
+        const { height: savedHeight, width: savedWidth } = this._visualViewportSizes || {};
+
+        if(!isDefined(savedHeight) || !isDefined(savedWidth)) {
+            return false;
+        }
+
+        const isChanged = currentHeight !== savedHeight || currentWidth !== savedWidth;
+
+        return isChanged;
+    },
+
+    _saveVisualViewportSizes() {
+        this._visualViewportSizes = getVisualViewportSizes();
+    },
+
     _renderContent: function() {
         const shouldDeferRendering = !this._currentVisible && this.option('deferRendering');
         const isParentHidden = this.option('visible') && this._isParentHidden();
@@ -1020,7 +1036,9 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        if(this._contentAlreadyRendered || shouldDeferRendering) {
+        const contentAlreadyRendered = this._contentAlreadyRendered;
+
+        if(contentAlreadyRendered || shouldDeferRendering) {
             return;
         }
 
@@ -1192,6 +1210,8 @@ const Overlay = Widget.inherit({
 
     _renderPosition() {
         this._positionController.positionContent();
+
+        this._saveVisualViewportSizes();
     },
 
     _isAllWindowCovered: function() {
@@ -1322,6 +1342,8 @@ const Overlay = Widget.inherit({
 
         this._pendingUpdate = null;
         this._resizeAnimationFrameId = null;
+        this._unSubscribeCallbacks = null;
+        this._visualViewportSizes = null;
     },
 
     _stopShowTimer() {
