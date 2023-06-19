@@ -120,12 +120,17 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         const rowsView = this.getView('rowsView');
         const $targetCell = $targetElement.closest(`.${ROW_CLASS}> td`);
         const rowIndex = rowsView.getRowIndex($targetCell.parent());
-        const columnIndex = rowsView.getCellElements(rowIndex).index($targetCell);
-        const visibleColumns = this._columnsController.getVisibleColumns();
-        // TODO jsdmitry: Move this code to _rowClick method of rowsView
-        const allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
+        const cellElements = rowsView.getCellElements(rowIndex);
 
-        result = result && !allowEditing && !this.isEditCell(rowIndex, columnIndex);
+        if (cellElements?.length) {
+          const columnIndex = cellElements.index($targetCell);
+          const visibleColumns = this._columnsController.getVisibleColumns();
+          // TODO jsdmitry: Move this code to _rowClick method of rowsView
+          const allowEditing = visibleColumns[columnIndex]?.allowEditing;
+          const isEditingCell = this.isEditCell(rowIndex, columnIndex);
+
+          result = result && !allowEditing && !isEditingCell;
+        }
       }
     }
 
@@ -230,7 +235,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     };
 
     if (item.key === undefined) {
-      // @ts-expect-error
       this._dataController.fireError('E1043');
       return;
     }
@@ -387,10 +391,9 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       const columnsCount = this._columnsController.getVisibleColumns().length;
       changes.forEach(({ key }) => {
         const rowIndex = this._dataController.getRowIndexByKey(key);
-        if (rowIndex !== -1) {
-          for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
-            this._rowsView._getCellElement(rowIndex, columnIndex).removeClass(CELL_MODIFIED_CLASS);
-          }
+        for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
+          const cellElement = this._rowsView._getCellElement(rowIndex, columnIndex);
+          cellElement?.removeClass(CELL_MODIFIED_CLASS);
         }
       });
     }
@@ -567,7 +570,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   prepareEditButtons(headerPanel) {
-    const editingOptions: any = this.option('editing') || {};
+    const editingOptions: any = this.option('editing') ?? {};
     const buttonItems = super.prepareEditButtons(headerPanel);
 
     if ((editingOptions.allowUpdating || editingOptions.allowAdding || editingOptions.allowDeleting) && this.isBatchEditMode()) {

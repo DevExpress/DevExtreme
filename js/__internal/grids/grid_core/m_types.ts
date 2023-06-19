@@ -4,7 +4,10 @@ import { GridBase, GridBaseOptions } from '@js/common/grids';
 import { Component } from '@js/core/component';
 import { PropertyType } from '@js/core/index';
 import { dxElementWrapper } from '@js/core/renderer';
+import { Properties as DataGridOptions } from '@js/ui/data_grid';
 import Widget from '@js/ui/widget/ui.widget';
+
+type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
 
 // Data types
 export type RowKey = unknown;
@@ -16,11 +19,11 @@ type OptionsMethod<TOptions> =
   (
     <TPropertyName extends string>(
       optionName: TPropertyName
-    ) => PropertyType<TOptions, TPropertyName>
+    ) => GridPropertyType<TOptions, TPropertyName>
   ) & (
     <TPropertyName extends string>(
       optionName: TPropertyName,
-      optionValue: PropertyType<TOptions, TPropertyName>
+      optionValue: GridPropertyType<TOptions, TPropertyName>
     ) => void
   );
 
@@ -58,10 +61,31 @@ export interface InternalGrid extends GridBaseType {
   ) => TComponent;
 }
 
-export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown> {
+type TemporarlyOptionsTakenFromDataGrid = Pick<DataGridOptions,
+'onFocusedCellChanged' |
+'onRowClick' |
+'onRowDblClick' |
+'onRowPrepared' |
+'onCellPrepared' |
+'onCellClick' |
+'onCellHoverChanged' |
+'onCellDblClick' |
+'onFocusedCellChanging' |
+'onFocusedRowChanged' |
+'onFocusedRowChanging' |
+'onEditingStart'
+>;
+
+export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unknown, unknown>, TemporarlyOptionsTakenFromDataGrid {
+  dataRowTemplate?: any;
+
   loadingTimeout?: number;
 
   useLegacyKeyboardNavigation?: boolean;
+
+  rowTemplate?: any;
+
+  forceApplyBindings?: any;
 }
 
 // todo: move to upper .d.ts files
@@ -99,8 +123,8 @@ type DotNestedKeys<T, RLIMIT extends number = 10> =
 interface OptionChangedArgs<T extends string = string> {
   name: T extends `${infer TName}.${string}` ? TName : T;
   fullName: T;
-  previousValue: PropertyType<InternalGridOptions, T>;
-  value: PropertyType<InternalGridOptions, T>;
+  previousValue: GridPropertyType<InternalGridOptions, T>;
+  value: GridPropertyType<InternalGridOptions, T>;
   handled: boolean;
 }
 
@@ -144,8 +168,12 @@ type ViewTypes = {
 
 type SilentOptionType = <TPropertyName extends string>(
   optionName: TPropertyName,
-  optionValue: PropertyType<InternalGridOptions, TPropertyName>
+  optionValue: GridPropertyType<InternalGridOptions, TPropertyName>
 ) => void;
+
+type ActionParameters<
+  TActionName extends keyof InternalGridOptions,
+> = Omit<Parameters<InternalGridOptions[TActionName]>[0], 'component' | 'element'>;
 
 export interface ClassStaticMembers {
   inherit: (obj: any) => any;
@@ -158,8 +186,6 @@ declare class ModuleItem {
   component: InternalGrid;
 
   name: string;
-
-  callBase: any;
 
   _createComponent: InternalGrid['_createComponent'];
 
@@ -199,7 +225,10 @@ declare class ModuleItem {
 
   createAction(...args: any[]): void;
 
-  executeAction(...args: any[]): void;
+  executeAction<T extends keyof InternalGridOptions>(
+    actionName: T,
+    args: ActionParameters<T>
+  ): void;
 
   dispose(): void;
 

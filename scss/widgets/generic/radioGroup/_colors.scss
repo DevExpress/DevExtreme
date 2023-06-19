@@ -23,7 +23,6 @@ $radiobutton-invalid-hover-border-color: $base-invalid-color !default;
 $radiobutton-invalid-focused-border-color: $base-invalid-color !default;
 $radiobutton-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 $radiogroup-readonly-border-color: null !default;
-$radiogroup-readonly-bg: null !default;
 
 @if $color == "carmine" {
   $radiogroup-checked-bg: $base-accent !default;
@@ -32,7 +31,6 @@ $radiogroup-readonly-bg: null !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
   $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
-  $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "contrast" {
@@ -42,7 +40,6 @@ $radiogroup-readonly-bg: null !default;
   $radiogroup-hover-border-color: $base-border-color !default;
   $radiobutton-focused-border-color: $base-focus-color !default;
   $radiogroup-readonly-border-color: darken($radiogroup-border-color, 50%) !default;
-  $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "dark" {
@@ -52,7 +49,6 @@ $radiogroup-readonly-bg: null !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
   $radiogroup-readonly-border-color: darken($radiogroup-border-color, 9%) !default;
-  $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "darkmoon" {
@@ -62,7 +58,6 @@ $radiogroup-readonly-bg: null !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
   $radiogroup-readonly-border-color: darken($radiogroup-border-color, 9%) !default;
-  $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "darkviolet" {
@@ -72,7 +67,6 @@ $radiogroup-readonly-bg: null !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
   $radiogroup-readonly-border-color: darken($radiogroup-border-color, 9%) !default;
-  $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "greenmist" {
@@ -82,7 +76,6 @@ $radiogroup-readonly-bg: null !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
   $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
-  $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "light" {
@@ -92,7 +85,6 @@ $radiogroup-readonly-bg: null !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
   $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
-  $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 
 @if $color == "softblue" {
@@ -102,6 +94,5 @@ $radiogroup-readonly-bg: null !default;
   $radiogroup-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
   $radiobutton-focused-border-color: $base-focus-bg !default;
   $radiogroup-readonly-border-color: lighten($radiogroup-border-color, 9%) !default;
-  $radiogroup-readonly-bg: $radiogroup-bg !default;
 }
 

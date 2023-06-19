@@ -540,7 +540,6 @@ export default modules.Controller.inherit((function () {
         skip: !remoteOperations.paging,
         take: !remoteOperations.paging,
         requireTotalCount: cachedExtra && 'totalCount' in cachedExtra || !remoteOperations.paging,
-        // eslint-disable-next-line spellcheck/spell-checker
         langParams: !remoteOperations.filtering || !remoteOperations.sorting,
       };
 
@@ -810,7 +809,6 @@ export default modules.Controller.inherit((function () {
         const store = dataSource.store();
         const dataSourceLoadOptions = dataSource.loadOptions();
         const loadResult: any = {
-          // eslint-disable-next-line spellcheck/spell-checker
           storeLoadOptions: extend({}, options, { langParams: dataSourceLoadOptions?.langParams }),
           isCustomLoading: true,
         };

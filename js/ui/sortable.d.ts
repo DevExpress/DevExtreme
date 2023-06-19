@@ -33,102 +33,271 @@ export {
     Orientation,
 };
 
-/** @public */
+/**
+ * @docid _ui_sortable_AddEvent
+ * @public
+ * @type object
+ */
 export interface AddEvent {
+    /**
+     * @docid _ui_sortable_AddEvent.component
+     * @type this
+     * @default Widget
+     */
     readonly component: dxSortable;
+    /** @docid _ui_sortable_AddEvent.element */
     readonly element: DxElement;
+    /** @docid _ui_sortable_AddEvent.model */
     readonly model?: any;
+    /**
+     * @docid _ui_sortable_AddEvent.event
+     * @type event
+     */
     readonly event: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
+    /** @docid _ui_sortable_AddEvent.itemData */
     readonly itemData?: any;
+    /** @docid _ui_sortable_AddEvent.itemElement */
     readonly itemElement: DxElement;
+    /** @docid _ui_sortable_AddEvent.fromIndex */
     readonly fromIndex: number;
+    /** @docid _ui_sortable_AddEvent.toIndex */
     readonly toIndex: number;
+    /**
+     * @docid _ui_sortable_AddEvent.fromComponent
+     * @type this
+     * @default Widget
+     */
     readonly fromComponent: dxSortable | dxDraggable;
+    /**
+     * @docid _ui_sortable_AddEvent.toComponent
+     * @type this
+     * @default Widget
+     */
     readonly toComponent: dxSortable | dxDraggable;
+    /** @docid _ui_sortable_AddEvent.fromData */
     readonly fromData?: any;
+    /** @docid _ui_sortable_AddEvent.toData */
     readonly toData?: any;
+    /** @docid _ui_sortable_AddEvent.dropInsideItem */
     readonly dropInsideItem: boolean;
 }
 
-/** @public */
+/**
+ * @docid _ui_sortable_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxSortable>;
 
-/** @public */
+/**
+ * @docid _ui_sortable_DragChangeEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    /** @docid _ui_sortable_DragChangeEvent.itemData */
     readonly itemData?: any;
+    /** @docid _ui_sortable_DragChangeEvent.itemElement */
     readonly itemElement: DxElement;
+    /** @docid _ui_sortable_DragChangeEvent.fromIndex */
     readonly fromIndex?: number;
+    /** @docid _ui_sortable_DragChangeEvent.toIndex */
     readonly toIndex?: number;
+    /**
+     * @docid _ui_sortable_DragChangeEvent.fromComponent
+     * @type this
+     * @default Widget
+     */
     readonly fromComponent?: dxSortable | dxDraggable;
+    /**
+     * @docid _ui_sortable_DragChangeEvent.toComponent
+     * @type this
+     * @default Widget
+     */
     readonly toComponent?: dxSortable | dxDraggable;
+    /** @docid _ui_sortable_DragChangeEvent.fromData */
     readonly fromData?: any;
+    /** @docid _ui_sortable_DragChangeEvent.toData */
     readonly toData?: any;
+    /** @docid _ui_sortable_DragChangeEvent.dropInsideItem */
     readonly dropInsideItem?: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_sortable_DragEndEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    /** @docid _ui_sortable_DragEndEvent.itemData */
     readonly itemData?: any;
+    /** @docid _ui_sortable_DragEndEvent.itemElement */
     readonly itemElement: DxElement;
+    /** @docid _ui_sortable_DragEndEvent.fromIndex */
     readonly fromIndex: number;
+    /** @docid _ui_sortable_DragEndEvent.toIndex */
     readonly toIndex: number;
+    /**
+     * @docid _ui_sortable_DragEndEvent.fromComponent
+     * @type this
+     * @default Widget
+     */
     readonly fromComponent: dxSortable | dxDraggable;
+    /**
+     * @docid _ui_sortable_DragEndEvent.toComponent
+     * @type this
+     * @default Widget
+     */
     readonly toComponent: dxSortable | dxDraggable;
+    /** @docid _ui_sortable_DragEndEvent.fromData */
     readonly fromData?: any;
+    /** @docid _ui_sortable_DragEndEvent.toData */
     readonly toData?: any;
+    /** @docid _ui_sortable_DragEndEvent.dropInsideItem */
     readonly dropInsideItem: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_sortable_DragMoveEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    /** @docid _ui_sortable_DragMoveEvent.itemData */
     readonly itemData?: any;
+    /** @docid _ui_sortable_DragMoveEvent.itemElement */
     readonly itemElement: DxElement;
+    /** @docid _ui_sortable_DragMoveEvent.fromIndex */
     readonly fromIndex: number;
+    /** @docid _ui_sortable_DragMoveEvent.toIndex */
     readonly toIndex: number;
+    /**
+     * @docid _ui_sortable_DragMoveEvent.fromComponent
+     * @type this
+     * @default Widget
+     */
     readonly fromComponent: dxSortable | dxDraggable;
+    /**
+     * @docid _ui_sortable_DragMoveEvent.toComponent
+     * @type this
+     * @default Widget
+     */
     readonly toComponent: dxSortable | dxDraggable;
+    /** @docid _ui_sortable_DragMoveEvent.fromData */
     readonly fromData?: any;
+    /** @docid _ui_sortable_DragMoveEvent.toData */
     readonly toData?: any;
+    /** @docid _ui_sortable_DragMoveEvent.dropInsideItem */
     readonly dropInsideItem: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_sortable_DragStartEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    /** @docid _ui_sortable_DragStartEvent.itemData */
     itemData?: any;
+    /** @docid _ui_sortable_DragStartEvent.itemElement */
     readonly itemElement: DxElement;
+    /** @docid _ui_sortable_DragStartEvent.fromIndex */
     readonly fromIndex: number;
+    /** @docid _ui_sortable_DragStartEvent.fromData */
     readonly fromData?: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_sortable_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxSortable>;
 
-/** @public */
+/**
+ * @docid _ui_sortable_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxSortable> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_sortable_RemoveEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type RemoveEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    /** @docid _ui_sortable_RemoveEvent.itemData */
     readonly itemData?: any;
+    /** @docid _ui_sortable_RemoveEvent.itemElement */
     readonly itemElement: DxElement;
+    /** @docid _ui_sortable_RemoveEvent.fromIndex */
     readonly fromIndex: number;
+    /** @docid _ui_sortable_RemoveEvent.toIndex */
     readonly toIndex: number;
+    /**
+     * @docid _ui_sortable_RemoveEvent.fromComponent
+     * @type this
+     * @default Widget
+     */
     readonly fromComponent: dxSortable | dxDraggable;
+    /**
+     * @docid _ui_sortable_RemoveEvent.toComponent
+     * @type this
+     * @default Widget
+     */
     readonly toComponent: dxSortable | dxDraggable;
+    /** @docid _ui_sortable_RemoveEvent.fromData */
     readonly fromData?: any;
+    /** @docid _ui_sortable_RemoveEvent.toData */
     readonly toData?: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_sortable_ReorderEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ReorderEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
+    /** @docid _ui_sortable_ReorderEvent.itemData */
     readonly itemData?: any;
+    /** @docid _ui_sortable_ReorderEvent.itemElement */
     readonly itemElement: DxElement;
+    /** @docid _ui_sortable_ReorderEvent.fromIndex */
     readonly fromIndex: number;
+    /** @docid _ui_sortable_ReorderEvent.toIndex */
     readonly toIndex: number;
+    /**
+     * @docid _ui_sortable_ReorderEvent.fromComponent
+     * @type this
+     * @default Widget
+     */
     readonly fromComponent: dxSortable | dxDraggable;
+    /**
+     * @docid _ui_sortable_ReorderEvent.toComponent
+     * @type this
+     * @default Widget
+     */
     readonly toComponent: dxSortable | dxDraggable;
+    /** @docid _ui_sortable_ReorderEvent.fromData */
     readonly fromData?: any;
+    /** @docid _ui_sortable_ReorderEvent.toData */
     readonly toData?: any;
+    /** @docid _ui_sortable_ReorderEvent.dropInsideItem */
     readonly dropInsideItem: boolean;
+    /**
+     * @docid _ui_sortable_ReorderEvent.promise
+     * @type Promise<void>
+     */
     promise?: PromiseLike<void>;
 };
 
@@ -281,19 +450,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxSortableOptions.onDisposing
  * @type_function_param1 e:{ui/sortable:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSortableOptions.onInitialized
  * @type_function_param1 e:{ui/sortable:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSortableOptions.onOptionChanged
  * @type_function_param1 e:{ui/sortable:OptionChangedEvent}
  */

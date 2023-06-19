@@ -65,57 +65,139 @@ export type VectorMapMarkerShape = 'circle' | 'square';
 /** @public */
 export type VectorMapMarkerType = 'bubble' | 'dot' | 'image' | 'pie';
 
+/**
+ * @docid _viz_vector_map_TooltipInfo
+ * @hidden
+ */
 export interface TooltipInfo {
+    /** @docid _viz_vector_map_TooltipInfo.target */
     target?: MapLayerElement | dxVectorMapAnnotationConfig;
 }
 
-/** @public */
+/**
+ * @docid _viz_vector_map_CenterChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type CenterChangedEvent = EventInfo<dxVectorMap> & {
+    /**
+     * @docid _viz_vector_map_CenterChangedEvent.center
+     * @type Array<number>
+     */
     readonly center: Array<number>;
 };
 
-/** @public */
+/**
+ * @docid _viz_vector_map_ClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ClickEvent = NativeEventInfo<dxVectorMap, MouseEvent | PointerEvent> & {
+    /** @docid _viz_vector_map_ClickEvent.target */
     readonly target: MapLayerElement;
 };
 
-/** @public */
+/**
+ * @docid _viz_vector_map_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxVectorMap>;
 
-/** @public */
+/**
+ * @docid _viz_vector_map_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxVectorMap>;
 
-/** @public */
+/**
+ * @docid _viz_vector_map_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxVectorMap>;
 
-/** @public */
+/**
+ * @docid _viz_vector_map_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxVectorMap> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_vector_map_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxVectorMap>;
 
-/** @public */
+/**
+ * @docid _viz_vector_map_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxVectorMap> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_vector_map_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxVectorMap>;
 
-/** @public */
+/**
+ * @docid _viz_vector_map_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxVectorMap> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_vector_map_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type SelectionChangedEvent = EventInfo<dxVectorMap> & {
+    /** @docid _viz_vector_map_SelectionChangedEvent.target */
     readonly target: MapLayerElement;
 };
 
-/** @public */
+/**
+ * @docid _viz_vector_map_TooltipHiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_vector_map_TooltipInfo
+ */
 export type TooltipHiddenEvent = EventInfo<dxVectorMap> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_vector_map_TooltipShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_vector_map_TooltipInfo
+ */
 export type TooltipShownEvent = EventInfo<dxVectorMap> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_vector_map_ZoomFactorChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ZoomFactorChangedEvent = EventInfo<dxVectorMap> & {
+    /** @docid _viz_vector_map_ZoomFactorChangedEvent.zoomFactor */
     readonly zoomFactor: number;
 };
 
@@ -904,49 +986,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxVectorMapOptions.onDisposing
  * @type_function_param1 e:{viz/vector_map:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onDrawn
  * @type_function_param1 e:{viz/vector_map:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onExported
  * @type_function_param1 e:{viz/vector_map:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onExporting
  * @type_function_param1 e:{viz/vector_map:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onFileSaving
  * @type_function_param1 e:{viz/vector_map:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/vector_map:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onInitialized
  * @type_function_param1 e:{viz/vector_map:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxVectorMapOptions.onOptionChanged
  * @type_function_param1 e:{viz/vector_map:OptionChangedEvent}
  */

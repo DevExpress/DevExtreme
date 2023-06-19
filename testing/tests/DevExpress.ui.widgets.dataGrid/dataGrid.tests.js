@@ -173,7 +173,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(filterRowWrapper.getTextEditorInput(0).attr('aria-describedby'), headersWrapper.getHeaderItem(0, 3).attr('id'));
         assert.equal(filterRowWrapper.getTextEditorInput(1).attr('aria-describedby'), headersWrapper.getHeaderItem(0, 4).attr('id'));
 
-        assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr('role'), 'grid', 'Grid role');
+        assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr('role'), 'group', 'group role');
+        assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr('aria-label'), 'Data grid with 2 rows and 4 columns', 'aria-label of the datagrid container');
         assert.equal(headersWrapper.getElement().attr('role'), 'presentation', 'Headers role');
         assert.equal(headersWrapper.getColumnsIndicators().attr('role'), 'presentation', 'Headers columns indicators role');
         assert.equal($('.dx-datagrid-scroll-container').attr('role'), 'presentation', 'Scroll container role');
@@ -205,8 +206,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 5] ID is valid (ShowWhenGrouped)');
         assert.equal(rowsViewWrapper.getCellElement(1, 5).attr('aria-describedby'), headerId, 'Cell[1, 5] aria-describedby is valid');
 
-        assert.equal(headersWrapper.getTable().attr('role'), 'presentation', 'Headers table role');
-        assert.equal(rowsViewWrapper.getTable().attr('role'), 'presentation', 'RowsView table role');
+        assert.equal(headersWrapper.getTable().attr('role'), undefined, 'Headers table role');
+        assert.equal(rowsViewWrapper.getTable().attr('role'), undefined, 'RowsView table role');
 
         const $freeSpaceRow = rowsViewWrapper.getFreeSpaceRow().getElement();
         assert.equal($freeSpaceRow.attr('role'), 'presentation');
@@ -3834,6 +3835,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.test('watch in cellPrepared should works after push', function(assert) {
+        let activeRowKey = null;
         // arrange
         const dataGrid = createDataGrid({
             dataSource: {
@@ -3871,7 +3873,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // act
-        const activeRowKey = 1;
+        activeRowKey = 1;
         dataGrid.refresh(true);
 
         // assert

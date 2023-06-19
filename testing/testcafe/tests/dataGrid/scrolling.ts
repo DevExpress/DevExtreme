@@ -1002,7 +1002,7 @@ test('The data should display correctly after changing the dataSource and focuse
 }));
 
 // T1166649
-test('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
+safeSizeTest('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1020,7 +1020,7 @@ test('The scroll position of a fixed table should be synchronized with the main 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
   // assert
-}).before(async () => createWidget('dxDataGrid', {
+}, [800, 800]).before(async () => createWidget('dxDataGrid', {
   dataSource: [...new Array(1000)].map((_, index) => ({ id: index, text: `item ${index}` })),
   keyExpr: 'id',
   showRowLines: true,
@@ -1439,5 +1439,46 @@ test('Editors should keep changes after being scrolled out of sight (T1145698)',
       allowUpdating: true,
       allowAdding: true,
     },
+  });
+});
+
+// T1136896
+safeSizeTest('Editing buttons should rerender correctly after scrolling if repaintChangesOnly=true', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollBy({ top: 1000 });
+
+  await dataGrid.apiEditRow(3); // row with id=12
+
+  await dataGrid.scrollBy({ top: -1000 });
+  await dataGrid.scrollBy({ top: 1000 });
+
+  await dataGrid.scrollBy({ top: -1 });
+
+  await takeScreenshot('T1136896-virtual-scrolling_editing-buttons.png', '#container');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 200]).before(async () => {
+  const data = [...new Array(14)].map((_, i) => ({
+    id: i + 1,
+  }));
+
+  return createWidget('dxDataGrid', {
+    height: 200,
+    loadingTimeout: null,
+    dataSource: data,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
+    },
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+      allowDeleting: true,
+    },
+    repaintChangesOnly: true,
   });
 });

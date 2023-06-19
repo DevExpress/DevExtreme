@@ -4,6 +4,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import {
   insertStylesheetRulesToPage,
   appendElementTo,
+  setAttribute,
   setClassAttribute,
   removeClassAttribute,
 } from '../../../helpers/domUtils';
@@ -12,6 +13,7 @@ import createWidget from '../../../helpers/createWidget';
 import Guid from '../../../../../js/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { clearTestPage } from '../../../helpers/clearPage';
+import DateRangeBox from '../../../model/dateRangeBox';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
@@ -91,5 +93,41 @@ fixture.disablePageReloads`DateRangeBox render`
         }
       }
     });
+  });
+});
+
+labelModes.forEach((labelMode) => {
+  test(`Custom placeholders and labels appearance (labelMode=${labelMode})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dateRangeBox = new DateRangeBox('#dateRangeBox');
+
+    await testScreenshot(t, takeScreenshot, `Placeholder and label by default labelMode=${labelMode}.png`, { element: '#container' });
+
+    await t
+      .click(dateRangeBox.getStartDateBox().input);
+
+    await testScreenshot(t, takeScreenshot, `Placeholder and label on start date input focus labelMode=${labelMode}.png`, { element: '#container' });
+
+    await t
+      .click(dateRangeBox.getEndDateBox().input);
+
+    await testScreenshot(t, takeScreenshot, `Placeholder and label on end date input focus labelMode=${labelMode}.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await appendElementTo('#container', 'div', 'dateRangeBox');
+    await setAttribute('#container', 'style', 'width: 800px; height: 300px; padding-top: 10px;');
+
+    return createWidget('dxDateRangeBox', {
+      labelMode,
+      width: 600,
+      openOnFieldClick: false,
+      startDateLabel: 'first date',
+      endDateLabel: 'second date',
+      startDatePlaceholder: 'enter start date',
+      endDatePlaceholder: 'enter end date',
+    }, '#dateRangeBox');
   });
 });

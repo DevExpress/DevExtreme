@@ -62,33 +62,80 @@ export type AxisScale = 'continuous' | 'discrete' | 'logarithmic' | 'semidiscret
 /** @public */
 export type ChartAxisScale = 'continuous' | 'logarithmic';
 
-/** @public */
+/**
+ * @docid _viz_range_selector_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxRangeSelector>;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxRangeSelector>;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxRangeSelector>;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxRangeSelector> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxRangeSelector>;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxRangeSelector> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxRangeSelector>;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxRangeSelector> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_range_selector_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxRangeSelector, MouseEvent | TouchEvent> & {
+  /** @docid _viz_range_selector_ValueChangedEvent.value */
   readonly value: Array<number | string | Date>;
+  /** @docid _viz_range_selector_ValueChangedEvent.previousValue */
   readonly previousValue: Array<number | string | Date>;
 };
 
@@ -802,49 +849,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>,
 */
 type Events = {
 /**
- * @skip
  * @docid dxRangeSelectorOptions.onDisposing
  * @type_function_param1 e:{viz/range_selector:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxRangeSelectorOptions.onDrawn
  * @type_function_param1 e:{viz/range_selector:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxRangeSelectorOptions.onExported
  * @type_function_param1 e:{viz/range_selector:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxRangeSelectorOptions.onExporting
  * @type_function_param1 e:{viz/range_selector:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxRangeSelectorOptions.onFileSaving
  * @type_function_param1 e:{viz/range_selector:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxRangeSelectorOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/range_selector:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxRangeSelectorOptions.onInitialized
  * @type_function_param1 e:{viz/range_selector:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxRangeSelectorOptions.onOptionChanged
  * @type_function_param1 e:{viz/range_selector:OptionChangedEvent}
  */

@@ -672,10 +672,10 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         assert.equal($treeList.find('.dx-gridbase-container').attr('role'), 'treegrid', 'treeList base container - value of \'role\' attribute');
 
         const $headerTable = $treeList.find('.dx-treelist-headers table').first();
-        assert.equal($headerTable.attr('role'), 'presentation', 'header table - value of \'role\' attribute');
+        assert.equal($headerTable.attr('role'), undefined, 'header table - value of \'role\' attribute');
 
         const $dataTable = $treeList.find('.dx-treelist-rowsview table').first();
-        assert.equal($dataTable.attr('role'), 'presentation', 'data table - value of \'role\' attribute');
+        assert.equal($dataTable.attr('role'), undefined, 'data table - value of \'role\' attribute');
 
         const $dataRows = $dataTable.find('.dx-data-row');
         assert.equal($dataRows.eq(0).attr('aria-expanded'), 'true', 'first data row - value of \'aria-expanded\' attribute');

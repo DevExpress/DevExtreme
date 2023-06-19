@@ -33,34 +33,84 @@ export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
 /** @public */
 export type CircularGaugeLabelOverlap = 'first' | 'last';
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxCircularGauge>;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxCircularGauge>;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxCircularGauge>;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxCircularGauge> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxCircularGauge>;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxCircularGauge> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxCircularGauge>;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxCircularGauge> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_TooltipHiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_base_gauge_TooltipInfo
+ */
 export type TooltipHiddenEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_circular_gauge_TooltipShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_base_gauge_TooltipInfo
+ */
 export type TooltipShownEvent = EventInfo<dxCircularGauge> & TooltipInfo;
 
 /**
@@ -196,61 +246,51 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>
 */
 type Events = {
 /**
- * @skip
  * @docid dxCircularGaugeOptions.onDisposing
  * @type_function_param1 e:{viz/circular_gauge:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxCircularGaugeOptions.onDrawn
  * @type_function_param1 e:{viz/circular_gauge:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxCircularGaugeOptions.onExported
  * @type_function_param1 e:{viz/circular_gauge:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxCircularGaugeOptions.onExporting
  * @type_function_param1 e:{viz/circular_gauge:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxCircularGaugeOptions.onFileSaving
  * @type_function_param1 e:{viz/circular_gauge:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxCircularGaugeOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/circular_gauge:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxCircularGaugeOptions.onInitialized
  * @type_function_param1 e:{viz/circular_gauge:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxCircularGaugeOptions.onOptionChanged
  * @type_function_param1 e:{viz/circular_gauge:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxCircularGaugeOptions.onTooltipHidden
  * @type_function_param1 e:{viz/circular_gauge:TooltipHiddenEvent}
  */
 onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
 /**
- * @skip
  * @docid dxCircularGaugeOptions.onTooltipShown
  * @type_function_param1 e:{viz/circular_gauge:TooltipShownEvent}
  */

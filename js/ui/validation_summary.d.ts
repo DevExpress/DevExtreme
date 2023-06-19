@@ -11,35 +11,45 @@ import CollectionWidget, {
     ItemLike,
 } from './collection/ui.collection_widget.base';
 
-/** @public */
-export type ContentReadyEvent<
-    TItem extends ItemLike = any,
-    TKey = any,
-> = EventInfo<dxValidationSummary<TItem, TKey>>;
+/**
+ * @docid _ui_validation_summary_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxValidationSummary<TItem, TKey>>;
 
-/** @public */
-export type DisposingEvent<
-    TItem extends ItemLike = any,
-    TKey = any,
-> = EventInfo<dxValidationSummary<TItem, TKey>>;
+/**
+ * @docid _ui_validation_summary_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxValidationSummary<TItem, TKey>>;
 
-/** @public */
-export type InitializedEvent<
-    TItem extends ItemLike = any,
-    TKey = any,
-> = InitializedEventInfo<dxValidationSummary<TItem, TKey>>;
+/**
+ * @docid _ui_validation_summary_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxValidationSummary<TItem, TKey>>;
 
-/** @public */
-export type ItemClickEvent<
-    TItem extends ItemLike = any,
-    TKey = any,
-> = NativeEventInfo<dxValidationSummary<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
+/**
+ * @docid _ui_validation_summary_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ItemInfo
+ */
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxValidationSummary<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
-/** @public */
-export type OptionChangedEvent<
-    TItem extends ItemLike = any,
-    TKey = any,
-> = EventInfo<dxValidationSummary<TItem, TKey>> & ChangedOptionInfo;
+/**
+ * @docid _ui_validation_summary_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxValidationSummary<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @deprecated use Properties instead
@@ -114,31 +124,26 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxValidationSummaryOptions.onContentReady
  * @type_function_param1 e:{ui/validation_summary:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxValidationSummaryOptions.onDisposing
  * @type_function_param1 e:{ui/validation_summary:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxValidationSummaryOptions.onInitialized
  * @type_function_param1 e:{ui/validation_summary:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxValidationSummaryOptions.onItemClick
  * @type_function_param1 e:{ui/validation_summary:ItemClickEvent}
  */
 onItemClick?: ((e: ItemClickEvent) => void);
 /**
- * @skip
  * @docid dxValidationSummaryOptions.onOptionChanged
  * @type_function_param1 e:{ui/validation_summary:OptionChangedEvent}
  */

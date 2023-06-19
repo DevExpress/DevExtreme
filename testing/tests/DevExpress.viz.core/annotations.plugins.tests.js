@@ -1292,14 +1292,14 @@ const environment = {
         this.renderer = new vizMocks.Renderer();
         rendererModule.Renderer = sinon.spy(() => this.renderer);
 
-        TooltipModule.Tooltip = (options) => {
+        TooltipModule.Tooltip = sinon.spy((options) => {
             this.tooltip = new vizMocks.Tooltip(options);
             this.tooltip.show = sinon.stub().returns(true);
             this.tooltip.hide = sinon.spy();
             this.tooltip.move = sinon.spy();
             this.tooltip.isCursorOnTooltip = sinon.stub().returns(false);
             return this.tooltip;
-        };
+        });
     },
     createChart(options) {
         const chart = $('<div>').appendTo('#qunit-fixture').dxChart($.extend(true, {

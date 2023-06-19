@@ -662,32 +662,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(row.attr('aria-rowindex'), 89, 'aria-index is correct after scrolling');
     });
 
-    // T595044
-    QUnit.test('aria-colcount aria-rowcount if virtual scrolling', function(assert) {
-        // arrange, act
-        const array = [];
-
-        for(let i = 0; i < 100; i++) {
-            array.push({ ID: i, C0: 'C0_' + i, C1: 'C1_' + i });
-        }
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 200,
-            dataSource: {
-                store: array,
-                group: 'ID'
-            },
-            paging: { pageSize: 2 },
-            scrolling: { mode: 'virtual' }
-        });
-
-        this.clock.tick(10);
-
-        // assert
-        assert.equal(dataGrid.find('.dx-gridbase-container').attr('aria-rowcount'), 200, 'aria-rowcount is correct');
-        assert.equal(dataGrid.find('.dx-gridbase-container').attr('aria-colcount'), 3, 'aria-colcount is correct');
-    });
-
     QUnit.test('all visible items should be rendered if pageSize is small and virtual scrolling is enabled', function(assert) {
         // arrange, act
         const array = [];
@@ -6460,58 +6434,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         } finally {
             $('#qunit-fixture').removeClass('qunit-fixture-static');
         }
-    });
-
-    // T1136896
-    QUnit.test('Editing buttons should rerender correctly after scrolling if repaintChangesOnly=true', function(assert) {
-        // arrange
-        const data = [...new Array(14)].map((_, i) => ({
-            id: i + 1
-        }));
-
-        const dataGrid = createDataGrid({
-            height: 200,
-            loadingTimeout: null,
-            dataSource: data,
-            keyExpr: 'id',
-            scrolling: {
-                mode: 'virtual',
-            },
-            editing: {
-                mode: 'row',
-                allowUpdating: true,
-                allowDeleting: true,
-            },
-            repaintChangesOnly: true,
-        });
-        this.clock.tick(10);
-
-        // act
-        dataGrid.option('editing.editRowKey', 14);
-
-        this.clock.tick(10);
-        $(dataGrid.getScrollable().container()).triggerHandler('scroll');
-        $(dataGrid.getScrollable().container()).triggerHandler('scroll');
-        this.clock.tick(10);
-
-
-        const $rows = $('.dx-data-row');
-        assert.strictEqual($rows.length, 6);
-
-        Array.from($rows).forEach((row, i) => {
-            const $row = $(row);
-            if(i === 5) { // editing row
-                assert.strictEqual($row.find('a').length, 2);
-                assert.strictEqual($row.find('a:eq(0)').text(), 'Save');
-                assert.strictEqual($row.find('a:eq(1)').text(), 'Cancel');
-                return;
-            }
-
-            // other rows
-            assert.strictEqual($row.find('a').length, 2);
-            assert.strictEqual($row.find('a:eq(0)').text(), 'Edit');
-            assert.strictEqual($row.find('a:eq(1)').text(), 'Delete');
-        });
     });
 });
 

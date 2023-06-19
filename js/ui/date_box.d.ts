@@ -33,58 +33,143 @@ export type DateType = 'date' | 'datetime' | 'time';
 /** @public */
 export type DatePickerType = 'calendar' | 'list' | 'native' | 'rollers';
 
-/** @public */
+/**
+ * @docid _ui_date_box_ChangeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ChangeEvent = NativeEventInfo<dxDateBox, Event>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_ClosedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ClosedEvent = EventInfo<dxDateBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxDateBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_CopyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CopyEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_CutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CutEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxDateBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_EnterKeyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type EnterKeyEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxDateBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_InputEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type InputEvent = NativeEventInfo<dxDateBox, UIEvent & { target: HTMLInputElement }>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_KeyDownEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyDownEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /** @public */
 export type KeyPressEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_KeyUpEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyUpEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_OpenedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type OpenedEvent = EventInfo<dxDateBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxDateBox> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_date_box_PasteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type PasteEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_box_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxDateBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
@@ -311,103 +396,86 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>
 */
 type Events = {
 /**
- * @skip
  * @docid dxDateBoxOptions.onChange
  * @type_function_param1 e:{ui/date_box:ChangeEvent}
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onClosed
  * @type_function_param1 e:{ui/date_box:ClosedEvent}
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onContentReady
  * @type_function_param1 e:{ui/date_box:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onCopy
  * @type_function_param1 e:{ui/date_box:CopyEvent}
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onCut
  * @type_function_param1 e:{ui/date_box:CutEvent}
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onDisposing
  * @type_function_param1 e:{ui/date_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onEnterKey
  * @type_function_param1 e:{ui/date_box:EnterKeyEvent}
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onFocusIn
  * @type_function_param1 e:{ui/date_box:FocusInEvent}
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onFocusOut
  * @type_function_param1 e:{ui/date_box:FocusOutEvent}
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onInitialized
  * @type_function_param1 e:{ui/date_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onInput
  * @type_function_param1 e:{ui/date_box:InputEvent}
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onKeyDown
  * @type_function_param1 e:{ui/date_box:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onKeyUp
  * @type_function_param1 e:{ui/date_box:KeyUpEvent}
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onOpened
  * @type_function_param1 e:{ui/date_box:OpenedEvent}
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/date_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onPaste
  * @type_function_param1 e:{ui/date_box:PasteEvent}
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @skip
  * @docid dxDateBoxOptions.onValueChanged
  * @type_function_param1 e:{ui/date_box:ValueChangedEvent}
  */

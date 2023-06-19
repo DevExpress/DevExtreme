@@ -1,0 +1,15 @@
+@use "./mixins" as *;
+
+// adduse
+
+.dx-radio-value-container {
+  padding-inline-end: 10px;
+}
+
+.dx-radiogroup-horizontal {
+  .dx-collection {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 17px;
+  }
+}

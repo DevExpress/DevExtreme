@@ -309,7 +309,6 @@ QUnit.module('Menu rendering', {
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         assert.ok(menu);
-        assert.ok(!submenu);
         rootMenuItem.trigger('dxclick');
         const submenu = getSubMenuInstance(rootMenuItem);
         assert.ok(submenu.option('visible'));

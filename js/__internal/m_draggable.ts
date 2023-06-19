@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import positionUtils from '@js/animation/position';
 import { locate, move } from '@js/animation/translator';
 import registerComponent from '@js/core/component_registrator';

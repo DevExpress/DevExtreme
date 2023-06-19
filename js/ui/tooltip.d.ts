@@ -9,28 +9,68 @@ import dxPopover, {
     dxPopoverOptions,
 } from './popover';
 
-/** @public */
+/**
+ * @docid _ui_tooltip_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_HidingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type HidingEvent = Cancelable & EventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_HiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type HiddenEvent = EventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxTooltip> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_ShowingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type ShowingEvent = Cancelable & EventInfo<dxTooltip>;
 
-/** @public */
+/**
+ * @docid _ui_tooltip_ShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ShownEvent = EventInfo<dxTooltip>;
 
 /**
@@ -67,49 +107,41 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxTooltipOptions.onContentReady
  * @type_function_param1 e:{ui/tooltip:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onDisposing
  * @type_function_param1 e:{ui/tooltip:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onHidden
  * @type_function_param1 e:{ui/tooltip:HiddenEvent}
  */
 onHidden?: ((e: HiddenEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onHiding
  * @type_function_param1 e:{ui/tooltip:HidingEvent}
  */
 onHiding?: ((e: HidingEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onInitialized
  * @type_function_param1 e:{ui/tooltip:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onOptionChanged
  * @type_function_param1 e:{ui/tooltip:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onShowing
  * @type_function_param1 e:{ui/tooltip:ShowingEvent}
  */
 onShowing?: ((e: ShowingEvent) => void);
 /**
- * @skip
  * @docid dxTooltipOptions.onShown
  * @type_function_param1 e:{ui/tooltip:ShownEvent}
  */

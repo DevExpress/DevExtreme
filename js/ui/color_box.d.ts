@@ -31,55 +31,135 @@ import {
     ApplyValueMode,
 } from '../common';
 
-/** @public */
+/**
+ * @docid _ui_color_box_ChangeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ChangeEvent = NativeEventInfo<dxColorBox, Event>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_ClosedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ClosedEvent = EventInfo<dxColorBox>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_CopyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CopyEvent = NativeEventInfo<dxColorBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_CutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CutEvent = NativeEventInfo<dxColorBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxColorBox>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_EnterKeyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type EnterKeyEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxColorBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxColorBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxColorBox>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_InputEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type InputEvent = NativeEventInfo<dxColorBox, UIEvent & { target: HTMLInputElement }>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_KeyDownEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyDownEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
 /** @public */
 export type KeyPressEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_KeyUpEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyUpEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_OpenedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type OpenedEvent = EventInfo<dxColorBox>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxColorBox> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_color_box_PasteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type PasteEvent = NativeEventInfo<dxColorBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_color_box_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxColorBox, KeyboardEvent | MouseEvent | PointerEvent | UIEvent | Event> & ValueChangedInfo;
 
 /** @public */
@@ -168,97 +248,81 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxColorBoxOptions.onChange
  * @type_function_param1 e:{ui/color_box:ChangeEvent}
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onClosed
  * @type_function_param1 e:{ui/color_box:ClosedEvent}
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onCopy
  * @type_function_param1 e:{ui/color_box:CopyEvent}
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onCut
  * @type_function_param1 e:{ui/color_box:CutEvent}
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onDisposing
  * @type_function_param1 e:{ui/color_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onEnterKey
  * @type_function_param1 e:{ui/color_box:EnterKeyEvent}
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onFocusIn
  * @type_function_param1 e:{ui/color_box:FocusInEvent}
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onFocusOut
  * @type_function_param1 e:{ui/color_box:FocusOutEvent}
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onInitialized
  * @type_function_param1 e:{ui/color_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onInput
  * @type_function_param1 e:{ui/color_box:InputEvent}
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onKeyDown
  * @type_function_param1 e:{ui/color_box:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onKeyUp
  * @type_function_param1 e:{ui/color_box:KeyUpEvent}
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onOpened
  * @type_function_param1 e:{ui/color_box:OpenedEvent}
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/color_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onPaste
  * @type_function_param1 e:{ui/color_box:PasteEvent}
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @skip
  * @docid dxColorBoxOptions.onValueChanged
  * @type_function_param1 e:{ui/color_box:ValueChangedEvent}
  */
