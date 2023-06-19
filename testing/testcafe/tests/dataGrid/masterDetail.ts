@@ -155,7 +155,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
   }));
 
 [true, false].forEach((useNative) => {
-  // T1169962
+  // T1167889
   safeSizeTest(`The master detail row should display correctly after scrolling when renderAsync, column fixing are enabled and virtual scrolling with useNative=${useNative}`, async (t) => {
     // arrange
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -179,21 +179,21 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
     await t.wait(100);
 
     // assert
-    await takeScreenshot(`T1169962-master-detail-with-scrolling.useNative=${useNative}-1.png`, dataGrid.element);
+    await takeScreenshot(`T1167889-master-detail-with-scrolling.useNative=${useNative}-1.png`, dataGrid.element);
 
     // act
     await dataGrid.scrollTo({ y: 1000 });
     await t.wait(100);
 
     // assert
-    await takeScreenshot(`T1169962-master-detail-with-scrolling.useNative=${useNative}-2.png`, dataGrid.element);
+    await takeScreenshot(`T1167889-master-detail-with-scrolling.useNative=${useNative}-2.png`, dataGrid.element);
 
     // act
     await scrollUp();
     await t.wait(100);
 
     // assert
-    await takeScreenshot(`T1169962-master-detail-with-scrolling.useNative=${useNative}-3.png`, dataGrid.element);
+    await takeScreenshot(`T1167889-master-detail-with-scrolling.useNative=${useNative}-3.png`, dataGrid.element);
 
     await t
       .expect(compareResults.isValid())

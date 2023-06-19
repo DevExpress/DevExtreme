@@ -2051,7 +2051,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _fireFocusedCellChanged($cell: dxElementWrapper | undefined): void {
     const columnIndex = this._rowsView.getCellIndex($cell);
-    const rowOptions: any = $cell?.parent().data('options');
+    const rowOptions: any = ($cell?.parent() as any).data('options');
     const focusedRowKey = rowOptions?.key;
 
     this._memoFireFocusedCellChanged(focusedRowKey, columnIndex);
