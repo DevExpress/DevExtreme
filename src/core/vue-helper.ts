@@ -1,5 +1,6 @@
 import {
     App,
+    Comment,
     ComponentPublicInstance,
     createApp,
     Slot,
@@ -174,9 +175,7 @@ function hasInlineTemplate(children: VNode[]): boolean {
 }
 
 function isComment(node) {
-    const nodeType = node.type;
-    const type = typeof nodeType === "symbol" ? nodeType.toString() : nodeType;
-    return type === "Symbol(Comment)" || (type === "Symbol()" && !node.children);
+    return node.type === Comment || (node.type.toString() === "Symbol()" && !node.children);
 }
 
 function isConfiguration(child): boolean {
