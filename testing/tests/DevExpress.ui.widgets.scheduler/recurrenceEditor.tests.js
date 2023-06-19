@@ -373,50 +373,6 @@ module('Repeat-end editor', () => {
         });
     });
 
-    test('Repeat-until dateBox should get date considering scheduler timeZone', function(assert) {
-        const timeZoneCalculator = createTimeZoneCalculator('America/Los_Angeles');
-
-        const dateInSchedulerTimeZone = new Date('2023-06-16 23:59:59');
-        const dateInLocaleTimeZone = timeZoneCalculator.createDate(
-            dateInSchedulerTimeZone,
-            { path: 'fromGrid' },
-        );
-        const dateInUtcTimeZone = getRecurrenceProcessor().getAsciiStringByDate(dateInLocaleTimeZone);
-
-        const instance = createInstance({
-            value: `FREQ=WEEKLY;UNTIL=${dateInUtcTimeZone}`,
-            timeZoneCalculator,
-        });
-
-        const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
-        const untilDate = $repeatUntilDate.dxDateBox('instance');
-
-        assert.deepEqual(untilDate.option('value'), dateInSchedulerTimeZone, 'dateBox has right value');
-    });
-
-    test('Repeat-until dateBox should apply date considering scheduler timeZone', function(assert) {
-        const timeZoneCalculator = createTimeZoneCalculator('America/Los_Angeles');
-
-        const dateInSchedulerTimeZone = new Date('2023-06-16 23:59:59');
-        const dateInLocaleTimeZone = timeZoneCalculator.createDate(
-            dateInSchedulerTimeZone,
-            { path: 'fromGrid' },
-        );
-        const dateInUtcTimeZone = getRecurrenceProcessor().getAsciiStringByDate(dateInLocaleTimeZone);
-
-        const instance = createInstance({
-            value: 'FREQ=WEEKLY;UNTIL=20151007T000000Z', // some other date, we'll change it later in dateBox
-            timeZoneCalculator,
-        });
-
-        const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
-        const untilDate = $repeatUntilDate.dxDateBox('instance');
-
-        untilDate.option('value', dateInSchedulerTimeZone);
-
-        assert.equal(instance.option('value'), `FREQ=WEEKLY;UNTIL=${dateInUtcTimeZone}`, 'Recurrence editor has right value');
-    });
-
     test('Recurrence editor should correctly process values from until-date editor', function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007' });
 
@@ -431,6 +387,43 @@ module('Repeat-end editor', () => {
             date = new Date(date.getTime() - 1);
 
             assert.equal(instance.option('value'), `FREQ=WEEKLY;UNTIL=${getRecurrenceProcessor().getAsciiStringByDate(date)}`, 'Recurrence editor has right value');
+        });
+    });
+
+    module('timezone', () => {
+
+        // [].forEach(() => {
+
+        // })
+
+        test('Repeat-until dateBox should get date considering scheduler timeZone', function(assert) {
+            const timeZoneCalculator = createTimeZoneCalculator('America/Los_Angeles');
+
+            const instance = createInstance({
+                value: 'FREQ=WEEKLY;UNTIL=20230617T065959Z',
+                timeZoneCalculator,
+            });
+
+            const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
+            const untilDate = $repeatUntilDate.dxDateBox('instance');
+
+            assert.deepEqual(untilDate.option('value'), new Date('2023-06-16 23:59:59'), 'dateBox has right value');
+        });
+
+        test('Repeat-until dateBox should apply date considering scheduler timeZone', function(assert) {
+            const timeZoneCalculator = createTimeZoneCalculator('America/Los_Angeles');
+
+            const instance = createInstance({
+                value: 'FREQ=WEEKLY;UNTIL=20151007T000000Z', // some other date, we'll change it later in dateBox
+                timeZoneCalculator,
+            });
+
+            const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
+            const untilDate = $repeatUntilDate.dxDateBox('instance');
+
+            untilDate.option('value', new Date('2023-06-16 23:59:59'));
+
+            assert.equal(instance.option('value'), 'FREQ=WEEKLY;UNTIL=20230617T065959Z', 'Recurrence editor has right value');
         });
     });
 });
