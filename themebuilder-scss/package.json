@@ -15,7 +15,7 @@
   "dependencies": {
     "autoprefixer": "^10.4.7",
     "bootstrap4": "npm:bootstrap@^4.6.0",
-    "bootstrap5": "npm:bootstrap@^5.2.1",
+    "bootstrap5": "npm:bootstrap@^5.3.0",
     "clean-css": "^5.3.0",
     "less": "^3.13.1",
     "postcss": "^8.2.6",
