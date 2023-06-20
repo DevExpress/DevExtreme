@@ -2054,16 +2054,18 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _fireFocusedCellChanged($cell: dxElementWrapper | undefined): void {
     const columnIndex = this._rowsView.getCellIndex($cell);
-    const rowIndex = this._getRowIndex($cell?.parent());
+    const rowOptions: any = $cell?.parent().data('options');
+    const focusedRowKey = rowOptions?.key;
 
-    this._memoFireFocusedCellChanged($cell, rowIndex, columnIndex);
+    this._memoFireFocusedCellChanged(focusedRowKey, columnIndex);
   }
 
   _memoFireFocusedCellChanged(
-    $cell: dxElementWrapper | undefined,
-    rowIndex: number,
+    rowKey: RowKey,
     columnIndex: number,
   ): void {
+    const $cell = this._getFocusedCell();
+    const rowIndex = this._getRowIndex($cell?.parent());
     const localRowIndex = Math.min(
       rowIndex - this._dataController.getRowIndexOffset(),
       this._dataController.items().length - 1,
