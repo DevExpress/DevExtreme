@@ -89,7 +89,7 @@ export default class SchedulerCalendar extends Widget {
 
     _getCalendarOptions() {
         return {
-            value: this.option('value'), // TODO rename
+            value: this.option('value'),
             min: this.option('min'),
             max: this.option('max'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
