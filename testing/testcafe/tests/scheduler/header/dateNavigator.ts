@@ -34,7 +34,7 @@ fixture.disablePageReloads`Date navigator`
   }));
 });
 
-test('Current date in Calendar should be respond on prev and next buttons of navigator', async (t) => {
+test('Current date in Calendar should be respond on prev and next buttons of Navigator', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const { toolbar } = new Scheduler('#container');
 
@@ -58,6 +58,10 @@ test('Current date in Calendar should be respond on prev and next buttons of nav
 
   await t
     .click(toolbar.navigator.prevButton)
+    .click(toolbar.navigator.prevButton)
+    .click(toolbar.navigator.prevButton)
+    .click(toolbar.navigator.prevButton)
+    .click(toolbar.navigator.prevButton)
     .click(toolbar.navigator.prevButton);
   await t
     .click(toolbar.navigator.caption);
@@ -71,9 +75,47 @@ test('Current date in Calendar should be respond on prev and next buttons of nav
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxScheduler', {
   dataSource: [],
-  views: ['week', 'month'],
+  views: ['week'],
   currentView: 'week',
   currentDate: new Date(2021, 2, 28),
+  width: 600,
+  height: 400,
 }));
 
-// await toolbar.calendar.getView();
+test('Current date in Navigator should be respond on Current date of Calendar', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const { toolbar } = new Scheduler('#container');
+  const { navigator } = toolbar;
+
+  await t
+    .click(toolbar.navigator.caption);
+
+  await t
+    .click(navigator.calendar.getNavigatorNextButton().element)
+    .click(navigator.calendar.getView().getCellByIndex(20));
+
+  await t
+    .expect(await takeScreenshot('navigator-state-after-calendar-next-button-click.png'))
+    .ok();
+
+  await t
+    .click(toolbar.navigator.caption)
+    .click(navigator.calendar.getNavigatorPrevButton().element)
+    .click(navigator.calendar.getNavigatorPrevButton().element)
+    .click(toolbar.navigator.calendar.getView().getCellByIndex(15));
+
+  await t
+    .expect(await takeScreenshot('navigator-state-after-calendar-prev-button-click.png'))
+    .ok();
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2021, 2, 28),
+  width: 600,
+  height: 400,
+}));
