@@ -129,14 +129,6 @@ export class Store<
     constructor(options?: Options<TItem, TKey>);
     /**
      * @docid
-     * @publicName byKey(key)
-     * @param1 key:object|string|number
-     * @return Promise<any>
-     * @public
-     */
-    byKey(key: TKey): DxPromise<TItem>;
-    /**
-     * @docid
      * @publicName insert(values)
      * @param1 values:object
      * @return Promise<any>
