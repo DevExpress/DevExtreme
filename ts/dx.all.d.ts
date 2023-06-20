@@ -4534,6 +4534,10 @@ declare module DevExpress.data {
   > {
     constructor(options?: DevExpress.data.ArrayStore.Options<TItem, TKey>);
     /**
+     * [descr:ArrayStore.byKey(key)]
+     */
+    byKey(key: TKey): DevExpress.core.utils.DxPromise<TItem>;
+    /**
      * [descr:ArrayStore.clear()]
      */
     clear(): void;
@@ -5949,10 +5953,6 @@ declare module DevExpress.data {
    */
   export class Store<TItem = any, TKey = any> {
     constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
-    /**
-     * [descr:Store.byKey(key)]
-     */
-    byKey(key: TKey): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:Store.insert(values)]
      */
