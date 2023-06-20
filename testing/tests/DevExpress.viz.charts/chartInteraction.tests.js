@@ -756,7 +756,7 @@ QUnit.module('Resizing (T1156890)', {
 
                 drawnHandler.reset();
 
-                chart.option(`size.${dimension}`, initialSize[dimension] + sign * 0.098);
+                chart.option(`size.${dimension}`, initialSize[dimension] + sign * 0.98);
 
                 assert.strictEqual(drawnHandler.callCount, 0);
             });
