@@ -54,10 +54,10 @@ describe('BootstrapExtractor', () => {
 
     expect(await extractor.sassProcessor())
       .toBe(`${functions.toString()}
-  ${variables.toString()}
-  ${testSassString}
-  ${setterServiceCode}
-  ${collectorServiceCode}`);
+${variables.toString()}
+${testSassString}
+${setterServiceCode}
+${collectorServiceCode}`);
   });
 
   test('sassProcessor (bootstrap5)', async () => {
