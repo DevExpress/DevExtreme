@@ -3219,6 +3219,7 @@ QUnit.module('scrollView integration', {
         const done = assert.async();
 
         const list = $('#list').dxList({
+            pageLoadMode: 'scrollBottom',
             height: 80,
             useNativeScrolling: false,
             grouped: true,
@@ -3248,7 +3249,8 @@ QUnit.module('scrollView integration', {
 
     QUnit.test('new page should be loaded by scrolling after change showScrollbar option in runtime (T1169123)', function(assert) {
         const list = $('#list').dxList({
-            height: 90,
+            pageLoadMode: 'scrollBottom',
+            height: 80,
             useNativeScrolling: false,
             grouped: true,
             collapsibleGroups: true,
