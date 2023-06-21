@@ -3239,7 +3239,7 @@ QUnit.module('scrollView integration', {
         list.collapseGroup(0).done(() => {
             assert.strictEqual(list.itemElements().length, 4, 'third page is not loaded after collapse first group');
 
-            list.scrollTo(200);
+            list.scrollTo(400);
 
             assert.strictEqual(list.itemElements().length, 5, 'third page is loaded');
             done();
@@ -3269,7 +3269,7 @@ QUnit.module('scrollView integration', {
 
         assert.strictEqual(list.itemElements().length, 4, 'third page is not loaded after change showScrollbar option');
 
-        list.scrollTo(200);
+        list.scrollTo(400);
 
         assert.strictEqual(list.itemElements().length, 5, 'third page is loaded');
     });
