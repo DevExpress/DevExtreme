@@ -726,30 +726,34 @@ const Draggable = (DOMComponent as any).inherit({
   },
 
   _getDraggableElementOffset(initialOffsetX: number, initialOffsetY: number): Offset {
-    const initScrollTop = this._initScrollTop ?? 0;
-    const initScrollLeft = this._initScrollLeft ?? 0;
+    const initScrollTop = this._initScrollTop;
+    const initScrollLeft = this._initScrollLeft;
 
     const scrollTop = this._getScrollableScrollTop();
     const scrollLeft = this._getScrollableScrollLeft();
 
-    const isFixedPosition = ($(this.element()) as any).css('position') === 'fixed';
+    const elementPosition = ($(this.element()) as any).css('position');
+    const isFixedPosition = elementPosition === 'fixed';
 
     const result: Offset = {
       left: (this._startPosition?.left ?? 0) + initialOffsetX,
       top: (this._startPosition?.top ?? 0) + initialOffsetY,
     };
 
-    if (!isFixedPosition && !this._hasClonedDraggable()) {
-      if (isNumeric(scrollTop)) {
-        result.top += scrollTop - initScrollTop;
-      }
-      if (isNumeric(scrollLeft)) {
-        result.left += scrollLeft - initScrollLeft;
-      }
+    if (isFixedPosition || this._hasClonedDraggable()) {
+      return result;
     }
 
-    return result;
+    return {
+      left: isNumeric(scrollLeft)
+        ? result.left + scrollLeft - initScrollLeft
+        : result.left,
+      top: isNumeric(scrollTop)
+        ? result.top + scrollTop - initScrollTop
+        : result.top,
+    };
   },
+
   _hasClonedDraggable() {
     return this.option('clone') || this.option('dragTemplate');
   },
@@ -806,9 +810,11 @@ const Draggable = (DOMComponent as any).inherit({
 
     return $scrollable;
   },
+
   _getScrollableScrollTop() {
     return this._getScrollable($(this.element()))?.scrollTop() ?? 0;
   },
+
   _getScrollableScrollLeft() {
     return this._getScrollable($(this.element()))?.scrollLeft() ?? 0;
   },
