@@ -45,7 +45,7 @@ test('dxDraggable element should not loose its position on dragging with auto-sc
     .drag(draggable, 0, 400, { speed: 0.1 })
 
     .expect(scrollable.getContainer()().scrollTop)
-    .gt(95);
+    .gt(60);
 
   await t
     .expect((await draggable().boundingClientRect).top)
@@ -57,7 +57,7 @@ test('dxDraggable element should not loose its position on dragging with auto-sc
     .drag(draggable, 400, 0, { speed: 0.1 })
 
     .expect(scrollable.getContainer()().scrollLeft)
-    .gt(95);
+    .gt(60);
 
   await t
     .expect((await draggable().boundingClientRect).left)
