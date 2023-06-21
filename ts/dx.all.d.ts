@@ -4726,12 +4726,6 @@ declare module DevExpress.data {
    */
   export function base64_encode(input: string | Array<number>): string;
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  type BaseGroupDescriptor<T> = {
-    selector: KeySelector<T>;
-  };
-  /**
    * [descr:CustomStore]
    */
   export class CustomStore<TItem = any, TKey = any> extends Store<TItem, TKey> {
@@ -5206,9 +5200,22 @@ declare module DevExpress.data {
    */
   export type GroupDescriptor<T> =
     | KeySelector<T>
-    | (BaseGroupDescriptor<T> & {
-        desc?: boolean;
+    | (OrderingDescriptor<T> & {
+        groupInterval?: number | GroupingInterval;
+        isExpanded?: boolean;
       });
+  /**
+   * [descr:GroupingInterval]
+   */
+  export type GroupingInterval =
+    | 'year'
+    | 'quarter'
+    | 'month'
+    | 'day'
+    | 'dayOfWeek'
+    | 'hour'
+    | 'minute'
+    | 'second';
   /**
    * [descr:Guid]
    */
@@ -5569,6 +5576,12 @@ declare module DevExpress.data {
      */
     withCredentials?: boolean;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type OrderingDescriptor<T> = SelectionDescriptor<T> & {
+    desc?: boolean;
+  };
   /**
    * [descr:PivotGridDataSource]
    */
@@ -6097,13 +6110,19 @@ declare module DevExpress.data {
     | Array<string>
     | ((source: T) => any);
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type SelectionDescriptor<T> = {
+    selector: KeySelector<T>;
+  };
+  /**
    * [descr:Utils.setErrorHandler]
    */
   export function setErrorHandler(handler: (e: Error) => void): void;
   /**
    * [descr:SortDescriptor]
    */
-  export type SortDescriptor<T> = GroupDescriptor<T>;
+  export type SortDescriptor<T> = OrderingDescriptor<T>;
   /**
    * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -6240,7 +6259,7 @@ declare module DevExpress.data {
    */
   export type SummaryDescriptor<T> =
     | KeySelector<T>
-    | (BaseGroupDescriptor<T> & {
+    | (SelectionDescriptor<T> & {
         summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
       });
   /**

@@ -11,27 +11,38 @@ export type SearchOperation = '=' | '<>' | '>' | '>=' | '<' | '<=' | 'startswith
 
 type KeySelector<T> = string | ((source: T) => string | number | Date | Object);
 
-type BaseGroupDescriptor<T> = {
+type SelectionDescriptor<T> = {
     selector: KeySelector<T>;
 };
 
-/**
- * @docid
- * @public
- * @type object
- * @skip
- */
-export type GroupDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
+type OrderingDescriptor<T> = SelectionDescriptor<T> & {
     desc?: boolean;
 };
 
 /**
  * @docid
  * @public
+ */
+export type GroupingInterval = 'year' | 'quarter' | 'month' | 'day' | 'dayOfWeek' | 'hour' | 'minute' | 'second';
+
+/**
+ * @docid
+ * @public
  * @type object
  * @skip
  */
-export type SortDescriptor<T> = GroupDescriptor<T>;
+export type GroupDescriptor<T> = KeySelector<T> | OrderingDescriptor<T> & {
+    groupInterval?: number | GroupingInterval;
+    isExpanded?: boolean;
+};
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @skip
+ */
+export type SortDescriptor<T> = OrderingDescriptor<T>;
 
 /**
  * @docid
@@ -67,7 +78,7 @@ export type LangParams = {
  * @public
  * @type object
  */
-export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
+export type SummaryDescriptor<T> = KeySelector<T> | SelectionDescriptor<T> & {
     summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
 };
 
