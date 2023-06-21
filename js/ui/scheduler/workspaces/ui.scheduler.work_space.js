@@ -3151,11 +3151,11 @@ const createDragBehaviorConfig = (
         const boundingRect = getBoundingRect(dragElementContainer.get(0));
 
         const newX = boundingRect.left;
-        const newY = boundingRect.top + MOUSE_IDENT;
+        const newY = boundingRect.top;
 
         const elements = isWideAppointment ?
-            domAdapter.elementsFromPoint(newX, newY) :
-            domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY);
+            domAdapter.elementsFromPoint(newX + MOUSE_IDENT, newY + MOUSE_IDENT) :
+            domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY + MOUSE_IDENT);
 
         const isMoveUnderControl = !!elements.find(el => el === rootElement.get(0));
         const dateTables = getDateTables();
