@@ -1,10 +1,10 @@
 import { ClientFunction } from 'testcafe';
-import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
-import DataGrid from '../../model/dataGrid';
+import url from '../../../../helpers/getPageUrl';
+import createWidget from '../../../../helpers/createWidget';
+import DataGrid from '../../../../model/dataGrid';
 
 fixture.disablePageReloads`Focused row`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('onFocusedRowChanged event should fire once after changing focusedRowKey if paging.enabled = false (T755722)', async (t) => {
   const dataGrid = new DataGrid('#container');
