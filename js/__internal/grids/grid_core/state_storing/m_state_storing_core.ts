@@ -52,7 +52,7 @@ const StateStoringController = modules.ViewController.inherit((function () {
         // @ts-expect-error
         return JSON.parse(getStorage(options).getItem(getUniqueStorageKey(options)));
       } catch (e: any) {
-        errors.log(e.message);
+        errors.log('W1022', 'State storing', e.message);
       }
     },
 
