@@ -3248,7 +3248,7 @@ QUnit.module('scrollView integration', {
 
     QUnit.test('new page should be loaded by scrolling after change showScrollbar option in runtime (T1169123)', function(assert) {
         const list = $('#list').dxList({
-            height: 80,
+            height: 90,
             useNativeScrolling: false,
             grouped: true,
             collapsibleGroups: true,
@@ -3270,6 +3270,8 @@ QUnit.module('scrollView integration', {
         assert.strictEqual(list.itemElements().length, 4, 'third page is not loaded after change showScrollbar option');
 
         list.scrollTo(400);
+
+        this.clock.tick(100);
 
         assert.strictEqual(list.itemElements().length, 5, 'third page is loaded');
     });
