@@ -3141,8 +3141,6 @@ const createDragBehaviorConfig = (
             return;
         }
 
-        const MOUSE_IDENT = 10;
-
         const appointmentWidth = getWidth(state.dragElement);
         const cellWidth = getCellWidth();
         const isWideAppointment = appointmentWidth > cellWidth;
@@ -3150,8 +3148,8 @@ const createDragBehaviorConfig = (
         const dragElementContainer = $(state.dragElement).parent();
         const boundingRect = getBoundingRect(dragElementContainer.get(0));
 
-        const newX = boundingRect.left + MOUSE_IDENT;
-        const newY = boundingRect.top + MOUSE_IDENT;
+        const newX = boundingRect.left;
+        const newY = boundingRect.top;
 
         const elements = isWideAppointment ?
             domAdapter.elementsFromPoint(newX, newY) :
