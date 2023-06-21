@@ -13,6 +13,7 @@ import Editor from '../editor/editor';
 import NumberBox from '../number_box';
 import { getRecurrenceProcessor } from './recurrence';
 import '../radio_group';
+import { PathTimeZoneConversion } from '../../renovation/ui/scheduler/timeZoneCalculator/types';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
 const LABEL_POSTFIX = '-label';
@@ -596,7 +597,7 @@ class RecurrenceEditor extends Editor {
     }
 
     _renderRepeatUntilEditor() {
-        const repeatUntil = this._recurrenceRule.getRules().until || this._formatUntilDate(new Date());
+        const repeatUntil = this._getUntilValue();
         const $editorWrapper = $('<div>').addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
 
         $('<div>')
@@ -624,11 +625,16 @@ class RecurrenceEditor extends Editor {
 
     _repeatUntilValueChangeHandler(args) {
         if(this._recurrenceRule.getRepeatEndRule() === 'until') {
-            const untilDate = this._formatUntilDate(new Date(args.value));
+            const dateInTimeZone = this._formatUntilDate(new Date(args.value));
+            const getStartDateTimeZone = this.option('getStartDateTimeZone');
+            const appointmentTimeZone = getStartDateTimeZone();
 
-            this._repeatUntilDate.option('value', untilDate);
+            const path = appointmentTimeZone ?
+                PathTimeZoneConversion.fromAppointmentToSource : PathTimeZoneConversion.fromGridToSource;
 
-            this._recurrenceRule.makeRule('until', untilDate);
+            const dateInLocaleTimeZone = this.option('timeZoneCalculator').createDate(dateInTimeZone, { path, appointmentTimeZone });
+
+            this._recurrenceRule.makeRule('until', dateInLocaleTimeZone);
             this._changeEditorValue();
         }
     }
@@ -803,7 +809,19 @@ class RecurrenceEditor extends Editor {
     }
 
     _getUntilValue() {
-        return this._recurrenceRule.getRules().until || this._formatUntilDate(new Date());
+        const untilDate = this._recurrenceRule.getRules().until;
+
+        if(!untilDate) {
+            return this._formatUntilDate(new Date());
+        }
+
+        const getStartDateTimeZone = this.option('getStartDateTimeZone');
+        const appointmentTimeZone = getStartDateTimeZone();
+
+        const path = appointmentTimeZone ?
+            PathTimeZoneConversion.fromSourceToAppointment : PathTimeZoneConversion.fromSourceToGrid;
+
+        return this.option('timeZoneCalculator').createDate(untilDate, { path, appointmentTimeZone });
     }
 
     toggle() {
