@@ -2,9 +2,10 @@ import registerComponent from '@js/core/component_registrator';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
-import { AdvancedChart } from '@js/viz/chart_components/advanced_chart';
 import { plugins } from '@js/viz/core/annotations';
 import { convertPolarToXY, normalizeAngle } from '@js/viz/core/utils';
+
+import { AdvancedChart } from './chart_components/m_advanced_chart';
 
 const DEFAULT_PANE_NAME = 'default';
 const DOUBLE_PI_ANGLE = 360;

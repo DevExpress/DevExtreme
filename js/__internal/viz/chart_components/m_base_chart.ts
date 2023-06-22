@@ -20,7 +20,7 @@ import { plugin as tooltipPlugin } from '@js/viz/core/tooltip';
 import { map as _map, processSeriesTemplate, setCanvasValues as _setCanvasValues } from '@js/viz/core/utils';
 import { Series } from '@js/viz/series/base_series';
 
-type SortingMethodParams = (a?: number, b?: number) => number;
+type SortingMethodParams = (a: any, b: any) => number;
 
 const { isArray } = Array;
 
@@ -1426,6 +1426,7 @@ export const BaseChart = (BaseWidget as any).inherit({
         found = singleSeries;
         return false;
       }
+      return undefined;
     });
     return found;
   },

@@ -4,7 +4,7 @@ import vizMocks from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import commons from './chartParts/commons.js';
 import seriesModule from 'viz/series/base_series';
-import { BaseChart } from 'viz/chart_components/base_chart';
+import { BaseChart } from '__internal/viz/chart_components/m_base_chart';
 import labelModule from 'viz/series/points/label';
 import dataValidatorModule from 'viz/components/data_validator';
 import translator1DModule from 'viz/translators/translator1d';
