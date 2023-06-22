@@ -5,7 +5,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
 const rendererModule = require('viz/core/renderers/renderer');
 const translator2DModule = require('viz/translators/translator2d');
 const tooltipModule = require('viz/core/tooltip');
-const BaseWidget = require('viz/core/base_widget');
+const BaseWidget = require('__internal/viz/core/m_base_widget').default;
 
 require('viz/bullet');
 
