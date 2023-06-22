@@ -290,8 +290,9 @@ QUnit.module('dateView', {
             minDate: new Date(2014, 1, 1, 1, 1),
             type: 'datetime'
         });
+        triggerShownEvent('#qunit-fixture');
 
-        triggerShownEvent($('#qunit-fixture'));
+        this.clock.tick(10);
 
         const instance = $dateView.dxDateView('instance');
 
@@ -310,6 +311,8 @@ QUnit.module('dateView', {
 
     QUnit.test('active roller class', function(assert) {
         const datePickerElement = this.wrapper;
+        const clock = this.clock;
+
         this.instance.option('value', new Date(2020, 5, 5, 8, 0));
 
         // NOTE: simulate triggering visibility change event in popup
@@ -321,6 +324,8 @@ QUnit.module('dateView', {
 
             assert.equal(datePickerElement.find('.' + DATEVIEW_ROLLER_CURRENT_CLASS).length, 1, 'active roller [' + type + '] only one');
             assert.ok(this.$element().hasClass(DATEVIEW_ROLLER_CURRENT_CLASS), 'this roller [' + type + '] is active');
+
+            clock.tick(400);
         });
     });
 
