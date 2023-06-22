@@ -91,7 +91,6 @@ export default class SchedulerCalendar extends Widget {
             onValueChanged: this.option('onValueChanged'),
             skipFocusCheck: true,
             tabIndex: this.option('tabIndex'),
-            width: '100%',
         };
     }
 
