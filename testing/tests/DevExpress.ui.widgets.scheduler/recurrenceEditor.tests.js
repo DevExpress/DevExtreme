@@ -37,7 +37,15 @@ const getFreqEditor = instance => instance.getRecurrenceForm().getEditor('freq')
 const getRepeatEndEditor = instance => instance.getEditorByField('repeatEnd');
 const getIntervalEditor = instance => instance.getRecurrenceForm().getEditor('interval');
 
-module('Recurrence Editor rendering', () => {
+module('Recurrence Editor rendering', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    },
+},
+() => {
     test('Recurrence editor should be initialized', function(assert) {
         const instance = createInstance();
         assert.ok(instance instanceof RecurrenceEditor, 'dxRecurrenceEditor was initialized');
@@ -79,6 +87,25 @@ module('Recurrence Editor rendering', () => {
             assert.equal(instance.option('value'), `FREQ=${value}`);
             assert.equal($('.dx-recurrence-editor-container').length, 1, 'recurrenceEditor was rendered');
         });
+    });
+
+    test('The recurrence editor should fire value change only once when the last selected day unselecting (Angular T1154651)', function(assert) {
+        const result = [];
+        const expectedResult = ['FREQ=WEEKLY;BYDAY=SU'];
+        const instance = createInstance({
+            value: 'FREQ=WEEKLY;BYDAY=MO',
+            startDate: new Date('2023-06-18'),
+        });
+        instance.on('valueChanged', ({ value }) => {
+            result.push(value);
+        });
+
+        $('#recurrence-editor .dx-item-selected').click();
+
+        this.clock.tick(100);
+
+        assert.equal(result.length, 1, 'valueChanged called only once');
+        assert.deepEqual(result, expectedResult, 'default value restored');
     });
 });
 
@@ -583,7 +610,7 @@ module('Repeat-on editor', () => {
         const buttonGroup = instance.getEditorByField('byday');
         buttonGroup.option('selectedItemKeys', []);
 
-        assert.equal(buttonGroup.option('selectedItemKeys').length, 0, 'Selection should not consider startDate anymore');
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), ['SU'], 'Selection should consider startDate day');
     });
 
     test('Recurrence editor should process values from repeat-on-editor after init correctly, freq=weekly', function(assert) {
