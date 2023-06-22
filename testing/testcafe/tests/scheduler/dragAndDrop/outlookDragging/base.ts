@@ -314,11 +314,11 @@ test('Basic drag-n-drop movements within the cell', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .drag(draggableAppointment.element, 55, 0)
+    .drag(draggableAppointment.element, 50, 0)
     .expect(await takeScreenshot('drag-n-drop-within-cell-to-right.png', scheduler.workSpace))
     .ok()
 
-    .drag(draggableAppointment.element, -55, 0)
+    .drag(draggableAppointment.element, -50, 0)
     .expect(await takeScreenshot('drag-n-drop-within-cell-to-left.png', scheduler.workSpace))
     .ok()
 
@@ -419,3 +419,43 @@ test('Basic drag-n-drop long appointments', async (t) => {
   height: 600,
   width: 1000,
 }));
+
+test('Narrow appointment dragging on minimal distance should be expected(1171520)', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.drag(scheduler.getAppointment('Test').element, -10, 0, { offsetX: 10 });
+
+  await t
+    .expect(await takeScreenshot('drag-short-app-min-dist-to-left.png', scheduler.workSpace))
+    .ok();
+
+  await t.drag(scheduler.getAppointment('Test').element, 195, 0, { offsetX: 10 });
+
+  await t
+    .expect(await takeScreenshot('drag-short-app-to-right.png', scheduler.workSpace))
+    .ok();
+
+  await t.drag(scheduler.getAppointment('Test').element, 200, 0, { offsetX: 10 });
+
+  await t
+    .expect(await takeScreenshot('drag-short-app-to-right-on-next-cell.png', scheduler.workSpace))
+    .ok();
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [{
+      text: 'Test',
+      startDate: new Date(2021, 1, 2),
+      endDate: new Date(2021, 1, 2, 1),
+    }],
+    views: ['timelineWeek'],
+    currentView: 'timelineWeek',
+    currentDate: new Date(2021, 1, 2),
+    cellDuration: 1440,
+    height: 300,
+    with: 500,
+  });
+});
