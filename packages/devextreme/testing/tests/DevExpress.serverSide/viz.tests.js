@@ -1,4 +1,4 @@
-const BaseVizWidget = require('viz/core/base_widget');
+const BaseVizWidget = require('__internal/viz/core/m_base_widget').default;
 
 QUnit.module('Viz', {
     beforeEach: function() {
@@ -12,7 +12,7 @@ QUnit.module('Viz', {
 });
 
 QUnit.test('Sized element when sizes are defined', function(assert) {
-    const TestVizBaseVizWidget = BaseVizWidget.inherit();
+    const TestVizBaseVizWidget = BaseVizWidget.inherit({});
 
     this.instance = new TestVizBaseVizWidget(this.element, {
         width: 500,
