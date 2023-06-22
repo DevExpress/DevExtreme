@@ -17,7 +17,7 @@ import {
   getOuterWidth, getWidth,
 } from '@js/core/utils/size';
 import { quadToObject } from '@js/core/utils/string';
-import { isFunction, isObject } from '@js/core/utils/type';
+import { isFunction, isNumeric, isObject } from '@js/core/utils/type';
 import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
@@ -61,6 +61,11 @@ const getMousePosition = (event) => ({
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+
+interface Offset {
+  left: number;
+  top: number;
+}
 
 class ScrollHelper {
   private _preventScroll: boolean;
@@ -327,6 +332,9 @@ const Draggable = (DOMComponent as any).inherit({
 
     this._horizontalScrollHelper = new ScrollHelper('horizontal', this);
     this._verticalScrollHelper = new ScrollHelper('vertical', this);
+
+    this._initScrollTop = 0;
+    this._initScrollLeft = 0;
   },
 
   _normalizeCursorOffset(offset) {
@@ -620,7 +628,14 @@ const Draggable = (DOMComponent as any).inherit({
     this._setSourceDraggable();
 
     this._$sourceElement = $element;
-    const initialOffset = $element.offset();
+    let initialOffset = $element.offset();
+
+    if (!this._hasClonedDraggable() && this.option('autoScroll')) {
+      this._initScrollTop = this._getScrollableScrollTop();
+      this._initScrollLeft = this._getScrollableScrollLeft();
+      initialOffset = this._getDraggableElementOffset(initialOffset.left, initialOffset.top);
+    }
+
     const $dragElement = this._$dragElement = this._createDragElement($element);
 
     this._toggleDraggingClass(true);
@@ -709,24 +724,50 @@ const Draggable = (DOMComponent as any).inherit({
     return $(container);
   },
 
-  _dragMoveHandler(e, scrollBy) {
+  _getDraggableElementOffset(initialOffsetX: number, initialOffsetY: number): Offset {
+    const initScrollTop = this._initScrollTop;
+    const initScrollLeft = this._initScrollLeft;
+
+    const scrollTop = this._getScrollableScrollTop();
+    const scrollLeft = this._getScrollableScrollLeft();
+
+    const elementPosition = ($(this.element()) as any).css('position');
+    const isFixedPosition = elementPosition === 'fixed';
+
+    const result: Offset = {
+      left: (this._startPosition?.left ?? 0) + initialOffsetX,
+      top: (this._startPosition?.top ?? 0) + initialOffsetY,
+    };
+
+    if (isFixedPosition || this._hasClonedDraggable()) {
+      return result;
+    }
+
+    return {
+      left: isNumeric(scrollLeft)
+        ? result.left + scrollLeft - initScrollLeft
+        : result.left,
+      top: isNumeric(scrollTop)
+        ? result.top + scrollTop - initScrollTop
+        : result.top,
+    };
+  },
+
+  _hasClonedDraggable() {
+    return this.option('clone') || this.option('dragTemplate');
+  },
+
+  _dragMoveHandler(e) {
     this._dragMoveArgs = e;
     if (!this._$dragElement) {
       e.cancel = true;
       return;
     }
 
-    const { offset } = e;
-    const startPosition = this._startPosition;
+    const offset = this._getDraggableElementOffset(e.offset.x, e.offset.y);
 
-    this._move({
-      left: startPosition.left + offset.x,
-      top: startPosition.top + offset.y,
-    });
-
-    if (!scrollBy) {
-      this._updateScrollable(e);
-    }
+    this._move(offset);
+    this._updateScrollable(e);
 
     const eventArgs = this._getEventArgs(e);
     this._getAction('onDragMove')(eventArgs);
@@ -767,6 +808,14 @@ const Draggable = (DOMComponent as any).inherit({
     });
 
     return $scrollable;
+  },
+
+  _getScrollableScrollTop() {
+    return this._getScrollable($(this.element()))?.scrollTop() ?? 0;
+  },
+
+  _getScrollableScrollLeft() {
+    return this._getScrollable($(this.element()))?.scrollLeft() ?? 0;
   },
 
   _defaultActionArgs() {
