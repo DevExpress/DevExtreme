@@ -6,7 +6,7 @@ import url from '../../../../helpers/getPageUrl';
 fixture.disablePageReloads`Layout:Appointments:dragging`
   .page(url(__dirname, '../../../container.html'));
 
-test('Short appointment dragging on minimal distance should be expected', async (t) => {
+test('Short appointment dragging on minimal distance should be expected(1171520)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
