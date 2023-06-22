@@ -85,7 +85,7 @@ import { utils } from '../utils';
 import { compileGetter } from '../../../core/utils/data';
 import { getMemoizeScrollTo } from '../../../renovation/ui/common/utils/scroll/getMemoizeScrollTo';
 
-// TODO: The constant is needed so that the dragging is not sharp, but with a small delay
+// TODO: The constant is needed so that the dragging is not sharp. To prevent small twitches
 const DRAGGING_MOUSE_FAULT = 10;
 
 const abstract = WidgetObserver.abstract;
@@ -3144,7 +3144,7 @@ const createDragBehaviorConfig = (
         const cellWidth = getCellWidth();
 
         const isWideAppointment = appointmentWidth > cellWidth;
-        const isShortAppointment = appointmentWidth <= DRAGGING_MOUSE_FAULT;
+        const isNarrowAppointment = appointmentWidth <= DRAGGING_MOUSE_FAULT;
 
         const dragElementContainer = $(state.dragElement).parent();
         const boundingRect = getBoundingRect(dragElementContainer.get(0));
@@ -3155,7 +3155,7 @@ const createDragBehaviorConfig = (
 
         if(isWideAppointment) {
             return domAdapter.elementsFromPoint(newX + DRAGGING_MOUSE_FAULT, newY + DRAGGING_MOUSE_FAULT);
-        } else if(isShortAppointment) {
+        } else if(isNarrowAppointment) {
             return domAdapter.elementsFromPoint(newX, newY);
         }
         return domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY + DRAGGING_MOUSE_FAULT);
