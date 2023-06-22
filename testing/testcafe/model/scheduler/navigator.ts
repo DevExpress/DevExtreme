@@ -1,10 +1,12 @@
 import { Selector } from 'testcafe';
+import Calendar from '../calendar';
 
 const CLASS = {
   navigator: 'dx-scheduler-navigator',
   navigatorButtonNext: 'dx-scheduler-navigator-next',
   navigatorButtonPrev: 'dx-scheduler-navigator-previous',
   navigatorButtonCaption: 'dx-scheduler-navigator-caption',
+  calendar: '.dx-scheduler-navigator-calendar',
 };
 
 export default class SchedulerNavigator {
@@ -15,6 +17,11 @@ export default class SchedulerNavigator {
   readonly prevButton: Selector;
 
   readonly caption: Selector;
+
+  // eslint-disable-next-line class-methods-use-this
+  get calendar(): Calendar {
+    return new Calendar(CLASS.calendar);
+  }
 
   constructor(scheduler: Selector) {
     this.element = scheduler.find(`.${CLASS.navigator}`);
