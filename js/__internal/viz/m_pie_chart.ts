@@ -3,14 +3,14 @@ import { noop as _noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
 import { each as _each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
-// @ts-expect-error
-import { BaseChart, overlapping } from '@js/viz/chart_components/base_chart';
 import consts from '@js/viz/components/consts';
 import { plugins as annotationsPlugins } from '@js/viz/core/annotations';
 import { plugins as centerTemplatePlugins } from '@js/viz/core/center_template';
 import { getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords, normalizeAngle } from '@js/viz/core/utils';
 import { Range } from '@js/viz/translators/range';
 import { Translator1D } from '@js/viz/translators/translator1d';
+
+import { BaseChart, overlapping } from './chart_components/m_base_chart';
 
 const { states } = consts;
 const seriesSpacing = consts.pieSeriesSpacing;
@@ -98,7 +98,7 @@ const pieSizeEqualizer = (function () {
   };
 }());
 
-const dxPieChart = (BaseChart as any).inherit({
+const dxPieChart = BaseChart.inherit({
   _themeSection: 'pie',
 
   _layoutManagerOptions() {

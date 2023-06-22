@@ -6,9 +6,6 @@ import { getPrecision } from '@js/core/utils/math';
 import { getHeight } from '@js/core/utils/size';
 import { isDefined as _isDefined, type } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import { AdvancedChart } from '@js/viz/chart_components/advanced_chart';
-// @ts-expect-error
-import { overlapping } from '@js/viz/chart_components/base_chart';
 import { Crosshair, getMargins } from '@js/viz/chart_components/crosshair';
 import { LayoutManager } from '@js/viz/chart_components/layout_manager';
 import multiAxesSynchronizer from '@js/viz/chart_components/multi_axes_synchronizer';
@@ -29,6 +26,9 @@ import rangeDataCalculator from '@js/viz/series/helpers/range_data_calculator';
 import { Range } from '@js/viz/translators/range';
 // @ts-expect-error
 import { prepareSegmentRectPoints } from '@js/viz/utils';
+
+import { AdvancedChart } from './chart_components/m_advanced_chart';
+import { overlapping } from './chart_components/m_base_chart';
 
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
