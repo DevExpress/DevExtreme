@@ -3273,8 +3273,6 @@ QUnit.module('scrollView integration', {
 
         list.scrollTo(400);
 
-        this.clock.tick(100);
-
         assert.strictEqual(list.itemElements().length, 5, 'third page is loaded');
     });
 
