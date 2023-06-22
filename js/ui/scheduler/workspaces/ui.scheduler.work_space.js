@@ -85,6 +85,9 @@ import { utils } from '../utils';
 import { compileGetter } from '../../../core/utils/data';
 import { getMemoizeScrollTo } from '../../../renovation/ui/common/utils/scroll/getMemoizeScrollTo';
 
+// TODO: The constant is needed so that the dragging is not sharp, but with a small delay
+const DRAGGING_MOUSE_FAULT = 10;
+
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -3136,16 +3139,12 @@ const createDragBehaviorConfig = (
         }
     };
 
-    const onDragMove = () => {
-        if(isDefaultDraggingMode) {
-            return;
-        }
-
-        const MOUSE_IDENT = 10;
-
+    const getElementsFromPoint = () => {
         const appointmentWidth = getWidth(state.dragElement);
         const cellWidth = getCellWidth();
+
         const isWideAppointment = appointmentWidth > cellWidth;
+        const isShortAppointment = appointmentWidth <= DRAGGING_MOUSE_FAULT;
 
         const dragElementContainer = $(state.dragElement).parent();
         const boundingRect = getBoundingRect(dragElementContainer.get(0));
@@ -3153,9 +3152,21 @@ const createDragBehaviorConfig = (
         const newX = boundingRect.left;
         const newY = boundingRect.top;
 
-        const elements = isWideAppointment ?
-            domAdapter.elementsFromPoint(newX + MOUSE_IDENT, newY + MOUSE_IDENT) :
-            domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY + MOUSE_IDENT);
+
+        if(isWideAppointment) {
+            return domAdapter.elementsFromPoint(newX + DRAGGING_MOUSE_FAULT, newY + DRAGGING_MOUSE_FAULT);
+        } else if(isShortAppointment) {
+            return domAdapter.elementsFromPoint(newX, newY);
+        }
+        return domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY + DRAGGING_MOUSE_FAULT);
+    };
+
+    const onDragMove = () => {
+        if(isDefaultDraggingMode) {
+            return;
+        }
+
+        const elements = getElementsFromPoint();
 
         const isMoveUnderControl = !!elements.find(el => el === rootElement.get(0));
         const dateTables = getDateTables();
