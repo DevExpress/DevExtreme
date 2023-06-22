@@ -52,7 +52,8 @@ import {
   FAST_EDITING_DELETE_KEY,
   FOCUS_STATE_CLASS,
   FOCUS_TYPE_CELL,
-  FOCUS_TYPE_ROW, FOCUSED_CLASS,
+  FOCUS_TYPE_ROW,
+  FOCUSED_CLASS,
   FREESPACE_ROW_CLASS,
   FUNCTIONAL_KEYS,
   GROUP_FOOTER_CLASS,
@@ -1313,8 +1314,9 @@ export class KeyboardNavigationController extends modules.ViewController {
       // @ts-expect-error
       eventsEngine.one($focusElement, 'blur', (e) => {
         if (e.relatedTarget) {
-          $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS);
-          $focusElement.removeClass(FOCUSED_CLASS);
+          $focusElement
+            .removeClass(CELL_FOCUS_DISABLED_CLASS)
+            .removeClass(FOCUSED_CLASS);
         }
       });
       if (!skipFocusEvent) {
