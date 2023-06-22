@@ -1,12 +1,21 @@
-import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import $ from 'jquery';
+import TreeViewTestWrapper from '../../helpers/TreeViewTestHelper.js';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 import {
     SCROLLABLE_SIMULATED_CLASS,
     SCROLLABLE_NATIVE_CLASS
-} from '../scrollableParts/scrollable.constants.js';
-import $ from 'jquery';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
+} from './scrollableParts/scrollable.constants.js';
+import 'ui/tree_view';
 
 import 'generic_light.css!';
+
+const { testStart } = QUnit;
+
+testStart(function() {
+    const markup = '<div id="treeView"></div>';
+
+    $('#qunit-fixture').html(markup);
+});
 
 QUnit.module('scrollToItem', {
     beforeEach: function() {

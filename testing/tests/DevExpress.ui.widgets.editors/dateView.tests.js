@@ -9,7 +9,6 @@ import 'ui/date_box/ui.date_view';
 import 'ui/date_box/ui.date_view_roller';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import { RESIZE_WAIT_TIMEOUT } from '../DevExpress.ui.widgets/scrollableParts/scrollable.constants.js';
 
 
 QUnit.testStart(function() {
@@ -284,8 +283,6 @@ QUnit.module('dateView', {
         }
     });
     QUnit.test('default value set correctly', function(assert) {
-        this.clock.restore();
-        const done = assert.async();
         const value = new Date(2015, 5, 5, 5, 5);
 
         const $dateView = $('<div>').appendTo('#qunit-fixture').dxDateView({
@@ -294,21 +291,15 @@ QUnit.module('dateView', {
             type: 'datetime'
         });
 
-        setTimeout(() => {
-            triggerShownEvent($('#qunit-fixture'));
+        triggerShownEvent($('#qunit-fixture'));
 
-            setTimeout(() => {
-                const instance = $dateView.dxDateView('instance');
+        const instance = $dateView.dxDateView('instance');
 
-                assert.notEqual(instance._rollers.year.scrollTop(), 0, 'year scroll correctly');
-                assert.notEqual(instance._rollers.month.scrollTop(), 0, 'month scroll correctly');
-                assert.notEqual(instance._rollers.day.scrollTop(), 0, 'day scroll correctly');
-                assert.notEqual(instance._rollers.hours.scrollTop(), 0, 'hours scroll correctly');
-                assert.notEqual(instance._rollers.minutes.scrollTop(), 0, 'minutes scroll correctly');
-
-                done();
-            }, RESIZE_WAIT_TIMEOUT);
-        }, RESIZE_WAIT_TIMEOUT);
+        assert.notEqual(instance._rollers.year.scrollTop(), 0, 'year scroll correctly');
+        assert.notEqual(instance._rollers.month.scrollTop(), 0, 'month scroll correctly');
+        assert.notEqual(instance._rollers.day.scrollTop(), 0, 'day scroll correctly');
+        assert.notEqual(instance._rollers.hours.scrollTop(), 0, 'hours scroll correctly');
+        assert.notEqual(instance._rollers.minutes.scrollTop(), 0, 'minutes scroll correctly');
     });
 
     QUnit.test('render default', function(assert) {
@@ -320,24 +311,17 @@ QUnit.module('dateView', {
     QUnit.test('active roller class', function(assert) {
         const datePickerElement = this.wrapper;
         this.instance.option('value', new Date(2020, 5, 5, 8, 0));
-        this.clock.restore();
-        const done = assert.async();
-        setTimeout(() => {
-            // NOTE: simulate triggering visibility change event in popup
-            triggerShownEvent('#qunit-fixture');
 
-            setTimeout(() => {
-                $.each(this.instance._rollers, function(type) {
-                    const pointer = pointerMock(this.container());
-                    pointer.start().down().move(0, -20).up();
+        // NOTE: simulate triggering visibility change event in popup
+        triggerShownEvent('#qunit-fixture');
 
-                    assert.equal(datePickerElement.find('.' + DATEVIEW_ROLLER_CURRENT_CLASS).length, 1, 'active roller [' + type + '] only one');
-                    assert.ok(this.$element().hasClass(DATEVIEW_ROLLER_CURRENT_CLASS), 'this roller [' + type + '] is active');
-                });
+        $.each(this.instance._rollers, function(type) {
+            const pointer = pointerMock(this.container());
+            pointer.start().down().move(0, -20).up();
 
-                done();
-            }, RESIZE_WAIT_TIMEOUT);
-        }, RESIZE_WAIT_TIMEOUT);
+            assert.equal(datePickerElement.find('.' + DATEVIEW_ROLLER_CURRENT_CLASS).length, 1, 'active roller [' + type + '] only one');
+            assert.ok(this.$element().hasClass(DATEVIEW_ROLLER_CURRENT_CLASS), 'this roller [' + type + '] is active');
+        });
     });
 
     QUnit.test('render rollers', function(assert) {

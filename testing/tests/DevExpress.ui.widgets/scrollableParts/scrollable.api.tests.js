@@ -21,7 +21,6 @@ import {
     SCROLLABLE_SCROLLBARS_HIDDEN,
     SCROLLABLE_DISABLED_CLASS,
     calculateInertiaDistance,
-    RESIZE_WAIT_TIMEOUT
 } from './scrollable.constants.js';
 
 import {
@@ -841,8 +840,6 @@ QUnit.test('scrollTo should not reset unused position', function(assert) {
         }
 
         QUnit.test(`scrollTo(${JSON.stringify(scrollToValue)}), update scrollOffset value after resize, useNative: ${useNative}, dir: ${direction}`, function(assert) {
-            this.clock.restore();
-            const done = assert.async();
             const contentSize = 1000;
             const containerSize = 100;
             const $scrollable = $('#scrollable').width(containerSize).height(containerSize);
@@ -880,16 +877,12 @@ QUnit.test('scrollTo should not reset unused position', function(assert) {
             $('#scrollable').width(1000).height(1000);
             resizeCallbacks.fire();
 
-            setTimeout(() => {
-                assert.deepEqual(scrollable.scrollOffset(), {
-                    top: 0,
-                    left: 0,
-                }, 'scrollOffset()');
-                assert.strictEqual(scrollable.scrollTop(), 0, 'scrollTop()');
-                assert.strictEqual(scrollable.scrollLeft(), 0, 'scrollLeft()');
-
-                done();
-            }, RESIZE_WAIT_TIMEOUT);
+            assert.deepEqual(scrollable.scrollOffset(), {
+                top: 0,
+                left: 0,
+            }, 'scrollOffset()');
+            assert.strictEqual(scrollable.scrollTop(), 0, 'scrollTop()');
+            assert.strictEqual(scrollable.scrollLeft(), 0, 'scrollLeft()');
         });
     });
 });

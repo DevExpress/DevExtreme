@@ -10,7 +10,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 
 import 'generic_light.css!';
 import ScrollView from 'ui/scroll_view';
-import { RESIZE_WAIT_TIMEOUT } from './scrollableParts/scrollable.constants.js';
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
@@ -468,12 +467,11 @@ QUnit.module('actions', moduleConfig, () => {
             $scrollView.dxScrollView('option', actionName, noop);
 
             this.clock.restore();
-            setTimeout(() => {
-                const location = getScrollOffset($scrollView);
-                assert.equal(location.top, -$topPocket.height() - 10, actionName + ' case scrollable rerendered');
 
-                actionName === 'onReachBottom' && done();
-            }, RESIZE_WAIT_TIMEOUT);
+            const location = getScrollOffset($scrollView);
+            assert.equal(location.top, -$topPocket.height() - 10, actionName + ' case scrollable rerendered');
+
+            actionName === 'onReachBottom' && done();
         };
 
         testAction('onPullDown');
@@ -570,11 +568,6 @@ QUnit.module('dynamic', moduleConfig, () => {
     });
 
     QUnit.test('onPullDown enabled doesn\'t change the position of content', function(assert) {
-        this.clock.restore();
-        const done = assert.async();
-
-        assert.expect(1);
-
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,
             inertiaEnabled: false
@@ -591,20 +584,12 @@ QUnit.module('dynamic', moduleConfig, () => {
 
         $scrollView.dxScrollView('option', 'onPullDown', noop);
 
-        setTimeout(() => {
-            const location = getScrollOffset($scrollView);
+        const location = getScrollOffset($scrollView);
 
-            assert.equal(location.top, -10 - $topPocket.height(), 'content position was not changed');
-
-            done();
-        }, RESIZE_WAIT_TIMEOUT);
+        assert.equal(location.top, -10 - $topPocket.height(), 'content position was not changed');
     });
 
     QUnit.test('onPullDown disabled does not change the position of content', function(assert) {
-        this.clock.restore();
-        const done = assert.async();
-        assert.expect(1);
-
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,
             inertiaEnabled: false,
@@ -619,25 +604,14 @@ QUnit.module('dynamic', moduleConfig, () => {
             .move(0, -10)
             .up();
 
-        setTimeout(() => {
-            $scrollView.dxScrollView('option', 'onPullDown', undefined);
+        $scrollView.dxScrollView('option', 'onPullDown', undefined);
 
-            setTimeout(() => {
-                const location = getScrollOffset($scrollView);
+        const location = getScrollOffset($scrollView);
 
-                assert.equal(location.top, -10, 'content position was not changed');
-
-                done();
-            }, RESIZE_WAIT_TIMEOUT);
-        }, RESIZE_WAIT_TIMEOUT);
+        assert.equal(location.top, -10, 'content position was not changed');
     });
 
     QUnit.test('scroll content stays in bounds when onPullDown turned off', function(assert) {
-        this.clock.restore();
-        const done = assert.async();
-
-        assert.expect(1);
-
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,
             inertiaEnabled: false,
@@ -654,18 +628,13 @@ QUnit.module('dynamic', moduleConfig, () => {
             .move(0, $container.height() - $content.height())
             .up();
 
-        setTimeout(() => {
-            $scrollView.dxScrollView('option', 'onPullDown', null);
+        $scrollView.dxScrollView('option', 'onPullDown', null);
 
-            setTimeout(() => {
-                const location = getScrollOffset($scrollView);
-                const maxScrollTopOffset = $content.height() - $container.height();
 
-                assert.equal(location.top, -maxScrollTopOffset, 'content position was not changed');
+        const location = getScrollOffset($scrollView);
+        const maxScrollTopOffset = $content.height() - $container.height();
 
-                done();
-            }, RESIZE_WAIT_TIMEOUT);
-        }, RESIZE_WAIT_TIMEOUT);
+        assert.equal(location.top, -maxScrollTopOffset, 'content position was not changed');
     });
 
     QUnit.test('pulled down adds ready state', function(assert) {
@@ -1290,7 +1259,7 @@ QUnit.module('api', moduleConfig, () => {
                 $container.height(100);
                 $('.content2').height(400);
 
-                setTimeout($.proxy(this.release, this), RESIZE_WAIT_TIMEOUT);
+                setTimeout($.proxy(this.release, this), 50);
             }
         });
 
@@ -1307,9 +1276,6 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('release calls moveToBound location immediately when state is released', function(assert) {
-        this.clock.restore();
-        const done = assert.async();
-
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,
             onPullDown: noop,
@@ -1322,16 +1288,11 @@ QUnit.module('api', moduleConfig, () => {
         scrollView.scrollTo(scrollView.scrollHeight());
         $children.remove();
 
-        setTimeout(() => {
-            pointerMock($scrollableContent).start().down(); // NOTE: call update without moveToBound location
-            scrollView.release();
+        pointerMock($scrollableContent).start().down(); // NOTE: call update without moveToBound location
+        scrollView.release();
 
-            setTimeout(() => {
-                assert.equal(scrollView.scrollOffset().top, 0, 'moveToBound was called immediately after release');
+        assert.equal(scrollView.scrollOffset().top, 0, 'moveToBound was called immediately after release');
 
-                done();
-            }, RESIZE_WAIT_TIMEOUT);
-        }, RESIZE_WAIT_TIMEOUT);
     });
 
     QUnit.test('toggleLoading', function(assert) {
@@ -1779,14 +1740,8 @@ QUnit.module('native pullDown strategy', {
         location = getTranslateValues($scrollView.get(0)).top;
         assert.equal(location, 0, 'content located at the top of container');
 
-        this.clock.restore();
-        const done = assert.async();
-        setTimeout(() => {
-            assert.equal($topPocket.children().eq(0).hasClass(SCROLLVIEW_PULLDOWN_LOADING_CLASS), false, 'scrollview-pull-down-refreshing class added');
-            assert.equal($pullDownText.children().eq(2).css('opacity'), 0, 'pullDown refreshing text');
-
-            done();
-        }, RESIZE_WAIT_TIMEOUT);
+        assert.equal($topPocket.children().eq(0).hasClass(SCROLLVIEW_PULLDOWN_LOADING_CLASS), false, 'scrollview-pull-down-refreshing class added');
+        assert.equal($pullDownText.children().eq(2).css('opacity'), 0, 'pullDown refreshing text');
     });
 
     QUnit.test('onReachBottom', function(assert) {

@@ -86,8 +86,6 @@ QUnit.test('rtlEnabled scrolls to very right position after changing the size of
 });
 
 QUnit.test('rtlEnabled scrolls to very right position after shown event', function(assert) {
-    this.clock.restore();
-    const done = assert.async();
     const $scrollable = $('#scrollable');
     const $wrapper = $scrollable.wrap('<div>').parent().hide();
 
@@ -99,13 +97,11 @@ QUnit.test('rtlEnabled scrolls to very right position after shown event', functi
 
     $wrapper.show();
     triggerShownEvent($wrapper);
-    setTimeout(() => {
-        const scrollable = $scrollable.dxScrollable('instance');
-        const veryRightPosition = $(scrollable.content()).width() - $scrollable.width();
 
-        assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
-        done();
-    });
+    const scrollable = $scrollable.dxScrollable('instance');
+    const veryRightPosition = $(scrollable.content()).width() - $scrollable.width();
+
+    assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
 
 QUnit.test('init option \'rtl\' is true', function(assert) {
