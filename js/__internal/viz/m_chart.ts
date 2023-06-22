@@ -145,6 +145,7 @@ function doesPaneExist(panes, paneName) {
       found = true;
       return false;
     }
+    return undefined;
   });
   return found;
 }
@@ -305,13 +306,12 @@ function shiftAxis(side1, side2) {
 
 function getCommonSize(side, margins) {
   let size = 0;
-  let pane;
   let paneMargins;
 
-  for (pane in margins.panes) {
+  Object.keys(margins.panes).forEach((pane) => {
     paneMargins = margins.panes[pane];
     size += side === 'height' ? paneMargins.top + paneMargins.bottom : paneMargins.left + paneMargins.right;
-  }
+  });
 
   return size;
 }
@@ -372,13 +372,13 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
       }
       tp.x = argTranslator.to(tp.argument, 1);
       tp.y = valTranslator.to(tp.value, 1);
-      seriesPoints.push(tp);
+      seriesPoints.push(tp as never);
     });
 
     overloadedSeries[seriesIndex].pointsCount = seriesPoints.length;
     overloadedSeries[seriesIndex].total = 0;
     overloadedSeries[seriesIndex].continuousSeries = 0;
-    series.push({ name: s.name, index: seriesIndex, points: seriesPoints });
+    series.push({ name: s.name, index: seriesIndex, points: seriesPoints } as never);
   });
   return { series, overloadedSeries };
 }
@@ -394,7 +394,7 @@ const isOverlay = (currentPoint, overlayPoint, pointRadius) => {
   return isPointOverlappedHorizontally && isPointOverlappedVertically;
 };
 
-const isPointOverlapped = (currentPoint, points, skipSamePointsComparing) => {
+const isPointOverlapped = (currentPoint, points, skipSamePointsComparing?) => {
   const radiusPoint = currentPoint.getOptions().size / 2;
 
   for (let i = 0; i < points.length; i++) {
@@ -428,7 +428,7 @@ function fastHidingPointMarkersByArea(canvas, markersInfo, series) {
       currentSeries.autoHidePointMarkers = true;
       seriesPoints.splice(i, 1);
       series.splice(series.indexOf(currentSeries), 1);
-      delete markersInfo.overloadedSeries[index];
+      markersInfo.overloadedSeries[index] = null;
     }
   }
 }
@@ -441,14 +441,14 @@ function updateMarkersInfo(points, overloadedSeries) {
     if (_isDefined(curPoint.x) && _isDefined(curPoint.y)) {
       for (let j = i + 1; j < points.length; j++) {
         const nextPoint = points[j];
-        const next_x = nextPoint?.x;
-        const next_y = nextPoint?.y;
+        const nextX = nextPoint?.x;
+        const nextY = nextPoint?.y;
 
-        if (!_isDefined(next_x) || Math.abs(curPoint.x - next_x) >= size) {
-          isContinuousSeries &= j !== i + 1;
+        if (!_isDefined(nextX) || Math.abs(curPoint.x - nextX) >= size) {
+          isContinuousSeries = isContinuousSeries && (j !== i + 1);
           break;
         } else {
-          const distance = _isDefined(next_x) && _isDefined(next_y) && Math.sqrt((curPoint.x - next_x) ** 2 + (curPoint.y - next_y) ** 2);
+          const distance = _isDefined(nextX) && _isDefined(nextY) && Math.sqrt((curPoint.x - nextX) ** 2 + (curPoint.y - nextY) ** 2);
           if (distance && distance < size) {
             overloadedSeries[curPoint.seriesIndex][nextPoint.seriesIndex]++;
             overloadedSeries[curPoint.seriesIndex].total++;
@@ -577,17 +577,17 @@ const dxChart = AdvancedChart.inherit({
   },
 
   _axesBoundaryPositioning() {
-    const that = this;
-    const allAxes = that._getAllAxes();
+    const allAxes = this._getAllAxes();
     let boundaryStateChanged = false;
 
     allAxes.forEach((a) => {
       if (!a.customPositionIsAvailable()) {
-        return false;
+        return;
       }
       const prevBoundaryState = a.customPositionIsBoundary();
       a._customBoundaryPosition = a.getCustomBoundaryPosition();
-      boundaryStateChanged |= prevBoundaryState !== a.customPositionIsBoundary();
+      boundaryStateChanged = boundaryStateChanged
+        || (prevBoundaryState !== a.customPositionIsBoundary());
     });
 
     return boundaryStateChanged;
@@ -598,8 +598,18 @@ const dxChart = AdvancedChart.inherit({
     const crosshairEnabled = crosshairOptions.enabled;
     const margins = getMargins();
 
-    const horizontalLabel = _extend(true, {}, crosshairOptions.label, crosshairOptions.horizontalLine.label);
-    const verticalLabel = _extend(true, {}, crosshairOptions.label, crosshairOptions.verticalLine.label);
+    const horizontalLabel = _extend(
+      true,
+      {},
+      crosshairOptions.label,
+      crosshairOptions.horizontalLine.label,
+    );
+    const verticalLabel = _extend(
+      true,
+      {},
+      crosshairOptions.label,
+      crosshairOptions.verticalLine.label,
+    );
 
     return {
       x: crosshairEnabled && crosshairOptions.horizontalLine.visible && horizontalLabel.visible ? margins.x : 0,
@@ -706,7 +716,7 @@ const dxChart = AdvancedChart.inherit({
     const paneSeries = [];
     _each(this.series, (_, oneSeries) => {
       if (oneSeries.pane === paneName) {
-        paneSeries.push(oneSeries);
+        paneSeries.push(oneSeries as never);
       }
     });
     return paneSeries;
@@ -715,7 +725,7 @@ const dxChart = AdvancedChart.inherit({
   _createPanesBorderOptions() {
     const commonBorderOptions = this._themeManager.getOptions('commonPaneSettings').border;
     const panesBorderOptions = {};
-    this.panes.forEach((pane) => panesBorderOptions[pane.name] = _extend(true, {}, commonBorderOptions, pane.border));
+    this.panes.forEach((pane) => { panesBorderOptions[pane.name] = _extend(true, {}, commonBorderOptions, pane.border); });
     return panesBorderOptions;
   },
 
@@ -738,7 +748,7 @@ const dxChart = AdvancedChart.inherit({
     append();
   },
 
-  _prepareToRender(drawOptions) {
+  _prepareToRender() {
     const panesBorderOptions = this._createPanesBorderOptions();
 
     this._createPanesBackground();
@@ -750,14 +760,13 @@ const dxChart = AdvancedChart.inherit({
   },
 
   _adjustViewport() {
-    const that = this;
-    const adjustOnZoom = that._themeManager.getOptions('adjustOnZoom');
+    const adjustOnZoom = this._themeManager.getOptions('adjustOnZoom');
 
     if (!adjustOnZoom) {
       return;
     }
 
-    that._valueAxes.forEach((axis) => axis.adjust());
+    this._valueAxes.forEach((axis) => axis.adjust());
   },
 
   _recreateSizeDependentObjects(isCanvasChanged) {
@@ -902,7 +911,7 @@ const dxChart = AdvancedChart.inherit({
       const currentPoint = seriesPoints[i];
       const overlappingPoints = seriesPoints.slice(i + 1);
 
-      overlappedPointsCount += isPointOverlapped(currentPoint, overlappingPoints);
+      overlappedPointsCount += Number(isPointOverlapped(currentPoint, overlappingPoints));
       if (overlappedPointsCount > seriesPoints.length / 2) {
         series.autoHidePointMarkers = true;
         break;
@@ -912,6 +921,8 @@ const dxChart = AdvancedChart.inherit({
 
   _applyAutoHidePointMarkers(filteredSeries) {
     let overlappingPoints = [];
+
+    const reducerFunc = (pointsCount, currentPoint) => pointsCount + isPointOverlapped(currentPoint, overlappingPoints, true);
 
     for (let i = filteredSeries.length - 1; i >= 0; i--) {
       const currentSeries = filteredSeries[i];
@@ -926,7 +937,10 @@ const dxChart = AdvancedChart.inherit({
       if (!currentSeries.autoHidePointMarkers) {
         const seriesPoints = currentSeries.getPoints();
         const overlappingPointsCount = seriesPoints
-          .reduce((pointsCount, currentPoint) => pointsCount + isPointOverlapped(currentPoint, overlappingPoints, true), 0);
+          .reduce(
+            reducerFunc,
+            0,
+          );
 
         if (overlappingPointsCount < seriesPoints.length) {
           overlappingPoints = overlappingPoints.concat(seriesPoints);
@@ -942,7 +956,7 @@ const dxChart = AdvancedChart.inherit({
     const allSeries = that.series;
 
     if (!that._themeManager.getOptions('autoHidePointMarkers')) {
-      allSeries.forEach((s) => s.autoHidePointMarkers = false);
+      allSeries.forEach((s) => { s.autoHidePointMarkers = false; });
       return;
     }
 
@@ -962,7 +976,7 @@ const dxChart = AdvancedChart.inherit({
           : (p1, p2) => p1.argument - p2.argument;
         let points = [];
 
-        markersInfo.series.forEach((s) => points = points.concat(s.points));
+        markersInfo.series.forEach((s) => { points = points.concat((s as any).points); });
         points.sort(sortingCallback);
         updateMarkersInfo(points, markersInfo.overloadedSeries);
         that._applyAutoHidePointMarkers(series);
@@ -1030,7 +1044,7 @@ const dxChart = AdvancedChart.inherit({
       that._scrollBar.setPane(that.panes);
     }
 
-    let vAxesMargins = { panes: {} };
+    let vAxesMargins = { panes: {}, left: 0, right: 0 };
     let hAxesMargins = getHorizontalAxesMargins(horizontalElements, (axis) => axis.estimateMargins(panesCanvases[axis.pane]));
     panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
@@ -1082,7 +1096,7 @@ const dxChart = AdvancedChart.inherit({
           vAxesMargins.right += offset;
         } else {
           vAxesMargins.left += offset;
-          that.panes.forEach(({ name }) => vAxesMargins.panes[name].left += offset);
+          that.panes.forEach(({ name }) => { vAxesMargins.panes[name].left += offset; });
         }
 
         panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
@@ -1133,7 +1147,7 @@ const dxChart = AdvancedChart.inherit({
     const that = this;
     const rotated = that._isRotated();
     const panesAreCustomSized = that.panes.filter((p) => p.unit).length === that.panes.length;
-    let needSpace = false;
+    let needSpace = false as any;
 
     if (panesAreCustomSized) {
       let needHorizontalSpace = 0;
@@ -1154,7 +1168,7 @@ const dxChart = AdvancedChart.inherit({
         const realSize = that.getSize();
         const customSize = that.option('size');
         const container = that._$element[0];
-        const containerHasStyledHeight = !!parseInt(container.style.height) || that._containerInitialHeight !== 0;
+        const containerHasStyledHeight = !!parseInt(container.style.height, 10) || that._containerInitialHeight !== 0;
 
         if (!rotated && !(customSize && customSize.height) && !containerHasStyledHeight) {
           that._forceResize(realSize.width, realSize.height + needVerticalSpace);
@@ -1234,7 +1248,7 @@ const dxChart = AdvancedChart.inherit({
     const params = [];
     for (i = 0; i < panes.length; i++) {
       if (that._getPaneBorderVisibility(i)) {
-        params.push({ coords: panes[i].borderCoords, clipRect: that._panesClipRects.fixed[i] });
+        params.push({ coords: panes[i].borderCoords, clipRect: that._panesClipRects.fixed[i] } as never);
       }
     }
     return params;
