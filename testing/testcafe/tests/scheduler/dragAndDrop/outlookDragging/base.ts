@@ -314,7 +314,7 @@ test('Basic drag-n-drop movements within the cell', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .drag(draggableAppointment.element, 50, 0)
+    .drag(draggableAppointment.element, 55, 0)
     .expect(await takeScreenshot('drag-n-drop-within-cell-to-right.png', scheduler.workSpace))
     .ok()
 
