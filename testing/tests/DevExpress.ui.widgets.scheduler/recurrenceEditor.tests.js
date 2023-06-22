@@ -94,7 +94,7 @@ module('Recurrence Editor rendering', {
         const expectedResult = ['FREQ=WEEKLY;BYDAY=SU'];
         const instance = createInstance({
             value: 'FREQ=WEEKLY;BYDAY=MO',
-            startDate: new Date('2023-06-18'),
+            startDate: new Date('2023-06-18T22:00:00'),
         });
         instance.on('valueChanged', ({ value }) => {
             result.push(value);
