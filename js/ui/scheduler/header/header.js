@@ -107,8 +107,6 @@ export class SchedulerHeader extends Widget {
         this._createEventMap();
         this.$element().addClass(COMPONENT_CLASS);
 
-        this.updateCurrentDateLock = 0;
-
         this.currentView = getCurrentView(
             getViewName(this.option('currentView')),
             this.option('views'),
@@ -184,21 +182,16 @@ export class SchedulerHeader extends Widget {
         this._callEvent('currentView', view);
     }
 
-    _updateCurrentDate(date) {
-        this._updateCurrentDateCore(date);
-
-        this.updateCurrentDateLock++;
+    _updateCalendarValueAndCurrentDate(date) {
+        this._updateCurrentDate(date);
         this._calendar.option('value', date);
-        this.updateCurrentDateLock--;
     }
 
-    _updateCurrentDateCore(date) {
-        if(this.updateCurrentDateLock === 0) {
-            const onCurrentDateChange = this.option('onCurrentDateChange');
-            onCurrentDateChange(date);
+    _updateCurrentDate(date) {
+        const onCurrentDateChange = this.option('onCurrentDateChange');
+        onCurrentDateChange(date);
 
-            this._callEvent('currentDate', date);
-        }
+        this._callEvent('currentDate', date);
     }
 
     _renderCalendar() {
@@ -210,7 +203,7 @@ export class SchedulerHeader extends Widget {
             focusStateEnabled: this.option('focusStateEnabled'),
             tabIndex: this.option('tabIndex'),
             onValueChanged: (e) => {
-                this._updateCurrentDateCore(e.value);
+                this._updateCurrentDate(e.value);
                 this._calendar.hide();
             },
         });
@@ -266,7 +259,7 @@ export class SchedulerHeader extends Widget {
     _updateDateByDirection(direction) {
         const date = this._getNextDate(direction);
 
-        this._updateCurrentDate(date);
+        this._updateCalendarValueAndCurrentDate(date);
     }
 
     _showCalendar(e) {

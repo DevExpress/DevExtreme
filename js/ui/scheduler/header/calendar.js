@@ -81,9 +81,13 @@ export default class SchedulerCalendar extends Widget {
         return result;
     }
 
-    _optionChanged(args) {
-        if(args.name === 'value') {
-            this._calendar?.option('value', args.value);
+    _optionChanged({ name, value }) {
+        switch(name) {
+            case 'value':
+                this._calendar?.option('value', value);
+                break;
+            default:
+                break;
         }
     }
 
