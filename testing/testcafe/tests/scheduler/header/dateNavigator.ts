@@ -128,7 +128,7 @@ test('Calendar should be have right appearance', async (t) => {
     .click(toolbar.navigator.caption);
 
   await t
-    .expect(await takeScreenshot('asdsdf.png', toolbar.navigator.calendar.element))
+    .expect(await takeScreenshot('right-calendar-appearance.png', toolbar.navigator.calendar.element))
     .ok();
 
   await t
