@@ -14,7 +14,7 @@ const logger = require('core/utils/console').logger;
 const resizeObserverSingleton = require('core/resize_observer');
 const isFunction = require('core/utils/type').isFunction;
 // const errors = require('viz/core/errors_warnings');
-const BaseWidget = require('viz/core/base_widget');
+const BaseWidget = require('__internal/viz/core/m_base_widget').default;
 const DEBUG_createEventTrigger = require('viz/core/base_widget.utils').DEBUG_createEventTrigger;
 const DEBUG_createResizeHandler = require('viz/core/base_widget.utils').DEBUG_createResizeHandler;
 const BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager;
@@ -24,7 +24,6 @@ let StubThemeManager;
 let StubTitle;
 const vizMocks = require('../../helpers/vizMocks.js');
 const { implementationsMap } = require('core/utils/size');
-require('viz/core/base_widget');
 
 // TODO: Move export tests to a separate file
 require('viz/core/export');

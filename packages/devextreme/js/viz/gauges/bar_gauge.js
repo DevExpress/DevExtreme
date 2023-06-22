@@ -8,7 +8,7 @@ const _max = Math.max;
 import registerComponent from '../../core/component_registrator';
 import { clone } from '../../core/utils/object';
 import { noop } from '../../core/utils/common';
-import { overlapping } from '../chart_components/base_chart';
+import { overlapping } from '../../__internal/viz/chart_components/m_base_chart';
 import { extend } from '../../core/utils/extend';
 import { normalizeEnum as _normalizeEnum, convertAngleToRendererSpace, getCosAndSin, patchFontOptions, getVerticallyShiftedAngularCoords, normalizeArcParams, normalizeAngle } from '../core/utils';
 import { BaseGauge, getSampleText, formatValue, compareArrays } from './base_gauge';
