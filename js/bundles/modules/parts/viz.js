@@ -52,8 +52,6 @@ viz.dxSankey = require('../../../viz/sankey');
 
 /// BUNDLER_PARTS_END
 
-viz.BaseWidget = require('../../../viz/core/base_widget');
-
 viz.getTheme = require('../../../viz/themes').getTheme;
 // Keep it for backward compatibility after renaming findTheme to getTheme
 viz.findTheme = require('../../../viz/themes').getTheme;
