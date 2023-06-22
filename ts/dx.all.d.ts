@@ -5204,9 +5204,6 @@ declare module DevExpress.data {
         groupInterval?: number | GroupingInterval;
         isExpanded?: boolean;
       });
-  /**
-   * [descr:GroupingInterval]
-   */
   export type GroupingInterval =
     | 'year'
     | 'quarter'
@@ -6122,7 +6119,7 @@ declare module DevExpress.data {
   /**
    * [descr:SortDescriptor]
    */
-  export type SortDescriptor<T> = OrderingDescriptor<T>;
+  export type SortDescriptor<T> = KeySelector<T> | OrderingDescriptor<T>;
   /**
    * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.

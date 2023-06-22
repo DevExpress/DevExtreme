@@ -20,7 +20,6 @@ type OrderingDescriptor<T> = SelectionDescriptor<T> & {
 };
 
 /**
- * @docid
  * @public
  */
 export type GroupingInterval = 'year' | 'quarter' | 'month' | 'day' | 'dayOfWeek' | 'hour' | 'minute' | 'second';
@@ -31,10 +30,10 @@ export type GroupingInterval = 'year' | 'quarter' | 'month' | 'day' | 'dayOfWeek
  * @type object
  * @skip
  */
-export type GroupDescriptor<T> = KeySelector<T> | OrderingDescriptor<T> & {
+export type GroupDescriptor<T> = KeySelector<T> | (OrderingDescriptor<T> & {
     groupInterval?: number | GroupingInterval;
     isExpanded?: boolean;
-};
+});
 
 /**
  * @docid
@@ -42,7 +41,7 @@ export type GroupDescriptor<T> = KeySelector<T> | OrderingDescriptor<T> & {
  * @type object
  * @skip
  */
-export type SortDescriptor<T> = OrderingDescriptor<T>;
+export type SortDescriptor<T> = KeySelector<T> | OrderingDescriptor<T>;
 
 /**
  * @docid
