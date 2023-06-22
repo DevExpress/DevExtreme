@@ -10,6 +10,7 @@ import CustomStore from 'data/custom_store';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 
 const NODE_LOAD_INDICATOR_CLASS = 'dx-treeview-node-loadindicator';
+const TREEVIEW_ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
 const DX_LOAD_INDICATOR_CLASS = 'dx-loadindicator';
 
 QUnit.module('Rendering', {
@@ -315,7 +316,7 @@ QUnit.test('Render checkbox before itemRendered is fired', function(assert) {
         onItemRendered: function(e) {
             i++;
             assert.equal($(e.element).find('.' + internals.NODE_CLASS).find('.dx-checkbox').length, i);
-            assert.equal($(e.element).find('.' + internals.NODE_CLASS + '.' + internals.ITEM_WITH_CHECKBOX_CLASS).length, i);
+            assert.equal($(e.element).find('.' + internals.NODE_CLASS + `.${TREEVIEW_ITEM_WITH_CHECKBOX_CLASS}`).length, i);
         }
     });
 

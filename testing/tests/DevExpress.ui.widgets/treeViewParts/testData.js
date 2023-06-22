@@ -1,29 +1,4 @@
-/* global stripFunctions */
-
-import $ from 'jquery';
-import CustomStore from 'data/custom_store';
-import ArrayStore from 'data/array_store';
-
-import 'ui/tree_view';
-
-const { testStart } = QUnit;
-
-testStart(function() {
-    const markup = '<div id="treeView"></div>';
-
-    $('#qunit-fixture').html(markup);
-});
-
-window.internals = {
-    NODE_CONTAINER_CLASS: 'dx-treeview-node-container',
-    OPENED_NODE_CONTAINER_CLASS: 'dx-treeview-node-container-opened',
-    NODE_CLASS: 'dx-treeview-node',
-    ITEM_CLASS: 'dx-treeview-item',
-    TOGGLE_ITEM_VISIBILITY_CLASS: 'dx-treeview-toggle-item-visibility',
-    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened',
-};
-
-window.DATA = (function() {
+export const DATA = (function() {
     return [
         // 0
         [
@@ -124,7 +99,7 @@ window.DATA = (function() {
     ];
 })();
 
-window.data2 = [
+export const data2 = [
     { id: 1, parentId: 0, text: 'Animals' },
     { id: 2, parentId: 1, text: 'Cat' },
     { id: 3, parentId: 1, text: 'Dog' },
@@ -143,68 +118,10 @@ window.data2 = [
     { id: 16, parentId: 0, text: 'Others' }
 ];
 
-window.dataID = [
+export const dataID = [
     { id: 1, 'elternId': 0, text: 'Animals' },
     { id: 2, 'elternId': 1, text: 'Cat' },
     { id: 3, 'elternId': 2, text: 'Abyssinian' },
     { id: 4, 'elternId': 0, text: 'Birds' },
     { id: 5, 'elternId': 4, text: 'Akekee' }
 ];
-
-window.initTree = function(options) {
-    return $('#treeView').dxTreeView(options);
-};
-
-window.stripFunctions = function(obj) {
-    const result = $.extend(true, {}, obj);
-    $.each(result, function(field, value) {
-        if($.isFunction(value)) {
-            delete result[field];
-        }
-
-        if(field === 'parent' && result.parent) {
-            result.parent = stripFunctions(result.parent);
-        }
-
-    });
-
-    return result;
-};
-
-window.makeSlowDataSource = function(data) {
-    return {
-        store: new CustomStore({
-            load: function(loadOptions) {
-                return $.Deferred(function(d) {
-                    setTimeout(function() {
-                        new ArrayStore(data).load(loadOptions).done(function() {
-                            d.resolve.apply(d, arguments);
-                        });
-                    }, 300);
-                }).promise();
-            }
-        })
-    };
-};
-
-import 'generic_light.css!';
-
-import './treeViewParts/accessibility.js';
-import './treeViewParts/animation.js';
-import './treeViewParts/events.js';
-import './treeViewParts/expresions.js';
-import './treeViewParts/focusing.js';
-import './treeViewParts/initialization.js';
-import './treeViewParts/keyboardNavigation.js';
-import './treeViewParts/lazyRendering.js';
-import './treeViewParts/optionChanged.js';
-import './treeViewParts/regression.js';
-import './treeViewParts/rendering.js';
-import './treeViewParts/selection.js';
-import './treeViewParts/searching.js';
-import './treeViewParts/selectAllMode.js';
-import './treeViewParts/selectAllWithSelectNodesRecursiveFalse.js';
-import './treeViewParts/selectNodesRecursiveTrue.js';
-import './treeViewParts/treeview.size.tests.js';
-import './treeViewParts/usageWithoutKeys.js';
-import './treeViewParts/virtualMode.js';

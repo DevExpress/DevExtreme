@@ -283,6 +283,8 @@ QUnit.module('dateView', {
         }
     });
     QUnit.test('default value set correctly', function(assert) {
+        this.clock.restore();
+        const done = assert.async();
         const value = new Date(2015, 5, 5, 5, 5);
 
         const $dateView = $('<div>').appendTo('#qunit-fixture').dxDateView({
@@ -290,17 +292,20 @@ QUnit.module('dateView', {
             minDate: new Date(2014, 1, 1, 1, 1),
             type: 'datetime'
         });
-        triggerShownEvent('#qunit-fixture');
 
-        this.clock.tick(10);
+        triggerShownEvent($('#qunit-fixture'));
 
-        const instance = $dateView.dxDateView('instance');
+        setTimeout(() => {
+            const instance = $dateView.dxDateView('instance');
 
-        assert.notEqual(instance._rollers.year.scrollTop(), 0, 'year scroll correctly');
-        assert.notEqual(instance._rollers.month.scrollTop(), 0, 'month scroll correctly');
-        assert.notEqual(instance._rollers.day.scrollTop(), 0, 'day scroll correctly');
-        assert.notEqual(instance._rollers.hours.scrollTop(), 0, 'hours scroll correctly');
-        assert.notEqual(instance._rollers.minutes.scrollTop(), 0, 'minutes scroll correctly');
+            assert.notEqual(instance._rollers.year.scrollTop(), 0, 'year scroll correctly');
+            assert.notEqual(instance._rollers.month.scrollTop(), 0, 'month scroll correctly');
+            assert.notEqual(instance._rollers.day.scrollTop(), 0, 'day scroll correctly');
+            assert.notEqual(instance._rollers.hours.scrollTop(), 0, 'hours scroll correctly');
+            assert.notEqual(instance._rollers.minutes.scrollTop(), 0, 'minutes scroll correctly');
+
+            done();
+        });
     });
 
     QUnit.test('render default', function(assert) {
