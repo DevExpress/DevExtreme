@@ -5,7 +5,7 @@ import Callbacks from '../../core/utils/callbacks';
 import { isPlainObject } from '../../core/utils/type';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Widget from '../../ui/widget/ui.widget';
-import VizWidget from '../../viz/core/base_widget';
+import VizWidget from '../../__internal/viz/core/m_base_widget';
 import ComponentWrapper from '../../renovation/component_wrapper/common/component';
 import Draggable from '../../ui/draggable';
 import ScrollView from '../../ui/scroll_view';
