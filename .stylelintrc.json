@@ -30,7 +30,7 @@
         "string-quotes": null,
         "value-no-vendor-prefix": true,
         "value-keyword-case": ["lower", {"camelCaseSvgKeywords": true}],
-        "selector-not-notation": null,
+        "selector-not-notation": "simple",
         "keyframe-selector-notation": null,
         "media-feature-range-notation": null,
 
