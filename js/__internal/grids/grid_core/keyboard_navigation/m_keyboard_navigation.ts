@@ -53,6 +53,7 @@ import {
   FOCUS_STATE_CLASS,
   FOCUS_TYPE_CELL,
   FOCUS_TYPE_ROW,
+  FOCUSED_CLASS,
   FREESPACE_ROW_CLASS,
   FUNCTIONAL_KEYS,
   GROUP_FOOTER_CLASS,
@@ -1306,13 +1307,16 @@ export class KeyboardNavigationController extends modules.ViewController {
           .find('.dx-row[tabindex], .dx-row > td[tabindex]')
           .not($focusElement)
           .removeClass(CELL_FOCUS_DISABLED_CLASS)
+          .removeClass(FOCUSED_CLASS)
           .removeAttr('tabindex');
       }
 
       // @ts-expect-error
       eventsEngine.one($focusElement, 'blur', (e) => {
         if (e.relatedTarget) {
-          $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS);
+          $focusElement
+            .removeClass(CELL_FOCUS_DISABLED_CLASS)
+            .removeClass(FOCUSED_CLASS);
         }
       });
       if (!skipFocusEvent) {
