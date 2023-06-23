@@ -1,6 +1,6 @@
 {
   "name": "devextreme-angular",
-  "version": "23.1.0",
+  "version": "23.2.0",
   "description": "Angular UI and visualization components based on DevExtreme widgets",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "@angular/common": ">12.0.0",
     "@angular/core": ">12.0.0",
     "@angular/forms": ">12.0.0",
-    "devextreme": "23.1-next"
+    "devextreme": "23.2-next"
   },
   "devDependencies": {
     "@angular/animations": "~12.2.17",
@@ -37,7 +37,7 @@
     "codelyzer": "6.0.2",
     "core-js": "^2.6.12",
     "del": "^2.2.2",
-    "devextreme": "23.1-next",
+    "devextreme": "23.2-next",
     "devextreme-angular-generator": "^2.1.0",
     "devextreme-internal-tools": "^10.0.0-beta.14",
     "gulp": "^4.0.2",
