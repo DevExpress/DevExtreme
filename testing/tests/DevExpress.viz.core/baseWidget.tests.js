@@ -24,7 +24,6 @@ let StubThemeManager;
 let StubTitle;
 const vizMocks = require('../../helpers/vizMocks.js');
 const { implementationsMap } = require('core/utils/size');
-require('viz/core/base_widget');
 
 // TODO: Move export tests to a separate file
 require('viz/core/export');
