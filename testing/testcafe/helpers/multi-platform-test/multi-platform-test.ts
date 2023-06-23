@@ -7,16 +7,16 @@ import type { PlatformType } from './platform-type';
 
 const platformsSiteRootPath = resolve('./testing/renovation/platforms');
 export class MultiPlatformTest {
-  beforeFn!: (t: TestController, { platform: PlatformType }) => Promise<void>;
+  beforeFn!: (t: TestController, e: { platform: PlatformType }) => Promise<void>;
 
-  afterFn!: (t: TestController, { platform: PlatformType }) => Promise<void>;
+  afterFn!: (t: TestController, e: { platform: PlatformType }) => Promise<void>;
 
-  before(fn: (t: TestController, { platform: PlatformType }) => Promise<void>): this {
+  before(fn: (t: TestController, e: { platform: PlatformType }) => Promise<void>): this {
     this.beforeFn = fn;
     return this;
   }
 
-  after(fn: (t: TestController, { platform: PlatformType }) => Promise<void>): this {
+  after(fn: (t: TestController, e: { platform: PlatformType }) => Promise<void>): this {
     this.afterFn = fn;
     return this;
   }
