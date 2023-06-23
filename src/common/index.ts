@@ -51,6 +51,7 @@ export {
     StringLengthRule,
     SubmenuShowMode,
     TextBoxPredefinedButton,
+    TextEditorButton,
     TextEditorButtonLocation,
     ToolbarItemComponent,
     ToolbarItemLocation,

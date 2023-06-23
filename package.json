@@ -1,7 +1,7 @@
 {
   "name": "devextreme-vue2-strategy",
   "private": true,
-  "version": "23.1.0",
+  "version": "23.2.0",
   "main": "npm/index",
   "types": "npm/index",
   "files": [
@@ -14,7 +14,7 @@
     "start": "webpack-dev-server"
   },
   "peerDependencies": {
-    "devextreme": "23.1-next"
+    "devextreme": "23.2-next"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
