@@ -111,7 +111,7 @@
   }
 }
 
-@media (max-width: 320px) {
+@media (width <= 320px) {
   .dx-datebox-wrapper-calendar .dx-calendar {
     margin: $material-datebox-overlay-item-margin-adaptive;
   }

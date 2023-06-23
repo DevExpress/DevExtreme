@@ -32,7 +32,7 @@
         "value-keyword-case": ["lower", {"camelCaseSvgKeywords": true}],
         "selector-not-notation": "simple",
         "keyframe-selector-notation": "percentage",
-        "media-feature-range-notation": null,
+        "media-feature-range-notation": "context",
 
         "scss/at-else-empty-line-before": null,
         "scss/at-if-closing-brace-newline-after": null,

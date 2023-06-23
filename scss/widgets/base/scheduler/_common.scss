@@ -82,7 +82,7 @@ $scheduler-popup-scrollable-content-padding: 20px;
 }
 
 .dx-scheduler-adaptive {
-  @media (max-width: 450px) {
+  @media (width <= 450px) {
     .dx-scheduler-view-switcher-label {
       display: none;
     }
