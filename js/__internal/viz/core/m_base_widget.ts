@@ -35,26 +35,26 @@ const SIZED_ELEMENT_CLASS = 'dx-sized-element';
 
 const baseOptionMethod = DOMComponent.prototype.option;
 
-function getTrue() {
+function getTrue(): boolean {
   return true;
 }
 
-function getFalse() {
+function getFalse(): boolean {
   return false;
 }
 
-function areCanvasesDifferent(canvas1, canvas2) {
+function areCanvasesDifferent(canvas1, canvas2): boolean {
   return !(Math.abs(canvas1.width - canvas2.width) < SIZE_CHANGING_THRESHOLD && Math.abs(canvas1.height - canvas2.height) < SIZE_CHANGING_THRESHOLD
         && canvas1.left === canvas2.left && canvas1.top === canvas2.top && canvas1.right === canvas2.right && canvas1.bottom === canvas2.bottom);
 }
 
-function defaultOnIncidentOccurred(e) {
+function defaultOnIncidentOccurred(e): void {
   if (!e.component._eventsStrategy.hasEvent('incidentOccurred')) {
     log.apply(null, [e.target.id].concat(e.target.args || []));
   }
 }
 
-function pickPositiveValue(values) {
+function pickPositiveValue(values): number {
   return values.reduce((result, value) => (value > 0 && !result ? value : result), 0);
 }
 
@@ -110,7 +110,7 @@ const getEmptyComponent = function () {
   return EmptyComponent;
 };
 
-function callForEach(functions) {
+function callForEach(functions): void {
   functions.forEach((c) => c());
 }
 
@@ -124,7 +124,7 @@ function floorCanvasDimensions(canvas) {
 
 const isServerSide = !hasWindow();
 
-function sizeIsValid(value) {
+function sizeIsValid(value): boolean {
   return isDefined(value) && value > 0;
 }
 
@@ -195,16 +195,14 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   _initialChanges: ['LAYOUT', 'RESIZE_HANDLER', 'THEME', 'DISABLED'],
 
   _initPlugins() {
-    const that = this;
-    each(that._plugins, (_, plugin) => {
-      plugin.init.call(that);
+    each(this._plugins, (_, plugin) => {
+      plugin.init.call(this);
     });
   },
 
   _disposePlugins() {
-    const that = this;
-    each(that._plugins.slice().reverse(), (_, plugin) => {
-      plugin.dispose.call(that);
+    each(this._plugins.slice().reverse(), (_, plugin) => {
+      plugin.dispose.call(this);
     });
   },
 
@@ -217,23 +215,21 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   },
 
   _resumeChanges() {
-    const that = this;
-
-    if (--that._changesLocker === 0 && that._changes.count() > 0 && !that._applyingChanges) {
-      that._renderer.lock();
-      that._applyingChanges = true;
-      that._applyChanges();
-      that._changes.reset();
-      that._applyingChanges = false;
-      that._changesApplied();
-      that._renderer.unlock();
-      if (that._optionsQueue) {
-        that._applyQueuedOptions();
+    if (--this._changesLocker === 0 && this._changes.count() > 0 && !this._applyingChanges) {
+      this._renderer.lock();
+      this._applyingChanges = true;
+      this._applyChanges();
+      this._changes.reset();
+      this._applyingChanges = false;
+      this._changesApplied();
+      this._renderer.unlock();
+      if (this._optionsQueue) {
+        this._applyQueuedOptions();
       }
-      that.resolveItemsDeferred(that._legend ? [that._legend] : []);
-      that._optionChangedLocker++;
-      that._notify();
-      that._optionChangedLocker--;
+      this.resolveItemsDeferred(this._legend ? [this._legend] : []);
+      this._optionChangedLocker++;
+      this._notify();
+      this._optionChangedLocker--;
     }
   },
 
@@ -307,15 +303,14 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   },
 
   _applyQueuedOptions() {
-    const that = this;
-    const queue = that._optionsQueue;
+    const queue = this._optionsQueue;
 
-    that._optionsQueue = null;
-    that.beginUpdate();
+    this._optionsQueue = null;
+    this.beginUpdate();
     each(queue, (_, action) => {
       action();
     });
-    that.endUpdate();
+    this.endUpdate();
   },
 
   _requestChange(codes) {
@@ -469,8 +464,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   },
 
   _initEventTrigger() {
-    const that = this;
-    that._eventTrigger = createEventTrigger(that._eventsMap, (name, actionSettings) => that._createActionByOption(name, actionSettings));
+    this._eventTrigger = createEventTrigger(this._eventsMap, (name, actionSettings) => this._createActionByOption(name, actionSettings));
   },
 
   _calculateRawCanvas() {
@@ -504,14 +498,13 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   },
 
   _updateSize() {
-    const that = this;
-    const rawCanvas = that._calculateRawCanvas();
+    const rawCanvas = this._calculateRawCanvas();
 
-    if (areCanvasesDifferent(that._canvas, rawCanvas) || that.__forceRender /* for charts */) {
-      that._canvas = floorCanvasDimensions(rawCanvas);
-      that._recreateSizeDependentObjects(true);
-      that._renderer.resize(this._canvas.width, this._canvas.height);
-      that._change(['LAYOUT']);
+    if (areCanvasesDifferent(this._canvas, rawCanvas) || this.__forceRender /* for charts */) {
+      this._canvas = floorCanvasDimensions(rawCanvas);
+      this._recreateSizeDependentObjects(true);
+      this._renderer.resize(this._canvas.width, this._canvas.height);
+      this._change(['LAYOUT']);
     }
   },
 
@@ -550,14 +543,13 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   },
 
   _setupResizeHandler() {
-    const that = this;
-    const redrawOnResize = _parseScalar(that._getOption('redrawOnResize', true), true);
+    const redrawOnResize = _parseScalar(this._getOption('redrawOnResize', true), true);
 
-    if (that._disposeResizeHandler) {
-      that._removeResizeHandler();
+    if (this._disposeResizeHandler) {
+      this._removeResizeHandler();
     }
 
-    that._disposeResizeHandler = createResizeHandler(that._$element[0], redrawOnResize, () => that._requestChange(['CONTAINER_SIZE']));
+    this._disposeResizeHandler = createResizeHandler(this._$element[0], redrawOnResize, () => this._requestChange(['CONTAINER_SIZE']));
   },
 
   _removeResizeHandler() {
@@ -571,14 +563,13 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   _onBeginUpdate: noop,
 
   beginUpdate() {
-    const that = this;
     // The "_initialized" flag is checked because first time "beginUpdate" is called in the constructor.
-    if (that._initialized && that._isUpdateAllowed()) {
-      that._onBeginUpdate();
-      that._suspendChanges();
+    if (this._initialized && this._isUpdateAllowed()) {
+      this._onBeginUpdate();
+      this._suspendChanges();
     }
-    that.callBase.apply(that, arguments);
-    return that;
+    this.callBase.apply(this, arguments);
+    return this;
   },
 
   endUpdate() {
@@ -589,22 +580,19 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   },
 
   option(name) {
-    const that = this;
     // NOTE: `undefined` has to be returned because base option setter returns `undefined`.
     // `argument.length` and `isObject` checks are copypaste from Component.
-    if (that._initialized && that._applyingChanges && (arguments.length > 1 || _isObject(name))) {
-      that._optionsQueue = that._optionsQueue || [];
-      that._optionsQueue.push(that._getActionForUpdating(arguments));
+    if (this._initialized && this._applyingChanges && (arguments.length > 1 || _isObject(name))) {
+      this._optionsQueue = this._optionsQueue || [];
+      this._optionsQueue.push(this._getActionForUpdating(arguments));
     } else {
-      return baseOptionMethod.apply(that, arguments as any);
+      return baseOptionMethod.apply(this, arguments as any);
     }
   },
 
   _getActionForUpdating(args) {
-    const that = this;
-
-    return function () {
-      baseOptionMethod.apply(that, args);
+    return () => {
+      baseOptionMethod.apply(this, args);
     };
   },
 
@@ -659,7 +647,6 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   _partialOptionChangesPath: { },
 
   getPartialChangeOptionsName(changedOption) {
-    const that = this;
     const { fullName } = changedOption;
     const sections = fullName.split(/[.]/);
     const { name } = changedOption;
@@ -676,10 +663,10 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
         });
         if (sections.length === 1) {
           if (type(value) === 'object') {
-            that._addOptionsNameForPartialUpdate(value, options, partialChangeOptionsName);
+            this._addOptionsNameForPartialUpdate(value, options, partialChangeOptionsName);
           } else if (type(value) === 'array') {
-            if (value.length > 0 && value.every((item) => that._checkOptionsForPartialUpdate(item, options))) {
-              value.forEach((item) => that._addOptionsNameForPartialUpdate(item, options, partialChangeOptionsName));
+            if (value.length > 0 && value.every((item) => this._checkOptionsForPartialUpdate(item, options))) {
+              value.forEach((item) => this._addOptionsNameForPartialUpdate(item, options, partialChangeOptionsName));
             }
           }
         }
@@ -766,14 +753,13 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   },
 
   _drawn() {
-    const that = this;
-    that.isReady = getFalse;
-    if (that._dataIsReady()) {
-      that._renderer.onEndAnimation(() => {
-        that.isReady = getTrue;
+    this.isReady = getFalse;
+    if (this._dataIsReady()) {
+      this._renderer.onEndAnimation(() => {
+        this.isReady = getTrue;
       });
     }
-    that._eventTrigger('drawn', {});
+    this._eventTrigger('drawn', {});
   },
 });
 
