@@ -98,7 +98,7 @@
 }
 
 @keyframes dx-content-rotation {
-  to { transform: rotate(360deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes dx-icon-rotation {
@@ -109,17 +109,17 @@
   62.5% { transform: rotate(675deg); }
   75% { transform: rotate(810deg); }
   87.5% { transform: rotate(945deg); }
-  to { transform: rotate(1080deg); }
+  100% { transform: rotate(1080deg); }
 }
 
 @keyframes dx-left-segment-rotation {
-  from { transform: rotate(130deg); }
+  0% { transform: rotate(130deg); }
   50% { transform: rotate(-5deg); }
-  to { transform: rotate(130deg); }
+  100% { transform: rotate(130deg); }
 }
 
 @keyframes dx-right-segment-rotation {
-  from { transform: rotate(-130deg); }
+  0% { transform: rotate(-130deg); }
   50% { transform: rotate(5deg); }
-  to { transform: rotate(-130deg); }
+  100% { transform: rotate(-130deg); }
 }

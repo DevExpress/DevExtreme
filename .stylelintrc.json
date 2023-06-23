@@ -31,7 +31,7 @@
         "value-no-vendor-prefix": true,
         "value-keyword-case": ["lower", {"camelCaseSvgKeywords": true}],
         "selector-not-notation": "simple",
-        "keyframe-selector-notation": null,
+        "keyframe-selector-notation": "percentage",
         "media-feature-range-notation": null,
 
         "scss/at-else-empty-line-before": null,

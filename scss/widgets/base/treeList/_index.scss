@@ -326,7 +326,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
 }
 
 @keyframes dx-treelist-highlight-change {
-  from {
+  0% {
     background-color: color.change($treelist-base-color, $alpha: 0.08);
   }
 

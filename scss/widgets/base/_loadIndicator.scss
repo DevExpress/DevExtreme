@@ -43,11 +43,11 @@ $loadindicator-height: 32px;
   animation: dx-loadindicator-icon-custom-rotate 1.5s infinite linear;
 
   @keyframes dx-loadindicator-icon-custom-rotate {
-    from {
+    0% {
       transform: rotate(0deg);
     }
 
-    to {
+    100% {
       transform: rotate(360deg);
     }
   }

@@ -38,11 +38,11 @@
   }
 
   @keyframes dx-generic-loadindicator-opacity {
-    from {
+    0% {
       opacity: 1;
     }
 
-    to {
+    100% {
       opacity: 0.55;
     }
   }
