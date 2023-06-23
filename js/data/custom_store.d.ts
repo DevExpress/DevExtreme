@@ -24,6 +24,16 @@ export type GroupItem<
 type ItemsArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
 
 /**
+ * @public
+ */
+type SummaryResult<TItem = any> = {
+    data: Array<TItem> | Array<GroupItem>;
+    totalCount?: number;
+    summary?: Array<any>;
+    groupCount?: number;
+  };
+
+/**
  * @docid
  * @public
  * @type object
@@ -33,14 +43,24 @@ export type ResolvedData<
 > =
   | Object
   | ItemsArray<TItem>
-  | {
-      data: Array<TItem> | Array<GroupItem>;
-      totalCount?: number;
-      summary?: Array<any>;
-      groupCount?: number;
-    };
+  | SummaryResult<TItem>;
 
 type LoadResult<T> = T | DxPromise<T> | PromiseLike<T>;
+
+/**
+ * @public
+ */
+export function isSummaryResult<TItem>(res: ResolvedData<TItem>): res is SummaryResult<TItem>;
+
+/**
+ * @public
+ */
+export function isGroupItemsArray<TItem>(res: ResolvedData<TItem>): res is Array<GroupItem<TItem>>;
+
+/**
+ * @public
+ */
+export function isItemsArray<TItem>(res: ResolvedData<TItem>): res is Array<TItem>;
 
 /**
  * @namespace DevExpress.data
