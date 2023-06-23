@@ -85,9 +85,13 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     }
 
     getRowCount(options) {
-        const edgeRowsCount = 2;
+        const endDate = new Date(options.currentDate);
+        endDate.setMonth(endDate.getMonth() + options.intervalCount);
 
-        return WEEKS_IN_MONTH * options.intervalCount + edgeRowsCount;
+        const dayCount = (endDate - options.currentDate) / (24 * 60 * 60 * 1000);
+        const daysInWeek = 7;
+
+        return Math.ceil(dayCount / daysInWeek);
     }
 
     getCellCountInDay() {
