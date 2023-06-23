@@ -4,7 +4,7 @@ import { getAlgorithm as _getTilingAlgorithm, setDefaultAlgorithm } from './tili
 import { getColorizer as _getColorizer, setDefaultColorizer } from './colorizing';
 import { patchFontOptions as _patchFontOptions } from '../core/utils';
 import { noop as _noop } from '../../core/utils/common';
-import baseWidget from '../core/base_widget';
+import baseWidget from '../../__internal/viz/core/m_base_widget';
 
 const _max = Math.max;
 const directions = {

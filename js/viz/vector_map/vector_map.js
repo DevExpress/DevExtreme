@@ -16,7 +16,7 @@ const RE_STARTS_LAYERS = /^layers/;
 const RE_ENDS_DATA_SOURCE = /\.dataSource$/;
 
 import './projection';
-import BaseWidget from '../core/base_widget';
+import BaseWidget from '../../__internal/viz/core/m_base_widget';
 
 function mergeBounds(sumBounds, dataBounds) {
     return dataBounds ? [Math.min(dataBounds[0], dataBounds[2], sumBounds[0]),

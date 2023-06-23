@@ -12,7 +12,7 @@ import tooltipModule from 'viz/core/tooltip';
 import translator1DModule from 'viz/translators/translator1d';
 import themeManagerModule from 'viz/gauges/theme_manager';
 import Tracker from 'viz/gauges/tracker';
-import graphicObjects from 'common/charts';
+import graphicObjects from '__internal/common/m_charts';
 
 registerComponent('BaseGauge', BaseGauge);
 

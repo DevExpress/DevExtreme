@@ -10,7 +10,6 @@ import * as trackerModule from '@js/viz/chart_components/tracker';
 import { ThemeManager } from '@js/viz/components/chart_theme_manager';
 import { validateData } from '@js/viz/components/data_validator';
 import { Legend } from '@js/viz/components/legend';
-import BaseWidget from '@js/viz/core/base_widget';
 // PLUGINS_SECTION
 import { plugin as dataSourcePlugin } from '@js/viz/core/data_source';
 import { plugin as exportPlugin } from '@js/viz/core/export';
@@ -19,6 +18,8 @@ import { plugin as titlePlugin } from '@js/viz/core/title';
 import { plugin as tooltipPlugin } from '@js/viz/core/tooltip';
 import { map as _map, processSeriesTemplate, setCanvasValues as _setCanvasValues } from '@js/viz/core/utils';
 import { Series } from '@js/viz/series/base_series';
+
+import BaseWidget from '../core/m_base_widget';
 
 type SortingMethodParams = (a: any, b: any) => number;
 
@@ -331,7 +332,7 @@ export const overlapping = {
   resolveLabelOverlappingInOneDirection,
 };
 
-export const BaseChart = (BaseWidget as any).inherit({
+export const BaseChart = BaseWidget.inherit({
   _eventsMap: {
     onSeriesClick: { name: 'seriesClick' },
     onPointClick: { name: 'pointClick' },

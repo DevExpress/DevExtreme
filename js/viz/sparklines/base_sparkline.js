@@ -1,7 +1,7 @@
 import eventsEngine from '../../events/core/events_engine';
 import domAdapter from '../../core/dom_adapter';
 import { isFunction } from '../../core/utils/type';
-import BaseWidget from '../core/base_widget';
+import BaseWidget from '../../__internal/viz/core/m_base_widget';
 import { extend } from '../../core/utils/extend';
 import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';

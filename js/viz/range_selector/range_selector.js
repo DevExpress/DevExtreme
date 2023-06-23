@@ -31,7 +31,7 @@ import { RangeView } from './range_view';
 import { SeriesDataSource } from './series_data_source';
 import { tickGenerator } from '../axes/tick_generator';
 import constants from '../axes/axes_constants';
-import baseWidgetModule from '../core/base_widget';
+import baseWidgetModule from '../../__internal/viz/core/m_base_widget';
 
 const _max = Math.max;
 const _ceil = Math.ceil;

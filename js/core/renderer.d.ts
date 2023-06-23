@@ -73,7 +73,7 @@ export interface dxElementWrapper {
 
   parent(selector?: string): this;
 
-  parents(selector: string): this;
+  parents(selector?: string): this;
 
   position(): Coordinates | undefined;
 

@@ -18,6 +18,8 @@ export interface DomAdapter {
   setClass(element: HTMLElement, className: string, isAdd: boolean): void;
   removeElement(element: HTMLElement): void;
   inject(obj: Record<string, unknown>): void;
+  setStyle(element: HTMLElement, name: string, value: string): void;
+  insertElement(parentElement: HTMLElement, newElement: HTMLElement, nextSiblingElement?: HTMLElement): void;
 }
 
 declare const domAdapter: DomAdapter;
