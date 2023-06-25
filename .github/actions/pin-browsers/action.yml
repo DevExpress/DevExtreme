@@ -4,7 +4,7 @@ description: "Install and setup Chrome and Firefox"
 inputs:
   chrome-version:
     description: "Chrome version to install"
-    default: "latest"
+    default: "114.0.5735.133-1"
   firefox-version:
     description: "Firefox version to install"
     default: "latest"
@@ -12,14 +12,19 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: browser-actions/setup-chrome@v1
-      with:
-        chrome-version: ${{ inputs.chrome-version }}
-      id: setup-chrome
-    - shell: bash
+    - name: "Setup Chrome"
+      shell: bash
+      env:
+        CHROME_VERSION: ${{ inputs.chrome-version }}
       run: |
-        echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
-        ${{ steps.setup-chrome.outputs.chrome-path }} --version
+        if [ -n "$CHROME_VERSION" ]; then
+          curl -L "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb" > /tmp/chrome.deb
+          sudo dpkg -i /tmp/chrome.deb
+          unlink /tmp/chrome.deb
+          google-chrome-stable --version
+        else
+          echo "Skip Chrome upgrade"
+        fi
     - shell: bash
       run: |
         echo Installed chromium version: ${{ inputs.chrome-version }}
