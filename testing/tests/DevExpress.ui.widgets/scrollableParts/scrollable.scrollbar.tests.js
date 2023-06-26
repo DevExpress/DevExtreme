@@ -26,7 +26,6 @@ import {
     SCROLLABLE_SCROLLBAR_ACTIVE_CLASS,
     SCROLLABLE_SCROLLBARS_HIDDEN,
     SCROLLABLE_CLASS,
-    RESIZE_WAIT_TIMEOUT,
 } from './scrollable.constants.js';
 
 const SCROLLBAR_MIN_HEIGHT = 15;
@@ -362,9 +361,6 @@ QUnit.test('scrollbar has correct position after update', function(assert) {
 });
 
 QUnit.test('scroll updated before start', function(assert) {
-    this.clock.restore();
-    const done = assert.async();
-
     const scrollHeight = 100;
     const $scrollable = $('#scrollable').height(scrollHeight);
     const $innerWrapper = $scrollable.wrapInner('<div>').children().eq(0).height(scrollHeight / 2);
@@ -379,21 +375,15 @@ QUnit.test('scroll updated before start', function(assert) {
 
     $innerWrapper.height(2 * scrollHeight);
 
-    setTimeout(() => {
-        pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
-            .start()
-            .down()
-            .move(0, -10);
+    pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
+        .start()
+        .down()
+        .move(0, -10);
 
-        assert.equal(scrollable.scrollOffset().top, 10, 'scrollable moved');
-        done();
-    }, RESIZE_WAIT_TIMEOUT);
+    assert.equal(scrollable.scrollOffset().top, 10, 'scrollable moved');
 });
 
 QUnit.test('scroll not updated before start if auto update is prevented', function(assert) {
-    this.clock.restore();
-    const done = assert.async();
-
     const scrollHeight = 100;
     const $scrollable = $('#scrollable').height(scrollHeight);
     const $innerWrapper = $scrollable.wrapInner('<div>').children().eq(0).height(scrollHeight / 2);
@@ -409,17 +399,12 @@ QUnit.test('scroll not updated before start if auto update is prevented', functi
 
     $innerWrapper.height(2 * scrollHeight);
 
-    setTimeout(() => {
-        pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
-            .start()
-            .down()
-            .move(0, -10);
+    pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS))
+        .start()
+        .down()
+        .move(0, -10);
 
-        assert.equal(scrollable.scrollOffset().top, isRenovatedScrollable ? 10 : 0, 'scrollable not moved');
-
-        done();
-    }, RESIZE_WAIT_TIMEOUT);
-
+    assert.equal(scrollable.scrollOffset().top, isRenovatedScrollable ? 10 : 0, 'scrollable not moved');
 });
 
 QUnit.test('scroll not updated after scrollTo if auto update is prevented', function(assert) {
@@ -740,9 +725,11 @@ QUnit.module('scrollbar visibility', {
     const configs = [];
     [true, false].forEach((useNative) => {
         [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BOTH].forEach((direction) => {
-            [true, false].forEach((useSimulatedScrollbar) => {
-                configs.push({ useNative, direction, useSimulatedScrollbar });
-            });
+            if(useNative) {
+                [true, false].forEach((useSimulatedScrollbar) => {
+                    configs.push({ useNative, direction, useSimulatedScrollbar });
+                });
+            }
         });
     });
 

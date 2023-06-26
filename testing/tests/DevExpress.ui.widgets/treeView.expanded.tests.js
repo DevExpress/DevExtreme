@@ -1,15 +1,32 @@
-/* global DATA, internals, initTree, makeSlowDataSource */
-
 import $ from 'jquery';
+import TreeViewTestWrapper from '../../helpers/TreeViewTestHelper.js';
 import { noop } from 'core/utils/common';
 import fx from 'animation/fx';
-import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import { DATA } from './treeViewParts/testData.js';
+import { makeSlowDataSource } from './treeViewParts/testUtils.js';
+import 'ui/tree_view';
 
+import 'generic_light.css!';
+
+const TREEVIEW_ITEM_CLASS = 'dx-treeview-item';
 const TREEVIEW_NODE_CLASS = 'dx-treeview-node';
 const TREEVIEW_NODE_CONTAINER_CLASS = `${TREEVIEW_NODE_CLASS}-container`;
 const TREEVIEW_NODE_CONTAINER_OPENED_CLASS = `${TREEVIEW_NODE_CLASS}-container-opened`;
+const TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
+const TREEVIEW_CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-expand-icon';
+const TREEVIEW_CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-collapse-icon';
 
-const { module, test } = QUnit;
+const { module, test, testStart } = QUnit;
+
+testStart(function() {
+    const markup = '<div id="treeView"></div>';
+
+    $('#qunit-fixture').html(markup);
+});
+
+const initTree = function(options) {
+    return $('#treeView').dxTreeView(options);
+};
 
 const checkFunctionArguments = (assert, actualArgs, expectedArgs) => {
     assert.strictEqual(actualArgs.event, expectedArgs.event, 'arg is OK');
@@ -39,7 +56,7 @@ module('Expanded items', {
             items: data
         });
 
-        assert.equal($treeView.find('.' + internals.OPENED_NODE_CONTAINER_CLASS).length, 3);
+        assert.equal($treeView.find(`.${TREEVIEW_NODE_CONTAINER_OPENED_CLASS}`).length, 3);
     });
 
     test('expansion by itemData', function(assert) {
@@ -65,12 +82,12 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+        const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
 
         const done = assert.async();
         treeView.expandItem($firstItem.get(0)).done(() => { assert.ok('expand is success'); done(); });
 
-        assert.equal($treeView.find('.' + internals.OPENED_NODE_CONTAINER_CLASS).length, 1);
+        assert.equal($treeView.find(`.${TREEVIEW_NODE_CONTAINER_OPENED_CLASS}`).length, 1);
         assert.ok(itemExpandedHandler.calledOnce);
 
         const args = itemExpandedHandler.getCall(0).args[0];
@@ -101,7 +118,7 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+        const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
 
         const done = assert.async(3);
         treeView.expandItem($firstItem.get(0)).done(() => { assert.ok('expand is success'); done(); });
@@ -122,9 +139,9 @@ module('Expanded items', {
             onItemExpanded: itemExpandedHandler
         });
 
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+        const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
         const event = new $.Event('dxclick');
-        $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger(event);
+        $firstItem.parent().find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`).trigger(event);
 
         const args = itemExpandedHandler.getCall(0).args[0];
         checkFunctionArguments(assert, args, {
@@ -145,12 +162,12 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+        const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
 
         const done = assert.async();
         treeView.collapseItem($firstItem).done(() => { assert.ok('expand is success'); done(); });
 
-        assert.equal($treeView.find('.' + internals.OPENED_NODE_CONTAINER_CLASS).length, 1);
+        assert.equal($treeView.find(`.${TREEVIEW_NODE_CONTAINER_OPENED_CLASS}`).length, 1);
         assert.ok(itemCollapsedHandler.calledOnce);
 
         const args = itemCollapsedHandler.getCall(0).args[0];
@@ -174,9 +191,9 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
+        const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
         const event = new $.Event('dxclick');
-        $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger(event);
+        $firstItem.parent().find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`).trigger(event);
 
         const args = itemCollapsedHandler.getCall(0).args[0];
         checkFunctionArguments(assert, args, {
@@ -194,8 +211,8 @@ module('Expanded items', {
             items: data
         });
         const treeView = $treeView.dxTreeView('instance');
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
-        const $icon = $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+        const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
+        const $icon = $firstItem.parent().find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`);
 
         $icon.trigger('dxclick');
 
@@ -210,8 +227,8 @@ module('Expanded items', {
             items: data
         });
         const treeView = $treeView.dxTreeView('instance');
-        const $firstItem = $treeView.find('.' + internals.ITEM_CLASS).eq(0);
-        const $icon = $firstItem.parent().find('> .' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+        const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
+        const $icon = $firstItem.parent().find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`);
 
         $icon.trigger('dxclick');
 
@@ -411,7 +428,7 @@ module('Expanded items', {
         const done = assert.async();
         treeView.expandItem(111).done(() => { assert.ok('expand is success'); done(); });
 
-        const nodeElements = $treeView.find('.' + TREEVIEW_NODE_CONTAINER_CLASS);
+        const nodeElements = $treeView.find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`);
         assert.ok(nodeElements.eq(1).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), 'item 11');
         assert.ok(nodeElements.eq(2).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), 'item 111');
     });
