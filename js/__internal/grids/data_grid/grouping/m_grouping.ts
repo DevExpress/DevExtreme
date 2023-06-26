@@ -457,7 +457,10 @@ export const GroupingHeaderPanelExtender = (function () {
 
         if ($groupPanel && $groupPanel.length) {
           this._updateGroupPanelContent($groupPanel);
+
           this.updateToolbarDimensions();
+          // this.updateToolbarDimensions();
+
           this.renderCompleted.fire();
         }
       }
@@ -479,6 +482,8 @@ export const GroupingHeaderPanelExtender = (function () {
 
         $groupPanel.closest(`.${DATAGRID_GROUP_PANEL_CONTAINER_CLASS}`).addClass(DATAGRID_GROUP_PANEL_LABEL_CLASS);
         $groupPanel.closest(`.${DATAGRID_GROUP_PANEL_LABEL_CLASS}`).css('maxWidth', 'none');
+
+        // $groupPanel.closest(`.${DATAGRID_GROUP_PANEL_CONTAINER_CLASS}`).css('maxWidth', 'none');
       }
     },
 

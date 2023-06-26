@@ -32,10 +32,11 @@ const members = {
 
   _getToolbarOptions() {
     const userToolbarOptions = this.option('toolbar');
+    const items = this._getToolbarItems();
 
     const options = {
       toolbarOptions: {
-        items: this._getToolbarItems(),
+        items,
         visible: userToolbarOptions?.visible,
         disabled: userToolbarOptions?.disabled,
         onItemRendered(e) {
@@ -231,7 +232,7 @@ export const headerPanelModule = {
           const isSizeChanged = this._isSizeChanged(false);
 
           if (isSizeChanged) {
-            this.getView('headerPanel').updateToolbarDimensions();
+            // this.getView('headerPanel').updateToolbarDimensions();
           }
         },
       },
