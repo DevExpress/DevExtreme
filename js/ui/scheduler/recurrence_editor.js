@@ -333,7 +333,11 @@ class RecurrenceEditor extends Editor {
                     selectedItemKeys: byDay,
                     keyExpr: 'key',
                     onSelectionChanged: (e) => {
-                        const selectedKeys = e.component.option('selectedItemKeys');
+                        const selectedItemKeys = e.component.option('selectedItemKeys');
+                        const selectedKeys = selectedItemKeys?.length
+                            ? selectedItemKeys
+                            : this._getDefaultByDayValue();
+
                         this._recurrenceRule.makeRule('byday', selectedKeys);
                         this._changeEditorValue();
                     }
@@ -477,10 +481,16 @@ class RecurrenceEditor extends Editor {
     _daysOfWeekByRules() {
         let daysByRule = this._recurrenceRule.getDaysFromByDayRule();
         if(!daysByRule.length) {
-            daysByRule = [days[this.option('startDate').getDay()]];
+            daysByRule = this._getDefaultByDayValue();
         }
 
         return daysByRule;
+    }
+
+    _getDefaultByDayValue() {
+        const startDate = this.option('startDate');
+        const startDay = startDate.getDay();
+        return [days[startDay]];
     }
 
     _dayOfMonthByRules() {
