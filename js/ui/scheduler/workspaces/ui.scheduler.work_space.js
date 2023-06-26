@@ -85,6 +85,9 @@ import { utils } from '../utils';
 import { compileGetter } from '../../../core/utils/data';
 import { getMemoizeScrollTo } from '../../../renovation/ui/common/utils/scroll/getMemoizeScrollTo';
 
+// TODO: The constant is needed so that the dragging is not sharp. To prevent small twitches
+const DRAGGING_MOUSE_FAULT = 10;
+
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -3136,26 +3139,34 @@ const createDragBehaviorConfig = (
         }
     };
 
+    const getElementsFromPoint = () => {
+        const appointmentWidth = getWidth(state.dragElement);
+        const cellWidth = getCellWidth();
+
+        const isWideAppointment = appointmentWidth > cellWidth;
+        const isNarrowAppointment = appointmentWidth <= DRAGGING_MOUSE_FAULT;
+
+        const dragElementContainer = $(state.dragElement).parent();
+        const boundingRect = getBoundingRect(dragElementContainer.get(0));
+
+        const newX = boundingRect.left;
+        const newY = boundingRect.top;
+
+
+        if(isWideAppointment) {
+            return domAdapter.elementsFromPoint(newX + DRAGGING_MOUSE_FAULT, newY + DRAGGING_MOUSE_FAULT);
+        } else if(isNarrowAppointment) {
+            return domAdapter.elementsFromPoint(newX, newY);
+        }
+        return domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY + DRAGGING_MOUSE_FAULT);
+    };
+
     const onDragMove = () => {
         if(isDefaultDraggingMode) {
             return;
         }
 
-        const MOUSE_IDENT = 10;
-
-        const appointmentWidth = getWidth(state.dragElement);
-        const cellWidth = getCellWidth();
-        const isWideAppointment = appointmentWidth > cellWidth;
-
-        const dragElementContainer = $(state.dragElement).parent();
-        const boundingRect = getBoundingRect(dragElementContainer.get(0));
-
-        const newX = boundingRect.left + MOUSE_IDENT;
-        const newY = boundingRect.top + MOUSE_IDENT;
-
-        const elements = isWideAppointment ?
-            domAdapter.elementsFromPoint(newX, newY) :
-            domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY);
+        const elements = getElementsFromPoint();
 
         const isMoveUnderControl = !!elements.find(el => el === rootElement.get(0));
         const dateTables = getDateTables();
