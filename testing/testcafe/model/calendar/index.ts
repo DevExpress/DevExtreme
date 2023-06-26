@@ -16,6 +16,8 @@ const CLASS = {
   cellInHoveredRange: 'dx-calendar-cell-range-hover',
   cellInHoveredRangeStart: 'dx-calendar-cell-range-hover-start',
   cellInHoveredRangeEnd: 'dx-calendar-cell-range-hover-end',
+  navigatorNextView: 'dx-calendar-navigator-next-view',
+  navigatorPrevView: 'dx-calendar-navigator-previous-view',
 };
 
 const showGestureCover = ($element: JQuery): void => {
@@ -91,6 +93,14 @@ export default class Calendar extends Widget {
 
   getView(): CalendarView {
     return new CalendarView(this.element.find(`.${CLASS.calendarViewsWrapper}`).find(`.${CLASS.widget}`).nth(0));
+  }
+
+  getNavigatorNextButton(): Button {
+    return new Button(this.element.find(`.${CLASS.navigatorNextView}`));
+  }
+
+  getNavigatorPrevButton(): Button {
+    return new Button(this.element.find(`.${CLASS.navigatorPrevView}`));
   }
 
   getTodayButton(): Button {

@@ -182,6 +182,11 @@ export class SchedulerHeader extends Widget {
         this._callEvent('currentView', view);
     }
 
+    _updateCalendarValueAndCurrentDate(date) {
+        this._updateCurrentDate(date);
+        this._calendar.option('value', date);
+    }
+
     _updateCurrentDate(date) {
         const onCurrentDateChange = this.option('onCurrentDateChange');
         onCurrentDateChange(date);
@@ -191,16 +196,14 @@ export class SchedulerHeader extends Widget {
 
     _renderCalendar() {
         this._calendar = this._createComponent('<div>', SchedulerCalendar, {
-            date: this.option('currentDate'),
+            value: this.option('currentDate'),
             min: this.option('min'),
             max: this.option('max'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             focusStateEnabled: this.option('focusStateEnabled'),
             tabIndex: this.option('tabIndex'),
             onValueChanged: (e) => {
-                const date = e.value;
-                this._updateCurrentDate(date);
-
+                this._updateCurrentDate(e.value);
                 this._calendar.hide();
             },
         });
@@ -256,7 +259,7 @@ export class SchedulerHeader extends Widget {
     _updateDateByDirection(direction) {
         const date = this._getNextDate(direction);
 
-        this._updateCurrentDate(date);
+        this._updateCalendarValueAndCurrentDate(date);
     }
 
     _showCalendar(e) {
