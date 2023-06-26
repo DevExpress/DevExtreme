@@ -1009,6 +1009,7 @@ declare module DevExpress {
    */
   export function hideTopOverlay(): boolean;
   /**
+   * [descr:PdfExportGanttFont]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface PdfExportGanttFont {
@@ -2003,6 +2004,9 @@ declare module DevExpress.common.charts {
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
   export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
+  /**
+   * [descr:GradientColor]
+   */
   export type GradientColor = {
     /**
      * [descr:GradientColor.offset]
@@ -6063,9 +6067,6 @@ declare module DevExpress.data {
      */
     toArray(): Array<any>;
   }
-  /**
-   * [descr:SearchOperation]
-   */
   export type SearchOperation =
     | '='
     | '<>'
@@ -7773,6 +7774,7 @@ declare module DevExpress.ui {
     open(): void;
   }
   /**
+   * [descr:DateBoxBaseOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface DateBoxBaseOptions<TComponent>
@@ -12006,6 +12008,9 @@ declare module DevExpress.ui {
       dxDateRangeBox,
       ClipboardEvent
     >;
+    /**
+     * [descr:dxDateRangeBoxOptions]
+     */
     export type Properties = Omit<
       DateBoxBaseOptions<dxDateRangeBox>,
       'inputAttr' | 'label' | 'maxLength' | 'name' | 'placeholder' | 'text'
