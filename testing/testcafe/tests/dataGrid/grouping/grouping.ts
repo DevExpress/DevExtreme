@@ -9,37 +9,6 @@ fixture.disablePageReloads`Grouping Panel`
 
 const DATA_GRID_SELECTOR = '#container';
 
-test('Grouping Panel label should not overflow in a narrow grid (T1103925)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const dataGrid = new DataGrid('#container');
-
-  await t
-    .expect(await takeScreenshot('groupingPanel', dataGrid.getToolbar().element))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: {
-    store: [
-      {
-        field1: '1', field2: '2', field3: '3', field4: '4', field5: '5',
-      },
-      {
-        field1: '11', field2: '22', field3: '33', field4: '44', field5: '55',
-      }],
-  },
-  width: 200,
-  groupPanel: {
-    emptyPanelText: 'Long long long long long long long long long long long text',
-    visible: true,
-  },
-  editing: { allowAdding: true, mode: 'batch' },
-  columnChooser: {
-    enabled: true,
-  },
-}));
-
 // T1112573
 test('Content should be rendered correctly after setting the grouping.autoExpandAll property to true when dataRowTemplate is given', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -221,18 +190,18 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
   await makeColumnHeadersViewTemplatesAsync(DATA_GRID_SELECTOR);
 });
 
-test('Group panel should set correct "max-width" after clear grouping', async (t) => {
+test('Group panel should set correct max-width after clear grouping (T1103925)', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.apiColumnOption('field2', 'groupIndex', 0);
 
-  await takeScreenshot('group-panel_all-toolbar-items-shown.png', dataGrid.element);
+  await takeScreenshot('T1103925-group-panel_all-toolbar-items-shown.png', dataGrid.element);
 
   await dataGrid.apiClearGrouping();
 
-  await takeScreenshot('group-panel_all-toolbar-items-hidden.png', dataGrid.element);
+  await takeScreenshot('T1103925-group-panel_all-toolbar-items-hidden.png', dataGrid.element);
 
   // assert
   await t
@@ -252,7 +221,7 @@ test('Group panel should set correct "max-width" after clear grouping', async (t
     },
     width: 460,
     groupPanel: {
-      emptyPanelText: 'Long long long long long long long long long long long text',
+      emptyPanelText: 'Very very very very very very very very very very very very long text',
       visible: true,
     },
     editing: { allowAdding: true, mode: 'batch' },
