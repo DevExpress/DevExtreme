@@ -1,11 +1,11 @@
 import * as React from 'react';
 
+import * as events from 'devextreme/events';
 import { DoubleKeyMap, generateID } from './helpers';
 import { ITemplateArgs } from './template';
 import { ITemplateWrapperProps, TemplateWrapper } from './template-wrapper';
 import { TemplatesStore } from './templates-store';
-import {DX_REMOVE_EVENT} from "./component-base";
-import * as events from 'devextreme/events';
+import { DX_REMOVE_EVENT } from './component-base';
 
 interface IDxTemplate {
   render: (data: IDxTemplateData) => any;
@@ -42,17 +42,17 @@ function createDxTemplate(
         renderedTemplates.delete(key);
       };
 
-      const _subscribeOnContainerRemoval = (): void =>  {
+      const _subscribeOnContainerRemoval = (): void => {
         if (container.nodeType === Node.ELEMENT_NODE) {
           events.one(container, DX_REMOVE_EVENT, onRemoved);
         }
-      }
+      };
 
-      const _unsubscribeOnContainerRemoval = (): void =>  {
+      const _unsubscribeOnContainerRemoval = (): void => {
         if (container.nodeType === Node.ELEMENT_NODE) {
           events.off(container, DX_REMOVE_EVENT, onRemoved);
         }
-      }
+      };
 
       if (prevTemplateId) {
         templateId = prevTemplateId;
@@ -67,7 +67,6 @@ function createDxTemplate(
       _subscribeOnContainerRemoval();
 
       templatesStore.add(templateId, () => {
-
         const props: ITemplateArgs = {
           data: data.model,
           index: data.index,

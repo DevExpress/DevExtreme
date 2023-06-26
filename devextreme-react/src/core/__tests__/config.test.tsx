@@ -53,10 +53,12 @@ describe('useLegacyTemplateEngine', () => {
 
     const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates.item;
 
-    act(() => { render({
-      container: ref.current,
-      model: { value: 'Value', key: 'key_1' },
-    }) });
+    act(() => {
+      render({
+        container: ref.current,
+        model: { value: 'Value', key: 'key_1' },
+      });
+    });
 
     expect(container.querySelector('.template')?.textContent)
       .toBe('value: Value, key: key_1, dxkey: key_1');
