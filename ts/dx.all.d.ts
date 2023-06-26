@@ -4772,6 +4772,15 @@ declare module DevExpress.data {
       count?: number;
       summary?: Array<any>;
     };
+    export function isGroupItemsArray<TItem>(
+      res: ResolvedData<TItem>
+    ): res is Array<GroupItem<TItem>>;
+    export function isItemsArray<TItem>(
+      res: ResolvedData<TItem>
+    ): res is Array<TItem>;
+    export function isSummaryResult<TItem>(
+      res: ResolvedData<TItem>
+    ): res is SummaryResult<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -4793,12 +4802,13 @@ declare module DevExpress.data {
     export type ResolvedData<TItem = any> =
       | Object
       | ItemsArray<TItem>
-      | {
-          data: Array<TItem> | Array<GroupItem>;
-          totalCount?: number;
-          summary?: Array<any>;
-          groupCount?: number;
-        };
+      | SummaryResult<TItem>;
+    type SummaryResult<TItem = any> = {
+      data: Array<TItem> | Array<GroupItem>;
+      totalCount?: number;
+      summary?: Array<any>;
+      groupCount?: number;
+    };
   }
   /**
    * [descr:CustomStoreOptions]
