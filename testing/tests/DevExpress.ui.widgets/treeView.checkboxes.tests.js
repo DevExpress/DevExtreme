@@ -1,11 +1,27 @@
-/* global DATA, data2, internals, initTree */
-import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import $ from 'jquery';
+import TreeViewTestWrapper from '../../helpers/TreeViewTestHelper.js';
 import { Deferred } from 'core/utils/deferred';
 import CustomStore from 'data/custom_store';
-import $ from 'jquery';
+import { DATA, data2 } from './treeViewParts/testData.js';
+import 'ui/tree_view';
+
+import 'generic_light.css!';
 
 const SELECT_ALL_CHECKBOX_CLASS = 'dx-treeview-select-all-item';
 const CHECKBOX_CLASS = 'dx-checkbox';
+const TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
+
+const { testStart } = QUnit;
+
+testStart(function() {
+    const markup = '<div id="treeView"></div>';
+
+    $('#qunit-fixture').html(markup);
+});
+
+const initTree = function(options) {
+    return $('#treeView').dxTreeView(options);
+};
 
 QUnit.module('Checkboxes');
 
@@ -404,7 +420,7 @@ QUnit.test('Selection works correct with custom rootValue', function(assert) {
         showCheckBoxesMode: 'normal',
         rootValue: 'none'
     }).dxTreeView('instance');
-    const $icon = $(treeView.$element()).find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+    const $icon = $(treeView.$element()).find(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).eq(0);
 
     $icon.trigger('dxclick');
     assert.equal(treeView.option('items').length, 5);
@@ -1284,26 +1300,26 @@ QUnit.module('Delayed datasource', () => {
                 done();
             });
         }, 2);
+    });
 
-        QUnit.test('all.selected: false -> contentReady(() => selectItem(1)) ', function(assert) {
-            const done = assert.async();
-            const wrapper = new TreeViewTestWrapper({
-                dataSource: new CustomStore({
-                    load: () => executeDelayed(() => { return [ { id: 0, text: 'item1' }]; }, 1)
-                }),
-                showCheckBoxesMode: 'normal',
-                dataStructure: 'plain',
-                onContentReady: function() {
-                    const selectResult = wrapper.instance.selectItem(0);
-                    const $item1 = wrapper.getElement().find('[aria-level="1"]');
+    QUnit.test('all.selected: false -> contentReady(() => selectItem(1)) ', function(assert) {
+        const done = assert.async();
+        const wrapper = new TreeViewTestWrapper({
+            dataSource: new CustomStore({
+                load: () => executeDelayed(() => { return [ { id: 0, text: 'item1' }]; }, 1)
+            }),
+            showCheckBoxesMode: 'normal',
+            dataStructure: 'plain',
+            onContentReady: function() {
+                const selectResult = wrapper.instance.selectItem(0);
+                const $item1 = wrapper.getElement().find('[aria-level="1"]');
 
-                    assert.equal(selectResult, true, 'item1 is selected');
-                    assert.equal($item1.length, 1, 'item1 is rendered');
-                    wrapper.checkSelection([0], [0], 'item1 is selected');
-                    wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'there is no selection events');
-                    done();
-                }
-            });
+                assert.equal(selectResult, true, 'item1 is selected');
+                assert.equal($item1.length, 1, 'item1 is rendered');
+                wrapper.checkSelection([0], [0], 'item1 is selected');
+                wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'there is no selection events');
+                done();
+            }
         });
     });
 });
