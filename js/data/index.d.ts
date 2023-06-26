@@ -4,7 +4,6 @@ import LocalStore, { Options as LocalStoreOptions } from './local_store';
 import ODataStore, { Options as ODataStoreOptions } from './odata/store';
 
 /**
- * @docid
  * @public
  */
 export type SearchOperation = '=' | '<>' | '>' | '>=' | '<' | '<=' | 'startswith' | 'endswith' | 'contains' | 'notcontains';
