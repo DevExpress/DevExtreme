@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const { default: CustomStore } = require('data/custom_store');
+const { default: CustomStore, isSummaryResult, isGroupItemsArray, isItemsArray } = require('data/custom_store');
 const processRequestResultLock = require('data/utils').processRequestResultLock;
 const config = require('core/config');
 const ERRORS = {
@@ -100,6 +100,30 @@ QUnit.test('load, promise result', function(assert) {
 
     store.load({ test: 123 }).done(function(r) {
         assert.deepEqual(r, [1, 2, 3]);
+        done();
+    });
+});
+
+QUnit.test('load, typeguard result check', function(assert) {
+    const done = assert.async();
+
+    const store = new CustomStore({
+        load: function(options) {
+            assert.equal(options.test, 123);
+            return $.Deferred().resolve([1, 2, 3]);
+        }
+    });
+
+    store.load({ test: 123 }).done(function(r) {
+        if(isSummaryResult(r)) {
+            mustNotReach();
+        }
+        if(isGroupItemsArray(r)) {
+            mustNotReach();
+        }
+        if(isItemsArray(r)) {
+            assert.deepEqual(r, [1, 2, 3]);
+        }
         done();
     });
 });

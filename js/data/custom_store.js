@@ -25,7 +25,7 @@ function isPromise(obj) {
 }
 
 function isGroupItem(item) {
-    if(item === undefined) {
+    if(item === undefined || item === null || typeof item !== 'object') {
         return false;
     }
     return 'key' in item && 'items' in item;
