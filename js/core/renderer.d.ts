@@ -29,6 +29,8 @@ export interface dxElementWrapper {
 
   css(propertyName: string, value: string | number): this;
 
+  css(props: Record<string, number | string>): this;
+
   data(key: string, value?: any): this;
 
   detach(): this;

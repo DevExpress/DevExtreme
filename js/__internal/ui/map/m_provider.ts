@@ -1,174 +1,159 @@
-import Class from '../../core/class';
-import { map } from '../../core/utils/iterator';
-import { isPlainObject, isNumeric } from '../../core/utils/type';
-import { addNamespace } from '../../events/utils/index';
+import { map } from '@js/core/utils/iterator';
+import { isNumeric, isPlainObject } from '@js/core/utils/type';
+import { addNamespace } from '@js/events/utils/index';
 
-const abstract = Class.abstract;
+type Location = string | { lat: number; lng: number };
+abstract class Provider {
+  _mapWidget: any;
 
-const Provider = Class.inherit({
+  _$container: any;
 
-    _defaultRouteWeight: function() {
-        return 5;
-    },
+  _map: any;
 
-    _defaultRouteOpacity: function() {
-        return 0.5;
-    },
+  constructor(map, $container) {
+    this._mapWidget = map;
+    this._$container = $container;
+  }
 
-    _defaultRouteColor: function() {
-        return '#0000FF';
-    },
+  abstract _renderImpl(): Promise<boolean | undefined | unknown>;
+  abstract updateDimensions(): Promise<void>;
+  abstract updateMapType(): Promise<void>;
+  abstract updateBounds(): Promise<void>;
+  abstract updateCenter(): Promise<void>;
+  abstract updateZoom(): Promise<void>;
+  abstract updateControls(): Promise<void>;
+  // abstract addMarkers(options: any): Promise<any[]>;
+  abstract removeMarkers(options: any): Promise<void>;
+  abstract adjustViewport(): Promise<void>;
+  // abstract addRoutes(options: any): Promise<boolean | any[]>;
+  abstract removeRoutes(options: any): Promise<void>;
+  abstract clean(): Promise<void>;
 
-    ctor: function(map, $container) {
-        this._mapWidget = map;
-        this._$container = $container;
-    },
+  _defaultRouteWeight(): number {
+    return 5;
+  }
 
-    render: function(markerOptions, routeOptions) {
-        return this._renderImpl().then(function() {
-            return Promise.all([
-                this._applyFunctionIfNeeded('addMarkers', markerOptions),
-                this._applyFunctionIfNeeded('addRoutes', routeOptions)
-            ]).then(function() {
-                return true;
-            });
-        }.bind(this));
-    },
+  _defaultRouteOpacity(): number {
+    return 0.5;
+  }
 
-    _renderImpl: abstract,
+  _defaultRouteColor() {
+    return '#0000FF';
+  }
 
-    updateDimensions: abstract,
+  render(markerOptions, routeOptions) {
+    return this._renderImpl().then(() => Promise.all([
+      this._applyFunctionIfNeeded('addMarkers', markerOptions),
+      this._applyFunctionIfNeeded('addRoutes', routeOptions),
+    ]).then(() => true));
+  }
 
-    updateMapType: abstract,
+  updateMarkers(markerOptionsToRemove, markerOptionsToAdd) {
+    return new Promise((resolve) => {
+      this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove)
+        .then((removeValue) => {
+          this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd).then((addValue) => {
+            resolve(addValue || removeValue);
+          });
+        });
+    });
+  }
 
-    updateBounds: abstract,
+  updateRoutes(routeOptionsToRemove, routeOptionsToAdd) {
+    return new Promise((resolve) => {
+      this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove).then((removeValue) => {
+        this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd).then((addValue) => {
+          resolve(addValue || removeValue);
+        });
+      });
+    });
+  }
 
-    updateCenter: abstract,
+  map() {
+    return this._map;
+  }
 
-    updateZoom: abstract,
+  isEventsCanceled() {
+    return false;
+  }
 
-    updateControls: abstract,
-
-    updateMarkers: function(markerOptionsToRemove, markerOptionsToAdd) {
-        return new Promise(function(resolve) {
-            return this._applyFunctionIfNeeded('removeMarkers', markerOptionsToRemove).then(function(removeValue) {
-                this._applyFunctionIfNeeded('addMarkers', markerOptionsToAdd).then(function(addValue) {
-                    resolve(addValue ? addValue : removeValue);
-                });
-            }.bind(this));
-        }.bind(this));
-    },
-
-    addMarkers: abstract,
-
-    removeMarkers: abstract,
-
-    adjustViewport: abstract,
-
-    updateRoutes: function(routeOptionsToRemove, routeOptionsToAdd) {
-        return new Promise(function(resolve) {
-            return this._applyFunctionIfNeeded('removeRoutes', routeOptionsToRemove).then(function(removeValue) {
-                this._applyFunctionIfNeeded('addRoutes', routeOptionsToAdd).then(function(addValue) {
-                    resolve(addValue ? addValue : removeValue);
-                });
-            }.bind(this));
-        }.bind(this));
-    },
-
-    addRoutes: abstract,
-
-    removeRoutes: abstract,
-
-    clean: abstract,
-
-    map: function() {
-        return this._map;
-    },
-
-    isEventsCanceled: function() {
-        return false;
-    },
-
-    _option: function(name, value) {
-        if(value === undefined) {
-            return this._mapWidget.option(name);
-        }
-
-        this._mapWidget.setOptionSilent(name, value);
-    },
-
-    _keyOption: function(providerName) {
-        const key = this._option('apiKey');
-
-        return key[providerName] === undefined ? key : key[providerName];
-    },
-
-    _parseTooltipOptions: function(option) {
-        return {
-            text: option.text || option,
-            visible: option.isShown || false
-        };
-    },
-
-    _getLatLng: function(location) {
-        if(typeof location === 'string') {
-            const coords = map(location.split(','), function(item) {
-                return item.trim();
-            });
-            const numericRegex = /^[-+]?[0-9]*\.?[0-9]*$/;
-
-            if(coords.length === 2 && coords[0].match(numericRegex) && coords[1].match(numericRegex)) {
-                return { lat: parseFloat(coords[0]), lng: parseFloat(coords[1]) };
-            }
-        } else if(Array.isArray(location) && location.length === 2) {
-            return { lat: location[0], lng: location[1] };
-        } else if(isPlainObject(location) && isNumeric(location.lat) && isNumeric(location.lng)) {
-            return location;
-        }
-
-        return null;
-    },
-
-    _areBoundsSet: function() {
-        return this._option('bounds.northEast') && this._option('bounds.southWest');
-    },
-
-    _addEventNamespace: function(name) {
-        return addNamespace(name, this._mapWidget.NAME);
-    },
-
-    _applyFunctionIfNeeded: function(fnName, array) {
-        if(!array.length) {
-            return Promise.resolve();
-        }
-
-        return this[fnName](array);
-    },
-
-    _fireAction: function(name, actionArguments) {
-        this._mapWidget._createActionByOption(name)(actionArguments);
-    },
-
-    _fireClickAction: function(actionArguments) {
-        this._fireAction('onClick', actionArguments);
-    },
-
-    _fireMarkerAddedAction: function(actionArguments) {
-        this._fireAction('onMarkerAdded', actionArguments);
-    },
-
-    _fireMarkerRemovedAction: function(actionArguments) {
-        this._fireAction('onMarkerRemoved', actionArguments);
-    },
-
-    _fireRouteAddedAction: function(actionArguments) {
-        this._fireAction('onRouteAdded', actionArguments);
-    },
-
-    _fireRouteRemovedAction: function(actionArguments) {
-        this._fireAction('onRouteRemoved', actionArguments);
+  _option(name, value?): any | undefined {
+    if (value === undefined) {
+      return this._mapWidget.option(name);
     }
 
-});
+    this._mapWidget.setOptionSilent(name, value);
+  }
+
+  _keyOption(providerName) {
+    const key = this._option('apiKey');
+
+    return key[providerName] === undefined ? key : key[providerName];
+  }
+
+  _parseTooltipOptions(option) {
+    return {
+      text: option.text || option,
+      visible: option.isShown || false,
+    };
+  }
+
+  _getLatLng(location: Location): { lat: number; lng: number } | null {
+    if (typeof location === 'string') {
+      const coords = map(location.split(','), (item) => item.trim());
+      const numericRegex = /^[-+]?[0-9]*\.?[0-9]*$/;
+
+      if (coords.length === 2 && coords[0].match(numericRegex) && coords[1].match(numericRegex)) {
+        return { lat: parseFloat(coords[0]), lng: parseFloat(coords[1]) };
+      }
+    } else if (Array.isArray(location) && location.length === 2) {
+      return { lat: location[0], lng: location[1] };
+    } else if (isPlainObject(location) && isNumeric(location.lat) && isNumeric(location.lng)) {
+      return location;
+    }
+
+    return null;
+  }
+
+  _areBoundsSet(): boolean {
+    return this._option('bounds.northEast') && this._option('bounds.southWest');
+  }
+
+  _addEventNamespace(name: string): string {
+    return addNamespace(name, this._mapWidget.NAME);
+  }
+
+  _applyFunctionIfNeeded(fnName: string, array): Promise<any> {
+    if (!array.length) {
+      return Promise.resolve();
+    }
+
+    return this[fnName](array) as Promise<any>;
+  }
+
+  _fireAction(name: string, actionArguments: any): void {
+    this._mapWidget._createActionByOption(name)(actionArguments);
+  }
+
+  _fireClickAction(actionArguments: any): void {
+    this._fireAction('onClick', actionArguments);
+  }
+
+  _fireMarkerAddedAction(actionArguments: any): void {
+    this._fireAction('onMarkerAdded', actionArguments);
+  }
+
+  _fireMarkerRemovedAction(actionArguments: any): void {
+    this._fireAction('onMarkerRemoved', actionArguments);
+  }
+
+  _fireRouteAddedAction(actionArguments: any): void {
+    this._fireAction('onRouteAdded', actionArguments);
+  }
+
+  _fireRouteRemovedAction(actionArguments: any): void {
+    this._fireAction('onRouteRemoved', actionArguments);
+  }
+}
 
 export default Provider;
