@@ -9,6 +9,7 @@ import {
     getViewStartByOptions,
 } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
 import { calculateAlignedWeeksBetweenDates } from './utils';
+import dateLocalization from '../../../../localization/date';
 
 const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
 const DAYS_IN_WEEK = 7;
@@ -85,13 +86,14 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
     getRowCount(options) {
         const startDate = options.currentDate;
+
         const endDate = new Date(startDate);
         endDate.setMonth(endDate.getMonth() + options.intervalCount);
 
         return calculateAlignedWeeksBetweenDates(
             startDate,
             endDate,
-            options.firstDayOfWeek
+            options.firstDayOfWeek ?? dateLocalization.firstDayOfWeekIndex(),
         );
     }
 
