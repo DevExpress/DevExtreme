@@ -81,9 +81,19 @@ export default class SchedulerCalendar extends Widget {
         return result;
     }
 
+    _optionChanged({ name, value }) {
+        switch(name) {
+            case 'value':
+                this._calendar?.option('value', value);
+                break;
+            default:
+                break;
+        }
+    }
+
     _getCalendarOptions() {
         return {
-            value: this.option('date'),
+            value: this.option('value'),
             min: this.option('min'),
             max: this.option('max'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
@@ -91,7 +101,6 @@ export default class SchedulerCalendar extends Widget {
             onValueChanged: this.option('onValueChanged'),
             skipFocusCheck: true,
             tabIndex: this.option('tabIndex'),
-            width: '100%',
         };
     }
 

@@ -331,6 +331,9 @@ export interface PdfExportGanttProps {
   font?: PdfExportGanttFont;
 }
 
+/**
+ * @docid
+ */
 export interface PdfExportGanttFont {
   /**
   * @docid
