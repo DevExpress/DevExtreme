@@ -8,11 +8,10 @@ import {
     isFirstCellInMonthWithIntervalCount,
     getViewStartByOptions,
 } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
+import { calculateAlignedWeeksBetweenDates } from './utils';
 
 const DAY_IN_MILLISECONDS = dateUtils.dateToMilliseconds('day');
 const DAYS_IN_WEEK = 7;
-const WEEKS_IN_MONTH = 4;
-
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
     get tableAllDay() { return undefined; }
 
@@ -85,13 +84,15 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     }
 
     getRowCount(options) {
-        const endDate = new Date(options.currentDate);
+        const startDate = options.currentDate;
+        const endDate = new Date(startDate);
         endDate.setMonth(endDate.getMonth() + options.intervalCount);
 
-        const dayCount = (endDate - options.currentDate) / (24 * 60 * 60 * 1000);
-        const daysInWeek = 7;
-
-        return Math.ceil(dayCount / daysInWeek);
+        return calculateAlignedWeeksBetweenDates(
+            startDate,
+            endDate,
+            options.firstDayOfWeek
+        );
     }
 
     getCellCountInDay() {

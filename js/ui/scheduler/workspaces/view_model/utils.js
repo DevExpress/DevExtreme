@@ -25,3 +25,42 @@ export const getViewDataGeneratorByViewType = (viewType) => {
             return new ViewDataGenerator();
     }
 };
+
+export function alignToFirstDayOfWeek(date, firstDayOfWeek) {
+    const newDate = new Date(date);
+    let dayDiff = newDate.getDay() - firstDayOfWeek;
+
+    if(dayDiff < 0) {
+        dayDiff += 7;
+    }
+
+    newDate.setDate(newDate.getDate() - dayDiff);
+
+    return newDate;
+}
+
+export function alignToLastDayOfWeek(date, firstDayOfWeek) {
+    const newDate = alignToFirstDayOfWeek(date, firstDayOfWeek);
+    newDate.setDate(newDate.getDate() + 6);
+    return newDate;
+}
+
+export const calculateDaysAlignedToWeek = (fromDate, toDate, firstDayOfWeek) => {
+    const startDate = new Date(fromDate);
+    startDate.setDate(startDate.getDate() - startDate.getDay() + 1);
+
+    const endDate = new Date(toDate);
+    endDate.setDate(endDate.getDate() + (7 - endDate.getDay()));
+};
+
+export const calculateDaysBetweenDates = (fromDate, toDate) => {
+    const MS_IN_DAY = 24 * 60 * 60 * 1000;
+    return (toDate.getTime() - fromDate.getTime()) / MS_IN_DAY + 1;
+};
+
+export const calculateAlignedWeeksBetweenDates = (fromDate, toDate, firstDayOfWeek) => {
+    const alignedFromDate = alignToFirstDayOfWeek(fromDate, firstDayOfWeek);
+    const alignedToDate = alignToLastDayOfWeek(toDate, firstDayOfWeek);
+
+    return calculateDaysBetweenDates(alignedFromDate, alignedToDate) / 7;
+};
