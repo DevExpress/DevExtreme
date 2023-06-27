@@ -59,6 +59,10 @@
         "scss/operator-no-newline-after": null,
 
         "devextreme/at-use-no-public-components": true,
-        "devextreme/no-division-slash": true
+        "devextreme/no-division-slash": true,
+
+        "selector-not-notation": "simple",
+        "keyframe-selector-notation": null,
+        "media-feature-range-notation": null
     }
 }
