@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const CustomStore = require('data/custom_store');
+const { default: CustomStore } = require('data/custom_store');
 const processRequestResultLock = require('data/utils').processRequestResultLock;
 const config = require('core/config');
 const ERRORS = {
