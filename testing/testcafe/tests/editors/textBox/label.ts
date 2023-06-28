@@ -105,9 +105,9 @@ stylingModes.forEach((stylingMode) => {
 test('Textbox with buttons container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${TEXTBOX_CLASS} { width: 220px; margin: 5px; }`);
+  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${TEXTBOX_CLASS} { width: 220px; margin: 2px; }`);
 
-  await testScreenshot(t, takeScreenshot, 'Textbox render with buttons container.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Textbox render with buttons container.png', { shouldTestInCompact: true });
 
   await removeStylesheetRulesFromPage();
 

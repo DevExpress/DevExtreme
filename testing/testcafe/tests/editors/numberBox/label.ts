@@ -48,20 +48,20 @@ stylingModes.forEach((stylingMode) => {
   });
 });
 
-test('NumberBox with buttons container', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[true, false].forEach((isValid) => {
+  test(`NumberBox with buttons container, isValid=${isValid}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${NUMBERBOX_CLASS} { width: 220px; margin: 5px; }`);
+    await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${NUMBERBOX_CLASS} { width: 220px; margin: 2px; }`);
 
-  await testScreenshot(t, takeScreenshot, 'NumberBox render with buttons container.png', { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `NumberBox render with buttons container, isValid=${isValid}.png`, { shouldTestInCompact: true });
 
-  await removeStylesheetRulesFromPage();
+    await removeStylesheetRulesFromPage();
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  for (const isValid of [true, false]) {
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
     for (const stylingMode of stylingModes) {
       for (const buttons of [
         ['clear'],
@@ -90,5 +90,5 @@ test('NumberBox with buttons container', async (t) => {
         }
       }
     }
-  }
+  });
 });
