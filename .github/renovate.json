@@ -12,8 +12,7 @@
         "dependencies"
     ],
     "vulnerabilityAlerts": {
-        "enabled": true,
-        "automerge": true
+        "enabled": true
     },
     "packageRules": [
         {
@@ -31,7 +30,6 @@
                 "@devextreme/runtime",
                 "devexpress-gantt",
                 "devexpress-diagram",
-                "eslint-config-devextreme",
                 "rrule",
                 "sass-embedded",
                 "sinon",
@@ -46,14 +44,9 @@
         },
         {
             "matchPackagePatterns": [ "*" ],
-            "matchUpdateTypes": [ "minor", "patch" ],
-            "automerge": true
-        },
-        {
-            "matchPackagePatterns": [ "*" ],
             "excludePackagePrefixes": [ "cldr-" ],
             "matchUpdateTypes": [ "major" ],
-            "enabled": false
+            "dependencyDashboardApproval": true
         }
     ],
     "reviewers": [
