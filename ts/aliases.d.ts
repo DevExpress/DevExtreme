@@ -674,4 +674,38 @@ declare module DevExpress.viz {
 
     /** @deprecated Use DevExpress.viz.dxCircularGauge.ScaleLabel instead */
     export type dxCircularGaugeScaleLabel = DevExpress.viz.dxCircularGauge.ScaleLabel;
+
+    /** @deprecated Use DevExpress.viz.dxFunnel.Legend instead */
+    export type dxFunnelLegend = DevExpress.viz.dxFunnel.Legend;
+
+    /** @deprecated Use DevExpress.viz.dxFunnel.Tooltip instead */
+    export type dxFunnelTooltip = DevExpress.viz.dxFunnel.Tooltip;
+
+    /** @deprecated Use DevExpress.viz.dxLinearGauge.RangeContainer instead */
+    export type dxLinearGaugeRangeContainer = DevExpress.viz.dxLinearGauge.RangeContainer;
+
+    /** @deprecated Use DevExpress.viz.dxLinearGauge.Scale instead */
+    export type dxLinearGaugeScale = DevExpress.viz.dxLinearGauge.Scale;
+
+    /** @deprecated Use DevExpress.viz.dxLinearGauge.ScaleLabel instead */
+    export type dxLinearGaugeScaleLabel = DevExpress.viz.dxLinearGauge.ScaleLabel;
+
+    /** @deprecated Use DevExpress.viz.dxPieChart.AdaptiveLayout instead */
+    export type dxPieChartAdaptiveLayout = DevExpress.viz.dxPieChart.AdaptiveLayout;
+
+    /** @deprecated Use DevExpress.viz.dxPieChart.Legend instead */
+    export type dxPieChartLegend = DevExpress.viz.dxPieChart.Legend;
+
+    /** @deprecated Use DevExpress.viz.dxSankey.Tooltip instead */
+    export type dxSankeyTooltip = DevExpress.viz.dxSankey.Tooltip;
+
+    /** @deprecated Use DevExpress.viz.dxTreeMap.Tooltip instead */
+    export type dxTreeMapTooltip = DevExpress.viz.dxTreeMap.Tooltip;
+
+    /** @deprecated Use DevExpress.viz.dxVectorMap.Legend instead */
+    export type dxVectorMapLegends = DevExpress.viz.dxVectorMap.Legend;
+
+    /** @deprecated Use DevExpress.viz.dxVectorMap.Tooltip instead */
+    export type dxVectorMapTooltip = DevExpress.viz.dxVectorMap.Tooltip;
+
 }

@@ -16,5 +16,6 @@ export {
   NodeClickEvent,
   NodeHoverEvent,
   OptionChangedEvent,
+  Tooltip,
   Properties,
 } from './sankey';

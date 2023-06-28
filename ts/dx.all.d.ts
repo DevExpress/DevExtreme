@@ -36123,6 +36123,36 @@ declare module DevExpress.viz {
     > &
       FunnelItemInfo;
     /**
+     * [descr:dxFunnelLegend]
+     */
+    export type Legend = DevExpress.common.charts.BaseLegend & {
+      /**
+       * [descr:dxFunnelOptions.legend.customizeHint]
+       */
+      customizeHint?: (itemInfo: { item?: Item; text?: string }) => string;
+      /**
+       * [descr:dxFunnelOptions.legend.customizeItems]
+       */
+      customizeItems?: (items: Array<LegendItem>) => Array<LegendItem>;
+      /**
+       * [descr:dxFunnelOptions.legend.customizeText]
+       */
+      customizeText?: (itemInfo: { item?: Item; text?: string }) => string;
+      /**
+       * [descr:dxFunnelOptions.legend.markerTemplate]
+       */
+      markerTemplate?:
+        | DevExpress.core.template
+        | ((
+            legendItem: LegendItem,
+            element: SVGGElement
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+      /**
+       * [descr:dxFunnelOptions.legend.visible]
+       */
+      visible?: boolean;
+    };
+    /**
      * [descr:_viz_funnel_LegendClickEvent]
      */
     export type LegendClickEvent = DevExpress.events.NativeEventInfo<
@@ -36141,6 +36171,36 @@ declare module DevExpress.viz {
      */
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
+    /**
+     * [descr:dxFunnelTooltip]
+     */
+    export type Tooltip = BaseWidgetTooltip & {
+      /**
+       * [descr:dxFunnelOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | DevExpress.core.template
+        | ((
+            info: {
+              item?: Item;
+              value?: number;
+              valueText?: string;
+              percent?: number;
+              percentText?: string;
+            },
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:dxFunnelOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: (info: {
+        item?: Item;
+        value?: number;
+        valueText?: string;
+        percent?: number;
+        percentText?: string;
+      }) => any;
+    };
   }
   /**
    * @deprecated Use Item instead
@@ -36187,45 +36247,6 @@ declare module DevExpress.viz {
      * [descr:dxFunnelItem.value]
      */
     value?: number;
-  }
-  /**
-   * [descr:dxFunnelLegend]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxFunnelLegend extends DevExpress.common.charts.BaseLegend {
-    /**
-     * [descr:dxFunnelOptions.legend.customizeHint]
-     */
-    customizeHint?: (itemInfo: {
-      item?: DevExpress.viz.dxFunnel.Item;
-      text?: string;
-    }) => string;
-    /**
-     * [descr:dxFunnelOptions.legend.customizeItems]
-     */
-    customizeItems?: (
-      items: Array<DevExpress.viz.dxFunnel.LegendItem>
-    ) => Array<DevExpress.viz.dxFunnel.LegendItem>;
-    /**
-     * [descr:dxFunnelOptions.legend.customizeText]
-     */
-    customizeText?: (itemInfo: {
-      item?: DevExpress.viz.dxFunnel.Item;
-      text?: string;
-    }) => string;
-    /**
-     * [descr:dxFunnelOptions.legend.markerTemplate]
-     */
-    markerTemplate?:
-      | DevExpress.core.template
-      | ((
-          legendItem: DevExpress.viz.dxFunnel.LegendItem,
-          element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-    /**
-     * [descr:dxFunnelOptions.legend.visible]
-     */
-    visible?: boolean;
   }
   /**
    * [descr:dxFunnelOptions]
@@ -36482,7 +36503,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.legend]
      */
-    legend?: dxFunnelLegend;
+    legend?: DevExpress.viz.dxFunnel.Legend;
     /**
      * [descr:dxFunnelOptions.neckHeight]
      */
@@ -36536,42 +36557,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.tooltip]
      */
-    tooltip?: dxFunnelTooltip;
+    tooltip?: DevExpress.viz.dxFunnel.Tooltip;
     /**
      * [descr:dxFunnelOptions.valueField]
      */
     valueField?: string;
-  }
-  /**
-   * [descr:dxFunnelTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxFunnelTooltip extends BaseWidgetTooltip {
-    /**
-     * [descr:dxFunnelOptions.tooltip.contentTemplate]
-     */
-    contentTemplate?:
-      | DevExpress.core.template
-      | ((
-          info: {
-            item?: DevExpress.viz.dxFunnel.Item;
-            value?: number;
-            valueText?: string;
-            percent?: number;
-            percentText?: string;
-          },
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:dxFunnelOptions.tooltip.customizeTooltip]
-     */
-    customizeTooltip?: (info: {
-      item?: DevExpress.viz.dxFunnel.Item;
-      value?: number;
-      valueText?: string;
-      percent?: number;
-      percentText?: string;
-    }) => any;
   }
   /**
    * [descr:dxLinearGauge]
@@ -36619,6 +36609,64 @@ declare module DevExpress.viz {
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxLinearGaugeOptions;
     /**
+     * [descr:dxLinearGaugeRangeContainer]
+     */
+    export type RangeContainer = BaseGaugeRangeContainer & {
+      /**
+       * [descr:dxLinearGaugeOptions.rangeContainer.horizontalOrientation]
+       */
+      horizontalOrientation?: DevExpress.common.HorizontalAlignment;
+      /**
+       * [descr:dxLinearGaugeOptions.rangeContainer.verticalOrientation]
+       */
+      verticalOrientation?: DevExpress.common.VerticalAlignment;
+      /**
+       * [descr:dxLinearGaugeOptions.rangeContainer.width]
+       */
+      width?:
+        | {
+            /**
+             * [descr:dxLinearGaugeOptions.rangeContainer.width.start]
+             */
+            start?: number;
+            /**
+             * [descr:dxLinearGaugeOptions.rangeContainer.width.end]
+             */
+            end?: number;
+          }
+        | number;
+    };
+    /**
+     * [descr:dxLinearGaugeScale]
+     */
+    export type Scale = BaseGaugeScale & {
+      /**
+       * [descr:dxLinearGaugeOptions.scale.horizontalOrientation]
+       */
+      horizontalOrientation?: DevExpress.common.HorizontalAlignment;
+      /**
+       * [descr:dxLinearGaugeOptions.scale.label]
+       */
+      label?: ScaleLabel;
+      /**
+       * [descr:dxLinearGaugeOptions.scale.scaleDivisionFactor]
+       */
+      scaleDivisionFactor?: number;
+      /**
+       * [descr:dxLinearGaugeOptions.scale.verticalOrientation]
+       */
+      verticalOrientation?: DevExpress.common.VerticalAlignment;
+    };
+    /**
+     * [descr:dxLinearGaugeScaleLabel]
+     */
+    export type ScaleLabel = BaseGaugeScaleLabel & {
+      /**
+       * [descr:dxLinearGaugeOptions.scale.label.indentFromTick]
+       */
+      indentFromTick?: number;
+    };
+    /**
      * [descr:_viz_linear_gauge_TooltipHiddenEvent]
      */
     export type TooltipHiddenEvent =
@@ -36649,11 +36697,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxLinearGaugeOptions.rangeContainer]
      */
-    rangeContainer?: dxLinearGaugeRangeContainer;
+    rangeContainer?: DevExpress.viz.dxLinearGauge.RangeContainer;
     /**
      * [descr:dxLinearGaugeOptions.scale]
      */
-    scale?: dxLinearGaugeScale;
+    scale?: DevExpress.viz.dxLinearGauge.Scale;
     /**
      * [descr:dxLinearGaugeOptions.subvalueIndicator]
      */
@@ -36662,67 +36710,6 @@ declare module DevExpress.viz {
      * [descr:dxLinearGaugeOptions.valueIndicator]
      */
     valueIndicator?: GaugeIndicator;
-  }
-  /**
-   * [descr:dxLinearGaugeRangeContainer]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
-    /**
-     * [descr:dxLinearGaugeOptions.rangeContainer.horizontalOrientation]
-     */
-    horizontalOrientation?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxLinearGaugeOptions.rangeContainer.verticalOrientation]
-     */
-    verticalOrientation?: DevExpress.common.VerticalAlignment;
-    /**
-     * [descr:dxLinearGaugeOptions.rangeContainer.width]
-     */
-    width?:
-      | {
-          /**
-           * [descr:dxLinearGaugeOptions.rangeContainer.width.start]
-           */
-          start?: number;
-          /**
-           * [descr:dxLinearGaugeOptions.rangeContainer.width.end]
-           */
-          end?: number;
-        }
-      | number;
-  }
-  /**
-   * [descr:dxLinearGaugeScale]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxLinearGaugeScale extends BaseGaugeScale {
-    /**
-     * [descr:dxLinearGaugeOptions.scale.horizontalOrientation]
-     */
-    horizontalOrientation?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxLinearGaugeOptions.scale.label]
-     */
-    label?: dxLinearGaugeScaleLabel;
-    /**
-     * [descr:dxLinearGaugeOptions.scale.scaleDivisionFactor]
-     */
-    scaleDivisionFactor?: number;
-    /**
-     * [descr:dxLinearGaugeOptions.scale.verticalOrientation]
-     */
-    verticalOrientation?: DevExpress.common.VerticalAlignment;
-  }
-  /**
-   * [descr:dxLinearGaugeScaleLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
-    /**
-     * [descr:dxLinearGaugeOptions.scale.label.indentFromTick]
-     */
-    indentFromTick?: number;
   }
   /**
    * [descr:dxPieChart]
@@ -36734,6 +36721,15 @@ declare module DevExpress.viz {
     getInnerRadius(): number;
   }
   module dxPieChart {
+    /**
+     * [descr:dxPieChartAdaptiveLayout]
+     */
+    export type AdaptiveLayout = BaseChartAdaptiveLayout & {
+      /**
+       * [descr:dxPieChartOptions.adaptiveLayout.keepLabels]
+       */
+      keepLabels?: boolean;
+    };
     /**
      * [descr:_viz_pie_chart_DisposingEvent]
      */
@@ -36771,6 +36767,44 @@ declare module DevExpress.viz {
      */
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxPieChart>;
+    /**
+     * [descr:dxPieChartLegend]
+     */
+    export type Legend = BaseChartLegend & {
+      /**
+       * [descr:dxPieChartOptions.legend.customizeHint]
+       */
+      customizeHint?: (pointInfo: {
+        pointName?: any;
+        pointIndex?: number;
+        pointColor?: string;
+      }) => string;
+      /**
+       * [descr:dxPieChartOptions.legend.customizeItems]
+       */
+      customizeItems?: (items: Array<LegendItem>) => Array<LegendItem>;
+      /**
+       * [descr:dxPieChartOptions.legend.customizeText]
+       */
+      customizeText?: (pointInfo: {
+        pointName?: any;
+        pointIndex?: number;
+        pointColor?: string;
+      }) => string;
+      /**
+       * [descr:dxPieChartOptions.legend.hoverMode]
+       */
+      hoverMode?: PieChartLegendHoverMode;
+      /**
+       * [descr:dxPieChartOptions.legend.markerTemplate]
+       */
+      markerTemplate?:
+        | DevExpress.core.template
+        | ((
+            legendItem: LegendItem,
+            element: SVGGElement
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+    };
     /**
      * [descr:_viz_pie_chart_LegendClickEvent]
      */
@@ -36834,16 +36868,6 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseChart.TooltipInfo;
   }
   /**
-   * [descr:dxPieChartAdaptiveLayout]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
-    /**
-     * [descr:dxPieChartOptions.adaptiveLayout.keepLabels]
-     */
-    keepLabels?: boolean;
-  }
-  /**
    * [descr:dxPieChartAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -36896,47 +36920,6 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
-   * [descr:dxPieChartLegend]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPieChartLegend extends BaseChartLegend {
-    /**
-     * [descr:dxPieChartOptions.legend.customizeHint]
-     */
-    customizeHint?: (pointInfo: {
-      pointName?: any;
-      pointIndex?: number;
-      pointColor?: string;
-    }) => string;
-    /**
-     * [descr:dxPieChartOptions.legend.customizeItems]
-     */
-    customizeItems?: (
-      items: Array<DevExpress.viz.dxPieChart.LegendItem>
-    ) => Array<DevExpress.viz.dxPieChart.LegendItem>;
-    /**
-     * [descr:dxPieChartOptions.legend.customizeText]
-     */
-    customizeText?: (pointInfo: {
-      pointName?: any;
-      pointIndex?: number;
-      pointColor?: string;
-    }) => string;
-    /**
-     * [descr:dxPieChartOptions.legend.hoverMode]
-     */
-    hoverMode?: DevExpress.viz.dxPieChart.PieChartLegendHoverMode;
-    /**
-     * [descr:dxPieChartOptions.legend.markerTemplate]
-     */
-    markerTemplate?:
-      | DevExpress.core.template
-      | ((
-          legendItem: DevExpress.viz.dxPieChart.LegendItem,
-          element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-  }
-  /**
    * [descr:dxPieChartOptions]
    * @deprecated [depNote:dxPieChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -36945,7 +36928,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.adaptiveLayout]
      */
-    adaptiveLayout?: dxPieChartAdaptiveLayout;
+    adaptiveLayout?: DevExpress.viz.dxPieChart.AdaptiveLayout;
     /**
      * [descr:dxPieChartOptions.centerTemplate]
      */
@@ -36970,7 +36953,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.legend]
      */
-    legend?: dxPieChartLegend;
+    legend?: DevExpress.viz.dxPieChart.Legend;
     /**
      * [descr:dxPieChartOptions.minDiameter]
      */
@@ -39767,6 +39750,50 @@ declare module DevExpress.viz {
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSankeyOptions;
     export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
+    /**
+     * [descr:dxSankeyTooltip]
+     */
+    export type Tooltip = BaseWidgetTooltip & {
+      /**
+       * [descr:dxSankeyOptions.tooltip.customizeLinkTooltip]
+       */
+      customizeLinkTooltip?: (info: {
+        source?: string;
+        target?: string;
+        weight?: number;
+      }) => any;
+      /**
+       * [descr:dxSankeyOptions.tooltip.customizeNodeTooltip]
+       */
+      customizeNodeTooltip?: (info: {
+        title?: string;
+        label?: string;
+        weightIn?: number;
+        weightOut?: number;
+      }) => any;
+      /**
+       * [descr:dxSankeyOptions.tooltip.enabled]
+       */
+      enabled?: boolean;
+      /**
+       * [descr:dxSankeyOptions.tooltip.linkTooltipTemplate]
+       */
+      linkTooltipTemplate?:
+        | DevExpress.core.template
+        | ((
+            info: { source?: string; target?: string; weight?: number },
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:dxSankeyOptions.tooltip.nodeTooltipTemplate]
+       */
+      nodeTooltipTemplate?:
+        | DevExpress.core.template
+        | ((
+            info: { label?: string; weightIn?: number; weightOut?: number },
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+    };
   }
   /**
    * [descr:dxSankeyConnectionInfoObject]
@@ -40180,56 +40207,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSankeyOptions.tooltip]
      */
-    tooltip?: dxSankeyTooltip;
+    tooltip?: DevExpress.viz.dxSankey.Tooltip;
     /**
      * [descr:dxSankeyOptions.weightField]
      */
     weightField?: string;
-  }
-  /**
-   * [descr:dxSankeyTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxSankeyTooltip extends BaseWidgetTooltip {
-    /**
-     * [descr:dxSankeyOptions.tooltip.customizeLinkTooltip]
-     */
-    customizeLinkTooltip?: (info: {
-      source?: string;
-      target?: string;
-      weight?: number;
-    }) => any;
-    /**
-     * [descr:dxSankeyOptions.tooltip.customizeNodeTooltip]
-     */
-    customizeNodeTooltip?: (info: {
-      title?: string;
-      label?: string;
-      weightIn?: number;
-      weightOut?: number;
-    }) => any;
-    /**
-     * [descr:dxSankeyOptions.tooltip.enabled]
-     */
-    enabled?: boolean;
-    /**
-     * [descr:dxSankeyOptions.tooltip.linkTooltipTemplate]
-     */
-    linkTooltipTemplate?:
-      | DevExpress.core.template
-      | ((
-          info: { source?: string; target?: string; weight?: number },
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:dxSankeyOptions.tooltip.nodeTooltipTemplate]
-     */
-    nodeTooltipTemplate?:
-      | DevExpress.core.template
-      | ((
-          info: { label?: string; weightIn?: number; weightOut?: number },
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
    * [descr:dxSparkline]
@@ -40520,6 +40502,28 @@ declare module DevExpress.viz {
      */
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTreeMap> &
       InteractionInfo;
+    /**
+     * [descr:dxTreeMapTooltip]
+     */
+    export type Tooltip = BaseWidgetTooltip & {
+      /**
+       * [descr:dxTreeMapOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | DevExpress.core.template
+        | ((
+            info: { value?: number; valueText?: string; node?: dxTreeMapNode },
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:dxTreeMapOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: (info: {
+        value?: number;
+        valueText?: string;
+        node?: dxTreeMapNode;
+      }) => any;
+    };
     export type TreeMapColorizerType =
       | 'discrete'
       | 'gradient'
@@ -40929,34 +40933,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxTreeMapOptions.tooltip]
      */
-    tooltip?: dxTreeMapTooltip;
+    tooltip?: DevExpress.viz.dxTreeMap.Tooltip;
     /**
      * [descr:dxTreeMapOptions.valueField]
      */
     valueField?: string;
-  }
-  /**
-   * [descr:dxTreeMapTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxTreeMapTooltip extends BaseWidgetTooltip {
-    /**
-     * [descr:dxTreeMapOptions.tooltip.contentTemplate]
-     */
-    contentTemplate?:
-      | DevExpress.core.template
-      | ((
-          info: { value?: number; valueText?: string; node?: dxTreeMapNode },
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:dxTreeMapOptions.tooltip.customizeTooltip]
-     */
-    customizeTooltip?: (info: {
-      value?: number;
-      valueText?: string;
-      node?: dxTreeMapNode;
-    }) => any;
   }
   /**
    * [descr:dxVectorMap]
@@ -41073,6 +41054,73 @@ declare module DevExpress.viz {
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxVectorMap>;
     /**
+     * [descr:dxVectorMapLegends]
+     */
+    export type Legend = DevExpress.common.charts.BaseLegend & {
+      /**
+       * [descr:dxVectorMapOptions.legends.customizeHint]
+       */
+      customizeHint?: (itemInfo: {
+        start?: number;
+        end?: number;
+        index?: number;
+        color?: string;
+        size?: number;
+      }) => string;
+      /**
+       * [descr:dxVectorMapOptions.legends.customizeItems]
+       */
+      customizeItems?: (items: Array<LegendItem>) => Array<LegendItem>;
+      /**
+       * [descr:dxVectorMapOptions.legends.customizeText]
+       */
+      customizeText?: (itemInfo: {
+        start?: number;
+        end?: number;
+        index?: number;
+        color?: string;
+        size?: number;
+      }) => string;
+      /**
+       * [descr:dxVectorMapOptions.legends.font]
+       */
+      font?: Font;
+      /**
+       * [descr:dxVectorMapOptions.legends.markerColor]
+       */
+      markerColor?: string;
+      /**
+       * [descr:dxVectorMapOptions.legends.markerShape]
+       */
+      markerShape?: VectorMapMarkerShape;
+      /**
+       * [descr:dxVectorMapOptions.legends.markerSize]
+       */
+      markerSize?: number;
+      /**
+       * [descr:dxVectorMapOptions.legends.markerTemplate]
+       */
+      markerTemplate?:
+        | DevExpress.core.template
+        | ((
+            legendItem: LegendItem,
+            element: SVGGElement
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+      /**
+       * [descr:dxVectorMapOptions.legends.source]
+       */
+      source?: {
+        /**
+         * [descr:dxVectorMapOptions.legends.source.grouping]
+         */
+        grouping?: string;
+        /**
+         * [descr:dxVectorMapOptions.legends.source.layer]
+         */
+        layer?: string;
+      };
+    };
+    /**
      * [descr:_viz_vector_map_OptionChangedEvent]
      */
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxVectorMap> &
@@ -41088,6 +41136,28 @@ declare module DevExpress.viz {
          */
         readonly target: MapLayerElement;
       };
+    /**
+     * [descr:dxVectorMapTooltip]
+     */
+    export type Tooltip = BaseWidgetTooltip & {
+      /**
+       * [descr:dxVectorMapOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | DevExpress.core.template
+        | ((
+            info: MapLayerElement,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:dxVectorMapOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: (info: MapLayerElement) => any;
+      /**
+       * [descr:dxVectorMapOptions.tooltip.format]
+       */
+      format?: DevExpress.ui.Format;
+    };
     /**
      * [descr:_viz_vector_map_TooltipHiddenEvent]
      */
@@ -41165,77 +41235,6 @@ declare module DevExpress.viz {
           annotation: dxVectorMapAnnotationConfig | any,
           element: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
-  }
-  /**
-   * [descr:dxVectorMapLegends]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxVectorMapLegends
-    extends DevExpress.common.charts.BaseLegend {
-    /**
-     * [descr:dxVectorMapOptions.legends.customizeHint]
-     */
-    customizeHint?: (itemInfo: {
-      start?: number;
-      end?: number;
-      index?: number;
-      color?: string;
-      size?: number;
-    }) => string;
-    /**
-     * [descr:dxVectorMapOptions.legends.customizeItems]
-     */
-    customizeItems?: (
-      items: Array<DevExpress.viz.dxVectorMap.LegendItem>
-    ) => Array<DevExpress.viz.dxVectorMap.LegendItem>;
-    /**
-     * [descr:dxVectorMapOptions.legends.customizeText]
-     */
-    customizeText?: (itemInfo: {
-      start?: number;
-      end?: number;
-      index?: number;
-      color?: string;
-      size?: number;
-    }) => string;
-    /**
-     * [descr:dxVectorMapOptions.legends.font]
-     */
-    font?: Font;
-    /**
-     * [descr:dxVectorMapOptions.legends.markerColor]
-     */
-    markerColor?: string;
-    /**
-     * [descr:dxVectorMapOptions.legends.markerShape]
-     */
-    markerShape?: DevExpress.viz.dxVectorMap.VectorMapMarkerShape;
-    /**
-     * [descr:dxVectorMapOptions.legends.markerSize]
-     */
-    markerSize?: number;
-    /**
-     * [descr:dxVectorMapOptions.legends.markerTemplate]
-     */
-    markerTemplate?:
-      | DevExpress.core.template
-      | ((
-          legendItem: DevExpress.viz.dxVectorMap.LegendItem,
-          element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-    /**
-     * [descr:dxVectorMapOptions.legends.source]
-     */
-    source?: {
-      /**
-       * [descr:dxVectorMapOptions.legends.source.grouping]
-       */
-      grouping?: string;
-      /**
-       * [descr:dxVectorMapOptions.legends.source.layer]
-       */
-      layer?: string;
-    };
   }
   /**
    * [descr:dxVectorMapOptions]
@@ -41479,7 +41478,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.legends]
      */
-    legends?: Array<dxVectorMapLegends>;
+    legends?: Array<DevExpress.viz.dxVectorMap.Legend>;
     /**
      * [descr:dxVectorMapOptions.margin]
      */
@@ -41531,7 +41530,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.tooltip]
      */
-    tooltip?: dxVectorMapTooltip;
+    tooltip?: DevExpress.viz.dxVectorMap.Tooltip;
     /**
      * [descr:dxVectorMapOptions.touchEnabled]
      */
@@ -41562,29 +41561,6 @@ declare module DevExpress.viz {
     customizeAnnotation?: (
       annotation: dxVectorMapAnnotationConfig | any
     ) => dxVectorMapAnnotationConfig;
-  }
-  /**
-   * [descr:dxVectorMapTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxVectorMapTooltip extends BaseWidgetTooltip {
-    /**
-     * [descr:dxVectorMapOptions.tooltip.contentTemplate]
-     */
-    contentTemplate?:
-      | DevExpress.core.template
-      | ((
-          info: MapLayerElement,
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:dxVectorMapOptions.tooltip.customizeTooltip]
-     */
-    customizeTooltip?: (info: MapLayerElement) => any;
-    /**
-     * [descr:dxVectorMapOptions.tooltip.format]
-     */
-    format?: DevExpress.ui.Format;
   }
   /**
    * [descr:viz.exportFromMarkup(markup, options)]
