@@ -31826,11 +31826,86 @@ declare module DevExpress.viz {
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxBarGauge>;
     /**
+     * [descr:dxBarGaugeLegend]
+     */
+    export type Legend = DevExpress.common.charts.BaseLegend & {
+      /**
+       * [descr:dxBarGaugeOptions.legend.customizeHint]
+       */
+      customizeHint?: (arg: {
+        item?: BarGaugeBarInfo;
+        text?: string;
+      }) => string;
+      /**
+       * [descr:dxBarGaugeOptions.legend.customizeItems]
+       */
+      customizeItems?: (items: Array<LegendItem>) => Array<LegendItem>;
+      /**
+       * [descr:dxBarGaugeOptions.legend.customizeText]
+       */
+      customizeText?: (arg: {
+        item?: BarGaugeBarInfo;
+        text?: string;
+      }) => string;
+      /**
+       * [descr:dxBarGaugeOptions.legend.itemTextFormat]
+       */
+      itemTextFormat?: DevExpress.ui.Format;
+      /**
+       * [descr:dxBarGaugeOptions.legend.markerTemplate]
+       */
+      markerTemplate?:
+        | DevExpress.core.template
+        | ((
+            legendItem: LegendItem,
+            element: SVGGElement
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+      /**
+       * [descr:dxBarGaugeOptions.legend.visible]
+       */
+      visible?: boolean;
+    };
+    /**
+     * [descr:dxBarGaugeLoadingIndicator]
+     */
+    export type LoadingIndicator = BaseWidgetLoadingIndicator & {
+      /**
+       * [descr:dxBarGaugeOptions.loadingIndicator.enabled]
+       */
+      enabled?: boolean;
+    };
+    /**
      * [descr:_viz_bar_gauge_OptionChangedEvent]
      */
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxBarGauge> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxBarGaugeOptions;
+    /**
+     * [descr:dxBarGaugeTooltip]
+     */
+    export interface Tooltip extends BaseWidgetTooltip {
+      /**
+       * [descr:dxBarGaugeOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | DevExpress.core.template
+        | ((
+            scaleValue: { value?: number; valueText?: string; index?: number },
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:dxBarGaugeOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: (scaleValue: {
+        value?: number;
+        valueText?: string;
+        index?: number;
+      }) => any;
+      /**
+       * [descr:dxBarGaugeOptions.tooltip.interactive]
+       */
+      interactive?: boolean;
+    }
     /**
      * [descr:_viz_bar_gauge_TooltipHiddenEvent]
      */
@@ -31851,55 +31926,6 @@ declare module DevExpress.viz {
      */
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxBarGauge> &
       TooltipInfo;
-  }
-  /**
-   * [descr:dxBarGaugeLegend]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxBarGaugeLegend
-    extends DevExpress.common.charts.BaseLegend {
-    /**
-     * [descr:dxBarGaugeOptions.legend.customizeHint]
-     */
-    customizeHint?: (arg: { item?: BarGaugeBarInfo; text?: string }) => string;
-    /**
-     * [descr:dxBarGaugeOptions.legend.customizeItems]
-     */
-    customizeItems?: (
-      items: Array<DevExpress.viz.dxBarGauge.LegendItem>
-    ) => Array<DevExpress.viz.dxBarGauge.LegendItem>;
-    /**
-     * [descr:dxBarGaugeOptions.legend.customizeText]
-     */
-    customizeText?: (arg: { item?: BarGaugeBarInfo; text?: string }) => string;
-    /**
-     * [descr:dxBarGaugeOptions.legend.itemTextFormat]
-     */
-    itemTextFormat?: DevExpress.ui.Format;
-    /**
-     * [descr:dxBarGaugeOptions.legend.markerTemplate]
-     */
-    markerTemplate?:
-      | DevExpress.core.template
-      | ((
-          legendItem: DevExpress.viz.dxBarGauge.LegendItem,
-          element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-    /**
-     * [descr:dxBarGaugeOptions.legend.visible]
-     */
-    visible?: boolean;
-  }
-  /**
-   * [descr:dxBarGaugeLoadingIndicator]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxBarGaugeLoadingIndicator
-    extends BaseWidgetLoadingIndicator {
-    /**
-     * [descr:dxBarGaugeOptions.loadingIndicator.enabled]
-     */
-    enabled?: boolean;
   }
   /**
    * [descr:dxBarGaugeOptions]
@@ -31988,11 +32014,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.legend]
      */
-    legend?: dxBarGaugeLegend;
+    legend?: DevExpress.viz.dxBarGauge.Legend;
     /**
      * [descr:dxBarGaugeOptions.loadingIndicator]
      */
-    loadingIndicator?: dxBarGaugeLoadingIndicator;
+    loadingIndicator?: DevExpress.viz.dxBarGauge.LoadingIndicator;
     /**
      * [descr:dxBarGaugeOptions.onTooltipHidden]
      */
@@ -32024,38 +32050,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.tooltip]
      */
-    tooltip?: dxBarGaugeTooltip;
+    tooltip?: DevExpress.viz.dxBarGauge.Tooltip;
     /**
      * [descr:dxBarGaugeOptions.values]
      */
     values?: Array<number>;
-  }
-  /**
-   * [descr:dxBarGaugeTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
-    /**
-     * [descr:dxBarGaugeOptions.tooltip.contentTemplate]
-     */
-    contentTemplate?:
-      | DevExpress.core.template
-      | ((
-          scaleValue: { value?: number; valueText?: string; index?: number },
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:dxBarGaugeOptions.tooltip.customizeTooltip]
-     */
-    customizeTooltip?: (scaleValue: {
-      value?: number;
-      valueText?: string;
-      index?: number;
-    }) => any;
-    /**
-     * [descr:dxBarGaugeOptions.tooltip.interactive]
-     */
-    interactive?: boolean;
   }
   /**
    * [descr:dxBullet]

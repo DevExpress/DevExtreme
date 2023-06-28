@@ -483,3 +483,15 @@ declare module DevExpress.viz.dxPieChart {
     /** @deprecated Use DevExpress.common.charts.ShiftLabelOverlap instead */
     export type PieChartLabelOverlap = DevExpress.common.charts.ShiftLabelOverlap;
 }
+
+declare module DevExpress.viz {
+
+    /** @deprecated Use DevExpress.viz.dxBarGauge.Legend instead */
+    export type dxBarGaugeLegend = DevExpress.viz.dxBarGauge.Legend;
+
+    /** @deprecated Use DevExpress.viz.dxBarGauge.LoadingIndicator instead */
+    export type dxBarGaugeLoadingIndicator = DevExpress.viz.dxBarGauge.LoadingIndicator;
+
+    /** @deprecated Use DevExpress.viz.dxBarGauge.Tooltip instead */
+    export type dxBarGaugeTooltip = DevExpress.viz.dxBarGauge.Tooltip;
+}
