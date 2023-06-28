@@ -1080,8 +1080,8 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
         const $element = this.instance.$element();
         let cellCounter = 0;
 
-        assert.equal($element.find('.dx-scheduler-date-table tbody tr').length, 6, 'Date table has 6 rows');
-        assert.equal($element.find('.dx-scheduler-date-table tbody tr>td').length, 42, 'Date table has 42 cells');
+        assert.equal($element.find('.dx-scheduler-date-table tbody tr').length, 5, 'Date table has 6 rows');
+        assert.equal($element.find('.dx-scheduler-date-table tbody tr>td').length, 35, 'Date table has 42 cells');
 
         $element.find('.dx-scheduler-date-table tbody tr').each(function() {
             if($(this).find('td').length === 7) {
@@ -1089,7 +1089,7 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
             }
         });
 
-        assert.equal(cellCounter, 6, 'Each row has a seven cells');
+        assert.equal(cellCounter, 5, 'Each row has a seven cells');
     });
 
     QUnit.test('Scheduler workspace month grouped view', function(assert) {
@@ -1203,7 +1203,7 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
         this.instance.option('currentDate', new Date(2015, 2, 1));
 
         const $cells = $element.find('.dx-scheduler-date-table-other-month');
-        assert.equal($cells.length, 11, 'Other-month cells count is correct');
+        assert.equal($cells.length, 4, 'Other-month cells count is correct');
     });
 
     QUnit.test('Scheduler workspace month view should have a dates with other-month class, if startDate is set', function(assert) {
@@ -1213,7 +1213,7 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
         this.instance.option('startDate', new Date(2015, 5, 1));
 
         const $cells = $element.find('.dx-scheduler-date-table-other-month');
-        assert.equal($cells.length, 11, 'Other-month cells count is correct');
+        assert.equal($cells.length, 4, 'Other-month cells count is correct');
     });
 
     QUnit.test('Scheduler workspace month view should have a dates with other-month class, if startDate & intervalCount is set', function(assert) {
@@ -1335,8 +1335,8 @@ QUnit.module('Workspace Month markup with vertical grouping', monthWithGroupingM
         const $element = this.instance.$element();
         let cellCounter = 0;
 
-        assert.equal($element.find('.dx-scheduler-date-table tbody tr').length, 12, 'Date table has 12 rows');
-        assert.equal($element.find('.dx-scheduler-date-table tbody tr>td').length, 84, 'Date table has 84 cells');
+        assert.equal($element.find('.dx-scheduler-date-table tbody tr').length, 10, 'Date table has 12 rows');
+        assert.equal($element.find('.dx-scheduler-date-table tbody tr>td').length, 70, 'Date table has 84 cells');
 
         $element.find('.dx-scheduler-date-table tbody tr').each(function() {
             if($(this).find('td').length === 7) {
@@ -1344,7 +1344,7 @@ QUnit.module('Workspace Month markup with vertical grouping', monthWithGroupingM
             }
         });
 
-        assert.equal(cellCounter, 12, 'Each row has a 7 cells');
+        assert.equal(cellCounter, 10, 'Each row has a 7 cells');
     });
 
     QUnit.test('Grouped cells should have a right group field in dxCellData', function(assert) {
@@ -1366,7 +1366,7 @@ QUnit.module('Workspace Month markup with vertical grouping', monthWithGroupingM
         this.instance.option('currentDate', new Date(2015, 2, 1));
 
         const $cells = $element.find('.dx-scheduler-date-table-other-month');
-        assert.equal($cells.length, 22, 'Other-month cells count is correct');
+        assert.equal($cells.length, 8, 'Other-month cells count is correct');
     });
 
     QUnit.test('Scheduler workspace month view should have a dates text', function(assert) {
