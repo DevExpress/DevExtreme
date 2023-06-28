@@ -1,6 +1,6 @@
 const $ = require('jquery');
 const CustomStore = require('data/custom_store');
-const { isSummaryResult, isGroupItemsArray, isItemsArray } = require('data/utils');
+const { isSummaryResult, isGroupItemsArray, isItemsArray } = require('common/data');
 const processRequestResultLock = require('data/utils').processRequestResultLock;
 const config = require('core/config');
 const ERRORS = {

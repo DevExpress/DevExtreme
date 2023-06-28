@@ -1528,8 +1528,30 @@ declare module DevExpress.common {
      */
     useLegacyVisibleIndex?: boolean;
   };
+  /**
+   * [descr:GroupItem]
+   */
+  export type GroupItem<TItem = any> = {
+    key: any | string | number;
+    items: Array<TItem> | Array<GroupItem<TItem>> | null;
+    count?: number;
+    summary?: Array<any>;
+  };
   export type HorizontalAlignment = 'center' | 'left' | 'right';
   export type HorizontalEdge = 'left' | 'right';
+  export function isGroupItemsArray<TItem>(
+    res: ResolvedData<TItem>
+  ): res is Array<GroupItem<TItem>>;
+  export function isItemsArray<TItem>(
+    res: ResolvedData<TItem>
+  ): res is Array<TItem>;
+  export function isSummaryResult<TItem>(
+    res: ResolvedData<TItem>
+  ): res is SummaryResult<TItem>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type ItemsArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
   export type LabelMode = 'static' | 'floating' | 'hidden';
   export type MaskMode = 'always' | 'onFocus';
   export type Mode = 'auto';
@@ -1646,6 +1668,13 @@ declare module DevExpress.common {
      */
     type: 'required';
   };
+  /**
+   * [descr:ResolvedData]
+   */
+  export type ResolvedData<TItem = any> =
+    | Object
+    | ItemsArray<TItem>
+    | SummaryResult<TItem>;
   export type Scrollable =
     DevExpress.core.OmitInternal<DevExpress.ui.dxScrollable>;
   export type ScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
@@ -1692,6 +1721,12 @@ declare module DevExpress.common {
     type: 'stringLength';
   };
   export type SubmenuShowMode = 'onClick' | 'onHover';
+  export type SummaryResult<TItem = any> = {
+    data: Array<TItem> | Array<GroupItem>;
+    totalCount?: number;
+    summary?: Array<any>;
+    groupCount?: number;
+  };
   export type TextBoxPredefinedButton = 'clear';
 
   /**
@@ -4749,7 +4784,7 @@ declare module DevExpress.data {
      * [descr:CustomStore.load()]
      */
     load(): DevExpress.core.utils.DxExtendedPromise<
-      DevExpress.data.CustomStore.ResolvedData<TItem>
+      DevExpress.common.ResolvedData<TItem>
     >;
     /**
      * [descr:CustomStore.load(options)]
@@ -4757,23 +4792,10 @@ declare module DevExpress.data {
     load(
       options: LoadOptions<TItem>
     ): DevExpress.core.utils.DxExtendedPromise<
-      DevExpress.data.CustomStore.ResolvedData<TItem>
+      DevExpress.common.ResolvedData<TItem>
     >;
   }
   module CustomStore {
-    /**
-     * [descr:GroupItem]
-     */
-    export type GroupItem<TItem = any> = {
-      key: any | string | number;
-      items: Array<TItem> | Array<GroupItem<TItem>> | null;
-      count?: number;
-      summary?: Array<any>;
-    };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    type ItemsArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -4785,19 +4807,6 @@ declare module DevExpress.data {
       TItem,
       TKey
     >;
-    /**
-     * [descr:ResolvedData]
-     */
-    export type ResolvedData<TItem = any> =
-      | Object
-      | ItemsArray<TItem>
-      | SummaryResult<TItem>;
-    export type SummaryResult<TItem = any> = {
-      data: Array<TItem> | Array<GroupItem>;
-      totalCount?: number;
-      summary?: Array<any>;
-      groupCount?: number;
-    };
   }
   /**
    * [descr:CustomStoreOptions]
@@ -4827,7 +4836,7 @@ declare module DevExpress.data {
     load: (
       options: LoadOptions<TItem>
     ) => DevExpress.data.CustomStore.LoadResult<
-      DevExpress.data.CustomStore.ResolvedData<TItem>
+      DevExpress.common.ResolvedData<TItem>
     >;
     /**
      * [descr:CustomStoreOptions.loadMode]
@@ -5233,15 +5242,6 @@ declare module DevExpress.data {
      */
     valueOf(): string;
   }
-  export function isGroupItemsArray<TItem>(
-    res: DevExpress.data.CustomStore.ResolvedData<TItem>
-  ): res is Array<DevExpress.data.CustomStore.GroupItem<TItem>>;
-  export function isItemsArray<TItem>(
-    res: DevExpress.data.CustomStore.ResolvedData<TItem>
-  ): res is Array<TItem>;
-  export function isSummaryResult<TItem>(
-    res: DevExpress.data.CustomStore.ResolvedData<TItem>
-  ): res is DevExpress.data.CustomStore.SummaryResult<TItem>;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
