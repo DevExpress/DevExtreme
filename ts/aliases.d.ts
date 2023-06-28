@@ -494,4 +494,95 @@ declare module DevExpress.viz {
 
     /** @deprecated Use DevExpress.viz.dxBarGauge.Tooltip instead */
     export type dxBarGaugeTooltip = DevExpress.viz.dxBarGauge.Tooltip;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ArgumentAxis instead */
+    export type dxChartArgumentAxis = DevExpress.viz.dxChart.ArgumentAxis;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ArgumentAxisConstantLines instead */
+    export type dxChartArgumentAxisConstantLines = DevExpress.viz.dxChart.ArgumentAxisConstantLines;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ArgumentAxisConstantLinesLabel instead */
+    export type dxChartArgumentAxisConstantLinesLabel = DevExpress.viz.dxChart.ArgumentAxisConstantLinesLabel;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ArgumentAxisConstantLineStyle instead */
+    export type dxChartArgumentAxisConstantLineStyle = DevExpress.viz.dxChart.ArgumentAxisConstantLineStyle;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ArgumentAxisConstantLineStyleLabel instead */
+    export type dxChartArgumentAxisConstantLineStyleLabel = DevExpress.viz.dxChart.ArgumentAxisConstantLineStyleLabel;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ArgumentAxisLabel instead */
+    export type dxChartArgumentAxisLabel = DevExpress.viz.dxChart.ArgumentAxisLabel;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ArgumentAxisStrips instead */
+    export type dxChartArgumentAxisStrips = DevExpress.viz.dxChart.ArgumentAxisStrips;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ArgumentAxisStripsLabel instead */
+    export type dxChartArgumentAxisStripsLabel = DevExpress.viz.dxChart.ArgumentAxisStripsLabel;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ArgumentAxisTitle instead */
+    export type dxChartArgumentAxisTitle = DevExpress.viz.dxChart.ArgumentAxisTitle;
+
+    /** @deprecated Use DevExpress.viz.dxChart.CommonAxisSettings instead */
+    export type dxChartCommonAxisSettings = DevExpress.viz.dxChart.CommonAxisSettings;
+
+    /** @deprecated Use DevExpress.viz.dxChart.CommonAxisSettingsConstantLineStyle instead */
+    export type dxChartCommonAxisSettingsConstantLineStyle = DevExpress.viz.dxChart.CommonAxisSettingsConstantLineStyle;
+
+    /** @deprecated Use DevExpress.viz.dxChart.CommonAxisSettingsConstantLineStyleLabel instead */
+    export type dxChartCommonAxisSettingsConstantLineStyleLabel = DevExpress.viz.dxChart.CommonAxisSettingsConstantLineStyleLabel;
+
+    /** @deprecated Use DevExpress.viz.dxChart.CommonAxisSettingsLabel instead */
+    export type dxChartCommonAxisSettingsLabel = DevExpress.viz.dxChart.CommonAxisSettingsLabel;
+
+    /** @deprecated Use DevExpress.viz.dxChart.CommonAxisSettingsStripStyle instead */
+    export type dxChartCommonAxisSettingsStripStyle = DevExpress.viz.dxChart.CommonAxisSettingsStripStyle;
+
+    /** @deprecated Use DevExpress.viz.dxChart.CommonAxisSettingsStripStyleLabel instead */
+    export type dxChartCommonAxisSettingsStripStyleLabel = DevExpress.viz.dxChart.CommonAxisSettingsStripStyleLabel;
+
+    /** @deprecated Use DevExpress.viz.dxChart.CommonAxisSettingsTitle instead */
+    export type dxChartCommonAxisSettingsTitle = DevExpress.viz.dxChart.CommonAxisSettingsTitle;
+
+    /** @deprecated Use DevExpress.viz.dxChart.CommonPaneSettings instead */
+    export type dxChartCommonPaneSettings = DevExpress.viz.dxChart.CommonPaneSettings;
+
+    /** @deprecated Use DevExpress.viz.dxChart.CommonSeriesSettings instead */
+    export type dxChartCommonSeriesSettings = DevExpress.viz.dxChart.CommonSeriesSettings;
+
+    /** @deprecated Use DevExpress.viz.dxChart.Legend instead */
+    export type dxChartLegend = DevExpress.viz.dxChart.Legend;
+
+    /** @deprecated Use DevExpress.viz.dxChart.Panes instead */
+    export type dxChartPanes = DevExpress.viz.dxChart.Panes;
+
+    /** @deprecated Use DevExpress.viz.dxChart.Tooltip instead */
+    export type dxChartTooltip = DevExpress.viz.dxChart.Tooltip;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ValueAxis instead */
+    export type dxChartValueAxis = DevExpress.viz.dxChart.ValueAxis;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ValueAxisConstantLines instead */
+    export type dxChartValueAxisConstantLines = DevExpress.viz.dxChart.ValueAxisConstantLines;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ValueAxisConstantLinesLabel instead */
+    export type dxChartValueAxisConstantLinesLabel = DevExpress.viz.dxChart.ValueAxisConstantLinesLabel;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ValueAxisConstantLineStyle instead */
+    export type dxChartValueAxisConstantLineStyle = DevExpress.viz.dxChart.ValueAxisConstantLineStyle;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ValueAxisConstantLineStyleLabel instead */
+    export type dxChartValueAxisConstantLineStyleLabel = DevExpress.viz.dxChart.ValueAxisConstantLineStyleLabel;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ValueAxisLabel instead */
+    export type dxChartValueAxisLabel = DevExpress.viz.dxChart.ValueAxisLabel;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ValueAxisStrips instead */
+    export type dxChartValueAxisStrips = DevExpress.viz.dxChart.ValueAxisStrips;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ValueAxisStripsLabel instead */
+    export type dxChartValueAxisStripsLabel = DevExpress.viz.dxChart.ValueAxisStripsLabel;
+
+    /** @deprecated Use DevExpress.viz.dxChart.ValueAxisTitle instead */
+    export type dxChartValueAxisTitle = DevExpress.viz.dxChart.ValueAxisTitle;
+
 }
