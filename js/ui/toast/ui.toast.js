@@ -165,7 +165,38 @@ const Toast = Overlay.inherit({
                     maxWidth: 568,
                     displayTime: 4000
                 }
-            }
+            },
+            {
+                device: { deviceType: 'tablet' },
+                options: {
+                    hideOnOutsideClick: true,
+
+                    displayTime: 2000,
+
+                    width: 'auto',
+
+                    position: {
+                        at: 'bottom center',
+                        my: 'bottom center',
+                        offset: '0 -20',
+                    },
+
+                    animation: {
+                        show: {
+                            type: 'fade',
+                            duration: 400,
+                            from: 0,
+                            to: 1
+                        },
+                        hide: {
+                            type: 'fade',
+                            duration: 400,
+                            from: 1,
+                            to: 0
+                        }
+                    },
+                },
+            },
         ]);
     },
 
