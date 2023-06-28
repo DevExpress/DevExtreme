@@ -243,6 +243,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
             if(this._parsedValue < 0 || 1 / this._parsedValue === -Infinity) {
                 this._revertSign(e);
                 this._setTextByParsedValue();
+                return;
             }
             e.preventDefault();
             return;
