@@ -585,4 +585,84 @@ declare module DevExpress.viz {
     /** @deprecated Use DevExpress.viz.dxChart.ValueAxisTitle instead */
     export type dxChartValueAxisTitle = DevExpress.viz.dxChart.ValueAxisTitle;
 
+    /** @deprecated Use DevExpress.viz.dxPolarChart.AdaptiveLayout instead */
+    export type dxPolarChartAdaptiveLayout = DevExpress.viz.dxPolarChart.AdaptiveLayout;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ArgumentAxis instead */
+    export type dxPolarChartArgumentAxis = DevExpress.viz.dxPolarChart.ArgumentAxis;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ArgumentAxisConstantLines instead */
+    export type dxPolarChartArgumentAxisConstantLines = DevExpress.viz.dxPolarChart.ArgumentAxisConstantLines;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ArgumentAxisConstantLinesLabel instead */
+    export type dxPolarChartArgumentAxisConstantLinesLabel = DevExpress.viz.dxPolarChart.ArgumentAxisConstantLinesLabel;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ArgumentAxisLabel instead */
+    export type dxPolarChartArgumentAxisLabel = DevExpress.viz.dxPolarChart.ArgumentAxisLabel;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ArgumentAxisMinorTick instead */
+    export type dxPolarChartArgumentAxisMinorTick = DevExpress.viz.dxPolarChart.ArgumentAxisMinorTick;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ArgumentAxisStrips instead */
+    export type dxPolarChartArgumentAxisStrips = DevExpress.viz.dxPolarChart.ArgumentAxisStrips;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ArgumentAxisStripsLabel instead */
+    export type dxPolarChartArgumentAxisStripsLabel = DevExpress.viz.dxPolarChart.ArgumentAxisStripsLabel;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ArgumentAxisTick instead */
+    export type dxPolarChartArgumentAxisTick = DevExpress.viz.dxPolarChart.ArgumentAxisTick;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.CommonAxisSettings instead */
+    export type dxPolarChartCommonAxisSettings = DevExpress.viz.dxPolarChart.CommonAxisSettings;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.CommonAxisSettingsConstantLineStyle instead */
+    export type dxPolarChartCommonAxisSettingsConstantLineStyle = DevExpress.viz.dxPolarChart.CommonAxisSettingsConstantLineStyle;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.CommonAxisSettingsConstantLineStyleLabel instead */
+    export type dxPolarChartCommonAxisSettingsConstantLineStyleLabel = DevExpress.viz.dxPolarChart.CommonAxisSettingsConstantLineStyleLabel;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.CommonAxisSettingsLabel instead */
+    export type dxPolarChartCommonAxisSettingsLabel = DevExpress.viz.dxPolarChart.CommonAxisSettingsLabel;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.CommonAxisSettingsMinorTick instead */
+    export type dxPolarChartCommonAxisSettingsMinorTick = DevExpress.viz.dxPolarChart.CommonAxisSettingsMinorTick;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.CommonAxisSettingsStripStyle instead */
+    export type dxPolarChartCommonAxisSettingsStripStyle = DevExpress.viz.dxPolarChart.CommonAxisSettingsStripStyle;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.CommonAxisSettingsStripStyleLabel instead */
+    export type dxPolarChartCommonAxisSettingsStripStyleLabel = DevExpress.viz.dxPolarChart.CommonAxisSettingsStripStyleLabel;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.CommonAxisSettingsTick instead */
+    export type dxPolarChartCommonAxisSettingsTick = DevExpress.viz.dxPolarChart.CommonAxisSettingsTick;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.CommonSeriesSettings instead */
+    export type dxPolarChartCommonSeriesSettings = DevExpress.viz.dxPolarChart.CommonSeriesSettings;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.Legend instead */
+    export type dxPolarChartLegend = DevExpress.viz.dxPolarChart.Legend;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.Tooltip instead */
+    export type dxPolarChartTooltip = DevExpress.viz.dxPolarChart.Tooltip;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ValueAxis instead */
+    export type dxPolarChartValueAxis = DevExpress.viz.dxPolarChart.ValueAxis;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ValueAxisConstantLines instead */
+    export type dxPolarChartValueAxisConstantLines = DevExpress.viz.dxPolarChart.ValueAxisConstantLines;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ValueAxisConstantLinesLabel instead */
+    export type dxPolarChartValueAxisConstantLinesLabel = DevExpress.viz.dxPolarChart.ValueAxisConstantLinesLabel;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ValueAxisLabel instead */
+    export type dxPolarChartValueAxisLabel = DevExpress.viz.dxPolarChart.ValueAxisLabel;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ValueAxisStrips instead */
+    export type dxPolarChartValueAxisStrips = DevExpress.viz.dxPolarChart.ValueAxisStrips;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ValueAxisStripsLabel instead */
+    export type dxPolarChartValueAxisStripsLabel = DevExpress.viz.dxPolarChart.ValueAxisStripsLabel;
+
+    /** @deprecated Use DevExpress.viz.dxPolarChart.ValueAxisTick instead */
+    export type dxPolarChartValueAxisTick = DevExpress.viz.dxPolarChart.ValueAxisTick;
 }
