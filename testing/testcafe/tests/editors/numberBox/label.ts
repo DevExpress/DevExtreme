@@ -1,16 +1,22 @@
+/* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import {
-  appendElementTo,
+  appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
+import Guid from '../../../../../js/core/guid';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { clearTestPage } from '../../../helpers/clearPage';
+
+const NUMBERBOX_CLASS = 'dx-numberbox';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 fixture.disablePageReloads`NumberBox_Label`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => clearTestPage());
 
 stylingModes.forEach((stylingMode) => {
   safeSizeTest(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
@@ -40,4 +46,49 @@ stylingModes.forEach((stylingMode) => {
       value: 123,
     }, '#numberBox2');
   });
+});
+
+test('NumberBox with buttons container', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${NUMBERBOX_CLASS} { width: 220px; margin: 5px; }`);
+
+  await testScreenshot(t, takeScreenshot, 'NumberBox render with buttons container.png', { element: '#container' });
+
+  await removeStylesheetRulesFromPage();
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  for (const isValid of [true, false]) {
+    for (const stylingMode of stylingModes) {
+      for (const buttons of [
+        ['clear'],
+        ['clear', 'spins'],
+        [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear', 'spins'],
+        ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }, 'spins'],
+        ['clear', 'spins', { name: 'custom', location: 'after', options: { icon: 'home' } }],
+        [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear', 'spins'],
+        ['clear', { name: 'custom', location: 'before', options: { icon: 'home' } }, 'spins'],
+        ['clear', 'spins', { name: 'custom', location: 'before', options: { icon: 'home' } }],
+      ]) {
+        for (const rtlEnabled of [true, false]) {
+          const id = `${`dx${new Guid()}`}`;
+
+          await appendElementTo('#container', 'div', id, { });
+
+          await createWidget('dxNumberBox', {
+            value: Math.PI,
+            stylingMode,
+            rtlEnabled,
+            buttons,
+            showClearButton: true,
+            showSpinButtons: true,
+            isValid,
+          }, `#${id}`);
+        }
+      }
+    }
+  }
 });
