@@ -1,4 +1,4 @@
-const { default: CustomStore } = require('data/custom_store');
+const CustomStore = require('data/custom_store');
 const ErrorHandlingHelper = require('../../helpers/data.errorHandlingHelper.js');
 
 const RAW = 'raw';
