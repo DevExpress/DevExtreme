@@ -3,7 +3,7 @@ import { Options as StoreOptions, Store } from './abstract_store';
 import { DxExtendedPromise, DxPromise } from '../core/utils/deferred';
 import { ResolvedData } from '../common/data';
 
-export type { ResolvedData } from '../common/data';
+export type { ResolvedData, GroupItem } from '../common/data';
 
 /** @public */
 export type Options<
