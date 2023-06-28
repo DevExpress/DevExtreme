@@ -1,12 +1,12 @@
 $(() => {
-  const stylingMode = readStylingMode() || 'filled';
+  const stylingMode = 'outlined';
+  const labelMode = 'static';
   DevExpress.config({
     editorStylingMode: stylingMode,
   });
 
   const name = $('#name').dxTextBox({
     value: 'Olivia Peyton',
-    width: '100%',
     placeholder: 'Type...',
     inputAttr: { 'aria-label': 'Name' },
     label: 'Name',
@@ -17,18 +17,17 @@ $(() => {
   }).dxTextBox('instance');
 
   const place = $('#address').dxTextBox({
-    width: '100%',
     placeholder: 'Type...',
     inputAttr: { 'aria-label': 'Address' },
     label: 'Address',
+    labelMode,
   }).dxValidator({
     validationRules: [{
       type: 'required',
     }],
   }).dxTextBox('instance');
 
-  const birthDate = $('#birthDate').dxDateBox({
-    width: '100%',
+  const birthDate = $('#birth-date').dxDateBox({
     label: 'Birth Date',
     placeholder: 'Select...',
     value: '6/3/1981',
@@ -39,45 +38,37 @@ $(() => {
     }],
   }).dxDateBox('instance');
 
-  const hireDate = $('#hireDate').dxDateBox({
-    width: '100%',
+  const hireDate = $('#hire-date').dxDateBox({
     label: 'Hire Date',
     placeholder: 'Select...',
     inputAttr: { 'aria-label': 'Hire Date' },
+    labelMode,
   }).dxValidator({
     validationRules: [{
       type: 'required',
     }],
   }).dxDateBox('instance');
 
+  const range = $('#vacation-dates').dxDateRangeBox({
+    startDate: '6/3/2023',
+    startDateLabel: 'Start Vacation Date',
+    endDate: '12/3/2023',
+    endDateLabel: 'End Vacation Date',
+  }).dxDateRangeBox('instance');
+
   const state = $('#state').dxSelectBox({
     items: states,
-    width: '100%',
     inputAttr: { 'aria-label': 'State' },
     placeholder: 'Select...',
     label: 'State',
+    labelMode,
   }).dxValidator({
     validationRules: [{
       type: 'required',
     }],
   }).dxSelectBox('instance');
 
-  const position = $('#position').dxTagBox({
-    items: positions,
-    value: ['Support Manager'],
-    placeholder: 'Select...',
-    multiline: false,
-    width: '100%',
-    inputAttr: { 'aria-label': 'Position' },
-    label: 'Position',
-  }).dxValidator({
-    validationRules: [{
-      type: 'required',
-    }],
-  }).dxTagBox('instance');
-
   const phone = $('#phone').dxTextBox({
-    width: '100%',
     label: 'Phone',
     mask: '+1 (000) 000-0000',
     inputAttr: { 'aria-label': 'Phone' },
@@ -92,7 +83,6 @@ $(() => {
 
   const notes = $('#notes').dxTextArea({
     value: 'Olivia loves to sell. She has been selling DevAV products since 2012.',
-    width: '100%',
     placeholder: 'Type...',
     label: 'Notes',
     inputAttr: { 'aria-label': 'Notes' },
@@ -100,9 +90,10 @@ $(() => {
 
   $('#validate').dxButton({
     text: 'Save',
+    icon: 'save',
     type: 'default',
-    onClick(e) {
-      const result = e.validationGroup.validate();
+    onClick({ validationGroup }) {
+      const result = validationGroup.validate();
       if (result.isValid) {
         DevExpress.ui.notify('The task was saved successfully.', 'success');
       } else {
@@ -111,35 +102,23 @@ $(() => {
     },
   });
 
-  $('#modeSelector').dxSelectBox({
-    items: ['outlined', 'filled', 'underlined'],
-    value: stylingMode,
-    inputAttr: { 'aria-label': 'Mode' },
-    onValueChanged(e) {
-      writeStylingMode(e.value);
-    },
-  });
+  const getValueChangedHandler = (optionName) => ({ value }) => {
+    [name, place, birthDate, hireDate, range, state, phone, notes].forEach((editor) => {
+      editor.option(optionName, value);
+    });
+  };
 
-  $('#labelModeSelector').dxSelectBox({
+  $('#styling-mode-selector').dxSelectBox({
+    items: ['outlined', 'filled', 'underlined'],
+    value: 'outlined',
+    inputAttr: { 'aria-label': 'Mode' },
+    onValueChanged: getValueChangedHandler('stylingMode'),
+  }).dxSelectBox('instance');
+
+  $('#label-mode-selector').dxSelectBox({
     items: ['static', 'floating', 'hidden'],
     value: 'static',
     inputAttr: { 'aria-label': 'Label Mode' },
-    onValueChanged(e) {
-      [name, place, birthDate, position, hireDate, state, phone, notes].forEach((editor) => {
-        editor.option('labelMode', e.value);
-      });
-    },
-  });
+    onValueChanged: getValueChangedHandler('labelMode'),
+  }).dxSelectBox('instance');
 });
-
-const storageKey = 'editorStylingMode';
-function readStylingMode() {
-  const mode = localStorage.getItem(storageKey);
-  localStorage.removeItem(storageKey);
-  return mode;
-}
-
-function writeStylingMode(mode) {
-  localStorage.setItem(storageKey, mode);
-  window.location.reload(true);
-}

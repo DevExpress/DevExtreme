@@ -1,48 +1,70 @@
+#app {
+  height: 680px;
+}
+
+.widgets-container {
+  display: grid;
+  grid-template-areas:
+    'title title title title'
+    'name name birthDate birthDate '
+    'address address state phone'
+    'hireDate hireDate range range'
+    'notes notes notes notes';
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .title {
-  padding: 20px 0 20px 0;
+  grid-area: title;
   font-size: 18px;
   font-weight: 500;
 }
 
-.editors {
-  margin-right: 320px;
-  height: 570px;
+#name {
+  grid-area: name;
 }
 
-.editors .left {
-  padding: 0 10px 0 0;
+#address {
+  grid-area: address;
 }
 
-.editors .right {
-  padding: 0 0 0 10px;
+#birth-date {
+  grid-area: birthDate;
 }
 
-.editors .left,
-.editors .right {
-  flex-grow: 1;
+#state {
+  grid-area: state;
 }
 
-.editors .left > div,
-.editors .right > div,
-.editors .center > div {
-  margin-bottom: 20px;
+#phone {
+  grid-area: phone;
 }
 
-.editors .center {
-  padding: 0 27px 0 0;
+#hire-date {
+  grid-area: hireDate;
 }
 
-.validate {
+#notes {
+  grid-area: notes;
+}
+
+#vacation-dates {
+  grid-area: range;
+}
+
+#validate {
   float: right;
+  margin-top: 20px;
+  margin-right: 20px;
+  width: 100px;
 }
 
 .options {
+  grid-area: options;
   padding: 20px;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 260px;
-  top: 0;
+  margin-bottom: 40px;
   background-color: rgba(191, 191, 191, 0.15);
 }
 
@@ -51,13 +73,11 @@
   font-weight: 500;
 }
 
-.option {
-  margin-top: 20px;
+.editors-modes {
+  display: flex;
 }
 
-.editors-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-right: 27px;
+.option {
+  padding-right: 20px;
+  margin-top: 20px;
 }

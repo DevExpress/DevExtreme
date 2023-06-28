@@ -1,148 +1,130 @@
-<div class="title">Edit Profile</div>
-<div class="editors">
-  <div class="editors-container">
-    <div class="left">
-      <dx-text-box
-        value="Olivia Peyton"
-        width="100%"
-        [inputAttr]="{ 'aria-label': 'Name' }"
-        label="Name"
-        placeholder="Type..."
-        [stylingMode]="stylingMode"
-        [labelMode]="labelMode"
-      >
-        <dx-validator>
-          <dxi-validation-rule type="required"> </dxi-validation-rule>
-        </dx-validator>
-      </dx-text-box>
-      <dx-text-box
-        width="100%"
-        label="Address"
-        [inputAttr]="{ 'aria-label': 'Address' }"
-        placeholder="Type..."
-        [stylingMode]="stylingMode"
-        [labelMode]="labelMode"
-      >
-        <dx-validator>
-          <dxi-validation-rule type="required"> </dxi-validation-rule>
-        </dx-validator>
-      </dx-text-box>
-    </div>
-    <div class="right">
-      <dx-date-box
-        [value]="birthDate"
-        width="100%"
-        label="Birth Date"
-        placeholder="Select..."
-        [stylingMode]="stylingMode"
-        [labelMode]="labelMode"
-        [inputAttr]="{ 'aria-label': 'Birth Date' }"
-      >
-        <dx-validator>
-          <dxi-validation-rule type="required"> </dxi-validation-rule>
-        </dx-validator>
-      </dx-date-box>
-      <dx-select-box
-        [items]="states"
-        width="100%"
-        placeholder="Select..."
-        [inputAttr]="{ 'aria-label': 'State' }"
-        label="State"
-        [stylingMode]="stylingMode"
-        [labelMode]="labelMode"
-      >
-        <dx-validator>
-          <dxi-validation-rule type="required"> </dxi-validation-rule>
-        </dx-validator>
-      </dx-select-box>
+<div id="content-wrapper">
+  <div class="options">
+    <div class="caption">Options</div>
+    <div class="editors-modes">
+      <div class="option">
+        <label>Styling Mode</label>
+        <dx-select-box
+          [items]="['outlined', 'filled', 'underlined']"
+          [inputAttr]="{ 'aria-label': 'Styling Mode' }"
+          stylingMode="outlined"
+          [(value)]="stylingMode"
+        ></dx-select-box>
+      </div>
+      <div class="option">
+        <label>Label Mode</label>
+        <dx-select-box
+          [items]="['floating', 'static', 'hidden']"
+          [inputAttr]="{ 'aria-label': 'Label Mode' }"
+          stylingMode="outlined"
+          [(value)]="labelMode"
+        ></dx-select-box>
+      </div>
     </div>
   </div>
-  <div class="center">
-    <dx-tag-box
-      [items]="positions"
-      [value]="['Support Manager']"
-      [multiline]="false"
-      width="100%"
-      placeholder="Select..."
-      [inputAttr]="{ 'aria-label': 'Position' }"
-      label="Position"
+  <div class="widgets-container">
+    <div class="title">Edit Profile</div>
+    <dx-text-box
+      value="Olivia Peyton"
+      [inputAttr]="{ 'aria-label': 'Name' }"
+      label="Name"
+      id="name"
+      placeholder="Type..."
       [stylingMode]="stylingMode"
       [labelMode]="labelMode"
     >
       <dx-validator>
         <dxi-validation-rule type="required"> </dxi-validation-rule>
       </dx-validator>
-    </dx-tag-box>
-  </div>
-  <div class="editors-container">
-    <div class="left">
-      <dx-text-box
-        width="100%"
-        label="Phone"
-        [inputAttr]="{ 'aria-label': 'Phone' }"
-        mask="+1 (000) 000-0000"
-        [maskRules]="phoneRules"
-        [stylingMode]="stylingMode"
-        [labelMode]="labelMode"
-      >
-        <dx-validator>
-          <dxi-validation-rule type="required"> </dxi-validation-rule>
-        </dx-validator>
-      </dx-text-box>
-    </div>
-    <div class="right">
-      <dx-date-box
-        width="100%"
-        label="Hire Date"
-        placeholder="Select..."
-        [stylingMode]="stylingMode"
-        [labelMode]="labelMode"
-        [inputAttr]="{ 'aria-label': 'Hire Date' }"
-      >
-        <dx-validator>
-          <dxi-validation-rule type="required"> </dxi-validation-rule>
-        </dx-validator>
-      </dx-date-box>
-    </div>
-  </div>
-  <div class="center">
+    </dx-text-box>
+    <dx-text-box
+      label="Address"
+      [inputAttr]="{ 'aria-label': 'Address' }"
+      placeholder="Type..."
+      id="address"
+      [stylingMode]="stylingMode"
+      [labelMode]="labelMode"
+    >
+      <dx-validator>
+        <dxi-validation-rule type="required"> </dxi-validation-rule>
+      </dx-validator>
+    </dx-text-box>
+    <dx-date-box
+      label="Hire Date"
+      id="hire-date"
+      placeholder="Select..."
+      [stylingMode]="stylingMode"
+      [labelMode]="labelMode"
+      [inputAttr]="{ 'aria-label': 'Hire Date' }"
+    >
+      <dx-validator>
+        <dxi-validation-rule type="required"> </dxi-validation-rule>
+      </dx-validator>
+    </dx-date-box>
+    <dx-date-box
+      [value]="birthDate"
+      label="Birth Date"
+      id="birth-date"
+      placeholder="Select..."
+      [stylingMode]="stylingMode"
+      [labelMode]="labelMode"
+      [inputAttr]="{ 'aria-label': 'Birth Date' }"
+    >
+      <dx-validator>
+        <dxi-validation-rule type="required"> </dxi-validation-rule>
+      </dx-validator>
+    </dx-date-box>
+    <dx-select-box
+      [items]="states"
+      placeholder="Select..."
+      [inputAttr]="{ 'aria-label': 'State' }"
+      label="State"
+      id="state"
+      [stylingMode]="stylingMode"
+      [labelMode]="labelMode"
+    >
+      <dx-validator>
+        <dxi-validation-rule type="required"> </dxi-validation-rule>
+      </dx-validator>
+    </dx-select-box>
+    <dx-text-box
+      label="Phone"
+      [inputAttr]="{ 'aria-label': 'Phone' }"
+      mask="+1 (000) 000-0000"
+      id="phone"
+      [maskRules]="phoneRules"
+      [stylingMode]="stylingMode"
+      [labelMode]="labelMode"
+    >
+      <dx-validator>
+        <dxi-validation-rule type="required"> </dxi-validation-rule>
+      </dx-validator>
+    </dx-text-box>
+    <dx-date-range-box
+      [stylingMode]="stylingMode"
+      [labelMode]="labelMode"
+      id="vacation-dates"
+      startDate="6/3/2023"
+      startDateLabel="Start Vacation Date"
+      endDate="12/3/2023"
+      endDateLabel="End Vacation Date"
+    ></dx-date-range-box>
     <dx-text-area
       value="Olivia loves to sell. She has been selling DevAV products since 2012."
-      width="100%"
       placeholder="Type..."
       label="Notes"
+      id="notes"
       [stylingMode]="stylingMode"
       [labelMode]="labelMode"
       [inputAttr]="{ 'aria-label': 'Notes' }"
     ></dx-text-area>
   </div>
-  <div class="center">
-    <dx-button
-      text="Save"
-      type="default"
-      (onClick)="validateClick($event)"
-      class="validate"
-    ></dx-button>
-  </div>
-</div>
-<div class="options">
-  <div class="caption">Options</div>
-  <div class="option">
-    <label>Styling Mode</label>
-    <dx-select-box
-      [items]="['outlined', 'filled', 'underlined']"
-      [inputAttr]="{ 'aria-label': 'Styling Mode' }"
-      [(value)]="stylingMode"
-      [stylingMode]="stylingMode"
-    ></dx-select-box>
-  </div>
-  <div class="option">
-    <label>Label Mode</label>
-    <dx-select-box
-      [items]="['floating', 'static', 'hidden']"
-      [inputAttr]="{ 'aria-label': 'Label Mode' }"
-      [(value)]="labelMode"
-      [stylingMode]="stylingMode"
-    ></dx-select-box>
-  </div>
+  <dx-button
+    text="Save"
+    type="default"
+    icon="save"
+    id="validate"
+    (onClick)="validateClick($event)"
+    class="validate"
+  ></dx-button>
 </div>
