@@ -85,10 +85,12 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     }
 
     getRowCount(options) {
-        const startDate = options.currentDate;
+        const startDate = new Date(options.currentDate);
+        startDate.setDate(1);
 
         const endDate = new Date(startDate);
         endDate.setMonth(endDate.getMonth() + options.intervalCount);
+        endDate.setDate(1);
 
         return calculateAlignedWeeksBetweenDates(
             startDate,
