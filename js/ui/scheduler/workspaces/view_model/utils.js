@@ -47,7 +47,7 @@ export function alignToLastDayOfWeek(date, firstDayOfWeek) {
 
 export function calculateDaysBetweenDates(fromDate, toDate) {
     const MS_IN_DAY = 24 * 60 * 60 * 1000;
-    return Math.floor((toDate.getTime() - fromDate.getTime()) / MS_IN_DAY) + 1;
+    return Math.round((toDate.getTime() - fromDate.getTime()) / MS_IN_DAY) + 1;
 }
 
 export function calculateAlignedWeeksBetweenDates(fromDate, toDate, firstDayOfWeek) {
