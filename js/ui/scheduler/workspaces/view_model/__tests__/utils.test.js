@@ -63,7 +63,7 @@ describe('alignToLastDayOfWeek', () => {
         ${new Date('2023-06-16')} | ${new Date('2023-06-18')} | ${1}
 
         ${new Date('2023-06-21')} | ${new Date('2023-06-25')} | ${1}
-    `.it('should return first day of current week', ({
+    `.it('should return last day of current week', ({
         date, rightDate, firstDayOfWeek
     }) => {
         const resultDate = alignToLastDayOfWeek(date, firstDayOfWeek);
@@ -87,10 +87,20 @@ describe('calculateDaysBetweenDates', () => {
 describe('calculateAlignedWeeksBetweenDates', () => {
     each`
         fromDate                  | toDate                     | res
-        ${new Date('2023-06-04')} | ${new Date('2023-06-12')}  | ${3}
-        ${new Date('2023-06-05')} | ${new Date('2023-06-12')}  | ${2}
-        ${new Date('2023-06-05')} | ${new Date('2023-06-11')}  | ${1}
+        ${new Date('2023-10-01')} | ${new Date('2023-10-31')}  | ${6}
+        ${new Date('2023-06-01')} | ${new Date('2023-07-31')}  | ${10}
     `.it('should return right count of days between dates', ({
+        fromDate, toDate, res
+    }) => {
+        expect(calculateAlignedWeeksBetweenDates(fromDate, toDate, 1)).toBe(res);
+    });
+
+    each`
+        fromDate                  | toDate                     | res
+        ${new Date('2023-06-04')} | ${new Date('2023-06-12')}  | ${6}
+        ${new Date('2023-06-05')} | ${new Date('2023-06-12')}  | ${6}
+        ${new Date('2023-06-05')} | ${new Date('2023-06-11')}  | ${6}
+    `.it('should return at least 6 weeks in order to not make breaking change', ({
         fromDate, toDate, res
     }) => {
         expect(calculateAlignedWeeksBetweenDates(fromDate, toDate, 1)).toBe(res);

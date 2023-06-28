@@ -45,14 +45,15 @@ export function alignToLastDayOfWeek(date, firstDayOfWeek) {
     return newDate;
 }
 
-export const calculateDaysBetweenDates = (fromDate, toDate) => {
+export function calculateDaysBetweenDates(fromDate, toDate) {
     const MS_IN_DAY = 24 * 60 * 60 * 1000;
     return (toDate.getTime() - fromDate.getTime()) / MS_IN_DAY + 1;
-};
+}
 
-export const calculateAlignedWeeksBetweenDates = (fromDate, toDate, firstDayOfWeek) => {
+export function calculateAlignedWeeksBetweenDates(fromDate, toDate, firstDayOfWeek) {
     const alignedFromDate = alignToFirstDayOfWeek(fromDate, firstDayOfWeek);
     const alignedToDate = alignToLastDayOfWeek(toDate, firstDayOfWeek);
 
-    return calculateDaysBetweenDates(alignedFromDate, alignedToDate) / 7;
-};
+    const weekCount = calculateDaysBetweenDates(alignedFromDate, alignedToDate) / 7;
+    return Math.max(weekCount, 6);
+}
