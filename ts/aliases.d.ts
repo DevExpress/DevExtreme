@@ -665,4 +665,13 @@ declare module DevExpress.viz {
 
     /** @deprecated Use DevExpress.viz.dxPolarChart.ValueAxisTick instead */
     export type dxPolarChartValueAxisTick = DevExpress.viz.dxPolarChart.ValueAxisTick;
+
+    /** @deprecated Use DevExpress.viz.dxCircularGauge.RangeContainer instead */
+    export type dxCircularGaugeRangeContainer = DevExpress.viz.dxCircularGauge.RangeContainer;
+
+    /** @deprecated Use DevExpress.viz.dxCircularGauge.Scale instead */
+    export type dxCircularGaugeScale = DevExpress.viz.dxCircularGauge.Scale;
+
+    /** @deprecated Use DevExpress.viz.dxCircularGauge.ScaleLabel instead */
+    export type dxCircularGaugeScaleLabel = DevExpress.viz.dxCircularGauge.ScaleLabel;
 }

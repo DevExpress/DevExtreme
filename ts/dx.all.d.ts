@@ -35950,6 +35950,45 @@ declare module DevExpress.viz {
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxCircularGaugeOptions;
     /**
+     * [descr:dxCircularGaugeRangeContainer]
+     */
+    export type RangeContainer = BaseGaugeRangeContainer & {
+      /**
+       * [descr:dxCircularGaugeOptions.rangeContainer.orientation]
+       */
+      orientation?: CircularGaugeElementOrientation;
+      /**
+       * [descr:dxCircularGaugeOptions.rangeContainer.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxCircularGaugeScale]
+     */
+    export type Scale = BaseGaugeScale & {
+      /**
+       * [descr:dxCircularGaugeOptions.scale.label]
+       */
+      label?: ScaleLabel;
+      /**
+       * [descr:dxCircularGaugeOptions.scale.orientation]
+       */
+      orientation?: CircularGaugeElementOrientation;
+    };
+    /**
+     * [descr:dxCircularGaugeScaleLabel]
+     */
+    export type ScaleLabel = BaseGaugeScaleLabel & {
+      /**
+       * [descr:dxCircularGaugeOptions.scale.label.hideFirstOrLast]
+       */
+      hideFirstOrLast?: CircularGaugeLabelOverlap;
+      /**
+       * [descr:dxCircularGaugeOptions.scale.label.indentFromTick]
+       */
+      indentFromTick?: number;
+    };
+    /**
      * [descr:_viz_circular_gauge_TooltipHiddenEvent]
      */
     export type TooltipHiddenEvent =
@@ -35994,11 +36033,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxCircularGaugeOptions.rangeContainer]
      */
-    rangeContainer?: dxCircularGaugeRangeContainer;
+    rangeContainer?: DevExpress.viz.dxCircularGauge.RangeContainer;
     /**
      * [descr:dxCircularGaugeOptions.scale]
      */
-    scale?: dxCircularGaugeScale;
+    scale?: DevExpress.viz.dxCircularGauge.Scale;
     /**
      * [descr:dxCircularGaugeOptions.subvalueIndicator]
      */
@@ -36007,49 +36046,6 @@ declare module DevExpress.viz {
      * [descr:dxCircularGaugeOptions.valueIndicator]
      */
     valueIndicator?: GaugeIndicator;
-  }
-  /**
-   * [descr:dxCircularGaugeRangeContainer]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxCircularGaugeRangeContainer
-    extends BaseGaugeRangeContainer {
-    /**
-     * [descr:dxCircularGaugeOptions.rangeContainer.orientation]
-     */
-    orientation?: DevExpress.viz.dxCircularGauge.CircularGaugeElementOrientation;
-    /**
-     * [descr:dxCircularGaugeOptions.rangeContainer.width]
-     */
-    width?: number;
-  }
-  /**
-   * [descr:dxCircularGaugeScale]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxCircularGaugeScale extends BaseGaugeScale {
-    /**
-     * [descr:dxCircularGaugeOptions.scale.label]
-     */
-    label?: dxCircularGaugeScaleLabel;
-    /**
-     * [descr:dxCircularGaugeOptions.scale.orientation]
-     */
-    orientation?: DevExpress.viz.dxCircularGauge.CircularGaugeElementOrientation;
-  }
-  /**
-   * [descr:dxCircularGaugeScaleLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
-    /**
-     * [descr:dxCircularGaugeOptions.scale.label.hideFirstOrLast]
-     */
-    hideFirstOrLast?: DevExpress.viz.dxCircularGauge.CircularGaugeLabelOverlap;
-    /**
-     * [descr:dxCircularGaugeOptions.scale.label.indentFromTick]
-     */
-    indentFromTick?: number;
   }
   /**
    * [descr:dxFunnel]
