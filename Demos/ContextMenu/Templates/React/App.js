@@ -28,7 +28,7 @@ class App extends React.Component {
         <div className="label">
             Right click an image to display the context menu:
         </div>
-        <img id="image" src="../../../../images/products/5.png" />
+        <img id="image" alt="product" src="../../../../images/products/5.png" />
         <ContextMenu
           dataSource={items}
           width={200}

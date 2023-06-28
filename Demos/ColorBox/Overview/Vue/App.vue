@@ -6,6 +6,7 @@
         <div class="dx-field-value">
           <DxColorBox
             value="#f05b41"
+            :input-attr="defaultModeLabel"
           />
         </div>
       </div>
@@ -15,6 +16,7 @@
           <DxColorBox
             :edit-alpha-channel="true"
             value="#f05b41"
+            :input-attr="alphaChannelLabel"
           />
         </div>
       </div>
@@ -25,6 +27,7 @@
             value="#f05b41"
             apply-button-text="Apply"
             cancel-button-text="Decline"
+            :input-attr="customButtonCaptionsLabel"
           />
         </div>
       </div>
@@ -34,6 +37,7 @@
           <DxColorBox
             :read-only="true"
             value="#f05b41"
+            :input-attr="readOnlyLabel"
           />
         </div>
       </div>
@@ -43,6 +47,7 @@
           <DxColorBox
             :disabled="true"
             value="#f05b41"
+            :input-attr="disabledLabel"
           />
         </div>
       </div>
@@ -60,6 +65,7 @@
           <DxColorBox
             v-model:value="color"
             apply-value-mode="instantly"
+            :input-attr="eventHandlingLabel"
           />
         </div>
       </div>
@@ -74,10 +80,32 @@ export default {
   components: {
     DxColorBox,
   },
+
   data() {
     return {
       color: '#f05b41',
     };
+  },
+
+  computed: {
+    defaultModeLabel() {
+      return { 'aria-label': 'Default mode' };
+    },
+    alphaChannelLabel() {
+      return { 'aria-label': 'With alpha channel editing' };
+    },
+    customButtonCaptionsLabel() {
+      return { 'aria-label': 'Custom button captions' };
+    },
+    readOnlyLabel() {
+      return { 'aria-label': 'Read only' };
+    },
+    disabledLabel() {
+      return { 'aria-label': 'Disabled' };
+    },
+    eventHandlingLabel() {
+      return { 'aria-label': 'Event Handling' };
+    },
   },
 };
 </script>

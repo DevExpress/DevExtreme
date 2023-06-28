@@ -7,6 +7,7 @@
           :display-expr="getDisplayExpr"
           :apply-value-mode="applyValueMode"
           placeholder="Select employee"
+          :input-attr="{ 'aria-label': 'Lookup' }"
           @value-changed="setSelectedValue"
         >
           <DxDropDownOptions :show-title="false"/>

@@ -16,7 +16,7 @@ class App extends React.Component {
         <div id="chat-window">
           <div className="message dx-theme-background-color">
             <div className="photo">
-              <img src="../../../../images/mentions/Kevin-Carter.png" />
+              <img alt="Kevin Carter" src="../../../../images/mentions/Kevin-Carter.png" />
             </div>
             <div className="name">
               Kevin Carter
@@ -31,7 +31,7 @@ class App extends React.Component {
           <br />
           <div className="message dx-theme-background-color">
             <div className="photo">
-              <img src="../../../../images/mentions/John-Heart.png" />
+              <img alt="John Heart" src="../../../../images/mentions/John-Heart.png" />
             </div>
             <div className="name">
               John Heart
@@ -47,7 +47,7 @@ class App extends React.Component {
           <br />
           <div className="message dx-theme-background-color">
             <div className="photo">
-              <img src="../../../../images/mentions/Kevin-Carter.png" />
+              <img alt="Kevin Carter" src="../../../../images/mentions/Kevin-Carter.png" />
             </div>
             <div className="name">
               Kevin Carter

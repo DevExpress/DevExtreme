@@ -2,7 +2,7 @@
   <h1>Product List</h1>
   <ul>
     <li *ngFor="let product of products">
-      <img [src]="product.ImageSrc" />
+      <img [alt]="product.Name" [src]="product.ImageSrc" />
       <div>{{ product.Name }}</div>
       <dx-check-box
         text="Available"

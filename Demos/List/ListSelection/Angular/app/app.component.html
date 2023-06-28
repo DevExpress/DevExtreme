@@ -38,7 +38,10 @@
     </div>
     <div class="option">
       <span>Select By Click</span>
-      <dx-check-box [(value)]="selectByClick"></dx-check-box>
+      <dx-check-box
+        [elementAttr]="{ 'aria-label': 'Selection By Click' }"
+        [(value)]="selectByClick"
+      ></dx-check-box>
     </div>
   </div>
 </div>

@@ -121,6 +121,7 @@ function renderTile(item) {
   return (
     <img
       className="tile-image"
+      alt={item.FileName}
       src={ `../../../../images/hotels/${item.FileName}` }
     />
   );

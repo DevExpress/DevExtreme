@@ -2,6 +2,7 @@
   <div class="custom-item">
     <img
       v-if="fieldData"
+      alt="Product name"
       :src="fieldData.ImageSrc"
     >
     <DxTextBox

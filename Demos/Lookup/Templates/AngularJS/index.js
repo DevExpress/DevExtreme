@@ -9,6 +9,9 @@ DemoApp.controller('DemoController', ($scope) => {
     },
     valueExpr: 'ID',
     value: employees[0].ID,
+    inputAttr: {
+      'aria-label': 'Custom Field Template',
+    },
     fieldTemplate(data) {
       return getTemplateMarkup(data, 'custom-field');
     },
@@ -23,13 +26,16 @@ DemoApp.controller('DemoController', ($scope) => {
       title: 'Select employee',
     },
     placeholder: 'Select employee',
+    inputAttr: {
+      'aria-label': 'Custom Item Template',
+    },
     itemTemplate(data) {
       return getTemplateMarkup(data, 'custom-item');
     },
   };
 
   function getTemplateMarkup(data, containerClass) {
-    return `<div class='${containerClass}'><img src='${
+    return `<div class='${containerClass}'><img alt='${data.FirstName}' src='${
       data.Picture}' /><div>${data.Prefix} ${
       data.FirstName} ${data.LastName}</div></div>`;
   }

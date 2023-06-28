@@ -3,13 +3,20 @@
     <div class="dx-field">
       <div class="dx-field-label">Default mode</div>
       <div class="dx-field-value">
-        <dx-color-box value="#f05b41"></dx-color-box>
+        <dx-color-box
+          value="#f05b41"
+          [inputAttr]="{ 'aria-label': 'Default mode' }"
+        ></dx-color-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">With alpha channel editing</div>
       <div class="dx-field-value">
-        <dx-color-box value="#f05b41" [editAlphaChannel]="true"></dx-color-box>
+        <dx-color-box
+          value="#f05b41"
+          [editAlphaChannel]="true"
+          [inputAttr]="{ 'aria-label': 'With alpha channel editing' }"
+        ></dx-color-box>
       </div>
     </div>
     <div class="dx-field">
@@ -19,19 +26,28 @@
           value="#f05b41"
           applyButtonText="Apply"
           cancelButtonText="Decline"
+          [inputAttr]="{ 'aria-label': 'Custom button captions' }"
         ></dx-color-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Read only</div>
       <div class="dx-field-value">
-        <dx-color-box value="#f05b41" [readOnly]="true"></dx-color-box>
+        <dx-color-box
+          value="#f05b41"
+          [readOnly]="true"
+          [inputAttr]="{ 'aria-label': 'Read only' }"
+        ></dx-color-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Disabled</div>
       <div class="dx-field-value">
-        <dx-color-box value="#f05b41" [disabled]="true"></dx-color-box>
+        <dx-color-box
+          value="#f05b41"
+          [disabled]="true"
+          [inputAttr]="{ 'aria-label': 'Disabled' }"
+        ></dx-color-box>
       </div>
     </div>
   </div>
@@ -45,6 +61,7 @@
         <dx-color-box
           [(value)]="currentColor"
           applyValueMode="instantly"
+          [inputAttr]="{ 'aria-label': 'Event Handling' }"
         ></dx-color-box>
       </div>
     </div>

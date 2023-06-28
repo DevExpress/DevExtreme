@@ -4,6 +4,7 @@ export default function ConditionalIcon({ value }) {
   if (value) {
     return (
       <img
+        alt='Custom icon'
         src={`../../../../images/icons/${value.IconSrc}`}
         className='custom-icon'
       />

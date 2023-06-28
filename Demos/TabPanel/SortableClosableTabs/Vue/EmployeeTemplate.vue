@@ -3,6 +3,7 @@
     <div class="employeeInfo">
       <img
         class="employeePhoto"
+        :alt="FirstName + ' ' + LastName"
         :src="picture"
       >
       <p class="employeeNotes"><b>Position: {{ position }}</b><br>{{ notes }}</p>

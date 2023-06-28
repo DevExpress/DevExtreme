@@ -35,7 +35,11 @@
     </div>
     <div *dxTemplate="let employee of 'item'">
       <div class="employeeInfo">
-        <img class="employeePhoto" [src]="employee.Picture" />
+        <img
+          alt="{{ employee.FirstName }} {{ employee.LastName }}"
+          class="employeePhoto"
+          [src]="employee.Picture"
+        />
         <p class="employeeNotes"
           ><b>Position: {{ employee.Position }}</b
           ><br />{{ employee.Notes }}</p

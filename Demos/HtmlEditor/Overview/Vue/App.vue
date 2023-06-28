@@ -14,12 +14,14 @@
         <DxItem name="redo"/>
         <DxItem name="separator"/>
         <DxItem
-          :accepted-values="sizeValues"
           name="size"
+          :accepted-values="sizeValues"
+          :options="fontSizeOptions"
         />
         <DxItem
-          :accepted-values="fontValues"
           name="font"
+          :accepted-values="fontValues"
+          :options="fontFamilyOptions"
         />
         <DxItem name="separator"/>
         <DxItem name="bold"/>
@@ -36,8 +38,9 @@
         <DxItem name="bulletList"/>
         <DxItem name="separator"/>
         <DxItem
-          :accepted-values="headerValues"
           name="header"
+          :accepted-values="headerValues"
+          :options="headerOptions"
         />
         <DxItem name="separator"/>
         <DxItem name="color"/>
@@ -108,6 +111,7 @@ export default {
     DxCheckBox,
     DxSelectBox,
   },
+
   data() {
     return {
       markup,
@@ -117,6 +121,9 @@ export default {
       headerValues: [false, 1, 2, 3, 4, 5],
       currentTabs: tabs[2].value,
       isMultiline: true,
+      fontSizeOptions: { inputAttr: { 'aria-label': 'Font size' } },
+      fontFamilyOptions: { inputAttr: { 'aria-label': 'Font family' } },
+      headerOptions: { inputAttr: { 'aria-label': 'Font family' } },
     };
   },
 };

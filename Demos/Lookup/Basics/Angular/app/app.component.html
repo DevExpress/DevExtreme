@@ -1,7 +1,11 @@
 <div class="dx-fieldset">
   <div class="dx-fieldset-header">Simple lookup</div>
   <div class="dx-field">
-    <dx-lookup [items]="employees" [value]="employees[0]">
+    <dx-lookup
+      [items]="employees"
+      [value]="employees[0]"
+      [inputAttr]="{ 'aria-label': 'Simple lookup' }"
+    >
       <dxo-drop-down-options [showTitle]="false"></dxo-drop-down-options>
     </dx-lookup>
   </div>
@@ -9,7 +13,12 @@
 <div class="dx-fieldset">
   <div class="dx-fieldset-header">Grouped lookup</div>
   <div class="dx-field">
-    <dx-lookup [dataSource]="dataSource" [grouped]="true" displayExpr="Subject">
+    <dx-lookup
+      displayExpr="Subject"
+      [dataSource]="dataSource"
+      [grouped]="true"
+      [inputAttr]="{ 'aria-label': 'Grouped lookup' }"
+    >
       <dxo-drop-down-options [hideOnOutsideClick]="true" [showTitle]="false">
       </dxo-drop-down-options>
     </dx-lookup>

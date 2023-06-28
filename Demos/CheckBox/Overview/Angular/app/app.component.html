@@ -3,19 +3,28 @@
     <div class="dx-field">
       <div class="dx-field-label">Checked</div>
       <div class="dx-field-value">
-        <dx-check-box [value]="true"></dx-check-box>
+        <dx-check-box
+          [value]="true"
+          [elementAttr]="{ 'aria-label': 'Checked' }"
+        ></dx-check-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Unchecked</div>
       <div class="dx-field-value">
-        <dx-check-box [value]="false"></dx-check-box>
+        <dx-check-box
+          [value]="false"
+          [elementAttr]="{ 'aria-label': 'Unchecked' }"
+        ></dx-check-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Indeterminate</div>
       <div class="dx-field-value">
-        <dx-check-box [value]="null"></dx-check-box>
+        <dx-check-box
+          [value]="null"
+          [elementAttr]="{ 'aria-label': 'Indeterminate' }"
+        ></dx-check-box>
       </div>
     </div>
     <div class="dx-field">
@@ -24,25 +33,37 @@
         <dx-check-box
           [enableThreeStateBehavior]="true"
           [value]="null"
+          [elementAttr]="{ 'aria-label': 'Three state mode' }"
         ></dx-check-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Handle value change</div>
       <div class="dx-field-value">
-        <dx-check-box [(value)]="checkBoxValue"></dx-check-box>
+        <dx-check-box
+          [(value)]="checkBoxValue"
+          [elementAttr]="{ 'aria-label': 'Handle value change' }"
+        ></dx-check-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Disabled</div>
       <div class="dx-field-value">
-        <dx-check-box [disabled]="true" [value]="checkBoxValue"></dx-check-box>
+        <dx-check-box
+          [disabled]="true"
+          [value]="checkBoxValue"
+          [elementAttr]="{ 'aria-label': 'Disabled' }"
+        ></dx-check-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Custom size</div>
       <div class="dx-field-value">
-        <dx-check-box [value]="null" [iconSize]="30"></dx-check-box>
+        <dx-check-box
+          [value]="null"
+          [iconSize]="30"
+          [elementAttr]="{ 'aria-label': 'Disabled' }"
+        ></dx-check-box>
       </div>
     </div>
     <div class="dx-field">

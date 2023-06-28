@@ -8,6 +8,7 @@ import TextBox from 'devextreme-react/text-box';
 
 import Logo from './Logo.js';
 
+const colorLabel = { 'aria-label': 'Color' };
 const widthLabel = { 'aria-label': 'Width' };
 const heightLabel = { 'aria-label': 'Height' };
 const titleLabel = { 'aria-label': 'Title' };
@@ -79,6 +80,7 @@ class App extends React.Component {
                   value={this.state.color}
                   onValueChanged={this.handleColorChange}
                   applyValueMode="instantly"
+                  inputAttr={colorLabel}
                 />
               </div>
             </div>

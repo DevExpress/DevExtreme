@@ -53,13 +53,13 @@
               <div id="custom-templates" dx-select-box="selectBox.customTemplates" dx-item-alias="product">
                 <div data-options="dxTemplate: { name: 'field' }">
                   <div class="custom-item">
-                    <img ng-src="{{ product && product.ImageSrc}}" />
+                    <img alt="Product name" ng-src="{{ product && product.ImageSrc}}" />
                     <div class="product-name" dx-text-box=" {value: product && product.Name, readOnly: true }"> </div>
                   </div>
                 </div>
                 <div data-options="dxTemplate: { name: 'item' }">
                   <div class="custom-item">
-                    <img ng-src="{{product.ImageSrc}}" />
+                    <img alt="Product name" ng-src="{{product.ImageSrc}}" />
                     <div class="product-name"> {{product.Name}} </div>
                   </div>
                 </div>

@@ -10,7 +10,7 @@
     (onItemClick)="selectItem($event)"
   ></dx-tree-view>
   <div id="product-details" *ngIf="currentItem.price">
-    <img [src]="currentItem.icon" />
+    <img alt="{{ currentItem.name }}" [src]="currentItem.icon" />
     <div class="name">{{ currentItem.name }}</div>
     <div class="price">{{ "$" + currentItem.price }}</div>
   </div>

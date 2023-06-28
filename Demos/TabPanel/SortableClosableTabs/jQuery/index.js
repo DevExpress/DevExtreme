@@ -49,7 +49,7 @@ $(() => {
   function itemTemplate(itemData, itemIndex, itemElement) {
     $('<div>')
       .addClass('employeeInfo')
-      .append($(`<img class="employeePhoto" src="${itemData.Picture}"/>`))
+      .append($(`<img alt="${itemData.FirstName} ${itemData.LastName}" class="employeePhoto" src="${itemData.Picture}"/>`))
       .append($('<p>').addClass('employeeNotes').append($(`<b>Position: ${itemData.Position}</b><br/>`)).append(itemData.Notes))
       .appendTo(itemElement);
 
