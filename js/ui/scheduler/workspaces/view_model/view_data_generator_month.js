@@ -90,7 +90,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
         const endDate = new Date(startDate);
         endDate.setMonth(endDate.getMonth() + options.intervalCount);
-        endDate.setDate(1);
+        endDate.setDate(0);
 
         return calculateAlignedWeeksBetweenDates(
             startDate,
