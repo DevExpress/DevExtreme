@@ -243,7 +243,11 @@ const NumberBoxMask = NumberBoxBase.inherit({
             if(this._parsedValue < 0 || 1 / this._parsedValue === -Infinity) {
                 this._revertSign(e);
                 this._setTextByParsedValue();
-                return;
+
+                const valueChangeEvent = this.option('valueChangeEvent');
+                if(valueChangeEvent === 'input') {
+                    eventsEngine.trigger(this._input(), addNamespace(this.option(this._getValueChangeEventOptionName()), `${this.NAME}ValueChange`));
+                }
             }
             e.preventDefault();
             return;
