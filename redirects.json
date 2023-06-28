@@ -41,5 +41,6 @@
     { "Widget": "NavBar", "Name": "Overview", "NewWidget": "Tabs", "NewName": "Overview" },
     { "Widget": "Slideout", "Name": "Overview", "NewWidget": "Drawer", "NewName": "LeftOrRightPosition" },
     { "Widget": "Reporting", "Name": "PollingReport", "NewWidget": "Reporting", "NewName": "EmployeePerformanceReview" },
-    { "Widget": "Common", "Name": "StylingMode", "NewWidget": "Common", "NewName": "EditorAppearanceVariants" }
+    { "Widget": "Common", "Name": "StylingMode", "NewWidget": "Common", "NewName": "EditorAppearanceVariants" },
+	{ "Widget": "TreeList", "Name": "UsingHeaderFilter", "NewWidget": "TreeList", "NewName": "ColumnHeaderFilter" }
 ]
