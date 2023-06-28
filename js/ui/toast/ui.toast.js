@@ -1,6 +1,4 @@
 import $ from '../../core/renderer';
-import { getWindow } from '../../core/utils/window';
-const window = getWindow();
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import readyCallbacks from '../../core/utils/ready_callbacks';
@@ -37,6 +35,7 @@ const POSITION_ALIASES = {
 };
 
 const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
+const DEFAULT_MARGIN = 20;
 
 ready(function() {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, function(e) {
@@ -93,67 +92,22 @@ const Toast = Overlay.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: { platform: 'android' },
-                options: {
-                    hideOnOutsideClick: true,
-
-                    width: 'auto',
-
-                    position: {
-                        at: 'bottom left',
-                        my: 'bottom left',
-                        offset: '20 -20'
-                    },
-
-                    animation: {
-                        show: {
-                            type: 'slide',
-                            duration: 200,
-                            from: {
-                                position: {
-                                    my: 'top',
-                                    at: 'bottom',
-                                    of: window
-                                }
-                            },
-                        },
-                        hide: {
-                            type: 'slide',
-                            duration: 200,
-                            to: {
-                                position: {
-                                    my: 'top',
-                                    at: 'bottom',
-                                    of: window
-                                }
-                            },
-                        }
-                    }
-                }
-            },
-            {
-                device: function(device) {
-                    const isPhone = device.deviceType === 'phone';
-                    const isAndroid = device.platform === 'android';
-
-                    return isPhone && isAndroid;
-                },
-                options: {
-                    width: '100vw',
-
-                    position: {
-                        at: 'bottom center',
-                        my: 'bottom center',
-                        offset: '0 0'
-                    }
-                }
-            },
-            {
                 device: function(device) {
                     return device.deviceType === 'phone';
                 },
                 options: {
-                    width: '100vw',
+                    width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+                    hideOnOutsideClick: true,
+                }
+            },
+            {
+                device: function(device) {
+                    return device.deviceType === 'tablet';
+                },
+                options: {
+                    width: 'auto',
+                    maxWidth: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+                    hideOnOutsideClick: true,
                 }
             },
             {
@@ -165,37 +119,6 @@ const Toast = Overlay.inherit({
                     maxWidth: 568,
                     displayTime: 4000
                 }
-            },
-            {
-                device: { deviceType: 'tablet' },
-                options: {
-                    hideOnOutsideClick: true,
-
-                    displayTime: 2000,
-
-                    width: 'auto',
-
-                    position: {
-                        at: 'bottom center',
-                        my: 'bottom center',
-                        offset: '0 -20',
-                    },
-
-                    animation: {
-                        show: {
-                            type: 'fade',
-                            duration: 400,
-                            from: 0,
-                            to: 1
-                        },
-                        hide: {
-                            type: 'fade',
-                            duration: 400,
-                            from: 1,
-                            to: 0
-                        }
-                    },
-                },
             },
         ]);
     },
@@ -262,7 +185,7 @@ const Toast = Overlay.inherit({
         return this.callBase.apply(this, arguments).always((function() {
             clearTimeout(this._hideTimeout);
 
-            this._hideTimeout = setTimeout(this.hide.bind(this), this.option('displayTime'));
+            // this._hideTimeout = setTimeout(this.hide.bind(this), this.option('displayTime'));
         }).bind(this));
     },
 
