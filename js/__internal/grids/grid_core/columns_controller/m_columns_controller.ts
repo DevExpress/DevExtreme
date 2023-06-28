@@ -704,7 +704,9 @@ export class ColumnsController extends modules.Controller {
         indexedColumns[visibleIndex] = indexedColumns[visibleIndex] || [];
         indexedColumns[visibleIndex].push(column);
 
-        notGroupedColumnsCount++;
+        if (!column.command) {
+          notGroupedColumnsCount++;
+        }
       }
     });
 
