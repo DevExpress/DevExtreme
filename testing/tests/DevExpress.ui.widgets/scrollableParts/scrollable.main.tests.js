@@ -12,7 +12,6 @@ import Scrollable from 'ui/scroll_view/ui.scrollable';
 import pointerMock from '../../../helpers/pointerMock.js';
 import {
     calculateInertiaDistance,
-    RESIZE_WAIT_TIMEOUT,
     SCROLLABLE_CLASS,
     SCROLLABLE_CONTAINER_CLASS,
     SCROLLABLE_CONTENT_CLASS,
@@ -108,7 +107,6 @@ QUnit.test('horizontal moving scrollable moves content', function(assert) {
 
     mouse.up();
 });
-
 
 QUnit.test('horizontal inertia calc distance', function(assert) {
     const done = assert.async();
@@ -857,7 +855,6 @@ QUnit.module('visibility events integration', {
 });
 
 QUnit.test('scroll should save position on dxhiding and restore on dxshown', function(assert) {
-    const done = assert.async();
     const $scrollable = $('#scrollable');
 
     const scrollable = $scrollable.dxScrollable({
@@ -869,17 +866,12 @@ QUnit.test('scroll should save position on dxhiding and restore on dxshown', fun
     triggerHidingEvent($scrollable);
     $scrollable.hide();
 
-    setTimeout(() => {
-        scrollable.scrollTo({ left: 0, top: 0 });
+    scrollable.scrollTo({ left: 0, top: 0 });
 
-        $scrollable.show();
-        setTimeout(() => {
-            triggerShownEvent($scrollable);
+    $scrollable.show();
+    triggerShownEvent($scrollable);
 
-            assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after dxshown');
-            done();
-        }, RESIZE_WAIT_TIMEOUT);
-    }, RESIZE_WAIT_TIMEOUT);
+    assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after dxshown');
 });
 
 QUnit.test('scroll should restore on second dxshown', function(assert) {
