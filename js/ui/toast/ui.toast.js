@@ -90,6 +90,21 @@ const Toast = Overlay.inherit({
     },
 
     _defaultOptionsRules: function() {
+        const tabletAndMobileAnimation = {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        };
+
         return this.callBase().concat([
             {
                 device(device) {
@@ -98,6 +113,7 @@ const Toast = Overlay.inherit({
                 options: {
                     width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
                     hideOnOutsideClick: true,
+                    animation: tabletAndMobileAnimation,
                 }
             },
             {
@@ -108,6 +124,7 @@ const Toast = Overlay.inherit({
                     width: 'auto',
                     maxWidth: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
                     hideOnOutsideClick: true,
+                    animation: tabletAndMobileAnimation,
                 }
             },
             {
@@ -118,6 +135,7 @@ const Toast = Overlay.inherit({
                     width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
                     displayTime: 4000,
                     hideOnOutsideClick: true,
+                    animation: tabletAndMobileAnimation,
                 }
             },
             {
@@ -129,6 +147,7 @@ const Toast = Overlay.inherit({
                     maxWidth: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
                     hideOnOutsideClick: true,
                     displayTime: 4000,
+                    animation: tabletAndMobileAnimation,
                 }
             },
             {
@@ -138,7 +157,7 @@ const Toast = Overlay.inherit({
                 options: {
                     minWidth: 344,
                     maxWidth: 568,
-                    displayTime: 4000
+                    displayTime: 4000,
                 }
             },
         ]);
