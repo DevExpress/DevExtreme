@@ -521,6 +521,7 @@ class Scheduler extends Widget {
                 } else {
                     this._header?.option(name, value);
                 }
+                this._validateKeyFieldIfAgendaExist();
                 break;
             case 'useDropDownViewSwitcher':
                 this._header?.option(name, value);
@@ -2469,6 +2470,10 @@ class Scheduler extends Widget {
     }
 
     _validateKeyFieldIfAgendaExist() {
+        if(!this.appointmentDataProvider.isDataSourceInit) {
+            return;
+        }
+
         const hasAgendaView = !!this._getViewByName('agenda');
         const isKeyExist = !!this.appointmentDataProvider.keyName;
 

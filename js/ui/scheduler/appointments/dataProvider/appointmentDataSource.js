@@ -16,6 +16,10 @@ export class AppointmentDataSource {
         return store.key();
     }
 
+    get isDataSourceInit() {
+        return !!this._dataSource;
+    }
+
     _getStoreKey(target) {
         const store = this._dataSource.store();
 
