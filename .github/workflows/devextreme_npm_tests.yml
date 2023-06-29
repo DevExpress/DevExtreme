@@ -343,7 +343,7 @@ jobs:
     - name: Run TestCafe tests
       working-directory: ./devextreme-demos
       env:
-        BROWSERS: chrome:headless
+        BROWSERS: chrome:headless --disable-skia-runtime-opts --deterministic-mode --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         CONCURRENCY: 4
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
