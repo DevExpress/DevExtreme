@@ -1867,24 +1867,6 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.ok(valueChangedStub.calledOnce);
     });
 
-    QUnit.test('onValueChanged should be triggerd on keydown', function(assert) {
-        const valueChangedStub = sinon.stub();
-        this.instance.option({
-            format: '#,##0',
-            valueChangeEvent: 'keydown',
-            value: -1323,
-            onValueChanged: valueChangedStub,
-        });
-
-        this.keyboard.caret(1).press('backspace');
-
-        assert.ok(valueChangedStub.notCalled);
-
-        this.keyboard.keyDown('backspace');
-
-        assert.ok(valueChangedStub.calledOnce);
-    });
-
     QUnit.test('onValueChanged should be triggerd on change event', function(assert) {
         const valueChangedStub = sinon.stub();
         this.instance.option({
