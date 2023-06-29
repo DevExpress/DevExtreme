@@ -22,7 +22,9 @@ const hasWarningCode = (message) => message.startsWith('W1023');
       height: 600,
     });
   });
+});
 
+['week', 'agenda'].forEach((currentView) => {
   test(`Waring shouldn't be throw in console in case currentView='${currentView}' if keyField exists(T1100758)`, async (t) => {
     const messages = await t.getBrowserConsoleMessages();
 
@@ -44,7 +46,9 @@ const hasWarningCode = (message) => message.startsWith('W1023');
       };
     });
   });
+});
 
+['week', 'agenda'].forEach((currentView) => {
   test(`Waring should be throw in console in case currentView='${currentView}' if keyField not set in Store(T1100758)`, async (t) => {
     const messages = await t.getBrowserConsoleMessages();
 
