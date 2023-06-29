@@ -1849,7 +1849,7 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.ok(valueChangedStub.calledOnce);
     });
 
-    QUnit.test('onValueChanged should be triggerd on keyup ', function(assert) {
+    QUnit.test('onValueChanged should be triggerd on keyup', function(assert) {
         const valueChangedStub = sinon.stub();
         this.instance.option({
             format: '#,##0',
