@@ -55,19 +55,15 @@ const hasWarningCode = (message) => message.startsWith('W1023');
     const isWarningExist = !!messages.warn.find(hasWarningCode);
     await t.expect(isWarningExist).ok();
   }).before(async () => {
-    await createWidget('dxScheduler', () => {
-      const store = new (window as any).DevExpress.data.CustomStore({
+    await createWidget('dxScheduler', () => ({
+      dataSource: new (window as any).DevExpress.data.CustomStore({
         load: () => [],
-      });
-
-      return {
-        dataSource: store,
-        views: ['week', 'agenda'],
-        currentView: currentView2,
-        currentDate: new Date(2021, 2, 28),
-        height: 600,
-      };
-    });
+      }),
+      views: ['week', 'agenda'],
+      currentView: currentView2,
+      currentDate: new Date(2021, 2, 28),
+      height: 600,
+    }));
   });
 });
 
