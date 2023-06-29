@@ -92,7 +92,7 @@ const Toast = Overlay.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: function(device) {
+                device(device) {
                     return device.deviceType === 'phone';
                 },
                 options: {
@@ -101,7 +101,7 @@ const Toast = Overlay.inherit({
                 }
             },
             {
-                device: function(device) {
+                device(device) {
                     return device.deviceType === 'tablet';
                 },
                 options: {
@@ -111,8 +111,29 @@ const Toast = Overlay.inherit({
                 }
             },
             {
-                device: function() {
-                    return isMaterial();
+                device(device) {
+                    return isMaterial() && device.deviceType === 'phone';
+                },
+                options: {
+                    width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+                    displayTime: 4000,
+                    hideOnOutsideClick: true,
+                }
+            },
+            {
+                device(device) {
+                    return isMaterial() && device.deviceType === 'tablet';
+                },
+                options: {
+                    width: 'auto',
+                    maxWidth: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+                    hideOnOutsideClick: true,
+                    displayTime: 4000,
+                }
+            },
+            {
+                device(device) {
+                    return isMaterial() && device.deviceType === 'desktop';
                 },
                 options: {
                     minWidth: 344,
