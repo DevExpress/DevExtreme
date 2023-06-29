@@ -763,7 +763,11 @@ export const getRowCount = function (that: ColumnsController) {
   return rowCount;
 };
 
-export const isCustomCommandColumn = (that: ColumnsController, commandColumn) => !!that._columns.filter((column) => column.type === commandColumn.type).length;
+export const isCustomCommandColumn = (that: ColumnsController, commandColumn): boolean => {
+  const customCommandColumns = that._columns.filter((column) => column.type === commandColumn.type);
+
+  return !!customCommandColumns.length;
+};
 
 export const getFixedPosition = function (that: ColumnsController, column) {
   const rtlEnabled = that.option('rtlEnabled');
