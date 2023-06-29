@@ -5,11 +5,13 @@ import url from '../../../helpers/getPageUrl';
 fixture.disablePageReloads`Agenda:KeyField`
   .page(url(__dirname, '../../container.html'));
 
-['week', 'agenda'].forEach((currentView) => {
-  test(`Waring should be throw in console in case currentView='${currentView}'`, async (t) => {
-    const consoleMessages = await t.getBrowserConsoleMessages();
+const hasWarningCode = (message) => message.startsWith('W1023');
 
-    const isWarningExist = !!consoleMessages.warn.find((message) => message.startsWith('W1023'));
+['week', 'agenda'].forEach((currentView) => {
+  test(`Waring should be throw in console in case currentView='${currentView}'(T1100758)`, async (t) => {
+    const messages = await t.getBrowserConsoleMessages();
+
+    const isWarningExist = !!messages.warn.find(hasWarningCode);
     await t.expect(isWarningExist).ok();
   }).before(async () => {
     await createWidget('dxScheduler', {
@@ -21,10 +23,10 @@ fixture.disablePageReloads`Agenda:KeyField`
     });
   });
 
-  test(`Waring shouldn't be throw in console in case currentView='${currentView}' if keyField exists`, async (t) => {
-    const consoleMessages = await t.getBrowserConsoleMessages();
+  test(`Waring shouldn't be throw in console in case currentView='${currentView}' if keyField exists(T1100758)`, async (t) => {
+    const messages = await t.getBrowserConsoleMessages();
 
-    const isWarningExist = !!consoleMessages.warn.find((message) => message.startsWith('W1023'));
+    const isWarningExist = !!messages.warn.find(hasWarningCode);
     await t.expect(isWarningExist).notOk();
   }).before(async () => {
     await createWidget('dxScheduler', () => {
@@ -43,10 +45,10 @@ fixture.disablePageReloads`Agenda:KeyField`
     });
   });
 
-  test(`Waring should be throw in console in case currentView='${currentView}' if keyField not set in Store`, async (t) => {
-    const consoleMessages = await t.getBrowserConsoleMessages();
+  test(`Waring should be throw in console in case currentView='${currentView}' if keyField not set in Store(T1100758)`, async (t) => {
+    const messages = await t.getBrowserConsoleMessages();
 
-    const isWarningExist = !!consoleMessages.warn.find((message) => message.startsWith('W1023'));
+    const isWarningExist = !!messages.warn.find(hasWarningCode);
     await t.expect(isWarningExist).ok();
   }).before(async () => {
     await createWidget('dxScheduler', () => {
@@ -62,6 +64,28 @@ fixture.disablePageReloads`Agenda:KeyField`
         height: 600,
       };
     });
+  });
+});
+
+test('Waring should be throw in console after set new views(T1100758)', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  const messages = await t.getBrowserConsoleMessages();
+  const isWarningExist = !!messages.warn.find(hasWarningCode);
+  await t.expect(isWarningExist).notOk();
+
+  await scheduler.option('views', ['week', 'agenda']);
+
+  const messagesAfterChangeViews = await t.getBrowserConsoleMessages();
+  const isWarningExistAfterChangeViews = !!messagesAfterChangeViews.warn.find(hasWarningCode);
+  await t.expect(isWarningExistAfterChangeViews).ok();
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 28),
+    height: 600,
   });
 });
 

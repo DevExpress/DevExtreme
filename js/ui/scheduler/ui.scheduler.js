@@ -521,7 +521,6 @@ class Scheduler extends Widget {
                 } else {
                     this._header?.option(name, value);
                 }
-                this._validateKeyFieldIfAgendaExist();
                 break;
             case 'useDropDownViewSwitcher':
                 this._header?.option(name, value);
