@@ -38,14 +38,14 @@ export type ResolvedData<
 /**
  * @public
  */
-export function isSummaryResult<TItem>(res: ResolvedData<TItem>): res is SummaryResult<TItem>;
+export function isCustomStoreSummaryResult<TItem>(res: ResolvedData<TItem>): res is SummaryResult<TItem>;
 
 /**
  * @public
  */
-export function isGroupItemsArray<TItem>(res: ResolvedData<TItem>): res is Array<GroupItem<TItem>>;
+export function isCustomStoreGroupItemsArrayResult<TItem>(res: ResolvedData<TItem>): res is Array<GroupItem<TItem>>;
 
 /**
  * @public
  */
-export function isItemsArray<TItem>(res: ResolvedData<TItem>): res is Array<TItem>;
+export function isCustomStoreItemsArrayResult<TItem>(res: ResolvedData<TItem>): res is Array<TItem>;
