@@ -54,6 +54,8 @@ const FileUploader = require('ui/file_uploader');
 const Form = require('ui/form');
 const ValidationMessage = require('ui/validation_message');
 
+const DEFAULT_MARGIN = 20;
+
 themes.setDefaultTimeout(0);
 
 QUnit.testStart(function() {
@@ -941,7 +943,7 @@ const mobileOptions = {
         my: 'bottom center',
         offset: '0 -20'
     },
-    width: 'calc(100vw - 40px)',
+    width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
     hideOnOutsideClick: true,
     animation: tabletAndMobileAnimation,
 };
@@ -953,7 +955,7 @@ const tabletOptions = {
         offset: '0 -20'
     },
     width: 'auto',
-    maxWidth: 'calc(100vw - 40px)',
+    maxWidth: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
     hideOnOutsideClick: true,
     animation: tabletAndMobileAnimation,
 };
@@ -986,7 +988,7 @@ testComponentDefaults(Toast,
             my: 'bottom center',
             offset: '0 -20'
         },
-        width: 'calc(100vw - 40px)',
+        width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
         displayTime: 4000,
         hideOnOutsideClick: true,
         animation: tabletAndMobileAnimation,
@@ -1011,7 +1013,7 @@ testComponentDefaults(Toast,
             offset: '0 -20'
         },
         width: 'auto',
-        maxWidth: 'calc(100vw - 40px)',
+        maxWidth: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
         hideOnOutsideClick: true,
         displayTime: 4000,
         animation: tabletAndMobileAnimation,
