@@ -659,7 +659,7 @@ export class ColumnsController extends modules.Controller {
 
     const isDataColumnsInvisible = !this._hasVisibleDataColumns(columns);
 
-    if (isDataColumnsInvisible) {
+    if (isDataColumnsInvisible && this._columns.length) {
       visibleColumns[visibleColumns.length - 1].push({ command: 'empty' });
     }
 
@@ -752,7 +752,7 @@ export class ColumnsController extends modules.Controller {
       result.push([]);
 
       orderEach(negativeIndexedColumns[rowIndex], (_, columns) => {
-        result[rowIndex].unshift(...columns);
+        result[rowIndex].unshift.apply(result[rowIndex], columns);
       });
 
       const firstPositiveIndexColumn = result[rowIndex].length;
@@ -760,7 +760,7 @@ export class ColumnsController extends modules.Controller {
 
       positiveIndexedRowColumns.forEach((columnsByFixing) => {
         orderEach(columnsByFixing, (_, columnsByVisibleIndex) => {
-          result[rowIndex].push(...columnsByVisibleIndex);
+          result[rowIndex].push.apply(result[rowIndex], columnsByVisibleIndex);
         });
       });
 
