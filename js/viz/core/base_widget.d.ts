@@ -208,6 +208,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
     width?: number | string | (() => number | string);
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
@@ -259,6 +260,7 @@ export interface BaseWidgetExport {
 /**
  * @docid
  * @namespace DevExpress.viz
+ * @hidden
  */
 export interface BaseWidgetLoadingIndicator {
     /**
@@ -294,6 +296,7 @@ export interface BaseWidgetLoadingIndicator {
     text?: string;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
@@ -324,6 +327,7 @@ export interface BaseWidgetMargin {
     top?: number;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
@@ -342,6 +346,7 @@ export interface BaseWidgetSize {
     width?: number;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
@@ -454,6 +459,7 @@ export interface BaseWidgetTitle {
     wordWrap?: WordWrap;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */

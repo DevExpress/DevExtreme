@@ -227,6 +227,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
     tooltip?: BaseChartTooltip;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
@@ -251,6 +252,7 @@ export interface BaseChartAdaptiveLayout {
     width?: number;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
@@ -269,6 +271,7 @@ export interface BaseChartLegend extends BaseLegend {
     markerTemplate?: template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | UserDefinedElement<SVGElement>);
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
