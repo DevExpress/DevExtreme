@@ -246,7 +246,6 @@ safeSizeTest('Empty header message should appear when all columns grouped and se
         field1: '3', field2: 'test2', field3: 'test13',
       },
     ],
-    width: 700,
     columns: [
       { dataField: 'field1', groupIndex: 0 },
       { dataField: 'field2', groupIndex: 1 },
