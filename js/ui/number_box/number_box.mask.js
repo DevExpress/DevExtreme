@@ -244,9 +244,9 @@ const NumberBoxMask = NumberBoxBase.inherit({
                 this._revertSign(e);
                 this._setTextByParsedValue();
 
-                const valueChangeEvent = this.option('valueChangeEvent');
-                if(valueChangeEvent === 'input') {
-                    eventsEngine.trigger(this._input(), addNamespace(this.option(this._getValueChangeEventOptionName()), `${this.NAME}ValueChange`));
+                if(this.option('valueChangeEvent') === 'input') {
+                    const valueChangedEventName = addNamespace(this.option(this._getValueChangeEventOptionName()), `${this.NAME}ValueChange`);
+                    eventsEngine.trigger(this._input(), valueChangedEventName);
                 }
             }
             e.preventDefault();
