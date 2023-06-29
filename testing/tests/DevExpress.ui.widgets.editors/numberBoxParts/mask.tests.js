@@ -1849,7 +1849,7 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.ok(valueChangedStub.calledOnce);
     });
 
-    QUnit.test('onValueChanged should be triggerd on keyup', function(assert) {
+    QUnit.test('onValueChanged should be triggered on keyup', function(assert) {
         const valueChangedStub = sinon.stub();
         this.instance.option({
             format: '#,##0',
@@ -1867,7 +1867,7 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.ok(valueChangedStub.calledOnce);
     });
 
-    QUnit.test('onValueChanged should be triggerd on change event', function(assert) {
+    QUnit.test('onValueChanged should be triggered on change event', function(assert) {
         const valueChangedStub = sinon.stub();
         this.instance.option({
             format: '#,##0',
@@ -1885,7 +1885,7 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.ok(valueChangedStub.calledOnce);
     });
 
-    QUnit.test('onValueChanged should be triggerd on focusout', function(assert) {
+    QUnit.test('onValueChanged should be triggered on focusout', function(assert) {
         const valueChangedStub = sinon.stub();
         this.instance.option({
             format: '#,##0',
@@ -1901,7 +1901,7 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.ok(valueChangedStub.calledOnce);
     });
 
-    QUnit.test('onValueChanged should be triggerd on blur', function(assert) {
+    QUnit.test('onValueChanged should be triggered on blur', function(assert) {
         const valueChangedStub = sinon.stub();
         this.instance.option({
             format: '#,##0',
