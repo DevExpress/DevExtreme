@@ -1,7 +1,7 @@
+/* eslint-disable max-classes-per-file */
 import '@js/ui/button';
 import '@js/ui/drop_down_button';
 
-import Class from '@js/core/class';
 import $ from '@js/core/renderer';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -23,12 +23,20 @@ const DATAGRID_EXPORT_SELECTED_ICON = 'exportselected';
 
 const DATAGRID_PDF_EXPORT_ICON = 'pdffile';
 
-export const DataProvider = Class.inherit({
-  ctor(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
+export class DataProvider {
+  private readonly _exportController: ExportController;
+
+  private readonly _initialColumnWidthsByColumnIndex: any;
+
+  private readonly _selectedRowsOnly: any;
+
+  private _options: any;
+
+  constructor(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
     this._exportController = exportController;
     this._initialColumnWidthsByColumnIndex = initialColumnWidthsByColumnIndex;
     this._selectedRowsOnly = selectedRowsOnly;
-  },
+  }
 
   _getGroupValue(item) {
     const {
@@ -45,11 +53,11 @@ export const DataProvider = Class.inherit({
     }
 
     return result;
-  },
+  }
 
   _correctCellIndex(cellIndex) {
     return cellIndex;
-  },
+  }
 
   _initOptions() {
     const exportController = this._exportController;
@@ -63,7 +71,7 @@ export const DataProvider = Class.inherit({
       summaryTexts: exportController.option('summary.texts'),
       rtlEnabled: exportController.option('rtlEnabled'),
     };
-  },
+  }
 
   getHeaderStyles() {
     return [
@@ -71,14 +79,14 @@ export const DataProvider = Class.inherit({
       { bold: true, alignment: 'left' },
       { bold: true, alignment: 'right' },
     ];
-  },
+  }
 
   getGroupRowStyle() {
     return {
       bold: true,
       alignment: getDefaultAlignment(this._options.rtlEnabled),
     };
-  },
+  }
 
   getColumnStyles() {
     const columnStyles: any[] = [];
@@ -92,16 +100,16 @@ export const DataProvider = Class.inherit({
     });
 
     return columnStyles;
-  },
+  }
 
   getStyles() {
     return [...this.getHeaderStyles(), ...this.getColumnStyles(), this.getGroupRowStyle()];
-  },
+  }
 
   _getTotalCellStyleId(cellIndex) {
     const alignment = this.getColumns()[cellIndex]?.alignment || 'right';
     return this.getHeaderStyles().map((style) => style.alignment).indexOf(alignment);
-  },
+  }
 
   getStyleId(rowIndex, cellIndex) {
     if (rowIndex < this.getHeaderRowCount()) {
@@ -114,35 +122,35 @@ export const DataProvider = Class.inherit({
       return this.getHeaderStyles().length + this.getColumns().length;
     }
     return cellIndex + this.getHeaderStyles().length;
-  },
+  }
 
-  getColumns(getColumnsByAllRows) {
+  getColumns(getColumnsByAllRows?) {
     const { columns } = this._options;
 
     return getColumnsByAllRows ? columns : columns[columns.length - 1];
-  },
+  }
 
   getColumnsWidths() {
     const columns = this.getColumns();
     return isDefined(columns)
       ? columns.map((c) => c.width)
       : undefined;
-  },
+  }
 
   getRowsCount() {
     return this._options.items.length + this.getHeaderRowCount();
-  },
+  }
 
   getHeaderRowCount() {
     if (this.isHeadersVisible()) {
       return this._options.columns.length - 1;
     }
     return 0;
-  },
+  }
 
   isGroupRow(rowIndex) {
     return rowIndex < this._options.items.length && this._options.items[rowIndex].rowType === 'group';
-  },
+  }
 
   getGroupLevel(rowIndex) {
     const item = this._options.items[rowIndex - this.getHeaderRowCount()];
@@ -152,7 +160,7 @@ export const DataProvider = Class.inherit({
       return 0;
     }
     return isDefined(groupIndex) ? groupIndex : this._options.groupColumns.length;
-  },
+  }
 
   getCellType(rowIndex, cellIndex) {
     const columns = this.getColumns();
@@ -173,7 +181,7 @@ export const DataProvider = Class.inherit({
       }
       return 'string';
     }
-  },
+  }
 
   ready() {
     const that = this;
@@ -186,13 +194,13 @@ export const DataProvider = Class.inherit({
     }).fail(() => {
       options.items = [];
     });
-  },
+  }
 
   _convertFromGridGroupSummaryItems(gridGroupSummaryItems) {
     if (isDefined(gridGroupSummaryItems) && gridGroupSummaryItems.length > 0) {
       return gridGroupSummaryItems.map((item) => ({ value: item.value, name: item.name }));
     }
-  },
+  }
 
   getCellData(rowIndex, cellIndex, isExcelJS) {
     let value;
@@ -275,11 +283,11 @@ export const DataProvider = Class.inherit({
       }
     }
     return result;
-  },
+  }
 
   isHeadersVisible() {
     return this._options.isHeadersVisible;
-  },
+  }
 
   isTotalCell(rowIndex, cellIndex) {
     const { items } = this._options;
@@ -288,7 +296,7 @@ export const DataProvider = Class.inherit({
     const isSummaryAlignByColumn = item.summaryCells && item.summaryCells[correctCellIndex] && item.summaryCells[correctCellIndex].length > 0 && item.summaryCells[correctCellIndex][0].alignByColumn;
 
     return item && item.rowType === 'groupFooter' || item.rowType === 'totalFooter' || isSummaryAlignByColumn;
-  },
+  }
 
   getCellMerging(rowIndex, cellIndex) {
     const { columns } = this._options;
@@ -298,27 +306,39 @@ export const DataProvider = Class.inherit({
       colspan: (column.exportColspan || 1) - 1,
       rowspan: (column.rowspan || 1) - 1,
     } : { colspan: 0, rowspan: 0 };
-  },
+  }
 
   getFrozenArea() {
     const that = this;
 
     return { x: 0, y: that.getHeaderRowCount() };
-  },
-});
+  }
+}
 
-export const ExportController = dataGridCore.ViewController.inherit({}).inherit({
+export class ExportController extends dataGridCore.ViewController {
+  public _columnsController: any;
+
+  private _headersView: any;
+
+  private _rowsView: any;
+
+  public _selectionOnly: any;
+
+  private _isSelectedRows: any;
+
+  private readonly selectionOnlyChanged: any;
+
   _getEmptyCell() {
     return {
       caption: '',
       colspan: 1,
       rowspan: 1,
     };
-  },
+  }
 
   _updateColumnWidth(column, width) { // this function is overridden in 'ui.grid_core.adaptivity.js'
     column.width = width;
-  },
+  }
 
   _getColumns(initialColumnWidthsByColumnIndex) {
     let result: any[] = [];
@@ -369,7 +389,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
     result.push(columns);
 
     return result;
-  },
+  }
 
   _calculateExportColspan(column) {
     if (!column.isBand) {
@@ -385,13 +405,13 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
       }
       return result;
     }, 0);
-  },
+  }
 
   _needColumnExporting(column) {
     return !column.command && (column.allowExporting || column.allowExporting === undefined);
-  },
+  }
 
-  _getFooterSummaryItems(summaryCells, isTotal) {
+  _getFooterSummaryItems(summaryCells, isTotal?) {
     const result: any[] = [];
     let estimatedItemsCount = 1;
     let i = 0;
@@ -410,10 +430,10 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
     } while (i++ < estimatedItemsCount - 1);
 
     return result;
-  },
+  }
 
   _hasSummaryGroupFooters() {
-    const groupItems = this.option('summary.groupItems');
+    const groupItems: any = this.option('summary.groupItems');
 
     if (isDefined(groupItems)) {
       for (let i = 0; i < groupItems.length; i++) {
@@ -424,7 +444,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
     }
 
     return false;
-  },
+  }
 
   _getItemsWithSummaryGroupFooters(sourceItems) {
     let result: any[] = [];
@@ -443,7 +463,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
     }
 
     return result.length ? result : beforeGroupFooterItems;
-  },
+  }
 
   _updateGroupValuesWithSummaryByColumn(sourceItems) {
     let summaryValues: any[] = [];
@@ -471,7 +491,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
         }
       }
     }
-  },
+  }
 
   _processUnExportedItems(items) {
     const columns = this._columnsController.getVisibleColumns(null, true);
@@ -516,14 +536,14 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
         item.summaryCells = summaryCells;
       }
     }
-  },
+  }
 
-  _getAllItems(data) {
+  _getAllItems(data?) {
     const that = this;
     // @ts-expect-error
     const d = new Deferred();
     const dataController = this.getController('data');
-    const footerItems = dataController.footerItems();
+    const footerItems = (dataController as any).footerItems();
     const totalItem = footerItems.length && footerItems[0];
     const summaryTotalItems = that.option('summary.totalItems');
     let summaryCells;
@@ -553,37 +573,37 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
     }).fail(d.reject);
 
     return d;
-  },
+  }
 
   _getSummaryCells(summaryTotalItems, totalAggregates) {
     const dataController = this.getController('data');
     const columnsController = dataController._columnsController;
 
-    return dataController._calculateSummaryCells(summaryTotalItems, totalAggregates, columnsController.getVisibleColumns(null, true), (summaryItem, column) => (dataController._isDataColumn(column) ? column.index : -1));
-  },
+    return (dataController as any)._calculateSummaryCells(summaryTotalItems, totalAggregates, columnsController.getVisibleColumns(null, true), (summaryItem, column) => ((dataController as any)._isDataColumn(column) ? column.index : -1));
+  }
 
   _getSelectedItems() {
     const selectionController = this.getController('selection');
     const selectedRowData = selectionController.getSelectedRowsData();
 
     return this._getAllItems(selectedRowData);
-  },
+  }
 
   _getColumnWidths(headersView, rowsView) {
     return headersView && headersView.isVisible() ? headersView.getColumnWidths() : rowsView.getColumnWidths();
-  },
+  }
 
   init() {
     this._columnsController = this.getController('columns');
     this._rowsView = this.getView('rowsView');
-    this._headersView = this.getView('columnHeadersView');
+    this._headersView = this.getView('columnHeadersView' as any);
 
     this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
-  },
+  }
 
   callbackNames() {
     return ['selectionOnlyChanged'];
-  },
+  }
 
   getDataProvider(selectedRowsOnly) {
     const columnWidths = this._getColumnWidths(this._headersView, this._rowsView);
@@ -597,7 +617,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
     }
 
     return new DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
-  },
+  }
 
   exportTo(selectedRowsOnly, format) {
     this._selectionOnly = selectedRowsOnly;
@@ -612,11 +632,11 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
     };
 
     isFunction(onExporting) && onExporting(eventArgs);
-  },
+  }
 
   publicMethods() {
     return ['getDataProvider'];
-  },
+  }
 
   selectionOnly(value) {
     if (isDefined(value)) {
@@ -625,8 +645,8 @@ export const ExportController = dataGridCore.ViewController.inherit({}).inherit(
     } else {
       return this._isSelectedRows;
     }
-  },
-});
+  }
+}
 
 dataGridCore.registerModule('export', {
   defaultOptions() {
