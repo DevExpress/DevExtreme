@@ -1539,13 +1539,13 @@ declare module DevExpress.common {
   };
   export type HorizontalAlignment = 'center' | 'left' | 'right';
   export type HorizontalEdge = 'left' | 'right';
-  export function isGroupItemsArray<TItem>(
+  export function isCustomStoreGroupItemsArray<TItem>(
     res: ResolvedData<TItem>
   ): res is Array<GroupItem<TItem>>;
-  export function isItemsArray<TItem>(
+  export function isCustomStoreItemsArray<TItem>(
     res: ResolvedData<TItem>
   ): res is Array<TItem>;
-  export function isSummaryResult<TItem>(
+  export function isCustomStoreSummary<TItem>(
     res: ResolvedData<TItem>
   ): res is SummaryResult<TItem>;
   /**
