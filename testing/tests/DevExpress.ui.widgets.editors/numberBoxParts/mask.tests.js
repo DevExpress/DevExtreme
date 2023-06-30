@@ -1923,38 +1923,22 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.ok(valueChangedStub.calledOnce);
     });
 
-    QUnit.test('onValueChanged should be triggered on focusout', function(assert) {
-        const valueChangedStub = sinon.stub();
-        this.instance.option({
-            format: '#,##0',
-            valueChangeEvent: 'focusout',
-            value: -1323,
-            onValueChanged: valueChangedStub,
+    ['blur', 'focusout'].forEach((valueChangeEvent) => {
+        QUnit.test(`onValueChanged should be triggered on ${valueChangeEvent}`, function(assert) {
+            const valueChangedStub = sinon.stub();
+            this.instance.option({
+                format: '#,##0',
+                valueChangeEvent,
+                value: -1323,
+                onValueChanged: valueChangedStub,
+            });
+
+            this.keyboard.caret(1).press('backspace');
+            assert.ok(valueChangedStub.notCalled);
+
+            this.input.trigger(valueChangeEvent);
+            assert.ok(valueChangedStub.calledOnce);
         });
-
-        this.keyboard.caret(1).press('backspace');
-        assert.ok(valueChangedStub.notCalled);
-
-        this.input.trigger('focusout');
-        assert.ok(valueChangedStub.calledOnce);
-    });
-
-    QUnit.test('onValueChanged should be triggered on blur', function(assert) {
-        const valueChangedStub = sinon.stub();
-        this.instance.option({
-            format: '#,##0',
-            valueChangeEvent: 'blur',
-            value: -1323,
-            onValueChanged: valueChangedStub,
-        });
-
-        this.keyboard.caret(1).press('backspace');
-
-        assert.ok(valueChangedStub.notCalled);
-
-        this.input.trigger('blur');
-
-        assert.ok(valueChangedStub.calledOnce);
     });
 
     QUnit.test('change event should be fired after extra digits have been entered', function(assert) {
