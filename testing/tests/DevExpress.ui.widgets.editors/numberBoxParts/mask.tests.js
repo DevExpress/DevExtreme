@@ -1066,7 +1066,7 @@ QUnit.module('format: text input', moduleConfig, () => {
         assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'change', 'event is correct');
     });
 
-    QUnit.test('onValueChanged should have input event as a parameter if valueChangeEvent value is input', function(assert) {
+    QUnit.test('onValueChanged should have input event as a parameter if valueChangeEvent="input"', function(assert) {
         const valueChangedHandler = sinon.spy();
         this.instance.option({
             onValueChanged: valueChangedHandler,
@@ -1078,7 +1078,7 @@ QUnit.module('format: text input', moduleConfig, () => {
         assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'input');
     });
 
-    QUnit.test('onValueChanged should have focusout event as a parameter if valueChangeEvent value is focusout', function(assert) {
+    QUnit.test('onValueChanged should have focusout event as a parameter if valueChangeEvent="focusout"', function(assert) {
         const valueChangedHandler = sinon.spy();
         this.instance.option({
             onValueChanged: valueChangedHandler,
