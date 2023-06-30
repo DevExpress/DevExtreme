@@ -637,7 +637,9 @@ export class ColumnsController extends modules.Controller {
     return isDefined(column.groupIndex) && !column.showWhenGrouped;
   }
 
-  _hasVisibleDataColumns(columns: any[]): boolean {
+  hasVisibleDataColumns(): boolean {
+    const columns: any[] = this._columns;
+
     return columns.some((column) => {
       const isVisible = this._isColumnVisible(column);
       const isInGroupPanel = this._isColumnInGroupPanel(column);
@@ -657,7 +659,7 @@ export class ColumnsController extends modules.Controller {
 
     const visibleColumns = this._getVisibleColumnsFromIndexed(indexedColumns);
 
-    const isDataColumnsInvisible = !this._hasVisibleDataColumns(columns);
+    const isDataColumnsInvisible = !this._hasVisibleDataColumns();
 
     if (isDataColumnsInvisible && this._columns.length) {
       visibleColumns[visibleColumns.length - 1].push({ command: 'empty' });
