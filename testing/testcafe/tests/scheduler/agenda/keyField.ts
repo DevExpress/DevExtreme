@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
@@ -73,13 +74,13 @@ test('123123', async (t) => {
   const isWarningExist = !!messages.warn.find(hasWarningCode);
   await t.expect(isWarningExist).ok();
 }).before(async () => {
-  await createWidget('dxScheduler', () => {
-    const store = new (window as any).DevExpress.data.CustomStore({
+  await createWidget('dxScheduler', async () => {
+    const createStore = ClientFunction(() => new (window as any).DevExpress.data.CustomStore({
       load: () => [],
-    });
+    }));
 
     return {
-      dataSource: store,
+      dataSource: await createStore(),
       views: ['week', 'agenda'],
       currentView: 'agenda',
       currentDate: new Date(2021, 2, 28),
