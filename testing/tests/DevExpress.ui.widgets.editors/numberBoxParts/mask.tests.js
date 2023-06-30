@@ -1859,7 +1859,7 @@ QUnit.module('format: removing', moduleConfig, () => {
             assert.ok(valueChangedStub.calledOnce);
         });
 
-        QUnit.test('should be triggered and sign reverted when using unformatted value', function(assert) {
+        QUnit.test('should be triggered and sign reverted', function(assert) {
             const valueChangedStub = sinon.stub();
             this.instance.option({
                 valueChangeEvent: 'input',
@@ -1873,7 +1873,7 @@ QUnit.module('format: removing', moduleConfig, () => {
             assert.ok(valueChangedStub.calledOnce);
         });
 
-        QUnit.test('should be triggered and sign reverted when using formatted value (T1170374)', function(assert) {
+        QUnit.test('should be triggered and sign reverted when format is specified (T1170374)', function(assert) {
             const valueChangedStub = sinon.stub();
             this.instance.option({
                 format: '#,##0',
