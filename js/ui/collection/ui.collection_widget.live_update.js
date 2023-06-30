@@ -28,7 +28,7 @@ export default CollectionWidget.inherit({
                 this._correctionIndex = 0;
             }
             if(this._correctionIndex && e.storeLoadOptions) {
-                e.storeLoadOptions.skip += this._correctionIndex;
+                // e.storeLoadOptions.skip += this._correctionIndex;
             }
         },
 
