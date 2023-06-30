@@ -348,7 +348,9 @@ jobs:
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
         CI_ENV: true
-      run: npm run test-testcafe
+      run: |
+        npm i testcafe@2.5.0
+        npm run test-testcafe
 
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
