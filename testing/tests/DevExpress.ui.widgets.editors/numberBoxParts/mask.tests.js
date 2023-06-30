@@ -1845,99 +1845,101 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.equal(changeHandler.callCount, 1, 'change event has not been fired if value is not changed');
     });
 
-    QUnit.test('removing minus should trigger onValueChanged event when valueChangeEvent has several events', function(assert) {
-        const valueChangedStub = sinon.stub();
-        this.instance.option({
-            valueChangeEvent: 'focusout input',
-            value: -123459,
-            onValueChanged: valueChangedStub,
+    QUnit.module('valueChanged event on minus sign remove', () => {
+        QUnit.test('should be triggered when valueChangeEvent has several events', function(assert) {
+            const valueChangedStub = sinon.stub();
+            this.instance.option({
+                valueChangeEvent: 'focusout input',
+                value: -123459,
+                onValueChanged: valueChangedStub,
+            });
+
+            this.keyboard.caret(1).press('backspace');
+
+            assert.ok(valueChangedStub.calledOnce);
         });
 
-        this.keyboard.caret(1).press('backspace');
+        QUnit.test('should be triggered and sign reverted when using unformatted value', function(assert) {
+            const valueChangedStub = sinon.stub();
+            this.instance.option({
+                valueChangeEvent: 'input',
+                value: -123459,
+                onValueChanged: valueChangedStub,
+            });
 
-        assert.ok(valueChangedStub.calledOnce);
-    });
+            this.keyboard.caret(1).press('backspace');
 
-    QUnit.test('removing minus should trigger onValueChanged event and revert sign when using unformatted value', function(assert) {
-        const valueChangedStub = sinon.stub();
-        this.instance.option({
-            valueChangeEvent: 'input',
-            value: -123459,
-            onValueChanged: valueChangedStub,
+            assert.strictEqual(this.input.val(), '123459');
+            assert.ok(valueChangedStub.calledOnce);
         });
 
-        this.keyboard.caret(1).press('backspace');
-
-        assert.strictEqual(this.input.val(), '123459');
-        assert.ok(valueChangedStub.calledOnce);
-    });
-
-    QUnit.test('removing minus should trigger onValueChanged event and revert sign when using formatted value', function(assert) {
-        const valueChangedStub = sinon.stub();
-        this.instance.option({
-            format: '#,##0',
-            valueChangeEvent: 'input',
-            value: -1323,
-            onValueChanged: valueChangedStub,
-        });
-
-        this.keyboard.caret(1).press('backspace');
-
-        assert.strictEqual(this.input.val(), '1,323');
-        assert.ok(valueChangedStub.calledOnce);
-    });
-
-    QUnit.test('onValueChanged should be triggered on keyup', function(assert) {
-        const valueChangedStub = sinon.stub();
-        this.instance.option({
-            format: '#,##0',
-            valueChangeEvent: 'keyup',
-            value: -1323,
-            onValueChanged: valueChangedStub,
-        });
-
-        this.keyboard.caret(1).press('backspace');
-
-        assert.ok(valueChangedStub.notCalled);
-
-        this.keyboard.keyUp('backspace');
-
-        assert.ok(valueChangedStub.calledOnce);
-    });
-
-    QUnit.test('onValueChanged should be triggered on change event', function(assert) {
-        const valueChangedStub = sinon.stub();
-        this.instance.option({
-            format: '#,##0',
-            valueChangeEvent: 'change',
-            value: -1323,
-            onValueChanged: valueChangedStub,
-        });
-
-        this.keyboard.caret(1).press('backspace');
-
-        assert.ok(valueChangedStub.notCalled);
-
-        this.keyboard.press('enter');
-
-        assert.ok(valueChangedStub.calledOnce);
-    });
-
-    ['blur', 'focusout'].forEach((valueChangeEvent) => {
-        QUnit.test(`onValueChanged should be triggered on ${valueChangeEvent}`, function(assert) {
+        QUnit.test('should be triggered and sign reverted when using formatted value (T1170374)', function(assert) {
             const valueChangedStub = sinon.stub();
             this.instance.option({
                 format: '#,##0',
-                valueChangeEvent,
+                valueChangeEvent: 'input',
                 value: -1323,
                 onValueChanged: valueChangedStub,
             });
 
             this.keyboard.caret(1).press('backspace');
+
+            assert.strictEqual(this.input.val(), '1,323');
+            assert.ok(valueChangedStub.calledOnce);
+        });
+
+        QUnit.test('should be triggered on keyup when valueChangeEvent="keyup"', function(assert) {
+            const valueChangedStub = sinon.stub();
+            this.instance.option({
+                format: '#,##0',
+                valueChangeEvent: 'keyup',
+                value: -1323,
+                onValueChanged: valueChangedStub,
+            });
+
+            this.keyboard.caret(1).press('backspace');
+
             assert.ok(valueChangedStub.notCalled);
 
-            this.input.trigger(valueChangeEvent);
+            this.keyboard.keyUp('backspace');
+
             assert.ok(valueChangedStub.calledOnce);
+        });
+
+        QUnit.test('should be triggered on change when valueChangeEvent="change"', function(assert) {
+            const valueChangedStub = sinon.stub();
+            this.instance.option({
+                format: '#,##0',
+                valueChangeEvent: 'change',
+                value: -1323,
+                onValueChanged: valueChangedStub,
+            });
+
+            this.keyboard.caret(1).press('backspace');
+
+            assert.ok(valueChangedStub.notCalled);
+
+            this.keyboard.press('enter');
+
+            assert.ok(valueChangedStub.calledOnce);
+        });
+
+        ['blur', 'focusout'].forEach((valueChangeEvent) => {
+            QUnit.test(`should be triggered on ${valueChangeEvent} when valueChangeEvent="${valueChangeEvent}"`, function(assert) {
+                const valueChangedStub = sinon.stub();
+                this.instance.option({
+                    format: '#,##0',
+                    valueChangeEvent,
+                    value: -1323,
+                    onValueChanged: valueChangedStub,
+                });
+
+                this.keyboard.caret(1).press('backspace');
+                assert.ok(valueChangedStub.notCalled);
+
+                this.input.trigger(valueChangeEvent);
+                assert.ok(valueChangedStub.calledOnce);
+            });
         });
     });
 
