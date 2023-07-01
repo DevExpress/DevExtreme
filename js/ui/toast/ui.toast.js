@@ -112,9 +112,10 @@ const Toast = Overlay.inherit({
                 },
                 options: {
                     width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+                    displayTime: isMaterial() ? 4000 : 2000,
                     hideOnOutsideClick: true,
                     animation: tabletAndMobileAnimation,
-                }
+                },
             },
             {
                 device(device) {
@@ -123,32 +124,10 @@ const Toast = Overlay.inherit({
                 options: {
                     width: 'auto',
                     maxWidth: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+                    displayTime: isMaterial() ? 4000 : 2000,
                     hideOnOutsideClick: true,
                     animation: tabletAndMobileAnimation,
-                }
-            },
-            {
-                device(device) {
-                    return isMaterial() && device.deviceType === 'phone';
                 },
-                options: {
-                    width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
-                    displayTime: 4000,
-                    hideOnOutsideClick: true,
-                    animation: tabletAndMobileAnimation,
-                }
-            },
-            {
-                device(device) {
-                    return isMaterial() && device.deviceType === 'tablet';
-                },
-                options: {
-                    width: 'auto',
-                    maxWidth: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
-                    hideOnOutsideClick: true,
-                    displayTime: 4000,
-                    animation: tabletAndMobileAnimation,
-                }
             },
             {
                 device(device) {
@@ -158,7 +137,7 @@ const Toast = Overlay.inherit({
                     minWidth: 344,
                     maxWidth: 568,
                     displayTime: 4000,
-                }
+                },
             },
         ]);
     },
