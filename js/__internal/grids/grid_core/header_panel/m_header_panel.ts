@@ -136,22 +136,28 @@ const members = {
     this.callBase.apply(this, arguments);
   },
 
-  setToolbarItemDisabled(name, optionValue) {
-    const toolbarInstance = this._toolbar;
+  setToolbarItemDisabled(name, disabled: boolean): void {
+    const toolbar = this._toolbar;
 
-    if (toolbarInstance) {
-      const items = toolbarInstance.option('items') || [];
-      const itemIndex = items.indexOf(items.filter((item) => item.name === name)[0]);
-
-      if (itemIndex >= 0) {
-        const itemOptionPrefix = `items[${itemIndex}]`;
-        if (toolbarInstance.option(`${itemOptionPrefix}.options`)) {
-          toolbarInstance.option(`${itemOptionPrefix}.options.disabled`, optionValue);
-        } else {
-          toolbarInstance.option(`${itemOptionPrefix}.disabled`, optionValue);
-        }
-      }
+    if (!toolbar) {
+      return;
     }
+
+    const items = toolbar.option('items') || [];
+    const itemIndex = items.findIndex((item) => item.name === name);
+
+    if (itemIndex < 0) {
+      return;
+    }
+
+    const item = toolbar.option(`items[${itemIndex}]`);
+    item.disabled = disabled;
+
+    if (item.options) {
+      item.options.disabled = disabled;
+    }
+
+    toolbar.option(`items[${itemIndex}]`, item);
   },
 
   updateToolbarDimensions() {
