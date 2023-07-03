@@ -691,12 +691,14 @@ dataGridCore.registerModule('export', {
       editing: {
         callbackNames() {
           const callbackList = this.callBase();
-          return isDefined(callbackList) ? callbackList.push('editingChanged') : ['editingChanged'];
+
+          return isDefined(callbackList) ? callbackList.push('editingButtonsUpdated') : ['editingButtonsUpdated'];
         },
 
         _updateEditButtons() {
           this.callBase();
-          this.editingChanged.fire(this.hasChanges());
+
+          this.editingButtonsUpdated.fire();
         },
       },
     },
@@ -706,6 +708,7 @@ dataGridCore.registerModule('export', {
           const items = this.callBase();
 
           const exportButton = this._getExportToolbarButton();
+
           if (exportButton) {
             items.push(exportButton);
             this._correctItemsPosition(items);
@@ -794,9 +797,12 @@ dataGridCore.registerModule('export', {
               exportAllIcon = DATAGRID_PDF_EXPORT_ICON;
             }
 
+            const disabled = this._needDisableExportButton();
+
             items.push({
               text: format(texts.exportAll, formatName),
               icon: exportAllIcon,
+              disabled,
               onClick: () => {
                 this._exportController[exportMethod](false, formatType);
               },
@@ -806,6 +812,7 @@ dataGridCore.registerModule('export', {
               items.push({
                 text: format(texts.exportSelectedRows, formatName),
                 icon: exportSelectedIcon,
+                disabled,
                 onClick: () => {
                   this._exportController[exportMethod](true, formatType);
                 },
@@ -832,13 +839,35 @@ dataGridCore.registerModule('export', {
           }
         },
 
+        _needDisableExportButton(): boolean {
+          const isDataColumnsInvisible = !this._columnsController.hasVisibleDataColumns();
+          const hasUnsavedChanges = this._editingController.hasChanges();
+
+          return isDataColumnsInvisible || hasUnsavedChanges;
+        },
+
+        _columnOptionChanged(e) {
+          this.callBase(e);
+
+          const isColumnLocationChanged = dataGridCore.checkChanges(e.optionNames, ['groupIndex', 'visible']);
+
+          if (isColumnLocationChanged) {
+            const disabled = this._needDisableExportButton();
+
+            this.setToolbarItemDisabled('exportButton', disabled);
+          }
+        },
+
         init() {
-          const that = this;
           this.callBase();
+
           this._exportController = this.getController('export');
           this._editingController = this.getController('editing');
-          this._editingController.editingChanged.add((hasChanges) => {
-            that.setToolbarItemDisabled('exportButton', hasChanges);
+
+          this._editingController.editingButtonsUpdated.add(() => {
+            const disabled = this._needDisableExportButton();
+
+            this.setToolbarItemDisabled('exportButton', disabled);
           });
         },
 
