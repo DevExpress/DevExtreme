@@ -922,62 +922,114 @@ testComponentDefaults(Toast,
     }
 );
 
-const tabletAndMobileAnimation = {
-    show: {
-        type: 'fade',
-        duration: 200,
-        from: 0,
-        to: 1
-    },
-    hide: {
-        type: 'fade',
-        duration: 200,
-        from: 1,
-        to: 0
-    }
-};
-
-const mobileOptions = {
-    position: {
-        at: 'bottom center',
-        my: 'bottom center',
-        offset: '0 -20'
-    },
-    width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
-    hideOnOutsideClick: true,
-    animation: tabletAndMobileAnimation,
-};
-
-const tabletOptions = {
-    position: {
-        at: 'bottom center',
-        my: 'bottom center',
-        offset: '0 -20'
-    },
-    width: 'auto',
-    maxWidth: '80vw',
-    hideOnOutsideClick: true,
-    animation: tabletAndMobileAnimation,
-};
-
 testComponentDefaults(Toast,
     [{ platform: 'android', deviceType: 'phone' }],
-    mobileOptions,
+    {
+        position: {
+            at: 'bottom center',
+            my: 'bottom center',
+            offset: '0 -20'
+        },
+        width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+        hideOnOutsideClick: true,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
+    },
 );
 
 testComponentDefaults(Toast,
     [{ platform: 'android', deviceType: 'tablet' }],
-    tabletOptions,
+    {
+        position: {
+            at: 'bottom center',
+            my: 'bottom center',
+            offset: '0 -20'
+        },
+        width: 'auto',
+        maxWidth: '80vw',
+        hideOnOutsideClick: true,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
+    },
 );
 
 testComponentDefaults(Toast,
     [{ platform: 'ios', deviceType: 'phone' }],
-    mobileOptions,
+    {
+        position: {
+            at: 'bottom center',
+            my: 'bottom center',
+            offset: '0 -20'
+        },
+        width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+        hideOnOutsideClick: true,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
+    },
 );
 
 testComponentDefaults(Toast,
     [{ platform: 'ios', deviceType: 'tablet' }],
-    tabletOptions,
+    {
+        position: {
+            at: 'bottom center',
+            my: 'bottom center',
+            offset: '0 -20'
+        },
+        width: 'auto',
+        maxWidth: '80vw',
+        hideOnOutsideClick: true,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
+    },
 );
 
 testComponentDefaults(Toast,
@@ -991,7 +1043,20 @@ testComponentDefaults(Toast,
         width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
         displayTime: 4000,
         hideOnOutsideClick: true,
-        animation: tabletAndMobileAnimation,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -1016,7 +1081,20 @@ testComponentDefaults(Toast,
         maxWidth: '80vw',
         hideOnOutsideClick: true,
         displayTime: 4000,
-        animation: tabletAndMobileAnimation,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
