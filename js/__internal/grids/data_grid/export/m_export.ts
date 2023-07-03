@@ -685,12 +685,15 @@ dataGridCore.registerModule('export', {
             return null;
           }
 
+          const disabled = this._needDisableExportButton();
+
           const toolbarButtonOptions: any = {
             name: DATAGRID_EXPORT_TOOLBAR_BUTTON_NAME,
             location: 'after',
             locateInMenu: 'auto',
             sortIndex: 30,
             options: { items },
+            disabled,
           };
 
           if (items.length === 1) {
@@ -756,12 +759,9 @@ dataGridCore.registerModule('export', {
               exportAllIcon = DATAGRID_PDF_EXPORT_ICON;
             }
 
-            const disabled = this._needDisableExportButton();
-
             items.push({
               text: format(texts.exportAll, formatName),
               icon: exportAllIcon,
-              disabled,
               onClick: () => {
                 this._exportController.exportTo(false, formatType);
               },
@@ -771,7 +771,6 @@ dataGridCore.registerModule('export', {
               items.push({
                 text: format(texts.exportSelectedRows, formatName),
                 icon: exportSelectedIcon,
-                disabled,
                 onClick: () => {
                   this._exportController.exportTo(true, formatType);
                 },
@@ -808,7 +807,7 @@ dataGridCore.registerModule('export', {
         _columnOptionChanged(e) {
           this.callBase(e);
 
-          const isColumnLocationChanged = dataGridCore.checkChanges(e.optionNames, ['groupIndex', 'visible']);
+          const isColumnLocationChanged = dataGridCore.checkChanges(e.optionNames, ['groupIndex', 'visible', 'all']);
 
           if (isColumnLocationChanged) {
             const disabled = this._needDisableExportButton();
