@@ -52,6 +52,8 @@ const FileUploader = require('ui/file_uploader');
 const Form = require('ui/form');
 const ValidationMessage = require('ui/validation_message');
 
+const DEFAULT_MARGIN = 20;
+
 themes.setDefaultTimeout(0);
 
 QUnit.testStart(function() {
@@ -775,58 +777,7 @@ testComponentDefaults(TagBox,
 );
 
 testComponentDefaults(Toast,
-    [{ platform: 'android' }],
-    {
-        position: {
-            at: 'bottom left',
-            my: 'bottom left',
-            of: null,
-            offset: '20 -20'
-        },
-        width: 'auto',
-        animation: {
-            show: {
-                type: 'slide',
-                duration: 200,
-                from: {
-                    position: {
-                        my: 'top',
-                        at: 'bottom',
-                        of: window
-                    }
-                },
-            },
-            hide: {
-                type: 'slide',
-                duration: 200,
-                to: {
-                    position: {
-                        my: 'top',
-                        at: 'bottom',
-                        of: window
-                    }
-                },
-            }
-        }
-    }
-);
-
-testComponentDefaults(Toast,
-    { platform: 'android', deviceType: 'phone' },
-    {
-        position: {
-            my: 'bottom center',
-            at: 'bottom center',
-            offset: '0 0'
-        }
-    }
-);
-
-testComponentDefaults(Toast,
-    [
-        { platform: 'generic', deviceType: 'desktop' },
-        { platform: 'ios' }
-    ],
+    [{ platform: 'generic', deviceType: 'desktop' }],
     {
         animation: {
             show: {
@@ -846,7 +797,190 @@ testComponentDefaults(Toast,
 );
 
 testComponentDefaults(Toast,
-    {},
+    [{ platform: 'android', deviceType: 'phone' }],
+    {
+        position: {
+            at: 'bottom center',
+            my: 'bottom center',
+            offset: '0 -20'
+        },
+        width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+        hideOnOutsideClick: true,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
+    },
+);
+
+testComponentDefaults(Toast,
+    [{ platform: 'android', deviceType: 'tablet' }],
+    {
+        position: {
+            at: 'bottom center',
+            my: 'bottom center',
+            offset: '0 -20'
+        },
+        width: 'auto',
+        maxWidth: '80vw',
+        hideOnOutsideClick: true,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
+    },
+);
+
+testComponentDefaults(Toast,
+    [{ platform: 'ios', deviceType: 'phone' }],
+    {
+        position: {
+            at: 'bottom center',
+            my: 'bottom center',
+            offset: '0 -20'
+        },
+        width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+        hideOnOutsideClick: true,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
+    },
+);
+
+testComponentDefaults(Toast,
+    [{ platform: 'ios', deviceType: 'tablet' }],
+    {
+        position: {
+            at: 'bottom center',
+            my: 'bottom center',
+            offset: '0 -20'
+        },
+        width: 'auto',
+        maxWidth: '80vw',
+        hideOnOutsideClick: true,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
+    },
+);
+
+testComponentDefaults(Toast,
+    [{ deviceType: 'phone' }],
+    {
+        position: {
+            at: 'bottom center',
+            my: 'bottom center',
+            offset: '0 -20'
+        },
+        width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+        displayTime: 4000,
+        hideOnOutsideClick: true,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() {
+            return true;
+        };
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(Toast,
+    [{ deviceType: 'tablet' }],
+    {
+        position: {
+            at: 'bottom center',
+            my: 'bottom center',
+            offset: '0 -20'
+        },
+        width: 'auto',
+        maxWidth: '80vw',
+        hideOnOutsideClick: true,
+        displayTime: 4000,
+        animation: {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        },
+    },
+    function() {
+        this.origIsMaterial = themes.isMaterial;
+        themes.isMaterial = () => true;
+    },
+    function() {
+        themes.isMaterial = this.origIsMaterial;
+    }
+);
+
+testComponentDefaults(Toast,
+    [{ deviceType: 'desktop' }],
     {
         minWidth: 344,
         maxWidth: 568,
