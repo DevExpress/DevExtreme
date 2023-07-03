@@ -15,6 +15,8 @@ const TOAST_CONTENT_CLASS = TOAST_CLASS_PREFIX + 'content';
 const TOAST_MESSAGE_CLASS = TOAST_CLASS_PREFIX + 'message';
 const TOAST_ICON_CLASS = TOAST_CLASS_PREFIX + 'icon';
 
+const DEFAULT_MARGIN = 20;
+
 const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#toast');
@@ -98,8 +100,9 @@ QUnit.module('general', moduleConfig, () => {
         this.instance = this.$element.dxToast({
             onShown: function(e) {
                 const $content = e.component.$content();
-                assert.roughEqual($content.offset().top + getOuterHeight($content), window.visualViewport.height, 1.01);
-                assert.roughEqual(getOuterWidth($content), window.visualViewport.width, 1.01);
+
+                assert.roughEqual($content.offset().top + getOuterHeight($content), window.visualViewport.height - DEFAULT_MARGIN, 1.01);
+                assert.roughEqual(getOuterWidth($content), window.visualViewport.width - (DEFAULT_MARGIN * 2), 1.01);
 
                 done();
             }

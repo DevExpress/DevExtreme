@@ -1,6 +1,4 @@
 import $ from '../../core/renderer';
-import { getWindow } from '../../core/utils/window';
-const window = getWindow();
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import readyCallbacks from '../../core/utils/ready_callbacks';
@@ -37,6 +35,7 @@ const POSITION_ALIASES = {
 };
 
 const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
+const DEFAULT_MARGIN = 20;
 
 ready(function() {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, function(e) {
@@ -91,81 +90,57 @@ const Toast = Overlay.inherit({
     },
 
     _defaultOptionsRules: function() {
+        const tabletAndMobileAnimation = {
+            show: {
+                type: 'fade',
+                duration: 200,
+                from: 0,
+                to: 1
+            },
+            hide: {
+                type: 'fade',
+                duration: 200,
+                from: 1,
+                to: 0
+            }
+        };
+
+        const tabletAndMobileCommonOptions = {
+            displayTime: isMaterial() ? 4000 : 2000,
+            hideOnOutsideClick: true,
+            animation: tabletAndMobileAnimation,
+        };
+
         return this.callBase().concat([
             {
-                device: { platform: 'android' },
-                options: {
-                    hideOnOutsideClick: true,
-
-                    width: 'auto',
-
-                    position: {
-                        at: 'bottom left',
-                        my: 'bottom left',
-                        offset: '20 -20'
-                    },
-
-                    animation: {
-                        show: {
-                            type: 'slide',
-                            duration: 200,
-                            from: {
-                                position: {
-                                    my: 'top',
-                                    at: 'bottom',
-                                    of: window
-                                }
-                            },
-                        },
-                        hide: {
-                            type: 'slide',
-                            duration: 200,
-                            to: {
-                                position: {
-                                    my: 'top',
-                                    at: 'bottom',
-                                    of: window
-                                }
-                            },
-                        }
-                    }
-                }
-            },
-            {
-                device: function(device) {
-                    const isPhone = device.deviceType === 'phone';
-                    const isAndroid = device.platform === 'android';
-
-                    return isPhone && isAndroid;
-                },
-                options: {
-                    width: '100vw',
-
-                    position: {
-                        at: 'bottom center',
-                        my: 'bottom center',
-                        offset: '0 0'
-                    }
-                }
-            },
-            {
-                device: function(device) {
+                device(device) {
                     return device.deviceType === 'phone';
                 },
                 options: {
-                    width: '100vw',
-                }
+                    width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+                    ...tabletAndMobileCommonOptions,
+                },
             },
             {
-                device: function() {
-                    return isMaterial();
+                device(device) {
+                    return device.deviceType === 'tablet';
+                },
+                options: {
+                    width: 'auto',
+                    maxWidth: '80vw',
+                    ...tabletAndMobileCommonOptions,
+                },
+            },
+            {
+                device(device) {
+                    return isMaterial() && device.deviceType === 'desktop';
                 },
                 options: {
                     minWidth: 344,
                     maxWidth: 568,
-                    displayTime: 4000
-                }
-            }
+                    displayTime: 4000,
+                },
+            },
         ]);
     },
 
