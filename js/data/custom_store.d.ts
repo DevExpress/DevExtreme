@@ -1,9 +1,9 @@
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 import { Options as StoreOptions, Store } from './abstract_store';
 import { DxExtendedPromise, DxPromise } from '../core/utils/deferred';
-import { ResolvedData } from '../common/data';
+import { CustomStoreLoadResult } from '../common/data';
 
-export type { ResolvedData, GroupItem } from '../common/data';
+export type { CustomStoreLoadResult as ResolvedData, CustomStoreGroupItem as GroupItem } from '../common/data';
 
 /** @public */
 export type Options<
@@ -49,7 +49,7 @@ export interface CustomStoreOptions<
      * @type_function_return Promise<Array<any>|object>|Array<any>
      * @public
      */
-    load: (options: LoadOptions<TItem>) => LoadResult<ResolvedData<TItem>>;
+    load: (options: LoadOptions<TItem>) => LoadResult<CustomStoreLoadResult<TItem>>;
     /**
      * @docid
      * @default 'processed'
@@ -118,7 +118,7 @@ export default class CustomStore<
      * @return Promise<any>
      * @public
      */
-    load(): DxExtendedPromise<ResolvedData<TItem>>;
+    load(): DxExtendedPromise<CustomStoreLoadResult<TItem>>;
     /**
      * @docid
      * @publicName load(options)
@@ -126,5 +126,5 @@ export default class CustomStore<
      * @return Promise<any>
      * @public
      */
-    load(options: LoadOptions<TItem>): DxExtendedPromise<ResolvedData<TItem>>;
+    load(options: LoadOptions<TItem>): DxExtendedPromise<CustomStoreLoadResult<TItem>>;
 }

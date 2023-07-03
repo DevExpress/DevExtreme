@@ -2,22 +2,22 @@
  * @docid
  * @public
  */
-export type GroupItem<
+export type CustomStoreGroupItem<
     TItem = any,
 > = {
   key: any | string | number;
-  items: Array<TItem> | Array<GroupItem<TItem>> | null;
+  items: Array<TItem> | Array<CustomStoreGroupItem<TItem>> | null;
   count?: number;
   summary?: Array<any>;
 };
 
-type ItemsArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
+type CustomStoreLoadedArray<TItem = any> = Array<TItem> | Array<CustomStoreGroupItem<TItem>>;
 
 /**
  * @public
  */
-export type SummaryResult<TItem = any> = {
-    data: Array<TItem> | Array<GroupItem>;
+export type CustomStoreLoadedSummary<TItem = any> = {
+    data: Array<TItem> | Array<CustomStoreGroupItem<TItem>>;
     totalCount?: number;
     summary?: Array<any>;
     groupCount?: number;
@@ -28,24 +28,24 @@ export type SummaryResult<TItem = any> = {
  * @public
  * @type object
  */
-export type ResolvedData<
+export type CustomStoreLoadResult<
     TItem = any,
 > =
   | Object
-  | ItemsArray<TItem>
-  | SummaryResult<TItem>;
+  | CustomStoreLoadedArray<TItem>
+  | CustomStoreLoadedSummary<TItem>;
 
 /**
  * @public
  */
-export function isCustomStoreSummary<TItem>(res: ResolvedData<TItem>): res is SummaryResult<TItem>;
+export function isCustomStoreSummary<TItem>(res: CustomStoreLoadResult<TItem>): res is CustomStoreLoadedSummary<TItem>;
 
 /**
  * @public
  */
-export function isCustomStoreGroupItemsArray<TItem>(res: ResolvedData<TItem>): res is Array<GroupItem<TItem>>;
+export function isCustomStoreGroupItemsArray<TItem>(res: CustomStoreLoadResult<TItem>): res is Array<CustomStoreGroupItem<TItem>>;
 
 /**
  * @public
  */
-export function isCustomStoreItemsArray<TItem>(res: ResolvedData<TItem>): res is Array<TItem>;
+export function isCustomStoreItemsArray<TItem>(res: CustomStoreLoadResult<TItem>): res is Array<TItem>;
