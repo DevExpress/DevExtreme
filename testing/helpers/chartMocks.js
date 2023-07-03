@@ -10,7 +10,6 @@ import translator2DModule from 'viz/translators/translator2d';
 import seriesFamilyModule from 'viz/core/series_family';
 import seriesModule from 'viz/series/base_series';
 import vizMocks from './vizMocks.js';
-import { isDefined } from '../../js/core/utils/type.js';
 import { Range } from 'viz/translators/range';
 const LoadingIndicatorOrig = loadingIndicatorModule.LoadingIndicator;
 
@@ -23,7 +22,11 @@ const sourceItemsToMocking = {};
 export const categories = [firstCategory, secondCategory, thirdCategory, fourthCategory];
 let renderer;
 
-export let seriesMockData = {};
+export const seriesMockData = {
+    series: [],
+    args: [],
+    currentSeries: 0
+};
 
 const canvas = {
     width: 610,
@@ -326,11 +329,7 @@ const MockSeriesFamily = Class.inherit({
 });
 
 export const insertMockFactory = function insertMockFactory() {
-    seriesMockData = {
-        series: [],
-        args: [],
-        currentSeries: 0
-    };
+    resetMockFactory();
 
     mockItem('Point', pointModule, function(series, data, options) {
         const opt = $.extend(true, {}, data, options);
@@ -384,7 +383,9 @@ export const restoreMockFactory = function() {
 };
 
 export const resetMockFactory = function resetMockFactory() {
-    seriesMockData = null;
+    seriesMockData.series = [];
+    seriesMockData.args = [];
+    seriesMockData.currentSeries = 0;
 };
 
 export const setupSeriesFamily = function() {
@@ -668,7 +669,8 @@ export const MockSeries = function MockSeries(options) {
         getMarginOptions: sinon.stub().returns(options.marginOptions || {}),
         useAggregation: sinon.stub().returns(!!(options.aggregation && options.aggregation.enabled)),
         usePointsToDefineAutoHiding: sinon.stub().returns(false),
-        resetApplyingAnimation: sinon.stub()
+        resetApplyingAnimation: sinon.stub(),
+        clearSelection: function() { }
     };
 };
 
@@ -898,7 +900,8 @@ export const MockPoint = Class.inherit(
         setHole: function() { },
         resetHoles: function() { },
         setInvisibility: sinon.spy(),
-        setDefaultCoords: sinon.spy()
+        setDefaultCoords: sinon.spy(),
+        clearSelection: function() { },
     });
 
 export const MockAxis = function(renderOptions) {
@@ -978,7 +981,7 @@ export const MockAxis = function(renderOptions) {
             this._options[typeSelector] = axisType || this._options[typeSelector];
         },
         getOptions: function() {
-            if(!isDefined(this._options)) {
+            if(!typeUtils.isDefined(this._options)) {
                 this._options = {
                     width: 1,
                     visible: true

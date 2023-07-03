@@ -86,6 +86,8 @@ const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
 
 const FOCUSED_CLASS = 'dx-state-focused';
 
+const WINDOW_RATIO = 0.8;
+
 const toSelector = function(val) {
     return '.' + val;
 };
@@ -1554,6 +1556,28 @@ QUnit.module('options', {
         }
 
         assert.equal(autoValue, initialValue, 'initial value equal auto value');
+    });
+
+    QUnit.test('popup height should have correct size on mobile devices', function(assert) {
+        if(devices.real().deviceType !== 'phone') {
+            assert.ok(true, 'not mobile device');
+            return;
+        }
+        const initialVisualViewport = window.visualViewport;
+
+        try {
+            window.visualViewport = { height: 510, width: 405 };
+            const $lookup = $('#lookup');
+            const instance = $lookup.dxLookup({}).dxLookup('instance');
+
+            instance.open();
+            const popup = $lookup.find(`.${POPUP_CLASS}`).dxPopup('instance');
+
+            assert.equal(popup.option('height')(), 510 * WINDOW_RATIO);
+            assert.equal(popup.option('width')(), 405 * WINDOW_RATIO);
+        } finally {
+            window.visualViewport = initialVisualViewport;
+        }
     });
 
     QUnit.test('searchPlaceholder', function(assert) {

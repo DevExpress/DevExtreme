@@ -232,7 +232,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _checkBoxModeChange: function(value, previousValue) {
         if(previousValue === 'none' || value === 'none') {
-            this.repaint();
             return;
         }
 
@@ -276,6 +275,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 break;
             case 'showCheckBoxesMode':
                 this._checkBoxModeChange(value, previousValue);
+                this._invalidate();
                 break;
             case 'scrollDirection':
                 this.getScrollable().option('direction', value);
@@ -1065,7 +1065,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const value = this._dataAdapter.isAllSelected();
         this._createComponent(this._$selectAllItem, CheckBox, {
             value: value,
-            tabIndex: 1,
             text: this.option('selectAllText'),
             onValueChanged: this._onSelectAllCheckboxValueChanged.bind(this)
         });
@@ -1361,6 +1360,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._updateItemSelection(true, $item.find('.' + ITEM_CLASS).get(0));
             itemIndex++;
         }
+    },
+
+    focus: function() {
+        if(this._selectAllEnabled()) {
+            eventsEngine.trigger(this._$selectAllItem, 'focus');
+            return;
+        }
+
+        this.callBase();
     },
 
     _focusInHandler: function(e) {

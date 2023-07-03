@@ -105,8 +105,7 @@ gulp.task('dev-watch', gulp.parallel(
     'bundler-config-watch',
     'js-bundles-watch',
     'style-compiler-themes-watch',
-    'test-env',
-    'compile-ts-watch'
+    'test-env'
 ));
 
 gulp.task('dev', gulp.series(

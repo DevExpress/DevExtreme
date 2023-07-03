@@ -1,5 +1,6 @@
 import { extend } from '../../core/utils/extend';
 import { when } from '../../core/utils/deferred';
+import { hasWindow } from '../../core/utils/window';
 import { name as dblClickName } from '../../events/double_click';
 import { addNamespace } from '../../events/utils/index';
 import eventsEngine from '../../events/core/events_engine';
@@ -24,6 +25,7 @@ class FileManagerItemListBase extends Widget {
     }
 
     _initMarkup() {
+        this._needResetScrollPosition = false;
         this.$element().addClass(FILE_MANAGER_FILES_VIEW_CLASS);
 
         const dblClickEventName = addNamespace(dblClickName, FILE_MANAGER_ITEM_LIST_ITEM_OPEN_EVENT_NAMESPACE);
@@ -142,6 +144,13 @@ class FileManagerItemListBase extends Widget {
         this._refreshDeferred?.resolve();
     }
 
+    _onContentReady() {
+        if(this._needResetScrollPosition) {
+            this._resetScrollTopPosition();
+            this._needResetScrollPosition = false;
+        }
+    }
+
     _tryRaiseSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
         const parentDirectoryItem = this._findParentDirectoryItem(this.getSelectedItems());
         if(parentDirectoryItem) {
@@ -176,6 +185,18 @@ class FileManagerItemListBase extends Widget {
     }
 
     _resetFocus() {
+
+    }
+
+
+    _resetScrollTopPosition() {
+        if(!hasWindow()) {
+            return;
+        }
+        setTimeout(() => this._getScrollable()?.scrollTo(0));
+    }
+
+    _getScrollable() {
 
     }
 

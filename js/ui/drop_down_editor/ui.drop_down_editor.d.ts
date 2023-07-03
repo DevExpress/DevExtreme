@@ -9,12 +9,7 @@ import {
 
 import dxTextBox, {
     dxTextBoxOptions,
-
 } from '../text_box';
-
-import {
-    dxTextEditorButton,
-} from '../text_box/ui.text_editor.base';
 
 import {
     Properties as PopoverProperties,
@@ -32,6 +27,7 @@ import {
     ApplyValueMode,
     Mode,
     Position,
+    TextEditorButton,
 } from '../../common';
 
 /** @public */
@@ -74,7 +70,7 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
      * @default undefined
      * @public
      */
-    buttons?: Array<DropDownPredefinedButton | dxTextEditorButton>;
+    buttons?: Array<DropDownPredefinedButton | TextEditorButton>;
     /**
      * @docid
      * @default true

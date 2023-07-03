@@ -90,7 +90,7 @@ QUnit.begin(function() {
         return $.extend({}, environment, {
             beforeEach: function() {
                 environment.beforeEach.apply(this, arguments);
-                this.validateData = sinon.stub(dataValidatorModule, 'validateData', function() {
+                this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function() {
                     return {
                         arg: [{
                             argument: 1,
@@ -278,7 +278,7 @@ QUnit.begin(function() {
 
     // T124801
     QUnit.test('Create canvas when container size is not defined', function(assert) {
-        const container = $('<div style="width: 100px">').appendTo(this.$container);
+        const container = $('<div>').css('width', '100px').appendTo(this.$container);
 
         this.createSparkline({ dataSource: [1], pointSize: 0 }, container);
 
@@ -2146,7 +2146,7 @@ QUnit.begin(function() {
 
     QUnit.test('isReady with not loaded dataSource', function(assert) {
         const data = new DataSource();
-        sinon.stub(data, 'isLoaded', function() { return false; });
+        sinon.stub(data, 'isLoaded').callsFake(function() { return false; });
 
         const sparkline = this.createSparkline({ dataSource: data });
 

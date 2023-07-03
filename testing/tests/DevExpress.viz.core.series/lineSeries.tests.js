@@ -71,7 +71,7 @@ const environmentWithSinonStubPoint = {
         environment.beforeEach.call(this);
         let mockPointIndex = 0;
 
-        this.createPoint = sinon.stub(pointModule, 'Point', function(series, data) {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(series, data) {
             const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.angle = -data.argument;
@@ -1311,7 +1311,7 @@ function setDiscreteType(series) {
             this.options = {
                 type: 'line'
             };
-            this.createPoint = sinon.stub(pointModule, 'Point', function() {
+            this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
                 const stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);

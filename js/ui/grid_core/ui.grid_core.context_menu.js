@@ -1,2 +1,2 @@
 // deprecated
-export * from '../../__internal/grids/grid_core/context_menu/module';
+export * from '../../__internal/grids/grid_core/context_menu/m_context_menu';

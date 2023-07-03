@@ -1,12 +1,9 @@
+require('../../helpers/trackerMock.js');
+
 const $ = require('jquery');
-const mock = require('../../helpers/mockModule.js').mock;
 const vizMocks = require('../../helpers/vizMocks.js');
-const { ChartTracker } = require('viz/chart_components/tracker');
+const trackerModule = require('viz/chart_components/tracker');
 const domAdapter = require('core/dom_adapter');
-const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
-const trackerModule = mock('viz/chart_components/tracker', {
-    ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters))
-});
 const noop = require('core/utils/common').noop;
 const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 const vizUtils = require('viz/core/utils');
@@ -146,7 +143,7 @@ const environment = {
             return createChartInstance(options, this.$container);
         };
 
-        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
+        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
             return that.themeManager;
         });
         this.layoutManager = new LayoutManager();
@@ -154,7 +151,7 @@ const environment = {
             arguments[2] && arguments[2]();
         });
 
-        sinon.stub(layoutManagerModule, 'LayoutManager', function() {
+        sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
             const layoutManager = new LayoutManager();
             layoutManager
                 .stub('needMoreSpaceForPanesCanvas')
@@ -168,7 +165,7 @@ const environment = {
         });
 
 
-        sinon.stub(tooltipModule, 'Tooltip', function(parameters) {
+        sinon.stub(tooltipModule, 'Tooltip').callsFake(function(parameters) {
             return new StubTooltip(parameters);
         });
 
@@ -701,7 +698,7 @@ const environment = {
 
     QUnit.test('draw chart when scrollBar is visible', function(assert) {
         // arrange
-        sinon.stub(scrollBarModule, 'ScrollBar', function() {
+        sinon.stub(scrollBarModule, 'ScrollBar').callsFake(function() {
             const stub = sinon.createStubInstance(ScrollBar);
             stub.init.returns(stub);
             stub.update.returns(stub);
@@ -853,7 +850,7 @@ const environment = {
         const argAxis = chart._argumentAxes[0];
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
+            sinon.stub(family, 'updateOptions').callsFake(function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
             });
         });
@@ -884,7 +881,7 @@ const environment = {
         const argAxis = chart._argumentAxes[0];
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
+            sinon.stub(family, 'updateOptions').callsFake(function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
             });
         });
@@ -912,7 +909,7 @@ const environment = {
         });
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
+            sinon.stub(family, 'updateOptions').callsFake(function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
             });
         });
@@ -935,7 +932,7 @@ const environment = {
         });
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
+            sinon.stub(family, 'updateOptions').callsFake(function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
             });
         });
@@ -962,7 +959,7 @@ const environment = {
         const argAxis = chart._argumentAxes[0];
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
-            sinon.stub(family, 'updateOptions', function(options) {
+            sinon.stub(family, 'updateOptions').callsFake(function(options) {
                 chart.seriesFamiliesUpdatingOptions = options;
             });
         });

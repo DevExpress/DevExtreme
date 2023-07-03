@@ -103,7 +103,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
             onSelectionChanged: this._onFilesViewSelectionChanged.bind(this),
             onFocusedRowChanged: this._onFilesViewFocusedRowChanged.bind(this),
-            onOptionChanged: this._onFilesViewOptionChanged.bind(this)
+            onOptionChanged: this._onFilesViewOptionChanged.bind(this),
+            onContentReady: this._onContentReady.bind(this)
         });
     }
 
@@ -463,11 +464,16 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             actualOptions.paging = {
                 pageIndex: 0
             };
+            this._needResetScrollPosition = true;
         }
         this._filesView.option(actualOptions);
 
         this._refreshDeferred = new Deferred();
         return this._refreshDeferred.promise();
+    }
+
+    _getScrollable() {
+        return this._filesView.getScrollable();
     }
 
     getSelectedItems() {

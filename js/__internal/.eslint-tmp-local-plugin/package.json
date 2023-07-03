@@ -1,0 +1,10 @@
+{
+  "name": "eslint-plugin-forbidden-imports",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.js",
+  "peerDependencies": {
+    "eslint": ">=8.0.0",
+    "@typescript-eslint/eslint-plugin": ">=5.0.0"
+  }
+}

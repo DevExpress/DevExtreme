@@ -26,7 +26,7 @@ const environment = {
                 tickInterval: that.generatedTickInterval
             };
         });
-        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator', function() {
+        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
             return that.tickGeneratorSpy;
         });
 
@@ -172,7 +172,7 @@ QUnit.module('API', {
     beforeEach: function() {
         const that = this;
 
-        sinon.stub(translator2DModule, 'Translator2D', function() {
+        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return that.translator;
         });
         environment.beforeEach.call(this);
@@ -1202,7 +1202,7 @@ QUnit.test('Validate visualRange, option is set', function(assert) {
 QUnit.module('Zoom', {
     beforeEach: function() {
         const that = this;
-        sinon.stub(translator2DModule, 'Translator2D', function() {
+        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return that.translator;
         });
 

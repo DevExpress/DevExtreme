@@ -5,6 +5,7 @@ import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { ClassNames as CLASS } from '../../model/dataGrid/classNames';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
+import { salesApiMock } from './apiMocks/salesApiMock';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
   const scrollWidth = await dataGrid.getScrollWidth();
@@ -1000,6 +1001,49 @@ test('The data should display correctly after changing the dataSource and focuse
   },
 }));
 
+// T1166649
+safeSizeTest('The scroll position of a fixed table should be synchronized with the main table when fast scrolling to the end', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const scrollbarVerticalThumbTrack = dataGrid.getScrollBarThumbTrack('vertical');
+
+  // act
+  await t
+    .hover(scrollbarVerticalThumbTrack)
+    .drag(scrollbarVerticalThumbTrack, 0, 600)
+    .wait(1000);
+
+  await t
+    .expect(await takeScreenshot('grid-virtual-scrolling_with_fixed_columns-T1166649.png', '#container'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+  // assert
+}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+  dataSource: [...new Array(1000)].map((_, index) => ({ id: index, text: `item ${index}` })),
+  keyExpr: 'id',
+  showRowLines: true,
+  height: 600,
+  scrolling: {
+    mode: 'virtual',
+    useNative: false,
+  },
+  editing: {
+    mode: 'row',
+    allowUpdating: true,
+    allowDeleting: true,
+    useIcons: true,
+  },
+  columnFixing: {
+    enabled: true,
+  },
+  columns: [{
+    type: 'buttons',
+    fixedPosition: 'left',
+  }, 'id', 'text'],
+}));
+
 fixture`Remote Scrolling`
   .page(url(__dirname, '../containerAspNet.html'))
   .beforeEach(async (t) => {
@@ -1015,16 +1059,10 @@ test('Scroll to the bottom after expand several group', async (t) => {
   };
 
   // act
-  await t.wait(200);
   await t.expect(dataGrid.hasScrollable()).ok();
   await scrollToBottom();
-  await scrollToBottom();
-  await scrollToBottom();
   await dataGrid.apiExpandRow(['Contoso York Store']);
-  await t.wait(200);
   await dataGrid.apiExpandRow(['Contoso York Store', 'Audio']);
-  await t.wait(200);
-  await scrollToBottom();
   await scrollToBottom();
   await dataGrid.scrollBy({ y: -1 });
   await t.expect(dataGrid.isReady()).ok();
@@ -1038,49 +1076,54 @@ test('Scroll to the bottom after expand several group', async (t) => {
       .within(897075, 932043);
   }
 })
-  .before(async () => createWidget('dxDataGrid', () => ({
-    width: 1000,
-    height: 440,
-    dataSource: (window as any).DevExpress.data.AspNet.createStore({
-      key: 'Id',
-      loadUrl: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/Sales',
-    }),
-    remoteOperations: { groupPaging: true },
-    scrolling: {
-      mode: 'virtual',
-      useNative: false,
-    },
-    grouping: {
-      autoExpandAll: false,
-    },
-    groupPanel: {
-      visible: true,
-    },
-    showBorders: true,
-    columns: [{
-      dataField: 'Id',
-      dataType: 'number',
-      width: 75,
-    }, {
-      caption: 'Subcategory',
-      dataField: 'ProductSubcategoryName',
-      width: 150,
-    }, {
-      caption: 'Store',
-      dataField: 'StoreName',
-      groupIndex: 0,
-      width: 150,
-    }, {
-      caption: 'Category',
-      dataField: 'ProductCategoryName',
-      groupIndex: 1,
-      width: 120,
-    }, {
-      caption: 'Product',
-      dataField: 'ProductName',
-    }],
-    loadingTimeout: 0,
-  })));
+  .before(async (t) => {
+    await t.addRequestHooks(salesApiMock);
+    return createWidget('dxDataGrid', () => ({
+      width: 1000,
+      height: 440,
+      dataSource: (window as any).DevExpress.data.AspNet.createStore({
+        key: 'Id',
+        loadUrl: 'https://api/data',
+      }),
+      remoteOperations: { groupPaging: true },
+      scrolling: {
+        mode: 'virtual',
+        useNative: false,
+      },
+      grouping: {
+        autoExpandAll: false,
+      },
+      groupPanel: {
+        visible: true,
+      },
+      showBorders: true,
+      columns: [{
+        dataField: 'Id',
+        dataType: 'number',
+        width: 75,
+      }, {
+        caption: 'Subcategory',
+        dataField: 'ProductSubcategoryName',
+        width: 150,
+      }, {
+        caption: 'Store',
+        dataField: 'StoreName',
+        groupIndex: 0,
+        width: 150,
+      }, {
+        caption: 'Category',
+        dataField: 'ProductCategoryName',
+        groupIndex: 1,
+        width: 120,
+      }, {
+        caption: 'Product',
+        dataField: 'ProductName',
+      }],
+      loadingTimeout: 0,
+    }));
+  }).after(async (t) => {
+    await t.removeRequestHooks(salesApiMock);
+  });
 
 test('New virtual mode. Virtual rows should not be in view port after scrolling large data (T1043156)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -1396,5 +1439,46 @@ test('Editors should keep changes after being scrolled out of sight (T1145698)',
       allowUpdating: true,
       allowAdding: true,
     },
+  });
+});
+
+// T1136896
+safeSizeTest('Editing buttons should rerender correctly after scrolling if repaintChangesOnly=true', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollBy({ top: 1000 });
+
+  await dataGrid.apiEditRow(3); // row with id=12
+
+  await dataGrid.scrollBy({ top: -1000 });
+  await dataGrid.scrollBy({ top: 1000 });
+
+  await dataGrid.scrollBy({ top: -1 });
+
+  await takeScreenshot('T1136896-virtual-scrolling_editing-buttons.png', '#container');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 200]).before(async () => {
+  const data = [...new Array(14)].map((_, i) => ({
+    id: i + 1,
+  }));
+
+  return createWidget('dxDataGrid', {
+    height: 200,
+    loadingTimeout: null,
+    dataSource: data,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
+    },
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+      allowDeleting: true,
+    },
+    repaintChangesOnly: true,
   });
 });

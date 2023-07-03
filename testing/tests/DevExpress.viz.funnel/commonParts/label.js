@@ -31,9 +31,11 @@ export const labelEnvironment = $.extend({}, environment, {
         ];
         let labelBoxesIndex = 0;
 
-        sinon.stub(labelModule, 'Label', ()=> {
+        const that = this;
+
+        sinon.stub(labelModule, 'Label', function() {
             const stub = new stubLabel();
-            stub.stub('getBoundingRect').returns(this.labelBoxes[(labelBoxesIndex++) % this.labelBoxes.length]);
+            stub.stub('getBoundingRect').returns(that.labelBoxes[(labelBoxesIndex++) % that.labelBoxes.length]);
             return stub;
         });
 

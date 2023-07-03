@@ -1,5 +1,5 @@
 import 'generic_light.css!';
-import '__internal/grids/pivot_grid/field_chooser/module';
+import '__internal/grids/pivot_grid/field_chooser/m_field_chooser';
 
 import $ from 'jquery';
 

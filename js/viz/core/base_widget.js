@@ -22,7 +22,7 @@ import {
     createIncidentOccurred } from './base_widget.utils';
 const _floor = Math.floor;
 const _log = warnings.log;
-const SIZE_CHANGING_THRESHOLD = 0.3;
+const SIZE_CHANGING_THRESHOLD = 1;
 
 const OPTION_RTL_ENABLED = 'rtlEnabled';
 

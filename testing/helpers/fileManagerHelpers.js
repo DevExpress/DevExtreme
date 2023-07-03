@@ -563,7 +563,8 @@ export class FileManagerWrapper {
         }
         $element.trigger($.Event(eventType, {
             clientX: $element.offset().left + elementOffset.left - this.getDocumentScrollLeft(),
-            clientY: $element.offset().top + elementOffset.top - this.getDocumentScrollTop()
+            clientY: $element.offset().top + elementOffset.top - this.getDocumentScrollTop(),
+            originalEvent: $.Event(eventType, { dataTransfer: { types: ['Files'] } })
         }));
     }
 
@@ -849,26 +850,22 @@ export const createTestFileSystem = () => {
     ];
 };
 
-export const createHugeFileSystem = () => {
+export const createHugeFileSystem = (rootFilesCount = 10, rootDirsCount = 2, ...filesCount) => {
     const result = [];
     const getFiles = amount =>
         [...new Array(amount).keys()].map(i => ({
             name: `File ${i}.txt`,
             isDirectory: false
         }));
-    result.push(...getFiles(10));
-    result.push({
-        name: 'Folder 1',
-        isDirectory: true,
-        hasDubDirectories: false,
-        items: getFiles(100)
-    });
-    result.push({
-        name: 'Folder 2',
-        isDirectory: true,
-        hasDubDirectories: false,
-        items: getFiles(100)
-    });
+    for(let i = 0; i < rootDirsCount; i++) {
+        result.push({
+            name: `Folder ${i + 1}`,
+            isDirectory: true,
+            hasDubDirectories: false,
+            items: getFiles((filesCount && filesCount[i]) || 100)
+        });
+    }
+    result.push(...getFiles(rootFilesCount));
     return result;
 };
 

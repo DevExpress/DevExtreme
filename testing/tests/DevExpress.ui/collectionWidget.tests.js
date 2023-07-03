@@ -745,8 +745,8 @@ module('render', {
     test('_getSummaryItemsWidth function returns right values', function(assert) {
         const instance = new TestComponent('#cmp', {
             items: [
-                { html: '<div class="test-width" style="width: 20px; padding-left: 7px"></div>' },
-                { html: '<div class="test-width" style="width: 10px; margin-left: 5px"></div>' }
+                { template: $('<div class="test-width">').css('width', '20px').css('padding-left', '7px') },
+                { template: $('<div class="test-width">').css('width', '10px').css('margin-left', '5px') },
             ]
         });
 

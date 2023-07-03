@@ -180,12 +180,10 @@ const Toast = Overlay.inherit({
     },
 
     _renderContentImpl: function() {
-        if(this.option('message')) {
-            this._message = $('<div>')
-                .addClass(TOAST_MESSAGE_CLASS)
-                .text(this.option('message'))
-                .appendTo(this.$content());
-        }
+        this._message = $('<div>')
+            .addClass(TOAST_MESSAGE_CLASS)
+            .text(this.option('message'))
+            .appendTo(this.$content());
 
         this.setAria('role', 'alert', this._message);
 

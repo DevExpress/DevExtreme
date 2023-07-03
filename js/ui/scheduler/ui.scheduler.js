@@ -1301,6 +1301,7 @@ class Scheduler extends Widget {
             getFirstDayOfWeek: () => this.option('firstDayOfWeek'),
             getStartDayHour: () => this.option('startDayHour'),
             getCalculatedEndDate: (startDateWithStartHour) => this._workSpace.calculateEndDate(startDateWithStartHour),
+            getTimeZoneCalculator: () => this.timeZoneCalculator,
         };
 
         return new AppointmentForm(scheduler);
@@ -1857,9 +1858,8 @@ class Scheduler extends Widget {
                 { text: occurrenceText, onClick: function() { return RECURRENCE_EDITING_MODE.OCCURENCE; } }
             ],
             popupOptions: {
-                copyRootClassesToWrapper: true,
-                _ignoreCopyRootClassesToWrapperDeprecation: true
-            },
+                wrapperAttr: { class: 'dx-dialog' }
+            }
         });
 
         return this._recurrenceDialog.show();

@@ -114,8 +114,16 @@ export default class Scheduler extends Widget {
     this.reducedIconTooltip = new ReducedIconTooltip();
   }
 
-  static getDeleteRecurrenceDialog(): AppointmentDialog {
+  private static getAppointmentDialog(): AppointmentDialog {
     return new AppointmentDialog();
+  }
+
+  static getDeleteRecurrenceDialog(): AppointmentDialog {
+    return this.getAppointmentDialog();
+  }
+
+  static getEditRecurrenceDialog(): AppointmentDialog {
+    return this.getAppointmentDialog();
   }
 
   // eslint-disable-next-line class-methods-use-this

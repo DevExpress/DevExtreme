@@ -1,1 +1,1 @@
-import '../../__internal/grids/tree_list/module_validating';
+import '../../__internal/grids/tree_list/m_validating';

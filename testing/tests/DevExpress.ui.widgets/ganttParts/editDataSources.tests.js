@@ -359,4 +359,45 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
         const taskText = this.$element.find(Consts.TASK_WRAPPER_SELECTOR).first().text();
         assert.equal(taskText, tasks[0].title, 'Custom task text works correctly');
     });
+    test('insert and update task with func field setter (T1163857)', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+
+        const tasks = [
+            { 'my_id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progressFake': 0 },
+            { 'my_id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progressFake': 0 },
+            { 'my_id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progressFake': 50 }
+        ];
+
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: tasks,
+                progressExpr: (data, value) => {
+                    if(value) {
+                        data.progressFake = value;
+                    } else {
+                        return data.progressFake;
+                    }
+                }
+            },
+            editing: { enabled: true },
+        };
+        this.createInstance(options);
+        this.clock.tick(10);
+
+        const updatedTaskId = 3;
+        let updatedProgress = 23;
+        getGanttViewCore(this.instance).commandManager.updateTaskCommand.execute(updatedTaskId.toString(), { progress: updatedProgress });
+        this.clock.tick(10);
+
+        let updatedTask = tasks.filter((t) => t.my_id === updatedTaskId)[0];
+        assert.equal(updatedTask.progressFake, updatedProgress, 'task progress is updated');
+
+        updatedProgress = 69;
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute({ progress: updatedProgress });
+        updatedTask = tasks[tasks.length - 1];
+        assert.equal(tasks.length, 4, 'new task is inserted');
+        assert.equal(updatedTask.progressFake, updatedProgress, 'new task progress is updated');
+    });
 });

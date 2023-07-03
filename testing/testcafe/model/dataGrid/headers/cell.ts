@@ -5,12 +5,13 @@ import Widget from '../../internal/widget';
 const CLASS = {
   hiddenColumn: 'hidden-column',
   filterMenu: 'dx-header-filter-menu',
+  list: 'dx-list',
 };
 
 export default class HeaderCell {
   element: Selector;
 
-  body: Selector;
+  body = Selector('body');
 
   isFocused: Promise<boolean>;
 
@@ -18,7 +19,6 @@ export default class HeaderCell {
 
   constructor(headerRow: Selector, index: number, widgetName: string) {
     this.element = headerRow.find(`td[aria-colindex='${index + 1}']`);
-    this.body = Selector('body');
     this.isFocused = this.element.focused;
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
   }
@@ -29,9 +29,5 @@ export default class HeaderCell {
 
   getEditor(): FocusableElement {
     return new FocusableElement(this.element.find('.dx-texteditor-input, .dx-checkbox'));
-  }
-
-  getHeaderFilterMenu(): Selector {
-    return this.body.find(`.${CLASS.filterMenu}`);
   }
 }

@@ -25,6 +25,7 @@ QUnit.module('Options', moduleConfig, () => {
         const treeListWrapperElement = this.$element.find(Consts.TREELIST_WRAPPER_SELECTOR);
         const splitterWrapper = this.$element.find(Consts.SPLITTER_WRAPPER_SELECTOR);
         const ganttWrapperElement = this.$element.find(Consts.GANTT_VIEW_SELECTOR);
+        const splitterOffset = this.instance._splitter._getSplitterOffset();
 
         this.instance.option('taskListWidth', 300);
         assert.roughEqual(treeListWrapperElement.width(), 300, 3, '300px');
@@ -33,12 +34,12 @@ QUnit.module('Options', moduleConfig, () => {
 
         this.instance.option('taskListWidth', '400px');
         assert.equal(treeListWrapperElement.width(), 400, '500px');
-        assert.equal(parseFloat(splitterWrapper.css('left')), 400, 'splitter position 400');
+        assert.equal(parseFloat(splitterWrapper.css('left')), 400 - splitterOffset, 'splitter position 400');
         assert.roughEqual(ganttWrapperElement.width(), 600, 3, '600px');
 
         this.instance.option('taskListWidth', '10%');
         assert.roughEqual(treeListWrapperElement.width(), 100, 1, '100px');
-        assert.roughEqual(parseFloat(splitterWrapper.css('left')), 100, 1, 'splitter position 100');
+        assert.roughEqual(parseFloat(splitterWrapper.css('left')), 100 - splitterOffset, 1, 'splitter position 100');
         assert.roughEqual(ganttWrapperElement.width(), 900, 3, '900px');
     });
     test('showResources', function(assert) {
@@ -278,5 +279,34 @@ QUnit.module('Options', moduleConfig, () => {
         assert.strictEqual(columns.length, 1);
         assert.strictEqual(columns[0].calculateCellValue({ id: '54' }), '54', 'number');
         assert.strictEqual(columns[0].calculateCellValue({ id: '54a' }), '54a', 'pseudo guid');
+    });
+    test('scaleType in optionChanged on zoom (T1167131)', function(assert) {
+        let lastScale;
+        const options = {
+            scaleType: 'weeks',
+            onOptionChanged: (e) => {
+                if(e.name === 'scaleType') {
+                    lastScale = e.value;
+                }
+            },
+        };
+        this.createInstance(options);
+        this.clock.tick(0);
+        assert.notOk(lastScale, 'first time undefined');
+
+        this.instance.zoomIn();
+        this.instance.zoomIn();
+        this.instance.zoomIn();
+        this.clock.tick(0);
+        assert.equal(lastScale, 'days', 'check after zoom in');
+
+        this.instance.zoomOut();
+        this.instance.zoomOut();
+        this.instance.zoomOut();
+        this.instance.zoomOut();
+        this.instance.zoomOut();
+        this.instance.zoomOut();
+        this.clock.tick(0);
+        assert.equal(lastScale, 'months', 'check after zoom in');
     });
 });

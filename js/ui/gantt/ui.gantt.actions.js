@@ -1,5 +1,6 @@
 import $ from '../../core/renderer';
 import { getPublicElement } from '../../core/element';
+import { extend } from '../../core/utils/extend';
 
 /* eslint-disable spellcheck/spell-checker */
 const Actions = {
@@ -170,7 +171,7 @@ export class GanttActionsManager {
             const args = { cancel: false, values: this._convertCoreToMappedData(optionName, coreArgs.values) };
             action(args);
             coreArgs.cancel = args.cancel;
-            coreArgs.values = this._convertMappedToCoreData(optionName, args.values);
+            extend(coreArgs.values, this._convertMappedToCoreData(optionName, args.values));
             if(optionName === GANTT_TASKS) {
                 this._saveCustomFieldsDataToCache(GANTT_NEW_TASK_CACHE_KEY, args.values);
             }
@@ -491,7 +492,7 @@ export class GanttActionsManager {
             }
             action(args);
             coreArgs.cancel = args.cancel;
-            coreArgs.newValues = this._convertMappedToCoreData(optionName, args.newValues);
+            extend(coreArgs.newValues, this._convertMappedToCoreData(optionName, args.newValues));
             if(isTaskUpdating) {
                 if(args.cancel) {
                     this._customFieldsManager.resetCustomFieldsDataCache(args.key);
@@ -571,7 +572,7 @@ export class GanttActionsManager {
             };
             action(args);
             coreArgs.cancel = args.cancel;
-            coreArgs.values = this._convertMappedToCoreData(GANTT_TASKS, args.values);
+            extend(coreArgs.values, this._convertMappedToCoreData(GANTT_TASKS, args.values));
             coreArgs.readOnlyFields = this._convertMappedToCoreFields(GANTT_TASKS, args.readOnlyFields);
             coreArgs.hiddenFields = this._convertMappedToCoreFields(GANTT_TASKS, args.hiddenFields);
         }

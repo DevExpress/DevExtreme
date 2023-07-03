@@ -9,9 +9,10 @@ QUnit.testStart(() => {
     const markup =
         '<div id="tabs"></div>\
         <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+        <div id="widthRootStyle"></div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const TABS_CLASS = 'dx-tabs';

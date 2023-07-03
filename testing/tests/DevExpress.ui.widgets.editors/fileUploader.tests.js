@@ -116,12 +116,13 @@ const getUploadChunkArgumentsSummary = (file, chunksInfo) => {
     };
 };
 
-const triggerDragEvent = function($element, eventType) {
+const triggerDragEvent = function($element, eventType, dataTransfer = { types: ['Files'] }) {
     $element = $($element);
     const offset = eventType === 'dragenter' ? 1 : -1;
     $element.trigger($.Event(eventType, {
         clientX: $element.offset().left + offset,
-        clientY: $element.offset().top + offset
+        clientY: $element.offset().top + offset,
+        originalEvent: $.Event(eventType, { dataTransfer })
     }));
 };
 
@@ -3776,7 +3777,36 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         triggerDragEvent($inputWrapper, 'dragleave');
         assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called once');
         assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
+    });
 
+    QUnit.test('dropZoneEnter and dropZoneLeave events should not fire if dragged item is not file', function(assert) {
+        const onDropZoneEnterSpy = sinon.spy();
+        const onDropZoneLeaveSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            onDropZoneEnter: onDropZoneEnterSpy,
+            onDropZoneLeave: onDropZoneLeaveSpy
+        });
+        const $inputWrapper = $fileUploader.find(`.${FILEUPLOADER_INPUT_WRAPPER_CLASS}`);
+
+        triggerDragEvent($inputWrapper, 'dragenter', { types: ['text/plain'] });
+        assert.notOk(onDropZoneEnterSpy.called);
+
+        triggerDragEvent($inputWrapper, 'dragleave', { types: ['text/plain'] });
+        assert.notOk(onDropZoneLeaveSpy.called);
+    });
+
+    QUnit.test('onValueChanged event should not fire if dragged item is not file', function(assert) {
+        const onValueChangedSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            onValueChanged: onValueChangedSpy,
+        });
+
+        const $inputWrapper = $fileUploader.find(`.${FILEUPLOADER_INPUT_WRAPPER_CLASS}`);
+
+        triggerDragEvent($inputWrapper, 'drop', { files: [] });
+        assert.notOk(onValueChangedSpy.called);
     });
 
     QUnit.test('Custom label text must be shown anyway, enven if upload mode is useForm and native drop is not supported (T936087)', function(assert) {

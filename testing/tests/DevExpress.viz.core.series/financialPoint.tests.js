@@ -1746,7 +1746,7 @@ QUnit.module('Draw label', {
                 failOnWrongData: true
             })
         };
-        this.sinonFactory = sinon.stub(labelModule, 'Label', function() {
+        this.sinonFactory = sinon.stub(labelModule, 'Label').callsFake(function() {
             const label = sinon.createStubInstance(originalLabel);
             label.getLayoutOptions.returns(that.options.label);
             label.getBoundingRect.returns({ height: 10, width: 20 });

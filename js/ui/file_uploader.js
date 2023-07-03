@@ -934,10 +934,16 @@ class FileUploader extends Editor {
         }
 
         const dropZoneElement = this._getDropZoneElement(isCustomTarget, e);
-        if(isDefined(dropZoneElement) && this._activeDropZone === null && this.isMouseOverElement(e, dropZoneElement, false)) {
+        if(isDefined(dropZoneElement) && this._shouldRaiseDragOver(e, dropZoneElement)) {
             this._activeDropZone = dropZoneElement;
             this._tryToggleDropZoneActive(true, isCustomTarget, e);
         }
+    }
+
+    _shouldRaiseDragOver(e, dropZoneElement) {
+        return this._activeDropZone === null
+            && this.isMouseOverElement(e, dropZoneElement, false)
+            && e.originalEvent.dataTransfer.types[0] === 'Files';
     }
 
     _dragOverHandler(isCustomTarget, e) {
@@ -948,10 +954,10 @@ class FileUploader extends Editor {
 
         if(!isCustomTarget) { // only default dropzone has pseudoelements
             const dropZoneElement = this._getDropZoneElement(false, e);
-            if(this._activeDropZone === null && this.isMouseOverElement(e, dropZoneElement, false)) {
+            if(this._shouldRaiseDragOver(e, dropZoneElement)) {
                 this._dragEnterHandler(false, e);
             }
-            if(this._activeDropZone !== null && this._shouldRaiseDragLeave(e, false)) {
+            if(this._shouldRaiseDragLeave(e, false)) {
                 this._dragLeaveHandler(false, e);
             }
         }
@@ -961,9 +967,6 @@ class FileUploader extends Editor {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
-        if(this._activeDropZone === null) {
-            return;
-        }
 
         if(this._shouldRaiseDragLeave(e, isCustomTarget)) {
             this._tryToggleDropZoneActive(false, isCustomTarget, e);
@@ -972,7 +975,7 @@ class FileUploader extends Editor {
     }
 
     _shouldRaiseDragLeave(e, isCustomTarget) {
-        return !this.isMouseOverElement(e, this._activeDropZone, !isCustomTarget);
+        return this._activeDropZone !== null && !this.isMouseOverElement(e, this._activeDropZone, !isCustomTarget);
     }
 
     _tryToggleDropZoneActive(active, isCustom, event) {
@@ -1004,7 +1007,7 @@ class FileUploader extends Editor {
         const fileList = e.originalEvent.dataTransfer.files;
         const files = this._getFiles(fileList);
 
-        if(!this.option('multiple') && files.length > 1) {
+        if(!this.option('multiple') && files.length > 1 || files.length === 0) {
             return;
         }
 

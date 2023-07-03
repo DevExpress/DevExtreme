@@ -6823,7 +6823,6 @@ QUnit.module('Cache', {
             'isContinuationOnNextPage': true,
             'items': [
                 {
-                    'isContinuationOnNextPage': true,
                     'items': [],
                     'key': 1
                 }

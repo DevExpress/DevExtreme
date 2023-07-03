@@ -305,38 +305,12 @@ QUnit.module('check action buttons position', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('if container is window', function(assert) {
-
-        $('#fab-one').dxSpeedDialAction({
-            icon: 'plus'
-        });
-
-        $('#fab-two').dxSpeedDialAction({
-            icon: 'trash'
-        });
-
-        const $fabMainElement = $(FAB_MAIN_SELECTOR);
-        const $fabMainWrapper = $fabMainElement.find('.dx-overlay-wrapper');
-        const $fabMainContent = $fabMainElement.find('.dx-overlay-content');
-        const $fabElement = $(`${FAB_SELECTOR}:not(${FAB_MAIN_SELECTOR})`);
-
-        $fabMainContent.trigger('dxclick');
-
-        const $fabWrapper = $fabElement.find('.dx-overlay-wrapper');
-        const expectedPosition = 'fixed';
-
-        assert.equal($fabMainWrapper.css('position'), expectedPosition, 'position is fixed');
-        assert.equal($fabWrapper.eq(0).css('position'), expectedPosition, 'first action has the same position with main fab');
-        assert.equal($fabWrapper.eq(1).css('position'), expectedPosition, 'second action has the same position with main fab');
-    });
-
-    QUnit.test('if random container', function(assert) {
+    QUnit.test('position should be absolute if position.of is specified', function(assert) {
         config({
             floatingActionButtonConfig: {
                 position: {
                     of: $('#fabs')
-                },
-                visualContainer: $('#fabs')
+                }
             }
         });
 
@@ -359,6 +333,34 @@ QUnit.module('check action buttons position', {
         const expectedPosition = 'absolute';
 
         assert.equal($fabMainWrapper.css('position'), expectedPosition, 'position is absolute');
+        assert.equal($fabWrapper.eq(0).css('position'), expectedPosition, 'first action has the same position with main fab');
+        assert.equal($fabWrapper.eq(1).css('position'), expectedPosition, 'second action has the same position with main fab');
+    });
+
+    QUnit.test('position should be fixed if position.of is not specified', function(assert) {
+        config({
+            floatingActionButtonConfig: {}
+        });
+
+        $('#fab-one').dxSpeedDialAction({
+            icon: 'plus'
+        });
+
+        $('#fab-two').dxSpeedDialAction({
+            icon: 'trash'
+        });
+
+        const $fabMainElement = $(FAB_MAIN_SELECTOR);
+        const $fabMainWrapper = $fabMainElement.find('.dx-overlay-wrapper');
+        const $fabMainContent = $fabMainElement.find('.dx-overlay-content');
+        const $fabElement = $(`${FAB_SELECTOR}:not(${FAB_MAIN_SELECTOR})`);
+
+        $fabMainContent.trigger('dxclick');
+
+        const $fabWrapper = $fabElement.find('.dx-overlay-wrapper');
+        const expectedPosition = 'fixed';
+
+        assert.equal($fabMainWrapper.css('position'), expectedPosition, 'position is fixed');
         assert.equal($fabWrapper.eq(0).css('position'), expectedPosition, 'first action has the same position with main fab');
         assert.equal($fabWrapper.eq(1).css('position'), expectedPosition, 'second action has the same position with main fab');
     });

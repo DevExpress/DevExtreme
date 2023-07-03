@@ -34,7 +34,7 @@ const environment = {
         this.nodesGroupIndex = 1;
         this.labelsGroupIndex = 2;
 
-        sinon.stub(rendererModule, 'Renderer', function() {
+        sinon.stub(rendererModule, 'Renderer').callsFake(function() {
             return that.renderer;
         });
     },

@@ -20,7 +20,7 @@ const themeManagerModule = require('viz/gauges/theme_manager');
 
 $('<div id="test-container">').appendTo('#qunit-fixture');
 
-sinon.stub(rangeModule, 'Range', function(parameters) {
+sinon.stub(rangeModule, 'Range').callsFake(function(parameters) {
     return new stubRange(parameters);
 });
 
@@ -173,7 +173,7 @@ loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
     return new vizMocks.LoadingIndicator(parameters);
 });
 
-sinon.stub(rendererModule, 'Renderer', function() {
+sinon.stub(rendererModule, 'Renderer').callsFake(function() {
     return currentTest().renderer;
 });
 

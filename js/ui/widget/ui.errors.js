@@ -344,5 +344,10 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1021
     */
-    W1021: 'The \'{0}\' is not rendered because none of the DOM elements match the value of the "container" property.'
+    W1021: 'The \'{0}\' is not rendered because none of the DOM elements match the value of the "container" property.',
+
+    /**
+     * @name ErrorsUIWidgets.W1022
+     */
+    W1022: '{0} JSON parsing error: \'{1}\''
 });

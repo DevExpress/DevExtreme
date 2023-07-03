@@ -1,4 +1,5 @@
-import { pagerModule } from '@js/ui/grid_core/ui.grid_core.pager';
-import gridCore from '../module_core';
+import { pagerModule } from '@ts/grids/grid_core/pager/m_pager';
+
+import gridCore from '../m_core';
 
 gridCore.registerModule('pager', pagerModule);

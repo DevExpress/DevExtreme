@@ -53,6 +53,31 @@ QUnit.module('Intl localization', () => {
             }
         });
 
+        ['h:mm aaa', 'h:mm aaaa', 'h:mm aaaaa'].forEach(displayFormat => {
+            QUnit.test(`DateBox should not raise error when displayFormat="${displayFormat}" and arabic locale is used`, function(assert) {
+                const currentLocale = locale();
+                try {
+                    locale('ar-u-nu-arab');
+                    const $dateBox = $('#dateBox').dxDateBox({
+                        value: new Date(2015, 10, 10),
+                        displayFormat,
+                        type: 'time',
+                        pickerType: 'calendar',
+                        useMaskBehavior: true
+                    });
+
+                    const $input = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR);
+                    const date = $input.val();
+
+                    assert.strictEqual(date, '١٢:٠٠ ص', 'date is localized');
+                } catch(e) {
+                    assert.ok(false, 'Error occured: ' + e.message);
+                } finally {
+                    locale(currentLocale);
+                }
+            });
+        });
+
         QUnit.test('DateBox should not raise error when digits are Farsi digits (T867867)', function(assert) {
             const currentLocale = locale();
             try {

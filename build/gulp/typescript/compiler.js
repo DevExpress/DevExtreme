@@ -1,78 +1,120 @@
 'use strict';
 
 const path = require('path');
-const del = require('del');
+const { Readable } = require('stream');
 const { glob } = require('glob');
 
+const Vinyl = require('vinyl');
 const tsCompiler = require('typescript');
 const tscAlias = require('tsc-alias');
+
 const createFileChangeManager = require('./file-change-manager');
 const { logError, logInfo } = require('./logger');
-const { writeFileAsync } = require('../utils');
 
-const createTsCompiler = (compilerConfig) => {
+
+const createAliasTranspileFuncAsync = async(configFile, outDir) => {
+    const transpileFunc = await tscAlias.prepareSingleFileReplaceTscAliasPaths({
+        configFile,
+        outDir,
+    });
+
+    return (filePath, fileContents) => transpileFunc({ fileContents, filePath });
+};
+
+const createReadableStream = () => {
+    const stream = new Readable({ objectMode: true });
+    stream._read = () => {};
+    return stream;
+};
+
+const createWriteFileToStreamFunc = (
+    stream,
+    aliasTranspileFunc,
+    { distPath, aliasPath, tsBaseDirName },
+) => (filePath, fileData) => {
+    if(!filePath.includes(tsBaseDirName)) {
+        return;
+    }
+
+    const distPathRegExp = new RegExp(distPath);
+    // Resolve ts alias
+    const normalizedFilePath = filePath.replace(distPathRegExp, aliasPath);
+    const resolvedFileData = aliasTranspileFunc(normalizedFilePath, fileData);
+
+    const file = new Vinyl({
+        path: filePath.replace(distPathRegExp, ''),
+        contents: Buffer.from(resolvedFileData),
+    });
+    stream.push(file);
+};
+
+const getAbsolutePaths = (compilerConfig) => {
+    const baseTsAbsDir = path.dirname(`${compilerConfig.baseAbsPath}/${compilerConfig.relativePath.tsconfig}`);
+
+    return {
+        tsConfigDir: baseTsAbsDir,
+        tsConfigFile: `${compilerConfig.baseAbsPath}/${compilerConfig.relativePath.tsconfig}`,
+        tsBaseDir: baseTsAbsDir,
+        aliasRoot: `${compilerConfig.baseAbsPath}/${compilerConfig.relativePath.alias}`,
+    };
+};
+
+const getTsConfigPath = (tsConfigDir) => {
+    const configFilePath = tsCompiler.findConfigFile(
+        tsConfigDir,
+        tsCompiler.sys.fileExists,
+    );
+
+    if(!configFilePath) {
+        const errorMsg = `tsconfig wasn't found by passed path:\n${tsConfigDir}/tsconfig.json`;
+        console.error(logError(errorMsg));
+        throw Error(errorMsg);
+    }
+
+    return configFilePath;
+};
+
+const reportDiagnostic = (diagnostic) => {
+    if(diagnostic.file) {
+        const { line, character } = tsCompiler.getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+        const message = tsCompiler.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+        console.error(logError(`${diagnostic.file.fileName} (${line + 1},${character + 1}):\n ${message} \n`));
+
+        return;
+    }
+
+    console.error(logError(`${tsCompiler.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}\n`));
+};
+
+const createTsCompiler = async(compilerConfig) => {
     // --- private ---
-    const absolutePaths = {
-        tsConfigDir: path.dirname(compilerConfig.tsconfigAbsPath),
-        tsConfigFile: compilerConfig.tsconfigAbsPath,
-        tsBaseDir: path.dirname(compilerConfig.tsconfigAbsPath),
-        aliasRoot: compilerConfig.aliasAbsPath,
-    };
-
-    const createAliasTranspileAsync = async(outDir) => {
-        const transpileFunc = await tscAlias.prepareSingleFileReplaceTscAliasPaths({
-            configFile: absolutePaths.tsConfigFile,
-            outDir,
-        });
-
-        return (filePath, fileContents) => transpileFunc({ fileContents, filePath });
-    };
-
-    const reportDiagnostic = (diagnostic) => {
-        if(diagnostic.file) {
-            const { line, character } = tsCompiler.getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-            const message = tsCompiler.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-            console.error(logError(`${diagnostic.file.fileName} (${line + 1},${character + 1}):\n ${message} \n`));
-
-            return;
-        }
-
-        console.error(logError(`${tsCompiler.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}\n`));
-    };
-
-    const getTsConfigPath = () => {
-        const configFilePath = tsCompiler.findConfigFile(
-            absolutePaths.tsConfigDir,
-            tsCompiler.sys.fileExists,
-            compilerConfig.tsConfigName,
-        );
-        if(!configFilePath) {
-            const errorMsg = `tsconfig wasn't found by passed path:\n${absolutePaths.tsConfigFile}`;
-            console.error(logError(errorMsg));
-            throw Error(errorMsg);
-        }
-
-        return configFilePath;
-    };
-
-    const getWriteFileOverride = (aliasTranspileFunc) => async(filePath, fileData) => {
-        const normalizedFilePath = compilerConfig.normalizeTsAliasFilePath(filePath);
-        const resolvedFileData = aliasTranspileFunc(normalizedFilePath, fileData);
-        await writeFileAsync(filePath, resolvedFileData);
-    };
+    const absolutePaths = getAbsolutePaths(compilerConfig);
+    const aliasTranspileFunc = await createAliasTranspileFuncAsync(
+        absolutePaths.tsConfigFile,
+        absolutePaths.aliasRoot,
+    );
 
     // --- public ---
-    const compileTsAsync = async(fileNamePattern) => {
+    const compileTs = (fileNamePattern) => {
         const fileNames = glob.sync(fileNamePattern);
-        const configFilePath = getTsConfigPath();
+        const configFilePath = getTsConfigPath(absolutePaths.tsConfigDir);
         const { config } = tsCompiler.readConfigFile(configFilePath, tsCompiler.sys.readFile);
         const { options } = tsCompiler.parseJsonConfigFileContent(config, tsCompiler.sys, absolutePaths.tsBaseDir);
 
         const program = tsCompiler.createProgram(fileNames, options);
-        const aliasTranspileFunc = await createAliasTranspileAsync(absolutePaths.aliasRoot);
+
+        const stream = createReadableStream();
+
         const emitResult = program.emit(
             undefined,
-            getWriteFileOverride(aliasTranspileFunc),
+            createWriteFileToStreamFunc(
+                stream,
+                aliasTranspileFunc,
+                {
+                    distPath: compilerConfig.relativePath.dist,
+                    aliasPath: compilerConfig.relativePath.alias,
+                    tsBaseDirName: compilerConfig.tsBaseDirName,
+                }),
         );
 
         const allDiagnostics = tsCompiler
@@ -85,15 +127,19 @@ const createTsCompiler = (compilerConfig) => {
             console.error(logInfo(compilerConfig.messages.compilationFailed));
             throw Error(compilerConfig.messages.compilationFailed);
         }
+
+        stream.push(null);
+        return stream;
     };
 
-    const watchTsAsync = async() => {
-        const configFilePath = getTsConfigPath();
+    const watchTs = () => {
+        const configFilePath = getTsConfigPath(absolutePaths.tsConfigDir);
         const createProgram = tsCompiler.createSemanticDiagnosticsBuilderProgram;
         const reportWatchStatusChanged = (diagnostic) => {
             console.info(logInfo(diagnostic.messageText));
         };
         const changeManager = createFileChangeManager();
+        const stream = createReadableStream();
 
         const host = tsCompiler.createWatchCompilerHost(
             configFilePath,
@@ -104,33 +150,38 @@ const createTsCompiler = (compilerConfig) => {
             reportWatchStatusChanged
         );
 
-        const origPostProgramCreate = host.afterProgramCreate;
-        const aliasTranspileFunc = await createAliasTranspileAsync(absolutePaths.aliasRoot);
-        const writeFile = getWriteFileOverride(aliasTranspileFunc);
-
+        const writeFileToStream = createWriteFileToStreamFunc(
+            stream,
+            aliasTranspileFunc,
+            {
+                distPath: compilerConfig.relativePath.dist,
+                aliasPath: compilerConfig.relativePath.alias,
+                tsBaseDirName: compilerConfig.tsBaseDirName,
+            });
         host.writeFile = async(filePath, fileData) => {
             const isChanged = changeManager.checkFileChanged(filePath, fileData);
-            if(isChanged) {
-                await writeFile(filePath, fileData);
+
+            if(!isChanged) {
+                return;
             }
+
+            writeFileToStream(filePath, fileData);
         };
 
+        const origPostProgramCreate = host.afterProgramCreate;
         host.afterProgramCreate = program => {
             changeManager.clearUntouchedFiles();
             origPostProgramCreate(program);
         };
 
         tsCompiler.createWatchProgram(host);
-    };
 
-    const clearAfterTSCompileAsync = async() => {
-        await del(compilerConfig.clearFilePattern, { force: true });
+        return stream;
     };
 
     return {
-        compileTsAsync,
-        watchTsAsync,
-        clearAfterTSCompileAsync,
+        compileTs,
+        watchTs,
     };
 };
 

@@ -933,7 +933,13 @@ QUnit.test('Refresh', function(assert) {
         endScaleValue: 10,
         target: 8
     };
-    const sparkCont = $('<div style="width: 200px; height: 30px">').appendTo(this.$container);
+    const sparkCont = $('<div>')
+        .css({
+            width: '200px',
+            height: '30px'
+        })
+        .appendTo(this.$container);
+
     const bullet = this.createBullet(options, sparkCont);
     sparkCont.width(300);
     sparkCont.height(40);
@@ -1092,7 +1098,7 @@ QUnit.test('Change size if size = 0,10 - B239871', function(assert) {
 QUnit.module('drawn', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        sinon.stub(BaseWidget.prototype, '_drawn', sinon.spy());
+        sinon.stub(BaseWidget.prototype, '_drawn').callsFake(sinon.spy());
     },
     createBullet: environment.createBullet,
     resetTranslators: environment.resetTranslators,

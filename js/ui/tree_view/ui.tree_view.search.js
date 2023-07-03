@@ -58,6 +58,10 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         });
     },
 
+    _getNodeContainer: function() {
+        return this.$element().find(`.${NODE_CONTAINER_CLASS}`).first();
+    },
+
     _updateSearch: function() {
         if(this._searchEditor) {
             const editorOptions = this._getSearchEditorOptions();
@@ -66,7 +70,7 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     },
 
     _repaintContainer: function() {
-        const $container = this.$element().find(`.${NODE_CONTAINER_CLASS}`).first();
+        const $container = this._getNodeContainer();
         let rootNodes;
 
         if($container.length) {
@@ -78,7 +82,19 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         }
     },
 
+    _focusTarget: function() {
+        return this._itemContainer(this.option('searchEnabled'));
+    },
+
+    _cleanItemContainer: function() {
+        this.$element().empty();
+    },
+
     _itemContainer: function(isSearchMode) {
+        if(this._selectAllEnabled()) {
+            return this._getNodeContainer();
+        }
+
         if(this._scrollable && isSearchMode) {
             return $(this._scrollable.content());
         }

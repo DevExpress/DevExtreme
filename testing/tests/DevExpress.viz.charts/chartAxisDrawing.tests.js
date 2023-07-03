@@ -57,7 +57,7 @@ const environment = {
         this.title = new vizMocks.Title();
         this.legend = new vizMocks.Legend();
 
-        this.legendStub = sinon.stub(legendModule, 'Legend', () =>{
+        this.legendStub = sinon.stub(legendModule, 'Legend').callsFake(() =>{
             this.legend.getTemplatesGroups = sinon.spy(function() {
                 return [];
             });

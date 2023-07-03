@@ -12,7 +12,7 @@ const contentTestEnv = {
     beforeEach: function() {
         pdfCreator.set_getBlob(function(data) { return data; });
         pdfCreator.set_getBase64(function(data) { return data; });
-        sinon.stub(imageCreator, 'getImageData', (markup) => {
+        sinon.stub(imageCreator, 'getImageData').callsFake((markup) => {
             const def = $.Deferred();
             def.resolve(this.imageDataSample || '_test_' + markup + '_string_');
             return def;
@@ -135,7 +135,7 @@ QUnit.module('Export', {
     beforeEach: function() {
         pdfCreator.set_composePdfString(function() { return '_composed_string_'; });
 
-        sinon.stub(imageCreator, 'getImageData', function(markup) { const def = $.Deferred(); def.resolve(''); return def; });
+        sinon.stub(imageCreator, 'getImageData').callsFake(function(markup) { const def = $.Deferred(); def.resolve(''); return def; });
 
         if(isFunction(window.Blob)) {
             this.Blob = window.Blob;

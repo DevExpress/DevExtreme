@@ -236,8 +236,17 @@ QUnit.test('Tooltip should be appended in the closest element to root', function
 
 // T803622
 QUnit.test('Container has offset', function(assert) {
-    $('#qunit-fixture')
-        .append('<div class="tooltipContainer" style="position: absolute; left: 20px; top:20px; width: 500px; height:100%;"></div>');
+    const $container = $('<div class="tooltipContainer"></div>');
+
+    $container.css({
+        position: 'absolute',
+        left: '20px',
+        top: '20px',
+        width: '500px',
+        height: '100%'
+    });
+
+    $('#qunit-fixture').append($container);
 
     const tooltip = new Tooltip({ eventTrigger: function() {} });
 
@@ -253,7 +262,9 @@ QUnit.test('Container has offset', function(assert) {
 });
 
 QUnit.test('Body has vertical scroll', function(assert) {
-    const container = $('<div style="height: 4000px"></div>').appendTo(domAdapter.getDocument().body);
+    const container = $('<div>')
+        .css('height', '4000px')
+        .appendTo(domAdapter.getDocument().body);
 
     try {
         const tooltip = new Tooltip({ eventTrigger: function() { } });
@@ -269,7 +280,13 @@ QUnit.test('Body has vertical scroll', function(assert) {
 });
 
 QUnit.test('Body has horizontal scroll', function(assert) {
-    const container = $('<div style="width: 4000px; height: 600px;"></div>').appendTo(domAdapter.getDocument().body);
+    const container = $('<div>')
+        .css({
+            width: '4000px',
+            height: '600px'
+        })
+        .appendTo(domAdapter.getDocument().body);
+
     const documentElement = domAdapter.getDocument().documentElement;
     const body = $('body').get(0);
     const bodyScrollLeft = body.scrollLeft;
@@ -575,7 +592,7 @@ QUnit.module('Manipulation', {
         }
 
         if(getComputedStyle) {
-            this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(elem) {
+            this.getComputedStyle = sinon.stub(window, 'getComputedStyle').callsFake(function(elem) {
                 if(elem === tooltip._textHtml.get(0)) {
                     return { width: '83.13px', height: '23.45px', getPropertyValue: () => {} };
                 }
@@ -1684,7 +1701,7 @@ QUnit.module('Movements', {
         that.canvas = CANVAS;
         tooltip._getCanvas = function() { return that.canvas; };
         if(getComputedStyle) {
-            this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(elem) {
+            this.getComputedStyle = sinon.stub(window, 'getComputedStyle').callsFake(function(elem) {
                 if(elem === tooltip._textHtml.get(0)) {
                     return { width: '60px', height: '40px', getPropertyValue: () => {} };
                 }

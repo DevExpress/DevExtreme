@@ -1,6 +1,7 @@
-import { virtualScrollingModule } from '@js/ui/grid_core/ui.grid_core.virtual_scrolling';
-import gridCore from '../module_core';
-import dataSourceAdapter from '../module_data_source_adapter';
+import { virtualScrollingModule } from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling';
+
+import gridCore from '../m_core';
+import dataSourceAdapter from '../m_data_source_adapter';
 
 gridCore.registerModule('virtualScrolling', virtualScrollingModule);
 

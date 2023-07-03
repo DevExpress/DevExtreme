@@ -1,4 +1,4 @@
-window.includeThemesLinks();
+import '../../helpers/includeThemesLinks.js';
 
 import $ from 'jquery';
 import domAdapter from 'core/dom_adapter';
@@ -19,6 +19,8 @@ const userAgents = {
     android_tablet_7_1_1: 'Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Safari/537.36',
     win_phone_10: 'Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; NOKIA; Lumia 920) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Mobile Safari/537.36 Edge/12.0',
 };
+
+themes.setDefaultTimeout(0);
 
 QUnit.module('devices', {
     beforeEach: function() {

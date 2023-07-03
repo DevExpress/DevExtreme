@@ -326,7 +326,7 @@ QUnit.module('layouting', moduleConfig, () => {
             height: 'auto',
             rows: [{ ratio: 1, baseSize: 'auto' }],
             cols: [{ ratio: 1, baseSize: 'auto' }],
-            items: [{ location: { row: 0, col: 0 }, html: '<div style=\'height: 100px;\'></div>' }]
+            items: [{ location: { row: 0, col: 0 }, template: $('<div>').css('height', '100px') }]
         });
 
         assert.equal($responsiveBox.height(), 100, 'height calculated correctly');

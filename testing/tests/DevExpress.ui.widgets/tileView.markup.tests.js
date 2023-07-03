@@ -4,11 +4,13 @@ import 'ui/tile_view';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
-    const markup =
-        '<div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>';
+    const markup = `
+        <div id="widget"></div>
+        <div id="widthRootStyle"></div>
+    `;
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const TILEVIEW_CLASS = 'dx-tileview';

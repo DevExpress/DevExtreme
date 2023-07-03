@@ -12,7 +12,12 @@ const getWindow = require('core/utils/window').getWindow;
 
 const window = getWindow();
 
-$('#qunit-fixture').append('<div id="test-container" style="width: 200px; height: 150px;"></div>');
+$('#qunit-fixture').append('<div id="test-container"></div>');
+
+$('#test-container').css({
+    width: '200px',
+    height: '150px'
+});
 
 QUnit.module('Export', {
     beforeEach: function() {

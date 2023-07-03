@@ -7,14 +7,40 @@ const KEYBOARD_DRAG_STEP = 5;
 
 QUnit.testStart(function() {
     const markup =
-        '<div id="draggableElement" style="width: 100px; height: 100px; position: absolute; top: 300px; left: 300px;">\
-            <div id="handle" style="width: 100%; height: 50px"></div>\
+        '<div id="draggableElement">\
+            <div id="handle"></div>\
         </div>\
-        <div id="container" style="width: 200px; height: 200px;"></div>\
-        <div id="container2" style="width: 300px; height: 350px; position: absolute; top: -1000px; left: -700px"></div>\
+        <div id="container"></div>\
+        <div id="container2"></div>\
         ';
 
     $('#qunit-fixture').html(markup);
+
+    $('#draggableElement').css({
+        width: '100px',
+        height: '100px',
+        position: 'absolute',
+        top: '300px',
+        left: '300px'
+    });
+
+    $('#handle').css({
+        width: '100%',
+        height: '50px'
+    });
+
+    $('#container').css({
+        width: '200px',
+        height: '200px'
+    });
+
+    $('#container2').css({
+        width: '300px',
+        height: '350px',
+        position: 'absolute',
+        top: '-1000px',
+        left: '-700px'
+    });
 });
 
 QUnit.module('overlay_drag', {

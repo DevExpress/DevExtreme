@@ -6,6 +6,7 @@ import themes from 'ui/themes';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import SelectBox from 'ui/select_box';
+import 'ui/text_area';
 import config from 'core/config';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -4029,6 +4030,75 @@ QUnit.module('Editing', baseModuleConfig, () => {
         const $cell = $(dataGrid.getCellElement(0, 0));
         assert.strictEqual($cell.text(), 'text2', 'new lookup display value');
     });
+
+    // T1161254
+    QUnit.test('A cell with a TextArea editor should not close when a mouse click is released outside the editor', function(assert) {
+        let $firstCell;
+        let $textArea;
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ value: 1, displayValue: 'text1' }],
+            showBorders: true,
+            columns: [{
+                dataField: 'displayValue'
+            }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+            },
+            onEditorPreparing(e) {
+                e.editorName = 'dxTextArea';
+            },
+        });
+        this.clock.tick(10);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $firstCell.trigger('dxclick');
+        this.clock.tick(10);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $textArea = $firstCell.find('textarea');
+        assert.equal($textArea.length, 1, 'textarea should appear');
+
+        $textArea.trigger($.Event('dxpointerdown'));
+        $textArea.trigger($.Event('dxpointerup'));
+        $textArea.trigger($.Event('click', { target: $('body').get(0) }));
+        this.clock.tick(10);
+
+        $firstCell = $(dataGrid.getCellElement(0, 0));
+        $textArea = $firstCell.find('textarea');
+        assert.equal($textArea.length, 1, 'textarea should not disappear');
+    });
+
+    // T1169962
+    QUnit.test('Not focus last checkbox after focusing out first checkbox', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            keyExpr: 'id',
+            dataSource: [
+                { value: false, id: 1 },
+                { value: false, id: 2 },
+                { value: false, id: 3 }
+            ],
+            columns: ['value', 'id'],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+            },
+        });
+        this.clock.tick(10);
+
+        // act
+        const checkbox1 = $('.dx-checkbox').eq(0);
+        checkbox1.trigger('dxclick');
+        this.clock.tick(10);
+
+        $('body').trigger('dxclick');
+        this.clock.tick(10);
+
+        // assert
+        assert.equal(document.activeElement, document.body, 'focus is set to body');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
@@ -6485,7 +6555,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
         });
 
-        QUnit.test(`editRowKey in init configuration (editMode = ${editMode})`, function(assert) {
+        QUnit.test(`editColumnName in init configuration (editMode = ${editMode})`, function(assert) {
             // arrange
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: [{ id: 1 }, { id: 2 }],
@@ -7877,6 +7947,49 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             assert.ok(dataGridWrapper.rowsView.isRowVisible(newRowInfo.visibleIndex), 'new row visible after adding repeatedly');
             checkNeighboringRow();
             assert.strictEqual($(dataGrid.getCellElement(newRowInfo.visibleIndex, 1)).find('.dx-texteditor-input').val(), '111', 'cell value in a new row is not changed');
+        });
+    });
+
+    ['pageBottom', 'pageTop'].forEach(newRowPosition => {
+        QUnit.test(`Adding a new row should not throw error in popup mode (newRowPosition is ${newRowPosition} and rowRenderingMode: virtual)`, function(assert) {
+            // arrange
+            const getData = () => {
+                const items = [];
+                for(let i = 0; i < 100; i += 1) {
+                    items.push({
+                        id: i + 1,
+                        name: `Name ${i + 1}`
+                    });
+                }
+                return items;
+            };
+            const dataGrid = createDataGrid({
+                height: 200,
+                dataSource: getData(),
+                keyExpr: 'id',
+                editing: {
+                    newRowPosition,
+                },
+                paging: {
+                    pageSize: 10
+                },
+                scrolling: {
+                    rowRenderingMode: 'virtual',
+                    useNative: false
+                },
+                masterDetail: {
+                    enabled: true,
+                    autoExpandAll: true,
+                }
+            });
+
+            this.clock.tick(400);
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick(400);
+
+            assert.ok(true, 'no errors');
         });
     });
 });

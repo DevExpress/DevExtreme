@@ -7,6 +7,7 @@ import { FloatingActionButtonDirection } from './core/config';
 import type dxDraggable from './ui/draggable';
 import type dxScrollable from './ui/scroll_view/ui.scrollable';
 import type dxSortable from './ui/sortable';
+import type { Properties as ButtonProperties } from './ui/button';
 
 /**
  * @public
@@ -702,6 +703,34 @@ export type SubmenuShowMode = 'onClick' | 'onHover';
  * @namespace DevExpress.common
  */
 export type TextBoxPredefinedButton = 'clear'; // eslint-disable-line @typescript-eslint/no-type-alias
+
+/**
+ * @public
+ * @docid
+ * @type object
+ * @namespace DevExpress.common
+ */
+export type TextEditorButton = {
+  /**
+   * @public
+   * @docid
+   * @default "after"
+   */
+  location?: TextEditorButtonLocation;
+  /**
+   * @public
+   * @docid
+   * @default undefined
+   */
+  name?: string;
+  /**
+   * @public
+   * @docid
+   * @type dxButtonOptions
+   * @default undefined
+   */
+  options?: ButtonProperties;
+};
 
 /**
  * @public

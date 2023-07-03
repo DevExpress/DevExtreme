@@ -15,28 +15,38 @@ QUnit.module('eventsOnDispose', {
     }
 });
 
-$.each(DevExpress.ui, function(componentName) {
-    if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName)) {
-        QUnit.test(componentName + ' should not leak memory by not removing redundant event subscriptions after disposing', function(assert) {
-            // NOTE: $.getScript() subscribes load and error event handlers on <script> element
-            const originalGetScript = $.fn.getScript;
-            $.getScript = function() {
-                return $.Deferred().promise();
-            };
+[
+    false, // default disposing
+    true, // vue 2 disposing (firstly clears dom, then call dispose)
+].forEach((vue2disposing) => {
+    $.each(DevExpress.ui, function(componentName) {
+        if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName)) {
+            QUnit.test(`${componentName} should not leak memory by not removing redundant event subscriptions after disposing (vue2 = ${vue2disposing})`, function(assert) {
+                // NOTE: $.getScript() subscribes load and error event handlers on <script> element
+                const originalGetScript = $.fn.getScript;
+                $.getScript = function() {
+                    return $.Deferred().promise();
+                };
 
-            try {
-                const testNode = memoryLeaksHelper.createTestNode();
-                const originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
+                try {
+                    const testNode = memoryLeaksHelper.createTestNode();
+                    const originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
 
-                $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance'),
+                    const component = $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance');
 
-                this.clock.tick(0);
-                memoryLeaksHelper.destroyTestNode(testNode);
-                const newEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
-                assert.deepEqual(newEventSubscriptions, originalEventSubscriptions, 'After a component is disposed, additional event subscriptions must be removed');
-            } finally {
-                $.getScript = originalGetScript;
-            }
-        });
-    }
+                    this.clock.tick(0);
+                    if(vue2disposing) {
+                        testNode.get(0).remove();
+                        component.dispose();
+                    } else {
+                        memoryLeaksHelper.destroyTestNode(testNode);
+                    }
+                    const newEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
+                    assert.deepEqual(newEventSubscriptions, originalEventSubscriptions, 'After a component is disposed, additional event subscriptions must be removed');
+                } finally {
+                    $.getScript = originalGetScript;
+                }
+            });
+        }
+    });
 });

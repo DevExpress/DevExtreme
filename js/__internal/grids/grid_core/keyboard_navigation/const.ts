@@ -26,6 +26,7 @@ export const DATEBOX_WIDGET_NAME = 'dxDateBox';
 export const FOCUS_STATE_CLASS = 'dx-state-focused';
 export const WIDGET_CLASS = 'dx-widget';
 export const REVERT_BUTTON_CLASS = 'dx-revert-button';
+export const FOCUSED_CLASS = 'dx-focused';
 
 export const FAST_EDITING_DELETE_KEY = 'delete';
 

@@ -210,6 +210,63 @@ QUnit.module('Scroll', moduleConfig, () => {
         implementationsMap.getWidth = originalFunc;
     });
 
+    test('Details view - must reset scroll position on currentPath changed (T1163728, T1125089)', function(assert) {
+        this.fileManager.option({
+            width: 500,
+            height: 250,
+            fileSystemProvider: createHugeFileSystem(15, 1, 24),
+            itemView: {
+                mode: 'details'
+            }
+        });
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
+
+        this.fileManager.option('focusedItemKey', 'File 14.txt');
+        this.clock.tick(400);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsCellText('Name', 15), 'File 14.txt', 'focused item is visible');
+        assert.ok(this.wrapper.getDetailsViewScrollableContainer().scrollTop() > 400, 'scroll position changed');
+
+        this.fileManager.option('currentPath', 'Folder 1');
+        this.clock.tick(800);
+        this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
+    });
+
+    test('Thumbnails view - must reset scroll position on currentPath changed (T1163728, T1125089)', function(assert) {
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
+
+        this.fileManager.option({
+            width: 500,
+            height: 250,
+            fileSystemProvider: createHugeFileSystem(15, 1, 24)
+        });
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), 0, 'initial scroll position is 0');
+
+        this.fileManager.option('focusedItemKey', 'File 14.txt');
+        this.clock.tick(400);
+
+        assert.ok(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop() > 700, 'scroll position changed');
+
+        this.fileManager.option('currentPath', 'Folder 1');
+        this.clock.tick(800);
+
+        assert.strictEqual(this.wrapper.getThumbnailsViewScrollableContainer().scrollTop(), 0, 'scroll position resetted to 0');
+
+        implementationsMap.getWidth = originalFunc;
+    });
+
     test('Details view - must reset scroll position on currentPath changed (T1125089)', function(assert) {
         this.fileManager.option({
             width: 500,

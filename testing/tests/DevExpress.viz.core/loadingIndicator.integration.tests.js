@@ -5,7 +5,12 @@ const vizMocks = require('../../helpers/vizMocks.js');
 const loadingIndicatorModule = require('viz/core/loading_indicator');
 const DataSource = require('data/data_source/data_source').DataSource;
 
-$('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
+$('#qunit-fixture').append('<div id="test-container"></div>');
+
+$('#test-container').css({
+    width: '600px',
+    height: '400px'
+});
 
 QUnit.module('Loading indicator', {
     beforeEach: function() {

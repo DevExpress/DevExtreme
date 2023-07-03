@@ -20,7 +20,7 @@
   }
 
   &.dx-state-readonly {
-    .dx-radiobutton-icon::before {
+    .dx-radiobutton-icon {
       border-color: $radiogroup-readonly-border-color;
       background-color: $radiogroup-readonly-bg;
     }

@@ -1689,6 +1689,23 @@ declare module DevExpress.common {
   export type SubmenuShowMode = 'onClick' | 'onHover';
   export type TextBoxPredefinedButton = 'clear';
 
+  /**
+   * [descr:TextEditorButton]
+   */
+  export type TextEditorButton = {
+    /**
+     * [descr:TextEditorButton.location]
+     */
+    location?: TextEditorButtonLocation;
+    /**
+     * [descr:TextEditorButton.name]
+     */
+    name?: string;
+    /**
+     * [descr:TextEditorButton.options]
+     */
+    options?: DevExpress.ui.dxButton.Properties;
+  };
   export type TextEditorButtonLocation = 'after' | 'before';
   export type ToolbarItemComponent =
     | 'dxAutocomplete'
@@ -9421,6 +9438,43 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.events.ChangedOptionInfo;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type OverriddenKeys =
+      | 'columns'
+      | 'customizeColumns'
+      | 'dataRowTemplate'
+      | 'editing'
+      | 'export'
+      | 'grouping'
+      | 'groupPanel'
+      | 'keyExpr'
+      | 'masterDetail'
+      | 'onCellClick'
+      | 'onCellDblClick'
+      | 'onCellHoverChanged'
+      | 'onCellPrepared'
+      | 'onContextMenuPreparing'
+      | 'onEditingStart'
+      | 'onEditorPrepared'
+      | 'onEditorPreparing'
+      | 'onExporting'
+      | 'onFocusedCellChanged'
+      | 'onFocusedCellChanging'
+      | 'onFocusedRowChanged'
+      | 'onFocusedRowChanging'
+      | 'onRowClick'
+      | 'onRowDblClick'
+      | 'onRowPrepared'
+      | 'remoteOperations'
+      | 'rowTemplate'
+      | 'scrolling'
+      | 'selection'
+      | 'selectionFilter'
+      | 'sortByGroupSummaryInfo'
+      | 'summary'
+      | 'toolbar';
     export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<
       TRowData,
       TKey
@@ -9992,13 +10046,13 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export type dxDataGridOptions<
-    TRowData = any,
-    TKey = any
-  > = DevExpress.common.grids.GridBaseOptions<
-    dxDataGrid<TRowData, TKey>,
-    TRowData,
-    TKey
+  export type dxDataGridOptions<TRowData = any, TKey = any> = Omit<
+    DevExpress.common.grids.GridBaseOptions<
+      dxDataGrid<TRowData, TKey>,
+      TRowData,
+      TKey
+    >,
+    DevExpress.ui.dxDataGrid.OverriddenKeys
   > & {
     /**
      * [descr:dxDataGridOptions.columns]
@@ -12440,7 +12494,7 @@ declare module DevExpress.ui {
      */
     buttons?: Array<
       | DevExpress.ui.dxDropDownEditor.DropDownPredefinedButton
-      | dxTextEditorButton
+      | DevExpress.common.TextEditorButton
     >;
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
@@ -17846,7 +17900,8 @@ declare module DevExpress.ui {
      * [descr:dxNumberBoxOptions.buttons]
      */
     buttons?: Array<
-      DevExpress.ui.dxNumberBox.NumberBoxPredefinedButton | dxTextEditorButton
+      | DevExpress.ui.dxNumberBox.NumberBoxPredefinedButton
+      | DevExpress.common.TextEditorButton
     >;
     /**
      * [descr:dxNumberBoxOptions.format]
@@ -21916,24 +21971,6 @@ declare module DevExpress.ui {
     interface TextEditorInstance extends dxTextEditor<Properties> {}
   }
   /**
-   * [descr:dxTextEditorButton]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxTextEditorButton {
-    /**
-     * [descr:dxTextEditorButton.location]
-     */
-    location?: DevExpress.common.TextEditorButtonLocation;
-    /**
-     * [descr:dxTextEditorButton.name]
-     */
-    name?: string;
-    /**
-     * [descr:dxTextEditorButton.options]
-     */
-    options?: dxButtonOptions;
-  }
-  /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxTextEditorOptions<TComponent>
@@ -21942,7 +21979,9 @@ declare module DevExpress.ui {
      * [descr:dxTextEditorOptions.buttons]
      */
     buttons?: Array<
-      string | DevExpress.common.TextBoxPredefinedButton | dxTextEditorButton
+      | string
+      | DevExpress.common.TextBoxPredefinedButton
+      | DevExpress.common.TextEditorButton
     >;
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
@@ -23131,6 +23170,44 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
+    type OverriddenKeys =
+      | 'autoExpandAll'
+      | 'columns'
+      | 'customizeColumns'
+      | 'dataStructure'
+      | 'editing'
+      | 'expandedRowKeys'
+      | 'expandNodesOnFiltering'
+      | 'filterMode'
+      | 'hasItemsExpr'
+      | 'itemsExpr'
+      | 'keyExpr'
+      | 'onCellClick'
+      | 'onCellDblClick'
+      | 'onCellHoverChanged'
+      | 'onCellPrepared'
+      | 'onContextMenuPreparing'
+      | 'onEditingStart'
+      | 'onEditorPrepared'
+      | 'onEditorPreparing'
+      | 'onFocusedCellChanged'
+      | 'onFocusedCellChanging'
+      | 'onFocusedRowChanged'
+      | 'onFocusedRowChanging'
+      | 'onNodesInitialized'
+      | 'onRowClick'
+      | 'onRowDblClick'
+      | 'onRowPrepared'
+      | 'paging'
+      | 'parentIdExpr'
+      | 'remoteOperations'
+      | 'rootValue'
+      | 'scrolling'
+      | 'selection'
+      | 'toolbar';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
     export interface Paging extends DevExpress.common.grids.PagingBase {
       /**
        * [descr:dxTreeListOptions.paging.enabled]
@@ -23538,13 +23615,13 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export type dxTreeListOptions<
-    TRowData = any,
-    TKey = any
-  > = DevExpress.common.grids.GridBaseOptions<
-    dxTreeList<TRowData, TKey>,
-    TRowData,
-    TKey
+  export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<
+    DevExpress.common.grids.GridBaseOptions<
+      dxTreeList<TRowData, TKey>,
+      TRowData,
+      TKey
+    >,
+    DevExpress.ui.dxTreeList.OverriddenKeys
   > & {
     /**
      * [descr:dxTreeListOptions.autoExpandAll]

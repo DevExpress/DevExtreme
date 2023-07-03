@@ -17,25 +17,25 @@ test('Drag-n-drop the tree view item in all directions', async (t) => {
 
   const fieldChooser = pivotGrid.getFieldChooser();
   const treeView = fieldChooser.getTreeView();
-  const treeViewNode = treeView.getNode();
+  const treeViewNodeItem = treeView.getNodeItem();
 
   await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-  await t.drag(treeViewNode, 0, -30, DRAG_MOUSE_OPTIONS);
+  await t.drag(treeViewNodeItem, 0, -30, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_top.png', { element: fieldChooser.element });
-  await t.dispatchEvent(treeViewNode, 'mouseup');
+  await t.dispatchEvent(treeViewNodeItem, 'mouseup');
 
-  await t.drag(treeViewNode, 30, 0, DRAG_MOUSE_OPTIONS);
+  await t.drag(treeViewNodeItem, 30, 0, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_right.png', { element: fieldChooser.element });
-  await t.dispatchEvent(treeViewNode, 'mouseup');
+  await t.dispatchEvent(treeViewNodeItem, 'mouseup');
 
-  await t.drag(treeViewNode, 0, 30, DRAG_MOUSE_OPTIONS);
+  await t.drag(treeViewNodeItem, 0, 30, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_bottom.png', { element: fieldChooser.element });
-  await t.dispatchEvent(treeViewNode, 'mouseup');
+  await t.dispatchEvent(treeViewNodeItem, 'mouseup');
 
-  await t.drag(treeViewNode, -30, 0, DRAG_MOUSE_OPTIONS);
+  await t.drag(treeViewNodeItem, -30, 0, DRAG_MOUSE_OPTIONS);
   await testScreenshot(t, takeScreenshot, 'field-chooser_tree-item_dnd_left.png', { element: fieldChooser.element });
-  await t.dispatchEvent(treeViewNode, 'mouseup');
+  await t.dispatchEvent(treeViewNodeItem, 'mouseup');
 
   await MouseUpEvents.enable(MouseAction.dragToOffset);
 

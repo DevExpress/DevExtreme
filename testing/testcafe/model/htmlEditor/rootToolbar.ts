@@ -11,7 +11,7 @@ export default class RootToolbar extends Toolbar {
     super(CLASS.ROOT);
   }
 
-  public getItem(itemName: ToolbarItemName): Selector {
+  public getItemByName(itemName: ToolbarItemName): Selector {
     return this.element.find(`.dx-${itemName}-format`).parent().parent();
   }
 }

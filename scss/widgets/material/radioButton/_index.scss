@@ -10,8 +10,8 @@
 // adduse
 
 $material-radiobutton-border-width: 2px;
-$material-radiobutton-inner-size: $material-radiobutton-size - $material-radiobutton-border-width * 2;
 $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+$dot-icon-border-width: math.div($material-radiobutton-size - $material-radiobutton-border-width * 2 - $material-radiobutton-dot-size, 2);
 
 .dx-radiobutton-icon {
   width: $material-radiobutton-size;
@@ -34,32 +34,29 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
     transition: $material-radiobutton-ripple-transition;
   }
 
-  &::before {
-    display: block;
-    width: $material-radiobutton-inner-size;
-    height: $material-radiobutton-inner-size;
-    border: $material-radiobutton-border-width solid $radiogroup-border-color;
-    background-color: $radiogroup-bg;
-    content: "";
-    border-radius: math.div($material-radiobutton-size, 2);
-    box-sizing: content-box;
-  }
+  border: $material-radiobutton-border-width solid $radiogroup-border-color;
+  background-color: $radiogroup-bg;
+  border-radius: math.div($material-radiobutton-size, 2);
+}
+
+.dx-radiobutton-icon-dot {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border-width: 0;
+  border-color: $radiogroup-bg;
+  background-color: $radiogroup-bg;
+  border-style: solid;
+  transform: scale(0);
 }
 
 .dx-radiobutton-icon-checked {
-  &::before {
-    border-color: $radiogroup-checked-bg;
-  }
+  border-color: $radiogroup-checked-bg;
 
   .dx-radiobutton-icon-dot {
-    display: block;
-    margin-top: math.div(-$material-radiobutton-size, 2) - math.div($material-radiobutton-dot-size, 2);
-    margin-left: math.div($material-radiobutton-size, 2) - math.div($material-radiobutton-dot-size, 2);
-    width: $material-radiobutton-dot-size;
-    height: $material-radiobutton-dot-size;
-    background: $radiogroup-checked-bg;
-    content: "";
-    border-radius: math.div($material-radiobutton-dot-size, 2);
+    background-color: $radiogroup-checked-bg;
+    border-width: $dot-icon-border-width;
+    transform: scale(1);
   }
 }
 
@@ -95,13 +92,13 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
     background-color: $radiogroup-border-color;
   }
 
-  .dx-radiobutton-icon::before {
+  .dx-radiobutton-icon {
     border-color: $radiogroup-border-color;
   }
 }
 
 .dx-invalid {
-  .dx-radiobutton-icon::before {
+  .dx-radiobutton-icon {
     border-color: $radiobutton-invalid-faded-border-color;
   }
 
@@ -112,7 +109,7 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
   .dx-state-active,
   .dx-state-focused {
     &.dx-radiobutton {
-      .dx-radiobutton-icon::before {
+      .dx-radiobutton-icon {
         border-color: $radiobutton-invalid-focused-border-color;
       }
 
@@ -133,13 +130,5 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
     &.dx-state-disabled {
       opacity: 1;
     }
-  }
-}
-
-.dx-rtl .dx-radiobutton,
-.dx-rtl.dx-radiobutton {
-  &.dx-radiobutton-checked .dx-radiobutton-icon-dot {
-    margin-right: math.div($material-radiobutton-size, 2) - math.div($material-radiobutton-dot-size, 2);
-    margin-left: 0;
   }
 }

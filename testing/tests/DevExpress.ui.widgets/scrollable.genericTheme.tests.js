@@ -13,15 +13,25 @@ import { extend } from 'core/utils/extend';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
-    const markup = '<div id="outerScrollable">\
-        <div style="height: 400px; width: 400px;"></div>\
-            <div id="innerScrollable">\
-                <div style="height: 200px; width: 200px;"></div>\
-            </div>\
-        </div>\
-    </div>';
+    const markup = `
+        <div id="outerScrollable">
+            <div id="outerScrollable-data"></div>
+                <div id="innerScrollable">
+                    <div id="innerScrollable-data"></div>
+                </div>
+            </div>
+        </div>
+    `;
 
     $('#qunit-fixture').html(markup);
+    $('#outerScrollable-data').css({
+        height: '400px',
+        width: '400px',
+    });
+    $('#innerScrollable-data').css({
+        height: '200px',
+        width: '200px',
+    });
 });
 
 // T851522

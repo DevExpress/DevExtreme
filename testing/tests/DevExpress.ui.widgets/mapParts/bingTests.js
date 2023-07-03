@@ -44,13 +44,15 @@ QUnit.module('bing provider', {
         ajaxMock.setup({
             url: fakeURL,
             callback: function() {
-                $.getScript('../../testing/helpers/forMap/bingMock.js')
-                    .done(function() {
-                        prepareTestingBingProvider(this.abortDirectionsUpdate);
-                        if(window._bingScriptReady) {
-                            window._bingScriptReady();
-                        }
-                    }.bind(this));
+                $.getScript({
+                    url: '../../testing/helpers/forMap/bingMock.js',
+                    scriptAttrs: { nonce: 'qunit-test' }
+                }).done(function() {
+                    prepareTestingBingProvider(this.abortDirectionsUpdate);
+                    if(window._bingScriptReady) {
+                        window._bingScriptReady();
+                    }
+                }.bind(this));
             }.bind(this)
         });
 

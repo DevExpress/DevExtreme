@@ -10,12 +10,13 @@ import 'generic_light.css!';
 QUnit.testStart(() => {
     const markup =
         '<div id="list"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="widthRootStyle"></div>\
         <div id="templated-list">\
             <div data-options="dxTemplate: { name: \'item\' }">Item Template</div>\
         </div>';
 
     $('#qunit-fixture').html(markup);
+    $('#widthRootStyle').css('width', '300px');
 });
 
 const LIST_CLASS = 'dx-list';

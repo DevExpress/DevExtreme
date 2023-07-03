@@ -130,6 +130,7 @@ const Accordion = CollectionWidget.inherit({
 
     _initMarkup: function() {
         this._deferredItems = [];
+        this._deferredTemplateItems = [];
         this.callBase();
 
         this.setAria({
@@ -146,7 +147,9 @@ const Accordion = CollectionWidget.inherit({
     _render: function() {
         this.callBase();
 
-        this._updateItemHeightsWrapper(true);
+        when.apply(this, this._deferredTemplateItems).done(() => {
+            this._updateItemHeights(true);
+        });
     },
 
     _itemDataKey: function() {
@@ -195,6 +198,8 @@ const Accordion = CollectionWidget.inherit({
     },
 
     _renderItemContent: function(args) {
+        this._deferredTemplateItems[args.index] = new Deferred();
+
         const itemTitle = this.callBase(extend({}, args, {
             contentClass: ACCORDION_ITEM_TITLE_CLASS,
             templateProperty: 'titleTemplate',
@@ -218,6 +223,13 @@ const Accordion = CollectionWidget.inherit({
             contentClass: ACCORDION_ITEM_BODY_CLASS,
             container: getPublicElement($('<div>').appendTo($(itemTitle).parent()))
         })));
+    },
+
+    _onItemTemplateRendered: function(_, renderArgs) {
+        return () => {
+            const item = this._deferredTemplateItems[renderArgs.index];
+            item && item.resolve();
+        };
     },
 
     _attachItemTitleClickAction: function(itemTitle) {
@@ -263,6 +275,7 @@ const Accordion = CollectionWidget.inherit({
     },
 
     _updateItemHeightsWrapper: function(skipAnimation) {
+        // Note: require for proper animation in angularjs (T520346)
         if(this.option('templatesRenderAsynchronously')) {
             this._animationTimer = setTimeout(function() {
                 this._updateItemHeights(skipAnimation);
@@ -371,6 +384,10 @@ const Accordion = CollectionWidget.inherit({
     },
 
     _clean: function() {
+        this._deferredTemplateItems.forEach(item => {
+            item.reject();
+        });
+        this._deferredTemplateItems = [];
         clearTimeout(this._animationTimer);
         this.callBase();
     },

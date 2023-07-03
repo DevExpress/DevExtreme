@@ -1,4 +1,5 @@
 import { compileGetter, compileSetter } from '../../core/utils/data';
+import { isFunction } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
 export const GanttHelper = {
@@ -40,8 +41,18 @@ export const GanttHelper = {
         const setters = {};
         for(const field in optionValue) {
             const exprMatches = field.match(/(\w*)Expr/);
-            if(exprMatches) {
+            if(exprMatches && !isFunction(optionValue[exprMatches[0]])) {
                 setters[exprMatches[1]] = compileSetter(optionValue[exprMatches[0]]);
+            }
+        }
+        return setters;
+    },
+    compileFuncSettersByOption(optionValue) {
+        const setters = {};
+        for(const field in optionValue) {
+            const exprMatches = field.match(/(\w*)Expr/);
+            if(exprMatches && isFunction(optionValue[exprMatches[0]])) {
+                setters[exprMatches[1]] = optionValue[exprMatches[0]];
             }
         }
         return setters;
