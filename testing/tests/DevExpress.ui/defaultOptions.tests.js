@@ -955,7 +955,7 @@ const tabletOptions = {
         offset: '0 -20'
     },
     width: 'auto',
-    maxWidth: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+    maxWidth: '80vw',
     hideOnOutsideClick: true,
     animation: tabletAndMobileAnimation,
 };
@@ -1013,16 +1013,14 @@ testComponentDefaults(Toast,
             offset: '0 -20'
         },
         width: 'auto',
-        maxWidth: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
+        maxWidth: '80vw',
         hideOnOutsideClick: true,
         displayTime: 4000,
         animation: tabletAndMobileAnimation,
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
-        themes.isMaterial = function() {
-            return true;
-        };
+        themes.isMaterial = () => true;
     },
     function() {
         themes.isMaterial = this.origIsMaterial;

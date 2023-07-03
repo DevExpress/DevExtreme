@@ -105,6 +105,12 @@ const Toast = Overlay.inherit({
             }
         };
 
+        const tabletAndMobileCommonOptions = {
+            displayTime: isMaterial() ? 4000 : 2000,
+            hideOnOutsideClick: true,
+            animation: tabletAndMobileAnimation,
+        };
+
         return this.callBase().concat([
             {
                 device(device) {
@@ -112,9 +118,7 @@ const Toast = Overlay.inherit({
                 },
                 options: {
                     width: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
-                    displayTime: isMaterial() ? 4000 : 2000,
-                    hideOnOutsideClick: true,
-                    animation: tabletAndMobileAnimation,
+                    ...tabletAndMobileCommonOptions,
                 },
             },
             {
@@ -123,10 +127,8 @@ const Toast = Overlay.inherit({
                 },
                 options: {
                     width: 'auto',
-                    maxWidth: `calc(100vw - ${DEFAULT_MARGIN * 2}px)`,
-                    displayTime: isMaterial() ? 4000 : 2000,
-                    hideOnOutsideClick: true,
-                    animation: tabletAndMobileAnimation,
+                    maxWidth: '80vw',
+                    ...tabletAndMobileCommonOptions,
                 },
             },
             {
