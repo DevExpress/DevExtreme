@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
@@ -219,4 +220,42 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
   });
 
   await makeColumnHeadersViewTemplatesAsync(DATA_GRID_SELECTOR);
+});
+
+safeSizeTest('Empty header message should appear when all columns grouped and selection is enabled', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const dataGrid = new DataGrid('#container');
+
+  await takeScreenshot('empty-header-message-with-selection-enabled', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 800]).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [
+      {
+        field1: '1', field2: 'test1', field3: 'test11',
+      },
+      {
+        field1: '2', field2: 'test1', field3: 'test12',
+      },
+      {
+        field1: '3', field2: 'test2', field3: 'test13',
+      },
+    ],
+    columns: [
+      { dataField: 'field1', groupIndex: 0 },
+      { dataField: 'field2', groupIndex: 1 },
+      { dataField: 'field3', groupIndex: 2 },
+    ],
+    groupPanel: {
+      visible: true,
+    },
+    selection: {
+      mode: 'multiple',
+    },
+  });
 });

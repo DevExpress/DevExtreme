@@ -30,6 +30,7 @@ import {
   COLUMN_OPTION_REGEXP,
   COMMAND_EXPAND_CLASS,
   DATATYPE_OPERATIONS,
+  DETAIL_COMMAND_COLUMN_NAME,
   GROUP_COMMAND_COLUMN_NAME,
   GROUP_LOCATION,
   MAX_SAFE_INTEGER,
@@ -636,60 +637,91 @@ export class ColumnsController extends modules.Controller {
     return column.visible && this.isParentColumnVisible(column.index);
   }
 
+  _isColumnInGroupPanel(column) {
+    return isDefined(column.groupIndex) && !column.showWhenGrouped;
+  }
+
+  hasVisibleDataColumns(): boolean {
+    const columns: any[] = this._columns;
+
+    return columns.some((column) => {
+      const isVisible = this._isColumnVisible(column);
+      const isInGroupPanel = this._isColumnInGroupPanel(column);
+      const isCommand = !!column.command;
+
+      return isVisible && !isInGroupPanel && !isCommand;
+    });
+  }
+
   _compileVisibleColumnsCore() {
-    const that = this;
-    let i;
-    const result: any = [];
-    let rowspanGroupColumns = 0;
-    let rowspanExpandColumns = 0;
-    const rowCount = that.getRowCount();
-    const positiveIndexedColumns: any = [];
-    const negativeIndexedColumns: any = [];
-    let notGroupedColumnsCount = 0;
-    let isFixedToEnd;
-    const rtlEnabled = that.option('rtlEnabled');
-    const bandColumnsCache = that.getBandColumnsCache();
-    const expandColumns = mergeColumns(that, that.getExpandColumns(), that._columns);
-    const columns = mergeColumns(that, that._columns, that._commandColumns, true);
+    const bandColumnsCache = this.getBandColumnsCache();
+    const columns = mergeColumns(this, this._columns, this._commandColumns, true);
+
+    processBandColumns(this, columns, bandColumnsCache);
+
+    const indexedColumns = this._getIndexedColumns(columns);
+
+    const visibleColumns = this._getVisibleColumnsFromIndexed(indexedColumns);
+
+    const isDataColumnsInvisible = !this.hasVisibleDataColumns();
+
+    if (isDataColumnsInvisible && this._columns.length) {
+      visibleColumns[visibleColumns.length - 1].push({ command: 'empty' });
+    }
+
+    return visibleColumns;
+  }
+
+  _getIndexedColumns(columns) {
+    const rtlEnabled = this.option('rtlEnabled');
+    const rowCount = this.getRowCount();
     const columnDigitsCount = digitsCount(columns.length);
 
-    processBandColumns(that, columns, bandColumnsCache);
+    const bandColumnsCache = this.getBandColumnsCache();
 
-    for (i = 0; i < rowCount; i++) {
-      result[i] = [];
+    const positiveIndexedColumns: any = [];
+    const negativeIndexedColumns: any = [];
+
+    for (let i = 0; i < rowCount; i += 1) {
       negativeIndexedColumns[i] = [{}];
+
+      // 0 - fixed columns on the left side
+      // 1 - not fixed columns
+      // 2 - fixed columns on the right side
       positiveIndexedColumns[i] = [{}, {}, {}];
     }
 
-    each(columns, function () {
-      const column = this;
+    columns.forEach((column) => {
       let { visibleIndex } = column;
       let indexedColumns;
-      const parentBandColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex);
-      const visible = that._isColumnVisible(column);
 
-      if (visible && (!isDefined(column.groupIndex) || column.showWhenGrouped)) {
+      const parentBandColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex);
+
+      const isVisible = this._isColumnVisible(column);
+      const isInGroupPanel = this._isColumnInGroupPanel(column);
+
+      if (isVisible && !isInGroupPanel) {
         const rowIndex = parentBandColumns.length;
 
         if (visibleIndex < 0) {
           visibleIndex = -visibleIndex;
           indexedColumns = negativeIndexedColumns[rowIndex];
         } else {
-          column.fixed = parentBandColumns.length ? parentBandColumns[0].fixed : column.fixed;
-          column.fixedPosition = parentBandColumns.length ? parentBandColumns[0].fixedPosition : column.fixedPosition;
+          column.fixed = parentBandColumns[0]?.fixed ?? column.fixed;
+          column.fixedPosition = parentBandColumns[0]?.fixedPosition ?? column.fixedPosition;
 
           if (column.fixed) {
-            isFixedToEnd = column.fixedPosition === 'right';
+            const isDefaultCommandColumn = !!column.command && !isCustomCommandColumn(this, column);
 
-            if (rtlEnabled && (!column.command || isCustomCommandColumn(that, column))) {
+            let isFixedToEnd = column.fixedPosition === 'right';
+
+            if (rtlEnabled && !isDefaultCommandColumn) {
               isFixedToEnd = !isFixedToEnd;
             }
 
-            if (isFixedToEnd) {
-              indexedColumns = positiveIndexedColumns[rowIndex][2];
-            } else {
-              indexedColumns = positiveIndexedColumns[rowIndex][0];
-            }
+            indexedColumns = isFixedToEnd
+              ? positiveIndexedColumns[rowIndex][2]
+              : positiveIndexedColumns[rowIndex][0];
           } else {
             indexedColumns = positiveIndexedColumns[rowIndex][1];
           }
@@ -697,44 +729,58 @@ export class ColumnsController extends modules.Controller {
 
         if (parentBandColumns.length) {
           visibleIndex = numberToString(visibleIndex, columnDigitsCount);
-          for (i = parentBandColumns.length - 1; i >= 0; i--) {
+
+          for (let i = parentBandColumns.length - 1; i >= 0; i -= 1) {
             visibleIndex = numberToString(parentBandColumns[i].visibleIndex, columnDigitsCount) + visibleIndex;
           }
         }
+
         indexedColumns[visibleIndex] = indexedColumns[visibleIndex] || [];
         indexedColumns[visibleIndex].push(column);
-
-        notGroupedColumnsCount++;
       }
     });
 
-    each(result, (rowIndex) => {
+    return {
+      positiveIndexedColumns, negativeIndexedColumns,
+    };
+  }
+
+  _getVisibleColumnsFromIndexed({ positiveIndexedColumns, negativeIndexedColumns }) {
+    const result: any = [];
+
+    const rowCount = this.getRowCount();
+    const expandColumns = mergeColumns(this, this.getExpandColumns(), this._columns);
+
+    let rowspanGroupColumns = 0;
+    let rowspanExpandColumns = 0;
+
+    for (let rowIndex = 0; rowIndex < rowCount; rowIndex += 1) {
+      result.push([]);
+
       orderEach(negativeIndexedColumns[rowIndex], (_, columns) => {
         result[rowIndex].unshift.apply(result[rowIndex], columns);
       });
 
       const firstPositiveIndexColumn = result[rowIndex].length;
-      each(positiveIndexedColumns[rowIndex], (index, columnsByFixing) => {
+      const positiveIndexedRowColumns = positiveIndexedColumns[rowIndex];
+
+      positiveIndexedRowColumns.forEach((columnsByFixing) => {
         orderEach(columnsByFixing, (_, columnsByVisibleIndex) => {
           result[rowIndex].push.apply(result[rowIndex], columnsByVisibleIndex);
         });
       });
 
       // The order of processing is important
-      if (rowspanExpandColumns < (rowIndex + 1)) {
-        rowspanExpandColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, 'detailExpand', firstPositiveIndexColumn);
+      if (rowspanExpandColumns <= rowIndex) {
+        rowspanExpandColumns += processExpandColumns.call(this, result[rowIndex], expandColumns, DETAIL_COMMAND_COLUMN_NAME, firstPositiveIndexColumn);
       }
 
-      if (rowspanGroupColumns < (rowIndex + 1)) {
-        rowspanGroupColumns += processExpandColumns.call(that, result[rowIndex], expandColumns, GROUP_COMMAND_COLUMN_NAME, firstPositiveIndexColumn);
+      if (rowspanGroupColumns <= rowIndex) {
+        rowspanGroupColumns += processExpandColumns.call(this, result[rowIndex], expandColumns, GROUP_COMMAND_COLUMN_NAME, firstPositiveIndexColumn);
       }
-    });
+    }
 
     result.push(getDataColumns(result));
-
-    if (!notGroupedColumnsCount && that._columns.length) {
-      result[rowCount].push({ command: 'empty' });
-    }
 
     return result;
   }
