@@ -151,13 +151,12 @@ const members = {
     }
 
     const item = toolbar.option(`items[${itemIndex}]`);
-    item.disabled = disabled;
+
+    toolbar.option(`items[${itemIndex}].disabled`, disabled);
 
     if (item.options) {
-      item.options.disabled = disabled;
+      toolbar.option(`items[${itemIndex}].options.disabled`, disabled);
     }
-
-    toolbar.option(`items[${itemIndex}]`, item);
   },
 
   updateToolbarDimensions() {
