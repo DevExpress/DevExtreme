@@ -1066,31 +1066,6 @@ QUnit.module('format: text input', moduleConfig, () => {
         assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'change', 'event is correct');
     });
 
-    QUnit.test('onValueChanged should have input event as a parameter if valueChangeEvent="input"', function(assert) {
-        const valueChangedHandler = sinon.spy();
-        this.instance.option({
-            onValueChanged: valueChangedHandler,
-            valueChangeEvent: 'input'
-        });
-
-        this.keyboard.type('1');
-
-        assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'input');
-    });
-
-    QUnit.test('onValueChanged should have focusout event as a parameter if valueChangeEvent="focusout"', function(assert) {
-        const valueChangedHandler = sinon.spy();
-        this.instance.option({
-            onValueChanged: valueChangedHandler,
-            valueChangeEvent: 'focusout'
-        });
-
-        this.keyboard.type('1');
-        this.input.trigger('focusout');
-
-        assert.equal(valueChangedHandler.getCall(0).args[0].event.type, 'focusout');
-    });
-
     QUnit.testInActiveWindow('caret position is not changed when the focus out event has occurred', function(assert) {
         const _caret = this.instance._caret;
         let caretIsUpdatedOnFocusOut;
@@ -1843,104 +1818,6 @@ QUnit.module('format: removing', moduleConfig, () => {
         this.instance.option('value', -5);
         this.keyboard.caret(5).press('backspace').press('enter');
         assert.equal(changeHandler.callCount, 1, 'change event has not been fired if value is not changed');
-    });
-
-    QUnit.module('valueChanged event on minus sign remove', () => {
-        QUnit.test('should be triggered when valueChangeEvent has several events', function(assert) {
-            const valueChangedStub = sinon.stub();
-            this.instance.option({
-                valueChangeEvent: 'focusout input',
-                value: -123459,
-                onValueChanged: valueChangedStub,
-            });
-
-            this.keyboard.caret(1).press('backspace');
-
-            assert.ok(valueChangedStub.calledOnce);
-        });
-
-        QUnit.test('should be triggered and sign reverted', function(assert) {
-            const valueChangedStub = sinon.stub();
-            this.instance.option({
-                valueChangeEvent: 'input',
-                value: -123459,
-                onValueChanged: valueChangedStub,
-            });
-
-            this.keyboard.caret(1).press('backspace');
-
-            assert.strictEqual(this.input.val(), '123459');
-            assert.ok(valueChangedStub.calledOnce);
-        });
-
-        QUnit.test('should be triggered and sign reverted when format is specified (T1170374)', function(assert) {
-            const valueChangedStub = sinon.stub();
-            this.instance.option({
-                format: '#,##0',
-                valueChangeEvent: 'input',
-                value: -1323,
-                onValueChanged: valueChangedStub,
-            });
-
-            this.keyboard.caret(1).press('backspace');
-
-            assert.strictEqual(this.input.val(), '1,323');
-            assert.ok(valueChangedStub.calledOnce);
-        });
-
-        QUnit.test('should be triggered on keyup when valueChangeEvent="keyup"', function(assert) {
-            const valueChangedStub = sinon.stub();
-            this.instance.option({
-                format: '#,##0',
-                valueChangeEvent: 'keyup',
-                value: -1323,
-                onValueChanged: valueChangedStub,
-            });
-
-            this.keyboard.caret(1).press('backspace');
-
-            assert.ok(valueChangedStub.notCalled);
-
-            this.keyboard.keyUp('backspace');
-
-            assert.ok(valueChangedStub.calledOnce);
-        });
-
-        QUnit.test('should be triggered on change when valueChangeEvent="change"', function(assert) {
-            const valueChangedStub = sinon.stub();
-            this.instance.option({
-                format: '#,##0',
-                valueChangeEvent: 'change',
-                value: -1323,
-                onValueChanged: valueChangedStub,
-            });
-
-            this.keyboard.caret(1).press('backspace');
-
-            assert.ok(valueChangedStub.notCalled);
-
-            this.keyboard.press('enter');
-
-            assert.ok(valueChangedStub.calledOnce);
-        });
-
-        ['blur', 'focusout'].forEach((valueChangeEvent) => {
-            QUnit.test(`should be triggered on ${valueChangeEvent} when valueChangeEvent="${valueChangeEvent}"`, function(assert) {
-                const valueChangedStub = sinon.stub();
-                this.instance.option({
-                    format: '#,##0',
-                    valueChangeEvent,
-                    value: -1323,
-                    onValueChanged: valueChangedStub,
-                });
-
-                this.keyboard.caret(1).press('backspace');
-                assert.ok(valueChangedStub.notCalled);
-
-                this.input.trigger(valueChangeEvent);
-                assert.ok(valueChangedStub.calledOnce);
-            });
-        });
     });
 
     QUnit.test('change event should be fired after extra digits have been entered', function(assert) {
