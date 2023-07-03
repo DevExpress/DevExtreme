@@ -420,7 +420,7 @@ export type LoadingIndicator = BaseWidgetLoadingIndicator & {
  * @public
  * @docid dxBarGaugeTooltip
  */
-export interface Tooltip extends BaseWidgetTooltip {
+export type Tooltip = BaseWidgetTooltip & {
     /**
      * @docid dxBarGaugeOptions.tooltip.contentTemplate
      * @type_function_return string|Element|jQuery
@@ -441,7 +441,7 @@ export interface Tooltip extends BaseWidgetTooltip {
      * @public
      */
     interactive?: boolean;
-}
+};
 /**
  * @docid
  * @inherits BaseWidget

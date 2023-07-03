@@ -31883,7 +31883,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeTooltip]
      */
-    export interface Tooltip extends BaseWidgetTooltip {
+    export type Tooltip = BaseWidgetTooltip & {
       /**
        * [descr:dxBarGaugeOptions.tooltip.contentTemplate]
        */
@@ -31905,7 +31905,7 @@ declare module DevExpress.viz {
        * [descr:dxBarGaugeOptions.tooltip.interactive]
        */
       interactive?: boolean;
-    }
+    };
     /**
      * [descr:_viz_bar_gauge_TooltipHiddenEvent]
      */
