@@ -30,7 +30,14 @@ export class DataProvider {
 
   private readonly _selectedRowsOnly: any;
 
-  private _options: any;
+  private _options!: {
+    isHeadersVisible: any;
+    rtlEnabled: any;
+    summaryTexts: any;
+    groupColumns: any;
+    items: any;
+    columns: any;
+  };
 
   constructor(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
     this._exportController = exportController;
