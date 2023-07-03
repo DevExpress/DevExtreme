@@ -1243,6 +1243,7 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
     });
 
     QUnit.test('WorkSpace Month view has right count of rows with view option intervalCount', function(assert) {
+        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
         this.instance.option('intervalCount', 2);
 
         let rows = this.instance.$element().find('.dx-scheduler-date-table-row');
@@ -1251,7 +1252,7 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
         this.instance.option('intervalCount', 4);
 
         rows = this.instance.$element().find('.dx-scheduler-date-table-row');
-        assert.equal(rows.length, 18, 'view has right rows count');
+        assert.equal(rows.length, 19, 'view has right rows count');
     });
 
     QUnit.test('WorkSpace Month view has right count of cells with view option intervalCount', function(assert) {
