@@ -258,9 +258,9 @@ export interface BaseWidgetExport {
     svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => PromiseLike<void>);
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
- * @hidden
  */
 export interface BaseWidgetLoadingIndicator {
     /**
