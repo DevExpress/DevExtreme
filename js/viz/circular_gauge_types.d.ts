@@ -11,5 +11,8 @@ export {
   OptionChangedEvent,
   TooltipHiddenEvent,
   TooltipShownEvent,
+  RangeContainer,
+  Scale,
+  ScaleLabel,
   Properties,
 } from './circular_gauge';
