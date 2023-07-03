@@ -6,6 +6,8 @@ import { ViewDataGeneratorTimelineMonth } from './view_data_generator_timeline_m
 import { ViewDataGeneratorWeek } from './view_data_generator_week';
 import { ViewDataGeneratorWorkWeek } from './view_data_generator_work_week';
 
+const DAYS_IN_WEEK = 7;
+
 export const getViewDataGeneratorByViewType = (viewType) => {
     switch(viewType) {
         case VIEWS.MONTH:
@@ -31,7 +33,7 @@ export function alignToFirstDayOfWeek(date, firstDayOfWeek) {
     let dayDiff = newDate.getDay() - firstDayOfWeek;
 
     if(dayDiff < 0) {
-        dayDiff += 7;
+        dayDiff += DAYS_IN_WEEK;
     }
 
     newDate.setDate(newDate.getDate() - dayDiff);
@@ -41,7 +43,7 @@ export function alignToFirstDayOfWeek(date, firstDayOfWeek) {
 
 export function alignToLastDayOfWeek(date, firstDayOfWeek) {
     const newDate = alignToFirstDayOfWeek(date, firstDayOfWeek);
-    newDate.setDate(newDate.getDate() + 6);
+    newDate.setDate(newDate.getDate() + DAYS_IN_WEEK - 1);
     return newDate;
 }
 
@@ -54,6 +56,6 @@ export function calculateAlignedWeeksBetweenDates(fromDate, toDate, firstDayOfWe
     const alignedFromDate = alignToFirstDayOfWeek(fromDate, firstDayOfWeek);
     const alignedToDate = alignToLastDayOfWeek(toDate, firstDayOfWeek);
 
-    const weekCount = calculateDaysBetweenDates(alignedFromDate, alignedToDate) / 7;
+    const weekCount = calculateDaysBetweenDates(alignedFromDate, alignedToDate) / DAYS_IN_WEEK;
     return Math.max(weekCount, 6);
 }
