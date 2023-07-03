@@ -7,6 +7,7 @@ import { ViewDataGeneratorWeek } from './view_data_generator_week';
 import { ViewDataGeneratorWorkWeek } from './view_data_generator_work_week';
 
 const DAYS_IN_WEEK = 7;
+const MS_IN_DAY = 24 * 60 * 60 * 1000;
 
 export const getViewDataGeneratorByViewType = (viewType) => {
     switch(viewType) {
@@ -47,9 +48,15 @@ export function alignToLastDayOfWeek(date, firstDayOfWeek) {
     return newDate;
 }
 
+function resetDateTime(date) {
+    const dateCopy = new Date(date);
+    dateCopy.setHours(0, 0, 0, 0);
+    return dateCopy;
+}
+
 export function calculateDaysBetweenDates(fromDate, toDate) {
-    const MS_IN_DAY = 24 * 60 * 60 * 1000;
-    return Math.round((toDate.getTime() - fromDate.getTime()) / MS_IN_DAY) + 1;
+    const msDiff = resetDateTime(toDate).getTime() - resetDateTime(fromDate).getTime();
+    return Math.round(msDiff / MS_IN_DAY) + 1;
 }
 
 export function calculateAlignedWeeksBetweenDates(fromDate, toDate, firstDayOfWeek) {

@@ -82,6 +82,16 @@ describe('calculateDaysBetweenDates', () => {
     }) => {
         expect(calculateDaysBetweenDates(fromDate, toDate)).toBe(res);
     });
+
+    each`
+        fromDate                  | toDate                     | res
+        ${new Date('2023-06-28T23:59:00')} | ${new Date('2023-06-29T00:01:00')}  | ${2}
+        ${new Date('2023-06-28T00:01:00')} | ${new Date('2023-06-28T23:59:00')}  | ${1}
+    `.it('should return right count of days between dates when they have non-zero time', ({
+        fromDate, toDate, res
+    }) => {
+        expect(calculateDaysBetweenDates(fromDate, toDate)).toBe(res);
+    });
 });
 
 describe('calculateAlignedWeeksBetweenDates', () => {
