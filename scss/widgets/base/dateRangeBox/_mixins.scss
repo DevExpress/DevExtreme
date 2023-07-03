@@ -1,6 +1,15 @@
 @use "sass:math";
 
-@mixin dx-outlined-mixin($base-bg, $horizontal-padding, $texteditor-label-font-size, $label-offset-y, $label-height) {
+@mixin dx-outlined-mixin(
+  $base-bg,
+  $horizontal-padding,
+  $texteditor-label-font-size,
+  $label-offset-y,
+  $label-height,
+  $label-line-height,
+  $label-background-height,
+  $label-background-top,
+) {
   .dx-daterangebox-with-label,
   .dx-daterangebox-with-floating-label {
     &.dx-editor-outlined {
@@ -8,60 +17,59 @@
 
       .dx-texteditor-label {
         .dx-label {
-          span {
+          position: relative;
+
+          &::before {
+            content: '';
             background-color: $base-bg;
-            box-shadow: $horizontal-padding 0 $base-bg, -$horizontal-padding 0 $base-bg !important; // stylelint-disable-line declaration-no-important
-            height: $label-height;
+            width: 100%;
+            position: absolute;
+            height: $label-background-height;
+            top: $label-background-top;
+            margin-left: -$horizontal-padding;
+            margin-right: -$horizontal-padding;
           }
         }
       }
+    }
+  }
 
-      &.dx-state-hover {
-        .dx-texteditor-label {
-          .dx-label {
-            padding: 0 $horizontal-padding;
+  .dx-daterangebox {
+    &.dx-daterangebox-with-floating-label {
+      &.dx-editor-outlined {
+        &.dx-dropdowneditor-active,
+        &.dx-state-focused,
+        &.dx-invalid {
+          .dx-datebox.dx-editor-outlined {
+            .dx-texteditor-label {
+              .dx-label {
+                padding: 0 $horizontal-padding;
 
-            span {
-              height: $label-height;
+                &::before {
+                  background-color: $base-bg;
+                }
+
+                span {
+                  transform: translate(0, -$label-offset-y);
+                  font-size: $texteditor-label-font-size;
+                  margin-top: 0;
+                  top: 0;
+                  height: $label-height;
+                  line-height: $label-line-height;
+                }
+              }
             }
           }
         }
-      }
 
-      &.dx-dropdowneditor-active,
-      &.dx-dropdowneditor-active.dx-state-focused,
-      &.dx-dropdowneditor-active.dx-state-focused.dx-state-hover,
-      &.dx-state-focused,
-      &.dx-state-focused.dx-state-hover {
-        .dx-texteditor-label {
-          .dx-label {
-            padding: 0 $horizontal-padding;
-
-            span {
-              transform: translate(0, -$label-offset-y);
-              font-size: $texteditor-label-font-size;
-              margin-top: 0;
-              top: 0;
-              height: $label-height;
-              line-height: $texteditor-label-font-size;
-            }
-          }
-        }
-      }
-
-      .dx-datebox {
-        &.dx-invalid,
-        &.dx-invalid.dx-state-hover,
-        &.dx-invalid.dx-state-focused,
-        &.dx-state-disabled,
-        &.dx-state-readonly,
-        &.dx-state-readonly.dx-state-hover,
-        &.dx-state-readonly.dx-state-focused {
-          .dx-label {
-            padding: 0 $horizontal-padding;
-
-            span {
-              height: $label-height;
+        .dx-datebox {
+          &.dx-texteditor-empty {
+            .dx-texteditor-label {
+              .dx-label {
+                &::before {
+                  background-color: transparent;
+                }
+              }
             }
           }
         }
@@ -82,14 +90,17 @@
       }
 
       &.dx-dropdowneditor-active,
-      &.dx-state-focused {
-        .dx-texteditor-label {
-          transform: $label-transform;
-          font-size: $texteditor-label-font-size;
-          height: $label-height;
-          line-height: $line-height;
-          top: 0;
-          margin-top: 0;
+      &.dx-state-focused,
+      &.dx-invalid {
+        .dx-datebox {
+          .dx-texteditor-label {
+            transform: $label-transform;
+            font-size: $texteditor-label-font-size;
+            height: $label-height;
+            line-height: $line-height;
+            top: 0;
+            margin-top: 0;
+          }
         }
       }
     }
@@ -105,34 +116,15 @@
       }
 
       &.dx-dropdowneditor-active,
-      &.dx-state-focused {
-        .dx-texteditor-label {
-          font-size: $texteditor-label-font-size;
-          height: $label-height;
-          line-height: $line-height;
-          top: $label-position-top;
-          margin-top: 0;
-        }
-      }
-    }
-  }
-}
-
-@mixin dx-invalid-mixin($texteditor-invalid-faded-border-color, $texteditor-invalid-focused-border-color) {
-  &.dx-editor-outlined,
-  &.dx-editor-filled,
-  &.dx-editor-underlined {
-    &.dx-invalid {
-      .dx-datebox {
-        &.dx-state-hover {
-          &::before {
-            border-color: $texteditor-invalid-faded-border-color;
-          }
-        }
-
-        &.dx-state-focused {
-          &::before {
-            border-color: $texteditor-invalid-focused-border-color;
+      &.dx-state-focused,
+      &.dx-invalid {
+        .dx-datebox {
+          .dx-texteditor-label {
+            font-size: $texteditor-label-font-size;
+            height: $label-height;
+            line-height: $line-height;
+            top: $label-position-top;
+            margin-top: 0;
           }
         }
       }

@@ -483,6 +483,48 @@ QUnit.module('Menu rendering', () => {
         assert.strictEqual(content.getAttribute('href'), 'http://some_url');
         assert.strictEqual(content.text, 'Item text');
     });
+
+    QUnit.test('Link should not be programmatically clicked if item.url is set and text inside link is clicked', function(assert) {
+        const clickSpy = sinon.spy();
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }],
+        });
+
+        const $menuItemLink = menuBase.element
+            .find(`.${DX_ITEM_URL_CLASS}`)
+            .get(0);
+
+        $menuItemLink.click = clickSpy;
+
+        const $itemText = menuBase.element
+            .find(`.${DX_MENU_ITEM_TEXT_CLASS}`)
+            .eq(0);
+
+        $itemText.trigger('dxclick');
+
+        assert.notOk(clickSpy.calledOnce);
+    });
+
+    QUnit.test('Link should be programmatically clicked if item.url is set and item is clicked', function(assert) {
+        const clickSpy = sinon.spy();
+        const menuBase = createMenu({
+            items: [{ text: 'Item text', url: 'http://some_url' }],
+        });
+
+        const $menuItemLink = menuBase.element
+            .find(`.${DX_ITEM_URL_CLASS}`)
+            .get(0);
+
+        $menuItemLink.click = clickSpy;
+
+        const $item = menuBase.element
+            .find(`.${DX_MENU_ITEM_CLASS}`)
+            .eq(0);
+
+        $item.trigger('dxclick');
+
+        assert.ok(clickSpy.calledOnce);
+    });
 });
 
 QUnit.module('Menu tests', {

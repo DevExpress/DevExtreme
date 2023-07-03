@@ -1,5 +1,6 @@
-import { headerPanelModule } from '../../grid_core/header_panel/module';
-import gridCore from '../module_core';
+import { headerPanelModule } from '@ts/grids/grid_core/header_panel/m_header_panel';
+
+import gridCore from '../m_core';
 
 export const HeaderPanel = headerPanelModule.views.headerPanel;
 

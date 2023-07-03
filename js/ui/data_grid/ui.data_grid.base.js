@@ -1,4 +1,4 @@
-import DataGrid from '../../__internal/grids/data_grid/module_widget_base';
+import DataGrid from '../../__internal/grids/data_grid/m_widget_base';
 // deprecated
 export default DataGrid;
 

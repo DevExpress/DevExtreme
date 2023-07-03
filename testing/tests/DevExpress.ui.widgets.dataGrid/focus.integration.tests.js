@@ -1469,12 +1469,13 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to value on the same page in onContentReady', function(assert) {
         // arrange
-        const onFocusedRowChangedSpy = sinon.spy();
+        const rowFocusChangedCalls = [];
+
         const dataGrid = createDataGrid({
             dataSource: [{ id: 1, name: 'foo' }, { id: 2, name: 'bar' }],
             keyExpr: 'id',
             focusedRowEnabled: true,
-            onFocusedRowChanged: onFocusedRowChangedSpy,
+            onFocusedRowChanged: (e) => { rowFocusChangedCalls.push(e); },
             onContentReady: function(e) {
                 // act
                 e.component.option('focusedRowKey', 1);
@@ -1484,14 +1485,15 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.equal(onFocusedRowChangedSpy.callCount, 1, 'onFocusedRowChanged is fired');
-        assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 1, 'onFocusedRowChanged row.key parameter');
+        assert.equal(rowFocusChangedCalls.length, 1, 'onFocusedRowChanged is fired');
+        assert.equal(rowFocusChangedCalls[0].row.key, 1, 'onFocusedRowChanged row.key parameter');
         assert.ok(dataGrid.getView('rowsView')._tableElement, 'tableElement exists');
     });
 
     QUnit.test('The onFocusedRowChanged should be fired if change focusedRowKey to another page in onContentReady', function(assert) {
         // arrange
-        const onFocusedRowChangedSpy = sinon.spy();
+        const rowFocusChangedCalls = [];
+
         const dataGrid = createDataGrid({
             dataSource: [{ id: 1, name: 'foo' }, { id: 2, name: 'bar' }],
             keyExpr: 'id',
@@ -1499,7 +1501,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 pageSize: 1
             },
             focusedRowEnabled: true,
-            onFocusedRowChanged: onFocusedRowChangedSpy,
+            onFocusedRowChanged: (e) => { rowFocusChangedCalls.push(e); },
             onContentReady: function(e) {
                 // act
                 e.component.option('focusedRowKey', 2);
@@ -1509,8 +1511,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.equal(onFocusedRowChangedSpy.callCount, 1, 'onFocusedRowChanged is fired');
-        assert.equal(onFocusedRowChangedSpy.getCall(0).args[0].row.key, 2, 'onFocusedRowChanged row.key parameter');
+        assert.equal(rowFocusChangedCalls.length, 1, 'onFocusedRowChanged is fired');
+        assert.equal(rowFocusChangedCalls[0].row.key, 2, 'onFocusedRowChanged row.key parameter');
         assert.ok(dataGrid.getView('rowsView')._tableElement, 'tableElement exists');
     });
 

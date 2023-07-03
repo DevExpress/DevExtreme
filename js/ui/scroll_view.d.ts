@@ -13,25 +13,60 @@ import dxScrollable, {
     ScrollEventInfo,
 } from './scroll_view/ui.scrollable';
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxScrollView>;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxScrollView>;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxScrollView> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_PullDownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type PullDownEvent = EventInfo<dxScrollView>;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_ReachBottomEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ReachBottomEvent = EventInfo<dxScrollView>;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_ScrollEvent
+ * @public
+ * @type object
+ * @inherits ScrollEventInfo
+ */
 export type ScrollEvent = ScrollEventInfo<dxScrollView>;
 
-/** @public */
+/**
+ * @docid _ui_scroll_view_UpdatedEvent
+ * @public
+ * @type object
+ * @inherits ScrollEventInfo
+ */
 export type UpdatedEvent = ScrollEventInfo<dxScrollView>;
 
 /**
@@ -43,8 +78,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScrollView
+     * @type_function_param1 e:{ui/scroll_view:PullDownEvent}
      * @action
      * @public
      */
@@ -52,8 +86,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScrollView
+     * @type_function_param1 e:{ui/scroll_view:ReachBottomEvent}
      * @action
      * @public
      */
@@ -117,53 +150,36 @@ export type Properties = dxScrollViewOptions;
 export type Options = dxScrollViewOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onPullDown' | 'onReachBottom'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
  * @docid dxScrollViewOptions.onDisposing
  * @type_function_param1 e:{ui/scroll_view:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxScrollViewOptions.onInitialized
  * @type_function_param1 e:{ui/scroll_view:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxScrollViewOptions.onOptionChanged
  * @type_function_param1 e:{ui/scroll_view:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
- * @docid dxScrollViewOptions.onPullDown
- * @type_function_param1 e:{ui/scroll_view:PullDownEvent}
- */
-onPullDown?: ((e: PullDownEvent) => void);
-/**
- * @skip
- * @docid dxScrollViewOptions.onReachBottom
- * @type_function_param1 e:{ui/scroll_view:ReachBottomEvent}
- */
-onReachBottom?: ((e: ReachBottomEvent) => void);
-/**
- * @skip
  * @docid dxScrollViewOptions.onScroll
  * @type_function_param1 e:{ui/scroll_view:ScrollEvent}
  */
 onScroll?: ((e: ScrollEvent) => void);
 /**
- * @skip
  * @docid dxScrollViewOptions.onUpdated
  * @type_function_param1 e:{ui/scroll_view:UpdatedEvent}
  */

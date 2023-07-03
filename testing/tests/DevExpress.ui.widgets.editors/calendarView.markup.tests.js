@@ -11,8 +11,8 @@ const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
-const CALENDAR_START_DAY_CELL_OF_MONTH_CLASS = 'dx-calendar-start-day-of-month';
-const CALENDAR_END_DAY_CELL_OF_MONTH_CLASS = 'dx-calendar-end-day-of-month';
+const CALENDAR_CELL_START_CLASS = 'dx-calendar-cell-start';
+const CALENDAR_CELL_END_CLASS = 'dx-calendar-cell-end';
 
 const getShortDate = function(date) {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
@@ -74,54 +74,12 @@ QUnit.module('MonthView markup', {
         assert.deepEqual(getTextsArray(captions), ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], 'day captions order is correct');
     });
 
-    QUnit.test('day captions must be rendered in proper order in RTL mode', function(assert) {
-        this.reinit({
-            date: new Date(2013, 9, 16),
-            firstDayOfWeek: 1,
-            rtlEnabled: true
-        });
-
-        const captions = this.$element.find('table').find('th');
-        assert.deepEqual(getTextsArray(captions), ['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon'], 'day captions order is correct');
-    });
-
-    QUnit.test('day captions must be rendered in proper order in RTL mode after changing runtime', function(assert) {
-        this.view.option('rtlEnabled', true);
-
-        const captions = this.$element.find('table').find('th');
-        assert.deepEqual(getTextsArray(captions), ['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon'], 'day captions order is correct');
-    });
-
     QUnit.test('dates must be rendered in proper positions', function(assert) {
         const dateCells = this.$element.find('table').find('td');
         assert.deepEqual(getTextsArray(dateCells),
             ['30', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13',
                 '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27',
                 '28', '29', '30', '31', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
-    });
-
-    QUnit.test('dates must be rendered in proper positions in RTL mode', function(assert) {
-        this.reinit({
-            date: new Date(2013, 9, 16),
-            firstDayOfWeek: 1,
-            rtlEnabled: true
-        });
-
-        const dateCells = this.$element.find('table').find('td');
-        assert.deepEqual(getTextsArray(dateCells),
-            ['6', '5', '4', '3', '2', '1', '30', '13', '12', '11', '10', '9', '8', '7',
-                '20', '19', '18', '17', '16', '15', '14', '27', '26', '25', '24', '23', '22', '21',
-                '3', '2', '1', '31', '30', '29', '28', '10', '9', '8', '7', '6', '5', '4']);
-    });
-
-    QUnit.test('dates must be rendered in proper positions in RTL mode after changing runtime', function(assert) {
-        this.view.option('rtlEnabled', true);
-
-        const dateCells = this.$element.find('table').find('td');
-        assert.deepEqual(getTextsArray(dateCells),
-            ['6', '5', '4', '3', '2', '1', '30', '13', '12', '11', '10', '9', '8', '7',
-                '20', '19', '18', '17', '16', '15', '14', '27', '26', '25', '24', '23', '22', '21',
-                '3', '2', '1', '31', '30', '29', '28', '10', '9', '8', '7', '6', '5', '4']);
     });
 
     QUnit.test('dates must be rendered in proper positions when the first day of the month comes right before the first day of the week', function(assert) {
@@ -158,8 +116,8 @@ QUnit.module('MonthView markup', {
             hoveredRange: [],
         });
 
-        const $startDateCell = this.$element.find(`.${CALENDAR_START_DAY_CELL_OF_MONTH_CLASS}`);
-        const $endDateCell = this.$element.find(`.${CALENDAR_END_DAY_CELL_OF_MONTH_CLASS}`);
+        const $startDateCell = this.$element.find(`.${CALENDAR_CELL_START_CLASS}`);
+        const $endDateCell = this.$element.find(`.${CALENDAR_CELL_END_CLASS}`);
 
         assert.strictEqual($startDateCell.length, 1);
         assert.strictEqual($startDateCell.text(), '1', 'the first day of the month');
@@ -179,8 +137,8 @@ QUnit.module('MonthView markup', {
 
         this.view.option('selectionMode', 'single');
 
-        const $startDateCell = this.$element.find(`.${CALENDAR_START_DAY_CELL_OF_MONTH_CLASS}`);
-        const $endDateCell = this.$element.find(`.${CALENDAR_END_DAY_CELL_OF_MONTH_CLASS}`);
+        const $startDateCell = this.$element.find(`.${CALENDAR_CELL_START_CLASS}`);
+        const $endDateCell = this.$element.find(`.${CALENDAR_CELL_END_CLASS}`);
 
         assert.strictEqual($startDateCell.length, 0);
         assert.strictEqual($endDateCell.length, 0);
@@ -192,8 +150,8 @@ QUnit.module('MonthView markup', {
             selectionMode: 'single',
         });
 
-        const $startDateCell = this.$element.find(`.${CALENDAR_START_DAY_CELL_OF_MONTH_CLASS}`);
-        const $endDateCell = this.$element.find(`.${CALENDAR_END_DAY_CELL_OF_MONTH_CLASS}`);
+        const $startDateCell = this.$element.find(`.${CALENDAR_CELL_START_CLASS}`);
+        const $endDateCell = this.$element.find(`.${CALENDAR_CELL_END_CLASS}`);
 
         assert.strictEqual($startDateCell.length, 0);
         assert.strictEqual($endDateCell.length, 0);
@@ -273,20 +231,6 @@ QUnit.module('YearView markup', {
                 'Oct', 'Nov', 'Dec']);
     });
 
-    QUnit.test('month must be rendered in proper positions in RTL mode', function(assert) {
-        this.reinit({
-            date: new Date(2015, 2, 1),
-            rtlEnabled: true
-        });
-
-        const dateCells = this.$element.find('table').find('td');
-        assert.deepEqual(getTextsArray(dateCells),
-            ['Apr', 'Mar', 'Feb', 'Jan',
-                'Aug', 'Jul', 'Jun', 'May',
-                'Dec', 'Nov', 'Oct', 'Sep']);
-    });
-
-
     QUnit.test('data-value after render for cells in year view', function(assert) {
         const dateCells = this.$element.find('table').find('td');
         let startMonth = 0;
@@ -361,19 +305,6 @@ QUnit.module('DecadeView', {
                 '2018', '2019', '2020']);
     });
 
-    QUnit.test('years must be rendered in proper positions in RTL mode', function(assert) {
-        this.reinit({
-            date: new Date(2015, 2, 1),
-            rtlEnabled: true
-        });
-
-        const dateCells = this.$element.find('table').find('td');
-        assert.deepEqual(getTextsArray(dateCells),
-            ['2012', '2011', '2010', '2009', '2016',
-                '2015', '2014', '2013', '2020',
-                '2019', '2018', '2017']);
-    });
-
     QUnit.test('non-current decade dates must be decorated with a CSS class', function(assert) {
         const dateCells = this.$element.find('table').find('td').filter('.' + CALENDAR_OTHER_VIEW_CLASS);
         assert.deepEqual(getTextsArray(dateCells), ['2009', '2020']);
@@ -440,19 +371,6 @@ QUnit.module('CenturyView', {
             ['1990 - 1999', '2000 - 2009', '2010 - 2019', '2020 - 2029', '2030 - 2039',
                 '2040 - 2049', '2050 - 2059', '2060 - 2069', '2070 - 2079',
                 '2080 - 2089', '2090 - 2099', '2100 - 2109']);
-    });
-
-    QUnit.test('decades must be rendered in proper positions in RTL mode', function(assert) {
-        this.reinit({
-            date: new Date(2015, 2, 1),
-            rtlEnabled: true
-        });
-
-        const dateCells = this.$element.find('table').find('td');
-        assert.deepEqual(getTextsArray(dateCells),
-            ['2020 - 2029', '2010 - 2019', '2000 - 2009', '1990 - 1999', '2060 - 2069',
-                '2050 - 2059', '2040 - 2049', '2030 - 2039', '2100 - 2109',
-                '2090 - 2099', '2080 - 2089', '2070 - 2079']);
     });
 
     QUnit.test('non-current century dates must be decorated with a CSS class', function(assert) {

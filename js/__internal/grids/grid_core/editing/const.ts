@@ -1,3 +1,5 @@
+import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+
 export const EDITOR_CELL_CLASS = 'dx-editor-cell';
 export const ROW_CLASS = 'dx-row';
 export const CELL_MODIFIED_CLASS = 'dx-cell-modified';
@@ -34,3 +36,74 @@ export const VIEWPORT_TOP_NEW_ROW_POSITION = 'viewportTop';
 export const EDIT_MODES = [EDIT_MODE_BATCH, EDIT_MODE_ROW, EDIT_MODE_CELL, EDIT_MODE_FORM, EDIT_MODE_POPUP];
 export const ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP];
 export const MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
+
+export const READONLY_CLASS = 'readonly';
+export const LINK_CLASS = 'dx-link';
+export const ROW_SELECTED = 'dx-selection';
+export const EDIT_BUTTON_CLASS = 'dx-edit-button';
+export const COMMAND_EDIT_CLASS = 'dx-command-edit';
+export const COMMAND_EDIT_WITH_ICONS_CLASS = `${COMMAND_EDIT_CLASS}-with-icons`;
+
+export const INSERT_INDEX = '__DX_INSERT_INDEX__';
+export const ROW_INSERTED = 'dx-row-inserted';
+export const ROW_MODIFIED = 'dx-row-modified';
+export const CELL_MODIFIED = 'dx-cell-modified';
+export const EDITING_NAMESPACE = 'dxDataGridEditing';
+
+export const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+
+export const DATA_EDIT_DATA_UPDATE_TYPE = 'update';
+
+export const DEFAULT_START_EDIT_ACTION = 'click';
+
+export const EDIT_LINK_CLASS = {
+  save: 'dx-link-save',
+  cancel: 'dx-link-cancel',
+  edit: 'dx-link-edit',
+  undelete: 'dx-link-undelete',
+  delete: 'dx-link-delete',
+  add: 'dx-link-add',
+};
+export const EDIT_ICON_CLASS = {
+  save: 'save',
+  cancel: 'revert',
+  edit: 'edit',
+  undelete: 'revert',
+  delete: 'trash',
+  add: 'add',
+};
+export const METHOD_NAMES = {
+  edit: 'editRow',
+  delete: 'deleteRow',
+  undelete: 'undeleteRow',
+  save: 'saveEditData',
+  cancel: 'cancelEditData',
+  add: 'addRowByRowIndex',
+};
+export const ACTION_OPTION_NAMES = {
+  add: 'allowAdding',
+  edit: 'allowUpdating',
+  delete: 'allowDeleting',
+};
+export const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
+
+export const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
+
+export const FOCUS_OVERLAY_CLASS = 'focus-overlay';
+export const ADD_ROW_BUTTON_CLASS = 'addrow-button';
+export const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
+export const DATA_ROW_CLASS = 'dx-data-row';
+export const ROW_REMOVED = 'dx-row-removed';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isRenovatedScrollable = !!(Scrollable as any).IS_RENOVATED_WIDGET;
+
+export const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
+export const EDIT_POPUP_CLASS = 'edit-popup';
+export const EDIT_POPUP_FORM_CLASS = 'edit-popup-form';
+export const FOCUSABLE_ELEMENT_CLASS = isRenovatedScrollable ? 'dx-scrollable' : 'dx-scrollable-container';
+export const BUTTON_CLASS = 'dx-button';
+
+export const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
+
+export const EDIT_ROW = 'dx-edit-row';

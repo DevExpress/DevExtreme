@@ -6,6 +6,8 @@ $material-radiobutton-size: null !default;
 $material-radiobutton-dot-size: null !default;
 $material-radiobutton-ripple-size: null !default;
 
+$material-radiobutton-border-width: 2px !default;
+
 @if $size == "default" {
   $material-radiobutton-size: 20px !default;
   $material-radiobutton-dot-size: 10px !default;

@@ -1,8 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-const spellcheckRule = require('eslint-config-devextreme/spell-check').rules['spellcheck/spell-checker'];
-spellcheckRule[1].skipIfMatch.push('langParams');
-spellcheckRule[1].skipWords.push('csp');
-
 /* eslint-env node */
 /* eslint-disable spellcheck/spell-checker */
 module.exports = {
@@ -99,7 +94,6 @@ module.exports = {
                         ],
                     },
                 ],
-                'spellcheck/spell-checker': spellcheckRule,
                 'brace-style': ['error', '1tbs', { allowSingleLine: true }],
                 'curly': ['error', 'multi-line', 'consistent'],
                 'unicode-bom': ['error', 'never'],

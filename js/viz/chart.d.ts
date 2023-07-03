@@ -76,7 +76,12 @@ import {
     ChartsColor,
 } from '../common/charts';
 
-interface SeriesInteractionInfo {
+/**
+ * @docid _viz_chart_SeriesInteractionInfo
+ * @hidden
+ */
+export interface SeriesInteractionInfo {
+    /** @docid _viz_chart_SeriesInteractionInfo.target */
     target: chartSeriesObject;
 }
 
@@ -131,85 +136,210 @@ export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
 /** @public */
 export type FinancialChartReductionLevel = 'close' | 'high' | 'low' | 'open';
 
-/** @public */
+/**
+ * @docid _viz_chart_ArgumentAxisClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
+    /** @docid _viz_chart_ArgumentAxisClickEvent.argument */
     readonly argument: Date | number | string;
 };
 
-/** @public */
+/**
+ * @docid _viz_chart_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_DoneEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DoneEvent = EventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxChart> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxChart> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxChart>;
 
-/** @public */
+/**
+ * @docid _viz_chart_LegendClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type LegendClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
+    /** @docid _viz_chart_LegendClickEvent.target */
     readonly target: chartSeriesObject;
 };
 
-/** @public */
+/**
+ * @docid _viz_chart_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxChart> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_PointClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,PointInteractionInfo
+ */
 export type PointClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_PointHoverChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,PointInteractionInfo
+ */
 export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_PointSelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,PointInteractionInfo
+ */
 export type PointSelectionChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_SeriesClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type SeriesClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
+    /** @docid _viz_chart_SeriesClickEvent.target */
     readonly target: chartSeriesObject;
 };
 
-/** @public */
+/**
+ * @docid _viz_chart_SeriesHoverChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_chart_SeriesInteractionInfo
+ */
 export type SeriesHoverChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_SeriesSelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_chart_SeriesInteractionInfo
+ */
 export type SeriesSelectionChangedEvent = EventInfo<dxChart> & SeriesInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_TooltipHiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
+ */
 export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_TooltipShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
+ */
 export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_chart_ZoomEndEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
+    /** @docid _viz_chart_ZoomEndEvent.rangeStart */
     readonly rangeStart: Date | number;
+    /** @docid _viz_chart_ZoomEndEvent.rangeEnd */
     readonly rangeEnd: Date | number;
+    /** @docid _viz_chart_ZoomEndEvent.axis */
     readonly axis: chartAxisObject;
+    /** @docid _viz_chart_ZoomEndEvent.range */
     readonly range: VisualRange;
+    /** @docid _viz_chart_ZoomEndEvent.previousRange */
     readonly previousRange: VisualRange;
+    /**
+     * @docid _viz_chart_ZoomEndEvent.actionType
+     * @type Enums.ZoomPanAction
+     */
     readonly actionType: ZoomPanAction;
+    /** @docid _viz_chart_ZoomEndEvent.zoomFactor */
     readonly zoomFactor: number;
+    /** @docid _viz_chart_ZoomEndEvent.shift */
     readonly shift: number;
 };
 
-/** @public */
+/**
+ * @docid _viz_chart_ZoomStartEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
+    /** @docid _viz_chart_ZoomStartEvent.axis */
     readonly axis: chartAxisObject;
+    /** @docid _viz_chart_ZoomStartEvent.range */
     readonly range: VisualRange;
+    /**
+     * @docid _viz_chart_ZoomStartEvent.actionType
+     * @type Enums.ZoomPanAction
+     */
     readonly actionType?: ZoomPanAction;
 };
 
@@ -958,9 +1088,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxChart
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/chart:ArgumentAxisClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -970,11 +1098,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxChart
-     * @type_function_param1_field element:DxElement
-     * @type_function_param1_field model:any
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/chart:LegendClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -984,11 +1108,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxChart
-     * @type_function_param1_field element:DxElement
-     * @type_function_param1_field model:any
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/chart:SeriesClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -997,8 +1117,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxChart
+     * @type_function_param1 e:{viz/chart:SeriesHoverChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -1007,8 +1126,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxChart
+     * @type_function_param1 e:{viz/chart:SeriesSelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -1017,12 +1135,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field rangeStart:Date|Number:deprecated(range)
-     * @type_function_param1_field rangeEnd:Date|Number:deprecated(range)
-     * @type_function_param1_field actionType:Enums.ZoomPanAction
-     * @type_function_param1_field component:dxChart
+     * @type_function_param1 e:{viz/chart:ZoomEndEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -1031,10 +1144,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxChart
-     * @type_function_param1_field event:event
-     * @type_function_param1_field actionType:Enums.ZoomPanAction
+     * @type_function_param1 e:{viz/chart:ZoomStartEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -5167,140 +5277,84 @@ export type Properties = dxChartOptions;
 export type Options = dxChartOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onArgumentAxisClick' | 'onLegendClick' | 'onSeriesClick' | 'onSeriesHoverChanged' | 'onSeriesSelectionChanged' | 'onZoomEnd' | 'onZoomStart'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
- * @docid dxChartOptions.onArgumentAxisClick
- * @type_function_param1 e:{viz/chart:ArgumentAxisClickEvent}
- */
-onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void);
-/**
- * @skip
  * @docid dxChartOptions.onDisposing
  * @type_function_param1 e:{viz/chart:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxChartOptions.onDone
  * @type_function_param1 e:{viz/chart:DoneEvent}
  */
 onDone?: ((e: DoneEvent) => void);
 /**
- * @skip
  * @docid dxChartOptions.onDrawn
  * @type_function_param1 e:{viz/chart:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxChartOptions.onExported
  * @type_function_param1 e:{viz/chart:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxChartOptions.onExporting
  * @type_function_param1 e:{viz/chart:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxChartOptions.onFileSaving
  * @type_function_param1 e:{viz/chart:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxChartOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/chart:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxChartOptions.onInitialized
  * @type_function_param1 e:{viz/chart:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
- * @docid dxChartOptions.onLegendClick
- * @type_function_param1 e:{viz/chart:LegendClickEvent}
- */
-onLegendClick?: ((e: LegendClickEvent) => void);
-/**
- * @skip
  * @docid dxChartOptions.onOptionChanged
  * @type_function_param1 e:{viz/chart:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxChartOptions.onPointClick
  * @type_function_param1 e:{viz/chart:PointClickEvent}
  */
 onPointClick?: ((e: PointClickEvent) => void);
 /**
- * @skip
  * @docid dxChartOptions.onPointHoverChanged
  * @type_function_param1 e:{viz/chart:PointHoverChangedEvent}
  */
 onPointHoverChanged?: ((e: PointHoverChangedEvent) => void);
 /**
- * @skip
  * @docid dxChartOptions.onPointSelectionChanged
  * @type_function_param1 e:{viz/chart:PointSelectionChangedEvent}
  */
 onPointSelectionChanged?: ((e: PointSelectionChangedEvent) => void);
 /**
- * @skip
- * @docid dxChartOptions.onSeriesClick
- * @type_function_param1 e:{viz/chart:SeriesClickEvent}
- */
-onSeriesClick?: ((e: SeriesClickEvent) => void);
-/**
- * @skip
- * @docid dxChartOptions.onSeriesHoverChanged
- * @type_function_param1 e:{viz/chart:SeriesHoverChangedEvent}
- */
-onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void);
-/**
- * @skip
- * @docid dxChartOptions.onSeriesSelectionChanged
- * @type_function_param1 e:{viz/chart:SeriesSelectionChangedEvent}
- */
-onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void);
-/**
- * @skip
  * @docid dxChartOptions.onTooltipHidden
  * @type_function_param1 e:{viz/chart:TooltipHiddenEvent}
  */
 onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
 /**
- * @skip
  * @docid dxChartOptions.onTooltipShown
  * @type_function_param1 e:{viz/chart:TooltipShownEvent}
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
-/**
- * @skip
- * @docid dxChartOptions.onZoomEnd
- * @type_function_param1 e:{viz/chart:ZoomEndEvent}
- */
-onZoomEnd?: ((e: ZoomEndEvent) => void);
-/**
- * @skip
- * @docid dxChartOptions.onZoomStart
- * @type_function_param1 e:{viz/chart:ZoomStartEvent}
- */
-onZoomStart?: ((e: ZoomStartEvent) => void);
 };
 ///#ENDDEBUG

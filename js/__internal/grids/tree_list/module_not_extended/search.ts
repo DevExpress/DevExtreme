@@ -1,4 +1,5 @@
-import { searchModule } from '@js/ui/grid_core/ui.grid_core.search';
-import core from '../module_core';
+import { searchModule } from '@ts/grids/grid_core/search/m_search';
+
+import core from '../m_core';
 
 core.registerModule('search', searchModule);

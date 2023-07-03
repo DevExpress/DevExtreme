@@ -40,6 +40,7 @@ import {
 } from 'ui/form/components/label';
 
 const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
+const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 
 import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
@@ -80,7 +81,7 @@ if(device.current().deviceType === 'desktop') {
     items.forEach((item) => {
         registerKeyHandlerTestHelper.runTests({
             createWidget: ($element) => $element.dxForm({ items: items }).dxForm('instance'),
-            keyPressTargetElement: (widget) => widget.getEditor(item.dataField).$element().find('.dx-texteditor-input'),
+            keyPressTargetElement: (widget) => widget.getEditor(item.dataField).$element().find(`.${EDITOR_INPUT_CLASS}`),
             checkInitialize: false,
             testNamePrefix: `Form -> ${item.editorType}:`
         });
@@ -581,11 +582,11 @@ QUnit.test('Check aria-labelledby attribute for editors label', function(assert)
         labelMode: 'floating'
     }).dxForm('instance');
 
-    const $fieldItem = $('#form').find('.' + FIELD_ITEM_CLASS);
-    const itemInputAttr = $fieldItem.find('input').attr('aria-labelledby');
-    const editorLabelID = $fieldItem.find('.' + EDITOR_LABEL_CLASS).attr('id');
+    const $fieldItem = $('#form').find(`.${FIELD_ITEM_CLASS}`);
+    const itemInputAttr = $fieldItem.find(`.${EDITOR_INPUT_CLASS}`).attr('aria-labelledby');
+    const editorLabelID = $fieldItem.find(`.${EDITOR_LABEL_CLASS}`).attr('id');
 
-    assert.equal(itemInputAttr, editorLabelID, 'input attr value equal editor label id');
+    assert.strictEqual(itemInputAttr.includes(editorLabelID), true, 'input attr value includes editor label id');
 
     form.dispose();
 });

@@ -13,6 +13,7 @@ import TextBox from '../text_box';
 import Draggable from '../draggable';
 import { isCommandKeyPressed } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
+import Guid from '../../core/guid';
 
 const COLOR_VIEW_CLASS = 'dx-colorview';
 const COLOR_VIEW_CONTAINER_CLASS = 'dx-colorview-container';
@@ -52,6 +53,8 @@ const COLOR_VIEW_COLOR_PREVIEW_CONTAINER_CLASS = 'dx-colorview-color-preview-con
 const COLOR_VIEW_COLOR_PREVIEW_CONTAINER_INNER_CLASS = 'dx-colorview-color-preview-container-inner';
 const COLOR_VIEW_COLOR_PREVIEW_COLOR_CURRENT = 'dx-colorview-color-preview-color-current';
 const COLOR_VIEW_COLOR_PREVIEW_COLOR_NEW = 'dx-colorview-color-preview-color-new';
+
+const TEXT_EDITOR_INPUT = 'dx-texteditor-input';
 
 const BLACK_COLOR = '#000000';
 
@@ -382,6 +385,14 @@ const ColorView = Editor.inherit({
         this._$paletteHandle = $('<div>')
             .addClass(COLOR_VIEW_PALETTE_HANDLE_CLASS)
             .appendTo(this._$palette);
+
+        const handleAria = {
+            id: this.option('ariaId'),
+            role: 'application',
+        };
+
+        this.setAria(handleAria, this._$paletteHandle);
+
         this._createComponent(this._$paletteHandle, Draggable, {
             contentTemplate: null,
             boundary: this._$palette,
@@ -639,6 +650,15 @@ const ColorView = Editor.inherit({
                 .appendTo(this._$controlsContainer)
                 .find('.dx-textbox')
         );
+
+        const inputId = `dx-${new Guid()}`;
+
+        const $hexInput = this._$controlsContainer
+            .find(`.${COLOR_VIEW_HEX_LABEL_CLASS}`)
+            .find(`.${TEXT_EDITOR_INPUT}`);
+
+        this.setAria('id', inputId, $hexInput);
+        this.setAria('labelledby', inputId, this._$paletteHandle);
     },
 
     _renderAlphaChannelScale: function() {

@@ -35,7 +35,12 @@ import {
     ChartsColor,
 } from '../../common/charts';
 
+/**
+ * @docid _viz_base_gauge_TooltipInfo
+ * @hidden
+ */
 export interface TooltipInfo {
+    /** @docid _viz_base_gauge_TooltipInfo.target */
     target: any;
 }
 

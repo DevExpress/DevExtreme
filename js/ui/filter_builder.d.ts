@@ -39,52 +39,121 @@ export type FilterBuilderOperation = '=' | '<>' | '<' | '<=' | '>' | '>=' | 'con
 /** @public */
 export type GroupOperation = 'and' | 'or' | 'notAnd' | 'notOr';
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxFilterBuilder>;
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxFilterBuilder>;
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_EditorPreparedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type EditorPreparedEvent = EventInfo<dxFilterBuilder> & {
+    /** @docid _ui_filter_builder_EditorPreparedEvent.value */
     readonly value?: any;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.setValue */
     readonly setValue: any;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.editorElement */
     readonly editorElement: DxElement;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.editorName */
     readonly editorName: string;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.dataField */
     readonly dataField?: string;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.filterOperation */
     readonly filterOperation?: string;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.updateValueTimeout */
     readonly updateValueTimeout?: number;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.width */
     readonly width?: number;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.readOnly */
     readonly readOnly: boolean;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.disabled */
     readonly disabled: boolean;
+    /** @docid _ui_filter_builder_EditorPreparedEvent.rtlEnabled */
     readonly rtlEnabled: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_EditorPreparingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type EditorPreparingEvent = Cancelable & EventInfo<dxFilterBuilder> & {
+    /** @docid _ui_filter_builder_EditorPreparingEvent.value */
     readonly value?: any;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.setValue */
     readonly setValue: any;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.editorElement */
     readonly editorElement?: DxElement;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.editorName */
     editorName: string;
+    /**
+     * @docid _ui_filter_builder_EditorPreparingEvent.editorOptions
+     * @type object
+     */
     editorOptions?: any;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.dataField */
     readonly dataField?: string;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.filterOperation */
     readonly filterOperation?: string;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.updateValueTimeout */
     updateValueTimeout?: number;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.width */
     readonly width?: number;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.readOnly */
     readonly readOnly: boolean;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.disabled */
     readonly disabled: boolean;
+    /** @docid _ui_filter_builder_EditorPreparingEvent.rtlEnabled */
     readonly rtlEnabled: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxFilterBuilder>;
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxFilterBuilder> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_filter_builder_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ValueChangedEvent = EventInfo<dxFilterBuilder> & {
+    /**
+     * @docid _ui_filter_builder_ValueChangedEvent.value
+     * @type object
+     */
     readonly value?: any;
+    /**
+     * @docid _ui_filter_builder_ValueChangedEvent.previousValue
+     * @type object
+     */
     readonly previousValue?: any;
 };
 
@@ -240,9 +309,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     maxGroupLevel?: number;
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFilterBuilder
-     * @type_function_param1_field setValue(newValue):any
+     * @type_function_param1 e:{ui/filter_builder:EditorPreparedEvent}
      * @default null
      * @action
      * @public
@@ -250,10 +317,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     onEditorPrepared?: ((e: EditorPreparedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFilterBuilder
-     * @type_function_param1_field setValue(newValue):any
-     * @type_function_param1_field editorOptions:object
+     * @type_function_param1 e:{ui/filter_builder:EditorPreparingEvent}
      * @default null
      * @action
      * @public
@@ -262,10 +326,7 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFilterBuilder
-     * @type_function_param1_field value:object
-     * @type_function_param1_field previousValue:object
+     * @type_function_param1 e:{ui/filter_builder:ValueChangedEvent}
      * @action
      * @public
      */
@@ -484,58 +545,36 @@ export type Properties = dxFilterBuilderOptions;
 export type Options = dxFilterBuilderOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onEditorPrepared' | 'onEditorPreparing' | 'onValueChanged'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
  * @docid dxFilterBuilderOptions.onContentReady
  * @type_function_param1 e:{ui/filter_builder:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxFilterBuilderOptions.onDisposing
  * @type_function_param1 e:{ui/filter_builder:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
- * @docid dxFilterBuilderOptions.onEditorPrepared
- * @type_function_param1 e:{ui/filter_builder:EditorPreparedEvent}
- */
-onEditorPrepared?: ((e: EditorPreparedEvent) => void);
-/**
- * @skip
- * @docid dxFilterBuilderOptions.onEditorPreparing
- * @type_function_param1 e:{ui/filter_builder:EditorPreparingEvent}
- */
-onEditorPreparing?: ((e: EditorPreparingEvent) => void);
-/**
- * @skip
  * @docid dxFilterBuilderOptions.onInitialized
  * @type_function_param1 e:{ui/filter_builder:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxFilterBuilderOptions.onOptionChanged
  * @type_function_param1 e:{ui/filter_builder:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxFilterBuilderOptions.onValueChanged
- * @type_function_param1 e:{ui/filter_builder:ValueChangedEvent}
- */
-onValueChanged?: ((e: ValueChangedEvent) => void);
 };
 ///#ENDDEBUG

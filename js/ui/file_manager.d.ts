@@ -41,9 +41,19 @@ import {
     ToolbarItemLocation,
 } from '../common';
 
-interface ActionEventInfo {
+/**
+ * @docid
+ * @hidden
+ */
+export interface ActionEventInfo {
+    /** @docid */
     errorCode?: number;
+    /** @docid */
     errorText: string;
+    /**
+     * @docid
+     * @type boolean|Promise<void>
+     */
     cancel: boolean | PromiseLike<void>;
 }
 
@@ -62,148 +72,346 @@ export type FileManagerPredefinedContextMenuItem = 'create' | 'upload' | 'refres
 export type FileManagerPredefinedToolbarItem = 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator';
 export type FileManagerViewArea = 'navPane' | 'itemView';
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxFileManager>;
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ContextMenuItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager, KeyboardEvent | PointerEvent | MouseEvent> & {
+    /**
+     * @docid _ui_file_manager_ContextMenuItemClickEvent.itemData
+     * @type object
+     */
     readonly itemData: any;
+    /** @docid _ui_file_manager_ContextMenuItemClickEvent.itemElement */
     readonly itemElement: DxElement;
+    /** @docid _ui_file_manager_ContextMenuItemClickEvent.itemIndex */
     readonly itemIndex: number;
+    /** @docid _ui_file_manager_ContextMenuItemClickEvent.fileSystemItem */
     readonly fileSystemItem?: FileSystemItem;
+    /**
+     * @docid _ui_file_manager_ContextMenuItemClickEvent.viewArea
+     * @type Enums.FileManagerViewArea
+     */
     readonly viewArea: FileManagerViewArea;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ContextMenuShowingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type ContextMenuShowingEvent = Cancelable & NativeEventInfo<dxFileManager, KeyboardEvent | PointerEvent | MouseEvent> & {
+    /** @docid _ui_file_manager_ContextMenuShowingEvent.fileSystemItem */
     readonly fileSystemItem?: FileSystemItem;
+    /** @docid _ui_file_manager_ContextMenuShowingEvent.targetElement */
     readonly targetElement?: DxElement;
+    /**
+     * @docid _ui_file_manager_ContextMenuShowingEvent.viewArea
+     * @type Enums.FileManagerViewArea
+     */
     readonly viewArea: FileManagerViewArea;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_CurrentDirectoryChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type CurrentDirectoryChangedEvent = EventInfo<dxFileManager> & {
+    /** @docid _ui_file_manager_CurrentDirectoryChangedEvent.directory */
     readonly directory: FileSystemItem;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxFileManager>;
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ErrorOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ErrorOccurredEvent = EventInfo<dxFileManager> & {
+    /** @docid _ui_file_manager_ErrorOccurredEvent.errorCode */
     readonly errorCode?: number;
+    /** @docid _ui_file_manager_ErrorOccurredEvent.errorText */
     errorText?: string;
+    /** @docid _ui_file_manager_ErrorOccurredEvent.fileSystemItem */
     readonly fileSystemItem?: FileSystemItem;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_FocusedItemChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type FocusedItemChangedEvent = EventInfo<dxFileManager> & {
+    /** @docid _ui_file_manager_FocusedItemChangedEvent.item */
     readonly item?: FileSystemItem;
+    /** @docid _ui_file_manager_FocusedItemChangedEvent.itemElement */
     readonly itemElement?: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxFileManager>;
 
-/** @public */
+/**
+ * @docid _ui_file_manager_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxFileManager> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_file_manager_SelectedFileOpenedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type SelectedFileOpenedEvent = EventInfo<dxFileManager> & {
+    /** @docid _ui_file_manager_SelectedFileOpenedEvent.file */
     readonly file: FileSystemItem;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type SelectionChangedEvent = EventInfo<dxFileManager> & {
+    /**
+     * @docid _ui_file_manager_SelectionChangedEvent.currentSelectedItemKeys
+     * @type Array<string>
+     */
     readonly currentSelectedItemKeys: Array<string>;
+    /**
+     * @docid _ui_file_manager_SelectionChangedEvent.currentDeselectedItemKeys
+     * @type Array<string>
+     */
     readonly currentDeselectedItemKeys: Array<string>;
+    /**
+     * @docid _ui_file_manager_SelectionChangedEvent.selectedItems
+     * @type Array<FileSystemItem>
+     */
     readonly selectedItems: Array<FileSystemItem>;
+    /**
+     * @docid _ui_file_manager_SelectionChangedEvent.selectedItemKeys
+     * @type Array<string>
+     */
     readonly selectedItemKeys: Array<string>;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ToolbarItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager, PointerEvent | MouseEvent> & {
+    /**
+     * @docid _ui_file_manager_ToolbarItemClickEvent.itemData
+     * @type object
+     */
     readonly itemData: any;
+    /** @docid _ui_file_manager_ToolbarItemClickEvent.itemElement */
     readonly itemElement: DxElement;
+    /** @docid _ui_file_manager_ToolbarItemClickEvent.itemIndex */
     readonly itemIndex: number;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_DirectoryCreatingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ActionEventInfo
+ */
 export type DirectoryCreatingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    /** @docid _ui_file_manager_DirectoryCreatingEvent.parentDirectory */
     readonly parentDirectory: FileSystemItem;
+    /** @docid _ui_file_manager_DirectoryCreatingEvent.name */
     readonly name: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_DirectoryCreatedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DirectoryCreatedEvent = EventInfo<dxFileManager> & {
+    /** @docid _ui_file_manager_DirectoryCreatedEvent.parentDirectory */
     readonly parentDirectory: FileSystemItem;
+    /** @docid _ui_file_manager_DirectoryCreatedEvent.name */
     readonly name: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ItemRenamingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ActionEventInfo
+ */
 export type ItemRenamingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    /** @docid _ui_file_manager_ItemRenamingEvent.item */
     readonly item: FileSystemItem;
+    /** @docid _ui_file_manager_ItemRenamingEvent.newName */
     readonly newName: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ItemRenamedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ItemRenamedEvent = EventInfo<dxFileManager> & {
+    /** @docid _ui_file_manager_ItemRenamedEvent.sourceItem */
     readonly sourceItem: FileSystemItem;
+    /** @docid _ui_file_manager_ItemRenamedEvent.itemName */
     readonly itemName: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ItemMovingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ActionEventInfo
+ */
 export type ItemMovingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    /** @docid _ui_file_manager_ItemMovingEvent.item */
     readonly item: FileSystemItem;
+    /** @docid _ui_file_manager_ItemMovingEvent.destinationDirectory */
     readonly destinationDirectory: FileSystemItem;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ItemMovedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ItemMovedEvent = EventInfo<dxFileManager> & {
+    /** @docid _ui_file_manager_ItemMovedEvent.sourceItem */
     readonly sourceItem: FileSystemItem;
+    /** @docid _ui_file_manager_ItemMovedEvent.parentDirectory */
     readonly parentDirectory: FileSystemItem;
+    /** @docid _ui_file_manager_ItemMovedEvent.itemName */
     readonly itemName: string;
+    /** @docid _ui_file_manager_ItemMovedEvent.itemPath */
     readonly itemPath: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ItemCopyingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ActionEventInfo
+ */
 export type ItemCopyingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    /** @docid _ui_file_manager_ItemCopyingEvent.item */
     readonly item: FileSystemItem;
+    /** @docid _ui_file_manager_ItemCopyingEvent.destinationDirectory */
     readonly destinationDirectory: FileSystemItem;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ItemCopiedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ItemCopiedEvent = EventInfo<dxFileManager> & {
+    /** @docid _ui_file_manager_ItemCopiedEvent.sourceItem */
     readonly sourceItem: FileSystemItem;
+    /** @docid _ui_file_manager_ItemCopiedEvent.parentDirectory */
     readonly parentDirectory: FileSystemItem;
+    /** @docid _ui_file_manager_ItemCopiedEvent.itemName */
     readonly itemName: string;
+    /** @docid _ui_file_manager_ItemCopiedEvent.itemPath */
     readonly itemPath: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ItemDeletingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ActionEventInfo
+ */
 export type ItemDeletingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    /** @docid _ui_file_manager_ItemDeletingEvent.item */
     readonly item: FileSystemItem;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ItemDeletedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ItemDeletedEvent = EventInfo<dxFileManager> & {
+    /** @docid _ui_file_manager_ItemDeletedEvent.item */
     readonly item: FileSystemItem;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_FileUploadingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ActionEventInfo
+ */
 export type FileUploadingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    /** @docid _ui_file_manager_FileUploadingEvent.fileData */
     readonly fileData: File;
+    /** @docid _ui_file_manager_FileUploadingEvent.destinationDirectory */
     readonly destinationDirectory: FileSystemItem;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_FileUploadedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type FileUploadedEvent = EventInfo<dxFileManager> & {
+    /** @docid _ui_file_manager_FileUploadedEvent.fileData */
     readonly fileData: File;
+    /** @docid _ui_file_manager_FileUploadedEvent.parentDirectory */
     readonly parentDirectory: FileSystemItem;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_manager_ItemDownloadingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ActionEventInfo
+ */
 export type ItemDownloadingEvent = EventInfo<dxFileManager> & ActionEventInfo & {
+    /** @docid _ui_file_manager_ItemDownloadingEvent.item */
     readonly item: FileSystemItem;
 };
 
@@ -303,11 +511,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field viewArea:Enums.FileManagerViewArea
+     * @type_function_param1 e:{ui/file_manager:ContextMenuItemClickEvent}
      * @action
      * @public
      */
@@ -315,18 +519,14 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
-     * @type_function_param1_field event:event
-     * @type_function_param1_field viewArea:Enums.FileManagerViewArea
+     * @type_function_param1 e:{ui/file_manager:ContextMenuShowingEvent}
      * @action
      * @public
      */
     onContextMenuShowing?: ((e: ContextMenuShowingEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1 e:{ui/file_manager:CurrentDirectoryChangedEvent}
      * @default null
      * @action
      * @public
@@ -334,8 +534,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onCurrentDirectoryChanged?: ((e: CurrentDirectoryChangedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1 e:{ui/file_manager:SelectedFileOpenedEvent}
      * @default null
      * @action
      * @public
@@ -343,12 +542,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onSelectedFileOpened?: ((e: SelectedFileOpenedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
-     * @type_function_param1_field currentSelectedItemKeys:Array<string>
-     * @type_function_param1_field currentDeselectedItemKeys:Array<string>
-     * @type_function_param1_field selectedItems:Array<FileSystemItem>
-     * @type_function_param1_field selectedItemKeys:Array<string>
+     * @type_function_param1 e:{ui/file_manager:SelectionChangedEvent}
      * @default null
      * @action
      * @public
@@ -356,18 +550,14 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onSelectionChanged?: ((e: SelectionChangedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/file_manager:ToolbarItemClickEvent}
      * @action
      * @public
      */
     onToolbarItemClick?: ((e: ToolbarItemClickEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1 e:{ui/file_manager:FocusedItemChangedEvent}
      * @default null
      * @action
      * @public
@@ -375,8 +565,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onFocusedItemChanged?: ((e: FocusedItemChangedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1 e:{ui/file_manager:ErrorOccurredEvent}
      * @default null
      * @action
      * @public
@@ -384,9 +573,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onErrorOccurred?: ((e: ErrorOccurredEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
-     * @type_function_param1_field cancel:boolean|Promise<void>
+     * @type_function_param1 e:{ui/file_manager:DirectoryCreatingEvent}
      * @default null
      * @action
      * @public
@@ -394,8 +581,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onDirectoryCreating?: ((e: DirectoryCreatingEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1 e:{ui/file_manager:DirectoryCreatedEvent}
      * @default null
      * @action
      * @public
@@ -403,9 +589,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onDirectoryCreated?: ((e: DirectoryCreatedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
-     * @type_function_param1_field cancel:boolean|Promise<void>
+     * @type_function_param1 e:{ui/file_manager:ItemRenamingEvent}
      * @default null
      * @action
      * @public
@@ -413,8 +597,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onItemRenaming?: ((e: ItemRenamingEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1 e:{ui/file_manager:ItemRenamedEvent}
      * @default null
      * @action
      * @public
@@ -422,9 +605,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onItemRenamed?: ((e: ItemRenamedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
-     * @type_function_param1_field cancel:boolean|Promise<void>
+     * @type_function_param1 e:{ui/file_manager:ItemMovingEvent}
      * @default null
      * @action
      * @public
@@ -432,8 +613,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onItemMoving?: ((e: ItemMovingEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1 e:{ui/file_manager:ItemMovedEvent}
      * @default null
      * @action
      * @public
@@ -441,9 +621,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onItemMoved?: ((e: ItemMovedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
-     * @type_function_param1_field cancel:boolean|Promise<void>
+     * @type_function_param1 e:{ui/file_manager:ItemCopyingEvent}
      * @default null
      * @action
      * @public
@@ -451,8 +629,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onItemCopying?: ((e: ItemCopyingEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1 e:{ui/file_manager:ItemCopiedEvent}
      * @default null
      * @action
      * @public
@@ -460,9 +637,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onItemCopied?: ((e: ItemCopiedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
-     * @type_function_param1_field cancel:boolean|Promise<void>
+     * @type_function_param1 e:{ui/file_manager:ItemDeletingEvent}
      * @default null
      * @action
      * @public
@@ -470,8 +645,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onItemDeleting?: ((e: ItemDeletingEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1 e:{ui/file_manager:ItemDeletedEvent}
      * @default null
      * @action
      * @public
@@ -479,9 +653,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onItemDeleted?: ((e: ItemDeletedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
-     * @type_function_param1_field cancel:boolean|Promise<void>
+     * @type_function_param1 e:{ui/file_manager:FileUploadingEvent}
      * @default null
      * @action
      * @public
@@ -489,8 +661,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onFileUploading?: ((e: FileUploadingEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
+     * @type_function_param1 e:{ui/file_manager:FileUploadedEvent}
      * @default null
      * @action
      * @public
@@ -498,9 +669,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onFileUploaded?: ((e: FileUploadedEvent) => void);
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileManager
-     * @type_function_param1_field cancel:boolean|Promise<void>
+     * @type_function_param1 e:{ui/file_manager:ItemDownloadingEvent}
      * @default null
      * @action
      * @public
@@ -831,166 +1000,36 @@ export type Properties = dxFileManagerOptions;
 export type Options = dxFileManagerOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onContextMenuItemClick' | 'onContextMenuShowing' | 'onCurrentDirectoryChanged' | 'onDirectoryCreated' | 'onDirectoryCreating' | 'onErrorOccurred' | 'onFileUploaded' | 'onFileUploading' | 'onFocusedItemChanged' | 'onItemCopied' | 'onItemCopying' | 'onItemDeleted' | 'onItemDeleting' | 'onItemDownloading' | 'onItemMoved' | 'onItemMoving' | 'onItemRenamed' | 'onItemRenaming' | 'onSelectedFileOpened' | 'onSelectionChanged' | 'onToolbarItemClick'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
  * @docid dxFileManagerOptions.onContentReady
  * @type_function_param1 e:{ui/file_manager:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
- * @docid dxFileManagerOptions.onContextMenuItemClick
- * @type_function_param1 e:{ui/file_manager:ContextMenuItemClickEvent}
- */
-onContextMenuItemClick?: ((e: ContextMenuItemClickEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onContextMenuShowing
- * @type_function_param1 e:{ui/file_manager:ContextMenuShowingEvent}
- */
-onContextMenuShowing?: ((e: ContextMenuShowingEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onCurrentDirectoryChanged
- * @type_function_param1 e:{ui/file_manager:CurrentDirectoryChangedEvent}
- */
-onCurrentDirectoryChanged?: ((e: CurrentDirectoryChangedEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onDirectoryCreated
- * @type_function_param1 e:{ui/file_manager:DirectoryCreatedEvent}
- */
-onDirectoryCreated?: ((e: DirectoryCreatedEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onDirectoryCreating
- * @type_function_param1 e:{ui/file_manager:DirectoryCreatingEvent}
- */
-onDirectoryCreating?: ((e: DirectoryCreatingEvent) => void);
-/**
- * @skip
  * @docid dxFileManagerOptions.onDisposing
  * @type_function_param1 e:{ui/file_manager:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
- * @docid dxFileManagerOptions.onErrorOccurred
- * @type_function_param1 e:{ui/file_manager:ErrorOccurredEvent}
- */
-onErrorOccurred?: ((e: ErrorOccurredEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onFileUploaded
- * @type_function_param1 e:{ui/file_manager:FileUploadedEvent}
- */
-onFileUploaded?: ((e: FileUploadedEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onFileUploading
- * @type_function_param1 e:{ui/file_manager:FileUploadingEvent}
- */
-onFileUploading?: ((e: FileUploadingEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onFocusedItemChanged
- * @type_function_param1 e:{ui/file_manager:FocusedItemChangedEvent}
- */
-onFocusedItemChanged?: ((e: FocusedItemChangedEvent) => void);
-/**
- * @skip
  * @docid dxFileManagerOptions.onInitialized
  * @type_function_param1 e:{ui/file_manager:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
- * @docid dxFileManagerOptions.onItemCopied
- * @type_function_param1 e:{ui/file_manager:ItemCopiedEvent}
- */
-onItemCopied?: ((e: ItemCopiedEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onItemCopying
- * @type_function_param1 e:{ui/file_manager:ItemCopyingEvent}
- */
-onItemCopying?: ((e: ItemCopyingEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onItemDeleted
- * @type_function_param1 e:{ui/file_manager:ItemDeletedEvent}
- */
-onItemDeleted?: ((e: ItemDeletedEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onItemDeleting
- * @type_function_param1 e:{ui/file_manager:ItemDeletingEvent}
- */
-onItemDeleting?: ((e: ItemDeletingEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onItemDownloading
- * @type_function_param1 e:{ui/file_manager:ItemDownloadingEvent}
- */
-onItemDownloading?: ((e: ItemDownloadingEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onItemMoved
- * @type_function_param1 e:{ui/file_manager:ItemMovedEvent}
- */
-onItemMoved?: ((e: ItemMovedEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onItemMoving
- * @type_function_param1 e:{ui/file_manager:ItemMovingEvent}
- */
-onItemMoving?: ((e: ItemMovingEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onItemRenamed
- * @type_function_param1 e:{ui/file_manager:ItemRenamedEvent}
- */
-onItemRenamed?: ((e: ItemRenamedEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onItemRenaming
- * @type_function_param1 e:{ui/file_manager:ItemRenamingEvent}
- */
-onItemRenaming?: ((e: ItemRenamingEvent) => void);
-/**
- * @skip
  * @docid dxFileManagerOptions.onOptionChanged
  * @type_function_param1 e:{ui/file_manager:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onSelectedFileOpened
- * @type_function_param1 e:{ui/file_manager:SelectedFileOpenedEvent}
- */
-onSelectedFileOpened?: ((e: SelectedFileOpenedEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onSelectionChanged
- * @type_function_param1 e:{ui/file_manager:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-/**
- * @skip
- * @docid dxFileManagerOptions.onToolbarItemClick
- * @type_function_param1 e:{ui/file_manager:ToolbarItemClickEvent}
- */
-onToolbarItemClick?: ((e: ToolbarItemClickEvent) => void);
 };
 ///#ENDDEBUG

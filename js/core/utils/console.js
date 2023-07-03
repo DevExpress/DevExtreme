@@ -12,6 +12,7 @@ const getConsoleMethod = function(method) {
 };
 
 export const logger = {
+    log: getConsoleMethod('log'),
     info: getConsoleMethod('info'),
     warn: getConsoleMethod('warn'),
     error: getConsoleMethod('error')

@@ -65,3 +65,21 @@ export type Permutations<T extends string> = UnionLength<T> extends PermutedUnio
 export type AllPermutations<T extends string> = UnionLength<T> extends PermutedUnionLength ? {
   [K in T]: Permutations<T> | AllPermutations<Exclude<T, K>>
 }[T] : string;
+
+///#DEBUG
+
+export type EventProps<T> = Extract<keyof T, `on${any}`>;
+
+export type CheckedEvents<
+  TProps,
+  TEvents extends {
+    [K in Exclude<EventProps<TProps>, TExcludedEvents>]: (e: any) => void
+  } & {
+    [K in Exclude<keyof TEvents, keyof TProps>]: never
+  } & {
+    [K in TExcludedEvents]?: never
+  },
+  TExcludedEvents extends keyof TProps = never,
+> = TEvents;
+
+///#ENDDEBUG

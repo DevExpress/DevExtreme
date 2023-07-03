@@ -14,7 +14,7 @@ test('Image from device should be inserted', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
-  await t.click(htmlEditor.toolbar.getItem('image'));
+  await t.click(htmlEditor.toolbar.getItemByName('image'));
 
   await t
     .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
@@ -73,7 +73,7 @@ test('Image should be validated and inserted from device', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
-  await t.click(htmlEditor.toolbar.getItem('image'));
+  await t.click(htmlEditor.toolbar.getItemByName('image'));
 
   const { fileUploader } = htmlEditor.dialog.addImageFileForm;
 

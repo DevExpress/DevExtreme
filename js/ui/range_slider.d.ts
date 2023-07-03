@@ -15,22 +15,50 @@ import {
 
 import dxTrackBar from './track_bar';
 
-/** @public */
+/**
+ * @docid _ui_range_slider_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxRangeSlider>;
 
-/** @public */
+/**
+ * @docid _ui_range_slider_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxRangeSlider>;
 
-/** @public */
+/**
+ * @docid _ui_range_slider_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxRangeSlider>;
 
-/** @public */
+/**
+ * @docid _ui_range_slider_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxRangeSlider> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_range_slider_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxRangeSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo & {
+    /** @docid _ui_range_slider_ValueChangedEvent.start */
     readonly start?: number;
+    /** @docid _ui_range_slider_ValueChangedEvent.end */
     readonly end?: number;
+    /** @docid _ui_range_slider_ValueChangedEvent.value */
     readonly value?: Array<number>;
 };
 
@@ -54,10 +82,9 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     endName?: string;
     /**
      * @docid
-     * @type_function_param1_field component:dxRangeSlider
+     * @type_function_param1 e:{ui/range_slider:ValueChangedEvent}
      * @action
      * @default null
-     * @type_function_param1_field value:array<number>
      * @public
      */
     onValueChanged?: ((e: ValueChangedEvent) => void);
@@ -96,46 +123,36 @@ export type Properties = dxRangeSliderOptions;
 export type Options = dxRangeSliderOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onValueChanged'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
  * @docid dxRangeSliderOptions.onContentReady
  * @type_function_param1 e:{ui/range_slider:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxRangeSliderOptions.onDisposing
  * @type_function_param1 e:{ui/range_slider:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxRangeSliderOptions.onInitialized
  * @type_function_param1 e:{ui/range_slider:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxRangeSliderOptions.onOptionChanged
  * @type_function_param1 e:{ui/range_slider:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxRangeSliderOptions.onValueChanged
- * @type_function_param1 e:{ui/range_slider:ValueChangedEvent}
- */
-onValueChanged?: ((e: ValueChangedEvent) => void);
 };
 ///#ENDDEBUG

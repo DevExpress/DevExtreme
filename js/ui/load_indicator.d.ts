@@ -8,16 +8,36 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
-/** @public */
+/**
+ * @docid _ui_load_indicator_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxLoadIndicator>;
 
-/** @public */
+/**
+ * @docid _ui_load_indicator_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxLoadIndicator>;
 
-/** @public */
+/**
+ * @docid _ui_load_indicator_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxLoadIndicator>;
 
-/** @public */
+/**
+ * @docid _ui_load_indicator_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxLoadIndicator> & ChangedOptionInfo;
 
 /**
@@ -48,8 +68,8 @@ export type Properties = dxLoadIndicatorOptions;
 export type Options = dxLoadIndicatorOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
@@ -60,25 +80,21 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxLoadIndicatorOptions.onContentReady
  * @type_function_param1 e:{ui/load_indicator:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxLoadIndicatorOptions.onDisposing
  * @type_function_param1 e:{ui/load_indicator:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxLoadIndicatorOptions.onInitialized
  * @type_function_param1 e:{ui/load_indicator:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxLoadIndicatorOptions.onOptionChanged
  * @type_function_param1 e:{ui/load_indicator:OptionChangedEvent}
  */

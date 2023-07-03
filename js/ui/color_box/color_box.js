@@ -5,6 +5,7 @@ import ColorView from './color_view';
 import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import DropDownEditor from '../drop_down_editor/ui.drop_down_editor';
+import Guid from '../../core/guid';
 
 // STYLE colorBox
 
@@ -205,6 +206,7 @@ const ColorBox = DropDownEditor.inherit({
             applyValueMode: that.option('applyValueMode'),
             focusStateEnabled: that.option('focusStateEnabled'),
             stylingMode: this.option('stylingMode'),
+            ariaId: this._ariaId,
             onEnterKeyPressed: function({ event }) {
                 that._colorViewEnterKeyPressed = true;
                 if(that._colorView.option('value') !== that.option('value')) {
@@ -292,6 +294,10 @@ const ColorBox = DropDownEditor.inherit({
 
     _renderInput: function() {
         this.callBase();
+
+        this._ariaId = `dx-${new Guid()}`;
+
+        this.setAria('activedescendant', this._ariaId);
 
         this._input().addClass(COLOR_BOX_INPUT_CLASS);
         this._renderColorPreview();

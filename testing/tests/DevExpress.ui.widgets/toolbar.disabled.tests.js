@@ -86,67 +86,30 @@ const openDropDownMenuIfExist = (toolbar) => {
                     { toolbarDisabled: true, itemDisabled: true, itemOptionsDisabled: true, expectedDisabled: { toolbar: true, itemDisabled: true, itemOptionsDisabled: true } },
                     { toolbarDisabled: true, itemDisabled: true, itemOptionsDisabled: false, expectedDisabled: { toolbar: true, itemDisabled: true, itemOptionsDisabled: false } },
                     { toolbarDisabled: true, itemDisabled: true, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: true, itemDisabled: true, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: true, itemDisabled: true, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: true, itemDisabled: true, itemOptionsDisabled: undefined } },
                     { toolbarDisabled: true, itemDisabled: false, itemOptionsDisabled: true, expectedDisabled: { toolbar: true, itemDisabled: false, itemOptionsDisabled: true } },
                     { toolbarDisabled: true, itemDisabled: false, itemOptionsDisabled: false, expectedDisabled: { toolbar: true, itemDisabled: false, itemOptionsDisabled: false } },
                     { toolbarDisabled: true, itemDisabled: false, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: true, itemDisabled: false, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: true, itemDisabled: false, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: true, itemDisabled: false, itemOptionsDisabled: undefined } },
                     { toolbarDisabled: true, itemDisabled: undefined, itemOptionsDisabled: true, expectedDisabled: { toolbar: true, itemDisabled: undefined, itemOptionsDisabled: true } },
                     { toolbarDisabled: true, itemDisabled: undefined, itemOptionsDisabled: false, expectedDisabled: { toolbar: true, itemDisabled: undefined, itemOptionsDisabled: false } },
                     { toolbarDisabled: true, itemDisabled: undefined, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: true, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: true, itemDisabled: undefined, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: true, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: true, itemDisabled: 'not declared', itemOptionsDisabled: true, expectedDisabled: { toolbar: true, itemDisabled: undefined, itemOptionsDisabled: true } },
-                    { toolbarDisabled: true, itemDisabled: 'not declared', itemOptionsDisabled: false, expectedDisabled: { toolbar: true, itemDisabled: undefined, itemOptionsDisabled: false } },
-                    { toolbarDisabled: true, itemDisabled: 'not declared', itemOptionsDisabled: undefined, expectedDisabled: { toolbar: true, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: true, itemDisabled: 'not declared', itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: true, itemDisabled: undefined, itemOptionsDisabled: undefined } },
                     { toolbarDisabled: false, itemDisabled: true, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, itemDisabled: true, itemOptionsDisabled: true } },
                     { toolbarDisabled: false, itemDisabled: true, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, itemDisabled: true, itemOptionsDisabled: false } },
                     { toolbarDisabled: false, itemDisabled: true, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, itemDisabled: true, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: false, itemDisabled: true, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, itemDisabled: true, itemOptionsDisabled: undefined } },
                     { toolbarDisabled: false, itemDisabled: false, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, itemDisabled: false, itemOptionsDisabled: true } },
                     { toolbarDisabled: false, itemDisabled: false, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, itemDisabled: false, itemOptionsDisabled: false } },
                     { toolbarDisabled: false, itemDisabled: false, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, itemDisabled: false, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: false, itemDisabled: false, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, itemDisabled: false, itemOptionsDisabled: undefined } },
                     { toolbarDisabled: false, itemDisabled: undefined, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: true } },
                     { toolbarDisabled: false, itemDisabled: undefined, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: false } },
                     { toolbarDisabled: false, itemDisabled: undefined, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: false, itemDisabled: undefined, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: false, itemDisabled: 'not declared', itemOptionsDisabled: true, expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: true } },
-                    { toolbarDisabled: false, itemDisabled: 'not declared', itemOptionsDisabled: false, expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: false } },
-                    { toolbarDisabled: false, itemDisabled: 'not declared', itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: false, itemDisabled: 'not declared', itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
                     { toolbarDisabled: undefined, itemDisabled: true, itemOptionsDisabled: true, expectedDisabled: { toolbar: undefined, itemDisabled: true, itemOptionsDisabled: true } },
                     { toolbarDisabled: undefined, itemDisabled: true, itemOptionsDisabled: false, expectedDisabled: { toolbar: undefined, itemDisabled: true, itemOptionsDisabled: false } },
                     { toolbarDisabled: undefined, itemDisabled: true, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: undefined, itemDisabled: true, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: undefined, itemDisabled: true, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: undefined, itemDisabled: true, itemOptionsDisabled: undefined } },
                     { toolbarDisabled: undefined, itemDisabled: false, itemOptionsDisabled: true, expectedDisabled: { toolbar: undefined, itemDisabled: false, itemOptionsDisabled: true } },
                     { toolbarDisabled: undefined, itemDisabled: false, itemOptionsDisabled: false, expectedDisabled: { toolbar: undefined, itemDisabled: false, itemOptionsDisabled: false } },
-                    { toolbarDisabled: undefined, itemDisabled: false, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: undefined, item: undefined, itemDisabled: false, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: undefined, itemDisabled: false, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: undefined, itemDisabled: false, itemOptionsDisabled: undefined } },
+                    { toolbarDisabled: undefined, itemDisabled: false, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: undefined, itemDisabled: false, itemOptionsDisabled: undefined } },
                     { toolbarDisabled: undefined, itemDisabled: undefined, itemOptionsDisabled: true, expectedDisabled: { toolbar: undefined, itemDisabled: undefined, itemOptionsDisabled: true } },
                     { toolbarDisabled: undefined, itemDisabled: undefined, itemOptionsDisabled: false, expectedDisabled: { toolbar: undefined, itemDisabled: undefined, itemOptionsDisabled: false } },
-                    { toolbarDisabled: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: undefined, item: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: undefined, itemDisabled: undefined, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: undefined, itemDisabled: 'not declared', itemOptionsDisabled: true, expectedDisabled: { toolbar: undefined, itemDisabled: undefined, itemOptionsDisabled: true } },
-                    { toolbarDisabled: undefined, itemDisabled: 'not declared', itemOptionsDisabled: false, expectedDisabled: { toolbar: undefined, itemDisabled: undefined, itemOptionsDisabled: false } },
-                    { toolbarDisabled: undefined, itemDisabled: 'not declared', itemOptionsDisabled: undefined, expectedDisabled: { toolbar: undefined, item: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: undefined, itemDisabled: 'not declared', itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: 'not declared', itemDisabled: true, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, itemDisabled: true, itemOptionsDisabled: true } },
-                    { toolbarDisabled: 'not declared', itemDisabled: true, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, itemDisabled: true, itemOptionsDisabled: false } },
-                    { toolbarDisabled: 'not declared', itemDisabled: true, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, itemDisabled: true, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: 'not declared', itemDisabled: true, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, itemDisabled: true, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: 'not declared', itemDisabled: false, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, itemDisabled: false, itemOptionsDisabled: true } },
-                    { toolbarDisabled: 'not declared', itemDisabled: false, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, itemDisabled: false, itemOptionsDisabled: false } },
-                    { toolbarDisabled: 'not declared', itemDisabled: false, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, item: undefined, itemDisabled: false, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: 'not declared', itemDisabled: false, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, itemDisabled: false, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: 'not declared', itemDisabled: undefined, itemOptionsDisabled: true, expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: true } },
-                    { toolbarDisabled: 'not declared', itemDisabled: undefined, itemOptionsDisabled: false, expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: false } },
-                    { toolbarDisabled: 'not declared', itemDisabled: undefined, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, item: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: 'not declared', itemDisabled: undefined, itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: 'not declared', itemDisabled: 'not declared', itemOptionsDisabled: true, expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: true } },
-                    { toolbarDisabled: 'not declared', itemDisabled: 'not declared', itemOptionsDisabled: false, expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: false } },
-                    { toolbarDisabled: 'not declared', itemDisabled: 'not declared', itemOptionsDisabled: undefined, expectedDisabled: { toolbar: false, item: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined } },
-                    { toolbarDisabled: 'not declared', itemDisabled: 'not declared', itemOptionsDisabled: 'not declared', expectedDisabled: { toolbar: false, itemDisabled: undefined, itemOptionsDisabled: undefined } }
+                    { toolbarDisabled: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined, expectedDisabled: { toolbar: undefined, itemDisabled: undefined, itemOptionsDisabled: undefined } },
                 ].filter((config) => (config.toolbarDisabled === toolbarDisabled && config.itemDisabled === itemDisabled && config.itemOptionsDisabled === itemOptionsDisabled))[0].expectedDisabled;
             };
 
@@ -199,10 +162,9 @@ const openDropDownMenuIfExist = (toolbar) => {
                 }
             };
 
-
-            [true, false, 'not declared'].forEach((isToolbarDisabled) => {
-                [true, false, 'not declared'].forEach((isItemOptionsDisabled) => {
-                    [true, false, 'not declared'].forEach((isItemDisabled) => {
+            [true, false].forEach((isToolbarDisabled) => {
+                [true, false].forEach((isItemOptionsDisabled) => {
+                    [true, false].forEach((isItemDisabled) => {
                         const initialTestConfig = `Toolbar.disabled=${isToolbarDisabled}, items[].disabled=${isItemDisabled}, items[].options.disabled=${isItemOptionsDisabled}`;
 
                         const getInitialToolbarOptions = () => {
@@ -221,15 +183,9 @@ const openDropDownMenuIfExist = (toolbar) => {
                                 initialToolbarOptions.items[0].options.onClick = buttonClickHandler;
                             }
 
-                            if(isToolbarDisabled !== 'not declared') {
-                                initialToolbarOptions.disabled = isToolbarDisabled;
-                            }
-                            if(isItemDisabled !== 'not declared') {
-                                initialToolbarOptions.items[0].disabled = isItemDisabled;
-                            }
-                            if(isItemOptionsDisabled !== 'not declared') {
-                                initialToolbarOptions.items[0].options.disabled = isItemOptionsDisabled;
-                            }
+                            initialToolbarOptions.disabled = isToolbarDisabled;
+                            initialToolbarOptions.items[0].disabled = isItemDisabled;
+                            initialToolbarOptions.items[0].options.disabled = isItemOptionsDisabled;
 
                             return initialToolbarOptions;
                         };

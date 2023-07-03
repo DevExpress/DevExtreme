@@ -117,19 +117,10 @@ export default {
         return searchMode === 'equals' ? '=' : searchMode;
     },
 
-    _cleanAria: function($target) {
-        this.setAria({
-            'role': null,
-            'activedescendant': null
-        }, $target);
-        $target.attr('tabIndex', null);
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case 'searchEnabled':
             case 'searchEditorOptions':
-                this._cleanAria(this.option('searchEnabled') ? this.$element() : this._itemContainer());
                 this._invalidate();
                 break;
             case 'searchExpr':
@@ -160,6 +151,22 @@ export default {
         }
 
         this.callBase();
+    },
+
+    _cleanAria: function() {
+        const $element = this.$element();
+
+        this.setAria({
+            'role': null,
+            'activedescendant': null
+        }, $element);
+
+        $element.attr('tabIndex', null);
+    },
+
+    _clean() {
+        this.callBase();
+        this._cleanAria();
     },
 
     _refresh: function() {

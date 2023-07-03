@@ -65,27 +65,63 @@ export type LabelLocation = 'left' | 'right' | 'top';
 /** @public */
 export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
 
-/** @public */
+/**
+ * @docid _ui_form_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxForm>;
 
-/** @public */
+/**
+ * @docid _ui_form_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxForm>;
 
-/** @public */
+/**
+ * @docid _ui_form_EditorEnterKeyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type EditorEnterKeyEvent = EventInfo<dxForm> & {
+    /** @docid _ui_form_EditorEnterKeyEvent.dataField */
     readonly dataField?: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_form_FieldDataChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type FieldDataChangedEvent = EventInfo<dxForm> & {
+    /** @docid _ui_form_FieldDataChangedEvent.dataField */
     readonly dataField?: string;
+    /**
+     * @docid _ui_form_FieldDataChangedEvent.value
+     * @type object
+     */
     readonly value?: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_form_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxForm>;
 
-/** @public */
+/**
+ * @docid _ui_form_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxForm> & ChangedOptionInfo;
 
 /** @public */
@@ -186,8 +222,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxForm
+     * @type_function_param1 e:{ui/form:EditorEnterKeyEvent}
      * @action
      * @public
      */
@@ -195,9 +230,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field value:object
-     * @type_function_param1_field component:dxForm
+     * @type_function_param1 e:{ui/form:FieldDataChangedEvent}
      * @action
      * @public
      */
@@ -812,49 +845,33 @@ export type Options = dxFormOptions;
 // TODO: temporary commented out to fix jquery generation error in R1
 
 // ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-// type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+// import { CheckedEvents } from '../core';
 
 // type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+// type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onEditorEnterKey' | 'onFieldDataChanged'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
  * @docid dxFormOptions.onContentReady
  * @type_function_param1 e:{ui/form:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxFormOptions.onDisposing
  * @type_function_param1 e:{ui/form:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
- * @docid dxFormOptions.onEditorEnterKey
- * @type_function_param1 e:{ui/form:EditorEnterKeyEvent}
- */
-onEditorEnterKey?: ((e: EditorEnterKeyEvent) => void);
-/**
- * @skip
- * @docid dxFormOptions.onFieldDataChanged
- * @type_function_param1 e:{ui/form:FieldDataChangedEvent}
- */
-onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
-/**
- * @skip
  * @docid dxFormOptions.onInitialized
  * @type_function_param1 e:{ui/form:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxFormOptions.onOptionChanged
  * @type_function_param1 e:{ui/form:OptionChangedEvent}
  */

@@ -20,73 +20,165 @@ import {
   ValueChangedInfo,
 } from './editor/editor';
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_ChangeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ChangeEvent = NativeEventInfo<dxDateRangeBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_ClosedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ClosedEvent = EventInfo<dxDateRangeBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxDateRangeBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_CopyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CopyEvent = NativeEventInfo<dxDateRangeBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_CutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CutEvent = NativeEventInfo<dxDateRangeBox, ClipboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxDateRangeBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_EnterKeyEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type EnterKeyEvent = NativeEventInfo<dxDateRangeBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxDateRangeBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxDateRangeBox, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxDateRangeBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_InputEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type InputEvent = NativeEventInfo<dxDateRangeBox, UIEvent & { target: HTMLInputElement }>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_KeyDownEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyDownEvent = NativeEventInfo<dxDateRangeBox, KeyboardEvent>;
 
 /** @public */
 export type KeyPressEvent = NativeEventInfo<dxDateRangeBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_KeyUpEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type KeyUpEvent = NativeEventInfo<dxDateRangeBox, KeyboardEvent>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_OpenedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type OpenedEvent = EventInfo<dxDateRangeBox>;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxDateRangeBox> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_date_range_box_PasteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type PasteEvent = NativeEventInfo<dxDateRangeBox, ClipboardEvent>;
 
-/** @public */
-export type ValueChangedEvent =
-    NativeEventInfo<dxDateRangeBox, KeyboardEvent | MouseEvent | PointerEvent | Event>
-    & ValueChangedInfo;
+/**
+ * @docid _ui_date_range_box_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
+export type ValueChangedEvent = NativeEventInfo<dxDateRangeBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
  * @public
+ * @docid dxDateRangeBoxOptions
+ * @type object
  */
-export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr | label | maxLength | name | placeholder | text'> & {
+export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 'label' | 'maxLength' | 'name' | 'placeholder' | 'text'> & {
+    /**
+     * @docid dxDateRangeBoxOptions.disableOutOfRangeSelection
+     * @default false
+     * @public
+     */
+    disableOutOfRangeSelection?: boolean;
     /**
      * @docid dxDateRangeBoxOptions.endDate
      * @default null
      * @public
+     * @fires dxDateRangeBoxOptions.onOptionChanged
      */
     endDate?: Date | number | string;
     /**
@@ -155,6 +247,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr | l
      * @docid dxDateRangeBoxOptions.startDate
      * @default null
      * @public
+     * @fires dxDateRangeBoxOptions.onOptionChanged
      */
     startDate?: Date | number | string;
     /**
@@ -195,7 +288,7 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr | l
     startDateText?: string;
     /**
      * @docid dxDateRangeBoxOptions.value
-     * @default [null, null]
+     * @default [null,null]
      * @public
      */
     value?: Array<Date | number | string>;
@@ -230,8 +323,8 @@ export default class dxDateRangeBox extends DateRangeBoxBase {
 }
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
@@ -240,103 +333,86 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>
 */
 type Events = {
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onChange
  * @type_function_param1 e:{ui/date_range_box:ChangeEvent}
  */
 onChange?: ((e: ChangeEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onClosed
  * @type_function_param1 e:{ui/date_range_box:ClosedEvent}
  */
 onClosed?: ((e: ClosedEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onContentReady
  * @type_function_param1 e:{ui/date_range_box:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onCopy
  * @type_function_param1 e:{ui/date_range_box:CopyEvent}
  */
 onCopy?: ((e: CopyEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onCut
  * @type_function_param1 e:{ui/date_range_box:CutEvent}
  */
 onCut?: ((e: CutEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onDisposing
  * @type_function_param1 e:{ui/date_range_box:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onEnterKey
  * @type_function_param1 e:{ui/date_range_box:EnterKeyEvent}
  */
 onEnterKey?: ((e: EnterKeyEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onFocusIn
  * @type_function_param1 e:{ui/date_range_box:FocusInEvent}
  */
 onFocusIn?: ((e: FocusInEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onFocusOut
  * @type_function_param1 e:{ui/date_range_box:FocusOutEvent}
  */
 onFocusOut?: ((e: FocusOutEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onInitialized
  * @type_function_param1 e:{ui/date_range_box:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onInput
  * @type_function_param1 e:{ui/date_range_box:InputEvent}
  */
 onInput?: ((e: InputEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onKeyDown
  * @type_function_param1 e:{ui/date_range_box:KeyDownEvent}
  */
 onKeyDown?: ((e: KeyDownEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onKeyUp
  * @type_function_param1 e:{ui/date_range_box:KeyUpEvent}
  */
 onKeyUp?: ((e: KeyUpEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onOpened
  * @type_function_param1 e:{ui/date_range_box:OpenedEvent}
  */
 onOpened?: ((e: OpenedEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onOptionChanged
  * @type_function_param1 e:{ui/date_range_box:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onPaste
  * @type_function_param1 e:{ui/date_range_box:PasteEvent}
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @skip
  * @docid dxDateRangeBoxOptions.onValueChanged
  * @type_function_param1 e:{ui/date_range_box:ValueChangedEvent}
  */

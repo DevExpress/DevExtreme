@@ -13,8 +13,14 @@ import {
     ValidationStatus,
 } from '../../common';
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface ValueChangedInfo {
+    /** @docid */
     readonly previousValue?: any;
+    /** @docid */
     readonly value?: any;
 }
 

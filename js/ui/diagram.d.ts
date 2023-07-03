@@ -40,51 +40,134 @@ export type DiagramShapeType = 'text' | 'rectangle' | 'ellipse' | 'cross' | 'tri
 export type DiagramToolboxDisplayMode = 'icons' | 'texts';
 export type DiagramUnits = 'in' | 'cm' | 'px';
 
-/** @public */
+/**
+ * @docid _ui_diagram_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxDiagram>;
 
-/** @public */
+/**
+ * @docid _ui_diagram_CustomCommandEvent
+ * @public
+ * @type object
+ */
 export type CustomCommandEvent = {
+    /**
+     * @docid _ui_diagram_CustomCommandEvent.component
+     * @type this
+     * @default Widget
+     */
     readonly component: dxDiagram;
+    /** @docid _ui_diagram_CustomCommandEvent.element */
     readonly element: DxElement;
+    /** @docid _ui_diagram_CustomCommandEvent.name */
     readonly name: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_diagram_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxDiagram>;
 
-/** @public */
+/**
+ * @docid _ui_diagram_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxDiagram>;
 
-/** @public */
+/**
+ * @docid _ui_diagram_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ItemClickEvent = EventInfo<dxDiagram> & {
+    /**
+     * @docid _ui_diagram_ItemClickEvent.item
+     * @type dxDiagramItem
+     */
     readonly item: Item;
 };
 
-/** @public */
+/**
+ * @docid _ui_diagram_ItemDblClickEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ItemDblClickEvent = EventInfo<dxDiagram> & {
+    /**
+     * @docid _ui_diagram_ItemDblClickEvent.item
+     * @type dxDiagramItem
+     */
     readonly item: Item;
 };
 
-/** @public */
+/**
+ * @docid _ui_diagram_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxDiagram> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_diagram_RequestEditOperationEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type RequestEditOperationEvent = EventInfo<dxDiagram> & {
+    /**
+     * @docid _ui_diagram_RequestEditOperationEvent.operation
+     * @type Enums.DiagramModelOperation
+     */
     readonly operation: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
+    /** @docid _ui_diagram_RequestEditOperationEvent.args */
     readonly args: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs | dxDiagramMoveShapeArgs;
+    /**
+     * @docid _ui_diagram_RequestEditOperationEvent.reason
+     * @type Enums.DiagramRequestEditOperationReason
+     */
     readonly reason: DiagramRequestEditOperationReason;
+    /** @docid _ui_diagram_RequestEditOperationEvent.allowed */
     allowed?: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_diagram_RequestLayoutUpdateEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type RequestLayoutUpdateEvent = EventInfo<dxDiagram> & {
+    /**
+     * @docid _ui_diagram_RequestLayoutUpdateEvent.changes
+     * @type Array<any>
+     */
     readonly changes: any[];
+    /** @docid _ui_diagram_RequestLayoutUpdateEvent.allowed */
     allowed?: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_diagram_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type SelectionChangedEvent = EventInfo<dxDiagram> & {
+    /**
+     * @docid _ui_diagram_SelectionChangedEvent.items
+     * @type Array<dxDiagramItem>
+     */
     readonly items: Array<Item>;
 };
 
@@ -164,8 +247,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     };
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
+     * @type_function_param1 e:{ui/diagram:CustomCommandEvent}
      * @action
      * @public
      */
@@ -708,9 +790,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDiagram
-     * @type_function_param1_field item:dxDiagramItem
+     * @type_function_param1 e:{ui/diagram:ItemClickEvent}
      * @action
      * @public
      */
@@ -718,9 +798,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDiagram
-     * @type_function_param1_field item:dxDiagramItem
+     * @type_function_param1 e:{ui/diagram:ItemDblClickEvent}
      * @action
      * @public
      */
@@ -728,9 +806,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDiagram
-     * @type_function_param1_field items:Array<dxDiagramItem>
+     * @type_function_param1 e:{ui/diagram:SelectionChangedEvent}
      * @action
      * @public
      */
@@ -738,10 +814,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDiagram
-     * @type_function_param1_field operation:Enums.DiagramModelOperation
-     * @type_function_param1_field reason:Enums.DiagramRequestEditOperationReason
+     * @type_function_param1 e:{ui/diagram:RequestEditOperationEvent}
      * @action
      * @public
      */
@@ -749,9 +822,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDiagram
-     * @type_function_param1_field changes:Array<any>
+     * @type_function_param1 e:{ui/diagram:RequestLayoutUpdateEvent}
      * @action
      * @public
      */
@@ -1587,76 +1658,36 @@ export type Properties = dxDiagramOptions;
 export type Options = dxDiagramOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCustomCommand' | 'onItemClick' | 'onItemDblClick' | 'onRequestEditOperation' | 'onRequestLayoutUpdate' | 'onSelectionChanged'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
  * @docid dxDiagramOptions.onContentReady
  * @type_function_param1 e:{ui/diagram:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
- * @docid dxDiagramOptions.onCustomCommand
- * @type_function_param1 e:{ui/diagram:CustomCommandEvent}
- */
-onCustomCommand?: ((e: CustomCommandEvent) => void);
-/**
- * @skip
  * @docid dxDiagramOptions.onDisposing
  * @type_function_param1 e:{ui/diagram:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDiagramOptions.onInitialized
  * @type_function_param1 e:{ui/diagram:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
- * @docid dxDiagramOptions.onItemClick
- * @type_function_param1 e:{ui/diagram:ItemClickEvent}
- */
-onItemClick?: ((e: ItemClickEvent) => void);
-/**
- * @skip
- * @docid dxDiagramOptions.onItemDblClick
- * @type_function_param1 e:{ui/diagram:ItemDblClickEvent}
- */
-onItemDblClick?: ((e: ItemDblClickEvent) => void);
-/**
- * @skip
  * @docid dxDiagramOptions.onOptionChanged
  * @type_function_param1 e:{ui/diagram:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxDiagramOptions.onRequestEditOperation
- * @type_function_param1 e:{ui/diagram:RequestEditOperationEvent}
- */
-onRequestEditOperation?: ((e: RequestEditOperationEvent) => void);
-/**
- * @skip
- * @docid dxDiagramOptions.onRequestLayoutUpdate
- * @type_function_param1 e:{ui/diagram:RequestLayoutUpdateEvent}
- */
-onRequestLayoutUpdate?: ((e: RequestLayoutUpdateEvent) => void);
-/**
- * @skip
- * @docid dxDiagramOptions.onSelectionChanged
- * @type_function_param1 e:{ui/diagram:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
 ///#ENDDEBUG

@@ -34,10 +34,24 @@ import {
 
 import dxScrollable from './scroll_view/ui.scrollable';
 
-interface ItemInfo<TKey = any> {
+/**
+ * @docid _ui_tree_view_ItemInfo
+ * @hidden
+ */
+export interface ItemInfo<TKey = any> {
+    /**
+     * @docid _ui_tree_view_ItemInfo.itemData
+     * @type object
+     */
     readonly itemData?: Item;
+    /** @docid _ui_tree_view_ItemInfo.itemElement */
     readonly itemElement?: DxElement;
+    /** @docid _ui_tree_view_ItemInfo.itemIndex */
     readonly itemIndex?: number;
+    /**
+     * @docid _ui_tree_view_ItemInfo.node
+     * @type dxTreeViewNode
+     */
     readonly node?: Node<TKey>;
 }
 
@@ -52,45 +66,111 @@ export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
 /** @public */
 export type TreeViewExpandEvent = 'dblclick' | 'click';
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent<TKey = any> = InitializedEventInfo<dxTreeView<TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
+ */
 export type ItemClickEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemCollapsedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
+ */
 export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemContextMenuEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
+ */
 export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemExpandedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
+ */
 export type ItemExpandedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemHoldEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,_ui_tree_view_ItemInfo
+ */
 export type ItemHoldEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemRenderedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_ui_tree_view_ItemInfo
+ */
 export type ItemRenderedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_ItemSelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_ui_tree_view_ItemInfo
+ */
 export type ItemSelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_tree_view_SelectAllValueChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type SelectAllValueChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & {
+    /** @docid _ui_tree_view_SelectAllValueChangedEvent.value */
     readonly value?: boolean | undefined;
 };
 
-/** @public */
+/**
+ * @docid _ui_tree_view_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type SelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
 /**
@@ -167,11 +247,7 @@ export interface dxTreeViewOptions<TKey = any>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeView
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field node:dxTreeViewNode
+     * @type_function_param1 e:{ui/tree_view:ItemClickEvent}
 
      * @action
      * @public
@@ -180,11 +256,7 @@ export interface dxTreeViewOptions<TKey = any>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeView
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field node:dxTreeViewNode
+     * @type_function_param1 e:{ui/tree_view:ItemCollapsedEvent}
      * @action
      * @public
      */
@@ -192,11 +264,7 @@ export interface dxTreeViewOptions<TKey = any>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field node:dxTreeViewNode
-     * @type_function_param1_field component:dxTreeView
+     * @type_function_param1 e:{ui/tree_view:ItemContextMenuEvent}
      * @action
      * @public
      */
@@ -204,11 +272,7 @@ export interface dxTreeViewOptions<TKey = any>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeView
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field node:dxTreeViewNode
+     * @type_function_param1 e:{ui/tree_view:ItemExpandedEvent}
      * @action
      * @public
      */
@@ -216,11 +280,7 @@ export interface dxTreeViewOptions<TKey = any>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeView
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field node:dxTreeViewNode
+     * @type_function_param1 e:{ui/tree_view:ItemHoldEvent}
      * @action
      * @public
      */
@@ -228,10 +288,7 @@ export interface dxTreeViewOptions<TKey = any>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field node:dxTreeViewNode
-     * @type_function_param1_field component:dxTreeView
+     * @type_function_param1 e:{ui/tree_view:ItemRenderedEvent}
      * @action
      * @public
      */
@@ -239,10 +296,7 @@ export interface dxTreeViewOptions<TKey = any>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field node:dxTreeViewNode
-     * @type_function_param1_field component:dxTreeView
-     * @type_function_param1_field itemData:object
+     * @type_function_param1 e:{ui/tree_view:ItemSelectionChangedEvent}
      * @action
      * @public
      */
@@ -250,8 +304,7 @@ export interface dxTreeViewOptions<TKey = any>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeView
+     * @type_function_param1 e:{ui/tree_view:SelectAllValueChangedEvent}
      * @action
      * @public
      */
@@ -259,8 +312,7 @@ export interface dxTreeViewOptions<TKey = any>
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeView
+     * @type_function_param1 e:{ui/tree_view:SelectionChangedEvent}
      * @action
      * @public
      * @override
@@ -661,94 +713,36 @@ export type Properties<TKey = any> = dxTreeViewOptions<TKey>;
 export type Options<TKey = any> = Properties<TKey>;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' | 'onItemDeleted' | 'onItemDeleting' | 'onItemReordered'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onItemClick' | 'onItemCollapsed' | 'onItemContextMenu' | 'onItemExpanded' | 'onItemHold' | 'onItemRendered' | 'onItemSelectionChanged' | 'onSelectAllValueChanged' | 'onSelectionChanged'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
  * @docid dxTreeViewOptions.onContentReady
  * @type_function_param1 e:{ui/tree_view:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxTreeViewOptions.onDisposing
  * @type_function_param1 e:{ui/tree_view:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxTreeViewOptions.onInitialized
  * @type_function_param1 e:{ui/tree_view:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
- * @docid dxTreeViewOptions.onItemClick
- * @type_function_param1 e:{ui/tree_view:ItemClickEvent}
- */
-onItemClick?: ((e: ItemClickEvent) => void);
-/**
- * @skip
- * @docid dxTreeViewOptions.onItemCollapsed
- * @type_function_param1 e:{ui/tree_view:ItemCollapsedEvent}
- */
-onItemCollapsed?: ((e: ItemCollapsedEvent) => void);
-/**
- * @skip
- * @docid dxTreeViewOptions.onItemContextMenu
- * @type_function_param1 e:{ui/tree_view:ItemContextMenuEvent}
- */
-onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
-/**
- * @skip
- * @docid dxTreeViewOptions.onItemExpanded
- * @type_function_param1 e:{ui/tree_view:ItemExpandedEvent}
- */
-onItemExpanded?: ((e: ItemExpandedEvent) => void);
-/**
- * @skip
- * @docid dxTreeViewOptions.onItemHold
- * @type_function_param1 e:{ui/tree_view:ItemHoldEvent}
- */
-onItemHold?: ((e: ItemHoldEvent) => void);
-/**
- * @skip
- * @docid dxTreeViewOptions.onItemRendered
- * @type_function_param1 e:{ui/tree_view:ItemRenderedEvent}
- */
-onItemRendered?: ((e: ItemRenderedEvent) => void);
-/**
- * @skip
- * @docid dxTreeViewOptions.onItemSelectionChanged
- * @type_function_param1 e:{ui/tree_view:ItemSelectionChangedEvent}
- */
-onItemSelectionChanged?: ((e: ItemSelectionChangedEvent) => void);
-/**
- * @skip
  * @docid dxTreeViewOptions.onOptionChanged
  * @type_function_param1 e:{ui/tree_view:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxTreeViewOptions.onSelectAllValueChanged
- * @type_function_param1 e:{ui/tree_view:SelectAllValueChangedEvent}
- */
-onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
-/**
- * @skip
- * @docid dxTreeViewOptions.onSelectionChanged
- * @type_function_param1 e:{ui/tree_view:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
 ///#ENDDEBUG

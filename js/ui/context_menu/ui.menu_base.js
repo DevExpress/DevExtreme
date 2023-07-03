@@ -166,19 +166,6 @@ class MenuBase extends HierarchicalCollectionWidget {
             space: selectItem,
             pageUp: noop,
             pageDown: noop,
-            enter: function(e) {
-                const $itemElement = $(this.option('focusedElement'));
-                if(!$itemElement.length) {
-                    return;
-                }
-                this._enterKeyHandler(e);
-
-                const itemData = this._getItemData($itemElement);
-                if(itemData.url) {
-                    const link = $itemElement.get(0).getElementsByClassName(DX_ITEM_URL_CLASS)[0];
-                    link?.click();
-                }
-            },
         });
     }
 
@@ -562,8 +549,19 @@ class MenuBase extends HierarchicalCollectionWidget {
         if(e._skipHandling) return;
 
         const itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));
-        this._itemDXEventHandler(e, 'onItemClick', {}, { afterExecute: itemClickActionHandler.bind(this) });
+        this._itemDXEventHandler(e, 'onItemClick', {}, {
+            beforeExecute: this._itemClick,
+            afterExecute: itemClickActionHandler.bind(this)
+        });
         e._skipHandling = true;
+    }
+
+    _itemClick(actionArgs) {
+        const args = actionArgs.args[0];
+        const link = args.event.target.getElementsByClassName(DX_ITEM_URL_CLASS)[0];
+        if(args.itemData.url && link) {
+            link.click();
+        }
     }
 
     _updateSubmenuVisibilityOnClick(actionArgs) {

@@ -19,12 +19,8 @@ window.internals = {
     OPENED_NODE_CONTAINER_CLASS: 'dx-treeview-node-container-opened',
     NODE_CLASS: 'dx-treeview-node',
     ITEM_CLASS: 'dx-treeview-item',
-    ITEM_WITH_CHECKBOX_CLASS: 'dx-treeview-item-with-checkbox',
-    IS_LEAF: 'dx-treeview-node-is-leaf',
     TOGGLE_ITEM_VISIBILITY_CLASS: 'dx-treeview-toggle-item-visibility',
     TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened',
-    CUSTOM_COLLAPSE_ICON_CLASS: 'dx-treeview-custom-collapse-icon',
-    CUSTOM_EXPAND_ICON_CLASS: 'dx-treeview-custom-expand-icon'
 };
 
 window.DATA = (function() {
@@ -195,10 +191,8 @@ import 'generic_light.css!';
 
 import './treeViewParts/accessibility.js';
 import './treeViewParts/animation.js';
-import './treeViewParts/checkboxes.js';
 import './treeViewParts/events.js';
 import './treeViewParts/expresions.js';
-import './treeViewParts/expandedItems.js';
 import './treeViewParts/focusing.js';
 import './treeViewParts/initialization.js';
 import './treeViewParts/keyboardNavigation.js';
@@ -206,7 +200,6 @@ import './treeViewParts/lazyRendering.js';
 import './treeViewParts/optionChanged.js';
 import './treeViewParts/regression.js';
 import './treeViewParts/rendering.js';
-import './treeViewParts/scrolling.tests.js';
 import './treeViewParts/selection.js';
 import './treeViewParts/searching.js';
 import './treeViewParts/selectAllMode.js';

@@ -28,13 +28,28 @@ export type PanelLocation = 'left' | 'right' | 'top' | 'bottom' | 'before' | 'af
 /** @public */
 export type RevealMode = 'slide' | 'expand';
 
-/** @public */
+/**
+ * @docid _ui_drawer_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxDrawer>;
 
-/** @public */
+/**
+ * @docid _ui_drawer_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxDrawer>;
 
-/** @public */
+/**
+ * @docid _ui_drawer_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxDrawer> & ChangedOptionInfo;
 
 /**
@@ -156,8 +171,8 @@ export type Properties = dxDrawerOptions;
 export type Options = dxDrawerOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut'>;
 
@@ -168,19 +183,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 */
 type Events = {
 /**
- * @skip
  * @docid dxDrawerOptions.onDisposing
  * @type_function_param1 e:{ui/drawer:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxDrawerOptions.onInitialized
  * @type_function_param1 e:{ui/drawer:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxDrawerOptions.onOptionChanged
  * @type_function_param1 e:{ui/drawer:OptionChangedEvent}
  */

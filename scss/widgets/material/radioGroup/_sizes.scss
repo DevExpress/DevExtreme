@@ -2,13 +2,13 @@
 
 // adduse
 
-$material-radio-button-margin: null !default;
+$material-radio-button-vertical-margin: null !default;
 
 @if $size == "default" {
-  $material-radio-button-margin: 12px !default;
+  $material-radio-button-vertical-margin: 12px !default;
 }
 
 @else if $size == "compact" {
-  $material-radio-button-margin: 6px !default;
+  $material-radio-button-vertical-margin: 6px !default;
 }
 

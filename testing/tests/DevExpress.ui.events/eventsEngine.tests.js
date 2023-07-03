@@ -200,7 +200,7 @@ QUnit.test('\'focusin\' and \'focus\' events call element.focus, \'focusout\' an
 
 QUnit.test('focusin event bubbling', function(assert) {
     const textBox = document.createElement('input');
-    const container = document.createElement(container);
+    const container = document.createElement('div');
     const handlerSpy = sinon.spy();
 
     container.appendChild(textBox);

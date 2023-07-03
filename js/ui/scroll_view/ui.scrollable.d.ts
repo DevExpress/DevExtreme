@@ -19,11 +19,22 @@ import {
     ScrollDirection,
 } from '../../common';
 
+/**
+ * @docid
+ * @hidden
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export interface ScrollEventInfo<T> extends NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
+    /** @docid */
     readonly scrollOffset?: any;
+    /** @docid */
     readonly reachedLeft?: boolean;
+    /** @docid */
     readonly reachedRight?: boolean;
+    /** @docid */
     readonly reachedTop?: boolean;
+    /** @docid */
     readonly reachedBottom?: boolean;
 }
 
@@ -55,10 +66,7 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field scrollOffset:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/scroll_view/ui.scrollable:ScrollEventInfo}
      * @action
      * @public
      */
@@ -66,10 +74,7 @@ export interface dxScrollableOptions<TComponent> extends DOMComponentOptions<TCo
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field scrollOffset:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/scroll_view/ui.scrollable:ScrollEventInfo}
      * @action
      * @public
      */

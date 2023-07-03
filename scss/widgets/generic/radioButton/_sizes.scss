@@ -5,6 +5,8 @@
 $generic-radiobutton-size: null !default;
 $generic-radiobutton-dot-size: null !default;
 
+$generic-radiobutton-border-width: 1px !default;
+
 @if $size == "default" {
   $generic-radiobutton-size: 22px !default;
   $generic-radiobutton-dot-size: 10px !default;

@@ -260,7 +260,17 @@ QUnit.module('DateRangeBox markup', moduleConfig, () => {
 
         const $clearButton = getClearButton(this.$element);
 
-        assert.strictEqual($clearButton.length, 0, 'clear button was rendered');
+        assert.strictEqual($clearButton.length, 0, 'clear button was not rendered');
+    });
+
+    QUnit.test('Clear button is not rendered if dateRangeBox showClearButton is false', function(assert) {
+        this.reinit({
+            showClearButton: false,
+        });
+
+        const $clearButton = getClearButton(this.$element);
+
+        assert.strictEqual($clearButton.length, 0, 'clear button was not rendered');
     });
 
     QUnit.test('StartDateBox input should have accesKey attribute if accesKey option is set on init', function(assert) {

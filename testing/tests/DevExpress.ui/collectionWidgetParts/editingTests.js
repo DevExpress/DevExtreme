@@ -1254,7 +1254,9 @@ module('selecting of items in single mode', () => {
 
 module('selecting of items in multiple mode', {
     beforeEach() {
-        this.TestComponent = ($element, options) => new TestComponent($element, options);
+        this.TestComponent = function($element, options) {
+            return new TestComponent($element, options);
+        };
     }
 }, () => {
     test('selectedItems should have precedence over selectedIndex if initialized with empty collection', function(assert) {

@@ -2924,6 +2924,29 @@ QUnit.module('search', moduleSetup, () => {
         });
     });
 
+    QUnit.test('focusout should not restore the value to null if selected item has an empty string as a display value (T1161443)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: [{ ID: 0, Name: '' }, { ID: 1, Name: 'One' }],
+            searchEnabled: true,
+            displayExpr: 'Name',
+            valueExpr: 'ID',
+            value: 1
+        });
+        const selectBox = $selectBox.dxSelectBox('instance');
+
+        selectBox.open();
+
+        const $items = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`);
+        $items.eq(0).trigger('dxclick');
+
+        assert.strictEqual(selectBox.option('value'), 0, 'input value is correct');
+
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        $input.trigger('focusout');
+
+        assert.strictEqual(selectBox.option('value'), 0, 'input value is not changed to null');
+    });
+
     QUnit.test('data is not displayed before min search length is exceeded', function(assert) {
         $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'three'],
@@ -5943,18 +5966,19 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes($listItemContainer, {}, 'scrollview content');
 
                 const inputAttributes = {
-                    role: 'combobox',
                     autocomplete: 'off',
-                    'aria-autocomplete': 'list',
-                    type: 'text',
+                    role: 'combobox',
                     spellcheck: 'false',
+                    tabindex: '0',
+                    type: 'text',
+                    'aria-autocomplete': 'list',
                     'aria-expanded': 'true',
                     'aria-haspopup': 'listbox',
-                    tabindex: '0',
                 };
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
                 inputAttributes['aria-owns'] = helper.widget._popupContentId;
+                inputAttributes['aria-labelledby'] = helper.widget._$placeholder.attr('id');
 
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
@@ -5974,6 +5998,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 inputAttributes['aria-controls'] = helper.widget._listId;
                 inputAttributes['aria-owns'] = helper.widget._popupContentId;
+                inputAttributes['aria-labelledby'] = helper.widget._$placeholder.attr('id');
 
                 delete inputAttributes.readonly;
 
@@ -5993,21 +6018,25 @@ if(devices.real().deviceType === 'desktop') {
                 });
 
                 const inputAttributes = {
-                    role: 'combobox',
                     autocomplete: 'off',
-                    'aria-autocomplete': 'list',
-                    type: 'text',
+                    role: 'combobox',
                     spellcheck: 'false',
+                    tabindex: '0',
+                    type: 'text',
+                    'aria-autocomplete': 'list',
                     'aria-expanded': 'false',
                     'aria-haspopup': 'listbox',
-                    tabindex: '0'
+                    'aria-labelledby': helper.widget._$placeholder.attr('id'),
                 };
+
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
                 }
+
                 if(this.isMac) {
                     inputAttributes.placeholder = ' ';
                 }
+
                 helper.checkAttributes(helper.$widget, { }, 'widget');
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
 
@@ -6016,7 +6045,11 @@ if(devices.real().deviceType === 'desktop') {
                 if(searchEnabled) {
                     inputAttributes.readonly = '';
                 }
+
                 helper.widget.option('searchEnabled', !searchEnabled);
+
+                inputAttributes['aria-labelledby'] = helper.widget._$placeholder.attr('id');
+
                 helper.checkAttributes(helper.$widget, { }, 'widget');
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
             });

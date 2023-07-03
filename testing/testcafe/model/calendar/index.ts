@@ -10,6 +10,14 @@ const CLASS = {
   footer: 'dx-calendar-footer',
   button: 'dx-button',
   todayButton: 'dx-calendar-today-button',
+  cellInRange: 'dx-calendar-cell-in-range',
+  cellInRangeStart: 'dx-calendar-range-start-date',
+  cellInRangeEnd: 'dx-calendar-range-end-date',
+  cellInHoveredRange: 'dx-calendar-cell-range-hover',
+  cellInHoveredRangeStart: 'dx-calendar-cell-range-hover-start',
+  cellInHoveredRangeEnd: 'dx-calendar-cell-range-hover-end',
+  navigatorNextView: 'dx-calendar-navigator-next-view',
+  navigatorPrevView: 'dx-calendar-navigator-previous-view',
 };
 
 const showGestureCover = ($element: JQuery): void => {
@@ -55,6 +63,30 @@ export default class Calendar extends Widget {
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxCalendar'; }
 
+  getSelectedRangeCells(): Selector {
+    return this.element.find(`.${CLASS.cellInRange}`);
+  }
+
+  getSelectedRangeStartCell(): Selector {
+    return this.element.find(`.${CLASS.cellInRangeStart}:not(.dx-calendar-other-month)`);
+  }
+
+  getSelectedRangeEndCell(): Selector {
+    return this.element.find(`.${CLASS.cellInRangeEnd}`);
+  }
+
+  getHoveredRangeCells(): Selector {
+    return this.element.find(`.${CLASS.cellInHoveredRange}`);
+  }
+
+  getHoveredRangeStartCell(): Selector {
+    return this.element.find(`.${CLASS.cellInHoveredRangeStart}`);
+  }
+
+  getHoveredRangeEndCell(): Selector {
+    return this.element.find(`.${CLASS.cellInHoveredRangeEnd}`);
+  }
+
   getViewsWrapper(): Selector {
     return this.element.find(`.${CLASS.calendarViewsWrapper}`);
   }
@@ -63,8 +95,20 @@ export default class Calendar extends Widget {
     return new CalendarView(this.element.find(`.${CLASS.calendarViewsWrapper}`).find(`.${CLASS.widget}`).nth(0));
   }
 
+  getNavigatorNextButton(): Button {
+    return new Button(this.element.find(`.${CLASS.navigatorNextView}`));
+  }
+
+  getNavigatorPrevButton(): Button {
+    return new Button(this.element.find(`.${CLASS.navigatorPrevView}`));
+  }
+
   getTodayButton(): Button {
     return new Button(this.element.find(`.${CLASS.todayButton}`));
+  }
+
+  getCellByDate(date: string): Selector {
+    return this.element.find(`*[data-value="${date}"]:not(.dx-calendar-other-month)`);
   }
 
   showGestureCover(): Promise<void> {

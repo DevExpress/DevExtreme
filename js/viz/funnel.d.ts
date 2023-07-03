@@ -91,44 +91,112 @@ export interface FunnelLegendItem extends BaseLegendItem {
     item?: Item;
 }
 
-interface FunnelItemInfo {
+/**
+ * @docid
+ * @hidden
+ */
+export interface FunnelItemInfo {
+  /**
+   * @docid
+   * @type dxFunnelItem
+   */
   readonly item: Item;
 }
 
-/** @public */
+/**
+ * @docid _viz_funnel_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxFunnel>;
 
-/** @public */
+/**
+ * @docid _viz_funnel_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxFunnel>;
 
-/** @public */
+/**
+ * @docid _viz_funnel_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxFunnel>;
 
-/** @public */
+/**
+ * @docid _viz_funnel_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxFunnel> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_funnel_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxFunnel>;
 
-/** @public */
+/**
+ * @docid _viz_funnel_HoverChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,FunnelItemInfo
+ */
 export type HoverChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 
-/** @public */
+/**
+ * @docid _viz_funnel_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxFunnel> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_funnel_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxFunnel>;
 
-/** @public */
+/**
+ * @docid _viz_funnel_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,FunnelItemInfo
+ */
 export type ItemClickEvent = NativeEventInfo<dxFunnel, MouseEvent | PointerEvent> & FunnelItemInfo;
 
-/** @public */
+/**
+ * @docid _viz_funnel_LegendClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,FunnelItemInfo
+ */
 export type LegendClickEvent = NativeEventInfo<dxFunnel, MouseEvent | PointerEvent> & FunnelItemInfo;
 
-/** @public */
+/**
+ * @docid _viz_funnel_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxFunnel> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_funnel_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,FunnelItemInfo
+ */
 export type SelectionChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 
 /**
@@ -454,9 +522,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFunnel
-     * @type_function_param1_field item:dxFunnelItem
+     * @type_function_param1 e:{viz/funnel:HoverChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -466,10 +532,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFunnel
-     * @type_function_param1_field event:event
-     * @type_function_param1_field item:dxFunnelItem
+     * @type_function_param1 e:{viz/funnel:ItemClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -479,10 +542,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFunnel
-     * @type_function_param1_field event:event
-     * @type_function_param1_field item:dxFunnelItem
+     * @type_function_param1 e:{viz/funnel:LegendClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -491,9 +551,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFunnel
-     * @type_function_param1_field item:dxFunnelItem
+     * @type_function_param1 e:{viz/funnel:SelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -709,86 +767,54 @@ export type Properties = dxFunnelOptions;
 export type Options = dxFunnelOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onHoverChanged' | 'onItemClick' | 'onLegendClick' | 'onSelectionChanged'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
  * @docid dxFunnelOptions.onDisposing
  * @type_function_param1 e:{viz/funnel:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onDrawn
  * @type_function_param1 e:{viz/funnel:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onExported
  * @type_function_param1 e:{viz/funnel:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onExporting
  * @type_function_param1 e:{viz/funnel:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onFileSaving
  * @type_function_param1 e:{viz/funnel:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
- * @docid dxFunnelOptions.onHoverChanged
- * @type_function_param1 e:{viz/funnel:HoverChangedEvent}
- */
-onHoverChanged?: ((e: HoverChangedEvent) => void);
-/**
- * @skip
  * @docid dxFunnelOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/funnel:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxFunnelOptions.onInitialized
  * @type_function_param1 e:{viz/funnel:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
- * @docid dxFunnelOptions.onItemClick
- * @type_function_param1 e:{viz/funnel:ItemClickEvent}
- */
-onItemClick?: ((e: ItemClickEvent) => void);
-/**
- * @skip
- * @docid dxFunnelOptions.onLegendClick
- * @type_function_param1 e:{viz/funnel:LegendClickEvent}
- */
-onLegendClick?: ((e: LegendClickEvent) => void);
-/**
- * @skip
  * @docid dxFunnelOptions.onOptionChanged
  * @type_function_param1 e:{viz/funnel:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxFunnelOptions.onSelectionChanged
- * @type_function_param1 e:{viz/funnel:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
 ///#ENDDEBUG

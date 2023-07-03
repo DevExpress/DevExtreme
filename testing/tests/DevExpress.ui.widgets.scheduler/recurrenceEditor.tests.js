@@ -7,6 +7,7 @@ import RadioGroup from 'ui/radio_group';
 import ButtonGroup from 'ui/button_group';
 import DateBox from 'ui/date_box';
 import { getRecurrenceProcessor } from 'ui/scheduler/recurrence';
+import { createTimeZoneCalculator } from 'renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
 import dateLocalization from 'localization/date';
 
 const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
@@ -26,13 +27,25 @@ testStart(() => {
     $('#qunit-fixture').html('<div id="recurrence-editor"></div>');
 });
 
-const createInstance = options => new RecurrenceEditor($('#recurrence-editor'), options);
+const createInstance = options => new RecurrenceEditor($('#recurrence-editor'), {
+    timeZoneCalculator: { createDate: (date) => date },
+    getStartDateTimeZone: () => {},
+    ...options
+});
 
 const getFreqEditor = instance => instance.getRecurrenceForm().getEditor('freq');
 const getRepeatEndEditor = instance => instance.getEditorByField('repeatEnd');
 const getIntervalEditor = instance => instance.getRecurrenceForm().getEditor('interval');
 
-module('Recurrence Editor rendering', () => {
+module('Recurrence Editor rendering', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    },
+},
+() => {
     test('Recurrence editor should be initialized', function(assert) {
         const instance = createInstance();
         assert.ok(instance instanceof RecurrenceEditor, 'dxRecurrenceEditor was initialized');
@@ -74,6 +87,25 @@ module('Recurrence Editor rendering', () => {
             assert.equal(instance.option('value'), `FREQ=${value}`);
             assert.equal($('.dx-recurrence-editor-container').length, 1, 'recurrenceEditor was rendered');
         });
+    });
+
+    test('The recurrence editor should fire value change only once when the last selected day unselecting (Angular T1154651)', function(assert) {
+        const result = [];
+        const expectedResult = ['FREQ=WEEKLY;BYDAY=SU'];
+        const instance = createInstance({
+            value: 'FREQ=WEEKLY;BYDAY=MO',
+            startDate: new Date('2023-06-18T22:00:00'),
+        });
+        instance.on('valueChanged', ({ value }) => {
+            result.push(value);
+        });
+
+        $('#recurrence-editor .dx-item-selected').click();
+
+        this.clock.tick(100);
+
+        assert.equal(result.length, 1, 'valueChanged called only once');
+        assert.deepEqual(result, expectedResult, 'default value restored');
     });
 });
 
@@ -384,6 +416,72 @@ module('Repeat-end editor', () => {
             assert.equal(instance.option('value'), `FREQ=WEEKLY;UNTIL=${getRecurrenceProcessor().getAsciiStringByDate(date)}`, 'Recurrence editor has right value');
         });
     });
+
+    module('timezone', () => {
+        [
+            [
+                'America/Los_Angeles',
+                undefined,
+                {
+                    appointmentTimeZone: undefined,
+                    path: 'Grid'
+                }],
+            [
+                undefined,
+                'America/Los_Angeles',
+                {
+                    appointmentTimeZone: 'America/Los_Angeles',
+                    path: 'Appointment'
+                },
+            ],
+            [
+                'America/Los_Angeles',
+                'America/Los_Angeles',
+                {
+                    appointmentTimeZone: 'America/Los_Angeles',
+                    path: 'Appointment'
+                },
+            ]
+        ].forEach(testCase => {
+            test('Repeat-until dateBox should get date considering scheduler timeZone', function(assert) {
+                const [gridTimeZone, startDateTimeZone] = testCase;
+                const timeZoneCalculator = createTimeZoneCalculator(gridTimeZone);
+
+                const instance = createInstance({
+                    value: 'FREQ=WEEKLY;UNTIL=20230617T065959Z',
+                    timeZoneCalculator,
+                    getStartDateTimeZone: () => startDateTimeZone
+                });
+
+                const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
+                const untilDate = $repeatUntilDate.dxDateBox('instance');
+
+                assert.deepEqual(untilDate.option('value'), new Date('2023-06-16 23:59:59'), 'dateBox has right value');
+            });
+
+            test('Repeat-until dateBox should apply date considering scheduler timeZone', function(assert) {
+                const [gridTimeZone, startDateTimeZone, result] = testCase;
+
+                const timeZoneCalculator = createTimeZoneCalculator(gridTimeZone);
+                const timeZoneCalculatorSpy = sinon.spy(timeZoneCalculator, 'createDate');
+
+                const instance = createInstance({
+                    value: 'FREQ=WEEKLY;UNTIL=20151007T000000Z', // some other date, we'll change it later in dateBox
+                    timeZoneCalculator,
+                    getStartDateTimeZone: () => startDateTimeZone
+                });
+                assert.deepEqual(timeZoneCalculatorSpy.getCall(0).args[1], { ...result, path: 'to' + result.path });
+
+                const $repeatUntilDate = getRepeatEndEditor(instance).$element().find('.' + REPEAT_DATE_EDITOR);
+                const untilDate = $repeatUntilDate.dxDateBox('instance');
+
+                untilDate.option('value', new Date('2023-06-16 23:59:59'));
+
+                assert.deepEqual(timeZoneCalculatorSpy.getCall(1).args[1], { ...result, path: 'from' + result.path });
+                assert.equal(instance.option('value'), 'FREQ=WEEKLY;UNTIL=20230617T065959Z', 'Recurrence editor has right value');
+            });
+        });
+    });
 });
 
 module('Interval editor', () => {
@@ -512,7 +610,7 @@ module('Repeat-on editor', () => {
         const buttonGroup = instance.getEditorByField('byday');
         buttonGroup.option('selectedItemKeys', []);
 
-        assert.equal(buttonGroup.option('selectedItemKeys').length, 0, 'Selection should not consider startDate anymore');
+        assert.deepEqual(buttonGroup.option('selectedItemKeys'), ['SU'], 'Selection should consider startDate day');
     });
 
     test('Recurrence editor should process values from repeat-on-editor after init correctly, freq=weekly', function(assert) {

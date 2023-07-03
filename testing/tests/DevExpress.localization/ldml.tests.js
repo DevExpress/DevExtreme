@@ -313,7 +313,7 @@ QUnit.module('number formatter', () => {
         checkFormat('#.## \'%\'');
     });
 
-    QUnit.test('getFormat for currency if separators are russion', function(assert) {
+    QUnit.test('getFormat for currency if separators are russian', function(assert) {
         const formatter = getNumberFormatter('#,##0.00 $', { thousandsSeparator: ' ', decimalSeparator: ',' });
 
         assert.strictEqual(getNumberFormat(formatter), '#,##0.00 $', 'format is correct');

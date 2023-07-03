@@ -932,6 +932,41 @@ QUnit.module('Rows view', {
         assert.equal(getNormalizeMarkup($rows.eq(2).find('td:first')), '<span class=' + 'dx-datagrid-search-text' + '>Test</span>3', 'Row 3 - case matches');
     });
 
+    QUnit.test('Highlight searchText - accent insensitive', function(assert) {
+        const columns = [{ allowFiltering: true, dataType: 'string' }];
+        const rows = [
+            { data: { name: 'aaaüaaa' }, values: ['aaaüaaa'] },
+            { data: { name: 'aaaaaaü' }, values: ['aaaaaaü'] },
+            { data: { name: 'üaaaaaa' }, values: ['üaaaaaa'] }];
+        const dataController = new MockDataController({ items: rows });
+        dataController.getDataSource = () => ({ loadOptions: () => ({
+            langParams: {
+                collatorOptions: {
+                    sensitivity: 'base'
+                },
+            }
+        }) });
+
+        const rowsView = this.createRowsView(this.items, dataController, columns);
+        const testElement = $('#container');
+
+        // act
+        this.options.searchPanel = {
+            highlightSearchText: true,
+            text: 'u'
+        };
+
+        rowsView.render(testElement);
+        const $rows = testElement.find('tbody > tr');
+
+        // assert
+        assert.equal($rows.length, 4, 'Correct number of rows');
+
+        assert.equal(getNormalizeMarkup($rows.eq(0).find('td:first')), 'aaa<span class=dx-datagrid-search-text>ü</span>aaa', 'Row 1 - case matches');
+        assert.equal(getNormalizeMarkup($rows.eq(1).find('td:first')), 'aaaaaa<span class=dx-datagrid-search-text>ü</span>', 'Row 2 - case matches');
+        assert.equal(getNormalizeMarkup($rows.eq(2).find('td:first')), '<span class=dx-datagrid-search-text>ü</span>aaaaaa', 'Row 3 - case matches');
+    });
+
     // T166350
     QUnit.test('Highlight searchText - case sensitive for odata when highlightCaseSensitive enabled', function(assert) {
         const columns = [{ allowFiltering: true, dataType: 'string' }];
@@ -4469,7 +4504,7 @@ QUnit.module('Rows view with real dataController and columnController', {
                 });
             } else {
                 const scrollTop = e.top;
-                const timeoutID = timeoutID || setTimeout(function() {
+                setTimeout(function() {
                     assert.equal(scrollTop, 0, 'scroll position is 0');
                     done();
                 });

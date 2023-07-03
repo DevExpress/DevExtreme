@@ -103,6 +103,16 @@ const filesContent: { [key: string]: string } = {
   '../scss/widgets/material/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
 };
 
+const copyDependencies = (dependencies: Record<string, string[]>): Record<string, string[]> => {
+  const result: Record<string, string[]> = {};
+  Object.keys(dependencies).forEach((key) => { result[key] = [...dependencies[key]]; });
+  return result;
+};
+
+const sortDependencies = (dependencies: Record<string, string[]>): void => {
+  Object.keys(dependencies).forEach((key) => { dependencies[key].sort(); });
+};
+
 jest.mock('fs', () => ({
   readFileSync: jest.fn().mockImplementation((path: string): string => filesContent[path] || ''),
   existsSync: (path: string): boolean => filesContent[path] !== undefined,
@@ -266,6 +276,11 @@ describe('validation', () => {
 
 describe('Integration test', () => {
   test('Check if dependensies is good', () => {
-    expect(builtDependencies).toEqual(idealDependencies);
+    const builtDependenciesCopy = copyDependencies(builtDependencies);
+    const idealDependenciesCopy = copyDependencies(idealDependencies);
+    sortDependencies(builtDependenciesCopy);
+    sortDependencies(idealDependenciesCopy);
+
+    expect(builtDependenciesCopy).toEqual(idealDependenciesCopy);
   });
 });

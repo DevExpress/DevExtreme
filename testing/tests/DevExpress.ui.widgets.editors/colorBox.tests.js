@@ -32,6 +32,7 @@ const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const COLORVIEW_HEX_INPUT_SELECTOR = '.dx-colorview-label-hex .dx-texteditor-input';
 const COLORVIEW_APPLY_BUTTON_SELECTOR = '.dx-colorview-apply-button';
 const CLEAR_BUTTON_AREA_SELECTOR = '.dx-clear-button-area';
+const COLOR_VIEW_PALETTE_HANDLE_SELECTOR = '.dx-colorview-palette-handle';
 
 const move = function($element, position) {
     const parentOffset = $element.parent().offset();
@@ -1122,5 +1123,23 @@ QUnit.module('valueChanged handler should receive correct event', {
         assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
 
         this.testProgramChange(assert);
+    });
+});
+
+QUnit.module('Accessibility', {
+    beforeEach: function() {
+        fx.off = true;
+        this.element = $('#color-box');
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('input should have "aria-activedescendant" attribute', function(assert) {
+        const $colorBox = showColorBox.call(this);
+        const $input = $colorBox.find(`.${COLOR_BOX_INPUT_CLASS}`);
+        const $handle = getColorBoxOverlayContent().find(COLOR_VIEW_PALETTE_HANDLE_SELECTOR);
+
+        assert.strictEqual($input.attr('aria-activedescendant'), $handle.attr('id'));
     });
 });

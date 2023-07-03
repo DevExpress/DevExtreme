@@ -49,9 +49,16 @@ export {
 
 type ItemLike = string | Item | any;
 
-interface ListItemInfo<TItem extends ItemLike> {
+/**
+ * @docid
+ * @hidden
+ */
+export interface ListItemInfo<TItem extends ItemLike> {
+    /** @docid */
     readonly itemData?: TItem;
+    /** @docid */
     readonly itemElement: DxElement;
+    /** @docid */
     readonly itemIndex: number | { group: number; item: number };
 }
 
@@ -60,79 +67,192 @@ export type ItemDeleteMode = 'context' | 'slideButton' | 'slideItem' | 'static' 
 /** @public */
 export type ListMenuMode = 'context' | 'slide';
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface ScrollInfo {
+    /** @docid */
     readonly scrollOffset?: any;
+    /** @docid */
     readonly reachedLeft: boolean;
+    /** @docid */
     readonly reachedRight: boolean;
+    /** @docid */
     readonly reachedTop: boolean;
+    /** @docid */
     readonly reachedBottom: boolean;
 }
 
-/** @public */
+/**
+ * @docid _ui_list_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_list_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_list_GroupRenderedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type GroupRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & {
+    /**
+     * @docid _ui_list_GroupRenderedEvent.groupData
+     * @type object
+     */
     readonly groupData?: any;
+    /** @docid _ui_list_GroupRenderedEvent.groupElement */
     readonly groupElement?: DxElement;
+    /** @docid _ui_list_GroupRenderedEvent.groupIndex */
     readonly groupIndex?: number;
 };
 
-/** @public */
+/**
+ * @docid _ui_list_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxList<TItem, TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_list_ItemClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ListItemInfo
+ */
 export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ListItemInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_list_ItemContextMenuEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ListItemInfo
+ */
 export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_list_ItemDeletedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ListItemInfo
+ */
 export type ItemDeletedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_list_ItemDeletingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ListItemInfo
+ */
 export type ItemDeletingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
+    /**
+     * @docid _ui_list_ItemDeletingEvent.cancel
+     * @type boolean
+     */
     cancel?: boolean | PromiseLike<boolean> | PromiseLike<void>;
 };
 
-/** @public */
+/**
+ * @docid _ui_list_ItemHoldEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ListItemInfo
+ */
 export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_list_ItemRenderedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ItemInfo
+ */
 export type ItemRenderedEvent<TItem extends Item | any = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ItemInfo<TItem>;
 
-/** @public */
+/**
+ * @docid _ui_list_ItemReorderedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ListItemInfo
+ */
 export type ItemReorderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
+    /** @docid _ui_list_ItemReorderedEvent.fromIndex */
     readonly fromIndex: number;
+    /** @docid _ui_list_ItemReorderedEvent.toIndex */
     readonly toIndex: number;
 };
 
-/** @public */
+/**
+ * @docid _ui_list_ItemSwipeEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ListItemInfo
+ */
 export type ItemSwipeEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo<TItem> & {
+    /** @docid _ui_list_ItemSwipeEvent.direction */
     readonly direction: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_list_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_list_PageLoadingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type PageLoadingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_list_PullRefreshEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type PullRefreshEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
-/** @public */
+/**
+ * @docid _ui_list_ScrollEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ScrollInfo
+ */
 export type ScrollEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>, Event> & ScrollInfo;
 
-/** @public */
+/**
+ * @docid _ui_list_SelectAllValueChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type SelectAllValueChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & {
+    /** @docid _ui_list_SelectAllValueChangedEvent.value */
     readonly value: boolean;
 };
 
-/** @public */
+/**
+ * @docid _ui_list_SelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SelectionChangedInfo
+ */
 export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
@@ -269,9 +389,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field groupData:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:GroupRenderedEvent}
      * @action
      * @public
      */
@@ -280,10 +398,7 @@ export interface dxListOptions<
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
+     * @type_function_param1 e:{ui/list:ItemClickEvent}
      * @action
      * @public
      */
@@ -291,10 +406,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
+     * @type_function_param1 e:{ui/list:ItemContextMenuEvent}
      * @action
      * @public
      */
@@ -302,9 +414,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:ItemDeletedEvent}
      * @action
      * @hidden false
      * @public
@@ -313,10 +423,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field cancel:boolean | Promise<boolean> | Promise<void>
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:ItemDeletingEvent}
      * @action
      * @hidden false
      * @public
@@ -325,10 +432,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
+     * @type_function_param1 e:{ui/list:ItemHoldEvent}
      * @action
      * @public
      */
@@ -336,9 +440,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:ItemReorderedEvent}
      * @action
      * @hidden false
      * @public
@@ -347,10 +449,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field itemData:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:ItemSwipeEvent}
      * @action
      * @public
      */
@@ -358,8 +457,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:PageLoadingEvent}
      * @action
      * @public
      */
@@ -367,8 +465,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:PullRefreshEvent}
      * @action
      * @public
      */
@@ -376,10 +473,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field scrollOffset:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:ScrollEvent}
      * @action
      * @public
      */
@@ -387,8 +481,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxList
+     * @type_function_param1 e:{ui/list:SelectAllValueChangedEvent}
      * @action
      * @public
      */
@@ -746,121 +839,43 @@ export type Options<
 > = Properties<TItem, TKey>;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onGroupRendered' | 'onItemClick' | 'onItemContextMenu' | 'onItemDeleted' | 'onItemDeleting' | 'onItemHold' | 'onItemReordered' | 'onItemSwipe' | 'onPageLoading' | 'onPullRefresh' | 'onScroll' | 'onSelectAllValueChanged'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
  * @docid dxListOptions.onContentReady
  * @type_function_param1 e:{ui/list:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxListOptions.onDisposing
  * @type_function_param1 e:{ui/list:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
- * @docid dxListOptions.onGroupRendered
- * @type_function_param1 e:{ui/list:GroupRenderedEvent}
- */
-onGroupRendered?: ((e: GroupRenderedEvent) => void);
-/**
- * @skip
  * @docid dxListOptions.onInitialized
  * @type_function_param1 e:{ui/list:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
- * @docid dxListOptions.onItemClick
- * @type_function_param1 e:{ui/list:ItemClickEvent}
- */
-onItemClick?: ((e: ItemClickEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onItemContextMenu
- * @type_function_param1 e:{ui/list:ItemContextMenuEvent}
- */
-onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onItemDeleted
- * @type_function_param1 e:{ui/list:ItemDeletedEvent}
- */
-onItemDeleted?: ((e: ItemDeletedEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onItemDeleting
- * @type_function_param1 e:{ui/list:ItemDeletingEvent}
- */
-onItemDeleting?: ((e: ItemDeletingEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onItemHold
- * @type_function_param1 e:{ui/list:ItemHoldEvent}
- */
-onItemHold?: ((e: ItemHoldEvent) => void);
-/**
- * @skip
  * @docid dxListOptions.onItemRendered
  * @type_function_param1 e:{ui/list:ItemRenderedEvent}
  */
 onItemRendered?: ((e: ItemRenderedEvent) => void);
 /**
- * @skip
- * @docid dxListOptions.onItemReordered
- * @type_function_param1 e:{ui/list:ItemReorderedEvent}
- */
-onItemReordered?: ((e: ItemReorderedEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onItemSwipe
- * @type_function_param1 e:{ui/list:ItemSwipeEvent}
- */
-onItemSwipe?: ((e: ItemSwipeEvent) => void);
-/**
- * @skip
  * @docid dxListOptions.onOptionChanged
  * @type_function_param1 e:{ui/list:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
- * @docid dxListOptions.onPageLoading
- * @type_function_param1 e:{ui/list:PageLoadingEvent}
- */
-onPageLoading?: ((e: PageLoadingEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onPullRefresh
- * @type_function_param1 e:{ui/list:PullRefreshEvent}
- */
-onPullRefresh?: ((e: PullRefreshEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onScroll
- * @type_function_param1 e:{ui/list:ScrollEvent}
- */
-onScroll?: ((e: ScrollEvent) => void);
-/**
- * @skip
- * @docid dxListOptions.onSelectAllValueChanged
- * @type_function_param1 e:{ui/list:SelectAllValueChangedEvent}
- */
-onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
-/**
- * @skip
  * @docid dxListOptions.onSelectionChanged
  * @type_function_param1 e:{ui/list:SelectionChangedEvent}
  */

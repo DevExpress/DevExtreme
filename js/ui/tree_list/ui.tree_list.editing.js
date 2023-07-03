@@ -1,1 +1,1 @@
-import '../../__internal/grids/tree_list/editing/module';
+import '../../__internal/grids/tree_list/editing/m_editing';

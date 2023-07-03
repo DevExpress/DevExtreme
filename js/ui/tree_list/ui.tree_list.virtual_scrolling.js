@@ -1,1 +1,1 @@
-import '../../__internal/grids/tree_list/module_virtual_scrolling';
+import '../../__internal/grids/tree_list/m_virtual_scrolling';

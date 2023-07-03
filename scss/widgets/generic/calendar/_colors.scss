@@ -49,13 +49,13 @@ $calendar-cell-selected-color: $base-inverted-text-color !default;
 * $type color
 */
 $calendar-cell-active-bg: null !default;
-$calendar-navigator-border-radius: null !default;
 $calendar-cell-contoured-border-color: null !default;
 $calendar-cell-contoured-border-radius: $base-border-radius !default;
 $calendar-invalid-focused-border-color: $base-invalid-color !default;
 $calendar-invalid-faded-border-color: $base-invalid-faded-border-color !default;
 $calendar-week-number-cell-color: color.change($calendar-color, $alpha: 0.56) !default;
 $calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.5) !default;
+$calendar-cell-hover-border-color: color.change($base-accent, $alpha: 0.6) !default;
 
 @if $color == "carmine" {
   $calendar-cell-other-color: color.change($calendar-color, $alpha: 0.38) !default;
@@ -64,7 +64,6 @@ $calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.5) 
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
   $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
@@ -75,7 +74,6 @@ $calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.5) 
   $calendar-cell-other-hover-color: $base-text-color !default;
   $calendar-cell-selected-bg: $base-inverted-bg !default;
   $calendar-cell-active-bg: $base-accent !default;
-  $calendar-navigator-border-radius: $base-border-radius !default;
   $calendar-cell-contoured-border-color: $base-border-color !default;
 }
 
@@ -86,7 +84,6 @@ $calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.5) 
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
   $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
@@ -97,7 +94,6 @@ $calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.5) 
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
   $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
@@ -108,7 +104,6 @@ $calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.5) 
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
   $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
@@ -119,7 +114,6 @@ $calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.5) 
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
   $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
@@ -130,7 +124,6 @@ $calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.5) 
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
   $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 
@@ -141,7 +134,6 @@ $calendar-week-number-cell-bg: color.change(darken($base-bg, 12%), $alpha: 0.5) 
   $calendar-cell-hover-color: $calendar-color !default;
   $calendar-cell-selected-bg: $base-accent !default;
   $calendar-cell-active-bg: color.change($base-accent, $alpha: 0.4) !default;
-  $calendar-navigator-border-radius: $button-border-radius !default;
   $calendar-cell-contoured-border-color: color.change($base-accent, $alpha: 0.5) !default;
 }
 

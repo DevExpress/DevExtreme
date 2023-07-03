@@ -48,6 +48,10 @@ export {
     ToolbarItemComponent as ToolbarItemWidget,
 };
 
+/**
+ * @docid
+ * @hidden
+ */
 export interface TitleRenderedInfo {
     readonly titleElement: DxElement;
 }

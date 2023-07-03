@@ -1,4 +1,5 @@
-import { editingCellBasedModule } from '@js/ui/grid_core/ui.grid_core.editing_cell_based';
-import treeListCore from '../module_core';
+import { editingCellBasedModule } from '@ts/grids/grid_core/editing/m_editing_cell_based';
+
+import treeListCore from '../m_core';
 
 treeListCore.registerModule('editingCellBased', editingCellBasedModule);

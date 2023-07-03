@@ -32,6 +32,7 @@ const READONLY_STATE_CLASS = 'dx-state-readonly';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXTEDITOR_EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 
 const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
@@ -59,6 +60,7 @@ class DateRangeBox extends Editor {
             endDateOutOfRangeMessage: messageLocalization.format('dxDateRangeBox-endDateOutOfRangeMessage'),
             dateSerializationFormat: undefined,
             deferRendering: true,
+            disableOutOfRangeSelection: false,
             disabledDates: null,
             displayFormat: null,
             dropDownButtonTemplate: 'dropDownButton',
@@ -93,7 +95,6 @@ class DateRangeBox extends Editor {
             opened: false,
             pickerType: 'calendar',
             readOnly: false,
-            selectionBehavior: 'normal',
             showClearButton: false,
             showDropDownButton: true,
             spellcheck: false,
@@ -241,15 +242,32 @@ class DateRangeBox extends Editor {
         this._renderStylingMode();
         // TODO: probably it need to update styling mode for dropDown in buttons container. It depends from design decision
 
-        this._renderStartDateBox();
-        this._renderSeparator();
         this._renderEndDateBox();
+        this._renderSeparator();
+        this._renderStartDateBox();
 
+
+        this._toggleEmptinessState();
+        this._renderEmptinessEvent();
         this._renderButtonsContainer();
 
         super._initMarkup();
 
         this.$element().removeClass(INVALID_BADGE_CLASS);
+    }
+
+    _renderEmptinessEvent() {
+        const eventName = addNamespace('input blur', this.NAME);
+
+        eventsEngine.off(this._focusTarget(), eventName);
+        eventsEngine.on(this._focusTarget(), eventName, this._toggleEmptinessState.bind(this));
+    }
+
+    _toggleEmptinessState() {
+        const isEmpty = this.getStartDateBox().$element().hasClass(TEXTEDITOR_EMPTY_INPUT_CLASS)
+            && this.getEndDateBox().$element().hasClass(TEXTEDITOR_EMPTY_INPUT_CLASS);
+
+        this.$element().toggleClass(TEXTEDITOR_EMPTY_INPUT_CLASS, isEmpty);
     }
 
     _attachKeyboardEvents() {
@@ -265,10 +283,10 @@ class DateRangeBox extends Editor {
         // TODO: should we add area readonly here?
     }
 
-    _toggleDropDownEditorActiveClass(state) {
+    _toggleDropDownEditorActiveClass() {
         const { opened } = this.option();
 
-        this.$element().toggleClass(DROP_DOWN_EDITOR_ACTIVE_CLASS, state ?? opened);
+        this.$element().toggleClass(DROP_DOWN_EDITOR_ACTIVE_CLASS, opened);
     }
 
     _toggleEditorLabelClass() {
@@ -291,7 +309,7 @@ class DateRangeBox extends Editor {
     _renderStartDateBox() {
         this._$startDateBox = $('<div>')
             .addClass(START_DATEBOX_CLASS)
-            .appendTo(this.$element());
+            .prependTo(this.$element());
 
         this._startDateBox = this._createComponent(this._$startDateBox, MultiselectDateBox, this._getStartDateBoxConfig());
         this._startDateBox.NAME = '_StartDateBox';
@@ -310,7 +328,7 @@ class DateRangeBox extends Editor {
         const $icon = getImageContainer(SEPARATOR_ICON_NAME);
         this._$separator = $('<div>')
             .addClass(DATERANGEBOX_SEPARATOR_CLASS)
-            .appendTo(this.$element());
+            .prependTo(this.$element());
 
         this._renderPreventBlurOnSeparatorClick();
 
@@ -318,7 +336,7 @@ class DateRangeBox extends Editor {
     }
 
     _renderPreventBlurOnSeparatorClick() {
-        const eventName = addNamespace('mousedown', 'dxDateRangeBox');
+        const eventName = addNamespace('mousedown', this.NAME);
 
         eventsEngine.off(this._$separator, eventName);
         eventsEngine.on(this._$separator, eventName, (e) => {
@@ -368,16 +386,12 @@ class DateRangeBox extends Editor {
     }
 
     _clearValueHandler(e) {
+        e.stopPropagation();
         this._saveValueChangeEvent(e);
 
-        this._shouldSuppressValueSync = true;
-        this.getStartDateBox()._clearValueHandler(e);
-        this.getEndDateBox()._clearValueHandler(e);
-        this._shouldSuppressValueSync = false;
+        this.reset();
 
-        this.reset(true);
-
-        this.focus();
+        !this._isStartDateActiveElement() && this.focus();
         eventsEngine.trigger($(this.startDateField()), 'input');
     }
 
@@ -442,6 +456,7 @@ class DateRangeBox extends Editor {
             disabled: options.disabled,
             displayFormat: options.displayFormat,
             focusStateEnabled: options.focusStateEnabled,
+            isValid: options.isValid,
             tabIndex: options.tabIndex,
             height: options.height,
             hoverStateEnabled: options.hoverStateEnabled,
@@ -459,7 +474,7 @@ class DateRangeBox extends Editor {
             validationMessageMode: options.validationMessageMode,
             validationMessagePosition: options.validationMessagePosition,
             valueChangeEvent: options.valueChangeEvent,
-            onKeyDown: options.onKeyUp,
+            onKeyDown: options.onKeyDown,
             onKeyUp: options.onKeyUp,
             onChange: options.onChange,
             onInput: options.onInput,
@@ -484,6 +499,18 @@ class DateRangeBox extends Editor {
         return dateBoxConfig;
     }
 
+    _hideOnOutsideClickHandler({ target }) {
+        // TODO: extract this common code part with ddeditor to avoid duplication
+        const $target = $(target);
+        const dropDownButton = this.getButton('dropDown');
+        const $dropDownButton = dropDownButton && dropDownButton.$element();
+        const isInputClicked = !!$target.closest(this.$element()).length;
+        const isDropDownButtonClicked = !!$target.closest($dropDownButton).length;
+        const isOutsideClick = !isInputClicked && !isDropDownButtonClicked;
+
+        return isOutsideClick;
+    }
+
     _getStartDateBoxConfig() {
         const options = this.option();
 
@@ -494,27 +521,26 @@ class DateRangeBox extends Editor {
             cancelButtonText: options.cancelButtonText,
             dateOutOfRangeMessage: options.startDateOutOfRangeMessage,
             deferRendering: options.deferRendering,
-            disabledDates: options.disabledDates,
-            'dropDownOptions.showTitle': false,
-            'dropDownOptions.title': '',
-            dropDownOptions: options.dropDownOptions,
+            disabledDates: options.dropDownOptions?.disabledDates,
+            dropDownOptions: {
+                showTitle: false,
+                title: '',
+                hideOnOutsideClick: (e) => this._hideOnOutsideClickHandler(e),
+                hideOnParentScroll: false,
+                preventScrollEvents: false,
+                ...options.dropDownOptions,
+            },
             invalidDateMessage: options.invalidStartDateMessage,
             onValueChanged: ({ value, event }) => {
-                if(!this._shouldSuppressValueSync) {
-                    const newValue = [value, this.option('value')[1]];
+                const newValue = [value, this.option('value')[1]];
 
-                    this.updateValue(newValue, event);
-                }
+                this.updateValue(newValue, event);
             },
             opened: options.opened,
             onOpened: () => {
-                this.option('opened', true);
-
                 this._raiseOpenAction();
             },
             onClosed: () => {
-                this.option('opened', false);
-
                 this._raiseCloseAction();
             },
             onOptionChanged: (args) => {
@@ -544,25 +570,11 @@ class DateRangeBox extends Editor {
         return {
             ...this._getDateBoxConfig(),
             invalidDateMessage: options.invalidEndDateMessage,
-            isValid: options.isValid,
             dateOutOfRangeMessage: options.endDateOutOfRangeMessage,
-            dropDownOptions: {
-                onShowing: (e) => {
-                    e.cancel = true;
-                    this.getStartDateBox().open();
-
-                    // TODO: datebox doesn't clear opened state after prevent of opening
-                    this.getEndDateBox().option('opened', false);
-                },
-                showTitle: false,
-                title: '',
-            },
             onValueChanged: ({ value, event }) => {
-                if(!this._shouldSuppressValueSync) {
-                    const newValue = [this.option('value')[0], value];
+                const newValue = [this.option('value')[0], value];
 
-                    this.updateValue(newValue, event);
-                }
+                this.updateValue(newValue, event);
             },
             onOptionChanged: (args) => {
                 const { name, value, previousValue } = args;
@@ -573,6 +585,7 @@ class DateRangeBox extends Editor {
                     this._syncValidationErrors('_internalValidationErrors', value, previousValue);
                 }
             },
+            opened: options.opened,
             showClearButton: false,
             showDropDownButton: false,
             value: this.option('value')[1],
@@ -644,13 +657,41 @@ class DateRangeBox extends Editor {
     }
 
     _hasActiveElement() {
-        const [startDateInput, endDateInput] = this.field();
+        return this._isStartDateActiveElement() || this._isEndDateActiveElement();
+    }
 
-        return this._isActiveElement(startDateInput) || this._isActiveElement(endDateInput);
+    _isStartDateActiveElement() {
+        return this._isActiveElement(this.startDateField());
+    }
+
+    _isEndDateActiveElement() {
+        return this._isActiveElement(this.endDateField());
     }
 
     _isActiveElement(input) {
         return $(input).is(domAdapter.getActiveElement(input));
+    }
+
+    _popupContentIdentifier(identifier) {
+        if(identifier) {
+            this._popupContentId = identifier;
+        }
+
+        return this._popupContentId;
+    }
+
+    _setAriaAttributes() {
+        const { opened } = this.option();
+
+        const arias = {
+            'expanded': opened,
+            'controls': this._popupContentIdentifier(),
+        };
+
+        const ariaOwns = opened ? this._popupContentIdentifier() : undefined;
+
+        this.setAria(arias);
+        this.setAria('owns', ariaOwns, this.$element());
     }
 
     _cleanButtonContainers() {
@@ -711,8 +752,9 @@ class DateRangeBox extends Editor {
                 this.getStartDateBox().option(name, value);
                 break;
             case 'opened':
-                this._toggleDropDownEditorActiveClass(value);
+                this._toggleDropDownEditorActiveClass();
                 this.getStartDateBox().option(name, value);
+                this.getEndDateBox()._setOptionWithoutOptionChange(name, value);
                 break;
             case 'buttons':
                 this._cleanButtonContainers();
@@ -775,7 +817,9 @@ class DateRangeBox extends Editor {
                 this.getStartDateBox().option('calendarOptions.viewsCount', value ? 2 : 1);
                 break;
             case 'tabIndex':
+            case 'activeStateEnabled':
             case 'focusStateEnabled':
+            case 'hoverStateEnabled':
                 super._optionChanged(args);
 
                 this.getStartDateBox().option(name, value);
@@ -816,13 +860,16 @@ class DateRangeBox extends Editor {
                 this.getStartDateBox().option(name, value);
                 this.getEndDateBox().option(name, value);
                 break;
-            case 'selectionBehavior':
+            case 'disableOutOfRangeSelection':
                 break;
             case 'startDate':
                 this.updateValue([value, this.option('value')[1]]);
                 break;
             case 'stylingMode':
                 this._renderStylingMode();
+
+                this.getStartDateBox().option(name, value);
+                this.getEndDateBox().option(name, value);
                 break;
             case 'startDateText':
             case 'endDateText':
@@ -852,6 +899,7 @@ class DateRangeBox extends Editor {
                 break;
             }
             case 'isValid': {
+                this.getStartDateBox().option(name, value);
                 this.getEndDateBox().option(name, value);
 
                 const isValid = value && !this.option('_internalValidationErrors').length;
@@ -886,6 +934,8 @@ class DateRangeBox extends Editor {
                     this._applyCustomValidation(newValue);
 
                     this._updateDateBoxesValue(newValue);
+                    this.getStartDateBox()._strategy.renderValue();
+                    this._toggleEmptinessState();
 
                     this._raiseValueChangeAction(newValue, previousValue);
                     this._saveValueChangeEvent(undefined);
@@ -941,15 +991,11 @@ class DateRangeBox extends Editor {
         this.getStartDateBox().focus();
     }
 
-    reset(shouldSkipCall) {
-        if(!shouldSkipCall) {
-            this._shouldSuppressValueSync = true;
-            this.getEndDateBox().reset();
-            this.getStartDateBox().reset();
-            this._shouldSuppressValueSync = false;
-        }
-
+    reset() {
         super.reset();
+
+        this.getEndDateBox().reset();
+        this.getStartDateBox().reset();
     }
 }
 

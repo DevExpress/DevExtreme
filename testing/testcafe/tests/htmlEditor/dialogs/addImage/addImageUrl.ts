@@ -13,7 +13,7 @@ test('Image url should be validate before wil be inserted by add button click', 
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItem('image'))
+    .click(htmlEditor.toolbar.getItemByName('image'))
     .click(htmlEditor.dialog.footerToolbar.addButton.element);
 
   await t
@@ -46,7 +46,7 @@ test('Image url should be validate before wil be inserted by add enter press', a
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItem('image'));
+    .click(htmlEditor.toolbar.getItemByName('image'));
 
   await t
     .pressKey('enter')
@@ -79,7 +79,7 @@ test('Image url should be updated', async (t) => {
   const htmlEditor = new HtmlEditor('#container');
 
   await t
-    .click(htmlEditor.toolbar.getItem('image'))
+    .click(htmlEditor.toolbar.getItemByName('image'))
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.text)
     .eql(isMaterial() ? 'ADD' : 'Add');
@@ -93,7 +93,7 @@ test('Image url should be updated', async (t) => {
   await testScreenshot(t, takeScreenshot, 'editor-add-url-image-before-updated.png', { element: htmlEditor.content });
 
   await t
-    .click(htmlEditor.toolbar.getItem('image'))
+    .click(htmlEditor.toolbar.getItemByName('image'))
 
     .expect(htmlEditor.dialog.footerToolbar.addButton.text)
     .eql(isMaterial() ? 'UPDATE' : 'Update');

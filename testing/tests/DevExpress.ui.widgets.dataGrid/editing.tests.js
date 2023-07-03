@@ -2835,6 +2835,23 @@ QUnit.module('Editing', {
 
         assert.notOk(spy.called);
     });
+
+    QUnit.test('Not refocus cell after editRowKey was reset', function(assert) {
+        // arrange
+        $.extend(this.options.editing, {
+            allowUpdating: true,
+            mode: 'cell',
+        });
+
+        const spy = sinon.spy(this.editingController, '_focusEditingCell');
+
+        // act
+        this.editingController._refocusEditCell = true;
+        this.editingController._resetEditRowKey();
+
+        // assert
+        assert.notOk(spy.called);
+    });
 });
 
 QUnit.module('Editing with real dataController', {
@@ -7849,6 +7866,9 @@ QUnit.module('Editing with real dataController', {
                 {
                     cssClass: 'mybutton',
                     template: function($cellElement, options) {
+                        // TODO: remove after adding typings to editing module
+                        assert.ok(options.column);
+
                         return $('<div/>').addClass('mybuttontext').text('My button');
                     }
                 }
@@ -20796,7 +20816,14 @@ QUnit.module('Editing - new row position', {
 
         this.setupModules = () => {
             setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'virtualScrolling', 'focus'], {
-                initViews: true
+                initViews: true,
+                controllers: {
+                    keyboardNavigation: {
+                        setFocusedRowIndex: () => {},
+                        focus: () => {},
+                        _fireFocusedRowChanged: () => {},
+                    },
+                },
             });
 
             this.on = (name, callBack) => {

@@ -643,13 +643,11 @@ QUnit.module('Pager', {
         const pagerView = this.pagerView;
 
         this.options.pager.showInfo = true;
-        // eslint-disable-next-line i18n/no-russian-character
-        this.options.pager.infoText = '{0} Страница из {1}';
+        this.options.pager.infoText = 'Page {0} sur {1}';
 
         // act
         pagerView.render(testElement);
-        // eslint-disable-next-line i18n/no-russian-character
-        assert.equal($('.dx-info').text(), '2 Страница из 20');
+        assert.equal($('.dx-info').text(), 'Page 2 sur 20');
     });
 
     QUnit.test('Invalidate instead of render for options', function(assert) {

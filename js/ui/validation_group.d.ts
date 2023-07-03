@@ -29,13 +29,28 @@ export {
     ValidationStatus,
 };
 
-/** @public */
+/**
+ * @docid _ui_validation_group_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxValidationGroup>;
 
-/** @public */
+/**
+ * @docid _ui_validation_group_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxValidationGroup>;
 
-/** @public */
+/**
+ * @docid _ui_validation_group_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxValidationGroup> & ChangedOptionInfo;
 
 /**
@@ -113,8 +128,8 @@ export type Properties = dxValidationGroupOptions;
 export type Options = dxValidationGroupOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
 
@@ -123,19 +138,16 @@ type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>
 */
 type Events = {
 /**
- * @skip
  * @docid dxValidationGroupOptions.onDisposing
  * @type_function_param1 e:{ui/validation_group:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxValidationGroupOptions.onInitialized
  * @type_function_param1 e:{ui/validation_group:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxValidationGroupOptions.onOptionChanged
  * @type_function_param1 e:{ui/validation_group:OptionChangedEvent}
  */

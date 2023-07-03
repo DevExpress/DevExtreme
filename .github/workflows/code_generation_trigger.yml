@@ -1,0 +1,15 @@
+name: Code generation trigger
+
+on:
+  push:
+    branches: [23_1]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger code generation
+        run: |
+          gh workflow run update-generated-code.yml -R DevExpress/devextreme-vue
+    env:
+      GITHUB_TOKEN: ${{ secrets.DX_ROBOT_PAT }}

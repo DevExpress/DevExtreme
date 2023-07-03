@@ -42,7 +42,7 @@ export default class DateRangeBox extends Widget {
 
   // eslint-disable-next-line class-methods-use-this
   getCalendar(): Calendar {
-    return new Calendar(Selector(`.${CLASS.calendar}`));
+    return new Calendar(this.getPopup().getContent().find(`.${CLASS.calendar}`));
   }
 
   getCalendarCell(index: number): Selector {

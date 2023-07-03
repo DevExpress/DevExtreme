@@ -53,25 +53,60 @@ export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 
 /** @public */
 export type MarkupType = 'html' | 'markdown';
 
-/** @public */
+/**
+ * @docid _ui_html_editor_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxHtmlEditor>;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_FocusInEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusInEvent = NativeEventInfo<dxHtmlEditor, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_FocusOutEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type FocusOutEvent = NativeEventInfo<dxHtmlEditor, FocusEvent>;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxHtmlEditor>;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxHtmlEditor> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_html_editor_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxHtmlEditor, KeyboardEvent | ClipboardEvent | Event> & ValueChangedInfo;
 
 /** @public */
@@ -143,9 +178,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxHtmlEditor
+     * @type_function_param1 e:{ui/html_editor:FocusInEvent}
      * @action
      * @public
      */
@@ -153,9 +186,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxHtmlEditor
+     * @type_function_param1 e:{ui/html_editor:FocusOutEvent}
      * @action
      * @public
      */
@@ -678,53 +709,36 @@ export type Properties = dxHtmlEditorOptions;
 export type Options = dxHtmlEditorOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onFocusIn' | 'onFocusOut'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
  * @docid dxHtmlEditorOptions.onContentReady
  * @type_function_param1 e:{ui/html_editor:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxHtmlEditorOptions.onDisposing
  * @type_function_param1 e:{ui/html_editor:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
- * @docid dxHtmlEditorOptions.onFocusIn
- * @type_function_param1 e:{ui/html_editor:FocusInEvent}
- */
-onFocusIn?: ((e: FocusInEvent) => void);
-/**
- * @skip
- * @docid dxHtmlEditorOptions.onFocusOut
- * @type_function_param1 e:{ui/html_editor:FocusOutEvent}
- */
-onFocusOut?: ((e: FocusOutEvent) => void);
-/**
- * @skip
  * @docid dxHtmlEditorOptions.onInitialized
  * @type_function_param1 e:{ui/html_editor:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxHtmlEditorOptions.onOptionChanged
  * @type_function_param1 e:{ui/html_editor:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxHtmlEditorOptions.onValueChanged
  * @type_function_param1 e:{ui/html_editor:ValueChangedEvent}
  */

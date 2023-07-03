@@ -271,6 +271,10 @@ const Tabs = CollectionWidget.inherit({
         this._inkRipple = render();
     },
 
+    _getPointerEvent() {
+        return pointerEvents.up;
+    },
+
     _toggleActiveState: function($element, value, e) {
         this.callBase.apply(this, arguments);
 

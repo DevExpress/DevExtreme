@@ -30,6 +30,8 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
         this._currentDateChanged = true;
 
         if(this.calendar.option('_allowChangeSelectionOrder') === true) {
+            this.calendar._valueSelected = true;
+
             if(this.calendar.option('_currentSelection') === 'startDate') {
                 if(this.calendar._convertToDate(selectedValue) > this.calendar._convertToDate(endDate)) {
                     this.dateValue([selectedValue, null], e);
@@ -68,7 +70,21 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     }
 
     getDefaultCurrentDate() {
-        const dates = this.dateOption('values').filter(value => value);
+        const { _allowChangeSelectionOrder, _currentSelection } = this.calendar.option();
+        const values = this.dateOption('values');
+
+        if(_allowChangeSelectionOrder) {
+            if(_currentSelection === 'startDate' && values[0]) {
+                return values[0];
+            }
+
+            if(_currentSelection === 'endDate' && values[1]) {
+                return values[1];
+            }
+        }
+
+        const dates = values.filter(value => value);
+
         return this._getLowestDateInArray(dates);
     }
 

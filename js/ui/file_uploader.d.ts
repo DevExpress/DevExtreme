@@ -21,78 +21,178 @@ export type FileUploadMode = 'instantly' | 'useButtons' | 'useForm';
 /** @public */
 export type UploadHttpMethod = 'POST' | 'PUT';
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_BeforeSendEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type BeforeSendEvent = EventInfo<dxFileUploader> & {
+    /** @docid _ui_file_uploader_BeforeSendEvent.request */
     readonly request: XMLHttpRequest;
+    /** @docid _ui_file_uploader_BeforeSendEvent.file */
     readonly file: File;
+    /** @docid _ui_file_uploader_BeforeSendEvent.uploadInfo */
     readonly uploadInfo?: UploadInfo;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxFileUploader>;
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxFileUploader>;
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_DropZoneEnterEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type DropZoneEnterEvent = NativeEventInfo<dxFileUploader, PointerEvent | MouseEvent> & {
+    /** @docid _ui_file_uploader_DropZoneEnterEvent.dropZoneElement */
     readonly dropZoneElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_DropZoneLeaveEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type DropZoneLeaveEvent = NativeEventInfo<dxFileUploader, PointerEvent | MouseEvent> & {
+    /** @docid _ui_file_uploader_DropZoneLeaveEvent.dropZoneElement */
     readonly dropZoneElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_FilesUploadedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type FilesUploadedEvent = EventInfo<dxFileUploader>;
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxFileUploader>;
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxFileUploader> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_ProgressEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ProgressEvent = NativeEventInfo<dxFileUploader> & {
+    /** @docid _ui_file_uploader_ProgressEvent.file */
     readonly file: File;
+    /** @docid _ui_file_uploader_ProgressEvent.segmentSize */
     readonly segmentSize: number;
+    /** @docid _ui_file_uploader_ProgressEvent.bytesLoaded */
     readonly bytesLoaded: number;
+    /** @docid _ui_file_uploader_ProgressEvent.bytesTotal */
     readonly bytesTotal: number;
+    /** @docid _ui_file_uploader_ProgressEvent.request */
     readonly request: XMLHttpRequest;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_UploadAbortedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type UploadAbortedEvent = NativeEventInfo<dxFileUploader> & {
+    /** @docid _ui_file_uploader_UploadAbortedEvent.file */
     readonly file: File;
+    /** @docid _ui_file_uploader_UploadAbortedEvent.request */
     readonly request: XMLHttpRequest;
+    /** @docid _ui_file_uploader_UploadAbortedEvent.message */
     message: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_UploadedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type UploadedEvent = NativeEventInfo<dxFileUploader> & {
+    /** @docid _ui_file_uploader_UploadedEvent.file */
     readonly file: File;
+    /** @docid _ui_file_uploader_UploadedEvent.request */
     readonly request: XMLHttpRequest;
+    /** @docid _ui_file_uploader_UploadedEvent.message */
     message: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_UploadErrorEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type UploadErrorEvent = NativeEventInfo<dxFileUploader> & {
+    /** @docid _ui_file_uploader_UploadErrorEvent.file */
     readonly file: File;
+    /** @docid _ui_file_uploader_UploadErrorEvent.request */
     readonly request: XMLHttpRequest;
+    /** @docid _ui_file_uploader_UploadErrorEvent.error */
     readonly error: any;
+    /** @docid _ui_file_uploader_UploadErrorEvent.message */
     message: string;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_UploadStartedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type UploadStartedEvent = NativeEventInfo<dxFileUploader> & {
+    /** @docid _ui_file_uploader_UploadStartedEvent.file */
     readonly file: File;
+    /** @docid _ui_file_uploader_UploadStartedEvent.request */
     readonly request: XMLHttpRequest;
 };
 
-/** @public */
+/**
+ * @docid _ui_file_uploader_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
+    /**
+     * @docid _ui_file_uploader_ValueChangedEvent.value
+     * @type Array<File>
+     */
     readonly value?: Array<File>;
+    /**
+     * @docid _ui_file_uploader_ValueChangedEvent.previousValue
+     * @type Array<File>
+     */
     readonly previousValue?: Array<File>;
 };
 
@@ -203,8 +303,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileUploader
+     * @type_function_param1 e:{ui/file_uploader:BeforeSendEvent}
      * @action
      * @public
      */
@@ -212,9 +311,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileUploader
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/file_uploader:DropZoneEnterEvent}
      * @action
      * @public
      */
@@ -222,9 +319,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileUploader
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/file_uploader:DropZoneLeaveEvent}
      * @action
      * @public
      */
@@ -232,8 +327,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileUploader
+     * @type_function_param1 e:{ui/file_uploader:FilesUploadedEvent}
      * @action
      * @public
      */
@@ -241,9 +335,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileUploader
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/file_uploader:ProgressEvent}
      * @action
      * @public
      */
@@ -251,9 +343,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileUploader
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/file_uploader:UploadAbortedEvent}
      * @action
      * @public
      */
@@ -261,9 +351,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileUploader
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/file_uploader:UploadErrorEvent}
      * @action
      * @public
      */
@@ -271,9 +359,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileUploader
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/file_uploader:UploadStartedEvent}
      * @action
      * @public
      */
@@ -281,9 +367,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileUploader
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/file_uploader:UploadedEvent}
      * @action
      * @public
      */
@@ -291,11 +375,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxFileUploader
-     * @type_function_param1_field value:Array<File>
-     * @type_function_param1_field previousValue:Array<File>
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/file_uploader:ValueChangedEvent}
      * @action
      * @public
      */
@@ -473,100 +553,36 @@ export type Properties = dxFileUploaderOptions;
 export type Options = dxFileUploaderOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onBeforeSend' | 'onDropZoneEnter' | 'onDropZoneLeave' | 'onFilesUploaded' | 'onProgress' | 'onUploadAborted' | 'onUploaded' | 'onUploadError' | 'onUploadStarted' | 'onValueChanged'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
- * @docid dxFileUploaderOptions.onBeforeSend
- * @type_function_param1 e:{ui/file_uploader:BeforeSendEvent}
- */
-onBeforeSend?: ((e: BeforeSendEvent) => void);
-/**
- * @skip
  * @docid dxFileUploaderOptions.onContentReady
  * @type_function_param1 e:{ui/file_uploader:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxFileUploaderOptions.onDisposing
  * @type_function_param1 e:{ui/file_uploader:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
- * @docid dxFileUploaderOptions.onDropZoneEnter
- * @type_function_param1 e:{ui/file_uploader:DropZoneEnterEvent}
- */
-onDropZoneEnter?: ((e: DropZoneEnterEvent) => void);
-/**
- * @skip
- * @docid dxFileUploaderOptions.onDropZoneLeave
- * @type_function_param1 e:{ui/file_uploader:DropZoneLeaveEvent}
- */
-onDropZoneLeave?: ((e: DropZoneLeaveEvent) => void);
-/**
- * @skip
- * @docid dxFileUploaderOptions.onFilesUploaded
- * @type_function_param1 e:{ui/file_uploader:FilesUploadedEvent}
- */
-onFilesUploaded?: ((e: FilesUploadedEvent) => void);
-/**
- * @skip
  * @docid dxFileUploaderOptions.onInitialized
  * @type_function_param1 e:{ui/file_uploader:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxFileUploaderOptions.onOptionChanged
  * @type_function_param1 e:{ui/file_uploader:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxFileUploaderOptions.onProgress
- * @type_function_param1 e:{ui/file_uploader:ProgressEvent}
- */
-onProgress?: ((e: ProgressEvent) => void);
-/**
- * @skip
- * @docid dxFileUploaderOptions.onUploadAborted
- * @type_function_param1 e:{ui/file_uploader:UploadAbortedEvent}
- */
-onUploadAborted?: ((e: UploadAbortedEvent) => void);
-/**
- * @skip
- * @docid dxFileUploaderOptions.onUploaded
- * @type_function_param1 e:{ui/file_uploader:UploadedEvent}
- */
-onUploaded?: ((e: UploadedEvent) => void);
-/**
- * @skip
- * @docid dxFileUploaderOptions.onUploadError
- * @type_function_param1 e:{ui/file_uploader:UploadErrorEvent}
- */
-onUploadError?: ((e: UploadErrorEvent) => void);
-/**
- * @skip
- * @docid dxFileUploaderOptions.onUploadStarted
- * @type_function_param1 e:{ui/file_uploader:UploadStartedEvent}
- */
-onUploadStarted?: ((e: UploadStartedEvent) => void);
-/**
- * @skip
- * @docid dxFileUploaderOptions.onValueChanged
- * @type_function_param1 e:{ui/file_uploader:ValueChangedEvent}
- */
-onValueChanged?: ((e: ValueChangedEvent) => void);
 };
 ///#ENDDEBUG

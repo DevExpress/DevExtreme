@@ -4,37 +4,49 @@ import LocalStore, { Options as LocalStoreOptions } from './local_store';
 import ODataStore, { Options as ODataStoreOptions } from './odata/store';
 
 /**
- * @docid
  * @public
  */
 export type SearchOperation = '=' | '<>' | '>' | '>=' | '<' | '<=' | 'startswith' | 'endswith' | 'contains' | 'notcontains';
 
 type KeySelector<T> = string | ((source: T) => string | number | Date | Object);
 
-type BaseGroupDescriptor<T> = {
+type SelectionDescriptor<T> = {
     selector: KeySelector<T>;
 };
 
-/**
- * @docid
- * @public
- * @type object
- */
-export type GroupDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
+type OrderingDescriptor<T> = SelectionDescriptor<T> & {
     desc?: boolean;
 };
 
 /**
- * @docid
  * @public
- * @type object
  */
-export type SortDescriptor<T> = GroupDescriptor<T>;
+export type GroupingInterval = 'year' | 'quarter' | 'month' | 'day' | 'dayOfWeek' | 'hour' | 'minute' | 'second';
 
 /**
  * @docid
  * @public
  * @type object
+ * @skip
+ */
+export type GroupDescriptor<T> = KeySelector<T> | (OrderingDescriptor<T> & {
+    groupInterval?: number | GroupingInterval;
+    isExpanded?: boolean;
+});
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @skip
+ */
+export type SortDescriptor<T> = KeySelector<T> | OrderingDescriptor<T>;
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @skip
  */
 export type SelectDescriptor<T> = string | Array<string> | ((source: T) => any);
 /**
@@ -64,7 +76,7 @@ export type LangParams = {
  * @public
  * @type object
  */
-export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
+export type SummaryDescriptor<T> = KeySelector<T> | SelectionDescriptor<T> & {
     summaryType?: 'sum' | 'avg' | 'min' | 'max' | 'count';
 };
 
@@ -110,7 +122,7 @@ export interface LoadOptions<T = any> {
     /**
      * @docid
      * @public
-     * @type object
+     * @type SummaryDescriptor | Array<SummaryDescriptor>
      */
     groupSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
     /**
@@ -169,7 +181,7 @@ export interface LoadOptions<T = any> {
     /**
      * @docid
      * @public
-     * @type object
+     * @type SummaryDescriptor | Array<SummaryDescriptor>
      */
     totalSummary?: SummaryDescriptor<T> | Array<SummaryDescriptor<T>>;
     /**

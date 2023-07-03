@@ -47,8 +47,20 @@ interface AppointmentDraggingEvent {
   readonly fromData?: any;
 }
 
-interface TargetedAppointmentInfo {
+/**
+ * @docid
+ * @hidden
+ */
+export interface TargetedAppointmentInfo {
+  /**
+   * @docid
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /**
+   * @docid
+   * @type dxSchedulerAppointment
+   */
   readonly targetedAppointmentData?: Appointment;
 }
 
@@ -67,49 +79,124 @@ export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentAddedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentAddedEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentAddedEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /** @docid _ui_scheduler_AppointmentAddedEvent.error */
   readonly error?: Error;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentAddingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentAddingEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /**
+   * @docid _ui_scheduler_AppointmentAddingEvent.cancel
+   * @type Boolean|Promise<Boolean>
+   */
   cancel: boolean | PromiseLike<boolean>;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,TargetedAppointmentInfo
+ */
 export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardEvent | MouseEvent | PointerEvent> & TargetedAppointmentInfo & {
+  /** @docid _ui_scheduler_AppointmentClickEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentContextMenuEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,TargetedAppointmentInfo
+ */
 export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & TargetedAppointmentInfo & {
+  /** @docid _ui_scheduler_AppointmentContextMenuEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentDblClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,TargetedAppointmentInfo
+ */
 export type AppointmentDblClickEvent = Cancelable & NativeEventInfo<dxScheduler, MouseEvent | PointerEvent> & TargetedAppointmentInfo & {
+  /** @docid _ui_scheduler_AppointmentDblClickEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentDeletedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentDeletedEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentDeletedEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /** @docid _ui_scheduler_AppointmentDeletedEvent.error */
   readonly error?: Error;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentDeletingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentDeletingEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentDeletingEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /**
+   * @docid _ui_scheduler_AppointmentDeletingEvent.cancel
+   * @type Boolean|Promise<Boolean>
+   */
   cancel: boolean | PromiseLike<boolean>;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentFormOpeningEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type AppointmentFormOpeningEvent = Cancelable & EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentFormOpeningEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData?: Appointment;
+  /** @docid _ui_scheduler_AppointmentFormOpeningEvent.form */
   readonly form: dxForm;
+  /** @docid _ui_scheduler_AppointmentFormOpeningEvent.popup */
   readonly popup: dxPopup;
 };
 
@@ -123,52 +210,135 @@ export type AppointmentTooltipShowingAppointmentInfo = {
   readonly color: PromiseLike<string>;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentTooltipShowingEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,EventInfo
+ */
 export type AppointmentTooltipShowingEvent = Cancelable & EventInfo<dxScheduler> & {
+  /** @docid _ui_scheduler_AppointmentTooltipShowingEvent.targetElement */
   readonly targetElement: DxElement;
+  /**
+   * @docid _ui_scheduler_AppointmentTooltipShowingEvent.appointments
+   * @type Array<object>
+   */
   readonly appointments: AppointmentTooltipShowingAppointmentInfo[];
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentRenderedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,TargetedAppointmentInfo
+ */
 export type AppointmentRenderedEvent = EventInfo<dxScheduler> & TargetedAppointmentInfo & {
+  /** @docid _ui_scheduler_AppointmentRenderedEvent.appointmentElement */
   readonly appointmentElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentUpdatedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentUpdatedEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentUpdatedEvent.appointmentData
+   * @type dxSchedulerAppointment
+   */
   readonly appointmentData: Appointment;
+  /** @docid _ui_scheduler_AppointmentUpdatedEvent.error */
   readonly error?: Error;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_AppointmentUpdatingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
+  /**
+   * @docid _ui_scheduler_AppointmentUpdatingEvent.oldData
+   * @type Object
+   */
   readonly oldData: any;
+  /**
+   * @docid _ui_scheduler_AppointmentUpdatingEvent.newData
+   * @type Object
+   */
   readonly newData: any;
+  /**
+   * @docid _ui_scheduler_AppointmentUpdatingEvent.cancel
+   * @type Boolean|Promise<Boolean>
+   */
   cancel?: boolean | PromiseLike<boolean>;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_CellClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardEvent | MouseEvent | PointerEvent> & {
+  /**
+   * @docid _ui_scheduler_CellClickEvent.cellData
+   * @type object
+   */
   readonly cellData: any;
+  /** @docid _ui_scheduler_CellClickEvent.cellElement */
   readonly cellElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_CellContextMenuEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CellContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & {
+  /**
+   * @docid _ui_scheduler_CellContextMenuEvent.cellData
+   * @type object
+   */
   readonly cellData: any;
+  /** @docid _ui_scheduler_CellContextMenuEvent.cellElement */
   readonly cellElement: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_scheduler_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxScheduler>;
 
-/** @public */
+/**
+ * @docid _ui_scheduler_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxScheduler>;
 
-/** @public */
+/**
+ * @docid _ui_scheduler_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxScheduler>;
 
-/** @public */
+/**
+ * @docid _ui_scheduler_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxScheduler> & ChangedOptionInfo;
 
 /** @public */
@@ -201,11 +371,22 @@ export type AppointmentDraggingRemoveEvent = AppointmentDraggingEvent & {
   readonly toComponent?: dxSortable | dxDraggable;
 };
 
-/** @public */
+/**
+ * @docid
+ * @public
+ * @inherits TargetedAppointmentInfo
+ */
 export type AppointmentTemplateData = TargetedAppointmentInfo;
 
-/** @public */
+/**
+ * @docid
+ * @public
+ * @inherits TargetedAppointmentInfo
+ */
 export type AppointmentTooltipTemplateData = TargetedAppointmentInfo & {
+  /**
+   * @docid
+   */
   readonly isButtonClicked: boolean;
 };
 
@@ -310,6 +491,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default "item"
+     * @type_function_param1 model:{ui/scheduler:AppointmentTemplateData}
      * @type_function_param1_field appointmentData:object
      * @type_function_param1_field targetedAppointmentData:object
      * @public
@@ -318,6 +500,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default "appointmentTooltip"
+     * @type_function_param1 model:{ui/scheduler:AppointmentTooltipTemplateData}
      * @type_function_param1_field appointmentData:object
      * @type_function_param1_field targetedAppointmentData:object
      * @public
@@ -512,9 +695,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1 e:{ui/scheduler:AppointmentAddedEvent}
      * @action
      * @public
      */
@@ -522,10 +703,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field cancel:Boolean|Promise<Boolean>
+     * @type_function_param1 e:{ui/scheduler:AppointmentAddingEvent}
      * @action
      * @public
      */
@@ -534,11 +712,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/scheduler:AppointmentClickEvent}
      * @action
      * @public
      */
@@ -547,11 +721,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/scheduler:AppointmentContextMenuEvent}
      * @action
      * @public
      */
@@ -560,11 +730,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/scheduler:AppointmentDblClickEvent}
      * @action
      * @public
      */
@@ -572,9 +738,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1 e:{ui/scheduler:AppointmentDeletedEvent}
      * @action
      * @public
      */
@@ -583,10 +747,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field cancel:Boolean|Promise<Boolean>
+     * @type_function_param1 e:{ui/scheduler:AppointmentDeletingEvent}
      * @action
      * @public
      */
@@ -594,9 +755,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field appointments:Array<object>
+     * @type_function_param1 e:{ui/scheduler:AppointmentTooltipShowingEvent}
      * @action
      * @public
      */
@@ -604,9 +763,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field appointmentData:dxSchedulerAppointment
+     * @type_function_param1 e:{ui/scheduler:AppointmentFormOpeningEvent}
      * @action
      * @public
      */
@@ -614,10 +771,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field targetedAppointmentData:dxSchedulerAppointment|undefined
+     * @type_function_param1 e:{ui/scheduler:AppointmentRenderedEvent}
      * @action
      * @public
      */
@@ -625,9 +779,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field appointmentData:dxSchedulerAppointment
-     * @type_function_param1_field component:dxScheduler
+     * @type_function_param1 e:{ui/scheduler:AppointmentUpdatedEvent}
      * @action
      * @public
      */
@@ -635,11 +787,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field oldData:Object
-     * @type_function_param1_field newData:Object
-     * @type_function_param1_field cancel:Boolean|Promise<Boolean>
+     * @type_function_param1 e:{ui/scheduler:AppointmentUpdatingEvent}
      * @action
      * @public
      */
@@ -648,10 +796,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field event:event
-     * @type_function_param1_field cellData:object
+     * @type_function_param1 e:{ui/scheduler:CellClickEvent}
      * @action
      * @public
      */
@@ -660,10 +805,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxScheduler
-     * @type_function_param1_field event:event
-     * @type_function_param1_field cellData:object
+     * @type_function_param1 e:{ui/scheduler:CellContextMenuEvent}
      * @action
      * @public
      */
@@ -847,6 +989,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default "item"
+       * @type_function_param1 model:{ui/scheduler:AppointmentTemplateData}
        * @type_function_param1_field appointmentData:object
        * @type_function_param1_field targetedAppointmentData:object
        */
@@ -854,6 +997,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default "appointmentTooltip"
+       * @type_function_param1 model:{ui/scheduler:AppointmentTooltipTemplateData}
        * @type_function_param1_field appointmentData:object
        * @type_function_param1_field targetedAppointmentData:object
        */
@@ -1166,121 +1310,33 @@ export interface dxSchedulerScrolling {
 }
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onAppointmentAdded' | 'onAppointmentAdding' | 'onAppointmentClick' | 'onAppointmentContextMenu' | 'onAppointmentDblClick' | 'onAppointmentDeleted' | 'onAppointmentDeleting' | 'onAppointmentFormOpening' | 'onAppointmentRendered' | 'onAppointmentTooltipShowing' | 'onAppointmentUpdated' | 'onAppointmentUpdating' | 'onCellClick' | 'onCellContextMenu'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentAdded
- * @type_function_param1 e:{ui/scheduler:AppointmentAddedEvent}
- */
-onAppointmentAdded?: ((e: AppointmentAddedEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentAdding
- * @type_function_param1 e:{ui/scheduler:AppointmentAddingEvent}
- */
-onAppointmentAdding?: ((e: AppointmentAddingEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentClick
- * @type_function_param1 e:{ui/scheduler:AppointmentClickEvent}
- */
-onAppointmentClick?: ((e: AppointmentClickEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentContextMenu
- * @type_function_param1 e:{ui/scheduler:AppointmentContextMenuEvent}
- */
-onAppointmentContextMenu?: ((e: AppointmentContextMenuEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentDblClick
- * @type_function_param1 e:{ui/scheduler:AppointmentDblClickEvent}
- */
-onAppointmentDblClick?: ((e: AppointmentDblClickEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentDeleted
- * @type_function_param1 e:{ui/scheduler:AppointmentDeletedEvent}
- */
-onAppointmentDeleted?: ((e: AppointmentDeletedEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentDeleting
- * @type_function_param1 e:{ui/scheduler:AppointmentDeletingEvent}
- */
-onAppointmentDeleting?: ((e: AppointmentDeletingEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentFormOpening
- * @type_function_param1 e:{ui/scheduler:AppointmentFormOpeningEvent}
- */
-onAppointmentFormOpening?: ((e: AppointmentFormOpeningEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentRendered
- * @type_function_param1 e:{ui/scheduler:AppointmentRenderedEvent}
- */
-onAppointmentRendered?: ((e: AppointmentRenderedEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentTooltipShowing
- * @type_function_param1 e:{ui/scheduler:AppointmentTooltipShowingEvent}
- */
-onAppointmentTooltipShowing?: ((e: AppointmentTooltipShowingEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentUpdated
- * @type_function_param1 e:{ui/scheduler:AppointmentUpdatedEvent}
- */
-onAppointmentUpdated?: ((e: AppointmentUpdatedEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onAppointmentUpdating
- * @type_function_param1 e:{ui/scheduler:AppointmentUpdatingEvent}
- */
-onAppointmentUpdating?: ((e: AppointmentUpdatingEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onCellClick
- * @type_function_param1 e:{ui/scheduler:CellClickEvent}
- */
-onCellClick?: ((e: CellClickEvent) => void);
-/**
- * @skip
- * @docid dxSchedulerOptions.onCellContextMenu
- * @type_function_param1 e:{ui/scheduler:CellContextMenuEvent}
- */
-onCellContextMenu?: ((e: CellContextMenuEvent) => void);
-/**
- * @skip
  * @docid dxSchedulerOptions.onContentReady
  * @type_function_param1 e:{ui/scheduler:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxSchedulerOptions.onDisposing
  * @type_function_param1 e:{ui/scheduler:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSchedulerOptions.onInitialized
  * @type_function_param1 e:{ui/scheduler:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSchedulerOptions.onOptionChanged
  * @type_function_param1 e:{ui/scheduler:OptionChangedEvent}
  */

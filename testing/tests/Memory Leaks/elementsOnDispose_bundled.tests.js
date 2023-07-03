@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const GoogleProvider = require('ui/map/provider.dynamic.google');
-const memoryLeaksHelper = require('../../helpers/memoryLeaksHelper.js');
+import $ from 'jquery';
+import GoogleProvider from 'ui/map/provider.dynamic.google';
+import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
 
-require('bundles/modules/parts/widgets-web');
+import 'bundles/modules/parts/widgets-web';
 
 GoogleProvider.remapConstant('http://fakeUrl');
 

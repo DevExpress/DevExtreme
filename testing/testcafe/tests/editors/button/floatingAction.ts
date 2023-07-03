@@ -128,7 +128,7 @@ fixture.disablePageReloads`FloatingAction - compact theme`
 
 for (const label of ['Add Row', '']) {
   for (const icon of ['home', '']) {
-    test(`FAB with one speed dial action button, label: ${label}, icon: ${icon}`, async (t) => {
+    test(`FAB with one speed dial action button in compact, label: ${label}, icon: ${icon}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t

@@ -1,31 +1,32 @@
 import dataQuery from '../../data/query';
 import { getKeyHash, noop, equalByValue } from '../../core/utils/common';
 import { isPlainObject, isObject } from '../../core/utils/type';
-import Class from '../../core/class';
 import { Deferred } from '../../core/utils/deferred';
 
-export default Class.inherit({
-    ctor: function(options) {
+export default class SelectionStrategy {
+    constructor(options) {
         this.options = options;
 
         this._setOption('disabledItemKeys', []);
         this._clearItemKeys();
-    },
+    }
 
-    _clearItemKeys: function() {
+    _clearItemKeys() {
         this._setOption('addedItemKeys', []);
         this._setOption('removedItemKeys', []);
         this._setOption('removedItems', []);
         this._setOption('addedItems', []);
-    },
+    }
 
-    validate: noop,
+    validate() {
 
-    _setOption: function(name, value) {
+    }
+
+    _setOption(name, value) {
         this.options[name] = value;
-    },
+    }
 
-    onSelectionChanged: function() {
+    onSelectionChanged() {
         const addedItemKeys = this.options.addedItemKeys;
         const removedItemKeys = this.options.removedItemKeys;
         const addedItems = this.options.addedItems;
@@ -43,9 +44,9 @@ export default Class.inherit({
             addedItems: addedItems,
             removedItems: removedItems
         });
-    },
+    }
 
-    equalKeys: function(key1, key2) {
+    equalKeys(key1, key2) {
         if(this.options.equalByReference) {
             if(isObject(key1) && isObject(key2)) {
                 return key1 === key2;
@@ -53,23 +54,23 @@ export default Class.inherit({
         }
 
         return equalByValue(key1, key2);
-    },
+    }
 
-    getSelectableItems: function(items) {
+    getSelectableItems(items) {
         return items.filter(function(item) {
             return !item?.disabled;
         });
-    },
+    }
 
-    _clearSelection: function(keys, preserve, isDeselect, isSelectAll) {
+    _clearSelection(keys, preserve, isDeselect, isSelectAll) {
         keys = keys || [];
         keys = Array.isArray(keys) ? keys : [keys];
         this.validate();
 
         return this.selectedItemKeys(keys, preserve, isDeselect, isSelectAll);
-    },
+    }
 
-    _removeTemplateProperty: function(remoteFilter) {
+    _removeTemplateProperty(remoteFilter) {
         if(Array.isArray(remoteFilter)) {
             return remoteFilter.map((f) => this._removeTemplateProperty(f));
         }
@@ -79,9 +80,9 @@ export default Class.inherit({
         }
 
         return remoteFilter;
-    },
+    }
 
-    _loadFilteredData: function(remoteFilter, localFilter, select, isSelectAll) {
+    _loadFilteredData(remoteFilter, localFilter, select, isSelectAll) {
         const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
         const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
         const deferred = new Deferred();
@@ -109,9 +110,9 @@ export default Class.inherit({
         }
 
         return deferred;
-    },
+    }
 
-    updateSelectedItemKeyHash: function(keys) {
+    updateSelectedItemKeyHash(keys) {
         for(let i = 0; i < keys.length; i++) {
             const keyHash = getKeyHash(keys[i]);
 
@@ -122,9 +123,9 @@ export default Class.inherit({
                 keyIndices.push(i);
             }
         }
-    },
+    }
 
-    _isAnyItemSelected: function(items) {
+    _isAnyItemSelected(items) {
         for(let i = 0; i < items.length; i++) {
             if(this.options.isItemSelected(items[i])) {
                 return undefined;
@@ -132,9 +133,9 @@ export default Class.inherit({
         }
 
         return false;
-    },
+    }
 
-    _getFullSelectAllState: function() {
+    _getFullSelectAllState() {
         const items = this.options.plainItems();
         const dataFilter = this.options.filter();
         let selectedItems = this.options.ignoreDisabledItems ? this.options.selectedItems : this.options.selectedItems.filter(item => !item?.disabled);
@@ -154,9 +155,9 @@ export default Class.inherit({
             return true;
         }
         return undefined;
-    },
+    }
 
-    _getVisibleSelectAllState: function() {
+    _getVisibleSelectAllState() {
         const items = this.getSelectableItems(this.options.plainItems());
         let hasSelectedItems = false;
         let hasUnselectedItems = false;
@@ -181,4 +182,4 @@ export default Class.inherit({
             return false;
         }
     }
-});
+}

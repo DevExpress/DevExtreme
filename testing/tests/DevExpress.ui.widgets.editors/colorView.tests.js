@@ -10,6 +10,9 @@ const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 const COLORVIEW_PALETTE_SELECTOR = '.dx-colorview-palette';
 const COLORVIEW_HUE_SCALE_SELECTOR = '.dx-colorview-hue-scale';
 const COLORVIEW_ALPHA_CHANNEL_SCALE_SELECTOR = '.dx-colorview-alpha-channel-scale';
+const COLORVIEW_PALETTE_HANDLE_SELECTOR = '.dx-colorview-palette-handle';
+const COLORVIEW_LABEL_HEX_SELECTOR = '.dx-colorview-label-hex';
+const TEXTBOX_SELECTOR = '.dx-textbox';
 
 import 'generic_light.css!';
 import 'ui/color_box/color_view';
@@ -1144,6 +1147,26 @@ QUnit.module('aria accessibility', () => {
         assert.equal($b.attr('aria-label'), 'Blue', 'blue label is correct');
         assert.equal($alpha.attr('aria-label'), 'Transparency', 'alpha label is correct');
         assert.equal($code.attr('aria-label'), 'Color code', 'hex label is correct');
+    });
+
+    QUnit.test('handle should have role="application" and id', function(assert) {
+        const $element = $('#color-view').dxColorView({
+            ariaId: 'ariaId'
+        });
+
+        const $handle = $element.find(COLORVIEW_PALETTE_HANDLE_SELECTOR);
+
+        assert.strictEqual($handle.attr('role'), 'application');
+        assert.strictEqual($handle.attr('id'), 'ariaId');
+    });
+
+    QUnit.test('hex input should have id equal to aria-labelledby of handle', function(assert) {
+        const $element = $('#color-view').dxColorView();
+
+        const $handle = $element.find(COLORVIEW_PALETTE_HANDLE_SELECTOR);
+        const $code = $element.find(`${COLORVIEW_LABEL_HEX_SELECTOR} ${TEXTBOX_SELECTOR}`);
+
+        assert.strictEqual($handle.attr('labelledby'), $code.attr('id'));
     });
 });
 

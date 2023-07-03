@@ -13,22 +13,52 @@ import dxTrackBar, {
     dxTrackBarOptions,
 } from './track_bar';
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_CompleteEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type CompleteEvent = NativeEventInfo<dxProgressBar>;
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxProgressBar>;
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxProgressBar>;
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxProgressBar>;
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxProgressBar> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _ui_progress_bar_ValueChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
 export type ValueChangedEvent = NativeEventInfo<dxProgressBar> & ValueChangedInfo;
 
 /**
@@ -40,9 +70,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field component:dxProgressBar
+     * @type_function_param1 e:{ui/progress_bar:CompleteEvent}
      * @action
      * @public
      */
@@ -81,49 +109,38 @@ export type Properties = dxProgressBarOptions;
 export type Options = dxProgressBarOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onComplete'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
- * @docid dxProgressBarOptions.onComplete
- * @type_function_param1 e:{ui/progress_bar:CompleteEvent}
- */
-onComplete?: ((e: CompleteEvent) => void);
-/**
- * @skip
  * @docid dxProgressBarOptions.onContentReady
  * @type_function_param1 e:{ui/progress_bar:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onDisposing
  * @type_function_param1 e:{ui/progress_bar:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onInitialized
  * @type_function_param1 e:{ui/progress_bar:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onOptionChanged
  * @type_function_param1 e:{ui/progress_bar:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxProgressBarOptions.onValueChanged
  * @type_function_param1 e:{ui/progress_bar:ValueChangedEvent}
  */

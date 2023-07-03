@@ -241,7 +241,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _checkBoxModeChange: function(value, previousValue) {
         if(previousValue === 'none' || value === 'none') {
-            this.repaint();
             return;
         }
 
@@ -285,6 +284,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 break;
             case 'showCheckBoxesMode':
                 this._checkBoxModeChange(value, previousValue);
+                this._invalidate();
                 break;
             case 'scrollDirection':
                 this.getScrollable().option('direction', value);

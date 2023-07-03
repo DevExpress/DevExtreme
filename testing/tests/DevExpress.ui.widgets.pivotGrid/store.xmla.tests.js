@@ -10,9 +10,9 @@ define(function(require) {
     const $ = require('jquery');
     const browser = require('core/utils/browser');
     const devices = require('core/devices');
-    const pivotGridUtils = require('__internal/grids/pivot_grid/module_widget_utils');
-    const pivotGridDataSourceUtils = require('__internal/grids/pivot_grid/data_source/module_utils');
-    const { XmlaStore } = require('__internal/grids/pivot_grid/xmla_store/module');
+    const pivotGridUtils = require('__internal/grids/pivot_grid/m_widget_utils');
+    const pivotGridDataSourceUtils = require('__internal/grids/pivot_grid/data_source/m_data_source_utils');
+    const { XmlaStore } = require('__internal/grids/pivot_grid/xmla_store/m_xmla_store');
 
     const PivotGridTestSettings = require('../../helpers/pivotGridTestSettings.js').default;
 
@@ -3913,11 +3913,9 @@ define(function(require) {
 
             store.load({
                 columns: [
-                    // eslint-disable-next-line i18n/no-russian-character
-                    { dataField: '[Агрегация по дате].[Агрегация по дате]', area: 'column' }
+                    { dataField: '[Agrégation par date].[Agrégation par date]', area: 'column' }
                 ],
-                // eslint-disable-next-line i18n/no-russian-character
-                values: [{ dataField: '[Measures].[Опер_Колво]' }]
+                values: [{ dataField: '[Measures].[Fon_nombre]' }]
             }).done(function(data) {
                 assert.deepEqual(data.rows, []);
                 assert.strictEqual(data.columns.length, 3);
@@ -3942,13 +3940,11 @@ define(function(require) {
                 cube: 'CubeMobile'
             });
             store.load({
-                /* eslint-disable i18n/no-russian-character */
                 columns: [
-                    { dataField: '[Агрегация по дате].[Агрегация по дате]', area: 'column', expanded: true },
-                    { dataField: '[Дата].[Год]' }
+                    { dataField: '[Agrégation par date].[Agrégation par date]', area: 'column', expanded: true },
+                    { dataField: '[Date].[L\'année]' }
                 ],
-                values: [{ dataField: '[Measures].[Опер_Колво]' }]
-                /* eslint-enable */
+                values: [{ dataField: '[Measures].[Fon_nombre]' }]
             }).done(function(data) {
                 assert.deepEqual(data.rows, []);
                 assert.strictEqual(data.columns.length, 3);

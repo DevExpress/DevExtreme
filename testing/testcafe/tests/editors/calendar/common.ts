@@ -185,12 +185,31 @@ test('Calendar with multiview rendered correct', async (t) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await setStyleAttribute(Selector('#container'), 'width: 600px; height: 800px;');
+    await setStyleAttribute(Selector('#container'), 'width: 400px; height: 400px;');
     await appendElementTo('#container', 'div', 'calendar');
 
     return createWidget('dxCalendar', {
       value: new Date(2021, 9, 17),
       zoomLevel,
+    }, '#calendar');
+  });
+
+  test(`Calendar ${zoomLevel} view rendered correct in RTL`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, `Calendar ${zoomLevel} view in RTL mode.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await setStyleAttribute(Selector('#container'), 'width: 400px; height: 400px;');
+    await appendElementTo('#container', 'div', 'calendar');
+
+    return createWidget('dxCalendar', {
+      value: new Date(2021, 9, 17),
+      zoomLevel,
+      rtlEnabled: true,
     }, '#calendar');
   });
 

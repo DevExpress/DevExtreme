@@ -90,38 +90,94 @@ export interface BarGaugeLegendItem extends BaseLegendItem {
     item?: BarGaugeBarInfo;
 }
 
+/**
+ * @docid _viz_bar_gauge_TooltipInfo
+ * @hidden
+ */
+
 export interface TooltipInfo {
+    /** @docid _viz_bar_gauge_TooltipInfo.target */
     target?: any;
 }
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxBarGauge>;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxBarGauge>;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxBarGauge>;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxBarGauge> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxBarGauge>;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxBarGauge> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxBarGauge>;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxBarGauge> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_TooltipHiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_bar_gauge_TooltipInfo
+ */
 export type TooltipHiddenEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_bar_gauge_TooltipShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_bar_gauge_TooltipInfo
+ */
 export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
 /**
@@ -242,9 +298,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxBarGauge
-     * @type_function_param1_field target:object
+     * @type_function_param1 e:{viz/bar_gauge:TooltipHiddenEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -253,9 +307,7 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxBarGauge
-     * @type_function_param1_field target:object
+     * @type_function_param1 e:{viz/bar_gauge:TooltipShownEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -416,74 +468,54 @@ export type Properties = dxBarGaugeOptions;
 export type Options = dxBarGaugeOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onTooltipHidden' | 'onTooltipShown'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
  * @docid dxBarGaugeOptions.onDisposing
  * @type_function_param1 e:{viz/bar_gauge:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxBarGaugeOptions.onDrawn
  * @type_function_param1 e:{viz/bar_gauge:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxBarGaugeOptions.onExported
  * @type_function_param1 e:{viz/bar_gauge:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxBarGaugeOptions.onExporting
  * @type_function_param1 e:{viz/bar_gauge:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxBarGaugeOptions.onFileSaving
  * @type_function_param1 e:{viz/bar_gauge:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxBarGaugeOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/bar_gauge:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxBarGaugeOptions.onInitialized
  * @type_function_param1 e:{viz/bar_gauge:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxBarGaugeOptions.onOptionChanged
  * @type_function_param1 e:{viz/bar_gauge:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @skip
- * @docid dxBarGaugeOptions.onTooltipHidden
- * @type_function_param1 e:{viz/bar_gauge:TooltipHiddenEvent}
- */
-onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
-/**
- * @skip
- * @docid dxBarGaugeOptions.onTooltipShown
- * @type_function_param1 e:{viz/bar_gauge:TooltipShownEvent}
- */
-onTooltipShown?: ((e: TooltipShownEvent) => void);
 };
 ///#ENDDEBUG

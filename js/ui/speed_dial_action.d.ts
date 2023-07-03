@@ -13,23 +13,50 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
-/** @public */
+/**
+ * @docid _ui_speed_dial_action_ClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ClickEvent = NativeEventInfo<dxSpeedDialAction, MouseEvent | PointerEvent> & {
+    /** @docid _ui_speed_dial_action_ClickEvent.actionElement */
     actionElement?: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_speed_dial_action_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxSpeedDialAction> & {
+    /** @docid _ui_speed_dial_action_ContentReadyEvent.actionElement */
     actionElement?: DxElement;
 };
 
-/** @public */
+/**
+ * @docid _ui_speed_dial_action_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxSpeedDialAction>;
 
-/** @public */
+/**
+ * @docid _ui_speed_dial_action_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxSpeedDialAction>;
 
-/** @public */
+/**
+ * @docid _ui_speed_dial_action_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxSpeedDialAction> & ChangedOptionInfo;
 
 /**
@@ -58,9 +85,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
     label?: string;
     /**
      * @docid
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:this
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{ui/speed_dial_action:ClickEvent}
      * @action
      * @public
      */
@@ -68,8 +93,7 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxSpeedDialAction
+     * @type_function_param1 e:{ui/speed_dial_action:ContentReadyEvent}
      * @action
      * @public
      */
@@ -95,43 +119,28 @@ export type Properties = dxSpeedDialActionOptions;
 export type Options = dxSpeedDialActionOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onClick' | 'onContentReady'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
- * @docid dxSpeedDialActionOptions.onClick
- * @type_function_param1 e:{ui/speed_dial_action:ClickEvent}
- */
-onClick?: ((e: ClickEvent) => void);
-/**
- * @skip
- * @docid dxSpeedDialActionOptions.onContentReady
- * @type_function_param1 e:{ui/speed_dial_action:ContentReadyEvent}
- */
-onContentReady?: ((e: ContentReadyEvent) => void);
-/**
- * @skip
  * @docid dxSpeedDialActionOptions.onDisposing
  * @type_function_param1 e:{ui/speed_dial_action:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxSpeedDialActionOptions.onInitialized
  * @type_function_param1 e:{ui/speed_dial_action:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxSpeedDialActionOptions.onOptionChanged
  * @type_function_param1 e:{ui/speed_dial_action:OptionChangedEvent}
  */

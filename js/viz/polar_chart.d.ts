@@ -70,7 +70,12 @@ import {
     ChartsColor,
 } from '../common/charts';
 
-interface SeriesInteractionInfo {
+/**
+ * @docid _viz_polar_chart_SeriesInteractionInfo
+ * @hidden
+ */
+export interface SeriesInteractionInfo {
+    /** @docid _viz_polar_chart_SeriesInteractionInfo.target */
     target: polarChartSeriesObject;
 }
 
@@ -98,82 +103,205 @@ export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stacke
 /** @public */
 export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_ArgumentAxisClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ArgumentAxisClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
+    /** @docid _viz_polar_chart_ArgumentAxisClickEvent.argument */
     readonly argument: Date | number | string;
 };
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxPolarChart>;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_DoneEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DoneEvent = EventInfo<dxPolarChart>;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_DrawnEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DrawnEvent = EventInfo<dxPolarChart>;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_ExportedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ExportedEvent = EventInfo<dxPolarChart>;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_ExportingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ExportInfo
+ */
 export type ExportingEvent = EventInfo<dxPolarChart> & ExportInfo;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_FileSavingEvent
+ * @public
+ * @type object
+ * @inherits FileSavingEventInfo
+ */
 export type FileSavingEvent = FileSavingEventInfo<dxPolarChart>;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_IncidentOccurredEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,IncidentInfo
+ */
 export type IncidentOccurredEvent = EventInfo<dxPolarChart> & IncidentInfo;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxPolarChart>;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_LegendClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type LegendClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
+    /** @docid _viz_polar_chart_LegendClickEvent.target */
     readonly target: polarChartSeriesObject;
 };
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxPolarChart> & ChangedOptionInfo;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_PointClickEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,PointInteractionInfo
+ */
 export type PointClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_PointHoverChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,PointInteractionInfo
+ */
 export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_PointSelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,PointInteractionInfo
+ */
 export type PointSelectionChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_SeriesClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type SeriesClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
+    /** @docid _viz_polar_chart_SeriesClickEvent.target */
     readonly target: polarChartSeriesObject;
 };
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_SeriesHoverChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_polar_chart_SeriesInteractionInfo
+ */
 export type SeriesHoverChangedEvent = EventInfo<dxPolarChart> & SeriesInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_SeriesSelectionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_polar_chart_SeriesInteractionInfo
+ */
 export type SeriesSelectionChangedEvent = EventInfo<dxPolarChart> & SeriesInteractionInfo;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_TooltipHiddenEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
+ */
 export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_TooltipShownEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
+ */
 export type TooltipShownEvent = EventInfo<dxPolarChart> & TooltipInfo;
 
-/** @public */
+/**
+ * @docid _viz_polar_chart_ZoomEndEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | TouchEvent> & {
+    /** @docid _viz_polar_chart_ZoomEndEvent.axis */
     readonly axis: chartAxisObject;
+    /** @docid _viz_polar_chart_ZoomEndEvent.range */
     readonly range: VisualRange;
+    /** @docid _viz_polar_chart_ZoomEndEvent.previousRange */
     readonly previousRange: VisualRange;
+    /**
+     * @docid _viz_polar_chart_ZoomEndEvent.actionType
+     * @type Enums.ZoomPanAction
+     */
     readonly actionType: ZoomPanAction;
+    /** @docid _viz_polar_chart_ZoomEndEvent.zoomFactor */
     readonly zoomFactor: number;
+    /** @docid _viz_polar_chart_ZoomEndEvent.shift */
     readonly shift: number;
 };
-/** @public */
+/**
+ * @docid _viz_polar_chart_ZoomStartEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo
+ */
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | TouchEvent> & {
+    /** @docid _viz_polar_chart_ZoomStartEvent.axis */
     readonly axis: chartAxisObject;
+    /** @docid _viz_polar_chart_ZoomStartEvent.range */
     readonly range: VisualRange;
+    /**
+     * @docid _viz_polar_chart_ZoomStartEvent.actionType
+     * @type Enums.ZoomPanAction
+     */
     readonly actionType: ZoomPanAction;
 };
 
@@ -314,7 +442,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1_field event:event
      * @notUsedInTheme
      * @action
      * @public
@@ -324,11 +451,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
-     * @type_function_param1_field element:DxElement
-     * @type_function_param1_field model:any
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/polar_chart:LegendClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -338,10 +461,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @docid
      * @default null
      * @type function
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
-     * @type_function_param1_field model:any
-     * @type_function_param1_field event:event
+     * @type_function_param1 e:{viz/polar_chart:SeriesClickEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -350,8 +470,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
+     * @type_function_param1 e:{viz/polar_chart:SeriesHoverChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -360,8 +479,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
+     * @type_function_param1 e:{viz/polar_chart:SeriesSelectionChangedEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -370,10 +488,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
-     * @type_function_param1_field event:event
-     * @type_function_param1_field actionType:Enums.ZoomPanAction
+     * @type_function_param1 e:{viz/polar_chart:ZoomEndEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -382,10 +497,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxPolarChart
-     * @type_function_param1_field event:event
-     * @type_function_param1_field actionType:Enums.ZoomPanAction
+     * @type_function_param1 e:{viz/polar_chart:ZoomStartEvent}
      * @notUsedInTheme
      * @action
      * @public
@@ -2303,140 +2415,84 @@ export type Properties = dxPolarChartOptions;
 export type Options = dxPolarChartOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
-type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<Properties, Required<Events>, 'onArgumentAxisClick' | 'onLegendClick' | 'onSeriesClick' | 'onSeriesHoverChanged' | 'onSeriesSelectionChanged' | 'onZoomEnd' | 'onZoomStart'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
- * @docid dxPolarChartOptions.onArgumentAxisClick
- * @type_function_param1 e:{viz/polar_chart:ArgumentAxisClickEvent}
- */
-onArgumentAxisClick?: ((e: ArgumentAxisClickEvent) => void);
-/**
- * @skip
  * @docid dxPolarChartOptions.onDisposing
  * @type_function_param1 e:{viz/polar_chart:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onDone
  * @type_function_param1 e:{viz/polar_chart:DoneEvent}
  */
 onDone?: ((e: DoneEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onDrawn
  * @type_function_param1 e:{viz/polar_chart:DrawnEvent}
  */
 onDrawn?: ((e: DrawnEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onExported
  * @type_function_param1 e:{viz/polar_chart:ExportedEvent}
  */
 onExported?: ((e: ExportedEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onExporting
  * @type_function_param1 e:{viz/polar_chart:ExportingEvent}
  */
 onExporting?: ((e: ExportingEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onFileSaving
  * @type_function_param1 e:{viz/polar_chart:FileSavingEvent}
  */
 onFileSaving?: ((e: FileSavingEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onIncidentOccurred
  * @type_function_param1 e:{viz/polar_chart:IncidentOccurredEvent}
  */
 onIncidentOccurred?: ((e: IncidentOccurredEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onInitialized
  * @type_function_param1 e:{viz/polar_chart:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
- * @docid dxPolarChartOptions.onLegendClick
- * @type_function_param1 e:{viz/polar_chart:LegendClickEvent}
- */
-onLegendClick?: ((e: LegendClickEvent) => void);
-/**
- * @skip
  * @docid dxPolarChartOptions.onOptionChanged
  * @type_function_param1 e:{viz/polar_chart:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onPointClick
  * @type_function_param1 e:{viz/polar_chart:PointClickEvent}
  */
 onPointClick?: ((e: PointClickEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onPointHoverChanged
  * @type_function_param1 e:{viz/polar_chart:PointHoverChangedEvent}
  */
 onPointHoverChanged?: ((e: PointHoverChangedEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onPointSelectionChanged
  * @type_function_param1 e:{viz/polar_chart:PointSelectionChangedEvent}
  */
 onPointSelectionChanged?: ((e: PointSelectionChangedEvent) => void);
 /**
- * @skip
- * @docid dxPolarChartOptions.onSeriesClick
- * @type_function_param1 e:{viz/polar_chart:SeriesClickEvent}
- */
-onSeriesClick?: ((e: SeriesClickEvent) => void);
-/**
- * @skip
- * @docid dxPolarChartOptions.onSeriesHoverChanged
- * @type_function_param1 e:{viz/polar_chart:SeriesHoverChangedEvent}
- */
-onSeriesHoverChanged?: ((e: SeriesHoverChangedEvent) => void);
-/**
- * @skip
- * @docid dxPolarChartOptions.onSeriesSelectionChanged
- * @type_function_param1 e:{viz/polar_chart:SeriesSelectionChangedEvent}
- */
-onSeriesSelectionChanged?: ((e: SeriesSelectionChangedEvent) => void);
-/**
- * @skip
  * @docid dxPolarChartOptions.onTooltipHidden
  * @type_function_param1 e:{viz/polar_chart:TooltipHiddenEvent}
  */
 onTooltipHidden?: ((e: TooltipHiddenEvent) => void);
 /**
- * @skip
  * @docid dxPolarChartOptions.onTooltipShown
  * @type_function_param1 e:{viz/polar_chart:TooltipShownEvent}
  */
 onTooltipShown?: ((e: TooltipShownEvent) => void);
-/**
- * @skip
- * @docid dxPolarChartOptions.onZoomEnd
- * @type_function_param1 e:{viz/polar_chart:ZoomEndEvent}
- */
-onZoomEnd?: ((e: ZoomEndEvent) => void);
-/**
- * @skip
- * @docid dxPolarChartOptions.onZoomStart
- * @type_function_param1 e:{viz/polar_chart:ZoomStartEvent}
- */
-onZoomStart?: ((e: ZoomStartEvent) => void);
 };
 ///#ENDDEBUG

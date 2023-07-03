@@ -28,21 +28,50 @@ export {
     ButtonStyle,
 };
 
-/** @public */
+/**
+ * @docid _ui_button_ClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ClickEvent = NativeEventInfo<dxButton, KeyboardEvent | MouseEvent | PointerEvent> & {
+    /**
+     * @docid _ui_button_ClickEvent.validationGroup
+     * @type object
+     */
     validationGroup?: any;
 };
 
-/** @public */
+/**
+ * @docid _ui_button_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type ContentReadyEvent = EventInfo<dxButton>;
 
-/** @public */
+/**
+ * @docid _ui_button_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
 export type DisposingEvent = EventInfo<dxButton>;
 
-/** @public */
+/**
+ * @docid _ui_button_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
 export type InitializedEvent = InitializedEventInfo<dxButton>;
 
-/** @public */
+/**
+ * @docid _ui_button_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
 export type OptionChangedEvent = EventInfo<dxButton> & ChangedOptionInfo;
 
 /** @public */
@@ -84,10 +113,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field validationGroup:object
-     * @type_function_param1_field component:dxButton
+     * @type_function_param1 e:{ui/button:ClickEvent}
      * @action
      * @public
      */
@@ -147,43 +173,33 @@ export type Properties = dxButtonOptions;
 export type Options = dxButtonOptions;
 
 ///#DEBUG
-type EventProps<T> = Extract<keyof T, `on${any}`>;
-type CheckedEvents<TProps, TEvents extends { [K in EventProps<TProps>]: (e: any) => void } & Record<Exclude<keyof TEvents, keyof TProps>, never>> = TEvents;
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onClick'>;
 
 /**
 * @hidden
 */
 type Events = {
 /**
- * @skip
- * @docid dxButtonOptions.onClick
- * @type_function_param1 e:{ui/button:ClickEvent}
- */
-onClick?: ((e: ClickEvent) => void);
-/**
- * @skip
  * @docid dxButtonOptions.onContentReady
  * @type_function_param1 e:{ui/button:ContentReadyEvent}
  */
 onContentReady?: ((e: ContentReadyEvent) => void);
 /**
- * @skip
  * @docid dxButtonOptions.onDisposing
  * @type_function_param1 e:{ui/button:DisposingEvent}
  */
 onDisposing?: ((e: DisposingEvent) => void);
 /**
- * @skip
  * @docid dxButtonOptions.onInitialized
  * @type_function_param1 e:{ui/button:InitializedEvent}
  */
 onInitialized?: ((e: InitializedEvent) => void);
 /**
- * @skip
  * @docid dxButtonOptions.onOptionChanged
  * @type_function_param1 e:{ui/button:OptionChangedEvent}
  */
