@@ -11,9 +11,11 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TextBox from '../../../model/textBox';
 import Guid from '../../../../../js/core/guid';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`TextBox_Label`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => clearTestPage());
 
 const labelModes = ['floating', 'static', 'hidden'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
@@ -98,4 +100,45 @@ stylingModes.forEach((stylingMode) => {
       }
     }
   });
+});
+
+test('Textbox with buttons container', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${TEXTBOX_CLASS} { width: 220px; margin: 2px; }`);
+
+  await testScreenshot(t, takeScreenshot, 'Textbox render with buttons container.png', { shouldTestInCompact: true });
+
+  await removeStylesheetRulesFromPage();
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  for (const isValid of [true, false]) {
+    for (const stylingMode of stylingModes) {
+      for (const buttons of [
+        ['clear'],
+        ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }],
+        [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear'],
+        ['clear', { name: 'custom', location: 'before', options: { icon: 'home' } }],
+        [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear'],
+      ]) {
+        for (const rtlEnabled of [true, false]) {
+          const id = `${`dx${new Guid()}`}`;
+
+          await appendElementTo('#container', 'div', id, { });
+
+          await createWidget('dxTextBox', {
+            value: 'Text',
+            stylingMode,
+            rtlEnabled,
+            buttons,
+            showClearButton: true,
+            isValid,
+          }, `#${id}`);
+        }
+      }
+    }
+  }
 });
