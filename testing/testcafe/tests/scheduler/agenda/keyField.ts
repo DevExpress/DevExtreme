@@ -68,27 +68,6 @@ const hasWarningCode = (message) => message.startsWith('W1023');
   });
 });
 
-test('123123', async (t) => {
-  const messages = await t.getBrowserConsoleMessages();
-
-  const isWarningExist = !!messages.warn.find(hasWarningCode);
-  await t.expect(isWarningExist).ok();
-}).before(async () => {
-  await createWidget('dxScheduler', async () => {
-    const createStore = ClientFunction(() => new (window as any).DevExpress.data.CustomStore({
-      load: () => [],
-    }));
-
-    return {
-      dataSource: await createStore(),
-      views: ['week', 'agenda'],
-      currentView: 'agenda',
-      currentDate: new Date(2021, 2, 28),
-      height: 600,
-    };
-  });
-});
-
 test('Waring should be throw in console after set new views(T1100758)', async (t) => {
   const scheduler = new Scheduler('#container');
 
