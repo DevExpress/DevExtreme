@@ -476,6 +476,10 @@ export class SelectionController extends modules.Controller {
     return this._selection.getSelectedItems();
   }
 
+  loadSelectedItemsWithFilter() {
+    return this._selection.loadSelectedItemsWithFilter();
+  }
+
   changeItemSelection(visibleItemIndex, keys, setFocusOnly?) {
     keys = keys || {};
     if (this.isSelectionWithCheckboxes()) {

@@ -234,9 +234,9 @@ export default class StandardStrategy extends SelectionStrategy {
         return deferred;
     }
 
-    selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys) {
+    selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter = false) {
         const that = this;
-        const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys);
+        const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter);
 
         deferred.done(function(items) {
             if(preserve) {
@@ -446,5 +446,17 @@ export default class StandardStrategy extends SelectionStrategy {
         } else {
             return this._getFullSelectAllState();
         }
+    }
+
+    loadSelectedItemsWithFilter() {
+        const keyExpr = this.options.key();
+        const keys = this.getSelectedItemKeys();
+        const filter = this.options.filter();
+
+        const selectionFilterCreator = new SelectionFilterCreator(keys);
+
+        const combinedFilter = selectionFilterCreator.getCombinedFilter(keyExpr, filter, true);
+
+        return this._loadFilteredData();
     }
 }
