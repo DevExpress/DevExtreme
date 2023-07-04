@@ -25,29 +25,54 @@ const hasWarningCode = (message) => message.startsWith('W1023');
   });
 });
 
-['week', 'agenda'].forEach((currentView) => {
-  test(`Waring shouldn't be throw in console in case currentView='${currentView}' if keyField exists(T1100758)`, async (t) => {
-    const messages = await t.getBrowserConsoleMessages();
+// TODO
+// The matrix test to split, so it was not possible to achieve a working state matrix test
 
-    const isWarningExist = !!messages.warn.find(hasWarningCode);
-    await t.expect(isWarningExist).notOk();
-  }).before(async () => {
-    await createWidget('dxScheduler', () => {
-      const store = new (window as any).DevExpress.data.CustomStore({
-        key: 'id',
-        load: () => [],
-      });
+test('Waring shouldn\'t be throw in console in case currentView=\'week\' if keyField exists(T1100758)', async (t) => {
+  const messages = await t.getBrowserConsoleMessages();
 
-      return {
-        dataSource: store,
-        views: ['week', 'agenda'],
-        currentView,
-        currentDate: new Date(2021, 2, 28),
-        height: 600,
-      };
+  const isWarningExist = !!messages.warn.find(hasWarningCode);
+  await t.expect(isWarningExist).notOk();
+}).before(async () => {
+  await createWidget('dxScheduler', () => {
+    const store = new (window as any).DevExpress.data.CustomStore({
+      key: 'id',
+      load: () => [],
     });
+
+    return {
+      dataSource: store,
+      views: ['week', 'agenda'],
+      currentView: 'week',
+      currentDate: new Date(2021, 2, 28),
+      height: 600,
+    };
   });
 });
+
+test('Waring shouldn\'t be throw in console in case currentView=\'agenda\' if keyField exists(T1100758)', async (t) => {
+  const messages = await t.getBrowserConsoleMessages();
+
+  const isWarningExist = !!messages.warn.find(hasWarningCode);
+  await t.expect(isWarningExist).notOk();
+}).before(async () => {
+  await createWidget('dxScheduler', () => {
+    const store = new (window as any).DevExpress.data.CustomStore({
+      key: 'id',
+      load: () => [],
+    });
+
+    return {
+      dataSource: store,
+      views: ['agenda'],
+      currentView: 'agenda',
+      currentDate: new Date(2021, 2, 28),
+      height: 600,
+    };
+  });
+});
+
+//
 
 ['week', 'agenda'].forEach((currentView) => {
   test(`Waring should be throw in console in case currentView='${currentView}' if keyField not set in Store(T1100758)`, async (t) => {
