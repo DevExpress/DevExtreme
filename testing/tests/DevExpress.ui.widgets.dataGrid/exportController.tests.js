@@ -2116,6 +2116,7 @@ QUnit.module('Export menu', {
 
         const $container = $('#container');
 
+        this.headerPanel._needDisableExportButton = () => false;
         this.headerPanel.render($container);
 
         const $button = $container.find('.dx-datagrid-export-button');
@@ -2327,6 +2328,7 @@ QUnit.module('Export menu', {
 
         const $container = $('#container');
 
+        this.headerPanel._needDisableExportButton = () => false;
         this.headerPanel.render($container);
         this.refresh();
 
@@ -2388,6 +2390,7 @@ QUnit.module('Export menu', {
             return $container;
         };
 
+        this.headerPanel._needDisableExportButton = () => false;
         this.headerPanel.render($container);
         this.headerPanel._$element = $container;
         this.headerPanel.option('export.allowExportSelectedData', true);
@@ -2550,7 +2553,9 @@ QUnit.module('Export menu', {
             return $container;
         };
 
+        this.headerPanel._needDisableExportButton = () => false;
         this.headerPanel.render($container);
+
         const $exportButton = $container.find('.dx-datagrid-export-button .dx-button').first();
         $($exportButton).trigger('dxclick');
 
