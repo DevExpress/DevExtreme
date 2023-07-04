@@ -71,6 +71,7 @@ interface Item {
   cells?: unknown[];
   loadIndex?: number;
   key: unknown;
+  isSelected?: boolean;
 }
 
 interface DataHelperMixinType {
@@ -1432,7 +1433,8 @@ export class DataController extends ControllerWithDataMixin {
     }
   }
 
-  getRowIndexOffset() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getRowIndexOffset(byLoadedRows?: boolean) {
     return 0;
   }
 

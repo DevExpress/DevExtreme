@@ -150,7 +150,7 @@ export interface Controllers {
   validating: any;
   export: any;
   draggingHeader: any;
-  selection: any;
+  selection: import('./selection/m_selection').SelectionController;
 }
 
 type ControllerTypes = {
