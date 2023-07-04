@@ -20,5 +20,6 @@ export {
   NodesRenderingEvent,
   OptionChangedEvent,
   SelectionChangedEvent,
+  Tooltip,
   Properties,
 } from './tree_map';

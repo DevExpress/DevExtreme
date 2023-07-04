@@ -22,6 +22,8 @@ export {
   LegendClickEvent,
   OptionChangedEvent,
   SelectionChangedEvent,
+  Legend,
+  Tooltip,
   Item,
   Properties,
 } from './funnel';
