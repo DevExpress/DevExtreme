@@ -2,8 +2,9 @@ import $ from 'jquery';
 import { createFunnel, stubAlgorithm } from './commonParts/common.js';
 import labelModule from 'viz/series/points/label';
 import { labelEnvironment } from './commonParts/label.js';
+import { logger } from 'core/utils/console';
 
-QUnit.module('Initialization', labelEnvironment);
+QUnit.module('Initialization with stubs', labelEnvironment);
 
 QUnit.test('Create label group on initialization', function(assert) {
     createFunnel({});
@@ -1301,42 +1302,31 @@ QUnit.test('change resolveLabelOverlapping option', function(assert) {
     assert.ok(label.shift.called);
 });
 
-QUnit.module('Initialization with no stubs');
-
-QUnit.test('should not fail when datasource contains zero values', function(assert) {
-    try {
-        createFunnel({
-            algorithm: 'dynamicHeight',
-            dataSource: [
-                { count: 1, level: 'Junior Engineer' },
-                { count: 20, level: 'Mid-Level Engineer' },
-                { count: 0, level: 'Senior Engineer' },
-                { count: 17, level: 'Architect' },
-            ],
-            valueField: 'count',
-            argumentField: 'level',
-            title: {
-                text: 'Team Composition',
-                margin: {
-                    bottom: 30,
-                },
-            },
-
-            inverted: true,
-
-            label: {
-                visible: true,
-                backgroundColor: 'none',
-                horizontalAlignment: 'left',
-                font: {
-                    size: 20,
-                },
-            },
-            sortData: false,
-        });
-
-        assert.ok(true, 'exception is not thrown');
-    } catch(e) {
-        assert.ok(false, 'exception is thrown');
+QUnit.module('Initialization', {
+    beforeEach: function() {
+        this.loggerErrorSpy = sinon.spy(logger, 'error');
+    },
+    afterEach: function() {
+        this.loggerErrorSpy.restore();
     }
+}, () => {
+    [true, false].forEach((showForZeroValues) => {
+        QUnit.test('should not fail when datasource contains zero values (T1172293)', function(assert) {
+            createFunnel({
+                algorithm: 'dynamicHeight',
+                showForZeroValues,
+                dataSource: [
+                    { count: 1, level: 'Junior Engineer' },
+                    { count: 20, level: 'Mid-Level Engineer' },
+                    { count: 0, level: 'Senior Engineer' },
+                    { count: 17, level: 'Architect' },
+                ],
+                valueField: 'count',
+                inverted: true,
+                sortData: false,
+            });
+
+            assert.strictEqual(this.loggerErrorSpy.callCount, 0);
+        });
+    });
 });
