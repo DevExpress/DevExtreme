@@ -161,7 +161,9 @@ function removeEmptySpace(labels, requiredSpace, startPoint) {
         const prevLabel = labels[index + 1];
         if(requiredSpace > 0) {
             const bBox = label.getBoundingRect();
-            const point = prevLabel ? prevLabel.getBoundingRect().y + prevLabel.getBoundingRect().height : startPoint;
+
+            const prevLabelIsDrawn = prevLabel && prevLabel?._drawn !== false;
+            const point = prevLabelIsDrawn ? prevLabel.getBoundingRect().y + prevLabel.getBoundingRect().height : startPoint;
             const emptySpace = bBox.y - point;
             const shift = Math.min(emptySpace, requiredSpace);
 
