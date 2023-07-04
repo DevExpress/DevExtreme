@@ -16378,6 +16378,7 @@ declare module DevExpress.ui {
       | 'dxCheckBox'
       | 'dxColorBox'
       | 'dxDateBox'
+      | 'dxDateRangeBox'
       | 'dxDropDownBox'
       | 'dxHtmlEditor'
       | 'dxLookup'

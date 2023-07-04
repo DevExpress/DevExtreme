@@ -416,6 +416,7 @@ QUnit.test('validate -> resetValues when there are invalid validation rules', fu
         { dataField: 'dxTagBox', editorType: 'dxTagBox', editorOptions: { dataSource: ['1'] } },
         { dataField: 'dxTextArea', editorType: 'dxTextArea' },
         { dataField: 'dxTextBox', editorType: 'dxTextBox' },
+        { dataField: 'dxDateRangeBox', editorType: 'dxDateRangeBox' },
     ];
 
     let validationCallbackLog = [];

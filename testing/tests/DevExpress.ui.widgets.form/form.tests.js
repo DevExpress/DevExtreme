@@ -52,6 +52,7 @@ import 'ui/radio_group';
 import 'ui/tag_box';
 import 'ui/toolbar';
 import 'ui/text_area';
+import 'ui/date_range_box';
 import themes from 'ui/themes';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
@@ -464,7 +465,8 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
                 'dxSwitch',
                 'dxTagBox',
                 'dxTextArea',
-                'dxTextBox'
+                'dxTextBox',
+                'dxDateRangeBox',
             ].forEach((editorType) => {
                 QUnit.test(`label rendering, form.labelMode=${formLabelMode},label.visible=${isLabelVisible},editorType=${editorType},label.showColon=${showColon}`, function(assert) {
                     const $form = $('#form').dxForm({
@@ -3499,6 +3501,7 @@ QUnit.test('resetValues - clear formData and editors', function(assert) {
         dxTagBox: ['1'],
         dxTextArea: 'a',
         dxTextBox: 'a',
+        dxDateRangeBox: [null, new Date(2021, 9, 17)],
     };
 
     const formItems = [
@@ -3515,6 +3518,7 @@ QUnit.test('resetValues - clear formData and editors', function(assert) {
         { dataField: 'dxTagBox', editorType: 'dxTagBox', editorOptions: { dataSource: ['1'] } },
         { dataField: 'dxTextArea', editorType: 'dxTextArea' },
         { dataField: 'dxTextBox', editorType: 'dxTextBox' },
+        { dataField: 'dxDateRangeBox', editorType: 'dxDateRangeBox', editorOptions: { value: ['9/17/2021'] } },
     ];
 
     const form = $('#form').dxForm({
@@ -3528,6 +3532,7 @@ QUnit.test('resetValues - clear formData and editors', function(assert) {
     const stringEditorResetValue = '';
     const dxCheckBoxResetValue = false;
     const dxTagBoxResetValue = [];
+    const dxDateRangeBoxResetValue = [null, null];
 
     assert.strictEqual(formData.dxAutocomplete, defaultResetValue, 'formData.dxAutocomplete');
     assert.strictEqual(formData.dxCalendar, defaultResetValue, 'formData.dxCalendar');
@@ -3542,6 +3547,7 @@ QUnit.test('resetValues - clear formData and editors', function(assert) {
     assert.strictEqual(formData.dxTagBox.length, dxTagBoxResetValue.length, 'formData.dxTagBox.length');
     assert.strictEqual(formData.dxTextArea, stringEditorResetValue, 'formData.dxTextArea');
     assert.strictEqual(formData.dxTextBox, stringEditorResetValue, 'formData.dxTextBox');
+    assert.deepEqual(formData.dxDateRangeBox, dxDateRangeBoxResetValue, 'formData.dxDateRangeBox');
 
     assert.strictEqual(form.getEditor('dxAutocomplete').option('value'), defaultResetValue, 'form.getEditor.dxAutocomplete');
     assert.strictEqual(form.getEditor('dxCalendar').option('value'), defaultResetValue, 'form.getEditor.dxCalendar');
@@ -3556,6 +3562,7 @@ QUnit.test('resetValues - clear formData and editors', function(assert) {
     assert.strictEqual(form.getEditor('dxTagBox').option('value').length, dxTagBoxResetValue.length, 'form.getEditor.dxTagBox');
     assert.strictEqual(form.getEditor('dxTextArea').option('value'), stringEditorResetValue, 'form.getEditor.dxTextArea');
     assert.strictEqual(form.getEditor('dxTextBox').option('value'), stringEditorResetValue, 'form.getEditor.dxTextBox');
+    assert.deepEqual(form.getEditor('dxDateRangeBox').option('value'), dxDateRangeBoxResetValue, 'form.getEditor.dxDateRangeBox');
 });
 
 const formatTestValue = value => Array.isArray(value) ? '[]' : value;
