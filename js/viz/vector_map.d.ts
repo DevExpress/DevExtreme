@@ -595,7 +595,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @default undefined
      * @public
      */
-    legends?: Array<dxVectorMapLegends>;
+    legends?: Array<Legend>;
     /**
      * @docid
      * @type object
@@ -683,7 +683,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @type object
      * @public
      */
-    tooltip?: dxVectorMapTooltip;
+    tooltip?: Tooltip;
     /**
      * @docid
      * @default true
@@ -782,10 +782,10 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
 }
 
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxVectorMapLegends
  */
-export interface dxVectorMapLegends extends BaseLegend {
+export type Legend = BaseLegend & {
     /**
      * @docid dxVectorMapOptions.legends.customizeHint
      * @notUsedInTheme
@@ -854,12 +854,12 @@ export interface dxVectorMapLegends extends BaseLegend {
        */
       layer?: string;
     };
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxVectorMapTooltip
  */
-export interface dxVectorMapTooltip extends BaseWidgetTooltip {
+export type Tooltip = BaseWidgetTooltip & {
     /**
      * @docid dxVectorMapOptions.tooltip.contentTemplate
      * @type_function_return string|Element|jQuery
@@ -880,7 +880,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
      * @hidden
      */
     format?: Format;
-}
+};
 /**
  * @docid
  * @inherits BaseWidget
@@ -974,6 +974,16 @@ export type Properties = dxVectorMapOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxVectorMapOptions;
+
+// #region deprecated in v23.1
+
+/** @deprecated Use Legend instead */
+export type dxVectorMapLegends = Legend;
+
+/** @deprecated Use Tooltip instead */
+export type dxVectorMapTooltip = Tooltip;
+
+// #endregion
 
 ///#DEBUG
 // eslint-disable-next-line import/first

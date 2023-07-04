@@ -134,13 +134,13 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
      * @type object
      * @public
      */
-    rangeContainer?: dxLinearGaugeRangeContainer;
+    rangeContainer?: RangeContainer;
     /**
      * @docid
      * @type object
      * @public
      */
-    scale?: dxLinearGaugeScale;
+    scale?: Scale;
     /**
      * @docid
      * @inheritAll
@@ -155,10 +155,10 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     valueIndicator?: GaugeIndicator;
 }
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxLinearGaugeRangeContainer
  */
-export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
+export type RangeContainer = BaseGaugeRangeContainer & {
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.horizontalOrientation
      * @default 'right'
@@ -187,12 +187,12 @@ export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
        */
       end?: number;
     } | number;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxLinearGaugeScale
  */
-export interface dxLinearGaugeScale extends BaseGaugeScale {
+export type Scale = BaseGaugeScale & {
     /**
      * @docid dxLinearGaugeOptions.scale.horizontalOrientation
      * @default 'right'
@@ -204,7 +204,7 @@ export interface dxLinearGaugeScale extends BaseGaugeScale {
      * @type object
      * @public
      */
-    label?: dxLinearGaugeScaleLabel;
+    label?: ScaleLabel;
     /**
      * @docid dxLinearGaugeOptions.scale.scaleDivisionFactor
      * @default 25
@@ -217,19 +217,19 @@ export interface dxLinearGaugeScale extends BaseGaugeScale {
      * @public
      */
     verticalOrientation?: VerticalAlignment;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxLinearGaugeScaleLabel
  */
-export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
+export type ScaleLabel = BaseGaugeScaleLabel & {
     /**
      * @docid dxLinearGaugeOptions.scale.label.indentFromTick
      * @default -10
      * @public
      */
     indentFromTick?: number;
-}
+};
 /**
  * @docid
  * @inherits BaseGauge
@@ -243,6 +243,19 @@ export type Properties = dxLinearGaugeOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxLinearGaugeOptions;
+
+// #region deprecated in v23.1
+
+/** @deprecated Use RangeContainer instead */
+export type dxLinearGaugeRangeContainer = RangeContainer;
+
+/** @deprecated Use Scale instead */
+export type dxLinearGaugeScale = Scale;
+
+/** @deprecated Use ScaleLabel instead */
+export type dxLinearGaugeScaleLabel = ScaleLabel;
+
+// #endregion
 
 ///#DEBUG
 // eslint-disable-next-line import/first

@@ -74,6 +74,7 @@ export interface BaseSparklineOptions<TComponent> extends BaseWidgetOptions<TCom
     tooltip?: BaseSparklineTooltip;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
