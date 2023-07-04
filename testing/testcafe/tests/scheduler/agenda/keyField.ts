@@ -49,22 +49,22 @@ const hasWarningCode = (message) => message.startsWith('W1023');
   });
 });
 
-['week', 'agenda'].forEach((currentView2) => {
-  test(`Waring should be throw in console in case currentView='${currentView2}' if keyField not set in Store(T1100758)`, async (t) => {
+['week', 'agenda'].forEach((currentView) => {
+  test(`Waring should be throw in console in case currentView='${currentView}' if keyField not set in Store(T1100758)`, async (t) => {
     const messages = await t.getBrowserConsoleMessages();
 
     const isWarningExist = !!messages.warn.find(hasWarningCode);
     await t.expect(isWarningExist).ok();
   }).before(async () => {
-    await createWidget('dxScheduler', () => ({
+    await createWidget('dxScheduler', ClientFunction(() => ({
       dataSource: new (window as any).DevExpress.data.CustomStore({
         load: () => [],
       }),
       views: ['week', 'agenda'],
-      currentView: currentView2,
+      currentView,
       currentDate: new Date(2021, 2, 28),
       height: 600,
-    }));
+    }), { dependencies: { currentView } }));
   });
 });
 
