@@ -1311,7 +1311,7 @@ QUnit.module('Initialization', {
     }
 }, () => {
     [true, false].forEach((showForZeroValues) => {
-        QUnit.test('should not fail when datasource contains zero values (T1172293)', function(assert) {
+        QUnit.test(`should not fail when showForZeroValues==${showForZeroValues} and datasource contains zero values (T1172293)`, function(assert) {
             createFunnel({
                 algorithm: 'dynamicHeight',
                 showForZeroValues,
