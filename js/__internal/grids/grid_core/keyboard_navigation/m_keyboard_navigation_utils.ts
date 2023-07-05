@@ -7,8 +7,13 @@ import {
   MASTER_DETAIL_ROW_CLASS, VIRTUAL_ROW_CLASS,
 } from './const';
 
+const DATAGRID_GROUP_FOOTER_CLASS = 'dx-datagrid-group-footer';
+
 export function isGroupRow($row) {
   return $row && $row.hasClass(GROUP_ROW_CLASS);
+}
+export function isGroupFooterRow($row) {
+  return $row && $row.hasClass(DATAGRID_GROUP_FOOTER_CLASS);
 }
 
 export function isDetailRow($row) {
@@ -16,7 +21,7 @@ export function isDetailRow($row) {
 }
 
 export function isDataRow($row) {
-  return $row && !isGroupRow($row) && !isDetailRow($row);
+  return $row && !isGroupRow($row) && !isGroupFooterRow($row) && !isDetailRow($row);
 }
 
 export function isNotFocusedRow($row) {
