@@ -3,7 +3,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture.disablePageReloads`Agenda:KeyField`
+fixture`Agenda:KeyField`
   .page(url(__dirname, '../../container.html'));
 
 const hasWarningCode = (message) => message.startsWith('W1023');
