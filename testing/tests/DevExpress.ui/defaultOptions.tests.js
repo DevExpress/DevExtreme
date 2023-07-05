@@ -778,10 +778,10 @@ testComponentDefaults(Toast,
     [{ platform: 'android' }],
     {
         position: {
-            at: 'bottom left',
-            my: 'bottom left',
+            at: 'bottom center',
+            my: 'bottom center',
             of: null,
-            offset: '20 -20'
+            offset: '0 -20'
         },
         width: 'auto',
         animation: {
