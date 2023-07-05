@@ -95,7 +95,6 @@ test('Waring shouldn\'t be throw in console in case currentView=\'agenda\' if ke
 
 test('Waring should be throw in console after set new views(T1100758)', async (t) => {
   const messages = await t.getBrowserConsoleMessages();
-  await t.wait(1000);
   const isWarningExist = !!messages.warn.find(hasWarningCode);
   await t.expect(isWarningExist).notOk();
 
