@@ -246,8 +246,8 @@ QUnit.module('Keyboard keys', {
         // assert
         const rowIndex = this.keyboardNavigationController._focusedCellPosition.rowIndex;
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, 'cellIndex');
-        assert.equal(rowIndex, 8, 'rowIndex');
-        assert.ok(!this.rowsView.element().find('.dx-row').eq(rowIndex).hasClass('dx-datagrid-group-footer'), 'not group footer');
+        assert.equal(rowIndex, 7, 'rowIndex');
+        assert.ok(this.rowsView.element().find('.dx-row').eq(rowIndex).hasClass('dx-datagrid-group-footer'), 'group footer');
     });
 
     QUnit.testInActiveWindow('Up arrow to group footer', function(assert) {
@@ -263,8 +263,8 @@ QUnit.module('Keyboard keys', {
         // assert
         const rowIndex = this.keyboardNavigationController._focusedCellPosition.rowIndex;
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, 'cellIndex');
-        assert.equal(rowIndex, 6, 'rowIndex');
-        assert.ok(!this.rowsView.element().find('.dx-row').eq(rowIndex).hasClass('dx-datagrid-group-footer'), 'not group footer');
+        assert.equal(rowIndex, 7, 'rowIndex');
+        assert.ok(this.rowsView.element().find('.dx-row').eq(rowIndex).hasClass('dx-datagrid-group-footer'), 'group footer');
     });
 
     QUnit.testInActiveWindow('Ctrl+RightArrow do not expand master detail row if master detail is not enabled (T576946)', function(assert) {
@@ -602,11 +602,10 @@ QUnit.module('Keyboard keys', {
         };
 
         this.triggerKeyDown('downArrow');
-        this.triggerKeyDown('rightArrow');
 
         // assert
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, 'cellIndex');
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 2, 'rowIndex');
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, 'cellIndex');
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 4, 'rowIndex');
     });
 
     // T1069664

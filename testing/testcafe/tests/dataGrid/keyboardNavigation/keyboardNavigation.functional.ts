@@ -2602,6 +2602,15 @@ test('All rows should be focused on arrow-up/down when virtual scrolling enabled
 
   // assert
   await t
+    .expect(dataGrid.getGroupFooterRow().focused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
     .expect(dataGrid.getGroupRow(1).element.focused)
     .ok()
     .expect(dataGrid.getGroupRow(1).isFocused)
@@ -2627,6 +2636,15 @@ test('All rows should be focused on arrow-up/down when virtual scrolling enabled
     .expect(dataGrid.getGroupRow(1).element.focused)
     .ok()
     .expect(dataGrid.getGroupRow(1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupFooterRow().focused)
     .ok();
 
   // act
