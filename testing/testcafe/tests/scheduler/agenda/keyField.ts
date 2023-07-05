@@ -3,6 +3,7 @@ import Scheduler from '../../../model/scheduler';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
+// TODO fixture.disablePageReloads lead to fail random test in current file
 fixture`Agenda:KeyField`
   .page(url(__dirname, '../../container.html'));
 
