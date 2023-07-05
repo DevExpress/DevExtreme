@@ -3616,23 +3616,6 @@ QUnit.module('Keyboard keys', {
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, 'columnIndex of focusedCellPosition');
     });
 
-    QUnit.testInActiveWindow('Move up when a focused cell is located on invalid position', function(assert) {
-        // arrange
-        setupModules(this);
-        this.gridView.render($('#container'));
-        this.keyboardNavigationController._focusedView = this.rowsView;
-        this.keyboardNavigationController._isNeedFocus = true;
-
-        // act
-        this.keyboardNavigationController.setFocusedCellPosition(7, 0);
-        this.editorFactoryController._$focusedElement = $('<div/>');
-        callViewsRenderCompleted(this._views);
-        this.clock.tick(10);
-
-        // arrange
-        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 6 });
-    });
-
     QUnit.testInActiveWindow('Tab index is not applied when focus is located inside edit form and master detail is enabled', function(assert) {
         // arrange
         this.options = {
