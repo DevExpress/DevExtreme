@@ -25,6 +25,27 @@ const hasWarningCode = (message) => message.startsWith('W1023');
   });
 });
 
+test('Waring should be throw in console after set new views(T1100758)', async (t) => {
+  const messages = await t.getBrowserConsoleMessages();
+  const isWarningExist = !!messages.warn.find(hasWarningCode);
+  await t.expect(isWarningExist).notOk();
+
+  const scheduler = new Scheduler('#container');
+  await scheduler.option('views', ['week', 'agenda']);
+
+  const messagesAfterChangeViews = await t.getBrowserConsoleMessages();
+  const isWarningExistAfterChangeViews = !!messagesAfterChangeViews.warn.find(hasWarningCode);
+  await t.expect(isWarningExistAfterChangeViews).ok();
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 28),
+    height: 600,
+  });
+});
+
 // TODO
 // The matrix test to split, so it was not possible to achieve a working state matrix test
 
@@ -90,27 +111,6 @@ test('Waring shouldn\'t be throw in console in case currentView=\'agenda\' if ke
       currentDate: new Date(2021, 2, 28),
       height: 600,
     }), { dependencies: { currentView } }));
-  });
-});
-
-test('Waring should be throw in console after set new views(T1100758)', async (t) => {
-  const messages = await t.getBrowserConsoleMessages();
-  const isWarningExist = !!messages.warn.find(hasWarningCode);
-  await t.expect(isWarningExist).notOk();
-
-  const scheduler = new Scheduler('#container');
-  await scheduler.option('views', ['week', 'agenda']);
-
-  const messagesAfterChangeViews = await t.getBrowserConsoleMessages();
-  const isWarningExistAfterChangeViews = !!messagesAfterChangeViews.warn.find(hasWarningCode);
-  await t.expect(isWarningExistAfterChangeViews).ok();
-}).before(async () => {
-  await createWidget('dxScheduler', {
-    dataSource: [],
-    views: ['week'],
-    currentView: 'week',
-    currentDate: new Date(2021, 2, 28),
-    height: 600,
   });
 });
 
