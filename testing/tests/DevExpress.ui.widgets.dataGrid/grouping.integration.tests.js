@@ -868,7 +868,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        assert.equal($(dataGrid.$element()).find('.dx-group-panel-item').first().attr('aria-roledescription'), 'Sorted ascending column');
+        assert.equal($(dataGrid.$element()).find('.dx-group-panel-item').first().attr('aria-roledescription'), 'Sorted column in ascending order');
         assert.equal($(dataGrid.$element()).find('.dx-group-row').first().attr('aria-roledescription'), 'Expanded row');
         assert.equal($(dataGrid.$element()).find('.dx-toolbar-before').first().attr('role'), 'presentation');
         assert.equal($(dataGrid.$element()).find('.dx-toolbar-center').first().attr('role'), 'presentation');
