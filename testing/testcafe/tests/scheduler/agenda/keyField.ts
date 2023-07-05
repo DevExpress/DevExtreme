@@ -50,7 +50,7 @@ test('Waring shouldn\'t be throw in console in case currentView=\'week\' if keyF
   });
 });
 
-test('Waring shouldn\'t be throw in console in case currentView=\'agenda\' if keyField exists(T1100758)', async (t) => {
+test('WWaring shouldn\'t be throw in console in case currentView=\'agenda\' if keyField exists(T1100758)', async (t) => {
   const messages = await t.getBrowserConsoleMessages();
 
   const isWarningExist = !!messages.warn.find(hasWarningCode);
