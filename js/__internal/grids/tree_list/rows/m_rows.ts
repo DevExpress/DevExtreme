@@ -1,4 +1,5 @@
 import $ from '@js/core/renderer';
+import { isDefined } from '@js/core/utils/type';
 import { rowsModule } from '@ts/grids/grid_core/views/m_rows_view';
 
 import treeListCore from '../m_core';
@@ -123,6 +124,11 @@ export const RowsView = rowsModule.views.rowsView.inherit((function () {
 
     isExpandIcon($targetElement) {
       return !!$targetElement.closest(`.${TREELIST_EXPANDED_CLASS}, .${TREELIST_COLLAPSED_CLASS}`).length;
+    },
+
+    setAriaExpandedAttribute($row, row) {
+      const isRowExpanded = row.isExpanded;
+      this.setAria('expanded', isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
     },
   };
 })());

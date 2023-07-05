@@ -838,8 +838,43 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getVisibleRows().length, 8, 'row count');
         assert.deepEqual(dataGrid.getVisibleRows().map((row) => row.rowType === 'group' ? row.data.key : row.data.text2), [0, 'İZMİR', 'İZ', 'İz', 'iz', 'izmir', 'İzmi̇r', 1], 'visible rows');
     });
-});
 
+    QUnit.test('Grouped rows and cells have correct aria-roledescription attributes', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [
+                { field1: '1', field2: '2', field3: '3', field4: '4' },
+                { field1: '1', field2: '4', field3: '3', field4: '5' }
+            ],
+            groupPanel: {
+                visible: true
+            },
+            grouping: {
+                autoExpandAll: true
+            },
+            searchPanel: {
+                visible: true,
+            },
+            columns: [
+                'field2',
+                'field3',
+                'field4',
+                {
+                    dataField: 'field1',
+                    groupIndex: 0,
+                },
+            ],
+        }).dxDataGrid('instance');
+        this.clock.tick(10);
+
+        // assert
+        assert.equal($(dataGrid.$element()).find('.dx-group-panel-item').first().attr('aria-roledescription'), 'Sorted ascending column');
+        assert.equal($(dataGrid.$element()).find('.dx-group-row').first().attr('aria-roledescription'), 'Expanded row');
+        assert.equal($(dataGrid.$element()).find('.dx-toolbar-before').first().attr('role'), 'presentation');
+        assert.equal($(dataGrid.$element()).find('.dx-toolbar-center').first().attr('role'), 'presentation');
+        assert.equal($(dataGrid.$element()).find('.dx-toolbar-after').first().attr('role'), 'presentation');
+    });
+});
 
 QUnit.module('Assign options', baseModuleConfig, () => {
     // T697860
