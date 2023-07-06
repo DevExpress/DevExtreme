@@ -39,7 +39,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build devextreme repo
-      run: npx nx build devextreme
+      run: npx nx build devextreme-root
 
     - name: Pack devextreme package
       working-directory: ./packages/devextreme/artifacts/npm/devextreme
