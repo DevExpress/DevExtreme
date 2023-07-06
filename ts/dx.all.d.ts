@@ -10136,7 +10136,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.editing.texts]
        */
-      texts?: EditingTexts;
+      texts?: any;
       /**
        * [descr:dxDataGridOptions.editing.newRowPosition]
        */
