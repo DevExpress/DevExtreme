@@ -93,14 +93,14 @@ const filesContent: { [key: string]: string } = {
   'grid_core.ts': 'import menu from \'./menu\'; import r from \'./render\';',
 
   // validation tests
-  '../scss/widgets/righttheme/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";',
-  '../scss/widgets/extratheme/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";@use "./menu";',
-  '../scss/widgets/lesstheme/_index.scss': '// public widgets\n@use "./toolbar";',
+  '../../../devextreme/scss/widgets/righttheme/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";',
+  '../../../devextreme/scss/widgets/extratheme/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";@use "./menu";',
+  '../../../devextreme/scss/widgets/lesstheme/_index.scss': '// public widgets\n@use "./toolbar";',
 
   // collect test
-  '../js/bundles/dx.all.js': 'import t from \'./toolbar\';import b from \'./button\';',
-  '../scss/widgets/generic/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
-  '../scss/widgets/material/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
+  '../../../devextreme/js/bundles/dx.all.js': 'import t from \'./toolbar\';import b from \'./button\';',
+  '../../../devextreme/scss/widgets/generic/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
+  '../../../devextreme/scss/widgets/material/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
 };
 
 const copyDependencies = (dependencies: Record<string, string[]>): Record<string, string[]> => {

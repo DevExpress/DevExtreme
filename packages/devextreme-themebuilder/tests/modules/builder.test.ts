@@ -116,7 +116,7 @@ describe('Builder integration tests', () => {
 
     return buildTheme(config).then((result) => {
       const themeBuilderCss = normalizeCss(result.css);
-      const distributionCss = normalizeCss(readFileSync(join(__dirname, '../../../artifacts/css/dx.light.css'), 'utf8'));
+      const distributionCss = normalizeCss(readFileSync('../../../devextreme/artifacts/css/dx.light.css', 'utf8'));
       expect(themeBuilderCss).toBe(distributionCss);
     });
   }, buildTimeout);
@@ -131,7 +131,7 @@ describe('Builder integration tests', () => {
 
     return buildTheme(config).then((result) => {
       const themeBuilderCss = normalizeCss(result.css);
-      const distributionCss = normalizeCss(readFileSync(join(__dirname, '../../../artifacts/css/dx.material.blue.light.css'), 'utf8'));
+      const distributionCss = normalizeCss(readFileSync('../../../devextreme/artifacts/css/dx.material.blue.light.css', 'utf8'));
       expect(themeBuilderCss).toBe(distributionCss);
     });
   }, buildTimeout);

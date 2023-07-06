@@ -8,7 +8,15 @@ const cache = require('gulp-cache');
 const shell = require('gulp-shell');
 
 gulp.task('clean', function(callback) {
-    require('del').sync('artifacts');
+    require('del').sync([
+        'artifacts/**',
+        '!artifacts',
+        '!artifacts/npm',
+        '!artifacts/npm/devextreme',
+        '!artifacts/npm/devextreme/*.json',
+        '!artifacts/npm/devextreme-dist',
+        '!artifacts/npm/devextreme-dist/*.json',
+    ]);
     cache.clearAll();
     callback();
 });
