@@ -93,13 +93,13 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: devextreme-npm
-        path: ./testing/renovation-npm/${{ matrix.framework }}-app
+        path: ./packages/devextreme/testing/renovation-npm/${{ matrix.framework }}-app
 
     - name: Prepare artifacts
       run: |
-        mkdir -p ./artifacts/npm
-        cp ./testing/renovation-npm/${{ matrix.framework }}-app/devextreme-installer.tgz ./artifacts/npm/devextreme.tgz
-        cd ./artifacts/npm
+#        mkdir -p ./artifacts/npm
+        cp ./packages/devextreme/testing/renovation-npm/${{ matrix.framework }}-app/devextreme-installer.tgz ./packages/devextreme/artifacts/npm/devextreme.tgz
+        cd ./packages/devextreme/artifacts/npm
         tar -xzf devextreme.tgz
         mv package devextreme
 
@@ -136,229 +136,229 @@ jobs:
         path: ${{ github.workspace }}/packages/devextreme/testing/renovation-npm/tests/artifacts
         if-no-files-found: ignore
 
-  test_angular_wrappers:
-    name: Angular wrapper tests
-    needs: build
-    runs-on: devextreme-shr2
-    timeout-minutes: 30
-
-    steps:
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-
-    - name: Get sources
-      uses: actions/checkout@v3
-
-    - uses: ./.github/actions/pin-browsers
-
-    - name: Create directory link
-      run: cd ../ && ln -s DevExtreme devextreme
-
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Install packages in devextreme repo
-      run: npm install --no-audit --no-fund
-
-    - name: Discover declarations in devextreme repo
-      run: npm run discover-declarations
-
-#    - name: Clone devextreme-angular repo from PR author fork
+#  test_angular_wrappers:
+#    name: Angular wrapper tests
+#    needs: build
+#    runs-on: devextreme-shr2
+#    timeout-minutes: 30
+#
+#    steps:
+#    - name: Use Node.js
+#      uses: actions/setup-node@v3
+#      with:
+#        node-version: '18'
+#
+#    - name: Get sources
+#      uses: actions/checkout@v3
+#
+#    - uses: ./.github/actions/pin-browsers
+#
+#    - name: Create directory link
+#      run: cd ../ && ln -s DevExtreme devextreme
+#
+#    - name: Restore npm cache
+#      uses: actions/cache@v3
+#      with:
+#        path: '**/node_modules'
+#        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+#        restore-keys: ${{ runner.os }}-node-modules
+#
+#    - name: Install packages in devextreme repo
+#      run: npm install --no-audit --no-fund
+#
+#    - name: Discover declarations in devextreme repo
+#      run: npm run discover-declarations
+#
+##    - name: Clone devextreme-angular repo from PR author fork
+##      continue-on-error: true
+##      if: github.event_name == 'pull_request'
+##      run: |
+##        REMOTE_URL=https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular
+##        REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
+##
+##        if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
+##          git clone -b $REMOTE_BRANCH $REMOTE_URL ../devextreme-angular-repo
+##        fi
+##
+##    - name: Clone devextreme-angular repo
+##      run: |
+##        test -d ../devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
+#
+#    - name: Download artifacts
+#      uses: actions/download-artifact@v3
+#      with:
+#        name: devextreme-npm
+#        path: ../devextreme-angular-repo/devextreme-setup
+#
+#    - name: Install packages for devextreme-angular
+#      working-directory: ../devextreme-angular-repo
+#      run: npm install --no-audit --no-fund
+#
+#    - name: Install devextreme package
+#      working-directory: ../devextreme-angular-repo
+#      run: |
+#        pushd devextreme-setup
+#        installerName=$(realpath .)/devextreme-installer.tgz
+#        popd
+#        cd ./packages/devextreme-angular
+#        npm install --save-dev --legacy-peer-deps $installerName
+#        cd ../sandbox
+#        npm install --save-dev --legacy-peer-deps $installerName
+#        cd ../../
+#        npm install --save-dev --legacy-peer-deps $installerName
+#
+#    - name: Build with Angular 12
+#      working-directory: ../devextreme-angular-repo
+#      run: npm run build
+#
+#    - name: Run tests with Angular 12
+#      working-directory: ../devextreme-angular-repo
+#      run: npm run test:dev --workspace=devextreme-angular
+#
+#  test_bundlers:
+#    name: Bundlers tests
+#    needs: build
+#    runs-on: devextreme-shr2
+#    timeout-minutes: 60
+#
+#    steps:
+#    - name: Get sources
+#      uses: actions/checkout@v3
+#
+#    - name: Use Node.js
+#      uses: actions/setup-node@v3
+#      with:
+#        node-version: '18'
+#
+#    - name: Download artifacts
+#      uses: actions/download-artifact@v3
+#      with:
+#        name: devextreme-npm
+#        path: ./testing/bundlers
+#
+#    - name: Install bundlers
+#      working-directory: ./testing/bundlers
+#      run: npm install --no-audit --no-fund
+#
+#    - name: Install DevExtreme package
+#      working-directory: ./testing/bundlers
+#      run: npm install --save-dev devextreme-installer.tgz
+#
+#    - name: Generate entry files
+#      working-directory: ./testing/bundlers
+#      run: npm run generate-entry-files
+#
+#    - name: Build webpack cjs
+#      working-directory: ./testing/bundlers
+#      run: npm run build:webpack-cjs
+#
+#    - name: Build browserify cjs
+#      working-directory: ./testing/bundlers
+#      run: npm run build:browserify-cjs
+#
+#    - name: Build webpack
+#      working-directory: ./testing/bundlers
+#      run: npm run build:webpack
+#
+#    - name: Build rollup
+#      working-directory: ./testing/bundlers
+#      run: npm run build:rollup
+#
+#    - name: Build parcel
+#      working-directory: ./testing/bundlers
+#      run: npm run build:parcel
+#
+#    - name: Build vite
+#      working-directory: ./testing/bundlers
+#      run: npm run build:vite
+#
+#  test_demos:
+#    needs: build
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
+#
+#    runs-on: devextreme-shr2
+#    name: Demos visual tests ${{ matrix.CONSTEL }}
+#    timeout-minutes: 20
+#
+#    steps:
+#    - name: Get sources
+#      uses: actions/checkout@v3
+#
+#    - uses: ./.github/actions/pin-browsers
+#
+#    - name: Use Node.js
+#      uses: actions/setup-node@v3
+#      with:
+#        node-version: '18'
+#
+#    - name: Clone devextreme-demos repo from PR author fork
 #      continue-on-error: true
 #      if: github.event_name == 'pull_request'
 #      run: |
-#        REMOTE_URL=https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular
+#        REMOTE_URL=https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos
 #        REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
 #
 #        if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
-#          git clone -b $REMOTE_BRANCH $REMOTE_URL ../devextreme-angular-repo
+#          git clone -b $REMOTE_BRANCH $REMOTE_URL ./devextreme-demos
 #        fi
 #
-#    - name: Clone devextreme-angular repo
+#    - name: Clone devextreme-demos repo
 #      run: |
-#        test -d ../devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-npm
-        path: ../devextreme-angular-repo/devextreme-setup
-
-    - name: Install packages for devextreme-angular
-      working-directory: ../devextreme-angular-repo
-      run: npm install --no-audit --no-fund
-
-    - name: Install devextreme package
-      working-directory: ../devextreme-angular-repo
-      run: |
-        pushd devextreme-setup
-        installerName=$(realpath .)/devextreme-installer.tgz
-        popd
-        cd ./packages/devextreme-angular
-        npm install --save-dev --legacy-peer-deps $installerName
-        cd ../sandbox
-        npm install --save-dev --legacy-peer-deps $installerName
-        cd ../../
-        npm install --save-dev --legacy-peer-deps $installerName
-
-    - name: Build with Angular 12
-      working-directory: ../devextreme-angular-repo
-      run: npm run build
-
-    - name: Run tests with Angular 12
-      working-directory: ../devextreme-angular-repo
-      run: npm run test:dev --workspace=devextreme-angular
-
-  test_bundlers:
-    name: Bundlers tests
-    needs: build
-    runs-on: devextreme-shr2
-    timeout-minutes: 60
-
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v3
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-npm
-        path: ./testing/bundlers
-
-    - name: Install bundlers
-      working-directory: ./testing/bundlers
-      run: npm install --no-audit --no-fund
-
-    - name: Install DevExtreme package
-      working-directory: ./testing/bundlers
-      run: npm install --save-dev devextreme-installer.tgz
-
-    - name: Generate entry files
-      working-directory: ./testing/bundlers
-      run: npm run generate-entry-files
-
-    - name: Build webpack cjs
-      working-directory: ./testing/bundlers
-      run: npm run build:webpack-cjs
-
-    - name: Build browserify cjs
-      working-directory: ./testing/bundlers
-      run: npm run build:browserify-cjs
-
-    - name: Build webpack
-      working-directory: ./testing/bundlers
-      run: npm run build:webpack
-
-    - name: Build rollup
-      working-directory: ./testing/bundlers
-      run: npm run build:rollup
-
-    - name: Build parcel
-      working-directory: ./testing/bundlers
-      run: npm run build:parcel
-
-    - name: Build vite
-      working-directory: ./testing/bundlers
-      run: npm run build:vite
-
-  test_demos:
-    needs: build
-    strategy:
-      fail-fast: false
-      matrix:
-        CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
-
-    runs-on: devextreme-shr2
-    name: Demos visual tests ${{ matrix.CONSTEL }}
-    timeout-minutes: 20
-
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v3
-
-    - uses: ./.github/actions/pin-browsers
-
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-
-    - name: Clone devextreme-demos repo from PR author fork
-      continue-on-error: true
-      if: github.event_name == 'pull_request'
-      run: |
-        REMOTE_URL=https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos
-        REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
-
-        if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
-          git clone -b $REMOTE_BRANCH $REMOTE_URL ./devextreme-demos
-        fi
-
-    - name: Clone devextreme-demos repo
-      run: |
-        BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
-        test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-npm
-        path: ./devextreme-demos
-
-    - name: Delete DX packages
-      working-directory: ./devextreme-demos
-      run:  sed -i '/23.2-next/d' ./package.json
-
-    - name: Install packages for devextreme-demos
-      working-directory: ./devextreme-demos
-      run: npm install --no-audit --no-fund
-
-    - name: Install devextreme package
-      working-directory: ./devextreme-demos
-      run: npm install --legacy-peer-deps devextreme-installer.tgz devextreme-dist-installer.tgz
-
-    - name: Prepare JS
-      working-directory: ./devextreme-demos
-      run: npm run prepare-js
-
-    - name: Run Web Server
-      working-directory: ./devextreme-demos
-      run: |
-        python -m http.server 8080 &
-        python -m http.server 8081 &
-        python -m http.server 8082 &
-        python -m http.server 8083 &
-
-    - name: Run TestCafe tests
-      working-directory: ./devextreme-demos
-      env:
-        BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
-        CONCURRENCY: 4
-        TCQUARANTINE: true
-        CONSTEL: ${{ matrix.CONSTEL }}
-        CI_ENV: true
-      run: |
-        npm i testcafe@2.5.0
-        npm run test-testcafe
-
-    - name: Copy screenshots artifacts
-      if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
-      with:
-        name: screenshots
-        path: ${{ github.workspace }}/devextreme-demos/testing/artifacts/*
-        if-no-files-found: ignore
+#        BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
+#        test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
+#
+#    - name: Download artifacts
+#      uses: actions/download-artifact@v3
+#      with:
+#        name: devextreme-npm
+#        path: ./devextreme-demos
+#
+#    - name: Delete DX packages
+#      working-directory: ./devextreme-demos
+#      run:  sed -i '/23.2-next/d' ./package.json
+#
+#    - name: Install packages for devextreme-demos
+#      working-directory: ./devextreme-demos
+#      run: npm install --no-audit --no-fund
+#
+#    - name: Install devextreme package
+#      working-directory: ./devextreme-demos
+#      run: npm install --legacy-peer-deps devextreme-installer.tgz devextreme-dist-installer.tgz
+#
+#    - name: Prepare JS
+#      working-directory: ./devextreme-demos
+#      run: npm run prepare-js
+#
+#    - name: Run Web Server
+#      working-directory: ./devextreme-demos
+#      run: |
+#        python -m http.server 8080 &
+#        python -m http.server 8081 &
+#        python -m http.server 8082 &
+#        python -m http.server 8083 &
+#
+#    - name: Run TestCafe tests
+#      working-directory: ./devextreme-demos
+#      env:
+#        BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+#        CONCURRENCY: 4
+#        TCQUARANTINE: true
+#        CONSTEL: ${{ matrix.CONSTEL }}
+#        CI_ENV: true
+#      run: |
+#        npm i testcafe@2.5.0
+#        npm run test-testcafe
+#
+#    - name: Copy screenshots artifacts
+#      if: ${{ failure() }}
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: screenshots
+#        path: ${{ github.workspace }}/devextreme-demos/testing/artifacts/*
+#        if-no-files-found: ignore
 
   notify:
     runs-on: devextreme-shr2

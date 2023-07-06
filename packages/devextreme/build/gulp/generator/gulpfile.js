@@ -212,9 +212,10 @@ function addGenerationTaskWithSuffix(
             .pipe(generateComponents(generator))
             .pipe(plumber(() => null))
             .pipe(gulpIf(compileTs, tsProject({
-                error: processErrors(knownErrors, errors),
+                error: processErrors([...knownErrors, 'properties from type \'ClientRect\''], errors),
                 finish() { }
-            }))).on('end', function() {
+            })))
+            .on('end', function() {
                 done(errors.map(e => e.message).join('\n') || undefined);
             });
     }

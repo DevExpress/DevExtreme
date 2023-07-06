@@ -43,8 +43,7 @@
   ],
   "include": [
     "js/renovation",
-    "themebuilder-scss",
-    "themebuilder",
+    "../devextreme-themebuilder",
     "testing/testcafe"
   ]
 }
