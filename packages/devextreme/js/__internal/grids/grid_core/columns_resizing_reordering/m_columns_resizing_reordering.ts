@@ -333,7 +333,7 @@ class BlockSeparatorView extends SeparatorView {
   }
 
   isVisible() {
-    const groupPanelOptions = this.option('groupPanel');
+    const groupPanelOptions: any = this.option('groupPanel');
     const columnChooserOptions = this.option('columnChooser');
 
     return (groupPanelOptions && groupPanelOptions.visible) || (columnChooserOptions && columnChooserOptions.enabled);
@@ -373,12 +373,26 @@ class BlockSeparatorView extends SeparatorView {
   }
 }
 
-const DraggingHeaderView = modules.View.inherit({
-  _isDragging: false,
+class DraggingHeaderView extends modules.View {
+  private _isDragging: any;
+
+  private _controller: any;
+
+  private _columnsResizerViewController: any;
+
+  private _dragOptions: any;
+
+  private _dropOptions: any;
+
+  private _onSelectStart: any;
+
+  /// #DEBUG
+  private _testPointsByColumns: any;
+  /// #ENDDEBUG
 
   isDragging() {
     return this._isDragging;
-  },
+  }
 
   _getDraggingPanelByPos(pos) {
     const that = this;
@@ -398,13 +412,13 @@ const DraggingHeaderView = modules.View.inherit({
     });
 
     return result;
-  },
+  }
 
   _renderCore() {
     this.element()
       .addClass(`${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)} ${this.addWidgetPrefix(CELL_CONTENT_CLASS)} ${WIDGET_CLASS}`)
       .hide();
-  },
+  }
 
   _resetTargetColumnOptions() {
     const params = this._dropOptions;
@@ -414,7 +428,7 @@ const DraggingHeaderView = modules.View.inherit({
     delete params.isLast;
     delete params.posX;
     delete params.posY;
-  },
+  }
 
   _getVisibleIndexObject(rowIndex, visibleIndex) {
     if (isDefined(rowIndex)) {
@@ -425,28 +439,29 @@ const DraggingHeaderView = modules.View.inherit({
     }
 
     return visibleIndex;
-  },
+  }
 
   dispose() {
     const element = this.element();
 
     this._dragOptions = null;
     element && element.parent().find(`.${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)}`).remove();
-  },
+  }
 
   isVisible() {
     const columnsController = this.getController('columns');
     const commonColumnSettings = columnsController.getCommonSettings();
 
     return this.option('showColumnHeaders') && (allowReordering(this) || commonColumnSettings.allowGrouping || commonColumnSettings.allowHiding);
-  },
+  }
 
   init() {
     const that = this;
 
-    this.callBase();
+    super.init();
     this._controller = this.getController('draggingHeader');
     this._columnsResizerViewController = this.getController('columnsResizer');
+    this._isDragging = false;
 
     this.getController('data').loadingChanged.add((isLoading) => {
       const element = that.element();
@@ -455,7 +470,7 @@ const DraggingHeaderView = modules.View.inherit({
         element.hide();
       }
     });
-  },
+  }
 
   dragHeader(options) {
     const that = this;
@@ -493,7 +508,7 @@ const DraggingHeaderView = modules.View.inherit({
       .text(isCommandColumn ? '' : options.sourceColumn.caption);
 
     that.element().appendTo(swatchContainer.getSwatchContainer(columnElement));
-  },
+  }
 
   moveHeader(args) {
     const e = args.event;
@@ -519,7 +534,7 @@ const DraggingHeaderView = modules.View.inherit({
       }
       e.preventDefault();
     }
-  },
+  }
 
   dockHeader(eventData) {
     const that = this;
@@ -575,7 +590,7 @@ const DraggingHeaderView = modules.View.inherit({
         controller.dock(params);
       }
     }
-  },
+  }
 
   dropHeader(args) {
     const e = args.event;
@@ -594,8 +609,8 @@ const DraggingHeaderView = modules.View.inherit({
     that._isDragging = false;
     // eslint-disable-next-line spellcheck/spell-checker
     domAdapter.getDocument().onselectstart = that._onSelectStart || null;
-  },
-});
+  }
+}
 
 const isNextColumnResizingMode = function (that) {
   return that.option('columnResizingMode') !== 'widget';
