@@ -12,6 +12,7 @@ export type Options<
 /**
  * @docid
  * @public
+ * @type object
  * @deprecated Use CustomStoreGroupItem instead
  */
 export type GroupItem<TItem = any> = CustomStoreGroupItem<TItem>;
