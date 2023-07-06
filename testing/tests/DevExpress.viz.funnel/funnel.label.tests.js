@@ -1328,5 +1328,28 @@ QUnit.module('Initialization', {
 
             assert.strictEqual(this.loggerErrorSpy.callCount, 0);
         });
+
+        QUnit.test('should run with correctly translated labels when datasource contains zero values', function(assert) {
+            const widget = createFunnel({
+                algorithm: 'dynamicHeight',
+                showForZeroValues,
+                dataSource: [
+                    { count: 1, level: 'Junior Engineer' },
+                    { count: 0, level: 'Senior Engineer' },
+                    { count: 1, level: 'Mid-Level Engineer' },
+                    { count: 99, level: 'Architect' }
+                ],
+                valueField: 'count',
+                inverted: true,
+                sortData: false,
+            });
+
+            const labels = widget._labels;
+
+            assert.strictEqual(labels[0]._insideGroup._settings.translateY, 393);
+            assert.strictEqual(labels[1]._insideGroup._settings.translateY, undefined);
+            assert.strictEqual(labels[2]._insideGroup._settings.translateY, 370);
+            assert.strictEqual(labels[3]._insideGroup._settings.translateY, 347);
+        });
     });
 });
