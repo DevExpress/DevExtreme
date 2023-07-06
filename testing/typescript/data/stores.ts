@@ -4,7 +4,6 @@
 import $ from 'jquery';
 import { HttpClient } from '@angular/common/http';
 import CustomStore from '../../../js/data/custom_store';
-import type { ResolvedData } from '../../../js/data/custom_store';
 import { Store, StoreOptions } from '../../../js/data';
 import {
   ANY,
@@ -13,6 +12,7 @@ import {
   notNever,
   toAssertion,
 } from '../consts';
+import type { CustomStoreLoadResult } from '../../../js/common/data';
 
 export async function infersTItemFromComplexLoadResult() {
   const store = new CustomStore({
@@ -38,7 +38,8 @@ export async function loadReturnTypeInferTypeDefinedInOptions() {
   });
 
   const loadResult = await store.load();
-  const actualItem: (typeof loadResult) extends ResolvedData<infer Item> ? Item : never = ANY;
+  const actualItem: (typeof loadResult) extends CustomStoreLoadResult<infer Item>
+    ? Item : never = ANY;
 
   notAny(actualItem);
   notNever(actualItem);
