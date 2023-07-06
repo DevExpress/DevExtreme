@@ -2,8 +2,9 @@ import $ from 'jquery';
 import { createFunnel, stubAlgorithm } from './commonParts/common.js';
 import labelModule from 'viz/series/points/label';
 import { labelEnvironment } from './commonParts/label.js';
+import { logger } from 'core/utils/console';
 
-QUnit.module('Initialization', labelEnvironment);
+QUnit.module('Initialization with stubs', labelEnvironment);
 
 QUnit.test('Create label group on initialization', function(assert) {
     createFunnel({});
@@ -1254,7 +1255,6 @@ QUnit.test('Redraw hidden labels on resize', function(assert) {
 
     labels.forEach((l, i) => {
         l.stub('isVisible').returns(i !== 1);
-
         l.draw.reset();
     });
 
@@ -1300,4 +1300,56 @@ QUnit.test('change resolveLabelOverlapping option', function(assert) {
 
     const label = labelModule.Label.getCall(0).returnValue;
     assert.ok(label.shift.called);
+});
+
+QUnit.module('Initialization', {
+    beforeEach: function() {
+        this.loggerErrorSpy = sinon.spy(logger, 'error');
+    },
+    afterEach: function() {
+        this.loggerErrorSpy.restore();
+    }
+}, () => {
+    [true, false].forEach((showForZeroValues) => {
+        QUnit.test(`should not fail when showForZeroValues==${showForZeroValues} and datasource contains zero values (T1172293)`, function(assert) {
+            createFunnel({
+                algorithm: 'dynamicHeight',
+                showForZeroValues,
+                dataSource: [
+                    { count: 1, level: 'Junior Engineer' },
+                    { count: 20, level: 'Mid-Level Engineer' },
+                    { count: 0, level: 'Senior Engineer' },
+                    { count: 17, level: 'Architect' },
+                ],
+                valueField: 'count',
+                inverted: true,
+                sortData: false,
+            });
+
+            assert.strictEqual(this.loggerErrorSpy.callCount, 0);
+        });
+
+        QUnit.test('should run with correctly translated labels when datasource contains zero values', function(assert) {
+            const widget = createFunnel({
+                algorithm: 'dynamicHeight',
+                showForZeroValues,
+                dataSource: [
+                    { count: 1, level: 'Junior Engineer' },
+                    { count: 0, level: 'Senior Engineer' },
+                    { count: 1, level: 'Mid-Level Engineer' },
+                    { count: 99, level: 'Architect' }
+                ],
+                valueField: 'count',
+                inverted: true,
+                sortData: false,
+            });
+
+            const labels = widget._labels;
+
+            assert.strictEqual(labels[0]._insideGroup._settings.translateY, 393);
+            assert.strictEqual(labels[1]._insideGroup._settings.translateY, undefined);
+            assert.strictEqual(labels[2]._insideGroup._settings.translateY, 370);
+            assert.strictEqual(labels[3]._insideGroup._settings.translateY, 347);
+        });
+    });
 });
