@@ -121,24 +121,27 @@ class TrackerView extends modules.View {
   }
 }
 
-const SeparatorView = modules.View.inherit({
-  _renderSeparator() { },
+class SeparatorView extends modules.View {
+  private _isShown: any;
 
-  _renderCore(options) {
-    const deferred = this.callBase(options);
+  _renderSeparator() { }
+
+  _renderCore(options?) {
+    // @ts-expect-error
+    const deferred = super._renderCore(options);
     this._isShown = true;
     this._renderSeparator();
     this.hide();
     return deferred;
-  },
+  }
 
   show() {
     this._isShown = true;
-  },
+  }
 
   hide() {
     this._isShown = false;
-  },
+  }
 
   height(value) {
     const $element = this.element();
@@ -149,7 +152,7 @@ const SeparatorView = modules.View.inherit({
         return getHeight($element);
       }
     }
-  },
+  }
 
   width(value) {
     const $element = this.element();
@@ -160,8 +163,8 @@ const SeparatorView = modules.View.inherit({
         return getWidth($element);
       }
     }
-  },
-});
+  }
+}
 
 const ColumnsSeparatorView = SeparatorView.inherit({
   _renderSeparator() {
