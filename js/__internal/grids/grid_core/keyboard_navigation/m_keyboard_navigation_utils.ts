@@ -3,7 +3,7 @@ import { isDefined } from '@js/core/utils/type';
 
 import { EDITOR_CELL_CLASS } from '../editing/const';
 import {
-  COMMAND_SELECT_CLASS, FREESPACE_ROW_CLASS, GROUP_ROW_CLASS, HEADER_ROW_CLASS,
+  COMMAND_SELECT_CLASS, DATA_ROW_CLASS, FREESPACE_ROW_CLASS, GROUP_ROW_CLASS, HEADER_ROW_CLASS,
   MASTER_DETAIL_ROW_CLASS, VIRTUAL_ROW_CLASS,
 } from './const';
 
@@ -21,7 +21,7 @@ export function isDetailRow($row) {
 }
 
 export function isDataRow($row) {
-  return $row && !isGroupRow($row) && !isGroupFooterRow($row) && !isDetailRow($row);
+  return $row && $row.hasClass(DATA_ROW_CLASS);
 }
 
 export function isNotFocusedRow($row) {
