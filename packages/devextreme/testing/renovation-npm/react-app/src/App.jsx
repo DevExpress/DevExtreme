@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import 'devextreme/dist/css/dx.light.css';
+import 'devextreme-dist/css/dx.light.css';
 import Button from '@devextreme/react/button';
 
 export const data = [
