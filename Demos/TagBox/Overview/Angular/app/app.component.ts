@@ -1,7 +1,7 @@
 import { Component, NgModule, enableProdMode } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTagBoxModule, DxTemplateModule } from 'devextreme-angular';
+import { DxTagBoxModule, DxPopoverModule, DxTemplateModule } from 'devextreme-angular';
 import ArrayStore from 'devextreme/data/array_store';
 
 import { Service, Product } from './app.service';
@@ -24,6 +24,14 @@ export class AppComponent {
 
   dataSource: any;
 
+  product: Product;
+
+  value: number[];
+
+  target: any;
+
+  visible = false;
+
   constructor(service: Service) {
     this.dataSource = new ArrayStore({
       data: service.getProducts(),
@@ -31,6 +39,7 @@ export class AppComponent {
     });
     this.simpleProducts = service.getSimpleProducts();
     this.editableProducts = this.simpleProducts.slice();
+    this.value = [1, 2];
   }
 
   onCustomItemCreating(args) {
@@ -41,6 +50,21 @@ export class AppComponent {
     }
     args.customItem = newValue;
   }
+
+  onMouseEnter(e, product) {
+    this.target = e.target;
+    this.product = product;
+    this.visible = true;
+  }
+
+  onMouseLeave() {
+    this.target = null;
+    this.visible = false;
+  }
+
+  isDisabled(product) {
+    return product.Name === 'SuperHD Video Player';
+  }
 }
 
 @NgModule({
@@ -49,6 +73,7 @@ export class AppComponent {
     BrowserTransferStateModule,
     DxTemplateModule,
     DxTagBoxModule,
+    DxPopoverModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

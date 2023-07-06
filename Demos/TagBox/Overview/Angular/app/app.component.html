@@ -106,9 +106,11 @@
       <div class="dx-field-value">
         <dx-tag-box
           [dataSource]="dataSource"
+          [value]="value"
           displayExpr="Name"
           valueExpr="Id"
           itemTemplate="customItem"
+          tagTemplate="customTag"
           [inputAttr]="{ 'aria-label': 'Product' }"
         >
           <div *dxTemplate="let product of 'customItem'">
@@ -119,7 +121,41 @@
               </div>
             </div>
           </div>
+          <div *dxTemplate="let product of 'customTag'">
+            <div
+              [ngClass]="{
+                'dx-tag-content': true,
+                'disabled-tag': isDisabled(product)
+              }"
+              [attr.aria-disabled]="isDisabled(product)"
+              (mouseenter)="onMouseEnter($event, product)"
+              (mouseleave)="onMouseLeave()"
+            >
+              <img [src]="product.ImageSrc" class="tag-img" />
+              <span>{{ product.Name }}</span>
+              <div
+                *ngIf="!isDisabled(product)"
+                class="dx-tag-remove-button"
+              ></div>
+            </div>
+          </div>
         </dx-tag-box>
+        <dx-popover [target]="target" [visible]="visible">
+          <div *dxTemplate="let data of 'content'">
+            <p>
+              <b>Name: </b><span>{{ product.Name }}</span>
+            </p>
+            <p>
+              <b>Price: </b><span>{{ product.Price }}</span>
+            </p>
+            <p>
+              <b>In-stock: </b><span>{{ product.Current_Inventory }}</span>
+            </p>
+            <p>
+              <b>Category: </b><span>{{ product.Category }}</span>
+            </p>
+          </div>
+        </dx-popover>
       </div>
     </div>
   </div>

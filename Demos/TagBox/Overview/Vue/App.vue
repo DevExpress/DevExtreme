@@ -98,13 +98,19 @@
       <div class="dx-field-value">
         <DxTagBox
           :data-source="products"
+          :value="value"
           :input-attr="{ 'aria-label': 'Product' }"
           display-expr="Name"
           value-expr="Id"
           item-template="item"
+          tag-template="tag"
         >
           <template #item="{ data }">
             <Item :item-data="data"/>
+          </template>
+
+          <template #tag="{ data }">
+            <Tag :tag-data="data"/>
           </template>
         </DxTagBox>
       </div>
@@ -115,6 +121,7 @@
 import DxTagBox from 'devextreme-vue/tag-box';
 import ArrayStore from 'devextreme/data/array_store';
 import Item from './Item.vue';
+import Tag from './Tag.vue';
 
 import { simpleProducts, products } from './data.js';
 
@@ -122,6 +129,7 @@ export default {
   components: {
     DxTagBox,
     Item,
+    Tag,
   },
   data() {
     return {
@@ -132,7 +140,7 @@ export default {
         data: products,
         key: 'ID',
       }),
-      value: simpleProducts[0],
+      value: [1, 2],
       onCustomItemCreating: (args) => {
         const newValue = args.text;
         const isItemInDataSource = this.editableProducts.some((item) => item === newValue);

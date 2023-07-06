@@ -1,9 +1,11 @@
 import React from 'react';
 
 import TagBox from 'devextreme-react/tag-box';
+import Popover from 'devextreme-react/popover';
 import ArrayStore from 'devextreme/data/array_store';
 
 import Item from './Item.js';
+import Tag from './Tag.js';
 import { simpleProducts, products, productLabel } from './data.js';
 
 const disabledValue = [simpleProducts[0]];
@@ -17,8 +19,12 @@ class App extends React.Component {
     });
     this.state = {
       editableProducts: [...simpleProducts],
+      value: [1, 2],
+      target: null,
+      product: {},
     };
     this.onCustomItemCreating = this.onCustomItemCreating.bind(this);
+    this.onMouseEnter = this.onMouseEnter.bind(this);
   }
 
   onCustomItemCreating(args) {
@@ -30,6 +36,13 @@ class App extends React.Component {
       });
     }
     args.customItem = newValue;
+  }
+
+  onMouseEnter(e, product) {
+    this.setState({
+      target: e.currentTarget,
+      product,
+    });
   }
 
   render() {
@@ -115,10 +128,31 @@ class App extends React.Component {
             <div className="dx-field-label">Custom template</div>
             <div className="dx-field-value">
               <TagBox dataSource={this.dataSource}
+                defaultValue={this.state.value}
                 inputAttr={productLabel}
                 displayExpr="Name"
                 valueExpr="Id"
-                itemRender={Item} />
+                itemRender={Item}
+                tagRender={(data) => <Tag product={data} onMouseEnter={this.onMouseEnter} />} />
+
+              <Popover
+                showEvent="mouseenter"
+                hideEvent="mouseleave"
+                target={this.state.target}
+              >
+                <p>
+                  <b>Name: </b><span>{ this.state.product.Name }</span>
+                </p>
+                <p>
+                  <b>Price: </b><span>{ this.state.product.Price }</span>
+                </p>
+                <p>
+                  <b>In-stock: </b><span>{ this.state.product.Current_Inventory }</span>
+                </p>
+                <p>
+                  <b>Category: </b><span>{ this.state.product.Category }</span>
+                </p>
+              </Popover>
             </div>
           </div>
         </div>

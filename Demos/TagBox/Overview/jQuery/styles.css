@@ -31,3 +31,19 @@ body .dx-popup-content .custom-item {
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+#productsCustom .dx-tag-content {
+  display: flex;
+  align-items: center;
+}
+
+#productsCustom .tag-img {
+  height: 30px;
+  margin-right: 5px;
+}
+
+#productsCustom .dx-tag-content.disabled-tag {
+  padding-right: 6px;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
