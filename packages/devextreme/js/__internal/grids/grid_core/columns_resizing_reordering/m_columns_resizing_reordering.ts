@@ -49,19 +49,23 @@ const allowReordering = function (that) {
   return that.option('allowColumnReordering') || that.getController('columns').isColumnOptionUsed('allowReordering');
 };
 
-const TrackerView = modules.View.inherit({
+class TrackerView extends modules.View {
+  private _positionChanged: any;
+
+  private _tablePositionController: any;
+
   _renderCore() {
-    const deferred = this.callBase();
+    const deferred = super._renderCore();
     this.element().addClass(this.addWidgetPrefix(TRACKER_CLASS));
     this.hide();
     return deferred;
-  },
+  }
 
   _unsubscribeFromCallback() {
     if (this._positionChanged) {
       this._tablePositionController.positionChanged.remove(this._positionChanged);
     }
-  },
+  }
 
   _subscribeToCallback() {
     const that = this;
@@ -74,7 +78,7 @@ const TrackerView = modules.View.inherit({
       }
     };
     this._tablePositionController.positionChanged.add(that._positionChanged);
-  },
+  }
 
   optionChanged(args) {
     if (args.name === 'allowColumnResizing') {
@@ -86,36 +90,36 @@ const TrackerView = modules.View.inherit({
       }
     }
 
-    this.callBase(args);
-  },
+    super.optionChanged(args);
+  }
 
   init() {
-    this.callBase();
-    this._tablePositionController = this.getController('tablePosition');
+    super.init();
+    this._tablePositionController = this.getController('tablePosition' as any);
     this._subscribeToCallback();
-  },
+  }
 
   isVisible() {
     return allowResizing(this);
-  },
+  }
 
   show() {
     this.element().show();
-  },
+  }
 
   hide() {
     this.element() && this.element().hide();
-  },
+  }
 
   setHeight(value) {
     setHeight(this.element(), value);
-  },
+  }
 
   dispose() {
     this._unsubscribeFromCallback();
-    this.callBase();
-  },
-});
+    super.dispose();
+  }
+}
 
 const SeparatorView = modules.View.inherit({
   _renderSeparator() { },
