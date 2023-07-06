@@ -700,17 +700,58 @@ declare module DevExpress.viz {
 
 declare module DevExpress.ui {
 
+    /** @deprecated Use DevExpress.ui.dxDataGrid.Editing instead */
+    export type dxDataGridEditing<TRowData, TKey = any> = DevExpress.ui.dxDataGrid.Editing<TRowData, TKey>;
+
+    /** @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead */
+    export type dxDataGridScrolling = DevExpress.ui.dxDataGrid.Scrolling;
+
+    /** @deprecated Use DevExpress.ui.dxDataGrid.Selection instead */
+    export type dxDataGridSelection = DevExpress.ui.dxDataGrid.Selection;
+
+    /** @deprecated Use DevExpress.ui.dxTreeList.Editing instead */
+    export type dxTreeListEditing<TRowData = any, TKey = any> = DevExpress.ui.dxTreeList.Editing<TRowData, TKey>;
+
+    /** @deprecated Use DevExpress.ui.dxTreeList.Scrolling instead */
+    export type dxTreeListScrolling = DevExpress.ui.dxTreeList.Scrolling;
+
+    /** @deprecated Use DevExpress.ui.dxTreeList.Selection instead */
+    export type dxTreeListSelection = DevExpress.ui.dxTreeList.Selection;
+
     /** @deprecated Use DevExpress.ui.dxTreeList.EditingTexts instead */
     export type dxTreeListEditingTexts = DevExpress.ui.dxTreeList.EditingTexts;
 
     /** @deprecated Use DevExpress.ui.dxTreeList.Paging instead */
     export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
 
+    /** @deprecated Use DevExpress.ui.dxDataGrid.Column instead */
+    export type GridBaseColumn<TRowData = any> = DevExpress.ui.dxDataGrid.ColumnBase<TRowData>;
+
+    /** @deprecated Use DevExpress.ui.dxDataGrid.ColumnButton instead */
+    export type GridBaseColumnButton = DevExpress.ui.dxDataGrid.ColumnButtonBase;
+
+    /** @deprecated Use DevExpress.ui.dxDataGrid.Editing instead */
+    export type GridBaseEditing<TRowData = any, TKey = any> = DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey>;
+
+    /** @deprecated Use DevExpress.ui.dxDataGrid.EditingTexts instead */
+    export type GridBaseEditingTexts = DevExpress.ui.dxDataGrid.EditingTextsBase;
+
+    /** @deprecated Use DevExpress.ui.dxDataGrid.Paging instead */
+    export type GridBasePaging = DevExpress.ui.dxDataGrid.Paging;
+
+    /** @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead */
+    export type GridBaseScrolling = DevExpress.ui.dxDataGrid.Scrolling;
+
+    /** @deprecated Use DevExpress.ui.dxDataGrid.Selection instead */
+    export type GridBaseSelection = DevExpress.ui.dxDataGrid.Selection;
 }
 
 declare module DevExpress.ui.dxDataGrid {
 
     /** @deprecated Use DevExpress.ui.dxDataGrid.SortByGroupSummaryInfoItem instead */
     export type dxDataGridSortByGroupSummaryInfoItem = DevExpress.ui.dxDataGrid.SortByGroupSummaryInfoItem;
+
+    /** @deprecated Use DevExpress.ui.dxDataGrid.EditingTexts instead */
+    export type EditingTextsBase = DevExpress.ui.dxDataGrid.EditingTexts;
 
 }

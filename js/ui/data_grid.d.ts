@@ -62,7 +62,7 @@ import {
     KeyDownInfo,
     NewRowInfo,
     NewRowPosition,
-    PagingBase as ComponentPagingBase,
+    PagingBase as ComponentPaging,
     ReducedNativeEventInfo,
     RowDragging as ComponentRowDragging,
     RowDraggingEventInfo,
@@ -180,7 +180,7 @@ export type EditingBase<TRowData = any, TKey = any> = ComponentEditingBase<TRowD
 /** @deprecated Use EditingTexts instead */
 export type EditingTextsBase = ComponentEditingTextsBase;
 /** @deprecated Use Paging instead */
-export type PagingBase = ComponentPagingBase;
+export type PagingBase = ComponentPaging;
 /** @deprecated Use Scrolling instead */
 export type ScrollingBase = ComponentScrollingBase;
 /** @deprecated Use Selection instead */
@@ -219,51 +219,44 @@ export type GroupData<TRowData> = {
 };
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Editing instead
  */
 export type GridBaseEditing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey>;
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use EditingTexts instead
  */
 export type GridBaseEditingTexts = EditingTextsBase;
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Paging instead
  */
-export type GridBasePaging = ComponentPagingBase;
+export type GridBasePaging = ComponentPaging;
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Scrolling instead
  */
 export type GridBaseScrolling = ScrollingBase;
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Selection instead
  */
 export type GridBaseSelection = SelectionBase;
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Column instead
  */
 export type GridBaseColumn<TRowData = any> = ColumnBase<TRowData>;
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use ColumnButton instead
  */
 export type GridBaseColumnButton = ColumnButtonBase;
 
@@ -1642,6 +1635,11 @@ export type CustomSummaryInfo<TRowData = any, TKey = any> = {
   readonly groupIndex?: number;
 };
 
+/**
+ * @public
+ */
+export type Paging = ComponentPaging;
+
 /** @public */
 export type RowDragging<TRowData = any, TKey = any> = ComponentRowDragging<dxDataGrid, TRowData, TKey>;
 
@@ -1904,7 +1902,6 @@ export type Toolbar = {
 };
 
 /**
- * @public
  * @namespace DevExpress.ui
  * @deprecated Use Editing instead
  */
@@ -1957,7 +1954,6 @@ export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & 
 export type EditingTexts = ComponentEditingTextsBase;
 
 /**
- * @public
  * @namespace DevExpress.ui
  * @deprecated Use Scrolling instead
  */
@@ -1976,7 +1972,6 @@ export type Scrolling = ScrollingBase & {
 };
 
 /**
- * @public
  * @namespace DevExpress.ui
  * @deprecated Use Selection instead
  */

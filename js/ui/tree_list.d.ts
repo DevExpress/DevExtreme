@@ -1153,7 +1153,6 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
 };
 
 /**
- * @public
  * @namespace DevExpress.ui
  * @deprecated Use Editing instead
  */
@@ -1237,7 +1236,6 @@ export type Paging = PagingBase & {
 };
 
 /**
- * @public
  * @namespace DevExpress.ui
  * @deprecated Use Scrolling instead
  */
@@ -1256,7 +1254,6 @@ export interface Scrolling extends ScrollingBase {
 }
 
 /**
- * @public
  * @namespace DevExpress.ui
  * @deprecated Use Selection instead
  */

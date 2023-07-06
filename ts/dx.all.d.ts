@@ -10173,11 +10173,6 @@ declare module DevExpress.ui {
       };
     export type EditingTexts = DevExpress.common.grids.EditingTextsBase;
     /**
-     * @deprecated Use EditingTexts instead
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type EditingTextsBase = DevExpress.common.grids.EditingTextsBase;
-    /**
      * [descr:_ui_data_grid_EditorPreparedEvent]
      */
     export type EditorPreparedEvent<
@@ -10762,6 +10757,7 @@ declare module DevExpress.ui {
       | 'sortByGroupSummaryInfo'
       | 'summary'
       | 'toolbar';
+    export type Paging = DevExpress.common.grids.PagingBase;
     export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<
       TRowData,
       TKey
@@ -11519,13 +11515,6 @@ declare module DevExpress.ui {
         }) => boolean);
   }
   /**
-   * @deprecated Use DevExpress.ui.dxDataGrid.Editing instead
-   */
-  export type dxDataGridEditing<
-    TRowData,
-    TKey = any
-  > = DevExpress.ui.dxDataGrid.Editing<TRowData, TKey>;
-  /**
    * [descr:dxDataGridOptions]
    * @deprecated [depNote:dxDataGridOptions]
    */
@@ -11751,14 +11740,6 @@ declare module DevExpress.ui {
     TRowData = any,
     TKey = any
   > = DevExpress.ui.dxDataGrid.Row<TRowData, TKey>;
-  /**
-   * @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead
-   */
-  export type dxDataGridScrolling = DevExpress.ui.dxDataGrid.Scrolling;
-  /**
-   * @deprecated Use DevExpress.ui.dxDataGrid.Selection instead
-   */
-  export type dxDataGridSelection = DevExpress.ui.dxDataGrid.Selection;
   /**
    * [descr:dxDateBox]
    */
@@ -28392,13 +28373,6 @@ declare module DevExpress.ui {
         }) => boolean);
   }
   /**
-   * @deprecated Use DevExpress.ui.dxTreeList.Editing instead
-   */
-  export type dxTreeListEditing<
-    TRowData = any,
-    TKey = any
-  > = DevExpress.ui.dxTreeList.Editing<TRowData, TKey>;
-  /**
    * @deprecated Use DevExpress.ui.dxTreeList.Node instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -28612,14 +28586,6 @@ declare module DevExpress.ui {
     TRowData = any,
     TKey = any
   > = DevExpress.ui.dxTreeList.Row<TRowData, TKey>;
-  /**
-   * @deprecated Use DevExpress.ui.dxTreeList.Scrolling instead
-   */
-  export type dxTreeListScrolling = DevExpress.ui.dxTreeList.Scrolling;
-  /**
-   * @deprecated Use DevExpress.ui.dxTreeList.Selection instead
-   */
-  export type dxTreeListSelection = DevExpress.ui.dxTreeList.Selection;
   /**
    * [descr:dxTreeView]
    */
@@ -29535,38 +29501,6 @@ declare module DevExpress.ui {
     | ((value: Date) => string)
     | ((value: number) => string)
     | ExternalFormat;
-  /**
-   * @deprecated 
-   */
-  export type GridBaseColumn<TRowData = any> =
-    DevExpress.ui.dxDataGrid.ColumnBase<TRowData>;
-  /**
-   * @deprecated 
-   */
-  export type GridBaseColumnButton = DevExpress.ui.dxDataGrid.ColumnButtonBase;
-  /**
-   * @deprecated 
-   */
-  export type GridBaseEditing<
-    TRowData = any,
-    TKey = any
-  > = DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey>;
-  /**
-   * @deprecated 
-   */
-  export type GridBaseEditingTexts = DevExpress.ui.dxDataGrid.EditingTextsBase;
-  /**
-   * @deprecated 
-   */
-  export type GridBasePaging = DevExpress.common.grids.PagingBase;
-  /**
-   * @deprecated 
-   */
-  export type GridBaseScrolling = DevExpress.ui.dxDataGrid.ScrollingBase;
-  /**
-   * @deprecated 
-   */
-  export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**
    * [descr:ui.hideToasts()]
    */
