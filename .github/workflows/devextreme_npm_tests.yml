@@ -29,12 +29,6 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-#    - name: Restore artifacts cache
-#      uses: actions/cache@v3
-#      with:
-#        path: ./artifacts
-#        key: build-npm-devextreme-artifacts-${{ github.sha }}
-
     - name: Install packages in devextreme repo
       run: npm install --no-audit --no-fund
 
@@ -204,7 +198,12 @@ jobs:
 
     - name: Build with Angular 12
       working-directory: packages/devextreme-angular-repo
-      run: npm run build
+      run: |
+        npm run update-integration-meta
+        cd packages/devextreme-angular
+        npm run build
+        cd ../devextreme-angular-generator
+        npm run build
 
     - name: Run tests with Angular 12
       working-directory: packages/devextreme-angular-repo
