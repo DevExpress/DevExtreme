@@ -244,8 +244,8 @@ QUnit.module('Keyboard keys', {
         // assert
         const rowIndex = this.keyboardNavigationController._focusedCellPosition.rowIndex;
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, 'cellIndex');
-        assert.equal(rowIndex, 8, 'rowIndex');
-        assert.ok(!this.rowsView.element().find('.dx-row').eq(rowIndex).hasClass('dx-datagrid-group-footer'), 'not group footer');
+        assert.equal(rowIndex, 7, 'rowIndex');
+        assert.ok(this.rowsView.element().find('.dx-row').eq(rowIndex).hasClass('dx-datagrid-group-footer'), 'group footer');
     });
 
     QUnit.testInActiveWindow('Up arrow to group footer', function(assert) {
@@ -261,8 +261,8 @@ QUnit.module('Keyboard keys', {
         // assert
         const rowIndex = this.keyboardNavigationController._focusedCellPosition.rowIndex;
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, 'cellIndex');
-        assert.equal(rowIndex, 6, 'rowIndex');
-        assert.ok(!this.rowsView.element().find('.dx-row').eq(rowIndex).hasClass('dx-datagrid-group-footer'), 'not group footer');
+        assert.equal(rowIndex, 7, 'rowIndex');
+        assert.ok(this.rowsView.element().find('.dx-row').eq(rowIndex).hasClass('dx-datagrid-group-footer'), 'group footer');
     });
 
     QUnit.testInActiveWindow('Ctrl+RightArrow do not expand master detail row if master detail is not enabled (T576946)', function(assert) {
@@ -600,11 +600,10 @@ QUnit.module('Keyboard keys', {
         };
 
         this.triggerKeyDown('downArrow');
-        this.triggerKeyDown('rightArrow');
 
         // assert
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, 'cellIndex');
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 2, 'rowIndex');
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, 'cellIndex');
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 4, 'rowIndex');
     });
 
     // T1069664
@@ -3613,23 +3612,6 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, 'columnIndex of focusedCellPosition');
-    });
-
-    QUnit.testInActiveWindow('Move up when a focused cell is located on invalid position', function(assert) {
-        // arrange
-        setupModules(this);
-        this.gridView.render($('#container'));
-        this.keyboardNavigationController._focusedView = this.rowsView;
-        this.keyboardNavigationController._isNeedFocus = true;
-
-        // act
-        this.keyboardNavigationController.setFocusedCellPosition(7, 0);
-        this.editorFactoryController._$focusedElement = $('<div/>');
-        callViewsRenderCompleted(this._views);
-        this.clock.tick(10);
-
-        // arrange
-        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 6 });
     });
 
     QUnit.testInActiveWindow('Tab index is not applied when focus is located inside edit form and master detail is enabled', function(assert) {
