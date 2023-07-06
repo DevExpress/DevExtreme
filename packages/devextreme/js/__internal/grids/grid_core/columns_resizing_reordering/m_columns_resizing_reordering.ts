@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import fx from '@js/animation/fx';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
@@ -122,7 +123,7 @@ class TrackerView extends modules.View {
 }
 
 class SeparatorView extends modules.View {
-  private _isShown: any;
+  protected _isShown: any;
 
   _renderSeparator() { }
 
@@ -166,13 +167,25 @@ class SeparatorView extends modules.View {
   }
 }
 
-const ColumnsSeparatorView = SeparatorView.inherit({
+class ColumnsSeparatorView extends SeparatorView {
+  private _positionChanged: any;
+
+  private _tablePositionController: any;
+
+  private _isTransparent: any;
+
+  /// #DEBUG
+  private _testPosX: any;
+
+  private _testCursorName: any;
+  /// #ENDDEBUG
+
   _renderSeparator() {
-    this.callBase();
+    super._renderSeparator();
 
     const $element = this.element();
     $element.addClass(this.addWidgetPrefix(COLUMNS_SEPARATOR_CLASS));
-  },
+  }
 
   _subscribeToCallback() {
     const that = this;
@@ -186,22 +199,22 @@ const ColumnsSeparatorView = SeparatorView.inherit({
       }
     };
     that._tablePositionController.positionChanged.add(that._positionChanged);
-  },
+  }
 
   _unsubscribeFromCallback() {
     this._positionChanged && this._tablePositionController.positionChanged.remove(this._positionChanged);
-  },
+  }
 
   _init() {
     this._isTransparent = allowResizing(this);
     if (this.isVisible()) {
       this._subscribeToCallback();
     }
-  },
+  }
 
   isVisible() {
     return this.option('showColumnHeaders') && (allowReordering(this) || allowResizing(this));
-  },
+  }
 
   optionChanged(args) {
     if (args.name === 'allowColumnResizing') {
@@ -216,14 +229,14 @@ const ColumnsSeparatorView = SeparatorView.inherit({
       }
     }
 
-    this.callBase(args);
-  },
+    super.optionChanged(args);
+  }
 
   init() {
-    this.callBase();
-    this._tablePositionController = this.getController('tablePosition');
+    super.init();
+    this._tablePositionController = this.getController('tablePosition' as any);
     this._init();
-  },
+  }
 
   show() {
     const that = this;
@@ -236,10 +249,10 @@ const ColumnsSeparatorView = SeparatorView.inherit({
         $element.show();
       }
     }
-    this.callBase();
-  },
+    super.show();
+  }
 
-  hide(force) {
+  hide(force?) {
     const $element = this.element();
     const columnsSeparatorTransparent = this.addWidgetPrefix(COLUMNS_SEPARATOR_TRANSPARENT);
 
@@ -255,8 +268,8 @@ const ColumnsSeparatorView = SeparatorView.inherit({
         $element.hide();
       }
     }
-    this.callBase();
-  },
+    super.hide();
+  }
 
   moveByX(outerX) {
     const $element = this.element();
@@ -266,7 +279,7 @@ const ColumnsSeparatorView = SeparatorView.inherit({
       this._testPosX = outerX;
       /// #ENDDEBUG
     }
-  },
+  }
 
   changeCursor(cursorName) {
     cursorName = isDefined(cursorName) ? cursorName : '';
@@ -277,13 +290,13 @@ const ColumnsSeparatorView = SeparatorView.inherit({
       this._testCursorName = cursorName;
       /// #ENDDEBUG
     }
-  },
+  }
 
   dispose() {
     this._unsubscribeFromCallback();
-    this.callBase();
-  },
-});
+    super.dispose();
+  }
+}
 
 const BlockSeparatorView = SeparatorView.inherit({
   init() {
