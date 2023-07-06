@@ -55,7 +55,6 @@ import {
   FOCUS_TYPE_ROW,
   FREESPACE_ROW_CLASS,
   FUNCTIONAL_KEYS,
-  GROUP_FOOTER_CLASS,
   INTERACTIVE_ELEMENTS_SELECTOR,
   MASTER_DETAIL_CELL_CLASS,
   NON_FOCUSABLE_ELEMENTS_SELECTOR,
@@ -71,6 +70,7 @@ import {
   isEditorCell,
   isElementDefined,
   isFixedColumnIndexOffsetRequired,
+  isGroupFooterRow,
   isGroupRow,
   isMobile,
   isNotFocusedRow,
@@ -1286,7 +1286,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     this._isHiddenFocus = disableFocus;
 
-    const isRowFocus = isGroupRow($row) || this.isRowFocusType();
+    const isRowFocus = isGroupRow($row) || isGroupFooterRow($row) || this.isRowFocusType();
 
     if (isRowFocus) {
       $focusElement = $row;
@@ -2223,7 +2223,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     return (
       row
       && (row.style.display === 'none'
-        || $row.hasClass(this.addWidgetPrefix(GROUP_FOOTER_CLASS))
         || (isDetailRow($row)
           && !$row.hasClass(this.addWidgetPrefix(EDIT_FORM_CLASS))))
     );
