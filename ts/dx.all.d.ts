@@ -3904,7 +3904,7 @@ declare module DevExpress.common.grids {
    * [descr:PagingBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type PagingBase = {
+  export interface PagingBase {
     /**
      * [descr:GridBaseOptions.paging.enabled]
      */
@@ -3917,7 +3917,7 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.paging.pageSize]
      */
     pageSize?: number;
-  };
+  }
   /**
    * [descr:RowDragging]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -10566,7 +10566,6 @@ declare module DevExpress.ui {
          */
         readonly rows: Array<Row<TRowData, TKey>>;
       };
-    export type ƒ = DevExpress.common.grids.PagingBase;
     /**
      * [descr:GroupData]
      */

@@ -1642,11 +1642,6 @@ export type CustomSummaryInfo<TRowData = any, TKey = any> = {
   readonly groupIndex?: number;
 };
 
-/**
-* @public
-*/
-export type ƒ = ComponentPagingBase;
-
 /** @public */
 export type RowDragging<TRowData = any, TKey = any> = ComponentRowDragging<dxDataGrid, TRowData, TKey>;
 

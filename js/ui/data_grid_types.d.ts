@@ -138,7 +138,6 @@ export {
   MasterDetail,
   SortByGroupSummaryInfoItem,
   CustomSummaryInfo,
-  ƒ,
   RowDragging,
   Summary,
   SummaryItemTextInfo,

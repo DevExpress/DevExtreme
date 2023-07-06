@@ -2492,7 +2492,7 @@ export type PagerPageSize = 'all' | 'auto';
  * @docid
  * @namespace DevExpress.common.grids
  */
-export type PagingBase = {
+export interface PagingBase {
   /**
    * @docid GridBaseOptions.paging.enabled
    * @default true
@@ -2513,7 +2513,7 @@ export type PagingBase = {
    * @public
    */
   pageSize?: number;
-};
+}
 
 export type ReducedNativeEventInfo<TComponent extends GridBase> = Required<Pick<NativeEventInfo<TComponent, PointerEvent | MouseEvent | TouchEvent>, 'component' | 'event'>>;
 
