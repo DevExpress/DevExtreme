@@ -453,10 +453,13 @@ export default class StandardStrategy extends SelectionStrategy {
         const keys = this.getSelectedItemKeys();
         const filter = this.options.filter();
 
-        const selectionFilterCreator = new SelectionFilterCreator(keys);
+        if(!keys.length) {
+            return Deferred().resolve([]);
+        }
 
+        const selectionFilterCreator = new SelectionFilterCreator(keys);
         const combinedFilter = selectionFilterCreator.getCombinedFilter(keyExpr, filter, true);
 
-        return this._loadFilteredData();
+        return this._loadFilteredData(combinedFilter);
     }
 }
