@@ -103,12 +103,6 @@ const Toast = Overlay.inherit({
 
                     width: 'auto',
 
-                    position: {
-                        at: 'bottom left',
-                        my: 'bottom left',
-                        offset: '20 -20'
-                    },
-
                     animation: {
                         show: {
                             type: 'slide',
