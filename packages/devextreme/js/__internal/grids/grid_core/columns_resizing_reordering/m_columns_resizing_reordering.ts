@@ -298,23 +298,23 @@ class ColumnsSeparatorView extends SeparatorView {
   }
 }
 
-const BlockSeparatorView = SeparatorView.inherit({
+class BlockSeparatorView extends SeparatorView {
   init() {
     const that = this;
 
-    this.callBase();
+    super.init();
 
     this.getController('data').loadingChanged.add((isLoading) => {
       if (!isLoading) {
         that.hide();
       }
     });
-  },
+  }
 
   _renderSeparator() {
-    this.callBase();
+    super._renderSeparator();
     this.element().addClass(BLOCK_SEPARATOR_CLASS).html('&nbsp;');
-  },
+  }
 
   hide() {
     const that = this;
@@ -329,17 +329,17 @@ const BlockSeparatorView = SeparatorView.inherit({
       $parent.prepend(that.element());
     }
 
-    that.callBase();
-  },
+    super.hide();
+  }
 
   isVisible() {
     const groupPanelOptions = this.option('groupPanel');
     const columnChooserOptions = this.option('columnChooser');
 
     return (groupPanelOptions && groupPanelOptions.visible) || (columnChooserOptions && columnChooserOptions.enabled);
-  },
+  }
 
-  show(targetLocation) {
+  show(targetLocation?) {
     const that = this;
     const $element = this.element();
     const startAnimate = function (toOptions) {
@@ -369,9 +369,9 @@ const BlockSeparatorView = SeparatorView.inherit({
       }
     }
 
-    that.callBase();
-  },
-});
+    super.show();
+  }
+}
 
 const DraggingHeaderView = modules.View.inherit({
   _isDragging: false,
