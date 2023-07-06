@@ -162,8 +162,7 @@ function removeEmptySpace(labels, requiredSpace, startPoint) {
         if(requiredSpace > 0) {
             const bBox = label.getBoundingRect();
 
-            const prevLabelIsDrawn = prevLabel?._drawn !== false;
-            const point = prevLabelIsDrawn ? prevLabel.getBoundingRect().y + prevLabel.getBoundingRect().height : startPoint;
+            const point = prevLabel ? prevLabel.getBoundingRect().y + prevLabel.getBoundingRect().height : startPoint;
             const emptySpace = bBox.y - point;
             const shift = Math.min(emptySpace, requiredSpace);
 
@@ -308,7 +307,7 @@ export const plugin = {
             } else if(resolveLabelOverlapping === 'shift') {
                 const maxHeight = this._labelRect[3];
 
-                labels.reduce(([height, emptySpace], label, index, labels) => {
+                labels.filter((label)=> label._visible !== false).reduce(([height, emptySpace], label, index, labels) => {
                     const bBox = label.getBoundingRect();
                     let y = bBox.y;
 
