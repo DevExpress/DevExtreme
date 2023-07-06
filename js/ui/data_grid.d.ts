@@ -1942,7 +1942,7 @@ export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & 
      * @docid dxDataGridOptions.editing.texts
      * @public
      */
-    texts?: EditingTextsBase;
+    texts?: EditingTexts;
     /**
      * @docid dxDataGridOptions.editing.newRowPosition
      * @default "viewportTop"
