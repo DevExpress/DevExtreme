@@ -2,7 +2,7 @@ name: Code generation trigger
 
 on:
   push:
-    branches: [23_1]
+    branches: [23_2]
 
 jobs:
   trigger:

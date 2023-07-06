@@ -12,5 +12,8 @@ export {
   OptionChangedEvent,
   TooltipHiddenEvent,
   TooltipShownEvent,
+  RangeContainer,
+  Scale,
+  ScaleLabel,
   Properties,
 } from './linear_gauge';

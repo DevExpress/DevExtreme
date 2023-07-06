@@ -6,7 +6,7 @@
     "semanticCommits": "enabled",
     "baseBranches": [
         "23_1",
-        "22_2"
+        "23_2"
     ],
     "labels": [
         "dependencies"

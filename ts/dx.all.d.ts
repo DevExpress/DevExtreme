@@ -23227,6 +23227,7 @@ declare module DevExpress.ui {
         readonly fromComponent?: dxSortable | dxDraggable;
         readonly toComponent?: dxSortable | dxDraggable;
         readonly toData?: any;
+        readonly toItemData?: any;
       };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -31826,11 +31827,86 @@ declare module DevExpress.viz {
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxBarGauge>;
     /**
+     * [descr:dxBarGaugeLegend]
+     */
+    export type Legend = DevExpress.common.charts.BaseLegend & {
+      /**
+       * [descr:dxBarGaugeOptions.legend.customizeHint]
+       */
+      customizeHint?: (arg: {
+        item?: BarGaugeBarInfo;
+        text?: string;
+      }) => string;
+      /**
+       * [descr:dxBarGaugeOptions.legend.customizeItems]
+       */
+      customizeItems?: (items: Array<LegendItem>) => Array<LegendItem>;
+      /**
+       * [descr:dxBarGaugeOptions.legend.customizeText]
+       */
+      customizeText?: (arg: {
+        item?: BarGaugeBarInfo;
+        text?: string;
+      }) => string;
+      /**
+       * [descr:dxBarGaugeOptions.legend.itemTextFormat]
+       */
+      itemTextFormat?: DevExpress.ui.Format;
+      /**
+       * [descr:dxBarGaugeOptions.legend.markerTemplate]
+       */
+      markerTemplate?:
+        | DevExpress.core.template
+        | ((
+            legendItem: LegendItem,
+            element: SVGGElement
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+      /**
+       * [descr:dxBarGaugeOptions.legend.visible]
+       */
+      visible?: boolean;
+    };
+    /**
+     * [descr:dxBarGaugeLoadingIndicator]
+     */
+    export type LoadingIndicator = BaseWidgetLoadingIndicator & {
+      /**
+       * [descr:dxBarGaugeOptions.loadingIndicator.enabled]
+       */
+      enabled?: boolean;
+    };
+    /**
      * [descr:_viz_bar_gauge_OptionChangedEvent]
      */
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxBarGauge> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxBarGaugeOptions;
+    /**
+     * [descr:dxBarGaugeTooltip]
+     */
+    export type Tooltip = BaseWidgetTooltip & {
+      /**
+       * [descr:dxBarGaugeOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | DevExpress.core.template
+        | ((
+            scaleValue: { value?: number; valueText?: string; index?: number },
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:dxBarGaugeOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: (scaleValue: {
+        value?: number;
+        valueText?: string;
+        index?: number;
+      }) => any;
+      /**
+       * [descr:dxBarGaugeOptions.tooltip.interactive]
+       */
+      interactive?: boolean;
+    };
     /**
      * [descr:_viz_bar_gauge_TooltipHiddenEvent]
      */
@@ -31851,55 +31927,6 @@ declare module DevExpress.viz {
      */
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxBarGauge> &
       TooltipInfo;
-  }
-  /**
-   * [descr:dxBarGaugeLegend]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxBarGaugeLegend
-    extends DevExpress.common.charts.BaseLegend {
-    /**
-     * [descr:dxBarGaugeOptions.legend.customizeHint]
-     */
-    customizeHint?: (arg: { item?: BarGaugeBarInfo; text?: string }) => string;
-    /**
-     * [descr:dxBarGaugeOptions.legend.customizeItems]
-     */
-    customizeItems?: (
-      items: Array<DevExpress.viz.dxBarGauge.LegendItem>
-    ) => Array<DevExpress.viz.dxBarGauge.LegendItem>;
-    /**
-     * [descr:dxBarGaugeOptions.legend.customizeText]
-     */
-    customizeText?: (arg: { item?: BarGaugeBarInfo; text?: string }) => string;
-    /**
-     * [descr:dxBarGaugeOptions.legend.itemTextFormat]
-     */
-    itemTextFormat?: DevExpress.ui.Format;
-    /**
-     * [descr:dxBarGaugeOptions.legend.markerTemplate]
-     */
-    markerTemplate?:
-      | DevExpress.core.template
-      | ((
-          legendItem: DevExpress.viz.dxBarGauge.LegendItem,
-          element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-    /**
-     * [descr:dxBarGaugeOptions.legend.visible]
-     */
-    visible?: boolean;
-  }
-  /**
-   * [descr:dxBarGaugeLoadingIndicator]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxBarGaugeLoadingIndicator
-    extends BaseWidgetLoadingIndicator {
-    /**
-     * [descr:dxBarGaugeOptions.loadingIndicator.enabled]
-     */
-    enabled?: boolean;
   }
   /**
    * [descr:dxBarGaugeOptions]
@@ -31988,11 +32015,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.legend]
      */
-    legend?: dxBarGaugeLegend;
+    legend?: DevExpress.viz.dxBarGauge.Legend;
     /**
      * [descr:dxBarGaugeOptions.loadingIndicator]
      */
-    loadingIndicator?: dxBarGaugeLoadingIndicator;
+    loadingIndicator?: DevExpress.viz.dxBarGauge.LoadingIndicator;
     /**
      * [descr:dxBarGaugeOptions.onTooltipHidden]
      */
@@ -32024,38 +32051,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.tooltip]
      */
-    tooltip?: dxBarGaugeTooltip;
+    tooltip?: DevExpress.viz.dxBarGauge.Tooltip;
     /**
      * [descr:dxBarGaugeOptions.values]
      */
     values?: Array<number>;
-  }
-  /**
-   * [descr:dxBarGaugeTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
-    /**
-     * [descr:dxBarGaugeOptions.tooltip.contentTemplate]
-     */
-    contentTemplate?:
-      | DevExpress.core.template
-      | ((
-          scaleValue: { value?: number; valueText?: string; index?: number },
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:dxBarGaugeOptions.tooltip.customizeTooltip]
-     */
-    customizeTooltip?: (scaleValue: {
-      value?: number;
-      valueText?: string;
-      index?: number;
-    }) => any;
-    /**
-     * [descr:dxBarGaugeOptions.tooltip.interactive]
-     */
-    interactive?: boolean;
   }
   /**
    * [descr:dxBullet]
@@ -32183,6 +32183,144 @@ declare module DevExpress.viz {
   module dxChart {
     export type AggregatedPointsPosition = 'betweenTicks' | 'crossTicks';
     /**
+     * [descr:dxChartArgumentAxis]
+     */
+    export type ArgumentAxis = CommonAxisSettings & {
+      /**
+       * [descr:dxChartOptions.argumentAxis.aggregateByCategory]
+       * @deprecated [depNote:dxChartOptions.argumentAxis.aggregateByCategory]
+       */
+      aggregateByCategory?: boolean;
+      /**
+       * [descr:dxChartOptions.argumentAxis.aggregationGroupWidth]
+       */
+      aggregationGroupWidth?: number;
+      /**
+       * [descr:dxChartOptions.argumentAxis.aggregationInterval]
+       */
+      aggregationInterval?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxChartOptions.argumentAxis.argumentType]
+       */
+      argumentType?: DevExpress.common.charts.ChartsDataType;
+      /**
+       * [descr:dxChartOptions.argumentAxis.axisDivisionFactor]
+       */
+      axisDivisionFactor?: number;
+      /**
+       * [descr:dxChartOptions.argumentAxis.breaks]
+       */
+      breaks?: Array<DevExpress.common.charts.ScaleBreak>;
+      /**
+       * [descr:dxChartOptions.argumentAxis.categories]
+       */
+      categories?: Array<number | string | Date>;
+      /**
+       * [descr:dxChartOptions.argumentAxis.constantLineStyle]
+       */
+      constantLineStyle?: ArgumentAxisConstantLineStyle;
+      /**
+       * [descr:dxChartOptions.argumentAxis.constantLines]
+       */
+      constantLines?: Array<ArgumentAxisConstantLines>;
+      /**
+       * [descr:dxChartOptions.argumentAxis.endOnTick]
+       */
+      endOnTick?: boolean;
+      /**
+       * [descr:dxChartOptions.argumentAxis.holidays]
+       */
+      holidays?: Array<Date | string> | Array<number>;
+      /**
+       * [descr:dxChartOptions.argumentAxis.hoverMode]
+       */
+      hoverMode?: DevExpress.common.charts.ArgumentAxisHoverMode;
+      /**
+       * [descr:dxChartOptions.argumentAxis.label]
+       */
+      label?: ArgumentAxisLabel;
+      /**
+       * [descr:dxChartOptions.argumentAxis.linearThreshold]
+       */
+      linearThreshold?: number;
+      /**
+       * [descr:dxChartOptions.argumentAxis.logarithmBase]
+       */
+      logarithmBase?: number;
+      /**
+       * [descr:dxChartOptions.argumentAxis.minVisualRangeLength]
+       */
+      minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxChartOptions.argumentAxis.minorTickCount]
+       */
+      minorTickCount?: number;
+      /**
+       * [descr:dxChartOptions.argumentAxis.minorTickInterval]
+       */
+      minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxChartOptions.argumentAxis.position]
+       */
+      position?: DevExpress.common.Position;
+      /**
+       * [descr:dxChartOptions.argumentAxis.customPosition]
+       */
+      customPosition?: number | Date | string;
+      /**
+       * [descr:dxChartOptions.argumentAxis.customPositionAxis]
+       */
+      customPositionAxis?: string;
+      /**
+       * [descr:dxChartOptions.argumentAxis.offset]
+       */
+      offset?: number;
+      /**
+       * [descr:dxChartOptions.argumentAxis.singleWorkdays]
+       */
+      singleWorkdays?: Array<Date | string> | Array<number>;
+      /**
+       * [descr:dxChartOptions.argumentAxis.strips]
+       */
+      strips?: Array<ArgumentAxisStrips>;
+      /**
+       * [descr:dxChartOptions.argumentAxis.tickInterval]
+       */
+      tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxChartOptions.argumentAxis.title]
+       */
+      title?: ArgumentAxisTitle;
+      /**
+       * [descr:dxChartOptions.argumentAxis.type]
+       */
+      type?: DevExpress.common.charts.AxisScaleType;
+      /**
+       * [descr:dxChartOptions.argumentAxis.visualRange]
+       */
+      visualRange?:
+        | DevExpress.common.charts.VisualRange
+        | Array<number | string | Date>;
+      /**
+       * [descr:dxChartOptions.argumentAxis.visualRangeUpdateMode]
+       */
+      visualRangeUpdateMode?: DevExpress.common.charts.VisualRangeUpdateMode;
+      /**
+       * [descr:dxChartOptions.argumentAxis.wholeRange]
+       */
+      wholeRange?:
+        | DevExpress.common.charts.VisualRange
+        | Array<number | string | Date>;
+      /**
+       * [descr:dxChartOptions.argumentAxis.workWeek]
+       */
+      workWeek?: Array<number>;
+      /**
+       * [descr:dxChartOptions.argumentAxis.workdaysOnly]
+       */
+      workdaysOnly?: boolean;
+    };
+    /**
      * [descr:_viz_chart_ArgumentAxisClickEvent]
      */
     export type ArgumentAxisClickEvent = DevExpress.events.NativeEventInfo<
@@ -32193,6 +32331,132 @@ declare module DevExpress.viz {
        * [descr:_viz_chart_ArgumentAxisClickEvent.argument]
        */
       readonly argument: Date | number | string;
+    };
+    /**
+     * [descr:dxChartArgumentAxisConstantLines]
+     */
+    export type ArgumentAxisConstantLines =
+      CommonAxisSettingsConstantLineStyle & {
+        /**
+         * [descr:dxChartOptions.argumentAxis.constantLines.displayBehindSeries]
+         */
+        displayBehindSeries?: boolean;
+        /**
+         * [descr:dxChartOptions.argumentAxis.constantLines.extendAxis]
+         */
+        extendAxis?: boolean;
+        /**
+         * [descr:dxChartOptions.argumentAxis.constantLines.label]
+         */
+        label?: ArgumentAxisConstantLinesLabel;
+        /**
+         * [descr:dxChartOptions.argumentAxis.constantLines.value]
+         */
+        value?: number | Date | string;
+      };
+    /**
+     * [descr:dxChartArgumentAxisConstantLinesLabel]
+     */
+    export type ArgumentAxisConstantLinesLabel =
+      CommonAxisSettingsConstantLineStyleLabel & {
+        /**
+         * [descr:dxChartOptions.argumentAxis.constantLines.label.horizontalAlignment]
+         */
+        horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+        /**
+         * [descr:dxChartOptions.argumentAxis.constantLines.label.text]
+         */
+        text?: string;
+        /**
+         * [descr:dxChartOptions.argumentAxis.constantLines.label.verticalAlignment]
+         */
+        verticalAlignment?: DevExpress.common.VerticalAlignment;
+      };
+    /**
+     * [descr:dxChartArgumentAxisConstantLineStyle]
+     */
+    export type ArgumentAxisConstantLineStyle =
+      CommonAxisSettingsConstantLineStyle & {
+        /**
+         * [descr:dxChartOptions.argumentAxis.constantLineStyle.label]
+         */
+        label?: ArgumentAxisConstantLineStyleLabel;
+      };
+    /**
+     * [descr:dxChartArgumentAxisConstantLineStyleLabel]
+     */
+    export type ArgumentAxisConstantLineStyleLabel =
+      CommonAxisSettingsConstantLineStyleLabel & {
+        /**
+         * [descr:dxChartOptions.argumentAxis.constantLineStyle.label.horizontalAlignment]
+         */
+        horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+        /**
+         * [descr:dxChartOptions.argumentAxis.constantLineStyle.label.verticalAlignment]
+         */
+        verticalAlignment?: DevExpress.common.VerticalAlignment;
+      };
+    /**
+     * [descr:dxChartArgumentAxisLabel]
+     */
+    export type ArgumentAxisLabel = CommonAxisSettingsLabel & {
+      /**
+       * [descr:dxChartOptions.argumentAxis.label.customizeHint]
+       */
+      customizeHint?: (argument: {
+        value?: Date | number | string;
+        valueText?: string;
+      }) => string;
+      /**
+       * [descr:dxChartOptions.argumentAxis.label.customizeText]
+       */
+      customizeText?: (argument: {
+        value?: Date | number | string;
+        valueText?: string;
+      }) => string;
+      /**
+       * [descr:dxChartOptions.argumentAxis.label.format]
+       */
+      format?: DevExpress.ui.Format;
+    };
+    /**
+     * [descr:dxChartArgumentAxisStrips]
+     */
+    export type ArgumentAxisStrips = CommonAxisSettingsStripStyle & {
+      /**
+       * [descr:dxChartOptions.argumentAxis.strips.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxChartOptions.argumentAxis.strips.endValue]
+       */
+      endValue?: number | Date | string;
+      /**
+       * [descr:dxChartOptions.argumentAxis.strips.label]
+       */
+      label?: ArgumentAxisStripsLabel;
+      /**
+       * [descr:dxChartOptions.argumentAxis.strips.startValue]
+       */
+      startValue?: number | Date | string;
+    };
+    /**
+     * [descr:dxChartArgumentAxisStripsLabel]
+     */
+    export type ArgumentAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
+      /**
+       * [descr:dxChartOptions.argumentAxis.strips.label.text]
+       */
+      text?: string;
+    };
+    /**
+     * [descr:dxChartArgumentAxisTitle]
+     */
+    export type ArgumentAxisTitle = CommonAxisSettingsTitle & {
+      /**
+       * [descr:dxChartOptions.argumentAxis.title.text]
+       */
+      text?: string;
     };
     export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
     export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
@@ -32217,6 +32481,512 @@ declare module DevExpress.viz {
     export type ChartTooltipLocation = 'center' | 'edge';
     export type ChartZoomAndPanMode = 'both' | 'none' | 'pan' | 'zoom';
     /**
+     * [descr:dxChartCommonAxisSettings]
+     */
+    export type CommonAxisSettings = {
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.allowDecimals]
+       */
+      allowDecimals?: boolean;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.breakStyle]
+       */
+      breakStyle?: {
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.breakStyle.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.breakStyle.line]
+         */
+        line?: DevExpress.common.charts.ScaleBreakLineStyle;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.breakStyle.width]
+         */
+        width?: number;
+      };
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.constantLineStyle]
+       */
+      constantLineStyle?: CommonAxisSettingsConstantLineStyle;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.discreteAxisDivisionMode]
+       */
+      discreteAxisDivisionMode?: DevExpress.common.charts.DiscreteAxisDivisionMode;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.aggregatedPointsPosition]
+       */
+      aggregatedPointsPosition?: AggregatedPointsPosition;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.endOnTick]
+       */
+      endOnTick?: boolean;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.grid]
+       */
+      grid?: {
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.grid.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.grid.opacity]
+         */
+        opacity?: number;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.grid.visible]
+         */
+        visible?: boolean;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.grid.width]
+         */
+        width?: number;
+      };
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.inverted]
+       */
+      inverted?: boolean;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label]
+       */
+      label?: CommonAxisSettingsLabel;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.maxValueMargin]
+       */
+      maxValueMargin?: number;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.minValueMargin]
+       */
+      minValueMargin?: number;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.minorGrid]
+       */
+      minorGrid?: {
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.minorGrid.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.minorGrid.opacity]
+         */
+        opacity?: number;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.minorGrid.visible]
+         */
+        visible?: boolean;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.minorGrid.width]
+         */
+        width?: number;
+      };
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.minorTick]
+       */
+      minorTick?: {
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.minorTick.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.minorTick.length]
+         */
+        length?: number;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.minorTick.opacity]
+         */
+        opacity?: number;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.minorTick.shift]
+         */
+        shift?: number;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.minorTick.visible]
+         */
+        visible?: boolean;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.minorTick.width]
+         */
+        width?: number;
+      };
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.opacity]
+       */
+      opacity?: number;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.placeholderSize]
+       */
+      placeholderSize?: number;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.stripStyle]
+       */
+      stripStyle?: CommonAxisSettingsStripStyle;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.tick]
+       */
+      tick?: {
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.tick.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.tick.length]
+         */
+        length?: number;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.tick.opacity]
+         */
+        opacity?: number;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.tick.shift]
+         */
+        shift?: number;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.tick.visible]
+         */
+        visible?: boolean;
+        /**
+         * [descr:dxChartOptions.commonAxisSettings.tick.width]
+         */
+        width?: number;
+      };
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.title]
+       */
+      title?: CommonAxisSettingsTitle;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.valueMarginsEnabled]
+       */
+      valueMarginsEnabled?: boolean;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxChartCommonAxisSettingsConstantLineStyle]
+     */
+    export type CommonAxisSettingsConstantLineStyle = {
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.dashStyle]
+       */
+      dashStyle?: DevExpress.common.charts.DashStyle;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label]
+       */
+      label?: CommonAxisSettingsConstantLineStyleLabel;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.paddingLeftRight]
+       */
+      paddingLeftRight?: number;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.paddingTopBottom]
+       */
+      paddingTopBottom?: number;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxChartCommonAxisSettingsConstantLineStyleLabel]
+     */
+    export type CommonAxisSettingsConstantLineStyleLabel = {
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label.font]
+       */
+      font?: Font;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label.position]
+       */
+      position?: DevExpress.common.charts.RelativePosition;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label.visible]
+       */
+      visible?: boolean;
+    };
+    /**
+     * [descr:dxChartCommonAxisSettingsLabel]
+     */
+    export type CommonAxisSettingsLabel = {
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.template]
+       */
+      template?:
+        | DevExpress.core.template
+        | ((
+            data: object,
+            element: SVGGElement
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.alignment]
+       */
+      alignment?: DevExpress.common.HorizontalAlignment;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.displayMode]
+       */
+      displayMode?: ChartLabelDisplayMode;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.font]
+       */
+      font?: Font;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.indentFromAxis]
+       */
+      indentFromAxis?: number;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.overlappingBehavior]
+       */
+      overlappingBehavior?: DevExpress.common.charts.ChartsAxisLabelOverlap;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.position]
+       */
+      position?:
+        | DevExpress.common.charts.RelativePosition
+        | DevExpress.common.Position;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.rotationAngle]
+       */
+      rotationAngle?: number;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.staggeringSpacing]
+       */
+      staggeringSpacing?: number;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.textOverflow]
+       */
+      textOverflow?: DevExpress.common.charts.TextOverflow;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.label.wordWrap]
+       */
+      wordWrap?: DevExpress.common.charts.WordWrap;
+    };
+    /**
+     * [descr:dxChartCommonAxisSettingsStripStyle]
+     */
+    export type CommonAxisSettingsStripStyle = {
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.stripStyle.label]
+       */
+      label?: CommonAxisSettingsStripStyleLabel;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.stripStyle.paddingLeftRight]
+       */
+      paddingLeftRight?: number;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.stripStyle.paddingTopBottom]
+       */
+      paddingTopBottom?: number;
+    };
+    /**
+     * [descr:dxChartCommonAxisSettingsStripStyleLabel]
+     */
+    export type CommonAxisSettingsStripStyleLabel = {
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.stripStyle.label.font]
+       */
+      font?: Font;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.stripStyle.label.horizontalAlignment]
+       */
+      horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.stripStyle.label.verticalAlignment]
+       */
+      verticalAlignment?: DevExpress.common.VerticalAlignment;
+    };
+    /**
+     * [descr:dxChartCommonAxisSettingsTitle]
+     */
+    export type CommonAxisSettingsTitle = {
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.title.alignment]
+       */
+      alignment?: DevExpress.common.HorizontalAlignment;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.title.font]
+       */
+      font?: Font;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.title.margin]
+       */
+      margin?: number;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.title.textOverflow]
+       */
+      textOverflow?: DevExpress.common.charts.TextOverflow;
+      /**
+       * [descr:dxChartOptions.commonAxisSettings.title.wordWrap]
+       */
+      wordWrap?: DevExpress.common.charts.WordWrap;
+    };
+    /**
+     * [descr:dxChartCommonPaneSettings]
+     */
+    export type CommonPaneSettings = {
+      /**
+       * [descr:dxChartOptions.commonPaneSettings.backgroundColor]
+       */
+      backgroundColor?: string | DevExpress.common.charts.ChartsColor;
+      /**
+       * [descr:dxChartOptions.commonPaneSettings.border]
+       */
+      border?: {
+        /**
+         * [descr:dxChartOptions.commonPaneSettings.border.bottom]
+         */
+        bottom?: boolean;
+        /**
+         * [descr:dxChartOptions.commonPaneSettings.border.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxChartOptions.commonPaneSettings.border.dashStyle]
+         */
+        dashStyle?: DevExpress.common.charts.DashStyle;
+        /**
+         * [descr:dxChartOptions.commonPaneSettings.border.left]
+         */
+        left?: boolean;
+        /**
+         * [descr:dxChartOptions.commonPaneSettings.border.opacity]
+         */
+        opacity?: number;
+        /**
+         * [descr:dxChartOptions.commonPaneSettings.border.right]
+         */
+        right?: boolean;
+        /**
+         * [descr:dxChartOptions.commonPaneSettings.border.top]
+         */
+        top?: boolean;
+        /**
+         * [descr:dxChartOptions.commonPaneSettings.border.visible]
+         */
+        visible?: boolean;
+        /**
+         * [descr:dxChartOptions.commonPaneSettings.border.width]
+         */
+        width?: number;
+      };
+    };
+    /**
+     * [descr:dxChartCommonSeriesSettings]
+     */
+    export type CommonSeriesSettings = dxChartSeriesTypesCommonSeries & {
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.area]
+       */
+      area?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.bar]
+       */
+      bar?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.bubble]
+       */
+      bubble?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.candlestick]
+       */
+      candlestick?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.fullstackedarea]
+       */
+      fullstackedarea?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.fullstackedbar]
+       */
+      fullstackedbar?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.fullstackedline]
+       */
+      fullstackedline?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.fullstackedspline]
+       */
+      fullstackedspline?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.fullstackedsplinearea]
+       */
+      fullstackedsplinearea?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.line]
+       */
+      line?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.rangearea]
+       */
+      rangearea?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.rangebar]
+       */
+      rangebar?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.scatter]
+       */
+      scatter?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.spline]
+       */
+      spline?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.splinearea]
+       */
+      splinearea?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.stackedarea]
+       */
+      stackedarea?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.stackedbar]
+       */
+      stackedbar?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.stackedline]
+       */
+      stackedline?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.stackedspline]
+       */
+      stackedspline?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.stackedsplinearea]
+       */
+      stackedsplinearea?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.steparea]
+       */
+      steparea?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.stepline]
+       */
+      stepline?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.stock]
+       */
+      stock?: any;
+      /**
+       * [descr:dxChartOptions.commonSeriesSettings.type]
+       */
+      type?: DevExpress.common.charts.SeriesType;
+    };
+    /**
      * [descr:_viz_chart_DisposingEvent]
      */
     export type DisposingEvent = DevExpress.events.EventInfo<dxChart>;
@@ -32228,6 +32998,11 @@ declare module DevExpress.viz {
      * [descr:_viz_chart_DrawnEvent]
      */
     export type DrawnEvent = DevExpress.events.EventInfo<dxChart>;
+    /**
+     * @deprecated Use CommonSeriesSettings instead
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type dxChartCommonSeriesSettings = CommonSeriesSettings;
     export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
     /**
      * [descr:_viz_chart_ExportedEvent]
@@ -32259,6 +33034,35 @@ declare module DevExpress.viz {
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxChart>;
     /**
+     * [descr:dxChartLegend]
+     */
+    export type Legend = BaseChartLegend & {
+      /**
+       * [descr:dxChartOptions.legend.customizeHint]
+       */
+      customizeHint?: (seriesInfo: {
+        seriesName?: any;
+        seriesIndex?: number;
+        seriesColor?: string;
+      }) => string;
+      /**
+       * [descr:dxChartOptions.legend.customizeText]
+       */
+      customizeText?: (seriesInfo: {
+        seriesName?: any;
+        seriesIndex?: number;
+        seriesColor?: string;
+      }) => string;
+      /**
+       * [descr:dxChartOptions.legend.hoverMode]
+       */
+      hoverMode?: DevExpress.common.charts.LegendHoverMode;
+      /**
+       * [descr:dxChartOptions.legend.position]
+       */
+      position?: DevExpress.common.charts.RelativePosition;
+    };
+    /**
      * [descr:_viz_chart_LegendClickEvent]
      */
     export type LegendClickEvent = DevExpress.events.Cancelable &
@@ -32273,6 +33077,19 @@ declare module DevExpress.viz {
      */
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.events.ChangedOptionInfo;
+    /**
+     * [descr:dxChartPanes]
+     */
+    export type Panes = CommonPaneSettings & {
+      /**
+       * [descr:dxChartOptions.panes.height]
+       */
+      height?: number | string;
+      /**
+       * [descr:dxChartOptions.panes.name]
+       */
+      name?: string;
+    };
     /**
      * [descr:_viz_chart_PointClickEvent]
      */
@@ -32324,6 +33141,16 @@ declare module DevExpress.viz {
     export type SeriesSelectionChangedEvent =
       DevExpress.events.EventInfo<dxChart> & SeriesInteractionInfo;
     /**
+     * [descr:dxChartTooltip]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export type Tooltip = BaseChartTooltip & {
+      /**
+       * [descr:dxChartOptions.tooltip.location]
+       */
+      location?: ChartTooltipLocation;
+    };
+    /**
      * [descr:_viz_chart_TooltipHiddenEvent]
      */
     export type TooltipHiddenEvent = DevExpress.events.EventInfo<dxChart> &
@@ -32333,6 +33160,260 @@ declare module DevExpress.viz {
      */
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseChart.TooltipInfo;
+    /**
+     * [descr:dxChartValueAxis]
+     */
+    export type ValueAxis = CommonAxisSettings & {
+      /**
+       * [descr:dxChartOptions.valueAxis.autoBreaksEnabled]
+       */
+      autoBreaksEnabled?: boolean;
+      /**
+       * [descr:dxChartOptions.valueAxis.axisDivisionFactor]
+       */
+      axisDivisionFactor?: number;
+      /**
+       * [descr:dxChartOptions.valueAxis.breaks]
+       */
+      breaks?: Array<DevExpress.common.charts.ScaleBreak>;
+      /**
+       * [descr:dxChartOptions.valueAxis.categories]
+       */
+      categories?: Array<number | string | Date>;
+      /**
+       * [descr:dxChartOptions.valueAxis.constantLineStyle]
+       */
+      constantLineStyle?: ValueAxisConstantLineStyle;
+      /**
+       * [descr:dxChartOptions.valueAxis.constantLines]
+       */
+      constantLines?: Array<ValueAxisConstantLines>;
+      /**
+       * [descr:dxChartOptions.valueAxis.endOnTick]
+       */
+      endOnTick?: boolean;
+      /**
+       * [descr:dxChartOptions.valueAxis.label]
+       */
+      label?: ValueAxisLabel;
+      /**
+       * [descr:dxChartOptions.valueAxis.linearThreshold]
+       */
+      linearThreshold?: number;
+      /**
+       * [descr:dxChartOptions.valueAxis.logarithmBase]
+       */
+      logarithmBase?: number;
+      /**
+       * [descr:dxChartOptions.valueAxis.maxAutoBreakCount]
+       */
+      maxAutoBreakCount?: number;
+      /**
+       * [descr:dxChartOptions.valueAxis.minVisualRangeLength]
+       */
+      minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxChartOptions.valueAxis.minorTickCount]
+       */
+      minorTickCount?: number;
+      /**
+       * [descr:dxChartOptions.valueAxis.minorTickInterval]
+       */
+      minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxChartOptions.valueAxis.multipleAxesSpacing]
+       */
+      multipleAxesSpacing?: number;
+      /**
+       * [descr:dxChartOptions.valueAxis.name]
+       */
+      name?: string;
+      /**
+       * [descr:dxChartOptions.valueAxis.pane]
+       */
+      pane?: string;
+      /**
+       * [descr:dxChartOptions.valueAxis.position]
+       */
+      position?: DevExpress.common.Position;
+      /**
+       * [descr:dxChartOptions.valueAxis.customPosition]
+       */
+      customPosition?: number | Date | string;
+      /**
+       * [descr:dxChartOptions.valueAxis.offset]
+       */
+      offset?: number;
+      /**
+       * [descr:dxChartOptions.valueAxis.showZero]
+       */
+      showZero?: boolean;
+      /**
+       * [descr:dxChartOptions.valueAxis.strips]
+       */
+      strips?: Array<ValueAxisStrips>;
+      /**
+       * [descr:dxChartOptions.valueAxis.synchronizedValue]
+       */
+      synchronizedValue?: number;
+      /**
+       * [descr:dxChartOptions.valueAxis.tickInterval]
+       */
+      tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxChartOptions.valueAxis.title]
+       */
+      title?: ValueAxisTitle;
+      /**
+       * [descr:dxChartOptions.valueAxis.type]
+       */
+      type?: DevExpress.common.charts.AxisScaleType;
+      /**
+       * [descr:dxChartOptions.valueAxis.valueType]
+       */
+      valueType?: DevExpress.common.charts.ChartsDataType;
+      /**
+       * [descr:dxChartOptions.valueAxis.visualRange]
+       */
+      visualRange?:
+        | DevExpress.common.charts.VisualRange
+        | Array<number | string | Date>;
+      /**
+       * [descr:dxChartOptions.valueAxis.visualRangeUpdateMode]
+       */
+      visualRangeUpdateMode?: DevExpress.common.charts.VisualRangeUpdateMode;
+      /**
+       * [descr:dxChartOptions.valueAxis.wholeRange]
+       */
+      wholeRange?:
+        | DevExpress.common.charts.VisualRange
+        | Array<number | string | Date>;
+    };
+    /**
+     * [descr:dxChartValueAxisConstantLines]
+     */
+    export type ValueAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
+      /**
+       * [descr:dxChartOptions.valueAxis.constantLines.displayBehindSeries]
+       */
+      displayBehindSeries?: boolean;
+      /**
+       * [descr:dxChartOptions.valueAxis.constantLines.extendAxis]
+       */
+      extendAxis?: boolean;
+      /**
+       * [descr:dxChartOptions.valueAxis.constantLines.label]
+       */
+      label?: ValueAxisConstantLinesLabel;
+      /**
+       * [descr:dxChartOptions.valueAxis.constantLines.value]
+       */
+      value?: number | Date | string;
+    };
+    /**
+     * [descr:dxChartValueAxisConstantLinesLabel]
+     */
+    export type ValueAxisConstantLinesLabel =
+      CommonAxisSettingsConstantLineStyleLabel & {
+        /**
+         * [descr:dxChartOptions.valueAxis.constantLines.label.horizontalAlignment]
+         */
+        horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+        /**
+         * [descr:dxChartOptions.valueAxis.constantLines.label.text]
+         */
+        text?: string;
+        /**
+         * [descr:dxChartOptions.valueAxis.constantLines.label.verticalAlignment]
+         */
+        verticalAlignment?: DevExpress.common.VerticalAlignment;
+      };
+    /**
+     * [descr:dxChartValueAxisConstantLineStyle]
+     */
+    export type ValueAxisConstantLineStyle =
+      CommonAxisSettingsConstantLineStyle & {
+        /**
+         * [descr:dxChartOptions.valueAxis.constantLineStyle.label]
+         */
+        label?: ValueAxisConstantLineStyleLabel;
+      };
+    /**
+     * [descr:dxChartValueAxisConstantLineStyleLabel]
+     */
+    export type ValueAxisConstantLineStyleLabel =
+      CommonAxisSettingsConstantLineStyleLabel & {
+        /**
+         * [descr:dxChartOptions.valueAxis.constantLineStyle.label.horizontalAlignment]
+         */
+        horizontalAlignment?: DevExpress.common.HorizontalAlignment;
+        /**
+         * [descr:dxChartOptions.valueAxis.constantLineStyle.label.verticalAlignment]
+         */
+        verticalAlignment?: DevExpress.common.VerticalAlignment;
+      };
+    /**
+     * [descr:dxChartValueAxisLabel]
+     */
+    export type ValueAxisLabel = CommonAxisSettingsLabel & {
+      /**
+       * [descr:dxChartOptions.valueAxis.label.customizeHint]
+       */
+      customizeHint?: (axisValue: {
+        value?: Date | number | string;
+        valueText?: string;
+      }) => string;
+      /**
+       * [descr:dxChartOptions.valueAxis.label.customizeText]
+       */
+      customizeText?: (axisValue: {
+        value?: Date | number | string;
+        valueText?: string;
+      }) => string;
+      /**
+       * [descr:dxChartOptions.valueAxis.label.format]
+       */
+      format?: DevExpress.ui.Format;
+    };
+    /**
+     * [descr:dxChartValueAxisStrips]
+     */
+    export type ValueAxisStrips = CommonAxisSettingsStripStyle & {
+      /**
+       * [descr:dxChartOptions.valueAxis.strips.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxChartOptions.valueAxis.strips.endValue]
+       */
+      endValue?: number | Date | string;
+      /**
+       * [descr:dxChartOptions.valueAxis.strips.label]
+       */
+      label?: ValueAxisStripsLabel;
+      /**
+       * [descr:dxChartOptions.valueAxis.strips.startValue]
+       */
+      startValue?: number | Date | string;
+    };
+    /**
+     * [descr:dxChartValueAxisStripsLabel]
+     */
+    export type ValueAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
+      /**
+       * [descr:dxChartOptions.valueAxis.strips.label.text]
+       */
+      text?: string;
+    };
+    /**
+     * [descr:dxChartValueAxisTitle]
+     */
+    export type ValueAxisTitle = CommonAxisSettingsTitle & {
+      /**
+       * [descr:dxChartOptions.valueAxis.title.text]
+       */
+      text?: string;
+    };
     /**
      * [descr:_viz_chart_ZoomEndEvent]
      */
@@ -32402,283 +33483,6 @@ declare module DevExpress.viz {
     name?: string;
   }
   /**
-   * [descr:dxChartArgumentAxis]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
-    /**
-     * [descr:dxChartOptions.argumentAxis.aggregateByCategory]
-     * @deprecated [depNote:dxChartOptions.argumentAxis.aggregateByCategory]
-     */
-    aggregateByCategory?: boolean;
-    /**
-     * [descr:dxChartOptions.argumentAxis.aggregationGroupWidth]
-     */
-    aggregationGroupWidth?: number;
-    /**
-     * [descr:dxChartOptions.argumentAxis.aggregationInterval]
-     */
-    aggregationInterval?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxChartOptions.argumentAxis.argumentType]
-     */
-    argumentType?: DevExpress.common.charts.ChartsDataType;
-    /**
-     * [descr:dxChartOptions.argumentAxis.axisDivisionFactor]
-     */
-    axisDivisionFactor?: number;
-    /**
-     * [descr:dxChartOptions.argumentAxis.breaks]
-     */
-    breaks?: Array<DevExpress.common.charts.ScaleBreak>;
-    /**
-     * [descr:dxChartOptions.argumentAxis.categories]
-     */
-    categories?: Array<number | string | Date>;
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLineStyle]
-     */
-    constantLineStyle?: dxChartArgumentAxisConstantLineStyle;
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLines]
-     */
-    constantLines?: Array<dxChartArgumentAxisConstantLines>;
-    /**
-     * [descr:dxChartOptions.argumentAxis.endOnTick]
-     */
-    endOnTick?: boolean;
-    /**
-     * [descr:dxChartOptions.argumentAxis.holidays]
-     */
-    holidays?: Array<Date | string> | Array<number>;
-    /**
-     * [descr:dxChartOptions.argumentAxis.hoverMode]
-     */
-    hoverMode?: DevExpress.common.charts.ArgumentAxisHoverMode;
-    /**
-     * [descr:dxChartOptions.argumentAxis.label]
-     */
-    label?: dxChartArgumentAxisLabel;
-    /**
-     * [descr:dxChartOptions.argumentAxis.linearThreshold]
-     */
-    linearThreshold?: number;
-    /**
-     * [descr:dxChartOptions.argumentAxis.logarithmBase]
-     */
-    logarithmBase?: number;
-    /**
-     * [descr:dxChartOptions.argumentAxis.minVisualRangeLength]
-     */
-    minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxChartOptions.argumentAxis.minorTickCount]
-     */
-    minorTickCount?: number;
-    /**
-     * [descr:dxChartOptions.argumentAxis.minorTickInterval]
-     */
-    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxChartOptions.argumentAxis.position]
-     */
-    position?: DevExpress.common.Position;
-    /**
-     * [descr:dxChartOptions.argumentAxis.customPosition]
-     */
-    customPosition?: number | Date | string;
-    /**
-     * [descr:dxChartOptions.argumentAxis.customPositionAxis]
-     */
-    customPositionAxis?: string;
-    /**
-     * [descr:dxChartOptions.argumentAxis.offset]
-     */
-    offset?: number;
-    /**
-     * [descr:dxChartOptions.argumentAxis.singleWorkdays]
-     */
-    singleWorkdays?: Array<Date | string> | Array<number>;
-    /**
-     * [descr:dxChartOptions.argumentAxis.strips]
-     */
-    strips?: Array<dxChartArgumentAxisStrips>;
-    /**
-     * [descr:dxChartOptions.argumentAxis.tickInterval]
-     */
-    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxChartOptions.argumentAxis.title]
-     */
-    title?: dxChartArgumentAxisTitle;
-    /**
-     * [descr:dxChartOptions.argumentAxis.type]
-     */
-    type?: DevExpress.common.charts.AxisScaleType;
-    /**
-     * [descr:dxChartOptions.argumentAxis.visualRange]
-     */
-    visualRange?:
-      | DevExpress.common.charts.VisualRange
-      | Array<number | string | Date>;
-    /**
-     * [descr:dxChartOptions.argumentAxis.visualRangeUpdateMode]
-     */
-    visualRangeUpdateMode?: DevExpress.common.charts.VisualRangeUpdateMode;
-    /**
-     * [descr:dxChartOptions.argumentAxis.wholeRange]
-     */
-    wholeRange?:
-      | DevExpress.common.charts.VisualRange
-      | Array<number | string | Date>;
-    /**
-     * [descr:dxChartOptions.argumentAxis.workWeek]
-     */
-    workWeek?: Array<number>;
-    /**
-     * [descr:dxChartOptions.argumentAxis.workdaysOnly]
-     */
-    workdaysOnly?: boolean;
-  }
-  /**
-   * [descr:dxChartArgumentAxisConstantLines]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartArgumentAxisConstantLines
-    extends dxChartCommonAxisSettingsConstantLineStyle {
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLines.displayBehindSeries]
-     */
-    displayBehindSeries?: boolean;
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLines.extendAxis]
-     */
-    extendAxis?: boolean;
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLines.label]
-     */
-    label?: dxChartArgumentAxisConstantLinesLabel;
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLines.value]
-     */
-    value?: number | Date | string;
-  }
-  /**
-   * [descr:dxChartArgumentAxisConstantLinesLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartArgumentAxisConstantLinesLabel
-    extends dxChartCommonAxisSettingsConstantLineStyleLabel {
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLines.label.horizontalAlignment]
-     */
-    horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLines.label.text]
-     */
-    text?: string;
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLines.label.verticalAlignment]
-     */
-    verticalAlignment?: DevExpress.common.VerticalAlignment;
-  }
-  /**
-   * [descr:dxChartArgumentAxisConstantLineStyle]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartArgumentAxisConstantLineStyle
-    extends dxChartCommonAxisSettingsConstantLineStyle {
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLineStyle.label]
-     */
-    label?: dxChartArgumentAxisConstantLineStyleLabel;
-  }
-  /**
-   * [descr:dxChartArgumentAxisConstantLineStyleLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartArgumentAxisConstantLineStyleLabel
-    extends dxChartCommonAxisSettingsConstantLineStyleLabel {
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLineStyle.label.horizontalAlignment]
-     */
-    horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxChartOptions.argumentAxis.constantLineStyle.label.verticalAlignment]
-     */
-    verticalAlignment?: DevExpress.common.VerticalAlignment;
-  }
-  /**
-   * [descr:dxChartArgumentAxisLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartArgumentAxisLabel
-    extends dxChartCommonAxisSettingsLabel {
-    /**
-     * [descr:dxChartOptions.argumentAxis.label.customizeHint]
-     */
-    customizeHint?: (argument: {
-      value?: Date | number | string;
-      valueText?: string;
-    }) => string;
-    /**
-     * [descr:dxChartOptions.argumentAxis.label.customizeText]
-     */
-    customizeText?: (argument: {
-      value?: Date | number | string;
-      valueText?: string;
-    }) => string;
-    /**
-     * [descr:dxChartOptions.argumentAxis.label.format]
-     */
-    format?: DevExpress.ui.Format;
-  }
-  /**
-   * [descr:dxChartArgumentAxisStrips]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartArgumentAxisStrips
-    extends dxChartCommonAxisSettingsStripStyle {
-    /**
-     * [descr:dxChartOptions.argumentAxis.strips.color]
-     */
-    color?: string;
-    /**
-     * [descr:dxChartOptions.argumentAxis.strips.endValue]
-     */
-    endValue?: number | Date | string;
-    /**
-     * [descr:dxChartOptions.argumentAxis.strips.label]
-     */
-    label?: dxChartArgumentAxisStripsLabel;
-    /**
-     * [descr:dxChartOptions.argumentAxis.strips.startValue]
-     */
-    startValue?: number | Date | string;
-  }
-  /**
-   * [descr:dxChartArgumentAxisStripsLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartArgumentAxisStripsLabel
-    extends dxChartCommonAxisSettingsStripStyleLabel {
-    /**
-     * [descr:dxChartOptions.argumentAxis.strips.label.text]
-     */
-    text?: string;
-  }
-  /**
-   * [descr:dxChartArgumentAxisTitle]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartArgumentAxisTitle
-    extends dxChartCommonAxisSettingsTitle {
-    /**
-     * [descr:dxChartOptions.argumentAxis.title.text]
-     */
-    text?: string;
-  }
-  /**
    * [descr:dxChartCommonAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -32712,552 +33516,6 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
-   * [descr:dxChartCommonAxisSettings]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartCommonAxisSettings {
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.allowDecimals]
-     */
-    allowDecimals?: boolean;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.breakStyle]
-     */
-    breakStyle?: {
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.breakStyle.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.breakStyle.line]
-       */
-      line?: DevExpress.common.charts.ScaleBreakLineStyle;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.breakStyle.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.color]
-     */
-    color?: string;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.constantLineStyle]
-     */
-    constantLineStyle?: dxChartCommonAxisSettingsConstantLineStyle;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.discreteAxisDivisionMode]
-     */
-    discreteAxisDivisionMode?: DevExpress.common.charts.DiscreteAxisDivisionMode;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.aggregatedPointsPosition]
-     */
-    aggregatedPointsPosition?: DevExpress.viz.dxChart.AggregatedPointsPosition;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.endOnTick]
-     */
-    endOnTick?: boolean;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.grid]
-     */
-    grid?: {
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.grid.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.grid.opacity]
-       */
-      opacity?: number;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.grid.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.grid.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.inverted]
-     */
-    inverted?: boolean;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label]
-     */
-    label?: dxChartCommonAxisSettingsLabel;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.maxValueMargin]
-     */
-    maxValueMargin?: number;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.minValueMargin]
-     */
-    minValueMargin?: number;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.minorGrid]
-     */
-    minorGrid?: {
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.minorGrid.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.minorGrid.opacity]
-       */
-      opacity?: number;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.minorGrid.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.minorGrid.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.minorTick]
-     */
-    minorTick?: {
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.minorTick.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.minorTick.length]
-       */
-      length?: number;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.minorTick.opacity]
-       */
-      opacity?: number;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.minorTick.shift]
-       */
-      shift?: number;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.minorTick.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.minorTick.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.opacity]
-     */
-    opacity?: number;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.placeholderSize]
-     */
-    placeholderSize?: number;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.stripStyle]
-     */
-    stripStyle?: dxChartCommonAxisSettingsStripStyle;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.tick]
-     */
-    tick?: {
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.tick.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.tick.length]
-       */
-      length?: number;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.tick.opacity]
-       */
-      opacity?: number;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.tick.shift]
-       */
-      shift?: number;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.tick.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxChartOptions.commonAxisSettings.tick.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.title]
-     */
-    title?: dxChartCommonAxisSettingsTitle;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.valueMarginsEnabled]
-     */
-    valueMarginsEnabled?: boolean;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.visible]
-     */
-    visible?: boolean;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.width]
-     */
-    width?: number;
-  }
-  /**
-   * [descr:dxChartCommonAxisSettingsConstantLineStyle]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartCommonAxisSettingsConstantLineStyle {
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.color]
-     */
-    color?: string;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.dashStyle]
-     */
-    dashStyle?: DevExpress.common.charts.DashStyle;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label]
-     */
-    label?: dxChartCommonAxisSettingsConstantLineStyleLabel;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.paddingLeftRight]
-     */
-    paddingLeftRight?: number;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.paddingTopBottom]
-     */
-    paddingTopBottom?: number;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.width]
-     */
-    width?: number;
-  }
-  /**
-   * [descr:dxChartCommonAxisSettingsConstantLineStyleLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartCommonAxisSettingsConstantLineStyleLabel {
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label.font]
-     */
-    font?: Font;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label.position]
-     */
-    position?: DevExpress.common.charts.RelativePosition;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label.visible]
-     */
-    visible?: boolean;
-  }
-  /**
-   * [descr:dxChartCommonAxisSettingsLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartCommonAxisSettingsLabel {
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.template]
-     */
-    template?:
-      | DevExpress.core.template
-      | ((
-          data: object,
-          element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.alignment]
-     */
-    alignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.displayMode]
-     */
-    displayMode?: DevExpress.viz.dxChart.ChartLabelDisplayMode;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.font]
-     */
-    font?: Font;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.indentFromAxis]
-     */
-    indentFromAxis?: number;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.overlappingBehavior]
-     */
-    overlappingBehavior?: DevExpress.common.charts.ChartsAxisLabelOverlap;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.position]
-     */
-    position?:
-      | DevExpress.common.charts.RelativePosition
-      | DevExpress.common.Position;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.rotationAngle]
-     */
-    rotationAngle?: number;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.staggeringSpacing]
-     */
-    staggeringSpacing?: number;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.textOverflow]
-     */
-    textOverflow?: DevExpress.common.charts.TextOverflow;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.visible]
-     */
-    visible?: boolean;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.label.wordWrap]
-     */
-    wordWrap?: DevExpress.common.charts.WordWrap;
-  }
-  /**
-   * [descr:dxChartCommonAxisSettingsStripStyle]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartCommonAxisSettingsStripStyle {
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.stripStyle.label]
-     */
-    label?: dxChartCommonAxisSettingsStripStyleLabel;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.stripStyle.paddingLeftRight]
-     */
-    paddingLeftRight?: number;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.stripStyle.paddingTopBottom]
-     */
-    paddingTopBottom?: number;
-  }
-  /**
-   * [descr:dxChartCommonAxisSettingsStripStyleLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartCommonAxisSettingsStripStyleLabel {
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.stripStyle.label.font]
-     */
-    font?: Font;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.stripStyle.label.horizontalAlignment]
-     */
-    horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.stripStyle.label.verticalAlignment]
-     */
-    verticalAlignment?: DevExpress.common.VerticalAlignment;
-  }
-  /**
-   * [descr:dxChartCommonAxisSettingsTitle]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartCommonAxisSettingsTitle {
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.title.alignment]
-     */
-    alignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.title.font]
-     */
-    font?: Font;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.title.margin]
-     */
-    margin?: number;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.title.textOverflow]
-     */
-    textOverflow?: DevExpress.common.charts.TextOverflow;
-    /**
-     * [descr:dxChartOptions.commonAxisSettings.title.wordWrap]
-     */
-    wordWrap?: DevExpress.common.charts.WordWrap;
-  }
-  /**
-   * [descr:dxChartCommonPaneSettings]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartCommonPaneSettings {
-    /**
-     * [descr:dxChartOptions.commonPaneSettings.backgroundColor]
-     */
-    backgroundColor?: string | DevExpress.common.charts.ChartsColor;
-    /**
-     * [descr:dxChartOptions.commonPaneSettings.border]
-     */
-    border?: {
-      /**
-       * [descr:dxChartOptions.commonPaneSettings.border.bottom]
-       */
-      bottom?: boolean;
-      /**
-       * [descr:dxChartOptions.commonPaneSettings.border.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxChartOptions.commonPaneSettings.border.dashStyle]
-       */
-      dashStyle?: DevExpress.common.charts.DashStyle;
-      /**
-       * [descr:dxChartOptions.commonPaneSettings.border.left]
-       */
-      left?: boolean;
-      /**
-       * [descr:dxChartOptions.commonPaneSettings.border.opacity]
-       */
-      opacity?: number;
-      /**
-       * [descr:dxChartOptions.commonPaneSettings.border.right]
-       */
-      right?: boolean;
-      /**
-       * [descr:dxChartOptions.commonPaneSettings.border.top]
-       */
-      top?: boolean;
-      /**
-       * [descr:dxChartOptions.commonPaneSettings.border.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxChartOptions.commonPaneSettings.border.width]
-       */
-      width?: number;
-    };
-  }
-  /**
-   * [descr:dxChartCommonSeriesSettings]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartCommonSeriesSettings
-    extends dxChartSeriesTypesCommonSeries {
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.area]
-     */
-    area?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.bar]
-     */
-    bar?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.bubble]
-     */
-    bubble?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.candlestick]
-     */
-    candlestick?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.fullstackedarea]
-     */
-    fullstackedarea?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.fullstackedbar]
-     */
-    fullstackedbar?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.fullstackedline]
-     */
-    fullstackedline?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.fullstackedspline]
-     */
-    fullstackedspline?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.fullstackedsplinearea]
-     */
-    fullstackedsplinearea?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.line]
-     */
-    line?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.rangearea]
-     */
-    rangearea?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.rangebar]
-     */
-    rangebar?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.scatter]
-     */
-    scatter?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.spline]
-     */
-    spline?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.splinearea]
-     */
-    splinearea?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.stackedarea]
-     */
-    stackedarea?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.stackedbar]
-     */
-    stackedbar?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.stackedline]
-     */
-    stackedline?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.stackedspline]
-     */
-    stackedspline?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.stackedsplinearea]
-     */
-    stackedsplinearea?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.steparea]
-     */
-    steparea?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.stepline]
-     */
-    stepline?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.stock]
-     */
-    stock?: any;
-    /**
-     * [descr:dxChartOptions.commonSeriesSettings.type]
-     */
-    type?: DevExpress.common.charts.SeriesType;
-  }
-  /**
-   * [descr:dxChartLegend]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartLegend extends BaseChartLegend {
-    /**
-     * [descr:dxChartOptions.legend.customizeHint]
-     */
-    customizeHint?: (seriesInfo: {
-      seriesName?: any;
-      seriesIndex?: number;
-      seriesColor?: string;
-    }) => string;
-    /**
-     * [descr:dxChartOptions.legend.customizeText]
-     */
-    customizeText?: (seriesInfo: {
-      seriesName?: any;
-      seriesIndex?: number;
-      seriesColor?: string;
-    }) => string;
-    /**
-     * [descr:dxChartOptions.legend.hoverMode]
-     */
-    hoverMode?: DevExpress.common.charts.LegendHoverMode;
-    /**
-     * [descr:dxChartOptions.legend.position]
-     */
-    position?: DevExpress.common.charts.RelativePosition;
-  }
-  /**
    * [descr:dxChartOptions]
    * @deprecated [depNote:dxChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -33274,7 +33532,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis]
      */
-    argumentAxis?: dxChartArgumentAxis;
+    argumentAxis?: DevExpress.viz.dxChart.ArgumentAxis;
     /**
      * [descr:dxChartOptions.autoHidePointMarkers]
      */
@@ -33294,15 +33552,15 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings]
      */
-    commonAxisSettings?: dxChartCommonAxisSettings;
+    commonAxisSettings?: DevExpress.viz.dxChart.CommonAxisSettings;
     /**
      * [descr:dxChartOptions.commonPaneSettings]
      */
-    commonPaneSettings?: dxChartCommonPaneSettings;
+    commonPaneSettings?: DevExpress.viz.dxChart.CommonPaneSettings;
     /**
      * [descr:dxChartOptions.commonSeriesSettings]
      */
-    commonSeriesSettings?: dxChartCommonSeriesSettings;
+    commonSeriesSettings?: DevExpress.viz.dxChart.CommonSeriesSettings;
     /**
      * [descr:dxChartOptions.containerBackgroundColor]
      */
@@ -33503,7 +33761,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.legend]
      */
-    legend?: dxChartLegend;
+    legend?: DevExpress.viz.dxChart.Legend;
     /**
      * [descr:dxChartOptions.maxBubbleSize]
      */
@@ -33557,7 +33815,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.panes]
      */
-    panes?: dxChartPanes | Array<dxChartPanes>;
+    panes?: DevExpress.viz.dxChart.Panes | Array<DevExpress.viz.dxChart.Panes>;
     /**
      * [descr:dxChartOptions.resizePanesOnZoom]
      */
@@ -33631,11 +33889,13 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.tooltip]
      */
-    tooltip?: dxChartTooltip;
+    tooltip?: DevExpress.viz.dxChart.Tooltip;
     /**
      * [descr:dxChartOptions.valueAxis]
      */
-    valueAxis?: dxChartValueAxis | Array<dxChartValueAxis>;
+    valueAxis?:
+      | DevExpress.viz.dxChart.ValueAxis
+      | Array<DevExpress.viz.dxChart.ValueAxis>;
     /**
      * [descr:dxChartOptions.zoomAndPan]
      */
@@ -33678,20 +33938,6 @@ declare module DevExpress.viz {
        */
       valueAxis?: DevExpress.viz.dxChart.ChartZoomAndPanMode;
     };
-  }
-  /**
-   * [descr:dxChartPanes]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartPanes extends dxChartCommonPaneSettings {
-    /**
-     * [descr:dxChartOptions.panes.height]
-     */
-    height?: number | string;
-    /**
-     * [descr:dxChartOptions.panes.name]
-     */
-    name?: string;
   }
   /**
    * [descr:dxChartSeriesTypes]
@@ -35655,284 +35901,6 @@ declare module DevExpress.viz {
     customizeText?: (pointInfo: any) => string;
   }
   /**
-   * [descr:dxChartTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartTooltip extends BaseChartTooltip {
-    /**
-     * [descr:dxChartOptions.tooltip.location]
-     */
-    location?: DevExpress.viz.dxChart.ChartTooltipLocation;
-  }
-  /**
-   * [descr:dxChartValueAxis]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartValueAxis extends dxChartCommonAxisSettings {
-    /**
-     * [descr:dxChartOptions.valueAxis.autoBreaksEnabled]
-     */
-    autoBreaksEnabled?: boolean;
-    /**
-     * [descr:dxChartOptions.valueAxis.axisDivisionFactor]
-     */
-    axisDivisionFactor?: number;
-    /**
-     * [descr:dxChartOptions.valueAxis.breaks]
-     */
-    breaks?: Array<DevExpress.common.charts.ScaleBreak>;
-    /**
-     * [descr:dxChartOptions.valueAxis.categories]
-     */
-    categories?: Array<number | string | Date>;
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLineStyle]
-     */
-    constantLineStyle?: dxChartValueAxisConstantLineStyle;
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLines]
-     */
-    constantLines?: Array<dxChartValueAxisConstantLines>;
-    /**
-     * [descr:dxChartOptions.valueAxis.endOnTick]
-     */
-    endOnTick?: boolean;
-    /**
-     * [descr:dxChartOptions.valueAxis.label]
-     */
-    label?: dxChartValueAxisLabel;
-    /**
-     * [descr:dxChartOptions.valueAxis.linearThreshold]
-     */
-    linearThreshold?: number;
-    /**
-     * [descr:dxChartOptions.valueAxis.logarithmBase]
-     */
-    logarithmBase?: number;
-    /**
-     * [descr:dxChartOptions.valueAxis.maxAutoBreakCount]
-     */
-    maxAutoBreakCount?: number;
-    /**
-     * [descr:dxChartOptions.valueAxis.minVisualRangeLength]
-     */
-    minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxChartOptions.valueAxis.minorTickCount]
-     */
-    minorTickCount?: number;
-    /**
-     * [descr:dxChartOptions.valueAxis.minorTickInterval]
-     */
-    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxChartOptions.valueAxis.multipleAxesSpacing]
-     */
-    multipleAxesSpacing?: number;
-    /**
-     * [descr:dxChartOptions.valueAxis.name]
-     */
-    name?: string;
-    /**
-     * [descr:dxChartOptions.valueAxis.pane]
-     */
-    pane?: string;
-    /**
-     * [descr:dxChartOptions.valueAxis.position]
-     */
-    position?: DevExpress.common.Position;
-    /**
-     * [descr:dxChartOptions.valueAxis.customPosition]
-     */
-    customPosition?: number | Date | string;
-    /**
-     * [descr:dxChartOptions.valueAxis.offset]
-     */
-    offset?: number;
-    /**
-     * [descr:dxChartOptions.valueAxis.showZero]
-     */
-    showZero?: boolean;
-    /**
-     * [descr:dxChartOptions.valueAxis.strips]
-     */
-    strips?: Array<dxChartValueAxisStrips>;
-    /**
-     * [descr:dxChartOptions.valueAxis.synchronizedValue]
-     */
-    synchronizedValue?: number;
-    /**
-     * [descr:dxChartOptions.valueAxis.tickInterval]
-     */
-    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxChartOptions.valueAxis.title]
-     */
-    title?: dxChartValueAxisTitle;
-    /**
-     * [descr:dxChartOptions.valueAxis.type]
-     */
-    type?: DevExpress.common.charts.AxisScaleType;
-    /**
-     * [descr:dxChartOptions.valueAxis.valueType]
-     */
-    valueType?: DevExpress.common.charts.ChartsDataType;
-    /**
-     * [descr:dxChartOptions.valueAxis.visualRange]
-     */
-    visualRange?:
-      | DevExpress.common.charts.VisualRange
-      | Array<number | string | Date>;
-    /**
-     * [descr:dxChartOptions.valueAxis.visualRangeUpdateMode]
-     */
-    visualRangeUpdateMode?: DevExpress.common.charts.VisualRangeUpdateMode;
-    /**
-     * [descr:dxChartOptions.valueAxis.wholeRange]
-     */
-    wholeRange?:
-      | DevExpress.common.charts.VisualRange
-      | Array<number | string | Date>;
-  }
-  /**
-   * [descr:dxChartValueAxisConstantLines]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartValueAxisConstantLines
-    extends dxChartCommonAxisSettingsConstantLineStyle {
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLines.displayBehindSeries]
-     */
-    displayBehindSeries?: boolean;
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLines.extendAxis]
-     */
-    extendAxis?: boolean;
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLines.label]
-     */
-    label?: dxChartValueAxisConstantLinesLabel;
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLines.value]
-     */
-    value?: number | Date | string;
-  }
-  /**
-   * [descr:dxChartValueAxisConstantLinesLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartValueAxisConstantLinesLabel
-    extends dxChartCommonAxisSettingsConstantLineStyleLabel {
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLines.label.horizontalAlignment]
-     */
-    horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLines.label.text]
-     */
-    text?: string;
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLines.label.verticalAlignment]
-     */
-    verticalAlignment?: DevExpress.common.VerticalAlignment;
-  }
-  /**
-   * [descr:dxChartValueAxisConstantLineStyle]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartValueAxisConstantLineStyle
-    extends dxChartCommonAxisSettingsConstantLineStyle {
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLineStyle.label]
-     */
-    label?: dxChartValueAxisConstantLineStyleLabel;
-  }
-  /**
-   * [descr:dxChartValueAxisConstantLineStyleLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartValueAxisConstantLineStyleLabel
-    extends dxChartCommonAxisSettingsConstantLineStyleLabel {
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLineStyle.label.horizontalAlignment]
-     */
-    horizontalAlignment?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxChartOptions.valueAxis.constantLineStyle.label.verticalAlignment]
-     */
-    verticalAlignment?: DevExpress.common.VerticalAlignment;
-  }
-  /**
-   * [descr:dxChartValueAxisLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartValueAxisLabel
-    extends dxChartCommonAxisSettingsLabel {
-    /**
-     * [descr:dxChartOptions.valueAxis.label.customizeHint]
-     */
-    customizeHint?: (axisValue: {
-      value?: Date | number | string;
-      valueText?: string;
-    }) => string;
-    /**
-     * [descr:dxChartOptions.valueAxis.label.customizeText]
-     */
-    customizeText?: (axisValue: {
-      value?: Date | number | string;
-      valueText?: string;
-    }) => string;
-    /**
-     * [descr:dxChartOptions.valueAxis.label.format]
-     */
-    format?: DevExpress.ui.Format;
-  }
-  /**
-   * [descr:dxChartValueAxisStrips]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartValueAxisStrips
-    extends dxChartCommonAxisSettingsStripStyle {
-    /**
-     * [descr:dxChartOptions.valueAxis.strips.color]
-     */
-    color?: string;
-    /**
-     * [descr:dxChartOptions.valueAxis.strips.endValue]
-     */
-    endValue?: number | Date | string;
-    /**
-     * [descr:dxChartOptions.valueAxis.strips.label]
-     */
-    label?: dxChartValueAxisStripsLabel;
-    /**
-     * [descr:dxChartOptions.valueAxis.strips.startValue]
-     */
-    startValue?: number | Date | string;
-  }
-  /**
-   * [descr:dxChartValueAxisStripsLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartValueAxisStripsLabel
-    extends dxChartCommonAxisSettingsStripStyleLabel {
-    /**
-     * [descr:dxChartOptions.valueAxis.strips.label.text]
-     */
-    text?: string;
-  }
-  /**
-   * [descr:dxChartValueAxisTitle]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxChartValueAxisTitle
-    extends dxChartCommonAxisSettingsTitle {
-    /**
-     * [descr:dxChartOptions.valueAxis.title.text]
-     */
-    text?: string;
-  }
-  /**
    * [descr:dxCircularGauge]
    */
   export class dxCircularGauge extends BaseGauge<dxCircularGaugeOptions> {}
@@ -35983,6 +35951,45 @@ declare module DevExpress.viz {
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxCircularGaugeOptions;
     /**
+     * [descr:dxCircularGaugeRangeContainer]
+     */
+    export type RangeContainer = BaseGaugeRangeContainer & {
+      /**
+       * [descr:dxCircularGaugeOptions.rangeContainer.orientation]
+       */
+      orientation?: CircularGaugeElementOrientation;
+      /**
+       * [descr:dxCircularGaugeOptions.rangeContainer.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxCircularGaugeScale]
+     */
+    export type Scale = BaseGaugeScale & {
+      /**
+       * [descr:dxCircularGaugeOptions.scale.label]
+       */
+      label?: ScaleLabel;
+      /**
+       * [descr:dxCircularGaugeOptions.scale.orientation]
+       */
+      orientation?: CircularGaugeElementOrientation;
+    };
+    /**
+     * [descr:dxCircularGaugeScaleLabel]
+     */
+    export type ScaleLabel = BaseGaugeScaleLabel & {
+      /**
+       * [descr:dxCircularGaugeOptions.scale.label.hideFirstOrLast]
+       */
+      hideFirstOrLast?: CircularGaugeLabelOverlap;
+      /**
+       * [descr:dxCircularGaugeOptions.scale.label.indentFromTick]
+       */
+      indentFromTick?: number;
+    };
+    /**
      * [descr:_viz_circular_gauge_TooltipHiddenEvent]
      */
     export type TooltipHiddenEvent =
@@ -36027,11 +36034,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxCircularGaugeOptions.rangeContainer]
      */
-    rangeContainer?: dxCircularGaugeRangeContainer;
+    rangeContainer?: DevExpress.viz.dxCircularGauge.RangeContainer;
     /**
      * [descr:dxCircularGaugeOptions.scale]
      */
-    scale?: dxCircularGaugeScale;
+    scale?: DevExpress.viz.dxCircularGauge.Scale;
     /**
      * [descr:dxCircularGaugeOptions.subvalueIndicator]
      */
@@ -36040,49 +36047,6 @@ declare module DevExpress.viz {
      * [descr:dxCircularGaugeOptions.valueIndicator]
      */
     valueIndicator?: GaugeIndicator;
-  }
-  /**
-   * [descr:dxCircularGaugeRangeContainer]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxCircularGaugeRangeContainer
-    extends BaseGaugeRangeContainer {
-    /**
-     * [descr:dxCircularGaugeOptions.rangeContainer.orientation]
-     */
-    orientation?: DevExpress.viz.dxCircularGauge.CircularGaugeElementOrientation;
-    /**
-     * [descr:dxCircularGaugeOptions.rangeContainer.width]
-     */
-    width?: number;
-  }
-  /**
-   * [descr:dxCircularGaugeScale]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxCircularGaugeScale extends BaseGaugeScale {
-    /**
-     * [descr:dxCircularGaugeOptions.scale.label]
-     */
-    label?: dxCircularGaugeScaleLabel;
-    /**
-     * [descr:dxCircularGaugeOptions.scale.orientation]
-     */
-    orientation?: DevExpress.viz.dxCircularGauge.CircularGaugeElementOrientation;
-  }
-  /**
-   * [descr:dxCircularGaugeScaleLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
-    /**
-     * [descr:dxCircularGaugeOptions.scale.label.hideFirstOrLast]
-     */
-    hideFirstOrLast?: DevExpress.viz.dxCircularGauge.CircularGaugeLabelOverlap;
-    /**
-     * [descr:dxCircularGaugeOptions.scale.label.indentFromTick]
-     */
-    indentFromTick?: number;
   }
   /**
    * [descr:dxFunnel]
@@ -36160,6 +36124,36 @@ declare module DevExpress.viz {
     > &
       FunnelItemInfo;
     /**
+     * [descr:dxFunnelLegend]
+     */
+    export type Legend = DevExpress.common.charts.BaseLegend & {
+      /**
+       * [descr:dxFunnelOptions.legend.customizeHint]
+       */
+      customizeHint?: (itemInfo: { item?: Item; text?: string }) => string;
+      /**
+       * [descr:dxFunnelOptions.legend.customizeItems]
+       */
+      customizeItems?: (items: Array<LegendItem>) => Array<LegendItem>;
+      /**
+       * [descr:dxFunnelOptions.legend.customizeText]
+       */
+      customizeText?: (itemInfo: { item?: Item; text?: string }) => string;
+      /**
+       * [descr:dxFunnelOptions.legend.markerTemplate]
+       */
+      markerTemplate?:
+        | DevExpress.core.template
+        | ((
+            legendItem: LegendItem,
+            element: SVGGElement
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+      /**
+       * [descr:dxFunnelOptions.legend.visible]
+       */
+      visible?: boolean;
+    };
+    /**
      * [descr:_viz_funnel_LegendClickEvent]
      */
     export type LegendClickEvent = DevExpress.events.NativeEventInfo<
@@ -36178,6 +36172,36 @@ declare module DevExpress.viz {
      */
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       FunnelItemInfo;
+    /**
+     * [descr:dxFunnelTooltip]
+     */
+    export type Tooltip = BaseWidgetTooltip & {
+      /**
+       * [descr:dxFunnelOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | DevExpress.core.template
+        | ((
+            info: {
+              item?: Item;
+              value?: number;
+              valueText?: string;
+              percent?: number;
+              percentText?: string;
+            },
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:dxFunnelOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: (info: {
+        item?: Item;
+        value?: number;
+        valueText?: string;
+        percent?: number;
+        percentText?: string;
+      }) => any;
+    };
   }
   /**
    * @deprecated Use Item instead
@@ -36224,45 +36248,6 @@ declare module DevExpress.viz {
      * [descr:dxFunnelItem.value]
      */
     value?: number;
-  }
-  /**
-   * [descr:dxFunnelLegend]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxFunnelLegend extends DevExpress.common.charts.BaseLegend {
-    /**
-     * [descr:dxFunnelOptions.legend.customizeHint]
-     */
-    customizeHint?: (itemInfo: {
-      item?: DevExpress.viz.dxFunnel.Item;
-      text?: string;
-    }) => string;
-    /**
-     * [descr:dxFunnelOptions.legend.customizeItems]
-     */
-    customizeItems?: (
-      items: Array<DevExpress.viz.dxFunnel.LegendItem>
-    ) => Array<DevExpress.viz.dxFunnel.LegendItem>;
-    /**
-     * [descr:dxFunnelOptions.legend.customizeText]
-     */
-    customizeText?: (itemInfo: {
-      item?: DevExpress.viz.dxFunnel.Item;
-      text?: string;
-    }) => string;
-    /**
-     * [descr:dxFunnelOptions.legend.markerTemplate]
-     */
-    markerTemplate?:
-      | DevExpress.core.template
-      | ((
-          legendItem: DevExpress.viz.dxFunnel.LegendItem,
-          element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-    /**
-     * [descr:dxFunnelOptions.legend.visible]
-     */
-    visible?: boolean;
   }
   /**
    * [descr:dxFunnelOptions]
@@ -36519,7 +36504,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.legend]
      */
-    legend?: dxFunnelLegend;
+    legend?: DevExpress.viz.dxFunnel.Legend;
     /**
      * [descr:dxFunnelOptions.neckHeight]
      */
@@ -36573,42 +36558,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.tooltip]
      */
-    tooltip?: dxFunnelTooltip;
+    tooltip?: DevExpress.viz.dxFunnel.Tooltip;
     /**
      * [descr:dxFunnelOptions.valueField]
      */
     valueField?: string;
-  }
-  /**
-   * [descr:dxFunnelTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxFunnelTooltip extends BaseWidgetTooltip {
-    /**
-     * [descr:dxFunnelOptions.tooltip.contentTemplate]
-     */
-    contentTemplate?:
-      | DevExpress.core.template
-      | ((
-          info: {
-            item?: DevExpress.viz.dxFunnel.Item;
-            value?: number;
-            valueText?: string;
-            percent?: number;
-            percentText?: string;
-          },
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:dxFunnelOptions.tooltip.customizeTooltip]
-     */
-    customizeTooltip?: (info: {
-      item?: DevExpress.viz.dxFunnel.Item;
-      value?: number;
-      valueText?: string;
-      percent?: number;
-      percentText?: string;
-    }) => any;
   }
   /**
    * [descr:dxLinearGauge]
@@ -36656,6 +36610,64 @@ declare module DevExpress.viz {
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxLinearGaugeOptions;
     /**
+     * [descr:dxLinearGaugeRangeContainer]
+     */
+    export type RangeContainer = BaseGaugeRangeContainer & {
+      /**
+       * [descr:dxLinearGaugeOptions.rangeContainer.horizontalOrientation]
+       */
+      horizontalOrientation?: DevExpress.common.HorizontalAlignment;
+      /**
+       * [descr:dxLinearGaugeOptions.rangeContainer.verticalOrientation]
+       */
+      verticalOrientation?: DevExpress.common.VerticalAlignment;
+      /**
+       * [descr:dxLinearGaugeOptions.rangeContainer.width]
+       */
+      width?:
+        | {
+            /**
+             * [descr:dxLinearGaugeOptions.rangeContainer.width.start]
+             */
+            start?: number;
+            /**
+             * [descr:dxLinearGaugeOptions.rangeContainer.width.end]
+             */
+            end?: number;
+          }
+        | number;
+    };
+    /**
+     * [descr:dxLinearGaugeScale]
+     */
+    export type Scale = BaseGaugeScale & {
+      /**
+       * [descr:dxLinearGaugeOptions.scale.horizontalOrientation]
+       */
+      horizontalOrientation?: DevExpress.common.HorizontalAlignment;
+      /**
+       * [descr:dxLinearGaugeOptions.scale.label]
+       */
+      label?: ScaleLabel;
+      /**
+       * [descr:dxLinearGaugeOptions.scale.scaleDivisionFactor]
+       */
+      scaleDivisionFactor?: number;
+      /**
+       * [descr:dxLinearGaugeOptions.scale.verticalOrientation]
+       */
+      verticalOrientation?: DevExpress.common.VerticalAlignment;
+    };
+    /**
+     * [descr:dxLinearGaugeScaleLabel]
+     */
+    export type ScaleLabel = BaseGaugeScaleLabel & {
+      /**
+       * [descr:dxLinearGaugeOptions.scale.label.indentFromTick]
+       */
+      indentFromTick?: number;
+    };
+    /**
      * [descr:_viz_linear_gauge_TooltipHiddenEvent]
      */
     export type TooltipHiddenEvent =
@@ -36686,11 +36698,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxLinearGaugeOptions.rangeContainer]
      */
-    rangeContainer?: dxLinearGaugeRangeContainer;
+    rangeContainer?: DevExpress.viz.dxLinearGauge.RangeContainer;
     /**
      * [descr:dxLinearGaugeOptions.scale]
      */
-    scale?: dxLinearGaugeScale;
+    scale?: DevExpress.viz.dxLinearGauge.Scale;
     /**
      * [descr:dxLinearGaugeOptions.subvalueIndicator]
      */
@@ -36699,67 +36711,6 @@ declare module DevExpress.viz {
      * [descr:dxLinearGaugeOptions.valueIndicator]
      */
     valueIndicator?: GaugeIndicator;
-  }
-  /**
-   * [descr:dxLinearGaugeRangeContainer]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
-    /**
-     * [descr:dxLinearGaugeOptions.rangeContainer.horizontalOrientation]
-     */
-    horizontalOrientation?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxLinearGaugeOptions.rangeContainer.verticalOrientation]
-     */
-    verticalOrientation?: DevExpress.common.VerticalAlignment;
-    /**
-     * [descr:dxLinearGaugeOptions.rangeContainer.width]
-     */
-    width?:
-      | {
-          /**
-           * [descr:dxLinearGaugeOptions.rangeContainer.width.start]
-           */
-          start?: number;
-          /**
-           * [descr:dxLinearGaugeOptions.rangeContainer.width.end]
-           */
-          end?: number;
-        }
-      | number;
-  }
-  /**
-   * [descr:dxLinearGaugeScale]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxLinearGaugeScale extends BaseGaugeScale {
-    /**
-     * [descr:dxLinearGaugeOptions.scale.horizontalOrientation]
-     */
-    horizontalOrientation?: DevExpress.common.HorizontalAlignment;
-    /**
-     * [descr:dxLinearGaugeOptions.scale.label]
-     */
-    label?: dxLinearGaugeScaleLabel;
-    /**
-     * [descr:dxLinearGaugeOptions.scale.scaleDivisionFactor]
-     */
-    scaleDivisionFactor?: number;
-    /**
-     * [descr:dxLinearGaugeOptions.scale.verticalOrientation]
-     */
-    verticalOrientation?: DevExpress.common.VerticalAlignment;
-  }
-  /**
-   * [descr:dxLinearGaugeScaleLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
-    /**
-     * [descr:dxLinearGaugeOptions.scale.label.indentFromTick]
-     */
-    indentFromTick?: number;
   }
   /**
    * [descr:dxPieChart]
@@ -36771,6 +36722,15 @@ declare module DevExpress.viz {
     getInnerRadius(): number;
   }
   module dxPieChart {
+    /**
+     * [descr:dxPieChartAdaptiveLayout]
+     */
+    export type AdaptiveLayout = BaseChartAdaptiveLayout & {
+      /**
+       * [descr:dxPieChartOptions.adaptiveLayout.keepLabels]
+       */
+      keepLabels?: boolean;
+    };
     /**
      * [descr:_viz_pie_chart_DisposingEvent]
      */
@@ -36808,6 +36768,44 @@ declare module DevExpress.viz {
      */
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxPieChart>;
+    /**
+     * [descr:dxPieChartLegend]
+     */
+    export type Legend = BaseChartLegend & {
+      /**
+       * [descr:dxPieChartOptions.legend.customizeHint]
+       */
+      customizeHint?: (pointInfo: {
+        pointName?: any;
+        pointIndex?: number;
+        pointColor?: string;
+      }) => string;
+      /**
+       * [descr:dxPieChartOptions.legend.customizeItems]
+       */
+      customizeItems?: (items: Array<LegendItem>) => Array<LegendItem>;
+      /**
+       * [descr:dxPieChartOptions.legend.customizeText]
+       */
+      customizeText?: (pointInfo: {
+        pointName?: any;
+        pointIndex?: number;
+        pointColor?: string;
+      }) => string;
+      /**
+       * [descr:dxPieChartOptions.legend.hoverMode]
+       */
+      hoverMode?: PieChartLegendHoverMode;
+      /**
+       * [descr:dxPieChartOptions.legend.markerTemplate]
+       */
+      markerTemplate?:
+        | DevExpress.core.template
+        | ((
+            legendItem: LegendItem,
+            element: SVGGElement
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+    };
     /**
      * [descr:_viz_pie_chart_LegendClickEvent]
      */
@@ -36871,16 +36869,6 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseChart.TooltipInfo;
   }
   /**
-   * [descr:dxPieChartAdaptiveLayout]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
-    /**
-     * [descr:dxPieChartOptions.adaptiveLayout.keepLabels]
-     */
-    keepLabels?: boolean;
-  }
-  /**
    * [descr:dxPieChartAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -36933,47 +36921,6 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
-   * [descr:dxPieChartLegend]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPieChartLegend extends BaseChartLegend {
-    /**
-     * [descr:dxPieChartOptions.legend.customizeHint]
-     */
-    customizeHint?: (pointInfo: {
-      pointName?: any;
-      pointIndex?: number;
-      pointColor?: string;
-    }) => string;
-    /**
-     * [descr:dxPieChartOptions.legend.customizeItems]
-     */
-    customizeItems?: (
-      items: Array<DevExpress.viz.dxPieChart.LegendItem>
-    ) => Array<DevExpress.viz.dxPieChart.LegendItem>;
-    /**
-     * [descr:dxPieChartOptions.legend.customizeText]
-     */
-    customizeText?: (pointInfo: {
-      pointName?: any;
-      pointIndex?: number;
-      pointColor?: string;
-    }) => string;
-    /**
-     * [descr:dxPieChartOptions.legend.hoverMode]
-     */
-    hoverMode?: DevExpress.viz.dxPieChart.PieChartLegendHoverMode;
-    /**
-     * [descr:dxPieChartOptions.legend.markerTemplate]
-     */
-    markerTemplate?:
-      | DevExpress.core.template
-      | ((
-          legendItem: DevExpress.viz.dxPieChart.LegendItem,
-          element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-  }
-  /**
    * [descr:dxPieChartOptions]
    * @deprecated [depNote:dxPieChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -36982,7 +36929,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.adaptiveLayout]
      */
-    adaptiveLayout?: dxPieChartAdaptiveLayout;
+    adaptiveLayout?: DevExpress.viz.dxPieChart.AdaptiveLayout;
     /**
      * [descr:dxPieChartOptions.centerTemplate]
      */
@@ -37007,7 +36954,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.legend]
      */
-    legend?: dxPieChartLegend;
+    legend?: DevExpress.viz.dxPieChart.Legend;
     /**
      * [descr:dxPieChartOptions.minDiameter]
      */
@@ -37391,6 +37338,100 @@ declare module DevExpress.viz {
   }
   module dxPolarChart {
     /**
+     * [descr:dxPolarChartAdaptiveLayout]
+     */
+    export type AdaptiveLayout = BaseChartAdaptiveLayout & {
+      /**
+       * [descr:dxPolarChartOptions.adaptiveLayout.height]
+       */
+      height?: number;
+      /**
+       * [descr:dxPolarChartOptions.adaptiveLayout.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxPolarChartArgumentAxis]
+     */
+    export type ArgumentAxis = CommonAxisSettings & {
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.argumentType]
+       */
+      argumentType?: DevExpress.common.charts.ChartsDataType;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.axisDivisionFactor]
+       */
+      axisDivisionFactor?: number;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.categories]
+       */
+      categories?: Array<number | string | Date>;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.constantLines]
+       */
+      constantLines?: Array<ArgumentAxisConstantLines>;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.firstPointOnStartAngle]
+       */
+      firstPointOnStartAngle?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.hoverMode]
+       */
+      hoverMode?: DevExpress.common.charts.ArgumentAxisHoverMode;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.label]
+       */
+      label?: ArgumentAxisLabel;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.linearThreshold]
+       */
+      linearThreshold?: number;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.logarithmBase]
+       */
+      logarithmBase?: number;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.minorTick]
+       */
+      minorTick?: ArgumentAxisMinorTick;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.minorTickCount]
+       */
+      minorTickCount?: number;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.minorTickInterval]
+       */
+      minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.originValue]
+       */
+      originValue?: number;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.period]
+       */
+      period?: number;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.startAngle]
+       */
+      startAngle?: number;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.strips]
+       */
+      strips?: Array<ArgumentAxisStrips>;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.tick]
+       */
+      tick?: ArgumentAxisTick;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.tickInterval]
+       */
+      tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.type]
+       */
+      type?: DevExpress.common.charts.AxisScaleType;
+    };
+    /**
      * [descr:_viz_polar_chart_ArgumentAxisClickEvent]
      */
     export type ArgumentAxisClickEvent = DevExpress.events.NativeEventInfo<
@@ -37402,6 +37443,361 @@ declare module DevExpress.viz {
        */
       readonly argument: Date | number | string;
     };
+    /**
+     * [descr:dxPolarChartArgumentAxisConstantLines]
+     */
+    export type ArgumentAxisConstantLines =
+      CommonAxisSettingsConstantLineStyle & {
+        /**
+         * [descr:dxPolarChartOptions.argumentAxis.constantLines.displayBehindSeries]
+         */
+        displayBehindSeries?: boolean;
+        /**
+         * [descr:dxPolarChartOptions.argumentAxis.constantLines.extendAxis]
+         */
+        extendAxis?: boolean;
+        /**
+         * [descr:dxPolarChartOptions.argumentAxis.constantLines.label]
+         */
+        label?: ArgumentAxisConstantLinesLabel;
+        /**
+         * [descr:dxPolarChartOptions.argumentAxis.constantLines.value]
+         */
+        value?: number | Date | string;
+      };
+    /**
+     * [descr:dxPolarChartArgumentAxisConstantLinesLabel]
+     */
+    export type ArgumentAxisConstantLinesLabel =
+      CommonAxisSettingsConstantLineStyleLabel & {
+        /**
+         * [descr:dxPolarChartOptions.argumentAxis.constantLines.label.text]
+         */
+        text?: string;
+      };
+    /**
+     * [descr:dxPolarChartArgumentAxisLabel]
+     */
+    export type ArgumentAxisLabel = CommonAxisSettingsLabel & {
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.label.customizeHint]
+       */
+      customizeHint?: (argument: {
+        value?: Date | number | string;
+        valueText?: string;
+      }) => string;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.label.customizeText]
+       */
+      customizeText?: (argument: {
+        value?: Date | number | string;
+        valueText?: string;
+      }) => string;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.label.format]
+       */
+      format?: DevExpress.ui.Format;
+    };
+    /**
+     * [descr:dxPolarChartArgumentAxisMinorTick]
+     */
+    export type ArgumentAxisMinorTick = CommonAxisSettingsMinorTick & {
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.minorTick.shift]
+       */
+      shift?: number;
+    };
+    /**
+     * [descr:dxPolarChartArgumentAxisStrips]
+     */
+    export type ArgumentAxisStrips = CommonAxisSettingsStripStyle & {
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.strips.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.strips.endValue]
+       */
+      endValue?: number | Date | string;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.strips.label]
+       */
+      label?: ArgumentAxisStripsLabel;
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.strips.startValue]
+       */
+      startValue?: number | Date | string;
+    };
+    /**
+     * [descr:dxPolarChartArgumentAxisStripsLabel]
+     */
+    export type ArgumentAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.strips.label.text]
+       */
+      text?: string;
+    };
+    /**
+     * [descr:dxPolarChartArgumentAxisTick]
+     */
+    export type ArgumentAxisTick = CommonAxisSettingsTick & {
+      /**
+       * [descr:dxPolarChartOptions.argumentAxis.tick.shift]
+       */
+      shift?: number;
+    };
+    /**
+     * [descr:dxPolarChartCommonAxisSettings]
+     */
+    export type CommonAxisSettings = {
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.allowDecimals]
+       */
+      allowDecimals?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle]
+       */
+      constantLineStyle?: CommonAxisSettingsConstantLineStyle;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.discreteAxisDivisionMode]
+       */
+      discreteAxisDivisionMode?: DevExpress.common.charts.DiscreteAxisDivisionMode;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.endOnTick]
+       */
+      endOnTick?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.grid]
+       */
+      grid?: {
+        /**
+         * [descr:dxPolarChartOptions.commonAxisSettings.grid.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxPolarChartOptions.commonAxisSettings.grid.opacity]
+         */
+        opacity?: number;
+        /**
+         * [descr:dxPolarChartOptions.commonAxisSettings.grid.visible]
+         */
+        visible?: boolean;
+        /**
+         * [descr:dxPolarChartOptions.commonAxisSettings.grid.width]
+         */
+        width?: number;
+      };
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.inverted]
+       */
+      inverted?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.label]
+       */
+      label?: CommonAxisSettingsLabel;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid]
+       */
+      minorGrid?: {
+        /**
+         * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid.color]
+         */
+        color?: string;
+        /**
+         * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid.opacity]
+         */
+        opacity?: number;
+        /**
+         * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid.visible]
+         */
+        visible?: boolean;
+        /**
+         * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid.width]
+         */
+        width?: number;
+      };
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.minorTick]
+       */
+      minorTick?: CommonAxisSettingsMinorTick;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.opacity]
+       */
+      opacity?: number;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.stripStyle]
+       */
+      stripStyle?: CommonAxisSettingsStripStyle;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.tick]
+       */
+      tick?: CommonAxisSettingsTick;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxPolarChartCommonAxisSettingsConstantLineStyle]
+     */
+    export type CommonAxisSettingsConstantLineStyle = {
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.dashStyle]
+       */
+      dashStyle?: DevExpress.common.charts.DashStyle;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.label]
+       */
+      label?: CommonAxisSettingsConstantLineStyleLabel;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxPolarChartCommonAxisSettingsConstantLineStyleLabel]
+     */
+    export type CommonAxisSettingsConstantLineStyleLabel = {
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font]
+       */
+      font?: Font;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.visible]
+       */
+      visible?: boolean;
+    };
+    /**
+     * [descr:dxPolarChartCommonAxisSettingsLabel]
+     */
+    export type CommonAxisSettingsLabel = {
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.label.font]
+       */
+      font?: Font;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.label.indentFromAxis]
+       */
+      indentFromAxis?: number;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.label.overlappingBehavior]
+       */
+      overlappingBehavior?: DevExpress.common.charts.LabelOverlap;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.label.visible]
+       */
+      visible?: boolean;
+    };
+    /**
+     * [descr:dxPolarChartCommonAxisSettingsMinorTick]
+     */
+    export type CommonAxisSettingsMinorTick = {
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.minorTick.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.minorTick.length]
+       */
+      length?: number;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.minorTick.opacity]
+       */
+      opacity?: number;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.minorTick.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.minorTick.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxPolarChartCommonAxisSettingsStripStyle]
+     */
+    export type CommonAxisSettingsStripStyle = {
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.stripStyle.label]
+       */
+      label?: CommonAxisSettingsStripStyleLabel;
+    };
+    /**
+     * [descr:dxPolarChartCommonAxisSettingsStripStyleLabel]
+     */
+    export type CommonAxisSettingsStripStyleLabel = {
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.stripStyle.label.font]
+       */
+      font?: Font;
+    };
+    /**
+     * [descr:dxPolarChartCommonAxisSettingsTick]
+     */
+    export type CommonAxisSettingsTick = {
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.tick.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.tick.length]
+       */
+      length?: number;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.tick.opacity]
+       */
+      opacity?: number;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.tick.visible]
+       */
+      visible?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.commonAxisSettings.tick.width]
+       */
+      width?: number;
+    };
+    /**
+     * [descr:dxPolarChartCommonSeriesSetting]
+     */
+    export type CommonSeriesSettings =
+      dxPolarChartSeriesTypesCommonPolarChartSeries & {
+        /**
+         * [descr:dxPolarChartOptions.commonSeriesSettings.area]
+         */
+        area?: any;
+        /**
+         * [descr:dxPolarChartOptions.commonSeriesSettings.bar]
+         */
+        bar?: any;
+        /**
+         * [descr:dxPolarChartOptions.commonSeriesSettings.line]
+         */
+        line?: any;
+        /**
+         * [descr:dxPolarChartOptions.commonSeriesSettings.scatter]
+         */
+        scatter?: any;
+        /**
+         * [descr:dxPolarChartOptions.commonSeriesSettings.stackedbar]
+         */
+        stackedbar?: any;
+        /**
+         * [descr:dxPolarChartOptions.commonSeriesSettings.type]
+         */
+        type?: PolarChartSeriesType;
+      };
     /**
      * [descr:_viz_polar_chart_DisposingEvent]
      */
@@ -37439,6 +37835,31 @@ declare module DevExpress.viz {
      */
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxPolarChart>;
+    /**
+     * [descr:dxPolarChartLegend]
+     */
+    export type Legend = BaseChartLegend & {
+      /**
+       * [descr:dxPolarChartOptions.legend.customizeHint]
+       */
+      customizeHint?: (seriesInfo: {
+        seriesName?: any;
+        seriesIndex?: number;
+        seriesColor?: string;
+      }) => string;
+      /**
+       * [descr:dxPolarChartOptions.legend.customizeText]
+       */
+      customizeText?: (seriesInfo: {
+        seriesName?: any;
+        seriesIndex?: number;
+        seriesColor?: string;
+      }) => string;
+      /**
+       * [descr:dxPolarChartOptions.legend.hoverMode]
+       */
+      hoverMode?: DevExpress.common.charts.LegendHoverMode;
+    };
     /**
      * [descr:_viz_polar_chart_LegendClickEvent]
      */
@@ -37518,6 +37939,15 @@ declare module DevExpress.viz {
     export type SeriesSelectionChangedEvent =
       DevExpress.events.EventInfo<dxPolarChart> & SeriesInteractionInfo;
     /**
+     * [descr:dxPolarChartTooltip]
+     */
+    export type Tooltip = BaseChartTooltip & {
+      /**
+       * [descr:dxPolarChartOptions.tooltip.shared]
+       */
+      shared?: boolean;
+    };
+    /**
      * [descr:_viz_polar_chart_TooltipHiddenEvent]
      */
     export type TooltipHiddenEvent = DevExpress.events.EventInfo<dxPolarChart> &
@@ -37527,6 +37957,196 @@ declare module DevExpress.viz {
      */
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxPolarChart> &
       DevExpress.viz.BaseChart.TooltipInfo;
+    /**
+     * [descr:dxPolarChartValueAxis]
+     */
+    export type ValueAxis = CommonAxisSettings & {
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.axisDivisionFactor]
+       */
+      axisDivisionFactor?: number;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.categories]
+       */
+      categories?: Array<number | string | Date>;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.constantLines]
+       */
+      constantLines?: Array<ValueAxisConstantLines>;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.endOnTick]
+       */
+      endOnTick?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.label]
+       */
+      label?: ValueAxisLabel;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.linearThreshold]
+       */
+      linearThreshold?: number;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.logarithmBase]
+       */
+      logarithmBase?: number;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.maxValueMargin]
+       */
+      maxValueMargin?: number;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.minValueMargin]
+       */
+      minValueMargin?: number;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.minVisualRangeLength]
+       */
+      minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.minorTickCount]
+       */
+      minorTickCount?: number;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.minorTickInterval]
+       */
+      minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.showZero]
+       */
+      showZero?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.strips]
+       */
+      strips?: Array<ValueAxisStrips>;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.tick]
+       */
+      tick?: ValueAxisTick;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.tickInterval]
+       */
+      tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.type]
+       */
+      type?: DevExpress.common.charts.AxisScaleType;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.valueMarginsEnabled]
+       */
+      valueMarginsEnabled?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.valueType]
+       */
+      valueType?: DevExpress.common.charts.ChartsDataType;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.visualRange]
+       */
+      visualRange?:
+        | DevExpress.common.charts.VisualRange
+        | Array<number | string | Date>;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.visualRangeUpdateMode]
+       */
+      visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.wholeRange]
+       */
+      wholeRange?:
+        | DevExpress.common.charts.VisualRange
+        | Array<number | string | Date>;
+    };
+    /**
+     * [descr:dxPolarChartValueAxisConstantLines]
+     */
+    export type ValueAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.constantLines.displayBehindSeries]
+       */
+      displayBehindSeries?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.constantLines.extendAxis]
+       */
+      extendAxis?: boolean;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.constantLines.label]
+       */
+      label?: ValueAxisConstantLinesLabel;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.constantLines.value]
+       */
+      value?: number | Date | string;
+    };
+    /**
+     * [descr:dxPolarChartValueAxisConstantLinesLabel]
+     */
+    export type ValueAxisConstantLinesLabel =
+      CommonAxisSettingsConstantLineStyleLabel & {
+        /**
+         * [descr:dxPolarChartOptions.valueAxis.constantLines.label.text]
+         */
+        text?: string;
+      };
+    /**
+     * [descr:dxPolarChartValueAxisLabel]
+     */
+    export type ValueAxisLabel = CommonAxisSettingsLabel & {
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.label.customizeHint]
+       */
+      customizeHint?: (axisValue: {
+        value?: Date | number | string;
+        valueText?: string;
+      }) => string;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.label.customizeText]
+       */
+      customizeText?: (axisValue: {
+        value?: Date | number | string;
+        valueText?: string;
+      }) => string;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.label.format]
+       */
+      format?: DevExpress.ui.Format;
+    };
+    /**
+     * [descr:dxPolarChartValueAxisStrips]
+     */
+    export type ValueAxisStrips = CommonAxisSettingsStripStyle & {
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.strips.color]
+       */
+      color?: string;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.strips.endValue]
+       */
+      endValue?: number | Date | string;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.strips.label]
+       */
+      label?: ValueAxisStripsLabel;
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.strips.startValue]
+       */
+      startValue?: number | Date | string;
+    };
+    /**
+     * [descr:dxPolarChartValueAxisStripsLabel]
+     */
+    export type ValueAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.strips.label.text]
+       */
+      text?: string;
+    };
+    /**
+     * [descr:dxPolarChartValueAxisTick]
+     */
+    export type ValueAxisTick = CommonAxisSettingsTick & {
+      /**
+       * [descr:dxPolarChartOptions.valueAxis.tick.visible]
+       */
+      visible?: boolean;
+    };
     export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
     /**
      * [descr:_viz_polar_chart_ZoomEndEvent]
@@ -37584,20 +38204,6 @@ declare module DevExpress.viz {
       };
   }
   /**
-   * [descr:dxPolarChartAdaptiveLayout]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
-    /**
-     * [descr:dxPolarChartOptions.adaptiveLayout.height]
-     */
-    height?: number;
-    /**
-     * [descr:dxPolarChartOptions.adaptiveLayout.width]
-     */
-    width?: number;
-  }
-  /**
    * [descr:dxPolarChartAnnotationConfig]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -37607,204 +38213,6 @@ declare module DevExpress.viz {
      * [descr:dxPolarChartAnnotationConfig.name]
      */
     name?: string;
-  }
-  /**
-   * [descr:dxPolarChartArgumentAxis]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartArgumentAxis
-    extends dxPolarChartCommonAxisSettings {
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.argumentType]
-     */
-    argumentType?: DevExpress.common.charts.ChartsDataType;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.axisDivisionFactor]
-     */
-    axisDivisionFactor?: number;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.categories]
-     */
-    categories?: Array<number | string | Date>;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.constantLines]
-     */
-    constantLines?: Array<dxPolarChartArgumentAxisConstantLines>;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.firstPointOnStartAngle]
-     */
-    firstPointOnStartAngle?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.hoverMode]
-     */
-    hoverMode?: DevExpress.common.charts.ArgumentAxisHoverMode;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.label]
-     */
-    label?: dxPolarChartArgumentAxisLabel;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.linearThreshold]
-     */
-    linearThreshold?: number;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.logarithmBase]
-     */
-    logarithmBase?: number;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.minorTick]
-     */
-    minorTick?: dxPolarChartArgumentAxisMinorTick;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.minorTickCount]
-     */
-    minorTickCount?: number;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.minorTickInterval]
-     */
-    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.originValue]
-     */
-    originValue?: number;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.period]
-     */
-    period?: number;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.startAngle]
-     */
-    startAngle?: number;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.strips]
-     */
-    strips?: Array<dxPolarChartArgumentAxisStrips>;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.tick]
-     */
-    tick?: dxPolarChartArgumentAxisTick;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.tickInterval]
-     */
-    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.type]
-     */
-    type?: DevExpress.common.charts.AxisScaleType;
-  }
-  /**
-   * [descr:dxPolarChartArgumentAxisConstantLines]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartArgumentAxisConstantLines
-    extends dxPolarChartCommonAxisSettingsConstantLineStyle {
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.constantLines.displayBehindSeries]
-     */
-    displayBehindSeries?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.constantLines.extendAxis]
-     */
-    extendAxis?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.constantLines.label]
-     */
-    label?: dxPolarChartArgumentAxisConstantLinesLabel;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.constantLines.value]
-     */
-    value?: number | Date | string;
-  }
-  /**
-   * [descr:dxPolarChartArgumentAxisConstantLinesLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartArgumentAxisConstantLinesLabel
-    extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.constantLines.label.text]
-     */
-    text?: string;
-  }
-  /**
-   * [descr:dxPolarChartArgumentAxisLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartArgumentAxisLabel
-    extends dxPolarChartCommonAxisSettingsLabel {
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.label.customizeHint]
-     */
-    customizeHint?: (argument: {
-      value?: Date | number | string;
-      valueText?: string;
-    }) => string;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.label.customizeText]
-     */
-    customizeText?: (argument: {
-      value?: Date | number | string;
-      valueText?: string;
-    }) => string;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.label.format]
-     */
-    format?: DevExpress.ui.Format;
-  }
-  /**
-   * [descr:dxPolarChartArgumentAxisMinorTick]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartArgumentAxisMinorTick
-    extends dxPolarChartCommonAxisSettingsMinorTick {
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.minorTick.shift]
-     */
-    shift?: number;
-  }
-  /**
-   * [descr:dxPolarChartArgumentAxisStrips]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartArgumentAxisStrips
-    extends dxPolarChartCommonAxisSettingsStripStyle {
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.strips.color]
-     */
-    color?: string;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.strips.endValue]
-     */
-    endValue?: number | Date | string;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.strips.label]
-     */
-    label?: dxPolarChartArgumentAxisStripsLabel;
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.strips.startValue]
-     */
-    startValue?: number | Date | string;
-  }
-  /**
-   * [descr:dxPolarChartArgumentAxisStripsLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartArgumentAxisStripsLabel
-    extends dxPolarChartCommonAxisSettingsStripStyleLabel {
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.strips.label.text]
-     */
-    text?: string;
-  }
-  /**
-   * [descr:dxPolarChartArgumentAxisTick]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartArgumentAxisTick
-    extends dxPolarChartCommonAxisSettingsTick {
-    /**
-     * [descr:dxPolarChartOptions.argumentAxis.tick.shift]
-     */
-    shift?: number;
   }
   /**
    * [descr:dxPolarChartCommonAnnotationConfig]
@@ -37844,293 +38252,6 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
-   * [descr:dxPolarChartCommonAxisSettings]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartCommonAxisSettings {
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.allowDecimals]
-     */
-    allowDecimals?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.color]
-     */
-    color?: string;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle]
-     */
-    constantLineStyle?: dxPolarChartCommonAxisSettingsConstantLineStyle;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.discreteAxisDivisionMode]
-     */
-    discreteAxisDivisionMode?: DevExpress.common.charts.DiscreteAxisDivisionMode;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.endOnTick]
-     */
-    endOnTick?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.grid]
-     */
-    grid?: {
-      /**
-       * [descr:dxPolarChartOptions.commonAxisSettings.grid.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxPolarChartOptions.commonAxisSettings.grid.opacity]
-       */
-      opacity?: number;
-      /**
-       * [descr:dxPolarChartOptions.commonAxisSettings.grid.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxPolarChartOptions.commonAxisSettings.grid.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.inverted]
-     */
-    inverted?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.label]
-     */
-    label?: dxPolarChartCommonAxisSettingsLabel;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid]
-     */
-    minorGrid?: {
-      /**
-       * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid.color]
-       */
-      color?: string;
-      /**
-       * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid.opacity]
-       */
-      opacity?: number;
-      /**
-       * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxPolarChartOptions.commonAxisSettings.minorGrid.width]
-       */
-      width?: number;
-    };
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.minorTick]
-     */
-    minorTick?: dxPolarChartCommonAxisSettingsMinorTick;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.opacity]
-     */
-    opacity?: number;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.stripStyle]
-     */
-    stripStyle?: dxPolarChartCommonAxisSettingsStripStyle;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.tick]
-     */
-    tick?: dxPolarChartCommonAxisSettingsTick;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.visible]
-     */
-    visible?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.width]
-     */
-    width?: number;
-  }
-  /**
-   * [descr:dxPolarChartCommonAxisSettingsConstantLineStyle]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.color]
-     */
-    color?: string;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.dashStyle]
-     */
-    dashStyle?: DevExpress.common.charts.DashStyle;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.label]
-     */
-    label?: dxPolarChartCommonAxisSettingsConstantLineStyleLabel;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.width]
-     */
-    width?: number;
-  }
-  /**
-   * [descr:dxPolarChartCommonAxisSettingsConstantLineStyleLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font]
-     */
-    font?: Font;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.visible]
-     */
-    visible?: boolean;
-  }
-  /**
-   * [descr:dxPolarChartCommonAxisSettingsLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartCommonAxisSettingsLabel {
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.label.font]
-     */
-    font?: Font;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.label.indentFromAxis]
-     */
-    indentFromAxis?: number;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.label.overlappingBehavior]
-     */
-    overlappingBehavior?: DevExpress.common.charts.LabelOverlap;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.label.visible]
-     */
-    visible?: boolean;
-  }
-  /**
-   * [descr:dxPolarChartCommonAxisSettingsMinorTick]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartCommonAxisSettingsMinorTick {
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.minorTick.color]
-     */
-    color?: string;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.minorTick.length]
-     */
-    length?: number;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.minorTick.opacity]
-     */
-    opacity?: number;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.minorTick.visible]
-     */
-    visible?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.minorTick.width]
-     */
-    width?: number;
-  }
-  /**
-   * [descr:dxPolarChartCommonAxisSettingsStripStyle]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartCommonAxisSettingsStripStyle {
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.stripStyle.label]
-     */
-    label?: dxPolarChartCommonAxisSettingsStripStyleLabel;
-  }
-  /**
-   * [descr:dxPolarChartCommonAxisSettingsStripStyleLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.stripStyle.label.font]
-     */
-    font?: Font;
-  }
-  /**
-   * [descr:dxPolarChartCommonAxisSettingsTick]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartCommonAxisSettingsTick {
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.tick.color]
-     */
-    color?: string;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.tick.length]
-     */
-    length?: number;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.tick.opacity]
-     */
-    opacity?: number;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.tick.visible]
-     */
-    visible?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.commonAxisSettings.tick.width]
-     */
-    width?: number;
-  }
-  /**
-   * [descr:dxPolarChartCommonSeriesSettings]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartCommonSeriesSettings
-    extends dxPolarChartSeriesTypesCommonPolarChartSeries {
-    /**
-     * [descr:dxPolarChartOptions.commonSeriesSettings.area]
-     */
-    area?: any;
-    /**
-     * [descr:dxPolarChartOptions.commonSeriesSettings.bar]
-     */
-    bar?: any;
-    /**
-     * [descr:dxPolarChartOptions.commonSeriesSettings.line]
-     */
-    line?: any;
-    /**
-     * [descr:dxPolarChartOptions.commonSeriesSettings.scatter]
-     */
-    scatter?: any;
-    /**
-     * [descr:dxPolarChartOptions.commonSeriesSettings.stackedbar]
-     */
-    stackedbar?: any;
-    /**
-     * [descr:dxPolarChartOptions.commonSeriesSettings.type]
-     */
-    type?: DevExpress.viz.dxPolarChart.PolarChartSeriesType;
-  }
-  /**
-   * [descr:dxPolarChartLegend]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartLegend extends BaseChartLegend {
-    /**
-     * [descr:dxPolarChartOptions.legend.customizeHint]
-     */
-    customizeHint?: (seriesInfo: {
-      seriesName?: any;
-      seriesIndex?: number;
-      seriesColor?: string;
-    }) => string;
-    /**
-     * [descr:dxPolarChartOptions.legend.customizeText]
-     */
-    customizeText?: (seriesInfo: {
-      seriesName?: any;
-      seriesIndex?: number;
-      seriesColor?: string;
-    }) => string;
-    /**
-     * [descr:dxPolarChartOptions.legend.hoverMode]
-     */
-    hoverMode?: DevExpress.common.charts.LegendHoverMode;
-  }
-  /**
    * [descr:dxPolarChartOptions]
    * @deprecated [depNote:dxPolarChartOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -38139,7 +38260,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.adaptiveLayout]
      */
-    adaptiveLayout?: dxPolarChartAdaptiveLayout;
+    adaptiveLayout?: DevExpress.viz.dxPolarChart.AdaptiveLayout;
     /**
      * [descr:dxPolarChartOptions.annotations]
      */
@@ -38147,7 +38268,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.argumentAxis]
      */
-    argumentAxis?: dxPolarChartArgumentAxis;
+    argumentAxis?: DevExpress.viz.dxPolarChart.ArgumentAxis;
     /**
      * [descr:dxPolarChartOptions.barGroupPadding]
      */
@@ -38163,11 +38284,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings]
      */
-    commonAxisSettings?: dxPolarChartCommonAxisSettings;
+    commonAxisSettings?: DevExpress.viz.dxPolarChart.CommonAxisSettings;
     /**
      * [descr:dxPolarChartOptions.commonSeriesSettings]
      */
-    commonSeriesSettings?: dxPolarChartCommonSeriesSettings;
+    commonSeriesSettings?: DevExpress.viz.dxPolarChart.CommonSeriesSettings;
     /**
      * [descr:dxPolarChartOptions.containerBackgroundColor]
      */
@@ -38203,7 +38324,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.legend]
      */
-    legend?: dxPolarChartLegend;
+    legend?: DevExpress.viz.dxPolarChart.Legend;
     /**
      * [descr:dxPolarChartOptions.negativesAsZeroes]
      */
@@ -38280,7 +38401,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.tooltip]
      */
-    tooltip?: dxPolarChartTooltip;
+    tooltip?: DevExpress.viz.dxPolarChart.Tooltip;
     /**
      * [descr:dxPolarChartOptions.useSpiderWeb]
      */
@@ -38288,7 +38409,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis]
      */
-    valueAxis?: dxPolarChartValueAxis;
+    valueAxis?: DevExpress.viz.dxPolarChart.ValueAxis;
   }
   /**
    * [descr:dxPolarChartSeriesTypes]
@@ -38894,219 +39015,6 @@ declare module DevExpress.viz {
     position?: DevExpress.common.charts.RelativePosition;
   }
   /**
-   * [descr:dxPolarChartTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartTooltip extends BaseChartTooltip {
-    /**
-     * [descr:dxPolarChartOptions.tooltip.shared]
-     */
-    shared?: boolean;
-  }
-  /**
-   * [descr:dxPolarChartValueAxis]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartValueAxis
-    extends dxPolarChartCommonAxisSettings {
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.axisDivisionFactor]
-     */
-    axisDivisionFactor?: number;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.categories]
-     */
-    categories?: Array<number | string | Date>;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.constantLines]
-     */
-    constantLines?: Array<dxPolarChartValueAxisConstantLines>;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.endOnTick]
-     */
-    endOnTick?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.label]
-     */
-    label?: dxPolarChartValueAxisLabel;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.linearThreshold]
-     */
-    linearThreshold?: number;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.logarithmBase]
-     */
-    logarithmBase?: number;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.maxValueMargin]
-     */
-    maxValueMargin?: number;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.minValueMargin]
-     */
-    minValueMargin?: number;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.minVisualRangeLength]
-     */
-    minVisualRangeLength?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.minorTickCount]
-     */
-    minorTickCount?: number;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.minorTickInterval]
-     */
-    minorTickInterval?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.showZero]
-     */
-    showZero?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.strips]
-     */
-    strips?: Array<dxPolarChartValueAxisStrips>;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.tick]
-     */
-    tick?: dxPolarChartValueAxisTick;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.tickInterval]
-     */
-    tickInterval?: DevExpress.common.charts.TimeIntervalConfig;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.type]
-     */
-    type?: DevExpress.common.charts.AxisScaleType;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.valueMarginsEnabled]
-     */
-    valueMarginsEnabled?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.valueType]
-     */
-    valueType?: DevExpress.common.charts.ChartsDataType;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.visualRange]
-     */
-    visualRange?:
-      | DevExpress.common.charts.VisualRange
-      | Array<number | string | Date>;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.visualRangeUpdateMode]
-     */
-    visualRangeUpdateMode?: DevExpress.viz.dxPolarChart.ValueAxisVisualRangeUpdateMode;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.wholeRange]
-     */
-    wholeRange?:
-      | DevExpress.common.charts.VisualRange
-      | Array<number | string | Date>;
-  }
-  /**
-   * [descr:dxPolarChartValueAxisConstantLines]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartValueAxisConstantLines
-    extends dxPolarChartCommonAxisSettingsConstantLineStyle {
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.constantLines.displayBehindSeries]
-     */
-    displayBehindSeries?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.constantLines.extendAxis]
-     */
-    extendAxis?: boolean;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.constantLines.label]
-     */
-    label?: dxPolarChartValueAxisConstantLinesLabel;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.constantLines.value]
-     */
-    value?: number | Date | string;
-  }
-  /**
-   * [descr:dxPolarChartValueAxisConstantLinesLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartValueAxisConstantLinesLabel
-    extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.constantLines.label.text]
-     */
-    text?: string;
-  }
-  /**
-   * [descr:dxPolarChartValueAxisLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartValueAxisLabel
-    extends dxPolarChartCommonAxisSettingsLabel {
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.label.customizeHint]
-     */
-    customizeHint?: (axisValue: {
-      value?: Date | number | string;
-      valueText?: string;
-    }) => string;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.label.customizeText]
-     */
-    customizeText?: (axisValue: {
-      value?: Date | number | string;
-      valueText?: string;
-    }) => string;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.label.format]
-     */
-    format?: DevExpress.ui.Format;
-  }
-  /**
-   * [descr:dxPolarChartValueAxisStrips]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartValueAxisStrips
-    extends dxPolarChartCommonAxisSettingsStripStyle {
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.strips.color]
-     */
-    color?: string;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.strips.endValue]
-     */
-    endValue?: number | Date | string;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.strips.label]
-     */
-    label?: dxPolarChartValueAxisStripsLabel;
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.strips.startValue]
-     */
-    startValue?: number | Date | string;
-  }
-  /**
-   * [descr:dxPolarChartValueAxisStripsLabel]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartValueAxisStripsLabel
-    extends dxPolarChartCommonAxisSettingsStripStyleLabel {
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.strips.label.text]
-     */
-    text?: string;
-  }
-  /**
-   * [descr:dxPolarChartValueAxisTick]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxPolarChartValueAxisTick
-    extends dxPolarChartCommonAxisSettingsTick {
-    /**
-     * [descr:dxPolarChartOptions.valueAxis.tick.visible]
-     */
-    visible?: boolean;
-  }
-  /**
    * [descr:dxRangeSelector]
    */
   export class dxRangeSelector extends BaseWidget<dxRangeSelectorOptions> {
@@ -39291,7 +39199,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.chart.commonSeriesSettings]
        */
-      commonSeriesSettings?: dxChartCommonSeriesSettings;
+      commonSeriesSettings?: DevExpress.viz.dxChart.dxChartCommonSeriesSettings;
       /**
        * [descr:dxRangeSelectorOptions.chart.dataPrepareSettings]
        */
@@ -39843,6 +39751,50 @@ declare module DevExpress.viz {
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSankeyOptions;
     export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
+    /**
+     * [descr:dxSankeyTooltip]
+     */
+    export type Tooltip = BaseWidgetTooltip & {
+      /**
+       * [descr:dxSankeyOptions.tooltip.customizeLinkTooltip]
+       */
+      customizeLinkTooltip?: (info: {
+        source?: string;
+        target?: string;
+        weight?: number;
+      }) => any;
+      /**
+       * [descr:dxSankeyOptions.tooltip.customizeNodeTooltip]
+       */
+      customizeNodeTooltip?: (info: {
+        title?: string;
+        label?: string;
+        weightIn?: number;
+        weightOut?: number;
+      }) => any;
+      /**
+       * [descr:dxSankeyOptions.tooltip.enabled]
+       */
+      enabled?: boolean;
+      /**
+       * [descr:dxSankeyOptions.tooltip.linkTooltipTemplate]
+       */
+      linkTooltipTemplate?:
+        | DevExpress.core.template
+        | ((
+            info: { source?: string; target?: string; weight?: number },
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:dxSankeyOptions.tooltip.nodeTooltipTemplate]
+       */
+      nodeTooltipTemplate?:
+        | DevExpress.core.template
+        | ((
+            info: { label?: string; weightIn?: number; weightOut?: number },
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+    };
   }
   /**
    * [descr:dxSankeyConnectionInfoObject]
@@ -40256,56 +40208,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSankeyOptions.tooltip]
      */
-    tooltip?: dxSankeyTooltip;
+    tooltip?: DevExpress.viz.dxSankey.Tooltip;
     /**
      * [descr:dxSankeyOptions.weightField]
      */
     weightField?: string;
-  }
-  /**
-   * [descr:dxSankeyTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxSankeyTooltip extends BaseWidgetTooltip {
-    /**
-     * [descr:dxSankeyOptions.tooltip.customizeLinkTooltip]
-     */
-    customizeLinkTooltip?: (info: {
-      source?: string;
-      target?: string;
-      weight?: number;
-    }) => any;
-    /**
-     * [descr:dxSankeyOptions.tooltip.customizeNodeTooltip]
-     */
-    customizeNodeTooltip?: (info: {
-      title?: string;
-      label?: string;
-      weightIn?: number;
-      weightOut?: number;
-    }) => any;
-    /**
-     * [descr:dxSankeyOptions.tooltip.enabled]
-     */
-    enabled?: boolean;
-    /**
-     * [descr:dxSankeyOptions.tooltip.linkTooltipTemplate]
-     */
-    linkTooltipTemplate?:
-      | DevExpress.core.template
-      | ((
-          info: { source?: string; target?: string; weight?: number },
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:dxSankeyOptions.tooltip.nodeTooltipTemplate]
-     */
-    nodeTooltipTemplate?:
-      | DevExpress.core.template
-      | ((
-          info: { label?: string; weightIn?: number; weightOut?: number },
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
   }
   /**
    * [descr:dxSparkline]
@@ -40596,6 +40503,28 @@ declare module DevExpress.viz {
      */
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTreeMap> &
       InteractionInfo;
+    /**
+     * [descr:dxTreeMapTooltip]
+     */
+    export type Tooltip = BaseWidgetTooltip & {
+      /**
+       * [descr:dxTreeMapOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | DevExpress.core.template
+        | ((
+            info: { value?: number; valueText?: string; node?: dxTreeMapNode },
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:dxTreeMapOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: (info: {
+        value?: number;
+        valueText?: string;
+        node?: dxTreeMapNode;
+      }) => any;
+    };
     export type TreeMapColorizerType =
       | 'discrete'
       | 'gradient'
@@ -41005,34 +40934,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxTreeMapOptions.tooltip]
      */
-    tooltip?: dxTreeMapTooltip;
+    tooltip?: DevExpress.viz.dxTreeMap.Tooltip;
     /**
      * [descr:dxTreeMapOptions.valueField]
      */
     valueField?: string;
-  }
-  /**
-   * [descr:dxTreeMapTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxTreeMapTooltip extends BaseWidgetTooltip {
-    /**
-     * [descr:dxTreeMapOptions.tooltip.contentTemplate]
-     */
-    contentTemplate?:
-      | DevExpress.core.template
-      | ((
-          info: { value?: number; valueText?: string; node?: dxTreeMapNode },
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:dxTreeMapOptions.tooltip.customizeTooltip]
-     */
-    customizeTooltip?: (info: {
-      value?: number;
-      valueText?: string;
-      node?: dxTreeMapNode;
-    }) => any;
   }
   /**
    * [descr:dxVectorMap]
@@ -41149,6 +41055,73 @@ declare module DevExpress.viz {
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxVectorMap>;
     /**
+     * [descr:dxVectorMapLegends]
+     */
+    export type Legend = DevExpress.common.charts.BaseLegend & {
+      /**
+       * [descr:dxVectorMapOptions.legends.customizeHint]
+       */
+      customizeHint?: (itemInfo: {
+        start?: number;
+        end?: number;
+        index?: number;
+        color?: string;
+        size?: number;
+      }) => string;
+      /**
+       * [descr:dxVectorMapOptions.legends.customizeItems]
+       */
+      customizeItems?: (items: Array<LegendItem>) => Array<LegendItem>;
+      /**
+       * [descr:dxVectorMapOptions.legends.customizeText]
+       */
+      customizeText?: (itemInfo: {
+        start?: number;
+        end?: number;
+        index?: number;
+        color?: string;
+        size?: number;
+      }) => string;
+      /**
+       * [descr:dxVectorMapOptions.legends.font]
+       */
+      font?: Font;
+      /**
+       * [descr:dxVectorMapOptions.legends.markerColor]
+       */
+      markerColor?: string;
+      /**
+       * [descr:dxVectorMapOptions.legends.markerShape]
+       */
+      markerShape?: VectorMapMarkerShape;
+      /**
+       * [descr:dxVectorMapOptions.legends.markerSize]
+       */
+      markerSize?: number;
+      /**
+       * [descr:dxVectorMapOptions.legends.markerTemplate]
+       */
+      markerTemplate?:
+        | DevExpress.core.template
+        | ((
+            legendItem: LegendItem,
+            element: SVGGElement
+          ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
+      /**
+       * [descr:dxVectorMapOptions.legends.source]
+       */
+      source?: {
+        /**
+         * [descr:dxVectorMapOptions.legends.source.grouping]
+         */
+        grouping?: string;
+        /**
+         * [descr:dxVectorMapOptions.legends.source.layer]
+         */
+        layer?: string;
+      };
+    };
+    /**
      * [descr:_viz_vector_map_OptionChangedEvent]
      */
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxVectorMap> &
@@ -41164,6 +41137,28 @@ declare module DevExpress.viz {
          */
         readonly target: MapLayerElement;
       };
+    /**
+     * [descr:dxVectorMapTooltip]
+     */
+    export type Tooltip = BaseWidgetTooltip & {
+      /**
+       * [descr:dxVectorMapOptions.tooltip.contentTemplate]
+       */
+      contentTemplate?:
+        | DevExpress.core.template
+        | ((
+            info: MapLayerElement,
+            element: DevExpress.core.DxElement
+          ) => string | DevExpress.core.UserDefinedElement);
+      /**
+       * [descr:dxVectorMapOptions.tooltip.customizeTooltip]
+       */
+      customizeTooltip?: (info: MapLayerElement) => any;
+      /**
+       * [descr:dxVectorMapOptions.tooltip.format]
+       */
+      format?: DevExpress.ui.Format;
+    };
     /**
      * [descr:_viz_vector_map_TooltipHiddenEvent]
      */
@@ -41241,77 +41236,6 @@ declare module DevExpress.viz {
           annotation: dxVectorMapAnnotationConfig | any,
           element: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
-  }
-  /**
-   * [descr:dxVectorMapLegends]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxVectorMapLegends
-    extends DevExpress.common.charts.BaseLegend {
-    /**
-     * [descr:dxVectorMapOptions.legends.customizeHint]
-     */
-    customizeHint?: (itemInfo: {
-      start?: number;
-      end?: number;
-      index?: number;
-      color?: string;
-      size?: number;
-    }) => string;
-    /**
-     * [descr:dxVectorMapOptions.legends.customizeItems]
-     */
-    customizeItems?: (
-      items: Array<DevExpress.viz.dxVectorMap.LegendItem>
-    ) => Array<DevExpress.viz.dxVectorMap.LegendItem>;
-    /**
-     * [descr:dxVectorMapOptions.legends.customizeText]
-     */
-    customizeText?: (itemInfo: {
-      start?: number;
-      end?: number;
-      index?: number;
-      color?: string;
-      size?: number;
-    }) => string;
-    /**
-     * [descr:dxVectorMapOptions.legends.font]
-     */
-    font?: Font;
-    /**
-     * [descr:dxVectorMapOptions.legends.markerColor]
-     */
-    markerColor?: string;
-    /**
-     * [descr:dxVectorMapOptions.legends.markerShape]
-     */
-    markerShape?: DevExpress.viz.dxVectorMap.VectorMapMarkerShape;
-    /**
-     * [descr:dxVectorMapOptions.legends.markerSize]
-     */
-    markerSize?: number;
-    /**
-     * [descr:dxVectorMapOptions.legends.markerTemplate]
-     */
-    markerTemplate?:
-      | DevExpress.core.template
-      | ((
-          legendItem: DevExpress.viz.dxVectorMap.LegendItem,
-          element: SVGGElement
-        ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-    /**
-     * [descr:dxVectorMapOptions.legends.source]
-     */
-    source?: {
-      /**
-       * [descr:dxVectorMapOptions.legends.source.grouping]
-       */
-      grouping?: string;
-      /**
-       * [descr:dxVectorMapOptions.legends.source.layer]
-       */
-      layer?: string;
-    };
   }
   /**
    * [descr:dxVectorMapOptions]
@@ -41555,7 +41479,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.legends]
      */
-    legends?: Array<dxVectorMapLegends>;
+    legends?: Array<DevExpress.viz.dxVectorMap.Legend>;
     /**
      * [descr:dxVectorMapOptions.margin]
      */
@@ -41607,7 +41531,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.tooltip]
      */
-    tooltip?: dxVectorMapTooltip;
+    tooltip?: DevExpress.viz.dxVectorMap.Tooltip;
     /**
      * [descr:dxVectorMapOptions.touchEnabled]
      */
@@ -41638,29 +41562,6 @@ declare module DevExpress.viz {
     customizeAnnotation?: (
       annotation: dxVectorMapAnnotationConfig | any
     ) => dxVectorMapAnnotationConfig;
-  }
-  /**
-   * [descr:dxVectorMapTooltip]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxVectorMapTooltip extends BaseWidgetTooltip {
-    /**
-     * [descr:dxVectorMapOptions.tooltip.contentTemplate]
-     */
-    contentTemplate?:
-      | DevExpress.core.template
-      | ((
-          info: MapLayerElement,
-          element: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
-    /**
-     * [descr:dxVectorMapOptions.tooltip.customizeTooltip]
-     */
-    customizeTooltip?: (info: MapLayerElement) => any;
-    /**
-     * [descr:dxVectorMapOptions.tooltip.format]
-     */
-    format?: DevExpress.ui.Format;
   }
   /**
    * [descr:viz.exportFromMarkup(markup, options)]

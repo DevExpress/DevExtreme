@@ -343,7 +343,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type object
      * @public
      */
-    adaptiveLayout?: dxPolarChartAdaptiveLayout;
+    adaptiveLayout?: AdaptiveLayout;
     /**
      * @docid
      * @inherits dxPolarChartOptions.commonAnnotationSettings
@@ -356,7 +356,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @inherits dxPolarChartOptions.commonAxisSettings
      * @public
      */
-    argumentAxis?: dxPolarChartArgumentAxis;
+    argumentAxis?: ArgumentAxis;
     /**
      * @docid
      * @default 0.3
@@ -381,7 +381,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type object
      * @public
      */
-    commonAxisSettings?: dxPolarChartCommonAxisSettings;
+    commonAxisSettings?: CommonAxisSettings;
     /**
      * @docid
      * @type object
@@ -390,7 +390,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @inheritAll
      * @public
      */
-    commonSeriesSettings?: dxPolarChartCommonSeriesSettings;
+    commonSeriesSettings?: CommonSeriesSettings;
     /**
      * @docid
      * @default '#FFFFFF'
@@ -430,7 +430,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type object
      * @public
      */
-    legend?: dxPolarChartLegend;
+    legend?: Legend;
     /**
      * @docid
      * @default false
@@ -546,7 +546,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type object
      * @public
      */
-    tooltip?: dxPolarChartTooltip;
+    tooltip?: Tooltip;
     /**
      * @docid
      * @default false
@@ -559,13 +559,13 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @inherits dxPolarChartOptions.commonAxisSettings
      * @public
      */
-    valueAxis?: dxPolarChartValueAxis;
+    valueAxis?: ValueAxis;
 }
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartAdaptiveLayout
  */
-export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
+export type AdaptiveLayout = BaseChartAdaptiveLayout & {
     /**
      * @docid dxPolarChartOptions.adaptiveLayout.height
      * @default 170
@@ -578,12 +578,13 @@ export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
      * @public
      */
     width?: number;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartArgumentAxis
+ * @type object
  */
-export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings {
+export type ArgumentAxis = CommonAxisSettings & {
     /**
      * @docid dxPolarChartOptions.argumentAxis.argumentType
      * @default undefined
@@ -608,7 +609,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @notUsedInTheme
      * @public
      */
-    constantLines?: Array<dxPolarChartArgumentAxisConstantLines>;
+    constantLines?: Array<ArgumentAxisConstantLines>;
     /**
      * @docid dxPolarChartOptions.argumentAxis.firstPointOnStartAngle
      * @default false
@@ -626,7 +627,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @type object
      * @public
      */
-    label?: dxPolarChartArgumentAxisLabel;
+    label?: ArgumentAxisLabel;
     /**
      * @docid dxPolarChartOptions.argumentAxis.linearThreshold
      * @default undefined
@@ -644,7 +645,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @type object
      * @public
      */
-    minorTick?: dxPolarChartArgumentAxisMinorTick;
+    minorTick?: ArgumentAxisMinorTick;
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTickCount
      * @default undefined
@@ -683,13 +684,13 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @inherits dxPolarChartOptions.commonAxisSettings.stripStyle
      * @public
      */
-    strips?: Array<dxPolarChartArgumentAxisStrips>;
+    strips?: Array<ArgumentAxisStrips>;
     /**
      * @docid dxPolarChartOptions.argumentAxis.tick
      * @type object
      * @public
      */
-    tick?: dxPolarChartArgumentAxisTick;
+    tick?: ArgumentAxisTick;
     /**
      * @docid dxPolarChartOptions.argumentAxis.tickInterval
      * @inherits VizTimeInterval
@@ -703,12 +704,13 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @public
      */
     type?: AxisScaleType;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartArgumentAxisConstantLines
+ * @type object
  */
-export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+export type ArgumentAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
     /**
      * @docid dxPolarChartOptions.argumentAxis.constantLines.displayBehindSeries
      * @default false
@@ -726,31 +728,33 @@ export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommo
      * @type object
      * @public
      */
-    label?: dxPolarChartArgumentAxisConstantLinesLabel;
+    label?: ArgumentAxisConstantLinesLabel;
     /**
      * @docid dxPolarChartOptions.argumentAxis.constantLines.value
      * @default undefined
      * @public
      */
     value?: number | Date | string;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartArgumentAxisConstantLinesLabel
+ * @type object
  */
-export interface dxPolarChartArgumentAxisConstantLinesLabel extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
+export type ArgumentAxisConstantLinesLabel = CommonAxisSettingsConstantLineStyleLabel & {
     /**
      * @docid dxPolarChartOptions.argumentAxis.constantLines.label.text
      * @default undefined
      * @public
      */
     text?: string;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartArgumentAxisLabel
+ * @type object
  */
-export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
+export type ArgumentAxisLabel = CommonAxisSettingsLabel & {
     /**
      * @docid dxPolarChartOptions.argumentAxis.label.customizeHint
      * @public
@@ -768,24 +772,26 @@ export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSet
      * @public
      */
     format?: Format;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartArgumentAxisMinorTick
+ * @type object
  */
-export interface dxPolarChartArgumentAxisMinorTick extends dxPolarChartCommonAxisSettingsMinorTick {
+export type ArgumentAxisMinorTick = CommonAxisSettingsMinorTick & {
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTick.shift
      * @default 3
      * @public
      */
     shift?: number;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartArgumentAxisStrips
+ * @type object
  */
-export interface dxPolarChartArgumentAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
+export type ArgumentAxisStrips = CommonAxisSettingsStripStyle & {
     /**
      * @docid dxPolarChartOptions.argumentAxis.strips.color
      * @default undefined
@@ -803,43 +809,45 @@ export interface dxPolarChartArgumentAxisStrips extends dxPolarChartCommonAxisSe
      * @type object
      * @public
      */
-    label?: dxPolarChartArgumentAxisStripsLabel;
+    label?: ArgumentAxisStripsLabel;
     /**
      * @docid dxPolarChartOptions.argumentAxis.strips.startValue
      * @default undefined
      * @public
      */
     startValue?: number | Date | string;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartArgumentAxisStripsLabel
+ * @type object
  */
-export interface dxPolarChartArgumentAxisStripsLabel extends dxPolarChartCommonAxisSettingsStripStyleLabel {
+export type ArgumentAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
     /**
      * @docid dxPolarChartOptions.argumentAxis.strips.label.text
      * @default undefined
      * @public
      */
     text?: string;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartArgumentAxisTick
+ * @type object
  */
-export interface dxPolarChartArgumentAxisTick extends dxPolarChartCommonAxisSettingsTick {
+export type ArgumentAxisTick = CommonAxisSettingsTick & {
     /**
      * @docid dxPolarChartOptions.argumentAxis.tick.shift
      * @default 3
      * @public
      */
     shift?: number;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartCommonAxisSettings
  */
-export interface dxPolarChartCommonAxisSettings {
+export type CommonAxisSettings = {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.allowDecimals
      * @default undefined
@@ -857,7 +865,7 @@ export interface dxPolarChartCommonAxisSettings {
      * @type object
      * @public
      */
-    constantLineStyle?: dxPolarChartCommonAxisSettingsConstantLineStyle;
+    constantLineStyle?: CommonAxisSettingsConstantLineStyle;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.discreteAxisDivisionMode
      * @default 'betweenLabels'
@@ -907,7 +915,7 @@ export interface dxPolarChartCommonAxisSettings {
      * @type object
      * @public
      */
-    label?: dxPolarChartCommonAxisSettingsLabel;
+    label?: CommonAxisSettingsLabel;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.minorGrid
      * @public
@@ -939,7 +947,7 @@ export interface dxPolarChartCommonAxisSettings {
      * @type object
      * @public
      */
-    minorTick?: dxPolarChartCommonAxisSettingsMinorTick;
+    minorTick?: CommonAxisSettingsMinorTick;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.opacity
      * @default undefined
@@ -951,13 +959,13 @@ export interface dxPolarChartCommonAxisSettings {
      * @type object
      * @public
      */
-    stripStyle?: dxPolarChartCommonAxisSettingsStripStyle;
+    stripStyle?: CommonAxisSettingsStripStyle;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.tick
      * @type object
      * @public
      */
-    tick?: dxPolarChartCommonAxisSettingsTick;
+    tick?: CommonAxisSettingsTick;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.visible
      * @default true
@@ -970,12 +978,12 @@ export interface dxPolarChartCommonAxisSettings {
      * @public
      */
     width?: number;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartCommonAxisSettingsConstantLineStyle
  */
-export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
+export type CommonAxisSettingsConstantLineStyle = {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.color
      * @default '#000000'
@@ -993,19 +1001,19 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
      * @type object
      * @public
      */
-    label?: dxPolarChartCommonAxisSettingsConstantLineStyleLabel;
+    label?: CommonAxisSettingsConstantLineStyleLabel;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.width
      * @default 1
      * @public
      */
     width?: number;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartCommonAxisSettingsConstantLineStyleLabel
  */
-export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
+export type CommonAxisSettingsConstantLineStyleLabel = {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font
      * @default '#767676' &prop(color)
@@ -1018,12 +1026,12 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
      * @public
      */
     visible?: boolean;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartCommonAxisSettingsLabel
  */
-export interface dxPolarChartCommonAxisSettingsLabel {
+export type CommonAxisSettingsLabel = {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.label.font
      * @default '#767676' &prop(color)
@@ -1048,12 +1056,12 @@ export interface dxPolarChartCommonAxisSettingsLabel {
      * @public
      */
     visible?: boolean;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartCommonAxisSettingsMinorTick
  */
-export interface dxPolarChartCommonAxisSettingsMinorTick {
+export type CommonAxisSettingsMinorTick = {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.minorTick.color
      * @default '#767676'
@@ -1084,36 +1092,36 @@ export interface dxPolarChartCommonAxisSettingsMinorTick {
      * @public
      */
     width?: number;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartCommonAxisSettingsStripStyle
  */
-export interface dxPolarChartCommonAxisSettingsStripStyle {
+export type CommonAxisSettingsStripStyle = {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.stripStyle.label
      * @type object
      * @public
      */
-    label?: dxPolarChartCommonAxisSettingsStripStyleLabel;
-}
+    label?: CommonAxisSettingsStripStyleLabel;
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartCommonAxisSettingsStripStyleLabel
  */
-export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
+export type CommonAxisSettingsStripStyleLabel = {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.stripStyle.label.font
      * @default '#767676' &prop(color)
      * @public
      */
     font?: Font;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartCommonAxisSettingsTick
  */
-export interface dxPolarChartCommonAxisSettingsTick {
+export type CommonAxisSettingsTick = {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.tick.color
      * @default '#767676'
@@ -1144,12 +1152,13 @@ export interface dxPolarChartCommonAxisSettingsTick {
      * @public
      */
     width?: number;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartCommonSeriesSetting
+ * @type object
  */
-export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesTypesCommonPolarChartSeries {
+export type CommonSeriesSettings = dxPolarChartSeriesTypesCommonPolarChartSeries & {
     /**
      * @docid dxPolarChartOptions.commonSeriesSettings.area
      * @public
@@ -1181,12 +1190,12 @@ export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesType
      * @public
      */
     type?: PolarChartSeriesType;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartLegend
  */
-export interface dxPolarChartLegend extends BaseChartLegend {
+export type Legend = BaseChartLegend & {
     /**
      * @docid dxPolarChartOptions.legend.customizeHint
      * @public
@@ -1204,24 +1213,25 @@ export interface dxPolarChartLegend extends BaseChartLegend {
      * @public
      */
     hoverMode?: LegendHoverMode;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartTooltip
  */
-export interface dxPolarChartTooltip extends BaseChartTooltip {
+export type Tooltip = BaseChartTooltip & {
     /**
      * @docid dxPolarChartOptions.tooltip.shared
      * @default false
      * @public
      */
     shared?: boolean;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartValueAxis
+ * @type object
  */
-export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
+export type ValueAxis = CommonAxisSettings & {
     /**
      * @docid dxPolarChartOptions.valueAxis.axisDivisionFactor
      * @default 30
@@ -1240,7 +1250,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @inherits dxPolarChartOptions.commonAxisSettings.constantLineStyle
      * @public
      */
-    constantLines?: Array<dxPolarChartValueAxisConstantLines>;
+    constantLines?: Array<ValueAxisConstantLines>;
     /**
      * @docid dxPolarChartOptions.valueAxis.endOnTick
      * @default false
@@ -1252,7 +1262,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @type object
      * @public
      */
-    label?: dxPolarChartValueAxisLabel;
+    label?: ValueAxisLabel;
     /**
      * @docid dxPolarChartOptions.valueAxis.linearThreshold
      * @default undefined
@@ -1312,13 +1322,13 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @inherits dxPolarChartOptions.commonAxisSettings.stripStyle
      * @public
      */
-    strips?: Array<dxPolarChartValueAxisStrips>;
+    strips?: Array<ValueAxisStrips>;
     /**
      * @docid dxPolarChartOptions.valueAxis.tick
      * @type object
      * @public
      */
-    tick?: dxPolarChartValueAxisTick;
+    tick?: ValueAxisTick;
     /**
      * @docid dxPolarChartOptions.valueAxis.tickInterval
      * @inherits VizTimeInterval
@@ -1363,12 +1373,13 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @public
      */
     wholeRange?: VisualRange | Array<number | string | Date>;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartValueAxisConstantLines
+ * @type object
  */
-export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+export type ValueAxisConstantLines = CommonAxisSettingsConstantLineStyle & {
     /**
      * @docid dxPolarChartOptions.valueAxis.constantLines.displayBehindSeries
      * @default false
@@ -1386,31 +1397,33 @@ export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAx
      * @type object
      * @public
      */
-    label?: dxPolarChartValueAxisConstantLinesLabel;
+    label?: ValueAxisConstantLinesLabel;
     /**
      * @docid dxPolarChartOptions.valueAxis.constantLines.value
      * @default undefined
      * @public
      */
     value?: number | Date | string;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartValueAxisConstantLinesLabel
+ * @type object
  */
-export interface dxPolarChartValueAxisConstantLinesLabel extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
+export type ValueAxisConstantLinesLabel = CommonAxisSettingsConstantLineStyleLabel & {
     /**
      * @docid dxPolarChartOptions.valueAxis.constantLines.label.text
      * @default undefined
      * @public
      */
     text?: string;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartValueAxisLabel
+ * @type object
  */
-export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
+export type ValueAxisLabel = CommonAxisSettingsLabel & {
     /**
      * @docid dxPolarChartOptions.valueAxis.label.customizeHint
      * @public
@@ -1428,12 +1441,13 @@ export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettin
      * @public
      */
     format?: Format;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartValueAxisStrips
+ * @type object
  */
-export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
+export type ValueAxisStrips = CommonAxisSettingsStripStyle & {
     /**
      * @docid dxPolarChartOptions.valueAxis.strips.color
      * @default undefined
@@ -1451,38 +1465,40 @@ export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSetti
      * @type object
      * @public
      */
-    label?: dxPolarChartValueAxisStripsLabel;
+    label?: ValueAxisStripsLabel;
     /**
      * @docid dxPolarChartOptions.valueAxis.strips.startValue
      * @default undefined
      * @public
      */
     startValue?: number | Date | string;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartValueAxisStripsLabel
+ * @type object
  */
-export interface dxPolarChartValueAxisStripsLabel extends dxPolarChartCommonAxisSettingsStripStyleLabel {
+export type ValueAxisStripsLabel = CommonAxisSettingsStripStyleLabel & {
     /**
      * @docid dxPolarChartOptions.valueAxis.strips.label.text
      * @default undefined
      * @public
      */
     text?: string;
-}
+};
 /**
- * @docid
- * @namespace DevExpress.viz
+ * @public
+ * @docid dxPolarChartValueAxisTick
+ * @type object
  */
-export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSettingsTick {
+export type ValueAxisTick = CommonAxisSettingsTick & {
     /**
      * @docid dxPolarChartOptions.valueAxis.tick.visible
      * @default false
      * @public
      */
     visible?: boolean;
-}
+};
 /**
  * @docid dxPolarChart
  * @inherits BaseChart
@@ -2413,6 +2429,91 @@ export type Properties = dxPolarChartOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxPolarChartOptions;
+
+// #region deprecated in v23.1
+
+/** @deprecated Use AdaptiveLayout instead */
+export type dxPolarChartAdaptiveLayout = AdaptiveLayout;
+
+/** @deprecated Use ArgumentAxis instead */
+export type dxPolarChartArgumentAxis = ArgumentAxis;
+
+/** @deprecated Use ArgumentAxisConstantLines instead */
+export type dxPolarChartArgumentAxisConstantLines = ArgumentAxisConstantLines;
+
+/** @deprecated Use ArgumentAxisConstantLinesLabel instead */
+export type dxPolarChartArgumentAxisConstantLinesLabel = ArgumentAxisConstantLinesLabel;
+
+/** @deprecated Use ArgumentAxisLabel instead */
+export type dxPolarChartArgumentAxisLabel = ArgumentAxisLabel;
+
+/** @deprecated Use ArgumentAxisMinorTick instead */
+export type dxPolarChartArgumentAxisMinorTick = ArgumentAxisMinorTick;
+
+/** @deprecated Use ArgumentAxisStrips instead */
+export type dxPolarChartArgumentAxisStrips = ArgumentAxisStrips;
+
+/** @deprecated Use ArgumentAxisStripsLabel instead */
+export type dxPolarChartArgumentAxisStripsLabel = ArgumentAxisStripsLabel;
+
+/** @deprecated Use ArgumentAxisTick instead */
+export type dxPolarChartArgumentAxisTick = ArgumentAxisTick;
+
+/** @deprecated Use CommonAxisSettings instead */
+export type dxPolarChartCommonAxisSettings = CommonAxisSettings;
+
+/** @deprecated Use CommonAxisSettingsConstantLineStyle instead */
+export type dxPolarChartCommonAxisSettingsConstantLineStyle = CommonAxisSettingsConstantLineStyle;
+
+/** @deprecated Use CommonAxisSettingsConstantLineStyleLabel instead */
+export type dxPolarChartCommonAxisSettingsConstantLineStyleLabel = CommonAxisSettingsConstantLineStyleLabel;
+
+/** @deprecated Use CommonAxisSettingsLabel instead */
+export type dxPolarChartCommonAxisSettingsLabel = CommonAxisSettingsLabel;
+
+/** @deprecated Use CommonAxisSettingsMinorTick instead */
+export type dxPolarChartCommonAxisSettingsMinorTick = CommonAxisSettingsMinorTick;
+
+/** @deprecated Use CommonAxisSettingsStripStyle instead */
+export type dxPolarChartCommonAxisSettingsStripStyle = CommonAxisSettingsStripStyle;
+
+/** @deprecated Use CommonAxisSettingsStripStyleLabel instead */
+export type dxPolarChartCommonAxisSettingsStripStyleLabel = CommonAxisSettingsStripStyleLabel;
+
+/** @deprecated Use CommonAxisSettingsTick instead */
+export type dxPolarChartCommonAxisSettingsTick = CommonAxisSettingsTick;
+
+/** @deprecated Use CommonSeriesSettings instead */
+export type dxPolarChartCommonSeriesSettings = CommonSeriesSettings;
+
+/** @deprecated Use Legend instead */
+export type dxPolarChartLegend = Legend;
+
+/** @deprecated Use Tooltip instead */
+export type dxPolarChartTooltip = Tooltip;
+
+/** @deprecated Use ValueAxis instead */
+export type dxPolarChartValueAxis = ValueAxis;
+
+/** @deprecated Use ValueAxisConstantLines instead */
+export type dxPolarChartValueAxisConstantLines = ValueAxisConstantLines;
+
+/** @deprecated Use ValueAxisConstantLinesLabel instead */
+export type dxPolarChartValueAxisConstantLinesLabel = ValueAxisConstantLinesLabel;
+
+/** @deprecated Use ValueAxisLabel instead */
+export type dxPolarChartValueAxisLabel = ValueAxisLabel;
+
+/** @deprecated Use ValueAxisStrips instead */
+export type dxPolarChartValueAxisStrips = ValueAxisStrips;
+
+/** @deprecated Use ValueAxisStripsLabel instead */
+export type dxPolarChartValueAxisStripsLabel = ValueAxisStripsLabel;
+
+/** @deprecated Use ValueAxisTick instead */
+export type dxPolarChartValueAxisTick = ValueAxisTick;
+
+// #endregion
 
 ///#DEBUG
 // eslint-disable-next-line import/first
