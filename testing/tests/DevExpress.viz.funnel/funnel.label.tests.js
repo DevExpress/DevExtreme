@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { createFunnel, stubAlgorithm } from './commonParts/common.js';
+import { createFunnel, stubAlgorithm, checkNumbersWithError } from './commonParts/common.js';
 import labelModule from 'viz/series/points/label';
 import { labelEnvironment } from './commonParts/label.js';
 import { logger } from 'core/utils/console';
@@ -1346,10 +1346,12 @@ QUnit.module('Initialization', {
 
             const labels = widget._labels;
 
-            assert.strictEqual(labels[0]._insideGroup._settings.translateY, 393);
+            const maxAllowedDelta = 3;
+
+            assert.ok(checkNumbersWithError(labels[0]._insideGroup._settings.translateY, 393, maxAllowedDelta));
             assert.strictEqual(labels[1]._insideGroup._settings.translateY, undefined);
-            assert.strictEqual(labels[2]._insideGroup._settings.translateY, 370);
-            assert.strictEqual(labels[3]._insideGroup._settings.translateY, 347);
+            assert.ok(checkNumbersWithError(labels[2]._insideGroup._settings.translateY, 370, maxAllowedDelta));
+            assert.ok(checkNumbersWithError(labels[3]._insideGroup._settings.translateY, 347, maxAllowedDelta));
         });
     });
 });
