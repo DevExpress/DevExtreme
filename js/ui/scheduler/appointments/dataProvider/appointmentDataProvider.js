@@ -20,7 +20,14 @@ export class AppointmentDataProvider {
         this.initFilterStrategy();
     }
 
-    get keyName() { return this.appointmentDataSource.keyName; }
+    get keyName() {
+        return this.appointmentDataSource.keyName;
+    }
+
+    get isDataSourceInit() {
+        return !!this.dataSource;
+    }
+
     get filterStrategyName() {
         return this.options.getIsVirtualScrolling()
             ? FilterStrategies.virtual
