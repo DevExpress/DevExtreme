@@ -1203,12 +1203,30 @@ class TablePositionViewController extends modules.ViewController {
   }
 }
 
-const DraggingHeaderViewController = modules.ViewController.inherit({
+class DraggingHeaderViewController extends modules.ViewController {
+  private _columnsController: any;
+
+  private _columnsSeparatorView: any;
+
+  private _blockSeparatorView: any;
+
+  private _animationColumnIndex: any;
+
+  private _columnHeadersView: any;
+
+  private _draggingHeaderView: any;
+
+  private _rowsView: any;
+
+  private _headerPanelView: any;
+
+  private _columnChooserView: any;
+
   _generatePointsByColumns(options) {
     const that = this;
 
     return gridCoreUtils.getPointsByColumns(options.columnElements, (point) => that._pointCreated(point, options.columns, options.targetDraggingPanel.getName(), options.sourceColumn), options.isVerticalOrientation, options.startColumnIndex);
-  },
+  }
 
   _pointCreated(point, columns, location, sourceColumn) {
     const targetColumn = columns[point.columnIndex];
@@ -1222,7 +1240,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
       default:
         return columns.length === 0;
     }
-  },
+  }
 
   _subscribeToEvents(draggingHeader, draggingPanels) {
     const that = this;
@@ -1274,7 +1292,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
         }
       }
     });
-  },
+  }
 
   _unsubscribeFromEvents(draggingHeader, draggingPanels) {
     const that = this;
@@ -1295,31 +1313,35 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
         });
       }
     });
-  },
+  }
 
   _getSeparator(targetLocation) {
     return targetLocation === 'headers' ? this._columnsSeparatorView : this._blockSeparatorView;
-  },
+  }
 
-  hideSeparators(type) {
+  hideSeparators(type?) {
     const blockSeparator = this._blockSeparatorView;
     const columnsSeparator = this._columnsSeparatorView;
 
     this._animationColumnIndex = null;
     blockSeparator && blockSeparator.hide();
     type !== 'block' && columnsSeparator && columnsSeparator.hide();
-  },
+  }
 
   init() {
     const that = this;
 
-    that.callBase();
+    super.init();
     that._columnsController = that.getController('columns');
 
+    // @ts-expect-error
     that._columnHeadersView = that.getView('columnHeadersView');
+    // @ts-expect-error
     that._columnsSeparatorView = that.getView('columnsSeparatorView');
+    // @ts-expect-error
     that._draggingHeaderView = that.getView('draggingHeaderView');
     that._rowsView = that.getView('rowsView');
+    // @ts-expect-error
     that._blockSeparatorView = that.getView('blockSeparatorView');
     that._headerPanelView = that.getView('headerPanel');
     that._columnChooserView = that.getView('columnChooserView');
@@ -1336,11 +1358,11 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
     that._columnHeadersView.renderCompleted.add(subscribeToEvents);
     that._headerPanelView && that._headerPanelView.renderCompleted.add(subscribeToEvents);
     that._columnChooserView && that._columnChooserView.renderCompleted.add(subscribeToEvents);
-  },
+  }
 
   allowDrop(parameters) {
     return this._columnsController.allowMoveColumn(parameters.sourceColumnIndex, parameters.targetColumnIndex, parameters.sourceLocation, parameters.targetLocation);
-  },
+  }
 
   drag(parameters) {
     const { sourceIndex } = parameters;
@@ -1357,7 +1379,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
         rowsView && rowsView.setRowsOpacity(sourceIndex, COLUMN_OPACITY);
       }
     }
-  },
+  }
 
   dock(parameters) {
     const that = this;
@@ -1385,6 +1407,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
           showSeparator();
         } else {
           that.hideSeparators('block');
+          // @ts-expect-error
           that.getController('tablePosition').update(parameters.posY);
           separator.moveByX(parameters.posX - separator.width());
           separator.show();
@@ -1393,7 +1416,7 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
         that.hideSeparators();
       }
     }
-  },
+  }
 
   drop(parameters) {
     const { sourceColumnElement } = parameters;
@@ -1413,14 +1436,14 @@ const DraggingHeaderViewController = modules.ViewController.inherit({
 
       this._columnsController.moveColumn(parameters.sourceColumnIndex, parameters.targetColumnIndex, parameters.sourceLocation, parameters.targetLocation);
     }
-  },
+  }
 
   dispose() {
     if (this._draggingHeaderView) {
       this._unsubscribeFromEvents(this._draggingHeaderView, [this._columnChooserView, this._columnHeadersView, this._headerPanelView]);
     }
-  },
-});
+  }
+}
 
 export const columnsResizingReorderingModule = {
   views: {
