@@ -1,50 +1,30 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "module": "es6",
-    "target": "es5",
-    "jsx": "preserve",
-    "declaration": false,
-    "strict": true,
-    "alwaysStrict": true,
-    "noImplicitAny": false,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
-    "moduleResolution": "node",
-    "noLib": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "downlevelIteration": true,
-    "sourceMap": false,
-    "esModuleInterop": true,
-    "lib": [
-      "es6",
-      "es7",
-      "es2017.object",
-      "dom"
-    ],
-    "baseUrl": "./",
-    "stripInternal": true,
+    "baseUrl": "./packages",
     "paths": {
-      "*": [
-        "node_modules"
-      ]
+      "devextreme-angular": ["devextreme-angular/src"],
+      "devextreme-angular/*": ["devextreme-angular/src/*"],
+      "devextreme-react-generator": ["devextreme-react-generator/src"],
+      "devextreme-react": ["devextreme-react/src"],
+      "devextreme-react/*": ["devextreme-react/src/*"]
     },
-    "outDir": "dist"
+    "target": "es5",
+    "module": "commonjs",
+    "noEmitOnError": true,
+    "jsx": "react",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "removeComments": false,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "lib": ["es2015", "es2015.iterable", "dom"]
   },
   "exclude": [
-    "artifacts",
     "node_modules",
-    "**/dist",
-    "playground"
-  ],
-  "include": [
-    "js/renovation",
-    "themebuilder-scss",
-    "themebuilder",
-    "testing/testcafe"
+    "dist"
   ]
 }

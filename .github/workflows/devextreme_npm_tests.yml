@@ -25,34 +25,34 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Restore artifacts cache
-      uses: actions/cache@v3
-      with:
-        path: ./artifacts
-        key: build-npm-devextreme-artifacts-${{ github.sha }}
+#    - name: Restore artifacts cache
+#      uses: actions/cache@v3
+#      with:
+#        path: ./artifacts
+#        key: build-npm-devextreme-artifacts-${{ github.sha }}
 
     - name: Install packages in devextreme repo
-      run: test -d artifacts || npm install --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Build devextreme repo
-      run: test -d artifacts || npm run build-npm-devextreme
+      run: npx nx build devextreme
 
     - name: Pack devextreme package
-      working-directory: ./artifacts/npm/devextreme
+      working-directory: ./packages/devextreme/artifacts/npm/devextreme
       run: npm pack
 
     - name: Pack devextreme-dist package
-      working-directory: ./artifacts/npm/devextreme-dist
+      working-directory: ./packages/devextreme/artifacts/npm/devextreme-dist
       run: npm pack
 
     - name: Copy packages
       run: |
-        cp ./artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
-        cp ./artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
+        cp ./packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
+        cp ./packages/devextreme/artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
 
     - name: Copy build artifacts
       uses: actions/upload-artifact@v3
@@ -82,7 +82,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -104,10 +104,10 @@ jobs:
         mv package devextreme
 
     - name: Build Renovated NPM
-      run: npm run build-npm-renovation:${{ matrix.framework }}
+      run: npx nx build-npm-renovation:${{ matrix.framework }} devextreme-root
 
     - name: Prepare test project
-      working-directory: ./testing/renovation-npm
+      working-directory: ./packages/devextreme/testing/renovation-npm
       run: |
         npm i
 
@@ -124,7 +124,7 @@ jobs:
         exit 1
 
     - name: Run tests
-      working-directory: ./testing/renovation-npm
+      working-directory: ./packages/devextreme/testing/renovation-npm
       run: |
         npm run test:${{ matrix.framework }}
 
@@ -133,7 +133,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: compared-screenshots
-        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts
+        path: ${{ github.workspace }}/packages/devextreme/testing/renovation-npm/tests/artifacts
         if-no-files-found: ignore
 
   test_angular_wrappers:
@@ -159,7 +159,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -169,20 +169,20 @@ jobs:
     - name: Discover declarations in devextreme repo
       run: npm run discover-declarations
 
-    - name: Clone devextreme-angular repo from PR author fork
-      continue-on-error: true
-      if: github.event_name == 'pull_request'
-      run: |
-        REMOTE_URL=https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular
-        REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
-
-        if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
-          git clone -b $REMOTE_BRANCH $REMOTE_URL ../devextreme-angular-repo
-        fi
-
-    - name: Clone devextreme-angular repo
-      run: |
-        test -d ../devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
+#    - name: Clone devextreme-angular repo from PR author fork
+#      continue-on-error: true
+#      if: github.event_name == 'pull_request'
+#      run: |
+#        REMOTE_URL=https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular
+#        REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
+#
+#        if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
+#          git clone -b $REMOTE_BRANCH $REMOTE_URL ../devextreme-angular-repo
+#        fi
+#
+#    - name: Clone devextreme-angular repo
+#      run: |
+#        test -d ../devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
