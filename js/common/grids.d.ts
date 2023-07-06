@@ -94,10 +94,10 @@ export type ApplyFilterMode = 'auto' | 'onClick';
 export type ApplyChangesMode = 'instantly' | 'onDemand';
 
 /**
+ * @hidden
  * @docid GridBaseColumn
  * @namespace DevExpress.common.grids
  * @type object
- * @hidden
  */
 export interface ColumnBase<TRowData = any> {
   /**
@@ -435,10 +435,10 @@ export interface ColumnBase<TRowData = any> {
 }
 
 /**
+ * @hidden
  * @docid GridBaseColumnButton
  * @namespace DevExpress.common.grids
  * @type object
- * @hidden
  */
 export interface ColumnButtonBase {
   /**
@@ -838,9 +838,9 @@ export interface DragStartEventInfo<TRowData = any> {
 }
 
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.common.grids
- * @hidden
  */
 export interface EditingBase<TRowData = any, TKey = any> {
   /**
@@ -923,9 +923,9 @@ export interface EditingBase<TRowData = any, TKey = any> {
 }
 
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.common.grids
- * @hidden
  */
 export interface EditingTextsBase {
   /**
@@ -2872,9 +2872,9 @@ export interface SavingInfo<TRowData = any, TKey = any> {
 }
 
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.common.grids
- * @hidden
  */
 export interface ScrollingBase {
   /**
@@ -2980,9 +2980,9 @@ export type SearchPanel = {
 export type SelectedFilterOperation = '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
 
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.common.grids
- * @hidden
  */
 export interface SelectionBase {
   /**
