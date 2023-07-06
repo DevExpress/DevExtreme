@@ -10,7 +10,7 @@ fixture`Agenda:KeyField`
 const hasWarningCode = (message) => message.startsWith('W1023');
 
 ['week', 'agenda'].forEach((currentView) => {
-  test(`Waring should be throw in console in case currentView='${currentView}'(T1100758)`, async (t) => {
+  test(`Warning should be thrown in console in case currentView='${currentView}'(T1100758)`, async (t) => {
     const messages = await t.getBrowserConsoleMessages();
 
     const isWarningExist = !!messages.warn.find(hasWarningCode);
@@ -26,7 +26,7 @@ const hasWarningCode = (message) => message.startsWith('W1023');
   });
 });
 
-test('Waring should be throw in console after set new views(T1100758)', async (t) => {
+test('Warning should be thrown in console after set new views(T1100758)', async (t) => {
   const messages = await t.getBrowserConsoleMessages();
   const isWarningExist = !!messages.warn.find(hasWarningCode);
   await t.expect(isWarningExist).notOk();
@@ -50,7 +50,7 @@ test('Waring should be throw in console after set new views(T1100758)', async (t
 // TODO
 // The matrix test to split, so it was not possible to achieve a working state matrix test
 
-test('Waring shouldn\'t be throw in console in case currentView=\'week\' if keyField exists(T1100758)', async (t) => {
+test('Warning shouldn\'t be thrown in console in case currentView=\'week\' if keyField exists(T1100758)', async (t) => {
   const messages = await t.getBrowserConsoleMessages();
 
   const isWarningExist = !!messages.warn.find(hasWarningCode);
@@ -72,7 +72,7 @@ test('Waring shouldn\'t be throw in console in case currentView=\'week\' if keyF
   });
 });
 
-test('Waring shouldn\'t be throw in console in case currentView=\'agenda\' if keyField exists(T1100758)', async (t) => {
+test('Warning shouldn\'t be thrown in console in case currentView=\'agenda\' if keyField exists(T1100758)', async (t) => {
   const messages = await t.getBrowserConsoleMessages();
 
   const isWarningExist = !!messages.warn.find(hasWarningCode);
@@ -97,7 +97,7 @@ test('Waring shouldn\'t be throw in console in case currentView=\'agenda\' if ke
 //
 
 ['week', 'agenda'].forEach((currentView) => {
-  test(`Waring should be throw in console in case currentView='${currentView}' if keyField not set in Store(T1100758)`, async (t) => {
+  test(`Warning should be thrown in console in case currentView='${currentView}' if keyField not set in Store(T1100758)`, async (t) => {
     const messages = await t.getBrowserConsoleMessages();
 
     const isWarningExist = !!messages.warn.find(hasWarningCode);
