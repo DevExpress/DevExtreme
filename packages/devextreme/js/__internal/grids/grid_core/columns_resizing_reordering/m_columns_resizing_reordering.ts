@@ -616,7 +616,43 @@ const isNextColumnResizingMode = function (that) {
   return that.option('columnResizingMode') !== 'widget';
 };
 
-const ColumnsResizerViewController = modules.ViewController.inherit({
+class ColumnsResizerViewController extends modules.ViewController {
+  private _columnHeadersView: any;
+
+  private _$parentContainer: any;
+
+  private readonly _targetPoint: any;
+
+  private _resizingInfo: any;
+
+  private _columnsController: any;
+
+  private _pointsByColumns: any;
+
+  private _moveSeparatorHandler: any;
+
+  private _startResizingHandler: any;
+
+  private _endResizingHandler: any;
+
+  private _columnsSeparatorView: any;
+
+  private _rowsView: any;
+
+  private readonly _scrollRight: any;
+
+  private _subscribesToCallbacks: any;
+
+  private readonly _isResizing: any;
+
+  private _scrollLeft: any;
+
+  private _trackerView: any;
+
+  private _tablePositionController: any;
+
+  private _draggingHeaderView: any;
+
   _isHeadersRowArea(posY) {
     if (this._columnHeadersView) {
       const element = this._columnHeadersView.element();
@@ -628,11 +664,11 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
       }
     }
     return false;
-  },
+  }
 
   _isRtlParentStyle() {
     return this.option('rtlEnabled') && this._$parentContainer?.parent().css('direction') === 'rtl';
-  },
+  }
 
   _pointCreated(point, cellsLength, columns) {
     const isNextColumnMode = isNextColumnResizingMode(this);
@@ -648,7 +684,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     }
 
     return true;
-  },
+  }
 
   _getTargetPoint(pointsByColumns, currentX, deltaX) {
     if (pointsByColumns) {
@@ -662,7 +698,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
       }
     }
     return null;
-  },
+  }
 
   _moveSeparator(args) {
     const e = args.event;
@@ -719,7 +755,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         that._columnsSeparatorView.moveByX(null);
       }
     }
-  },
+  }
 
   _endResizing(args) {
     const e = args.event;
@@ -737,11 +773,11 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
       that._isReadyResizing = false;
       that._isResizing = false;
     }
-  },
+  }
 
   _getNextColumnIndex(currentColumnIndex) {
     return currentColumnIndex + 1;
-  },
+  }
 
   _setupResizingInfo(posX) {
     const that = this;
@@ -757,7 +793,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
       nextColumnIndex,
       nextColumnWidth: nextHeader && nextHeader.length > 0 ? getBoundingRect(nextHeader[0]).width : 0,
     };
-  },
+  }
 
   _startResizing(args) {
     const e = args.event;
@@ -803,7 +839,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     if (this.isResizing()) {
       this.getController('editorFactory').loseFocus();
     }
-  },
+  }
 
   _generatePointsByColumns() {
     const that = this;
@@ -816,7 +852,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     }
 
     that._pointsByColumns = pointsByColumns;
-  },
+  }
 
   _unsubscribeFromEvents() {
     this._moveSeparatorHandler && eventsEngine.off(domAdapter.getDocument(), addNamespace(pointerEvents.move, MODULE_NAMESPACE), this._moveSeparatorHandler);
@@ -825,7 +861,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
       eventsEngine.off(this._columnsSeparatorView.element(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
       eventsEngine.off(domAdapter.getDocument(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
     }
-  },
+  }
 
   _subscribeToEvents() {
     this._moveSeparatorHandler = this.createAction(this._moveSeparator);
@@ -836,7 +872,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     eventsEngine.on(this._$parentContainer, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this, this._startResizingHandler);
     eventsEngine.on(this._columnsSeparatorView.element(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
     eventsEngine.on(domAdapter.getDocument(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
-  },
+  }
 
   _updateColumnsWidthIfNeeded(posX) {
     let deltaX;
@@ -972,14 +1008,14 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
 
         const scrollable = this.component.getScrollable();
         if (scrollable && isRtlParentStyle) {
-          const left = getWidth(scrollable.$content()) - getWidth(scrollable.container()) - this._scrollRight;
+          const left = getWidth((scrollable as any).$content()) - getWidth((scrollable as any).container()) - this._scrollRight;
           scrollable.scrollTo({ left });
         }
       }
     }
 
     return needUpdate;
-  },
+  }
 
   _subscribeToCallback(callback, handler) {
     callback.add(handler);
@@ -987,7 +1023,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
       callback,
       handler,
     });
-  },
+  }
 
   _unsubscribeFromCallbacks() {
     for (let i = 0; i < this._subscribesToCallbacks.length; i++) {
@@ -996,12 +1032,12 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     }
 
     this._subscribesToCallbacks = [];
-  },
+  }
 
   _unsubscribes() {
     this._unsubscribeFromEvents();
     this._unsubscribeFromCallbacks();
-  },
+  }
 
   _init() {
     const that = this;
@@ -1017,13 +1053,18 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
       }
     };
 
+    // @ts-expect-error
     that._columnsSeparatorView = that.getView('columnsSeparatorView');
+    // @ts-expect-error
     that._columnHeadersView = that.getView('columnHeadersView');
+    // @ts-expect-error
     that._trackerView = that.getView('trackerView');
     that._rowsView = that.getView('rowsView');
     that._columnsController = that.getController('columns');
+    // @ts-expect-error
     that._tablePositionController = that.getController('tablePosition');
     that._$parentContainer = that.component.$element();
+    // @ts-expect-error
     that._draggingHeaderView = that.component.getView('draggingHeaderView');
 
     that._subscribeToCallback(that._columnHeadersView.renderCompleted, generatePointsByColumnsHandler);
@@ -1040,6 +1081,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
     let previousScrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
     let previousTableHeight = 0;
 
+    // @ts-expect-error
     that._subscribeToCallback(that.getController('tablePosition').positionChanged, (e) => {
       if (that._isResizing && !that._rowsView.isResizing) {
         const scrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
@@ -1054,10 +1096,10 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
       }
       previousTableHeight = e.height;
     });
-  },
+  }
 
   optionChanged(args) {
-    this.callBase(args);
+    super.optionChanged(args);
 
     if (args.name === 'allowColumnResizing') {
       if (args.value) {
@@ -1067,18 +1109,18 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         this._unsubscribes();
       }
     }
-  },
+  }
 
   isResizing() {
     return this._isResizing;
-  },
+  }
 
   init() {
     this._subscribesToCallbacks = [];
     if (allowResizing(this)) {
       this._init();
     }
-  },
+  }
 
   pointsByColumns(value) {
     if (value !== undefined) {
@@ -1089,13 +1131,13 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
       }
       return this._pointsByColumns;
     }
-  },
+  }
 
   dispose() {
     this._unsubscribes();
-    this.callBase();
-  },
-});
+    super.dispose();
+  }
+}
 
 const TablePositionViewController = modules.ViewController.inherit({
   update(top) {
