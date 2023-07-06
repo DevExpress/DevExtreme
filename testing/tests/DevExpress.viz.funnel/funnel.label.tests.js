@@ -1254,6 +1254,7 @@ QUnit.test('Redraw hidden labels on resize', function(assert) {
 
     labels.forEach((l, i) => {
         l.stub('isVisible').returns(i !== 1);
+
         l.draw.reset();
     });
 
