@@ -15,6 +15,7 @@ import '../../helpers/ignoreQuillTimers.js';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/tag_box';
+import 'ui/date_range_box';
 
 const INVALID_CLASS = 'dx-invalid';
 const VALIDATION_SUMMARY_ITEM_CLASS = 'dx-validationsummary-item';
@@ -438,7 +439,8 @@ QUnit.test('validate -> resetValues when there are invalid validation rules', fu
     form.validate();
 
     formItems.forEach(item => assert.strictEqual(form.getEditor(item.dataField).option('isValid'), false, 'form.getEditor.' + item.dataField));
-    assert.equal(findInvalidElements$(form).length, formItems.length, 'There are all the invalid elements');
+    // Note: DateRangeBox includes 3 invalid element: root and two nested Dateboxes
+    assert.equal(findInvalidElements$(form).length, formItems.length + 2, 'There are all the invalid elements');
     assert.equal(findInvalidSummaryElements$(form).length, formItems.length, 'There are all the validation summary items');
     assert.equal(validationCallbackLog.length, formItems.length, 'validationCallbackLog on validate');
 
