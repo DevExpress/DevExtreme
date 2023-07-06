@@ -1139,7 +1139,20 @@ class ColumnsResizerViewController extends modules.ViewController {
   }
 }
 
-const TablePositionViewController = modules.ViewController.inherit({
+class TablePositionViewController extends modules.ViewController {
+  private _columnHeadersView: any;
+
+  private _rowsView: any;
+
+  private readonly positionChanged: any;
+
+  private _pagerView: any;
+
+  constructor(component) {
+    super(component);
+    this.positionChanged = Callbacks();
+  }
+
   update(top) {
     const that = this;
     const params: any = {};
@@ -1151,6 +1164,7 @@ const TablePositionViewController = modules.ViewController.inherit({
     const scrollBarWidth = that._rowsView.getScrollbarWidth(true);
     const rowsHeight = that._rowsView ? that._rowsView.height() - scrollBarWidth : 0;
     const columnsResizerController = that.component.getController('columnsResizer');
+    // @ts-expect-error
     const draggingHeaderView = that.component.getView('draggingHeaderView');
 
     params.height = columnsHeadersHeight;
@@ -1166,15 +1180,17 @@ const TablePositionViewController = modules.ViewController.inherit({
     }
 
     that.positionChanged.fire(params);
-  },
+  }
 
   init() {
     const that = this;
 
-    that.callBase();
+    super.init();
 
+    // @ts-expect-error
     that._columnHeadersView = this.getView('columnHeadersView');
     that._rowsView = this.getView('rowsView');
+    // @ts-expect-error
     that._pagerView = this.getView('pagerView');
 
     that._rowsView.resizeCompleted.add(() => {
@@ -1184,13 +1200,8 @@ const TablePositionViewController = modules.ViewController.inherit({
         that.update(targetPoint ? targetPoint.y : null);
       }
     });
-  },
-
-  ctor(component) {
-    this.callBase(component);
-    this.positionChanged = Callbacks();
-  },
-});
+  }
+}
 
 const DraggingHeaderViewController = modules.ViewController.inherit({
   _generatePointsByColumns(options) {
