@@ -97,7 +97,6 @@ jobs:
 
     - name: Prepare artifacts
       run: |
-#        mkdir -p ./artifacts/npm
         cp ./packages/devextreme/testing/renovation-npm/${{ matrix.framework }}-app/devextreme-installer.tgz ./packages/devextreme/artifacts/npm/devextreme.tgz
         cd ./packages/devextreme/artifacts/npm
         tar -xzf devextreme.tgz
