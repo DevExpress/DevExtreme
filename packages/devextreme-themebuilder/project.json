@@ -14,7 +14,9 @@
         "{projectRoot}/tests"
       ],
       "outputs": [
-        "{projectRoot}/dist"
+        "{projectRoot}/dist",
+        "{projectRoot}/src/data/metadata",
+        "{projectRoot}/src/data/scss"
       ]
     }
   },
