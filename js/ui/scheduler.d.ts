@@ -180,6 +180,7 @@ export type AppointmentDraggingEndEvent = Cancelable & AppointmentDraggingEvent 
   readonly fromComponent?: dxSortable | dxDraggable;
   readonly toComponent?: dxSortable | dxDraggable;
   readonly toData?: any;
+  readonly toItemData?: any;
 };
 
 /** @public */
