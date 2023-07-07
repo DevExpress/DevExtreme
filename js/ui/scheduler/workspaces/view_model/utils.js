@@ -1,3 +1,4 @@
+import dateUtils from '../../../../core/utils/date';
 import { VIEWS } from '../../constants';
 import { ViewDataGenerator } from './view_data_generator';
 import { ViewDataGeneratorDay } from './view_data_generator_day';
@@ -48,14 +49,8 @@ export function alignToLastDayOfWeek(date, firstDayOfWeek) {
     return newDate;
 }
 
-function resetDateTime(date) {
-    const dateCopy = new Date(date);
-    dateCopy.setHours(0, 0, 0, 0);
-    return dateCopy;
-}
-
 export function calculateDaysBetweenDates(fromDate, toDate) {
-    const msDiff = resetDateTime(toDate).getTime() - resetDateTime(fromDate).getTime();
+    const msDiff = dateUtils.trimTime(toDate).getTime() - dateUtils.trimTime(fromDate).getTime();
     return Math.round(msDiff / MS_IN_DAY) + 1;
 }
 
