@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { createFunnel, stubAlgorithm, checkNumbersWithError } from './commonParts/common.js';
 import labelModule from 'viz/series/points/label';
 import { labelEnvironment } from './commonParts/label.js';
-import { logger } from 'core/utils/console';
 
 QUnit.module('Initialization with stubs', labelEnvironment);
 
