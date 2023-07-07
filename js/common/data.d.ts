@@ -14,6 +14,7 @@ export type CustomStoreGroupItem<
 type CustomStoreLoadedArray<TItem = any> = Array<TItem> | Array<CustomStoreGroupItem<TItem>>;
 
 /**
+ * @docid
  * @public
  */
 export type CustomStoreLoadedSummary<TItem = any> = {
@@ -36,16 +37,19 @@ export type CustomStoreLoadResult<
   | CustomStoreLoadedSummary<TItem>;
 
 /**
+ * @docid
  * @public
  */
 export function isCustomStoreSummary<TItem>(res: CustomStoreLoadResult<TItem>): res is CustomStoreLoadedSummary<TItem>;
 
 /**
+ * @docid
  * @public
  */
 export function isCustomStoreGroupItemsArray<TItem>(res: CustomStoreLoadResult<TItem>): res is Array<CustomStoreGroupItem<TItem>>;
 
 /**
+ * @docid
  * @public
  */
 export function isCustomStoreItemsArray<TItem>(res: CustomStoreLoadResult<TItem>): res is Array<TItem>;
