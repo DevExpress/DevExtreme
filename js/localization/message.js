@@ -8,7 +8,10 @@ import { defaultMessages } from './default_messages';
 const baseDictionary = extend(true, {}, defaultMessages);
 
 const getDataByLocale = (localeData, locale) => {
-    return localeData[locale] || {};
+    return localeData[locale]
+        || Object.entries(localeData).find(
+            ([key,]) => key.toLowerCase() === locale.toLowerCase())?.[1]
+        || {};
 };
 
 const newMessages = {};
