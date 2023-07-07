@@ -4047,3 +4047,27 @@ test('DataGrid - "Maximum call stack size exceeded" error occurs on navigating s
     pageSize: 3,
   },
 }));
+test('DataGrid - focusedRowIndex is -1 when the first data cell is focused with the keyboard (T1175896)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .click(dataGrid.getSearchBox().input)
+    .pressKey('tab tab tab')
+    .pressKey('enter')
+
+    .expect(Selector('#otherContainer').innerText)
+    .eql('0');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(1, 2),
+  keyExpr: 'field_0',
+  showBorders: true,
+  searchPanel: {
+    visible: true,
+  },
+  onKeyDown(e) {
+    const eventKey = e.event.key.toLowerCase();
+    if (eventKey === 'enter') {
+      const focusedRowIndex = e.component.option('focusedRowIndex');
+      ($('#otherContainer') as any).text(focusedRowIndex);
+    }
+  },
+}));
