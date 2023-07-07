@@ -194,6 +194,12 @@ export class KeyboardNavigationController extends modules.ViewController {
           eventsEngine.trigger($focusedCell, 'focus');
         }
       }
+
+      const isCell = $element.is('td');
+      const needSetFocusPosition = (this.option('focusedRowIndex') ?? -1) < 0;
+      if (isCell && needSetFocusPosition) {
+        this._updateFocusedCellPosition($element);
+      }
     };
 
     this._rowsView.renderCompleted.add((e) => {
