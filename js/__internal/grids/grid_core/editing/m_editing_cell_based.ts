@@ -572,8 +572,9 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   prepareEditButtons(headerPanel) {
     const editingOptions: any = this.option('editing') ?? {};
     const buttonItems = super.prepareEditButtons(headerPanel);
+    const needEditingButtons = editingOptions.allowUpdating || editingOptions.allowAdding || editingOptions.allowDeleting;
 
-    if ((editingOptions.allowUpdating || editingOptions.allowAdding || editingOptions.allowDeleting) && this.isBatchEditMode()) {
+    if (needEditingButtons && this.isBatchEditMode()) {
       buttonItems.push(this.prepareButtonItem(headerPanel, 'save', 'saveEditData', 21));
       buttonItems.push(this.prepareButtonItem(headerPanel, 'revert', 'cancelEditData', 22));
     }

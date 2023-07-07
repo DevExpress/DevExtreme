@@ -477,7 +477,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             export: {
                 enabled: true,
                 allowExportSelectedData: true
-            }
+            },
+            columns: ['field1']
         });
 
         $('.dx-datagrid-export-button .dx-button').trigger('dxclick');
