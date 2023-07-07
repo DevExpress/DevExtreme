@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Export button`
   .page(url(__dirname, '../container.html'));
@@ -103,4 +104,63 @@ test('allowExportSelectedData: true, menu: true', async (t) => {
     formats: ['xlsx', 'pdf'],
   },
   width: 30,
+}));
+
+safeSizeTest('Export is disabled when no data columns is in grid header, menu: false', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(await takeScreenshot('disabled-export_when-no-columns-visible.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{ value: 1 }],
+  groupPanel: {
+    visible: true,
+  },
+  columns: [
+    { dataField: 'value', groupIndex: 0 },
+  ],
+  export: {
+    enabled: true,
+    allowExportSelectedData: true,
+    formats: ['xlsx', 'pdf'],
+  },
+}));
+
+safeSizeTest('Export is disabled when no data columns is in grid header, menu: true', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const dataGrid = new DataGrid('#container');
+  const headerPanel = dataGrid.getHeaderPanel();
+
+  await t.click(headerPanel.getDropDownMenuButton());
+
+  await t
+    .expect(await takeScreenshot('disabled-export-in-menu_when-no-columns-visible.png', 'html'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{ value: 1 }],
+  columns: [
+    { dataField: 'value', visible: false },
+  ],
+  columnChooser: {
+    enabled: true,
+  },
+  toolbar: {
+    items: [
+      { name: 'exportButton', locateInMenu: 'always' },
+      { name: 'columnChooserButton', locateInMenu: 'always' },
+    ],
+  },
+  export: {
+    enabled: true,
+    allowExportSelectedData: true,
+    formats: ['xlsx', 'pdf'],
+  },
 }));

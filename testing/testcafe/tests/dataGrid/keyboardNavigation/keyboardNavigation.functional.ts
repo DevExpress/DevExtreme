@@ -4,6 +4,7 @@ import createWidget from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import CommandCell from '../../../model/dataGrid/commandCell';
 import { ClassNames } from '../../../model/dataGrid/classNames';
+import { getData } from '../helpers/generateDataSourceData';
 
 const CLASS = ClassNames;
 
@@ -2493,7 +2494,7 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     .expect(dataGrid.option('focusedColumnIndex'))
     .eql(0);
 }).before(async () => {
-  const getData = (): Record<string, unknown>[] => {
+  const getTestData = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
     for (let i = 0; i < 100; i += 1) {
       items.push({
@@ -2505,7 +2506,7 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     return items;
   };
   await createWidget('dxDataGrid', {
-    dataSource: getData(),
+    dataSource: getTestData(),
     keyExpr: 'ID',
     remoteOperations: true,
     height: 300,
@@ -2601,6 +2602,15 @@ test('All rows should be focused on arrow-up/down when virtual scrolling enabled
 
   // assert
   await t
+    .expect(dataGrid.getGroupFooterRow().focused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
     .expect(dataGrid.getGroupRow(1).element.focused)
     .ok()
     .expect(dataGrid.getGroupRow(1).isFocused)
@@ -2626,6 +2636,15 @@ test('All rows should be focused on arrow-up/down when virtual scrolling enabled
     .expect(dataGrid.getGroupRow(1).element.focused)
     .ok()
     .expect(dataGrid.getGroupRow(1).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupFooterRow().focused)
     .ok();
 
   // act
@@ -3974,5 +3993,81 @@ test('DataGrid - An exception should not throw after pressing the space key in a
   },
   selection: {
     mode: 'single',
+  },
+}));
+
+test('DataGrid - "Maximum call stack size exceeded" error occurs on navigating summary items in the group footer via arrow keys (T1175253)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getSearchBox().input)
+    .pressKey('tab tab tab tab tab tab tab tab tab tab');
+
+  // assert
+  await t
+    .expect(Selector(':focus').innerText)
+    .eql('2');
+
+  // act
+  await t
+    .click(dataGrid.getGroupFooterRow())
+    .pressKey('left left left tab shift+tab');
+
+  // assert
+  await t
+    .expect((await Selector(':focus').innerText).trim())
+    .eql('Total: 1');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(3, 3),
+  keyExpr: 'field_0',
+  showBorders: true,
+  columns: [{
+    dataField: 'field_0',
+    groupIndex: 0,
+  }, {
+    dataField: 'field_1',
+  }, {
+    dataField: 'field_2',
+  }],
+  summary: {
+    groupItems: [{
+      column: 'field_2',
+      summaryType: 'count',
+      displayFormat: 'Total: {0}',
+      showInGroupFooter: true,
+    }],
+  },
+  searchPanel: {
+    visible: true,
+    width: 240,
+    placeholder: 'Search...',
+  },
+  paging: {
+    pageSize: 3,
+  },
+}));
+test('DataGrid - focusedRowIndex is -1 when the first data cell is focused with the keyboard (T1175896)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .click(dataGrid.getSearchBox().input)
+    .pressKey('tab tab tab')
+    .pressKey('enter')
+
+    .expect(Selector('#otherContainer').innerText)
+    .eql('0');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(1, 2),
+  keyExpr: 'field_0',
+  showBorders: true,
+  searchPanel: {
+    visible: true,
+  },
+  onKeyDown(e) {
+    const eventKey = e.event.key.toLowerCase();
+    if (eventKey === 'enter') {
+      const focusedRowIndex = e.component.option('focusedRowIndex');
+      ($('#otherContainer') as any).text(focusedRowIndex);
+    }
   },
 }));

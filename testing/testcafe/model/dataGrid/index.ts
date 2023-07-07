@@ -17,11 +17,13 @@ import { Overlay } from './overlay';
 import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
+import TextBox from '../textBox';
 
 export const CLASS = {
   dataGrid: 'dx-datagrid',
   headers: 'headers',
   headerPanel: 'header-panel',
+  searchBox: 'dx-searchbox',
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
   columnChooser: 'column-chooser',
@@ -39,6 +41,7 @@ export const CLASS = {
 
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
+  groupFooterRow: 'group-footer',
 
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
@@ -173,6 +176,10 @@ export default class DataGrid extends Widget {
     return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor());
   }
 
+  getSearchBox(): TextBox {
+    return new TextBox(this.element.find(`.${CLASS.searchBox}`));
+  }
+
   getOverlay(): Overlay {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
   }
@@ -191,6 +198,10 @@ export default class DataGrid extends Widget {
 
   getFooterRow(): Selector {
     return this.element.find(`.${CLASS.footerRow}`);
+  }
+
+  getGroupFooterRow(): Selector {
+    return this.element.find(`.${CLASS.dataGrid}-${CLASS.groupFooterRow}`);
   }
 
   getColumnChooser(): ColumnChooser {
