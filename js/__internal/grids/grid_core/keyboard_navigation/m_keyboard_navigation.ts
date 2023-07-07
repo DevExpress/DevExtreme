@@ -196,7 +196,8 @@ export class KeyboardNavigationController extends modules.ViewController {
       }
 
       const isCell = $element.is('td');
-      if (isCell) {
+      const needSetFocusPosition = (this.option('focusedRowIndex') ?? -1) < 0;
+      if (isCell && needSetFocusPosition) {
         this._updateFocusedCellPosition($element);
       }
     };
