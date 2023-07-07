@@ -1231,16 +1231,15 @@ class DraggingHeaderViewController extends modules.ViewController {
   _pointCreated(point, columns, location, sourceColumn) {
     const targetColumn = columns[point.columnIndex];
     const prevColumn = columns[point.columnIndex - 1];
-    const nextColumn = columns[point.columnIndex + 1];
 
     const isColumnAfterExpandColumn = prevColumn?.command === 'expand';
-    const isLastExpandColumn = targetColumn?.command === 'expand' && nextColumn?.command !== 'expand';
+    const isFirstExpandColumn = targetColumn?.command === 'expand' && prevColumn?.command !== 'expand';
 
     switch (location) {
       case 'columnChooser':
         return true;
       case 'headers':
-        return !isLastExpandColumn && (isColumnAfterExpandColumn || (sourceColumn && !sourceColumn.allowReordering) || (!targetColumn || !targetColumn.allowReordering) && (!prevColumn || !prevColumn.allowReordering));
+        return !isFirstExpandColumn && (isColumnAfterExpandColumn || (sourceColumn && !sourceColumn.allowReordering) || (!targetColumn || !targetColumn.allowReordering) && (!prevColumn || !prevColumn.allowReordering));
       default:
         return columns.length === 0;
     }
