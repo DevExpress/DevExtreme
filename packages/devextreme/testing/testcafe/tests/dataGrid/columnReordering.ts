@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -128,4 +128,43 @@ test('The separator should display correctly when dragging column', async (t) =>
   ],
   allowColumnReordering: true,
   allowColumnResizing: true,
+}));
+
+test.only('column separator should work properly with expand columns', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.dragToElement(
+    Selector('.dx-group-panel-item').nth(0),
+    Selector('.dx-header-row').find('td').nth(2),
+  );
+
+  await t.debug();
+}).before(async () => createWidget('dxDataGrid', {
+  width: 800,
+  dataSource: [
+    {
+      field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
+    },
+  ],
+  groupPanel: {
+    visible: true,
+  },
+  columns: [
+    {
+      dataField: 'field1',
+      width: 200,
+      groupIndex: 0,
+    }, {
+      dataField: 'field2',
+      width: 200,
+      groupIndex: 1,
+    }, {
+      dataField: 'field3',
+      width: 200,
+    }, {
+      dataField: 'field4',
+      width: 200,
+    },
+  ],
+  allowColumnReordering: true,
 }));
