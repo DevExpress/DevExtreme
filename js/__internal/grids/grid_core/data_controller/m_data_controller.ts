@@ -1366,7 +1366,6 @@ export class DataController extends ControllerWithDataMixin {
           isCustomLoading: true,
           storeLoadOptions: { isLoadingAll: true },
           loadOptions: {
-            filter: that.getCombinedFilter(),
             group: dataSource.group(),
             sort: dataSource.sort(),
           },

@@ -591,7 +591,7 @@ export class ExportController extends dataGridCore.ViewController {
 
   _getSelectedItems() {
     const selectionController = this.getController('selection');
-    const selectedRowData = selectionController.getSelectedRowsData();
+    const selectedRowData = selectionController.loadSelectedItemsWithFilter();
 
     return this._getAllItems(selectedRowData);
   }

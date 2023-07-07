@@ -44,7 +44,7 @@ export const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
         const filterExpr = this.getExpr(keyExpr);
         let combinedFilter = filterExpr;
 
-        if(forceCombinedFilter || (isSelectAll && dataSourceFilter)) {
+        if((forceCombinedFilter || isSelectAll) && dataSourceFilter) {
             if(filterExpr) {
                 combinedFilter = [];
                 combinedFilter.push(filterExpr);
