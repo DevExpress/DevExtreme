@@ -1396,6 +1396,9 @@ declare module DevExpress.common {
   type CustomStoreLoadedArray<TItem = any> =
     | Array<TItem>
     | Array<CustomStoreGroupItem<TItem>>;
+  /**
+   * [descr:CustomStoreLoadedSummary]
+   */
   export type CustomStoreLoadedSummary<TItem = any> = {
     data: Array<TItem> | Array<CustomStoreGroupItem<TItem>>;
     totalCount?: number;
@@ -1558,12 +1561,21 @@ declare module DevExpress.common {
   };
   export type HorizontalAlignment = 'center' | 'left' | 'right';
   export type HorizontalEdge = 'left' | 'right';
+  /**
+   * [descr:isCustomStoreGroupItemsArray]
+   */
   export function isCustomStoreGroupItemsArray<TItem>(
     res: CustomStoreLoadResult<TItem>
   ): res is Array<CustomStoreGroupItem<TItem>>;
+  /**
+   * [descr:isCustomStoreItemsArray]
+   */
   export function isCustomStoreItemsArray<TItem>(
     res: CustomStoreLoadResult<TItem>
   ): res is Array<TItem>;
+  /**
+   * [descr:isCustomStoreSummary]
+   */
   export function isCustomStoreSummary<TItem>(
     res: CustomStoreLoadResult<TItem>
   ): res is CustomStoreLoadedSummary<TItem>;
