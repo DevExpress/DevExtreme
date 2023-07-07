@@ -39,9 +39,10 @@ jobs:
           DEVEXTREME_TEST_CI: "true"
           DOTNET_CLI_TELEMETRY_OPTOUT: "true"
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+        working-directory: ./packages/devextreme
         run: |
-          npx nx build:dev devextreme-root
-          npx nx build:systemjs devextreme-root
+          npm run build:dev
+          npm run build:systemjs
 
       - name: Zip artifacts
         working-directory: ./packages/devextreme
