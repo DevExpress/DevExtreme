@@ -5,6 +5,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { touch } from '@js/core/utils/support';
 import { isDefined } from '@js/core/utils/type';
+import { applyBatch } from '@js/data/array_utils';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import holdEvent from '@js/events/hold';
@@ -117,6 +118,11 @@ const SelectionController = modules.Controller.inherit((function () {
     },
 
     _handleDataPushed(changes) {
+      this._deselectRemovedOnPush(changes);
+      this._updateSelectedOnPush(changes);
+    },
+
+    _deselectRemovedOnPush(changes) {
       let removedKeys = changes
         .filter((change) => change.type === 'remove')
         .map((change) => change.key);
@@ -131,6 +137,16 @@ const SelectionController = modules.Controller.inherit((function () {
       }
 
       removedKeys.length && this.deselectRows(removedKeys);
+    },
+
+    _updateSelectedOnPush(changes) {
+      const updateChanges = changes.filter((change) => change.type === 'update');
+
+      applyBatch({
+        keyInfo: this._selection.options,
+        data: this.getSelectedRowsData(),
+        changes: updateChanges,
+      } as any);
     },
 
     _getSelectionConfig() {
