@@ -19,7 +19,8 @@
         "{projectRoot}/testing",
         "!{projectRoot}/testing/*.txt",
         "!{projectRoot}/testing/*.xml",
-        "{projectRoot}/ts"
+        "{projectRoot}/ts",
+        "{projectRoot}/*.js"
       ],
       "outputs": [
         "{projectRoot}/artifacts/internal-tools",
