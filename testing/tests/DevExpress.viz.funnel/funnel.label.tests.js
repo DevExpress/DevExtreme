@@ -1302,16 +1302,10 @@ QUnit.test('change resolveLabelOverlapping option', function(assert) {
     assert.ok(label.shift.called);
 });
 
-QUnit.module('Initialization', {
-    beforeEach: function() {
-        this.loggerErrorSpy = sinon.spy(logger, 'error');
-    },
-    afterEach: function() {
-        this.loggerErrorSpy.restore();
-    }
-}, () => {
-    [true, false].forEach((showForZeroValues) => {
-        QUnit.test(`should not fail when showForZeroValues==${showForZeroValues} and datasource contains zero values (T1172293)`, function(assert) {
+QUnit.module('Initialization');
+[true, false].forEach((showForZeroValues) => {
+    QUnit.test(`should not fail when showForZeroValues==${showForZeroValues} and datasource contains zero values (T1172293)`, function(assert) {
+        try {
             createFunnel({
                 algorithm: 'dynamicHeight',
                 showForZeroValues,
@@ -1325,32 +1319,33 @@ QUnit.module('Initialization', {
                 inverted: true,
                 sortData: false,
             });
+            assert.ok(true);
+        } catch(e) {
+            assert.ok(false, 'exception raised: ' + e.message);
+        }
+    });
+});
 
-            assert.strictEqual(this.loggerErrorSpy.callCount, 0);
-        });
+QUnit.test('should run with correctly translated labels when datasource contains zero values', function(assert) {
+    const widget = createFunnel({
+        algorithm: 'dynamicHeight',
+        dataSource: [
+            { count: 1, level: 'Junior Engineer' },
+            { count: 0, level: 'Senior Engineer' },
+            { count: 1, level: 'Mid-Level Engineer' },
+            { count: 99, level: 'Architect' }
+        ],
+        valueField: 'count',
+        inverted: true,
+        sortData: false,
     });
 
-    QUnit.test('should run with correctly translated labels when datasource contains zero values', function(assert) {
-        const widget = createFunnel({
-            algorithm: 'dynamicHeight',
-            dataSource: [
-                { count: 1, level: 'Junior Engineer' },
-                { count: 0, level: 'Senior Engineer' },
-                { count: 1, level: 'Mid-Level Engineer' },
-                { count: 99, level: 'Architect' }
-            ],
-            valueField: 'count',
-            inverted: true,
-            sortData: false,
-        });
+    const labels = widget._labels;
 
-        const labels = widget._labels;
+    const maxAllowedDelta = 3;
 
-        const maxAllowedDelta = 3;
-
-        assert.ok(checkNumbersWithError(labels[0]._insideGroup._settings.translateY, 393, maxAllowedDelta));
-        assert.strictEqual(labels[1]._insideGroup._settings.translateY, undefined);
-        assert.ok(checkNumbersWithError(labels[2]._insideGroup._settings.translateY, 370, maxAllowedDelta));
-        assert.ok(checkNumbersWithError(labels[3]._insideGroup._settings.translateY, 347, maxAllowedDelta));
-    });
+    assert.ok(checkNumbersWithError(labels[0]._insideGroup._settings.translateY, 393, maxAllowedDelta));
+    assert.strictEqual(labels[1]._insideGroup._settings.translateY, undefined);
+    assert.ok(checkNumbersWithError(labels[2]._insideGroup._settings.translateY, 370, maxAllowedDelta));
+    assert.ok(checkNumbersWithError(labels[3]._insideGroup._settings.translateY, 347, maxAllowedDelta));
 });
