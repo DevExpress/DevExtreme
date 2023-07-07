@@ -41,7 +41,7 @@ const transpileModules = async() => {
         transpileFile(filePath, filePath.replace('/transpiled', '/transpiled-systemjs'));
     });
 
-    const infernoPath = path.join(root, 'node_modules/@devextreme/runtime/esm/inferno');
+    const infernoPath = path.dirname(require.resolve('@devextreme/runtime/esm/inferno'));
     const listRuntimeFiles = getFileList(infernoPath);
 
     // eslint-disable-next-line no-restricted-syntax
@@ -169,11 +169,11 @@ const transpileWithBabel = async(sourceCode, destPath) => {
 const transpileIntl = async() => {
     const listIntlFiles = [
         {
-            filePath: path.join(root, 'node_modules/intl/lib/core.js'),
+            filePath: require.resolve('intl/lib/core.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/intl/intl.js'),
         },
         {
-            filePath: path.join(root, 'node_modules/intl/locale-data/complete.js'),
+            filePath: require.resolve('intl/locale-data/complete.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/intl/intl.complete.js'),
         },
     ];
@@ -210,11 +210,11 @@ const transpileIntl = async() => {
 const transpileJsVendors = async() => {
     const pluginsList = [
         {
-            filePath: path.join(root, 'node_modules/systemjs-plugin-css/css.js'),
+            filePath: require.resolve('systemjs-plugin-css/css.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/css.js'),
         },
         {
-            filePath: path.join(root, 'node_modules/systemjs-plugin-json/json.js'),
+            filePath: require.resolve('systemjs-plugin-json/json.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/json.js'),
         },
     ];
@@ -234,7 +234,7 @@ const transpileJsVendors = async() => {
     );
 
     await Promise.all(
-        getFileList(path.join(root, 'node_modules/angular')).map((filePath) => {
+        getFileList(path.dirname(require.resolve('angular'))).map((filePath) => {
             return transpileFile(
                 filePath,
                 filePath.replace('node_modules', 'artifacts/js-systemjs'),
@@ -245,14 +245,14 @@ const transpileJsVendors = async() => {
     await transpileIntl();
 
     await transpileFile(
-        path.join(root, 'node_modules/knockout/build/output/knockout-latest.debug.js'),
+        require.resolve('knockout/build/output/knockout-latest.debug.js'),
         path.join(root, 'artifacts/js-systemjs/knockout.js')
     );
 
 
     [].concat(
-        getFileList(path.join(root, 'node_modules/devextreme-cldr-data')),
-        getFileList(path.join(root, 'node_modules/cldr-core/supplemental'))
+        getFileList(path.join(root, '../..', 'node_modules/devextreme-cldr-data')),
+        getFileList(path.join(root, '../..', 'node_modules/cldr-core/supplemental'))
     )
         .filter(filePath => filePath.endsWith('.json'))
         .forEach((filePath) => {
