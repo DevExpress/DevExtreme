@@ -60,7 +60,7 @@ export interface CustomStoreOptions<
     /**
      * @docid
      * @type_function_param1 options:LoadOptions
-     * @type_function_return Promise<Array<any>|object>|Array<any>
+     * @type_function_return CustomStoreLoadResult|Promise<CustomStoreLoadResult>
      * @public
      */
     load: (options: LoadOptions<TItem>) => LoadResult<CustomStoreLoadResult<TItem>>;
@@ -137,7 +137,7 @@ export default class CustomStore<
      * @docid
      * @publicName load(options)
      * @param1 options:LoadOptions
-     * @return Promise<any>
+     * @return Promise<CustomStoreLoadResult>
      * @public
      */
     load(options: LoadOptions<TItem>): DxExtendedPromise<CustomStoreLoadResult<TItem>>;
