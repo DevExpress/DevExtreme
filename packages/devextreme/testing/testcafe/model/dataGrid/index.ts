@@ -17,6 +17,7 @@ import { Overlay } from './overlay';
 import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
+import { ColumnSeparator } from './columnSeparator';
 import TextBox from '../textBox';
 
 export const CLASS = {
@@ -326,6 +327,10 @@ export default class DataGrid extends Widget {
 
   getColumnChooserButton(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
+  }
+
+  getColumnSeparator(): ColumnSeparator {
+    return new ColumnSeparator(this);
   }
 
   apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {

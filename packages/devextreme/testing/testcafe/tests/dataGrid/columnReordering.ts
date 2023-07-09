@@ -130,13 +130,17 @@ test('The separator should display correctly when dragging column', async (t) =>
   allowColumnResizing: true,
 }));
 
-test.only('column separator should work properly with expand columns', async (t) => {
+test('column separator should work properly with expand columns', async (t) => {
   const dataGrid = new DataGrid('#container');
+  const columnSeparator = dataGrid.getColumnSeparator();
 
-  await t.dragToElement(
-    Selector('.dx-group-panel-item').nth(0),
-    Selector('.dx-header-row').find('td').nth(2),
-  );
+  await t.drag(Selector('.dx-group-panel-item').nth(0), 0, 30);
+
+  // todo add screenshot test once testcafe support holding while dragging
+
+  await t
+    .expect(await columnSeparator.getX())
+    .eql(5); // padding before first column
 
   await t.debug();
 }).before(async () => createWidget('dxDataGrid', {
