@@ -6,7 +6,7 @@ import Guid from '../../core/guid';
 
 import { SIMPLE_ITEM_TYPE } from './constants';
 
-const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
+const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider', 'dxDateRangeBox'];
 export const EDITORS_WITHOUT_LABELS = ['dxCalendar', 'dxCheckBox', 'dxHtmlEditor', 'dxRadioGroup', 'dxRangeSlider', 'dxSlider', 'dxSwitch'];
 
 export function convertToRenderFieldItemOptions({
@@ -131,6 +131,7 @@ function _convertToEditorOptions({
     labelMark,
 }) {
     const editorOptionsWithValue = {};
+
     if(editorValue !== undefined || canAssignUndefinedValueToEditor) {
         editorOptionsWithValue.value = editorValue;
     }
@@ -205,7 +206,7 @@ function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, show
         }
     );
 
-    const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor']; // TODO: support "dxCalendar"
+    const editorsRequiringIdForLabel = ['dxRadioGroup', 'dxCheckBox', 'dxLookup', 'dxSlider', 'dxRangeSlider', 'dxSwitch', 'dxHtmlEditor', 'dxDateRangeBox']; // TODO: support "dxCalendar"
     if(editorsRequiringIdForLabel.includes(item.editorType)) {
         labelOptions.labelID = `dx-label-${new Guid()}`;
     }

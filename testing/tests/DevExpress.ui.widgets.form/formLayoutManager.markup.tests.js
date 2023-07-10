@@ -46,6 +46,8 @@ import 'ui/radio_group';
 import 'ui/range_slider';
 import 'ui/slider';
 import 'ui/html_editor';
+import 'ui/date_range_box';
+import 'ui/text_box';
 import '../../helpers/ignoreQuillTimers.js';
 
 
@@ -78,7 +80,8 @@ const supportedEditors = [
     'dxTagBox',
     'dxTextArea',
     'dxTextBox',
-    'dxHtmlEditor'
+    'dxHtmlEditor',
+    'dxDateRangeBox',
 ];
 
 const createTestObject = () => ({
@@ -783,7 +786,8 @@ QUnit.module('Layout manager', () => {
                 name: 'Patti',
                 active: true,
                 price: 1200,
-                birthDate: new Date()
+                birthDate: new Date(),
+                vacation: [null, null]
             }
         }).dxLayoutManager('instance');
 
@@ -811,6 +815,13 @@ QUnit.module('Layout manager', () => {
             editorType: 'dxDateBox',
             itemType: 'simple',
             visibleIndex: 3,
+            col: 0
+        },
+        {
+            dataField: 'vacation',
+            editorType: 'dxTextBox',
+            itemType: 'simple',
+            visibleIndex: 4,
             col: 0
         }]);
     });
@@ -944,14 +955,15 @@ QUnit.module('Layout manager', () => {
                 name: 'Patti',
                 active: true,
                 price: 1200,
-                birthDate: new Date()
+                birthDate: new Date(),
             }
         }).dxLayoutManager('instance');
 
         layoutManager.option('layoutData', {
             title: 'Test',
             room: 1001,
-            startDate: new Date()
+            startDate: new Date(),
+            vacation: [null, null],
         });
 
         assert.deepEqual(layoutManager._items, [{
@@ -972,6 +984,12 @@ QUnit.module('Layout manager', () => {
             itemType: 'simple',
             visibleIndex: 2,
             col: 0
+        }, {
+            dataField: 'vacation',
+            editorType: 'dxTextBox',
+            itemType: 'simple',
+            visibleIndex: 3,
+            col: 0
         }]);
     });
 
@@ -983,7 +1001,8 @@ QUnit.module('Layout manager', () => {
                 name: 'Patti',
                 active: true,
                 price: 1200,
-                birthDate: new Date('10/10/2010')
+                birthDate: new Date('10/10/2010'),
+                vacation: [null, null]
             }
         });
 
@@ -993,6 +1012,7 @@ QUnit.module('Layout manager', () => {
         assert.equal($editors.eq(1).dxCheckBox('instance').option('value'), true, '2 editor');
         assert.equal($editors.eq(2).dxNumberBox('instance').option('value'), 1200, '3 editor');
         assert.deepEqual($editors.eq(3).dxDateBox('instance').option('value'), new Date('10/10/2010'), '4 editor');
+        assert.deepEqual($editors.eq(4).dxTextBox('instance').option('value'), [null, null], '5 editor');
     });
 
     test('Value from layoutData shouldn\'t pass to the editor in case when the \'dataField\' options isn\'t specified', function(assert) {
@@ -2434,9 +2454,9 @@ QUnit.module('Accessibility', () => {
     });
 
     test('Check aria-labelledby attribute for ariaTarget and id attr for label (T813296)', function(assert) {
-        const items = supportedEditors.map((editorType, index) => ({ dataField: `test${index}`, editorType: editorType }));
+        const items = supportedEditors.map((editorType, index) => ({ dataField: `test${index}`, value: [null, null], editorType: editorType }));
         const layoutManager = $('#container').dxLayoutManager({ items }).dxLayoutManager('instance');
-        const editorClassesRequiringIdForLabel = ['dx-radiogroup', 'dx-checkbox', 'dx-lookup', 'dx-slider', 'dx-rangeslider', 'dx-switch', 'dx-htmleditor']; // TODO: support "dx-calendar"
+        const editorClassesRequiringIdForLabel = ['dx-radiogroup', 'dx-checkbox', 'dx-lookup', 'dx-slider', 'dx-rangeslider', 'dx-switch', 'dx-htmleditor', 'dx-daterangebox']; // TODO: support "dx-calendar"
 
         items.forEach(({ dataField, editorType }) => {
             const editor = layoutManager.getEditor(dataField);
@@ -2670,6 +2690,28 @@ QUnit.module('Supported editors', () => {
 
         layoutManager.getEditor('noRange').option('value', [2, 6]);
         assert.deepEqual(layoutManager.option('layoutData.noRange'), [2, 6], 'data updated');
+    });
+
+    test('Render DateRangeBox', function(assert) {
+        const layoutManager = $('#container').dxLayoutManager({
+            layoutData: {
+                range: [new Date(2021, 9, 17), new Date(2021, 9, 25)]
+            },
+            items: [{
+                dataField: 'range',
+                editorType: 'dxDateRangeBox'
+            }, {
+                dataField: 'noRange',
+                editorType: 'dxDateRangeBox'
+            }]
+        }).dxLayoutManager('instance');
+
+        assert.deepEqual(layoutManager.getEditor('range').option('value'), [new Date(2021, 9, 17), new Date(2021, 9, 25)], 'Editor\'s value correct');
+
+        const newRangeValue = [new Date(2022, 9, 17), new Date(2022, 9, 25)];
+
+        layoutManager.getEditor('noRange').option('value', newRangeValue);
+        assert.deepEqual(layoutManager.option('layoutData.noRange'), newRangeValue, 'data updated');
     });
 
     test('Form with dxRadioGroup that items are defined via \'dataSource\' option renders without error', function(assert) {
