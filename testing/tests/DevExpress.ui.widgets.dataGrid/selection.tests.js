@@ -2249,6 +2249,48 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
         assert.deepEqual(dataBeforePush, expectedDataBeforePush);
         assert.deepEqual(dataAfterPush, expectedDataAfterPush, 'selected row was updated');
     });
+
+    QUnit.test('_updateSelectedOnPush should be called on Push API event', function(assert) {
+        // arrange
+        this.applyOptions({
+            selection: {
+                mode: 'multiple',
+            }
+        });
+        const store = this.dataController.dataSource().store();
+
+        sinon.spy(this.selectionController, '_updateSelectedOnPush');
+        sinon.spy(this.selectionController, 'getSelectedRowsData');
+
+        // act
+        store.push([{ type: 'update', key: 1, data: { name: 'updated name' } }]);
+        this.clock.tick(10);
+
+        assert.strictEqual(this.selectionController._updateSelectedOnPush.callCount, 1, '_updateSelectedOnPush was called');
+        assert.strictEqual(this.selectionController.getSelectedRowsData.callCount, 1, 'getSelectedRowsData was called');
+    });
+
+    QUnit.test('getSelectedRowsData should not be called on Push API event when selection.deferred=true', function(assert) {
+        // arrange
+        this.applyOptions({
+            selection: {
+                mode: 'multiple',
+                deferred: true
+            }
+        });
+        const store = this.dataController.dataSource().store();
+
+        sinon.spy(this.selectionController, '_updateSelectedOnPush');
+        sinon.spy(this.selectionController, 'getSelectedRowsData');
+
+        // act
+        store.push([{ type: 'update', key: 1, data: { name: 'updated name' } }]);
+        this.clock.tick(10);
+
+
+        assert.strictEqual(this.selectionController._updateSelectedOnPush.callCount, 1, '_updateSelectedOnPush was called');
+        assert.strictEqual(this.selectionController.getSelectedRowsData.callCount, 0, 'getSelectedRowsData was not called');
+    });
 });
 
 QUnit.module('Start/Stop selection with checkboxes', { beforeEach: setupSelectionModule, afterEach: teardownSelectionModule }, () => {
