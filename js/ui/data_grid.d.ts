@@ -1908,7 +1908,9 @@ export type Toolbar = {
 export type dxDataGridEditing<TRowData, TKey = any> = Editing<TRowData, TKey>;
 
 /**
+ * @docid dxDataGridEditing
  * @public
+ * @type object
  */
 export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & {
     /**
@@ -1960,7 +1962,9 @@ export type EditingTexts = ComponentEditingTextsBase;
 export type dxDataGridScrolling = Scrolling;
 
 /**
+ * @docid dxDataGridScrolling
  * @public
+ * @type object
  */
 export type Scrolling = ScrollingBase & {
     /**

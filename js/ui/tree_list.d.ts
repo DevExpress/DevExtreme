@@ -1159,7 +1159,9 @@ export type dxTreeListOptions<TRowData = any, TKey = any> = Omit<GridBaseOptions
 export type dxTreeListEditing<TRowData = any, TKey = any> = Editing<TRowData, TKey>;
 
 /**
+ * @docid dxTreeListEditing
  * @public
+ * @type object
  */
 export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowData, TKey> {
     /**
@@ -1242,7 +1244,9 @@ export type Paging = PagingBase & {
 export type dxTreeListScrolling = Scrolling;
 
 /**
+ * @docid dxTreeListScrolling
  * @public
+ * @type object
  */
 export interface Scrolling extends ScrollingBase {
     /**
