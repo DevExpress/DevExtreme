@@ -377,10 +377,13 @@ const MultiView = CollectionWidget.inherit({
         const { items, loop } = this.option();
         const { firstIndex, lastIndex } = this._boundaryIndices;
 
+        const isFirstActive = index === firstIndex;
+        const isLastActive = index === lastIndex;
+
         if(loop) {
-            if(index === firstIndex) {
+            if(isFirstActive && offset < 0) {
                 return lastIndex;
-            } else if(index === lastIndex) {
+            } else if(isLastActive && offset > 0) {
                 return firstIndex;
             }
         }
