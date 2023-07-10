@@ -56,7 +56,7 @@ export const environment = {
     }
 };
 
-function checkNumbersWithError(actual, expected, error) {
+export function checkNumbersWithError(actual, expected, error) {
     return actual === expected || (actual < expected + error && actual > expected - error);
 }
 
