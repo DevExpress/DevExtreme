@@ -45,9 +45,9 @@ class App extends React.Component {
         >
           <HeaderFilter dataSource={saleAmountHeaderFilters} />
         </Column>
-        <Column dataField="Employee" />
-        <Column dataField="CustomerInfo.StoreCity" caption="City" />
-        <Column dataField="CustomerInfo.StoreState" caption="State" />
+        <Column dataField="Employee" dataType="string" />
+        <Column dataField="CustomerInfo.StoreCity" caption="City" dataType="string" />
+        <Column dataField="CustomerInfo.StoreState" caption="State" dataType="string" />
       </DataGrid>
     );
   }

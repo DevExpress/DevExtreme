@@ -32,14 +32,19 @@
         data-type="number"
         format="currency"
       />
-      <DxColumn data-field="Employee"/>
+      <DxColumn
+        data-field="Employee"
+        data-type="string"
+      />
       <DxColumn
         data-field="CustomerInfo.StoreCity"
         caption="City"
+        data-type="string"
       />
       <DxColumn
         data-field="CustomerInfo.StoreState"
         caption="State"
+        data-type="string"
       />
     </DxDataGrid>
   </div>

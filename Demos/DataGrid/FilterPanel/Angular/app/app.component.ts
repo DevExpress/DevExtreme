@@ -33,9 +33,7 @@ export class AppComponent {
   saleAmountHeaderFilter: any;
 
   constructor(service: Service) {
-    this.dataSource = new DataSource({
-      store: service.getOrders(),
-    });
+    this.dataSource = service.getOrders();
     this.popupPosition = {
       of: window, at: 'top', my: 'top', offset: { y: 10 },
     };
