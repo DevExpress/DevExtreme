@@ -1,9 +1,9 @@
 import $ from 'jquery';
-import { createFunnel, stubAlgorithm } from './commonParts/common.js';
+import { createFunnel, stubAlgorithm, checkNumbersWithError } from './commonParts/common.js';
 import labelModule from 'viz/series/points/label';
 import { labelEnvironment } from './commonParts/label.js';
 
-QUnit.module('Initialization', labelEnvironment);
+QUnit.module('Initialization with stubs', labelEnvironment);
 
 QUnit.test('Create label group on initialization', function(assert) {
     createFunnel({});
@@ -1299,4 +1299,52 @@ QUnit.test('change resolveLabelOverlapping option', function(assert) {
 
     const label = labelModule.Label.getCall(0).returnValue;
     assert.ok(label.shift.called);
+});
+
+QUnit.module('Initialization');
+[true, false].forEach((showForZeroValues) => {
+    QUnit.test(`should not fail when showForZeroValues==${showForZeroValues} and datasource contains zero values (T1172293)`, function(assert) {
+        try {
+            createFunnel({
+                algorithm: 'dynamicHeight',
+                showForZeroValues,
+                dataSource: [
+                    { count: 1, level: 'Junior Engineer' },
+                    { count: 20, level: 'Mid-Level Engineer' },
+                    { count: 0, level: 'Senior Engineer' },
+                    { count: 17, level: 'Architect' },
+                ],
+                valueField: 'count',
+                inverted: true,
+                sortData: false,
+            });
+            assert.ok(true);
+        } catch(e) {
+            assert.ok(false, 'exception raised: ' + e.message);
+        }
+    });
+});
+
+QUnit.test('should run with correctly translated labels when datasource contains zero values', function(assert) {
+    const widget = createFunnel({
+        algorithm: 'dynamicHeight',
+        dataSource: [
+            { count: 1, level: 'Junior Engineer' },
+            { count: 0, level: 'Senior Engineer' },
+            { count: 1, level: 'Mid-Level Engineer' },
+            { count: 99, level: 'Architect' }
+        ],
+        valueField: 'count',
+        inverted: true,
+        sortData: false,
+    });
+
+    const labels = widget._labels;
+
+    const maxAllowedDelta = 3;
+
+    assert.ok(checkNumbersWithError(labels[0]._insideGroup._settings.translateY, 393, maxAllowedDelta));
+    assert.strictEqual(labels[1]._insideGroup._settings.translateY, undefined);
+    assert.ok(checkNumbersWithError(labels[2]._insideGroup._settings.translateY, 370, maxAllowedDelta));
+    assert.ok(checkNumbersWithError(labels[3]._insideGroup._settings.translateY, 347, maxAllowedDelta));
 });

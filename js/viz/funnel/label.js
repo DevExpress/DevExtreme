@@ -306,7 +306,7 @@ export const plugin = {
             } else if(resolveLabelOverlapping === 'shift') {
                 const maxHeight = this._labelRect[3];
 
-                labels.reduce(([height, emptySpace], label, index, labels) => {
+                labels.filter(label => label.isVisible()).reduce(([height, emptySpace], label, index, labels) => {
                     const bBox = label.getBoundingRect();
                     let y = bBox.y;
 
