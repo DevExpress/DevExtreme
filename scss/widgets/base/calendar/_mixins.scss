@@ -33,6 +33,20 @@
   }
 }
 
+@mixin dx-calendar-navigator-mixin(
+  $calendar-navigator-text-color,
+) {
+  .dx-calendar-navigator {
+    .dx-button {
+      color: $calendar-navigator-text-color;
+
+      .dx-icon {
+        color: $calendar-navigator-text-color;
+      }
+    }
+  }
+}
+
 @mixin dx-calendar-body-mixin(
   $cell-other-color,
   $week-number-cell-color,
