@@ -50,7 +50,7 @@ namespace Runner.Tools
 
         public string GetSuiteVirtualPath(string catName, string suiteName)
         {
-            return String.Format("~/testing/tests/{0}/{1}", catName, suiteName);
+            return String.Format("~/packages/devextreme/testing/tests/{0}/{1}", catName, suiteName);
         }
 
         public IEnumerable<Suite> GetAllSuites(bool deviceMode, string constellation, ISet<string> includeCategories, ISet<string> excludeCategories, ISet<string> excludeSuites, int partIndex, int partCount)
