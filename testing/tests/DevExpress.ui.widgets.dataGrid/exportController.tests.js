@@ -842,7 +842,8 @@ QUnit.module('ExportController', {
 
         this.setupModules({
             dataSource: dataSource,
-            selectedRowKeys: [dataSource[1], dataSource[2]],
+            keyExpr: 'Name',
+            selectedRowKeys: [2, 3],
             selection: {
                 mode: 'multiple',
                 showCheckBoxesMode: 'onClick'
@@ -886,6 +887,7 @@ QUnit.module('ExportController', {
         this.clock.tick(10);
 
         // assert, act
+
         assert.equal(dataProvider.getRowsCount(), 4, 'rows count');
         assert.equal(dataProvider.getCellData(2, 0).value, '2 tests', 'summary cell 1');
         assert.equal(dataProvider.getCellData(2, 1).value, 'Sum: $24', 'summary cell 2');
@@ -893,6 +895,63 @@ QUnit.module('ExportController', {
         assert.equal(dataProvider.getCellData(3, 0).value, 'Sale - 63%', 'summary cell 1');
         assert.equal(dataProvider.getCellData(3, 1).value, undefined, 'summary cell 2');
         assert.equal(dataProvider.getCellData(3, 2).value, undefined, 'summary cell 3');
+    });
+
+    QUnit.test('Remote filtering should work when exporting selected items', function(assert) {
+        // arrange
+        const items = [
+            { Name: 1, Price: 1, Sale: 0.03 },
+            { Name: 2, Price: 12, Sale: 0.14 },
+            { Name: 3, Price: 12, Sale: 0.63 },
+            { Name: 4, Price: 1, Sale: 0.93 }
+        ];
+
+        const dataSource = {
+            load: sinon.spy((loadOptions) => {
+                return new ArrayStore(items)
+                    .load(loadOptions)
+                    .then((data) => ({
+                        data,
+                        totalCount: items.length,
+                    }));
+            }),
+            filter: ['Price', '>', 0],
+            key: 'Name',
+        };
+
+        this.setupModules({
+            dataSource: dataSource,
+            selectedRowKeys: [1, 2],
+            remoteOperations: true,
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'onClick'
+            },
+            columns: [
+                'Name', 'Price',
+                'Sale'
+            ]
+        });
+
+        this.exportController._selectionOnly = true;
+
+        // acts
+        const dataProvider = this.exportController.getDataProvider();
+        dataProvider.ready();
+
+        this.clock.tick(10);
+
+        // assert
+        assert.equal(dataProvider.getRowsCount(), 2, 'rows count');
+        assert.equal(dataProvider.getCellData(0, 0).value, '1',);
+        assert.equal(dataProvider.getCellData(1, 0).value, '2',);
+
+        assert.deepEqual(dataSource.load.getCall(1).args[0], {
+            'filter': [
+                [ [ 'Name', '=', 1 ], 'or', [ 'Name', '=', 2 ] ],
+                [ 'Price', '>', 0 ]
+            ]
+        });
     });
 
     QUnit.test('Get total summary value when selected items are defined. Deferred selection', function(assert) {
@@ -1009,7 +1068,7 @@ QUnit.module('ExportController', {
 
         this.exportController._selectionOnly = true;
 
-        this.selectionController.getSelectedRowsData = function() {
+        this.selectionController._selection.options.load = function() {
             return $.Deferred().reject();
         };
 
