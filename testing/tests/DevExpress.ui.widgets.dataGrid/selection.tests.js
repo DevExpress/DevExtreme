@@ -2188,6 +2188,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
         assert.deepEqual(this.option('selectedRowKeys'), [], 'selectedRowKeys is empty');
     });
 
+    // T1171774
     QUnit.test('getSelectedRows should return updated items after \'update\' push API event', function(assert) {
         // arrange
         this.applyOptions({
@@ -2218,6 +2219,7 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
         assert.deepEqual(dataAfterPush, expectedDataAfterPush, 'selected row was updated');
     });
 
+    // T1171774
     QUnit.test('getSelectedRows should return updated items after \'update\' push API event when all rows selected', function(assert) {
         // arrange
         this.applyOptions({
