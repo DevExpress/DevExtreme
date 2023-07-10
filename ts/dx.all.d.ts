@@ -10107,6 +10107,9 @@ declare module DevExpress.ui {
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.DataChangeInfo<TRowData, TKey>;
+    /**
+     * [descr:dxDataGridEditing]
+     */
     export type Editing<TRowData = any, TKey = any> = EditingBase<
       TRowData,
       TKey
@@ -11139,6 +11142,9 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.SavingInfo<TRowData, TKey>;
+    /**
+     * [descr:dxDataGridScrolling]
+     */
     export type Scrolling = ScrollingBase & {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
@@ -27344,6 +27350,9 @@ declare module DevExpress.ui {
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.common.grids.DataChangeInfo<TRowData, TKey>;
+    /**
+     * [descr:dxTreeListEditing]
+     */
     export interface Editing<TRowData = any, TKey = any>
       extends DevExpress.common.grids.EditingBase<TRowData, TKey> {
       /**
@@ -28214,6 +28223,9 @@ declare module DevExpress.ui {
       | '_notifyOptionChanged'
       | '_createElement'
     >;
+    /**
+     * [descr:dxTreeListScrolling]
+     */
     export interface Scrolling extends DevExpress.common.grids.ScrollingBase {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
