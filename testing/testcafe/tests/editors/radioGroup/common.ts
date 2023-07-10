@@ -5,6 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import RadioGroup from '../../../model/radioGroup';
 import createWidget from '../../../helpers/createWidget';
 import { setStyleAttribute } from '../../../helpers/domUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Radio Group`
   .page(url(__dirname, '../../container.html'));
@@ -76,7 +77,7 @@ test('Radio buttons placed into the template should not be selected after clicki
   }),
 }));
 
-test('Dot of Radio button placed in scaled container should have valid centering(T1165339)', async (t) => {
+safeSizeTest('Dot of Radio button placed in scaled container should have valid centering(T1165339)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'RadioGroup in scaled container.png', { element: '#container', shouldTestInCompact: true });
