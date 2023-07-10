@@ -114,7 +114,11 @@ const SelectionController = modules.Controller.inherit((function () {
       this._selection = this._createSelection();
       this._updateSelectColumn();
       this.createAction('onSelectionChanged', { excludeValidators: ['disabled', 'readOnly'] });
-      this._dataController && this._dataController.pushed.add(this._handleDataPushed.bind(this));
+
+      if (!this._dataPushedHandler) {
+        this._dataPushedHandler = this._handleDataPushed.bind(this);
+        this._dataController.pushed.add(this._dataPushedHandler);
+      }
     },
 
     _handleDataPushed(changes) {
@@ -123,11 +127,13 @@ const SelectionController = modules.Controller.inherit((function () {
     },
 
     _deselectRemovedOnPush(changes) {
+      const isDeferredSelection = this.option('selection.deferred');
+
       let removedKeys = changes
         .filter((change) => change.type === 'remove')
         .map((change) => change.key);
 
-      if (this.option('selection.deferred')) {
+      if (isDeferredSelection) {
         const selectedKeys = this._dataController.items()
           .filter((item) => item.isSelected)
           .map((item) => item.key);
@@ -140,11 +146,18 @@ const SelectionController = modules.Controller.inherit((function () {
     },
 
     _updateSelectedOnPush(changes) {
+      const isDeferredSelection = this.option('selection.deferred');
+
+      if (isDeferredSelection) {
+        return;
+      }
+
       const updateChanges = changes.filter((change) => change.type === 'update');
+      const data = this.getSelectedRowsData();
 
       applyBatch({
         keyInfo: this._selection.options,
-        data: this.getSelectedRowsData(),
+        data,
         changes: updateChanges,
       } as any);
     },
