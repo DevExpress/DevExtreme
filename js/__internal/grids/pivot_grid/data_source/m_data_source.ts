@@ -1086,7 +1086,7 @@ const PivotGridDataSource = Class.inherit((function () {
       }
     },
 
-    _sort(descriptions, data, getAscOrder) {
+    _sort(descriptions, data, getAscOrder?: boolean) {
       const store = this._store;
 
       if (store && !this._paginate) {
@@ -1095,11 +1095,7 @@ const PivotGridDataSource = Class.inherit((function () {
     },
 
     sortLocal(): void {
-      this._sort(
-        this._descriptions,
-        this._data,
-        areExpressionsUsed(this._descriptions.values),
-      );
+      this._sort(this._descriptions, this._data);
       this._eventsStrategy.fireEvent('changed');
     },
 
