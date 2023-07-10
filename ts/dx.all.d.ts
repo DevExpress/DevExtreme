@@ -4809,8 +4809,7 @@ declare module DevExpress.data {
   }
   module CustomStore {
     /**
-     * [descr:GroupItem]
-     * @deprecated [depNote:GroupItem]
+     * @deprecated Use GroupItem from common/data/custom-store instead
      */
     export type GroupItem<TItem = any> = DevExpress.common.GroupItem<TItem>;
     /**

@@ -10,9 +10,7 @@ export type Options<
 > = CustomStoreOptions<TItem, TKey>;
 
 /**
- * @docid
  * @public
- * @type object
  * @deprecated Use GroupItem from common/data/custom-store instead
  */
 export type GroupItem<TItem = any> = CustomStoreGroupItem<TItem>;
