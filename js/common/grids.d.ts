@@ -94,6 +94,7 @@ export type ApplyFilterMode = 'auto' | 'onClick';
 export type ApplyChangesMode = 'instantly' | 'onDemand';
 
 /**
+ * @hidden
  * @docid GridBaseColumn
  * @namespace DevExpress.common.grids
  * @type object
@@ -434,6 +435,7 @@ export interface ColumnBase<TRowData = any> {
 }
 
 /**
+ * @hidden
  * @docid GridBaseColumnButton
  * @namespace DevExpress.common.grids
  * @type object
@@ -836,6 +838,7 @@ export interface DragStartEventInfo<TRowData = any> {
 }
 
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.common.grids
  */
@@ -920,6 +923,7 @@ export interface EditingBase<TRowData = any, TKey = any> {
 }
 
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.common.grids
  */
@@ -2484,6 +2488,7 @@ export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
 export type PagerPageSize = 'all' | 'auto';
 
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.common.grids
  */
@@ -2867,6 +2872,7 @@ export interface SavingInfo<TRowData = any, TKey = any> {
 }
 
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.common.grids
  */
@@ -2974,6 +2980,7 @@ export type SearchPanel = {
 export type SelectedFilterOperation = '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
 
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.common.grids
  */
