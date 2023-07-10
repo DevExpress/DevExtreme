@@ -749,6 +749,45 @@ QUnit.module('loop', {
         assert.equal(multiView.option('selectedIndex'), 1, 'selected index changed correctly');
     });
 
+    QUnit.test('selected index should be set to the first item after right swipe from the second if the last is disabled', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [1, 2, { disabled: true, text: 3 }],
+            selectedIndex: 1,
+            loop: true,
+        });
+        const multiView = $('#multiView').dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
+        assert.equal(multiView.option('selectedIndex'), 0, 'selected index changed correctly');
+    });
+
+    QUnit.test('selected index should be set to the second item after left swipe from the first', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [1, 2, 3, 4, 5],
+            selectedIndex: 0,
+            loop: true,
+        });
+        const multiView = $('#multiView').dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+        assert.equal(multiView.option('selectedIndex'), 1, 'selected index changed correctly');
+    });
+
+    QUnit.test('selected index should be set to the fourth item after right swipe from the last', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [1, 2, 3, 4, 5],
+            selectedIndex: 4,
+            loop: true,
+        });
+        const multiView = $('#multiView').dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
+        assert.equal(multiView.option('selectedIndex'), 3, 'selected index changed correctly');
+    });
+
     QUnit.test('selected index should be set to first item after left swipe from last one', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3],
