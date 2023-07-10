@@ -2710,7 +2710,6 @@ QUnit.module('positioning', {
             this.popup.dispose();
             this.init(options);
         };
-
         this.init();
     }
 }, () => {
@@ -2725,8 +2724,6 @@ QUnit.module('positioning', {
                     at: 'top left',
                     of: $target
                 },
-                visualContainer: $target,
-                restorePosition: false
             });
             this.popup.option('fullScreen', false);
 
@@ -2735,31 +2732,44 @@ QUnit.module('positioning', {
             const visualPosition = this.getPosition();
             const expectedPosition = $target.position();
 
-            assert.deepEqual(visualPosition, expectedPosition, 'position is correct');
+            assert.deepEqual(visualPosition, expectedPosition);
         });
 
-        QUnit.test('popup should not restore position after fullScreen disable', function(assert) {
-            const visualPositionBeforeFullScreen = this.getPosition();
+        QUnit.test('popup should render on passed position after change fullScreen option to false', function(assert) {
+            this.reinit({ position: 'top' });
 
-            this.popup.option('fullScreen', true);
-            this.popup.option('position', { of: '#container' });
+            const expectedPosition = this.getPosition();
+
+            this.reinit({
+                position: 'top',
+                fullScreen: true,
+            });
+
             this.popup.option('fullScreen', false);
 
-            const visualPositionAfterFullScreen = this.getPosition();
-            assert.deepEqual(visualPositionAfterFullScreen, visualPositionBeforeFullScreen, 'visual position was not changed');
+            const visualPosition = this.getPosition();
+            assert.deepEqual(visualPosition, expectedPosition);
         });
 
-        QUnit.test('popup should not restore position on rerender after fullScreen changed to false', function(assert) {
-            const visualPositionBeforeFullScreen = this.getPosition();
+        QUnit.test('popup should render on passed position after on/off fullScreen option', function(assert) {
+            this.reinit({
+                position: 'top',
+            });
+
+            const initialPosition = this.getPosition();
 
             this.popup.option('fullScreen', true);
-            this.popup.option('position', { of: '#container' });
             this.popup.option('fullScreen', false);
 
-            this.popup.option('height', 'auto');
-            const visualPositionAfterFullScreen = this.getPosition();
+            const visualPosition = this.getPosition();
+            assert.deepEqual(visualPosition, initialPosition);
+        });
 
-            assert.deepEqual(visualPositionAfterFullScreen, visualPositionBeforeFullScreen, 'visual position was not changed');
+        QUnit.test('popup should render at the left top corner of the window after change fullScreen option to true', function(assert) {
+            this.popup.option('fullScreen', true);
+            const visualPosition = this.getPosition();
+
+            assert.deepEqual(visualPosition, { top: 0, left: 0 });
         });
 
         QUnit.test('fullScreen option change to true should trigger visualPositionChanged event', function(assert) {
@@ -2770,6 +2780,14 @@ QUnit.module('positioning', {
 
             assert.ok(visualPositionChangedHandlerStub.calledOnce, 'visualPositionChanged event is raised');
             assert.deepEqual(visualPositionChangedHandlerStub.getCall(0).args[0].position, { top: 0, left: 0 }, 'parameter is correct');
+        });
+
+        QUnit.test('popup should render at the left top corner of the window after change fullScreen option to true and change position', function(assert) {
+            this.popup.option('fullScreen', true);
+            this.popup.option('position', 'bottom');
+
+            const visualPosition = this.getPosition();
+            assert.deepEqual(visualPosition, { top: 0, left: 0 });
         });
     });
 
@@ -2797,9 +2815,7 @@ QUnit.module('positioning', {
             this.init();
         }
     }, () => {
-        QUnit.test('popup should not restore position on rerender after fullScreen changed to false', function(assert) {
-            this.popup.option('fullScreen', true);
-            this.popup.option('fullScreen', false);
+        QUnit.test('popup should not restore position on rerender after height changed', function(assert) {
             this.drag();
 
             const expectedPosition = this.getPosition();
@@ -2859,18 +2875,20 @@ QUnit.module('positioning', {
             assert.strictEqual(args.event.target, this.$resizeHandle.get(0), 'event parameter target is correct');
         });
 
-        QUnit.test('fullScrren change after drag should trigger visualPositionChanged event with correct parameters', function(assert) {
+        QUnit.test('fullScreen change after drag should trigger visualPositionChanged event with correct parameters', function(assert) {
             const visualPositionChangedStub = sinon.stub();
             this.popup.on('visualPositionChanged', visualPositionChangedStub);
 
+            const position = this.getPosition();
+
             this.drag();
-            const { left, top } = this.getPosition();
 
             this.popup.option('fullScreen', true);
             assert.deepEqual(visualPositionChangedStub.getCall(1).args[0].position, { top: 0, left: 0 }, 'position parameter is correct after change to true');
 
             this.popup.option('fullScreen', false);
-            assert.deepEqual(visualPositionChangedStub.getCall(2).args[0].position, { top, left }, 'position parameter is correct after change to false');
+
+            assert.deepEqual(visualPositionChangedStub.getCall(2).args[0].position, position, 'position is equal to the initial position before drag');
         });
 
         QUnit.test('position change should not trigger visualPositionChanged event if fullScreen=true', function(assert) {
@@ -2907,11 +2925,24 @@ QUnit.module('positioning', {
                 assert.strictEqual(newPosition.top, position.top - 100, 'top coordinate is correct');
             });
 
+            QUnit.test('on/off fullScreen and resize should not be restored', function(assert) {
+                const position = this.getPosition();
+
+                this.popup.option('fullScreen', true);
+                this.popup.option('fullScreen', false);
+                this.resize();
+
+                const newPosition = this.getPosition();
+                assert.strictEqual(newPosition.left, position.left - 100, 'left coordinate is correct');
+                assert.strictEqual(newPosition.top, position.top - 100, 'top coordinate is correct');
+            });
+
             ['drag', 'resize'].forEach(moveMethodName => {
+                // NOTE: we should implement "pin" special button as a separate feature if we wan't to keep drag/resize position
                 QUnit.module(moveMethodName, () => {
-                    QUnit.test('should not be changed after fullScreen is enabled and disabled', function(assert) {
-                        this[moveMethodName]();
+                    QUnit.test('should be restored to initial position after fullScreen is enabled and disabled', function(assert) {
                         const position = this.getPosition();
+                        this[moveMethodName]();
 
                         this.popup.option('fullScreen', true);
                         this.popup.option('fullScreen', false);
@@ -2920,7 +2951,11 @@ QUnit.module('positioning', {
                         assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
                         assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
                     });
+                });
+            });
 
+            ['drag', 'resize'].forEach(moveMethodName => {
+                QUnit.module(moveMethodName, () => {
                     QUnit.test('should not be changed after width or height change', function(assert) {
                         this[moveMethodName]();
                         const position = this.getPosition();
@@ -3001,7 +3036,7 @@ QUnit.module('positioning', {
                     });
 
                     QUnit.test('should not be restored to position from option after reopening if restorePosition=false', function(assert) {
-                        this.reinit({ restorePosition: false });
+                        this.init({ restorePosition: false });
 
                         this[moveMethodName]();
 

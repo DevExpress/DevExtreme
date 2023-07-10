@@ -29,5 +29,7 @@ export {
   TooltipHiddenEvent,
   TooltipShownEvent,
   LegendItem,
+  AdaptiveLayout,
+  Legend,
   Properties,
 } from './pie_chart';

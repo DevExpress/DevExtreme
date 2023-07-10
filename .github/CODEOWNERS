@@ -3,6 +3,10 @@
 *.d.ts                   @DevExpress/devextreme-apireviewers @DevExpress/devextreme-techwriters
 /ts/**                   @DevExpress/devextreme-apireviewers
 
+# Localization strings
+
+/js/localization/messages/**           @DevExpress/devextreme-techwriters
+
 # Grids
 
 ## grid_core

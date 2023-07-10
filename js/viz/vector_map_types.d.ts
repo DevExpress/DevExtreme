@@ -21,5 +21,7 @@ export {
   TooltipShownEvent,
   ZoomFactorChangedEvent,
   LegendItem,
+  Legend,
+  Tooltip,
   Properties,
 } from './vector_map';
