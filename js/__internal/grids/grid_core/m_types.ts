@@ -86,6 +86,8 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   rowTemplate?: any;
 
   forceApplyBindings?: any;
+
+  loadItemsOnExportingSelectedItems?: boolean | undefined;
 }
 
 // todo: move to upper .d.ts files

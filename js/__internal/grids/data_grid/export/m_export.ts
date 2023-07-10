@@ -591,7 +591,10 @@ export class ExportController extends dataGridCore.ViewController {
 
   _getSelectedItems() {
     const selectionController = this.getController('selection');
-    const selectedRowData = selectionController.loadSelectedItemsWithFilter();
+
+    const selectedRowData = this.needLoadItemsOnExportingSelectedItems()
+      ? selectionController.loadSelectedItemsWithFilter()
+      : selectionController.getSelectedRowsData();
 
     return this._getAllItems(selectedRowData);
   }
@@ -652,6 +655,11 @@ export class ExportController extends dataGridCore.ViewController {
     } else {
       return this._isSelectedRows;
     }
+  }
+
+  needLoadItemsOnExportingSelectedItems(): boolean {
+    return this.option('loadItemsOnExportingSelectedItems')
+      ?? this.getController('data')._dataSource.remoteOperations().filtering;
   }
 }
 
