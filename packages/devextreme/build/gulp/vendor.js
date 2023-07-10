@@ -46,30 +46,37 @@ const JS_VENDORS = [
     },
     {
         path: 'cldrjs/dist/cldr/event.js',
+        dir: 'cldr',
         noUglyFile: true
     },
     {
         path: 'cldrjs/dist/cldr/supplemental.js',
+        dir: 'cldr',
         noUglyFile: true
     },
     {
         path: 'cldrjs/dist/cldr/unresolved.js',
+        dir: 'cldr',
         noUglyFile: true
     },
     {
         path: 'globalize/dist/globalize/number.js',
+        dir: 'globalize',
         noUglyFile: true
     },
     {
         path: 'globalize/dist/globalize/currency.js',
+        dir: 'globalize',
         noUglyFile: true
     },
     {
         path: 'globalize/dist/globalize/date.js',
+        dir: 'globalize',
         noUglyFile: true
     },
     {
         path: 'globalize/dist/globalize/message.js',
+        dir: 'globalize',
         noUglyFile: true
     },
     {
@@ -103,22 +110,23 @@ const CSS_VENDORS = [
 
 gulp.task('vendor-js', function() {
     return merge.apply(this, JS_VENDORS.map(function(vendor) {
-        const sourceConfig = vendor.base ? { base: PACKAGES_SOURCE + vendor.base } : null;
+        const sourceConfig = vendor.base ? { dir: PACKAGES_SOURCE + vendor.base } : null;
         const vendorSource = require.resolve(vendor.path);
+        const dest = vendor.dir ? `${DESTINATION_JS_PATH}/${vendor.dir}` : DESTINATION_JS_PATH;
         const stream = gulp.src(vendorSource, sourceConfig)
-            .pipe(gulp.dest(DESTINATION_JS_PATH));
+            .pipe(gulp.dest(dest));
 
         if(vendor.noUglyFile) {
             return stream
                 .pipe(compressionPipes.minify())
                 .pipe(rename({ suffix: '.min' }))
-                .pipe(gulp.dest(DESTINATION_JS_PATH));
+                .pipe(gulp.dest(dest));
         }
 
         const path = vendorSource.replace(/(min\.)?js$/, `${vendor.suffix || 'min'}.js`);
 
         return merge(stream, gulp.src(path, sourceConfig)
-            .pipe(gulp.dest(DESTINATION_JS_PATH))
+            .pipe(gulp.dest(dest))
         );
     }));
 });
