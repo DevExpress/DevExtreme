@@ -170,11 +170,11 @@ const transpileIntl = async() => {
     const listIntlFiles = [
         {
             filePath: require.resolve('intl/lib/core.js'),
-            destPath: path.join(root, 'artifacts/js-systemjs/intl/intl.js'),
+            destPath: path.join(root, 'packages/devextreme/artifacts/js-systemjs/intl/intl.js'),
         },
         {
             filePath: require.resolve('intl/locale-data/complete.js'),
-            destPath: path.join(root, 'artifacts/js-systemjs/intl/intl.complete.js'),
+            destPath: path.join(root, 'packages/devextreme/artifacts/js-systemjs/intl/intl.complete.js'),
         },
     ];
 
@@ -204,7 +204,7 @@ const transpileIntl = async() => {
         });
     `;
 
-    writeFileSync(path.join(root, 'artifacts/js-systemjs/intl/index.js'), intlIndex);
+    writeFileSync(path.join(root, 'packages/devextreme/artifacts/js-systemjs/intl/index.js'), intlIndex);
 };
 
 const transpileJsVendors = async() => {
@@ -237,7 +237,7 @@ const transpileJsVendors = async() => {
         getFileList(path.dirname(require.resolve('angular'))).map((filePath) => {
             return transpileFile(
                 filePath,
-                filePath.replace('node_modules', 'artifacts/js-systemjs'),
+                filePath.replace('node_modules', 'packages/devextreme/artifacts/js-systemjs'),
             );
         })
     );
@@ -256,7 +256,7 @@ const transpileJsVendors = async() => {
     )
         .filter(filePath => filePath.endsWith('.json'))
         .forEach((filePath) => {
-            transpileFile(filePath, filePath.replace('node_modules', 'artifacts/js-systemjs'));
+            transpileFile(filePath, filePath.replace('node_modules', 'packages/devextreme/artifacts/js-systemjs'));
         });
 };
 

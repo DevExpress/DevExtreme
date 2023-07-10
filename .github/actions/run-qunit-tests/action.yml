@@ -78,7 +78,7 @@ runs:
 
     - name: Run npm install
       shell: bash
-      run: npm install --no-package-lock --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
