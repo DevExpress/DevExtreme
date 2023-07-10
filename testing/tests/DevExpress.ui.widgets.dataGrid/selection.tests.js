@@ -2187,6 +2187,66 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
         assert.strictEqual(this.selectionController.isSelectAll(), false, 'nothing is selected');
         assert.deepEqual(this.option('selectedRowKeys'), [], 'selectedRowKeys is empty');
     });
+
+    QUnit.test('getSelectedRows should return updated items after \'update\' push API event', function(assert) {
+        // arrange
+        this.applyOptions({
+            selection: {
+                mode: 'multiple',
+                allowSelectAll: true
+            },
+        });
+        const store = this.dataController.dataSource().store();
+
+        // act
+        this.selectionController.selectRows([1]);
+
+        this.selectionController._selection.options.selectedItems = this.selectionController._selection.options.selectedItems.map(item => ({ ...item }));
+
+        const dataBeforePush = { ...this.selectionController.getSelectedRowsData()[0] };
+        const expectedDataBeforePush = { id: 1, name: 'Alex', age: 15 };
+
+        // act
+        store.push([{ type: 'update', key: 1, data: { name: 'updated name' } }]);
+        this.clock.tick(10);
+
+        // assert
+        const dataAfterPush = { ...this.selectionController.getSelectedRowsData()[0] };
+        const expectedDataAfterPush = { id: 1, name: 'updated name', age: 15 };
+
+        assert.deepEqual(dataBeforePush, expectedDataBeforePush);
+        assert.deepEqual(dataAfterPush, expectedDataAfterPush, 'selected row was updated');
+    });
+
+    QUnit.test('getSelectedRows should return updated items after \'update\' push API event when all rows selected', function(assert) {
+        // arrange
+        this.applyOptions({
+            selection: {
+                mode: 'multiple',
+                allowSelectAll: true
+            }
+        });
+        const store = this.dataController.dataSource().store();
+
+        // act
+        this.selectionController.selectAll();
+
+        this.selectionController._selection.options.selectedItems = this.selectionController._selection.options.selectedItems.map(item => ({ ...item }));
+
+        const dataBeforePush = { ...this.selectionController.getSelectedRowsData()[0] };
+        const expectedDataBeforePush = { id: 1, name: 'Alex', age: 15 };
+
+        // act
+        store.push([{ type: 'update', key: 1, data: { name: 'updated name' } }]);
+        this.clock.tick(10);
+
+        // assert
+        const dataAfterPush = { ...this.selectionController.getSelectedRowsData()[0] };
+        const expectedDataAfterPush = { id: 1, name: 'updated name', age: 15 };
+
+        assert.deepEqual(dataBeforePush, expectedDataBeforePush);
+        assert.deepEqual(dataAfterPush, expectedDataAfterPush, 'selected row was updated');
+    });
 });
 
 QUnit.module('Start/Stop selection with checkboxes', { beforeEach: setupSelectionModule, afterEach: teardownSelectionModule }, () => {
