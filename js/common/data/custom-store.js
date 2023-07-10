@@ -5,14 +5,14 @@ function isGroupItem(item) {
     return 'key' in item && 'items' in item;
 }
 
-export function isCustomStoreSummary(res) {
+export function isSummary(res) {
     return !Array.isArray(res) && 'data' in res;
 }
 
-export function isCustomStoreGroupItemsArray(res) {
+export function isGroupItemsArray(res) {
     return Array.isArray(res) && !!res.length && isGroupItem(res[0]);
 }
 
-export function isCustomStoreItemsArray(res) {
+export function isItemsArray(res) {
     return Array.isArray(res) && !isGroupItem(res[0]);
 }

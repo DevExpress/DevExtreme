@@ -1,7 +1,7 @@
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 import { Options as StoreOptions, Store } from './abstract_store';
 import { DxExtendedPromise, DxPromise } from '../core/utils/deferred';
-import { CustomStoreGroupItem, CustomStoreLoadResult } from '../common/data';
+import { GroupItem as CustomStoreGroupItem, LoadResult } from '../common/data/custom-store';
 
 /** @public */
 export type Options<
@@ -13,7 +13,7 @@ export type Options<
  * @docid
  * @public
  * @type object
- * @deprecated Use CustomStoreGroupItem instead
+ * @deprecated Use GroupItem from common/data/custom-store instead
  */
 export type GroupItem<TItem = any> = CustomStoreGroupItem<TItem>;
 
@@ -21,11 +21,11 @@ export type GroupItem<TItem = any> = CustomStoreGroupItem<TItem>;
  * @docid
  * @public
  * @type object
- * @deprecated Use CustomStoreLoadResult instead
+ * @deprecated Use LoadResult instead
  */
-export type ResolvedData<TItem = any> = CustomStoreLoadResult<TItem>;
+export type ResolvedData<TItem = any> = LoadResult<TItem>;
 
-type LoadResult<T> = T | DxPromise<T> | PromiseLike<T>;
+type LoadFunctionResult<T> = T | DxPromise<T> | PromiseLike<T>;
 
 /**
  * @namespace DevExpress.data
@@ -60,10 +60,10 @@ export interface CustomStoreOptions<
     /**
      * @docid
      * @type_function_param1 options:LoadOptions
-     * @type_function_return CustomStoreLoadResult|Promise<CustomStoreLoadResult>
+     * @type_function_return LoadResult|Promise<LoadResult>
      * @public
      */
-    load: (options: LoadOptions<TItem>) => LoadResult<CustomStoreLoadResult<TItem>>;
+    load: (options: LoadOptions<TItem>) => LoadFunctionResult<LoadResult<TItem>>;
     /**
      * @docid
      * @default 'processed'
@@ -132,13 +132,13 @@ export default class CustomStore<
      * @return Promise<any>
      * @public
      */
-    load(): DxExtendedPromise<CustomStoreLoadResult<TItem>>;
+    load(): DxExtendedPromise<LoadResult<TItem>>;
     /**
      * @docid
      * @publicName load(options)
      * @param1 options:LoadOptions
-     * @return Promise<CustomStoreLoadResult>
+     * @return Promise<LoadResult>
      * @public
      */
-    load(options: LoadOptions<TItem>): DxExtendedPromise<CustomStoreLoadResult<TItem>>;
+    load(options: LoadOptions<TItem>): DxExtendedPromise<LoadResult<TItem>>;
 }

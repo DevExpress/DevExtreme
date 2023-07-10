@@ -1,6 +1,6 @@
 const $ = require('jquery');
 const CustomStore = require('data/custom_store');
-const { isCustomStoreSummary, isCustomStoreGroupItemsArray, isCustomStoreItemsArray } = require('common/data');
+const { isSummary, isGroupItemsArray, isItemsArray } = require('common/data');
 const processRequestResultLock = require('data/utils').processRequestResultLock;
 const config = require('core/config');
 const ERRORS = {
@@ -116,13 +116,13 @@ QUnit.test('load, typeguard result check', function(assert) {
     });
 
     store.load({ test: 123 }).done(function(r) {
-        if(isCustomStoreSummary(r)) {
+        if(isSummary(r)) {
             mustNotReach();
         }
-        if(isCustomStoreGroupItemsArray(r)) {
+        if(isGroupItemsArray(r)) {
             mustNotReach();
         }
-        if(isCustomStoreItemsArray(r)) {
+        if(isItemsArray(r)) {
             assert.deepEqual(r, [1, 2, 3]);
         }
         done();

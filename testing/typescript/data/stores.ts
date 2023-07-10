@@ -12,7 +12,7 @@ import {
   notNever,
   toAssertion,
 } from '../consts';
-import type { CustomStoreLoadResult } from '../../../js/common/data';
+import type { LoadResult } from '../../../js/common/data/custom-store';
 
 export async function infersTItemFromComplexLoadResult() {
   const store = new CustomStore({
@@ -38,7 +38,7 @@ export async function loadReturnTypeInferTypeDefinedInOptions() {
   });
 
   const loadResult = await store.load();
-  const actualItem: (typeof loadResult) extends CustomStoreLoadResult<infer Item>
+  const actualItem: (typeof loadResult) extends LoadResult<infer Item>
     ? Item : never = ANY;
 
   notAny(actualItem);
