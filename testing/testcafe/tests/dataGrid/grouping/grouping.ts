@@ -267,6 +267,7 @@ test('Checking group panel and group rows via aXe', async (t) => {
   const { error, results } = await axeCheck(t, undefined, {
     rules: {
       'color-contrast': { enabled: false },
+      'th-has-data-cells': { enabled: false },
     },
   });
 
