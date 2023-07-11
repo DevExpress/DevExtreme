@@ -890,12 +890,10 @@ const dxChart = AdvancedChart.inherit({
 
     that.panes.forEach(({ borderCoords, name }) => {
       const series = allSeries.filter((s) => s.pane === name && s.usePointsToDefineAutoHiding());
-      series.forEach((singleSeries) => {
-        singleSeries.prepareCoordinatesForPoints();
-      });
       const argAxis = that.getArgumentAxis();
       const markersInfo = collectMarkersInfoBySeries(allSeries, series, argAxis);
       fastHidingPointMarkersByArea(borderCoords, markersInfo, series);
+
       if (markersInfo.series.length) {
         const argVisualRange = argAxis.visualRange();
         const argAxisIsDiscrete = argAxis.getOptions().type === DISCRETE;
@@ -904,7 +902,9 @@ const dxChart = AdvancedChart.inherit({
           : (p1, p2) => p1.argument - p2.argument;
         let points = [];
 
-        markersInfo.series.forEach((s: any) => { points = points.concat(s.points); });
+        markersInfo.series.forEach((s: any) => {
+          points = points.concat(s.points);
+        });
         points.sort(sortingCallback);
 
         updateMarkersInfo(points, markersInfo.overloadedSeries);
