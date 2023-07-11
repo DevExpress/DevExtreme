@@ -375,6 +375,7 @@ const Editor = Widget.inherit({
                 this._innerWidgetOptionChanged(this._validationMessage, args);
                 break;
             case '_showValidationMessage':
+            case 'isDirty':
                 break;
             default:
                 this.callBase(args);
