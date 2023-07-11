@@ -521,8 +521,10 @@ function generate({
     }
     Object.keys(rawData.commonReexports).forEach((key) => {
       const targetFileName = key === commonTargetFolderName ? 'index.ts' : `${key.replace(`${commonTargetFolderName}/`, '')}.ts`;
+      const fullPath = joinPaths(commonPath, targetFileName);
+      mkdirSync(getDirName(fullPath), { recursive: true });
       writeFile(
-        joinPaths(commonPath, targetFileName),
+        fullPath,
         generateCommonReexports(key, rawData.commonReexports[key]),
         { encoding: 'utf8' },
       );
