@@ -46,18 +46,10 @@
         },
         {
             "matchPackagePatterns": [ "*" ],
-            "matchUpdateTypes": [ "minor", "patch" ],
-            "automerge": true
-        },
-        {
-            "matchPackagePatterns": [ "*" ],
             "excludePackagePrefixes": [ "cldr-" ],
             "matchUpdateTypes": [ "major" ],
-            "enabled": false
+            "dependencyDashboardApproval": true
         }
-    ],
-    "reviewers": [
-        "team:devextreme-devops"
     ],
     "ignorePaths": [
         ".github"
