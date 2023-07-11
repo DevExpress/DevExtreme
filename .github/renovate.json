@@ -31,6 +31,7 @@
                 "@devextreme/runtime",
                 "devexpress-gantt",
                 "devexpress-diagram",
+                "eslint-config-devextreme",
                 "rrule",
                 "sass-embedded",
                 "sinon",
@@ -49,9 +50,6 @@
             "matchUpdateTypes": [ "major" ],
             "dependencyDashboardApproval": true
         }
-    ],
-    "reviewers": [
-        "team:devextreme-devops"
     ],
     "ignorePaths": [
         ".github"
