@@ -1,6 +1,6 @@
 SystemJS.config({
     map: {
-        'devexpress-diagram': '/testing/helpers/noDiagram.js'
+        'devexpress-diagram': '/packages/devextreme/testing/helpers/noDiagram.js'
     }
 });
 

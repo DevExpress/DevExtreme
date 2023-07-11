@@ -97,7 +97,12 @@ SystemJS.register([], function(exports) {
 `;
 
 const transpileFile = async(sourcePath, targetPath) => {
-    const code = fs.readFileSync(sourcePath).toString().replaceAll(path.normalize('/testing/helpers/'), path.normalize('/artifacts/transpiled-testing/helpers/'));
+    const code = fs.readFileSync(sourcePath)
+        .toString()
+        .replaceAll(path.normalize('/testing/helpers/'), path.normalize('/artifacts/transpiled-testing/helpers/'))
+        .replaceAll(
+            path.normalize('../../../artifacts/js/vectormap-utils/dx.vectormaputils.js'),
+            path.normalize('../../../../artifacts/js/vectormap-utils/dx.vectormaputils.js'));
 
     if(sourcePath.includes('testing/helpers/includeThemesLinks.js')) {
         writeFileSync(targetPath, buildSystemJSModule('', code.replaceAll('\n', '    ')));
