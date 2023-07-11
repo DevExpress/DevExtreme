@@ -3,7 +3,7 @@ import { getAppropriateFormat as _getAppropriateFormat } from '../core/utils';
 import { extend } from '../../core/utils/extend';
 import { Translator1D } from '../translators/translator1d';
 const _extend = extend;
-import BaseWidget from '../core/base_widget';
+import BaseWidget from '../../__internal/viz/core/m_base_widget';
 import themeManagerModule from './theme_manager';
 import Tracker from './tracker';
 import formatHelper from '../../format_helper';
