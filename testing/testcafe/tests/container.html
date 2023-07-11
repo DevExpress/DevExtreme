@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>TestCafe Tests Container</title>
 
@@ -12,12 +12,16 @@
     <link rel="dx-theme" data-theme="material.blue.dark" href="../../../artifacts/css/dx.material.blue.dark.css" data-active="false">
 
     <script type="text/javascript" src="../../../artifacts/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../../../artifacts/js/dx.all.js"></script>
+    <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
 <body>
-    <div id="container">
-    </div>
-    <div id="otherContainer">
+    <div role="main">
+        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
+
+        <div id="container">
+        </div>
+        <div id="otherContainer">
+        </div>
     </div>
 </body>
 </html>

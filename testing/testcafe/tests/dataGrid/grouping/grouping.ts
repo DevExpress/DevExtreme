@@ -1,9 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+/* eslint-disable spellcheck/spell-checker */
+import { axeCheck, createReport } from '@testcafe-community/axe';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import { makeColumnHeadersViewTemplatesAsync } from '../helpers/asyncTemplates';
+import { getData } from '../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Grouping Panel`
   .page(url(__dirname, '../../container.html'));
@@ -259,3 +262,38 @@ safeSizeTest('Empty header message should appear when all columns grouped and se
     },
   });
 });
+
+test('Checking group panel and group rows via aXe', async (t) => {
+  const { error, results } = await axeCheck(t, undefined, {
+    rules: {
+      'color-contrast': { enabled: false },
+    },
+  });
+
+  await t
+    .expect(error)
+    .eql(null)
+    .expect(results.violations.length === 0)
+    .ok(createReport(results.violations));
+}).before(() => createWidget('dxDataGrid', {
+  dataSource: getData(2, 2),
+  keyExpr: 'field_0',
+  allowColumnReordering: true,
+  showBorders: true,
+  grouping: {
+    autoExpandAll: true,
+  },
+  searchPanel: {
+    visible: true,
+  },
+  groupPanel: {
+    visible: true,
+  },
+  columns: [
+    'field_0',
+    {
+      dataField: 'field_1',
+      groupIndex: 0,
+    },
+  ],
+}));
