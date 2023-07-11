@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-/* eslint-disable spellcheck/spell-checker */
-import { axeCheck, createReport } from '@testcafe-community/axe';
+import { a11yCheck } from '@testcafe-community/axe';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
@@ -264,18 +263,7 @@ safeSizeTest('Empty header message should appear when all columns grouped and se
 });
 
 test('Checking group panel and group rows via aXe', async (t) => {
-  const { error, results } = await axeCheck(t, undefined, {
-    rules: {
-      'color-contrast': { enabled: false },
-      'th-has-data-cells': { enabled: false },
-    },
-  });
-
-  await t
-    .expect(error)
-    .eql(null)
-    .expect(results.violations.length === 0)
-    .ok(createReport(results.violations));
+  await a11yCheck(t);
 }).before(() => createWidget('dxDataGrid', {
   dataSource: getData(2, 2),
   keyExpr: 'field_0',
