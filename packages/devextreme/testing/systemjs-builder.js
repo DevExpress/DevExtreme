@@ -136,7 +136,7 @@ System.register('${filePath}', [], false, function() {});
     if (typeof document == 'undefined') return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/${filePath}';
+    link.href = '/packages/devextreme/${filePath}';
     link.setAttribute('data-theme', '${name}');
     document.getElementsByTagName('head')[0].appendChild(link);
 })();

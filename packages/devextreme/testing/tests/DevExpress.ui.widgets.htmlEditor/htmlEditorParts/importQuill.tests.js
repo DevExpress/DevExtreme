@@ -1,7 +1,7 @@
 
 SystemJS.config({
     map: {
-        'devextreme-quill': '/testing/helpers/quillDependencies/noQuill.js'
+        'devextreme-quill': '/packages/devextreme/testing/helpers/quillDependencies/noQuill.js'
     }
 });
 
