@@ -7,7 +7,7 @@ import DataGrid from '../../../model/dataGrid';
 import { makeColumnHeadersViewTemplatesAsync } from '../helpers/asyncTemplates';
 import { getData } from '../helpers/generateDataSourceData';
 
-fixture.disablePageReloads`Grouping Panel`
+fixture`Grouping Panel`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
