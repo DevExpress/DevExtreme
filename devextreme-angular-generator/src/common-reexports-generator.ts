@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
-import { join as joinPaths } from 'path';
+import { join as joinPaths, dirname as getDirName } from 'path';
 import { createTemplateFromString } from './dot-generator';
 
 const render: (model: { module: string, reexports: string[] }) => string = createTemplateFromString(`
@@ -23,8 +23,10 @@ export default class CommonReexportsGenerator {
     }
     Object.keys(metadata.CommonReexports).forEach((key) => {
       const targetFileName = key === commonTargetFolderName ? 'index.ts' : `${key.replace(`${commonTargetFolderName}/`, '')}.ts`;
+      const fullPath = joinPaths(commonPath, targetFileName);
+      mkdirSync(getDirName(fullPath), { recursive: true });
       writeFileSync(
-        joinPaths(commonPath, targetFileName),
+        fullPath,
         this.generateReexports(key, metadata.CommonReexports[key]),
         { encoding: 'utf8' },
       );
