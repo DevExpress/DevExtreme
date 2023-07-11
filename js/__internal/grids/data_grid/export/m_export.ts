@@ -31,8 +31,8 @@ export class DataProvider {
   private readonly _selectedRowsOnly: any;
 
   private _options!: {
-    isHeadersVisible: any;
-    rtlEnabled: any;
+    isHeadersVisible: boolean | undefined;
+    rtlEnabled: boolean | undefined;
     summaryTexts: any;
     groupColumns: any;
     items: any;
