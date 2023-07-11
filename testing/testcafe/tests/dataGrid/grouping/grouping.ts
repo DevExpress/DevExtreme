@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { a11yCheck } from '@testcafe-community/axe';
+import { a11yCheck } from '../../../helpers/accessibilityUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
