@@ -2510,7 +2510,7 @@ QUnit.module('Rows view', {
         assert.equal(testElement.find('tbody > tr').length, 4, 'rows count: 3 + 1 freespace row');
 
         assert.equal(testElement.find('tbody > tr').eq(0).attr('role'), 'row');
-        assert.equal(testElement.find('tbody > tr').eq(0).attr('aria-expanded'), 'true');
+        assert.equal(testElement.find('tbody > tr').eq(0).attr('aria-roledescription'), 'Expanded row');
         assert.ok($(testElement.find('tbody > tr')[0]).hasClass('dx-group-row'));
         assert.equal($(testElement.find('tbody > tr')[0]).find('td').length, 2);
         assert.ok($(testElement.find('tbody > tr')[0]).find('td').first().children().first().hasClass('dx-datagrid-group-opened'));
@@ -2518,7 +2518,7 @@ QUnit.module('Rows view', {
         assert.equal($(testElement.find('tbody > tr')[0]).find('td').last().attr('colspan'), 2);
 
         assert.equal(testElement.find('tbody > tr').eq(1).attr('role'), 'row');
-        assert.equal(testElement.find('tbody > tr').eq(1).attr('aria-expanded'), 'false');
+        assert.equal(testElement.find('tbody > tr').eq(1).attr('aria-roledescription'), 'Collapsed row');
         assert.ok($(testElement.find('tbody > tr')[1]).hasClass('dx-group-row'));
         assert.equal($(testElement.find('tbody > tr')[1]).find('td').length, 3);
         assert.equal($(testElement.find('tbody > tr')[1]).find('td').first().text(), '');
@@ -5465,7 +5465,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         assert.equal(testElement.find('tbody > tr').length, 7, 'rows count: 6 + 1 freespace row');
 
         assert.equal(testElement.find('tbody > tr').eq(0).attr('role'), 'row');
-        assert.equal(testElement.find('tbody > tr').eq(0).attr('aria-expanded'), 'true');
+        assert.equal(testElement.find('tbody > tr').eq(0).attr('aria-roledescription'), 'Expanded row');
         assert.ok($(testElement.find('tbody > tr')[0]).hasClass('dx-group-row'));
         assert.equal($(testElement.find('tbody > tr')[0]).find('td').last().text(), 'Last Name: Heart');
         assert.equal($(testElement.find('tbody > tr')[0]).find('td').last().attr('colspan'), 2);

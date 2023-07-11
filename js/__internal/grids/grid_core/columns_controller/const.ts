@@ -5,6 +5,7 @@ export const IGNORE_COLUMN_OPTION_NAMES = { visibleWidth: true, bestFitWidth: tr
 export const COMMAND_EXPAND_CLASS = 'dx-command-expand';
 export const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
 export const GROUP_COMMAND_COLUMN_NAME = 'groupExpand';
+export const DETAIL_COMMAND_COLUMN_NAME = 'detailExpand';
 export const COLUMN_OPTION_REGEXP = /columns\[(\d+)\]\.?/gi;
 
 export const DEFAULT_COLUMN_OPTIONS = {

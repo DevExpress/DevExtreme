@@ -173,6 +173,7 @@ class ToolbarBase extends AsyncCollectionWidget {
             if(!$section.length) {
                 this[`_$${section}Section`] = $('<div>')
                     .addClass(sectionClass)
+                    .attr('role', 'presentation')
                     .appendTo($container);
             }
         });

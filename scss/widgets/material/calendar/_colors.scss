@@ -8,13 +8,19 @@
 $calendar-color: $base-text-color !default;
 
 /**
-* $name 20. Header text color
+* $name 20. Navigator text color
+* $type color
+*/
+$calendar-navigator-text-color: $button-default-bg !default;
+
+/**
+* $name 30. Header text color
 * $type color
 */
 $calendar-header-color: $calendar-color !default;
 
 /**
-* $name 30. Other month text color
+* $name 40. Other month text color
 * $type color
 */
 $calendar-cell-other-color: color.change($calendar-color, $alpha: 0.38) !default;
@@ -25,7 +31,7 @@ $calendar-cell-hover-border-color: color.change($base-accent, $alpha: 0.6) !defa
 $calendar-cell-hover-color: $calendar-color !default;
 
 /**
-* $name 40. Selected cell background color
+* $name 50. Selected cell background color
 * $type color
 */
 $calendar-cell-selected-bg: $base-accent !default;

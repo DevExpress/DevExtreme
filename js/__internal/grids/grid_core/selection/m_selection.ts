@@ -5,6 +5,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { touch } from '@js/core/utils/support';
 import { isDefined } from '@js/core/utils/type';
+import { applyBatch } from '@js/data/array_utils';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import holdEvent from '@js/events/hold';
@@ -112,6 +113,8 @@ export class SelectionController extends modules.Controller {
 
   private _selectedItemsInternalChange?: boolean;
 
+  private _dataPushedHandler: any;
+
   init() {
     // @ts-expect-error
     const { deferred, selectAllMode, mode } = this.option('selection') ?? {};
@@ -126,15 +129,26 @@ export class SelectionController extends modules.Controller {
     this._selection = this._createSelection();
     this._updateSelectColumn();
     this.createAction('onSelectionChanged', { excludeValidators: ['disabled', 'readOnly'] });
-    this._dataController && this._dataController.pushed.add(this._handleDataPushed.bind(this));
+
+    if (!this._dataPushedHandler) {
+      this._dataPushedHandler = this._handleDataPushed.bind(this);
+      this._dataController.pushed.add(this._dataPushedHandler);
+    }
   }
 
   _handleDataPushed(changes) {
+    this._deselectRemovedOnPush(changes);
+    this._updateSelectedOnPush(changes);
+  }
+
+  _deselectRemovedOnPush(changes) {
+    const isDeferredSelection = this.option('selection.deferred');
+
     let removedKeys = changes
       .filter((change) => change.type === 'remove')
       .map((change) => change.key);
 
-    if (this.option('selection.deferred')) {
+    if (isDeferredSelection) {
       const selectedKeys = this._dataController.items()
         .filter((item) => item.isSelected)
         .map((item) => item.key);
@@ -144,6 +158,23 @@ export class SelectionController extends modules.Controller {
     }
 
     removedKeys.length && this.deselectRows(removedKeys);
+  }
+
+  _updateSelectedOnPush(changes) {
+    const isDeferredSelection = this.option('selection.deferred');
+
+    if (isDeferredSelection) {
+      return;
+    }
+
+    const updateChanges = changes.filter((change) => change.type === 'update');
+    const data = this.getSelectedRowsData();
+
+    applyBatch({
+      keyInfo: this._selection.options,
+      data,
+      changes: updateChanges,
+    } as any);
   }
 
   _getSelectionConfig() {

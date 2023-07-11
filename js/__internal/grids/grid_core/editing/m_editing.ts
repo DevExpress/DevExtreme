@@ -430,7 +430,7 @@ class EditingControllerImpl extends modules.ViewController {
     return gridCoreUtils.getIndexByKey(key, items);
   }
 
-  hasChanges(rowIndex?) {
+  hasChanges(rowIndex?): boolean {
     const changes = this.getChanges();
     let result = false;
 

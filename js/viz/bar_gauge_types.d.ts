@@ -14,5 +14,8 @@ export {
   OptionChangedEvent,
   TooltipHiddenEvent,
   TooltipShownEvent,
+  Legend,
+  LoadingIndicator,
+  Tooltip,
   Properties,
 } from './bar_gauge';

@@ -336,8 +336,10 @@ const MultiView = CollectionWidget.inherit({
         });
 
         this._boundaryIndices = {
-            firstIndex: firstIndex ?? 0,
-            lastIndex: lastIndex ?? items.length - 1,
+            firstAvailableIndex: firstIndex ?? 0,
+            lastAvailableIndex: lastIndex ?? items.length - 1,
+            firstTrueIndex: 0,
+            lastTrueIndex: items.length - 1,
         };
     },
 
@@ -347,12 +349,12 @@ const MultiView = CollectionWidget.inherit({
         const selectedIndex = this.option('selectedIndex');
         const loop = this.option('loop');
 
-        const { firstIndex, lastIndex } = this._boundaryIndices;
+        const { firstAvailableIndex, lastAvailableIndex } = this._boundaryIndices;
 
         const rtl = this.option('rtlEnabled');
 
-        e.maxLeftOffset = toNumber(loop || (rtl ? selectedIndex > firstIndex : selectedIndex < lastIndex));
-        e.maxRightOffset = toNumber(loop || (rtl ? selectedIndex < lastIndex : selectedIndex > firstIndex));
+        e.maxLeftOffset = toNumber(loop || (rtl ? selectedIndex > firstAvailableIndex : selectedIndex < lastAvailableIndex));
+        e.maxRightOffset = toNumber(loop || (rtl ? selectedIndex < lastAvailableIndex : selectedIndex > firstAvailableIndex));
 
         this._swipeDirection = null;
     },
@@ -375,17 +377,20 @@ const MultiView = CollectionWidget.inherit({
 
     _findNextAvailableIndex(index, offset) {
         const { items, loop } = this.option();
-        const { firstIndex, lastIndex } = this._boundaryIndices;
+        const { firstAvailableIndex, lastAvailableIndex, firstTrueIndex, lastTrueIndex } = this._boundaryIndices;
+
+        const isFirstActive = [firstTrueIndex, firstAvailableIndex].includes(index);
+        const isLastActive = [lastTrueIndex, lastAvailableIndex].includes(index);
 
         if(loop) {
-            if(index === firstIndex) {
-                return lastIndex;
-            } else if(index === lastIndex) {
-                return firstIndex;
+            if(isFirstActive && offset < 0) {
+                return lastAvailableIndex;
+            } else if(isLastActive && offset > 0) {
+                return firstAvailableIndex;
             }
         }
 
-        for(let i = index + offset; i >= firstIndex && i <= lastIndex; i += offset) {
+        for(let i = index + offset; i >= firstAvailableIndex && i <= lastAvailableIndex; i += offset) {
             const isDisabled = Boolean(items[i].disabled);
 
             if(!isDisabled) {
@@ -401,6 +406,7 @@ const MultiView = CollectionWidget.inherit({
 
         if(targetOffset) {
             const newSelectedIndex = this._findNextAvailableIndex(this.option('selectedIndex'), -targetOffset);
+
             this.option('selectedIndex', newSelectedIndex);
 
             // TODO: change focusedElement on focusedItem
@@ -454,6 +460,7 @@ const MultiView = CollectionWidget.inherit({
 
     _dispose: function() {
         delete this._boundaryIndices;
+
         this.callBase();
     },
 

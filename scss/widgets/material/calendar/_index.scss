@@ -29,6 +29,9 @@
   }
 }
 
+@include dx-calendar-navigator-mixin(
+  $calendar-navigator-text-color,
+);
 @include dx-calendar-body-mixin(
   $calendar-cell-other-color,
   $calendar-week-number-cell-color,

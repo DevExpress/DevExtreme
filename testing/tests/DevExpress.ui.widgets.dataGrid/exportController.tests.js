@@ -2175,6 +2175,7 @@ QUnit.module('Export menu', {
 
         const $container = $('#container');
 
+        this.headerPanel._needDisableExportButton = () => false;
         this.headerPanel.render($container);
 
         const $button = $container.find('.dx-datagrid-export-button');
@@ -2199,9 +2200,11 @@ QUnit.module('Export menu', {
         }, true);
 
         const $container = $('#container');
-        this.headerPanel.render($container);
 
-        this.headerPanel._exportController.exportTo = sinon.spy();
+        this.headerPanel._needDisableExportButton = () => false;
+        this.exportController.exportTo = sinon.spy();
+
+        this.headerPanel.render($container);
 
         // assert
         assert.ok(this.headerPanel.isVisible(), 'is visible');
@@ -2239,10 +2242,12 @@ QUnit.module('Export menu', {
                     enabled: true,
                     allowExportSelectedData: true
                 },
+                columns: ['field1'],
                 onExporting,
             }, true);
 
             const $container = $('#container');
+
             this.headerPanel.render($container);
 
             // act
@@ -2382,6 +2387,7 @@ QUnit.module('Export menu', {
 
         const $container = $('#container');
 
+        this.headerPanel._needDisableExportButton = () => false;
         this.headerPanel.render($container);
         this.refresh();
 
@@ -2391,42 +2397,43 @@ QUnit.module('Export menu', {
     });
 
     QUnit.test('Export button disable on editing', function(assert) {
+        // arrange
         this.setupModules({
             'export': {
                 enabled: true
-            }
+            },
+            columns: ['field1']
         }, true);
 
         const $container = $('#container');
-        let $exportButton;
 
         this.headerPanel.render($container);
-        $exportButton = $container.find('.dx-datagrid-export-button');
 
-        assert.ok(
-            !(
-                $exportButton.closest('.dx-toolbar-item').hasClass('dx-state-disabled')
-                || $exportButton.hasClass('dx-state-disabled')
-            ),
-            'Export button is enabled before editing start'
-        );
+        let $exportButton = $container.find('.dx-datagrid-export-button');
+        const isExportButtonDisabled = () =>
+            $exportButton.closest('.dx-toolbar-item').hasClass('dx-state-disabled') ||
+            $exportButton.hasClass('dx-state-disabled');
 
+        // assert
+        assert.ok(!isExportButtonDisabled(), 'Export button is enabled before editing start');
+
+        // act
         this.editingController.hasChanges = function() { return true; };
         this.editingController._updateEditButtons();
 
+        // assert
         $exportButton = $container.find('.dx-datagrid-export-button');
 
-        assert.ok(
-            $exportButton.closest('.dx-toolbar-item').hasClass('dx-state-disabled')
-            || $exportButton.hasClass('dx-state-disabled'),
-            'Export button is disabled after editing'
-        );
+        assert.ok(isExportButtonDisabled(), 'Export button is disabled after editing');
 
+        // act
         this.editingController.hasChanges = function() { return false; };
         this.editingController._updateEditButtons();
+
+        // assert
         $exportButton = $container.closest('.dx-toolbar-item').find('.dx-datagrid-export-button');
 
-        assert.ok(!$exportButton.hasClass('dx-state-disabled'), 'Export button is enabled after saving');
+        assert.ok(!isExportButtonDisabled(), 'Export button is enabled after saving');
     });
 
     QUnit.test('Show the export to excel button and a context menu via an option', function(assert) {
@@ -2442,6 +2449,7 @@ QUnit.module('Export menu', {
             return $container;
         };
 
+        this.headerPanel._needDisableExportButton = () => false;
         this.headerPanel.render($container);
         this.headerPanel._$element = $container;
         this.headerPanel.option('export.allowExportSelectedData', true);
@@ -2604,7 +2612,9 @@ QUnit.module('Export menu', {
             return $container;
         };
 
+        this.headerPanel._needDisableExportButton = () => false;
         this.headerPanel.render($container);
+
         const $exportButton = $container.find('.dx-datagrid-export-button .dx-button').first();
         $($exportButton).trigger('dxclick');
 
@@ -2655,7 +2665,8 @@ QUnit.module('Export menu', {
             },
             stateStoring: {
                 enabled: true
-            }
+            },
+            columns: ['field1']
         }, true);
 
         const $container = $('#container');

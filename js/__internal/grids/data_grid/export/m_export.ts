@@ -691,12 +691,14 @@ dataGridCore.registerModule('export', {
       editing: {
         callbackNames() {
           const callbackList = this.callBase();
-          return isDefined(callbackList) ? callbackList.push('editingChanged') : ['editingChanged'];
+
+          return isDefined(callbackList) ? callbackList.push('editingButtonsUpdated') : ['editingButtonsUpdated'];
         },
 
         _updateEditButtons() {
           this.callBase();
-          this.editingChanged.fire(this.hasChanges());
+
+          this.editingButtonsUpdated.fire();
         },
       },
     },
@@ -706,6 +708,7 @@ dataGridCore.registerModule('export', {
           const items = this.callBase();
 
           const exportButton = this._getExportToolbarButton();
+
           if (exportButton) {
             items.push(exportButton);
             this._correctItemsPosition(items);
@@ -721,12 +724,15 @@ dataGridCore.registerModule('export', {
             return null;
           }
 
+          const disabled = this._needDisableExportButton();
+
           const toolbarButtonOptions: any = {
             name: DATAGRID_EXPORT_TOOLBAR_BUTTON_NAME,
             location: 'after',
             locateInMenu: 'auto',
             sortIndex: 30,
             options: { items },
+            disabled,
           };
 
           if (items.length === 1) {
@@ -830,13 +836,35 @@ dataGridCore.registerModule('export', {
           }
         },
 
+        _needDisableExportButton(): boolean {
+          const isDataColumnsInvisible = !this._columnsController.hasVisibleDataColumns();
+          const hasUnsavedChanges = this._editingController.hasChanges();
+
+          return isDataColumnsInvisible || hasUnsavedChanges;
+        },
+
+        _columnOptionChanged(e) {
+          this.callBase(e);
+
+          const isColumnLocationChanged = dataGridCore.checkChanges(e.optionNames, ['groupIndex', 'visible', 'all']);
+
+          if (isColumnLocationChanged) {
+            const disabled = this._needDisableExportButton();
+
+            this.setToolbarItemDisabled('exportButton', disabled);
+          }
+        },
+
         init() {
-          const that = this;
           this.callBase();
+
           this._exportController = this.getController('export');
           this._editingController = this.getController('editing');
-          this._editingController.editingChanged.add((hasChanges) => {
-            that.setToolbarItemDisabled('exportButton', hasChanges);
+
+          this._editingController.editingButtonsUpdated.add(() => {
+            const disabled = this._needDisableExportButton();
+
+            this.setToolbarItemDisabled('exportButton', disabled);
           });
         },
 
