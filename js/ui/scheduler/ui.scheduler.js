@@ -1406,6 +1406,8 @@ class Scheduler extends Widget {
         this.createAppointmentDataProvider();
 
         this._filterAppointmentsByDate();
+
+        this._validateKeyFieldIfAgendaExist();
     }
 
     _isDataSourceLoaded() { // TODO
@@ -1517,16 +1519,6 @@ class Scheduler extends Widget {
 
     getAppointmentDurationInMinutes() {
         return this._getCurrentViewOption('cellDuration');
-    }
-
-    _validateCellDuration() {
-        const endDayHour = this._getCurrentViewOption('endDayHour');
-        const startDayHour = this._getCurrentViewOption('startDayHour');
-        const cellDuration = this._getCurrentViewOption('cellDuration');
-
-        if((endDayHour - startDayHour) * MINUTES_IN_HOUR % cellDuration !== 0) {
-            errors.log('W1015');
-        }
     }
 
     _getCurrentViewType() { // TODO get rid of mapping
@@ -2474,6 +2466,29 @@ class Scheduler extends Widget {
         return isDefined(this.option('firstDayOfWeek'))
             ? this.option('firstDayOfWeek')
             : dateLocalization.firstDayOfWeekIndex();
+    }
+
+    _validateKeyFieldIfAgendaExist() {
+        if(!this.appointmentDataProvider.isDataSourceInit) {
+            return;
+        }
+
+        const hasAgendaView = !!this._getViewByName('agenda');
+        const isKeyExist = !!this.appointmentDataProvider.keyName;
+
+        if(hasAgendaView && !isKeyExist) {
+            errors.log('W1023');
+        }
+    }
+
+    _validateCellDuration() {
+        const endDayHour = this._getCurrentViewOption('endDayHour');
+        const startDayHour = this._getCurrentViewOption('startDayHour');
+        const cellDuration = this._getCurrentViewOption('cellDuration');
+
+        if((endDayHour - startDayHour) * MINUTES_IN_HOUR % cellDuration !== 0) {
+            errors.log('W1015');
+        }
     }
 
     _validateDayHours() {

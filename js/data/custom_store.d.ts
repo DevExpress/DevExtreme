@@ -1,6 +1,7 @@
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 import { Options as StoreOptions, Store } from './abstract_store';
 import { DxExtendedPromise, DxPromise } from '../core/utils/deferred';
+import { GroupItem as CustomStoreGroupItem, LoadResult } from '../common/data/custom-store';
 
 /** @public */
 export type Options<
@@ -9,38 +10,20 @@ export type Options<
 > = CustomStoreOptions<TItem, TKey>;
 
 /**
- * @docid
  * @public
+ * @deprecated Use GroupItem from common/data/custom-store instead
  */
-export type GroupItem<
-    TItem = any,
-> = {
-  key: any | string | number;
-  items: Array<TItem> | Array<GroupItem<TItem>> | null;
-  count?: number;
-  summary?: Array<any>;
-};
-
-type ItemsArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
+export type GroupItem<TItem = any> = CustomStoreGroupItem<TItem>;
 
 /**
  * @docid
  * @public
  * @type object
+ * @deprecated Use LoadResult instead
  */
-export type ResolvedData<
-    TItem = any,
-> =
-  | Object
-  | ItemsArray<TItem>
-  | {
-      data: Array<TItem> | Array<GroupItem>;
-      totalCount?: number;
-      summary?: Array<any>;
-      groupCount?: number;
-    };
+export type ResolvedData<TItem = any> = LoadResult<TItem>;
 
-type LoadResult<T> = T | DxPromise<T> | PromiseLike<T>;
+type LoadFunctionResult<T> = T | DxPromise<T> | PromiseLike<T>;
 
 /**
  * @namespace DevExpress.data
@@ -75,10 +58,10 @@ export interface CustomStoreOptions<
     /**
      * @docid
      * @type_function_param1 options:LoadOptions
-     * @type_function_return Promise<Array<any>|object>|Array<any>
+     * @type_function_return LoadResult|Promise<LoadResult>
      * @public
      */
-    load: (options: LoadOptions<TItem>) => LoadResult<ResolvedData<TItem>>;
+    load: (options: LoadOptions<TItem>) => LoadFunctionResult<LoadResult<TItem>>;
     /**
      * @docid
      * @default 'processed'
@@ -147,13 +130,13 @@ export default class CustomStore<
      * @return Promise<any>
      * @public
      */
-    load(): DxExtendedPromise<ResolvedData<TItem>>;
+    load(): DxExtendedPromise<LoadResult<TItem>>;
     /**
      * @docid
      * @publicName load(options)
      * @param1 options:LoadOptions
-     * @return Promise<any>
+     * @return Promise<LoadResult>
      * @public
      */
-    load(options: LoadOptions<TItem>): DxExtendedPromise<ResolvedData<TItem>>;
+    load(options: LoadOptions<TItem>): DxExtendedPromise<LoadResult<TItem>>;
 }

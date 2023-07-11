@@ -35,6 +35,7 @@ export const labelEnvironment = $.extend({}, environment, {
 
         sinon.stub(labelModule, 'Label', function() {
             const stub = new stubLabel();
+            stub.stub('isVisible').returns(true);
             stub.stub('getBoundingRect').returns(that.labelBoxes[(labelBoxesIndex++) % that.labelBoxes.length]);
             return stub;
         });

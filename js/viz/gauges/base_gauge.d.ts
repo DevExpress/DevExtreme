@@ -126,6 +126,7 @@ export interface BaseGaugeOptions<TComponent> extends BaseWidgetOptions<TCompone
     value?: number;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
@@ -150,6 +151,7 @@ export interface BaseGaugeAnimation {
     enabled?: boolean;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
@@ -161,6 +163,7 @@ export interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     enabled?: boolean;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
@@ -211,6 +214,7 @@ export interface BaseGaugeRangeContainer {
     }>;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
@@ -337,6 +341,7 @@ export interface BaseGaugeScale {
     tickInterval?: number;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */
@@ -379,6 +384,7 @@ export interface BaseGaugeScaleLabel {
     visible?: boolean;
 }
 /**
+ * @hidden
  * @docid
  * @namespace DevExpress.viz
  */

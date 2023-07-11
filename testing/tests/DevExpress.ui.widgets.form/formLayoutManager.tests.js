@@ -14,6 +14,7 @@ import 'ui/switch';
 import 'ui/lookup';
 import 'ui/text_area';
 import 'ui/radio_group';
+import 'ui/date_range_box';
 
 import 'generic_light.css!';
 
@@ -191,11 +192,15 @@ QUnit.test('Change a layoutData object', function(assert) {
             name: 'Patti',
             active: true,
             price: 1200,
-            birthDate: new Date('10/10/2010')
+            birthDate: new Date('10/10/2010'),
+            vacation: [null, '9/17/2023'],
         },
         customizeItem: function(item) {
             if(item.dataField === 'active') {
                 item.editorType = 'dxSwitch';
+            }
+            if(item.dataField === 'vacation') {
+                item.editorType = 'dxDateRangeBox';
             }
         }
     }).dxLayoutManager('instance');
@@ -204,7 +209,8 @@ QUnit.test('Change a layoutData object', function(assert) {
         name: 'Vadim',
         active: null,
         price: 450,
-        birthDate: new Date('1/1/2001')
+        birthDate: new Date('1/1/2001'),
+        vacation: [null, null]
     });
 
     const $editors = $testContainer.find('.dx-texteditor, .dx-switch');
@@ -213,6 +219,7 @@ QUnit.test('Change a layoutData object', function(assert) {
     assert.equal($editors.eq(1).dxSwitch('instance').option('value'), false);
     assert.equal($editors.eq(2).dxNumberBox('instance').option('value'), 450);
     assert.deepEqual($editors.eq(3).dxDateBox('instance').option('value'), new Date('1/1/2001'));
+    assert.deepEqual($editors.eq(4).dxDateRangeBox('instance').option('value'), [null, null]);
 });
 
 function triggerKeyUp($element, key) {

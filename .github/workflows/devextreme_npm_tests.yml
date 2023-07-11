@@ -182,7 +182,7 @@ jobs:
 
     - name: Clone devextreme-angular repo
       run: |
-        test -d ../devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
+        test -d ../devextreme-angular-repo || git clone -b 23.1 https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
@@ -348,7 +348,9 @@ jobs:
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
         CI_ENV: true
-      run: npm run test-testcafe
+      run: |
+        npm i testcafe@2.5.0
+        npm run test-testcafe
 
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
