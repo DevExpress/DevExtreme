@@ -1524,9 +1524,56 @@ declare module DevExpress.common {
      */
     useLegacyVisibleIndex?: boolean;
   };
+  /**
+   * [descr:GroupItem]
+   */
+  export type GroupItem<TItem = any> = {
+    key: any | string | number;
+    items: Array<TItem> | Array<GroupItem<TItem>> | null;
+    count?: number;
+    summary?: Array<any>;
+  };
   export type HorizontalAlignment = 'center' | 'left' | 'right';
   export type HorizontalEdge = 'left' | 'right';
+  /**
+   * [descr:isGroupItemsArray]
+   */
+  export function isGroupItemsArray<TItem>(
+    res: LoadResult<TItem>
+  ): res is Array<GroupItem<TItem>>;
+  /**
+   * [descr:isItemsArray]
+   */
+  export function isItemsArray<TItem>(
+    res: LoadResult<TItem>
+  ): res is Array<TItem>;
+  /**
+   * [descr:isSummary]
+   */
+  export function isSummary<TItem>(
+    res: LoadResult<TItem>
+  ): res is LoadedSummary<TItem>;
   export type LabelMode = 'static' | 'floating' | 'hidden';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type LoadedArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
+  /**
+   * [descr:LoadedSummary]
+   */
+  export type LoadedSummary<TItem = any> = {
+    data: Array<TItem> | Array<GroupItem<TItem>>;
+    totalCount?: number;
+    summary?: Array<any>;
+    groupCount?: number;
+  };
+  /**
+   * [descr:LoadResult]
+   */
+  export type LoadResult<TItem = any> =
+    | Object
+    | LoadedArray<TItem>
+    | LoadedSummary<TItem>;
   export type MaskMode = 'always' | 'onFocus';
   export type Mode = 'auto';
 
@@ -4403,7 +4450,7 @@ declare module DevExpress.data {
      * [descr:CustomStore.load()]
      */
     load(): DevExpress.core.utils.DxExtendedPromise<
-      DevExpress.data.CustomStore.ResolvedData<TItem>
+      DevExpress.common.LoadResult<TItem>
     >;
     /**
      * [descr:CustomStore.load(options)]
@@ -4411,24 +4458,18 @@ declare module DevExpress.data {
     load(
       options: LoadOptions<TItem>
     ): DevExpress.core.utils.DxExtendedPromise<
-      DevExpress.data.CustomStore.ResolvedData<TItem>
+      DevExpress.common.LoadResult<TItem>
     >;
   }
   module CustomStore {
-    export type GroupItem<TItem = any> = {
-      key: any | string | number;
-      items: Array<TItem> | Array<GroupItem<TItem>> | null;
-      count?: number;
-      summary?: Array<any>;
-    };
+    /**
+     * @deprecated Use GroupItem from common/data/custom-store instead
+     */
+    export type GroupItem<TItem = any> = DevExpress.common.GroupItem<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    type ItemsArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    type LoadResult<T> =
+    type LoadFunctionResult<T> =
       | T
       | DevExpress.core.utils.DxPromise<T>
       | PromiseLike<T>;
@@ -4436,15 +4477,11 @@ declare module DevExpress.data {
       TItem,
       TKey
     >;
-    export type ResolvedData<TItem = any> =
-      | Object
-      | ItemsArray<TItem>
-      | {
-          data: Array<TItem> | Array<GroupItem>;
-          totalCount?: number;
-          summary?: Array<any>;
-          groupCount?: number;
-        };
+    /**
+     * [descr:ResolvedData]
+     * @deprecated [depNote:ResolvedData]
+     */
+    export type ResolvedData<TItem = any> = DevExpress.common.LoadResult<TItem>;
   }
   /**
    * @deprecated Use Options instead
@@ -4469,8 +4506,8 @@ declare module DevExpress.data {
      */
     load: (
       options: LoadOptions<TItem>
-    ) => DevExpress.data.CustomStore.LoadResult<
-      DevExpress.data.CustomStore.ResolvedData<TItem>
+    ) => DevExpress.data.CustomStore.LoadFunctionResult<
+      DevExpress.common.LoadResult<TItem>
     >;
     /**
      * [descr:CustomStoreOptions.loadMode]
