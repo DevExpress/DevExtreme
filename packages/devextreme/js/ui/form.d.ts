@@ -302,6 +302,12 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @public
      */
     validationGroup?: string;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    isDirty?: boolean;
 }
 /**
  * @docid

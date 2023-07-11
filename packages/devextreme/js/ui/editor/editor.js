@@ -92,7 +92,9 @@ const Editor = Widget.inherit({
 
             validationTooltipOptions: {},
 
-            _showValidationMessage: true
+            _showValidationMessage: true,
+
+            isDirty: false
         });
     },
 
