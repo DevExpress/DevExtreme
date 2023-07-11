@@ -5,7 +5,7 @@ concurrency:
   cancel-in-progress: true
 
 on:
-#  pull_request:
+  pull_request:
   push:
     branches: [23_2]
 
@@ -27,7 +27,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -35,6 +35,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
+      working-directory: ./packages/devextreme
       env:
         DEVEXTREME_TEST_CI: "true"
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
@@ -42,6 +43,7 @@ jobs:
       run: BUILD_INPROGRESS_RENOVATION=true npm run build:dev
 
     - name: Zip artifacts
+      working-directory: ./packages/devextreme
       run: |
         7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
 
@@ -49,7 +51,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: devextreme-artifacts
-        path: artifacts.zip
+        path: packages/devextreme/artifacts.zip
         retention-days: 1
 
   qunit-tests:

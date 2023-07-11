@@ -5,7 +5,7 @@ concurrency:
   cancel-in-progress: true
 
 on:
-#  pull_request:
+  pull_request:
   push:
     branches: [23_2]
 
@@ -33,12 +33,14 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Compile renovation
+      working-directory: ./packages/devextreme
       run: |
         npm i cheerio@1.0.0-rc.10
         npm run compile:r
 # Remove package install after upgrade to TypeScript >= 4.6
 
     - name: Lint renovation
+      working-directory: ./packages/devextreme
       run: npm run lint-renovation
 
   TS:
@@ -56,7 +58,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -64,20 +66,24 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Run npm install TS testing
+      working-directory: ./packages/devextreme
       run: |
         pushd testing/typescript
         npm install --no-audit --no-fund
         popd
 
     - name: Build
+      working-directory: ./packages/devextreme
       run: npm run build
 
     - name: Lint TS
+      working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
       run: npm run lint-ts
 
     - name: Lint .d.ts
+      working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
       run: npm run lint-dts
@@ -97,7 +103,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -105,9 +111,11 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
+      working-directory: ./packages/devextreme
       run: npm run build
 
     - name: Lint JS
+      working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
       run: npm run lint-js
@@ -127,7 +135,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -135,6 +143,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Check texts
+      working-directory: ./packages/devextreme
       run: npm run lint-texts
 
   CSS:
@@ -152,14 +161,16 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
+      working-directory: ./packages/devextreme
       run: npm install --no-audit --no-fund
 
     - name: Lint CSS
+      working-directory: ./packages/devextreme
       run: npm run lint-css
 
   package_lock_npm_6:
@@ -182,6 +193,7 @@ jobs:
         npm install --no-audit --no-fund
 
     - name: Check build
+      working-directory: ./packages/devextreme
       run: npm run build:dev
 
   package_lock:
@@ -216,6 +228,7 @@ jobs:
         node-version: '18'
 
     - name: Check generated component reexports
+      working-directory: ./packages/devextreme
       run: |
         node -v
         npm -v
