@@ -9,8 +9,15 @@ const prettify = require('gulp-jsbeautifier');
 
 const context = require('./context.js');
 
+// NOTE:
+// Removes the #DEBUG section from the code in the production build.
+// E.g. removes the next code:
+// //#DEBUG
+// // some code.
+// //#ENDDEBUG
+// Between comment slashes (/) and # may be space symbols (count doesn't matter).
 const removeDebug = lazyPipe().pipe(function() {
-    return replace(/\/{2,}#DEBUG[\s\S]*?\/{2,}#ENDDEBUG/g, '');
+    return replace(/\/{2,}\s{0,}#DEBUG[\s\S]*?\/{2,}\s{0,}#ENDDEBUG/g, '');
 });
 
 function saveLicenseComments(node, comment) {
