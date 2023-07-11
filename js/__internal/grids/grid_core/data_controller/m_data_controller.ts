@@ -1353,7 +1353,7 @@ export class DataController extends ControllerWithDataMixin {
     return dataSource && dataSource.store();
   }
 
-  loadAll(data) {
+  loadAll(data, skipFilter = false) {
     const that = this;
     // @ts-expect-error
     const d = new Deferred();
@@ -1366,6 +1366,7 @@ export class DataController extends ControllerWithDataMixin {
           isCustomLoading: true,
           storeLoadOptions: { isLoadingAll: true },
           loadOptions: {
+            filter: skipFilter ? undefined : that.getCombinedFilter(),
             group: dataSource.group(),
             sort: dataSource.sort(),
           },

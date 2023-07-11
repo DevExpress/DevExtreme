@@ -545,7 +545,7 @@ export class ExportController extends dataGridCore.ViewController {
     }
   }
 
-  _getAllItems(data?) {
+  _getAllItems(data?, skipFilter = false) {
     const that = this;
     // @ts-expect-error
     const d = new Deferred();
@@ -556,7 +556,7 @@ export class ExportController extends dataGridCore.ViewController {
     let summaryCells;
 
     when(data).done((data) => {
-      dataController.loadAll(data).done((sourceItems, totalAggregates) => {
+      dataController.loadAll(data, skipFilter).done((sourceItems, totalAggregates) => {
         that._updateGroupValuesWithSummaryByColumn(sourceItems);
 
         if (that._hasSummaryGroupFooters()) {
@@ -592,11 +592,15 @@ export class ExportController extends dataGridCore.ViewController {
   _getSelectedItems() {
     const selectionController = this.getController('selection');
 
-    const selectedRowData = this.needLoadItemsOnExportingSelectedItems()
-      ? selectionController.loadSelectedItemsWithFilter()
-      : selectionController.getSelectedRowsData();
-
-    return this._getAllItems(selectedRowData);
+    if (this.needLoadItemsOnExportingSelectedItems()) {
+      return this._getAllItems(
+        selectionController.loadSelectedItemsWithFilter(),
+        true,
+      );
+    }
+    return this._getAllItems(
+      selectionController.getSelectedRowsData(),
+    );
   }
 
   _getColumnWidths(headersView, rowsView) {
