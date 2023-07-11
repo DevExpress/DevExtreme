@@ -1,13 +1,13 @@
-import VerticalRenderingStrategy from './strategy_vertical';
+import VerticalRenderingStrategy from './m_strategy_vertical';
 
 class WeekAppointmentRenderingStrategy extends VerticalRenderingStrategy {
-    isApplyCompactAppointmentOffset() {
-        if(this.isAdaptive && this._getMaxAppointmentCountPerCellByType() === 0) {
-            return false;
-        }
-
-        return this.supportCompactDropDownAppointments();
+  isApplyCompactAppointmentOffset() {
+    if (this.isAdaptive && this._getMaxAppointmentCountPerCellByType() === 0) {
+      return false;
     }
+
+    return this.supportCompactDropDownAppointments();
+  }
 }
 
 export default WeekAppointmentRenderingStrategy;
