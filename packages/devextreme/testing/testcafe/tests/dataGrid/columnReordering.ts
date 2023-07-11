@@ -1,8 +1,10 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { ClassNames } from '../../model/dataGrid/classNames';
+import { MouseAction, MouseUpEvents } from '../../helpers/mouseUpEvents';
 
 const CLASS = ClassNames;
 
@@ -131,18 +133,18 @@ test('The separator should display correctly when dragging column', async (t) =>
 }));
 
 test('column separator should work properly with expand columns', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
-  const columnSeparator = dataGrid.getColumnSeparator();
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-  await t.drag(Selector('.dx-group-panel-item').nth(0), 0, 30);
-
-  // todo add screenshot test once testcafe support holding while dragging
-
+  await t.drag(dataGrid.getGroupPanel().getHeader(0), 0, 30);
   await t
-    .expect(await columnSeparator.getX())
-    .eql(5); // padding before first column
+    .expect(await takeScreenshot('column-separator-with-expand-columns.png'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 
-  await t.debug();
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
 }).before(async () => createWidget('dxDataGrid', {
   width: 800,
   dataSource: [
