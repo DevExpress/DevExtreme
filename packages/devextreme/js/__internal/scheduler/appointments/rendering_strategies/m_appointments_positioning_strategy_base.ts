@@ -1,4 +1,4 @@
-import { isDefined } from '../../../../core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 
 const COLLECTOR_DEFAULT_WIDTH = 24;
 const COLLECTOR_DEFAULT_OFFSET = 3;
@@ -12,67 +12,67 @@ const COLLECTOR_WIDTH_IN_PERCENTS = 75;
 const APPOINTMENT_INCREASED_WIDTH = 50;
 
 class AppointmentPositioningStrategy {
+  _renderingStrategy: any;
 
-    constructor(renderingStrategy) {
-        this._renderingStrategy = renderingStrategy;
+  constructor(renderingStrategy) {
+    this._renderingStrategy = renderingStrategy;
+  }
+
+  getDropDownAppointmentWidth(intervalCount, isAllDay) {
+    if (isAllDay || !isDefined(isAllDay)) {
+      return COLLECTOR_WIDTH_IN_PERCENTS * this._renderingStrategy.cellWidth / 100;
+    }
+    return COLLECTOR_DEFAULT_WIDTH;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getCollectorTopOffset(allDay) {
+    return COLLECTOR_DEFAULT_OFFSET;
+  }
+
+  getCollectorLeftOffset() {
+    return COLLECTOR_DEFAULT_OFFSET;
+  }
+
+  getAppointmentDefaultOffset() {
+    if (this._renderingStrategy._isCompactTheme()) {
+      return COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET;
     }
 
-    getDropDownAppointmentWidth(intervalCount, isAllDay) {
-        if(isAllDay || !isDefined(isAllDay)) {
-            return COLLECTOR_WIDTH_IN_PERCENTS * this._renderingStrategy.cellWidth / 100;
-        } else {
-            return COLLECTOR_DEFAULT_WIDTH;
-        }
+    return this._renderingStrategy.appointmentOffset;
+  }
+
+  getDynamicAppointmentCountPerCell() {
+    const renderingStrategy = this._renderingStrategy;
+
+    const { cellHeight } = renderingStrategy;
+    const allDayCount = Math.floor((cellHeight - renderingStrategy._getAppointmentDefaultOffset()) / renderingStrategy._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
+
+    // NOTE: Simplify using only object
+    if (renderingStrategy.allDaySupported()) {
+      return {
+        allDay: renderingStrategy.groupOrientation === 'vertical' ? allDayCount : this._renderingStrategy.appointmentCountPerCell,
+        simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount(),
+      };
     }
+    return allDayCount;
+  }
 
-    getCollectorTopOffset() {
-        return COLLECTOR_DEFAULT_OFFSET;
-    }
+  getDropDownAppointmentHeight(): undefined | number {
+    return undefined;
+  }
 
-    getCollectorLeftOffset() {
-        return COLLECTOR_DEFAULT_OFFSET;
-    }
+  _getAppointmentMinCount() {
+    return APPOINTMENT_MIN_COUNT;
+  }
 
-    getAppointmentDefaultOffset() {
-        if(this._renderingStrategy._isCompactTheme()) {
-            return COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET;
-        }
+  _calculateDynamicAppointmentCountPerCell() {
+    return Math.floor(this._renderingStrategy._getAppointmentMaxWidth() / APPOINTMENT_INCREASED_WIDTH);
+  }
 
-        return this._renderingStrategy.appointmentOffset;
-    }
-
-    getDynamicAppointmentCountPerCell() {
-        const renderingStrategy = this._renderingStrategy;
-
-        const cellHeight = renderingStrategy.cellHeight;
-        const allDayCount = Math.floor((cellHeight - renderingStrategy._getAppointmentDefaultOffset()) / renderingStrategy._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
-
-        // NOTE: Simplify using only object
-        if(renderingStrategy.allDaySupported()) {
-            return {
-                allDay: renderingStrategy.groupOrientation === 'vertical' ? allDayCount : this._renderingStrategy.appointmentCountPerCell,
-                simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
-            };
-        } else {
-            return allDayCount;
-        }
-    }
-
-    getDropDownAppointmentHeight() {
-        return undefined;
-    }
-
-    _getAppointmentMinCount() {
-        return APPOINTMENT_MIN_COUNT;
-    }
-
-    _calculateDynamicAppointmentCountPerCell() {
-        return Math.floor(this._renderingStrategy._getAppointmentMaxWidth() / APPOINTMENT_INCREASED_WIDTH);
-    }
-
-    _getAppointmentDefaultWidth() {
-        return APPOINTMENT_DEFAULT_WIDTH;
-    }
+  _getAppointmentDefaultWidth() {
+    return APPOINTMENT_DEFAULT_WIDTH;
+  }
 }
 
 export default AppointmentPositioningStrategy;
