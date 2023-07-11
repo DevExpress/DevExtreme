@@ -1,4 +1,4 @@
-const path = require('path/posix');
+const path = require('path');
 const fs = require('fs');
 const babel = require('@babel/core');
 const parseArguments = require('minimist');
@@ -15,12 +15,12 @@ const getFileList = (dirName) => {
     // eslint-disable-next-line no-restricted-syntax
     for(const item of items) {
         if(item.isDirectory()) {
-            files = [...files, ...getFileList(`${dirName}/${item.name}`)];
+            files = [...files, ...getFileList(path.join(dirName, item.name))];
         } else if(
             item.name.endsWith('.js') ||
             (item.name.endsWith('.json') && !item.name.includes('tsconfig') && !item.name.includes('__meta'))
         ) {
-            files.push(`${dirName}/${item.name}`);
+            files.push(path.join(dirName, item.name));
         }
     }
 
@@ -38,7 +38,7 @@ const writeFileSync = (destPath, file) => {
 
 const transpileModules = async() => {
     getFileList(transpilePath).forEach((filePath) => {
-        transpileFile(filePath, filePath.replace('/transpiled', '/transpiled-systemjs'));
+        transpileFile(filePath, filePath.replace(path.normalize('/transpiled'), path.normalize('/transpiled-systemjs')));
     });
 
     const infernoPath = path.dirname(require.resolve('@devextreme/runtime/esm/inferno'));
@@ -97,7 +97,7 @@ SystemJS.register([], function(exports) {
 `;
 
 const transpileFile = async(sourcePath, targetPath) => {
-    const code = fs.readFileSync(sourcePath).toString().replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/');
+    const code = fs.readFileSync(sourcePath).toString().replaceAll(path.normalize('/testing/helpers/'), path.normalize('/artifacts/transpiled-testing/helpers/'));
 
     if(sourcePath.includes('testing/helpers/includeThemesLinks.js')) {
         writeFileSync(targetPath, buildSystemJSModule('', code.replaceAll('\n', '    ')));
@@ -124,7 +124,7 @@ const transpileRenovationModules = async() => {
         getFileList(transpileRenovationPath).map((filePath) => {
             return transpileFile(
                 filePath,
-                filePath.replace('/transpiled-renovation', '/transpiled-renovation-systemjs'),
+                filePath.replace(path.normalize('/transpiled-renovation'), path.normalize('/transpiled-renovation-systemjs')),
             );
         })
     );
@@ -256,7 +256,7 @@ const transpileJsVendors = async() => {
     )
         .filter(filePath => filePath.endsWith('.json'))
         .forEach((filePath) => {
-            transpileFile(filePath, filePath.replace('node_modules', 'packages/devextreme/artifacts/js-systemjs'));
+            transpileFile(filePath, filePath.replace(path.normalize('/node_modules'), path.normalize('/packages/devextreme/artifacts/js-systemjs')));
         });
 };
 
@@ -267,7 +267,7 @@ const transpileTesting = async() => {
 
     [].concat(contentList, helpersList, testsList)
         .forEach((filePath) => {
-            transpileFile(filePath, filePath.replace('/testing/', '/artifacts/transpiled-testing/'));
+            transpileFile(filePath, filePath.replace(path.normalize('/testing/'), path.normalize('/artifacts/transpiled-testing/')));
         });
 };
 
