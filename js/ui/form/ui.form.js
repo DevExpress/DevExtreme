@@ -745,6 +745,7 @@ const Form = Widget.inherit({
                 break;
             case 'alignRootItemLabels':
             case 'readOnly':
+            case 'isDirty':
                 break;
             case 'width':
                 this.callBase(args);
