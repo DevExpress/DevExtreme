@@ -12,7 +12,8 @@
         "dependencies"
     ],
     "vulnerabilityAlerts": {
-        "enabled": true
+        "enabled": true,
+        "automerge": true
     },
     "packageRules": [
         {
