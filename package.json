@@ -34,7 +34,8 @@
   "browserslist": [
     "last 2 versions",
     "ios > 9",
-    "> 1%"
+    "> 1%",
+    "not dead"
   ],
   "workspaces": [
     "packages/*",
