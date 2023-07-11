@@ -1,9 +1,9 @@
-@use "sass:math";
-@use "colors" as *;
+@use "sass:math"; // ?
+@use "colors" as *; // ?
 @use "../colors" as *;
-@use "sizes" as *;
+@use "sizes" as *; // ?
 @use "../sizes" as *;
-@use "../button/colors" as *;
+@use "../button/colors" as *; // ?
 @use "../../base/icons" as *;
 @use "../../base/tabs";
 
@@ -186,25 +186,55 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 .dx-tabs {
   background-color: $tabs-tab-bg;
   color: $tabs-border-color;
-  box-shadow: $generic-tabpanel-inset-shadow-bottom $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-left $tabs-border-color;
 
   .dx-tab {
-    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $tabs-border-color;
+    // box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $tabs-border-color;
+    border-block-start: 1px solid $tabs-border-color;
+    border-block-end: 1px solid $tabs-border-color;
+    padding-inline-start: 10px;
+    padding-inline-end: 10px;
+    margin-block-start: -1px;
+    margin-block-end: -1px;
+
+    &.dx-tab-selected {
+      border: 1px solid $tabs-border-color;
+      padding-inline-start: 9px;
+      padding-inline-end: 9px;
+    }
+
+    &.dx-state-focused {
+      border: 1px solid $tabs-focused-border-color;
+    }
+
+    &.dx-state-focused.dx-state-disabled {
+      border: 1px solid $tabs-focused-disabled-border-color;
+      padding-inline-start: 9px;
+      padding-inline-end: 9px;
+      // padding-inline-start: 10px;
+    }
   }
 
   .dx-tabs-nav-button {
-    border: none;
+    // border: none;
     background-color: $tabs-tab-bg;
     border-radius: 0;
-    box-shadow: none;
+    // box-shadow: none;
     color: $tabs-border-color;
+
+    &.dx-tabs-nav-button-left {
+      border-right: none;
+    }
+
+    &.dx-tabs-nav-button-right {
+      border-left: none;
+    }
 
     .dx-button-content {
       padding: 0;
     }
 
     &.dx-state-active {
-      border: none;
+      // border: none;
     }
 
     &.dx-state-disabled {
@@ -221,38 +251,40 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 
     .dx-tabs-wrapper {
       display: block;
+      border-top: 1px solid $tabs-border-color;
+      border-bottom: 1px solid $tabs-border-color;
     }
   }
 
-  @include tabs-shadow-mixin($tabs-border-color, 'dx-tab-selected');
+  // @include tabs-shadow-mixin($tabs-border-color, 'dx-tab-selected');
 
   &.dx-state-focused {
-    @include tabs-shadow-mixin($tabs-focused-border-color, 'dx-state-focused');
+    // @include tabs-shadow-mixin($tabs-focused-border-color, 'dx-state-focused');
 
     .dx-tab {
       &.dx-state-focused.dx-state-disabled {
-        box-shadow: $generic-tabpanel-inset-shadow-bottom $tabs-focused-disabled-border-color, $generic-tabpanel-inset-shadow-top $tabs-focused-disabled-border-color, $generic-tabpanel-inset-shadow-right $tabs-focused-disabled-border-color, $generic-tabpanel-inset-shadow-left $tabs-focused-disabled-border-color;
+        // box-shadow: $generic-tabpanel-inset-shadow-bottom $tabs-focused-disabled-border-color, $generic-tabpanel-inset-shadow-top $tabs-focused-disabled-border-color, $generic-tabpanel-inset-shadow-right $tabs-focused-disabled-border-color, $generic-tabpanel-inset-shadow-left $tabs-focused-disabled-border-color;
       }
     }
 
     .dx-tab.dx-tab-selected {
       &:not(.dx-state-focused) {
-        @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-left-right-shadow, $tab-selected-not-focused-left-right-rtl-shadow);
+        // @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-left-right-shadow, $tab-selected-not-focused-left-right-rtl-shadow);
       }
     }
 
     .dx-tab.dx-state-focused + .dx-tab.dx-tab-selected {
       &:not(.dx-state-focused) {
-        @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-right-shadow, $tab-selected-not-focused-right-rtl-shadow);
+        // @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-right-shadow, $tab-selected-not-focused-right-rtl-shadow);
       }
     }
 
     .dx-tab.dx-tab-selected.dx-focused-next-tab {
       &:not(.dx-state-focused) {
-        @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-left-shadow, $tab-selected-not-focused-left-rtl-shadow);
+        // @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-left-shadow, $tab-selected-not-focused-left-rtl-shadow);
       }
     }
   }
 
-  @include tabpanel-navigation-shadow-mixin($tabs-border-color);
+  // @include tabpanel-navigation-shadow-mixin($tabs-border-color);
 }
