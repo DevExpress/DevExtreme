@@ -98,6 +98,13 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @hidden
      */
     stylingMode?: EditorStyle;
+
+     /**
+     * @docid
+     * @default false
+     * @public
+     */
+     isDirty?: boolean;
 }
 /**
  * @docid

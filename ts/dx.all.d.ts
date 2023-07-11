@@ -16708,6 +16708,10 @@ declare module DevExpress.ui {
      * [descr:dxFormOptions.validationGroup]
      */
     validationGroup?: string;
+    /**
+     * [descr:dxFormOptions.isDirty]
+     */
+    isDirty?: boolean;
   }
   /**
    * @deprecated Use SimpleItem instead
@@ -29530,6 +29534,11 @@ declare module DevExpress.ui {
      * [descr:EditorOptions.stylingMode]
      */
     stylingMode?: DevExpress.common.EditorStyle;
+
+    /**
+     * [descr:EditorOptions.isDirty]
+     */
+    isDirty?: boolean;
   }
   /**
    * [descr:dxFilterBuilderField]
