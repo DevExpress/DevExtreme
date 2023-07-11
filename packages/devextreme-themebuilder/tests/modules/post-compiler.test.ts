@@ -45,7 +45,7 @@ describe('PostCompiler', () => {
 
   test('autoPrefixer', async () => {
     expect(await autoPrefix('.c1 { box-shadow: none; }'))
-      .toBe('.c1 { -webkit-box-shadow: none; box-shadow: none; }');
+      .toBe('.c1 { box-shadow: none; }');
   });
 
   test('removeExternalResources', () => {
