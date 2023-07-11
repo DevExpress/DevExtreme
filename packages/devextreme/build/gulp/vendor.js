@@ -1,6 +1,7 @@
 'use strict';
 
 const gulp = require('gulp');
+const path = require('path');
 const rename = require('gulp-rename');
 const merge = require('merge-stream');
 const compressionPipes = require('./compression-pipes.js');
@@ -133,7 +134,7 @@ gulp.task('vendor-js', function() {
 
 gulp.task('vendor-css', function() {
     return merge.apply(this, CSS_VENDORS.map(function(vendor) {
-        return gulp.src(PACKAGES_SOURCE + vendor.path).pipe(gulp.dest(DESTINATION_CSS_PATH));
+        return gulp.src(path.resolve(__dirname, '../../../..', PACKAGES_SOURCE) + vendor.path).pipe(gulp.dest(DESTINATION_CSS_PATH));
     }));
 });
 
