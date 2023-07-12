@@ -43,8 +43,8 @@ const normalizeAlign = function(raw) {
     return result;
 };
 
-const normalizeOffset = function(raw, preventRound) {
-    return pairToObject(raw, preventRound);
+const normalizeOffset = function(raw) {
+    return pairToObject(raw);
 };
 
 const normalizeCollision = function(raw) {
@@ -219,10 +219,10 @@ const calculatePosition = function(what, options) {
     const my = normalizeAlign(options.my);
     const at = normalizeAlign(options.at);
     let of = ($(options.of).length && options.of) || window;
-    const offset = normalizeOffset(options.offset, options.precise);
+    const offset = normalizeOffset(options.offset);
     const collision = normalizeCollision(options.collision);
     const boundary = options.boundary;
-    const boundaryOffset = normalizeOffset(options.boundaryOffset, options.precise);
+    const boundaryOffset = normalizeOffset(options.boundaryOffset);
 
     const h = {
         mySize: getOuterWidth($what),

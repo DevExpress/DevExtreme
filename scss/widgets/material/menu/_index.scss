@@ -63,13 +63,17 @@ $material-menu-font-size: $material-base-font-size;
   background-color: $menu-popup-bg;
 
   .dx-treeview {
-    border-color: $menu-popup-border-color;
+    border: 1px solid $menu-popup-border-color;
     border-radius: $base-border-radius;
 
     &,
     &.dx-state-focused {
       box-shadow: 0 3px 10px color.change($base-shadow-color, $alpha: 0.1);
     }
+  }
+
+  .dx-treeview-toggle-item-visibility {
+    font-size: 18px;
   }
 
   .dx-treeview-node {
@@ -85,6 +89,6 @@ $material-menu-font-size: $material-base-font-size;
   }
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
-    border-bottom-color: $menu-popup-border-color;
+    border-bottom: 1px solid $menu-popup-border-color;
   }
 }

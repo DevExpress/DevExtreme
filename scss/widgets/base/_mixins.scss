@@ -55,6 +55,17 @@
   transform: scaleX(-1);
 }
 
+@mixin vertical-middle() {
+  height: 100%;
+
+  &::after {
+    height: 100%;
+    display: inline-block;
+    content: '';
+    vertical-align: middle;
+  }
+}
+
 @mixin hide-input-cursor() {
   border: none;
   color: transparent;
