@@ -325,4 +325,8 @@ export default class Selection {
     getSelectAllState(visibleOnly) {
         return this._selectionStrategy.getSelectAllState(visibleOnly);
     }
+
+    loadSelectedItemsWithFilter() {
+        return this._selectionStrategy.loadSelectedItemsWithFilter();
+    }
 }

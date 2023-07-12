@@ -86,6 +86,8 @@ export interface InternalGridOptions extends GridBaseOptions<InternalGrid, unkno
   rowTemplate?: any;
 
   forceApplyBindings?: any;
+
+  loadItemsOnExportingSelectedItems?: boolean | undefined;
 }
 
 // todo: move to upper .d.ts files
@@ -150,7 +152,7 @@ export interface Controllers {
   validating: any;
   export: any;
   draggingHeader: any;
-  selection: any;
+  selection: import('./selection/m_selection').SelectionController;
 }
 
 type ControllerTypes = {
