@@ -5,7 +5,7 @@ function isGroupItem(item) {
     return 'key' in item && 'items' in item;
 }
 
-export function isSummary(res) {
+export function isLoadResultObject(res) {
     return !Array.isArray(res) && 'data' in res;
 }
 
