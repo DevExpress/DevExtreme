@@ -84,8 +84,8 @@ $generic-menu-popup-border: 1px solid $menu-popup-border-color;
     .dx-menu-item-text {
       padding-top: $generic-menu-item-padding-top-base;
       padding-bottom: $generic-menu-item-padding-base;
-      padding-inline-end: $generic-menu-item-padding-base + $generic-base-icon-size;
-      padding-inline-start: $generic-menu-padding-big;
+      padding-inline-end: $generic-menu-padding-big;
+      padding-inline-start: $generic-menu-item-padding-base + $generic-base-icon-size; 
     }
 
     .dx-menu-item-popout {
