@@ -13,6 +13,9 @@ import 'ui/autocomplete';
 import 'ui/calendar';
 import 'ui/date_box';
 import 'ui/drop_down_box';
+import 'ui/switch';
+import 'ui/slider';
+import 'ui/range_slider';
 
 import windowModule from 'core/utils/window';
 import Form from 'ui/form/ui.form.js';
@@ -4363,4 +4366,105 @@ QUnit.test('TagBox.SelectionChanged is raised once if formData is wrapped into a
     assert.deepEqual(form.getEditor('arrayField').option('value'), ['item1'], 'tagBox.option(value)');
     assert.deepEqual(formData, { arrayField: ['item1'] }, 'formData');
     assert.strictEqual(onSelectionChangedCounter, 1, 'onSelectionChangedCounter');
+});
+
+QUnit.test('setting form items props should non affect isDirty', function(assert) {
+    const form = $('#form').dxForm({
+        screenByWidth: () => 'md',
+        items: [{
+            itemType: 'tabbed',
+            name: 'groupName',
+            tabs: [{
+                name: 'tabName',
+                items: ['Phone', 'Email'],
+                colCountByScreen: { md: 1 },
+            }],
+        }],
+    }).dxForm('instance');
+
+    form.itemOption('groupName.tabName', 'colCountByScreen.md', 2);
+
+    assert.strictEqual(form.option('isDirty'), false);
+});
+
+
+QUnit.test('simple isDirty test', function(assert) {
+    const form = $('#form').dxForm({
+        items: [{
+            dataField: 'FirstName',
+        }],
+    }).dxForm('instance');
+
+    assert.strictEqual(form.option('isDirty'), false);
+
+    form.updateData('FirstName', 'Heart');
+
+    assert.strictEqual(form.option('isDirty'), true);
+});
+
+[['dxCalendar', new Date(2019, 1, 2), { dxCalendar: new Date(2019, 1, 3) } ],
+    ['dxRangeSlider', [1, 5], { dxRangeSlider: [1, 3] } ],
+    ['dxSlider', 199, { dxSlider: 99 }],
+    ['dxSwitch', true, { dxSwitch: false }],
+    ['dxAutocomplete', '1', { dxAutocomplete: '2' }],
+    ['dxColorBox', new Date(2019, 1, 1), { dxColorBox: new Date(2019, 1, 2) } ],
+    ['dxDateBox', new Date(2017, 0, 3), { dxDateBox: new Date(2019, 1, 2) }],
+    ['dxDropDownBox', '1', { dxDropDownBox: '3' }],
+    ['dxHtmlEditor', '<p>a</p>', { dxHtmlEditor: '<p>b</p>' }],
+    ['dxLookup', '1', { dxLookup: '3' }],
+    ['dxNumberBox', '1', { dxNumberBox: '3' }],
+    ['dxRadioGroup', '1', { dxRadioGroup: '3' }],
+    ['dxSelectBox', '1', { dxSelectBox: '2' }],
+    ['dxTagBox', ['1'], { dxTagBox: ['2'] }],
+    ['dxTextArea', 'a', { dxTextArea: 'b' }],
+    ['dxTextBox', 'a', { dxTextBox: 'b' }],
+    // TODO: fix dxDateRangeBox's value change is not fired or write some custom logic
+    // ['dxDateRangeBox', [new Date(2021, 8, 17), new Date(2021, 9, 17)], { dxDateRangeBox: [null, null] } ],
+    // TODO: implement for renovated component check_box.tsx
+    // ['dxCheckBox', true, { dxCheckbox: false } ],
+].forEach((editorData) => {
+    QUnit.test(`form should be dirty after ${editorData[0]} value updated and not dirty when get back to initial value`, function(assert) {
+        const editorName = editorData[0];
+        const newEditorValue = editorData[1];
+        const initialFormData = editorData[2];
+
+        const form = $('#form').dxForm({
+            formData: initialFormData,
+            items: [{ dataField: editorName, editorType: editorName }]
+        }).dxForm('instance');
+
+        const initialValue = form.getEditor(editorName).option('value');
+
+        assert.strictEqual(form.option('isDirty'), false, 'is not dirty after init');
+
+        form.updateData(editorName, newEditorValue);
+
+        assert.strictEqual(form.option('isDirty'), true, 'is dirty after update');
+
+        form.updateData(editorName, initialValue);
+
+        assert.strictEqual(form.option('isDirty'), false, 'is not dirty after setting initial value');
+    });
+});
+
+
+QUnit.test('nested form items should affect isDirty', function(assert) {
+    const form = $('#form').dxForm({
+        items: [{
+            itemType: 'group',
+            items: [{
+                itemType: 'group',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        dataField: 'ZipCode'
+                    }],
+                }],
+            }],
+        }],
+    }).dxForm('instance');
+
+    form.updateData('ZipCode', '4012');
+
+    assert.strictEqual(form.option('isDirty'), true);
 });
