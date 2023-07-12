@@ -1015,7 +1015,7 @@ safeSizeTest('The scroll position of a fixed table should be synchronized with t
     .wait(1000);
 
   await t
-    .expect(await takeScreenshot('grid-virtual-scrolling_with_fixed_columns-T1166649.png', '#container'))
+    .expect(await takeScreenshot('grid-virtual-scrolling_with_fixed_columns-T1166649.png', 'tr[aria-rowindex="999"]'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
