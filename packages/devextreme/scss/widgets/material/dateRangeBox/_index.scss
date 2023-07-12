@@ -159,13 +159,7 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
       &.dx-editor-filled,
       &.dx-editor-underlined {
         .dx-texteditor-input {
-          padding-right: $material-filled-texteditor-input-horizontal-padding;
-        }
-
-        &.dx-rtl {
-          .dx-texteditor-input {
-            padding-left: $material-filled-texteditor-input-horizontal-padding;
-          }
+          padding-inline-end: $material-filled-texteditor-input-horizontal-padding;
         }
       }
     }
@@ -176,13 +170,12 @@ $material-filled-texteditor-spin-button-horizontal-padding: $material-filled-tex
       &.dx-editor-filled {
         &.dx-invalid {
           .dx-texteditor-input {
-            padding-right: $material-texteditor-invalid-badge-size;
+            padding-inline-end: $material-texteditor-invalid-badge-size;
           }
 
           &.dx-rtl {
             .dx-texteditor-input {
               padding-right: $material-filled-texteditor-input-horizontal-padding;
-              padding-left: $material-texteditor-invalid-badge-size;
             }
           }
         }
