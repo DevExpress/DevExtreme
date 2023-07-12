@@ -25,7 +25,6 @@ require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/vectormap');
-require('./build/gulp/styles/themebuilder-npm');
 require('./build/gulp/styles/style-compiler');
 require('./build/gulp/npm');
 require('./build/gulp/aspnet');
@@ -84,9 +83,6 @@ function createDefaultBatch(dev) {
     tasks.push(dev && !env.BUILD_TESTCAFE ? 'main-batch-dev' : 'main-batch');
     if(!env.TEST_CI && !dev && !env.BUILD_TESTCAFE) {
         tasks.push('npm');
-        if(!env.SKIP_THEMEBUILDER) {
-            tasks.push('themebuilder-npm');
-        }
         tasks.push('check-license-notices');
     }
     if(!env.BUILD_TESTCAFE) {

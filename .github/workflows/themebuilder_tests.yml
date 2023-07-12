@@ -33,7 +33,8 @@ jobs:
       run: npx gulp style-compiler-themes-ci
 
     - name: Build
-      run: npx nx build devextreme-themebuilder
+      working-directory: ./packages/devextreme-themebuilder
+      run: npm run build
 
     - name: Run themebuilder tests (full set, node)
       run: npm run test

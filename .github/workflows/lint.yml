@@ -186,7 +186,8 @@ jobs:
 #       This version contains npm v6
         node-version: '14'
 
-    - name: Check package-lock
+    - name: Run npm install
+      working-directory: ./packages/devextreme
       run: |
         node -v
         npm -v
@@ -226,6 +227,13 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Check generated component reexports
       working-directory: ./packages/devextreme
