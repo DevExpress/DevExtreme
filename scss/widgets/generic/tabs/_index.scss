@@ -18,9 +18,9 @@
   padding: $generic-tabs-item-padding;
   background-color: $tabs-tab-bg;
   color: $tabs-tab-color;
-  border: $generic-tabs-transparent-border;
-  border-top-width: 0;
-  border-bottom-width: 0;
+  border: $generic-tabs-border-transparent;
+  border-block-start-width: 0;
+  border-block-end-width: 0;
 
   &.dx-state-hover {
     background-color: $tabs-tab-hover-bg;
@@ -154,11 +154,28 @@
 
   .dx-tabs-scrollable {
     height: 100%;
+  }
 
+  .dx-tabs-wrapper {
+    border: $generic-tabs-border;
+  }
+
+  &.dx-tabs-nav-buttons {
     .dx-tabs-wrapper {
-      display: block;
-      border-top: $generic-tabs-border;
-      border-bottom: $generic-tabs-border;
+      border-left: none;
+      border-right: none;
+    }
+  }
+
+  &:not(.dx-tabs-nav-buttons) .dx-tabs-scrollable {
+    .dx-tabs-wrapper {
+      border-block-start: $generic-tabs-border;
+      border-block-end: $generic-tabs-border;
+    }
+
+    .dx-scrollable-container {
+      border-inline-start: $generic-tabs-border;
+      border-inline-end: $generic-tabs-border;
     }
   }
 }

@@ -8,7 +8,7 @@
 // adduse
 
 $generic-tabs-border: $generic-tabs-border-width solid $tabs-border-color !default;
-$generic-tabs-transparent-border: $generic-tabs-border-width solid $tabs-tab-bg !default;
+$generic-tabs-border-transparent: $generic-tabs-border-width solid transparent !default;
 $generic-tab-focus-border: $generic-tabs-border-width solid $tabs-focused-border-color !default;
 
 $generic-tabs-border-hover-top: null !default;
@@ -38,8 +38,8 @@ $generic-tabs-border-active-right: null !default;
 
 
 @if $color == "carmine" {
-  $generic-tabs-border-hover-top: 0 solid $tabs-tab-hover-border-color-horizontal !default;
-  $generic-tabs-border-hover-bottom: 0 solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
   $generic-tabs-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
 
@@ -65,8 +65,8 @@ $generic-tabs-border-active-right: null !default;
 }
 
 @if $color == "contrast" {
-  $generic-tabs-border-hover-top: 0 solid $tabs-tab-hover-border-color-horizontal !default;
-  $generic-tabs-border-hover-bottom: 0 solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
   $generic-tabs-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
 
@@ -92,8 +92,8 @@ $generic-tabs-border-active-right: null !default;
 }
 
 @if $color == "dark" {
-  $generic-tabs-border-hover-top: 0 solid $tabs-tab-hover-border-color-horizontal !default;
-  $generic-tabs-border-hover-bottom: 0 solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
   $generic-tabs-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
 
@@ -119,8 +119,8 @@ $generic-tabs-border-active-right: null !default;
 }
 
 @if $color == "darkmoon" {
-  $generic-tabs-border-hover-top: 0 solid $tabs-tab-hover-border-color-horizontal !default;
-  $generic-tabs-border-hover-bottom: 0 solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
   $generic-tabs-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
 
@@ -139,15 +139,15 @@ $generic-tabs-border-active-right: null !default;
   $generic-tabs-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
   $generic-tabs-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
 
-  $generic-tabs-border-active-top: 0 solid $tabs-tab-active-border-color !default;
-  $generic-tabs-border-active-bottom: 0 solid $tabs-tab-active-border-color !default;
+  $generic-tabs-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
   $generic-tabs-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
   $generic-tabs-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
 }
 
 @if $color == "darkviolet" {
-  $generic-tabs-border-hover-top: 0 solid $tabs-tab-hover-border-color-horizontal !default;
-  $generic-tabs-border-hover-bottom: 0 solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
   $generic-tabs-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
 
@@ -166,15 +166,15 @@ $generic-tabs-border-active-right: null !default;
   $generic-tabs-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
   $generic-tabs-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
 
-  $generic-tabs-border-active-top: 0 solid $tabs-tab-active-border-color !default;
-  $generic-tabs-border-active-bottom: 0 solid $tabs-tab-active-border-color !default;
+  $generic-tabs-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
   $generic-tabs-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
   $generic-tabs-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
 }
 
 @if $color == "greenmist" {
-  $generic-tabs-border-hover-top: 0 solid $tabs-tab-hover-border-color-horizontal !default;
-  $generic-tabs-border-hover-bottom: 0 solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
   $generic-tabs-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
 
@@ -193,15 +193,15 @@ $generic-tabs-border-active-right: null !default;
   $generic-tabs-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
   $generic-tabs-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
 
-  $generic-tabs-border-active-top: 0 solid $tabs-tab-active-border-color !default;
-  $generic-tabs-border-active-bottom: 0 solid $tabs-tab-active-border-color !default;
+  $generic-tabs-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
   $generic-tabs-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
   $generic-tabs-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
 }
 
 @if $color == "light" {
-  $generic-tabs-border-hover-top: 0 solid $tabs-tab-hover-border-color-horizontal !default;
-  $generic-tabs-border-hover-bottom: 0 solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
   $generic-tabs-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
 
@@ -220,15 +220,15 @@ $generic-tabs-border-active-right: null !default;
   $generic-tabs-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
   $generic-tabs-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
 
-  $generic-tabs-border-active-top: 0 solid $tabs-tab-active-border-color !default;
-  $generic-tabs-border-active-bottom: 0 solid $tabs-tab-active-border-color !default;
+  $generic-tabs-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
   $generic-tabs-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
   $generic-tabs-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
 }
 
 @if $color == "softblue" {
-  $generic-tabs-border-hover-top: 0 solid $tabs-tab-hover-border-color-horizontal !default;
-  $generic-tabs-border-hover-bottom: 0 solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
   $generic-tabs-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
 
@@ -247,8 +247,8 @@ $generic-tabs-border-active-right: null !default;
   $generic-tabs-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
   $generic-tabs-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
 
-  $generic-tabs-border-active-top: 0 solid $tabs-tab-active-border-color !default;
-  $generic-tabs-border-active-bottom: 0 solid $tabs-tab-active-border-color !default;
+  $generic-tabs-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
   $generic-tabs-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
   $generic-tabs-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
 }

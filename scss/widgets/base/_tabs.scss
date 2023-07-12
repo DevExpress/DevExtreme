@@ -24,43 +24,22 @@ $icon-size: 16px;
   /* TODO: remove position, table-layout, display from root element */
   @include user-select(none);
 
-  display: inline-block;
+  display: block;
   width: 100%;
-  text-align: center;
-  table-layout: fixed;
   position: relative;
 
-  &.dx-tabs-stretched {
-    table-layout: auto;
-  }
+  // TODO: Remove this class from js
+  &.dx-tabs-stretched {}
 
   &.dx-overflow-hidden {
     overflow: hidden;
   }
 }
 
-.dx-tabs-wrapper {
-  display: table-row;
-}
-
-
 .dx-tabs-scrollable {
   .dx-tabs-wrapper {
-    display: block;
     white-space: nowrap;
     height: 100%;
-  }
-
-  .dx-tab {
-    height: 100%;
-    display: inline-block;
-
-    &::before {
-      content: "";
-      height: 100%;
-      display: inline-block;
-      vertical-align: middle;
-    }
   }
 
   .dx-scrollable-content {
@@ -68,39 +47,21 @@ $icon-size: 16px;
   }
 }
 
-.dx-tabs-nav-buttons {
-  .dx-tabs-scrollable {
-    margin-right: $nav-button-width;
-    margin-left: $nav-button-width;
-  }
-}
+// TODO: Remove this class from js
+.dx-tabs-expanded {}
 
-.dx-tabs-nav-button {
-  width: $nav-button-width;
-  padding: 0;
-  height: 100%;
-  position: absolute;
-  top: 0;
-}
-
-.dx-tabs-nav-button-left {
-  left: 0;
-}
-
-.dx-tabs-nav-button-right {
-  right: 0;
-}
-
-.dx-tabs-expanded {
-  display: table;
+.dx-tabs-wrapper {
+  display: flex;
 }
 
 .dx-tab {
   position: relative;
-  display: table-cell;
-  vertical-align: middle;
-  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 100%;
   white-space: nowrap;
+  cursor: pointer;
 
   @include dx-tabs-link();
 
@@ -131,4 +92,27 @@ $icon-size: 16px;
 .dx-tabs-item-badge {
   display: inline-block;
   vertical-align: top;
+}
+
+.dx-tabs-nav-buttons {
+  .dx-tabs-scrollable {
+    margin-right: $nav-button-width;
+    margin-left: $nav-button-width;
+  }
+}
+
+.dx-tabs-nav-button {
+  width: $nav-button-width;
+  padding: 0;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.dx-tabs-nav-button-left {
+  left: 0;
+}
+
+.dx-tabs-nav-button-right {
+  right: 0;
 }
