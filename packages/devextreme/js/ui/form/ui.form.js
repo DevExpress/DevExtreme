@@ -73,6 +73,7 @@ const Form = Widget.inherit({
     _init: function() {
         this.callBase();
 
+        this._dirtyFields = new Set();
         this._cachedColCountOptions = [];
         this._itemsRunTimeInfo = new FormItemsRunTimeInfo();
         this._groupsColCount = [];
@@ -926,7 +927,7 @@ const Form = Widget.inherit({
     },
 
     _triggerOnFieldDataChanged: function(args) {
-        this._updateDirty(args.dataField);
+        this._updateIsDirty(args.dataField);
         this._createActionByOption('onFieldDataChanged')(args);
     },
 
@@ -1138,20 +1139,17 @@ const Form = Widget.inherit({
         this.callBase();
     },
 
-    _updateDirty: function(dataField) {
-        // TODO: refactor and add dirty fields
-        let isDirtyCore = false;
-        this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
-            if(isDefined(itemRunTimeInfo.widgetInstance) && Editor.isEditor(itemRunTimeInfo.widgetInstance)) {
-                const editorIsDirty = itemRunTimeInfo.widgetInstance.option('isDirty');
+    _updateIsDirty: function(dataField) {
+        const editor = this.getEditor(dataField);
+        if(!editor) return;
 
-                if(editorIsDirty) {
-                    isDirtyCore = true;
-                }
-            }
-        }.bind(this));
+        if(editor.option('isDirty')) {
+            this._dirtyFields.add(dataField);
+        } else {
+            this._dirtyFields.delete(dataField);
+        }
 
-        this.option('isDirty', isDirtyCore);
+        this.option('isDirty', !!this._dirtyFields.size);
     },
 
     _resetValues: function() {

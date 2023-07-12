@@ -4368,40 +4368,6 @@ QUnit.test('TagBox.SelectionChanged is raised once if formData is wrapped into a
     assert.strictEqual(onSelectionChangedCounter, 1, 'onSelectionChangedCounter');
 });
 
-QUnit.test('setting form items props should non affect isDirty', function(assert) {
-    const form = $('#form').dxForm({
-        screenByWidth: () => 'md',
-        items: [{
-            itemType: 'tabbed',
-            name: 'groupName',
-            tabs: [{
-                name: 'tabName',
-                items: ['Phone', 'Email'],
-                colCountByScreen: { md: 1 },
-            }],
-        }],
-    }).dxForm('instance');
-
-    form.itemOption('groupName.tabName', 'colCountByScreen.md', 2);
-
-    assert.strictEqual(form.option('isDirty'), false);
-});
-
-
-QUnit.test('simple isDirty test', function(assert) {
-    const form = $('#form').dxForm({
-        items: [{
-            dataField: 'FirstName',
-        }],
-    }).dxForm('instance');
-
-    assert.strictEqual(form.option('isDirty'), false);
-
-    form.updateData('FirstName', 'Heart');
-
-    assert.strictEqual(form.option('isDirty'), true);
-});
-
 [['dxCalendar', new Date(2019, 1, 2), { dxCalendar: new Date(2019, 1, 3) } ],
     ['dxRangeSlider', [1, 5], { dxRangeSlider: [1, 3] } ],
     ['dxSlider', 199, { dxSlider: 99 }],
@@ -4423,7 +4389,7 @@ QUnit.test('simple isDirty test', function(assert) {
     // TODO: implement for renovated component check_box.tsx
     // ['dxCheckBox', true, { dxCheckbox: false } ],
 ].forEach((editorData) => {
-    QUnit.test(`form should be dirty after ${editorData[0]} value updated and not dirty when get back to initial value`, function(assert) {
+    QUnit.test(`form should be dirty after ${editorData[0]} value updated and become pristine on getting back to initial value`, function(assert) {
         const editorName = editorData[0];
         const newEditorValue = editorData[1];
         const initialFormData = editorData[2];
@@ -4435,7 +4401,7 @@ QUnit.test('simple isDirty test', function(assert) {
 
         const initialValue = form.getEditor(editorName).option('value');
 
-        assert.strictEqual(form.option('isDirty'), false, 'is not dirty after init');
+        assert.strictEqual(form.option('isDirty'), false, 'pristine after init');
 
         form.updateData(editorName, newEditorValue);
 
@@ -4443,10 +4409,9 @@ QUnit.test('simple isDirty test', function(assert) {
 
         form.updateData(editorName, initialValue);
 
-        assert.strictEqual(form.option('isDirty'), false, 'is not dirty after setting initial value');
+        assert.strictEqual(form.option('isDirty'), false, 'pristine after setting initial value');
     });
 });
-
 
 QUnit.test('nested form items should affect isDirty', function(assert) {
     const form = $('#form').dxForm({
@@ -4467,4 +4432,50 @@ QUnit.test('nested form items should affect isDirty', function(assert) {
     form.updateData('ZipCode', '4012');
 
     assert.strictEqual(form.option('isDirty'), true);
+});
+
+QUnit.test('setting form items props should non affect isDirty', function(assert) {
+    const form = $('#form').dxForm({
+        screenByWidth: () => 'md',
+        items: [{
+            itemType: 'tabbed',
+            name: 'groupName',
+            tabs: [{
+                name: 'tabName',
+                items: ['Phone', 'Email'],
+                colCountByScreen: { md: 1 },
+            }],
+        }],
+    }).dxForm('instance');
+
+    form.itemOption('groupName.tabName', 'colCountByScreen.md', 2);
+
+    assert.strictEqual(form.option('isDirty'), false);
+});
+
+QUnit.test('form should be dirty when some editors are dirty', function(assert) {
+    const originalName = 'Mart';
+    const originalAddress = '8th Street';
+
+    const form = $('#form2').dxForm({
+        formData: {
+            Name: originalName,
+            Address: originalAddress,
+        },
+    }).dxForm('instance');
+
+    assert.strictEqual(form.option('isDirty'), false, 'form is not dirty when all editors are pristine');
+
+    form.updateData('Name', 'Ted');
+    form.updateData('Address', 'Paradise str');
+
+    assert.strictEqual(form.option('isDirty'), true, 'form is dirty when editors are dirty');
+
+    form.updateData('Name', originalName);
+
+    assert.strictEqual(form.option('isDirty'), true, 'form is dirty when some editors are dirty');
+
+    form.updateData('Address', originalAddress);
+
+    assert.strictEqual(form.option('isDirty'), false, 'form is not dirty when all editors are back to pristine');
 });
