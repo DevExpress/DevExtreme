@@ -926,6 +926,7 @@ const Form = Widget.inherit({
     },
 
     _triggerOnFieldDataChanged: function(args) {
+        this._updateDirty(args.dataField);
         this._createActionByOption('onFieldDataChanged')(args);
     },
 
@@ -1135,6 +1136,22 @@ const Form = Widget.inherit({
         eventsEngine.trigger(this.$element().find(editorSelector), 'change');
 
         this.callBase();
+    },
+
+    _updateDirty: function(dataField) {
+        // TODO: refactor and add dirty fields
+        let isDirtyCore = false;
+        this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
+            if(isDefined(itemRunTimeInfo.widgetInstance) && Editor.isEditor(itemRunTimeInfo.widgetInstance)) {
+                const editorIsDirty = itemRunTimeInfo.widgetInstance.option('isDirty');
+
+                if(editorIsDirty) {
+                    isDirtyCore = true;
+                }
+            }
+        }.bind(this));
+
+        this.option('isDirty', isDirtyCore);
     },
 
     _resetValues: function() {
