@@ -68,7 +68,7 @@ namespace Runner
                             EnableDirectoryBrowsing = true,
                             EnableDefaultFiles = false,
                             StaticFileOptions = {
-                                FileProvider = new PhysicalFileProvider(rootPath),
+                                FileProvider = new PhysicalFileProvider(Path.Combine(rootPath, "../..")),
                                 ServeUnknownFileTypes = true,
                                 OnPrepareResponse = OnPrepareStaticFileResponse
                             }

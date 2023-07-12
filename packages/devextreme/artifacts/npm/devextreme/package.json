@@ -1,5 +1,5 @@
 {
-  "name": "devextreme-root",
+  "name": "devextreme",
   "version": "23.2.0",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
@@ -70,7 +70,6 @@
     "angular": "1.8.3",
     "ast-types": "0.14.2",
     "autoprefixer": "10.4.14",
-    "axe-core": "4.7.2",
     "babel-core": "7.0.0-bridge.0",
     "babel-loader": "8.3.0",
     "babel-plugin-add-module-exports": "1.0.4",

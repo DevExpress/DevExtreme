@@ -9,6 +9,9 @@ on:
   push:
     branches: [23_2]
 
+env:
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
 jobs:
   jest-tests:
     runs-on: devextreme-shr2
@@ -25,7 +28,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -33,10 +36,12 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build localization
+      working-directory: ./packages/devextreme
       run: npx gulp localization
 
     - name: Jest test
-      run: npm run test-jest
+      run: npx nx test-jest devextreme-root
+
   generation:
     runs-on: devextreme-shr2
     timeout-minutes: 60
@@ -52,7 +57,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -60,6 +65,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Check components generation
+      working-directory: ./packages/devextreme
       run: |
         npx gulp localization
         npx gulp native-components-compilation-check

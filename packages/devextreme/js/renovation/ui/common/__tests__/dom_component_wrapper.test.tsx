@@ -3,13 +3,13 @@ import React, { createRef } from 'react';
 import { mount, shallow } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
 // eslint-disable-next-line import/no-relative-packages
-import { renderTemplate } from '../../../../../node_modules/@devextreme/runtime/cjs/declarations/index';
+import { renderTemplate } from '@devextreme/runtime/cjs/declarations/index';
 import { DomComponentWrapper, DomComponentWrapperProps, viewFunction as DomComponentWrapperView } from '../dom_component_wrapper';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { getUpdatedOptions } from '../utils/get_updated_options';
 
-jest.mock('../../../../../node_modules/@devextreme/runtime/esm/declarations/index', () => ({ hasTemplate: jest.fn(() => true), renderTemplate: jest.fn() }));
-jest.mock('../../../../../node_modules/@devextreme/runtime/cjs/declarations/index', () => ({ hasTemplate: jest.fn(() => true), renderTemplate: jest.fn() }));
+jest.mock(require.resolve('@devextreme/runtime/esm/declarations/index'), () => ({ hasTemplate: jest.fn(() => true), renderTemplate: jest.fn() }));
+jest.mock(require.resolve('@devextreme/runtime/cjs/declarations/index'), () => ({ hasTemplate: jest.fn(() => true), renderTemplate: jest.fn() }));
 
 jest.mock('../utils/get_updated_options', () => {
   const defaultImplementation = jest.requireActual('../utils/get_updated_options');

@@ -1,10 +1,11 @@
 /* global ROOT_URL */
 
-import { parse } from '../../../../artifacts/js/vectormap-utils/dx.vectormaputils.js';
+// TODO fix me! This used to work because of a dirty hack - the application rested on the root.
+import { parse } from '../../../artifacts/js/vectormap-utils/dx.vectormaputils.js';
 import $ from 'jquery';
 
 const CONTROLLER_URL = ROOT_URL + 'TestVectorMapData/';
-const TEST_DATA_URL = ROOT_URL + 'testing/content/VectorMapData/';
+const TEST_DATA_URL = ROOT_URL + 'packages/devextreme/testing/content/VectorMapData/';
 
 let testData = [];
 

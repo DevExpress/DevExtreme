@@ -1035,7 +1035,7 @@ QUnit.module('render', {
                 assert.roughEqual(getHeight($galleryItemImage), imageHeight, 0.1);
                 done();
             })
-            .attr('src', '../../testing/content/LightBlueSky.jpg');
+            .attr('src', '../../packages/devextreme/testing/content/LightBlueSky.jpg');
     });
 
     QUnit.test('gallary with loop should not remove component content from templates (T1125857)', function(assert) {

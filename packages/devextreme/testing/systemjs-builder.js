@@ -1,4 +1,4 @@
-const path = require('path/posix');
+const path = require('path');
 const fs = require('fs');
 const babel = require('@babel/core');
 const parseArguments = require('minimist');
@@ -15,12 +15,12 @@ const getFileList = (dirName) => {
     // eslint-disable-next-line no-restricted-syntax
     for(const item of items) {
         if(item.isDirectory()) {
-            files = [...files, ...getFileList(`${dirName}/${item.name}`)];
+            files = [...files, ...getFileList(path.join(dirName, item.name))];
         } else if(
             item.name.endsWith('.js') ||
             (item.name.endsWith('.json') && !item.name.includes('tsconfig') && !item.name.includes('__meta'))
         ) {
-            files.push(`${dirName}/${item.name}`);
+            files.push(path.join(dirName, item.name));
         }
     }
 
@@ -38,10 +38,10 @@ const writeFileSync = (destPath, file) => {
 
 const transpileModules = async() => {
     getFileList(transpilePath).forEach((filePath) => {
-        transpileFile(filePath, filePath.replace('/transpiled', '/transpiled-systemjs'));
+        transpileFile(filePath, filePath.replace(path.normalize('/transpiled'), path.normalize('/transpiled-systemjs')));
     });
 
-    const infernoPath = path.join(root, 'node_modules/@devextreme/runtime/esm/inferno');
+    const infernoPath = path.dirname(require.resolve('@devextreme/runtime/esm/inferno'));
     const listRuntimeFiles = getFileList(infernoPath);
 
     // eslint-disable-next-line no-restricted-syntax
@@ -97,7 +97,13 @@ SystemJS.register([], function(exports) {
 `;
 
 const transpileFile = async(sourcePath, targetPath) => {
-    const code = fs.readFileSync(sourcePath).toString().replaceAll('/testing/helpers/', '/artifacts/transpiled-testing/helpers/');
+    const code = fs.readFileSync(sourcePath)
+        .toString()
+        .replaceAll(path.normalize('/testing/helpers/'), path.normalize('/artifacts/transpiled-testing/helpers/'))
+        // TODO see TODO at packages/devextreme/testing/tests/DevExpress.viz.vectorMap.utils/tests.js and remove this lines after fix
+        .replaceAll(
+            path.normalize('../../../artifacts/js/vectormap-utils/dx.vectormaputils.js'),
+            path.normalize('../../../../artifacts/js/vectormap-utils/dx.vectormaputils.js'));
 
     if(sourcePath.includes('testing/helpers/includeThemesLinks.js')) {
         writeFileSync(targetPath, buildSystemJSModule('', code.replaceAll('\n', '    ')));
@@ -124,7 +130,7 @@ const transpileRenovationModules = async() => {
         getFileList(transpileRenovationPath).map((filePath) => {
             return transpileFile(
                 filePath,
-                filePath.replace('/transpiled-renovation', '/transpiled-renovation-systemjs'),
+                filePath.replace(path.normalize('/transpiled-renovation'), path.normalize('/transpiled-renovation-systemjs')),
             );
         })
     );
@@ -136,7 +142,7 @@ System.register('${filePath}', [], false, function() {});
     if (typeof document == 'undefined') return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = '/${filePath}';
+    link.href = '/packages/devextreme/${filePath}';
     link.setAttribute('data-theme', '${name}');
     document.getElementsByTagName('head')[0].appendChild(link);
 })();
@@ -169,11 +175,11 @@ const transpileWithBabel = async(sourceCode, destPath) => {
 const transpileIntl = async() => {
     const listIntlFiles = [
         {
-            filePath: path.join(root, 'node_modules/intl/lib/core.js'),
+            filePath: require.resolve('intl/lib/core.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/intl/intl.js'),
         },
         {
-            filePath: path.join(root, 'node_modules/intl/locale-data/complete.js'),
+            filePath: require.resolve('intl/locale-data/complete.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/intl/intl.complete.js'),
         },
     ];
@@ -210,11 +216,11 @@ const transpileIntl = async() => {
 const transpileJsVendors = async() => {
     const pluginsList = [
         {
-            filePath: path.join(root, 'node_modules/systemjs-plugin-css/css.js'),
+            filePath: require.resolve('systemjs-plugin-css/css.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/css.js'),
         },
         {
-            filePath: path.join(root, 'node_modules/systemjs-plugin-json/json.js'),
+            filePath: require.resolve('systemjs-plugin-json/json.js'),
             destPath: path.join(root, 'artifacts/js-systemjs/json.js'),
         },
     ];
@@ -234,10 +240,10 @@ const transpileJsVendors = async() => {
     );
 
     await Promise.all(
-        getFileList(path.join(root, 'node_modules/angular')).map((filePath) => {
+        getFileList(path.dirname(require.resolve('angular'))).map((filePath) => {
             return transpileFile(
                 filePath,
-                filePath.replace('node_modules', 'artifacts/js-systemjs'),
+                filePath.replace('node_modules', 'packages/devextreme/artifacts/js-systemjs'),
             );
         })
     );
@@ -245,18 +251,18 @@ const transpileJsVendors = async() => {
     await transpileIntl();
 
     await transpileFile(
-        path.join(root, 'node_modules/knockout/build/output/knockout-latest.debug.js'),
+        require.resolve('knockout/build/output/knockout-latest.debug.js'),
         path.join(root, 'artifacts/js-systemjs/knockout.js')
     );
 
 
     [].concat(
-        getFileList(path.join(root, 'node_modules/devextreme-cldr-data')),
-        getFileList(path.join(root, 'node_modules/cldr-core/supplemental'))
+        getFileList(path.join(root, '../..', 'node_modules/devextreme-cldr-data')),
+        getFileList(path.join(root, '../..', 'node_modules/cldr-core/supplemental'))
     )
         .filter(filePath => filePath.endsWith('.json'))
         .forEach((filePath) => {
-            transpileFile(filePath, filePath.replace('node_modules', 'artifacts/js-systemjs'));
+            transpileFile(filePath, filePath.replace(path.normalize('/node_modules'), path.normalize('/packages/devextreme/artifacts/js-systemjs')));
         });
 };
 
@@ -267,7 +273,7 @@ const transpileTesting = async() => {
 
     [].concat(contentList, helpersList, testsList)
         .forEach((filePath) => {
-            transpileFile(filePath, filePath.replace('/testing/', '/artifacts/transpiled-testing/'));
+            transpileFile(filePath, filePath.replace(path.normalize('/testing/'), path.normalize('/artifacts/transpiled-testing/')));
         });
 };
 
