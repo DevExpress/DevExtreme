@@ -1552,32 +1552,32 @@ declare module DevExpress.common {
     res: LoadResult<TItem>
   ): res is Array<TItem>;
   /**
-   * [descr:isSummary]
+   * [descr:isLoadResultObject]
    */
-  export function isSummary<TItem>(
+  export function isLoadResultObject<TItem>(
     res: LoadResult<TItem>
-  ): res is LoadedSummary<TItem>;
+  ): res is LoadResultObject<TItem>;
   export type LabelMode = 'static' | 'floating' | 'hidden';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  type LoadedArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
-  /**
-   * [descr:LoadedSummary]
-   */
-  export type LoadedSummary<TItem = any> = {
-    data: Array<TItem> | Array<GroupItem<TItem>>;
-    totalCount?: number;
-    summary?: Array<any>;
-    groupCount?: number;
-  };
   /**
    * [descr:LoadResult]
    */
   export type LoadResult<TItem = any> =
     | Object
-    | LoadedArray<TItem>
-    | LoadedSummary<TItem>;
+    | LoadResultArray<TItem>
+    | LoadResultObject<TItem>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type LoadResultArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
+  /**
+   * [descr:LoadResultObject]
+   */
+  export type LoadResultObject<TItem = any> = {
+    data: Array<TItem> | Array<GroupItem<TItem>>;
+    totalCount?: number;
+    summary?: Array<any>;
+    groupCount?: number;
+  };
   export type MaskMode = 'always' | 'onFocus';
   export type Mode = 'auto';
 

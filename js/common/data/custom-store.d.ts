@@ -11,13 +11,13 @@ export type GroupItem<
   summary?: Array<any>;
 };
 
-type LoadedArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
+type LoadResultArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
 
 /**
  * @docid
  * @public
  */
-export type LoadedSummary<TItem = any> = {
+export type LoadResultObject<TItem = any> = {
     data: Array<TItem> | Array<GroupItem<TItem>>;
     totalCount?: number;
     summary?: Array<any>;
@@ -33,14 +33,14 @@ export type LoadResult<
     TItem = any,
 > =
   | Object
-  | LoadedArray<TItem>
-  | LoadedSummary<TItem>;
+  | LoadResultArray<TItem>
+  | LoadResultObject<TItem>;
 
 /**
  * @docid
  * @public
  */
-export function isSummary<TItem>(res: LoadResult<TItem>): res is LoadedSummary<TItem>;
+export function isLoadResultObject<TItem>(res: LoadResult<TItem>): res is LoadResultObject<TItem>;
 
 /**
  * @docid
