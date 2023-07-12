@@ -39,20 +39,7 @@ $material-menu-font-size: $material-base-font-size;
     &.dx-menu-item-has-text {
       &.dx-menu-item-has-icon {
         .dx-icon {
-          margin-right: $material-menu-horizontal-padding;
-        }
-      }
-    }
-  }
-
-  &.dx-rtl {
-    .dx-menu-item {
-      &.dx-menu-item-has-text {
-        &.dx-menu-item-has-icon {
-          .dx-icon {
-            margin-left: $material-menu-item-with-icon-horizontal-padding - $material-menu-horizontal-padding - $material-base-icon-size;
-            margin-right: 0;
-          }
+          margin-inline-end: $material-menu-horizontal-padding;
         }
       }
     }

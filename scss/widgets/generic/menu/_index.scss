@@ -65,7 +65,7 @@
   .dx-menu-item-has-text {
     &.dx-menu-item-has-icon {
       .dx-icon {
-        margin: 0 $generic-menu-item-padding-reduced;
+        margin-inline: $generic-menu-item-padding-reduced;
       }
     }
   }
