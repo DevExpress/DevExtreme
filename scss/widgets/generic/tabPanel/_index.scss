@@ -10,12 +10,65 @@
 
 // adduse
 
+$generic-tabpanel-inset-shadow-left: inset $generic-tabs-border-width 0;
+$generic-tabpanel-inset-shadow-top: inset 0 $generic-tabs-border-width;
+$generic-tabpanel-inset-shadow-right: inset (-$generic-tabs-border-width) 0;
+$generic-tabpanel-inset-shadow-bottom: inset 0 (-$generic-tabs-border-width);
+
+$generic-tabs-border: $generic-tabs-border-width solid $tabs-border-color !default;
+
 $tab-selected-not-focused-right-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
 $tab-selected-not-focused-right-rtl-shadow: $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
 $tab-selected-not-focused-left-right-shadow: $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
 $tab-selected-not-focused-left-shadow: $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
 $tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
 $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-left $tabs-border-color;
+
+
+@function get-tab-not-selected-not-focused-first-expanded-shadow($accent-color) {
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $accent-color, $generic-tabpanel-inset-shadow-top $accent-color;
+}
+
+@function get-tab-not-selected-not-focused-last-expanded-shadow($accent-color) {
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color;
+}
+
+@function get-tab-not-selected-not-focused-first-expanded-rtl-shadow($accent-color) {
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-top $accent-color;
+}
+
+@function get-tab-not-selected-not-focused-last-expanded-rtl-shadow($accent-color) {
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-left $accent-color;
+}
+
+@function get-tab-not-selected-not-focused-first-stretched-shadow($accent-color) {
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-top $accent-color;
+}
+
+@function get-tab-not-selected-not-focused-first-stretched-rtl-shadow($accent-color) {
+  @return $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $accent-color, $generic-tabpanel-inset-shadow-top $accent-color;
+}
+
+
+@mixin tabpanel-navigation-shadow-mixin($accent-color) {
+  .dx-tabs-nav-button-left {
+    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
+  }
+
+  .dx-tabs-nav-button-right {
+    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
+  }
+}
+
+
+@mixin tabpanel-tab-shadow-mixin($tab-shadow, $tab-rtl-shadow) {
+  box-shadow: $tab-shadow;
+
+  @at-root #{selector-append(".dx-rtl", &)},
+  .dx-rtl & {
+    box-shadow: $tab-rtl-shadow;
+  }
+}
 
 
 @mixin tabpanel-tab-color-mixin() {
