@@ -52,6 +52,10 @@ $tabs-focused-disabled-border-color: null !default;
 */
 $tabs-tab-hover-bg: null !default;
 $tabs-tab-active-bg: null !default;
+$tabs-tab-active-border-color: null !default;
+$tabs-tab-hover-border-color: null !default;
+$tabs-tab-hover-border-color-horizontal: null !default;
+$tabs-tab-hover-border-color-vertical: null !default;
 
 @if $color == "carmine" {
   $tabs-tab-selected-color: $base-text-color !default;
@@ -63,6 +67,9 @@ $tabs-tab-active-bg: null !default;
   $tabs-focused-disabled-border-color: darken($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-hover-bg !default;
   $tabs-tab-active-bg: color.change(darken($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
+  $tabs-tab-active-border-color: color.change(darken(#dee1e3, 2.55)) !default;
+  $tabs-tab-hover-border-color-horizontal: color.change(lighten(#f05b41, 33.92)) !default;
+  $tabs-tab-hover-border-color-vertical: color.change(lighten(#f05b41, 33.92)) !default;
 }
 
 @if $color == "contrast" {
@@ -75,6 +82,9 @@ $tabs-tab-active-bg: null !default;
   $tabs-focused-border-color: $base-focus-color !default;
   $tabs-focused-disabled-border-color: darken($base-border-color, 20%) !default;
   $tabs-tab-active-bg: $base-inverted-bg !default;
+  $tabs-tab-active-border-color: $base-border-color !default;
+  $tabs-tab-hover-border-color-horizontal: $tabs-tab-hover-bg !default;
+  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }
 
 @if $color == "dark" {
@@ -87,6 +97,9 @@ $tabs-tab-active-bg: null !default;
   $tabs-focused-disabled-border-color: lighten($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(lighten($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
+  $tabs-tab-active-border-color: color.change(lighten($tabs-tab-bg, 12.55)) !default;
+  $tabs-tab-hover-border-color-horizontal: transparent !default;
+  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }
 
 @if $color == "darkmoon" {
@@ -99,6 +112,9 @@ $tabs-tab-active-bg: null !default;
   $tabs-focused-disabled-border-color: lighten($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(lighten($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
+  $tabs-tab-active-border-color: transparent !default;
+  $tabs-tab-hover-border-color-horizontal: $tabs-tab-hover-bg !default;
+  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }
 
 @if $color == "darkviolet" {
@@ -111,6 +127,9 @@ $tabs-tab-active-bg: null !default;
   $tabs-focused-disabled-border-color: lighten($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-hover-bg !default;
   $tabs-tab-active-bg: color.change(lighten($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
+  $tabs-tab-active-border-color: color.change(lighten($base-bg, 15.49)) !default;
+  $tabs-tab-hover-border-color-horizontal: $tabs-tab-hover-bg !default;
+  $tabs-tab-hover-border-color-vertical: color.change(lighten($tabs-tab-bg, 16.86)) !default;
 }
 
 @if $color == "greenmist" {
@@ -123,6 +142,9 @@ $tabs-tab-active-bg: null !default;
   $tabs-focused-disabled-border-color: darken($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(darken($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
+  $tabs-tab-active-border-color: darken($tabs-tab-bg, 12.16) !default;
+  $tabs-tab-hover-border-color-horizontal: $tabs-tab-hover-bg !default;
+  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }
 
 @if $color == "light" {
@@ -135,6 +157,9 @@ $tabs-tab-active-bg: null !default;
   $tabs-focused-disabled-border-color: darken($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(darken($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
+  $tabs-tab-active-border-color: darken($tabs-tab-bg, 12.16) !default;
+  $tabs-tab-hover-border-color-horizontal: $tabs-tab-hover-bg !default;
+  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }
 
 @if $color == "softblue" {
@@ -147,5 +172,8 @@ $tabs-tab-active-bg: null !default;
   $tabs-focused-disabled-border-color: darken($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-element-bg !default;
   $tabs-tab-active-bg: color.change(darken($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
+  $tabs-tab-active-border-color: darken($tabs-tab-bg, 12.16) !default;
+  $tabs-tab-hover-border-color-horizontal: $tabs-tab-hover-bg !default;
+  $tabs-tab-hover-border-color-vertical: $tabs-tab-hover-bg !default;
 }
 

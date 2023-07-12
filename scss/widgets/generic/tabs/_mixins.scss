@@ -1,0 +1,22 @@
+@use "sizes" as *;
+
+@mixin dx-tabs-border-mixin(
+  $border-top,
+  $border-bottom,
+  $border-left,
+  $border-right,
+  $is-disabled: false,
+) {
+  margin-block-start: -$generic-tabs-border-width;
+  margin-block-end: -$generic-tabs-border-width;
+  border-block-start: $border-top;
+  border-block-end: $border-bottom;
+  border-inline-start: $border-left;
+  border-inline-end: $border-right;
+
+  @if $is-disabled {
+    margin: -$generic-tabs-border-width;
+    padding: $generic-tabs-item-padding-disabled-focused;
+    z-index: 1;
+  }
+}

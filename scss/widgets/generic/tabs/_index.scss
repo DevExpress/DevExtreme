@@ -6,37 +6,91 @@
 @use "../button/colors" as *;
 @use "../../base/icons" as *;
 @use "../../base/tabs";
+@use "borders" as *;
+@use "mixins" as *;
 
 // adduse
 @use "../scrollable";
 @use "../badge";
 
 
-@mixin dx-tabs-border-mixin($accent-color, $is-disabled: false) {
-  &::after {
-    content: "";
-    pointer-events: none;
-    position: absolute;
-    top: -1px;
-    bottom: -1px;
-    border: 1px solid $accent-color;
-
-    @if $is-disabled {
-      right: -1px;
-      left: -1px;
-      z-index: 2;
-    } @else {
-      right: 0;
-      left: 0;
-      z-index: 1;
-    }
-  }
-}
-
 .dx-tab {
   padding: $generic-tabs-item-padding;
   background-color: $tabs-tab-bg;
   color: $tabs-tab-color;
+  border: $generic-tabs-transparent-border;
+  border-top-width: 0;
+  border-bottom-width: 0;
+
+  &.dx-state-hover {
+    background-color: $tabs-tab-hover-bg;
+
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border-hover-top,
+      $generic-tabs-border-hover-bottom,
+      $generic-tabs-border-hover-left,
+      $generic-tabs-border-hover-right,
+    );
+  }
+
+  &.dx-tab-selected {
+    background-color: $tabs-tab-selected-bg;
+    color: $tabs-tab-selected-color;
+
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border-selected-top,
+      $generic-tabs-border-selected-bottom,
+      $generic-tabs-border-selected-left,
+      $generic-tabs-border-selected-right,
+    );
+
+    .dx-tab-text {
+      color: $tabs-tab-selected-color;
+    }
+
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
+    }
+  }
+  
+  &.dx-state-active {
+    background-color: $tabs-tab-active-bg;
+    color: $tabs-tab-selected-color;
+
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border-active-top,
+      $generic-tabs-border-active-bottom,
+      $generic-tabs-border-active-left,
+      $generic-tabs-border-active-right,
+    );
+
+    .dx-tab-text {
+      color: $tabs-tab-selected-color;
+    }
+
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
+    }
+  }
+
+  &.dx-state-focused {
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border-focused-top,
+      $generic-tabs-border-focused-bottom,
+      $generic-tabs-border-focused-left,
+      $generic-tabs-border-focused-right,
+    );
+  }
+
+  &.dx-state-focused.dx-state-disabled {
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border-focused-disabled-top,
+      $generic-tabs-border-focused-disabled-bottom,
+      $generic-tabs-border-focused-disabled-left,
+      $generic-tabs-border-focused-disabled-right,
+      $is-disabled: true,
+    );
+  }
 
   .dx-tab-text {
     color: $tabs-tab-color;
@@ -49,36 +103,6 @@
 
     @include dx-icon-sizing($generic-base-icon-size);
     @include dx-icon-margin(math.div($generic-base-icon-size, 2));
-  }
-
-  &.dx-state-hover {
-    background-color: $tabs-tab-hover-bg;
-  }
-
-  &.dx-tab-selected {
-    background-color: $tabs-tab-selected-bg;
-    color: $tabs-tab-selected-color;
-
-    .dx-tab-text {
-      color: $tabs-tab-selected-color;
-    }
-
-    .dx-icon {
-      color: $tabs-tab-icon-selected-color;
-    }
-  }
-
-  &.dx-state-active {
-    background-color: $tabs-tab-active-bg;
-    color: $tabs-tab-selected-color;
-
-    .dx-tab-text {
-      color: $tabs-tab-selected-color;
-    }
-
-    .dx-icon {
-      color: $tabs-tab-icon-selected-color;
-    }
   }
 }
 
@@ -101,24 +125,11 @@
   background-color: $tabs-tab-bg;
   color: $tabs-border-color;
 
-  .dx-tab {    
-    &.dx-tab-selected {
-      @include dx-tabs-border-mixin($tabs-border-color);
-    }
-
-    &.dx-state-focused {
-      @include dx-tabs-border-mixin($tabs-focused-border-color);
-    }
-
-    &.dx-state-focused.dx-state-disabled {
-      @include dx-tabs-border-mixin($tabs-focused-disabled-border-color, $is-disabled: true);
-    }
-  }
-
   .dx-tabs-nav-button {
     background-color: $tabs-tab-bg;
-    border-radius: 0;
     color: $tabs-border-color;
+    border-radius: 0;
+    border-color: $tabs-border-color;
 
     &.dx-tabs-nav-button-left {
       border-right: none;
@@ -128,16 +139,16 @@
       border-left: none;
     }
 
-    .dx-button-content {
-      padding: 0;
-    }
-
     &.dx-state-disabled {
       opacity: 1;
 
       .dx-button-content {
         opacity: $tabs-tab-button-disabled-opacity;
       }
+    }
+
+    .dx-button-content {
+      padding: 0;
     }
   }
 
@@ -146,8 +157,8 @@
 
     .dx-tabs-wrapper {
       display: block;
-      border-top: 1px solid $tabs-border-color;
-      border-bottom: 1px solid $tabs-border-color;
+      border-top: $generic-tabs-border;
+      border-bottom: $generic-tabs-border;
     }
   }
 }
