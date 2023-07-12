@@ -8,7 +8,7 @@
 }
 
 .dx-menu-horizontal {
-  @include vertical-middle();
+  height: 100%;
 
   .dx-menu-item-wrapper {
     display: inline-block;
@@ -21,7 +21,7 @@
 }
 
 .dx-menu-vertical {
-  @include vertical-middle();
+  height: 100%;
 
   .dx-menu-item-wrapper {
     display: block;
@@ -37,10 +37,7 @@
 }
 
 .dx-context-menu-container-border {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   position: absolute;
 }
 
@@ -52,15 +49,15 @@
 }
 
 .dx-menu-adaptive-mode {
-  .dx-treeview-toggle-item-visibility {
-    left: auto;
-    right: 0;
+  .dx-treeview {
+    border-width: 1px;
+    border-style: solid;
+  }
 
-    @at-root #{selector-append(".dx-rtl", &)},
-    .dx-rtl & {
-      left: 0;
-      right: auto;
-    }
+  .dx-treeview-toggle-item-visibility {
+    font-size: 18px;
+    inset-inline-end: 0;
+    inset-inline-start: auto;
   }
 
   .dx-treeview-item {
@@ -69,19 +66,16 @@
 
   .dx-treeview-node-container:first-child > .dx-treeview-node {
     padding: 1px;
-
-    .dx-item-content {
-      padding-left: 15px;
-
-      @at-root #{selector-append(".dx-rtl", &)},
-      .dx-rtl & {
-        padding-right: 15px;
-      }
-    }
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 
     &:last-child {
       border-bottom: none;
     }
+  }
+
+  .dx-item-content {
+    padding-inline-start: 15px;
   }
 }
 
