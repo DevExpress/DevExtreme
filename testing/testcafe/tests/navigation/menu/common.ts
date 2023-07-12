@@ -84,27 +84,29 @@ safeSizeTest('Menu delimiter appearance when orientation is horizontal', async (
     .click(menu.getItem(1))
     .pressKey('down');
 
-  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is horizontal, submenu width more than root item.png');
+  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is horizontal, submenu more than root item.png');
 
   await t
     .click(menu.getItem(2))
     .pressKey('down');
 
-  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is horizontal, submenu width less than root item.png');
+  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is horizontal, submenu less than root item.png');
 
   await setAttribute('#container', 'style', 'padding-top: 450px;');
 
   await t
-    .click(menu.getItem(1));
+    .click(menu.getItem(1))
+    .pressKey('down');
 
   await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is horizontal, submenu width more than root item, bottom collision.png');
 
   await t
-    .click(menu.getItem(2));
+    .click(menu.getItem(2))
+    .pressKey('down');
 
   await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is horizontal, submenu width less than root item, bottom collision.png');
 
-  await setAttribute('#container', 'style', 'padding-top: 0px; padding-left: 80px;');
+  await setAttribute('#container', 'style', 'padding-top: 0px; padding-left: 30px;');
 
   await t
     .click(menu.getItem(3))
@@ -169,11 +171,12 @@ safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t)
 
   await t
     .click(menu.getItem(1))
+    .pressKey('down')
     .pressKey('down');
 
   await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, bottom collision.png');
 
-  await setAttribute('#container', 'style', 'padding-top: 0px; padding-left: 400px;');
+  await setAttribute('#container', 'style', 'padding-top: 0px; padding-left: 350px;');
 
   await t
     .click(menu.getItem(2))
@@ -181,11 +184,12 @@ safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t)
 
   await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, right collision.png');
 
-  await setAttribute('#container', 'style', 'padding-top: 370px; padding-left: 400px;');
+  await setAttribute('#container', 'style', 'padding-top: 400px; padding-left: 350px;');
 
   await t
-    .click(menu.getItem(3))
-    .click(menu.getItem(2));
+    .click(menu.getItem(0))
+    .click(menu.getItem(2))
+    .pressKey('down');
 
   await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, bottom right collision.png');
 
