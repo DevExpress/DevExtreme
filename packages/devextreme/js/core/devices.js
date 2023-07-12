@@ -3,7 +3,6 @@ import $ from '../core/renderer';
 import { getWindow, getNavigator, hasWindow } from './utils/window';
 import { extend } from './utils/extend';
 import { isPlainObject } from './utils/type';
-import { each } from './utils/iterator';
 import errors from './errors';
 import Callbacks from './utils/callbacks';
 import readyCallbacks from './utils/ready_callbacks';
@@ -13,7 +12,6 @@ import { sessionStorage as SessionStorage } from './utils/storage';
 import { changeCallback, value as viewPort } from './utils/view_port';
 import Config from './config';
 
-const navigator = getNavigator();
 const window = getWindow();
 
 const KNOWN_UA_TABLE = {
@@ -44,7 +42,7 @@ const DEFAULT_DEVICE = {
     mac: false
 };
 
-const uaParsers = {
+const UA_PARSERS = {
     generic(userAgent) {
         const isPhone = /windows phone/i.test(userAgent) || userAgent.match(/WPDesktop/);
         const isTablet = !isPhone && /Windows(.*)arm(.*)Tablet PC/i.test(userAgent);
@@ -52,7 +50,7 @@ const uaParsers = {
         const isMac = /((intel|ppc) mac os x)/.test(userAgent.toLowerCase());
 
         if(!(isPhone || isTablet || isDesktop || isMac)) {
-            return;
+            return null;
         }
 
         return {
@@ -64,13 +62,17 @@ const uaParsers = {
         };
     },
 
-    ios(userAgent) {
-        if(!/ip(hone|od|ad)/i.test(userAgent)) {
-            return;
+    appleTouchDevice(userAgent) {
+        const navigator = getNavigator();
+        const isIpadOs = /Macintosh/i.test(userAgent) && navigator?.maxTouchPoints > 2;
+        const isAppleDevice = /ip(hone|od|ad)/i.test(userAgent);
+
+        if(!isAppleDevice && !isIpadOs) {
+            return null;
         }
 
         const isPhone = /ip(hone|od)/i.test(userAgent);
-        const matches = userAgent.match(/os (\d+)_(\d+)_?(\d+)?/i);
+        const matches = userAgent.match(/os\s{0,}X? (\d+)_(\d+)_?(\d+)?/i);
         const version = matches ? [parseInt(matches[1], 10), parseInt(matches[2], 10), parseInt(matches[3] || 0, 10)] : [];
         const isIPhone4 = (window.screen.height === (960 / 2));
         const grade = isIPhone4 ? 'B' : 'A';
@@ -84,8 +86,10 @@ const uaParsers = {
     },
 
     android(userAgent) {
-        if(!/android|htc_|silk/i.test(userAgent)) {
-            return;
+        // TODO: Check this RegExp.
+        //  It looks like there may be missing android user agents.
+        if(!/android|htc_|silk/i.test(userAgent) || /windows phone/i.test(userAgent)) {
+            return null;
         }
 
         const isPhone = /mobile/i.test(userAgent);
@@ -102,6 +106,11 @@ const uaParsers = {
         };
     }
 };
+const UA_PARSERS_ARRAY = [
+    UA_PARSERS.appleTouchDevice,
+    UA_PARSERS.android,
+    UA_PARSERS.generic
+];
 
 class Devices {
     /**
@@ -249,6 +258,7 @@ class Devices {
                     throw errors.Error('E0005');
                 }
             } else {
+                const navigator = getNavigator();
                 ua = navigator.userAgent;
             }
             return this._fromUA(ua);
@@ -295,15 +305,13 @@ class Devices {
     }
 
     _fromUA(ua) {
-        let config;
+        for(let idx = 0; idx < UA_PARSERS_ARRAY.length; idx += 1) {
+            const parser = UA_PARSERS_ARRAY[idx];
+            const config = parser(ua);
 
-        each(uaParsers, (platform, parser) => {
-            config = parser(ua);
-            return !config;
-        });
-
-        if(config) {
-            return this._fromConfig(config);
+            if(config) {
+                return this._fromConfig(config);
+            }
         }
 
         return DEFAULT_DEVICE;
