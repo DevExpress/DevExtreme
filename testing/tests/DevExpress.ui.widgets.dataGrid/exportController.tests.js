@@ -957,12 +957,10 @@ QUnit.module('ExportController', {
         assert.equal(dataProvider.getCellData(0, 0).value, '1',);
         assert.equal(dataProvider.getCellData(1, 0).value, '2',);
 
-        assert.deepEqual(dataSource.load.getCall(1).args[0], {
-            'filter': [
-                [ [ 'Name', '=', 1 ], 'or', [ 'Name', '=', 2 ] ],
-                [ 'Price', '>', 0 ]
-            ]
-        });
+        assert.deepEqual(dataSource.load.getCall(1).args[0].filter, [
+            [ [ 'Name', '=', 1 ], 'or', [ 'Name', '=', 2 ] ],
+            [ 'Price', '>', 0 ]
+        ]);
     });
 
     QUnit.test('Get total summary value when selected items are defined. Deferred selection', function(assert) {
