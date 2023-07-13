@@ -1,27 +1,9 @@
 {
-  "rebase": false,
   "format": {
     "breaks": {
-      "afterAtRule": true,
-      "afterBlockBegins": true,
-      "afterBlockEnds": true,
-      "afterComment": false,
-      "afterProperty": true,
-      "afterRuleBegins": true,
-      "afterRuleEnds": true,
-      "beforeBlockEnds": true,
-      "betweenSelectors": true
+      "afterAtRule": 1
     },
-    "breakWith": "\n",
-    "indentBy": 2,
-    "indentWith": "space",
-    "spaces": {
-      "aroundSelectorRelation": true,
-      "beforeBlockBegins": true,
-      "beforeValue": true
-    },
-    "wrapAt": false,
-    "semicolonAfterLastProperty": true
+    "breakWith": "\n"
   },
   "level": 2
 }
