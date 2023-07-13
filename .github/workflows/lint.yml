@@ -172,31 +172,6 @@ jobs:
       working-directory: ./packages/devextreme
       run: npm run lint-css
 
-# TODO discuss - do we need it? If yes - we should fix it (https://github.com/DevExpress/DevExtreme/actions/runs/5532662586/jobs/10095078667?pr=25082)
-#  package_lock_npm_6:
-#    runs-on: devextreme-shr2
-#    timeout-minutes: 10
-#    steps:
-#    - name: Get sources
-#      uses: actions/checkout@v3
-#
-#    - name: Use Node.js 14
-#      uses: actions/setup-node@v3
-#      with:
-##       This version contains npm v6
-#        node-version: '14'
-#
-#    - name: Run npm install
-#      working-directory: ./packages/devextreme
-#      run: |
-#        node -v
-#        npm -v
-#        npm install --no-audit --no-fund
-#
-#    - name: Check build
-#      working-directory: ./packages/devextreme
-#      run: npm run build:dev
-
   package_lock:
     runs-on: devextreme-shr2
     timeout-minutes: 10

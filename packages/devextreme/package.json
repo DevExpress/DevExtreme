@@ -1,5 +1,5 @@
 {
-  "name": "devextreme-root",
+  "name": "devextreme-main",
   "version": "23.2.0",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
@@ -25,8 +25,7 @@
     "type": "git",
     "url": "https://github.com/DevExpress/DevExtreme.git"
   },
-  "types": "./artifacts/npm/devextreme/bundles/dx.all.d.ts",
-  "main": "./artifacts/npm/devextreme",
+  "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "@babel/runtime": "^7.12.1",
@@ -182,6 +181,10 @@
     "webpack-stream": "7.0.0",
     "yaml": "2.2.2",
     "yargs": "7.1.2"
+  },
+  "bin": {
+    "devextreme-bundler-init": "bin/bundler-init.js",
+    "devextreme-bundler": "bin/bundler.js"
   },
   "scripts": {
     "clean": "gulp clean",

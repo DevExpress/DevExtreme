@@ -100,7 +100,10 @@ const transpileFile = async(sourcePath, targetPath) => {
     const code = fs.readFileSync(sourcePath)
         .toString()
         .replaceAll(path.normalize('/testing/helpers/'), path.normalize('/artifacts/transpiled-testing/helpers/'))
-        // TODO see TODO at packages/devextreme/testing/tests/DevExpress.viz.vectorMap.utils/tests.js and remove this lines after fix
+        // TODO see packages/devextreme/testing/tests/DevExpress.viz.vectorMap.utils/tests.js
+        // import { parse } from '../../../artifacts/js/vectormap-utils/dx.vectormaputils.js';
+        // This used to work because the runner cwd was the same as the devextreme root folder
+        // remove next 3 lines after fix
         .replaceAll(
             path.normalize('../../../artifacts/js/vectormap-utils/dx.vectormaputils.js'),
             path.normalize('../../../../artifacts/js/vectormap-utils/dx.vectormaputils.js'));

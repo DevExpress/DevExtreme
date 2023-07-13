@@ -1,6 +1,5 @@
 /* global ROOT_URL */
 
-// TODO fix me! This used to work because of a dirty hack - the application rested on the root.
 import { parse } from '../../../artifacts/js/vectormap-utils/dx.vectormaputils.js';
 import $ from 'jquery';
 
