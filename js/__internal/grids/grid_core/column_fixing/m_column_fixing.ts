@@ -460,17 +460,6 @@ const baseFixedColumns = {
     }
   },
 
-  _createColGroup(columns) {
-    if (this._isFixedTableRendering && !this.option('columnAutoWidth')) {
-      const visibleColumns = this._columnsController.getVisibleColumns();
-      const useVisibleColumns = visibleColumns.filter((column) => !column.width).length;
-      if (useVisibleColumns) {
-        columns = visibleColumns;
-      }
-    }
-    return this.callBase(columns);
-  },
-
   _getClientHeight(element) {
     const boundingClientRectElement = element.getBoundingClientRect && getBoundingRect(element);
 
