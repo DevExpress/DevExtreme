@@ -20,10 +20,12 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import sortingMixin from '@ts/grids/grid_core/sorting/m_sorting_mixin';
 
 import { createPath, foreachTree } from '../m_widget_utils';
-import { Sortable } from '../sortable/m_sortable';
+import SortableModule from '../sortable/m_sortable';
 import { ATTRIBUTES, CLASSES } from './const';
 import { dragAndDropItemRender } from './dom';
 import { reverseSortOrder } from './utils';
+
+const { Sortable } = SortableModule;
 
 const DIV = '<div>';
 

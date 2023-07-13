@@ -13,7 +13,7 @@ const ctx = require('./context.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
 const { packageDir, packageDistDir, isEsmPackage, stringSrc } = require('./utils');
-const { version } = require('../../package.json');
+const { name, version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
 
@@ -101,6 +101,7 @@ const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src('package.json')
         .pipe(replace(version, ctx.version.package))
+        .pipe(replace(name, 'devextreme'))
         .pipe(gulp.dest(dist)),
 
     gulp
@@ -111,7 +112,7 @@ const sources = (src, dist, distGlob) => (() => merge(
         .src('README.md')
         .pipe(gulp.dest(dist)),
 
-    stringSrc('.npmignore', 'dist/js\ndist/ts')
+    stringSrc('.npmignore', 'dist/js\ndist/ts\nproject.json')
         .pipe(gulp.dest(`${dist}/`))
 ));
 

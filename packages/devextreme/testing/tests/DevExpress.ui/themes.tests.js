@@ -20,7 +20,7 @@ function loadCss(frame, cssFileName) {
     const frameWindow = frame[0].contentWindow;
     const frameDoc = frameWindow.document;
     const defaultSheetCount = frameDoc.styleSheets.length;
-    const cssUrl = ROOT_URL + 'artifacts/css/' + cssFileName;
+    const cssUrl = ROOT_URL + 'packages/devextreme/artifacts/css/' + cssFileName;
 
     frameDoc.write('<link rel=stylesheet href=\'' + cssUrl + '\'>');
 
@@ -649,7 +649,7 @@ QUnit.module('web font checker', () => {
         }
 
         const done = assert.async();
-        const font = new FontFace('RobotoFallback', 'url(../../artifacts/css/fonts/Roboto-400.woff2)', { weight: 400, unicodeRange: 'U+26' });
+        const font = new FontFace('RobotoFallback', 'url(../../packages/devextreme/artifacts/css/fonts/Roboto-400.woff2)', { weight: 400, unicodeRange: 'U+26' });
 
         document.fonts.add(font);
         font.load();
@@ -726,7 +726,7 @@ QUnit.module('initialized method', (hooks) => {
 
     test('initialized fires for data-theme link (init after link addition)', function(assert) {
         const done = assert.async();
-        const url = ROOT_URL + 'testing/helpers/themeMarker.css';
+        const url = ROOT_URL + 'packages/devextreme/testing/helpers/themeMarker.css';
         const $frame = createFrame();
         writeToFrame($frame, '<link id=\'testTheme\' rel=\'dx-theme\' data-theme=\'sampleTheme.sampleColorScheme\' href=\'' + url + '\' />');
 
@@ -764,7 +764,7 @@ QUnit.module('initialized method', (hooks) => {
 
     test('initialized fires for ordinary link (init before link addition - should wait theme loading)', function(assert) {
         const done = assert.async();
-        const url = ROOT_URL + 'testing/helpers/themeMarker.css';
+        const url = ROOT_URL + 'packages/devextreme/testing' + '/helpers/themeMarker.css'; // WA for systemjs builder
         const $frame = createFrame();
 
         themes.setDefaultTimeout(30000);

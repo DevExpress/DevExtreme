@@ -18,7 +18,7 @@ const getDefaultFlavor = (label, minor, revision) => {
         ? (minor <= 2 ? 'beta' : '')
         : revision
             ? (minor <= 1 ? 'alpha' : 'build')
-            : 'dev';
+            : '';
 };
 
 const getPackageVersion = (version, flavor, revision) => {

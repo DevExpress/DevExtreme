@@ -1,5 +1,6 @@
 import fs from 'fs';
 import cabinet from 'filing-cabinet';
+import path from 'path';
 import { dependencies as idealDependencies } from '../data/dependencies';
 import DependencyCollector, { filePathMap } from '../../src/metadata/dependency-collector';
 import { dependencies as builtDependencies } from '../../src/data/metadata/dx-theme-builder-metadata';
@@ -93,14 +94,14 @@ const filesContent: { [key: string]: string } = {
   'grid_core.ts': 'import menu from \'./menu\'; import r from \'./render\';',
 
   // validation tests
-  '../scss/widgets/righttheme/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";',
-  '../scss/widgets/extratheme/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";@use "./menu";',
-  '../scss/widgets/lesstheme/_index.scss': '// public widgets\n@use "./toolbar";',
+  [path.resolve(__dirname, '../../../devextreme/scss/widgets/righttheme/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";',
+  [path.resolve(__dirname, '../../../devextreme/scss/widgets/extratheme/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./menu";',
+  [path.resolve(__dirname, '../../../devextreme/scss/widgets/lesstheme/_index.scss')]: '// public widgets\n@use "./toolbar";',
 
   // collect test
-  '../js/bundles/dx.all.js': 'import t from \'./toolbar\';import b from \'./button\';',
-  '../scss/widgets/generic/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
-  '../scss/widgets/material/_index.scss': '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
+  [path.resolve(__dirname, '../../../devextreme/js/bundles/dx.all.js')]: 'import t from \'./toolbar\';import b from \'./button\';',
+  [path.resolve(__dirname, '../../../devextreme/scss/widgets/generic/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
+  [path.resolve(__dirname, '../../../devextreme/scss/widgets/material/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
 };
 
 const copyDependencies = (dependencies: Record<string, string[]>): Record<string, string[]> => {

@@ -447,7 +447,7 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
             margin: 40,
             __test: {
                 deferred: deferred,
-                imageSrc: '/testing/content/exporterTestsContent/test-image.png',
+                imageSrc: '/packages/devextreme/testing/content/exporterTestsContent/test-image.png',
                 mockWindow: mockWindow,
                 checkAssertions: function() {
                     assert.equal(window.frames.length, 1);
@@ -460,7 +460,7 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
 
                     const body = frame.contentDocument.body;
                     const image = body.childNodes[0];
-                    assert.equal(image.getAttribute('src'), '/testing/content/exporterTestsContent/test-image.png');
+                    assert.equal(image.getAttribute('src'), '/packages/devextreme/testing/content/exporterTestsContent/test-image.png');
 
                     assert.equal(mockWindow.focus.callCount, 1); // Required for IE
                     assert.equal(mockWindow.print.callCount, 1);
@@ -576,7 +576,7 @@ QUnit.test('Printing. width of chart > width of page', function(assert) {
         'export': {
             __test: {
                 deferred,
-                imageSrc: '/testing/content/exporterTestsContent/test-image.png',
+                imageSrc: '/packages/devextreme/testing/content/exporterTestsContent/test-image.png',
                 mockWindow,
                 checkAssertions: () => {}
             }

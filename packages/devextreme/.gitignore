@@ -1,6 +1,8 @@
-.idea
-.vs
+node_modules
 /artifacts
+!/artifacts/npm/devextreme/package.json
+!/artifacts/npm/devextreme/project.json
+!/artifacts/npm/devextreme-dist/package.json
 /testing/testcafe/artifacts
 /testing/bundlers/dist
 /testing/bundlers/entry
@@ -14,11 +16,5 @@
 /js/renovation/**/*.j.tsx
 /js/renovation/code_coverage
 /scss/bundles/*.scss
-bin
-node_modules
-obj
-yarn.lock
 RawLog.txt
-.DS_Store
 testing/CompletedSuites.txt
-

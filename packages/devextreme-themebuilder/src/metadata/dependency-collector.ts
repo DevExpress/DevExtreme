@@ -1,6 +1,7 @@
 /* eslint import/no-extraneous-dependencies: 0 */
 /* eslint no-console: 0 */
 
+import * as path from 'path';
 import { readFileSync, existsSync } from 'fs';
 import cabinet from 'filing-cabinet';
 import precinct from 'precinct';
@@ -86,10 +87,10 @@ export default class DependencyCollector {
 
       const deps = result.map((relativeDependency: string): string => cabinet({
         partial: relativeDependency,
-        directory: '../js',
+        directory: path.resolve(__dirname, '../../../devextreme/js'),
         filename: filePath,
         ast: precinct.ast,
-        tsConfig: '../js/__internal/tsconfig.json',
+        tsConfig: path.resolve(__dirname, '../../../devextreme/js/__internal/tsconfig.json'),
       }))
         // NOTE: Workaround for the filing-cabinet issue:
         // https://github.com/dependents/node-filing-cabinet/issues/112
@@ -121,7 +122,7 @@ export default class DependencyCollector {
 
   validate(): void {
     this.themes.forEach((theme) => {
-      const indexFileName = `../scss/widgets/${theme}/_index.scss`;
+      const indexFileName = path.resolve(__dirname, `../../../devextreme/scss/widgets/${theme}/_index.scss`);
       const indexContent = readFileSync(indexFileName, 'utf8');
       const indexPublicWidgetsList = new WidgetsHandler([], '', {})
         .getIndexWidgetItems(indexContent)
@@ -138,7 +139,7 @@ export default class DependencyCollector {
   }
 
   collect(): void {
-    const fullDependencyTree = this.getFullDependencyTree('../js/bundles/dx.all.js');
+    const fullDependencyTree = this.getFullDependencyTree(path.resolve(__dirname, '../../../devextreme/js/bundles/dx.all.js'));
     this.treeProcessor(fullDependencyTree);
     this.validate();
   }

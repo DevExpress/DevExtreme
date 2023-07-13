@@ -1321,7 +1321,7 @@ QUnit.test('Circle', function(assert) {
 QUnit.test('Image with xlink:href', function(assert) {
     const that = this;
     const done = assert.async();
-    const markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/testing/content/exporterTestsContent/test-image.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd;
+    const markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/packages/devextreme/testing/content/exporterTestsContent/test-image.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd;
     const imageBlob = getData(markup);
     const context = window.CanvasRenderingContext2D.prototype;
 
@@ -1333,7 +1333,7 @@ QUnit.test('Image with xlink:href', function(assert) {
             assert.equal(that.drawnElements[2].type, 'image', 'Canvas drawn rect element');
             assert.deepEqual(that.drawnElements[2].args, {
                 node: 'IMG',
-                src: '/testing/content/exporterTestsContent/test-image.png',
+                src: '/packages/devextreme/testing/content/exporterTestsContent/test-image.png',
                 x: -10,
                 y: -15,
                 width: 20,
@@ -1360,7 +1360,7 @@ QUnit.test('Image with xlink:href', function(assert) {
 QUnit.test('Image drawing. Default x&y coordinates', function(assert) {
     const that = this;
     const done = assert.async();
-    const markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/testing/content/exporterTestsContent/test-image.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd;
+    const markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/packages/devextreme/testing/content/exporterTestsContent/test-image.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd;
     const imageBlob = getData(markup);
 
     assert.expect(3);
@@ -1370,7 +1370,7 @@ QUnit.test('Image drawing. Default x&y coordinates', function(assert) {
             assert.equal(that.drawnElements[2].type, 'image', 'Canvas drawn rect element');
             assert.deepEqual(that.drawnElements[2].args, {
                 node: 'IMG',
-                src: '/testing/content/exporterTestsContent/test-image.png',
+                src: '/packages/devextreme/testing/content/exporterTestsContent/test-image.png',
                 x: 0,
                 y: 0,
                 width: 20,
@@ -1386,7 +1386,7 @@ QUnit.test('Image drawing. Default x&y coordinates', function(assert) {
 QUnit.test('Image with href', function(assert) {
     const that = this;
     const done = assert.async();
-    const markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image>' + testingMarkupEnd;
+    const markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/packages/devextreme/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image>' + testingMarkupEnd;
     const imageBlob = getData(markup);
 
     assert.expect(3);
@@ -1397,7 +1397,7 @@ QUnit.test('Image with href', function(assert) {
             assert.equal(that.drawnElements[1].type, 'image', 'Canvas drawn rect element');
             assert.deepEqual(that.drawnElements[1].args, {
                 node: 'IMG',
-                src: '/testing/content/exporterTestsContent/test-image.png',
+                src: '/packages/devextreme/testing/content/exporterTestsContent/test-image.png',
                 x: -10,
                 y: -15,
                 width: 20,
@@ -1427,7 +1427,7 @@ QUnit.test('Image with 404 href', function(assert) {
 
 QUnit.test('Export image in group', function(assert) {
     const done = assert.async();
-    const markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd;
+    const markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/packages/devextreme/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd;
     const imageBlob = getData(markup);
     const context = window.CanvasRenderingContext2D.prototype;
 
@@ -1447,7 +1447,7 @@ QUnit.test('Export image in group', function(assert) {
 
 QUnit.test('Export draws into hidden canvas', function(assert) {
     const done = assert.async();
-    const markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd;
+    const markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/packages/devextreme/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd;
 
     getData(markup).then(done);
 
@@ -2283,7 +2283,7 @@ QUnit.test('Pattern canvas has same siza as pattern', function(assert) {
 QUnit.test('Pattern with image', function(assert) {
     const that = this;
     const done = assert.async();
-    const markup = testingMarkupStart + '<defs><pattern id="DevExpress_3-hatching-2" width="30" height="30"><image href="/testing/content/exporterTestsContent/test-image.png" x="0" y="0" width="30" height="30" preserveAspectRatio="none"></image></pattern></defs><rect x="10" y="10" width="70" height="150" stroke-width="0" fill="url(#DevExpress_3-hatching-2)" stroke="#ffa500"></rect>' + testingMarkupEnd;
+    const markup = testingMarkupStart + '<defs><pattern id="DevExpress_3-hatching-2" width="30" height="30"><image href="/packages/devextreme/testing/content/exporterTestsContent/test-image.png" x="0" y="0" width="30" height="30" preserveAspectRatio="none"></image></pattern></defs><rect x="10" y="10" width="70" height="150" stroke-width="0" fill="url(#DevExpress_3-hatching-2)" stroke="#ffa500"></rect>' + testingMarkupEnd;
     const imageBlob = getData(markup);
 
     assert.expect(6);
@@ -2298,7 +2298,7 @@ QUnit.test('Pattern with image', function(assert) {
             assert.deepEqual(that.drawnElements[2].args, {
                 height: 30,
                 node: 'IMG',
-                src: '/testing/content/exporterTestsContent/test-image.png',
+                src: '/packages/devextreme/testing/content/exporterTestsContent/test-image.png',
                 width: 30,
                 x: 0,
                 y: 0

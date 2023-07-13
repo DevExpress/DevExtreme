@@ -192,7 +192,7 @@ QUnit.test('getData. markup with image', function(assert) {
     if(!checkForBlob.call(this, assert)) return;
 
     const done = assert.async();
-    const imageHtml = '<image xlink:href="../../testing/content/exporterTestsContent/test-image.png" width="300" height="200"></image>';
+    const imageHtml = '<image xlink:href="../../packages/devextreme/testing/content/exporterTestsContent/test-image.png" width="300" height="200"></image>';
 
     const testingMarkup = createSvgElement(`
         <svg
@@ -239,8 +239,8 @@ QUnit.test('getData. correct process two images with similar href', function(ass
     const done = assert.async();
 
     const imageHtml = `
-        <image xlink:href="../../testing/content/exporterTestsContent/test-image.png" width="300" height="200"></image>
-        <image xlink:href="../../testing/content/exporterTestsContent/test-image.png.png" width="300" height="200"></image>
+        <image xlink:href="../../packages/devextreme/testing/content/exporterTestsContent/test-image.png" width="300" height="200"></image>
+        <image xlink:href="../../packages/devextreme/testing/content/exporterTestsContent/test-image.png.png" width="300" height="200"></image>
     `;
 
     const testingMarkup = createSvgElement(`
@@ -288,7 +288,7 @@ QUnit.test('getData. markup with image with href', function(assert) {
     if(!checkForBlob.call(this, assert)) return;
 
     const done = assert.async();
-    const imageHtml = '<image href="../../testing/content/exporterTestsContent/test-image.png" width="300" height="200"></image>';
+    const imageHtml = '<image href="../../packages/devextreme/testing/content/exporterTestsContent/test-image.png" width="300" height="200"></image>';
     const testingMarkup = createSvgElement(`
         <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -15,8 +15,8 @@ import 'viz/sparkline';
 import 'viz/bullet';
 import 'viz/tree_map';
 
-import '/artifacts/js/vectormap-data/world.js';
-import '/artifacts/js/vectormap-data/usa.js';
+import '/packages/devextreme/artifacts/js/vectormap-data/world.js';
+import '/packages/devextreme/artifacts/js/vectormap-data/usa.js';
 
 const chartTestsSignature = {
     getInitOptions() {
