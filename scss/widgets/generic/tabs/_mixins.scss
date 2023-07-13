@@ -5,18 +5,28 @@
   $border-bottom,
   $border-left,
   $border-right,
-  $is-disabled: false,
+  $is-expanded: false,
 ) {
-  margin-block-start: -$generic-tabs-border-width;
-  margin-block-end: -$generic-tabs-border-width;
-  border-block-start: $border-top;
-  border-block-end: $border-bottom;
-  border-inline-start: $border-left;
-  border-inline-end: $border-right;
+  &::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    top: -$generic-tabs-border-width;
+    bottom: -$generic-tabs-border-width;
 
-  @if $is-disabled {
-    margin: -$generic-tabs-border-width;
-    padding: $generic-tabs-item-padding-disabled-focused;
-    z-index: 1;
+    border-block-start: $border-top;
+    border-block-end: $border-bottom;
+    border-inline-start: $border-left;
+    border-inline-end: $border-right;
+
+    @if $is-expanded {
+      right: -$generic-tabs-border-width;
+      left: -$generic-tabs-border-width;
+      z-index: 2;
+    } @else {
+      right: 0;
+      left: 0;
+      z-index: 1;
+    }
   }
 }

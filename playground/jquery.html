@@ -36,13 +36,55 @@
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
-        <div id="button"></div>
+        <div id="tabs"></div>
+        <div id="tabpanel" style="margin-top: 25px;"></div>
+
         <script>
            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+                const tabPanelItems = [
+                    { title: 'user', text: '1' },
+                    { title: 'analytics', text: '2' },
+                    { title: 'customers', text: '3', disabled: true },
+                    { title: 'search', text: '4', disabled: true },
+                    { title: 'favorites', text: '5' },
+                    { title: 'additional', text: '6' },
+                    { title: 'clients', text: '7' },
+                    { title: 'orders', text: '8' },
+                    { title: 'shipment', text: '9' },
+                ];
+
+                const tabsItems = [
+                    { text: 'user' },
+                    { text: 'analytics' },
+                    { text: 'customers', disabled: true },
+                    { text: 'search', disabled: true },
+                    { text: 'favorites' },
+                    { text: 'additional' },
+                    { text: 'clients' },
+                    { text: 'orders' },
+                    { text: 'shipment' },
+                ];
+
+                const tabs = $('#tabs').dxTabs({
+                    width: 450,
+                    dataSource: tabsItems,
+                    loop: false,
+                    animationEnabled: true,
+                    swipeEnabled: true,
+                    scrollByContent: true,
+                    // showNavButtons: false,
+                }).dxTabs('instance');
+
+                const tabPanel = $('#tabpanel').dxTabPanel({
+                    width: 450,
+                    height: 260,
+                    dataSource: tabPanelItems,
+                    loop: false,
+                    animationEnabled: true,
+                    swipeEnabled: true,
+                    scrollByContent: true,
+                    // showNavButtons: false,
+                }).dxTabPanel('instance');
             });
         </script>
     </div>
