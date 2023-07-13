@@ -130,3 +130,54 @@ test('The updateDimensions method should render the grid if a container was hidd
     },
   });
 });
+
+// T1176160
+test('The vertical scroll position should not be reset after horizontal scrolling when there is a fixed column and a master detail row', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.wait(50);
+
+  // act
+  await dataGrid.scrollTo({ y: 5000 });
+
+  // assert
+  await takeScreenshot('T1176160-master-detail-with-virtual-columns-1.png', dataGrid.element);
+
+  // act
+  await dataGrid.scrollTo({ x: 1000 });
+
+  // assert
+  await takeScreenshot('T1176160-master-detail-with-virtual-columns-2.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: generateData(10, 50).map((item, index) => ({ ...item, id: index })),
+  keyExpr: 'id',
+  width: 500,
+  height: 500,
+  columnWidth: 100,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+  customizeColumns(columns) {
+    columns[0].fixed = true;
+  },
+  masterDetail: {
+    enabled: true,
+    template() {
+      return ($('<div style=\'height: 300px;\'>') as any).text('details');
+    },
+  },
+  onContentReady(e) {
+    // eslint-disable-next-line no-underscore-dangle
+    if (!e.component.__initExpand) {
+    // eslint-disable-next-line no-underscore-dangle
+      e.component.__initExpand = true;
+      e.component.expandRow(9);
+    }
+  },
+}));
