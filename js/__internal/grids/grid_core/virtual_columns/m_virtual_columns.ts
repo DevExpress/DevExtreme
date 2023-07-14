@@ -25,6 +25,28 @@ const VirtualScrollingRowsViewExtender = {
 
     that._columnsController.setScrollPosition(left);
   },
+
+  _restoreScrollTop() {
+    const scrollable = this.getScrollable();
+    const scrollTop = scrollable?.scrollTop();
+
+    if (this._scrollTop > 0 && scrollTop !== this._scrollTop) {
+      scrollable.scrollTo({ y: this._scrollTop });
+    }
+  },
+
+  _renderCore(e) {
+    if (e?.virtualColumnsScrolling) {
+      const resizeCompletedHandler = () => {
+        this.resizeCompleted.remove(resizeCompletedHandler);
+        this._restoreScrollTop();
+      };
+
+      this.resizeCompleted.add(resizeCompletedHandler);
+    }
+
+    return this.callBase.apply(this, arguments);
+  },
 };
 
 const HeaderViewExtender = {
