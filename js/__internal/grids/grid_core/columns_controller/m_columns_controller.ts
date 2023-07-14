@@ -1167,7 +1167,7 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  updateColumns(dataSource, forceApplying?, isApplyingUserState?): any {
+  updateColumns(dataSource?, forceApplying?, isApplyingUserState?): any {
     if (!forceApplying) {
       this.updateSortingGrouping(dataSource);
     }
