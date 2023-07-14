@@ -5,9 +5,16 @@
 export type GroupItem<
     TItem = any,
 > = {
+  /** @docid */
   key: any | string | number;
+  /**
+   * @docid
+   * @type Array<any>|Array<GroupItem>|null
+   */
   items: Array<TItem> | Array<GroupItem<TItem>> | null;
+  /** @docid */
   count?: number;
+  /** @docid */
   summary?: Array<any>;
 };
 
@@ -18,9 +25,16 @@ type LoadResultArray<TItem = any> = Array<TItem> | Array<GroupItem<TItem>>;
  * @public
  */
 export type LoadResultObject<TItem = any> = {
+    /**
+     * @docid
+     * @type Array<any>|Array<GroupItem>
+    */
     data: Array<TItem> | Array<GroupItem<TItem>>;
+    /** @docid */
     totalCount?: number;
+    /** @docid */
     summary?: Array<any>;
+    /** @docid */
     groupCount?: number;
   };
 
