@@ -1532,9 +1532,21 @@ declare module DevExpress.common {
    * [descr:GroupItem]
    */
   export type GroupItem<TItem = any> = {
+    /**
+     * [descr:GroupItem.key]
+     */
     key: any | string | number;
+    /**
+     * [descr:GroupItem.items]
+     */
     items: Array<TItem> | Array<GroupItem<TItem>> | null;
+    /**
+     * [descr:GroupItem.count]
+     */
     count?: number;
+    /**
+     * [descr:GroupItem.summary]
+     */
     summary?: Array<any>;
   };
   export type HorizontalAlignment = 'center' | 'left' | 'right';
@@ -1573,9 +1585,21 @@ declare module DevExpress.common {
    * [descr:LoadResultObject]
    */
   export type LoadResultObject<TItem = any> = {
+    /**
+     * [descr:LoadResultObject.data]
+     */
     data: Array<TItem> | Array<GroupItem<TItem>>;
+    /**
+     * [descr:LoadResultObject.totalCount]
+     */
     totalCount?: number;
+    /**
+     * [descr:LoadResultObject.summary]
+     */
     summary?: Array<any>;
+    /**
+     * [descr:LoadResultObject.groupCount]
+     */
     groupCount?: number;
   };
   export type MaskMode = 'always' | 'onFocus';
