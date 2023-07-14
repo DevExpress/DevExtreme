@@ -88,7 +88,10 @@ const UA_PARSERS = {
     android(userAgent) {
         // TODO: Check this RegExp.
         //  It looks like there may be missing android user agents.
-        if(!/android|htc_|silk/i.test(userAgent) || /windows phone/i.test(userAgent)) {
+        const isAndroid = /android|htc_|silk/i.test(userAgent);
+        const isWinPhone = /windows phone/i.test(userAgent);
+
+        if(!isAndroid || isWinPhone) {
             return null;
         }
 
