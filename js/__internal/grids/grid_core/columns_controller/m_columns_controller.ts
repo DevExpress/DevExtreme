@@ -1171,8 +1171,7 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  // @ts-expect-error
-  updateColumns(dataSource, forceApplying?, isApplyingUserState?) {
+  updateColumns(dataSource?, forceApplying?, isApplyingUserState?): any {
     if (!forceApplying) {
       this.updateSortingGrouping(dataSource);
     }
