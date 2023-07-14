@@ -42,7 +42,6 @@ const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
-// TODO: Can we move it to tabPanel?
 const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 
@@ -407,7 +406,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _updateSelection: function(addedSelection) {
-        this._scrollable && this._scrollable.scrollToElement(this.itemElements().eq(addedSelection[0]), { left: 1, right: 1 });
+        this._scrollable && this._scrollable.scrollToElement(this.itemElements().eq(addedSelection[0]));
     },
 
     _visibilityChanged: function(visible) {
@@ -483,9 +482,10 @@ const Tabs = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case 'focusedElement': {
+                // debugger;
                 this._toggleFocusedDisabledClasses(args.value);
-                this.callBase(args);
                 this._scrollToItem(args.value);
+                this.callBase(args);
                 break;
             }
             default:

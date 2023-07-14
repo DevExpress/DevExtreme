@@ -13,19 +13,16 @@
     position: absolute;
     top: -$generic-tabs-border-width;
     bottom: -$generic-tabs-border-width;
+    right: 0;
+    left: 0;
     border-block-start: $border-top;
     border-block-end: $border-bottom;
     border-inline-start: $border-left;
     border-inline-end: $border-right;
+    z-index: 1;
 
     @if $is-expanded {
-      right: -$generic-tabs-border-width;
-      left: -$generic-tabs-border-width;
       z-index: 2;
-    } @else {
-      right: 0;
-      left: 0;
-      z-index: 1;
     }
   }
 }

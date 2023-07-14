@@ -122,6 +122,29 @@
   background-color: $tabs-tab-bg;
   color: $tabs-border-color;
 
+  &.dx-tabs-nav-buttons {
+    .dx-tabs-wrapper {
+      border-inline-start: $generic-tabs-border-transparent;
+      border-inline-end: $generic-tabs-border-transparent;
+    }
+  }
+
+  &.dx-state-focused {
+    .dx-tab {
+      &.dx-focused-disabled-next-tab {
+        &::after {
+          border-inline-end: none;
+        }
+      }
+    
+      &.dx-focused-disabled-prev-tab {
+        &::after {
+          border-inline-start: none;
+        }
+      }
+    }
+  }
+
   .dx-tabs-nav-button {
     background-color: $tabs-tab-bg;
     color: $tabs-border-color;
@@ -155,12 +178,5 @@
 
   .dx-tabs-wrapper {
     border: $generic-tabs-border;
-  }
-
-  &.dx-tabs-nav-buttons {
-    .dx-tabs-wrapper {
-      border-inline-start: $generic-tabs-border-transparent;
-      border-inline-end: $generic-tabs-border-transparent;
-    }
   }
 }

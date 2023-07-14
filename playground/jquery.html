@@ -48,7 +48,7 @@
                     { title: 'search', text: '4', disabled: true },
                     { title: 'favorites', text: '5', disabled: true },
                     { title: 'additional', text: '6' },
-                    { title: 'clients', text: '7', disabled: true },
+                    { title: 'clients', text: '7' },
                     { title: 'orders', text: '8' },
                     { title: 'shipment', text: '9' },
                 ];
@@ -59,8 +59,8 @@
                     { text: 'customers', disabled: true },
                     { text: 'search', disabled: true },
                     { text: 'favorites' },
-                    { text: 'additional' },
-                    { text: 'clients' },
+                    { text: 'additional', disabled: true },
+                    { text: 'clients', disabled: true },
                     { text: 'orders' },
                     { text: 'shipment' },
                 ];
@@ -72,18 +72,18 @@
                 //     animationEnabled: true,
                 //     swipeEnabled: true,
                 //     scrollByContent: true,
-                //     // showNavButtons: false,
+                //     showNavButtons: false,
                 // }).dxTabs('instance');
 
                 const tabPanel = $('#tabpanel').dxTabPanel({
-                    width: 500,
+                    width: 450,
                     height: 260,
                     dataSource: tabPanelItems,
                     loop: false,
                     animationEnabled: true,
                     swipeEnabled: true,
                     scrollByContent: true,
-                    showNavButtons: true,
+                    // showNavButtons: true,
                 }).dxTabPanel('instance');
             });
         </script>

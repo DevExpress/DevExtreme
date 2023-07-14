@@ -51,13 +51,6 @@
         @include dx-tabpanel-tab-border-mixin(null, $generic-tabpanel-tab-border-focused-bottom, null, null);
       }
 
-      &.dx-state-focused.dx-state-disabled {
-        &::after {
-          left: 0;
-          right: 0;
-        }
-      }
-
       &:first-child {
         &.dx-state-hover {
           @include dx-tabpanel-tab-border-mixin(null, $generic-tabpanel-tab-border-hover-bottom, $generic-tabs-border-transparent, null);
