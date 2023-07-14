@@ -44,7 +44,7 @@ const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
 const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
 const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
-const FOCUSED_NEXT_TAB_CLASS = 'dx-focused-next-tab';
+const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const BUTTON_NEXT_ICON = 'chevronnext';
 const BUTTON_PREV_ICON = 'chevronprev';
 const TAB_OFFSET = 30;
@@ -186,18 +186,29 @@ QUnit.module('General', () => {
         const $element = $('#tabs').dxTabs({
             items: [
                 { text: '0' },
-                { text: '1', disabled: true },
+                { text: '1' },
+                { text: '2', disabled: true },
+                { text: '3', disabled: true },
             ],
             focusStateEnabled: true,
         });
-        const $item = $element.find(`.${DISABLED_STATE_CLASS}`).eq(0);
         const keyboard = keyboardMock($element);
 
         keyboard.press('right');
-        assert.ok($($item).hasClass(FOCUSED_NEXT_TAB_CLASS), 'The first item has specific class');
+        keyboard.press('right');
+
+        const items = $element.find(toSelector(TABS_ITEM_CLASS));
+
+        assert.notOk(items.eq(0).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The first item does not have specific class');
+        assert.notOk(items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item has specific class');
 
         keyboard.press('left');
-        assert.ok($($item).hasClass(FOCUSED_NEXT_TAB_CLASS), 'The first item does not have specific class');
+        assert.ok(items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item does not have specific class');
+
+        keyboard.press('right');
+        keyboard.press('right');
+
+        assert.ok(items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item does not have specific class');
     });
 });
 

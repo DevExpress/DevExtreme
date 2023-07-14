@@ -44,11 +44,11 @@
                 const tabPanelItems = [
                     { title: 'user', text: '1' },
                     { title: 'analytics', text: '2' },
-                    { title: 'customers', text: '3', disabled: true },
+                    { title: 'customers', text: '3' },
                     { title: 'search', text: '4', disabled: true },
-                    { title: 'favorites', text: '5' },
+                    { title: 'favorites', text: '5', disabled: true },
                     { title: 'additional', text: '6' },
-                    { title: 'clients', text: '7' },
+                    { title: 'clients', text: '7', disabled: true },
                     { title: 'orders', text: '8' },
                     { title: 'shipment', text: '9' },
                 ];
@@ -65,15 +65,15 @@
                     { text: 'shipment' },
                 ];
 
-                const tabs = $('#tabs').dxTabs({
-                    width: 450,
-                    dataSource: tabsItems,
-                    loop: false,
-                    animationEnabled: true,
-                    swipeEnabled: true,
-                    scrollByContent: true,
-                    // showNavButtons: false,
-                }).dxTabs('instance');
+                // const tabs = $('#tabs').dxTabs({
+                //     width: 450,
+                //     dataSource: tabsItems,
+                //     loop: false,
+                //     animationEnabled: true,
+                //     swipeEnabled: true,
+                //     scrollByContent: true,
+                //     // showNavButtons: false,
+                // }).dxTabs('instance');
 
                 const tabPanel = $('#tabpanel').dxTabPanel({
                     width: 500,
