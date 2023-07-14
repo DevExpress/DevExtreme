@@ -457,7 +457,6 @@ const Tabs = CollectionWidget.inherit({
 
         this._toggleFocusedDisabledNextClass(currentIndex, shouldNextClassBeSetted);
         this._toggleFocusedDisabledPrevClass(currentIndex, shouldPrevClassBeSetted);
-
     },
 
     _optionChanged: function(args) {
@@ -482,10 +481,9 @@ const Tabs = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case 'focusedElement': {
-                // debugger;
                 this._toggleFocusedDisabledClasses(args.value);
-                this._scrollToItem(args.value);
                 this.callBase(args);
+                this._scrollToItem(args.value);
                 break;
             }
             default:
