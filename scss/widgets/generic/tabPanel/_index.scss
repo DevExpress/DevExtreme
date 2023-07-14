@@ -91,6 +91,10 @@
     .dx-tabs-wrapper {
       border-block-end: $generic-tabs-border-focus;
     }
+
+    .dx-tabs-nav-button {
+      border-block-end: $generic-tabs-border-focus;
+    }
   }
 
   &:not(.dx-empty-collection) {
