@@ -1,4 +1,4 @@
-import { getWidth, getOuterWidth } from '../core/utils/size';
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
@@ -9,7 +9,6 @@ import { addNamespace } from '../events/utils/index';
 import { extend } from '../core/utils/extend';
 import { isPlainObject } from '../core/utils/type';
 import pointerEvents from '../events/pointer';
-import { each } from '../core/utils/iterator';
 import TabsItem from './tabs/item';
 import { isMaterial, current as currentTheme } from './themes';
 import holdEvent from '../events/hold';
@@ -224,20 +223,6 @@ const Tabs = CollectionWidget.inherit({
         const tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
 
         return tabItemsWidth - 1 > getWidth(this.$element());
-    },
-
-    _needStretchItems: function() {
-        const $visibleItems = this._getVisibleItems();
-        const elementWidth = getWidth(this.$element());
-        const itemsWidth = [];
-
-        each($visibleItems, (_, item) => {
-            itemsWidth.push(getOuterWidth(item, true));
-        });
-
-        const maxTabWidth = Math.max.apply(null, itemsWidth);
-
-        return maxTabWidth >= elementWidth / $visibleItems.length;
     },
 
     _cleanNavButtons: function() {
