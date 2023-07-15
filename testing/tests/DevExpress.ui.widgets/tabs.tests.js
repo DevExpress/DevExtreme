@@ -19,7 +19,7 @@ QUnit.testStart(function() {
                 padding: 35px;
             }
 
-            .bigtab.dx-tabs-expanded .dx-tab {
+            .bigtab .dx-tab {
                 width: 1000px;
             }
 

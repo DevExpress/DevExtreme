@@ -28,9 +28,6 @@ $icon-size: 16px;
   width: 100%;
   position: relative;
 
-  // TODO: Remove this class from js
-  &.dx-tabs-stretched {}
-
   &.dx-overflow-hidden {
     overflow: hidden;
   }
@@ -46,9 +43,6 @@ $icon-size: 16px;
     height: 100%;
   }
 }
-
-// TODO: Remove this class from js
-.dx-tabs-expanded {}
 
 .dx-tabs-wrapper {
   display: flex;

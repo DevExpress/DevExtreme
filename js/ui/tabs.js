@@ -11,7 +11,6 @@ import { isPlainObject } from '../core/utils/type';
 import pointerEvents from '../events/pointer';
 import { each } from '../core/utils/iterator';
 import TabsItem from './tabs/item';
-import { TABS_EXPANDED_CLASS } from './tabs/constants';
 import { isMaterial, current as currentTheme } from './themes';
 import holdEvent from '../events/hold';
 import Scrollable from './scroll_view/ui.scrollable';
@@ -26,7 +25,6 @@ import { getScrollLeftMax } from '../renovation/ui/scroll_view/utils/get_scroll_
 
 const TABS_CLASS = 'dx-tabs';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
-const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
 
@@ -195,8 +193,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _renderScrolling: function() {
-        const removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
-        this.$element().removeClass(removeClasses.join(' '));
+        this.$element().removeClass(OVERFLOW_HIDDEN_CLASS);
 
         if(this.option('scrollingEnabled') && this._isItemsWidthExceeded()) {
             if(!this._scrollable) {
@@ -219,13 +216,7 @@ const Tabs = CollectionWidget.inherit({
         if(!(this.option('scrollingEnabled') && this._isItemsWidthExceeded())) {
             this._cleanScrolling();
 
-            if(this._needStretchItems() && !this._isItemsWidthExceeded()) {
-                this.$element().addClass(TABS_STRETCHED_CLASS);
-            }
-
-            this.$element()
-                .removeClass(TABS_NAV_BUTTONS_CLASS)
-                .addClass(TABS_EXPANDED_CLASS);
+            this.$element().removeClass(TABS_NAV_BUTTONS_CLASS);
         }
     },
 
