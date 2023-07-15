@@ -159,6 +159,16 @@
       border-left: none;
     }
 
+    &.dx-state-active {
+      background-color: $tabs-tab-active-bg;
+
+      &.dx-button-has-icon {
+        .dx-icon {
+          color: $tabs-tab-selected-color;
+        }
+      }
+    }
+
     &.dx-state-disabled {
       opacity: 1;
 
@@ -169,6 +179,14 @@
 
     .dx-button-content {
       padding: 0;
+    }
+
+    &.dx-state-hover {
+      background-color: $tabs-tab-hover-bg;
+
+      .dx-button-content {
+        border-radius: 0;
+      }
     }
   }
 
