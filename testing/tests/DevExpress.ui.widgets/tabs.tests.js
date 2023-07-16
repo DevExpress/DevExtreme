@@ -38,6 +38,8 @@ QUnit.testStart(function() {
 const TABS_ITEM_CLASS = 'dx-tab';
 const TAB_SELECTED_CLASS = 'dx-tab-selected';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
+const TABS_VERTICAL_CLASS = 'dx-tabs-vertical';
+const TABS_HORIZONTAL_CLASS = 'dx-tabs-horizontal';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
@@ -243,6 +245,38 @@ QUnit.module('General', () => {
         keyboard.press('right');
 
         assert.notOk($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item does not have specific class');
+    });
+
+    QUnit.test('the tabs element must have a horizontal class by default', function(assert) {
+        const $element = $('#tabs').dxTabs({
+            items: [1, 2, 3],
+        });
+
+        assert.ok($element.hasClass(TABS_HORIZONTAL_CLASS));
+    });
+
+    QUnit.test('the tabs element must have a vertical class if orientation is vertical', function(assert) {
+        const $element = $('#tabs').dxTabs({
+            items: [1, 2, 3],
+            orientation: 'vertical',
+        });
+
+        assert.ok($element.hasClass(TABS_VERTICAL_CLASS));
+    });
+
+    QUnit.test('the tabs element must have a correct orientation class in runtime change', function(assert) {
+        const $element = $('#tabs').dxTabs({
+            items: [1, 2, 3],
+        });
+        const tabs = $element.dxTabs('instance');
+
+        assert.ok($element.hasClass(TABS_HORIZONTAL_CLASS));
+
+        tabs.option('orientation', 'vertical');
+        assert.ok($element.hasClass(TABS_VERTICAL_CLASS));
+
+        tabs.option('orientation', 'horizontal');
+        assert.ok($element.hasClass(TABS_HORIZONTAL_CLASS));
     });
 });
 
