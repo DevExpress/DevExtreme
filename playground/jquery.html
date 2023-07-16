@@ -51,8 +51,13 @@
                     { text: 'shipment' },
                 ];
 
-                $('#tabs').dxTabs({
+                const instance = $('#tabs').dxTabs({
                     dataSource: longtabs,
+                    orientation: 'vertical',
+                }).dxTabs('instance');
+
+                setTimeout(() => {
+                    instance.option('orientation', 'horizontal')
                 });
             });
         </script>

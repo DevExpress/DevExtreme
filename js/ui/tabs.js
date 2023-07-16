@@ -26,6 +26,8 @@ const TABS_CLASS = 'dx-tabs';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
+const TABS_VERTICAL_CLASS = 'dx-tabs-vertical';
+const TABS_HORIZONTAL_CLASS = 'dx-tabs-horizontal';
 
 const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
@@ -53,6 +55,10 @@ const FEEDBACK_SCROLL_TIMEOUT = 300;
 
 const TAB_OFFSET = 30;
 
+const ORIENTATION = {
+    horizontal: 'horizontal',
+    vertical: 'vertical',
+};
 
 const Tabs = CollectionWidget.inherit({
 
@@ -65,7 +71,7 @@ const Tabs = CollectionWidget.inherit({
             scrollByContent: true,
             scrollingEnabled: true,
             selectionMode: 'single',
-            orientation: 'horizontal',
+            orientation: ORIENTATION.horizontal,
 
             /**
              * @name dxTabsOptions.activeStateEnabled
@@ -121,14 +127,23 @@ const Tabs = CollectionWidget.inherit({
         ]);
     },
 
+    _setBaseElementClasses() {
+        const isVertical = this.option('orientation') === ORIENTATION.vertical;
+        const orientationClass = isVertical ? TABS_VERTICAL_CLASS : TABS_HORIZONTAL_CLASS;
+
+        const elementClasses = [
+            TABS_CLASS,
+            orientationClass,
+        ];
+
+        this.$element().addClass(elementClasses);
+    },
+
     _init: function() {
         this.callBase();
-
         this.setAria('role', 'tablist');
-
-        this.$element().addClass(TABS_CLASS);
+        this._setBaseElementClasses();
         this._renderWrapper();
-
         this._renderMultiple();
 
         this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
@@ -436,6 +451,21 @@ const Tabs = CollectionWidget.inherit({
         this._toggleFocusedDisabledPrevClass(currentIndex, shouldPrevClassBeSetted);
     },
 
+    _toggleTabsVerticalClass(value) {
+        this.$element().toggleClass(TABS_VERTICAL_CLASS, value);
+    },
+
+    _toggleTabsHorizontalClass(value) {
+        this.$element().toggleClass(TABS_HORIZONTAL_CLASS, value);
+    },
+
+    _replaceOrientationClass(orientation) {
+        const isVertical = orientation === ORIENTATION.vertical;
+
+        this._toggleTabsVerticalClass(isVertical);
+        this._toggleTabsHorizontalClass(!isVertical);
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'useInkRipple':
@@ -463,6 +493,9 @@ const Tabs = CollectionWidget.inherit({
                 this._scrollToItem(args.value);
                 break;
             }
+            case 'orientation':
+                this._replaceOrientationClass(args.value);
+                break;
             default:
                 this.callBase(args);
         }
