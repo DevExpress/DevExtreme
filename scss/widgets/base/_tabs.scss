@@ -4,6 +4,7 @@
 
 
 $nav-button-width: 25px;
+$nav-button-height: 25px;
 $icon-size: 16px;
 
 @mixin dx-tabs-link() {
@@ -88,25 +89,19 @@ $icon-size: 16px;
   vertical-align: top;
 }
 
-.dx-tabs-nav-buttons {
-  .dx-tabs-scrollable {
-    margin-right: $nav-button-width;
-    margin-left: $nav-button-width;
-  }
-}
-
 .dx-tabs-nav-button {
   width: $nav-button-width;
   padding: 0;
   height: 100%;
-  position: absolute;
-  top: 0;
 }
 
-.dx-tabs-nav-button-left {
-  left: 0;
-}
+.dx-tabs-vertical {
+  .dx-tabs-nav-button {
+    width: 100%;
+    height: $nav-button-height;
 
-.dx-tabs-nav-button-right {
-  right: 0;
+    .dx-icon {
+      transform: rotate(90deg);
+    }
+  }
 }

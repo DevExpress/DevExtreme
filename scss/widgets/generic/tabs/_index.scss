@@ -198,3 +198,13 @@
     border: $generic-tabs-border;
   }
 }
+
+.dx-tabs-vertical {
+  display: flex;
+  flex-direction: column;
+
+  .dx-tabs-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}
