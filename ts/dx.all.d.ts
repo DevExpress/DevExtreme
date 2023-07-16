@@ -25672,6 +25672,10 @@ declare module DevExpress.ui {
      */
     items?: Array<TItem>;
     /**
+     * [descr:dxTabsOptions.orientation]
+     */
+    orientation?: DevExpress.common.Orientation;
+    /**
      * [descr:dxTabsOptions.repaintChangesOnly]
      */
     repaintChangesOnly?: boolean;

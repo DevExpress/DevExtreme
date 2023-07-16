@@ -36,12 +36,23 @@
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
-        <div id="button"></div>
+        <div id="tabs"></div>
         <script>
            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+                const longtabs = [
+                    { text: 'user' },
+                    { text: 'analytics' },
+                    { text: 'customers' },
+                    { text: 'search' },
+                    { text: 'favorites' },
+                    { text: 'additional' },
+                    { text: 'clients' },
+                    { text: 'orders' },
+                    { text: 'shipment' },
+                ];
+
+                $('#tabs').dxTabs({
+                    dataSource: longtabs,
                 });
             });
         </script>

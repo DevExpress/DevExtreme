@@ -65,6 +65,7 @@ const Tabs = CollectionWidget.inherit({
             scrollByContent: true,
             scrollingEnabled: true,
             selectionMode: 'single',
+            orientation: 'horizontal',
 
             /**
              * @name dxTabsOptions.activeStateEnabled
