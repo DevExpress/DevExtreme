@@ -1,4 +1,4 @@
-import { getWidth, getOuterWidth } from '../core/utils/size';
+import { getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
@@ -9,9 +9,7 @@ import { addNamespace } from '../events/utils/index';
 import { extend } from '../core/utils/extend';
 import { isPlainObject } from '../core/utils/type';
 import pointerEvents from '../events/pointer';
-import { each } from '../core/utils/iterator';
 import TabsItem from './tabs/item';
-import { TABS_EXPANDED_CLASS } from './tabs/constants';
 import { isMaterial, current as currentTheme } from './themes';
 import holdEvent from '../events/hold';
 import Scrollable from './scroll_view/ui.scrollable';
@@ -26,7 +24,6 @@ import { getScrollLeftMax } from '../renovation/ui/scroll_view/utils/get_scroll_
 
 const TABS_CLASS = 'dx-tabs';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
-const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
 
@@ -41,7 +38,9 @@ const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
-const FOCUSED_NEXT_TAB_CLASS = 'dx-focused-next-tab';
+const STATE_DISABLED_CLASS = 'dx-state-disabled';
+const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
+const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 
 const TABS_ITEM_DATA_KEY = 'dxTabData';
 
@@ -193,8 +192,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _renderScrolling: function() {
-        const removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
-        this.$element().removeClass(removeClasses.join(' '));
+        this.$element().removeClass(OVERFLOW_HIDDEN_CLASS);
 
         if(this.option('scrollingEnabled') && this._isItemsWidthExceeded()) {
             if(!this._scrollable) {
@@ -217,13 +215,7 @@ const Tabs = CollectionWidget.inherit({
         if(!(this.option('scrollingEnabled') && this._isItemsWidthExceeded())) {
             this._cleanScrolling();
 
-            if(this._needStretchItems() && !this._isItemsWidthExceeded()) {
-                this.$element().addClass(TABS_STRETCHED_CLASS);
-            }
-
-            this.$element()
-                .removeClass(TABS_NAV_BUTTONS_CLASS)
-                .addClass(TABS_EXPANDED_CLASS);
+            this.$element().removeClass(TABS_NAV_BUTTONS_CLASS);
         }
     },
 
@@ -231,20 +223,6 @@ const Tabs = CollectionWidget.inherit({
         const tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
 
         return tabItemsWidth - 1 > getWidth(this.$element());
-    },
-
-    _needStretchItems: function() {
-        const $visibleItems = this._getVisibleItems();
-        const elementWidth = getWidth(this.$element());
-        const itemsWidth = [];
-
-        each($visibleItems, (_, item) => {
-            itemsWidth.push(getOuterWidth(item, true));
-        });
-
-        const maxTabWidth = Math.max.apply(null, itemsWidth);
-
-        return maxTabWidth >= elementWidth / $visibleItems.length;
     },
 
     _cleanNavButtons: function() {
@@ -404,7 +382,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _updateSelection: function(addedSelection) {
-        this._scrollable && this._scrollable.scrollToElement(this.itemElements().eq(addedSelection[0]), { left: 1, right: 1 });
+        this._scrollable && this._scrollable.scrollToElement(this.itemElements().eq(addedSelection[0]));
     },
 
     _visibilityChanged: function(visible) {
@@ -431,8 +409,30 @@ const Tabs = CollectionWidget.inherit({
         this.callBase();
     },
 
-    _toggleFocusedNextClass(index, isNextTabFocused) {
-        this._itemElements().eq(index).toggleClass(FOCUSED_NEXT_TAB_CLASS, isNextTabFocused);
+    _toggleFocusedDisabledNextClass(currentIndex, isNextDisabled) {
+        this._itemElements().eq(currentIndex).toggleClass(FOCUSED_DISABLED_NEXT_TAB_CLASS, isNextDisabled);
+    },
+
+    _toggleFocusedDisabledPrevClass(currentIndex, isPrevDisabled) {
+        this._itemElements().eq(currentIndex).toggleClass(FOCUSED_DISABLED_PREV_TAB_CLASS, isPrevDisabled);
+    },
+
+    _toggleFocusedDisabledClasses(value) {
+        const { selectedIndex: currentIndex } = this.option();
+
+        const prevItemIndex = currentIndex - 1;
+        const nextItemIndex = currentIndex + 1;
+
+        const nextFocusedIndex = $(value).index();
+
+        const isNextDisabled = this._itemElements().eq(nextItemIndex).hasClass(STATE_DISABLED_CLASS);
+        const isPrevDisabled = this._itemElements().eq(prevItemIndex).hasClass(STATE_DISABLED_CLASS);
+
+        const shouldNextClassBeSetted = isNextDisabled && nextFocusedIndex === nextItemIndex;
+        const shouldPrevClassBeSetted = isPrevDisabled && nextFocusedIndex === prevItemIndex;
+
+        this._toggleFocusedDisabledNextClass(currentIndex, shouldNextClassBeSetted);
+        this._toggleFocusedDisabledPrevClass(currentIndex, shouldPrevClassBeSetted);
     },
 
     _optionChanged: function(args) {
@@ -457,13 +457,7 @@ const Tabs = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case 'focusedElement': {
-                const { selectedIndex } = this.option();
-                const currentIndex = $(args.value).index();
-
-                if(currentIndex !== selectedIndex) {
-                    this._toggleFocusedNextClass(selectedIndex, currentIndex === selectedIndex + 1);
-                }
-
+                this._toggleFocusedDisabledClasses(args.value);
                 this.callBase(args);
                 this._scrollToItem(args.value);
                 break;
