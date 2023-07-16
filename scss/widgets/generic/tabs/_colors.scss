@@ -67,9 +67,9 @@ $tabs-tab-hover-border-color-vertical: null !default;
   $tabs-focused-disabled-border-color: darken($base-border-color, 20%) !default;
   $tabs-tab-hover-bg: $base-hover-bg !default;
   $tabs-tab-active-bg: color.change(darken($tabs-tab-bg, 62.5%), $alpha: 0.2) !default;
-  $tabs-tab-active-border-color: color.change(darken(#dee1e3, 2.55)) !default;
+  $tabs-tab-active-border-color: color.change(darken($base-border-color, 2.55)) !default;
   $tabs-tab-hover-border-color-horizontal: $base-border-color !default;
-  $tabs-tab-hover-border-color-vertical: color.change(lighten(#f05b41, 33.92)) !default;
+  $tabs-tab-hover-border-color-vertical: color.change(lighten($base-accent, 33.92)) !default;
 }
 
 @if $color == "contrast" {
