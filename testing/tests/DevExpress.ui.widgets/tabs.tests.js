@@ -198,18 +198,18 @@ QUnit.module('General', () => {
         keyboard.press('right');
         keyboard.press('right');
 
-        const items = $element.find(toSelector(TABS_ITEM_CLASS));
+        const $items = $element.find(toSelector(TABS_ITEM_CLASS));
 
-        assert.notOk(items.eq(0).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The first item does not have specific class');
-        assert.ok(items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item has specific class');
+        assert.notOk($items.eq(0).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The first item does not have specific class');
+        assert.ok($items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item has specific class');
 
         keyboard.press('left');
-        assert.notOk(items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item does not have specific class');
+        assert.notOk($items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item does not have specific class');
 
         keyboard.press('right');
         keyboard.press('right');
 
-        assert.notOk(items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item does not have specific class');
+        assert.notOk($items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item does not have specific class');
     });
 
     QUnit.testInActiveWindow('specific class should be set to the selected item when prev item has focused and disabled states', function(assert) {
@@ -228,20 +228,21 @@ QUnit.module('General', () => {
         keyboard.press('right');
         keyboard.press('right');
 
-        const $item = $element.find(toSelector(TABS_ITEM_CLASS)).eq(4);
+        const $items = $element.find(toSelector(TABS_ITEM_CLASS));
 
-        assert.notOk($item.hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The third item does not have specific class');
+        assert.notOk($items.eq(0).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The first item does not have specific class');
+        assert.notOk($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item does not have specific class');
 
         keyboard.press('right');
-        assert.notOk($item.hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The third item does not have specific class');
+        assert.notOk($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item does not have specific class');
 
         keyboard.press('left');
-        assert.ok($item.hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The third item has specific class');
+        assert.ok($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item has specific class');
 
         keyboard.press('right');
         keyboard.press('right');
 
-        assert.ok($item.hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The third item does not have specific class');
+        assert.notOk($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item does not have specific class');
     });
 });
 

@@ -134,7 +134,7 @@ const Tabs = CollectionWidget.inherit({
         const elementClasses = [
             TABS_CLASS,
             orientationClass,
-        ];
+        ].join(' ');
 
         this.$element().addClass(elementClasses);
     },
