@@ -46,6 +46,8 @@ const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
 const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
 const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const SCROLLABLE_CLASS = 'dx-scrollable';
+const SCROLLABLE_CLASS_VERTICAL = 'dx-scrollable-vertical';
 const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 const BUTTON_NEXT_ICON = 'chevronnext';
@@ -378,9 +380,24 @@ QUnit.module('Tab select action', () => {
     });
 });
 
-QUnit.module('Horizontal scrolling', () => {
-    const SCROLLABLE_CLASS = 'dx-scrollable';
+QUnit.module('Vertical scrolling', () => {
+    QUnit.test('Tabs in vertical orientation should have vertical scrollable', function(assert) {
+        const $element = $('#scrollableTabs').dxTabs({
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }],
+            showNavButtons: true,
+            scrollingEnabled: true,
+            orientation: 'vertical',
+        });
 
+        const $scrollable = $element.find('.' + SCROLLABLE_CLASS);
+        const scrollable = $scrollable.dxScrollable('instance');
+
+        assert.ok($scrollable.hasClass(SCROLLABLE_CLASS_VERTICAL), 'scrollable element must have vertical class');
+        assert.strictEqual(scrollable.option('direction'), 'vertical', 'direction option must have vertical value');
+    });
+});
+
+QUnit.module('Horizontal scrolling', () => {
     QUnit.test('tabs should be wrapped into scrollable if scrollingEnabled=true', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
