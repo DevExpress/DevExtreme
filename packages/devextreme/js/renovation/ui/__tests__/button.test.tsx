@@ -658,23 +658,4 @@ describe('Button', () => {
       });
     });
   });
-
-  describe('checkDeprecation', () => {
-    afterEach(() => {
-      jest.resetAllMocks();
-    });
-
-    it('check deprecation error', () => {
-      const component = new Button({ type: 'back' });
-      component.checkDeprecation();
-      expect(errors.log).toHaveBeenCalledTimes(1);
-      expect(errors.log).toHaveBeenNthCalledWith(1, 'W0016', 'type', 'back', '22.2', 'Use the \'back\' icon instead');
-    });
-
-    it('no deprecation error', () => {
-      const component = new Button({ icon: 'back' });
-      component.checkDeprecation();
-      expect(errors.log).toHaveBeenCalledTimes(0);
-    });
-  });
 });
