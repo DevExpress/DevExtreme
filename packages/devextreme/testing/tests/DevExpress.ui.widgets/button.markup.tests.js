@@ -95,7 +95,7 @@ QUnit.module('Button markup', function() {
         element.dxButton('instance').option('type', 'danger');
 
         assert.equal(element.find('.dx-button-normal').length, 0, 'prev class type was removed');
-        assert.equal(element.find('.dx-icon').length, 1, 'icon was not rendered');
+        assert.equal(element.find('.dx-icon').length, 0, 'icon was not rendered');
     });
 
     QUnit.test('class is not removed after change type', function(assert) {
@@ -286,21 +286,6 @@ QUnit.module('Button markup', function() {
             });
 
             assert.equal($element.attr('aria-label'), undefined, 'aria label does not exist');
-        });
-
-        QUnit.test('after change the button type to \'back\' and then change to \'normal\' arrow should be disappear', function(assert) {
-            const $element = $('#button').dxButton({});
-            const instance = $element.dxButton('instance');
-
-            const backIconClass = '.dx-icon-back';
-
-            assert.equal($element.find(backIconClass).length, 0, 'button hasn\'t \'back\' icon');
-
-            instance.option('type', 'back');
-            assert.equal($element.find(backIconClass).length, 1, 'button has \'back\' icon');
-
-            instance.option('type', 'normal');
-            assert.equal($element.find(backIconClass).length, 0, 'button hasn\'t \'back\' icon');
         });
     });
 });
