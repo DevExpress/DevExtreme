@@ -4,7 +4,6 @@
 
 
 $nav-button-width: 25px;
-$nav-button-height: 25px;
 $icon-size: 16px;
 
 @mixin dx-tabs-link() {
@@ -96,9 +95,15 @@ $icon-size: 16px;
 }
 
 .dx-tabs-vertical {
+  display: flex;
+  flex-direction: column;
+
+  .dx-tabs-wrapper {
+    flex-direction: column;
+  }
+
   .dx-tabs-nav-button {
     width: 100%;
-    height: $nav-button-height;
 
     .dx-icon {
       transform: rotate(90deg);

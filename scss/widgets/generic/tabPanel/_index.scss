@@ -3,11 +3,11 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../tabs/sizes" as *;
-@use "../tabs/colors" as *;
-@use "../tabs/borders" as *;
+@use "../tabs/variables/sizes" as *;
+@use "../tabs/variables/colors" as *;
+@use "../tabs/variables/borders" as *;
 @use "../tabs/mixins" as *;
-@use "../tabs/index" as *;
+@use "../tabs" as *;
 @use "../../base/tabPanel";
 @use "borders" as *;
 @use "mixins" as *;

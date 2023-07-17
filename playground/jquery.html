@@ -43,8 +43,8 @@
                     { text: 'user' },
                     { text: 'analytics' },
                     { text: 'customers' },
-                    { text: 'search' },
-                    { text: 'favorites' },
+                    { text: 'search', disabled: true },
+                    { text: 'favorites', disabled: true },
                     { text: 'additional' },
                     { text: 'clients' },
                     { text: 'orders' },
@@ -55,10 +55,6 @@
                     dataSource: longtabs,
                     orientation: 'vertical',
                 }).dxTabs('instance');
-
-                setTimeout(() => {
-                    instance.option('orientation', 'horizontal')
-                });
             });
         </script>
     </div>

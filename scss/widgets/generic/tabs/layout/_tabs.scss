@@ -1,0 +1,47 @@
+@use "sass:math";
+@use "../../colors" as *;
+@use "../../sizes" as *;
+@use "../../button/colors" as *;
+@use "../../../base/icons" as *;
+@use "../../../base/tabs";
+@use "../variables/sizes" as *;
+@use "../variables/colors" as *;
+@use "../variables/borders" as *;
+
+.dx-tabs {
+  background-color: $tabs-tab-bg;
+  color: $tabs-border-color;
+
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+
+  &.dx-tabs-nav-buttons {
+    .dx-tabs-wrapper {
+      border-inline-start: $generic-tabs-border-transparent;
+      border-inline-end: $generic-tabs-border-transparent;
+    }
+  }
+
+  .dx-tabs-scrollable {
+    height: 100%;
+  }
+
+  .dx-tabs-wrapper {
+    border: $generic-tabs-border;
+  }
+}
+
+.dx-tabs.dx-tabs-vertical {
+  &.dx-tabs-nav-buttons {
+    .dx-tabs-wrapper {
+      border-block-start: $generic-tabs-border-transparent;
+      border-block-end: $generic-tabs-border-transparent;
+    }
+  }
+
+  .dx-tabs-wrapper {
+    border-inline-start: $generic-tabs-border;
+    border-inline-end: $generic-tabs-border;
+  }
+}
