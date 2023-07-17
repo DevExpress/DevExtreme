@@ -231,7 +231,7 @@ export class ToolbarButtonGroupProps extends BaseToolbarItemProps {
 }
 
 export type ToolbarButtonStylingMode = 'text' | 'outlined' | 'contained';
-export type ToolbarButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+export type ToolbarButtonType = 'danger' | 'default' | 'normal' | 'success';
 
 /*
 *   const toolbarItems = [
