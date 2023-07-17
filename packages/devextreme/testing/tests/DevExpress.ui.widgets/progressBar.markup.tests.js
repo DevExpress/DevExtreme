@@ -136,22 +136,41 @@ QUnit.module('ProgressBar markup', {
 });
 
 QUnit.module('aria accessibility', () => {
-    QUnit.test('aria role', function(assert) {
-        const $element = $('#progressbar').dxProgressBar({});
-        assert.equal($element.attr('role'), 'progressbar', 'aria role is correct');
+    QUnit.test('aria attributes should be correct on init', function(assert) {
+        const $element = $('#progressbar').dxProgressBar({
+            min: 0,
+            max: 50,
+            value: 0
+        });
+
+        assert.equal($element.attr('aria-valuemin'), 0, 'min value');
+        assert.equal($element.attr('aria-valuemax'), 50, 'max value');
+        assert.equal($element.attr('aria-valuenow'), 0, 'current value');
+        assert.equal($element.attr('aria-live'), 'polite', 'aria-live attribute');
+        assert.equal($element.attr('aria-label'), 0, 'aria-label attribute');
+        assert.equal($element.attr('role'), 'progressbar', 'aria role');
     });
 
-    QUnit.test('aria properties', function(assert) {
+    QUnit.test('aria properties should be correct after options changed', function(assert) {
         const $element = $('#progressbar').dxProgressBar({
             min: 32,
             max: 137,
             value: 58
         });
+        const instance = $element.dxProgressBar('instance');
 
-        assert.equal($element.attr('aria-valuemin'), 32, 'min value is correct');
-        assert.equal($element.attr('aria-valuemax'), 137, 'max value is correct');
-        assert.equal($element.attr('aria-valuenow'), 58, 'current value is correct');
+        instance.option({
+            min: 33,
+            max: 138,
+            value: 59
+        });
 
+        assert.equal($element.attr('aria-valuemin'), 33, 'min value is changed correctly');
+        assert.equal($element.attr('aria-valuemax'), 138, 'max value is changed correctly');
+        assert.equal($element.attr('aria-valuenow'), 59, 'current value is changed correctly');
+        assert.equal($element.attr('aria-live'), 'polite', 'aria-live attribute');
+        assert.equal($element.attr('aria-label'), 59, 'aria-label attribute is changed correctly');
+        assert.equal($element.attr('role'), 'progressbar', 'aria role');
     });
 });
 

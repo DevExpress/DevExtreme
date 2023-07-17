@@ -78,7 +78,10 @@ const ProgressBar = TrackBar.inherit({
         this._$wrapper.addClass(PROGRESSBAR_WRAPPER_CLASS);
         this._$bar.addClass(PROGRESSBAR_CONTAINER_CLASS);
 
-        this.setAria('role', 'progressbar');
+        this.setAria({
+            role: 'progressbar',
+            live: 'polite'
+        });
 
         $('<div>').addClass(PROGRESSBAR_RANGE_CONTAINER_CLASS).appendTo(this._$wrapper).append(this._$bar);
         this._$range.addClass(PROGRESSBAR_RANGE_CLASS);
@@ -170,12 +173,15 @@ const ProgressBar = TrackBar.inherit({
             this._toggleIndeterminateState(false);
         }
 
-
         if(val === max) {
             this._completeAction();
         }
 
         this.callBase();
+
+        this.setAria({
+            'label': val
+        });
 
         this._setStatus();
     },

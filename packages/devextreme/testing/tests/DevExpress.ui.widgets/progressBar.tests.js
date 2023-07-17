@@ -200,24 +200,3 @@ QUnit.module('states', {
     });
 });
 
-QUnit.module('aria accessibility', () => {
-    QUnit.test('aria properties after options changed', function(assert) {
-        const $element = $('#progressbar').dxProgressBar({
-            min: 32,
-            max: 137,
-            value: 58
-        });
-        const instance = $element.dxProgressBar('instance');
-
-        instance.option({
-            min: 33,
-            max: 138,
-            value: 59
-        });
-
-        assert.equal($element.attr('aria-valuemin'), 33, 'min value is changed correctly');
-        assert.equal($element.attr('aria-valuemax'), 138, 'max value is changed correctly');
-        assert.equal($element.attr('aria-valuenow'), 59, 'current value is changed correctly');
-    });
-});
-
