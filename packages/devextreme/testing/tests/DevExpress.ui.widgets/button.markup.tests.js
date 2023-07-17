@@ -22,7 +22,7 @@ const BUTTON_TEXT_CLASS = 'dx-button-text';
 const BUTTON_HAS_TEXT_CLASS = 'dx-button-has-text';
 const BUTTON_HAS_ICON_CLASS = 'dx-button-has-icon';
 const BUTTON_CONTENT_CLASS = 'dx-button-content';
-const BUTTON_BACK_CLASS = 'dx-button-back';
+const BUTTON_DANGER_CLASS = 'dx-button-danger';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const BUTTON_TEXT_STYLE_CLASS = 'dx-button-mode-text';
 const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
@@ -59,14 +59,12 @@ QUnit.module('Button markup', function() {
         assert.equal($submitElement.attr('tabindex'), -1, 'submit input is not focusable');
     });
 
-    QUnit.test('class added from type (back)', function(assert) {
+    QUnit.test('class added from type (danger)', function(assert) {
         const element = $('#button').dxButton({
-            type: 'back'
+            type: 'danger'
         });
-        const buttonContent = element.find('.' + BUTTON_CONTENT_CLASS);
 
-        assert.ok(element.hasClass(BUTTON_BACK_CLASS), 'class was added');
-        assert.ok(buttonContent.find('.dx-icon').length, 'icon class was added');
+        assert.ok(element.hasClass(BUTTON_DANGER_CLASS), 'class was added');
     });
 
     QUnit.test('class added from stylingMode', function(assert) {
@@ -94,11 +92,10 @@ QUnit.module('Button markup', function() {
         assert.ok(element.hasClass('dx-button-normal'), 'button has correct type class');
         assert.equal(element.find('.dx-icon').length, 0, 'icon not be rendered');
 
-        element.dxButton('instance').option('type', 'back');
+        element.dxButton('instance').option('type', 'danger');
 
         assert.equal(element.find('.dx-button-normal').length, 0, 'prev class type was removed');
-        assert.equal(element.find('.dx-icon').length, 1, 'icon was rendered');
-        assert.ok(element.hasClass(BUTTON_BACK_CLASS), 'button has correct type class after change type');
+        assert.equal(element.find('.dx-icon').length, 1, 'icon was not rendered');
     });
 
     QUnit.test('class is not removed after change type', function(assert) {

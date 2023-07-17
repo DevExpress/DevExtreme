@@ -509,8 +509,8 @@ describe('Button', () => {
         });
 
         it('should add button type class', () => {
-          expect(new Button({ type: 'back' }).cssClasses)
-            .toEqual(expect.stringMatching('dx-button-back'));
+          expect(new Button({ type: 'danger' }).cssClasses)
+            .toEqual(expect.stringMatching('dx-button-danger'));
         });
 
         it('should add "normal" button type class by default', () => {

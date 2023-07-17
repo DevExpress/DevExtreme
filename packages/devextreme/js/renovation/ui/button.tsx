@@ -135,7 +135,7 @@ export class ButtonProps extends BaseWidgetProps {
 
   @OneWay() text = '';
 
-  @OneWay() type: 'back' | 'danger' | 'default' | 'normal' | 'success' = 'normal';
+  @OneWay() type: 'danger' | 'default' | 'normal' | 'success' = 'normal';
 
   @OneWay() useInkRipple = false;
 
@@ -199,15 +199,6 @@ export class Button extends JSXComponent(ButtonProps) {
     }
 
     return undefined;
-  }
-
-  @Effect()
-  checkDeprecation(): void {
-    const { type } = this.props;
-
-    if (type === 'back') {
-      errors.log('W0016', 'type', 'back', '22.2', 'Use the \'back\' icon instead');
-    }
   }
 
   onActive(event: Event): void {
@@ -300,18 +291,14 @@ export class Button extends JSXComponent(ButtonProps) {
   }
 
   get iconSource(): string {
-    const { icon, type } = this.props;
+    const { icon } = this.props;
 
-    if (icon || type === 'back') {
-      return (icon ?? '') || 'back';
-    }
-
-    return '';
+    return icon ?? '';
   }
 
   get inkRippleConfig(): InkRippleConfig {
-    const { text, icon, type } = this.props;
-    return (!text && icon) || (type === 'back') ? {
+    const { text, icon } = this.props;
+    return !text && icon ? {
       isCentered: true,
       useHoldAnimation: false,
       waveSizeCoefficient: 1,
