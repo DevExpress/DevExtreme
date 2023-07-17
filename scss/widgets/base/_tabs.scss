@@ -24,7 +24,7 @@ $icon-size: 16px;
   /* TODO: remove position, table-layout, display from root element */
   @include user-select(none);
 
-  display: block;
+  display: flex;
   width: 100%;
   position: relative;
 
@@ -34,6 +34,8 @@ $icon-size: 16px;
 }
 
 .dx-tabs-scrollable {
+  overflow: hidden;
+
   .dx-tabs-wrapper {
     white-space: nowrap;
     height: 100%;
@@ -46,6 +48,7 @@ $icon-size: 16px;
 
 .dx-tabs-wrapper {
   display: flex;
+  width: 100%;
 }
 
 .dx-tab {
@@ -91,11 +94,9 @@ $icon-size: 16px;
 .dx-tabs-nav-button {
   width: $nav-button-width;
   padding: 0;
-  height: 100%;
 }
 
 .dx-tabs-vertical {
-  display: flex;
   flex-direction: column;
 
   .dx-tabs-wrapper {
@@ -104,9 +105,14 @@ $icon-size: 16px;
 
   .dx-tabs-nav-button {
     width: 100%;
+    flex-shrink: 0;
 
     .dx-icon {
       transform: rotate(90deg);
     }
+  }
+
+  .dx-tab {
+    justify-content: flex-start;
   }
 }
