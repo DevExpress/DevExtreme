@@ -306,8 +306,13 @@ const Tabs = CollectionWidget.inherit({
     _renderScrollable: function() {
         const $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
 
+        const { orientation } = this.option();
+
+        const isVertical = orientation === ORIENTATION.vertical;
+        const scrollableDirection = isVertical ? 'vertical' : 'horizontal';
+
         this._scrollable = this._createComponent($itemContainer, Scrollable, {
-            direction: 'horizontal',
+            direction: scrollableDirection,
             showScrollbar: 'never',
             useKeyboard: false,
             useNative: false,
