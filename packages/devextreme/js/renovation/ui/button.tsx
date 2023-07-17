@@ -19,7 +19,6 @@ import { combineClasses } from '../utils/combine_classes';
 import { getImageSourceType } from '../../core/utils/icon';
 import { camelize } from '../../core/utils/inflector';
 import { Icon } from './common/icon';
-import errors from '../../core/errors';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import { BaseWidgetProps } from './common/base_props';
