@@ -9,6 +9,9 @@ on:
   push:
     branches: [23_2]
 
+env:
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
 jobs:
   build:
     runs-on: devextreme-shr2
@@ -25,34 +28,28 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Restore artifacts cache
-      uses: actions/cache@v3
-      with:
-        path: ./artifacts
-        key: build-npm-devextreme-artifacts-${{ github.sha }}
-
     - name: Install packages in devextreme repo
-      run: test -d artifacts || npm install --no-audit --no-fund
+      run: npm install --no-audit --no-fund
 
     - name: Build devextreme repo
-      run: test -d artifacts || npm run build-npm-devextreme
+      run: npx nx build devextreme-root
 
     - name: Pack devextreme package
-      working-directory: ./artifacts/npm/devextreme
+      working-directory: ./packages/devextreme/artifacts/npm/devextreme
       run: npm pack
 
     - name: Pack devextreme-dist package
-      working-directory: ./artifacts/npm/devextreme-dist
+      working-directory: ./packages/devextreme/artifacts/npm/devextreme-dist
       run: npm pack
 
     - name: Copy packages
       run: |
-        cp ./artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
-        cp ./artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
+        cp ./packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
+        cp ./packages/devextreme/artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
 
     - name: Copy build artifacts
       uses: actions/upload-artifact@v3
@@ -82,7 +79,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -93,21 +90,20 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: devextreme-npm
-        path: ./testing/renovation-npm/${{ matrix.framework }}-app
+        path: ./packages/devextreme/testing/renovation-npm/${{ matrix.framework }}-app
 
     - name: Prepare artifacts
       run: |
-        mkdir -p ./artifacts/npm
-        cp ./testing/renovation-npm/${{ matrix.framework }}-app/devextreme-installer.tgz ./artifacts/npm/devextreme.tgz
-        cd ./artifacts/npm
+        cp ./packages/devextreme/testing/renovation-npm/${{ matrix.framework }}-app/devextreme-installer.tgz ./packages/devextreme/artifacts/npm/devextreme.tgz
+        cd ./packages/devextreme/artifacts/npm
         tar -xzf devextreme.tgz
         mv package devextreme
 
     - name: Build Renovated NPM
-      run: npm run build-npm-renovation:${{ matrix.framework }}
+      run: npx nx build-npm-renovation:${{ matrix.framework }} devextreme-root
 
     - name: Prepare test project
-      working-directory: ./testing/renovation-npm
+      working-directory: ./packages/devextreme/testing/renovation-npm
       run: |
         npm i
 
@@ -124,7 +120,7 @@ jobs:
         exit 1
 
     - name: Run tests
-      working-directory: ./testing/renovation-npm
+      working-directory: ./packages/devextreme/testing/renovation-npm
       run: |
         npm run test:${{ matrix.framework }}
 
@@ -133,7 +129,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: compared-screenshots
-        path: ${{ github.workspace }}/testing/renovation-npm/tests/artifacts
+        path: ${{ github.workspace }}/packages/devextreme/testing/renovation-npm/tests/artifacts
         if-no-files-found: ignore
 
   test_angular_wrappers:
@@ -153,13 +149,10 @@ jobs:
 
     - uses: ./.github/actions/pin-browsers
 
-    - name: Create directory link
-      run: cd ../ && ln -s DevExtreme devextreme
-
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -167,7 +160,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Discover declarations in devextreme repo
-      run: npm run discover-declarations
+      run: npx nx discover-declarations devextreme-root
 
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
@@ -207,13 +200,21 @@ jobs:
         cd ../../
         npm install --save-dev --legacy-peer-deps $installerName
 
+    - name: Move devextreme-angular-repo to packages
+      run: mv ../devextreme-angular-repo ./packages
+
     - name: Build with Angular 12
-      working-directory: ../devextreme-angular-repo
-      run: npm run build
+      working-directory: packages/devextreme-angular-repo
+      run: |
+        npm run update-integration-meta
+        cd packages/devextreme-angular-generator
+        npm run build
+        cd ../devextreme-angular
+        npm run build
 
     - name: Run tests with Angular 12
-      working-directory: ../devextreme-angular-repo
-      run: npm run test:dev --workspace=devextreme-angular
+      working-directory: packages/devextreme-angular-repo/packages/devextreme-angular
+      run: npm run test:dev
 
   test_bundlers:
     name: Bundlers tests
@@ -234,42 +235,42 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: devextreme-npm
-        path: ./testing/bundlers
+        path: ./packages/devextreme/testing/bundlers
 
     - name: Install bundlers
-      working-directory: ./testing/bundlers
+      working-directory: ./packages/devextreme/testing/bundlers
       run: npm install --no-audit --no-fund
 
     - name: Install DevExtreme package
-      working-directory: ./testing/bundlers
+      working-directory: ./packages/devextreme/testing/bundlers
       run: npm install --save-dev devextreme-installer.tgz
 
     - name: Generate entry files
-      working-directory: ./testing/bundlers
+      working-directory: ./packages/devextreme/testing/bundlers
       run: npm run generate-entry-files
 
     - name: Build webpack cjs
-      working-directory: ./testing/bundlers
+      working-directory: ./packages/devextreme/testing/bundlers
       run: npm run build:webpack-cjs
 
     - name: Build browserify cjs
-      working-directory: ./testing/bundlers
+      working-directory: ./packages/devextreme/testing/bundlers
       run: npm run build:browserify-cjs
 
     - name: Build webpack
-      working-directory: ./testing/bundlers
+      working-directory: ./packages/devextreme/testing/bundlers
       run: npm run build:webpack
 
     - name: Build rollup
-      working-directory: ./testing/bundlers
+      working-directory: ./packages/devextreme/testing/bundlers
       run: npm run build:rollup
 
     - name: Build parcel
-      working-directory: ./testing/bundlers
+      working-directory: ./packages/devextreme/testing/bundlers
       run: npm run build:parcel
 
     - name: Build vite
-      working-directory: ./testing/bundlers
+      working-directory: ./packages/devextreme/testing/bundlers
       run: npm run build:vite
 
   test_demos:
@@ -363,7 +364,12 @@ jobs:
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [build, test_angular_wrappers, test_bundlers, test_demos, test_npm_renovation]
+    needs:
+      - build
+      - test_angular_wrappers
+      - test_bundlers
+      - test_demos
+      - test_npm_renovation
     if: always() && contains(needs.*.result, 'failure')
 
     steps:

@@ -9,6 +9,9 @@ on:
   push:
     branches: [23_2]
 
+env:
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
 jobs:
   Tests:
     runs-on: devextreme-shr2
@@ -25,7 +28,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -33,7 +36,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Run tests
-      run: npm run test-styles
+      run: npx nx test-styles devextreme-root
 
   notify:
     runs-on: devextreme-shr2
