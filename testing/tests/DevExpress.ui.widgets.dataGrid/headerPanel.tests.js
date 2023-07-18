@@ -954,4 +954,47 @@ QUnit.module('Draw buttons in header panel', {
             return e.message === 'Default toolbar item \'new\' is not added to DEFAULT_TOOLBAR_ITEM_NAMES';
         }, 'exception');
     });
+
+    // T1177143
+    QUnit.test('Button inside toolbar menu is visible after disabling it', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        $testElement.width(500);
+
+        this.options.toolbar = {
+            items: [
+                {
+                    widget: 'dxButton',
+                    options: { icon: 'user', width: 450, },
+                    location: 'after'
+                },
+                {
+                    name: 'myButton',
+                    widget: 'dxButton',
+                    options: { text: 'test' },
+                    locateInMenu: 'auto'
+                },
+            ]
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+
+        headerPanel.setToolbarItemDisabled('myButton', true);
+
+        const $menuButton = $('.dx-toolbar .dx-dropdownmenu');
+        $menuButton.trigger('dxclick');
+
+        this.clock.tick(10);
+
+        const $myButton = $('.dx-toolbar-item-content > .dx-button[aria-label="test"]');
+        const $text = $myButton.find('.dx-button-text');
+
+        // assert
+        assert.ok($text.length, 'button content rendered');
+        assert.ok($text.is(':visible'), 'button content visible');
+    });
 });

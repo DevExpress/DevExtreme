@@ -136,7 +136,7 @@ const members = {
     this.callBase.apply(this, arguments);
   },
 
-  setToolbarItemDisabled(name, disabled: boolean): void {
+  setToolbarItemDisabled(name: string, disabled: boolean): void {
     const toolbar = this._toolbar;
 
     if (!toolbar) {
@@ -157,6 +157,9 @@ const members = {
     if (item.options) {
       toolbar.option(`items[${itemIndex}].options.disabled`, disabled);
     }
+
+    // TODO: remove when fixed: https://trello.com/c/sijx6j0H/7657-toolbar-changing-disabled-option-for-item-in-overflow-menu-works-incorrectly
+    toolbar.repaint();
   },
 
   updateToolbarDimensions() {
