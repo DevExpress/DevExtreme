@@ -170,7 +170,7 @@ const members = {
   getHeight() {
     return this.getElementHeight();
   },
-
+  // aboba
   optionChanged(args) {
     if (args.name === 'onToolbarPreparing') {
       this._invalidate();
