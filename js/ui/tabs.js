@@ -19,7 +19,7 @@ import { default as CollectionWidget } from './collection/ui.collection_widget.l
 import { getImageContainer } from '../core/utils/icon';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred, when } from '../core/utils/deferred';
-import { isReachedLeft, isReachedRight } from '../renovation/ui/scroll_view/utils/get_boundary_props';
+import { isReachedLeft, isReachedRight, isReachedTop, isReachedBottom } from '../renovation/ui/scroll_view/utils/get_boundary_props';
 import { getScrollLeftMax } from '../renovation/ui/scroll_view/utils/get_scroll_left_max';
 
 // STYLE tabs
@@ -395,10 +395,17 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _updateNavButtonsVisibility: function() {
+        const isVertical = this.option('orientation') === ORIENTATION.vertical;
         const scrollable = this.getScrollable();
+        const scrollableContainer = $(scrollable.container()).get(0);
 
-        this._leftButton && this._leftButton.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
-        this._rightButton && this._rightButton.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
+        if(isVertical) {
+            this._leftButton?.option('disabled', isReachedTop(scrollable.scrollTop(), 1));
+            this._rightButton?.option('disabled', isReachedBottom(scrollableContainer, scrollable.scrollTop(), 0, 1));
+        } else {
+            this._leftButton?.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
+            this._rightButton?.option('disabled', isReachedRight(scrollableContainer, scrollable.scrollLeft(), 1));
+        }
     },
 
     _updateScrollPosition: function(offset, duration) {
