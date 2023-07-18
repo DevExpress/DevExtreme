@@ -31,6 +31,7 @@ import {
   EDIT_MODE_FORM,
   EDIT_MODE_ROW,
   EDITOR_CELL_CLASS,
+  FOCUSABLE_ELEMENT_SELECTOR,
   ROW_CLASS,
 } from '../editing/const';
 import modules from '../m_modules';
@@ -1344,7 +1345,19 @@ export class KeyboardNavigationController extends modules.ViewController {
   _updateFocus(isRenderView?) {
     this._updateFocusTimeout = setTimeout(() => {
       const editingController = this._editingController;
+      const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
+      const isBatchEditMode = editingController.getEditMode() === EDIT_MODE_BATCH;
       let $cell = this._getFocusedCell();
+
+      const cellEditModeHasChanges = isCellEditMode && editingController.hasChanges();
+      const isNewRowBatchEditMode = isBatchEditMode && editingController.isNewRowInEditMode();
+      const cellHasFocusableElements = $cell.find(FOCUSABLE_ELEMENT_SELECTOR).length > 0;
+
+      if (cellHasFocusableElements && (cellEditModeHasChanges || isNewRowBatchEditMode)) {
+        editingController._focusEditingCell();
+        return;
+      }
+
       const isEditing = editingController.isEditing();
 
       if (
