@@ -85,14 +85,10 @@ function createDefaultBatch(dev) {
         tasks.push('npm');
         tasks.push('check-license-notices');
     }
-    if(!env.BUILD_TESTCAFE) {
-        tasks.push('discover-declarations');
-    }
 
     return gulp.series(tasks);
 }
 
-gulp.task('discover-declarations', shell.task('npm run discover-declarations'));
 gulp.task('misc-batch', createMiscBatch());
 gulp.task('style-compiler-batch', createStyleCompilerBatch());
 gulp.task('main-batch', createMainBatch(false));
