@@ -218,7 +218,6 @@ const supportedWidgets = ['dxAutocomplete', 'dxCheckBox', 'dxDateBox', 'dxMenu',
           locateInMenu,
           widget: 'dxButton',
           options: {
-            text: 'back',
             icon: 'money',
             stylingMode,
           },
