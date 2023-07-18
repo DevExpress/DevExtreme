@@ -5,59 +5,40 @@
 @use "../sizes" as *;
 @use "../button/colors" as *;
 @use "../../base/buttonGroup";
+@use "../../base/buttonGroup/mixins" as *;
 
 // adduse
 
+.dx-button-mode-outlined,
 .dx-button-mode-contained {
   &.dx-buttongroup-item {
+    padding-left: 1px;
     padding-right: 1px;
+
+    &.dx-state-hover .dx-button-content {
+      border-radius: 0;
+    }
+  }
+
+  &.dx-buttongroup-first-item {
+    padding-left: 1px;
+    border-left-width: 1px;
+
+    &.dx-button,
+    &.dx-state-hover .dx-button-content {
+      border-top-left-radius: $button-border-radius;
+      border-bottom-left-radius: $button-border-radius;
+    }
   }
 
   &.dx-buttongroup-last-item {
     padding-right: 0;
-  }
-}
 
-.dx-button-mode-outlined {
-  &.dx-buttongroup-item {
-    border-left-width: 0;
-  }
-
-  &.dx-buttongroup-first-item {
-    border-left-width: 1px;
-  }
-}
-
-.dx-button-mode-text {
-  &.dx-button.dx-buttongroup-item {
-    border-radius: $button-border-radius;
-  }
-
-  &.dx-buttongroup-first-item {
-    margin-left: 0;
-  }
-}
-
-.dx-button-mode-outlined,
-.dx-button-mode-contained {
-  &.dx-button.dx-buttongroup-first-item {
-    border-top-left-radius: $button-border-radius;
-    border-bottom-left-radius: $button-border-radius;
-  }
-
-  &.dx-button.dx-buttongroup-last-item {
-    border-top-right-radius: $button-border-radius;
-    border-bottom-right-radius: $button-border-radius;
-  }
-}
-
-@mixin dx-buttongroup-item-states($hover-color, $focused-color) {
-  &.dx-state-hover {
-    background-color: $hover-color;
-  }
-
-  &.dx-state-focused {
-    background-color: $focused-color;
+    &.dx-button,
+    &.dx-state-hover .dx-button-content {
+      border-top-right-radius: $button-border-radius;
+      border-bottom-right-radius: $button-border-radius;
+    }
   }
 }
 
@@ -220,16 +201,6 @@
 
     &.dx-button.dx-buttongroup-first-item.dx-buttongroup-last-item {
       border-radius: $button-border-radius;
-    }
-  }
-
-  &.dx-button-mode-text {
-    &.dx-buttongroup-first-item {
-      margin-left: 1px;
-    }
-
-    &.dx-buttongroup-last-item {
-      margin-left: 0;
     }
   }
 

@@ -5,26 +5,13 @@
 @use "colors" as *;
 @use "../colors" as *;
 @use "../../base/icons" as *;
+@use "../../base/button/mixins" as *;
 
 $generic-button-padding:
   $generic-button-vertical-padding
   $generic-button-horizontal-padding;
 
 $generic-button-icon-size: $generic-base-icon-size;
-
-@mixin dx-button-sizing($padding, $icon-size, $icon-margin) {
-  .dx-button-content {
-    padding: $padding;
-  }
-
-  .dx-icon {
-    width: $icon-size;
-    height: $icon-size;
-    font-size: $icon-size;
-
-    @include dx-icon-margin($icon-margin);
-  }
-}
 
 @mixin dx-button-onlyicon-sizing() {
   @include dx-button-sizing($generic-button-icon-horizontal-padding, $generic-button-icon-size, 0);
@@ -35,10 +22,16 @@ $generic-button-icon-size: $generic-base-icon-size;
 }
 
 @mixin dx-button-styling-variant(
-    $background-color, $border-color, $text-color,
-    $hover-background-color, $hover-border-color,
-    $focused-background-color, $focused-border-color,
-    $active-background-color, $active-border-color, $active-text-color,
+    $background-color,
+    $border-color,
+    $text-color,
+    $hover-background-color,
+    $hover-border-color,
+    $focused-background-color,
+    $focused-border-color,
+    $active-background-color,
+    $active-border-color,
+    $active-text-color,
     $icon-color
   ) {
   background-color: $background-color;

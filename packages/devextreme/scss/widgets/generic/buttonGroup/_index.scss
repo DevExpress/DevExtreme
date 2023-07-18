@@ -6,6 +6,7 @@
 @use "../button/colors" as *;
 @use "../button/sizes" as *;
 @use "../../base/buttonGroup";
+@use "../../base/buttonGroup/mixins" as *;
 
 // adduse
 
@@ -39,22 +40,6 @@
       border-top-right-radius: $button-border-radius;
       border-bottom-right-radius: $button-border-radius;
     }
-  }
-}
-
-.dx-button-mode-text {
-  &.dx-buttongroup-first-item {
-    margin-left: 0;
-  }
-}
-
-@mixin dx-buttongroup-item-states($hover-color, $focused-color) {
-  &.dx-state-hover {
-    background-color: $hover-color;
-  }
-
-  &.dx-state-focused {
-    background-color: $focused-color;
   }
 }
 
@@ -240,16 +225,6 @@
           border-radius: $button-border-radius;
         }
       }
-    }
-  }
-
-  &.dx-button-mode-text {
-    &.dx-buttongroup-first-item {
-      margin-left: 1px;
-    }
-
-    &.dx-buttongroup-last-item {
-      margin-left: 0;
     }
   }
 }
