@@ -1344,17 +1344,6 @@ export class KeyboardNavigationController extends modules.ViewController {
   _updateFocus(isRenderView?) {
     this._updateFocusTimeout = setTimeout(() => {
       const editingController = this._editingController;
-      const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
-      const isBatchEditMode = editingController.getEditMode() === EDIT_MODE_BATCH;
-
-      if (
-        (isCellEditMode && editingController.hasChanges())
-        || (isBatchEditMode && editingController.isNewRowInEditMode())
-      ) {
-        editingController._focusEditingCell();
-        return;
-      }
-
       let $cell = this._getFocusedCell();
       const isEditing = editingController.isEditing();
 
