@@ -3,6 +3,7 @@ import { extend } from 'core/utils/extend';
 import { DataSource } from 'data/data_source/data_source';
 import holdEvent from 'events/hold';
 import { triggerShownEvent } from 'events/visibility_change';
+import { getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import 'ui/responsive_box';
 import 'ui/tabs';
@@ -19,7 +20,7 @@ QUnit.testStart(function() {
                 padding: 35px;
             }
 
-            .bigtab .dx-tab {
+            .bigtab.dx-tabs-expanded .dx-tab {
                 width: 1000px;
             }
 
@@ -396,6 +397,50 @@ QUnit.module('Vertical scrolling', () => {
         assert.ok($scrollable.hasClass(SCROLLABLE_CLASS_VERTICAL), 'scrollable element must have vertical class');
         assert.strictEqual(scrollable.option('direction'), 'vertical', 'direction option must have vertical value');
     });
+
+    QUnit.test('left button should be disabled if scrollPosition == 0', function(assert) {
+        const $element = $('#scrollableTabs').dxTabs({
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
+            showNavButtons: true,
+            scrollingEnabled: true,
+            orientation: 'vertical',
+            height: 200,
+        });
+        const $button = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS);
+        const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
+
+        assert.ok($button.dxButton('instance').option('disabled'));
+
+        scrollable.scrollTo(10);
+        assert.ok(!$button.dxButton('instance').option('disabled'));
+
+        scrollable.scrollTo(0);
+        assert.ok($button.dxButton('instance').option('disabled'));
+    });
+
+    QUnit.test('right button should be disabled if scrollPosition == scrollHeight', function(assert) {
+        const items = [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }];
+
+        const $element = $('#scrollableTabs').dxTabs({
+            items,
+            showNavButtons: true,
+            scrollingEnabled: true,
+            orientation: 'vertical',
+            height: 200,
+        });
+        const $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS);
+        const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
+        const $tab = $element.find('.' + TABS_ITEM_CLASS).get(0);
+        const tabsHeight = Math.round(getOuterHeight($tab) * items.length);
+
+        assert.ok(!$button.dxButton('instance').option('disabled'));
+
+        scrollable.scrollTo(tabsHeight);
+        assert.ok($button.dxButton('instance').option('disabled'));
+
+        scrollable.scrollTo(0);
+        assert.ok(!$button.dxButton('instance').option('disabled'));
+    });
 });
 
 QUnit.module('Horizontal scrolling', () => {
@@ -632,6 +677,7 @@ QUnit.module('Horizontal scrolling', () => {
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
             showNavButtons: true,
             scrollingEnabled: true,
+            orientation: 'horizontal',
             width: 100
         });
         const $button = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS);
@@ -651,6 +697,7 @@ QUnit.module('Horizontal scrolling', () => {
             items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
             showNavButtons: true,
             scrollingEnabled: true,
+            orientation: 'horizontal',
             width: 100
         });
         const $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS);

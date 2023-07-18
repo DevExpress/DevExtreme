@@ -397,14 +397,13 @@ const Tabs = CollectionWidget.inherit({
     _updateNavButtonsVisibility: function() {
         const isVertical = this.option('orientation') === ORIENTATION.vertical;
         const scrollable = this.getScrollable();
-        const scrollableContainer = $(scrollable.container()).get(0);
 
         if(isVertical) {
             this._leftButton?.option('disabled', isReachedTop(scrollable.scrollTop(), 1));
-            this._rightButton?.option('disabled', isReachedBottom(scrollableContainer, scrollable.scrollTop(), 0, 1));
+            this._rightButton?.option('disabled', isReachedBottom($(scrollable.container()).get(0), scrollable.scrollTop(), 0, 1));
         } else {
             this._leftButton?.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
-            this._rightButton?.option('disabled', isReachedRight(scrollableContainer, scrollable.scrollLeft(), 1));
+            this._rightButton?.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
         }
     },
 
