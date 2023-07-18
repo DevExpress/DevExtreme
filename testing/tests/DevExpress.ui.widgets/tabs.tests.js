@@ -387,6 +387,7 @@ QUnit.module('Vertical scrolling', () => {
             showNavButtons: true,
             scrollingEnabled: true,
             orientation: 'vertical',
+            height: 200,
         });
 
         const $scrollable = $element.find('.' + SCROLLABLE_CLASS);
@@ -764,16 +765,34 @@ QUnit.module('Horizontal scrolling', () => {
         assert.equal($element.find('.' + TABS_SCROLLABLE_CLASS).length, 1, 'only one scrollable wrapper should exist');
     });
 
-    QUnit.test('tabs should hide navigation if scrollable is not allowed after resize', function(assert) {
+    QUnit.test('tabs should hide navigation if scrollable is not allowed after resize and orientation is horizontal', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
+            orientation: 'horizontal',
             items: [{ text: 'item 1' }, { text: 'item 2' }],
             scrollingEnabled: true,
             visible: true,
-            width: 100
+            width: 100,
         });
         const instance = $element.dxTabs('instance');
 
         instance.option('width', 700);
+
+        assert.equal($element.find('.' + TABS_NAV_BUTTON_CLASS).length, 0, 'nav buttons was removed');
+        assert.equal($element.find('.' + TABS_SCROLLABLE_CLASS).length, 0, 'scrollable was removed');
+        assert.equal($element.find('.' + TABS_WRAPPER_CLASS).length, 1, 'indent wrapper was restored');
+    });
+
+    QUnit.test('tabs should hide navigation if scrollable is not allowed after resize and orientation is vertical', function(assert) {
+        const $element = $('#scrollableTabs').dxTabs({
+            orientation: 'vertical',
+            items: [{ text: 'item 1' }, { text: 'item 2' }],
+            scrollingEnabled: true,
+            visible: true,
+            height: 100,
+        });
+        const instance = $element.dxTabs('instance');
+
+        instance.option('height', 700);
 
         assert.equal($element.find('.' + TABS_NAV_BUTTON_CLASS).length, 0, 'nav buttons was removed');
         assert.equal($element.find('.' + TABS_SCROLLABLE_CLASS).length, 0, 'scrollable was removed');
