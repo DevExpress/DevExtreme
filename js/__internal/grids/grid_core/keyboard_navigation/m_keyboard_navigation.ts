@@ -1344,22 +1344,14 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _updateFocus(isRenderView?) {
     this._updateFocusTimeout = setTimeout(() => {
-      const editingController = this._editingController;
-      const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
-      const isBatchEditMode = editingController.getEditMode() === EDIT_MODE_BATCH;
-      let $cell = this._getFocusedCell();
+      const isEditing = this._editingController.isEditing();
 
-      const cellEditModeHasChanges = isCellEditMode && editingController.hasChanges();
-      const isNewRowBatchEditMode = isBatchEditMode && editingController.isNewRowInEditMode();
-      const cellHasFocusableElements = $cell.find(FOCUSABLE_ELEMENT_SELECTOR).length > 0;
-
-      if (cellHasFocusableElements && (cellEditModeHasChanges || isNewRowBatchEditMode)) {
-        editingController._focusEditingCell();
+      if (this._needFocusEditingCell()) {
+        this._editingController._focusEditingCell();
         return;
       }
 
-      const isEditing = editingController.isEditing();
-
+      let $cell = this._getFocusedCell();
       if (
         $cell
         && !(this._isMasterDetailCell($cell) && !this._isRowEditMode())
@@ -1408,6 +1400,21 @@ export class KeyboardNavigationController extends modules.ViewController {
         }
       }
     });
+  }
+
+  _needFocusEditingCell() {
+    const isCellEditMode = this._editingController.getEditMode() === EDIT_MODE_CELL;
+    const isBatchEditMode = this._editingController.getEditMode() === EDIT_MODE_BATCH;
+
+    const cellEditModeHasChanges = isCellEditMode && this._editingController.hasChanges();
+    const isNewRowBatchEditMode = isBatchEditMode && this._editingController.isNewRowInEditMode();
+    const $cell = this._getFocusedCell();
+
+    return (
+      !isElementDefined($cell)
+      || $cell.children().length === 0
+      || $cell.find(FOCUSABLE_ELEMENT_SELECTOR).length > 0
+    ) && (cellEditModeHasChanges || isNewRowBatchEditMode);
   }
 
   _getFocusedCell() {
