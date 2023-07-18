@@ -180,7 +180,7 @@ const ProgressBar = TrackBar.inherit({
         this.callBase();
 
         this.setAria({
-            'label': val
+            label: val
         });
 
         this._setStatus();

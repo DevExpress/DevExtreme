@@ -143,12 +143,12 @@ QUnit.module('aria accessibility', () => {
             value: 0
         });
 
-        assert.equal($element.attr('aria-valuemin'), 0, 'min value');
-        assert.equal($element.attr('aria-valuemax'), 50, 'max value');
-        assert.equal($element.attr('aria-valuenow'), 0, 'current value');
-        assert.equal($element.attr('aria-live'), 'polite', 'aria-live attribute');
-        assert.equal($element.attr('aria-label'), 0, 'aria-label attribute');
-        assert.equal($element.attr('role'), 'progressbar', 'aria role');
+        assert.strictEqual($element.attr('aria-valuemin'), 0, 'min value');
+        assert.strictEqual($element.attr('aria-valuemax'), 50, 'max value');
+        assert.strictEqual($element.attr('aria-valuenow'), 0, 'current value');
+        assert.strictEqual($element.attr('aria-live'), 'polite', 'aria-live attribute');
+        assert.strictEqual($element.attr('aria-label'), 0, 'aria-label attribute');
+        assert.strictEqual($element.attr('role'), 'progressbar', 'aria role');
     });
 
     QUnit.test('aria properties should be correct after options changed', function(assert) {
@@ -165,12 +165,12 @@ QUnit.module('aria accessibility', () => {
             value: 59
         });
 
-        assert.equal($element.attr('aria-valuemin'), 33, 'min value is changed correctly');
-        assert.equal($element.attr('aria-valuemax'), 138, 'max value is changed correctly');
-        assert.equal($element.attr('aria-valuenow'), 59, 'current value is changed correctly');
-        assert.equal($element.attr('aria-live'), 'polite', 'aria-live attribute');
-        assert.equal($element.attr('aria-label'), 59, 'aria-label attribute is changed correctly');
-        assert.equal($element.attr('role'), 'progressbar', 'aria role');
+        assert.strictEqual($element.attr('aria-valuemin'), 33, 'min value is changed correctly');
+        assert.strictEqual($element.attr('aria-valuemax'), 138, 'max value is changed correctly');
+        assert.strictEqual($element.attr('aria-valuenow'), 59, 'current value is changed correctly');
+        assert.strictEqual($element.attr('aria-live'), 'polite', 'aria-live attribute');
+        assert.strictEqual($element.attr('aria-label'), 59, 'aria-label attribute is changed correctly');
+        assert.strictEqual($element.attr('role'), 'progressbar', 'aria role');
     });
 });
 
