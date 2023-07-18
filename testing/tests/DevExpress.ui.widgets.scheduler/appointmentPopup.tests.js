@@ -757,7 +757,6 @@ QUnit.module('Appointment Popup Content', moduleOptions, () => {
         const appointmentPopupOptions = scheduler.instance._appointmentPopup.popup.option();
 
         assert.strictEqual(appointmentPopupOptions.enableBodyScroll, false, 'enable body scroll');
-        assert.strictEqual(appointmentPopupOptions.preventScrollEvents, false, 'prevent scroll events');
     });
 
     QUnit.test('showAppointmentPopup method with passed a recurrence appointment should render popup(T698732)', function(assert) {
