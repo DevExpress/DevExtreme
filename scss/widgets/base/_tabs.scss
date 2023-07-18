@@ -97,10 +97,13 @@ $icon-size: 16px;
 }
 
 .dx-tabs-vertical {
+  display: inline-flex;
   flex-direction: column;
+  width: auto;
 
   .dx-tabs-wrapper {
     flex-direction: column;
+    height: auto;
   }
 
   .dx-tabs-nav-button {
@@ -114,5 +117,6 @@ $icon-size: 16px;
 
   .dx-tab {
     justify-content: flex-start;
+    min-width: 90px;
   }
 }

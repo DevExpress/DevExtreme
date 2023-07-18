@@ -430,12 +430,11 @@ QUnit.module('Vertical scrolling', () => {
         });
         const $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS);
         const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
-        const $tab = $element.find('.' + TABS_ITEM_CLASS).get(0);
-        const tabsHeight = Math.round(getOuterHeight($tab) * items.length);
+        const tabsWrapperHeight = Math.round(getOuterHeight($element.find('.' + TABS_WRAPPER_CLASS)));
 
         assert.ok(!$button.dxButton('instance').option('disabled'));
 
-        scrollable.scrollTo(tabsHeight);
+        scrollable.scrollTo(tabsWrapperHeight);
         assert.ok($button.dxButton('instance').option('disabled'));
 
         scrollable.scrollTo(0);
