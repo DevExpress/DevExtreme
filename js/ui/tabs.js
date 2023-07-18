@@ -1,4 +1,4 @@
-import { getWidth } from '../core/utils/size';
+import { getWidth, getHeight, getOuterWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
@@ -9,7 +9,9 @@ import { addNamespace } from '../events/utils/index';
 import { extend } from '../core/utils/extend';
 import { isPlainObject } from '../core/utils/type';
 import pointerEvents from '../events/pointer';
+import { each } from '../core/utils/iterator';
 import TabsItem from './tabs/item';
+import { TABS_EXPANDED_CLASS } from './tabs/constants';
 import { isMaterial, current as currentTheme } from './themes';
 import holdEvent from '../events/hold';
 import Scrollable from './scroll_view/ui.scrollable';
@@ -24,6 +26,7 @@ import { getScrollLeftMax } from '../renovation/ui/scroll_view/utils/get_scroll_
 
 const TABS_CLASS = 'dx-tabs';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
+const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
 const TABS_VERTICAL_CLASS = 'dx-tabs-vertical';
@@ -207,10 +210,12 @@ const Tabs = CollectionWidget.inherit({
         when.apply(this, this._deferredTemplates).done(() => this._renderScrolling());
     },
 
-    _renderScrolling: function() {
-        this.$element().removeClass(OVERFLOW_HIDDEN_CLASS);
+    _renderScrolling() {
+        const removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
+        this.$element().removeClass(removeClasses.join(' '));
 
-        if(this.option('scrollingEnabled') && this._isItemsWidthExceeded()) {
+
+        if(this.option('scrollingEnabled') && this._isItemsSizeExceeded()) {
             if(!this._scrollable) {
                 this._renderScrollable();
                 this._renderNavButtons();
@@ -228,17 +233,55 @@ const Tabs = CollectionWidget.inherit({
             this._scrollToItem(this.option('selectedItem'));
         }
 
-        if(!(this.option('scrollingEnabled') && this._isItemsWidthExceeded())) {
+        if(!(this.option('scrollingEnabled') && this._isItemsSizeExceeded())) {
             this._cleanScrolling();
 
-            this.$element().removeClass(TABS_NAV_BUTTONS_CLASS);
+            if(this._needStretchItems() && !this._isItemsSizeExceeded()) {
+                this.$element().addClass(TABS_STRETCHED_CLASS);
+            }
+
+            this.$element()
+                .removeClass(TABS_NAV_BUTTONS_CLASS)
+                .addClass(TABS_EXPANDED_CLASS);
         }
     },
 
-    _isItemsWidthExceeded: function() {
-        const tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
+    _isItemsSizeExceeded() {
+        const isVertical = this.option('orientation') === ORIENTATION.vertical;
 
-        return tabItemsWidth - 1 > getWidth(this.$element());
+        const isItemsSizeExceeded = isVertical ? this._isItemsHeightExceeded() : this._isItemsWidthExceeded();
+
+        return isItemsSizeExceeded;
+    },
+
+    _isItemsWidthExceeded() {
+        const $visibleItems = this._getVisibleItems();
+        const itemsWidth = this._getSummaryItemsSize('width', $visibleItems, true);
+        const elementWidth = getWidth(this.$element());
+
+        return itemsWidth - 1 > elementWidth;
+    },
+
+    _isItemsHeightExceeded() {
+        const $visibleItems = this._getVisibleItems();
+        const itemsHeight = this._getSummaryItemsSize('height', $visibleItems, true);
+        const elementHeight = getHeight(this.$element());
+
+        return itemsHeight - 1 > elementHeight;
+    },
+
+    _needStretchItems: function() {
+        const $visibleItems = this._getVisibleItems();
+        const elementWidth = getWidth(this.$element());
+        const itemsWidth = [];
+
+        each($visibleItems, (_, item) => {
+            itemsWidth.push(getOuterWidth(item, true));
+        });
+
+        const maxTabWidth = Math.max.apply(null, itemsWidth);
+
+        return maxTabWidth >= elementWidth / $visibleItems.length;
     },
 
     _cleanNavButtons: function() {
@@ -482,6 +525,10 @@ const Tabs = CollectionWidget.inherit({
                 this._scrollable && this._scrollable.option(args.name, args.value);
                 break;
             case 'width':
+                this.callBase(args);
+                this._dimensionChanged();
+                break;
+            case 'height':
                 this.callBase(args);
                 this._dimensionChanged();
                 break;

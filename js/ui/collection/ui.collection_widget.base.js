@@ -1,4 +1,4 @@
-import { getOuterWidth } from '../../core/utils/size';
+import { getOuterHeight, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { ensureDefined, deferRenderer, noop } from '../../core/utils/common';
@@ -1080,12 +1080,16 @@ const CollectionWidget = Widget.inherit({
         return $(itemElement).data(this._itemDataKey());
     },
 
-    _getSummaryItemsWidth: function(items, includeMargin) {
+    _getSummaryItemsSize(quantity, items, includeMargin) {
         let result = 0;
 
         if(items) {
             each(items, function(_, item) {
-                result += getOuterWidth(item, includeMargin || false);
+                if(quantity === 'width') {
+                    result += getOuterWidth(item, includeMargin || false);
+                } else if(quantity === 'height') {
+                    result += getOuterHeight(item, includeMargin || false);
+                }
             });
         }
 
