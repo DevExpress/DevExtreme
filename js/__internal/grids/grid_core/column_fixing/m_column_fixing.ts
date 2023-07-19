@@ -438,7 +438,7 @@ const baseFixedColumns = {
     let columns;
     const visibleColumns = this._columnsController.getVisibleColumns();
     const { widths } = options;
-    const isWidthsSynchronized = widths && widths.length && isDefined(visibleColumns[0].visibleWidth);
+    const isColumnWidthsSynced = widths?.length && visibleColumns.some((column) => isDefined(column.visibleWidth));
     const { optionNames } = options;
     const isColumnWidthChanged = optionNames && optionNames.width;
     let useVisibleColumns = false;
@@ -447,7 +447,7 @@ const baseFixedColumns = {
 
     if (this._fixedTableElement) {
       const hasAutoWidth = widths && widths.some((width) => width === 'auto');
-      useVisibleColumns = hasAutoWidth && (!isWidthsSynchronized || !this.isScrollbarVisible(true));
+      useVisibleColumns = hasAutoWidth && (!isColumnWidthsSynced || !this.isScrollbarVisible(true));
 
       if (useVisibleColumns) {
         columns = visibleColumns;
@@ -455,7 +455,7 @@ const baseFixedColumns = {
       this.callBase(extend({}, options, { $tableElement: this._fixedTableElement, columns, fixed: true }));
     }
 
-    if (isWidthsSynchronized || isColumnWidthChanged && this.option('wordWrapEnabled')) {
+    if (isColumnWidthsSynced || isColumnWidthChanged && this.option('wordWrapEnabled')) {
       this.synchronizeRows();
     }
   },
