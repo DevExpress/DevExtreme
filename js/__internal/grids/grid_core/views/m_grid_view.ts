@@ -270,6 +270,7 @@ const resizingControllerMembers = {
       $element[0].style.maxWidth = '';
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     deferUpdate(() => {
       if (needBestFit) {
         resultWidths = this._getBestFitWidths();
@@ -313,6 +314,7 @@ const resizingControllerMembers = {
         }
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferRender(() => {
         if (needBestFit || isColumnWidthsCorrected || hasUndefinedColumnWidth) {
           this._setVisibleWidths(visibleColumns, resultWidths);

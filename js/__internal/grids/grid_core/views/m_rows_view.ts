@@ -61,7 +61,7 @@ const defaultCellTemplate = function ($container, options) {
 
 const getScrollableBottomPadding = function (that) {
   const scrollable = that.getScrollable();
-  // @ts-expect-error
+
   return scrollable ? Math.ceil(parseFloat($(scrollable.content()).css('paddingBottom'))) : 0;
 };
 
