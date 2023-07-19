@@ -5,6 +5,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
+import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import { name as wheelEventName } from '@js/events/core/wheel';
@@ -12,6 +13,7 @@ import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 
 import gridCoreUtils from '../m_utils';
+import { normalizeWidth } from '../views/m_columns_view';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -40,7 +42,7 @@ const getTransparentColumnIndex = function (fixedColumns: any[]) {
   return transparentColumnIndex;
 };
 
-const normalizeColumnWidths = function (fixedColumns, widths, fixedWidths) {
+const normalizeColumnWidths = function (fixedColumns, widths: number[], fixedWidths): number[] {
   let fixedColumnIndex = 0;
 
   if (fixedColumns && widths && fixedWidths) {
@@ -366,10 +368,10 @@ const baseFixedColumns = {
     }
   },
 
-  getColumns(rowIndex, $tableElement) {
-    $tableElement = $tableElement || this.getTableElement();
+  getColumns(rowIndex) {
+    const $tableElement = this.getTableElement();
 
-    if (this._isFixedTableRendering || $tableElement && $tableElement.closest('table').parent(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`).length) {
+    if (this._isFixedTableRendering) {
       return this.getFixedColumns(rowIndex);
     }
 
@@ -434,30 +436,59 @@ const baseFixedColumns = {
     this.synchronizeRows();
   },
 
-  setColumnWidths(options) {
-    let columns;
-    const visibleColumns = this._columnsController.getVisibleColumns();
+  setColumnWidths(options): void {
     const { widths } = options;
-    const isColumnWidthsSynced = widths?.length && visibleColumns.some((column) => isDefined(column.visibleWidth));
-    const { optionNames } = options;
-    const isColumnWidthChanged = optionNames && optionNames.width;
-    let useVisibleColumns = false;
 
-    this.callBase.apply(this, arguments);
+    const visibleColumns = this._columnsController.getVisibleColumns();
+    const isColumnWidthsSynced = widths?.length && visibleColumns.some((column) => isDefined(column.visibleWidth));
+    const isColumnWidthChanged = options.optionNames?.width;
+
+    this.callBase(options);
 
     if (this._fixedTableElement) {
-      const hasAutoWidth = widths && widths.some((width) => width === 'auto');
-      useVisibleColumns = hasAutoWidth && (!isColumnWidthsSynced || !this.isScrollbarVisible(true));
+      const hasAutoWidth = widths?.some((width) => width === 'auto');
+      const hasHorizontalScroll = this.isScrollbarVisible(true);
+      const needUseVisibleColumns = hasAutoWidth && (!isColumnWidthsSynced || !hasHorizontalScroll);
 
-      if (useVisibleColumns) {
-        columns = visibleColumns;
+      if (needUseVisibleColumns) {
+        this.setFixedTableColumnWidths(visibleColumns, widths);
+      } else {
+        const fixedColumns = this.getFixedColumns();
+
+        this.setFixedTableColumnWidths(fixedColumns, widths);
       }
-      this.callBase(extend({}, options, { $tableElement: this._fixedTableElement, columns, fixed: true }));
     }
 
-    if (isColumnWidthsSynced || isColumnWidthChanged && this.option('wordWrapEnabled')) {
+    const wordWrapEnabled = this.option('wordWrapEnabled');
+    const needSynchronizeRows = isColumnWidthsSynced || (isColumnWidthChanged && wordWrapEnabled);
+
+    if (needSynchronizeRows) {
       this.synchronizeRows();
     }
+  },
+
+  setFixedTableColumnWidths(columns, widths): void {
+    if (!this._fixedTableElement || !widths) {
+      return;
+    }
+
+    const $cols = this._fixedTableElement.children('colgroup').children('col');
+    setWidth($cols, 'auto');
+
+    let columnIndex = 0;
+
+    columns.forEach((column) => {
+      if (column.colspan) {
+        columnIndex += column.colspan;
+        return;
+      }
+
+      const width = normalizeWidth(widths[columnIndex]);
+
+      setWidth($cols.eq(columnIndex), width);
+
+      columnIndex += 1;
+    });
   },
 
   _getClientHeight(element) {
