@@ -2563,7 +2563,7 @@ QUnit.module('Point coordinates translation with correction on canvas visible ar
             _valueChecker: function() { return true; }
         };
         const translateXData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: 480, 7: 600, 'canvas_position_default': 100 };
-        const translateYData = { 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, 7: 110, 'canvas_position_default': 300 };
+        const translateYData = { 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, 'canvas_position_default': 300 };
 
         this.continuousTranslators = {
             arg: new MockTranslator({
