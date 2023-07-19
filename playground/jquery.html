@@ -31,6 +31,19 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="../node_modules/axe-core/axe.min.js"></script>
+
+    <style>
+        body {
+            height: 100vh;
+        }
+
+        [role="main"] {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
     <div role="main">
@@ -40,30 +53,34 @@
         <script>
            $(function() {
                 const longtabs = [
-                    { text: 'user' },
-                    { text: 'analyticsanalyticsanalyticsanalyticsanalytics' },
-                    { text: 'customers', icon: 'user' },
-                    { text: 'search', disabled: true },
-                    { text: 'favorites', disabled: true },
-                    { text: 'additional' },
-                    { text: 'clients' },
-                    { text: 'orders' },
-                    { text: 'shipment' },
+                    { text: 'Tab', icon: 'plus' },
+                    { text: 'Tab', icon: 'plus' },
+                    { text: 'Tab', icon: 'plus' },
+                    { text: 'Tab', icon: 'plus', disabled: true },
+                    { text: 'Tab', icon: 'plus', disabled: true },
+                    { text: 'Tab', icon: 'plus' },
+                    { text: 'Tab', icon: 'plus' },
+                    { text: 'Tab', icon: 'plus' },
+                    { text: 'Tab', icon: 'plus' },
                 ];
 
                 const instance = $('#tabs').dxTabs({
                     dataSource: longtabs,
                     orientation: 'vertical',
                     // selectOnFocus: true,
-                    // showNavButtons: true,
+                    showNavButtons: true,
                     scrollByContent: true,
-                    height: 400,
-                    width: 200,
+                    height: 300,
+                    // width: 200,
                 }).dxTabs('instance');
 
                 // setTimeout(() => {
                 //     instance.option('height', 400)
                 // }, 100);
+
+                // 1. Зачем грани между табами? Предлагаю убрать.
+                // 2. Что насчет компактной темы? 
+                // 3. Также я заметил, что ты изменил некоторые стейты. Например, состояние active имеет серую рамку, раньше она была синей. Зачем?
             });
         </script>
     </div>

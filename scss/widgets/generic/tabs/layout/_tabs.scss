@@ -9,7 +9,6 @@
 @use "../variables/borders" as *;
 
 .dx-tabs {
-  background-color: $tabs-tab-bg;
   color: $tabs-border-color;
 
   &.dx-state-disabled {
@@ -29,6 +28,7 @@
 
   .dx-tabs-wrapper {
     border: $generic-tabs-border;
+    background-color: $tabs-tab-bg;
   }
 }
 
