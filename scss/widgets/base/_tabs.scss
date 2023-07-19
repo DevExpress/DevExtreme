@@ -63,24 +63,25 @@ $icon-size: 16px;
   @include dx-tabs-link();
 
   .dx-icon {
+    display: inline-block;
     width: $icon-size;
     height: $icon-size;
-    display: block;
-    margin: 0 auto;
     -webkit-user-drag: none;
   }
 }
 
 .dx-tab-content {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   max-width: 100%;
+  line-height: 0;
 }
 
 .dx-tab-text {
-  display: inline-block;
-  margin: 0 auto;
-  text-align: center;
-  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   -webkit-user-drag: none;
 
   @include dx-overflow();
@@ -88,7 +89,6 @@ $icon-size: 16px;
 
 .dx-tabs-item-badge {
   display: inline-block;
-  vertical-align: top;
 }
 
 .dx-tabs-nav-button {

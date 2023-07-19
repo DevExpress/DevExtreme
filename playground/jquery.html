@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.material.blue.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -45,7 +45,7 @@
         }
     </style>
 </head>
-<body>
+<body style="background-color: #eee;">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
@@ -55,8 +55,8 @@
                 const longtabs = [
                     { text: 'Tab', icon: 'plus' },
                     { text: 'Tab', icon: 'plus' },
-                    { text: 'Tab', icon: 'plus' },
-                    { text: 'Tab', icon: 'plus', disabled: true },
+                    { text: 'TabTabTabTab', icon: 'user' },
+                    { text: 'TabTabTabTabTabTabTabTab', icon: 'plus', disabled: true },
                     { text: 'Tab', icon: 'plus', disabled: true },
                     { text: 'Tab', icon: 'plus' },
                     { text: 'Tab', icon: 'plus' },
@@ -66,11 +66,11 @@
 
                 const instance = $('#tabs').dxTabs({
                     dataSource: longtabs,
-                    orientation: 'vertical',
+                    // orientation: 'vertical',
                     // selectOnFocus: true,
                     showNavButtons: true,
                     scrollByContent: true,
-                    height: 300,
+                    // height: 300,
                     // width: 200,
                 }).dxTabs('instance');
 
@@ -78,9 +78,7 @@
                 //     instance.option('height', 400)
                 // }, 100);
 
-                // 1. Зачем грани между табами? Предлагаю убрать.
-                // 2. Что насчет компактной темы? 
-                // 3. Также я заметил, что ты изменил некоторые стейты. Например, состояние active имеет серую рамку, раньше она была синей. Зачем?
+                // 1. Проблема с нав кнопкой
             });
         </script>
     </div>
