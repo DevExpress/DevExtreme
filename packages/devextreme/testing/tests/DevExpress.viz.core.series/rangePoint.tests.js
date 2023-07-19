@@ -2562,8 +2562,8 @@ QUnit.module('Point coordinates translation with correction on canvas visible ar
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         };
-        const translateXData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: 480, 7: 600, 8: 500, 'canvas_position_default': 100 };
-        const translateYData = { 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, 7: 110, 8: 300, 'canvas_position_default': 300 };
+        const translateXData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: 480, 7: 600, 'canvas_position_default': 100 };
+        const translateYData = { 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, 7: 110, 'canvas_position_default': 300 };
 
         this.continuousTranslators = {
             arg: new MockTranslator({
@@ -2576,46 +2576,6 @@ QUnit.module('Point coordinates translation with correction on canvas visible ar
             })
         };
     }
-});
-
-QUnit.test('Point is out of boundaries on the left, right bound of bar on left border', function(assert) {
-    const point = createPoint(this.series, { argument: 1, value: 4, minValue: 3 }, this.opt);
-
-    point.width = 100;
-    point.height = 100;
-    point.translate();
-
-    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
-});
-
-QUnit.test('Point is out of boundaries on the right, left bound of bar on right border', function(assert) {
-    const point = createPoint(this.series, { argument: 8, value: 4, minValue: 3 }, this.opt);
-
-    point.width = 50;
-    point.height = 100;
-    point.translate();
-
-    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
-});
-
-QUnit.test('Point is out of boundaries on the top, bar\'s bottom bound on top border', function(assert) {
-    const point = createPoint(this.series, { argument: 3, value: 8, minValue: 1 }, this.opt);
-
-    point.width = 50;
-    point.height = 100;
-    point.translate();
-
-    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
-});
-
-QUnit.test('Point is out of boundaries on the bottom, bar\'s top bound on bottom border', function(assert) {
-    const point = createPoint(this.series, { argument: 3, value: 7, minValue: 6 }, this.opt);
-
-    point.width = 50;
-    point.height = 100;
-    point.translate();
-
-    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
 });
 
 QUnit.test('Point is out of boundaries on the left', function(assert) {

@@ -46,17 +46,9 @@ export default _extend({}, symbolPoint, {
     },
 
     _calculateVisibility: function(x, y, width, height) {
-        this.inVisibleArea = this._getPointVisibility({ x, y, width, height }, true);
-    },
-
-    _getPointVisibility: function({ x, y, width, height }, shouldDrawBorderPoints) {
         const { minX, maxX, minY, maxY } = this._getVisibleArea();
 
-        if(shouldDrawBorderPoints) {
-            return maxX >= x && minY <= y + height && minX <= x + width && maxY >= y;
-        } else {
-            return maxX > x && minY < y + height && minX < x + width && maxY > y;
-        }
+        this.inVisibleArea = maxX >= x && minY <= y + height && minX <= x + width && maxY >= y;
     },
 
     _getGraphicBBox: function(location) {
@@ -281,15 +273,16 @@ export default _extend({}, symbolPoint, {
         that[argAxis] = arg = arg === null ? arg : arg + (that[argAxis + 'Correction'] || 0);
         that['v' + valAxis] = val;
         that['v' + argAxis] = arg + that[argIntervalName] / 2;
+        that[valIntervalName] = _abs(val - minVal);
 
+        const newVal = val < minVal ? val : minVal;
+        that._calculateVisibility(rotated ? newVal : arg, rotated ? arg : newVal, that.width, that.height);
         val = that._truncateCoord(val, valVisibleArea);
         minVal = that._truncateCoord(minVal, valVisibleArea);
 
         that[valIntervalName] = _abs(val - minVal);
 
         val = val < minVal ? val : minVal;
-
-        that._calculateVisibility(rotated ? val : arg, rotated ? arg : val, that.width, that.height);
 
         that[valAxis] = val === null ? val : val + (that[valAxis + 'Correction'] || 0);
         that['min' + valAxis.toUpperCase()] = minVal === null ? minVal : minVal + (that[valAxis + 'Correction'] || 0);
