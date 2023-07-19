@@ -46,6 +46,8 @@ const GROUP_CELL_CLASS = 'dx-group-cell';
 const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FILTER_ROW_CLASS = 'filter-row';
 const ERROR_ROW_CLASS = 'dx-error-row';
+const HEADER_ROW_CLASS = 'dx-header-row';
+const DATA_ROW_CLASS = 'dx-data-row';
 const CELL_UPDATED_ANIMATION_CLASS = 'cell-updated-animation';
 
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
@@ -139,6 +141,22 @@ const copyAttributes = function (element, newElement) {
 
 const removeHandler = function (templateDeferred) {
   templateDeferred.resolve();
+};
+
+export const normalizeWidth = (width: string | number | undefined): string => {
+  if (width === undefined) {
+    return 'auto';
+  }
+
+  if (typeof width === 'number') {
+    return `${width.toFixed(3)}px`;
+  }
+
+  if (width === 'adaptiveHidden') {
+    return HIDDEN_COLUMNS_WIDTH;
+  }
+
+  return width;
 };
 
 const viewWithColumnStateMixin: ModuleType<View> = modules.View.inherit(columnStateMixin);
@@ -1008,121 +1026,98 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
   }
 
-  _getWidths($cellElements) {
-    const result: any[] = [];
-    let width;
-
-    if ($cellElements) {
-      iteratorUtils.each($cellElements, (index, item) => {
-        width = item.offsetWidth;
-        if (item.getBoundingClientRect) {
-          const clientRect = getBoundingRect(item);
-          if (clientRect.width > width - 1) {
-            width = clientRect.width;
-          }
-        }
-
-        result.push(width);
-      });
+  _getWidths($cellElements?: dxElementWrapper): number[] {
+    if (!$cellElements) {
+      return [];
     }
+
+    const result: number[] = [];
+    const cellElements = $cellElements.toArray();
+
+    (cellElements as HTMLElement[]).forEach((cell) => {
+      const rect = getBoundingRect(cell);
+      const width = rect.width > cell.offsetWidth - 1 ? rect.width : cell.offsetWidth;
+
+      result.push(width);
+    });
 
     return result;
   }
 
-  getColumnWidths($tableElement) {
-    const that = this;
-    let result: any[] = [];
-    let $rows;
-    let $cells;
-
+  getColumnWidths($tableElement?: dxElementWrapper): number[] {
     (this.option('forceApplyBindings') || noop)();
 
-    $tableElement = $tableElement || that.getTableElement();
+    $tableElement = $tableElement ?? this.getTableElement();
 
     if ($tableElement) {
-      $rows = $tableElement.children('tbody:not(.dx-header)').children();
+      const $rows = $tableElement.children('tbody:not(.dx-header)').children();
 
       for (let i = 0; i < $rows.length; i++) {
         const $row = $rows.eq(i);
-        const isRowVisible = $row.get(0).style.display !== 'none' && !$row.hasClass('dx-state-invisible');
-        if (!$row.is(`.${GROUP_ROW_CLASS}`) && !$row.is(`.${DETAIL_ROW_CLASS}`) && !$row.is(`.${ERROR_ROW_CLASS}`) && isRowVisible) {
-          $cells = $row.children('td');
-          break;
+
+        const isRowVisible = $row.is(':visible');
+        const isDataRow = $row.hasClass(DATA_ROW_CLASS);
+        const isHeaderRow = $row.hasClass(HEADER_ROW_CLASS);
+
+        if (isRowVisible && (isDataRow || isHeaderRow)) {
+          const $cells = $row.children('td');
+
+          const result = this._getWidths($cells);
+
+          return result;
         }
       }
-
-      result = that._getWidths($cells);
     }
 
-    return result;
+    return [];
   }
 
   getVisibleColumnIndex(columnIndex, rowIndex) {
     return columnIndex;
   }
 
-  setColumnWidths({
-    widths, $tableElement, columns, fixed,
-  }: any) {
-    let $cols;
-    let width;
-    let minWidth;
-    let columnIndex;
+  setColumnWidths({ widths, optionNames }: any): void {
+    const $tableElement = this.getTableElement();
+
+    if (!$tableElement?.length || !widths) {
+      return;
+    }
+
+    const columns = this.getColumns();
     const columnAutoWidth = this.option('columnAutoWidth');
 
-    $tableElement = $tableElement || this.getTableElement();
+    const $cols = $tableElement.children('colgroup').children('col');
+    setWidth($cols, 'auto');
 
-    if ($tableElement && $tableElement.length && widths) {
-      columnIndex = 0;
-      $cols = $tableElement.children('colgroup').children('col');
-      setWidth($cols, 'auto');
-      columns = columns || this.getColumns(null, $tableElement);
+    columns.forEach((column, columnIndex) => {
+      if (columnAutoWidth && column.width && !column.command) {
+        const width = getWidthStyle(column.visibleWidth || column.width);
+        const minWidth = getWidthStyle(column.minWidth || width);
 
-      for (let i = 0; i < columns.length; i++) {
-        if (columnAutoWidth && !fixed) {
-          width = columns[i].width;
+        const $rows = $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
 
-          if (width && !columns[i].command) {
-            width = columns[i].visibleWidth || width;
+        for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
+          const $row = $rows.eq(rowIndex);
 
-            width = getWidthStyle(width);
-            minWidth = getWidthStyle(columns[i].minWidth || width);
-            // @ts-expect-error
-            const $rows = $rows || $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
-            for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
-              const row = $rows[rowIndex];
+          const visibleIndex = this.getVisibleColumnIndex(columnIndex, rowIndex);
 
-              let cell;
-              const visibleIndex = this.getVisibleColumnIndex(i, rowIndex);
-              if (row.classList.contains(GROUP_ROW_CLASS)) {
-                cell = row.querySelector(`td[aria-colindex='${visibleIndex + 1}']:not(.${GROUP_CELL_CLASS})`);
-              } else {
-                cell = row.cells[visibleIndex];
-              }
-              if (cell) {
-                setCellWidth(cell, columns[i], width);
-                cell.style.minWidth = minWidth;
-              }
-            }
+          const $cell = $row.hasClass(GROUP_ROW_CLASS)
+            ? $row.find(`td[aria-colindex='${visibleIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
+            : $row.find('td').eq(visibleIndex);
+
+          const cell = $cell.get(0);
+
+          if (cell) {
+            setCellWidth(cell, column, width);
+            cell.style.minWidth = minWidth;
           }
         }
-
-        if (columns[i].colspan) {
-          columnIndex += columns[i].colspan;
-          continue;
-        }
-        width = widths[columnIndex];
-        if (width === 'adaptiveHidden') {
-          width = HIDDEN_COLUMNS_WIDTH;
-        }
-        if (typeof width === 'number') {
-          width = `${width.toFixed(3)}px`;
-        }
-        setWidth($cols.eq(columnIndex), isDefined(width) ? width : 'auto');
-
-        columnIndex++;
       }
-    }
+
+      const colWidth = normalizeWidth(widths[columnIndex]);
+
+      setWidth($cols.eq(columnIndex), colWidth);
+    });
   }
 
   getCellElements(rowIndex): dxElementWrapper | undefined {
