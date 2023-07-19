@@ -211,6 +211,7 @@ const resizingControllerMembers = {
     const visibleColumns = columnsController.getVisibleColumns();
     const columnAutoWidth = this.option('columnAutoWidth');
     const wordWrapEnabled = this.option('wordWrapEnabled');
+    const hasUndefinedColumnWidth = visibleColumns.some((column) => !isDefined(column.width));
     let needBestFit = this._needBestFit();
     let hasMinWidth = false;
     let resetBestFitMode;
@@ -313,7 +314,7 @@ const resizingControllerMembers = {
       }
 
       deferRender(() => {
-        if (needBestFit || isColumnWidthsCorrected) {
+        if (needBestFit || isColumnWidthsCorrected || hasUndefinedColumnWidth) {
           this._setVisibleWidths(visibleColumns, resultWidths);
         }
 
