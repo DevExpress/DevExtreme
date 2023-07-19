@@ -10,7 +10,7 @@ export default _extend({}, barPoint, {
     _getFormatObject: rangeSymbolPointMethods._getFormatObject,
 
     _calculateVisibility: function(x, y, width, height) {
-        this.inVisibleArea = barPoint._getPointVisibility.call(this, x, y, width, height, false);
+        this.inVisibleArea = barPoint._getPointVisibility.call(this, { x, y, width, height }, false);
     },
 
     clearVisibility: function() {
