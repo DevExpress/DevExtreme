@@ -21,7 +21,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: ./node_modules
+        path: '**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -29,24 +29,23 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build etalon bundles
+      working-directory: ./packages/devextreme
       run: npx gulp style-compiler-themes-ci
 
-    - name: Run npm install for themebuilder-scss
-      run: npm install --no-audit --no-fund
-      working-directory: ./themebuilder-scss
-
     - name: Build
+      working-directory: ./packages/devextreme-themebuilder
       run: npm run build
-      working-directory: ./themebuilder-scss
 
     - name: Run themebuilder tests (full set, node)
       run: npm run test
-      working-directory: ./themebuilder-scss
+      working-directory: ./packages/devextreme-themebuilder
 
     - name: Check styles for duplicate rules (generic)
+      working-directory: ./packages/devextreme
       run: npx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.light.css"
 
     - name: Check styles for duplicate rules (material)
+      working-directory: ./packages/devextreme
       run: npx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.material.blue.light.css"
 
   notify:
