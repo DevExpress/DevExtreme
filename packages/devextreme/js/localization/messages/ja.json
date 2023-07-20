@@ -178,6 +178,7 @@
         "dxDataGrid-ariaSelectAll": "すべてを選択",
         "dxDataGrid-ariaSelectRow": "行の選択",
         "dxDataGrid-ariaToolbar": "データ グリッドのツール バー",
+        "dxDataGrid-ariaEditForm": "TODO",
         "dxDataGrid-filterBuilderPopupTitle": "フィルター ビルダー",
         "dxDataGrid-filterPanelCreateFilter": "フィルターの作成",
         "dxDataGrid-filterPanelClearFilter": "クリア",

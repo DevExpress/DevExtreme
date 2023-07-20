@@ -59,6 +59,7 @@ import {
   PAGE_BOTTOM_NEW_ROW_POSITION,
   PAGE_TOP_NEW_ROW_POSITION,
   READONLY_CLASS,
+  REQUIRED_EDITOR_LABELLEDBY_MODES,
   ROW_BASED_MODES,
   ROW_CLASS,
   ROW_INSERTED,
@@ -171,7 +172,7 @@ class EditingControllerImpl extends modules.ViewController {
     return (container, options) => {
       const $editor = $('<div>').appendTo(container);
 
-      this.getController('editorFactory').createEditor($editor, extend({}, options.column, {
+      const editorOptions = extend({}, options.column, {
         value: options.value,
         setValue: options.setValue,
         row: options.row,
@@ -179,8 +180,15 @@ class EditingControllerImpl extends modules.ViewController {
         width: null,
         readOnly: !options.setValue,
         isOnForm: options.isOnForm,
-        id: options.id,
-      }));
+        inputAttr: {
+          id: options.id,
+        },
+      });
+
+      const needLabel = REQUIRED_EDITOR_LABELLEDBY_MODES.includes(this.getEditMode());
+      if (needLabel) { editorOptions.inputAttr['aria-labelledby'] = options.column.headerId; }
+
+      this.getController('editorFactory').createEditor($editor, editorOptions);
     };
   }
 

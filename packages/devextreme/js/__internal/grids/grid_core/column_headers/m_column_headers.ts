@@ -211,7 +211,8 @@ export const columnHeadersModule = {
         _setCellAriaAttributes($cell, cellOptions) {
           this.callBase($cell, cellOptions);
           if (cellOptions.rowType === 'header') {
-            if (cellOptions.column.type !== 'groupExpand') {
+            const notHeaderTypes = ['groupExpand', 'buttons'];
+            if (!notHeaderTypes.includes(cellOptions.column.type)) {
               this.setAria('role', 'columnheader', $cell);
             }
             if (cellOptions.column && !cellOptions.column.command && !cellOptions.column.isBand) {

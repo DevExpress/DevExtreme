@@ -26,9 +26,7 @@ const EditorFactoryMixin = (function() {
         return extend(config, {
             readOnly: options.readOnly,
             placeholder: options.placeholder,
-            inputAttr: {
-                id: options.id
-            },
+            inputAttr: options.inputAttr,
             tabIndex: options.tabIndex
         }, options.editorOptions);
     };
