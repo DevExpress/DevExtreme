@@ -11,7 +11,7 @@ import { Overlay } from '../../model/dataGrid/overlay';
 import { getData } from './helpers/generateDataSourceData';
 import { a11yCheck } from '../../helpers/accessibilityUtils';
 
-fixture.disablePageReloads`Editing`
+fixture`Editing`
   .page(url(__dirname, '../container.html'));
 
 const getGridConfig = (config): Record<string, unknown> => {
