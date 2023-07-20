@@ -11,6 +11,7 @@
     #progressBar
     id="progress-bar-status"
     width="90%"
+    [elementAttr]="{ 'aria-label': 'Progress Bar' }"
     [class.complete]="progressBar.value == maxValue"
     [min]="0"
     [max]="maxValue"

@@ -15,6 +15,8 @@ function statusFormat(ratio) {
 
 let intervalId;
 
+const elementAttr = { 'aria-label': 'Progress Bar' };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -46,6 +48,7 @@ class App extends React.Component {
           width="90%"
           min={0}
           max={maxValue}
+          elementAttr={elementAttr}
           statusFormat={statusFormat}
           value={maxValue - this.state.seconds}
         />

@@ -7,6 +7,9 @@ $(() => {
     min: 0,
     max: 100,
     width: '90%',
+    elementAttr: {
+      'aria-label': 'Progress Bar',
+    },
     statusFormat(ratio) {
       return `Loading: ${ratio * 100}%`;
     },

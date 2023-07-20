@@ -16,6 +16,7 @@
       :max="maxValue"
       :status-format="statusFormat"
       :value="progressValue"
+      :element-attr="{ 'aria-label': 'Progress Bar' }"
       width="90%"
     />
   </div>
