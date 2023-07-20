@@ -1,0 +1,14 @@
+@use "../variables/colors" as *;
+
+.dx-tabs {
+  padding: 0;
+  background-color: $material-tabs-background;
+
+  .dx-inkripple {
+    overflow: hidden;
+  }
+
+  .dx-scrollable {
+    flex-basis: 100%;
+  }
+}

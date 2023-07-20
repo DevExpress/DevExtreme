@@ -1,0 +1,82 @@
+@use "../../sizes" as *;
+@use "../../../base/icons" as *;
+@use "../variables/sizes" as *;
+@use "../variables/colors" as *;
+
+
+.dx-tab {
+  padding: $material-tabs-item-padding;
+  background-color: $tabs-tab-bg;
+  color: $tabs-tab-color;
+
+  &.dx-state-hover {
+    background-color: $tabs-hovered-tab-bg-color;
+  }
+
+  &.dx-tab-selected {
+    color: $tabs-tab-selected-color;
+
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      height: 2px;
+      left: 0;
+      right: 0;
+      background-color: $tabs-selected-tab-bottom-border-color;
+    }
+  }
+
+  &.dx-state-focused {
+    background-color: $tabs-focused-tab-bg-color;
+  }
+
+  &.dx-state-disabled {
+    color: $tabs-tab-disabled-color;
+
+    .dx-icon {
+      color: $tabs-tab-icon-disabled-color;
+    }
+  }
+
+  &.dx-state-disabled.dx-tab-selected {
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      height: 2px;
+      left: 0;
+      right: 0;
+      background-color: $tabs-disabled-tab-bottom-border-color;
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-active .dx-inkripple-wave {
+    background-color: $tabs-active-tab-bg-color;
+  }
+
+  .dx-tab-text {
+    flex-direction: column;
+    text-transform: uppercase;
+    line-height: $material-tab-text-line-height;
+    font-weight: 500;
+  }
+
+  .dx-icon {
+    color: $tabs-tab-icon-color;
+    margin-bottom: $material-base-icon-margin-bottom;
+
+    @include dx-icon-sizing($material-base-icon-size);
+  }
+}
+
+.dx-tabs-vertical {
+  .dx-tab-text.dx-icon {
+    @include dx-icon-margin($material-base-icon-margin-right);
+  }
+}

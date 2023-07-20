@@ -1,145 +1,16 @@
 @use "sass:color";
-@use "colors" as *;
 @use "../colors" as *;
-@use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/mixins" as *;
 @use "../button/colors" as *;
 @use "../../base/icons" as *;
 @use "../../base/tabs";
+@use "variables/colors" as *;
+@use "variables/sizes" as *;
+@use "layout/tab" as *;
+@use "layout/tabs" as *;
+@use "layout/navigation-button" as *;
 
 // adduse
 @use "../scrollable";
 @use "../badge";
-
-
-$material-tabs-background: $base-bg;
-$material-tabs-nav-button-background: color.change($button-default-hover-bg, $alpha: 0.08);
-
-.dx-tabs {
-  padding: 0;
-  background-color: $material-tabs-background;
-
-  .dx-inkripple {
-    overflow: hidden;
-  }
-
-  .dx-scrollable {
-    flex-basis: 100%;
-  }
-}
-
-.dx-tab {
-  padding: $material-tabs-item-padding;
-  background-color: $tabs-tab-bg;
-  color: $tabs-tab-color;
-
-  &.dx-state-hover {
-    background-color: $tabs-hovered-tab-bg-color;
-  }
-
-  &.dx-tab-selected {
-    color: $tabs-tab-selected-color;
-
-    .dx-icon {
-      color: $tabs-tab-icon-selected-color;
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      height: 2px;
-      left: 0;
-      right: 0;
-      background-color: $tabs-selected-tab-bottom-border-color;
-    }
-  }
-
-  &.dx-state-focused {
-    background-color: $tabs-focused-tab-bg-color;
-  }
-
-  &.dx-state-disabled {
-    color: $tabs-tab-disabled-color;
-
-    .dx-icon {
-      color: $tabs-tab-icon-disabled-color;
-    }
-  }
-
-  &.dx-state-disabled.dx-tab-selected {
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      height: 2px;
-      left: 0;
-      right: 0;
-      background-color: $tabs-disabled-tab-bottom-border-color;
-    }
-  }
-
-  &.dx-state-active,
-  &.dx-state-active .dx-inkripple-wave {
-    background-color: $tabs-active-tab-bg-color;
-  }
-
-  .dx-tab-text {
-    flex-direction: column;
-    text-transform: uppercase;
-    line-height: $material-tab-text-line-height;
-    font-weight: 500;
-  }
-
-  .dx-icon {
-    color: $tabs-tab-icon-color;
-    margin-bottom: $material-base-icon-margin-bottom;
-
-    @include dx-icon-sizing($material-base-icon-size);
-  }
-}
-
-.dx-tabs-nav-button {
-  align-self: stretch;
-  border: none;
-  background-color: $tabs-tab-bg;
-  height: $material-tab-height;
-  border-radius: 0;
-  box-shadow: none;
-
-  &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
-    @include dx-button-flat-color-styling($base-icon-color, $material-tabs-nav-button-background, $material-tabs-nav-button-background, $material-tabs-nav-button-background);
-
-    border-radius: 0;
-
-    .dx-inkripple-wave {
-      background-color: $material-tabs-nav-button-background;
-    }
-  }
-
-  .dx-button-content {
-    padding: 0;
-  }
-
-  &.dx-state-active {
-    border: none;
-  }
-
-  &.dx-state-disabled {
-    opacity: 1;
-    background-color: $tabs-tab-bg;
-
-    .dx-button-content {
-      opacity: $tabs-tab-button-disabled-opacity;
-    }
-  }
-}
-
-.dx-tabs-vertical {
-  .dx-tab-text {
-    .dx-icon {
-      @include dx-icon-margin($material-base-icon-margin-right);
-    }
-  }
-}

@@ -1,9 +1,11 @@
 @use "sass:color";
-@use "../sizes" as *;
-@use "../colors" as *;
-@use "../button/colors" as *;
+@use "../../sizes" as *;
+@use "../../colors" as *;
+@use "../../button/colors" as *;
 
-// adduse
+
+$material-tabs-background: $base-bg;
+$material-tabs-nav-button-background: color.change($button-default-hover-bg, $alpha: 0.08);
 
 /**
 * $name 10. Tab text color
