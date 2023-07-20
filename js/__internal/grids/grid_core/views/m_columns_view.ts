@@ -46,8 +46,6 @@ const GROUP_CELL_CLASS = 'dx-group-cell';
 const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FILTER_ROW_CLASS = 'filter-row';
 const ERROR_ROW_CLASS = 'dx-error-row';
-const HEADER_ROW_CLASS = 'dx-header-row';
-const DATA_ROW_CLASS = 'dx-data-row';
 const CELL_UPDATED_ANIMATION_CLASS = 'cell-updated-animation';
 
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
@@ -1055,11 +1053,14 @@ export class ColumnsView extends viewWithColumnStateMixin {
       for (let i = 0; i < $rows.length; i++) {
         const $row = $rows.eq(i);
 
-        const isRowVisible = $row.is(':visible');
-        const isDataRow = $row.hasClass(DATA_ROW_CLASS);
-        const isHeaderRow = $row.hasClass(HEADER_ROW_CLASS);
+        const isGroupRow = $row.hasClass(GROUP_ROW_CLASS);
+        const isDetailRow = $row.hasClass(DETAIL_ROW_CLASS);
+        const isErrorRow = $row.hasClass(ERROR_ROW_CLASS);
 
-        if (isRowVisible && (isDataRow || isHeaderRow)) {
+        const isRowVisible = $row.is(':visible');
+        const isRelevantRow = !isGroupRow && !isDetailRow && !isErrorRow;
+
+        if (isRowVisible && isRelevantRow) {
           const $cells = $row.children('td');
 
           const result = this._getWidths($cells);
