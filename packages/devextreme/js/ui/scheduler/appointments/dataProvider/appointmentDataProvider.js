@@ -1,6 +1,9 @@
 import config from '../../../../core/config';
 import { AppointmentDataSource } from './appointmentDataSource';
-import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
+import {
+    AppointmentFilterBaseStrategy,
+    AppointmentFilterVirtualStrategy
+} from '../../../../__internal/scheduler/appointments/data_provider/m_appointment_filter';
 import combineRemoteFilter from '../../../../renovation/ui/scheduler/utils/filtering/remote';
 
 const FilterStrategies = {
