@@ -4267,7 +4267,8 @@
               "/Models/SampleData/Electronics.cs",
               "/Models/ElectronicsSimpleItem.cs",
               "/Models/SampleData/ElectronicsSimple.cs",
-              "/ViewModels/SelectBoxViewModel.cs"
+              "/ViewModels/SelectBoxViewModel.cs",
+              "/Controllers/ApiControllers/SelectBoxEditingController.cs"
             ]
           },
           {
