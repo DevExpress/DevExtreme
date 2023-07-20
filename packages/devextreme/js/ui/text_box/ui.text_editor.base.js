@@ -475,15 +475,15 @@ const TextEditorBase = Editor.inherit({
         return this._getLabelContainer();
     },
 
-    _setFieldAria() {
+    _setFieldAria(force) {
         const labelId = this._label.getId();
         const placeholderId = this._$placeholder?.attr('id');
 
         const value = [labelId, placeholderId].filter(Boolean).join(' ');
 
-        if(value) {
+        if(value || force) {
             const aria = {
-                'labelledby': value,
+                'labelledby': value || undefined,
             };
             this.setAria(aria, this._getFieldElement());
         }
@@ -792,11 +792,11 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'placeholder':
                 this._renderPlaceholder();
-                this._setFieldAria();
+                this._setFieldAria(true);
                 break;
             case 'label':
                 this._label.updateText(value);
-                this._setFieldAria();
+                this._setFieldAria(true);
                 break;
             case 'labelMark':
                 this._label.updateMark(value);
