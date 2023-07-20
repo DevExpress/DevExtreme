@@ -51,6 +51,17 @@ export default _extend({}, symbolPoint, {
         this.inVisibleArea = minX <= x + width && maxX >= x && minY <= y + height && maxY >= y;
     },
 
+    _checkVisibility: function(arg, val, minVal, rotated) {
+        const size = _abs(val - minVal);
+        const valueBeforeCorrection = Math.min(val, minVal);
+
+        if(rotated) {
+            this._calculateVisibility(valueBeforeCorrection, arg, size, this.height);
+        } else {
+            this._calculateVisibility(arg, valueBeforeCorrection, this.width, size);
+        }
+    },
+
     _getGraphicBBox: function(location) {
         const bBox = {
             x: this.x,
@@ -273,10 +284,9 @@ export default _extend({}, symbolPoint, {
         that[argAxis] = arg = arg === null ? arg : arg + (that[argAxis + 'Correction'] || 0);
         that['v' + valAxis] = val;
         that['v' + argAxis] = arg + that[argIntervalName] / 2;
-        that[valIntervalName] = _abs(val - minVal);
 
-        const newVal = val < minVal ? val : minVal;
-        that._calculateVisibility(rotated ? newVal : arg, rotated ? arg : newVal, that.width, that.height);
+        this._checkVisibility(arg, val, minVal, rotated);
+
         val = that._truncateCoord(val, valVisibleArea);
         minVal = that._truncateCoord(minVal, valVisibleArea);
 
