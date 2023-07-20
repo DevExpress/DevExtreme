@@ -1352,10 +1352,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       let $cell = this._getFocusedCell();
       const isEditing = this._editingController.isEditing();
 
-      if (
-        $cell
-        && !(this._isMasterDetailCell($cell) && !this._isRowEditMode())
-      ) {
+      if (!this._isMasterDetailCell($cell) || this._isRowEditMode()) {
         if (this._hasSkipRow($cell.parent())) {
           const direction = this._focusedCellPosition && this._focusedCellPosition.rowIndex > 0
             ? 'upArrow'
@@ -1402,7 +1399,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     });
   }
 
-  _needFocusEditingCell() {
+  private _needFocusEditingCell() {
     const isCellEditMode = this._editingController.getEditMode() === EDIT_MODE_CELL;
     const isBatchEditMode = this._editingController.getEditMode() === EDIT_MODE_BATCH;
 
@@ -1411,8 +1408,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     const $cell = this._getFocusedCell();
 
     return (
-      !isElementDefined($cell)
-      || $cell.children().length === 0
+      $cell.children().length === 0
       || $cell.find(FOCUSABLE_ELEMENT_SELECTOR).length > 0
     ) && (cellEditModeHasChanges || isNewRowBatchEditMode);
   }
