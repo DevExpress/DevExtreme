@@ -59,7 +59,13 @@ function run_test_impl {
                 return 1
             fi
 
-            httping -qsc1 "$url" && break
+            if curl --head --silent --fail $url 2> /dev/null;
+             then
+              echo "Runner reached!"
+              break
+             else
+              echo "Page $url does not exist."
+            fi
 
             if [ $i -eq 0 ]; then
                 echo "Runner not reached"
