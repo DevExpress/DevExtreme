@@ -1,0 +1,26 @@
+[
+  {
+    "data": "area-1-data",
+	"attrs": {
+	  "name": "Area-1"
+	}
+  },
+  {
+    "data": "area-2-data",
+	"attrs": {
+	  "name": "Area-2"
+	}
+  },
+  {
+    "data": "area-3-data",
+	"attrs": {
+	  "name": "Area-3"
+	}
+  },
+  {
+    "data": "area-4-data",
+	"attrs": {
+	  "name": "Area-4"
+	}
+  }
+]

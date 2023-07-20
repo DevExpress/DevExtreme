@@ -72,34 +72,28 @@ runs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: '**/node_modules'
+        path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
       shell: bash
-      run: npm install --no-audit --no-fund
+      run: npm install --no-package-lock --no-audit --no-fund
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
         name: devextreme-artifacts
-        path: packages/devextreme
 
     - name: Unpack artifacts
-      working-directory: ./packages/devextreme
       shell: bash
-      run: |
-        rm -rf artifacts/npm
-        7z x artifacts.zip
+      run: 7z x artifacts.zip
 
     - name: Build dotnet
-      working-directory: ./packages/devextreme
       shell: bash
       run: dotnet build build/build-dotnet.sln
 
     - name: Run QUnit tests
-      working-directory: ./packages/devextreme
       shell: bash
       env:
         CONSTEL: ${{ inputs.constel }}
@@ -124,5 +118,5 @@ runs:
       uses: actions/upload-artifact@v3
       with:
         name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}
-        path: ${{ github.workspace }}/packages/devextreme/testing/RawLog.txt
+        path: ${{ github.workspace }}/testing/RawLog.txt
         if-no-files-found: ignore

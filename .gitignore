@@ -1,29 +1,24 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
-# compiled output
-dist
-bin
-obj
-
-# dependencies
-node_modules
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+.idea
 .vs
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-
-# System Files
+/artifacts
+/testing/testcafe/artifacts
+/testing/bundlers/dist
+/testing/bundlers/entry
+/testing/bundlers/devextreme*
+/testing/bundlers/.parcel-cache
+/testing/LastSuiteTime.txt
+/dotnet_packages
+/js/bundles/dx.custom.js
+/js/localization/default_messages.js
+/js/localization/cldr-data
+/js/renovation/**/*.j.tsx
+/js/renovation/code_coverage
+/scss/bundles/*.scss
+bin
+node_modules
+obj
+yarn.lock
+RawLog.txt
 .DS_Store
-Thumbs.db
+testing/CompletedSuites.txt
+

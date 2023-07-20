@@ -9,9 +9,6 @@ on:
   push:
     branches: [23_2]
 
-env:
-  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
-
 jobs:
   build:
     name: build
@@ -33,7 +30,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: '**/node_modules'
+        path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -41,10 +38,9 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
-      run: npx nx build:testcafe devextreme-root
+      run: npm run build:testcafe
 
     - name: Zip artifacts
-      working-directory: ./packages/devextreme
       run: |
         7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
 
@@ -52,7 +48,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: devextreme-artifacts
-        path: ./packages/devextreme/artifacts.zip
+        path: artifacts.zip
         retention-days: 1
 
   testcafe:
@@ -102,7 +98,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: '**/node_modules'
+        path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -113,20 +109,16 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: devextreme-artifacts
-        path: ./packages/devextreme
 
     - name: Prepare localization
       if: matrix.ARGS.componentFolder == 'renovation'
-      working-directory: ./packages/devextreme
       run: npx gulp localization
 
     - name: Unpack artifacts
-      working-directory: ./packages/devextreme
       run: 7z x artifacts.zip -aoa
 
     - name: Prepare renovation playground
       if: matrix.ARGS.componentFolder == 'renovation'
-      working-directory: ./packages/devextreme
       run: |
         pushd testing/renovation
         npm install --no-audit --no-fund --legacy-peer-deps
@@ -135,7 +127,6 @@ jobs:
         npx gulp build-renovation-testing
 
     - name: Run TestCafe tests
-      working-directory: ./packages/devextreme
       run: |
         [ "${{ matrix.ARGS.theme }}" == "material.blue.light" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
@@ -154,15 +145,14 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: compared-screenshots
-        path: ${{ github.workspace }}/packages/devextreme/testing/testcafe/artifacts/compared-screenshots/**/*
+        path: ${{ github.workspace }}/testing/testcafe/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
-
     - name: Copy failed test artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v3
       with:
         name: failed-tests
-        path: ${{ github.workspace }}/packages/devextreme/testing/testcafe/artifacts/failedtests/**/*
+        path: ${{ github.workspace }}/testing/testcafe/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
   notify:

@@ -1,0 +1,504 @@
+import $ from 'jquery';
+import Class from 'core/class';
+import Editor from 'ui/editor/editor';
+import DefaultAdapter from 'ui/validation/default_adapter';
+import ValidationEngine from 'ui/validation_engine';
+import TextEditorBase from 'ui/text_box/ui.text_editor.base';
+import { Deferred } from 'core/utils/deferred';
+
+import 'ui/validator';
+import 'ui/load_indicator';
+
+const Fixture = Class.inherit({
+    createValidator(options, element) {
+        this.$element = element || this.$element || $('<div/>');
+        this.stubAdapter = sinon.createStubInstance(DefaultAdapter);
+        const validator = this.$element.dxValidator($.extend({
+            adapter: this.stubAdapter
+        }, options)).dxValidator('instance');
+
+        return validator;
+    },
+    createEditor(editorOptions) {
+        this.$element = $('<div/>');
+        return new Editor(this.$element, $.extend({}, editorOptions));
+    },
+    createTextEditor(editorOptions) {
+        this.$element = $('<div/>');
+        return new TextEditorBase(this.$element, $.extend({}, editorOptions));
+    },
+    teardown() {
+        this.$element.remove();
+        ValidationEngine.initGroups();
+    }
+});
+
+QUnit.module('Editors Standard Adapter', {
+    beforeEach: function() {
+        this.fixture = new Fixture();
+    },
+    afterEach: function() {
+        this.fixture.teardown();
+    }
+}, () => {
+    QUnit.test('Adapter reacts on editor\'s value change - to invalid', function(assert) {
+        const emptyValue = '';
+        const handler = sinon.stub();
+        const editor = this.fixture.createEditor({
+            value: '123'
+        });
+
+        this.fixture.createValidator({
+            adapter: null,
+            validationRules: [{
+                type: 'required'
+            }],
+            onValidated: handler
+        });
+
+        editor.option('value', emptyValue);
+
+
+        assert.strictEqual(editor.option('isValid'), false, 'Editor options should be set');
+        assert.ok(handler.calledOnce, 'onValidated handler should be called');
+        const brokenRule = handler.getCall(0).args[0].brokenRule;
+        assert.ok(brokenRule, 'Validation error should exists');
+        assert.equal(brokenRule.type, 'required', 'Correct message should be passed');
+    });
+
+    QUnit.test('Adapter reacts on editor\'s value change - to valid', function(assert) {
+        const value = '123';
+        const handler = sinon.stub();
+        const editor = this.fixture.createEditor({
+            value: ''
+        });
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [{
+                type: 'required'
+            }],
+            onValidated: handler
+        });
+
+
+        validator.validate();
+        editor.option('value', value);
+
+        assert.strictEqual(editor.option('isValid'), true, 'Editor options should be set');
+        assert.ok(handler.calledTwice, 'onValidated handler should be called two times');
+        const brokenRule = handler.getCall(1).args[0].brokenRule;
+        assert.ok(!brokenRule, 'Validation error should not be set');
+    });
+
+
+    QUnit.test('Validation request should get value from editor', function(assert) {
+        const value = '123';
+        const editor = this.fixture.createEditor({
+            value: value
+        });
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [{
+                type: 'required'
+            }]
+        });
+
+
+        const result = validator.validate();
+
+        assert.strictEqual(result.isValid, true, 'result should be valid');
+
+        assert.strictEqual(editor.option('isValid'), true, 'Editor options should be set');
+    });
+
+    QUnit.test('Adapter should be set on contentReady', function(assert) {
+        const fixture = this.fixture;
+        let error = '';
+        this.fixture.createEditor({
+            onContentReady: function() {
+                try {
+                    fixture.createValidator({
+                        adapter: null,
+                        validationRules: [{
+                            type: 'required'
+                        }]
+                    });
+
+                } catch(e) {
+                    error = e;
+                }
+            }
+        });
+
+        assert.equal(error, '');
+    });
+
+
+    QUnit.test('Editor\'s validators request should not be mixed with another editors', function(assert) {
+        const value = '123';
+        const emptyValue = '';
+
+        const editor1 = this.fixture.createEditor({
+            value: value
+        });
+
+        this.fixture.createValidator(
+            {
+                adapter: null,
+                validationRules: [{
+                    type: 'required'
+                }]
+            },
+            editor1.$element()
+        );
+
+        const editor2 = this.fixture.createEditor({
+            value: emptyValue
+        });
+
+
+        this.fixture.createValidator(
+            {
+                adapter: null,
+                validationRules: [{
+                    type: 'required'
+                }]
+            },
+            editor2.$element()
+        );
+
+        // act
+        editor1.option('value', emptyValue);
+        // assert
+        assert.strictEqual(editor1.option('isValid'), false, 'Editor1 changed and should be marked as valid');
+        assert.strictEqual(editor2.option('isValid'), true, 'Editor2 have not changed yet and should not be validated');
+    });
+
+
+    QUnit.test('Editor-specific validation should be kept', function(assert) {
+        const handler = sinon.stub();
+        const editor = this.fixture.createEditor({
+            value: 'abc',
+            isValid: false,
+            validationError: {
+                message: 'Something went wrong in Editor itself',
+                editorSpecific: true
+            }
+        });
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [{
+                type: 'required'
+            }],
+            onValidated: handler
+        });
+
+
+        // act
+        validator.validate();
+
+        // assert
+        assert.strictEqual(editor.option('isValid'), false, 'Editor should be kept invalid');
+        assert.strictEqual(validator.option('isValid'), false, 'Validator should become invalid');
+        assert.ok(handler.calledOnce);
+        const params = handler.getCall(0).args[0];
+        assert.strictEqual(params.isValid, false, 'Result should be marked as invalid');
+        assert.ok(params.brokenRule, 'validationError should be passed');
+        assert.equal(params.brokenRule.message, 'Something went wrong in Editor itself', 'Message from editor should be passed');
+
+    });
+
+    QUnit.test('Disabled editor should bypass validation', function(assert) {
+        this.fixture.createEditor({
+            disabled: true
+        });
+
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [{
+                type: 'required'
+            }]
+        });
+
+        // act
+        const result = validator.option('adapter').bypass();
+        // assert
+
+        assert.strictEqual(result, true, 'Disabled editor should bypass validation');
+    });
+
+    QUnit.test('Reset value of custom validation rule when the required rule is defined before it', function(assert) {
+    // arrange
+        const editor = this.fixture.createEditor();
+        const spy = sinon.spy(function() { return false; });
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [
+                { type: 'required' },
+                {
+                    type: 'custom',
+                    validationCallback: spy
+                }
+            ]
+        });
+
+        // act
+        editor.option('value', 'test');
+        validator.reset();
+        editor.option('value', 'test');
+
+        // assert
+        assert.equal(spy.callCount, 2, 'The validationCallback is called after reset');
+    });
+
+    QUnit.test('Editor should display pending indicator after repaint', function(assert) {
+    // arrange
+        const editor = this.fixture.createTextEditor({
+            value: 'test'
+        });
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [
+                {
+                    type: 'async',
+                    validationCallback: function() {
+                        return new Deferred().promise();
+                    }
+                }
+            ]
+        });
+
+        validator.validate();
+        let indicator = editor.$element().find('.dx-pending-indicator').dxLoadIndicator('instance');
+
+        assert.ok(indicator, 'indicator found after valiating');
+        assert.ok(indicator.option('visible'), 'indicator is shown after validating');
+
+        editor.repaint();
+        indicator = editor.$element().find('.dx-pending-indicator').dxLoadIndicator('instance');
+
+        assert.ok(indicator, 'indicator found after repainting');
+        assert.ok(indicator.option('visible'), 'indicator is shown after repainting');
+    });
+
+    QUnit.test('Editor should not display valid mark after resetting a value', function(assert) {
+    // arrange
+        const editor = this.fixture.createTextEditor({
+            value: 'test'
+        });
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [
+                {
+                    type: 'async',
+                    ignoreEmptyValue: true,
+                    validationCallback: function() {
+                        return new Deferred().resolve().promise();
+                    }
+                }
+            ]
+        });
+        const done = assert.async();
+
+        const result = validator.validate();
+        result.complete.then(() => {
+            assert.ok(editor.$element().hasClass('dx-valid'), 'editor has the \'dx-valid\' CSS after validating');
+
+            validator.reset();
+
+            assert.notOk(editor.$element().hasClass('dx-valid'), 'editor does not have the \'dx-valid\' CSS after resetting a value');
+
+            done();
+        });
+    });
+
+    QUnit.test('Editor - validation options should be synchrnoized on init', function(assert) {
+        const err1 = { message: '1' };
+        const err2 = { message: '2' };
+        let editor = this.fixture.createEditor({
+            isValid: false,
+            validationError: err1
+        });
+
+        assert.strictEqual(editor.option('validationStatus'), 'invalid', 'validationStatus === \'invalid\'');
+        assert.strictEqual(editor.option('validationErrors[0]'), err1, 'validationErrors[0] === err1');
+
+        this.fixture.teardown();
+        editor = this.fixture.createEditor({
+            isValid: false,
+            validationErrors: [err2, err1]
+        });
+        assert.strictEqual(editor.option('validationStatus'), 'invalid', 'validationStatus === \'invalid\'');
+        assert.strictEqual(editor.option('validationError'), err2, 'validationError === err2');
+
+        this.fixture.teardown();
+        editor = this.fixture.createEditor({
+            isValid: false,
+            validationErrors: [err2, err1]
+        });
+        assert.strictEqual(editor.option('validationStatus'), 'invalid', 'validationStatus === \'invalid\'');
+        assert.strictEqual(editor.option('validationError'), err2, 'validationError === err2');
+
+        this.fixture.teardown();
+        editor = this.fixture.createEditor({
+            validationStatus: 'invalid'
+        });
+        assert.strictEqual(editor.option('isValid'), false, 'isValid === false');
+    });
+
+    QUnit.test('Editor - validation options should be synchrnoized at runtime', function(assert) {
+        const editor = this.fixture.createEditor({});
+        const err1 = { message: '1' };
+        const err2 = { message: '2' };
+
+        editor.option('isValid', false);
+        assert.strictEqual(editor.option('validationStatus'), 'invalid', 'validationStatus === \'invalid\'');
+
+        editor.option('isValid', true);
+        assert.strictEqual(editor.option('validationStatus'), 'valid', 'validationStatus === \'valid\'');
+
+        editor.option('validationStatus', 'pending');
+        assert.ok(editor.option('isValid'), 'isValid === true');
+
+        editor.option('validationStatus', 'invalid');
+        assert.notOk(editor.option('isValid'), 'isValid === false');
+
+        editor.option('validationStatus', 'valid');
+        assert.ok(editor.option('isValid'), 'isValid === true');
+
+
+        editor.option('validationError', err1);
+        assert.strictEqual(editor.option('validationErrors[0]'), err1, 'validationErrors[0] === err1');
+
+        editor.option('validationError', err2);
+        assert.strictEqual(editor.option('validationErrors[0]'), err2, 'validationErrors[0] === err2');
+
+        editor.option('validationError', null);
+        assert.notOk(editor.option('validationErrors'), 'validationErrors === null');
+
+        editor.option('validationErrors', [err1]);
+        assert.strictEqual(editor.option('validationError'), err1, 'validationError === err1');
+
+        editor.option('validationErrors', [err2, err1]);
+        assert.strictEqual(editor.option('validationError'), err2, 'validationError === err2');
+
+        editor.option('validationErrors', null);
+        assert.notOk(editor.option('validationError'), 'validationError === null');
+    });
+
+
+    QUnit.test('Editor should not display a valid mark when showValidationMark is false', function(assert) {
+        const editor = this.fixture.createTextEditor({
+            showValidationMark: false
+        });
+
+        editor.option('validationStatus', 'pending');
+        editor.option('validationStatus', 'valid');
+
+        assert.notOk(this.fixture.$element.hasClass('dx-valid'), 'valid mark is not rendered');
+    });
+
+    QUnit.test('Editor should display a valid mark when showValidationMark is changed at runtime to true', function(assert) {
+        const editor = this.fixture.createTextEditor({
+            showValidationMark: false
+        });
+
+        editor.option('validationStatus', 'pending');
+        editor.option('showValidationMark', true);
+        editor.option('validationStatus', 'valid');
+
+        assert.ok(this.fixture.$element.hasClass('dx-valid'), 'valid mark is rendered');
+    });
+
+    QUnit.test('Editor(read-only) - validating and validated events of a validator should be raised (T873862)', function(assert) {
+        // arrange
+        this.fixture.createTextEditor({
+            value: 'test',
+            readOnly: true
+        });
+        const validatingHandler = sinon.stub();
+        const validatedHandler = sinon.stub();
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [
+                {
+                    type: 'async',
+                    validationCallback: function() {
+                        return new Deferred().resolve().promise();
+                    }
+                }
+            ]
+        });
+        validator.on('validating', validatingHandler);
+        validator.on('validated', validatedHandler);
+        const done = assert.async();
+
+        const result = validator.validate();
+        result.complete.then(() => {
+            // assert
+            assert.ok(validatingHandler.calledOnce, 'validating was called');
+            assert.ok(validatedHandler.calledOnce, 'validated was called');
+
+            done();
+        });
+    });
+
+    QUnit.test('Editor should toggle an "aria-required" attribute if the "required" rule is removed', function(assert) {
+        this.fixture.createTextEditor();
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [{ type: 'required' }]
+        });
+
+        const $input = this.fixture.$element.find('.dx-texteditor-input');
+        assert.ok(Boolean($input.attr('aria-required')), 'input have an "aria-required" attribute');
+
+        validator.option('validationRules', []);
+        assert.notOk(Boolean($input.attr('aria-required')), 'input does not have an "aria-required" attribute');
+    });
+
+    QUnit.test('Editor should toggle an "aria-required" attribute if the "required" rule is added', function(assert) {
+        this.fixture.createTextEditor();
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: null
+        });
+
+        const $input = this.fixture.$element.find('.dx-texteditor-input');
+        assert.notOk(Boolean($input.attr('aria-required')), 'input does not have an "aria-required" attribute');
+
+        validator.option('validationRules', [{ type: 'required' }]);
+        assert.ok(Boolean($input.attr('aria-required')), 'input have an "aria-required" attribute');
+    });
+
+    QUnit.test('Editor should not toggle an "aria-required" attribute if the "required" rule is added, but editor is not initialized yet', function(assert) {
+        const editor = this.fixture.createTextEditor();
+        editor._initialized = false; // to not render attributes
+        editor._initializing = true; // to not call initMarkup after onMarkupRendered option update
+
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: null
+        });
+
+        const $input = this.fixture.$element.find('.dx-texteditor-input');
+        validator.option('validationRules', [{ type: 'required' }]);
+        assert.notOk(Boolean($input.attr('aria-required')), 'input still does not have an "aria-required" attribute');
+    });
+
+    QUnit.test('Editor should toggle an "aria-required" attribute on markup render if the "required" rule is added', function(assert) {
+        const editor = this.fixture.createTextEditor();
+        editor._initialized = false;
+
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: null
+        });
+
+        const $input = this.fixture.$element.find('.dx-texteditor-input');
+        validator.option('validationRules', [{ type: 'required' }]); // initMarkup is called on endUpdate
+
+        assert.ok(Boolean($input.attr('aria-required')), '"aria-required" is rendered after editor initialization');
+    });
+});
+

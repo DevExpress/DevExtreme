@@ -25,7 +25,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: '**/node_modules'
+        path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -33,7 +33,6 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Check dx.all.d.ts is up-to-date
-      working-directory: ./packages/devextreme
       run: |
         target=./ts/dx.all.d.ts
         cp $target $target.current
@@ -64,7 +63,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: '**/node_modules'
+        path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -72,7 +71,6 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Validate declarations
-      working-directory: ./packages/devextreme
       run: npm run validate-declarations
 
   check-ts-compilation:
@@ -90,7 +88,7 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: '**/node_modules'
+        path: ./node_modules
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
@@ -98,11 +96,9 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Check sources compilation
-      working-directory: ./packages/devextreme
       run: npm run validate-ts
 
     - name: Check test cases
-      working-directory: ./packages/devextreme
       run: npm run test-typescript
 
   notify:

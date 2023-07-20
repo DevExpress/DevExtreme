@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Replace HTML insertion with text insertion where the markup is not needed</title>
+
+        <link rel="stylesheet" type="text/css" href="../../../../../../artifacts/css/dx.light.css"/>
+
+        <script type="text/javascript" src="../../../../../../artifacts/js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../../artifacts/js/dx.all.js"></script>
+    </head>
+    <body>
+        <div id="slider-with-tooltip"></div>
+        <div id="range-slider-with-tooltip"></div>
+        <div id="filter-builder"></div>
+        <div id="form"></div>
+        <script>
+            $(function () {
+                $("#slider-with-tooltip").dxSlider({
+                    min: 0,
+                    max: 100,
+                    value: 35,
+                    rtlEnabled: false,
+                    tooltip: {
+                        enabled: true,
+                        format: function (value) {
+                            return "<script>alert(1)<\/script>";
+                        },
+                        showMode: "always",
+                        position: "bottom"
+                    },
+                    label: {
+                        visible: true,
+                        format: function (value) {
+                            return "<script>alert(2)<\/script>";
+                        }
+                    }
+                });
+    
+                $("#range-slider-with-tooltip").dxRangeSlider({
+                    min: 0,
+                    max: 100,
+                    start: 15,
+                    end: 65,
+                    tooltip: {
+                        enabled: true,
+                        format: function (value) {
+                            return "<script>alert(1)<\/script>";
+                        },
+                        showMode: "always",
+                        position: "bottom"
+                    },
+                    label: {
+                        visible: true,
+                        format: function (value) {
+                            return "<script>alert(2)<\/script>";
+                        }
+                    }
+                });
+    
+                $("#filter-builder").dxFilterBuilder({
+                    fields: fields,
+                    value: filter,
+                    groupOperationDescriptions: {
+                        and: '<script>alert(3)<\/script>'
+                    }
+                });
+    
+                $("#form").dxForm({
+                    colCount: 2,
+                    formData: employee,
+                    requiredMark: '<script>alert(4)<\/script>',
+                    items: [{
+                        dataField: "HireDate",
+                        editorType: "dxDateBox",
+                        editorOptions: {
+                            value: null,
+                            width: "100%"
+                        },
+                        validationRules: [{
+                            type: "required",
+                            message: "Hire date is required"
+                        }]
+                    }]
+                });
+    
+                $("#form").dxForm("instance").validate();
+            });
+    
+            var employee = {
+                "HireDate": "1995/01/15"
+            };
+    
+            var filter = [
+                ["Product_Inventory", "<>", 0],
+                "or",
+                ["Product_Cost", "<", 200]
+            ];
+            var fields = [
+                {
+                    caption: "Cost",
+                    dataField: "Product_Cost",
+                    dataType: "number",
+                    format: "currency"
+                }, {
+                    dataField: "Product_Inventory",
+                    dataType: "number",
+                    caption: "Inventory"
+                }
+            ];
+        </script>
+    </body>
+</html>

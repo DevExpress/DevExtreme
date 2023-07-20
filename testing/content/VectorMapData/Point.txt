@@ -1,0 +1,125 @@
+{
+    "type": "FeatureCollection",
+    "bbox": [-12.5, -2.5, 10.0, 15.0],
+    "features": [{
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-12.5, 10]
+        },
+        "properties": {
+            "Name": "Figure-1",
+            "Count": 10,
+            "Date": "2010-12-09",
+            "Ratio": 1.12
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-7.5, 12.5]
+        },
+        "properties": {
+            "Name": "Figure-2",
+            "Count": 30,
+            "Date": "2011-11-12",
+            "Ratio": 3.456
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-2.5, 10]
+        },
+        "properties": {
+            "Name": "Figure-3",
+            "Count": 25,
+            "Date": "2009-02-01",
+            "Ratio": 8.231
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-5, 5]
+        },
+        "properties": {
+            "Name": "Figure-4",
+            "Count": 15,
+            "Date": "2010-05-24",
+            "Ratio": 10.2
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.5, 5]
+        },
+        "properties": {
+            "Name": "Figure-5",
+            "Count": 95,
+            "Date": "2009-01-19",
+            "Ratio": 43.2
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [7.5, 12.5]
+        },
+        "properties": {
+            "Name": "Figure-6",
+            "Count": 40,
+            "Date": "2008-10-12",
+            "Ratio": 87.23
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.5, 15]
+        },
+        "properties": {
+            "Name": "Figure-7",
+            "Count": 55,
+            "Date": "2008-07-14",
+            "Ratio": 5.32
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [10, 5]
+        },
+        "properties": {
+            "Name": "Figure-8",
+            "Count": 35,
+            "Date": "2009-06-08",
+            "Ratio": 9.751
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [2.5, -2.5]
+        },
+        "properties": {
+            "Name": "Figure-9",
+            "Count": 80,
+            "Date": "2010-07-07",
+            "Ratio": 10.1
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-10, 0]
+        },
+        "properties": {
+            "Name": "Figure-10",
+            "Count": 40,
+            "Date": "2008-03-10",
+            "Ratio": 12.32
+        }
+    }]
+}

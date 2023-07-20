@@ -27,7 +27,7 @@ jobs:
       - name: Restore npm cache
         uses: actions/cache@v3
         with:
-          path: '**/node_modules'
+          path: ./node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-modules
 
@@ -39,13 +39,11 @@ jobs:
           DEVEXTREME_TEST_CI: "true"
           DOTNET_CLI_TELEMETRY_OPTOUT: "true"
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
-        working-directory: ./packages/devextreme
         run: |
           npm run build:dev
           npm run build:systemjs
 
       - name: Zip artifacts
-        working-directory: ./packages/devextreme
         run: |
           7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
 
@@ -53,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: devextreme-artifacts
-          path: packages/devextreme/artifacts.zip
+          path: artifacts.zip
           retention-days: 1
 
   qunit-tests-timezones:

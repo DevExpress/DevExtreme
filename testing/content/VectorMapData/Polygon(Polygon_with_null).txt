@@ -1,0 +1,71 @@
+{
+    "type": "FeatureCollection",
+    "bbox": [-7.5, -20.0, 22.5, 17.5],
+    "features": [{
+        "type": "Feature",
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    [15, -15],
+                    [10, -12.5],
+                    [5, -20],
+                    [2.5, -10],
+                    [-5, -15],
+                    [-7.5, -7.5],
+                    [5, 2.5],
+                    [15, 2.5],
+                    [22.5, -7.5],
+                    [15, -15]              
+                ],
+                [
+                    [7, -7.5],
+                    [10, -10],
+                    [15, -5],
+                    [10, 0],
+                    [7, -7.5]
+                ]
+            ]
+        },
+        "properties": {
+            "Name": "Figure-1",
+            "Count": 20,
+            "Date": "2008-10-11",
+            "Ratio": 12.1
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Null",
+            "coordinates": []
+        },
+        "properties": {
+            "Name": "Figure-2",
+            "Count": 30,
+            "Date": "2009-09-15",
+            "Ratio": 14.7
+        }    
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    [-7.5, 7.5],
+                    [-2.5, 10],
+                    [2.5, 7.5],
+                    [0, 0],
+                    [-5, -2.5],
+                    [-7.5, 7.5]             
+                ]
+            ]
+        },
+        "properties": {
+            "Name": "Figure-3",
+            "Count": 40,
+            "Date": "2010-07-20",
+            "Ratio": 15.9
+        }    
+    }]
+}
+	

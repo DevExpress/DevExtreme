@@ -1,0 +1,12 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "lib": [
+            "es2019"
+        ]
+    },
+    "include": [
+        "./*.ts"
+    ]
+}

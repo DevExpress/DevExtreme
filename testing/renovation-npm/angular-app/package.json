@@ -1,0 +1,39 @@
+{
+  "name": "angular-app",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --port 3000",
+    "build": "ng build"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "12.2.17",
+    "@angular/common": "12.2.17",
+    "@angular/compiler": "12.2.17",
+    "@angular/core": "12.2.17",
+    "@angular/forms": "12.2.17",
+    "@angular/platform-browser": "12.2.17",
+    "@angular/platform-browser-dynamic": "12.2.17",
+    "@angular/router": "12.2.17",
+    "@devextreme/angular": "file:devextreme-angular-22.1.0-dev.tgz",
+    "devextreme": "file:devextreme-22.1.0-dev.tgz",
+    "rxjs": "~6.6.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.11.5"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "12.2.18",
+    "@angular/cli": "12.2.18",
+    "@angular/compiler-cli": "12.2.17",
+    "@types/jasmine": "3.10.7",
+    "@types/node": "12.20.55",
+    "jasmine-core": "3.99.1",
+    "karma": "6.4.1",
+    "karma-chrome-launcher": "3.1.1",
+    "karma-coverage": "2.2.0",
+    "karma-jasmine": "4.0.2",
+    "karma-jasmine-html-reporter": "1.7.0",
+    "typescript": "4.3.5"
+  }
+}

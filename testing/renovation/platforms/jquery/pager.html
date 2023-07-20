@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pager Tests Container</title>
+
+    <link rel="dx-theme" data-theme="generic.light" href="../../../../artifacts/css/dx.light.css" data-active="true">
+    <link rel="dx-theme" data-theme="material.blue.light" href="../../../../artifacts/css/dx.material.blue.light.css"
+        data-active="false">
+
+    <script type="text/javascript" src="../../../../artifacts/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../../artifacts/js/dx.all.js"></script>
+</head>
+
+<body>
+    <div id="container">
+    </div>
+    <div id="otherContainer">
+    </div>
+</body>
+
+</html>
+<script>
+    $(() => {
+        const pager = $('#container')
+            .dxPager({
+                totalCount: 100,
+                pageCount: 100 / 5,
+                gridCompatibility: false,
+                showPageSizes: true,
+                pageSizes: [5, 10, 20],
+
+                pageSizeChanged: function(pageSize) {
+                    pager.option('pageCount', pager.option('totalCount') / pageSize)
+                }
+            })
+            .dxPager('instance');
+    })
+</script>

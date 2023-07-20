@@ -1,0 +1,62 @@
+#!/usr/bin/env node
+
+const http = require('http');
+const { join } = require('path');
+const { spawn } = require('child_process');
+const { platform } = require('os');
+const { env, versions } = require('process');
+const PORT = require('./../ports.json').qunit;
+
+if(parseInt(versions.node.split('.')[0]) < 6) {
+    throw 'Node version is too low';
+}
+
+execRunner();
+
+function execRunner () {
+    spawn(
+        'dotnet',
+        [ join(__dirname, 'runner/bin/runner.dll') ],
+        { stdio: 'inherit', shell: true }
+    );
+
+    waitForRunner();
+}
+
+function waitForRunner() {
+    const timestamp = Date.now();
+
+    http
+        .request({ port: PORT, family: 4 }, openBrowser)
+        .on('error', () => setTimeout(
+            () => {
+                console.log('waiting...');
+                waitForRunner();
+            },
+            Math.max(0, 300 - Date.now() + timestamp)
+        ))
+        .end();
+}
+
+function openBrowser() {
+    spawn(
+        getBrowserCommand(),
+        [ 'http://localhost:' + PORT ],
+        { shell: true, detached: true }
+    );
+}
+
+function getBrowserCommand() {
+    switch(platform()) {
+        case 'win32':
+            return 'start';
+
+        case 'darwin':
+            return 'open';
+
+        case 'linux':
+            return 'xdg-open';
+    }
+
+    throw 'Not implemented';
+}

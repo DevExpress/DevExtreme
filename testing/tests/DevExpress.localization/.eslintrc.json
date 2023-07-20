@@ -1,0 +1,12 @@
+{
+  "overrides": [
+    {
+      "files": [
+        "*.js"
+      ],
+      "rules": {
+        "i18n/no-russian-character": "warn"
+      }
+    }
+  ]
+}
