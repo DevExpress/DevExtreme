@@ -592,6 +592,45 @@ QUnit.module('Strategy', moduleConfig, () => {
             assert.ok($endDateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
         });
     });
+
+    QUnit.test('DateRangeBox value selected by click should be serialized (T1178899)', function(assert) {
+        this.reinit({
+            dateSerializationFormat: 'yyyy-MM-dd',
+            value: [new Date('2023/07/20'), new Date('2023/07/25')]
+        });
+        this.instance.open();
+
+        const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+        $startDateCell.trigger('dxclick');
+
+        assert.deepEqual(this.instance.option('startDate'), '2023-07-15', 'start date is serialized');
+
+        const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(22);
+        $endDateCell.trigger('dxclick');
+
+        assert.deepEqual(this.instance.option('endDate'), '2023-07-17', 'end date is serialized');
+    });
+
+    QUnit.test('DateRangeBox value selected by enter key should be serialized (T1178899)', function(assert) {
+        this.reinit({
+            dateSerializationFormat: 'yyyy-MM-dd',
+            value: [new Date('2023/07/20'), new Date('2023/07/25')]
+        });
+        this.instance.open();
+
+        const $startDateInput = $(this.instance.startDateField());
+        const $endDateInput = $(this.instance.endDateField());
+        let keyboard = keyboardMock($startDateInput);
+
+        keyboard.press('arrowleft').press('enter');
+
+        assert.deepEqual(this.instance.option('startDate'), '2023-07-19', 'start date is serialized');
+
+        keyboard = keyboardMock($endDateInput);
+        keyboard.press('arrowright').press('enter');
+
+        assert.deepEqual(this.instance.option('endDate'), '2023-07-26', 'end date is serialized');
+    });
 });
 
 QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig, () => {
