@@ -11,6 +11,8 @@
 
 .dx-tabs {
   .dx-tabs-nav-button {
+    width: $generic-tabs-nav-button-width;
+    padding: 0;
     background-color: $tabs-tab-bg;
     color: $tabs-border-color;
     border-radius: 0;
@@ -58,6 +60,7 @@
 
 .dx-tabs-vertical {
   .dx-tabs-nav-button {
+    width: 100%;
     height: $generic-tabs-nav-button-height;
     border-color: $tabs-border-color;
 

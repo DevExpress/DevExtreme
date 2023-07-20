@@ -55,8 +55,8 @@
                 const longtabs = [
                     { text: 'Tab', icon: 'plus' },
                     { text: 'Tab', icon: 'plus' },
-                    { text: 'TabTabTabTab', icon: 'user' },
-                    { text: 'TabTabTabTabTabTabTabTab', icon: 'plus', disabled: true },
+                    { text: 'Tab One', icon: 'user' },
+                    { text: 'Tab', icon: 'plus', disabled: true },
                     { text: 'Tab', icon: 'plus', disabled: true },
                     { text: 'Tab', icon: 'plus' },
                     { text: 'Tab', icon: 'plus' },
@@ -67,12 +67,12 @@
                 const instance = $('#tabs').dxTabs({
                     dataSource: longtabs,
                     orientation: 'vertical',
-                    selectedIndex: 4,
+                    selectedIndex: longtabs.length - 1,
                     // selectOnFocus: true,
                     showNavButtons: true,
                     scrollByContent: true,
-                    // height: 300,
-                    // width: 200,
+                    height: 300,
+                    // width: 450,
                 }).dxTabs('instance');
 
                 // setTimeout(() => {

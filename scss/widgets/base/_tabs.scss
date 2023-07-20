@@ -3,9 +3,6 @@
 // adduse
 
 
-$nav-button-width: 25px;
-$icon-size: 16px;
-
 @mixin dx-tabs-link() {
   a {
     position: absolute;
@@ -64,8 +61,6 @@ $icon-size: 16px;
 
   .dx-icon {
     display: inline-block;
-    width: $icon-size;
-    height: $icon-size;
     -webkit-user-drag: none;
   }
 }
@@ -92,8 +87,10 @@ $icon-size: 16px;
 }
 
 .dx-tabs-nav-button {
-  width: $nav-button-width;
-  padding: 0;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
 }
 
 .dx-tabs-vertical {
@@ -107,9 +104,6 @@ $icon-size: 16px;
   }
 
   .dx-tabs-nav-button {
-    width: 100%;
-    flex-shrink: 0;
-
     .dx-icon {
       transform: rotate(90deg);
     }
@@ -117,6 +111,5 @@ $icon-size: 16px;
 
   .dx-tab {
     justify-content: flex-start;
-    min-width: 90px;
   }
 }

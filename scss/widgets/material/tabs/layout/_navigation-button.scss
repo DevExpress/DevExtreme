@@ -6,10 +6,10 @@
 
 
 .dx-tabs-nav-button {
-  align-self: stretch;
   border: none;
   background-color: $tabs-tab-bg;
   height: $material-tab-height;
+  min-width: unset;
   border-radius: 0;
   box-shadow: none;
 
@@ -23,8 +23,11 @@
     }
   }
 
-  .dx-button-content {
-    padding: 0;
+
+  &.dx-button-has-icon .dx-icon {
+    width: $material-tab-nav-button-icon-width;
+    height: $material-tab-nav-button-icon-height;
+    font-size: $material-tab-nav-button-icon-font-size;
   }
 
   &.dx-state-active {
@@ -38,5 +41,16 @@
     .dx-button-content {
       opacity: $tabs-tab-button-disabled-opacity;
     }
+  }
+
+  .dx-button-content {
+    flex: unset;
+    padding: $material-tab-nav-button-content-padding;
+  }
+}
+
+.dx-tabs-vertical {
+  .dx-tabs-nav-button {
+    padding: $material-tab-vertical-nav-button-content-padding;
   }
 }
