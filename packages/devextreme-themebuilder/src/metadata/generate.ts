@@ -4,7 +4,7 @@ import MetadataCollector from './collector';
 import DependencyCollector from './dependency-collector';
 import { version } from '../../../devextreme/build/gulp/context';
 import { resolveDataUri } from '../../../devextreme/build/gulp/gulp-data-uri';
-import { browserslist } from '../../package.json';
+import { browserslist } from '../../../devextreme/package.json';
 
 const stylesDirectory = path.resolve(__dirname, '../../../devextreme/scss');
 const stylesDestinationDirectory = './src/data/scss';
