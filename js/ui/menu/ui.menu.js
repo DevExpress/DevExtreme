@@ -696,7 +696,8 @@ class Menu extends MenuBase {
         const rtlEnabled = this.option('rtlEnabled');
         const submenuPosition = {
             collision: 'flip',
-            of: $rootItem
+            of: $rootItem,
+            precise: true,
         };
 
         switch(submenuDirection) {

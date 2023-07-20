@@ -97,10 +97,10 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(getHeight(delimiter), 2, 'ok');
+        assert.equal(getHeight(delimiter), 3, 'ok');
         assert.notEqual(getWidth(delimiter), 0, 'ok');
-        assert.roughEqual($(submenu._overlay.content()).offset().left + 1, delimiter.offset().left, 1, 'ok');
-        assert.roughEqual($(submenu._overlay.content()).offset().top - 1, delimiter.offset().top, 1, 'ok');
+        assert.roughEqual($(submenu._overlay.content()).offset().left + 1, delimiter.offset().left, 1.01, 'ok');
+        assert.roughEqual($(submenu._overlay.content()).offset().top - 2.5, delimiter.offset().top, 1.01, 'ok');
     });
 
     QUnit.test('Render vertical content delimiter', function(assert) {
@@ -116,10 +116,10 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(getWidth(delimiter), 2, 'ok');
+        assert.equal(getWidth(delimiter), 3, 'ok');
         assert.notEqual(getHeight(delimiter), 0, 'ok');
-        assert.roughEqual($(submenu._overlay.content()).offset().left - 1, delimiter.offset().left, 1, 'ok');
-        assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1, 'ok');
+        assert.roughEqual($(submenu._overlay.content()).offset().left - 2.5, delimiter.offset().left, 1.01, 'ok');
+        assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1.01, 'ok');
     });
 
     QUnit.test('Render horizontal rtl content delimiter', function(assert) {
@@ -135,10 +135,10 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(getHeight(delimiter), 2, 'ok');
+        assert.equal(getHeight(delimiter), 3, 'ok');
         assert.notEqual(getWidth(delimiter), 0, 'ok');
-        assert.roughEqual(rootMenuItem.offset().left + 1, delimiter.offset().left, 1, 'ok');
-        assert.roughEqual($(submenu._overlay.content()).offset().top - 1, delimiter.offset().top, 1, 'ok');
+        assert.roughEqual(rootMenuItem.offset().left + 1, delimiter.offset().left, 1.01, 'ok');
+        assert.roughEqual($(submenu._overlay.content()).offset().top - 2.5, delimiter.offset().top, 1.01, 'ok');
     });
 
     QUnit.test('Render vertical rtl content delimiter', function(assert) {
@@ -154,10 +154,10 @@ QUnit.module('Render content delimiters', {
         const delimiter = submenu.$contentDelimiter;
         assert.ok(delimiter);
         assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
-        assert.equal(getWidth(delimiter), 2, 'ok');
+        assert.equal(getWidth(delimiter), 3, 'ok');
         assert.notEqual(getHeight(delimiter), 0, 'ok');
-        assert.roughEqual(rootMenuItem.offset().left - 1, delimiter.offset().left, 1, 'ok');
-        assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1, 'ok');
+        assert.roughEqual(rootMenuItem.offset().left - 2.5, delimiter.offset().left, 1.01, 'ok');
+        assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1.01, 'ok');
     });
 
     QUnit.test('container border should not be hidden when non-top level submenu hides', function(assert) {
