@@ -1091,6 +1091,13 @@ export class ColumnsView extends viewWithColumnStateMixin {
     setWidth($cols, 'auto');
 
     columns.forEach((column, columnIndex) => {
+      /*
+      Probably we do not need this if statement. It seems like there is no point to set
+      min-width, width and max-width for each cell, beacuse below width for cols in colgroup is set.
+      Style for cols applies to all td elements.
+
+      Also check _createCell method because min-width, width and max-width are also set there.
+      */
       if (columnAutoWidth && column.width && !column.command) {
         const width = getWidthStyle(column.visibleWidth || column.width);
         const minWidth = getWidthStyle(column.minWidth || width);
