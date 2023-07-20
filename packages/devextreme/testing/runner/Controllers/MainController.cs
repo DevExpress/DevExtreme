@@ -199,7 +199,7 @@ namespace Runner.Controllers
 
         public ContentResult DisplayResults()
         {
-            var xslUrl = Url.Content("~/testing/content/unittests.xsl");
+            var xslUrl = Url.Content("~/packages/devextreme/testing/content/unittests.xsl");
             var xml = new StringBuilder();
             xml.AppendLine("<?xml version=\"1.0\"?>");
             xml.AppendLine("<?xml-stylesheet type=\"text/xsl\" href=\"" + xslUrl + "\"?>");
