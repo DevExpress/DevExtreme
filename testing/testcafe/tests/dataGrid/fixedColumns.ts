@@ -1,5 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import DataGrid from '../../model/dataGrid';
@@ -202,3 +203,44 @@ test('Hovering over a row should work correctly when there is a fixed column and
 
   await t.wait(200);
 });
+
+// T1177143
+safeSizeTest('Fixed to the right columns should appear when any column has undefined or 0 width', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await takeScreenshot('T1177143-right-fixed-column-with-no-width-columns-1.png', dataGrid.element);
+
+  await dataGrid.scrollTo({ x: 5000 });
+
+  await takeScreenshot('T1177143-right-fixed-column-with-no-width-columns-2.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+  columnAutoWidth: false,
+  dataSource: [{
+    Column1: 'a',
+    Column2: 'b',
+    Column3: 'b',
+    Column4: 'c',
+    Column5: 'd',
+    Column6: 'e',
+    Column7: 'f',
+    Column8: 'g',
+  }],
+  columns: [
+    {
+      dataField: 'Column1', fixed: true, fixedPosition: 'right', width: 100,
+    },
+    { dataField: 'Column2', width: undefined },
+    { dataField: 'Column3', width: 0 },
+    { dataField: 'Column4', width: 220 },
+    { dataField: 'Column5', width: 240 },
+    { dataField: 'Column6', width: 240 },
+    { dataField: 'Column7', width: 0 },
+    { dataField: 'Column8', width: 270 },
+  ],
+}));
