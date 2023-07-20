@@ -2,6 +2,7 @@
 @use "../../../base/icons" as *;
 @use "../variables/sizes" as *;
 @use "../variables/colors" as *;
+@use "../mixins" as *;
 
 
 .dx-tab {
@@ -16,18 +17,14 @@
   &.dx-tab-selected {
     color: $tabs-tab-selected-color;
 
-    .dx-icon {
-      color: $tabs-tab-icon-selected-color;
+    @include dx-tabs-border-mixin(bottom, $tabs-selected-tab-border-color);
+
+    &.dx-state-disabled {
+      @include dx-tabs-border-mixin(bottom, $tabs-disabled-tab-border-color);
     }
 
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      height: 2px;
-      left: 0;
-      right: 0;
-      background-color: $tabs-selected-tab-bottom-border-color;
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
     }
   }
 
@@ -40,18 +37,6 @@
 
     .dx-icon {
       color: $tabs-tab-icon-disabled-color;
-    }
-  }
-
-  &.dx-state-disabled.dx-tab-selected {
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      height: 2px;
-      left: 0;
-      right: 0;
-      background-color: $tabs-disabled-tab-bottom-border-color;
     }
   }
 
@@ -76,7 +61,19 @@
 }
 
 .dx-tabs-vertical {
-  .dx-tab-text.dx-icon {
-    @include dx-icon-margin($material-base-icon-margin-right);
+  .dx-tab-selected {
+    @include dx-tabs-border-mixin(left, $tabs-selected-tab-border-color);
+
+    &.dx-state-disabled {
+      @include dx-tabs-border-mixin(left, $tabs-disabled-tab-border-color);
+    }
+  }
+
+  .dx-tab-text {
+    flex-direction: row;
+  
+    .dx-icon {
+      @include dx-icon-margin($material-base-icon-margin-right);
+    }
   }
 }

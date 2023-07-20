@@ -26,16 +26,16 @@ $tabs-tab-selected-color: $base-accent !default;
 $tabs-tab-disabled-color: color.change($tabs-tab-color, $alpha: 0.13) !default;
 
 /**
-* $name 40. Selected tab bottom border color
+* $name 40. Selected tab border color
 * $type color
 */
-$tabs-selected-tab-bottom-border-color: $base-accent !default;
+$tabs-selected-tab-border-color: $base-accent !default;
 
 /**
-* $name 50. Disabled tab bottom border color
+* $name 50. Disabled tab border color
 * $type color
 */
-$tabs-disabled-tab-bottom-border-color: null !default;
+$tabs-disabled-tab-border-color: null !default;
 
 /**
 * $name 60. Tab background color
@@ -76,9 +76,9 @@ $tabs-focused-tab-bg-color: color.change($base-accent, $alpha: 0.12) !default;
 $tabs-active-tab-bg-color: color.change($base-accent, $alpha: 0.16) !default;
 
 @if $mode == "light" {
-  $tabs-disabled-tab-bottom-border-color: color.change($tabs-tab-color, $alpha: 0.13) !default;
+  $tabs-disabled-tab-border-color: color.change($tabs-tab-color, $alpha: 0.13) !default;
 }
 
 @if $mode == "dark" {
-  $tabs-disabled-tab-bottom-border-color: color.change($tabs-tab-color, $alpha: 0.4) !default;
+  $tabs-disabled-tab-border-color: color.change($tabs-tab-color, $alpha: 0.4) !default;
 }
