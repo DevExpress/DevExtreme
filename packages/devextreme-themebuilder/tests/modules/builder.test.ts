@@ -1,8 +1,11 @@
 import { readFileSync } from 'fs';
 import * as path from 'path';
+import CleanCSS from 'clean-css';
 import { buildTheme } from '../../src/modules/builder';
 import commands from '../../src/modules/commands';
 import { version, metadata } from '../../src/data/metadata/dx-theme-builder-metadata';
+import commonOptions from '../../src/data/clean-css-options.json';
+
 import {
   cleanCss,
 } from '../../src/modules/post-compiler';
@@ -118,10 +121,13 @@ describe('Builder integration tests', () => {
     };
 
     return buildTheme(config).then(async (result) => {
-      const themeBuilderCss = normalizeCss(result.css);
+      const cleaner = new CleanCSS(commonOptions as any);
+
+      const themeBuilderCss = normalizeCss((await cleaner.minify(result.css)).styles);
       const cssPath = path.resolve(__dirname, '../../../devextreme/artifacts/css/dx.light.css');
       const distributionCss = normalizeCss(readFileSync(cssPath, 'utf8'));
-      expect(await cleanCss(themeBuilderCss)).toBe(distributionCss);
+
+      expect(themeBuilderCss).toBe(distributionCss);
     });
   }, buildTimeout);
 
@@ -134,11 +140,13 @@ describe('Builder integration tests', () => {
     };
 
     return buildTheme(config).then(async (result) => {
-      const themeBuilderCss = normalizeCss(result.css);
+      const cleaner = new CleanCSS(commonOptions as any);
+
+      const themeBuilderCss = normalizeCss((await cleaner.minify(result.css)).styles);
       const cssPath = path.resolve(__dirname, '../../../devextreme/artifacts/css/dx.material.blue.light.css');
       const distributionCss = normalizeCss(readFileSync(cssPath, 'utf8'));
 
-      expect(await cleanCss(themeBuilderCss)).toBe(distributionCss);
+      expect(themeBuilderCss).toBe(distributionCss);
     });
   }, buildTimeout);
 });
