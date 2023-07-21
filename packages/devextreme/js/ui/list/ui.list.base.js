@@ -30,6 +30,7 @@ import { getElementMargin } from '../../renovation/ui/scroll_view/utils/get_elem
 import Guid from '../../core/guid';
 
 const LIST_CLASS = 'dx-list';
+const LIST_ITEMS_CLASS = 'dx-list-items';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTOR = '.' + LIST_ITEM_CLASS;
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
@@ -269,6 +270,17 @@ export const ListBase = CollectionWidget.inherit({
         return this._$container;
     },
 
+    _getItemsContainer: function() {
+        return this._$listContainer;
+    },
+
+    _cleanItemContainer: function() {
+        this.callBase();
+        const listContainer = this._getItemsContainer();
+        $(listContainer).empty();
+        listContainer.appendTo(this._$container);
+    },
+
     _saveSelectionChangeEvent: function(e) {
         this._selectionChangeEventInstance = e;
     },
@@ -279,9 +291,9 @@ export const ListBase = CollectionWidget.inherit({
 
     _refreshItemElements: function() {
         if(!this.option('grouped')) {
-            this._itemElementsCache = this._itemContainer().children(this._itemSelector());
+            this._itemElementsCache = this._getItemsContainer().children(this._itemSelector());
         } else {
-            this._itemElementsCache = this._itemContainer()
+            this._itemElementsCache = this._getItemsContainer()
                 .children('.' + LIST_GROUP_CLASS)
                 .children('.' + LIST_GROUP_BODY_CLASS)
                 .children(this._itemSelector());
@@ -332,6 +344,7 @@ export const ListBase = CollectionWidget.inherit({
         this._dataController.resetDataSourcePageIndex();
         this._$container = this.$element();
 
+        this._$listContainer = $('<div>').addClass(LIST_ITEMS_CLASS);
         this._initScrollView();
 
         this._feedbackShowTimeout = LIST_FEEDBACK_SHOW_TIMEOUT;
@@ -360,7 +373,7 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _getGroupContainerByIndex: function(groupIndex) {
-        return this._itemContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex).find(`.${LIST_GROUP_BODY_CLASS}`);
+        return this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex).find(`.${LIST_GROUP_BODY_CLASS}`);
     },
 
     _dataSourceFromUrlLoadMode: function() {
@@ -393,11 +406,15 @@ export const ListBase = CollectionWidget.inherit({
 
         this._$container = $(this._scrollView.content());
 
-        if(this.option('wrapItemText')) {
-            this._$container.addClass(WRAP_ITEM_TEXT_CLASS);
-        }
+        this._$listContainer.appendTo(this._$container);
+
+        this._toggleWrapItemText(this.option('wrapItemText'));
 
         this._createScrollViewActions();
+    },
+
+    _toggleWrapItemText: function(value) {
+        this._$listContainer.toggleClass(WRAP_ITEM_TEXT_CLASS, value);
     },
 
     _createScrollViewActions: function() {
@@ -676,7 +693,7 @@ export const ListBase = CollectionWidget.inherit({
             label: undefined
         };
 
-        this.setAria(listArea);
+        this.setAria(listArea, this._$listContainer);
     },
 
     _focusTarget: function() {
@@ -750,7 +767,7 @@ export const ListBase = CollectionWidget.inherit({
     _renderGroup: function(index, group) {
         const $groupElement = $('<div>')
             .addClass(LIST_GROUP_CLASS)
-            .appendTo(this._itemContainer());
+            .appendTo(this._getItemsContainer());
 
         const id = `dx-${new Guid().toString()}`;
         const groupAria = {
@@ -947,7 +964,7 @@ export const ListBase = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case 'wrapItemText':
-                this._$container.toggleClass(WRAP_ITEM_TEXT_CLASS, args.value);
+                this._toggleWrapItemText(args.value);
                 break;
             case 'onGroupRendered':
                 this._createGroupRenderAction();
@@ -999,7 +1016,7 @@ export const ListBase = CollectionWidget.inherit({
 
     expandGroup: function(groupIndex) {
         const deferred = new Deferred();
-        const $group = this._itemContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex);
+        const $group = this._getItemsContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex);
 
         this._collapseGroupHandler($group, false).done((function() {
             deferred.resolveWith(this);
@@ -1010,7 +1027,7 @@ export const ListBase = CollectionWidget.inherit({
 
     collapseGroup: function(groupIndex) {
         const deferred = new Deferred();
-        const $group = this._itemContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex);
+        const $group = this._getItemsContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex);
 
         this._collapseGroupHandler($group, true).done((function() {
             deferred.resolveWith(this);

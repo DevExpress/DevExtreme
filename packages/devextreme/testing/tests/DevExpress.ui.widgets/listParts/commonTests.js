@@ -952,8 +952,7 @@ QUnit.module('options', moduleSetup, () => {
             wrapItemText: true
         });
         const instance = element.dxList('instance');
-        const $container = instance._itemContainer();
-
+        const $container = instance._getItemsContainer();
         assert.ok($container.hasClass('dx-wrap-item-text'), 'class was added');
 
         instance.option('wrapItemText', false);
@@ -971,6 +970,7 @@ QUnit.module('options', moduleSetup, () => {
                 wrapItemText: true
             });
             const $itemContent = $element.find('.dx-list-item-content');
+
             assert.strictEqual($itemContent.css('whiteSpace'), 'normal', 'white-space: normal');
         });
     });
@@ -3968,7 +3968,7 @@ QUnit.module('keyboard navigation', {
 
         instance.registerKeyHandler('enter', handler);
 
-        const $itemContainer = $element.find(`.${LIST_ITEM_CLASS}`).eq(0).parent();
+        const $itemContainer = $element.find(`.${LIST_ITEM_CLASS}`).eq(0).parent().parent();
 
         $itemContainer.trigger($.Event('keydown', { key: 'Enter' }));
         assert.equal(handler.callCount, 0);
@@ -4189,9 +4189,12 @@ if(devices.real().deviceType === 'desktop') {
                         }, options))
                 });
                 this.clock = sinon.useFakeTimers();
-                this.expectedItemContainerAttrs = {
-                    role: 'listbox',
+
+                this.expectedContainerAttrs = {
                     tabindex: '0',
+                };
+                this.expectedItemsContainerAttrs = {
+                    role: 'listbox',
                     'aria-label': 'Items'
                 };
             },
@@ -4205,11 +4208,11 @@ if(devices.real().deviceType === 'desktop') {
 
                 $(helper.$itemContainer).trigger('focusin');
 
-                helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
+                helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
                 helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option' });
 
                 helper.$widget.focusout();
-                helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
+                helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
                 helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option' });
             });
 
@@ -4224,18 +4227,21 @@ if(devices.real().deviceType === 'desktop') {
                 eventsEngine.trigger($item_2, 'dxpointerdown');
                 this.clock.tick(10);
 
-                helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
+                helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkItemsAttributes([2], { attributes: ['aria-selected'], focusedItemIndex: 2, role: 'option' });
 
                 helper.widget.option('focusedElement', null);
-                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
+                helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkItemsAttributes([2], { attributes: ['aria-selected'], role: 'option' });
             });
 
             QUnit.test('Selected: ["Item_1", "Item_3"] -> select "Item_2" by click', function() {
                 helper.createWidget({ selectedItemKeys: ['Item_1', 'Item_3'], keyExpr: 'text', selectionMode: 'multiple' });
 
-                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
+                helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkItemsAttributes([0, 2], { attributes: ['aria-selected'], role: 'option' });
 
                 const $item_1 = $(helper.getItems().eq(1));
@@ -4243,7 +4249,8 @@ if(devices.real().deviceType === 'desktop') {
                 eventsEngine.trigger($item_1, 'dxpointerdown');
                 this.clock.tick(10);
 
-                helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
+                helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkItemsAttributes([0, 1, 2], { attributes: ['aria-selected'], focusedItemIndex: 1, role: 'option' });
             });
         });
