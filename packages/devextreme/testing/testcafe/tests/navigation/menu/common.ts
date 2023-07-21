@@ -8,6 +8,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
 import Menu from '../../../model/menu';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Menu_common`
   .page(url(__dirname, '../../container.html'));
@@ -73,4 +74,154 @@ test('Menu items render', async (t) => {
   ] as Item[];
 
   return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' }, '#menu');
+});
+
+safeSizeTest('Menu delimiter appearance when orientation is horizontal', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const menu = new Menu();
+
+  await t
+    .click(menu.getItem(1))
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, submenu more than root item.png');
+
+  await t
+    .click(menu.getItem(2))
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, submenu less than root item.png');
+
+  await setAttribute('#container', 'style', 'padding-top: 450px;');
+
+  await t
+    .click(menu.getItem(1))
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, submenu more than root item, bottom collision.png');
+
+  await t
+    .click(menu.getItem(2))
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, submenu less than root item, bottom collision.png');
+
+  await setAttribute('#container', 'style', 'padding-left: 100px;');
+
+  await t
+    .click(menu.getItem(3))
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, right collision.png');
+
+  await setAttribute('#container', 'style', 'padding-top: 450px; padding-left: 100px;');
+
+  await t
+    .click(menu.getItem(2))
+    .click(menu.getItem(3));
+
+  await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, bottom right collision.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [500, 500]).before(async () => {
+  const menuItems = [{
+    text: 'Video Players',
+  }, {
+    text: 'Televisions',
+    items: [{
+      id: '2_1',
+      text: 'SuperLCD 42',
+    }, {
+      id: '2_2',
+      text: 'SuperLED 42',
+    }],
+  }, {
+    text: 'Monitors',
+    items: [{
+      id: '3_1',
+      text: '19"',
+    }, {
+      id: '3_2',
+      text: '21"',
+    }],
+  }, {
+    text: 'Projectors',
+    items: [{
+      id: '4_1',
+      text: 'Projector Plus',
+    }],
+  }] as Item[];
+
+  return createWidget('dxMenu', { items: menuItems }, '#container');
+});
+
+safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const menu = new Menu();
+
+  await t
+    .click(menu.getItem(2))
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical.png');
+
+  await setAttribute('#container', 'style', 'padding-top: 400px;');
+
+  await t
+    .click(menu.getItem(1))
+    .pressKey('down')
+    .pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, bottom collision.png');
+
+  await setAttribute('#container', 'style', 'padding-top: 0px; padding-left: 350px;');
+
+  await t
+    .click(menu.getItem(2));
+
+  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, right collision.png');
+
+  await setAttribute('#container', 'style', 'padding-top: 400px; padding-left: 350px;');
+
+  await t
+    .click(menu.getItem(0))
+    .click(menu.getItem(1));
+
+  await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, bottom right collision.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [500, 500]).before(async () => {
+  const menuItems = [{
+    text: 'Video Players',
+  }, {
+    text: 'Televisions',
+    items: [{
+      id: '2_1',
+      text: 'SuperLCD 42',
+    }, {
+      id: '2_2',
+      text: 'SuperLED 42',
+    }],
+  }, {
+    text: 'Monitors',
+    items: [{
+      id: '3_1',
+      text: '19"',
+    }, {
+      id: '3_2',
+      text: '21"',
+    }],
+  }, {
+    text: 'Projectors',
+    items: [{
+      id: '4_1',
+      text: 'Projector Plus',
+    }],
+  }] as Item[];
+
+  return createWidget('dxMenu', { items: menuItems, orientation: 'vertical' }, '#container');
 });
