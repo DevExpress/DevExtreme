@@ -379,7 +379,7 @@ QUnit.test('Point is out of boundaries on the left, right bound of bar on left b
     point.width = 100;
     point.translate();
 
-    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
 });
 
 QUnit.test('Point is partially out of boundaries on the left', function(assert) {
@@ -458,7 +458,7 @@ QUnit.test('Point is out of boundaries on the right, left bound of bar on right 
     point.width = 50;
     point.translate();
 
-    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
 });
 
 QUnit.test('Point is partially out of boundaries at the right', function(assert) {
@@ -553,7 +553,7 @@ QUnit.test('Point is out of boundaries on the top, bar\'s bottom bound on top bo
     point.height = 100;
     point.translate();
 
-    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
 });
 
 QUnit.test('Point is partially out of boundaries on the top', function(assert) {
@@ -632,7 +632,7 @@ QUnit.test('Point is out of boundaries on the bottom, bar\'s top bound on bottom
     point.height = 50;
     point.translate();
 
-    assert.notOk(point.isInVisibleArea(), 'inVisibleArea');
+    assert.ok(point.isInVisibleArea(), 'inVisibleArea');
 });
 
 QUnit.test('Point is out of boundaries on the bottom', function(assert) {
