@@ -23,7 +23,7 @@ $tabs-tab-selected-color: $base-accent !default;
 * $name 30. Disabled tab color
 * $type color
 */
-$tabs-tab-disabled-color: color.change($tabs-tab-color, $alpha: 0.13) !default;
+$tabs-tab-disabled-color: color.change($tabs-tab-color, $alpha: 0.32) !default;
 
 /**
 * $name 40. Selected tab border color
@@ -54,7 +54,7 @@ $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
 * $name 80. Disabled tab icon color
 * $type color
 */
-$tabs-tab-icon-disabled-color: color.change($tabs-tab-icon-color, $alpha: 0.13) !default;
+$tabs-tab-icon-disabled-color: color.change($tabs-tab-icon-color, $alpha: 0.32) !default;
 $tabs-tab-button-disabled-opacity: 0 !default;
 
 /**
