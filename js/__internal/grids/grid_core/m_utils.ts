@@ -192,7 +192,7 @@ export default {
         .addClass(noDataClass);
     }
 
-    if (noDataElement.parent() !== $element) {
+    if (!noDataElement.parent().is($element)) {
       noDataElement.appendTo($element);
     }
 
