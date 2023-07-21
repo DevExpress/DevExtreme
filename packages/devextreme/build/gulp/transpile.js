@@ -19,7 +19,7 @@ const through2 = require('through2');
 const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
 const { replaceWidgets, reloadConfig, renovatedComponentsPath } = require('./renovation-pipes');
-const { ifEsmPackage, writeFilePipe, replaceArtifactPath } = require('./utils');
+const { ifEsmPackage } = require('./utils');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
 
