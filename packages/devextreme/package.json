@@ -236,11 +236,6 @@
     "test-typescript": "gulp test-ts",
     "tcd-update": "tcd-update"
   },
-  "browserslist": [
-    "last 2 versions",
-    "ios > 9",
-    "> 1%"
-  ],
   "jest": {
     "modulePathIgnorePatterns": [
       "node_modules"
@@ -249,5 +244,11 @@
   "pre-commit": [
     "lint-staged",
     "pre-commit"
+  ],
+  "browserslist": [
+    "last 2 versions",
+    "ios > 9",
+    "> 1%",
+    "not dead"
   ]
 }
