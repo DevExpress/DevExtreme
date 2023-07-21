@@ -36,7 +36,7 @@ QUnit.testStart(function() {
 
 const BUTTON_HAS_TEXT_CLASS = 'dx-button-has-text';
 const BUTTON_HAS_ICON_CLASS = 'dx-button-has-icon';
-const BUTTON_BACK_CLASS = 'dx-button-back';
+const BUTTON_DANGER_CLASS = 'dx-button-danger';
 const BUTTON_SUBMIT_INPUT_CLASS = 'dx-button-submit-input';
 const BUTTON_TEXT_STYLE_CLASS = 'dx-button-mode-text';
 const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
@@ -137,8 +137,8 @@ QUnit.module('Button', function() {
         });
 
         QUnit.test('type', function(assert) {
-            this.instance.option('type', 'back');
-            assert.ok(this.element.hasClass(BUTTON_BACK_CLASS));
+            this.instance.option('type', 'danger');
+            assert.ok(this.element.hasClass(BUTTON_DANGER_CLASS));
         });
 
         QUnit.test('disabled', function(assert) {
@@ -238,14 +238,6 @@ QUnit.module('Button', function() {
         QUnit.test('Q513961', function(assert) {
             this.instance.option({ text: '123', 'icon': 'home' });
             assert.equal(this.element.find('.dx-icon-home').index(), 0);
-        });
-
-        QUnit.test('B238735: dxButton holds the shape of an arrow after you change it\'s type from back to any other', function(assert) {
-            this.instance.option('type', 'back');
-            assert.equal(this.element.hasClass(BUTTON_BACK_CLASS), true, 'back button css class removed');
-
-            this.instance.option('type', 'normal');
-            assert.equal(this.element.hasClass(BUTTON_BACK_CLASS), false, 'back button css class removed');
         });
     });
 
