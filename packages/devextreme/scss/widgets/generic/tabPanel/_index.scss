@@ -71,10 +71,6 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 
 @mixin tabpanel-shadow-mixin($accent-color, $target-class) {
   & > .dx-tabpanel-tabs {
-    .dx-tabs {
-      display: block;
-    }
-
     .dx-tab {
       &.#{$target-class} {
         box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color;
@@ -98,11 +94,18 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 .dx-tabpanel {
   > .dx-tabpanel-tabs {
     .dx-tab {
-      width: 140px;
+      flex-basis: unset;
+      min-width: 140px;
       padding: $generic-tabpanel-tabs-item-padding;
     }
 
     @include tabpanel-tab-color-mixin();
+
+    .dx-tabs-stretched {
+      .dx-tab {
+        min-width: 50px;
+      }
+    }
   }
 
   &:not(.dx-empty-collection) {
