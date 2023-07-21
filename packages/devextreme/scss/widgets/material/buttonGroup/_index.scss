@@ -9,6 +9,12 @@
 
 // adduse
 
+.dx-buttongroup {
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+}
+
 .dx-button-mode-outlined,
 .dx-button-mode-contained {
   &.dx-buttongroup-item {
@@ -44,17 +50,6 @@
 
 .dx-buttongroup-item {
   &.dx-button {
-    &.dx-button-mode-contained,
-    &.dx-button-mode-outlined {
-      &.dx-state-disabled {
-        opacity: 1;
-
-        .dx-button-content {
-          opacity: $button-disabled-icon-opacity;
-        }
-      }
-    }
-
     &.dx-button-mode-contained {
       &.dx-button-normal {
         background-color: $button-normal-bg;

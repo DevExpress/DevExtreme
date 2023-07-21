@@ -45,17 +45,6 @@
 
 .dx-buttongroup-item {
   &.dx-button {
-    &.dx-button-mode-outlined,
-    &.dx-button-mode-contained {
-      &.dx-state-disabled {
-        opacity: 1;
-
-        .dx-button-content {
-          opacity: $button-disabled-icon-opacity;
-        }
-      }
-    }
-
     &.dx-button-mode-contained {
       &.dx-button-normal {
         background-color: $button-normal-bg;

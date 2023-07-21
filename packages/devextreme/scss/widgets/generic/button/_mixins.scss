@@ -63,17 +63,6 @@ $generic-button-icon-size: $generic-base-icon-size;
   border-radius: $button-border-radius;
   border-width: $generic-button-border-weight;
   border-style: solid;
-
-  @at-root #{selector-append(".dx-state-disabled", &)},
-  .dx-state-disabled & {
-    .dx-icon {
-      opacity: $button-disabled-icon-opacity;
-    }
-
-    .dx-button-text {
-      opacity: $button-disabled-text-opacity;
-    }
-  }
 }
 
 @mixin dx-button-special-hover($hover: transparent) {

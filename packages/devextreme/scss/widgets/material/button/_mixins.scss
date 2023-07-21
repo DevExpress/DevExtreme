@@ -74,25 +74,6 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
     box-shadow: $active-shadow-color;
   }
 
-  &.dx-state-disabled {
-    background: $disabled-background-color;
-    box-shadow: none;
-
-    .dx-icon {
-      opacity: $button-disabled-icon-opacity;
-    }
-
-    &.dx-button-mode-contained {
-      .dx-icon {
-        color: $button-disabled-text-color;
-      }
-    }
-
-    .dx-button-text {
-      color: $button-disabled-text-color;
-    }
-  }
-
   .dx-inkripple-wave {
     background-color: color.change($text-color, $alpha: 0.2);
   }
@@ -107,18 +88,39 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
   border-style: solid;
 
   @include dx-button-styling-variant(
-      $button-bg,
-      $button-color,
-      $material-normal-button-shadow,
-      $button-hover-bg,
-      $material-normal-button-hovered-state-shadow,
-      $button-focused-bg,
-      $material-normal-button-focused-state-shadow,
-      $button-active-bg,
-      $material-normal-button-active-state-shadow,
-      $button-disabled-background,
-      $button-icon-color
-    );
+    $button-bg,
+    $button-color,
+    $material-normal-button-shadow,
+    $button-hover-bg,
+    $material-normal-button-hovered-state-shadow,
+    $button-focused-bg,
+    $material-normal-button-focused-state-shadow,
+    $button-active-bg,
+    $material-normal-button-active-state-shadow,
+    $button-disabled-background,
+    $button-icon-color
+  );
+
+  &.dx-state-disabled {
+    opacity: 1;
+    box-shadow: none;
+
+    .dx-icon {
+      color: $button-disabled-text-color;
+    }
+
+    .dx-button-text {
+      color: $button-disabled-text-color;
+    }
+
+    &.dx-button-mode-contained {
+      background-color: $button-disabled-background;
+    }
+
+    &.dx-button-mode-outlined {
+      border-color: $button-disabled-background;
+    }
+  }
 }
 
 @mixin dx-button-flat-color-styling($button-color, $hover-bg, $focused-bg, $active-bg) {

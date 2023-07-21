@@ -206,14 +206,6 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
     &.dx-state-active {
       border: none;
     }
-
-    &.dx-state-disabled {
-      opacity: 1;
-
-      .dx-button-content {
-        opacity: $tabs-tab-button-disabled-opacity;
-      }
-    }
   }
 
   .dx-tabs-scrollable {
