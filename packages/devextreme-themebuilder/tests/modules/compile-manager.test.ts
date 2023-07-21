@@ -50,7 +50,15 @@ describe('Compile manager - integration test on test sass', () => {
       makeSwatch: true,
       outColorScheme: 'test-theme',
     }).then((result) => {
-      expect(result.css).toBe('.dx-swatch-test-theme .dx-accordion{background-color:"Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;color:#337ab7;background-image:url(icons/icons.woff2)}.dx-swatch-test-theme .dx-accordion .from-base{background-color:transparent;color:#337ab7}');
+      expect(result.css).toBe(`.dx-swatch-test-theme .dx-accordion {
+        background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
+        color: #337ab7;
+        background-image: url(icons/icons.woff2);
+      }
+      .dx-swatch-test-theme .dx-accordion .from-base {
+        background-color: transparent;
+        color: #337ab7;
+      }`);
       expect(result.compiledMetadata).toEqual(noModificationsMeta);
     });
   });
@@ -60,7 +68,15 @@ describe('Compile manager - integration test on test sass', () => {
     return manager.compile({
       assetsBasePath: 'base-path',
     }).then((result) => {
-      expect(result.css).toBe('.dx-accordion{background-color:"Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;color:#337ab7;background-image:url(base-path/icons/icons.woff2)}.dx-accordion .from-base{background-color:transparent;color:#337ab7}');
+      expect(result.css).toBe(`.dx-accordion {
+        background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
+        color: #337ab7;
+        background-image: url(base-path/icons/icons.woff2);
+      }
+      .dx-accordion .from-base {
+        background-color: transparent;
+        color: #337ab7;
+      }`);
       expect(result.compiledMetadata).toEqual(noModificationsMeta);
     });
   });
@@ -85,7 +101,15 @@ describe('Compile manager - integration test on test sass', () => {
       bootstrapVersion: 3,
       data: '@brand-primary: red;',
     }).then((result) => {
-      expect(result.css).toBe('.dx-accordion{background-color:"Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;color:red;background-image:url(icons/icons.woff2)}.dx-accordion .from-base{background-color:transparent;color:red}');
+      expect(result.css).toBe(`.dx-accordion {
+        background-color: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
+        color: red;
+        background-image: url(icons/icons.woff2);
+      }
+      .dx-accordion .from-base {
+        background-color: transparent;
+        color: red;
+      }`);
 
       expect(result.compiledMetadata).toEqual({
         '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
@@ -103,7 +127,15 @@ describe('Compile manager - integration test on test sass', () => {
       bootstrapVersion: 4,
       data: '$primary: red;$font-family-sans-serif: sans-serif;',
     }).then((result) => {
-      expect(result.css).toBe('.dx-accordion{background-color:sans-serif;color:red;background-image:url(icons/icons.woff2)}.dx-accordion .from-base{background-color:transparent;color:red}');
+      expect(result.css).toBe(`.dx-accordion {
+        background-color: sans-serif;
+        color: red;
+        background-image: url(icons/icons.woff2);
+      }
+      .dx-accordion .from-base {
+        background-color: transparent;
+        color: red;
+      }`);
 
       expect(result.compiledMetadata).toEqual({
         '$base-font-family': 'sans-serif',
@@ -137,7 +169,7 @@ describe('Compile manager - integration test on test sass', () => {
     return expect(manager.compile({
       makeSwatch: true,
       outColorScheme: 'error for sass compiler :)',
-    })).rejects.toThrow(Error);
+    })).rejects.toThrowError(Error);
   });
 
   test('compile test bundle with removeExternalResources option', async () => {
