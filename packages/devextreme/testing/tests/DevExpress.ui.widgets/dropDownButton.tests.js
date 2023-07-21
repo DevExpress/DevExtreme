@@ -931,7 +931,7 @@ QUnit.module('list integration', {}, () => {
         });
 
         const list = getList(dropDownButton);
-        const $itemContainer = list._itemContainer();
+        const $itemContainer = list._getItemsContainer();
 
         assert.ok($itemContainer.hasClass('dx-wrap-item-text'), 'class was added');
     });

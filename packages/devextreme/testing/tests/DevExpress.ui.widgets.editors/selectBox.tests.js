@@ -75,6 +75,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
+const LIST_ITEMS_CLASS = 'dx-list-items';
 
 const KEY_DOWN = 'ArrowDown';
 const KEY_ENTER = 'Enter';
@@ -6058,7 +6059,7 @@ if(devices.real().deviceType === 'desktop') {
         ['items', 'dataSource'].forEach(dataSourcePropertyName => {
             QUnit.test(`should have correct role and aria-label if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
                 helper.createWidget({ opened: true });
-                const $listItemContainer = helper.widget._list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
+                const $listItemContainer = helper.widget._list.$element().find(`.${LIST_ITEMS_CLASS}`);
 
                 helper.checkAttributes($listItemContainer, {});
 

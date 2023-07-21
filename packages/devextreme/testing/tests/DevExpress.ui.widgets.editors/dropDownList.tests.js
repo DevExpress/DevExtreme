@@ -30,7 +30,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
 const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
-const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
+const LIST_ITEMS_CLASS = 'dx-list-items';
 
 const TIME_TO_WAIT = 500;
 
@@ -393,7 +393,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
             wrapItemText: true
         });
         const instance = $dropDownList.dxDropDownList('instance');
-        const $itemContainer = $(instance.content()).find('.dx-scrollview-content');
+        const $itemContainer = $(instance.content()).find('.dx-list-items');
 
         assert.ok($itemContainer.hasClass('dx-wrap-item-text'), 'class was added');
 
@@ -1703,30 +1703,29 @@ QUnit.module('aria accessibility', moduleConfig, () => {
 
 
     ['items', 'dataSource'].forEach(dataSource => {
+        const getItemsContainer = () => $(`.${LIST_CLASS} .${LIST_ITEMS_CLASS}`);
         QUnit.test(`list focusable element should have aria-label if data source is ${dataSource}`, function(assert) {
             const instance = $('#dropDownList').dxDropDownList({ opened: true }).dxDropDownList('instance');
-            const $scrollView = $(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`);
 
-            assert.strictEqual($scrollView.attr('aria-label'), undefined);
+            assert.strictEqual(getItemsContainer().attr('aria-label'), undefined);
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($scrollView.attr('aria-label'), 'Items');
+            assert.strictEqual(getItemsContainer().attr('aria-label'), 'Items');
 
             instance.option(dataSource, []);
-            assert.strictEqual($scrollView.attr('aria-label'), undefined);
+            assert.strictEqual(getItemsContainer().attr('aria-label'), undefined);
         });
 
         QUnit.test(`list should have correct role if data sourse is set with ${dataSource} property`, function(assert) {
             const instance = $('#dropDownList').dxDropDownList({ opened: true }).dxDropDownList('instance');
-            const $scrollView = $(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`);
 
-            assert.strictEqual($scrollView.attr('role'), undefined);
+            assert.strictEqual(getItemsContainer().attr('role'), undefined);
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($scrollView.attr('role'), 'listbox');
+            assert.strictEqual(getItemsContainer().attr('role'), 'listbox');
 
             instance.option(dataSource, []);
-            assert.strictEqual($scrollView.attr('role'), undefined);
+            assert.strictEqual(getItemsContainer().attr('role'), undefined);
         });
     });
 });
