@@ -15,7 +15,7 @@ export default class Menu extends Widget {
   constructor() {
     super(`.${CLASS.menu}`);
 
-    this.items = Selector(`.${CLASS.item}`);
+    this.items = Selector(`.${CLASS.item}`).filterVisible();
   }
 
   // eslint-disable-next-line class-methods-use-this

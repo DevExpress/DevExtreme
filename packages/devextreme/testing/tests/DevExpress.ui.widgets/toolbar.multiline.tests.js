@@ -24,7 +24,7 @@ class ToolbarTestWrapper {
             items: [{
                 location: 'before',
                 widget: 'dxButton',
-                options: { type: 'back' }
+                options: { icon: 'back' }
             }, {
                 location: 'before',
                 widget: 'dxButton',
@@ -40,7 +40,7 @@ class ToolbarTestWrapper {
             }, {
                 location: 'before',
                 widget: 'dxButton',
-                options: { type: 'back' }
+                options: { icon: 'back' }
             }, {
                 location: 'before',
                 widget: 'dxSelectBox',
@@ -48,7 +48,7 @@ class ToolbarTestWrapper {
             }, {
                 location: 'before',
                 widget: 'dxButton',
-                options: { type: 'back' }
+                options: { icon: 'back' }
             }]
         }, options));
         this._toolbar = this._$toolbar.dxToolbar('instance');

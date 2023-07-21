@@ -31,11 +31,6 @@
     "nx-cloud": "^16.0.5",
     "postcss": "^8.4.24"
   },
-  "browserslist": [
-    "last 2 versions",
-    "ios > 9",
-    "> 1%"
-  ],
   "workspaces": [
     "packages/*",
     "packages/devextreme/artifacts/npm/*",

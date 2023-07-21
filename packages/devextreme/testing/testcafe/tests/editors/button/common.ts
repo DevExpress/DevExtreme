@@ -13,7 +13,7 @@ const BUTTON_TEXT_CLASS = 'dx-button-text';
 const ICON_CLASS = 'dx-icon';
 
 const stylingModes = ['text', 'outlined', 'contained'];
-const types = ['back', 'danger', 'default', 'normal', 'success'];
+const types = ['danger', 'default', 'normal', 'success'];
 
 fixture.disablePageReloads`Button`
   .page(url(__dirname, '../../container.html'));
