@@ -31,6 +31,7 @@ import {
   EDIT_MODE_FORM,
   EDIT_MODE_ROW,
   EDITOR_CELL_CLASS,
+  FOCUSABLE_ELEMENT_SELECTOR,
   ROW_CLASS,
 } from '../editing/const';
 import modules from '../m_modules';
@@ -1343,25 +1344,15 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _updateFocus(isRenderView?) {
     this._updateFocusTimeout = setTimeout(() => {
-      const editingController = this._editingController;
-      const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
-      const isBatchEditMode = editingController.getEditMode() === EDIT_MODE_BATCH;
-
-      if (
-        (isCellEditMode && editingController.hasChanges())
-        || (isBatchEditMode && editingController.isNewRowInEditMode())
-      ) {
-        editingController._focusEditingCell();
+      if (this._needFocusEditingCell()) {
+        this._editingController._focusEditingCell();
         return;
       }
 
       let $cell = this._getFocusedCell();
-      const isEditing = editingController.isEditing();
+      const isEditing = this._editingController.isEditing();
 
-      if (
-        $cell
-        && !(this._isMasterDetailCell($cell) && !this._isRowEditMode())
-      ) {
+      if (!this._isMasterDetailCell($cell) || this._isRowEditMode()) {
         if (this._hasSkipRow($cell.parent())) {
           const direction = this._focusedCellPosition && this._focusedCellPosition.rowIndex > 0
             ? 'upArrow'
@@ -1406,6 +1397,20 @@ export class KeyboardNavigationController extends modules.ViewController {
         }
       }
     });
+  }
+
+  private _needFocusEditingCell() {
+    const isCellEditMode = this._editingController.getEditMode() === EDIT_MODE_CELL;
+    const isBatchEditMode = this._editingController.getEditMode() === EDIT_MODE_BATCH;
+
+    const cellEditModeHasChanges = isCellEditMode && this._editingController.hasChanges();
+    const isNewRowBatchEditMode = isBatchEditMode && this._editingController.isNewRowInEditMode();
+    const $cell = this._getFocusedCell();
+
+    return (
+      $cell.children().length === 0
+      || $cell.find(FOCUSABLE_ELEMENT_SELECTOR).length > 0
+    ) && (cellEditModeHasChanges || isNewRowBatchEditMode);
   }
 
   _getFocusedCell() {
