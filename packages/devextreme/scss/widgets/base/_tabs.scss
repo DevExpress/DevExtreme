@@ -50,13 +50,26 @@ $icon-size: 16px;
   width: 100%;
 }
 
+.dx-tabs-expanded {
+  .dx-tab {
+    flex-basis: 100%;
+    flex-grow: 0;
+  }
+}
+
+.dx-tabs-stretched {
+  .dx-tab {
+    flex-basis: unset;
+    flex-grow: 1;
+    min-width: 50px;
+  }
+}
+
 .dx-tab {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-basis: 100%;
-  white-space: nowrap;
   cursor: pointer;
 
   @include dx-tabs-link();

@@ -76,8 +76,8 @@ QUnit.module('Width', () => {
             this.assert.equal(this.tabs.option('width'), this._isOptionApproach() ? 200 : undefined);
 
             this.assert.equal(this.$tabs.outerWidth(), 200);
-            this.assert.ok(this._getTabItem(0).outerWidth() < 73, this._getTabItem(0).outerWidth() + ' < 73');
-            this.assert.ok(this._getTabItem(1).outerWidth() > 127, this._getTabItem(1).outerWidth() + ' > 127');
+            this.assert.ok(this._getTabItem(0).outerWidth() < 70, this._getTabItem(0).outerWidth() + ' < 70');
+            this.assert.ok(this._getTabItem(1).outerWidth() > 130, this._getTabItem(1).outerWidth() + ' > 130');
             this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
         }
 
@@ -96,7 +96,6 @@ QUnit.module('Width', () => {
                 this.assert.ok(this._getTabItem(1).outerWidth() > 100, this._getTabItem().outerWidth() + ' > 100');
                 this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons aren\'t rendered');
             } else {
-                debugger;
                 this.assert.ok(this._getTabItem(0).outerWidth() < 55, this._getTabItem(0).outerWidth() + ' < 55');
                 this.assert.ok(this._getTabItem(1).outerWidth() < 55, this._getTabItem(1).outerWidth() + ' < 55');
                 this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
