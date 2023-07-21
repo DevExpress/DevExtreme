@@ -8,7 +8,7 @@ import DataCell from '../../model/dataGrid/data/cell';
 import EditForm from '../../model/dataGrid/editForm';
 import { ClassNames as CLASS } from '../../model/dataGrid/classNames';
 
-fixture.disablePageReloads`Editing`
+fixture`Editing`
   .page(url(__dirname, '../container.html'));
 
 const editingModes = [
