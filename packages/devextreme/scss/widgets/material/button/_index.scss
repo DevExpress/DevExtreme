@@ -103,14 +103,6 @@
       $button-success-icon-color
     );
   }
-
-  &.dx-button-back {
-    @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg);
-
-    border-radius: 50%;
-
-    @include dx-button-onlyicon-sizing();
-  }
 }
 
 .dx-button-mode-text {

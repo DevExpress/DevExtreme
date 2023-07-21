@@ -4,7 +4,7 @@ import { setStyleAttribute, appendElementTo, setAttribute } from '../../../helpe
 import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
-import { Item } from '../../../../../js/ui/button_group.d';
+import { Item, ButtonType } from '../../../../../js/ui/button_group.d';
 
 interface ButtonGroupItem extends Item {
   id: string;
@@ -38,36 +38,34 @@ fixture.disablePageReloads`ButtonGroup_Styles`
 
       await appendElementTo('#container', 'div', `buttongroup${stylingMode}${state}`, {});
 
-          type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+      const items: ButtonGroupItem[] = ['danger', 'default', 'normal', 'success'].map((type) => ({
+        id: type,
+        type: type as ButtonType,
+        text: type,
+      }));
 
-          const items: ButtonGroupItem[] = ['back', 'danger', 'default', 'normal', 'success'].map((type) => ({
-            id: type,
-            type: type as ButtonType,
-            text: type,
-          }));
+      items.push({
+        id: 'find',
+        icon: 'find',
+        text: 'find',
+      });
 
-          items.push({
-            id: 'find',
-            icon: 'find',
-            text: 'find',
-          });
+      items.push({
+        id: 'findIconOnly',
+        icon: 'find',
+      });
 
-          items.push({
-            id: 'findIconOnly',
-            icon: 'find',
-          });
+      items.map((item) => {
+        item.elementAttr = { class: state };
+        return item;
+      });
 
-          items.map((item) => {
-            item.elementAttr = { class: state };
-            return item;
-          });
-
-          await createWidget('dxButtonGroup', {
-            items,
-            stylingMode,
-            keyExpr: 'id',
-            selectionMode: 'none',
-          }, `#buttongroup${stylingMode}${state}`);
+      await createWidget('dxButtonGroup', {
+        items,
+        stylingMode,
+        keyExpr: 'id',
+        selectionMode: 'none',
+      }, `#buttongroup${stylingMode}${state}`);
     }
 
     await testScreenshot(t, takeScreenshot, `ButtonGroup render states mode=${stylingMode}.png`, { element: '#container' });

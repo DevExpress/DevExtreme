@@ -26,6 +26,7 @@ const POPUP_CONFIG = {
     showCloseButton: false,
     showTitle: false,
     preventScrollEvents: false,
+    _ignorePreventScrollEventsDeprecation: true,
     enableBodyScroll: false,
     defaultOptionsRules: [
         {
