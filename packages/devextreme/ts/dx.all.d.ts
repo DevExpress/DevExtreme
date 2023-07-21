@@ -8940,6 +8940,7 @@ declare module DevExpress.ui {
    */
   export class dxCalendar extends Editor<dxCalendarOptions> {}
   module dxCalendar {
+    export type CalendarSelectionMode = 'single' | 'multiple' | 'range';
     export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
     export type CellTemplateData = {
       readonly date: Date;
@@ -9050,6 +9051,10 @@ declare module DevExpress.ui {
      * [descr:dxCalendarOptions.name]
      */
     name?: string;
+    /**
+     * [descr:dxCalendarOptions.selectionMode]
+     */
+    selectionMode?: DevExpress.ui.dxCalendar.CalendarSelectionMode;
     /**
      * [descr:dxCalendarOptions.showTodayButton]
      */
