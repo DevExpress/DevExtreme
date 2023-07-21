@@ -364,6 +364,15 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiCollapseRow(key: unknown): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).collapseRow(key),
+      { dependencies: { getInstance, key } },
+    )();
+  }
+
   apiExpandAdaptiveDetailRow(key: unknown): Promise<void> {
     const { getInstance } = this;
 
