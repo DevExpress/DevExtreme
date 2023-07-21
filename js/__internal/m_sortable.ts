@@ -674,6 +674,7 @@ const Sortable = Draggable.inherit({
       scrollContainer = $element.get(0);
     } else {
       $element.parents().each(function () {
+        // @ts-expect-error
         if ($(this).css('overflow') !== 'visible') {
           scrollContainer = this;
           return false;

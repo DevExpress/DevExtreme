@@ -1033,8 +1033,15 @@ export class ColumnsView extends viewWithColumnStateMixin {
     const cellElements = $cellElements.toArray();
 
     (cellElements as HTMLElement[]).forEach((cell) => {
-      const rect = getBoundingRect(cell);
-      const width = rect.width > cell.offsetWidth - 1 ? rect.width : cell.offsetWidth;
+      let width = cell.offsetWidth;
+
+      if ((cell as any).getBoundingClientRect) {
+        const rect = getBoundingRect(cell);
+
+        if (rect.width > cell.offsetWidth - 1) {
+          width = rect.width;
+        }
+      }
 
       result.push(width);
     });
@@ -1057,7 +1064,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
         const isDetailRow = $row.hasClass(DETAIL_ROW_CLASS);
         const isErrorRow = $row.hasClass(ERROR_ROW_CLASS);
 
-        const isRowVisible = $row.is(':visible');
+        const isRowVisible = ($row.get(0) as HTMLElement).style.display !== 'none' && !$row.hasClass('dx-state-invisible');
         const isRelevantRow = !isGroupRow && !isDetailRow && !isErrorRow;
 
         if (isRowVisible && isRelevantRow) {
