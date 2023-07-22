@@ -193,6 +193,7 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
   }
 
   .dx-tabs-nav-button {
+    flex-shrink: 0;
     border: none;
     background-color: $tabs-tab-bg;
     border-radius: 0;
@@ -210,10 +211,6 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 
   .dx-tabs-scrollable {
     height: 100%;
-
-    .dx-tabs-wrapper {
-      display: block;
-    }
   }
 
   @include tabs-shadow-mixin($tabs-border-color, 'dx-tab-selected');
