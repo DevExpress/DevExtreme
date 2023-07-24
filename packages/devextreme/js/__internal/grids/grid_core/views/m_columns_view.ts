@@ -142,7 +142,7 @@ const removeHandler = function (templateDeferred) {
 };
 
 export const normalizeWidth = (width: string | number | undefined): string => {
-  if (width === undefined) {
+  if (!isDefined(width)) {
     return 'auto';
   }
 
@@ -1214,7 +1214,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
   getColumnElements() {}
 
-  getColumns(rowIndex?, $tableElement?) {
+  getColumns(rowIndex?) {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 
