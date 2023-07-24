@@ -108,3 +108,9 @@ $icon-size: 16px;
   align-self: stretch;
   flex-shrink: 0;
 }
+
+.dx-rtl {
+  &.dx-tabs {
+    flex-direction: row-reverse;
+  }
+}
