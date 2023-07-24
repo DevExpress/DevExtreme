@@ -4,7 +4,7 @@ description: "Install and setup Chrome and Firefox"
 inputs:
   chrome-version:
     description: "Chrome version to install"
-    default: "114.0.5735.133-1"
+    default: "114.0.5735.198-1"
   firefox-version:
     description: "Firefox version to install"
     default: "latest"
