@@ -36,7 +36,10 @@ import {
  * @hidden
  */
 export interface SelectionChangedInfo<T = any> {
-    /** @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo.selectedItem */
+    /**
+     * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo.selectedItem
+     * @type object
+     */
     readonly selectedItem: T;
 }
 
