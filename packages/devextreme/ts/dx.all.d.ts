@@ -1321,7 +1321,7 @@ declare module DevExpress.common {
     validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
   };
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
-  export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+  export type ButtonType = 'danger' | 'default' | 'normal' | 'success';
   /**
    * [descr:CompareRule]
    */
@@ -1532,9 +1532,21 @@ declare module DevExpress.common {
    * [descr:GroupItem]
    */
   export type GroupItem<TItem = any> = {
+    /**
+     * [descr:GroupItem.key]
+     */
     key: any | string | number;
+    /**
+     * [descr:GroupItem.items]
+     */
     items: Array<TItem> | Array<GroupItem<TItem>> | null;
+    /**
+     * [descr:GroupItem.count]
+     */
     count?: number;
+    /**
+     * [descr:GroupItem.summary]
+     */
     summary?: Array<any>;
   };
   export type HorizontalAlignment = 'center' | 'left' | 'right';
@@ -1573,9 +1585,21 @@ declare module DevExpress.common {
    * [descr:LoadResultObject]
    */
   export type LoadResultObject<TItem = any> = {
+    /**
+     * [descr:LoadResultObject.data]
+     */
     data: Array<TItem> | Array<GroupItem<TItem>>;
+    /**
+     * [descr:LoadResultObject.totalCount]
+     */
     totalCount?: number;
+    /**
+     * [descr:LoadResultObject.summary]
+     */
     summary?: Array<any>;
+    /**
+     * [descr:LoadResultObject.groupCount]
+     */
     groupCount?: number;
   };
   export type MaskMode = 'always' | 'onFocus';
@@ -8916,6 +8940,7 @@ declare module DevExpress.ui {
    */
   export class dxCalendar extends Editor<dxCalendarOptions> {}
   module dxCalendar {
+    export type CalendarSelectionMode = 'single' | 'multiple' | 'range';
     export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
     export type CellTemplateData = {
       readonly date: Date;
@@ -9026,6 +9051,10 @@ declare module DevExpress.ui {
      * [descr:dxCalendarOptions.name]
      */
     name?: string;
+    /**
+     * [descr:dxCalendarOptions.selectionMode]
+     */
+    selectionMode?: DevExpress.ui.dxCalendar.CalendarSelectionMode;
     /**
      * [descr:dxCalendarOptions.showTodayButton]
      */

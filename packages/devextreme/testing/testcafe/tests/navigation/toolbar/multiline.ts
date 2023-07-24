@@ -10,7 +10,7 @@ fixture.disablePageReloads`Toolbar_multiline`
 
 const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 const stylingModes = ['text', 'outlined', 'contained'];
-const types = ['back', 'danger', 'default', 'normal', 'success'];
+const types = ['danger', 'default', 'normal', 'success'];
 
 [true, false].forEach((rtlEnabled) => {
   test(`Default nested widgets render, rtlEnabled: ${rtlEnabled}`, async (t) => {

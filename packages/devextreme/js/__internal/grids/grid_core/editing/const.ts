@@ -17,7 +17,7 @@ export const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
 export const TARGET_COMPONENT_NAME = 'targetComponent';
 
 export const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
-export const FOCUSABLE_ELEMENT_SELECTOR = `[tabindex], ${EDITORS_INPUT_SELECTOR}`;
+export const FOCUSABLE_ELEMENT_SELECTOR = `[tabindex]:not([disabled]), ${EDITORS_INPUT_SELECTOR}:not([disabled])`;
 
 export const EDIT_MODE_BATCH = 'batch';
 export const EDIT_MODE_ROW = 'row';

@@ -150,10 +150,12 @@ const baseFixedColumns = {
 
     if (this._isFixedColumns) {
       const change = options?.change;
+      const $fixedDataRows = this._getRowElements(this._fixedTableElement);
+      const needPartialUpdate = change?.virtualColumnsScrolling && $fixedDataRows.length === change?.items?.length;
 
       this._isFixedTableRendering = true;
 
-      if (change?.virtualColumnsScrolling && this.option('scrolling.legacyMode') !== true) {
+      if (needPartialUpdate && this.option('scrolling.legacyMode') !== true) {
         this._partialUpdateFixedTable(fixedColumns);
         this._isFixedTableRendering = false;
       } else {

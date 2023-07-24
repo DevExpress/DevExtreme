@@ -1,6 +1,7 @@
 export {
   FirstDayOfWeek,
   CalendarZoomLevel,
+  CalendarSelectionMode,
   WeekNumberRule,
   ContentReadyEvent,
   DisposingEvent,

@@ -4,17 +4,29 @@ import $ from 'jquery';
 import domAdapter from 'core/dom_adapter';
 import themes from 'ui/themes';
 import devices from 'core/devices';
-const fromUA = $.proxy(devices._fromUA, devices);
 import viewPort from 'core/utils/view_port';
-const viewPortChanged = viewPort.changeCallback;
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import readyCallbacks from 'core/utils/ready_callbacks';
 import config from 'core/config';
 import { implementationsMap } from 'core/utils/size';
+import { setWindow } from 'core/utils/window';
+
+const fromUA = $.proxy(devices._fromUA, devices);
+const viewPortChanged = viewPort.changeCallback;
 
 const userAgents = {
     iphone_12: 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1',
+    iphone_14: {
+        safari: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.1 Mobile/15E148 Safari/604.1',
+        chrome: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/98.0.4758.85 Mobile/15E148 Safari/604.1',
+        firefox: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/115.0 Mobile/15E148 Safari/605.1.15',
+    },
     ipad_10: 'Mozilla/5.0 (iPad; CPU OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.0 Mobile/14G60 Safari/602.1',
+    ipad_16: {
+        safari: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.1 Safari/605.1.15',
+        chrome: 'Mozilla/5.0 (iPad; CPU OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/114.0.5735.124 Mobile/15E148 Safari/604.1',
+        firefox: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15',
+    },
     android_9: 'Mozilla/5.0 (Linux; Android 9; Mi A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.143 Mobile Safari/537.36',
     android_tablet_7_1_1: 'Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Safari/537.36',
     win_phone_10: 'Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; NOKIA; Lumia 920) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Mobile Safari/537.36 Edge/12.0',
@@ -33,32 +45,44 @@ QUnit.module('devices', {
     }
 });
 
-QUnit.test('ios by userAgent', function(assert) {
-    let device = fromUA(userAgents.iphone_12);
+[
+    // iphone
+    ['iphone 12', userAgents.iphone_12, 'ios', '12.3.1', 'phone', null],
+    ['iphone 14 safari', userAgents.iphone_14.safari, 'ios', '16.5.1', 'phone', null],
+    ['iphone 14 chrome', userAgents.iphone_14.chrome, 'ios', '16.5.0', 'phone', null],
+    ['iphone 14 firefox', userAgents.iphone_14.firefox, 'ios', '16.5.1', 'phone', null],
+    // android phone
+    ['android phone 9', userAgents.android_9, 'android', '9.0.0', 'phone', null],
+    // ipad
+    ['ipad 10', userAgents.ipad_10, 'ios', '10.3.3', 'tablet', { maxTouchPoints: 5 }],
+    ['ipad 16 safari', userAgents.ipad_16.safari, 'ios', '10.15.7', 'tablet', { maxTouchPoints: 5 }],
+    ['ipad 16 chrome', userAgents.ipad_16.chrome, 'ios', '16.5.0', 'tablet', { maxTouchPoints: 5 }],
+    ['ipad 16 firefox', userAgents.ipad_16.firefox, 'ios', '10.15.7', 'tablet', { maxTouchPoints: 5 }],
+    // android tablet
+    ['android tablet 7.1.1', userAgents.android_tablet_7_1_1, 'android', '7.1.1', 'tablet', null],
+    // others
+    // platform: generic, because win is deprecated
+    ['winphone 10', userAgents.win_phone_10, 'generic', null, 'phone', null],
+].forEach(([
+    name,
+    userAgent,
+    platform,
+    version,
+    deviceType,
+    navigatorMock,
+]) => {
+    QUnit.test(`${name} device by userAgent`, function(assert) {
+        if(navigatorMock) {
+            setWindow({ navigator: navigatorMock }, true);
+        }
 
-    assert.equal(device.platform, 'ios', 'platform is ios');
-    assert.equal(device.version.toString(), '12,3,1', 'correct version');
-    assert.equal(device.deviceType, 'phone', 'deviceType is phone');
+        const device = fromUA(userAgent);
+        assert.equal(device.platform, platform, 'correct platform');
+        assert.equal(device.version.join('.') || null, version, 'correct version');
+        assert.equal(device.deviceType, deviceType, 'correct deviceType');
 
-    device = fromUA(userAgents.ipad_10);
-
-    assert.equal(device.platform, 'ios', 'platform is ios');
-    assert.equal(device.version.toString(), '10,3,3', 'correct version');
-    assert.equal(device.deviceType, 'tablet', 'deviceType is tablet');
-});
-
-QUnit.test('android by userAgent', function(assert) {
-    let device = fromUA(userAgents.android_tablet_7_1_1);
-
-    assert.equal(device.platform, 'android', 'platform is android');
-    assert.equal(device.version.toString(), '7,1,1', 'correct version');
-    assert.equal(device.deviceType, 'tablet', 'deviceType is tablet');
-
-    device = fromUA(userAgents.android_9);
-
-    assert.equal(device.platform, 'android', 'platform is android');
-    assert.equal(device.version.toString(), '9,0,0', 'correct version');
-    assert.equal(device.deviceType, 'phone', 'deviceType is phone');
+        setWindow(window);
+    });
 });
 
 QUnit.test('iphone by device name', function(assert) {
@@ -118,13 +142,6 @@ QUnit.test('android tablet by device name', function(assert) {
 
     assert.equal(device.platform, 'android', 'correct platform');
     assert.equal(device.deviceType, 'tablet', 'correct deviceType');
-});
-
-QUnit.test('winphone10 by userAgent', function(assert) {
-    const device = fromUA(userAgents.win_phone_10);
-
-    assert.strictEqual(device.deviceType, 'phone', 'correct deviceType');
-    assert.strictEqual(device.platform, 'generic', 'platform is generic because win is deprecated');
 });
 
 QUnit.test('generic phone by device name', function(assert) {
