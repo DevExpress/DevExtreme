@@ -42,59 +42,59 @@
 
         <script>
             $(function () {
-                $('#form').dxForm({
-                    width: 1000,
-                    labelLocation: 'left',
-                    formData: {
-                        ID: 1,
-                        FirstName: 'John',
-                        LastName: 'Heart',
-                        Position: 'CEO',
-                        OfficeNo: '901',
-                        BirthDate: new Date(1964, 2, 16),
-                        HireDate: new Date(1995, 0, 15),
-                        Address: '351 S Hill St.',
-                        City: 'Los Angeles',
-                        State: 'CA',
-                        ZipCode: '90013',
-                        Phone: '+1(213) 555-9392',
-                        Email: 'jheart@dx-email.com',
-                        Skype: 'jheart_DX_skype',
+                const dataSource = [
+                    {
+                        title: 'John Heart',
+                        text: 'John Heart',
+                    }, {
+                        title: 'Olivia Peyton',
+                        text: 'Olivia Peyton',
+                    }, {
+                        title: 'Robert Reagan',
+                        text: 'Robert Reagan',
+                    }, {
+                        title: 'Greta Sims',
+                        text: 'Greta Sims',
+                    }, {
+                        title: 'Olivia Peyton',
+                        text: 'Olivia Peyton',
                     },
-                    colCount: 2,
-                    items: [{
-                        itemType: 'group',
-                        caption: 'System Information',
-                        items: ['ID', 'FirstName', 'LastName', 'HireDate', 'Position', 'OfficeNo'],
-                    }, {
-                        itemType: 'group',
-                        caption: 'Personal Data',
-                        items: ['BirthDate', {
-                            itemType: 'group',
-                            caption: 'Home Address',
-                            items: ['Address', 'City', 'State', 'ZipCode'],
-                        }],
-                    }, {
-                        itemType: 'group',
-                        caption: 'Contact Information',
-                        items: [{
-                            itemType: 'tabbed',
-                            tabPanelOptions: {
-                                deferRendering: true,
-                            },
-                            tabs: [{
-                                title: 'Phone',
-                                items: ['Phone'],
-                            }, {
-                                title: 'Skype',
-                                items: ['Skype'],
-                            }, {
-                                title: 'Email',
-                                items: ['Email'],
-                            }],
-                        }],
-                    }],
-                })
+                ];
+
+                const tabPanelOptions = {
+                    dataSource,
+                    itemTemplate: (itemData, itemIndex, itemElement) => {
+                        ($('<div>').css('marginTop', 10))
+                            .dxTabs({
+                                items: [
+                                    {
+                                        title: 'John Heart',
+                                        text: 'John Heart',
+                                    }, {
+                                        title: 'Olivia Peyton',
+                                        text: 'Olivia Peyton',
+                                    }, {
+                                        title: 'Robert Reagan',
+                                        text: 'Robert Reagan',
+                                    }, {
+                                        title: 'Greta Sims',
+                                        text: 'Greta Sims',
+                                    }, {
+                                        title: 'Olivia Peyton',
+                                        text: 'Olivia Peyton',
+                                    },
+                                ],
+                                width: 300,
+                                showNavButtons: true,
+                            })
+                            .appendTo(itemElement);
+                    },
+                    height: 120,
+                    width: 300,
+                    showNavButtons: true,
+                };
+
+                $('#form').dxTabPanel(tabPanelOptions)
             });
         </script>
     </div>

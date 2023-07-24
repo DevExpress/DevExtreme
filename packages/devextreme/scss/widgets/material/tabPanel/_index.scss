@@ -10,7 +10,6 @@
 
 .dx-tabpanel {
   .dx-tabs {
-    display: block;
     border-bottom: 1px solid $base-border-color;
 
     @at-root #{selector-append(".dx-empty-collection", &)} {
@@ -22,11 +21,7 @@
     min-width: 72px;
   }
 
-  .dx-tabs-wrapper {
-    display: block;
-  }
-
   .dx-tabs-nav-button {
-    height: 100%;
+    height: auto;
   }
 }

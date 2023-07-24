@@ -104,6 +104,8 @@ $icon-size: 16px;
 }
 
 .dx-tabs-nav-button {
-  width: $nav-button-width;
-  padding: 0;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
 }
