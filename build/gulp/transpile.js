@@ -311,6 +311,7 @@ const watchTsTask = async() => {
         .pipe(babel(transpileConfig.tsCjs))
         .pipe(gulp.dest(ctx.TRANSPILED_PATH))
         .pipe(gulp.dest(ctx.TRANSPILED_RENOVATION_PATH))
+        .pipe(removeDebug())
         .pipe(gulp.dest(ctx.TRANSPILED_PROD_RENOVATION_PATH));
 };
 watchTsTask.displayName = 'transpile TS watch';
