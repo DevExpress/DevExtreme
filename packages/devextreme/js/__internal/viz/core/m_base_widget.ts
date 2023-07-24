@@ -398,10 +398,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   },
 
   _disposeRenderer() {
-    /// #DEBUG
-    // NOTE: This is temporary - until links mechanism is stabilized
-    this._useLinks && this._renderer.root.checkLinks();
-    /// #ENDDEBUG
+    
     this._renderer.dispose();
   },
 

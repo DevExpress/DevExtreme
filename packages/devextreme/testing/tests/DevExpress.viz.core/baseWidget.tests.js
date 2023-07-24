@@ -126,7 +126,6 @@ QUnit.test('Renderer destruction', function(assert) {
     this.$container.remove();
 
     assert.deepEqual(this.renderer.dispose.lastCall.args, [], 'renderer is destroyed');
-    assert.deepEqual(this.renderer.root.checkLinks.lastCall.args, [], 'links are checked');
 });
 
 QUnit.test('Theme manager creation', function(assert) {
