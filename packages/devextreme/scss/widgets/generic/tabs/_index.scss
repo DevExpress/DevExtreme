@@ -193,7 +193,7 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
   }
 
   .dx-tabs-nav-button {
-    flex-shrink: 0;
+    width: $generic-tabs-nav-button-width;
     border: none;
     background-color: $tabs-tab-bg;
     border-radius: 0;
