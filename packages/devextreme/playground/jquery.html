@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.material.blue.light.css" />
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -32,117 +33,71 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body style="margin: 0; padding: 0;">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
-        <div id="longtabs" style="margin-bottom: 25px;"></div>
-
-        <div id="container"></div>
+        <div id="form"></div>
 
         <script>
-           $(function() {
-                const longtabs = [
-                    // { title: 'lont title', text: 'user' },
-                    // { title: 'lont title', text: 'long text example' },
-                    // { title: 'lont title', text: 'long text example' },
-                    // { title: 'lont title', text: 'long text example' },
-                    // { title: 'lont title', text: 'long text example' },
-                    // { title: 'lont title', text: 'long text example' },
-                    // { title: 'lont title', text: 'long text example' },
-                    // { title: 'lont title', text: 'long text example' },
-                    // { title: 'lont title', text: 'long text example' },
-                    { title: 'title' },
-                    { title: 'long long title example' }
-                ];
-
-                $('#longtabs').dxTabPanel({
-                    dataSource: longtabs,
-                    // items: [{ title: 'Tab1', text: 'This is Tab1' }, { title: 'Tab2', text: 'This is Tab2' }, { title: 'Tab3', text: 'This is Tab3' }],
-                    showNavButtons: true,
-                    scrollByContent: true,
-                    // scrollingEnabled: false,
-                    // width: 100,
-                });
-
-                /**
-                function createDrawer({
-                    openedStateMode, shading, createOuterContent, createDrawerContent, createInnerContent,
-                }) {
-                    function createDrawerInt($container) {
-
-                        if (createOuterContent) {
-                            createOuterContent($container);
-                        }
-
-                        const $drawer = $('<div id=\'drawer1\'>');
-                        const $templateView = $('<div style=\'background-color: aquamarine; height: 100%;\'>').appendTo($drawer);
-
-                        if (openedStateMode === 'overlap') {
-                            $templateView.css('padding-left', '200px');
-                        }
-
-                        if (openedStateMode === 'push') {
-                            $templateView.css('padding-right', '200px');
-                        }
-
-                        if (createInnerContent) {
-                            createInnerContent($templateView);
-                        }
-
-                        $drawer.appendTo($container).dxDrawer({
-                            openedStateMode,
-                            shading,
-                            opened: true,
-                            height: 400,
-                            template: () => {
-                                const $result = $('<div>').width(200).css('background-color', 'aqua').css('height', '100%');
-                                if (createDrawerContent) {
-                                    createDrawerContent($result);
-                                }
-                                return $result;
+            $(function () {
+                $('#form').dxForm({
+                    width: 1000,
+                    labelLocation: 'left',
+                    formData: {
+                        ID: 1,
+                        FirstName: 'John',
+                        LastName: 'Heart',
+                        Position: 'CEO',
+                        OfficeNo: '901',
+                        BirthDate: new Date(1964, 2, 16),
+                        HireDate: new Date(1995, 0, 15),
+                        Address: '351 S Hill St.',
+                        City: 'Los Angeles',
+                        State: 'CA',
+                        ZipCode: '90013',
+                        Phone: '+1(213) 555-9392',
+                        Email: 'jheart@dx-email.com',
+                        Skype: 'jheart_DX_skype',
+                    },
+                    colCount: 2,
+                    items: [{
+                        itemType: 'group',
+                        caption: 'System Information',
+                        items: ['ID', 'FirstName', 'LastName', 'HireDate', 'Position', 'OfficeNo'],
+                    }, {
+                        itemType: 'group',
+                        caption: 'Personal Data',
+                        items: ['BirthDate', {
+                            itemType: 'group',
+                            caption: 'Home Address',
+                            items: ['Address', 'City', 'State', 'ZipCode'],
+                        }],
+                    }, {
+                        itemType: 'group',
+                        caption: 'Contact Information',
+                        items: [{
+                            itemType: 'tabbed',
+                            tabPanelOptions: {
+                                deferRendering: true,
                             },
-                        });
-                    }
-
-                    $('<div id="showPopupBtn">').appendTo($('#container')).dxButton({
-                        text: 'Show Popup',
-                        onClick: () => $('#popup1').dxPopup('instance').show(),
-                    });
-
-                    $('<div id=\'popup1\'>').appendTo($('#container')).dxPopup({
-                        position: 'top',
-                        height: 600,
-                        showTitle: false,
-                        contentTemplate: () => {
-                            const $popupTemplate = $('<div id="popup1_template">').css('background-color', 'blanchedalmond').css('height', '100%');
-                            createDrawerInt($popupTemplate);
-                            return $popupTemplate;
-                        },
-                    });
-
-                    createDrawerInt($('#container'));
-                }
-
-                const createInnerContent = ($container) => {
-                    ($('<div id="tabPanel">').appendTo($container)).dxTabPanel({
-                        selectedIndex: 1,
-                        items: [{ title: 'Tab1', text: 'This is Tab1' }, { title: 'Tab2', text: 'This is Tab2' }, { title: 'Tab3', text: 'This is Tab3' }],
-                    });
-                }
-
-                // ['overlap', 'shrink', 'push']
-
-                const config = {
-                    openedStateMode: 'overlap',
-                    shading: true,
-                    createInnerContent,
-                }
-
-                createDrawer(config);
-                */
+                            tabs: [{
+                                title: 'Phone',
+                                items: ['Phone'],
+                            }, {
+                                title: 'Skype',
+                                items: ['Skype'],
+                            }, {
+                                title: 'Email',
+                                items: ['Email'],
+                            }],
+                        }],
+                    }],
+                })
             });
         </script>
     </div>
 </body>
+
 </html>
