@@ -448,10 +448,15 @@ $icons: (
   @include dx-font-icon(map.get($icons, $name));
 }
 
+%icon-font {
+  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+}
+
 @mixin dx-font-icons-list() {
-  @each $key, $val in $icons {
-    .dx-icon-#{$key} {
-      @include dx-icon($key);
+  @each $key, $glyph in $icons {
+    .dx-icon-#{$key} { @extend %icon-font; }
+    .dx-icon-#{$key}:before {
+      content: $glyph;
     }
   }
 }
