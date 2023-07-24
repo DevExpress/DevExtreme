@@ -94,10 +94,7 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 .dx-tabpanel {
   > .dx-tabpanel-tabs {
     .dx-tab {
-      flex-basis: unset;
       max-width: 140px;
-      flex-grow: 1;
-      flex-shrink: 1;
       padding: $generic-tabpanel-tabs-item-padding;
     }
 
