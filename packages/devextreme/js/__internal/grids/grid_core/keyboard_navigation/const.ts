@@ -31,7 +31,7 @@ export const FOCUSED_CLASS = 'dx-focused';
 export const FAST_EDITING_DELETE_KEY = 'delete';
 
 export const INTERACTIVE_ELEMENTS_SELECTOR = `
-  input:not([type=\\'hidden\\']):not([disabled]),
+  input:not([type="hidden"]):not([disabled]),
   textarea:not([disabled]),
   a:not([disabled]),
   select:not([disabled]),
