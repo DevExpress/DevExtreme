@@ -131,15 +131,9 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEven
     readonly itemData?: any;
     /** @docid _ui_draggable_DragEndEvent.itemElement */
     readonly itemElement?: DxElement;
-    /**
-     * @docid _ui_draggable_DragEndEvent.fromComponent
-     * @type this
-     */
+    /** @docid _ui_draggable_DragEndEvent.fromComponent */
     readonly fromComponent: dxSortable | dxDraggable;
-    /**
-     * @docid _ui_draggable_DragEndEvent.toComponent
-     * @type this
-     */
+    /** @docid _ui_draggable_DragEndEvent.toComponent */
     readonly toComponent: dxSortable | dxDraggable;
     /** @docid _ui_draggable_DragEndEvent.fromData */
     readonly fromData?: any;
@@ -158,15 +152,9 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEve
     readonly itemData?: any;
     /** @docid _ui_draggable_DragMoveEvent.itemElement */
     readonly itemElement?: DxElement;
-    /**
-     * @docid _ui_draggable_DragMoveEvent.fromComponent
-     * @type this
-     */
+    /** @docid _ui_draggable_DragMoveEvent.fromComponent */
     readonly fromComponent: dxSortable | dxDraggable;
-    /**
-     * @docid _ui_draggable_DragMoveEvent.toComponent
-     * @type this
-     */
+    /** @docid _ui_draggable_DragMoveEvent.toComponent */
     readonly toComponent: dxSortable | dxDraggable;
     /** @docid _ui_draggable_DragMoveEvent.fromData */
     readonly fromData?: any;
