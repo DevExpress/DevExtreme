@@ -86,3 +86,53 @@ test('it should skip weekend days in timelineWorkWeek', async (t) => {
     },
   );
 });
+
+test('should work correctly for unsorted dataSource', async (t) => {
+  const {
+    takeScreenshot,
+    compareResults,
+  } = createScreenshotsComparer(t);
+
+  await t
+    .expect(await takeScreenshot('allDay-unsorted-datasource.png'))
+    .ok();
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget(
+    'dxScheduler',
+    {
+      dataSource: [{
+        id: 2,
+        text: '2',
+        startDate: new Date('2020-11-26T10:30:00.000'),
+        endDate: new Date('2020-11-26T21:00:00.000'),
+        allDay: false,
+      }, {
+        id: 3,
+        text: '3',
+        startDate: new Date('2020-11-23T00:00:00.000'),
+        endDate: new Date('2020-11-28T00:00:00.000'),
+        allDay: true,
+      }, {
+        id: 5,
+        text: '5',
+        startDate: new Date('2020-11-27T00:00:00.000'),
+        endDate: new Date('2020-11-27T00:00:00.000'),
+        allDay: true,
+      }, {
+        id: 1,
+        text: '1',
+        startDate: new Date('2020-11-25T22:20:00.000'),
+        endDate: new Date('2020-11-26T12:30:00.000'),
+      }],
+      views: ['week'],
+      currentView: 'week',
+      showAllDayPanel: true,
+      currentDate: new Date(2020, 10, 25),
+      height: 600,
+    },
+  );
+});
