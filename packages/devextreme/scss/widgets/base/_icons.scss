@@ -461,7 +461,7 @@ $icons: (
   }
 }
 
-@mixin dx-font-icons($font-file: "dxicons", $font-name: "DevExtreme Generic Icons", $font-name-safari: "devextreme_generic_icons") {
+@mixin dx-font-icons($font-file: "dxicons", $font-name: "DevExtreme Generic Icons", $font-name-safari: "devextreme_generic_icons", $text-rendering: auto) {
   @font-face {
     font-family: 'DXIcons';
     src:
@@ -477,7 +477,7 @@ $icons: (
   .dx-icon {
     display: inline-block;
     font-size: inherit;
-    text-rendering: auto;
+    text-rendering: $text-rendering;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
