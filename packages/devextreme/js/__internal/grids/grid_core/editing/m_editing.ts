@@ -180,13 +180,11 @@ class EditingControllerImpl extends modules.ViewController {
         width: null,
         readOnly: !options.setValue,
         isOnForm: options.isOnForm,
-        inputAttr: {
-          id: options.id,
-        },
+        id: options.id,
       });
 
       const needLabel = REQUIRED_EDITOR_LABELLEDBY_MODES.includes(this.getEditMode());
-      if (needLabel) { editorOptions.inputAttr['aria-labelledby'] = options.column.headerId; }
+      if (needLabel) { editorOptions['aria-labelledby'] = options.column.headerId; }
 
       this.getController('editorFactory').createEditor($editor, editorOptions);
     };

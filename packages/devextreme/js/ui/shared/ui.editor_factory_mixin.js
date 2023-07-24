@@ -26,7 +26,10 @@ const EditorFactoryMixin = (function() {
         return extend(config, {
             readOnly: options.readOnly,
             placeholder: options.placeholder,
-            inputAttr: options.inputAttr,
+            inputAttr: {
+                id: options.id,
+                'aria-labelledby': options['aria-labelledby']
+            },
             tabIndex: options.tabIndex
         }, options.editorOptions);
     };
