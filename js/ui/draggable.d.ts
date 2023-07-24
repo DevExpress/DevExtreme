@@ -134,13 +134,11 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEven
     /**
      * @docid _ui_draggable_DragEndEvent.fromComponent
      * @type this
-     * @default Widget
      */
     readonly fromComponent: dxSortable | dxDraggable;
     /**
      * @docid _ui_draggable_DragEndEvent.toComponent
      * @type this
-     * @default Widget
      */
     readonly toComponent: dxSortable | dxDraggable;
     /** @docid _ui_draggable_DragEndEvent.fromData */
@@ -163,13 +161,11 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEve
     /**
      * @docid _ui_draggable_DragMoveEvent.fromComponent
      * @type this
-     * @default Widget
      */
     readonly fromComponent: dxSortable | dxDraggable;
     /**
      * @docid _ui_draggable_DragMoveEvent.toComponent
      * @type this
-     * @default Widget
      */
     readonly toComponent: dxSortable | dxDraggable;
     /** @docid _ui_draggable_DragMoveEvent.fromData */

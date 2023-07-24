@@ -20,7 +20,6 @@ export interface InitializedEventInfo<TComponent> {
     /**
      * @docid
      * @type this
-     * @default Widget
      */
     readonly component?: TComponent;
     /** @docid */
@@ -35,7 +34,6 @@ export interface EventInfo<TComponent> {
     /**
      * @docid
      * @type this
-     * @default Widget
      */
     readonly component: TComponent;
     /** @docid */
@@ -52,7 +50,6 @@ export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
     /**
      * @docid
      * @type this
-     * @default Widget
      */
     readonly component: TComponent;
     /** @docid */

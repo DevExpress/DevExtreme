@@ -75,7 +75,6 @@ export type ContextMenuPreparingEvent = Cancelable & {
     /**
      * @docid _ui_gantt_ContextMenuPreparingEvent.component
      * @type this
-     * @default Widget
      */
     readonly component?: dxGantt;
     /** @docid _ui_gantt_ContextMenuPreparingEvent.element */
@@ -107,7 +106,6 @@ export type CustomCommandEvent = {
     /**
      * @docid _ui_gantt_CustomCommandEvent.component
      * @type this
-     * @default Widget
      */
     readonly component?: dxGantt;
     /** @docid _ui_gantt_CustomCommandEvent.element */

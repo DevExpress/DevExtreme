@@ -42,7 +42,6 @@ export interface AddEvent {
     /**
      * @docid _ui_sortable_AddEvent.component
      * @type this
-     * @default Widget
      */
     readonly component: dxSortable;
     /** @docid _ui_sortable_AddEvent.element */
@@ -65,13 +64,11 @@ export interface AddEvent {
     /**
      * @docid _ui_sortable_AddEvent.fromComponent
      * @type this
-     * @default Widget
      */
     readonly fromComponent: dxSortable | dxDraggable;
     /**
      * @docid _ui_sortable_AddEvent.toComponent
      * @type this
-     * @default Widget
      */
     readonly toComponent: dxSortable | dxDraggable;
     /** @docid _ui_sortable_AddEvent.fromData */
@@ -108,13 +105,11 @@ export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable, PointerEv
     /**
      * @docid _ui_sortable_DragChangeEvent.fromComponent
      * @type this
-     * @default Widget
      */
     readonly fromComponent?: dxSortable | dxDraggable;
     /**
      * @docid _ui_sortable_DragChangeEvent.toComponent
      * @type this
-     * @default Widget
      */
     readonly toComponent?: dxSortable | dxDraggable;
     /** @docid _ui_sortable_DragChangeEvent.fromData */
@@ -143,13 +138,11 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent
     /**
      * @docid _ui_sortable_DragEndEvent.fromComponent
      * @type this
-     * @default Widget
      */
     readonly fromComponent: dxSortable | dxDraggable;
     /**
      * @docid _ui_sortable_DragEndEvent.toComponent
      * @type this
-     * @default Widget
      */
     readonly toComponent: dxSortable | dxDraggable;
     /** @docid _ui_sortable_DragEndEvent.fromData */
@@ -178,13 +171,11 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable, PointerEven
     /**
      * @docid _ui_sortable_DragMoveEvent.fromComponent
      * @type this
-     * @default Widget
      */
     readonly fromComponent: dxSortable | dxDraggable;
     /**
      * @docid _ui_sortable_DragMoveEvent.toComponent
      * @type this
-     * @default Widget
      */
     readonly toComponent: dxSortable | dxDraggable;
     /** @docid _ui_sortable_DragMoveEvent.fromData */
@@ -246,13 +237,11 @@ export type RemoveEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent 
     /**
      * @docid _ui_sortable_RemoveEvent.fromComponent
      * @type this
-     * @default Widget
      */
     readonly fromComponent: dxSortable | dxDraggable;
     /**
      * @docid _ui_sortable_RemoveEvent.toComponent
      * @type this
-     * @default Widget
      */
     readonly toComponent: dxSortable | dxDraggable;
     /** @docid _ui_sortable_RemoveEvent.fromData */
@@ -279,13 +268,11 @@ export type ReorderEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent
     /**
      * @docid _ui_sortable_ReorderEvent.fromComponent
      * @type this
-     * @default Widget
      */
     readonly fromComponent: dxSortable | dxDraggable;
     /**
      * @docid _ui_sortable_ReorderEvent.toComponent
      * @type this
-     * @default Widget
      */
     readonly toComponent: dxSortable | dxDraggable;
     /** @docid _ui_sortable_ReorderEvent.fromData */
