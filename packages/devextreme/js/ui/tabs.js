@@ -231,6 +231,10 @@ const Tabs = CollectionWidget.inherit({
         const tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
         const elementWidth = getWidth(this.$element());
 
+        if([tabItemsWidth, elementWidth].includes(0)) {
+            return false;
+        }
+
         const isItemsWidthExceeded = tabItemsWidth + 5 > elementWidth;
 
         return isItemsWidthExceeded;
