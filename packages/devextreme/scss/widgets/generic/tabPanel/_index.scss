@@ -106,11 +106,11 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
       }
     }
 
-    .dx-tabs-stretched {
-      .dx-tab {
-        min-width: 50px;
-      }
-    }
+    // .dx-tabs-stretched {
+    //   .dx-tab {
+    //     min-width: 50px;
+    //   }
+    // }
   }
 
   &:not(.dx-empty-collection) {
