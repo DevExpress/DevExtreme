@@ -6,10 +6,6 @@ import commands from '../../src/modules/commands';
 import { version, metadata } from '../../src/data/metadata/dx-theme-builder-metadata';
 import commonOptions from '../../src/data/clean-css-options.json';
 
-import {
-  cleanCss,
-} from '../../src/modules/post-compiler';
-
 const buildTimeout = 150000;
 
 const normalizeCss = (css: string): string => css
@@ -121,13 +117,15 @@ describe('Builder integration tests', () => {
     };
 
     return buildTheme(config).then(async (result) => {
-      const cleaner = new CleanCSS(commonOptions as any);
-
-      const themeBuilderCss = normalizeCss((await cleaner.minify(result.css)).styles);
+      const themeBuilderCss = normalizeCss(result.css);
       const cssPath = path.resolve(__dirname, '../../../devextreme/artifacts/css/dx.light.css');
       const distributionCss = normalizeCss(readFileSync(cssPath, 'utf8'));
 
-      expect(themeBuilderCss).toBe(distributionCss);
+      const cleaner = new CleanCSS(commonOptions as any);
+
+      const themeBuilderCssMinified = (await cleaner.minify(themeBuilderCss)).styles;
+      const distributionCssMinified = (await cleaner.minify(distributionCss)).styles;
+      expect(themeBuilderCssMinified).toBe(distributionCssMinified);
     });
   }, buildTimeout);
 
@@ -140,13 +138,15 @@ describe('Builder integration tests', () => {
     };
 
     return buildTheme(config).then(async (result) => {
-      const cleaner = new CleanCSS(commonOptions as any);
-
-      const themeBuilderCss = normalizeCss((await cleaner.minify(result.css)).styles);
+      const themeBuilderCss = normalizeCss(result.css);
       const cssPath = path.resolve(__dirname, '../../../devextreme/artifacts/css/dx.material.blue.light.css');
       const distributionCss = normalizeCss(readFileSync(cssPath, 'utf8'));
+     
+      const cleaner = new CleanCSS(commonOptions as any);
 
-      expect(themeBuilderCss).toBe(distributionCss);
+      const themeBuilderCssMinified = (await cleaner.minify(themeBuilderCss)).styles;
+      const distributionCssMinified = (await cleaner.minify(distributionCss)).styles;
+      expect(themeBuilderCssMinified).toBe(distributionCssMinified);
     });
   }, buildTimeout);
 });
