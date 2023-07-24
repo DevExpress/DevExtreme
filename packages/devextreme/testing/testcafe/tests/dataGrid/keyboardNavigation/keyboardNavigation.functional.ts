@@ -4047,6 +4047,7 @@ test('DataGrid - "Maximum call stack size exceeded" error occurs on navigating s
     pageSize: 3,
   },
 }));
+
 test('DataGrid - focusedRowIndex is -1 when the first data cell is focused with the keyboard (T1175896)', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t
@@ -4069,5 +4070,41 @@ test('DataGrid - focusedRowIndex is -1 when the first data cell is focused with 
       const focusedRowIndex = e.component.option('focusedRowIndex');
       ($('#otherContainer') as any).text(focusedRowIndex);
     }
+  },
+}));
+
+test('DataGrid - Cell focus in edit mode does not work correctly if a cell has a disabled editor (T1177434)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getToolbar().getItem(0))
+    .pressKey('tab')
+
+    .expect(Selector(':focus').tagName)
+    .eql('td')
+    .expect(Selector(':focus').getAttribute('aria-colindex'))
+    .eql('3');
+}).before(async () => createWidget('dxDataGrid', {
+  onEditorPreparing(e) {
+    if (e.dataField === 'field_1') { e.editorOptions.disabled = true; }
+  },
+  dataSource: getData(3, 3),
+  showBorders: true,
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowAdding: true,
+    allowDeleting: true,
+  },
+  selection: {
+    mode: 'multiple',
+  },
+  toolbar: {
+    items: [
+      {
+        name: 'addRowButton',
+        showText: 'always',
+      },
+    ],
   },
 }));
