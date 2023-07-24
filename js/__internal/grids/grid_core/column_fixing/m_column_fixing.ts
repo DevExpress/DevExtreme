@@ -446,17 +446,13 @@ const baseFixedColumns = {
     this.callBase(options);
 
     if (this._fixedTableElement) {
-      const hasAutoWidth = widths?.some((width) => width === 'auto');
-      const hasHorizontalScroll = this.isScrollbarVisible(true);
-      const needUseVisibleColumns = hasAutoWidth && (!isColumnWidthsSynced || !hasHorizontalScroll);
+      const hasAutoWidth = widths && widths.some((width) => width === 'auto');
+      // if order of calling isScrollbarVisible changed, performance tests will fail
+      const needVisibleColumns = hasAutoWidth && (!isColumnWidthsSynced || !this.isScrollbarVisible(true));
 
-      if (needUseVisibleColumns) {
-        this.setFixedTableColumnWidths(visibleColumns, widths);
-      } else {
-        const fixedColumns = this.getFixedColumns();
+      const columns = needVisibleColumns ? visibleColumns : this.getFixedColumns();
 
-        this.setFixedTableColumnWidths(fixedColumns, widths);
-      }
+      this.setFixedTableColumnWidths(columns, widths);
     }
 
     const wordWrapEnabled = this.option('wordWrapEnabled');
