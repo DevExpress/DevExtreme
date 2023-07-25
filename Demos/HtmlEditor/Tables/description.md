@@ -26,7 +26,7 @@ If you need to customize menu commands, override the **tableContextMenu**.[items
 
 ## Manage Tables Programmatically
 
-You can perform table-related actions in code. Use the [getModules](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Methods/#getModulemoduleName) method to access the Table module. This module contains methods with names that match toolbar item names listed above. Refer to the following topic for the complete method list and code examples: <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md" target="_blank">DevExtreme Quill modules: Table</a>.
+You can perform table-related actions in code. Use the [getModule](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Methods/#getModulemoduleName) method to access the Table module. This module contains methods with names that match toolbar item names listed above. Refer to the following topic for the complete method list and code examples: <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md" target="_blank">DevExtreme Quill modules: Table</a>.
 
 ## Resize Tables
 
