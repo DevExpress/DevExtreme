@@ -2648,15 +2648,15 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(10);
 
         // assert
-        const $colGroups = $('.dx-datagrid colgroup');
+        const colGroups = $('.dx-datagrid colgroup');
 
-        for(let i = 0; i < $colGroups.length; i++) {
-            const $cols = $colGroups.eq(i).find('col');
+        for(let i = 0; i < colGroups.length; i++) {
+            const headersCols = colGroups.eq(i).find('col');
 
-            assert.strictEqual($cols[0].style.width, '80px');
-            assert.strictEqual($cols[1].style.width, 'auto');
-            assert.strictEqual($cols[2].style.width, '120px');
-            assert.strictEqual($cols[3].style.width, 'auto');
+            assert.strictEqual(headersCols[0].style.width, '80px');
+            assert.strictEqual(headersCols[1].style.width, '');
+            assert.strictEqual(headersCols[2].style.width, '120px');
+            assert.strictEqual(headersCols[3].style.width, '');
         }
     });
 
