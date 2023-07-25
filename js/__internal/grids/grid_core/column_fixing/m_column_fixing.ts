@@ -469,7 +469,7 @@ const baseFixedColumns = {
     }
 
     const $cols = this._fixedTableElement.children('colgroup').children('col');
-    setWidth($cols, 'auto');
+    $cols.removeAttr('style');
 
     let columnIndex = 0;
 
@@ -479,9 +479,11 @@ const baseFixedColumns = {
         return;
       }
 
-      const width = normalizeWidth(widths[columnIndex]);
+      const colWidth = normalizeWidth(widths[columnIndex]);
 
-      setWidth($cols.eq(columnIndex), width);
+      if (isDefined(colWidth)) {
+        setWidth($cols.eq(columnIndex), colWidth);
+      }
 
       columnIndex += 1;
     });
