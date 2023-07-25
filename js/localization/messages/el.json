@@ -173,6 +173,7 @@
         "dxDataGrid-ariaSelectAll": "Επιλογή όλων",
         "dxDataGrid-ariaSelectRow": "Επιλέξτε σειρά",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Δημιουργία φίλτρου",
         "dxDataGrid-filterPanelCreateFilter": "Δημιουργία φίλτρου",
         "dxDataGrid-filterPanelClearFilter": "Εκκαθάριση",

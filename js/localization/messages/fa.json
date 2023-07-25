@@ -173,6 +173,7 @@
         "dxDataGrid-ariaSelectAll": "انتخاب همه",
         "dxDataGrid-ariaSelectRow": "انتخب سطر",
         "dxDataGrid-ariaToolbar": "نوار ابزار",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "فیلتر",
         "dxDataGrid-filterPanelCreateFilter": "ایجاد فیلتر",
         "dxDataGrid-filterPanelClearFilter": "حذف فیلتر",

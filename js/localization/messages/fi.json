@@ -173,6 +173,7 @@
         "dxDataGrid-ariaSelectAll": "Valitse kaikki",
         "dxDataGrid-ariaSelectRow": "Valitse rivi",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Suodattimen muodostin",
         "dxDataGrid-filterPanelCreateFilter": "Luo suodatin",
         "dxDataGrid-filterPanelClearFilter": "Tyhjennä",

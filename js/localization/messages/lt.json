@@ -173,6 +173,7 @@
         "dxDataGrid-ariaSelectAll": "Pasirinkti viską",
         "dxDataGrid-ariaSelectRow": "Pasirinkti eilutę",
         "dxDataGrid-ariaToolbar": "Duomenų lentelės įrankių juosta",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Filtrų konstruktorius",
         "dxDataGrid-filterPanelCreateFilter": "Sukurti filtrą",
         "dxDataGrid-filterPanelClearFilter": "Išvalyti",

@@ -173,6 +173,7 @@
         "dxDataGrid-ariaSelectAll": "Izberi vse",
         "dxDataGrid-ariaSelectRow": "Izberi vrstico",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Graditelj filtra",
         "dxDataGrid-filterPanelCreateFilter": "Ustvari filter",
         "dxDataGrid-filterPanelClearFilter": "Pobriši",

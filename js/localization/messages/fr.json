@@ -173,6 +173,7 @@
         "dxDataGrid-ariaSelectAll": "Sélectionner tout",
         "dxDataGrid-ariaSelectRow": "Sélectionner ligne",
         "dxDataGrid-ariaToolbar": "Barre d'outils de la grille de données",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Création de filtre",
         "dxDataGrid-filterPanelCreateFilter": "Créer un filtre",
         "dxDataGrid-filterPanelClearFilter": "Supprimer",
