@@ -78,11 +78,11 @@ QUnit.module('DataGrid markup', {
         assert.ok($container.hasClass('dx-datagrid'), 'dx-datagrid');
 
         assert.equal($headersView.length, 1, 'headers view');
-        assert.equal($headersView.find('col').get(0).style.width, 'auto', 'headers first col width');
+        assert.equal($headersView.find('col').get(0).style.width, '', 'headers first col width');
         assert.equal($headersView.find('col').get(1).style.width, '200px', 'headers second col width');
 
         assert.equal($rowsView.length, 1, 'rows view');
-        assert.equal($rowsView.find('col').get(0).style.width, 'auto', 'rows first col width');
+        assert.equal($rowsView.find('col').get(0).style.width, '', 'rows first col width');
         assert.equal($rowsView.find('col').get(1).style.width, '200px', 'rows second col width');
     });
 
