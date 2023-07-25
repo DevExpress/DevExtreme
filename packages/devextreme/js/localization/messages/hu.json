@@ -178,6 +178,7 @@
         "dxDataGrid-ariaSelectAll": "Összes kiválasztása",
         "dxDataGrid-ariaSelectRow": "Sor kiválasztása",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Szűrőkészítő",
         "dxDataGrid-filterPanelCreateFilter": "Szűrő létrehozása",
         "dxDataGrid-filterPanelClearFilter": "Törlés",
