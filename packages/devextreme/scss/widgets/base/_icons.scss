@@ -448,14 +448,6 @@ $icons: (
   @include dx-font-icon(map.get($icons, $name));
 }
 
-.dx-icon {
-  display: inline-block;
-  font-size: inherit;
-  text-rendering: $text-rendering;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 @mixin dx-font-icons($font-file: "dxicons", $font-name: "DevExtreme Generic Icons", $font-name-safari: "devextreme_generic_icons", $text-rendering: auto) {
   @font-face {
     font-family: 'DXIcons';
@@ -467,6 +459,14 @@ $icons: (
       url("icons/#{$font-file}.ttf") format('truetype');
     font-weight: normal;
     font-style: normal;
+  }
+
+  .dx-icon {
+    display: inline-block;
+    font-size: inherit;
+    text-rendering: $text-rendering;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   %icon-font {
