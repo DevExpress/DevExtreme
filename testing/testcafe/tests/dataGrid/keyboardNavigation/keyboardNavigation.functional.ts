@@ -4108,3 +4108,35 @@ test('DataGrid - Cell focus in edit mode does not work correctly if a cell has a
     ],
   },
 }));
+
+test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
+  await t
+    .pressKey('tab tab tab tab tab tab')
+
+    .expect(Selector(':focus').tagName)
+    .eql('td')
+    .expect(Selector(':focus').getAttribute('aria-colindex'))
+    .eql('1');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(2, 2),
+  showBorders: true,
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowDeleting: true,
+  },
+  columns: ['field_0', 'field_1', {
+    type: 'buttons',
+    buttons: [{
+      template() {
+        return $('<button>').text('Edit');
+      },
+    }, {
+      template() {
+        return $('<button>').attr({
+          disabled: true,
+        }).text('Delete');
+      },
+    }],
+  }],
+}));
