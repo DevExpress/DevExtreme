@@ -25,6 +25,7 @@ import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestH
 import { reorderingPointerMock } from './utils.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_ITEMS_CLASS = 'dx-list-items';
 const LIST_GROUP_CLASS = 'dx-list-group';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 const LIST_GROUP_BODY_CLASS = 'dx-list-group-body';
@@ -3968,7 +3969,7 @@ QUnit.module('keyboard navigation', {
 
         instance.registerKeyHandler('enter', handler);
 
-        const $itemContainer = $element.find(`.${LIST_ITEM_CLASS}`).eq(0).parent().parent();
+        const $itemContainer = $element.find(`.${LIST_ITEMS_CLASS}`).eq(0).parent();
 
         $itemContainer.trigger($.Event('keydown', { key: 'Enter' }));
         assert.equal(handler.callCount, 0);
@@ -4192,6 +4193,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 this.expectedContainerAttrs = {
                     tabindex: '0',
+                    role: 'group'
                 };
                 this.expectedItemsContainerAttrs = {
                     role: 'listbox',

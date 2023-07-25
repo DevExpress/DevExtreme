@@ -678,6 +678,7 @@ export const ListBase = CollectionWidget.inherit({
             'roledescription': 'list',
         };
         this.setAria(elementAria, this.$element());
+        this.setAria({ role: 'group' }, this._focusTarget());
 
         this._setListAria();
     },
@@ -1016,7 +1017,7 @@ export const ListBase = CollectionWidget.inherit({
 
     expandGroup: function(groupIndex) {
         const deferred = new Deferred();
-        const $group = this._getItemsContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex);
+        const $group = this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex);
 
         this._collapseGroupHandler($group, false).done((function() {
             deferred.resolveWith(this);
@@ -1027,7 +1028,7 @@ export const ListBase = CollectionWidget.inherit({
 
     collapseGroup: function(groupIndex) {
         const deferred = new Deferred();
-        const $group = this._getItemsContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex);
+        const $group = this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex);
 
         this._collapseGroupHandler($group, true).done((function() {
             deferred.resolveWith(this);

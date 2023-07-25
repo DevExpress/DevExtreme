@@ -280,6 +280,7 @@ if(devices.real().deviceType === 'desktop') {
             this.clock = sinon.useFakeTimers();
             this.expectedContainerAttrs = {
                 tabindex: '0',
+                role: 'group'
             };
             this.expectedItemsContainerAttrs = {
                 role: 'listbox',

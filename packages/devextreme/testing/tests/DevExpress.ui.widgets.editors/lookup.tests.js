@@ -2890,13 +2890,13 @@ QUnit.module('keyboard navigation', {
         const instance = $element.dxLookup('instance');
 
         instance._$list.dxList('focus');
-        assert.ok(instance._$list.find('.dx-list-item').eq(0).hasClass(FOCUSED_CLASS), 'list-item is focused after focusing on list');
+        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).eq(0).hasClass(FOCUSED_CLASS), 'list-item is focused after focusing on list');
 
-        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent().parent();
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEMS_CLASS}`).parent();
         const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
-        assert.ok(instance._$list.find('.dx-list-item').eq(1).hasClass(FOCUSED_CLASS), 'second list-item is focused after down key pressing');
+        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(FOCUSED_CLASS), 'second list-item is focused after down key pressing');
     });
 
     QUnit.testInActiveWindow('lookup item should be selected after \'enter\' key pressing', function(assert) {
@@ -2959,7 +2959,7 @@ QUnit.module('keyboard navigation', {
 
         instance.option('searchEnabled', false);
 
-        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent().parent();
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEMS_CLASS}`).parent();
         const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
@@ -3028,7 +3028,7 @@ QUnit.module('keyboard navigation', {
             searchEnabled: false
         }).dxLookup('instance');
 
-        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent().parent();
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEMS_CLASS}`).parent();
         const keyboard = keyboardMock($listItemContainer);
 
         assert.ok(instance.option('opened'), 'overlay opened');
@@ -3414,6 +3414,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 const listItemContainerAttributes = {
                     tabindex: '0',
+                    role: 'group',
                 };
 
                 let fieldAttributes = {
@@ -3524,15 +3525,15 @@ if(devices.real().deviceType === 'desktop') {
                 const $scrollView = $list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`);
                 const $itemsContainer = $list.find(`.${LIST_ITEMS_CLASS}`);
 
-                helper.checkAttributes($scrollView, { tabindex: '0' });
+                helper.checkAttributes($scrollView, { tabindex: '0', role: 'group' });
                 helper.checkAttributes($itemsContainer, { });
 
                 helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
-                helper.checkAttributes($scrollView, { tabindex: '0' });
+                helper.checkAttributes($scrollView, { tabindex: '0', role: 'group' });
                 helper.checkAttributes($itemsContainer, { 'aria-label': 'Items', role: 'listbox' });
 
                 helper.widget.option(dataSourcePropertyName, []);
-                helper.checkAttributes($scrollView, { tabindex: '0' });
+                helper.checkAttributes($scrollView, { tabindex: '0', role: 'group' });
                 helper.checkAttributes($itemsContainer, { });
             });
         });

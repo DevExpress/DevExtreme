@@ -393,7 +393,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
             wrapItemText: true
         });
         const instance = $dropDownList.dxDropDownList('instance');
-        const $itemContainer = $(instance.content()).find('.dx-list-items');
+        const $itemContainer = $(instance.content()).find(`.${LIST_ITEMS_CLASS}`);
 
         assert.ok($itemContainer.hasClass('dx-wrap-item-text'), 'class was added');
 
