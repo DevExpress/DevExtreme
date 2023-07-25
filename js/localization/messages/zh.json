@@ -162,6 +162,7 @@
         "dxDataGrid-ariaSelectAll": "全选",
         "dxDataGrid-ariaSelectRow": "选择行",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "过滤器生成器",
         "dxDataGrid-filterPanelCreateFilter": "创建过滤器",
         "dxDataGrid-filterPanelClearFilter": "清空",

@@ -162,6 +162,7 @@
         "dxDataGrid-ariaSelectAll": "Chọn tất cả",
         "dxDataGrid-ariaSelectRow": "Chọn hàng",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Trình dựng Bộ lọc",
         "dxDataGrid-filterPanelCreateFilter": "Tạo Bộ lọc",
         "dxDataGrid-filterPanelClearFilter": "Loại bỏ",

@@ -162,6 +162,7 @@
         "dxDataGrid-ariaSelectAll": "Selectează tot",
         "dxDataGrid-ariaSelectRow": "Selectează rând",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Filtrează Constructor",
         "dxDataGrid-filterPanelCreateFilter": "Crează Fișier",
         "dxDataGrid-filterPanelClearFilter": "Curăță",

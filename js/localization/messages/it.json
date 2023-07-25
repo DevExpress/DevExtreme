@@ -162,6 +162,7 @@
         "dxDataGrid-ariaSelectAll": "Seleziona tutti",
         "dxDataGrid-ariaSelectRow": "Seleziona riga",
         "dxDataGrid-ariaToolbar": "Barra degli strumenti griglia",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Composizione filtro",
         "dxDataGrid-filterPanelCreateFilter": "Nuovo filtro",
         "dxDataGrid-filterPanelClearFilter": "Cancella",

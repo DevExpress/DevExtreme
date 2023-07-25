@@ -216,6 +216,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
       formTemplate(this._$popupContent, templateOptions, { isPopupForm: true });
       this._rowsView.renderDelayedTemplates();
+      $(container).parent().attr('aria-label', this.localize('dxDataGrid-ariaEditForm'));
     };
   }
 
