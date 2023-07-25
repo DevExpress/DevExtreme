@@ -858,7 +858,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return this._tableElement || $();
   }
 
-  getTableElement(isFixedTableRendering?) {
+  getTableElement(isFixedTableRendering?): dxElementWrapper | undefined {
     return this._tableElement;
   }
 
@@ -1088,7 +1088,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     const columnAutoWidth = this.option('columnAutoWidth');
 
     const $cols = $tableElement.children('colgroup').children('col');
-    $cols.removeAttr('style');
+    $cols.toArray().forEach((col) => col.removeAttribute('style'));
 
     columns.forEach((column, columnIndex) => {
       /*
@@ -1113,7 +1113,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
             ? $row.find(`td[aria-colindex='${visibleIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
             : $row.find('td').eq(visibleIndex);
 
-          const cell = $cell.get(0);
+          const cell = $cell.get(0) as HTMLElement;
 
           if (cell) {
             setCellWidth(cell, column, width);
