@@ -1984,33 +1984,6 @@ QUnit.module('Options', {
                 });
             });
 
-            QUnit.test(`Should show only date from value option after runtime switching from ${selectionMode} to single selectionMode`, function(assert) {
-                this.reinit({
-                    selectionMode,
-                    ...this.options,
-                });
-
-                this.calendar.option('selectionMode', 'single');
-
-                const $cell = $(getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-
-                assert.strictEqual($cell.data('value'), '2023/01/07');
-            });
-
-            QUnit.test(`Should show dates from values option after runtime ${selectionMode} selectionMode enable`, function(assert) {
-                this.reinit({
-                    selectionMode: 'single',
-                    values: ['01/05/2023', '02/01/2023'],
-                    value: '01/07/2023',
-                });
-                this.calendar.option('selectionMode', selectionMode);
-
-                const $cells = $(getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-
-                assert.strictEqual($($cells[0]).data('value'), '2023/01/05');
-                assert.strictEqual($($cells[1]).data('value'), '2023/02/01');
-            });
-
             QUnit.module('CurrentDate', {}, () => {
                 QUnit.test(`Should be equal to the lowest defined date in values on init (selectionMode=${selectionMode}`, function(assert) {
                     this.reinit({
@@ -2028,29 +2001,6 @@ QUnit.module('Options', {
                     const { currentDate, values } = this.calendar.option();
 
                     assert.deepEqual(currentDate, values[1]);
-                });
-
-                QUnit.test(`Should be equal to value after switching from ${selectionMode} to single selectionMode`, function(assert) {
-                    this.reinit({
-                        ...this.options,
-                        selectionMode
-                    });
-                    this.calendar.option('selectionMode', 'single');
-                    const { currentDate, value } = this.calendar.option();
-
-                    assert.deepEqual(currentDate, new Date(value));
-                });
-
-                QUnit.test(`Should be equal to the lowest defined date in values after switching from single to ${selectionMode} selectionMode`, function(assert) {
-                    this.reinit({
-                        selectionMode: 'single',
-                        values: ['02/01/2023', '01/15/2023', '02/05/2023', null],
-                        value: '01/07/2023',
-                    });
-                    this.calendar.option('selectionMode', selectionMode);
-                    const { currentDate } = this.calendar.option();
-
-                    assert.deepEqual(currentDate, new Date('01/15/2023'));
                 });
 
                 QUnit.test(`Should be equal to new selected cell date when selectionMode = ${selectionMode}`, function(assert) {
@@ -2392,6 +2342,51 @@ QUnit.module('Options', {
                 $cellToHover.trigger('mouseenter');
 
                 assert.notOk($cellToHover.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
+            });
+        });
+
+        [
+            {
+                initialSelectionMode: 'multiple',
+                newSelectionMode: 'single',
+                optionName: 'value',
+                expectedValue: null,
+            },
+            {
+                initialSelectionMode: 'single',
+                newSelectionMode: 'range',
+                optionName: 'values',
+                expectedValue: [null, null],
+            },
+            {
+                initialSelectionMode: 'range',
+                newSelectionMode: 'multiple',
+                optionName: 'values',
+                expectedValue: [],
+            },
+        ].forEach(({ initialSelectionMode, newSelectionMode, optionName, expectedValue }) => {
+            QUnit.test(`Value should be restored after switching from ${initialSelectionMode} to ${newSelectionMode} selectionMode`, function(assert) {
+                this.reinit({
+                    ...this.options,
+                    selectionMode: initialSelectionMode,
+                });
+
+                this.calendar.option('selectionMode', newSelectionMode);
+
+                assert.deepEqual(this.calendar.option(optionName), expectedValue);
+            });
+
+            QUnit.test(`No cells should be selected after switching from ${initialSelectionMode} to ${newSelectionMode} selectionMode`, function(assert) {
+                this.reinit({
+                    ...this.options,
+                    selectionMode: initialSelectionMode,
+                });
+
+                this.calendar.option('selectionMode', newSelectionMode);
+
+                const $cells = $(getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+
+                assert.strictEqual($cells.length, 0);
             });
         });
     });

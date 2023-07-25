@@ -88,6 +88,10 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
         return this._getLowestDateInArray(dates);
     }
 
+    restoreValue() {
+        this.calendar.option('values', [null, null]);
+    }
+
     _getValues() {
         const values = this.dateOption('values');
 

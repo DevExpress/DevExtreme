@@ -1406,6 +1406,7 @@ const Calendar = Editor.inherit({
                 break;
             case 'selectionMode':
                 this._refreshSelectionStrategy();
+                this._selectionStrategy.restoreValue();
                 this._initCurrentDate();
                 break;
             case 'firstDayOfWeek':
