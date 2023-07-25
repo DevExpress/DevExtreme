@@ -141,11 +141,7 @@ const removeHandler = function (templateDeferred) {
   templateDeferred.resolve();
 };
 
-export const normalizeWidth = (width: string | number | undefined): string => {
-  if (!isDefined(width)) {
-    return 'auto';
-  }
-
+export const normalizeWidth = (width: string | number | undefined): string | undefined => {
   if (typeof width === 'number') {
     return `${width.toFixed(3)}px`;
   }
@@ -840,10 +836,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
     if (gridCoreUtils.checkChanges(optionNames, ['width', 'visibleWidth'])) {
       const visibleColumns = this._columnsController.getVisibleColumns();
-      const widths = iteratorUtils.map(visibleColumns, (column) => {
-        const width = column.visibleWidth || column.width;
-        return isDefined(width) ? width : 'auto';
-      });
+      const widths = visibleColumns.map((column) => column.visibleWidth || column.width);
 
       this.setColumnWidths({ widths, optionNames });
       return;
@@ -1095,7 +1088,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     const columnAutoWidth = this.option('columnAutoWidth');
 
     const $cols = $tableElement.children('colgroup').children('col');
-    setWidth($cols, 'auto');
+    $cols.removeAttr('style');
 
     columns.forEach((column, columnIndex) => {
       /*
@@ -1131,7 +1124,9 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
       const colWidth = normalizeWidth(widths[columnIndex]);
 
-      setWidth($cols.eq(columnIndex), colWidth);
+      if (isDefined(colWidth)) {
+        setWidth($cols.eq(columnIndex), colWidth);
+      }
     });
   }
 
