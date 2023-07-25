@@ -1854,7 +1854,7 @@ QUnit.module('Synchronize columns', {
 
         assert.strictEqual($colElements.get(0).style.width, '100px', 'width of a first column');
         assert.strictEqual($colElements.get(1).style.width, '50px', 'width of a second column');
-        assert.strictEqual($colElements.get(2).style.width, 'auto', 'width of a third column');
+        assert.strictEqual($colElements.get(2).style.width, '', 'width of a third column');
         assert.strictEqual($colElements.get(3).style.width, '70px', 'width of a fourth column');
         assert.strictEqual($colElements.get(4).style.width, '150px', 'width of a fifth column');
     });
@@ -2301,9 +2301,9 @@ QUnit.module('Fixed columns', {
         const $colElements = gridView.getView('rowsView').element().find('.dx-datagrid-content-fixed').find('col');
         assert.strictEqual($colElements.length, 5, 'col count');
         assert.strictEqual($colElements.get(0).style.width, '200px', 'width of the first cell');
-        assert.strictEqual($colElements.get(1).style.width, 'auto', 'width of the second cell');
-        assert.strictEqual($colElements.get(2).style.width, 'auto', 'width of the third cell');
-        assert.strictEqual($colElements.get(3).style.width, 'auto', 'width of the fourth cell');
+        assert.strictEqual($colElements.get(1).style.width, '', 'width of the second cell');
+        assert.strictEqual($colElements.get(2).style.width, '', 'width of the third cell');
+        assert.strictEqual($colElements.get(3).style.width, '', 'width of the fourth cell');
         assert.strictEqual($colElements.get(4).style.width, '100px', 'width of the fifth cell');
     });
 

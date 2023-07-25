@@ -446,10 +446,9 @@ const baseFixedColumns = {
     this.callBase(options);
 
     if (this._fixedTableElement) {
-      const hasAutoWidth = widths && widths.some((width) => width === 'auto');
+      const hasAutoWidth = widths?.some((width) => width === 'auto' || !isDefined(width));
       // if order of calling isScrollbarVisible changed, performance tests will fail
       const needVisibleColumns = hasAutoWidth && (!isColumnWidthsSynced || !this.isScrollbarVisible(true));
-
       const columns = needVisibleColumns ? visibleColumns : this.getFixedColumns();
 
       this.setFixedTableColumnWidths(columns, widths);
@@ -469,7 +468,7 @@ const baseFixedColumns = {
     }
 
     const $cols = this._fixedTableElement.children('colgroup').children('col');
-    $cols.removeAttr('style');
+    $cols.toArray().forEach((col) => col.removeAttribute('style'));
 
     let columnIndex = 0;
 
