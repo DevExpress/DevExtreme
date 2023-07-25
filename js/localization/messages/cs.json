@@ -173,6 +173,7 @@
         "dxDataGrid-ariaSelectAll": "Vybrat vše",
         "dxDataGrid-ariaSelectRow": "Vybrat řádek",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Tvorba Filtru",
         "dxDataGrid-filterPanelCreateFilter": "Vytvořit Filtr",
         "dxDataGrid-filterPanelClearFilter": "Smazat",

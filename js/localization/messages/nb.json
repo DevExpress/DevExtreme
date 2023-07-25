@@ -173,6 +173,7 @@
         "dxDataGrid-ariaSelectAll": "Velg alle",
         "dxDataGrid-ariaSelectRow": "Velg rad",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Filterbygger",
         "dxDataGrid-filterPanelCreateFilter": "Velg filter",
         "dxDataGrid-filterPanelClearFilter": "Slett",
