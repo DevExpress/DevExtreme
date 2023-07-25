@@ -471,8 +471,8 @@ const TextEditorBase = Editor.inherit({
     },
 
     _setLabelContainerAria: function(force) {
-        const label = this._label.getId();
-        if(label || force) { this.setAria('labelledby', this._label.getId(), this._getLabelContainer()); }
+        const label = this._label.getId() || undefined;
+        if(label || force) { this.setAria('labelledby', label, this._getLabelContainer()); }
     },
 
     _renderLabel: function() {
