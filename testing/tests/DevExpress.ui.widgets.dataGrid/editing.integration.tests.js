@@ -91,7 +91,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal($('.dx-row.dx-header-row').eq(0).attr('role'), 'row');
-        assert.equal($('.dx-header-row .dx-command-edit').eq(0).attr('role'), 'columnheader');
+        assert.equal($('.dx-header-row .dx-command-edit').eq(0).attr('role'), 'gridcell');
         assert.equal($('.dx-header-row .dx-command-edit').eq(0).attr('aria-colindex'), 3);
     });
 

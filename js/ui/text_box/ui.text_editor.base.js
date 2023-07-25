@@ -470,8 +470,9 @@ const TextEditorBase = Editor.inherit({
         this._label.updateMaxWidth(this._getLabelContainerWidth());
     },
 
-    _setLabelContainerAria: function() {
-        this.setAria('labelledby', this._label.getId(), this._getLabelContainer());
+    _setLabelContainerAria: function(force) {
+        const label = this._label.getId() || undefined;
+        if(label || force) { this.setAria('labelledby', label, this._getLabelContainer()); }
     },
 
     _renderLabel: function() {
@@ -775,14 +776,14 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'label':
                 this._label.updateText(value);
-                this._setLabelContainerAria();
+                this._setLabelContainerAria(true);
                 break;
             case 'labelMark':
                 this._label.updateMark(value);
                 break;
             case 'labelMode':
                 this._label.updateMode(value);
-                this._setLabelContainerAria();
+                this._setLabelContainerAria(true);
                 break;
             case 'width':
                 this.callBase(args);

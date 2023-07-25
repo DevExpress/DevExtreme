@@ -162,6 +162,7 @@
         "dxDataGrid-ariaSelectAll": "Seleccionar tot",
         "dxDataGrid-ariaSelectRow": "Seleccioneu la fila",
         "dxDataGrid-ariaToolbar": "Barra d’eines de quadrícula de dades",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Creador de filtres",
         "dxDataGrid-filterPanelCreateFilter": "Crea un filtre",
         "dxDataGrid-filterPanelClearFilter": "Clar",

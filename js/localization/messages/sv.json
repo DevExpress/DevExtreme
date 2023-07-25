@@ -162,6 +162,7 @@
         "dxDataGrid-ariaSelectAll": "Välj allt",
         "dxDataGrid-ariaSelectRow": "Välj rad",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Filterverktyg",
         "dxDataGrid-filterPanelCreateFilter": "Skapa filter",
         "dxDataGrid-filterPanelClearFilter": "Rensa",
