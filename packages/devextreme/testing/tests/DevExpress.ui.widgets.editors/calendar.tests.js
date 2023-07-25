@@ -1363,7 +1363,7 @@ QUnit.module('Calendar footer', {
         assert.deepEqual(value, expectedValue);
     });
 
-    ['multi', 'range'].forEach((selectionMode) => {
+    ['multiple', 'range'].forEach((selectionMode) => {
         QUnit.test(`today button click adds today date to values when selectionMode is ${selectionMode}`, function(assert) {
             this.reinit({
                 selectionMode,
@@ -1380,9 +1380,9 @@ QUnit.module('Calendar footer', {
         });
     });
 
-    QUnit.test('today button click should deselect date if it is already selected and selectionMode is multi', function(assert) {
+    QUnit.test('today button click should deselect date if it is already selected and selectionMode is multiple', function(assert) {
         this.reinit({
-            selectionMode: 'multi',
+            selectionMode: 'multiple',
             values: [new Date()],
             showTodayButton: true
         });
@@ -1947,7 +1947,7 @@ QUnit.module('Options', {
             };
         }
     }, () => {
-        ['multi', 'range'].forEach((selectionMode) => {
+        ['multiple', 'range'].forEach((selectionMode) => {
             QUnit.test(`Date from value option is not selected when selectionMode is ${selectionMode}`, function(assert) {
                 this.reinit({
                     ...this.options,
@@ -2067,10 +2067,10 @@ QUnit.module('Options', {
                     assert.deepEqual(currentDate, new Date('2023/01/16'));
                 });
 
-                QUnit.test('Should be equal to deselected cell date when selectionMode = multi', function(assert) {
+                QUnit.test('Should be equal to deselected cell date when selectionMode = multiple', function(assert) {
                     this.reinit({
                         ...this.options,
-                        selectionMode: 'multi'
+                        selectionMode: 'multiple'
                     });
                     const $cell = this.$element.find('*[data-value="2023/01/15"]');
 
@@ -2083,11 +2083,11 @@ QUnit.module('Options', {
             });
         });
 
-        QUnit.module('Multi', {
+        QUnit.module('Multiple', {
             beforeEach: function() {
                 this.reinit({
                     ...this.options,
-                    selectionMode: 'multi'
+                    selectionMode: 'multiple'
                 });
             }
         }, () => {
@@ -4378,7 +4378,7 @@ QUnit.module('Aria accessibility', {
         assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the additional view cell');
     });
 
-    ['multi', 'range'].forEach((selectionMode) => {
+    ['multiple', 'range'].forEach((selectionMode) => {
         QUnit.test(`aria-selected on selected date cell, selectionMode=${selectionMode}`, function(assert) {
             const calendar = this.$element.dxCalendar({
                 values: [new Date(2015, 5, 1)],
@@ -4400,7 +4400,7 @@ QUnit.module('Aria accessibility', {
         });
     });
 
-    ['single', 'multi', 'range'].forEach((selectionMode) => {
+    ['single', 'multiple', 'range'].forEach((selectionMode) => {
         QUnit.test('aria-selected should be added to selected date cell afrer view change, selectionMode=${selectionMode}', function(assert) {
             const calendar = this.$element.dxCalendar({
                 selectionMode,
@@ -4744,7 +4744,7 @@ QUnit.module('dxCalendar number and string value support', {
     });
 });
 
-['single', 'multi', 'range'].forEach((selectionMode) => {
+['single', 'multiple', 'range'].forEach((selectionMode) => {
     QUnit.module(`valueChanged handler should receive correct event (selectionMode = ${selectionMode}`, {
         beforeEach: function() {
             fx.off = true;
