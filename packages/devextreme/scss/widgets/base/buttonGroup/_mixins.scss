@@ -1,0 +1,9 @@
+@mixin dx-buttongroup-item-states($hover-color, $focused-color) {
+  &.dx-state-hover {
+    background-color: $hover-color;
+  }
+
+  &.dx-state-focused {
+    background-color: $focused-color;
+  }
+}

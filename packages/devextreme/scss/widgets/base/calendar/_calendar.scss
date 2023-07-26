@@ -38,14 +38,6 @@
       text-transform: none;
     }
 
-    &.dx-state-disabled {
-      opacity: 1;
-
-      .dx-button-content {
-        opacity: 0.5;
-      }
-    }
-
     &.dx-state-active,
     &.dx-state-hover {
       z-index: 1;

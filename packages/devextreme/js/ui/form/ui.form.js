@@ -107,7 +107,8 @@ const Form = Widget.inherit({
             scrollingEnabled: false,
             validationGroup: undefined,
             stylingMode: config().editorStylingMode,
-            labelMode: 'outside'
+            labelMode: 'outside',
+            isDirty: false
         });
     },
 
@@ -744,6 +745,7 @@ const Form = Widget.inherit({
                 break;
             case 'alignRootItemLabels':
             case 'readOnly':
+            case 'isDirty':
                 break;
             case 'width':
                 this.callBase(args);

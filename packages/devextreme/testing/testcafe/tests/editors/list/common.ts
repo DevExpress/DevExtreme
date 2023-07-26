@@ -3,8 +3,9 @@ import { isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
 import createWidget from '../../../helpers/createWidget';
+import { a11yCheck } from '../../../helpers/accessibilityUtils';
 
-fixture.disablePageReloads`List`
+fixture`List`
   .page(url(__dirname, '../../container.html'));
 
 test('Should focus first item after changing selection mode (T811770)', async (t) => {
@@ -320,4 +321,28 @@ test('Disabled item should be focused on tab press to match accessibility criter
 }).before(async () => createWidget('dxList', {
   dataSource: [{ text: 'item1' }, { text: 'item2' }],
   searchEnabled: true,
+}));
+
+test('Checking simple list with selectAll and "more" button via aXe', async (t) => {
+  await a11yCheck(t);
+}).before(async () => createWidget('dxList', {
+  dataSource: {
+    store: ['item 1', 'item 2', 'item 3'],
+    pageSize: 2,
+  },
+  selectionMode: 'all',
+  showSelectionControls: true,
+}));
+
+test('Checking group list via aXe', async (t) => {
+  await a11yCheck(t);
+}).before(async () => createWidget('dxList', {
+  dataSource: [{
+    key: 'Group 1',
+    items: ['item 1', 'item 2', 'item 3'],
+  }, {
+    key: 'Group 2',
+    items: ['item 1', 'item 2', 'item 3'],
+  }],
+  grouped: true,
 }));

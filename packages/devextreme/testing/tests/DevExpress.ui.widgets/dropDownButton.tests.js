@@ -30,6 +30,7 @@ const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const CUSTOM_CLASS = 'custom-class';
 const LIST_CLASS = 'dx-list';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
+const LIST_ITEMS_CLASS = 'dx-list-items';
 
 QUnit.testStart(() => {
     const markup =
@@ -930,7 +931,7 @@ QUnit.module('list integration', {}, () => {
         });
 
         const list = getList(dropDownButton);
-        const $itemContainer = list._itemContainer();
+        const $itemContainer = list._getItemsContainer();
 
         assert.ok($itemContainer.hasClass('dx-wrap-item-text'), 'class was added');
     });
@@ -2788,17 +2789,18 @@ QUnit.module('Accessibility', {
     });
 
     ['items', 'dataSource'].forEach(dataSource => {
+        const getItemsContainer = () => $(`.${LIST_CLASS} .${LIST_ITEMS_CLASS}`);
+
         QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is not empty on init`, function(assert) {
             const instance = this.createInstance({ opened: true });
-            const $scrollView = $(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`);
 
-            assert.strictEqual($scrollView.attr('aria-label'), 'Items');
+            assert.strictEqual(getItemsContainer().attr('aria-label'), 'Items');
 
             instance.option(dataSource, []);
-            assert.strictEqual($scrollView.attr('aria-label'), undefined);
+            assert.strictEqual(getItemsContainer().attr('aria-label'), undefined);
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($scrollView.attr('aria-label'), 'Items');
+            assert.strictEqual(getItemsContainer().attr('aria-label'), 'Items');
         });
 
         QUnit.test(`list aria-label should be set correctly if data source is ${dataSource} and items is empty on init`, function(assert) {
@@ -2806,30 +2808,29 @@ QUnit.module('Accessibility', {
                 [dataSource]: [],
                 opened: true,
             });
-            const $scrollView = $(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`);
 
-            assert.strictEqual($scrollView.attr('aria-label'), undefined);
+            assert.strictEqual(getItemsContainer().attr('aria-label'), undefined);
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($scrollView.attr('aria-label'), 'Items');
+            assert.strictEqual(getItemsContainer().attr('aria-label'), 'Items');
 
             instance.option(dataSource, []);
-            assert.strictEqual($scrollView.attr('aria-label'), undefined);
+            assert.strictEqual(getItemsContainer().attr('aria-label'), undefined);
         });
 
         QUnit.test(`list should have correct role if data sourse is set with ${dataSource} property`, function(assert) {
             const instance = this.createInstance({
                 [dataSource]: [],
                 opened: true,
-            }); const $scrollView = $(`.${LIST_CLASS} .${SCROLLVIEW_CONTENT_CLASS}`);
+            });
 
-            assert.strictEqual($scrollView.attr('role'), undefined);
+            assert.strictEqual(getItemsContainer().attr('role'), undefined);
 
             instance.option(dataSource, [1, 2, 3]);
-            assert.strictEqual($scrollView.attr('role'), 'listbox');
+            assert.strictEqual(getItemsContainer().attr('role'), 'listbox');
 
             instance.option(dataSource, []);
-            assert.strictEqual($scrollView.attr('role'), undefined);
+            assert.strictEqual(getItemsContainer().attr('role'), undefined);
         });
 
         [[1, 2, 3], []].forEach(items => {

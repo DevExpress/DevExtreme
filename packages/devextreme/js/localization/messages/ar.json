@@ -178,6 +178,7 @@
         "dxDataGrid-ariaSelectAll": "حدد الكل",
         "dxDataGrid-ariaSelectRow": "تحديد صف",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "عامل التصفية",
         "dxDataGrid-filterPanelCreateFilter": "إنشاء عامل تصفية",
         "dxDataGrid-filterPanelClearFilter": "مسح",

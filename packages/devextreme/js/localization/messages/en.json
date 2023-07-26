@@ -178,6 +178,7 @@
         "dxDataGrid-ariaSelectAll": "Select all",
         "dxDataGrid-ariaSelectRow": "Select row",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Filter Builder",
         "dxDataGrid-filterPanelCreateFilter": "Create Filter",
         "dxDataGrid-filterPanelClearFilter": "Clear",
