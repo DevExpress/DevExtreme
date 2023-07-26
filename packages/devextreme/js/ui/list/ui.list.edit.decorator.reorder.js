@@ -25,8 +25,8 @@ registerDecorator(
             this._lockedDrag = false;
 
             const filter = this._groupedEnabled ?
-                '> .dx-list-group > .dx-list-group-body > .dx-list-item' :
-                '> .dx-list-item';
+                '> .dx-list-items > .dx-list-group > .dx-list-group-body > .dx-list-item' :
+                '> .dx-list-items > .dx-list-item';
 
             this._sortable = list._createComponent(list._scrollView.content(), Sortable, extend({
                 component: list,

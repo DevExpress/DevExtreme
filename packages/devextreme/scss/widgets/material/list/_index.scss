@@ -241,6 +241,14 @@ $material-list-searchbox-padding-top: $material-list-searchbox-vertical-padding 
     }
   }
 
+  .dx-list-items {
+    &:not(:first-of-type) {
+      .dx-list-item {
+        margin-top: 0;
+      }
+    }
+  }
+
   .dx-list-item {
     @include toggle-delete-icon($list-icon-color);
 
