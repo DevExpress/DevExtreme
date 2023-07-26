@@ -14,16 +14,6 @@ const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
 
 const toMs = dateUtils.dateToMilliseconds;
 
-function compareBoolean(a, b) {
-    if(a === b) {
-        return 0;
-    }
-    if(a) {
-        return 1;
-    }
-    return -1;
-}
-
 class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     getDeltaTime(args, initialSize, appointment) {
         let deltaTime = 0;
