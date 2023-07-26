@@ -838,6 +838,12 @@ dataGridCore.registerModule('export', {
           if (args.name === 'export') {
             args.handled = true;
             this._invalidate();
+
+            if (args.fullName === 'export.enabled') {
+              if (args.value && !isDefined(this.option('onExporting'))) {
+                errors.log('W1024');
+              }
+            }
           }
         },
 
