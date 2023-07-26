@@ -75,7 +75,10 @@ import Widget from './widget/ui.widget';
  * @hidden
  */
 export interface CellInfo<TRowData = any, TKey = any> {
-    /** @docid */
+    /**
+     * @docid
+     * @type object
+     */
     readonly data: TRowData;
     /** @docid */
     readonly key: TKey;
@@ -482,20 +485,11 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTre
  * @inherits Cancelable,NativeEventInfo
  */
 export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
-    /**
-     * @docid _ui_tree_list_FocusedRowChangingEvent.rowElement
-     * @type DxElement
-     */
+    /** @docid _ui_tree_list_FocusedRowChangingEvent.rowElement */
     readonly rowElement: DxElement;
-    /**
-     * @docid _ui_tree_list_FocusedRowChangingEvent.prevRowIndex
-     * @type number
-     */
+    /** @docid _ui_tree_list_FocusedRowChangingEvent.prevRowIndex */
     readonly prevRowIndex: number;
-    /**
-     * @docid _ui_tree_list_FocusedRowChangingEvent.newRowIndex
-     * @type number
-     */
+    /** @docid _ui_tree_list_FocusedRowChangingEvent.newRowIndex */
     newRowIndex: number;
     /**
      * @docid _ui_tree_list_FocusedRowChangingEvent.rows

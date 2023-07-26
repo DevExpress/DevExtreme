@@ -57,7 +57,6 @@ export type CustomCommandEvent = {
     /**
      * @docid _ui_diagram_CustomCommandEvent.component
      * @type this
-     * @default Widget
      */
     readonly component: dxDiagram;
     /** @docid _ui_diagram_CustomCommandEvent.element */
