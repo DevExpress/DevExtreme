@@ -372,10 +372,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _sortCondition(a, b) {
-        const allDayCondition = compareBoolean(!!a.allDay, !!b.allDay);
+        if(!!a.allDay !== !!b.allDay) {
+            return a.allDay ? 1 : -1;
+        }
+
         const isAllDay = a.allDay && b.allDay;
-        const condition = this.groupOrientation === 'vertical' && isAllDay ? this._columnCondition(a, b) : this._rowCondition(a, b);
-        return allDayCondition ? allDayCondition : condition;
+        return this.groupOrientation === 'vertical' && isAllDay
+            ? this._columnCondition(a, b)
+            : this._rowCondition(a, b);
     }
 
     allDaySupported() {
