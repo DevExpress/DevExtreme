@@ -171,24 +171,12 @@
 }
 
 @mixin dx-icon-margin($size) {
-  margin-right: $size;
-  margin-left: 0;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    margin-left: $size;
-    margin-right: 0;
-  }
+  inset-inline-start: 0;
+  inset-inline-end: $size;
 
   &.dx-icon-right {
-    margin-left: $size;
-    margin-right: 0;
-
-    @at-root #{selector-append(".dx-rtl", &)},
-    .dx-rtl & {
-      margin-right: $size;
-      margin-left: 0;
-    }
+    inset-inline-start: $size;
+    inset-inline-end: 0;
   }
 }
 
