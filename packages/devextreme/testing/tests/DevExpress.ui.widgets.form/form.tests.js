@@ -4384,8 +4384,7 @@ QUnit.test('TagBox.SelectionChanged is raised once if formData is wrapped into a
     ['dxTagBox', ['1'], { dxTagBox: ['2'] }],
     ['dxTextArea', 'a', { dxTextArea: 'b' }],
     ['dxTextBox', 'a', { dxTextBox: 'b' }],
-    // TODO: fix dxDateRangeBox's value change is not fired or write some custom logic
-    // ['dxDateRangeBox', [new Date(2021, 8, 17), new Date(2021, 9, 17)], { dxDateRangeBox: [null, null] } ],
+    ['dxDateRangeBox', [new Date(2021, 8, 17), new Date(2021, 9, 17)], { dxDateRangeBox: [null, null] } ],
     // TODO: implement for renovated component check_box.tsx
     // ['dxCheckBox', true, { dxCheckbox: false } ],
 ].forEach((editorData) => {
