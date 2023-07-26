@@ -1040,6 +1040,10 @@ const Popup = Overlay.inherit({
 
     $overlayContent: function() {
         return this._$content;
+    },
+
+    getAllElements: function() {
+        return this.$wrapper().find('[tabindex]');
     }
 });
 

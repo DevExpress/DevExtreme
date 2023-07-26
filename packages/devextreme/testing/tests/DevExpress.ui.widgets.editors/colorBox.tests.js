@@ -784,13 +784,6 @@ QUnit.module('keyboard navigation', {
         assert.ok(this.instance._colorView, 'colorView work fine when focusStateEnabled set to false');
     });
 
-    QUnit.testInActiveWindow('focusing colorView element should trigger focus on editor input', function(assert) {
-        this.instance.option('opened', true);
-
-        $(this.instance._colorView.$element()).triggerHandler('focus');
-        assert.ok(this.instance.$element().hasClass(STATE_FOCUSED_CLASS), 'colorView on focus reset focus to element');
-    });
-
     QUnit.testInActiveWindow('pressing tab should set focus on first input in overlay', function(assert) {
         this.instance.option('opened', true);
         this.keyboard.keyDown('tab');

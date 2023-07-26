@@ -14,6 +14,7 @@ import Draggable from '../draggable';
 import { isCommandKeyPressed } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
 import Guid from '../../core/guid';
+import { noop } from '../../core/utils/common';
 
 const COLOR_VIEW_CLASS = 'dx-colorview';
 const COLOR_VIEW_CONTAINER_CLASS = 'dx-colorview-container';
@@ -593,6 +594,8 @@ const ColorView = Editor.inherit({
             this._rgbInputsWithLabels[2].find('.dx-numberbox').dxNumberBox('instance')
         ];
     },
+
+    _renderFocusTarget: noop,
 
     _renderEditorWithLabel: function(options) {
         const $editor = $('<div>');
