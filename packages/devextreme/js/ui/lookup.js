@@ -600,7 +600,7 @@ const Lookup = DropDownList.inherit({
 
 
     _listItemGroupedElements: function() {
-        const groups = this._list._itemContainer().children();
+        const groups = this._list._getItemsContainer().children();
         const items = [];
 
         groups.each((_, group) => {

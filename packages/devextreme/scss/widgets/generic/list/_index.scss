@@ -280,6 +280,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
   .dx-list-select-all {
     padding: $generic-list-item-vertical-padding - 1px 0 $generic-list-item-vertical-padding - 2px;
+    border-bottom: $generic-list-item-border;
   }
 
   .dx-list-select-all-checkbox {
