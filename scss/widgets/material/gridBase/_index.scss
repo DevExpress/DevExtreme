@@ -283,8 +283,10 @@ $grid-masterdetail-padding: 16px;
             }
           }
 
-          .dx-link.dx-state-disabled {
-            opacity: $datagrid-text-link-disabled-opacity;
+          .dx-state-disabled {
+            &.dx-link {
+              opacity: $datagrid-text-link-disabled-opacity;
+            }
 
             &.dx-link-icon {
               opacity: $datagrid-icon-link-disabled-opacity;

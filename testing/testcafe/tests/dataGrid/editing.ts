@@ -26,6 +26,8 @@ const getGridConfig = (config): Record<string, unknown> => {
   return config ? { ...defaultConfig, ...config } : defaultConfig;
 };
 
+const encodedIcon = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%3E%3Cpath%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20d%3D%22M4.913%203.5%209.81%208.397%2012%206.207V12H6.206l2.19-2.19-4.898-4.896L4.913%203.5s0-.028%200%200zM4.914%202c-.384%200-.767.146-1.06.44L2.438%203.852a1.5%201.5%200%200%200%200%202.121L6.275%209.81l-1.982%201.983A1%201%200%200%200%205%2013.5h7.5a.97.97%200%200%200%20.972-.972L13.5%205a1%201%200%200%200-1.707-.707L9.811%206.275%205.975%202.44A1.498%201.498%200%200%200%204.914%202z%22%20fill%3D%22%230067C5%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E';
+
 test('Tab key on editor should focus next cell if editing mode is cell', async (t) => {
   const dataGrid = new DataGrid('#container');
 
@@ -2289,5 +2291,65 @@ test('Popup EditForm screenshot', async (t) => {
         data,
       },
     })();
+  });
+});
+
+[
+  {
+    theme: 'material.blue.light',
+    useIcons: true,
+  },
+  {
+    theme: 'generic.light',
+    useIcons: true,
+  },
+  {
+    theme: 'material.blue.light',
+    useIcons: false,
+  },
+  {
+    theme: 'generic.light',
+    useIcons: false,
+  },
+].forEach(({ theme, useIcons }) => {
+  // T1179114
+  test(`The disabled state should be correct for a custom button when given as a SVG image (${theme})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-${theme.split('.')[0]}-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      height: 150,
+      dataSource: [{
+        Id: 0,
+        name: 'test',
+      }],
+      keyExpr: 'Id',
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        allowDeleting: true,
+        useIcons,
+      },
+      columns: ['Id', 'name', {
+        type: 'buttons',
+        buttons: ['edit',
+          {
+            name: 'delete',
+            disabled: true,
+          },
+          {
+            icon: encodedIcon,
+            disabled: true,
+          }],
+      }],
+    });
   });
 });
