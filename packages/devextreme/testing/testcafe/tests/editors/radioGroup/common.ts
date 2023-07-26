@@ -5,7 +5,6 @@ import url from '../../../helpers/getPageUrl';
 import RadioGroup from '../../../model/radioGroup';
 import createWidget from '../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Radio Group`
   .page(url(__dirname, '../../container.html'));
