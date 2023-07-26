@@ -14,6 +14,16 @@ const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
 
 const toMs = dateUtils.dateToMilliseconds;
 
+function compareBoolean(a, b) {
+    if(a === b) {
+        return 0;
+    }
+    if(a) {
+        return 1;
+    }
+    return -1;
+}
+
 class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     getDeltaTime(args, initialSize, appointment) {
         let deltaTime = 0;
@@ -362,7 +372,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _sortCondition(a, b) {
-        const allDayCondition = !!a.allDay - !!b.allDay;
+        const allDayCondition = compareBoolean(!!a.allDay, !!b.allDay);
         const isAllDay = a.allDay && b.allDay;
         const condition = this.groupOrientation === 'vertical' && isAllDay ? this._columnCondition(a, b) : this._rowCondition(a, b);
         return allDayCondition ? allDayCondition : condition;

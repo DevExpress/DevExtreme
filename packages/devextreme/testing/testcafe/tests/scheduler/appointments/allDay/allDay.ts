@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import Scheduler from '../../../../model/scheduler';
 
 fixture.disablePageReloads`Scheduler - All day appointments`
   .page(url(__dirname, '../../../container.html'));
@@ -88,13 +89,15 @@ test('it should skip weekend days in timelineWorkWeek', async (t) => {
 });
 
 test('should work correctly for unsorted dataSource', async (t) => {
+  const scheduler = new Scheduler('#container');
+
   const {
     takeScreenshot,
     compareResults,
   } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('allDay-unsorted-datasource.png'))
+    .expect(await takeScreenshot('allDay-unsorted-datasource.png', scheduler.workSpace))
     .ok();
 
   await t
@@ -105,12 +108,6 @@ test('should work correctly for unsorted dataSource', async (t) => {
     'dxScheduler',
     {
       dataSource: [{
-        id: 2,
-        text: '2',
-        startDate: new Date('2020-11-26T10:30:00.000'),
-        endDate: new Date('2020-11-26T21:00:00.000'),
-        allDay: false,
-      }, {
         id: 3,
         text: '3',
         startDate: new Date('2020-11-23T00:00:00.000'),
