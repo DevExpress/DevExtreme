@@ -3518,6 +3518,55 @@ if(devices.real().deviceType === 'desktop') {
             });
         });
 
+        QUnit.test('activedescendant attribute should be correct if searchEnabled is true', function(assert) {
+            helper.createWidget({
+                opened: true,
+                searchEnabled: true,
+                dataSource: [1, 2, 3]
+            });
+
+            const $list = $(`.${LIST_CLASS}`);
+            const list = getList();
+            const $input = $(`.${LOOKUP_FIELD_CLASS}`);
+            const $searchInput = $(`.${LOOKUP_SEARCH_CLASS}`).find('input');
+            const $firstItem = $list.find('.dx-list-item:eq(0)');
+            const $secondItem = $list.find('.dx-list-item:eq(1)');
+
+            assert.notOk($firstItem.attr('id'), 'id on 0 item is not exist');
+            assert.notOk($secondItem.attr('id'), 'id on 1 item is not exist');
+            assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not exists');
+            assert.strictEqual($searchInput.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not exists');
+
+            list.option('focusedElement', $secondItem);
+
+            assert.ok($secondItem.attr('id'), 'id is exist');
+            assert.strictEqual($input.attr('aria-activedescendant'), $secondItem.attr('id'), 'aria-activedescendant is exists');
+            assert.strictEqual($searchInput.attr('aria-activedescendant'), $secondItem.attr('id'), 'aria-activedescendant is exists');
+        });
+
+        QUnit.test('activedescendant attribute should be correct if searchEnabled is false', function(assert) {
+            helper.createWidget({
+                opened: true,
+                searchEnabled: false,
+                dataSource: [1, 2, 3]
+            });
+
+            const $list = $(`.${LIST_CLASS}`);
+            const list = getList();
+            const $input = $(`.${LOOKUP_FIELD_CLASS}`);
+            const $firstItem = $list.find('.dx-list-item:eq(0)');
+
+            assert.ok($firstItem.attr('id'), 'id on 0 is exist');
+            assert.strictEqual($input.attr('aria-activedescendant'), $firstItem.attr('id'), 'aria-activedescendant is exists');
+
+            const $secondItem = $list.find('.dx-list-item:eq(1)');
+            list.option('focusedElement', $secondItem);
+
+            assert.notOk($firstItem.attr('id'), 'id on 0 item is not exist');
+            assert.ok($secondItem.attr('id'), 'id on 1 item is exist');
+            assert.strictEqual($input.attr('aria-activedescendant'), $secondItem.attr('id'), 'aria-activedescendant is exists');
+        });
+
         ['items', 'dataSource'].forEach(dataSourcePropertyName => {
             QUnit.test(`should have correct role and aria-label if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
                 helper.createWidget({ opened: true });
