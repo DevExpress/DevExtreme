@@ -3,6 +3,7 @@ import between from 'ui/filter_builder/between';
 import CustomStore from 'data/custom_store';
 import messageLocalization from 'localization/message';
 import fields from '../../../helpers/filterBuilderTestData.js';
+import filterUtils from 'ui/shared/filtering';
 
 const condition1 = ['CompanyName', '=', 'Super Mart of the West'];
 const condition2 = ['CompanyName', '=', 'and'];
@@ -256,17 +257,17 @@ QUnit.module('Utils', function() {
 
         hierarchicalFields = [{
             dataField: 'group.field1',
-            dataType: 'string'
+            dataType: 'string',
         }, {
             dataField: 'group.group2.field3',
-            dataType: 'string'
+            dataType: 'string',
         }, {
             dataField: 'group3.field4',
-            dataType: 'string'
+            dataType: 'string',
         }, {
             dataField: 'group3',
             dataType: 'object',
-            filterOperations: ['isblank', 'isnotblank']
+            filterOperations: ['isblank', 'isnotblank'],
         }];
 
         plainItems = utils.getItems(hierarchicalFields, true);
@@ -275,38 +276,40 @@ QUnit.module('Utils', function() {
             dataField: 'group',
             dataType: 'object',
             filterOperations: ['isblank', 'isnotblank'],
-            id: 'group'
+            id: 'group',
+            defaultCalculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
         }, {
             caption: 'Field 1',
             dataField: 'group.field1',
             dataType: 'string',
             parentId: 'group',
-            id: 'group.field1'
+            id: 'group.field1',
         }, {
             caption: 'Group 2',
             dataField: 'group.group2',
             dataType: 'object',
             parentId: 'group',
             filterOperations: ['isblank', 'isnotblank'],
-            id: 'group.group2'
+            id: 'group.group2',
+            defaultCalculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
         }, {
             caption: 'Field 3',
             dataField: 'group.group2.field3',
             dataType: 'string',
             parentId: 'group.group2',
-            id: 'group.group2.field3'
+            id: 'group.group2.field3',
         }, {
             caption: 'Field 4',
             dataField: 'group3.field4',
             dataType: 'string',
             parentId: 'group3',
-            id: 'group3.field4'
+            id: 'group3.field4',
         }, {
             caption: 'Group 3',
             dataField: 'group3',
             dataType: 'object',
             filterOperations: ['isblank', 'isnotblank'],
-            id: 'group3'
+            id: 'group3',
         }]);
     });
 
