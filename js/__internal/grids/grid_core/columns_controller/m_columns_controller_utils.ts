@@ -566,7 +566,7 @@ export const updateColumnChanges = function (that: ColumnsController, changeType
       columnChanges.columnIndices ??= [];
 
       if (isDefined(columnChanges.columnIndex)) {
-        columnChanges.push(columnChanges.columnIndex);
+        columnChanges.columnIndices.push(columnChanges.columnIndex);
       }
 
       columnChanges.columnIndices.push(columnIndex);
