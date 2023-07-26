@@ -94,17 +94,13 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 .dx-tabpanel {
   > .dx-tabpanel-tabs {
     .dx-tab {
-      max-width: 140px;
+      flex-grow: 0;
+      flex-basis: auto;
+      width: 140px;
       padding: $generic-tabpanel-tabs-item-padding;
     }
 
     @include tabpanel-tab-color-mixin();
-
-    .dx-tabs-nav-buttons {
-      .dx-tab {
-        min-width: 140px;
-      }
-    }
   }
 
   &:not(.dx-empty-collection) {
