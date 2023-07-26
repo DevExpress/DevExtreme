@@ -2388,4 +2388,3 @@ test('Popup EditForm screenshot', async (t) => {
     });
   });
 });
-
