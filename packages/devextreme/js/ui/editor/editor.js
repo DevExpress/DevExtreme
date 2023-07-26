@@ -92,7 +92,9 @@ const Editor = Widget.inherit({
 
             validationTooltipOptions: {},
 
-            _showValidationMessage: true
+            _showValidationMessage: true,
+
+            isDirty: false
         });
     },
 
@@ -373,6 +375,7 @@ const Editor = Widget.inherit({
                 this._innerWidgetOptionChanged(this._validationMessage, args);
                 break;
             case '_showValidationMessage':
+            case 'isDirty':
                 break;
             default:
                 this.callBase(args);
