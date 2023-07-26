@@ -12,7 +12,6 @@ $scrollable-bg: $base-bg !default;
 */
 $scrollable-scroll-bg: null !default;
 $scrollable-scroll-active-bg: null !default;
-$scrollable-scroll-shadow-color: null !default;
 $scrollable-scrollbar-bg: null !default;
 
 /**
@@ -24,7 +23,6 @@ $scrollable-scrollbar-active-bg: null !default;
 @if $color == "carmine" {
   $scrollable-scroll-bg: color.change(darken($base-accent, 15%), $alpha: 0.8) !default;
   $scrollable-scroll-active-bg: darken($base-accent, 15%) !default;
-  $scrollable-scroll-shadow-color: transparent !default;
   $scrollable-scrollbar-bg: transparent !default;
   $scrollable-scrollbar-active-bg: color.change(darken($scrollable-bg, 25%), $alpha: 0.2) !default;
 }
@@ -32,7 +30,6 @@ $scrollable-scrollbar-active-bg: null !default;
 @if $color == "contrast" {
   $scrollable-scroll-bg: $base-inverted-bg !default;
   $scrollable-scroll-active-bg: $base-inverted-bg !default;
-  $scrollable-scroll-shadow-color: color.change($scrollable-bg, $alpha: 0.2) !default;
   $scrollable-scrollbar-bg: color.change($base-inverted-bg, $alpha: 0) !default;
   $scrollable-scrollbar-active-bg: color.change($base-accent, $alpha: 0.8) !default;
 }
@@ -40,7 +37,6 @@ $scrollable-scrollbar-active-bg: null !default;
 @if $color == "dark" {
   $scrollable-scroll-bg: color.change(lighten($scrollable-bg, 25%), $alpha: 0.7) !default;
   $scrollable-scroll-active-bg: lighten($scrollable-bg, 25%) !default;
-  $scrollable-scroll-shadow-color: transparent !default;
   $scrollable-scrollbar-bg: transparent !default;
   $scrollable-scrollbar-active-bg: color.change(lighten($scrollable-bg, 25%), $alpha: 0.2) !default;
 }
@@ -48,7 +44,6 @@ $scrollable-scrollbar-active-bg: null !default;
 @if $color == "darkmoon" {
   $scrollable-scroll-bg: color.change(darken($base-accent, 15%), $alpha: 0.8) !default;
   $scrollable-scroll-active-bg: darken($base-accent, 15%) !default;
-  $scrollable-scroll-shadow-color: transparent !default;
   $scrollable-scrollbar-bg: transparent !default;
   $scrollable-scrollbar-active-bg: color.change(lighten($base-bg, 25%), $alpha: 0.2) !default;
 }
@@ -56,7 +51,6 @@ $scrollable-scrollbar-active-bg: null !default;
 @if $color == "darkviolet" {
   $scrollable-scroll-bg: color.change(darken($base-accent, 15%), $alpha: 0.8) !default;
   $scrollable-scroll-active-bg: darken($base-accent, 15%) !default;
-  $scrollable-scroll-shadow-color: transparent !default;
   $scrollable-scrollbar-bg: transparent !default;
   $scrollable-scrollbar-active-bg: color.change(#4d4d68, $alpha: 0.5) !default;
 }
@@ -64,7 +58,6 @@ $scrollable-scrollbar-active-bg: null !default;
 @if $color == "greenmist" {
   $scrollable-scroll-bg: color.change(darken($base-accent, 15%), $alpha: 0.8) !default;
   $scrollable-scroll-active-bg: darken($base-accent, 15%) !default;
-  $scrollable-scroll-shadow-color: transparent !default;
   $scrollable-scrollbar-bg: transparent !default;
   $scrollable-scrollbar-active-bg: color.change(darken($base-bg, 9%), $alpha: 0.7) !default;
 }
@@ -72,7 +65,6 @@ $scrollable-scrollbar-active-bg: null !default;
 @if $color == "light" {
   $scrollable-scroll-bg: color.change(darken($scrollable-bg, 25%), $alpha: 0.7) !default;
   $scrollable-scroll-active-bg: darken($scrollable-bg, 25%) !default;
-  $scrollable-scroll-shadow-color: transparent !default;
   $scrollable-scrollbar-bg: transparent !default;
   $scrollable-scrollbar-active-bg: color.change(darken($scrollable-bg, 25%), $alpha: 0.2) !default;
 }
@@ -80,7 +72,6 @@ $scrollable-scrollbar-active-bg: null !default;
 @if $color == "softblue" {
   $scrollable-scroll-bg: color.change(darken($base-accent, 15%), $alpha: 0.8) !default;
   $scrollable-scroll-active-bg: darken($base-accent, 15%) !default;
-  $scrollable-scroll-shadow-color: transparent !default;
   $scrollable-scrollbar-bg: transparent !default;
   $scrollable-scrollbar-active-bg: color.change(darken($scrollable-bg, 25%), $alpha: 0.2) !default;
 }
