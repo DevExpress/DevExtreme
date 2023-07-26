@@ -2,7 +2,6 @@ import dateUtils from '../../core/utils/date';
 import CalendarSelectionStrategy from './ui.calendar.selection.strategy';
 
 const DAY_INTERVAL = 86400000;
-const RANGE_OFFSET = DAY_INTERVAL * 120;
 
 class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     constructor(component) {
