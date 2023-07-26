@@ -858,6 +858,25 @@ QUnit.module('Filter value', function() {
         assert.equal($fields.eq(3).text(), 'City');
     });
 
+    // T1176596
+    QUnit.test('filter by parent field with hierarchical fields', function(assert) {
+        const container = $('#container');
+
+        const filterBuilder = container.dxFilterBuilder({
+            value: [
+                ['address', '=', null]
+            ],
+            allowHierarchicalFields: true,
+            fields: [{
+                dataField: 'address.state',
+            }]
+        }).dxFilterBuilder('instance');
+
+        const filterExpr = filterBuilder.getFilterExpression();
+
+        assert.deepEqual(filterExpr, ['address', '=', null]);
+    });
+
     // T812261, T750946
     QUnit.test('hierarchical fields with two fields with the same dataField', function(assert) {
         const container = $('#container');

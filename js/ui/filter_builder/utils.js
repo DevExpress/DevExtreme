@@ -634,7 +634,8 @@ function pushItemAndCheckParent(originalItems, plainItems, item) {
                 dataType: 'object',
                 dataField: item.parentId,
                 caption: generateCaptionByDataField(item.parentId, true),
-                filterOperations: ['isblank', 'isnotblank']
+                filterOperations: ['isblank', 'isnotblank'],
+                defaultCalculateFilterExpression: filterUtils.defaultCalculateFilterExpression
             });
         }
     }
