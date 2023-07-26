@@ -2227,6 +2227,66 @@ QUnit.module('Options', {
                 assert.ok(selectedRange.length < 240);
             });
 
+            [1, 2].forEach((viewsCount) => {
+                QUnit.test(`Big range should start from first date of before view and end on last date of after view (viewsCount=${viewsCount})`, function(assert) {
+                    this.reinit({
+                        values: ['1996/01/05', '2345/03/07'],
+                        selectionMode: 'range',
+                        viewsCount,
+                    });
+
+                    this.calendar.option('currentDate', new Date('2023/07/24'));
+
+                    const expectedRangeStart = new Date('2023/06/01');
+                    const expectedRangeEnd = viewsCount === 1 ? new Date('2023/08/31') : new Date('2023/09/30');
+                    const selectedRange = getCurrentViewInstance(this.calendar).option('range');
+                    const rangeStart = selectedRange[0];
+                    const rangeEnd = selectedRange[selectedRange.length - 1];
+
+                    assert.deepEqual(rangeStart, expectedRangeStart, 'range start date is first date in views');
+                    assert.deepEqual(rangeEnd, expectedRangeEnd, 'range end date is last date in views');
+                });
+
+                QUnit.test(`Big range should start from start date if start date is date in before view (viewsCount=${viewsCount})`, function(assert) {
+                    this.reinit({
+                        values: ['1996/01/05', '2345/03/07'],
+                        selectionMode: 'range',
+                        viewsCount,
+                    });
+
+                    this.calendar.option('currentDate', new Date('2023/07/24'));
+                    this.calendar.option('currentDate', new Date('1996/02/15'));
+
+                    const expectedRangeStart = new Date('1996/01/05');
+                    const expectedRangeEnd = viewsCount === 1 ? new Date('1996/03/31') : new Date('1996/04/30');
+                    const selectedRange = getCurrentViewInstance(this.calendar).option('range');
+                    const rangeStart = selectedRange[0];
+                    const rangeEnd = selectedRange[selectedRange.length - 1];
+
+                    assert.deepEqual(rangeStart, expectedRangeStart, 'range start date is start date');
+                    assert.deepEqual(rangeEnd, expectedRangeEnd, 'range end date is last date in views');
+                });
+
+                QUnit.test(`Big range should end on end date if end date is date from views (viewsCount=${viewsCount})`, function(assert) {
+                    this.reinit({
+                        values: ['1996/01/05', '2345/03/07'],
+                        selectionMode: 'range',
+                        viewsCount,
+                    });
+
+                    this.calendar.option('currentDate', new Date('2345/03/15'));
+
+                    const expectedRangeStart = new Date('2345/02/01');
+                    const expectedRangeEnd = new Date('2345/03/07');
+                    const selectedRange = getCurrentViewInstance(this.calendar).option('range');
+                    const rangeStart = selectedRange[0];
+                    const rangeEnd = selectedRange[selectedRange.length - 1];
+
+                    assert.deepEqual(rangeStart, expectedRangeStart, 'range start date is first date in views');
+                    assert.deepEqual(rangeEnd, expectedRangeEnd, 'range end date is end date');
+                });
+            });
+
             [
                 [null, null],
                 [new Date(2021, 9, 17), null],

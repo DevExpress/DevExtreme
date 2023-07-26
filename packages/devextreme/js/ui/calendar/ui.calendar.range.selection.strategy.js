@@ -118,11 +118,13 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
             return [];
         }
 
-        // TODO: Rework this range reducing algorithm to support different multi views
-        // and optimise single views.
-        const currentDate = this.calendar.option('currentDate').getTime();
-        const rangeStartDate = new Date(Math.max(currentDate - RANGE_OFFSET, startDate));
-        const rangeEndDate = new Date(Math.min(currentDate + RANGE_OFFSET, endDate));
+        const { currentDate, viewsCount } = this.calendar.option();
+        const isAdditionalViewDate = this.calendar._isAdditionalViewDate(currentDate);
+        const firstDateInViews = dateUtils.getFirstMonthDate(dateUtils.addDateInterval(currentDate, 'month', isAdditionalViewDate ? -2 : -1));
+        const lastDateInViews = dateUtils.getLastMonthDate(dateUtils.addDateInterval(currentDate, 'month', isAdditionalViewDate ? 1 : viewsCount));
+
+        const rangeStartDate = new Date(Math.max(firstDateInViews, startDate));
+        const rangeEndDate = new Date(Math.min(lastDateInViews, endDate));
 
         return [...dateUtils.getDatesOfInterval(rangeStartDate, rangeEndDate, DAY_INTERVAL), rangeEndDate];
     }
