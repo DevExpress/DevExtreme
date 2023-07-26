@@ -582,7 +582,7 @@ const AreaItem = Class.inherit({
       } catch (e) {
         that._tableElement.empty();
       }
-      that._tableElement.attr('style', '');
+      that._tableElement.removeAttr('style');
     } else {
       that._groupElement = that._createGroupElement();
       that._tableElement = that._createTableElement();
