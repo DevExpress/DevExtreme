@@ -1,0 +1,126 @@
+@use "sass:math";
+@use "../../colors" as *;
+@use "../../sizes" as *;
+@use "../../button/colors" as *;
+@use "../../../base/icons" as *;
+@use "../../../base/tabs";
+@use "../variables/sizes" as *;
+@use "../variables/colors" as *;
+@use "../variables/borders" as *;
+@use "../mixins" as *;
+
+
+.dx-tab {
+  // min-width: 90px;
+  padding: $generic-tabs-item-padding;
+  background-color: $tabs-tab-bg;
+  color: $tabs-tab-color;
+
+  &.dx-state-hover {
+    background-color: $tabs-tab-hover-bg;
+
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border-hover-top,
+      $generic-tabs-border-hover-bottom,
+      $generic-tabs-border-hover-left,
+      $generic-tabs-border-hover-right,
+    );
+  }
+
+  &.dx-tab-selected {
+    background-color: $tabs-tab-selected-bg;
+    color: $tabs-tab-selected-color;
+
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border-selected-top,
+      $generic-tabs-border-selected-bottom,
+      $generic-tabs-border-selected-left,
+      $generic-tabs-border-selected-right,
+    );
+
+    .dx-tab-text {
+      color: $tabs-tab-selected-color;
+    }
+
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
+    }
+  }
+
+  &.dx-state-active {
+    background-color: $tabs-tab-active-bg;
+    color: $tabs-tab-selected-color;
+
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border-active-top,
+      $generic-tabs-border-active-bottom,
+      $generic-tabs-border-active-left,
+      $generic-tabs-border-active-right,
+    );
+
+    .dx-tab-text {
+      color: $tabs-tab-selected-color;
+    }
+
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
+    }
+  }
+
+  &.dx-state-focused {
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border-focused-top,
+      $generic-tabs-border-focused-bottom,
+      $generic-tabs-border-focused-left,
+      $generic-tabs-border-focused-right,
+    );
+  }
+
+  &.dx-state-focused.dx-state-disabled {
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border-focused-disabled-top,
+      $generic-tabs-border-focused-disabled-bottom,
+      $generic-tabs-border-focused-disabled-left,
+      $generic-tabs-border-focused-disabled-right,
+      $is-expanded: true,
+    );
+  }
+
+  .dx-tab-text {
+    color: $tabs-tab-color;
+    line-height: $generic-tab-text-line-height;
+  }
+
+  .dx-icon {
+    color: $tabs-tab-icon-color;
+
+    @include dx-icon-sizing($generic-base-icon-size);
+    @include dx-icon-margin($generic-tabs-icon-margin);
+  }
+}
+
+.dx-tabs {
+  &.dx-state-focused {
+    .dx-tab {
+      &.dx-focused-disabled-next-tab {
+        &::after {
+          border-inline-end: none;
+        }
+      }
+    
+      &.dx-focused-disabled-prev-tab {
+        &::after {
+          border-inline-start: none;
+        }
+      }
+    }
+  }
+
+  .dx-tab {
+    &.dx-state-disabled {
+      .dx-tab-content {
+        opacity: 0.32;
+      }
+    }
+  }
+}

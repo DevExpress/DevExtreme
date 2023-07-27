@@ -1,5 +1,5 @@
-@use "../sizes" as *;
-@use "../colors" as *;
+@use "../../sizes" as *;
+@use "../../colors" as *;
 @use "colors" as *;
 
 // adduse
@@ -7,15 +7,19 @@
 $generic-tabs-item-padding: null !default;
 $generic-tabs-item-padding-disabled-focused: null !default;
 $generic-tabs-border-width: $generic-base-border-width !default;
+
+$generic-tabs-nav-button-height: null !default;
 $generic-tabs-nav-button-width: null !default;
 $generic-tab-text-line-height: null !default;
-
+$generic-tabs-icon-margin: null !default;
 
 @if $size == "default" {
   $generic-tabs-item-padding: 10px 9px !default;
   $generic-tabs-item-padding-disabled-focused: 10px !default;
   $generic-tabs-nav-button-width: 25px !default;
-  $generic-tab-text-line-height: 25px !default;
+  $generic-tab-text-line-height: 1 !default;
+  $generic-tabs-nav-button-height: 38px !default;
+  $generic-tabs-icon-margin: 8px !default;
 }
 
 @else if $size == "compact" {
@@ -23,4 +27,6 @@ $generic-tab-text-line-height: null !default;
   $generic-tabs-item-padding-disabled-focused: 5px !default;
   $generic-tabs-nav-button-width: 25px !default;
   $generic-tab-text-line-height: 21px !default;
+  $generic-tabs-nav-button-height: 38px !default;
+  $generic-tabs-icon-margin: 8px !default;
 }

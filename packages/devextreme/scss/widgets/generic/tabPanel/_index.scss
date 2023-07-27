@@ -3,8 +3,8 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../tabs/sizes" as *;
-@use "../tabs/colors" as *;
+@use "../tabs/variables/sizes" as *;
+@use "../tabs/variables/colors" as *;
 @use "../tabs/index" as *;
 @use "../../base/tabPanel";
 
