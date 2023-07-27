@@ -11,14 +11,12 @@ const ts = require('gulp-typescript');
 const plumber = require('gulp-plumber');
 const gulpIf = require('gulp-if');
 const babel = require('gulp-babel');
-const notify = require('gulp-notify');
 const watch = require('gulp-watch');
 const transpileConfig = require('../transpile-config');
 const env = require('../env-variables');
 const cached = require('gulp-cached');
 
 const {
-    BASE_GENERATOR_OPTIONS,
     BASE_GENERATOR_OPTIONS_WITH_JQUERY
 } = require('./generator-options');
 
@@ -36,14 +34,7 @@ const SRC = [
     '!js/renovation/test_utils/**/*'
 ];
 
-const IGNORE_PATHS_BY_FRAMEWORKS = {
-    vue: [],
-    react: [],
-};
-
 const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
-
-const COMMON_SRC = ['js/**/*.d.ts', 'js/**/*.js'];
 
 const knownErrors = [
     'js/renovation/component_wrapper/',
@@ -174,140 +165,6 @@ gulp.task('generate-inferno-components-watch', function() {
         ));
 });
 
-function addGenerationTask(
-    frameworkName,
-    knownErrors = [],
-    compileTs = true,
-    copyArtifacts = false,
-    babelGeneratedFiles = true
-) {
-    addGenerationTaskWithSuffix(frameworkName, '', knownErrors, compileTs, copyArtifacts, babelGeneratedFiles)
-}
-function addGenerationTaskWithSuffix(
-    frameworkName,
-    suffix,
-    knownErrors = [],
-    compileTs = true,
-    copyArtifacts = false,
-    babelGeneratedFiles = true
-) {
-    const frameworkDest = `artifacts/${frameworkName}${suffix}`;
-    const generator = require(`@devextreme-generator/${frameworkName}`).default;
-    let tsProject = () => () => { };
-    if(compileTs) {
-        tsProject = ts.createProject(`build/gulp/generator/ts-configs/${frameworkName}.tsconfig.json`);
-    }
-
-    generator.options = BASE_GENERATOR_OPTIONS;
-
-    function compileComponents(done) {
-        const errors = [];
-        const frameworkIgnorePaths = IGNORE_PATHS_BY_FRAMEWORKS[frameworkName];
-
-        return gulp.src([
-            ...SRC,
-            ...frameworkIgnorePaths,
-            '!js/renovation/component_wrapper/**/*.*',
-        ], { base: 'js' })
-            .pipe(generateComponents(generator))
-            .pipe(plumber(() => null))
-            .pipe(gulpIf(compileTs, tsProject({
-                error: processErrors(knownErrors, errors),
-                finish() { }
-            }))).on('end', function() {
-                done(errors.map(e => e.message).join('\n') || undefined);
-            });
-    }
-
-    gulp.task(`${frameworkName}${suffix}-compilation-check`, compileComponents);
-
-    gulp.task(`generate-${frameworkName}${suffix}-declaration-only`, function(done) {
-        return compileComponents(done)
-            .pipe(gulpIf(babelGeneratedFiles, babel(transpileConfig.cjs)))
-            .pipe(gulp.dest(frameworkDest));
-    });
-
-    const frameworkSrc = `./artifacts/${frameworkName}${suffix}`;
-    const artifactsSrc = ['./artifacts/css/**/*', `${frameworkSrc}/**/*`];
-
-    const generateSeries = [
-        function cleanFrameworkArtifacts(cb) {
-            del.sync(frameworkSrc);
-            cb();
-        },
-        `generate-${frameworkName}${suffix}-declaration-only`,
-        function() {
-            return gulp.src(COMMON_SRC)
-                .pipe(
-                    gulpIf(
-                        file => file.extname === '.js',
-                        babel(transpileConfig.cjs)
-                    )
-                )
-                .pipe(gulp.dest(frameworkDest));
-        }];
-
-    if(copyArtifacts) {
-        const dest = `./playground/${frameworkName}${suffix}/src/artifacts`;
-        generateSeries.push(function cleanFrameworkPlayground(cb) {
-            del.sync(dest);
-            cb();
-        });
-        generateSeries.push(function copyArtifacts() {
-            return gulp.src(artifactsSrc, { base: './artifacts/' })
-                .pipe(gulp.dest(dest));
-        });
-    }
-
-    gulp.task(`generate-${frameworkName}${suffix}`, gulp.series(...generateSeries));
-
-    const watchTasks = [
-        function() {
-            watch(COMMON_SRC)
-                .pipe(plumber({
-                    errorHandler: notify.onError('Error: <%= error.message %>')
-                        .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
-                }))
-                .pipe(
-                    gulpIf(
-                        file => file.extname === '.js',
-                        babel(transpileConfig.cjs)
-                    )
-                )
-                .pipe(gulp.dest(frameworkDest));
-        },
-        function watchDeclarationBuild() {
-            gulp.watch(SRC, gulp.series(`generate-${frameworkName}${suffix}-declaration-only`));
-        }
-    ];
-
-    if(copyArtifacts) {
-        watchTasks.push(function copyArtifacts() {
-            return gulp.src(artifactsSrc, { base: './artifacts/' })
-                .pipe(watch(artifactsSrc, { base: './artifacts/', readDelay: 1000 }))
-                .pipe(gulp.dest(`./playground/${frameworkName}${suffix}/src/artifacts`));
-        });
-    }
-
-    gulp.task(`generate-${frameworkName}${suffix}-watch`, gulp.series(
-        `generate-${frameworkName}${suffix}`,
-        gulp.parallel(...watchTasks)
-    ));
-}
-
-addGenerationTask('react',
-    knownErrors,
-    true,
-    true,
-    false
-);
-addGenerationTaskWithSuffix('react', '-typescript', knownErrors, false, false, false);
-
-const ngErrors = [
-    'Cannot find module \'inferno\'',
-    'Cannot find module \'inferno-create-element\'',
-].concat(knownErrors);
-
 gulp.task('generate-components-watch', gulp.series('generate-components', function() {
     gulp
         .watch(SRC, gulp.series('generate-components-dev'))
@@ -315,5 +172,3 @@ gulp.task('generate-components-watch', gulp.series('generate-components', functi
             'generate-components task is watching for changes...'
         ));
 }));
-
-gulp.task('native-components-compilation-check', gulp.series('react-compilation-check'));
