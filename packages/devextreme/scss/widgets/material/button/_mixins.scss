@@ -41,6 +41,7 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
     $background-color,
     $text-color,
     $shadow-color,
+    $border-color,
     $hover-background-color,
     $hover-shadow-color,
     $focused-background-color,
@@ -53,7 +54,7 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
   background-color: $background-color;
   color: $text-color;
   box-shadow: $shadow-color;
-  border-color: transparent;
+  border-color: $border-color;
 
   .dx-icon {
     color: $icon-color;
@@ -91,6 +92,7 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
     $button-bg,
     $button-color,
     $material-normal-button-shadow,
+    transparent,
     $button-hover-bg,
     $material-normal-button-hovered-state-shadow,
     $button-focused-bg,
@@ -128,6 +130,7 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
       transparent,
       $button-color,
       none,
+      transparent,
       $hover-bg,
       none,
       $focused-bg,
@@ -144,6 +147,7 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
       transparent,
       $button-color,
       none,
+      $border-color,
       $hover-bg,
       none,
       $focused-bg,
@@ -153,6 +157,4 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
       transparent,
       $button-color
     );
-
-  border-color: $border-color;
 }
