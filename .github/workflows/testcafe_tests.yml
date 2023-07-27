@@ -42,7 +42,7 @@ jobs:
 
     - name: Zip artifacts
       run: |
-        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
@@ -76,8 +76,6 @@ jobs:
           { componentFolder: "editors", name: "editors - material", theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
           { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
-          { componentFolder: "renovation", name: "renovation (jquery)", platform: "jquery" },
-          { componentFolder: "renovation", name: "renovation (react)", platform: "react" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
