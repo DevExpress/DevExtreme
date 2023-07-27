@@ -1,18 +1,21 @@
 /* global currentTest */
 
-import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
-import registerComponent from 'core/component_registrator';
-import resizeCallbacks from 'core/utils/resize_callbacks';
-import { BaseGauge, formatValue, getSampleText } from 'viz/gauges/base_gauge';
-import titleModule from 'viz/core/title';
-import loadingIndicatorModule from 'viz/core/loading_indicator';
-import rendererModule from 'viz/core/renderers/renderer';
-import tooltipModule from 'viz/core/tooltip';
-import translator1DModule from 'viz/translators/translator1d';
-import themeManagerModule from 'viz/gauges/theme_manager';
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const registerComponent = require('core/component_registrator');
+const resizeCallbacks = require('core/utils/resize_callbacks');
+const baseGaugeModule = require('viz/gauges/base_gauge');
+const BaseGauge = baseGaugeModule.BaseGauge;
+const formatValue = baseGaugeModule.formatValue;
+const getSampleText = baseGaugeModule.getSampleText;
+const titleModule = require('viz/core/title');
+const loadingIndicatorModule = require('viz/core/loading_indicator');
+const rendererModule = require('viz/core/renderers/renderer');
+const tooltipModule = require('viz/core/tooltip');
+const translator1DModule = require('viz/translators/translator1d');
+const themeManagerModule = require('viz/gauges/theme_manager');
 const ThemeManager = themeManagerModule.ThemeManager;
-import Tracker from 'viz/gauges/tracker';
+const Tracker = require('viz/gauges/tracker');
 
 registerComponent('BaseGauge', BaseGauge);
 
