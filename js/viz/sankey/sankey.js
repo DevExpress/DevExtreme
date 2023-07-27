@@ -5,7 +5,7 @@ import Node from './node_item';
 import Link from './link_item';
 import { layout as defaultLayoutBuilder } from './layout';
 import { isString as _isString, isNumeric as _isNumber } from '../../core/utils/type';
-import baseWidget from '../core/base_widget';
+import baseWidget from '../../__internal/viz/core/m_base_widget';
 import componentRegistrator from '../../core/component_registrator';
 
 function moveLabel(node, labelOptions, availableLabelWidth, rect) {
