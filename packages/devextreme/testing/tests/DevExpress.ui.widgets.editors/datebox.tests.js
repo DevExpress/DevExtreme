@@ -2791,6 +2791,18 @@ QUnit.module('datebox w/ calendar', {
         assert.equal(value.getHours(), 14, 'the \'hours\' component has not been changed');
         assert.equal(value.getMinutes(), 15, 'the \'minutes\' component has not been changed');
     });
+
+    QUnit.test('Calendar should have single selectionMode even if another selectionMode is passed to calendarOptions', function(assert) {
+        this.reinitFixture({
+            pickerType: 'calendar',
+            opened: true,
+            calendarOptions: {
+                selectionMode: 'range',
+            }
+        });
+
+        assert.strictEqual(this.fixture.dateBox.option('calendarOptions.selectionMode'), 'single');
+    });
 });
 
 QUnit.module('datebox with time component', {
