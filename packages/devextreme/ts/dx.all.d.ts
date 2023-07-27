@@ -9072,6 +9072,10 @@ declare module DevExpress.ui {
      */
     value?: Date | number | string;
     /**
+     * [descr:dxCalendarOptions.values]
+     */
+    values?: Array<Date | number | string>;
+    /**
      * [descr:dxCalendarOptions.zoomLevel]
      */
     zoomLevel?: DevExpress.ui.dxCalendar.CalendarZoomLevel;
