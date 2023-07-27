@@ -188,6 +188,10 @@
     opacity: 0;
     transition: opacity 0.5s linear 1s;
   }
+
+  .dx-rtl & {
+    direction: rtl;
+  }
 }
 
 .dx-scrollable-scroll-content {
