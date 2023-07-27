@@ -37,6 +37,8 @@ const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const CUSTOM_CLASS = 'custom-class';
+const BUTTON_SELECTOR = '.dx-button';
+const TEXTBOX_SELECTOR = '.dx-textbox';
 
 const isIOs = devices.current().platform === 'ios';
 
@@ -758,124 +760,145 @@ QUnit.module('keyboard navigation', {
     });
 });
 
-QUnit.module('keyboard navigation inside popup', {
-    beforeEach() {
-        fx.off = true;
-        this.$element = $('<div>');
-        $('#qunit-fixture').append(this.$element);
+if(devices.real().deviceType === 'desktop') {
+    QUnit.module('keyboard navigation inside popup', {
+        beforeEach() {
+            fx.off = true;
+            this.$element = $('<div>');
+            $('#qunit-fixture').append(this.$element);
 
-        this.instance = this.$element.dxDropDownEditor({
-            focusStateEnabled: true,
-            applyValueMode: 'useButtons',
-            opened: true
-        }).dxDropDownEditor('instance');
+            this.instance = this.$element.dxDropDownEditor({
+                focusStateEnabled: true,
+                applyValueMode: 'useButtons',
+                opened: true
+            }).dxDropDownEditor('instance');
 
-        this.$input = this.$element.find('.dx-texteditor-input');
+            this.$input = this.$element.find('.dx-texteditor-input');
 
-        const $popupWrapper = $(this.instance._popup.$wrapper());
-        this.$doneButton = $popupWrapper.find('.dx-popup-done.dx-button');
-        this.$cancelButton = $popupWrapper.find('.dx-popup-cancel.dx-button');
+            const $popupWrapper = $(this.instance._popup.$wrapper());
+            this.$doneButton = $popupWrapper.find('.dx-popup-done.dx-button');
+            this.$cancelButton = $popupWrapper.find('.dx-popup-cancel.dx-button');
 
-        this.triggerKeyPress = function($element, keyCode, shiftKey) {
-            const eventConfig = { key: keyCode };
+            this.triggerKeyPress = function($element, keyCode, shiftKey) {
+                const eventConfig = { key: keyCode };
 
-            if(shiftKey) {
-                eventConfig.shiftKey = shiftKey;
-            }
+                if(shiftKey) {
+                    eventConfig.shiftKey = shiftKey;
+                }
 
-            $($element)
-                .focus()
-                .trigger($.Event('keydown', eventConfig));
-        };
-    },
-    afterEach() {
-        this.$element.remove();
-        this.instance = null;
-        fx.off = false;
-    }
-}, () => {
-    QUnit.testInActiveWindow('the first popup element should be focused on the \'tab\' key press if the input is focused', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
+                $($element)
+                    .focus()
+                    .trigger($.Event('keydown', eventConfig));
+            };
+        },
+        afterEach() {
+            this.$element.remove();
+            this.instance = null;
+            fx.off = false;
         }
+    }, () => {
+        QUnit.testInActiveWindow('the first popup element should be focused on the \'tab\' key press if the input is focused', function(assert) {
+            this.instance.open();
+            this.triggerKeyPress(this.$input, TAB_KEY_CODE);
+            assert.ok(this.$doneButton.hasClass('dx-state-focused'), 'the first popup element is focused');
+        });
 
-        this.instance.open();
-        this.triggerKeyPress(this.$input, TAB_KEY_CODE);
-        assert.ok(this.$doneButton.hasClass('dx-state-focused'), 'the first popup element is focused');
+        QUnit.testInActiveWindow('the input should be focused on the \'tab\' key press if the last element is focused', function(assert) {
+            this.instance.open();
+            this.triggerKeyPress(this.$cancelButton, TAB_KEY_CODE);
+            assert.ok(this.$element.hasClass('dx-state-focused'), 'the input is focused');
+        });
+
+        QUnit.test('pressing tab should set focus on first item in popup with custom items', function(assert) {
+            this.instance.option({
+                dropDownOptions: {
+                    toolbarItems: [{
+                        widget: 'dxButton',
+                        toolbar: 'top',
+                        location: 'before',
+                        options: {
+                            text: 'Button',
+                        },
+                    },
+                    {
+                        widget: 'dxTextBox',
+                        toolbar: 'bottom',
+                        location: 'before',
+                        options: {
+                            text: 'Text box',
+                        },
+                    }],
+                },
+            });
+            this.instance.open();
+            this.triggerKeyPress(this.$input, TAB_KEY_CODE);
+
+            assert.ok($(this.instance._popup.$wrapper()).find(BUTTON_SELECTOR).hasClass('dx-state-focused'));
+        });
+
+        QUnit.test('pressing tab + shift should set focus on last item in popup with custom items', function(assert) {
+            this.instance.option({
+                dropDownOptions: {
+                    toolbarItems: [{
+                        widget: 'dxButton',
+                        toolbar: 'top',
+                        location: 'before',
+                        options: {
+                            text: 'Button',
+                        },
+                    },
+                    {
+                        widget: 'dxTextBox',
+                        toolbar: 'bottom',
+                        location: 'before',
+                        options: {
+                            text: 'Text box',
+                        },
+                    }],
+                },
+            });
+            this.instance.open();
+            this.triggerKeyPress(this.$input, TAB_KEY_CODE, true);
+
+            assert.ok($(this.instance._popup.$wrapper()).find(TEXTBOX_SELECTOR).hasClass('dx-state-focused'));
+        });
+
+        QUnit.testInActiveWindow('the input should be focused on the \'tab+shift\' key press if the first element is focused', function(assert) {
+            this.instance.open();
+            this.triggerKeyPress(this.$doneButton, TAB_KEY_CODE, true);
+            assert.ok(this.$element.hasClass('dx-state-focused'), 'the input is focused');
+        });
+
+        QUnit.testInActiveWindow('the last popup element should be focused on the \'tab+shift\' key press if the input is focused', function(assert) {
+            this.instance.open();
+            this.triggerKeyPress(this.$input, TAB_KEY_CODE, true);
+            assert.ok(this.$cancelButton.hasClass('dx-state-focused'), 'the last popup element is focused');
+        });
+
+        QUnit.testInActiveWindow('default event should be prevented on the tab key press if the input is focused', function(assert) {
+            this.instance.open();
+            const spy = sinon.spy();
+            this.$cancelButton.on('keydown', spy);
+            this.triggerKeyPress(this.$cancelButton, TAB_KEY_CODE);
+            assert.ok(spy.args[0][0].isDefaultPrevented(), 'default is prevented');
+        });
+
+        QUnit.testInActiveWindow('default event should be prevented on the tab key press if the last element is focused', function(assert) {
+            this.instance.open();
+            const spy = sinon.spy();
+            this.$input.on('keydown', spy);
+            this.triggerKeyPress(this.$input, TAB_KEY_CODE);
+            assert.ok(spy.args[0][0].isDefaultPrevented(), 'default is prevented');
+        });
+
+        QUnit.testInActiveWindow('popup should be closed on the \'esc\' key press if the button inside is focused', function(assert) {
+            this.instance.open();
+            this.triggerKeyPress(this.$doneButton, ESC_KEY_CODE);
+            assert.notOk(this.instance.option('opened'), 'popup is closed');
+            assert.ok(this.$element.hasClass('dx-state-focused'), 'editor is focused');
+        });
     });
-
-    QUnit.testInActiveWindow('the input should be focused on the \'tab\' key press if the last element is focused', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
-        this.instance.open();
-        this.triggerKeyPress(this.$cancelButton, TAB_KEY_CODE);
-        assert.ok(this.$element.hasClass('dx-state-focused'), 'the input is focused');
-    });
-
-    QUnit.testInActiveWindow('the input should be focused on the \'tab+shift\' key press if the first element is focused', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
-        this.instance.open();
-        this.triggerKeyPress(this.$doneButton, TAB_KEY_CODE, true);
-        assert.ok(this.$element.hasClass('dx-state-focused'), 'the input is focused');
-    });
-
-    QUnit.testInActiveWindow('the last popup element should be focused on the \'tab+shift\' key press if the input is focused', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
-        this.instance.open();
-        this.triggerKeyPress(this.$input, TAB_KEY_CODE, true);
-        assert.ok(this.$cancelButton.hasClass('dx-state-focused'), 'the last popup element is focused');
-    });
-
-    QUnit.testInActiveWindow('default event should be prevented on the tab key press if the input is focused', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
-        this.instance.open();
-        const spy = sinon.spy();
-        this.$cancelButton.on('keydown', spy);
-        this.triggerKeyPress(this.$cancelButton, TAB_KEY_CODE);
-        assert.ok(spy.args[0][0].isDefaultPrevented(), 'default is prevented');
-    });
-
-    QUnit.testInActiveWindow('default event should be prevented on the tab key press if the last element is focused', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
-        this.instance.open();
-        const spy = sinon.spy();
-        this.$input.on('keydown', spy);
-        this.triggerKeyPress(this.$input, TAB_KEY_CODE);
-        assert.ok(spy.args[0][0].isDefaultPrevented(), 'default is prevented');
-    });
-
-    QUnit.testInActiveWindow('popup should be closed on the \'esc\' key press if the button inside is focused', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
-        this.instance.open();
-        this.triggerKeyPress(this.$doneButton, ESC_KEY_CODE);
-        assert.notOk(this.instance.option('opened'), 'popup is closed');
-        assert.ok(this.$element.hasClass('dx-state-focused'), 'editor is focused');
-    });
-});
+}
 
 QUnit.module('Templates', () => {
     QUnit.test('should not render placeholder if the fieldTemplate is used', function(assert) {

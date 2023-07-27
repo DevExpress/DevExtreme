@@ -1043,7 +1043,9 @@ const Popup = Overlay.inherit({
     },
 
     getAllElements: function() {
-        return this.$wrapper().find('[tabindex]');
+        return this.$wrapper().find('[tabindex]').filter((index, item) => {
+            return item.getAttribute('tabindex') >= 0;
+        });
     }
 });
 

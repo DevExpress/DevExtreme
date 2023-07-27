@@ -39,6 +39,10 @@ const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_CONTOURED_CELL_CLASS = 'dx-calendar-contoured-date';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
+const TODAY_BUTTON_SELECTOR = '.dx-button-today.dx-button';
+const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
+const BUTTON_SELECTOR = '.dx-button';
+const TEXTBOX_SELECTOR = '.dx-textbox';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -4142,3 +4146,93 @@ QUnit.module('isDirty', moduleConfig, () => {
         assert.strictEqual(this.instance.option('isDirty'), true);
     });
 });
+
+if(devices.real().deviceType === 'desktop') {
+    QUnit.module('Keyboard navigation', moduleConfig, () => {
+        const toolbarItems = [{
+            widget: 'dxButton',
+            toolbar: 'top',
+            location: 'before',
+            options: {
+                text: 'Button',
+            },
+        },
+        {
+            widget: 'dxTextBox',
+            toolbar: 'bottom',
+            location: 'before',
+            options: {
+                text: 'Text box',
+            },
+        }];
+
+        QUnit.test('pressing tab should set focus on today button in popup', function(assert) {
+            this.reinit({
+                opened: true,
+                applyValueMode: 'useButtons',
+            });
+            this.$endDateInput
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                }));
+
+            const $todayButton = this.getPopupContent().parent().find(TODAY_BUTTON_SELECTOR);
+            assert.ok($todayButton.hasClass(STATE_FOCUSED_CLASS));
+        });
+
+        QUnit.test('pressing tab + shift should set focus on cancel button in popup', function(assert) {
+            this.reinit({
+                opened: true,
+                applyValueMode: 'useButtons',
+            });
+            this.$startDateInput
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                    shiftKey: true
+                }));
+
+            const $cancelButton = this.getPopupContent().parent().find(CANCEL_BUTTON_SELECTOR);
+            assert.ok($cancelButton.hasClass(STATE_FOCUSED_CLASS));
+        });
+
+        QUnit.test('pressing tab should set focus on first item in popup with custom items', function(assert) {
+            this.reinit({
+                opened: true,
+                applyValueMode: 'useButtons',
+                dropDownOptions: {
+                    toolbarItems,
+                },
+            });
+            this.$endDateInput
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                }));
+
+            const $firstItem = this.getPopupContent().parent().find(BUTTON_SELECTOR);
+            assert.ok($firstItem.hasClass(STATE_FOCUSED_CLASS));
+        });
+
+        QUnit.test('pressing tab + shift should set focus on last item in popup with custom items', function(assert) {
+            this.reinit({
+                opened: true,
+                applyValueMode: 'useButtons',
+                dropDownOptions: {
+                    toolbarItems,
+                },
+            });
+            this.$startDateInput
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                    shiftKey: true
+                }));
+
+            const $lastItem = this.getPopupContent().parent().find(TEXTBOX_SELECTOR);
+            assert.ok($lastItem.hasClass(STATE_FOCUSED_CLASS));
+        });
+    });
+}
+
