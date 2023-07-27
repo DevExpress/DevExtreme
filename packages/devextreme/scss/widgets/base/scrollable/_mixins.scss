@@ -5,6 +5,7 @@
     background-color: $scrollable-scroll-bg;
   }
 }
+
 @mixin dx-scrollable-scrollbar-hoverable(
   $scrollable-scrollbar-bg,
   $scrollable-scrollbar-active-bg,
@@ -31,6 +32,7 @@
     }
   }
 }
+
 @mixin dx-scrollable-scrollbar-vertical(
   $scrollbar-size-thin,
   $scrollbar-size,
@@ -74,6 +76,7 @@
     }
   }
 }
+
 @mixin dx-scrollable-scrollbar-horizontal(
   $scrollbar-size-thin,
   $scrollbar-size,
@@ -116,6 +119,7 @@
     }
   }
 }
+
 @mixin dx-scrollable-scrollbars-alwaysvisible(
   $scrollbar-size-thin
 ) {
@@ -155,4 +159,3 @@
     }
   }
 }
-

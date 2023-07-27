@@ -11,30 +11,19 @@
 @include dx-scrollable-scroll-content(
   $scrollable-scroll-bg,
 );
-
 @include dx-scrollable-scrollbar-hoverable(
   $scrollable-scrollbar-bg,
   $scrollable-scrollbar-active-bg,
   $scrollable-scroll-active-bg,
 );
-
 @include dx-scrollable-scrollbar-vertical(
   $generic-scrollbar-size-thin,
   $generic-scrollbar-size,
   2px
 );
-
 @include dx-scrollable-scrollbar-horizontal(
   $generic-scrollbar-size-thin,
   $generic-scrollbar-size,
   2px
 );
-
 @include dx-scrollable-scrollbars-alwaysvisible($generic-scrollbar-size-thin);
-
-.dx-rtl .dx-scrollable,
-.dx-rtl.dx-scrollable {
-  .dx-scrollable-scroll {
-    float: left;
-  }
-}

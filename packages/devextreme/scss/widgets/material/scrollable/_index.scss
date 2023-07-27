@@ -12,25 +12,21 @@
 @include dx-scrollable-scroll-content(
   $scrollable-scroll-bg,
 );
-
 @include dx-scrollable-scrollbar-hoverable(
   $scrollable-scrollbar-bg,
   transparent,
   $scrollable-scroll-bg,
 );
-
 @include dx-scrollable-scrollbar-vertical(
   $material-scrollbar-size-thin,
   $material-scrollbar-size,
   0,
 );
-
 @include dx-scrollable-scrollbar-horizontal(
   $material-scrollbar-size-thin,
   $material-scrollbar-size,
   0,
 );
-
 @include dx-scrollable-scrollbars-alwaysvisible($material-scrollbar-size-thin);
 
 .dx-scrollview-scrollbottom-text,
