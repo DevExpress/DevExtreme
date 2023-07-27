@@ -88,6 +88,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
 
         return extend(this.dateBox.option('calendarOptions'), {
             value: this.dateBoxValue() || null,
+            selectionMode: 'single',
             dateSerializationFormat: null,
             min: this.dateBox.dateOption('min'),
             max: this.dateBox.dateOption('max'),

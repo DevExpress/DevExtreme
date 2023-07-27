@@ -22,7 +22,7 @@ import dateLocalization from '../../localization/date';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import { isCommandKeyPressed, addNamespace } from '../../events/utils/index';
 import CalendarSingleSelectionStrategy from './ui.calendar.single.selection.strategy';
-import CalendarMultiSelectionStrategy from './ui.calendar.multi.selection.strategy';
+import CalendarMultipleSelectionStrategy from './ui.calendar.multiple.selection.strategy';
 import CalendarRangeSelectionStrategy from './ui.calendar.range.selection.strategy';
 import { end as hoverEndEventName } from '../../events/hover';
 import eventsEngine from '../../events/core/events_engine';
@@ -67,7 +67,7 @@ const ZOOM_LEVEL = {
 
 const SELECTION_STRATEGIES = {
     SingleSelection: CalendarSingleSelectionStrategy,
-    MultiSelection: CalendarMultiSelectionStrategy,
+    MultipleSelection: CalendarMultipleSelectionStrategy,
     RangeSelection: CalendarRangeSelectionStrategy
 };
 
@@ -452,8 +452,8 @@ const Calendar = Editor.inherit({
         const selectionMode = this.option('selectionMode');
 
         switch(selectionMode) {
-            case 'multi':
-                return 'MultiSelection';
+            case 'multiple':
+                return 'MultipleSelection';
             case 'range':
                 return 'RangeSelection';
             default:
@@ -1406,6 +1406,7 @@ const Calendar = Editor.inherit({
                 break;
             case 'selectionMode':
                 this._refreshSelectionStrategy();
+                this._selectionStrategy.restoreValue();
                 this._initCurrentDate();
                 break;
             case 'firstDayOfWeek':
