@@ -44,8 +44,12 @@ function getFalse(): boolean {
 }
 
 function areCanvasesDifferent(canvas1, canvas2): boolean {
-  return !(Math.abs(canvas1.width - canvas2.width) < SIZE_CHANGING_THRESHOLD && Math.abs(canvas1.height - canvas2.height) < SIZE_CHANGING_THRESHOLD
-        && canvas1.left === canvas2.left && canvas1.top === canvas2.top && canvas1.right === canvas2.right && canvas1.bottom === canvas2.bottom);
+  const sizeLessThreshold = ['width', 'height']
+    .every((key) => Math.abs(canvas1[key] - canvas2[key]) < SIZE_CHANGING_THRESHOLD);
+
+  const canvasCoordsIsEqual = ['left', 'right', 'top', 'bottom'].every((key) => canvas1[key] === canvas2[key]);
+
+  return !(sizeLessThreshold && canvasCoordsIsEqual);
 }
 
 function defaultOnIncidentOccurred(e): void {
@@ -142,12 +146,12 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
 
   _useLinks: true,
 
-  _init() {
+  _init(...params) {
     this._$element.children(`.${SIZED_ELEMENT_CLASS}`).remove();
 
     this._graphicObjects = {};
 
-    this.callBase.apply(this, arguments);
+    this.callBase(...params);
     this._changesLocker = 0;
     this._optionChangedLocker = 0;
     this._asyncFirstDrawing = true;
@@ -162,20 +166,22 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
     // Shouldn't "_useLinks" be passed to the renderer instead of doing 3 checks here?
     const linkTarget = this._useLinks && this._renderer.root;
     // There is an implicit relation between `_useLinks` and `loading indicator` - it uses links
-    // Though this relation is not ensured in code we will immediately know when it is broken - `loading indicator` will break on construction
-    linkTarget && linkTarget.enableLinks().virtualLink('core').virtualLink('peripheral');
+    // Though this relation is not ensured in code
+    // we will immediately know when it is broken - `loading indicator` will break on construction
+    linkTarget?.enableLinks().virtualLink('core').virtualLink('peripheral');
     this._renderVisibilityChange();
     this._attachVisibilityChangeHandlers();
     this._toggleParentsScrollSubscription(this._isVisible());
     this._initEventTrigger();
     this._incidentOccurred = createIncidentOccurred(this.NAME, this._eventTrigger);
     this._layout = new _Layout();
-    // Such solution is used only to avoid writing lots of "after" for all core elements in all widgets
+    // Such solution is used only to avoid writing lots of "after"
+    // for all core elements in all widgets
     // May be later a proper solution would be found
-    linkTarget && linkTarget.linkAfter('core');
+    linkTarget?.linkAfter('core');
     this._initPlugins();
     this._initCore();
-    linkTarget && linkTarget.linkAfter();
+    linkTarget?.linkAfter();
     this._change(this._initialChanges);
   },
 
@@ -383,7 +389,8 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
   _themeDependentChanges: ['RENDERER'],
 
   _initRenderer() {
-    // Canvas is calculated before the renderer is created in order to capture actual size of the container
+    // Canvas is calculated before the renderer is created in order to capture actual
+    // size of the container
     const rawCanvas = this._calculateRawCanvas();
     this._canvas = floorCanvasDimensions(rawCanvas);
     this._renderer = new Renderer({ cssClass: `${this._rootClassPrefix} ${this._rootClass}`, pathModified: this.option('pathModified'), container: this._$element[0] });
@@ -473,16 +480,23 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
     const elementWidth = getSizeOfSide(size, 'width', (x) => getWidth(x));
     const elementHeight = getSizeOfSide(size, 'height', (x) => getHeight(x));
     let canvas = {
-      width: size.width <= 0 ? 0 : pickPositiveValue([size.width, elementWidth, defaultCanvas.width]),
-      height: size.height <= 0 ? 0 : pickPositiveValue([size.height, elementHeight, defaultCanvas.height]),
+      width: size.width <= 0
+        ? 0
+        : pickPositiveValue([size.width, elementWidth, defaultCanvas.width]),
+      height: size.height <= 0
+        ? 0
+        : pickPositiveValue([size.height, elementHeight, defaultCanvas.height]),
       left: pickPositiveValue([margin.left, defaultCanvas.left]),
       top: pickPositiveValue([margin.top, defaultCanvas.top]),
       right: pickPositiveValue([margin.right, defaultCanvas.right]),
       bottom: pickPositiveValue([margin.bottom, defaultCanvas.bottom]),
     } as any;
     // This for backward compatibility - widget was not rendered when canvas is empty.
-    // Now it will be rendered but because of "width" and "height" of the root both set to 0 it will not be visible.
-    if (canvas.width - canvas.left - canvas.right <= 0 || canvas.height - canvas.top - canvas.bottom <= 0) {
+    // Now it will be rendered but because of "width" and "height"
+    // of the root both set to 0 it will not be visible.
+    if (canvas.width - canvas.left - canvas.right <= 0
+      || canvas.height - canvas.top - canvas.bottom <= 0
+    ) {
       canvas = { width: 0, height: 0 };
     }
     return canvas;
@@ -552,16 +566,18 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
     }
   },
 
-  // This is actually added only to make loading indicator pluggable. This is bad but much better than entire loading indicator in BaseWidget.
+  // This is actually added only to make loading indicator pluggable.
+  // This is bad but much better than entire loading indicator in BaseWidget.
   _onBeginUpdate: noop,
 
-  beginUpdate() {
-    // The "_initialized" flag is checked because first time "beginUpdate" is called in the constructor.
+  beginUpdate(...params) {
+    // The "_initialized" flag is checked because
+    // first time "beginUpdate" is called in the constructor.
     if (this._initialized && this._isUpdateAllowed()) {
       this._onBeginUpdate();
       this._suspendChanges();
     }
-    this.callBase.apply(this, arguments);
+    this.callBase(...params);
     return this;
   },
 
@@ -657,8 +673,12 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
           if (type(value) === 'object') {
             this._addOptionsNameForPartialUpdate(value, options, partialChangeOptionsName);
           } else if (type(value) === 'array') {
-            if (value.length > 0 && value.every((item) => this._checkOptionsForPartialUpdate(item, options))) {
-              value.forEach((item) => this._addOptionsNameForPartialUpdate(item, options, partialChangeOptionsName));
+            if (value.length > 0
+              && value.every((item) => this._checkOptionsForPartialUpdate(item, options))
+            ) {
+              value.forEach((item) => {
+                this._addOptionsNameForPartialUpdate(item, options, partialChangeOptionsName);
+              });
             }
           }
         }
@@ -735,7 +755,12 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
             this._graphicObjects[id] = renderer.radialGradient(colors, id);
             break;
           case 'pattern':
-            this._graphicObjects[id] = renderer.customPattern(id, this._getTemplate(template), width, height);
+            this._graphicObjects[id] = renderer.customPattern(
+              id,
+              this._getTemplate(template),
+              width,
+              height,
+            );
             break;
           default:
             break;
