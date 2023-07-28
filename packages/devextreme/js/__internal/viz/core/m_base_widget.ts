@@ -164,11 +164,13 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
     this._renderElementAttributes();
     this._initRenderer();
     // Shouldn't "_useLinks" be passed to the renderer instead of doing 3 checks here?
-    const linkTarget = this._useLinks && this._renderer.root;
+    const useLinks = this._useLinks;
     // There is an implicit relation between `_useLinks` and `loading indicator` - it uses links
     // Though this relation is not ensured in code
     // we will immediately know when it is broken - `loading indicator` will break on construction
-    linkTarget?.enableLinks().virtualLink('core').virtualLink('peripheral');
+    if (useLinks) {
+      this._renderer.root.enableLinks().virtualLink('core').virtualLink('peripheral');
+    }
     this._renderVisibilityChange();
     this._attachVisibilityChangeHandlers();
     this._toggleParentsScrollSubscription(this._isVisible());
@@ -178,10 +180,15 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
     // Such solution is used only to avoid writing lots of "after"
     // for all core elements in all widgets
     // May be later a proper solution would be found
-    linkTarget?.linkAfter('core');
+    if (useLinks) {
+      this._renderer.root.linkAfter('core');
+    }
     this._initPlugins();
     this._initCore();
-    linkTarget?.linkAfter();
+    if (useLinks) {
+      this._renderer.root.linkAfter();
+    }
+
     this._change(this._initialChanges);
   },
 
