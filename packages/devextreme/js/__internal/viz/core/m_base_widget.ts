@@ -231,9 +231,9 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
         this._applyQueuedOptions();
       }
       this.resolveItemsDeferred(this._legend ? [this._legend] : []);
-      this._optionChangedLocker++;
+      this._optionChangedLocker += 1;
       this._notify();
-      this._optionChangedLocker--;
+      this._optionChangedLocker -= 1;
     }
   },
 
@@ -443,12 +443,12 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
 
   _stopCurrentHandling: noop,
 
-  _dispose() {
+  _dispose(...params) {
     if (this._disposed) {
       return;
     }
 
-    this.callBase.apply(this, arguments);
+    this.callBase(...params);
     this._toggleParentsScrollSubscription(false);
     this._removeResizeHandler();
     this._layout.dispose();
@@ -458,7 +458,9 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
     this._disposeGraphicObjects();
     this._disposeRenderer();
     this._themeManager.dispose();
-    this._themeManager = this._renderer = this._eventTrigger = null;
+    this._themeManager = null;
+    this._renderer = null;
+    this._eventTrigger = null;
   },
 
   _initEventTrigger() {

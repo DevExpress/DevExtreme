@@ -127,7 +127,7 @@ const dxPieChart = BaseChart.inherit({
         series,
         valueOptions: { valueType: 'numeric' },
       }],
-      argumentOptions: series[0] && series[0].getOptions(),
+      argumentOptions: series[0]?.getOptions(),
     };
   },
 
@@ -207,7 +207,9 @@ const dxPieChart = BaseChart.inherit({
         const key = argument.valueOf().toString() + index;
         itemsByArgument[key] = itemsByArgument[key] || [];
         const argumentCount = itemsByArgument[key].push(point);
-        point.index = itemsByArgument[key][argumentCount - 2] ? itemsByArgument[key][argumentCount - 2].index : Object.keys(itemsByArgument).length - 1;
+        point.index = itemsByArgument[key][argumentCount - 2]
+          ? itemsByArgument[key][argumentCount - 2].index
+          : Object.keys(itemsByArgument).length - 1;
         point.argumentIndex = index;
       });
     });
@@ -288,7 +290,9 @@ const dxPieChart = BaseChart.inherit({
     const { sizeGroupLayout } = drawOptions;
 
     if (lengthVisibleSeries) {
-      layout = sizeGroupLayout ? that._getLayoutSeriesForEqualPies(visibleSeries, sizeGroupLayout) : that._getLayoutSeries(visibleSeries, drawOptions);
+      layout = sizeGroupLayout
+        ? that._getLayoutSeriesForEqualPies(visibleSeries, sizeGroupLayout)
+        : that._getLayoutSeries(visibleSeries, drawOptions);
 
       delta = (layout.radiusOuter - layout.radiusInner - seriesSpacing * (lengthVisibleSeries - 1)) / lengthVisibleSeries;
       innerRad = layout.radiusInner;
@@ -375,16 +379,29 @@ const dxPieChart = BaseChart.inherit({
     let labelsOverlapped = false;
 
     if (seriesByPosition.inside.length > 0) {
-      labelsOverlapped = resolve(seriesByPosition.inside.reduce((r, singleSeries) => singleSeries.getVisiblePoints().reduce((r, point) => {
-        r.left.push(point);
-        return r;
-      }, r), { left: [], right: [] }), shiftInColumnFunction) || labelsOverlapped;
+      const pointsToResolve = seriesByPosition.inside.reduce((r, singleSeries) => {
+        const visiblePoints = singleSeries.getVisiblePoints();
+        return visiblePoints.reduce((r, point) => {
+          r.left.push(point);
+          return r;
+        }, r);
+      }, { left: [], right: [] });
+      labelsOverlapped = resolve(pointsToResolve, shiftInColumnFunction) || labelsOverlapped;
     }
 
-    labelsOverlapped = seriesByPosition.columns.reduce((r, singleSeries) => resolve(dividePoints(singleSeries), shiftInColumnFunction) || r, labelsOverlapped);
+    labelsOverlapped = seriesByPosition.columns.reduce(
+      (r, singleSeries) => resolve(dividePoints(singleSeries), shiftInColumnFunction) || r,
+      labelsOverlapped,
+    );
 
     if (seriesByPosition.outside.length > 0) {
-      labelsOverlapped = resolve(seriesByPosition.outside.reduce((r, singleSeries) => dividePoints(singleSeries, r), null), shiftFunction) || labelsOverlapped;
+      labelsOverlapped = resolve(
+        seriesByPosition.outside.reduce(
+          (r, singleSeries) => dividePoints(singleSeries, r),
+          null,
+        ),
+        shiftFunction,
+      ) || labelsOverlapped;
     }
     return labelsOverlapped;
 
@@ -403,8 +420,20 @@ const dxPieChart = BaseChart.inherit({
         points.right.reverse();
       }
 
-      overlapped = overlapping.resolveLabelOverlappingInOneDirection(points.left, that._canvas, false, false, shiftCallback);
-      return overlapping.resolveLabelOverlappingInOneDirection(points.right, that._canvas, false, false, shiftCallback) || overlapped;
+      overlapped = overlapping.resolveLabelOverlappingInOneDirection(
+        points.left,
+        that._canvas,
+        false,
+        false,
+        shiftCallback,
+      );
+      return overlapping.resolveLabelOverlappingInOneDirection(
+        points.right,
+        that._canvas,
+        false,
+        false,
+        shiftCallback,
+      ) || overlapped;
     }
 
     function shiftFunction(box, length) {

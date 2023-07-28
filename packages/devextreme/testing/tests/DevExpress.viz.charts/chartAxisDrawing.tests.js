@@ -184,7 +184,7 @@ QUnit.test('Take into account max margin on each side of pane', function(assert)
         height: 600
     }, 'createTicks valAxis canvas');
 
-    assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, 'draw valAxis');
+    assert.strictEqual(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis');
 
     // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(0).returnValue.draw_test_arg, {
@@ -278,7 +278,7 @@ QUnit.test('Multiple value axes - margins are accumulated on left and right', fu
         height: 600
     }, 'createTicks valAxis_inner canvas');
 
-    assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, 'draw valAxis_inner');
+    assert.strictEqual(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_inner');
 
     // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
@@ -294,7 +294,7 @@ QUnit.test('Multiple value axes - margins are accumulated on left and right', fu
         height: 600
     }, 'createTicks valAxis_outer canvas');
 
-    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, 'draw valAxis_outer canvas');
+    assert.strictEqual(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_outer canvas');
 
     // 3. draw horizontal axes
     // argAxis
@@ -425,7 +425,7 @@ QUnit.test('Rotated. Multiple value axes - margins are accumulated on top and bo
         height: 600
     }, 'createTicks valAxis_inner canvas');
 
-    assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, 'draw valAxis_inner');
+    assert.strictEqual(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_inner');
 
     // valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
@@ -441,7 +441,7 @@ QUnit.test('Rotated. Multiple value axes - margins are accumulated on top and bo
         height: 600
     }, 'createTicks valAxis_outer canvas');
 
-    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, 'draw valAxis_outer');
+    assert.strictEqual(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_outer');
 
     // 4. update horizontal axes size
     // valAxis_inner
@@ -561,7 +561,7 @@ QUnit.test('Multiple panes - individual margins on top and bottom, common margin
         height: 600
     }, 'createTicks valAxis_bottomPane_right_inner canvas');
 
-    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, 'draw valAxis_bottomPane_right_inner canvas');
+    assert.strictEqual(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_bottomPane_right_inner canvas');
 
     // valAxis_bottomPane_right_outer
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
@@ -577,7 +577,7 @@ QUnit.test('Multiple panes - individual margins on top and bottom, common margin
         height: 600
     }, 'createTicks valAxis_bottomPane_right_outer canvas');
 
-    assert.equal(this.axisStub.getCall(3).returnValue.draw.lastCall.args[0], false, 'draw valAxis_bottomPane_right_outer canvas');
+    assert.strictEqual(this.axisStub.getCall(3).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_bottomPane_right_outer canvas');
 
     // valAxis_topPane_left_inner
     assert.deepEqual(this.axisStub.getCall(4).returnValue.createTicks_test_arg, {
@@ -593,7 +593,7 @@ QUnit.test('Multiple panes - individual margins on top and bottom, common margin
         height: 600
     }, 'createTicks valAxis_topPane_left_inner canvas');
 
-    assert.equal(this.axisStub.getCall(4).returnValue.draw.lastCall.args[0], false, 'draw valAxis_topPane_left_inner canvas');
+    assert.strictEqual(this.axisStub.getCall(4).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_topPane_left_inner canvas');
 
     // valAxis_topPane_left_outer
     assert.deepEqual(this.axisStub.getCall(5).returnValue.createTicks_test_arg, {
@@ -609,7 +609,7 @@ QUnit.test('Multiple panes - individual margins on top and bottom, common margin
         height: 600
     }, 'createTicks valAxis_topPane_left_outer canvas');
 
-    assert.equal(this.axisStub.getCall(5).returnValue.draw.lastCall.args[0], false, 'draw valAxis_topPane_left_outer canvas');
+    assert.strictEqual(this.axisStub.getCall(5).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_topPane_left_outer canvas');
 
     // 3. draw horizontal axes
     // argAxis_topPane
@@ -834,7 +834,7 @@ QUnit.test('Rotated. Multiple panes - individual margins on left and right, comm
         height: 600
     }, 'createTicks valAxis_leftPane_top_inner canvas');
 
-    assert.equal(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], false, 'draw valAxis_leftPane_top_inner canvas');
+    assert.strictEqual(this.axisStub.getCall(2).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_leftPane_top_inner canvas');
 
     // valAxis_leftPane_top_outer
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
@@ -850,7 +850,7 @@ QUnit.test('Rotated. Multiple panes - individual margins on left and right, comm
         height: 600
     }, 'createTicks valAxis_leftPane_top_outer canvas');
 
-    assert.equal(this.axisStub.getCall(3).returnValue.draw.lastCall.args[0], false, 'draw valAxis_leftPane_top_outer canvas');
+    assert.strictEqual(this.axisStub.getCall(3).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_leftPane_top_outer canvas');
 
     // valAxis_rightPane_bottom_inner
     assert.deepEqual(this.axisStub.getCall(4).returnValue.createTicks_test_arg, {
@@ -866,7 +866,7 @@ QUnit.test('Rotated. Multiple panes - individual margins on left and right, comm
         height: 600
     }, 'createTicks valAxis_rightPane_bottom_inner canvas');
 
-    assert.equal(this.axisStub.getCall(4).returnValue.draw.lastCall.args[0], false, 'draw valAxis_rightPane_bottom_inner canvas');
+    assert.strictEqual(this.axisStub.getCall(4).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_rightPane_bottom_inner canvas');
 
     // valAxis_rightPane_bottom_outer
     assert.deepEqual(this.axisStub.getCall(5).returnValue.createTicks_test_arg, {
@@ -882,7 +882,7 @@ QUnit.test('Rotated. Multiple panes - individual margins on left and right, comm
         height: 600
     }, 'createTicks valAxis_rightPane_bottom_outer canvas');
 
-    assert.equal(this.axisStub.getCall(5).returnValue.draw.lastCall.args[0], false, 'draw valAxis_rightPane_bottom_outer canvas');
+    assert.strictEqual(this.axisStub.getCall(5).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis_rightPane_bottom_outer canvas');
 
     // 4. update horizontal axes size
     // argAxis_rightPane
@@ -1799,7 +1799,7 @@ QUnit.test('Do not recalculate canvas on zooming - only draw axes in old canvas'
         height: 600
     }, 'createTicks valAxis canvas');
 
-    assert.equal(valAxisStub.draw.lastCall.args[0], false, 'draw valAxis');
+    assert.strictEqual(valAxisStub.draw.lastCall.args[0], undefined, 'draw valAxis');
 
     assert.deepEqual(argAxisStub.draw_test_arg, {
         left: 18,
@@ -1872,7 +1872,7 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas, resizePanes
         height: 600
     }, 'createTicks valAxis canvas');
 
-    assert.equal(valAxisStub.draw.lastCall.args[0], false, 'draw valAxis');
+    assert.strictEqual(valAxisStub.draw.lastCall.args[0], undefined, 'draw valAxis');
 
     assert.deepEqual(argAxisStub.draw_test_arg, {
         left: 18,
@@ -1945,7 +1945,7 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas (support of 
         height: 600
     }, 'createTicks valAxis canvas');
 
-    assert.equal(valAxisStub.draw.lastCall.args[0], false, 'draw valAxis');
+    assert.strictEqual(valAxisStub.draw.lastCall.args[0], undefined, 'draw valAxis');
 
     assert.deepEqual(argAxisStub.draw_test_arg, {
         left: 18,
@@ -2028,8 +2028,8 @@ QUnit.test('Redraw vertical axes, if tickInterval is changed', function(assert) 
         width: 800,
         height: 600
     }, 'createTicks valAxis canvas');
-    assert.equal(this.axisStub.getCall(1).returnValue.draw.callCount, 2);
-    assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, 'draw valAxis');
+    assert.strictEqual(this.axisStub.getCall(1).returnValue.draw.callCount, 2);
+    assert.strictEqual(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], undefined, 'draw valAxis');
 });
 
 QUnit.test('No redrawing after changing tickInterval when templates used', function(assert) {
@@ -3302,7 +3302,7 @@ QUnit.test('Recalculate canvas on zooming, axis labels hide due to adaptiveLayou
     chart.zoomArgument(2, 9);
 
     // assert
-    assert.equal(valAxisStub.draw.lastCall.args[0], false, 'draw valAxis');
+    assert.strictEqual(valAxisStub.draw.lastCall.args[0], undefined, 'draw valAxis');
 
     assert.deepEqual(argAxisStub.draw_test_arg, {
         left: 0,
@@ -3317,12 +3317,12 @@ QUnit.test('Recalculate canvas on zooming, axis labels hide due to adaptiveLayou
         height: 410
     }, 'draw argAxis canvas');
 
-    assert.equal(argAxisStub.updateSize.called, false);
-    assert.equal(valAxisStub.updateSize.called, false);
-    assert.equal(scrollBar.updateSize.called, false);
+    assert.strictEqual(argAxisStub.updateSize.called, false);
+    assert.strictEqual(valAxisStub.updateSize.called, false);
+    assert.strictEqual(scrollBar.updateSize.called, false);
 
-    assert.equal(argAxisStub.shift.called, false);
-    assert.equal(valAxisStub.shift.called, false);
+    assert.strictEqual(argAxisStub.shift.called, false);
+    assert.strictEqual(valAxisStub.shift.called, false);
 
     assert.ok(valAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for value axis');
     assert.ok(argAxisStub.drawScaleBreaks.called, 'draw scaleBreaks for argument axis');
