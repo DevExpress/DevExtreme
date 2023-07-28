@@ -749,11 +749,11 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _getFirstPopupElement: function() {
-        return $(this._popup.getAllElements()[0]);
+        return $(this._popup.getFocusableElements()[0]);
     },
 
     _getLastPopupElement: function() {
-        const elements = this._popup.getAllElements();
+        const elements = this._popup.getFocusableElements();
         return $(elements[elements.length - 1]);
     },
 

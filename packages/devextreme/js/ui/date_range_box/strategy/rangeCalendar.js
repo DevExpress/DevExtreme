@@ -28,11 +28,11 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     getFirstPopupElement() {
-        return $(this._getPopup().getAllElements()[0]);
+        return $(this._getPopup().getFocusableElements()[0]);
     }
 
     getLastPopupElement() {
-        const elements = this._getPopup().getAllElements();
+        const elements = this._getPopup().getFocusableElements();
         return $(elements[elements.length - 1]);
     }
 

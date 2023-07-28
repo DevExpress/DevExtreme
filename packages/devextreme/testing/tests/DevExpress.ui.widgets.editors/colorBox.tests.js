@@ -791,7 +791,7 @@ QUnit.module('keyboard navigation', {
         this.instance.option('opened', true);
         this.keyboard.keyDown('tab');
 
-        assert.ok($(`.${COLORVIEW_CLASS}`).hasClass(STATE_FOCUSED_CLASS), 'tab set focus to first item in overlay');
+        assert.ok($(`.${COLORVIEW_CLASS}`).hasClass(STATE_FOCUSED_CLASS), 'tab sets focus to the first overlay item');
     });
 
     QUnit.testInActiveWindow('first input focused on tab should have selected text (T1127632)', function(assert) {
