@@ -779,12 +779,8 @@ class EditingControllerImpl extends modules.ViewController {
 
   _addInsertInfo(change, parentKey?) {
     let insertInfo;
-    let { key } = change;
-
-    if (!isDefined(key)) {
-      key = String(new Guid());
-      change.key = key;
-    }
+    this._ensureChangeKeyValue(change);
+    const { key } = change;
 
     insertInfo = this._getInternalData(key)?.insertInfo;
     if (!isDefined(insertInfo)) {
@@ -800,6 +796,23 @@ class EditingControllerImpl extends modules.ViewController {
     this._addInternalData({ insertInfo, key });
 
     return { insertInfo, key };
+  }
+
+  _ensureChangeKeyValue(change: any) {
+    if (isDefined(change.key)) {
+      return;
+    }
+
+    const keyExpr = this._dataController.key();
+    let keyValue;
+    if (change.data && keyExpr && !Array.isArray(keyExpr)) {
+      keyValue = change.data[keyExpr];
+    }
+    if (!isDefined(keyValue)) {
+      keyValue = String(new Guid());
+    }
+
+    change.key = keyValue;
   }
 
   _setInsertAfterOrBeforeKey(change, parentKey) {
