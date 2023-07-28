@@ -194,7 +194,9 @@ export const AdvancedChart = BaseChart.inherit({
     const crosshairMargins = this._getCrosshairMargins();
 
     function getNextAxisName(): string {
-      return DEFAULT_AXIS_NAME + valueAxesCounter++;
+      const name = DEFAULT_AXIS_NAME + String(valueAxesCounter);
+      valueAxesCounter += 1;
+      return name;
     }
 
     if (rotated) {
@@ -264,7 +266,7 @@ export const AdvancedChart = BaseChart.inherit({
     let axes = isArgumentAxes ? this._argumentAxes : this._valueAxes;
 
     _each(options, (_, opt) => {
-      const curAxes = axes && axes.filter((a) => a.name === opt.name
+      const curAxes = axes?.filter((a) => a.name === opt.name
                 && (!_isDefined(opt.pane) && this.panes.some((p) => p.name === a.pane) || a.pane === opt.pane));
       if (curAxes && curAxes.length > 0) {
         _each(curAxes, (_, axis) => {
