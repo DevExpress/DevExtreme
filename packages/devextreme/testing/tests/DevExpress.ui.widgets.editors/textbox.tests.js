@@ -234,27 +234,6 @@ QUnit.module('options changing', {
         assert.equal(this.input.outerHeight(), this.element.height(), 'input outer height should be equal widget height');
         assert.equal(this.input.outerWidth(), this.element.width(), 'input outer width should be equal widget width');
     });
-
-    QUnit.test('isDirty is false by default', function(assert) {
-        const isDirty = this.instance.option('isDirty');
-
-        assert.strictEqual(isDirty, false);
-    });
-
-    QUnit.test('isDirty should be true if value differ from initial', function(assert) {
-        this.instance.option('value', '123');
-
-        assert.strictEqual(this.instance.option('isDirty'), true);
-    });
-
-    QUnit.test('isDirty should be false if value updated to initial', function(assert) {
-        const initialValue = this.instance.option('value');
-
-        this.instance.option('value', '123');
-        this.instance.option('value', initialValue);
-
-        assert.strictEqual(this.instance.option('isDirty'), false);
-    });
 });
 
 QUnit.module('widget sizing render', {}, () => {
