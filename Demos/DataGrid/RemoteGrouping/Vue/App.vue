@@ -3,6 +3,7 @@
     id="gridContainer"
     :word-wrap-enabled="true"
     :data-source="dataSource"
+    :width="'100%'"
     :show-borders="true"
   >
     <DxRemoteOperations :group-paging="true"/>

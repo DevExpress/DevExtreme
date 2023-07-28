@@ -3,8 +3,9 @@
     <DxDataGrid
       id="gridContainer"
       :data-source="dataSource"
-      key-expr="ID"
+      :key-expr="'ID'"
       :column-hiding-enabled="true"
+      :width="'100%'"
       :show-borders="true"
     >
       <DxEditing

@@ -2,9 +2,10 @@
   <DxDataGrid
     id="grid"
     :data-source="countries"
-    key-expr="ID"
+    :key-expr="'ID'"
     :column-auto-width="true"
     :allow-column-reordering="true"
+    :width="'100%'"
     :show-borders="true"
   >
     <DxColumnChooser :enabled="true"/>

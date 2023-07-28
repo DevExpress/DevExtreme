@@ -24,6 +24,7 @@ class App extends React.Component {
           id="gridContainer"
           dataSource={this.companies}
           keyExpr="ID"
+          width="100%"
           showBorders={true}
           onExporting={this.onExporting}>
 

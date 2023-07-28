@@ -43,6 +43,7 @@ class App extends React.Component {
         allowColumnReordering={true}
         rowAlternationEnabled={true}
         showBorders={true}
+        width="100%"
         onContentReady={this.onContentReady}
       >
         <GroupPanel visible={true} />

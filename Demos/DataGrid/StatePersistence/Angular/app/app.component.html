@@ -8,12 +8,12 @@
 >
 <dx-data-grid
   id="gridContainer"
-  #dataGrid
   [dataSource]="orders"
+  [keyExpr]="'ID'"
   [allowColumnResizing]="true"
   [allowColumnReordering]="true"
+  [width]="'100%'"
   [showBorders]="true"
-  keyExpr="ID"
 >
   <dxo-selection mode="single"></dxo-selection>
   <dxo-filter-row [visible]="true"></dxo-filter-row>

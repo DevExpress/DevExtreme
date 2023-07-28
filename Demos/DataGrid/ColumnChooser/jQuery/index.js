@@ -28,6 +28,7 @@ $(() => {
     }],
     columnAutoWidth: true,
     showRowLines: true,
+    width: '100%',
     showBorders: true,
     columnChooser: {
       enabled: true,

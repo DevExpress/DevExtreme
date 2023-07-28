@@ -15,6 +15,7 @@ $(() => {
       visible: true,
     },
     wordWrapEnabled: true,
+    width: '100%',
     showBorders: true,
     columns: [{
       dataField: 'Id',

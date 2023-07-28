@@ -85,6 +85,7 @@ $(() => {
     scrolling: {
       mode: 'virtual',
     },
+    width: '100%',
     height: 600,
     showBorders: true,
     masterDetail: {

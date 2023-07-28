@@ -1,7 +1,8 @@
 <dx-data-grid
   id="gridContainer"
   [dataSource]="dataSource"
-  keyExpr="ID"
+  [keyExpr]="'ID'"
+  [width]="'100%'"
   [columnHidingEnabled]="true"
   [showBorders]="true"
 >

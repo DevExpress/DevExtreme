@@ -2,6 +2,7 @@ $(() => {
   $('#gridContainer').dxDataGrid({
     dataSource: employees,
     keyExpr: 'ID',
+    width: '100%',
     showBorders: true,
     selection: {
       mode: 'multiple',

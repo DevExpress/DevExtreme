@@ -48,10 +48,11 @@ class App extends React.Component {
         <DataGrid
           id="employees"
           dataSource={employees}
+          keyExpr="ID"
           columnAutoWidth={true}
           showRowLines={true}
+          width="100%"
           showBorders={true}
-          keyExpr="ID"
         >
           <Column dataField='FirstName' allowHiding={false} />
           <Column dataField='LastName' />

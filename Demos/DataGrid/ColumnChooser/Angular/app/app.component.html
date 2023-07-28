@@ -1,9 +1,9 @@
 <dx-data-grid
   id="employees"
   [dataSource]="employees"
-  keyExpr="ID"
-  parentIdExpr="Head_ID"
+  [keyExpr]="'ID'"
   [showRowLines]="true"
+  [width]="'100%'"
   [showBorders]="true"
   [columnAutoWidth]="true"
 >

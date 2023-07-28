@@ -2,6 +2,7 @@ $(() => {
   $('#gridContainer').dxDataGrid({
     dataSource: companies,
     keyExpr: 'ID',
+    width: '100%',
     showBorders: true,
     groupPanel: {
       visible: true,

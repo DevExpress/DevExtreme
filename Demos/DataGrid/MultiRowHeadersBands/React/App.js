@@ -17,6 +17,7 @@ class App extends React.Component {
         keyExpr="ID"
         columnAutoWidth={true}
         allowColumnReordering={true}
+        width="100%"
         showBorders={true}
       >
         <ColumnChooser enabled={true} />

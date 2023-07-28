@@ -2,8 +2,9 @@
   <div>
     <DxDataGrid
       id="gridContainer"
-      key-expr="ID"
+      :key-expr="'ID'"
       :data-source="companies"
+      :width="'100%'"
       :show-borders="true"
       @exporting="onExporting"
     >

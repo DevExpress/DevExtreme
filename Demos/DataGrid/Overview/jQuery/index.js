@@ -31,6 +31,7 @@ $(() => {
     allowColumnReordering: true,
     rowAlternationEnabled: true,
     showBorders: true,
+    width: '100%',
     columns: [
       {
         dataField: 'Product',

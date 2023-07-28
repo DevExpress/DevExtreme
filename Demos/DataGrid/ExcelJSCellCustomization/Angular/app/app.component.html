@@ -1,7 +1,8 @@
 <dx-data-grid
   id="gridContainer"
   [dataSource]="companies"
-  keyExpr="ID"
+  [keyExpr]="'ID'"
+  [width]="'100%'"
   [showBorders]="true"
   (onExporting)="onExporting($event)"
 >

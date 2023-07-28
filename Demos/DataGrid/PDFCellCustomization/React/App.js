@@ -61,6 +61,7 @@ export default function App() {
         id="gridContainer"
         dataSource={companies}
         keyExpr="ID"
+        width="100%"
         showBorders={true}
         onExporting={onExporting}>
 

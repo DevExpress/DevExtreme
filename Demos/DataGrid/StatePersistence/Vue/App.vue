@@ -9,10 +9,11 @@
       id="gridContainer"
       ref="dataGrid"
       :data-source="orders"
+      :key-expr="'ID'"
       :allow-column-resizing="true"
       :allow-column-reordering="true"
+      :width="'100%'"
       :show-borders="true"
-      key-expr="ID"
     >
       <DxSelection mode="single"/>
       <DxFilterRow :visible="true"/>

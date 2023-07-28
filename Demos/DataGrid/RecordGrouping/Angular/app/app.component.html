@@ -1,8 +1,9 @@
 <dx-data-grid
   id="gridContainer"
   [dataSource]="customers"
-  keyExpr="ID"
+  [keyExpr]="'ID'"
   [allowColumnReordering]="true"
+  [width]="'100%'"
   [showBorders]="true"
 >
   <dxi-column dataField="CompanyName"></dxi-column>

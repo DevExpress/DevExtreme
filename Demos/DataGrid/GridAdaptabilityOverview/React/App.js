@@ -21,6 +21,7 @@ class App extends React.Component {
           dataSource={this.dataSource}
           keyExpr="ID"
           columnHidingEnabled={true}
+          width="100%"
           showBorders={true}>
           <Editing allowAdding={true} allowUpdating={true} mode="batch" />
           <Grouping contextMenuEnabled={true} expandMode="rowClick" />

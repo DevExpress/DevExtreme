@@ -58,6 +58,7 @@ class App extends React.Component {
       <DataGrid
         dataSource={dataSource}
         showBorders={true}
+        width="100%"
         height={600}
         remoteOperations={true}
       >

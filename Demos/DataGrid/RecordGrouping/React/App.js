@@ -28,6 +28,7 @@ class App extends React.Component {
           dataSource={customers}
           keyExpr="ID"
           allowColumnReordering={true}
+          width="100%"
           showBorders={true}
         >
           <GroupPanel visible={true} />

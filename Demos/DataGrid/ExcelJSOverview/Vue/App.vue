@@ -3,7 +3,8 @@
     <DxDataGrid
       id="gridContainer"
       :data-source="employees"
-      key-expr="ID"
+      :key-expr="'ID'"
+      :width="'100%'"
       :show-borders="true"
       @exporting="onExporting"
     >

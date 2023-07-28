@@ -3,6 +3,7 @@
     :show-borders="true"
     :data-source="dataSource"
     :remote-operations="true"
+    :width="'100%'"
     :height="600"
   >
     <DxColumn

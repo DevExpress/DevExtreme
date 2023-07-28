@@ -3,6 +3,7 @@ $(() => {
     dataSource: orders,
     keyExpr: 'ID',
     columnHidingEnabled: true,
+    width: '100%',
     showBorders: true,
     editing: {
       allowAdding: true,

@@ -4,8 +4,9 @@
 <dx-data-grid
   id="gridContainer"
   [dataSource]="countries"
-  keyExpr="ID"
+  [keyExpr]="'ID'"
   [columnAutoWidth]="true"
+  [width]="'100%'"
   [showBorders]="true"
   [allowColumnReordering]="true"
 >

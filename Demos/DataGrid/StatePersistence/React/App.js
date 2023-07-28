@@ -29,12 +29,13 @@ class App extends React.Component {
         <div id="descContainer">Sort and filter data, group, reorder and resize columns, change page numbers and page size. Once you are done, <a onClick={this.onRefreshClick}>refresh</a> the web page to see that the grid’s state is automatically persisted to continue working from where you stopped or you can <a onClick={this.onStateResetClick}>reset</a> the grid to its initial state.</div>
         <DataGrid
           id="gridContainer"
+          ref={this.dataGrid}
           dataSource={this.orders}
+          keyExpr="ID"
           allowColumnResizing={true}
           allowColumnReordering={true}
-          showBorders={true}
-          keyExpr="ID"
-          ref={this.dataGrid}>
+          width="100%"
+          showBorders={true}>
           <Selection mode="single" />
           <FilterRow visible={true} />
           <GroupPanel visible={true} />

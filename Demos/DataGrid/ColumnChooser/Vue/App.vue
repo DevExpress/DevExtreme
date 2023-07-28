@@ -3,10 +3,11 @@
     <DxDataGrid
       id="employees"
       :data-source="employees"
+      :key-expr="'ID'"
       :column-auto-width="true"
       :show-row-lines="true"
+      :width="'100%'"
       :show-borders="true"
-      key-expr="ID"
     >
       <DxColumn
         data-field="FirstName"

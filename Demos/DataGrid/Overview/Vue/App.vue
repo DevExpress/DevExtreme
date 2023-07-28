@@ -5,6 +5,7 @@
     :allow-column-reordering="true"
     :row-alternation-enabled="true"
     :show-borders="true"
+    :width="'100%'"
     @content-ready="onContentReady"
   >
     <DxColumn
