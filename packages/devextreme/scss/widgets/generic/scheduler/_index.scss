@@ -163,10 +163,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     $generic-scheduler-header-height,
     $generic-scheduler-toolbar-item-offset,
   );
-  @include header-buttons(
-    $button-normal-bg,
-    $button-normal-contained-bg-focused,
-  );
 
   background-color: $scheduler-header-bg;
 }
