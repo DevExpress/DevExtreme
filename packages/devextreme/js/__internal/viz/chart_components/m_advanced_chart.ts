@@ -494,7 +494,11 @@ export const AdvancedChart = BaseChart.inherit({
 
       if (!updatedAxis || updatedAxis && groupSeries.length && valueAxis === updatedAxis) {
         valueAxis.setGroupSeries(groupSeries);
-        valueAxis.setBusinessRange(groupRange, this._axesReinitialized || keepRange, this._argumentAxes[0]._lastVisualRangeUpdateMode);
+        valueAxis.setBusinessRange(
+          groupRange,
+          this._axesReinitialized || keepRange,
+          this._argumentAxes[0]._lastVisualRangeUpdateMode,
+        );
       }
     });
 
@@ -503,7 +507,12 @@ export const AdvancedChart = BaseChart.inherit({
       const commonInterval = commonArgRange.interval;
       this._argumentAxes.forEach((a) => {
         const currentInterval = argRanges[getPaneName(a)].interval ?? commonInterval; // T956425
-        a.setBusinessRange(new Range({ ...commonArgRange, interval: currentInterval }), this._axesReinitialized, undefined, this._groupsData.categories);
+        a.setBusinessRange(
+          new Range({ ...commonArgRange, interval: currentInterval }),
+          this._axesReinitialized,
+          undefined,
+          this._groupsData.categories,
+        );
       });
     }
 
@@ -511,11 +520,15 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   getArgumentAxis() {
-    return (this._argumentAxes || []).filter((a) => !a.isVirtual)[0];
+    return (this._argumentAxes || []).find((a) => !a.isVirtual);
   },
 
   getValueAxis(name) {
-    return (this._valueAxes || []).filter(_isDefined(name) ? (a) => a.name === name : (a) => a.pane === this.defaultPane)[0];
+    return (this._valueAxes || []).find(
+      _isDefined(name)
+        ? (a) => a.name === name
+        : (a) => a.pane === this.defaultPane,
+    );
   },
 
   _getGroupsData() {
@@ -560,10 +573,23 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _populateAxesOptions(typeSelector, userOptions, axisOptions, rotated, virtual) {
-    const preparedUserOptions = this._prepareStripsAndConstantLines(typeSelector, userOptions, rotated);
-    const options = _extend(true, {}, preparedUserOptions, axisOptions, this._prepareAxisOptions(typeSelector, preparedUserOptions, rotated));
+    const preparedUserOptions = this._prepareStripsAndConstantLines(
+      typeSelector,
+      userOptions,
+      rotated,
+    );
+    const options = _extend(
+      true,
+      {},
+      preparedUserOptions,
+      axisOptions,
+      this._prepareAxisOptions(typeSelector, preparedUserOptions, rotated),
+    );
     if (virtual) {
-      options.visible = options.tick.visible = options.minorTick.visible = options.label.visible = false;
+      options.visible = false;
+      options.tick.visible = false;
+      options.minorTick.visible = false;
+      options.label.visible = false;
       options.title = {};
     }
 
@@ -668,7 +694,9 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   checkForMoreSpaceForPanesCanvas() {
-    return this.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
+    return this
+      .layoutManager
+      .needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
   },
 
   _parseVisualRangeOption(fullName, value) {
@@ -686,7 +714,11 @@ export const AdvancedChart = BaseChart.inherit({
       if (_isDefined(value.visualRange)) {
         this._setCustomVisualRange(name, index, value.visualRange);
       } else if (isArray(value)) {
-        value.forEach((a, i) => _isDefined(a.visualRange) && this._setCustomVisualRange(name, i, a.visualRange));
+        value.forEach((a, i) => {
+          if (_isDefined(a.visualRange)) {
+            this._setCustomVisualRange(name, i, a.visualRange);
+          }
+        });
       }
     }
   },
@@ -731,7 +763,10 @@ export const AdvancedChart = BaseChart.inherit({
       const axisPath = axis.getOptions().optionPath;
       if (axisPath) {
         const path = `${axisPath}.visualRange`;
-        const visualRange = convertVisualRangeObject(axis.visualRange(), !isArray(this.option(path)));
+        const visualRange = convertVisualRangeObject(
+          axis.visualRange(),
+          !isArray(this.option(path)),
+        );
 
         if (!axis.skipEventRising || !rangesAreEqual(visualRange, this.option(path))) {
           if (!this.option(axisPath) && axisPath !== 'valueAxis') {

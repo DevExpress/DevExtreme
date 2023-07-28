@@ -42,7 +42,7 @@ const { isArray } = Array;
 
 function getFirstAxisNameForPane(axes, paneName, defaultPane) {
   let result;
-  for (let i = 0; i < axes.length; i++) {
+  for (let i = 0; i < axes.length; i += 1) {
     if (axes[i].pane === paneName || (axes[i].pane === undefined && paneName === defaultPane)) {
       result = axes[i].name;
       break;
@@ -91,7 +91,9 @@ function hideGridsOnNonFirstValueAxisForPane(axesForPane) {
       }
     });
 
-    !axisShown && hiddenStubAxis.length && changeVisibilityAxisGrids(hiddenStubAxis[0], gridVisibility, minorGridVisibility);
+    if (!axisShown && hiddenStubAxis.length) {
+      changeVisibilityAxisGrids(hiddenStubAxis[0], gridVisibility, minorGridVisibility);
+    }
   }
 }
 
@@ -99,7 +101,7 @@ function findAxisOptions(valueAxes, valueAxesOptions, axisName) {
   let result;
   let axInd;
 
-  for (axInd = 0; axInd < valueAxesOptions.length; axInd++) {
+  for (axInd = 0; axInd < valueAxesOptions.length; axInd += 1) {
     if (valueAxesOptions[axInd].name === axisName) {
       result = valueAxesOptions[axInd];
       result.priority = axInd;
@@ -107,7 +109,7 @@ function findAxisOptions(valueAxes, valueAxesOptions, axisName) {
     }
   }
   if (!result) {
-    for (axInd = 0; axInd < valueAxes.length; axInd++) {
+    for (axInd = 0; axInd < valueAxes.length; axInd += 1) {
       if (valueAxes[axInd].name === axisName) {
         result = valueAxes[axInd].getOptions();
         result.priority = valueAxes[axInd].priority;
@@ -120,13 +122,10 @@ function findAxisOptions(valueAxes, valueAxesOptions, axisName) {
 }
 
 function findAxis(paneName, axisName, axes) {
-  let axis;
-  let i;
-  for (i = 0; i < axes.length; i++) {
-    axis = axes[i];
-    if (axis.name === axisName && axis.pane === paneName) {
-      return axis;
-    }
+  const axisByName = axes.find((axis) => axis.name === axisName && axis.pane === paneName);
+
+  if (axisByName) {
+    return axisByName;
   }
   if (paneName) {
     return findAxis(undefined, axisName, axes);
@@ -216,7 +215,11 @@ function getVerticalAxesMargins(axes) {
 
 function performActionOnAxes(axes, action, actionArgument1?, actionArgument2?, actionArgument3?) {
   axes.forEach((axis) => {
-    axis[action](actionArgument1 && actionArgument1[axis.pane], actionArgument2 && actionArgument2[axis.pane] || actionArgument2, actionArgument3);
+    axis[action](
+      actionArgument1 && actionArgument1[axis.pane],
+      actionArgument2 && actionArgument2[axis.pane] || actionArgument2,
+      actionArgument3,
+    );
   });
 }
 
@@ -1457,20 +1460,38 @@ const dxChart = AdvancedChart.inherit({
 
   _resolveLabelOverlappingStack() {
     const isRotated = this._isRotated();
-    const shiftDirection = isRotated ? function (box, length) { return { x: box.x - length, y: box.y }; } : function (box, length) { return { x: box.x, y: box.y - length }; };
+    const shiftDirection = isRotated
+      ? (box, length) => ({ x: box.x - length, y: box.y })
+      : (box, length) => ({ x: box.x, y: box.y - length });
+
+    const processor = (a, b) => {
+      const coordPosition = isRotated ? 1 : 0;
+      const figureCenter1 = a.labels[0].getFigureCenter()[coordPosition];
+      const figureCenter12 = b.labels[0].getFigureCenter()[coordPosition];
+      if (figureCenter1 - figureCenter12 === 0) {
+        const translator = a.labels[0]
+          .getPoint()
+          .series.getValueAxis()
+          .getTranslator();
+        const direction = translator.isInverted()
+          ? -1
+          : 1;
+        return (a.value() - b.value()) * direction;
+      }
+      return 0;
+    };
 
     _each(this._getStackPoints(), (_, stacks) => {
       _each(stacks, (_, points) => {
         const isInverted = points[0].series.getValueAxis().getOptions().inverted;
-        overlapping.resolveLabelOverlappingInOneDirection(points, this._getCommonCanvas(), isRotated, isInverted, shiftDirection, (a, b) => {
-          const coordPosition = isRotated ? 1 : 0;
-          const figureCenter1 = a.labels[0].getFigureCenter()[coordPosition];
-          const figureCenter12 = b.labels[0].getFigureCenter()[coordPosition];
-          if (figureCenter1 - figureCenter12 === 0) {
-            return (a.value() - b.value()) * (a.labels[0].getPoint().series.getValueAxis().getTranslator().isInverted() ? -1 : 1);
-          }
-          return 0;
-        });
+        overlapping.resolveLabelOverlappingInOneDirection(
+          points,
+          this._getCommonCanvas(),
+          isRotated,
+          isInverted,
+          shiftDirection,
+          processor,
+        );
       });
     });
   },
