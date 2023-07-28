@@ -2327,6 +2327,7 @@ test('Popup EditForm screenshot', async (t) => {
 
     return createWidget('dxDataGrid', {
       height: 150,
+      width: 600,
       dataSource: [{
         Id: 0,
         name: 'test',
@@ -2351,5 +2352,7 @@ test('Popup EditForm screenshot', async (t) => {
           }],
       }],
     });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 });
