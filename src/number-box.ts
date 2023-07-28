@@ -15,6 +15,7 @@ type AccessibleOptions = Pick<Properties,
   "hoverStateEnabled" |
   "inputAttr" |
   "invalidValueMessage" |
+  "isDirty" |
   "isValid" |
   "label" |
   "labelMode" |
@@ -75,6 +76,7 @@ const DxNumberBox = createComponent({
     hoverStateEnabled: Boolean,
     inputAttr: {},
     invalidValueMessage: String,
+    isDirty: Boolean,
     isValid: Boolean,
     label: String,
     labelMode: String,
@@ -132,6 +134,7 @@ const DxNumberBox = createComponent({
     "update:hoverStateEnabled": null,
     "update:inputAttr": null,
     "update:invalidValueMessage": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:label": null,
     "update:labelMode": null,

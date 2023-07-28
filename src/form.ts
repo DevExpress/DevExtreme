@@ -17,6 +17,7 @@ type AccessibleOptions = Pick<Properties,
   "height" |
   "hint" |
   "hoverStateEnabled" |
+  "isDirty" |
   "items" |
   "labelLocation" |
   "labelMode" |
@@ -63,6 +64,7 @@ const DxForm = createComponent({
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
+    isDirty: Boolean,
     items: Array,
     labelLocation: String,
     labelMode: String,
@@ -106,6 +108,7 @@ const DxForm = createComponent({
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:isDirty": null,
     "update:items": null,
     "update:labelLocation": null,
     "update:labelMode": null,

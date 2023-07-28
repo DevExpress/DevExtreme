@@ -7,6 +7,7 @@ type AccessibleOptions = Pick<Properties,
   "height" |
   "hint" |
   "hoverStateEnabled" |
+  "isDirty" |
   "isValid" |
   "max" |
   "min" |
@@ -40,6 +41,7 @@ const DxProgressBar = createComponent({
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
+    isDirty: Boolean,
     isValid: Boolean,
     max: Number,
     min: Number,
@@ -70,6 +72,7 @@ const DxProgressBar = createComponent({
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:max": null,
     "update:min": null,

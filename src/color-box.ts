@@ -22,6 +22,7 @@ type AccessibleOptions = Pick<Properties,
   "hint" |
   "hoverStateEnabled" |
   "inputAttr" |
+  "isDirty" |
   "isValid" |
   "keyStep" |
   "label" |
@@ -87,6 +88,7 @@ const DxColorBox = createComponent({
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
+    isDirty: Boolean,
     isValid: Boolean,
     keyStep: Number,
     label: String,
@@ -149,6 +151,7 @@ const DxColorBox = createComponent({
     "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:inputAttr": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:keyStep": null,
     "update:label": null,
