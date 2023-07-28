@@ -505,7 +505,8 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
         let point;
 
         if(this._segments.length) {
-            point = this._segments[0].line[0];
+            const segmentPoint = this._segments[0].line[0];
+            point = clonePoint(segmentPoint, segmentPoint.x, segmentPoint.y, segmentPoint.angle);
         } else {
             point = clonePoint(points[0], points[0].x, points[0].y, points[0].angle);
         }
