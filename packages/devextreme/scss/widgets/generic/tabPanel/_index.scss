@@ -153,11 +153,10 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 }
 
 // TODO: Reset Tabs Borders
-.dx-tabpanel > .dx-tabpanel-tabs { // stylelint-disable-line no-duplicate-selectors
-  border: none;
-
+.dx-tabpanel { // stylelint-disable-line no-duplicate-selectors
   .dx-tabs-wrapper,
-  .dx-tabs-scrollable {
+  .dx-tabs-scrollable,
+  .dx-tabpanel-tabs {
     border: none;
   }
 
