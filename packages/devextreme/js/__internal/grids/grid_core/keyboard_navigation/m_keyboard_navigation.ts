@@ -155,11 +155,11 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     if (this.isKeyboardEnabled()) {
       accessibility.subscribeVisibilityChange();
-      this._editorFactory.focused.add(this._focusedHandlerWithContext);
+      this._editorFactory?.focused.add(this._focusedHandlerWithContext);
       this.createAction('onKeyDown');
     } else {
       accessibility.unsubscribeVisibilityChange();
-      this._editorFactory.focused.remove(this._focusedHandlerWithContext);
+      this._editorFactory?.focused.remove(this._focusedHandlerWithContext);
     }
 
     this._initViewHandlers();
