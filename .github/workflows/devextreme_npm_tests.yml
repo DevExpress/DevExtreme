@@ -75,9 +75,9 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v3
       with:
-        path: devextreme
+        path: ../devextreme
 
-    - uses: ./.github/actions/pin-browsers
+    - uses: ../devextreme/.github/actions/pin-browsers
 
     - name: Restore npm cache
       uses: actions/cache@v3
