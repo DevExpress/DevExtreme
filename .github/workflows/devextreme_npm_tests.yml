@@ -74,6 +74,8 @@ jobs:
 
     - name: Get sources
       uses: actions/checkout@v3
+      with:
+        path: devextreme
 
     - uses: ./.github/actions/pin-browsers
 
@@ -88,7 +90,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Discover declarations in devextreme repo
-      run: npx nx discover-declarations devextreme-root
+      run: npx nx discover-declarations devextreme-main
 
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
