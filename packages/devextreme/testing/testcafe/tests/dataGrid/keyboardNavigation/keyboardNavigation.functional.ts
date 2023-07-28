@@ -4140,3 +4140,45 @@ test('DataGrid - Cell focus works incorrectly if the command column has a disabl
     }],
   }],
 }));
+
+// T1178858
+test('Keyboard navigation behavior should be changed after changing the keyboardNavigation.enabled option', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const $firstDataCell = dataGrid.getDataRow(0).getDataCell(0);
+
+  await t
+    .click($firstDataCell.element)
+    .pressKey('tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused)
+    .ok();
+
+  await dataGrid.apiToggleKeyboardNavigation(false);
+
+  await t
+    .click($firstDataCell.element)
+    .pressKey('tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused)
+    .notOk();
+
+  await dataGrid.apiToggleKeyboardNavigation(true);
+
+  await t
+    .click($firstDataCell.element)
+    .pressKey('tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 600,
+    dataSource: [
+      { name: 'Alex', c0: 'c0_0' },
+      { name: 'Ben', c0: 'c0_1' },
+      { name: 'Dan', c0: 'c0_2' },
+      { name: 'John', c0: 'c0_3' },
+    ],
+    keyExpr: 'name',
+    keyboardNavigation: {
+      enabled: true,
+    },
+  });
+});
