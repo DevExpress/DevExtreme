@@ -10,6 +10,7 @@ import typeUtils from 'core/utils/type';
 import publicComponentUtils from 'core/utils/public_component';
 import eventsEngine from 'events/core/events_engine';
 import pointerEvents from 'events/pointer';
+import { keyboard } from 'events/short';
 import { MockDataController, MockColumnsController, MockEditingController } from '../../helpers/dataGridMocks.js';
 import { CLICK_EVENT, callViewsRenderCompleted } from '../../helpers/grid/keyboardNavigationHelper.js';
 
@@ -718,5 +719,98 @@ QUnit.module('Keyboard controller', {
 
         // assert
         assert.ok(!_$focusElement, 'element has not focused');
+    });
+
+    // T1178858
+    QUnit.testInActiveWindow('Unsubscribe from events when changing the keyboardNavigation.enabled option to false', function(assert) {
+        // arrange
+        this.options.keyboardNavigation = {
+            enabled: true
+        };
+
+        const onSpy = sinon.spy();
+        const offSpy = sinon.spy();
+        const rowsView = this.getView('rowsView');
+        const element = rowsView.element();
+        const editorFactory = this.getController('editorFactory');
+        const navigationController = new KeyboardNavigationController(this.component);
+
+        eventsEngine.on = onSpy;
+        eventsEngine.off = offSpy;
+
+        navigationController.init();
+        navigationController._focusView();
+        callViewsRenderCompleted(this.component._views);
+
+        // assert
+        assert.ok(editorFactory.focused.has(navigationController._focusedHandlerWithContext), 'subscribed to the "editorFactory.focused" callback');
+        assert.ok(rowsView.renderCompleted.has(navigationController._renderCompletedWithContext), 'subscribed to the "rowsView.renderCompleted" callback');
+        assert.ok(onSpy.calledWith(document, 'visibilitychange'), 'subscribed to the "visibilitychange" event');
+        assert.ok(onSpy.calledWith(element, 'focusin'), 'subscribed to the "focusin" event');
+        assert.ok(onSpy.calledWith(element, 'dxpointerdown.dxDataGridKeyboardNavigation'), 'subscribed to the "pointerdown" event');
+        assert.ok(keyboard._getProcessor(navigationController._keyDownListener), 'subscribed to the "keydown" event');
+
+        // arrange
+        onSpy.reset();
+
+        // act
+        navigationController.option('keyboardNavigation.enabled', false);
+        navigationController.optionChanged({ name: 'keyboardNavigation' });
+        callViewsRenderCompleted(this.component._views);
+
+        // assert
+        assert.notOk(editorFactory.focused.has(navigationController._focusedHandlerWithContext), 'unsubscribed from the "editorFactory.focused" callback');
+        assert.notOk(rowsView.renderCompleted.has(navigationController._renderCompletedWithContext), 'unsubscribed from the "rowsView.renderCompleted" callback');
+        assert.strictEqual(onSpy.callCount, 0, 'call count of the "eventsEngine.on" method');
+        assert.ok(offSpy.calledWith(document, 'visibilitychange'), 'unsubscribed from the "visibilitychange" event');
+        assert.ok(offSpy.calledWith(element, 'focusin'), 'unsubscribed from the "focusin" event');
+        assert.ok(offSpy.calledWith(element, 'dxpointerdown.dxDataGridKeyboardNavigation'), 'unsubscribed from the "pointerdown" event');
+        assert.notOk(keyboard._getProcessor(navigationController._keyDownListener), 'unsubscribed from the "keydown" event');
+    });
+
+    // T1178858
+    QUnit.testInActiveWindow('Subscribe to events when changing the keyboardNavigation.enabled option to true', function(assert) {
+        // arrange
+        this.options.keyboardNavigation = {
+            enabled: false
+        };
+
+        const onSpy = sinon.spy();
+        const offSpy = sinon.spy();
+        const rowsView = this.getView('rowsView');
+        const element = rowsView.element();
+        const editorFactory = this.getController('editorFactory');
+        const navigationController = new KeyboardNavigationController(this.component);
+
+        eventsEngine.on = onSpy;
+        eventsEngine.off = offSpy;
+
+        navigationController.init();
+        navigationController._focusView();
+        callViewsRenderCompleted(this.component._views);
+
+        // assert
+        assert.notOk(editorFactory.focused.has(navigationController._focusedHandlerWithContext), 'not subscribed to the "editorFactory.focused" callback');
+        assert.notOk(rowsView.renderCompleted.has(navigationController._renderCompletedWithContext), 'not subscribed to the "rowsView.renderCompleted" callback');
+        assert.notOk(onSpy.calledWith(document, 'visibilitychange'), 'not subscribed to the "visibilitychange" event');
+        assert.notOk(onSpy.calledWith(element, 'focusin'), 'not subscribed to the "focusin" event');
+        assert.notOk(onSpy.calledWith(element, 'dxpointerdown.dxDataGridKeyboardNavigation'), 'not subscribed to the "pointerdown" event');
+        assert.notOk(keyboard._getProcessor(navigationController._keyDownListener), 'not subscribed to the "keydown" event');
+
+        // arrange
+        onSpy.reset();
+
+        // act
+        navigationController.option('keyboardNavigation.enabled', true);
+        navigationController.optionChanged({ name: 'keyboardNavigation' });
+        callViewsRenderCompleted(this.component._views);
+
+        // assert
+        assert.ok(editorFactory.focused.has(navigationController._focusedHandlerWithContext), 'subscribed to the "editorFactory.focused" callback');
+        assert.ok(rowsView.renderCompleted.has(navigationController._renderCompletedWithContext), 'subscribed to the "rowsView.renderCompleted" callback');
+        assert.ok(onSpy.calledWith(document, 'visibilitychange'), 'subscribed to the "visibilitychange" event');
+        assert.ok(onSpy.calledWith(element, 'focusin'), 'subscribed to the "focusin" event');
+        assert.ok(onSpy.calledWith(element, 'dxpointerdown.dxDataGridKeyboardNavigation'), 'subscribed to the "pointerdown" event');
+        assert.ok(keyboard._getProcessor(navigationController._keyDownListener), 'subscribed to the "keydown" event');
     });
 });
