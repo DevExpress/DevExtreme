@@ -20,6 +20,7 @@ import { map as _map, processSeriesTemplate, setCanvasValues as _setCanvasValues
 import { Series } from '@js/viz/series/base_series';
 
 import BaseWidget from '../core/m_base_widget';
+import RollingStock from './rolling_stock';
 
 type SortingMethodParams = (a: any, b: any) => number;
 
@@ -234,70 +235,6 @@ function moveRollingStock(rollingStocks, canvas) {
 function rollingStocksIsOut(rollingStock, canvas) {
   return rollingStock && rollingStock.getBoundingRect().end > canvas.end;
 }
-
-function RollingStock(label, isRotated, shiftFunction) {
-  const bBox = label.getBoundingRect();
-  const { x } = bBox;
-  const { y } = bBox;
-  const endX = bBox.x + bBox.width;
-  const endY = bBox.y + bBox.height;
-
-  this.labels = [label];
-  this.shiftFunction = shiftFunction;
-
-  this._bBox = {
-    start: isRotated ? x : y,
-    width: isRotated ? bBox.width : bBox.height,
-    end: isRotated ? endX : endY,
-    oppositeStart: isRotated ? y : x,
-    oppositeEnd: isRotated ? endY : endX,
-  };
-  this._initialPosition = isRotated ? bBox.x : bBox.y;
-}
-
-RollingStock.prototype = {
-  toChain(nextRollingStock) {
-    const nextRollingStockBBox = nextRollingStock.getBoundingRect();
-
-    nextRollingStock.shift(nextRollingStockBBox.start - this._bBox.end);
-
-    this._changeBoxWidth(nextRollingStockBBox.width);
-    this.labels = this.labels.concat(nextRollingStock.labels);
-  },
-  getBoundingRect() {
-    return this._bBox;
-  },
-  shift(shiftLength) {
-    const { shiftFunction } = this;
-    _each(this.labels, (index, label) => {
-      const bBox = label.getBoundingRect();
-      const coords = shiftFunction(bBox, shiftLength);
-      if (!label.hideInsideLabel(coords)) {
-        label.shift(coords.x, coords.y);
-      }
-    });
-    this._bBox.end -= shiftLength;
-    this._bBox.start -= shiftLength;
-  },
-  setRollingStockInCanvas(canvas) {
-    if (this._bBox.end > canvas.end) {
-      this.shift(this._bBox.end - canvas.end);
-    }
-  },
-  getLabels() {
-    return this.labels;
-  },
-  value() {
-    return this.labels[0].getData().value;
-  },
-  getInitialPosition() {
-    return this._initialPosition;
-  },
-  _changeBoxWidth(width) {
-    this._bBox.end += width;
-    this._bBox.width += width;
-  },
-};
 
 function getLegendFields(name) {
   return {
