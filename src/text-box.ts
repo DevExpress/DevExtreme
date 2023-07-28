@@ -13,6 +13,7 @@ type AccessibleOptions = Pick<Properties,
   "hint" |
   "hoverStateEnabled" |
   "inputAttr" |
+  "isDirty" |
   "isValid" |
   "label" |
   "labelMode" |
@@ -74,6 +75,7 @@ const DxTextBox = createComponent({
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
+    isDirty: Boolean,
     isValid: Boolean,
     label: String,
     labelMode: String,
@@ -132,6 +134,7 @@ const DxTextBox = createComponent({
     "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:inputAttr": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:label": null,
     "update:labelMode": null,

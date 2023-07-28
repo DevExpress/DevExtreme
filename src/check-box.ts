@@ -12,6 +12,7 @@ type AccessibleOptions = Pick<Properties,
   "hint" |
   "hoverStateEnabled" |
   "iconSize" |
+  "isDirty" |
   "isValid" |
   "name" |
   "onContentReady" |
@@ -48,6 +49,7 @@ const DxCheckBox = createComponent({
     hint: String,
     hoverStateEnabled: Boolean,
     iconSize: [Number, String],
+    isDirty: Boolean,
     isValid: Boolean,
     name: String,
     onContentReady: Function,
@@ -81,6 +83,7 @@ const DxCheckBox = createComponent({
     "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:iconSize": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:name": null,
     "update:onContentReady": null,

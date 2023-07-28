@@ -13,6 +13,7 @@ type AccessibleOptions = Pick<Properties,
   "height" |
   "hint" |
   "hoverStateEnabled" |
+  "isDirty" |
   "isValid" |
   "keyStep" |
   "label" |
@@ -57,6 +58,7 @@ const DxRangeSlider = createComponent({
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
+    isDirty: Boolean,
     isValid: Boolean,
     keyStep: Number,
     label: Object,
@@ -98,6 +100,7 @@ const DxRangeSlider = createComponent({
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:keyStep": null,
     "update:label": null,

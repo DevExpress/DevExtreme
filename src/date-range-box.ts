@@ -32,6 +32,7 @@ type AccessibleOptions = Pick<Properties,
   "hoverStateEnabled" |
   "invalidEndDateMessage" |
   "invalidStartDateMessage" |
+  "isDirty" |
   "isValid" |
   "labelMode" |
   "max" |
@@ -117,6 +118,7 @@ const DxDateRangeBox = createComponent({
     hoverStateEnabled: Boolean,
     invalidEndDateMessage: String,
     invalidStartDateMessage: String,
+    isDirty: Boolean,
     isValid: Boolean,
     labelMode: String,
     max: {},
@@ -199,6 +201,7 @@ const DxDateRangeBox = createComponent({
     "update:hoverStateEnabled": null,
     "update:invalidEndDateMessage": null,
     "update:invalidStartDateMessage": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:labelMode": null,
     "update:max": null,
@@ -346,6 +349,7 @@ const DxCalendarOptions = createConfigurationComponent({
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:max": null,
     "update:maxZoomLevel": null,
@@ -358,6 +362,7 @@ const DxCalendarOptions = createConfigurationComponent({
     "update:onValueChanged": null,
     "update:readOnly": null,
     "update:rtlEnabled": null,
+    "update:selectionMode": null,
     "update:showTodayButton": null,
     "update:showWeekNumbers": null,
     "update:tabIndex": null,
@@ -367,6 +372,7 @@ const DxCalendarOptions = createConfigurationComponent({
     "update:validationMessagePosition": null,
     "update:validationStatus": null,
     "update:value": null,
+    "update:values": null,
     "update:visible": null,
     "update:weekNumberRule": null,
     "update:width": null,
@@ -397,6 +403,7 @@ const DxCalendarOptions = createConfigurationComponent({
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
+    isDirty: Boolean,
     isValid: Boolean,
     max: {},
     maxZoomLevel: String,
@@ -409,6 +416,7 @@ const DxCalendarOptions = createConfigurationComponent({
     onValueChanged: Function,
     readOnly: Boolean,
     rtlEnabled: Boolean,
+    selectionMode: String,
     showTodayButton: Boolean,
     showWeekNumbers: Boolean,
     tabIndex: Number,
@@ -418,6 +426,7 @@ const DxCalendarOptions = createConfigurationComponent({
     validationMessagePosition: String,
     validationStatus: String,
     value: {},
+    values: Array,
     visible: Boolean,
     weekNumberRule: String,
     width: [Function, Number, String],

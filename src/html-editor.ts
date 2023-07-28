@@ -14,6 +14,7 @@ type AccessibleOptions = Pick<Properties,
   "hint" |
   "hoverStateEnabled" |
   "imageUpload" |
+  "isDirty" |
   "isValid" |
   "mediaResizing" |
   "mentions" |
@@ -61,6 +62,7 @@ const DxHtmlEditor = createComponent({
     hint: String,
     hoverStateEnabled: Boolean,
     imageUpload: Object,
+    isDirty: Boolean,
     isValid: Boolean,
     mediaResizing: Object,
     mentions: Array,
@@ -105,6 +107,7 @@ const DxHtmlEditor = createComponent({
     "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:imageUpload": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:mediaResizing": null,
     "update:mentions": null,
@@ -180,6 +183,7 @@ const DxFileUploaderOptions = createConfigurationComponent({
     "update:invalidFileExtensionMessage": null,
     "update:invalidMaxFileSizeMessage": null,
     "update:invalidMinFileSizeMessage": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:labelText": null,
     "update:maxFileSize": null,
@@ -246,6 +250,7 @@ const DxFileUploaderOptions = createConfigurationComponent({
     invalidFileExtensionMessage: String,
     invalidMaxFileSizeMessage: String,
     invalidMinFileSizeMessage: String,
+    isDirty: Boolean,
     isValid: Boolean,
     labelText: String,
     maxFileSize: Number,

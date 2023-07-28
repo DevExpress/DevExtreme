@@ -13,6 +13,7 @@ type AccessibleOptions = Pick<Properties,
   "height" |
   "hint" |
   "hoverStateEnabled" |
+  "isDirty" |
   "isValid" |
   "items" |
   "itemTemplate" |
@@ -52,6 +53,7 @@ const DxRadioGroup = createComponent({
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
+    isDirty: Boolean,
     isValid: Boolean,
     items: Array,
     itemTemplate: {},
@@ -88,6 +90,7 @@ const DxRadioGroup = createComponent({
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:items": null,
     "update:itemTemplate": null,

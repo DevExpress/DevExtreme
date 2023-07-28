@@ -14,6 +14,7 @@ type AccessibleOptions = Pick<Properties,
   "height" |
   "hint" |
   "hoverStateEnabled" |
+  "isDirty" |
   "isValid" |
   "max" |
   "maxZoomLevel" |
@@ -26,6 +27,7 @@ type AccessibleOptions = Pick<Properties,
   "onValueChanged" |
   "readOnly" |
   "rtlEnabled" |
+  "selectionMode" |
   "showTodayButton" |
   "showWeekNumbers" |
   "tabIndex" |
@@ -35,6 +37,7 @@ type AccessibleOptions = Pick<Properties,
   "validationMessagePosition" |
   "validationStatus" |
   "value" |
+  "values" |
   "visible" |
   "weekNumberRule" |
   "width" |
@@ -69,6 +72,7 @@ const DxCalendar = createComponent({
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
+    isDirty: Boolean,
     isValid: Boolean,
     max: {},
     maxZoomLevel: String,
@@ -81,6 +85,7 @@ const DxCalendar = createComponent({
     onValueChanged: Function,
     readOnly: Boolean,
     rtlEnabled: Boolean,
+    selectionMode: String,
     showTodayButton: Boolean,
     showWeekNumbers: Boolean,
     tabIndex: Number,
@@ -90,6 +95,7 @@ const DxCalendar = createComponent({
     validationMessagePosition: String,
     validationStatus: String,
     value: {},
+    values: Array,
     visible: Boolean,
     weekNumberRule: String,
     width: [Function, Number, String],
@@ -110,6 +116,7 @@ const DxCalendar = createComponent({
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:max": null,
     "update:maxZoomLevel": null,
@@ -122,6 +129,7 @@ const DxCalendar = createComponent({
     "update:onValueChanged": null,
     "update:readOnly": null,
     "update:rtlEnabled": null,
+    "update:selectionMode": null,
     "update:showTodayButton": null,
     "update:showWeekNumbers": null,
     "update:tabIndex": null,
@@ -131,6 +139,7 @@ const DxCalendar = createComponent({
     "update:validationMessagePosition": null,
     "update:validationStatus": null,
     "update:value": null,
+    "update:values": null,
     "update:visible": null,
     "update:weekNumberRule": null,
     "update:width": null,

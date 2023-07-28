@@ -21,6 +21,7 @@ type AccessibleOptions = Pick<Properties,
   "invalidFileExtensionMessage" |
   "invalidMaxFileSizeMessage" |
   "invalidMinFileSizeMessage" |
+  "isDirty" |
   "isValid" |
   "labelText" |
   "maxFileSize" |
@@ -91,6 +92,7 @@ const DxFileUploader = createComponent({
     invalidFileExtensionMessage: String,
     invalidMaxFileSizeMessage: String,
     invalidMinFileSizeMessage: String,
+    isDirty: Boolean,
     isValid: Boolean,
     labelText: String,
     maxFileSize: Number,
@@ -158,6 +160,7 @@ const DxFileUploader = createComponent({
     "update:invalidFileExtensionMessage": null,
     "update:invalidMaxFileSizeMessage": null,
     "update:invalidMinFileSizeMessage": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:labelText": null,
     "update:maxFileSize": null,

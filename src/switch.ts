@@ -10,6 +10,7 @@ type AccessibleOptions = Pick<Properties,
   "height" |
   "hint" |
   "hoverStateEnabled" |
+  "isDirty" |
   "isValid" |
   "name" |
   "onContentReady" |
@@ -45,6 +46,7 @@ const DxSwitch = createComponent({
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
+    isDirty: Boolean,
     isValid: Boolean,
     name: String,
     onContentReady: Function,
@@ -77,6 +79,7 @@ const DxSwitch = createComponent({
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:name": null,
     "update:onContentReady": null,

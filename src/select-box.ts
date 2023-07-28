@@ -24,6 +24,7 @@ type AccessibleOptions = Pick<Properties,
   "hint" |
   "hoverStateEnabled" |
   "inputAttr" |
+  "isDirty" |
   "isValid" |
   "items" |
   "itemTemplate" |
@@ -111,6 +112,7 @@ const DxSelectBox = createComponent({
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
+    isDirty: Boolean,
     isValid: Boolean,
     items: Array,
     itemTemplate: {},
@@ -195,6 +197,7 @@ const DxSelectBox = createComponent({
     "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:inputAttr": null,
+    "update:isDirty": null,
     "update:isValid": null,
     "update:items": null,
     "update:itemTemplate": null,
