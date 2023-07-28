@@ -3,21 +3,12 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../tabs/variables/sizes" as *;
-@use "../tabs/variables/colors" as *;
-@use "../tabs/index" as *;
+@use "../tabs/old/sizes" as *;
+@use "../tabs/old/colors" as *;
+@use "../tabs/old/index" as *;
 @use "../../base/tabPanel";
 
 // adduse
-
-$generic-tabs-border: $generic-tabs-border-width solid $tabs-border-color !default;
-$generic-tabs-border-transparent: $generic-tabs-border-width solid $tabs-tab-bg !default;
-$generic-tabs-border-focus: $generic-tabs-border-width solid $tabs-focused-border-color !default;
-
-$generic-tabpanel-inset-shadow-left: inset $generic-tabs-border-width 0;
-$generic-tabpanel-inset-shadow-top: inset 0 $generic-tabs-border-width;
-$generic-tabpanel-inset-shadow-right: inset (-$generic-tabs-border-width) 0;
-$generic-tabpanel-inset-shadow-bottom: inset 0 (-$generic-tabs-border-width);
 
 $tab-selected-not-focused-right-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
 $tab-selected-not-focused-right-rtl-shadow: $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
@@ -25,27 +16,6 @@ $tab-selected-not-focused-left-right-shadow: $generic-tabpanel-inset-shadow-left
 $tab-selected-not-focused-left-shadow: $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
 $tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
 $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-left $tabs-border-color;
-
-
-@mixin tabpanel-tab-shadow-mixin($tab-shadow, $tab-rtl-shadow) {
-  box-shadow: $tab-shadow;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    box-shadow: $tab-rtl-shadow;
-  }
-}
-
-
-@mixin tabpanel-navigation-shadow-mixin($accent-color) {
-  .dx-tabs-nav-button-left {
-    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
-  }
-
-  .dx-tabs-nav-button-right {
-    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
-  }
-}
 
 
 @mixin tabpanel-tab-color-mixin() {
@@ -186,10 +156,16 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 .dx-tabpanel > .dx-tabpanel-tabs { // stylelint-disable-line no-duplicate-selectors
   border: none;
 
-  .dx-tab::after,
   .dx-tabs-wrapper,
-  .dx-tabs-scrollable,
-  &.dx-tabs {
+  .dx-tabs-scrollable {
     border: none;
+  }
+
+  .dx-tabs-wrapper {
+    background-color: transparent;
+  }
+
+  .dx-tab::after {
+    content: none;
   }
 }
