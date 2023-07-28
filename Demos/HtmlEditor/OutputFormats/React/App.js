@@ -85,7 +85,7 @@ class App extends React.Component {
             <ButtonItem text="Html" />
             <ButtonItem text="Markdown" />
           </ButtonGroup>
-          <div className="value-content">
+          <div className="value-content" tabIndex={0}>
             {this.prettierFormat(valueContent)}
           </div>
         </div>

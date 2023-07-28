@@ -40,7 +40,10 @@
         <DxButtonGroupItem text="Html"/>
         <DxButtonGroupItem text="Markdown"/>
       </DxButtonGroup>
-      <div class="value-content">{{ prettierFormat(valueContent) }}</div>
+      <div
+        class="value-content"
+        tabindex="0"
+      >{{ prettierFormat(valueContent) }}</div>
     </div>
   </div>
 </template>
