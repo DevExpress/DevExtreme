@@ -14,7 +14,7 @@ class App extends React.Component {
     return (
       <div>
         <div id="chat-window">
-          <div className="message dx-theme-background-color">
+          <div className="message dx-theme-background-color" tabIndex={0}>
             <div className="photo">
               <img alt="Kevin Carter" src="../../../../images/mentions/Kevin-Carter.png" />
             </div>
@@ -29,7 +29,7 @@ class App extends React.Component {
             </div>
           </div>
           <br />
-          <div className="message dx-theme-background-color">
+          <div className="message dx-theme-background-color" tabIndex={0}>
             <div className="photo">
               <img alt="John Heart" src="../../../../images/mentions/John-Heart.png" />
             </div>
@@ -45,7 +45,7 @@ class App extends React.Component {
             </div>
           </div>
           <br />
-          <div className="message dx-theme-background-color">
+          <div className="message dx-theme-background-color" tabIndex={0}>
             <div className="photo">
               <img alt="Kevin Carter" src="../../../../images/mentions/Kevin-Carter.png" />
             </div>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="chat-window">
-      <div class="message dx-theme-background-color">
+      <div class="message dx-theme-background-color" tabindex="0">
         <div class="photo">
           <img
             alt="Kevin Carter"
@@ -22,7 +22,7 @@
         </div>
       </div>
       <br>
-      <div class="message dx-theme-background-color">
+      <div class="message dx-theme-background-color" tabindex="0">
         <div class="photo">
           <img
             alt="John Heart"
@@ -41,7 +41,7 @@
         </div>
       </div>
       <br>
-      <div class="message dx-theme-background-color">
+      <div class="message dx-theme-background-color" tabindex="0">
         <div class="photo">
           <img
             alt="Kevin Carter"
