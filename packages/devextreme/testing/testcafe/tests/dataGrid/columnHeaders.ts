@@ -11,7 +11,7 @@ test('Checking column headers via aXe', async (t) => {
   dataSource: [{
     id: 1,
     field1: 'field1',
-    field2: 'field2'
+    field2: 'field2',
   }],
   keyExpr: 'id',
   columns: ['field1', 'field2'],
