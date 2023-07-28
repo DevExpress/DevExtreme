@@ -1443,7 +1443,7 @@ const dxChart = AdvancedChart.inherit({
   },
 
   _getCanvasForPane(paneName) {
-    return this.panes.find((pane) => pane.name === paneName).canvas;
+    return this.panes.find((pane) => pane.name === paneName)?.canvas;
   },
 
   _getTrackerSettings() {
