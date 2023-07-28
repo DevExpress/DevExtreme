@@ -927,10 +927,10 @@ class DateRangeBox extends Editor {
             case 'value': {
                 const newValue = sortDatesArray(value);
 
-                const isDirty = !isSameDateArrays(newValue, this._initialValue);
-                this.option('isDirty', isDirty);
-
                 if(!isSameDateArrays(newValue, previousValue)) {
+                    const isDirty = !isSameDateArrays(newValue, this._initialValue);
+                    this.option('isDirty', isDirty);
+
                     this._setOptionWithoutOptionChange('value', newValue);
                     this._setOptionWithoutOptionChange('startDate', newValue[0]);
                     this._setOptionWithoutOptionChange('endDate', newValue[1]);
