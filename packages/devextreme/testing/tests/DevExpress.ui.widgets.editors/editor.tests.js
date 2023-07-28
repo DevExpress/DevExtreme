@@ -58,7 +58,7 @@ const moduleConfig = {
     }
 };
 
-// NOTE: change OldEditor to Editor after isDirty fo renovated editors are implemented
+// TODO: change OldEditor to Editor after isDirty for renovated editors is implemented
 QUnit.module('isDirty', () => {
     QUnit.test('isDirty is false by default', function(assert) {
         const editor = new OldEditor($('<div>').appendTo('body'));
