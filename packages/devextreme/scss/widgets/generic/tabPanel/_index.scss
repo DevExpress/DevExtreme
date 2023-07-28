@@ -181,3 +181,15 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
     }
   }
 }
+
+// TODO: Reset Tabs Borders
+.dx-tabpanel > .dx-tabpanel-tabs { // stylelint-disable-line no-duplicate-selectors
+  border: none;
+
+  .dx-tab::after,
+  .dx-tabs-wrapper,
+  .dx-tabs-scrollable,
+  &.dx-tabs {
+    border: none;
+  }
+}
