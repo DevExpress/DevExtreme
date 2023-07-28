@@ -747,7 +747,7 @@ QUnit.module('Keyboard controller', {
         assert.ok(rowsView.renderCompleted.has(navigationController._renderCompletedWithContext), 'subscribed to the "rowsView.renderCompleted" callback');
         assert.ok(onSpy.calledWith(document, 'visibilitychange'), 'subscribed to the "visibilitychange" event');
         assert.ok(onSpy.calledWith(element, 'focusin'), 'subscribed to the "focusin" event');
-        assert.ok(onSpy.calledWith(element, 'dxpointerdown.dxDataGridKeyboardNavigation'), 'subscribed to the "pointerdown" event');
+        assert.ok(onSpy.calledWith(element, CLICK_EVENT), 'subscribed to the "pointerdown" event');
         assert.ok(keyboard._getProcessor(navigationController._keyDownListener), 'subscribed to the "keydown" event');
 
         // arrange
@@ -764,7 +764,7 @@ QUnit.module('Keyboard controller', {
         assert.strictEqual(onSpy.callCount, 0, 'call count of the "eventsEngine.on" method');
         assert.ok(offSpy.calledWith(document, 'visibilitychange'), 'unsubscribed from the "visibilitychange" event');
         assert.ok(offSpy.calledWith(element, 'focusin'), 'unsubscribed from the "focusin" event');
-        assert.ok(offSpy.calledWith(element, 'dxpointerdown.dxDataGridKeyboardNavigation'), 'unsubscribed from the "pointerdown" event');
+        assert.ok(offSpy.calledWith(element, CLICK_EVENT), 'unsubscribed from the "pointerdown" event');
         assert.notOk(keyboard._getProcessor(navigationController._keyDownListener), 'unsubscribed from the "keydown" event');
     });
 
