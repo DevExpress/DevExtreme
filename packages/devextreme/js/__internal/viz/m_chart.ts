@@ -1428,39 +1428,30 @@ const dxChart = AdvancedChart.inherit({
     const axes = this._getAllAxes();
     const chartCanvasClipRectID = this._getCanvasClipRectID();
 
-    for (let i = 0; i < axes.length; i++) {
+    for (let i = 0; i < axes.length; i += 1) {
       const elementsClipRectID = this._getElementsClipRectID(axes[i].pane);
       axes[i].applyClipRects(elementsClipRectID, chartCanvasClipRectID);
     }
   },
 
   _getPaneBorderVisibility(paneIndex) {
-    const commonPaneBorderVisible = this._themeManager.getOptions('commonPaneSettings').border.visible;
-    const pane = this.panes[paneIndex] || {};
-    const paneBorder = pane.border || {};
+    const commonPaneBorderVisible = this._themeManager.getOptions('commonPaneSettings').border.visible as boolean;
+    const pane = this.panes[paneIndex];
+    const paneVisibility = pane?.border?.visible as boolean;
 
-    return 'visible' in paneBorder ? paneBorder.visible : commonPaneBorderVisible;
+    return paneVisibility === undefined ? commonPaneBorderVisible : paneVisibility;
   },
 
   _getCanvasForPane(paneName) {
-    const { panes } = this;
-    const panesNumber = panes.length;
-    let i;
-
-    for (i = 0; i < panesNumber; i++) {
-      if (panes[i].name === paneName) {
-        return panes[i].canvas;
-      }
-    }
+    return this.panes.find((pane) => pane.name === paneName).canvas;
   },
 
   _getTrackerSettings() {
-    const themeManager = this._themeManager;
     return _extend(this.callBase(), {
       chart: this,
       rotated: this._isRotated(),
       crosshair: this._getCrosshairOptions().enabled ? this._crosshair : null,
-      stickyHovering: themeManager.getOptions('stickyHovering'),
+      stickyHovering: this._themeManager.getOptions('stickyHovering'),
     });
   },
 
@@ -1579,12 +1570,12 @@ const dxChart = AdvancedChart.inherit({
     });
   },
 
-  option() {
-    const option = this.callBase.apply(this, arguments);
+  option(...params) {
+    const option = this.callBase(...params);
     const valueAxis = this._options.silent('valueAxis');
 
     if (type(valueAxis) === 'array') {
-      for (let i = 0; i < valueAxis.length; i++) {
+      for (let i = 0; i < valueAxis.length; i += 1) {
         const optionPath = `valueAxis[${i}].visualRange`;
         this._optionsByReference[optionPath] = true;
       }
