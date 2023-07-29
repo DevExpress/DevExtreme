@@ -6,23 +6,14 @@
 @use "../../base/icons" as *;
 @use "../button/sizes" as *;
 @use "../common/mixins" as *;
-@use "../../base/dropDownButton" as *;
+@use "../../base/dropDownButton/mixins" as *;
 
 // adduse
-@include dx-dropdown-button(5px);
-
-.dx-dropdownbutton-toggle {
-  max-width: 20px;
-}
-
-.dx-dropdownbutton-action {
-  min-width: 0;
-
-  .dx-button-content {
-    padding-inline-start: 10px;
-    padding-inline-end: 4px;
-  }
-}
+@include dx-dropdown-button(
+  5px,
+  10px,
+  4px,
+);
 
 .dx-dropdownbutton-popup-wrapper {
   @include dx-dropdownlist-list-appearance();

@@ -8,27 +8,17 @@
 @use "../button/sizes" as *;
 @use "../button/colors" as *;
 @use "../common/mixins" as *;
-@use "../../base/dropDownButton" as *;
+@use "../../base/dropDownButton/mixins" as *;
 
 // adduse
 
 $material-dropdownbutton-horizontal-padding: 8px;
 
-@include dx-dropdown-button($material-dropdownbutton-horizontal-padding);
-
-.dx-dropdownbutton-toggle {
-  min-width: 26px;
-  // max-width: 26px;
-}
-
-.dx-dropdownbutton-action {
-  min-width: 0;
-
-  .dx-button-content {
-    padding-inline-start: 12px;
-    padding-inline-end: 8px;
-  }
-}
+@include dx-dropdown-button(
+  $material-dropdownbutton-horizontal-padding,
+  12px,
+  $material-text-button-horizontal-padding,
+);
 
 .dx-dropdownbutton-popup-wrapper {
   @include dx-dropdownlist-list-appearance();
