@@ -7,18 +7,12 @@
 @use "../../base/icons" as *;
 @use "../../base/button/mixins" as *;
 
-$generic-button-padding:
-  $generic-button-vertical-padding
-  $generic-button-horizontal-padding;
-
-$generic-button-icon-size: $generic-base-icon-size;
-
 @mixin dx-button-onlyicon-sizing() {
-  @include dx-button-sizing($generic-button-icon-horizontal-padding, $generic-button-icon-size, 0);
+  @include dx-button-sizing($generic-button-icon-horizontal-padding, $generic-button-icon-horizontal-padding, $generic-base-icon-size, 0);
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($generic-button-padding, $generic-button-icon-size, math.div($generic-button-icon-size, 2));
+  @include dx-button-sizing($generic-button-vertical-padding, $generic-button-horizontal-padding, $generic-base-icon-size, math.div($generic-base-icon-size, 2));
 }
 
 @mixin dx-button-styling-variant(

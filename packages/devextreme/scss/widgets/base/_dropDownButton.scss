@@ -6,6 +6,13 @@
   }
 
   .dx-dropdownbutton-action {
+
+    &.dx-buttongroup-last-item{
+      .dx-button-content {
+        padding-inline-end: 0;
+      }
+    }
+
     &.dx-button-has-text .dx-icon.dx-icon-right {
       margin-inline-start: 4px;
       margin-inline-end: 0;

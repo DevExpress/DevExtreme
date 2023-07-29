@@ -285,7 +285,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
   .dx-list-item-after-bag {
     &.dx-list-static-delete-button-container {
-      width: $item-horizontal-padding + $generic-button-icon-size + $generic-list-deletebutton-padding * 2 + $generic-button-border-weight * 2;
+      width: $item-horizontal-padding + $generic-base-icon-size + $generic-list-deletebutton-padding * 2 + $generic-button-border-weight * 2;
     }
 
     &.dx-list-reorder-handle-container {

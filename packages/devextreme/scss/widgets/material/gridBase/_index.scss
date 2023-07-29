@@ -1099,7 +1099,7 @@ $grid-masterdetail-padding: 16px;
     }
 
     .dx-revert-button {
-      @include dx-button-sizing(2px, 18px, 0);
+      @include dx-button-sizing(2px, 2px, 18px, 0);
 
       border-radius: $button-border-radius;
 
