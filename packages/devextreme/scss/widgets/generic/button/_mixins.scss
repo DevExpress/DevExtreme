@@ -65,15 +65,6 @@ $generic-button-icon-size: $generic-base-icon-size;
   border-style: solid;
 }
 
-@mixin dx-button-special-hover($hover: transparent) {
-  &.dx-state-hover {
-    .dx-button-content {
-      background-color: $hover;
-      border-radius: $button-border-radius;
-    }
-  }
-}
-
 @mixin dx-button-mode-contained-styling() {
   @include dx-button-styling-variant(
     $button-normal-bg, $button-normal-border-color, $button-normal-color,
