@@ -179,11 +179,6 @@
     margin-left: $size;
     margin-right: 0;
   }
-
-  &.dx-icon-right {
-    margin-inline-start: $size;
-    margin-inline-end: 0;
-  }
 }
 
 @mixin dx-font-icon($glyph) {
