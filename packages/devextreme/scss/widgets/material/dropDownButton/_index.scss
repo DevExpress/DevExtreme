@@ -24,12 +24,6 @@ $material-dropdownbutton-horizontal-padding: 8px;
 .dx-dropdownbutton-toggle {
   @include dx-size-dropdownbutton();
 
-  &.dx-button {
-    .dx-rtl & {
-      border-right-width: 0;
-    }
-  }
-
   .dx-button-content {
     flex: $material-toggle-button-flex;
   }
