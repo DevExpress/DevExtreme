@@ -8,11 +8,23 @@
 @use "../../base/button/mixins" as *;
 
 @mixin dx-button-onlyicon-sizing() {
-  @include dx-button-sizing($generic-button-icon-horizontal-padding, $generic-button-icon-horizontal-padding, $generic-base-icon-size, 0);
+  @include dx-button-sizing(
+    $generic-button-icon-horizontal-padding,
+    $generic-button-icon-horizontal-padding,
+    $generic-button-icon-horizontal-padding,
+    $generic-base-icon-size,
+    0
+  );
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($generic-button-vertical-padding, $generic-button-horizontal-padding, $generic-base-icon-size, math.div($generic-base-icon-size, 2));
+  @include dx-button-sizing(
+    $generic-button-vertical-padding,
+    $generic-button-horizontal-padding,
+    $generic-button-horizontal-padding,
+    $generic-base-icon-size,
+    math.div($generic-base-icon-size, 2)
+  );
 }
 
 @mixin dx-button-styling-variant(

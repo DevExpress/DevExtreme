@@ -16,15 +16,33 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 @mixin dx-button-onlyicon-sizing() {
   min-width: $material-button-height;
 
-  @include dx-button-sizing(0, 0, $material-button-icon-size, 0);
+  @include dx-button-sizing(
+    0,
+    0,
+    0,
+    $material-button-icon-size,
+    0
+  );
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($material-button-vertical-padding, $material-button-horizontal-padding, $material-button-icon-size, math.div($material-button-icon-size, 2));
+  @include dx-button-sizing(
+    $material-button-vertical-padding,
+    $material-button-horizontal-padding,
+    $material-button-horizontal-padding,
+    $material-button-icon-size,
+    math.div($material-button-icon-size, 2)
+  );
 }
 
 @mixin dx-button-text-and-icon-sizing() {
-  @include dx-button-sizing($material-button-vertical-padding, $material-button-icon-text-padding, $material-button-icon-size, 8px);
+  @include dx-button-sizing(
+    $material-button-vertical-padding, 
+    $material-button-icon-text-padding,
+    $material-button-horizontal-padding,
+    $material-button-icon-size,
+    8px
+  );
 }
 
 
