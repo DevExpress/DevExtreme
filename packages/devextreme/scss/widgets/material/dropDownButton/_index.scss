@@ -16,132 +16,17 @@ $material-dropdownbutton-horizontal-padding: 8px;
 
 @include dx-dropdown-button($material-dropdownbutton-horizontal-padding);
 
-@mixin dx-size-dropdownbutton() {
-  min-width: 0;
-  height: 100%;
-}
-
 .dx-dropdownbutton-toggle {
-  @include dx-size-dropdownbutton();
-
-  .dx-button-content {
-    flex: $material-toggle-button-flex;
-  }
+  min-width: 26px;
+  // max-width: 26px;
 }
 
 .dx-dropdownbutton-action {
-  @include dx-size-dropdownbutton();
-}
+  min-width: 0;
 
-.dx-dropdownbutton {
-  height: $material-button-height;
-
-  &.dx-dropdownbutton-has-arrow {
-    .dx-button-has-icon,
-    .dx-button-has-text,
-    .dx-button-has-icon.dx-button-has-text {
-      &.dx-buttongroup-last-item {
-        .dx-button-content {
-          padding-right: 0;
-
-          .dx-icon-spindown {
-            @include dx-icon-sizing($material-button-icon-size);
-
-            width: 26px;
-
-            &.dx-icon-right {
-              margin-left: 4px;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .dx-button-has-icon,
-  .dx-button-has-text,
-  .dx-button-has-icon.dx-button-has-text {
-    min-width: 0;
-
-    .dx-button-content {
-      padding-right: 8px;
-    }
-  }
-
-  .dx-buttongroup {
-    .dx-button {
-      border-radius: 0;
-    }
-
-    .dx-buttongroup-item {
-      margin-left: 0;
-    }
-
-    .dx-buttongroup-last-item {
-      border-top-right-radius: $button-border-radius;
-      border-bottom-right-radius: $button-border-radius;
-    }
-
-    .dx-buttongroup-first-item {
-      border-top-left-radius: $button-border-radius;
-      border-bottom-left-radius: $button-border-radius;
-    }
-  }
-}
-
-.dx-rtl {
-  .dx-dropdownbutton,
-  &.dx-dropdownbutton {
-    .dx-button-has-icon,
-    .dx-button-has-text,
-    .dx-button-has-icon.dx-button-has-text {
-      &.dx-buttongroup-last-item {
-        .dx-button-content {
-          padding-left: 0;
-
-          .dx-icon-spindown {
-            &.dx-icon-right {
-              margin-left: 0;
-              margin-right: 4px;
-            }
-          }
-        }
-      }
-
-      .dx-button-content {
-        padding-left: 8px;
-      }
-    }
-
-    .dx-buttongroup-last-item {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      border-top-left-radius: $button-border-radius;
-      border-bottom-left-radius: $button-border-radius;
-      border-left-width: 1px;
-    }
-
-    .dx-buttongroup-first-item {
-      border-top-right-radius: $button-border-radius;
-      border-bottom-right-radius: $button-border-radius;
-
-      &:not(.dx-buttongroup-last-item) {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-    }
-
-    .dx-button-has-text:not(.dx-button-mode-text) .dx-button-content {
-      padding-right: $material-button-horizontal-padding;
-    }
-
-    .dx-button-has-icon.dx-button-has-text:not(.dx-button-mode-text) .dx-button-content {
-      padding-right: $material-button-icon-text-padding;
-    }
-
-    .dx-button-mode-text.dx-buttongroup-first-item .dx-button-content {
-      padding-right: $material-text-button-horizontal-padding;
-    }
+  .dx-button-content {
+    padding-inline-start: 12px;
+    padding-inline-end: 8px;
   }
 }
 

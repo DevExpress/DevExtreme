@@ -5,6 +5,14 @@
     vertical-align: middle;
   }
 
+  .dx-dropdownbutton-action {
+    &.dx-button-has-text .dx-icon.dx-icon-right {
+      margin-inline-start: 4px;
+      margin-inline-end: 0;
+    }
+  }
+  
+
   .dx-dropdownbutton-content {
     &.dx-popup-content {
       padding: 0;
@@ -17,7 +25,6 @@
   }
 
   .dx-dropdownbutton-toggle {
-    display: flex;
     flex: 0 0 auto;
 
     .dx-button-content {
