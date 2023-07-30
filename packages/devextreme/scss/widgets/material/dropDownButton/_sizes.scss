@@ -3,11 +3,14 @@
 // adduse
 
 $material-text-button-horizontal-padding: null !default;
+$material-dropdownbutton-icon-spindown-size: null !default;
 
 @if $size == "default" {
   $material-text-button-horizontal-padding: 8px;
+  $material-dropdownbutton-icon-spindown-size: 24px;
 }
 
 @else if $size == "compact" {
   $material-text-button-horizontal-padding: 5px;
+  $material-dropdownbutton-icon-spindown-size: 18px;
 }

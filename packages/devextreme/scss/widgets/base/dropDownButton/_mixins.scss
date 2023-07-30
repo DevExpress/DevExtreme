@@ -2,6 +2,7 @@
   $dropdownbutton-horizontal-padding,
   $dropdownbutton-action-padding-left,
   $dropdownbutton-action-padding-right,
+  $dropdownbutton-icon-spindown-size: 18px,
 ) {
   .dx-dropdownbutton {
     &:not(.dx-dropdownbutton-has-arrow) {
@@ -15,6 +16,14 @@
         .dx-button-content {
           padding-inline: $dropdownbutton-horizontal-padding * 2;
         }
+      }
+    }
+
+    .dx-icon {
+      &.dx-icon-spindown {
+        width: $dropdownbutton-icon-spindown-size;
+        height: $dropdownbutton-icon-spindown-size;
+        font-size: $dropdownbutton-icon-spindown-size;
       }
     }
   }
