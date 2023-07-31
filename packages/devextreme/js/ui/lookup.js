@@ -891,6 +891,16 @@ const Lookup = DropDownList.inherit({
         }
     },
 
+    _updateActiveDescendant() {
+        this.callBase();
+
+        if(!this._$searchBox) {
+            return;
+        }
+        const $input = this._$searchBox.find('input');
+        this.callBase($input);
+    },
+
     _removeSearch: function() {
         this._$searchWrapper && this._$searchWrapper.remove();
         delete this._$searchWrapper;

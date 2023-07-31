@@ -204,6 +204,12 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     value?: Date | number | string;
     /**
      * @docid
+     * @default []
+     * @public
+     */
+    values?: Array<Date | number | string>;
+    /**
+     * @docid
      * @default 'month'
      * @fires dxCalendarOptions.onOptionChanged
      * @public

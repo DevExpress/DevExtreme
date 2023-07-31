@@ -9072,6 +9072,10 @@ declare module DevExpress.ui {
      */
     value?: Date | number | string;
     /**
+     * [descr:dxCalendarOptions.values]
+     */
+    values?: Array<Date | number | string>;
+    /**
      * [descr:dxCalendarOptions.zoomLevel]
      */
     zoomLevel?: DevExpress.ui.dxCalendar.CalendarZoomLevel;
@@ -31952,10 +31956,10 @@ declare module DevExpress.viz {
     export type TooltipHiddenEvent = DevExpress.events.EventInfo<dxBarGauge> &
       TooltipInfo;
     /**
-      * [descr:_viz_bar_gauge_TooltipInfo]
-      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-      */
-     export interface TooltipInfo {
+     * [descr:_viz_bar_gauge_TooltipInfo]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export interface TooltipInfo {
       /**
        * [descr:_viz_bar_gauge_TooltipInfo.target]
        */

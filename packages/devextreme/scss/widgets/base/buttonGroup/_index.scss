@@ -1,4 +1,4 @@
-@use "./mixins" as *;
+@use "../mixins" as *;
 
 // adduse
 
@@ -26,7 +26,11 @@
   }
 
   &.dx-button-mode-text {
-    margin-left: 1px;
+    margin-inline-start: 1px;
+
+    &.dx-buttongroup-first-item{
+      margin-inline-start: 0;
+    }
   }
 }
 

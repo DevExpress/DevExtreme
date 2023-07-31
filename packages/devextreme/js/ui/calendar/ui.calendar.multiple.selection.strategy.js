@@ -41,6 +41,10 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
         const dates = this.dateOption('values').filter(value => value);
         return this._getLowestDateInArray(dates);
     }
+
+    restoreValue() {
+        this.calendar.option('values', []);
+    }
 }
 
 export default CalendarMultiSelectionStrategy;

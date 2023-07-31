@@ -15,6 +15,7 @@
 @use "../menu/colors" as *;
 @use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
+@use "../../base/button/mixins" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
 @use "../typography/sizes" as *;
