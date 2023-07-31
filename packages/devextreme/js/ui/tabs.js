@@ -217,7 +217,7 @@ const Tabs = CollectionWidget.inherit({
         if(!(this.option('scrollingEnabled') && this._isItemsWidthExceeded())) {
             this._cleanScrolling();
 
-            if(this._needStretchItems() && !this._isItemsWidthExceeded()) {
+            if(this._needStretchItems()) {
                 this.$element().addClass(TABS_STRETCHED_CLASS);
             }
 
@@ -229,8 +229,15 @@ const Tabs = CollectionWidget.inherit({
 
     _isItemsWidthExceeded: function() {
         const tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
+        const elementWidth = getWidth(this.$element());
 
-        return tabItemsWidth - 1 > getWidth(this.$element());
+        if([tabItemsWidth, elementWidth].includes(0)) {
+            return false;
+        }
+
+        const isItemsWidthExceeded = tabItemsWidth + 5 > elementWidth;
+
+        return isItemsWidthExceeded;
     },
 
     _needStretchItems: function() {
@@ -243,8 +250,9 @@ const Tabs = CollectionWidget.inherit({
         });
 
         const maxTabWidth = Math.max.apply(null, itemsWidth);
+        const needStretchItems = maxTabWidth >= elementWidth / $visibleItems.length;
 
-        return maxTabWidth >= elementWidth / $visibleItems.length;
+        return needStretchItems;
     },
 
     _cleanNavButtons: function() {
