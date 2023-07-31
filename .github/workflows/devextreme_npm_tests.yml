@@ -75,7 +75,7 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v3
       with:
-        path: ../devextreme
+        path: ./devextreme
 
     - name: Pin browsers
       uses: ./.github/actions/pin-browsers
