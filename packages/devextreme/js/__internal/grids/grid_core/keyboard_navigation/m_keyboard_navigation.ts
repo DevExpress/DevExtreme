@@ -88,11 +88,11 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   _canceledCellPosition: any;
 
-  _focusedHandlerWithContext: any;
+  private focusedHandlerWithContext!: ($element: dxElementWrapper) => void;
 
-  _renderCompletedWithContext: any;
+  private renderCompletedWithContext!: (e: any) => void;
 
-  _rowsViewFocusHandlerContext: any;
+  private rowsViewFocusHandlerContext!: (event: any) => void;
 
   _isNeedScroll: any;
 
@@ -144,9 +144,9 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._memoFireFocusedCellChanged = memoize(this._memoFireFocusedCellChanged.bind(this), { compareType: 'value' });
     this._memoFireFocusedRowChanged = memoize(this._memoFireFocusedRowChanged.bind(this), { compareType: 'value' });
 
-    this._focusedHandlerWithContext = this._focusedHandlerWithContext || this._focusedHandler.bind(this);
-    this._renderCompletedWithContext = this._renderCompletedWithContext || this._renderCompleted.bind(this);
-    this._rowsViewFocusHandlerContext = this._rowsViewFocusHandlerContext || this._rowsViewFocusHandler.bind(this);
+    this.focusedHandlerWithContext = this.focusedHandlerWithContext || this.focusedHandler.bind(this);
+    this.renderCompletedWithContext = this.renderCompletedWithContext || this.renderCompleted.bind(this);
+    this.rowsViewFocusHandlerContext = this.rowsViewFocusHandlerContext || this.rowsViewFocusHandler.bind(this);
 
     this._updateFocusTimeout = null;
     this._fastEditingStarted = false;
@@ -155,18 +155,18 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     if (this.isKeyboardEnabled()) {
       accessibility.subscribeVisibilityChange();
-      this._editorFactory?.focused.add(this._focusedHandlerWithContext);
+      this._editorFactory?.focused.add(this.focusedHandlerWithContext);
       this.createAction('onKeyDown');
     } else {
       accessibility.unsubscribeVisibilityChange();
-      this._editorFactory?.focused.remove(this._focusedHandlerWithContext);
+      this._editorFactory?.focused.remove(this.focusedHandlerWithContext);
     }
 
-    this._initViewHandlers();
-    this._initDocumentHandlers();
+    this.initViewHandlers();
+    this.initDocumentHandlers();
   }
 
-  _focusedHandler($element) {
+  private focusedHandler($element: dxElementWrapper): void {
     this.setupFocusedView();
 
     if (this._isNeedScroll) {
@@ -181,7 +181,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  _rowsViewFocusHandler(event) {
+  private rowsViewFocusHandler(event: any): void {
     const $element = $(event.target);
     const isRelatedTargetInRowsView = $(event.relatedTarget).closest(
       this._rowsView.element(),
@@ -214,19 +214,19 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  _subscribeToRowsViewFocusEvent() {
+  private subscribeToRowsViewFocusEvent(): void {
     const $rowsView = this._rowsView?.element();
 
-    eventsEngine.on($rowsView, 'focusin', this._rowsViewFocusHandlerContext);
+    eventsEngine.on($rowsView, 'focusin', this.rowsViewFocusHandlerContext);
   }
 
-  _unsubscribeFromRowsViewFocusEvent() {
+  private unsubscribeFromRowsViewFocusEvent(): void {
     const $rowsView = this._rowsView?.element();
 
-    eventsEngine.off($rowsView, 'focusin', this._rowsViewFocusHandlerContext);
+    eventsEngine.off($rowsView, 'focusin', this.rowsViewFocusHandlerContext);
   }
 
-  _renderCompleted(e) {
+  private renderCompleted(e: any): void {
     const $rowsView = this._rowsView.element();
     const isFullUpdate = !e || e.changeType === 'refresh';
     const isFocusedViewCorrect = this._focusedView && this._focusedView.name === this._rowsView.name;
@@ -237,11 +237,11 @@ export class KeyboardNavigationController extends modules.ViewController {
     const $focusedElement = root.find(':focus');
     const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length;
 
-    this._unsubscribeFromRowsViewFocusEvent();
-    this._subscribeToRowsViewFocusEvent();
+    this.unsubscribeFromRowsViewFocusEvent();
+    this.subscribeToRowsViewFocusEvent();
 
-    this._initPointerEventHandler();
-    this._initKeyDownHandler();
+    this.initPointerEventHandler();
+    this.initKeyDownHandler();
     this._setRowsViewAttributes();
 
     if (isFocusedViewCorrect && isFocusedElementCorrect) {
@@ -252,19 +252,19 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  _initViewHandlers() {
-    this._unsubscribeFromRowsViewFocusEvent();
-    this._unsubscribeFromPointerEvent();
-    this._unsubscribeFromKeyDownEvent();
+  private initViewHandlers(): void {
+    this.unsubscribeFromRowsViewFocusEvent();
+    this.unsubscribeFromPointerEvent();
+    this.unsubscribeFromKeyDownEvent();
 
-    this._rowsView?.renderCompleted?.remove(this._renderCompletedWithContext);
+    this._rowsView?.renderCompleted?.remove(this.renderCompletedWithContext);
 
     if (this.isKeyboardEnabled()) {
-      this._rowsView.renderCompleted.add(this._renderCompletedWithContext);
+      this._rowsView.renderCompleted.add(this.renderCompletedWithContext);
     }
   }
 
-  _initDocumentHandlers() {
+  private initDocumentHandlers(): void {
     const document = domAdapter.getDocument();
 
     this._documentClickHandler = this._documentClickHandler || this.createAction((e) => {
@@ -309,7 +309,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  _unsubscribeFromPointerEvent() {
+  private unsubscribeFromPointerEvent(): void {
     const pointerEventName = !isMobile() ? pointerEvents.down : clickEventName;
     const $rowsView = this._getRowsViewElement();
 
@@ -320,7 +320,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     );
   }
 
-  _subscribeToPointerEvent() {
+  private subscribeToPointerEvent(): void {
     const pointerEventName = !isMobile() ? pointerEvents.down : clickEventName;
     const $rowsView = this._getRowsViewElement();
     const clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
@@ -333,25 +333,25 @@ export class KeyboardNavigationController extends modules.ViewController {
     );
   }
 
-  _initPointerEventHandler() {
+  private initPointerEventHandler(): void {
     this._pointerEventAction = this._pointerEventAction || this.createAction(this._pointerEventHandler);
-    this._unsubscribeFromPointerEvent();
-    this._subscribeToPointerEvent();
+    this.unsubscribeFromPointerEvent();
+    this.subscribeToPointerEvent();
   }
 
-  _unsubscribeFromKeyDownEvent() {
+  private unsubscribeFromKeyDownEvent(): void {
     keyboard.off(this._keyDownListener);
   }
 
-  _subscribeToKeyDownEvent() {
+  private subscribeToKeyDownEvent(): void {
     const $rowsView = this._getRowsViewElement();
 
     this._keyDownListener = keyboard.on($rowsView, null, (e) => this._keyDownHandler(e));
   }
 
-  _initKeyDownHandler() {
-    this._keyDownListener && this._unsubscribeFromKeyDownEvent();
-    this._subscribeToKeyDownEvent();
+  private initKeyDownHandler(): void {
+    this._keyDownListener && this.unsubscribeFromKeyDownEvent();
+    this.subscribeToKeyDownEvent();
   }
 
   dispose() {
