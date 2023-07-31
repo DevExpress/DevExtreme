@@ -36356,6 +36356,9 @@ declare module DevExpress.viz.dxFunnel {
   export type LegendItem = FunnelLegendItem;
 }
 declare module DevExpress.viz.dxPieChart {
+  /**
+   * [descr:PieChartLegendItem]
+   */
   export type LegendItem = PieChartLegendItem;
 }
 declare module DevExpress.viz.dxVectorMap {
