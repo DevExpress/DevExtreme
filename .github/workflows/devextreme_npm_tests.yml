@@ -83,14 +83,16 @@ jobs:
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: '**/node_modules'
+        path: './devextreme/**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Install packages in devextreme repo
+      working-directory: ./devextreme
       run: npm install --no-audit --no-fund
 
     - name: Discover declarations in devextreme repo
+      working-directory: ./devextreme
       run: npx nx discover-declarations devextreme-main
 
     - name: Clone devextreme-angular repo from PR author fork
