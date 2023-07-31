@@ -231,7 +231,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const $cols = $('#dataGrid colgroup').eq(0).children('col');
         assert.strictEqual($cols.length, 2);
         assert.strictEqual($cols[0].style.width, '50px', 'min-width is applied');
-        assert.strictEqual($cols[1].style.width, 'auto');
+        assert.strictEqual($cols[1].style.width, '');
     });
 
     // T516187
@@ -249,8 +249,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         assert.strictEqual($cols.length, 3);
         assert.strictEqual($cols[0].style.width, '80px', 'width is applied because width < minWidth');
-        assert.strictEqual($cols[1].style.width, 'auto', 'width is auto');
-        assert.strictEqual($cols[2].style.width, 'auto', 'width is auto');
+        assert.strictEqual($cols[1].style.width, '', 'width is not set');
+        assert.strictEqual($cols[2].style.width, '', 'width is not set');
     });
 
     QUnit.test('Apply minWidth when columns have \'auto\' width but the last column hasn\'t width', function(assert) {
