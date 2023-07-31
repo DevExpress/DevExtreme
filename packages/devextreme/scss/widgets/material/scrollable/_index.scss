@@ -28,36 +28,3 @@
   0,
 );
 @include dx-scrollable-scrollbars-alwaysvisible($material-scrollbar-size-thin);
-
-.dx-scrollview-scrollbottom-text,
-.dx-scrollview-pull-down-text {
-  margin-left: 10px;
-  top: math.div(50px - $material-base-font-size, 2);
-  display: inline-block;
-
-  .dx-rtl & {
-    margin-left: 0;
-    margin-right: 10px;
-  }
-}
-
-.dx-scrollview-pull-down-text {
-  div {
-    position: relative;
-  }
-}
-
-.dx-scrollview-pull-down-image {
-  display: none;
-}
-
-.dx-scrollview-pull-down {
-  text-align: center;
-}
-
-.dx-rtl .dx-scrollable,
-.dx-rtl.dx-scrollable {
-  .dx-scrollable-scroll {
-    float: left;
-  }
-}
