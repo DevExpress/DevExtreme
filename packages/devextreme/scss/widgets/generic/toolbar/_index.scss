@@ -25,10 +25,6 @@
     $generic-toolbar-item-spacing
   );
 
-  &.dx-state-disabled {
-    opacity: 1;
-  }
-
   &.dx-toolbar-compact {
     .dx-button {
       min-width: auto;
@@ -58,17 +54,15 @@
   .dx-toolbar-hidden-button-group {
     .dx-button {
       border-radius: 0;
+    }
 
-      .dx-button-content {
-        padding: $generic-list-item-vertical-padding;
-      }
+    .dx-button-content {
+      padding: $generic-list-item-vertical-padding;
     }
   }
 
   .dx-toolbar-hidden-button {
-    .dx-button {
-      @include dx-button-mode-text-styling();
-    }
+    @include dx-button-mode-text-styling();
   }
 
   .dx-toolbar-hidden-button-group {

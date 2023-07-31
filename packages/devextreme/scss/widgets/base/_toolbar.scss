@@ -23,6 +23,10 @@
       flex: 0 1 auto;
     }
   }
+
+  &.dx-state-disabled {
+    opacity: 1;
+  }
 }
 
 .dx-toolbar .dx-button .dx-icon {
@@ -190,11 +194,12 @@
 
       .dx-buttongroup-wrapper {
         flex-direction: column;
-
-        .dx-buttongroup-item {
-          border: none;
-        }
       }
+    }
+
+    .dx-button {
+      border: none;
+      box-shadow: none;
     }
   }
 }
