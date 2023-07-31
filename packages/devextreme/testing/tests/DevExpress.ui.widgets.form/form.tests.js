@@ -4385,8 +4385,7 @@ QUnit.test('TagBox.SelectionChanged is raised once if formData is wrapped into a
     ['dxTextArea', 'a', { dxTextArea: 'b' }],
     ['dxTextBox', 'a', { dxTextBox: 'b' }],
     ['dxDateRangeBox', [new Date(2021, 8, 17), new Date(2021, 9, 17)], { dxDateRangeBox: [null, null] } ],
-    // TODO: implement for renovated component check_box.tsx
-    // ['dxCheckBox', true, { dxCheckbox: false } ],
+    ['dxCheckBox', true, { dxCheckbox: false } ],
 ].forEach((editorData) => {
     QUnit.test(`form should be dirty after ${editorData[0]} value updated and become pristine on getting back to initial value`, function(assert) {
         const editorName = editorData[0];

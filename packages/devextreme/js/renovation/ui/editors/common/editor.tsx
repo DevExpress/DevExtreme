@@ -118,6 +118,8 @@ export class EditorProps extends BaseWidgetProps {
 
   @OneWay() isValid = true;
 
+  @TwoWay() isDirty = false;
+
   @OneWay() inputAttr = {};
 
   // private
