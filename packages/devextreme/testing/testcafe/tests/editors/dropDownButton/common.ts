@@ -1,20 +1,17 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import DropDownButton from '../../../model/dropDownButton';
 import createWidget from '../../../helpers/createWidget';
 import {
-  appendElementTo, setClassAttribute,
-  removeClassAttribute,
+  appendElementTo,
   insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
 import Guid from '../../../../../js/core/guid';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
-const HOVER_STATE_CLASS = 'dx-state-hover';
-const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const stylingModes = ['text', 'outlined', 'contained'];
 
@@ -59,12 +56,12 @@ test('Item collection should be updated after direct option changing (T817436)',
   }, '#dropDownButton2');
 });
 
-[undefined, 150].forEach((width) => {
+[undefined, 120].forEach((width) => {
   test('DropDownButton renders correctly', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await insertStylesheetRulesToPage(`.${DROP_DOWN_BUTTON_CLASS} { display: inline-block; margin: 2px; }`);
-    await testScreenshot(t, takeScreenshot, `DropDownButton render${width ? 'with fixed width' : ''}.png`, { element: '#container' });
+    await insertStylesheetRulesToPage(`.${DROP_DOWN_BUTTON_CLASS} { display: inline-flex; vertical-aligh: middle; margin: 2px; }`);
+    await testScreenshot(t, takeScreenshot, `DropDownButton render${width ? 'with fixed width' : ''}.png`);
 
     await t
       .expect(compareResults.isValid())
