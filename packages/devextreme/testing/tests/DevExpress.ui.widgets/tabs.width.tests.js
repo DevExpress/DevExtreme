@@ -96,8 +96,8 @@ QUnit.module('Width', () => {
                 this.assert.ok(this._getTabItem(1).outerWidth() > 100, this._getTabItem().outerWidth() + ' > 100');
                 this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons aren\'t rendered');
             } else {
-                this.assert.ok(this._getTabItem(0).outerWidth() < 55, this._getTabItem(0).outerWidth() + ' < 55');
-                this.assert.ok(this._getTabItem(1).outerWidth() < 55, this._getTabItem(1).outerWidth() + ' < 55');
+                this.assert.ok(Math.floor(this._getTabItem(0).outerWidth()) === 33, this._getTabItem(0).outerWidth() + ' = 33');
+                this.assert.ok(Math.floor(this._getTabItem(1).outerWidth()) === 66, this._getTabItem(1).outerWidth() + ' = 66');
                 this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
             }
         }

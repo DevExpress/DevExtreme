@@ -30,6 +30,10 @@ class CalendarSingleSelectionStrategy extends CalendarSelectionStrategy {
         return this.dateOption('value');
     }
 
+    restoreValue() {
+        this.calendar.option('value', null);
+    }
+
     _updateViewsValue(value) {
         this._updateViewsOption('value', value[0]);
     }

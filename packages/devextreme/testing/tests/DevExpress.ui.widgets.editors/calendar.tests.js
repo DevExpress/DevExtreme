@@ -1363,7 +1363,7 @@ QUnit.module('Calendar footer', {
         assert.deepEqual(value, expectedValue);
     });
 
-    ['multi', 'range'].forEach((selectionMode) => {
+    ['multiple', 'range'].forEach((selectionMode) => {
         QUnit.test(`today button click adds today date to values when selectionMode is ${selectionMode}`, function(assert) {
             this.reinit({
                 selectionMode,
@@ -1380,9 +1380,9 @@ QUnit.module('Calendar footer', {
         });
     });
 
-    QUnit.test('today button click should deselect date if it is already selected and selectionMode is multi', function(assert) {
+    QUnit.test('today button click should deselect date if it is already selected and selectionMode is multiple', function(assert) {
         this.reinit({
-            selectionMode: 'multi',
+            selectionMode: 'multiple',
             values: [new Date()],
             showTodayButton: true
         });
@@ -1947,7 +1947,7 @@ QUnit.module('Options', {
             };
         }
     }, () => {
-        ['multi', 'range'].forEach((selectionMode) => {
+        ['multiple', 'range'].forEach((selectionMode) => {
             QUnit.test(`Date from value option is not selected when selectionMode is ${selectionMode}`, function(assert) {
                 this.reinit({
                     ...this.options,
@@ -1984,33 +1984,6 @@ QUnit.module('Options', {
                 });
             });
 
-            QUnit.test(`Should show only date from value option after runtime switching from ${selectionMode} to single selectionMode`, function(assert) {
-                this.reinit({
-                    selectionMode,
-                    ...this.options,
-                });
-
-                this.calendar.option('selectionMode', 'single');
-
-                const $cell = $(getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-
-                assert.strictEqual($cell.data('value'), '2023/01/07');
-            });
-
-            QUnit.test(`Should show dates from values option after runtime ${selectionMode} selectionMode enable`, function(assert) {
-                this.reinit({
-                    selectionMode: 'single',
-                    values: ['01/05/2023', '02/01/2023'],
-                    value: '01/07/2023',
-                });
-                this.calendar.option('selectionMode', selectionMode);
-
-                const $cells = $(getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-
-                assert.strictEqual($($cells[0]).data('value'), '2023/01/05');
-                assert.strictEqual($($cells[1]).data('value'), '2023/02/01');
-            });
-
             QUnit.module('CurrentDate', {}, () => {
                 QUnit.test(`Should be equal to the lowest defined date in values on init (selectionMode=${selectionMode}`, function(assert) {
                     this.reinit({
@@ -2030,29 +2003,6 @@ QUnit.module('Options', {
                     assert.deepEqual(currentDate, values[1]);
                 });
 
-                QUnit.test(`Should be equal to value after switching from ${selectionMode} to single selectionMode`, function(assert) {
-                    this.reinit({
-                        ...this.options,
-                        selectionMode
-                    });
-                    this.calendar.option('selectionMode', 'single');
-                    const { currentDate, value } = this.calendar.option();
-
-                    assert.deepEqual(currentDate, new Date(value));
-                });
-
-                QUnit.test(`Should be equal to the lowest defined date in values after switching from single to ${selectionMode} selectionMode`, function(assert) {
-                    this.reinit({
-                        selectionMode: 'single',
-                        values: ['02/01/2023', '01/15/2023', '02/05/2023', null],
-                        value: '01/07/2023',
-                    });
-                    this.calendar.option('selectionMode', selectionMode);
-                    const { currentDate } = this.calendar.option();
-
-                    assert.deepEqual(currentDate, new Date('01/15/2023'));
-                });
-
                 QUnit.test(`Should be equal to new selected cell date when selectionMode = ${selectionMode}`, function(assert) {
                     this.reinit({
                         ...this.options,
@@ -2067,10 +2017,10 @@ QUnit.module('Options', {
                     assert.deepEqual(currentDate, new Date('2023/01/16'));
                 });
 
-                QUnit.test('Should be equal to deselected cell date when selectionMode = multi', function(assert) {
+                QUnit.test('Should be equal to deselected cell date when selectionMode = multiple', function(assert) {
                     this.reinit({
                         ...this.options,
-                        selectionMode: 'multi'
+                        selectionMode: 'multiple'
                     });
                     const $cell = this.$element.find('*[data-value="2023/01/15"]');
 
@@ -2083,11 +2033,11 @@ QUnit.module('Options', {
             });
         });
 
-        QUnit.module('Multi', {
+        QUnit.module('Multiple', {
             beforeEach: function() {
                 this.reinit({
                     ...this.options,
-                    selectionMode: 'multi'
+                    selectionMode: 'multiple'
                 });
             }
         }, () => {
@@ -2277,6 +2227,66 @@ QUnit.module('Options', {
                 assert.ok(selectedRange.length < 240);
             });
 
+            [1, 2].forEach((viewsCount) => {
+                QUnit.test(`Big range should start from first date of before view and end on last date of after view (viewsCount=${viewsCount})`, function(assert) {
+                    this.reinit({
+                        values: ['1996/01/05', '2345/03/07'],
+                        selectionMode: 'range',
+                        viewsCount,
+                    });
+
+                    this.calendar.option('currentDate', new Date('2023/07/24'));
+
+                    const expectedRangeStart = new Date('2023/06/01');
+                    const expectedRangeEnd = viewsCount === 1 ? new Date('2023/08/31') : new Date('2023/09/30');
+                    const selectedRange = getCurrentViewInstance(this.calendar).option('range');
+                    const rangeStart = selectedRange[0];
+                    const rangeEnd = selectedRange[selectedRange.length - 1];
+
+                    assert.deepEqual(rangeStart, expectedRangeStart, 'range start date is first date in views');
+                    assert.deepEqual(rangeEnd, expectedRangeEnd, 'range end date is last date in views');
+                });
+
+                QUnit.test(`Big range should start from start date if start date is date in before view (viewsCount=${viewsCount})`, function(assert) {
+                    this.reinit({
+                        values: ['1996/01/05', '2345/03/07'],
+                        selectionMode: 'range',
+                        viewsCount,
+                    });
+
+                    this.calendar.option('currentDate', new Date('2023/07/24'));
+                    this.calendar.option('currentDate', new Date('1996/02/15'));
+
+                    const expectedRangeStart = new Date('1996/01/05');
+                    const expectedRangeEnd = viewsCount === 1 ? new Date('1996/03/31') : new Date('1996/04/30');
+                    const selectedRange = getCurrentViewInstance(this.calendar).option('range');
+                    const rangeStart = selectedRange[0];
+                    const rangeEnd = selectedRange[selectedRange.length - 1];
+
+                    assert.deepEqual(rangeStart, expectedRangeStart, 'range start date is start date');
+                    assert.deepEqual(rangeEnd, expectedRangeEnd, 'range end date is last date in views');
+                });
+
+                QUnit.test(`Big range should end on end date if end date is date from views (viewsCount=${viewsCount})`, function(assert) {
+                    this.reinit({
+                        values: ['1996/01/05', '2345/03/07'],
+                        selectionMode: 'range',
+                        viewsCount,
+                    });
+
+                    this.calendar.option('currentDate', new Date('2345/03/15'));
+
+                    const expectedRangeStart = new Date('2345/02/01');
+                    const expectedRangeEnd = new Date('2345/03/07');
+                    const selectedRange = getCurrentViewInstance(this.calendar).option('range');
+                    const rangeStart = selectedRange[0];
+                    const rangeEnd = selectedRange[selectedRange.length - 1];
+
+                    assert.deepEqual(rangeStart, expectedRangeStart, 'range start date is first date in views');
+                    assert.deepEqual(rangeEnd, expectedRangeEnd, 'range end date is end date');
+                });
+            });
+
             [
                 [null, null],
                 [new Date(2021, 9, 17), null],
@@ -2392,6 +2402,51 @@ QUnit.module('Options', {
                 $cellToHover.trigger('mouseenter');
 
                 assert.notOk($cellToHover.hasClass(CALENDAR_CELL_IN_RANGE_CLASS));
+            });
+        });
+
+        [
+            {
+                initialSelectionMode: 'multiple',
+                newSelectionMode: 'single',
+                optionName: 'value',
+                expectedValue: null,
+            },
+            {
+                initialSelectionMode: 'single',
+                newSelectionMode: 'range',
+                optionName: 'values',
+                expectedValue: [null, null],
+            },
+            {
+                initialSelectionMode: 'range',
+                newSelectionMode: 'multiple',
+                optionName: 'values',
+                expectedValue: [],
+            },
+        ].forEach(({ initialSelectionMode, newSelectionMode, optionName, expectedValue }) => {
+            QUnit.test(`Value should be restored after switching from ${initialSelectionMode} to ${newSelectionMode} selectionMode`, function(assert) {
+                this.reinit({
+                    ...this.options,
+                    selectionMode: initialSelectionMode,
+                });
+
+                this.calendar.option('selectionMode', newSelectionMode);
+
+                assert.deepEqual(this.calendar.option(optionName), expectedValue);
+            });
+
+            QUnit.test(`No cells should be selected after switching from ${initialSelectionMode} to ${newSelectionMode} selectionMode`, function(assert) {
+                this.reinit({
+                    ...this.options,
+                    selectionMode: initialSelectionMode,
+                });
+
+                this.calendar.option('selectionMode', newSelectionMode);
+
+                const $cells = $(getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+
+                assert.strictEqual($cells.length, 0);
             });
         });
     });
@@ -4378,7 +4433,7 @@ QUnit.module('Aria accessibility', {
         assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the additional view cell');
     });
 
-    ['multi', 'range'].forEach((selectionMode) => {
+    ['multiple', 'range'].forEach((selectionMode) => {
         QUnit.test(`aria-selected on selected date cell, selectionMode=${selectionMode}`, function(assert) {
             const calendar = this.$element.dxCalendar({
                 values: [new Date(2015, 5, 1)],
@@ -4400,7 +4455,7 @@ QUnit.module('Aria accessibility', {
         });
     });
 
-    ['single', 'multi', 'range'].forEach((selectionMode) => {
+    ['single', 'multiple', 'range'].forEach((selectionMode) => {
         QUnit.test('aria-selected should be added to selected date cell afrer view change, selectionMode=${selectionMode}', function(assert) {
             const calendar = this.$element.dxCalendar({
                 selectionMode,
@@ -4744,7 +4799,7 @@ QUnit.module('dxCalendar number and string value support', {
     });
 });
 
-['single', 'multi', 'range'].forEach((selectionMode) => {
+['single', 'multiple', 'range'].forEach((selectionMode) => {
     QUnit.module(`valueChanged handler should receive correct event (selectionMode = ${selectionMode}`, {
         beforeEach: function() {
             fx.off = true;
