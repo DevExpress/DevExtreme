@@ -146,7 +146,7 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
   },
 }));
 
-['multi', 'range'].forEach((selectionMode) => {
+['multiple', 'range'].forEach((selectionMode) => {
   test(`Calendar with ${selectionMode} selectionMode rendered correct`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

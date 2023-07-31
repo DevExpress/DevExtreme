@@ -51,14 +51,14 @@ export default _extend({}, symbolPoint, {
         this.inVisibleArea = minX <= x + width && maxX >= x && minY <= y + height && maxY >= y;
     },
 
-    _checkVisibility: function(arg, val, minVal, rotated) {
-        const size = _abs(val - minVal);
-        const valueBeforeCorrection = Math.min(val, minVal);
+    _cacheVisibility: function(x, y, minY, rotated) {
+        y = Math.min(y, minY);
+        const size = Math.abs(y - minY);
 
         if(rotated) {
-            this._calculateVisibility(valueBeforeCorrection, arg, size, this.height);
+            this._calculateVisibility(y, x, size, this.height);
         } else {
-            this._calculateVisibility(arg, valueBeforeCorrection, this.width, size);
+            this._calculateVisibility(x, y, this.width, size);
         }
     },
 
@@ -285,7 +285,7 @@ export default _extend({}, symbolPoint, {
         that['v' + valAxis] = val;
         that['v' + argAxis] = arg + that[argIntervalName] / 2;
 
-        this._checkVisibility(arg, val, minVal, rotated);
+        this._cacheVisibility(arg, val, minVal, rotated);
 
         val = that._truncateCoord(val, valVisibleArea);
         minVal = that._truncateCoord(minVal, valVisibleArea);
