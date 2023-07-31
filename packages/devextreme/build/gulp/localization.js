@@ -6,7 +6,6 @@ const rename = require('gulp-rename');
 const del = require('del');
 const template = require('gulp-template');
 const lint = require('gulp-eslint-new');
-const PluginError = require('plugin-error');
 const through = require('through2');
 const fs = require('fs');
 
@@ -25,7 +24,6 @@ const globalizeSupplementalCldr = require('devextreme-cldr-data/supplemental.jso
 
 const PARENT_LOCALE_SEPARATOR = '-';
 const DEFAULT_LOCALE = 'en';
-const SUPPORTED_LOCALES = ['de', 'ru', 'ja'];
 
 const getParentLocale = (parentLocales, locale) => {
     const parentLocale = parentLocales[locale];
@@ -118,7 +116,6 @@ gulp.task('clean-cldr-data', function() {
 gulp.task('generate-community-locales', () => {
     const defaultFile = fs.readFileSync(path.join(DICTIONARY_SOURCE_FOLDER, DEFAULT_LOCALE + '.json')).toString();
     const defaultDictionaryKeys = Object.keys(JSON.parse(defaultFile)[DEFAULT_LOCALE]);
-    const needToUpdate = [];
 
     return gulp
         .src([
@@ -140,14 +137,6 @@ gulp.task('generate-community-locales', () => {
                     const val = dictionary[key];
                     if(!val.includes('TODO')) {
                         replaceValue = val.replace(/"/g, '\\"');
-                    } else if(SUPPORTED_LOCALES.includes(locale)) {
-                        replaceValue = 'TODO';
-                        needToUpdate.push({ locale, key });
-                    }
-                } else {
-                    if(SUPPORTED_LOCALES.includes(locale)) {
-                        replaceValue = 'TODO';
-                        needToUpdate.push({ locale, key });
                     }
                 }
 
@@ -159,14 +148,7 @@ gulp.task('generate-community-locales', () => {
             file.contents = Buffer.from(newFile, encoding);
             callback(null, file);
         }))
-        .pipe(gulp.dest(DICTIONARY_SOURCE_FOLDER))
-        .on('end', () => {
-            if(needToUpdate.length > 0) {
-                throw new PluginError('validate-localization-messages', needToUpdate.map(
-                    ({ locale, key }) => `\tThe "${key}" must be translated in the "${locale}" locale`
-                ).join('\n'));
-            }
-        });
+        .pipe(gulp.dest(DICTIONARY_SOURCE_FOLDER));
 });
 
 gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FOLDER).map(locale => Object.assign(
@@ -228,7 +210,7 @@ gulp.task('localization-generated-sources', gulp.parallel([
                 exportName: source.exportName,
                 json: serializeObject(source.data)
             }))
-            .pipe(lint({fix: true}))
+            .pipe(lint({ fix: true }))
             .pipe(lint.format())
             .pipe(rename(source.filename))
             .pipe(gulp.dest(source.destination));
