@@ -93,7 +93,7 @@ jobs:
 
     - name: Discover declarations in devextreme repo
       working-directory: ./devextreme
-      run: npx nx discover-declarations devextreme-main
+      run: npx nx discover-declarations devextreme-root
 
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
