@@ -5,7 +5,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/sizes" as *;
-@use "../../base/button/mixins" as *;
+@use "../button/mixins" as *;
 @use "../../base/calendar/calendar";
 @use "../../base/calendar/mixins" as *;
 
@@ -23,15 +23,7 @@
 
 .dx-calendar-navigator-previous-view,
 .dx-calendar-navigator-next-view {
-  $icon-padding: math.div($material-button-height - $material-base-icon-size - $material-base-border-width * 2, 2);
-
-  @include dx-button-sizing(
-    $icon-padding,
-    $icon-padding,
-    $icon-padding,
-    $material-base-icon-size,
-    0
-  );
+  @include dx-button-onlyicon-sizing($material-base-icon-size);
 }
 
 @include dx-calendar-navigator-mixin(

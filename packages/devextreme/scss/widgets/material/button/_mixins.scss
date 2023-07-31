@@ -13,12 +13,14 @@ $material-normal-button-active-state-shadow: $material-button-active-box-shadow-
 $material-normal-button-hovered-state-shadow: $material-button-box-shadow-size $button-hover-shadow-color;
 $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $button-focused-shadow-color;
 
-@mixin dx-button-onlyicon-sizing() {
+@mixin dx-button-onlyicon-sizing($icon-size: $material-button-icon-size) {
+  $button-content-padding: math.div($material-button-height - $icon-size - $material-base-border-width * 2, 2);
+
   @include dx-button-sizing(
-    $material-button-icon-padding,
-    $material-button-icon-padding,
-    $material-button-icon-padding,
-    $material-button-icon-size,
+    $button-content-padding,
+    $button-content-padding,
+    $button-content-padding,
+    $icon-size,
     0
   );
 }
