@@ -211,6 +211,7 @@ const resizingControllerMembers = {
     const visibleColumns = columnsController.getVisibleColumns();
     const columnAutoWidth = this.option('columnAutoWidth');
     const wordWrapEnabled = this.option('wordWrapEnabled');
+    const hasUndefinedColumnWidth = visibleColumns.some((column) => !isDefined(column.width));
     let needBestFit = this._needBestFit();
     let hasMinWidth = false;
     let resetBestFitMode;
@@ -269,6 +270,7 @@ const resizingControllerMembers = {
       $element[0].style.maxWidth = '';
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     deferUpdate(() => {
       if (needBestFit) {
         resultWidths = this._getBestFitWidths();
@@ -312,8 +314,9 @@ const resizingControllerMembers = {
         }
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferRender(() => {
-        if (needBestFit || isColumnWidthsCorrected) {
+        if (needBestFit || isColumnWidthsCorrected || hasUndefinedColumnWidth) {
           this._setVisibleWidths(visibleColumns, resultWidths);
         }
 

@@ -272,8 +272,8 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
         assert.strictEqual($colGroups.eq(0).children().get(1).style.width, '100px');
         assert.strictEqual($colGroups.eq(0).children().get(2).style.width, '100px');
 
-        assert.strictEqual($colGroups.eq(1).children().get(0).style.width, 'auto');
-        assert.strictEqual($colGroups.eq(1).children().get(1).style.width, 'auto');
+        assert.strictEqual($colGroups.eq(1).children().get(0).style.width, '');
+        assert.strictEqual($colGroups.eq(1).children().get(1).style.width, '');
         assert.strictEqual($colGroups.eq(1).children().get(2).style.width, '100px');
     });
 
