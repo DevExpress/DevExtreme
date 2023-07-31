@@ -108,20 +108,20 @@ jobs:
 
     - name: Clone devextreme-angular repo
       run: |
-        test -d ../devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
+        test -d ./devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ./devextreme-angular-repo
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
         name: devextreme-npm
-        path: ../devextreme-angular-repo/devextreme-setup
+        path: ./devextreme-angular-repo/devextreme-setup
 
     - name: Install packages for devextreme-angular
-      working-directory: ../devextreme-angular-repo
+      working-directory: ./devextreme-angular-repo
       run: npm install --no-audit --no-fund
 
     - name: Install devextreme package
-      working-directory: ../devextreme-angular-repo
+      working-directory: ./devextreme-angular-repo
       run: |
         pushd devextreme-setup
         installerName=$(realpath .)/devextreme-installer.tgz
@@ -134,11 +134,11 @@ jobs:
         npm install --save-dev --legacy-peer-deps $installerName
 
     - name: Build with Angular 12
-      working-directory: ../devextreme-angular-repo
+      working-directory: ./devextreme-angular-repo
       run: npm run build
 
     - name: Run tests with Angular 12
-      working-directory: ../devextreme-angular-repo/packages/devextreme-angular
+      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
       run: npm run test:dev
 
   test_bundlers:
