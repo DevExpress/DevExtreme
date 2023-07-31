@@ -19,25 +19,21 @@
   $calendar-invalid-focused-border-color,
 );
 
-.dx-calendar-navigator {
-  .dx-calendar-caption-button {
-    font-weight: 600;
-    border-radius: 0;
-  }
+.dx-calendar-caption-button {
+  font-weight: 600;
+  border-radius: 0;
+}
 
-  .dx-calendar-navigator-previous-view {
-    flex-shrink: 0;
-    margin-inline-end: -1px;
-    border-start-end-radius: 0;
-    border-end-end-radius: 0;
-  }
+.dx-calendar-navigator-previous-view {
+  margin-inline-end: -1px;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
 
-  .dx-calendar-navigator-next-view {
-    flex-shrink: 0;
-    margin-inline-start: -1px;
-    border-end-start-radius: 0;
-    border-start-start-radius: 0;
-  }
+.dx-calendar-navigator-next-view {
+  margin-inline-start: -1px;
+  border-end-start-radius: 0;
+  border-start-start-radius: 0;
 }
 
 @include dx-calendar-navigator-mixin(

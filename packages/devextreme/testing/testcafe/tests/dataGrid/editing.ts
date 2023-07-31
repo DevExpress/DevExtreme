@@ -1695,7 +1695,6 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     .expect(popupDataGrid.getDataRow(0).element.exists)
     .ok();
 
-  await t.debug();
   // assert
   await t
     .expect(await takeScreenshot('grid-popup-editing-grid.png', overlay.content))
