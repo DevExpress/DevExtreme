@@ -103,7 +103,7 @@ jobs:
         REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
 
         if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
-          git clone -b $REMOTE_BRANCH $REMOTE_URL ../devextreme-angular-repo
+          git clone -b $REMOTE_BRANCH $REMOTE_URL ./devextreme-angular-repo
         fi
 
     - name: Clone devextreme-angular repo
