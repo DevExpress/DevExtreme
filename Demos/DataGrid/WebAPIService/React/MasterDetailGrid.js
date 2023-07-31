@@ -5,32 +5,30 @@ import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
 
-class MasterDetailGrid extends React.Component {
-  constructor(props) {
-    super(props);
-    this.dataSource = getMasterDetailGridDataSource(props.data.key);
-  }
+const getMasterDetailGridDataSource = (id) => ({
+  store: createStore({
+    loadUrl: `${url}/OrderDetails`,
+    loadParams: { orderID: id },
+    onBeforeSend: (method, ajaxOptions) => {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  }),
+});
 
-  render() {
-    return (
-      <DataGrid
-        dataSource={this.dataSource}
-        showBorders={true}
-      />
-    );
-  }
-}
+const MasterDetailGrid = (props) => {
+  const [dataSource, setDataSource] = React.useState(null);
 
-function getMasterDetailGridDataSource(id) {
-  return {
-    store: createStore({
-      loadUrl: `${url}/OrderDetails`,
-      loadParams: { orderID: id },
-      onBeforeSend: (method, ajaxOptions) => {
-        ajaxOptions.xhrFields = { withCredentials: true };
-      },
-    }),
-  };
-}
+  React.useEffect(() => {
+    const masterDetailDataSource = getMasterDetailGridDataSource(props.data.key);
+    setDataSource(masterDetailDataSource);
+  }, [props.data.key]);
+
+  return (
+    <DataGrid
+      dataSource={dataSource}
+      showBorders={true}
+    />
+  );
+};
 
 export default MasterDetailGrid;

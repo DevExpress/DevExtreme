@@ -3,78 +3,69 @@ import DataGrid, {
   Column, RowDragging, Scrolling, Lookup,
 } from 'devextreme-react/data-grid';
 
-class Grid extends React.Component {
-  constructor(props) {
-    super(props);
+const priorities = [{
+  id: 1, text: 'Low',
+}, {
+  id: 2, text: 'Normal',
+}, {
+  id: 3, text: 'High',
+}, {
+  id: 4, text: 'Urgent',
+}];
 
-    this.priorities = [{
-      id: 1, text: 'Low',
-    }, {
-      id: 2, text: 'Normal',
-    }, {
-      id: 3, text: 'High',
-    }, {
-      id: 4, text: 'Urgent',
-    }];
-    this.filterExpr = ['Status', '=', this.props.status];
+const Grid = ({ tasksStore, status }) => {
+  const [filterExpr] = React.useState(['Status', '=', status]);
+  const [dataSource] = React.useState({
+    store: tasksStore,
+    reshapeOnPush: true,
+  });
 
-    this.onAdd = this.onAdd.bind(this);
-
-    this.dataSource = {
-      store: this.props.tasksStore,
-      reshapeOnPush: true,
-    };
-  }
-
-  onAdd(e) {
+  const onAdd = React.useCallback((e) => {
     const key = e.itemData.ID;
     const values = { Status: e.toData };
 
-    this.props.tasksStore.update(key, values).then(() => {
-      this.props.tasksStore.push([{
+    tasksStore.update(key, values).then(() => {
+      tasksStore.push([{
         type: 'update', key, data: values,
       }]);
     });
-  }
+  }, [tasksStore]);
 
-  render() {
-    return (
-      <DataGrid
-        dataSource={this.dataSource}
-        height={440}
-        showBorders={true}
-        filterValue={this.filterExpr}
+  return (
+    <DataGrid
+      dataSource={dataSource}
+      height={440}
+      showBorders={true}
+      filterValue={filterExpr}
+    >
+      <RowDragging
+        data={status}
+        group="tasksGroup"
+        onAdd={onAdd}
+      />
+      <Scrolling mode="virtual" />
+      <Column
+        dataField="Subject"
+        dataType="string"
+      />
+      <Column
+        dataField="Priority"
+        dataType="number"
+        width={80}
       >
-        <RowDragging
-          data={this.props.status}
-          group="tasksGroup"
-          onAdd={this.onAdd}
+        <Lookup
+          dataSource={priorities}
+          valueExpr="id"
+          displayExpr="text"
         />
-        <Scrolling mode="virtual" />
-        <Column
-          dataField="Subject"
-          dataType="string"
-        />
-        <Column
-          dataField="Priority"
-          dataType="number"
-          width={80}
-        >
-          <Lookup
-            dataSource={this.priorities}
-            valueExpr="id"
-            displayExpr="text"
-          />
-        </Column>
-        <Column
-          dataField="Status"
-          dataType="number"
-          visible={false}
-        />
-
-      </DataGrid>
-    );
-  }
-}
+      </Column>
+      <Column
+        dataField="Status"
+        dataType="number"
+        visible={false}
+      />
+    </DataGrid>
+  );
+};
 
 export default Grid;

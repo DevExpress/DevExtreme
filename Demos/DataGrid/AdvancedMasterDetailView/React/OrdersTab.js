@@ -4,49 +4,33 @@ import { Form, Item, Label } from 'devextreme-react/form';
 import ProductSelectBox from './ProductSelectBox.js';
 import OrderHistory from './OrderHistory.js';
 
-class OrdersTab extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      chosenProductId: null,
-    };
-    this.productChanged = this.productChanged.bind(this);
-    this.renderSelectBox = this.renderSelectBox.bind(this);
-    this.renderOrderHistory = this.renderOrderHistory.bind(this);
-  }
+const OrdersTab = (props) => {
+  const [chosenProductId, setChosenProductId] = React.useState(null);
 
-  render() {
-    return (
-      <Form
-        labelLocation="top"
-        className="form-container"
-      >
-        <Item render={this.renderSelectBox}>
-          <Label text="Product" />
-        </Item>
-        <Item render={this.renderOrderHistory}>
-          <Label text="Order History" />
-        </Item>
-      </Form>
-    );
-  }
+  const renderSelectBox = React.useCallback(() => (
+    <ProductSelectBox
+      supplierId={props.supplierId}
+      productId={chosenProductId}
+      onProductChanged={setChosenProductId} />
+  ), [chosenProductId, props.supplierId]);
 
-  renderSelectBox() {
-    return <ProductSelectBox
-      supplierId={this.props.supplierId}
-      productId={this.state.chosenProductId}
-      onProductChanged={this.productChanged} />;
-  }
+  const renderOrderHistory = React.useCallback(() => (
+    <OrderHistory productId={chosenProductId} />
+  ), [chosenProductId]);
 
-  renderOrderHistory() {
-    return <OrderHistory productId={this.state.chosenProductId} />;
-  }
-
-  productChanged(productId) {
-    this.setState({
-      chosenProductId: productId,
-    });
-  }
-}
+  return (
+    <Form
+      labelLocation="top"
+      className="form-container"
+    >
+      <Item render={renderSelectBox}>
+        <Label text="Product" />
+      </Item>
+      <Item render={renderOrderHistory}>
+        <Label text="Order History" />
+      </Item>
+    </Form>
+  );
+};
 
 export default OrdersTab;

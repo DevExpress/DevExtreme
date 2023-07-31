@@ -10,37 +10,34 @@ import DropDownBox from 'devextreme-react/drop-down-box';
 const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };
 
-export default class EmployeeDropDownBoxComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedRowKeys: [props.data.value],
-      isDropDownOpened: false,
-    };
-    this.onSelectionChanged = this.onSelectionChanged.bind(this);
-    this.contentRender = this.contentRender.bind(this);
-    this.boxOptionChanged = this.boxOptionChanged.bind(this);
-  }
+const EmployeeDropDownBoxComponent = (props) => {
+  const [selectedRowKeys, setSelectedRowKeys] = React.useState([props.data.value]);
+  const [isDropDownOpened, setDropDownOpened] = React.useState(false);
 
-  boxOptionChanged(e) {
+  const boxOptionChanged = React.useCallback((e) => {
     if (e.name === 'opened') {
-      this.setState({
-        isDropDownOpened: e.value,
-      });
+      setDropDownOpened(e.value);
     }
-  }
+  }, []);
 
-  contentRender() {
+  const contentRender = React.useCallback(() => {
+    const onSelectionChanged = (args) => {
+      setSelectedRowKeys(args.selectedRowKeys);
+      setDropDownOpened(false);
+
+      props.data.setValue(args.selectedRowKeys[0]);
+    };
+
     return (
       <DataGrid
-        dataSource={this.props.data.column.lookup.dataSource}
+        dataSource={props.data.column.lookup.dataSource}
         remoteOperations={true}
         height={250}
-        selectedRowKeys={this.state.selectedRowKeys}
+        selectedRowKeys={selectedRowKeys}
         hoverStateEnabled={true}
-        onSelectionChanged={this.onSelectionChanged}
+        onSelectionChanged={onSelectionChanged}
         focusedRowEnabled={true}
-        defaultFocusedRowKey={this.state.selectedRowKeys[0]}
+        defaultFocusedRowKey={selectedRowKeys[0]}
       >
         <Column dataField="FullName" />
         <Column dataField="Title" />
@@ -50,29 +47,21 @@ export default class EmployeeDropDownBoxComponent extends React.Component {
         <Selection mode="single" />
       </DataGrid>
     );
-  }
+  }, [props.data, selectedRowKeys]);
 
-  onSelectionChanged(selectionChangedArgs) {
-    this.setState({
-      selectedRowKeys: selectionChangedArgs.selectedRowKeys,
-      isDropDownOpened: false,
-    });
-    this.props.data.setValue(this.state.selectedRowKeys[0]);
-  }
+  return (
+    <DropDownBox
+      onOptionChanged={boxOptionChanged}
+      opened={isDropDownOpened}
+      dropDownOptions={dropDownOptions}
+      dataSource={props.data.column.lookup.dataSource}
+      value={selectedRowKeys[0]}
+      displayExpr="FullName"
+      valueExpr="ID"
+      inputAttr={ownerLabel}
+      contentRender={contentRender}>
+    </DropDownBox>
+  );
+};
 
-  render() {
-    return (
-      <DropDownBox
-        onOptionChanged={this.boxOptionChanged}
-        opened={this.state.isDropDownOpened}
-        dropDownOptions={dropDownOptions}
-        dataSource={this.props.data.column.lookup.dataSource}
-        value={this.state.selectedRowKeys[0]}
-        displayExpr="FullName"
-        valueExpr="ID"
-        inputAttr={ownerLabel}
-        contentRender={this.contentRender}>
-      </DropDownBox>
-    );
-  }
-}
+export default EmployeeDropDownBoxComponent;

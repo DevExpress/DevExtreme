@@ -4,78 +4,70 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
-class Grid extends React.Component {
-  constructor(props) {
-    super(props);
+const maxDate = new Date(3000, 0);
+const statesStore = AspNetData.createStore({
+  key: 'ID',
+  loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup',
+});
 
-    this.maxDate = new Date(3000, 0);
-    this.statesStore = AspNetData.createStore({
-      key: 'ID',
-      loadUrl: 'https://js.devexpress.com/Demos/NetCore/api/DataGridStatesLookup',
-    });
-  }
+const Grid = (props) => (
+  <DataGrid
+    dataSource={props.dataSource}
+    height={600}
+    showBorders={true}
+    repaintChangesOnly={true}
+    highlightChanges={true}
+  >
+    <Paging
+      enabled={false}
+    />
 
-  render() {
-    return (
-      <DataGrid
-        dataSource={this.props.dataSource}
-        height={600}
-        showBorders={true}
-        repaintChangesOnly={true}
-        highlightChanges={true}
-      >
-        <Paging
-          enabled={false}
-        />
+    <Editing
+      mode="cell"
+      refreshMode="reshape"
+      allowUpdating={true}
+      allowDeleting={true}
+      allowAdding={true}
+      useIcons={true}
+    />
 
-        <Editing
-          mode="cell"
-          refreshMode="reshape"
-          allowUpdating={true}
-          allowDeleting={true}
-          allowAdding={true}
-          useIcons={true}
-        />
+    <Column
+      dataField="Prefix"
+      caption="Title"
+      width={50}
+    >
+      <RequiredRule />
+    </Column>
 
-        <Column
-          dataField="Prefix"
-          caption="Title"
-          width={50}
-        >
-          <RequiredRule />
-        </Column>
+    <Column
+      dataField="FirstName"
+    >
+      <RequiredRule />
+    </Column>
 
-        <Column
-          dataField="FirstName"
-        >
-          <RequiredRule />
-        </Column>
+    <Column
+      dataField="StateID"
+      caption="State"
+    >
+      <Lookup
+        dataSource={statesStore}
+        displayExpr="Name"
+        valueExpr="ID"
+      />
+      <RequiredRule />
+    </Column>
 
-        <Column
-          dataField="StateID"
-          caption="State"
-        >
-          <Lookup
-            dataSource={this.statesStore}
-            displayExpr="Name"
-            valueExpr="ID"
-          />
-          <RequiredRule />
-        </Column>
+    <Column
+      dataField="BirthDate"
+      dataType="date"
+    >
+      <RangeRule
+        max={maxDate}
+        message="Date can not be greater than 01/01/3000"
+      />
+    </Column>
 
-        <Column
-          dataField="BirthDate"
-          dataType="date"
-        >
-          <RangeRule
-            max={this.maxDate}
-            message="Date can not be greater than 01/01/3000"
-          />
-        </Column>
-
-      </DataGrid>
-    );
-  }
-}
+  </DataGrid>
+);
 
 export default Grid;

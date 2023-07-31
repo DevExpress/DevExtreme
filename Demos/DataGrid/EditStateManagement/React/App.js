@@ -17,7 +17,7 @@ const initialState = {
 
 const loadPanelPosition = { of: '#gridContainer' };
 
-function App() {
+const App = () => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   const changesText = React.useMemo(() => JSON.stringify(state.changes.map((change) => ({
@@ -87,6 +87,6 @@ function App() {
       </div>
     </React.Fragment>
   );
-}
+};
 
 export default App;

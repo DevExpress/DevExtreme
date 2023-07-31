@@ -6,51 +6,42 @@ import service from './data.js';
 
 const tasks = service.getTasks();
 
-class DetailTemplate extends React.Component {
-  constructor(props) {
-    super(props);
-    this.dataSource = getTasks(props.data.key);
-  }
+const getTasks = (key) => new DataSource({
+  store: new ArrayStore({
+    data: tasks,
+    key: 'ID',
+  }),
+  filter: ['EmployeeID', '=', key],
+});
 
-  render() {
-    const { FirstName, LastName } = this.props.data.data;
-    return (
-      <React.Fragment>
-        <div className="master-detail-caption">
-          {`${FirstName} ${LastName}'s Tasks:`}
-        </div>
-        <DataGrid
-          dataSource={this.dataSource}
-          showBorders={true}
-          columnAutoWidth={true}
-        >
-          <Column dataField="Subject" />
-          <Column dataField="StartDate" dataType="date" />
-          <Column dataField="DueDate" dataType="date" />
-          <Column dataField="Priority" />
-          <Column
-            caption="Completed"
-            dataType="boolean"
-            calculateCellValue={this.completedValue}
-          />
-        </DataGrid>
-      </React.Fragment>
-    );
-  }
+const completedValue = (rowData) => rowData.Status === 'Completed';
 
-  completedValue(rowData) {
-    return rowData.Status === 'Completed';
-  }
-}
+const DetailTemplate = (props) => {
+  const { FirstName, LastName } = props.data.data;
+  const dataSource = getTasks(props.data.key);
 
-function getTasks(key) {
-  return new DataSource({
-    store: new ArrayStore({
-      data: tasks,
-      key: 'ID',
-    }),
-    filter: ['EmployeeID', '=', key],
-  });
-}
+  return (
+    <React.Fragment>
+      <div className="master-detail-caption">
+        {`${FirstName} ${LastName}'s Tasks:`}
+      </div>
+      <DataGrid
+        dataSource={dataSource}
+        showBorders={true}
+        columnAutoWidth={true}
+      >
+        <Column dataField="Subject" />
+        <Column dataField="StartDate" dataType="date" />
+        <Column dataField="DueDate" dataType="date" />
+        <Column dataField="Priority" />
+        <Column
+          caption="Completed"
+          dataType="boolean"
+          calculateCellValue={completedValue}
+        />
+      </DataGrid>
+    </React.Fragment>
+  );
+};
 
 export default DetailTemplate;

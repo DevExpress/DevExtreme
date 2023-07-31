@@ -1,5 +1,4 @@
 import React from 'react';
-
 import DataGrid, {
   Column,
   Grouping,
@@ -10,57 +9,47 @@ import DataGrid, {
 import CheckBox from 'devextreme-react/check-box';
 import { customers } from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+const App = () => {
+  const [autoExpandAll, setAutoExpandAll] = React.useState(true);
 
-    this.state = {
-      autoExpandAll: true,
-    };
+  const onAutoExpandAllChanged = React.useCallback(() => {
+    setAutoExpandAll(!autoExpandAll);
+  }, [autoExpandAll]);
 
-    this.onAutoExpandAllChanged = this.onAutoExpandAllChanged.bind(this);
-  }
+  return (
+    <div>
+      <DataGrid
+        dataSource={customers}
+        keyExpr="ID"
+        allowColumnReordering={true}
+        width="100%"
+        showBorders={true}
+      >
+        <GroupPanel visible={true} />
+        <SearchPanel visible={true} />
+        <Grouping autoExpandAll={autoExpandAll} />
+        <Paging defaultPageSize={10} />
 
-  render() {
-    return (
-      <div>
-        <DataGrid
-          dataSource={customers}
-          keyExpr="ID"
-          allowColumnReordering={true}
-          width="100%"
-          showBorders={true}
-        >
-          <GroupPanel visible={true} />
-          <SearchPanel visible={true} />
-          <Grouping autoExpandAll={this.state.autoExpandAll} />
-          <Paging defaultPageSize={10} />
+        <Column dataField="CompanyName" dataType="string" />
+        <Column dataField="Phone" dataType="string" />
+        <Column dataField="Fax" dataType="string" />
+        <Column dataField="City" dataType="string" />
+        <Column dataField="State" dataType="string" groupIndex={0} />
+      </DataGrid>
 
-          <Column dataField="CompanyName" dataType="string" />
-          <Column dataField="Phone" dataType="string" />
-          <Column dataField="Fax" dataType="string" />
-          <Column dataField="City" dataType="string" />
-          <Column dataField="State" dataType="string" groupIndex={0} />
-        </DataGrid>
-
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <CheckBox text="Expand All Groups"
-              id="autoExpand"
-              value={this.state.autoExpandAll}
-              onValueChanged={this.onAutoExpandAllChanged} />
-          </div>
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <CheckBox
+            text="Expand All Groups"
+            id="autoExpand"
+            value={autoExpandAll}
+            onValueChanged={onAutoExpandAllChanged}
+          />
         </div>
       </div>
-    );
-  }
-
-  onAutoExpandAllChanged() {
-    this.setState({
-      autoExpandAll: !this.state.autoExpandAll,
-    });
-  }
-}
+    </div>
+  );
+};
 
 export default App;

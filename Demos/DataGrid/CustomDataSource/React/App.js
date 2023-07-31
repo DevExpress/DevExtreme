@@ -1,5 +1,4 @@
 import React from 'react';
-
 import 'devextreme/data/odata/store';
 import DataGrid, { Column, Paging, Pager } from 'devextreme-react/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
@@ -41,47 +40,43 @@ const store = new CustomStore({
 
 const allowedPageSizes = [8, 12, 20];
 
-class App extends React.Component {
-  render() {
-    return (
-      <DataGrid
-        dataSource={store}
-        showBorders={true}
-        remoteOperations={true}
-      >
-        <Column
-          dataField="OrderNumber"
-          dataType="number"
-        />
-        <Column
-          dataField="OrderDate"
-          dataType="date"
-        />
-        <Column
-          dataField="StoreCity"
-          dataType="string"
-        />
-        <Column
-          dataField="StoreState"
-          dataType="string"
-        />
-        <Column
-          dataField="Employee"
-          dataType="string"
-        />
-        <Column
-          dataField="SaleAmount"
-          dataType="number"
-          format="currency"
-        />
-        <Paging defaultPageSize={12} />
-        <Pager
-          showPageSizeSelector={true}
-          allowedPageSizes={allowedPageSizes}
-        />
-      </DataGrid>
-    );
-  }
-}
+const App = () => (
+  <DataGrid
+    dataSource={store}
+    showBorders={true}
+    remoteOperations={true}
+  >
+    <Column
+      dataField="OrderNumber"
+      dataType="number"
+    />
+    <Column
+      dataField="OrderDate"
+      dataType="date"
+    />
+    <Column
+      dataField="StoreCity"
+      dataType="string"
+    />
+    <Column
+      dataField="StoreState"
+      dataType="string"
+    />
+    <Column
+      dataField="Employee"
+      dataType="string"
+    />
+    <Column
+      dataField="SaleAmount"
+      dataType="number"
+      format="currency"
+    />
+    <Paging defaultPageSize={12} />
+    <Pager
+      showPageSizeSelector={true}
+      allowedPageSizes={allowedPageSizes}
+    />
+  </DataGrid>
+);
 
 export default App;

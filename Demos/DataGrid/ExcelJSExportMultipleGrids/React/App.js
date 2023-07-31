@@ -4,8 +4,6 @@ import TabPanel, { Item } from 'devextreme-react/tab-panel';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
-// Our demo infrastructure requires us to use 'file-saver-es'.
-// We recommend that you use the official 'file-saver' package in your applications.
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import 'devextreme/data/odata/store';
 
@@ -28,48 +26,21 @@ const ratingDataSource = {
   filter: ['Product_ID', '<', 10],
 };
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.priceGridRef = React.createRef();
-    this.ratingGridRef = React.createRef();
+const setAlternatingRowsBackground = (gridCell, excelCell) => {
+  if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
+    if (excelCell.fullAddress.row % 2 === 0) {
+      excelCell.fill = {
+        type: 'pattern', pattern: 'solid', fgColor: { argb: 'D3D3D3' }, bgColor: { argb: 'D3D3D3' },
+      };
+    }
   }
+};
 
-  render() {
-    return (
-      <div>
-        <div id="exportContainer">
-          <Button
-            text="Export multiple grids"
-            icon="xlsxfile"
-            onClick={this.exportGrids}
-          />
-        </div>
-        <TabPanel id="tabPanel" deferRendering={false}>
-          <Item title="Price">
-            <DataGrid id="priceDataGrid" ref={this.priceGridRef} dataSource={priceDataSource} showBorders={true} rowAlternationEnabled={true}>
-              <Column dataField="Product_ID" caption="ID" width={50} />
-              <Column dataField="Product_Name" caption="Name" />
-              <Column dataField="Product_Sale_Price" caption="Sale Price" dataType="number" format="currency" />
-              <Column dataField="Product_Retail_Price" caption="Retail Price" dataType="number" format="currency" />
-            </DataGrid>
-          </Item>
-          <Item title="Rating">
-            <DataGrid id="ratingDataGrid" ref={this.ratingGridRef} dataSource={ratingDataSource} showBorders={true} rowAlternationEnabled={true}>
-              <Column dataField="Product_ID" caption="ID" width={50} />
-              <Column dataField="Product_Name" caption="Name" />
-              <Column dataField="Product_Consumer_Rating" caption="Rating" />
-              <Column dataField="Product_Category" caption="Category" />
-            </DataGrid>
-          </Item>
-        </TabPanel>
-      </div>
-    );
-  }
+const App = () => {
+  const priceGridRef = React.useRef(null);
+  const ratingGridRef = React.useRef(null);
 
-  exportGrids = () => {
-    const context = this;
+  const exportGrids = React.useCallback(() => {
     const workbook = new Workbook();
     const priceSheet = workbook.addWorksheet('Price');
     const ratingSheet = workbook.addWorksheet('Rating');
@@ -82,42 +53,66 @@ class App extends React.Component {
 
     exportDataGrid({
       worksheet: priceSheet,
-      component: context.priceDataGrid,
+      component: priceGridRef.current.instance,
       topLeftCell: { row: 4, column: 2 },
       customizeCell: ({ gridCell, excelCell }) => {
-        context.setAlternatingRowsBackground(gridCell, excelCell);
+        setAlternatingRowsBackground(gridCell, excelCell);
       },
     }).then(() => exportDataGrid({
       worksheet: ratingSheet,
-      component: context.ratingDataGrid,
+      component: ratingGridRef.current.instance,
       topLeftCell: { row: 4, column: 2 },
       customizeCell: ({ gridCell, excelCell }) => {
-        context.setAlternatingRowsBackground(gridCell, excelCell);
+        setAlternatingRowsBackground(gridCell, excelCell);
       },
     })).then(() => {
       workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'MultipleGrids.xlsx');
       });
     });
-  }
+  }, []);
 
-  setAlternatingRowsBackground(gridCell, excelCell) {
-    if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
-      if (excelCell.fullAddress.row % 2 === 0) {
-        excelCell.fill = {
-          type: 'pattern', pattern: 'solid', fgColor: { argb: 'D3D3D3' }, bgColor: { argb: 'D3D3D3' },
-        };
-      }
-    }
-  }
-
-  get priceDataGrid() {
-    return this.priceGridRef.current.instance;
-  }
-
-  get ratingDataGrid() {
-    return this.ratingGridRef.current.instance;
-  }
-}
+  return (
+    <div>
+      <div id="exportContainer">
+        <Button
+          text="Export multiple grids"
+          icon="xlsxfile"
+          onClick={exportGrids}
+        />
+      </div>
+      <TabPanel id="tabPanel" deferRendering={false}>
+        <Item title="Price">
+          <DataGrid
+            id="priceDataGrid"
+            ref={priceGridRef}
+            dataSource={priceDataSource}
+            showBorders={true}
+            rowAlternationEnabled={true}
+          >
+            <Column dataField="Product_ID" caption="ID" width={50} />
+            <Column dataField="Product_Name" caption="Name" />
+            <Column dataField="Product_Sale_Price" caption="Sale Price" dataType="number" format="currency" />
+            <Column dataField="Product_Retail_Price" caption="Retail Price" dataType="number" format="currency" />
+          </DataGrid>
+        </Item>
+        <Item title="Rating">
+          <DataGrid
+            id="ratingDataGrid"
+            ref={ratingGridRef}
+            dataSource={ratingDataSource}
+            showBorders={true}
+            rowAlternationEnabled={true}
+          >
+            <Column dataField="Product_ID" caption="ID" width={50} />
+            <Column dataField="Product_Name" caption="Name" />
+            <Column dataField="Product_Consumer_Rating" caption="Rating" />
+            <Column dataField="Product_Category" caption="Category" />
+          </DataGrid>
+        </Item>
+      </TabPanel>
+    </div>
+  );
+};
 
 export default App;

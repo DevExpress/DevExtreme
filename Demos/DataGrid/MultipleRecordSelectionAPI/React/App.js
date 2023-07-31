@@ -1,5 +1,4 @@
 import React from 'react';
-
 import DataGrid, {
   Column,
   Selection,
@@ -11,116 +10,87 @@ import Button from 'devextreme-react/button';
 import { employees, titleLabel } from './data.js';
 
 const titles = ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'];
+const getEmployeeName = (row) => `${row.FirstName} ${row.LastName}`;
+const getEmployeeNames = (selectedRowsData) => (selectedRowsData.length ? selectedRowsData.map(getEmployeeName).join(', ') : 'Nobody has been selected');
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+const App = () => {
+  const [prefix, setPrefix] = React.useState('');
+  const [selectedRowKeys, setSelectedRowKeys] = React.useState([]);
+  const [selectedEmployeeNames, setSelectedEmployeeNames] = React.useState('Nobody has been selected');
 
-    this.dataGrid = null;
-    this.selectionChangedBySelectBox = false;
+  const dataGridRef = React.useRef(null);
 
-    this.state = {
-      prefix: '',
-      selectedEmployeeNames: 'Nobody has been selected',
-      selectedRowKeys: [],
-    };
+  const onClearButtonClicked = React.useCallback(() => {
+    dataGridRef.current.instance.clearSelection();
+  }, []);
 
-    this.onClearButtonClicked = this.onClearButtonClicked.bind(this);
-    this.onSelectionChanged = this.onSelectionChanged.bind(this);
-    this.onSelectionFilterChanged = this.onSelectionFilterChanged.bind(this);
-  }
+  const onSelectionChanged = React.useCallback(
+    ({ selectedRowKeys: changedRowKeys, selectedRowsData }) => {
+      setPrefix(null);
+      setSelectedRowKeys(changedRowKeys);
+      setSelectedEmployeeNames(getEmployeeNames(selectedRowsData));
+    }, [],
+  );
 
-  render() {
-    const {
-      prefix, selectedRowKeys, selectedEmployeeNames,
-    } = this.state;
+  const onSelectionFilterChanged = React.useCallback(({ value }) => {
+    const newPrefix = value;
 
-    return (
-      <div>
-        <DataGrid
-          id="grid-container"
-          dataSource={employees}
-          keyExpr="ID"
-          onSelectionChanged={this.onSelectionChanged}
-          ref={(ref) => { this.dataGrid = ref; }}
-          selectedRowKeys={selectedRowKeys}
-          showBorders={true}
-        >
-          <Selection mode="multiple" />
-          <Column dataField="Prefix" caption="Title" width={70} />
-          <Column dataField="FirstName" />
-          <Column dataField="LastName" />
-          <Column dataField="Position" width={180} />
-          <Column dataField="BirthDate" dataType="date" width={125} />
-          <Column dataField="HireDate" dataType="date" width={125} />
-          <Toolbar>
-            <Item location="before">
-              <SelectBox
-                dataSource={titles}
-                inputAttr={titleLabel}
-                onValueChanged={this.onSelectionFilterChanged}
-                placeholder="Select title"
-                width={150}
-                value={prefix}
-              />
-            </Item>
-            <Item location="before">
-              <Button
-                disabled={!selectedRowKeys.length}
-                onClick={this.onClearButtonClicked}
-                text="Clear Selection"
-              />
-            </Item>
-          </Toolbar>
-        </DataGrid>
-        <div className="selected-data">
-          <span className="caption">Selected Records:</span>{' '}
-          <span>
-            { selectedEmployeeNames }
-          </span>
-        </div>
-      </div>
-    );
-  }
+    if (newPrefix) {
+      const filteredEmployees = newPrefix === 'All' ? employees : employees.filter((employee) => employee.Prefix === newPrefix);
+      const changedRowKeys = filteredEmployees.map((employee) => employee.ID);
 
-  onSelectionChanged({ selectedRowKeys, selectedRowsData }) {
-    this.selectionChangedBySelectBox = false;
-
-    this.setState({
-      prefix: null,
-      selectedEmployeeNames: getEmployeeNames(selectedRowsData),
-      selectedRowKeys,
-    });
-  }
-
-  onClearButtonClicked() {
-    this.dataGrid.instance.clearSelection();
-  }
-
-  onSelectionFilterChanged({ value }) {
-    this.selectionChangedBySelectBox = true;
-
-    const prefix = value;
-
-    if (prefix) {
-      const filteredEmployees = prefix === 'All' ? employees : employees.filter((employee) => employee.Prefix === prefix);
-      const selectedRowKeys = filteredEmployees.map((employee) => employee.ID);
-
-      this.setState({
-        prefix,
-        selectedRowKeys,
-        selectedEmployeeNames: getEmployeeNames(filteredEmployees),
-      });
+      setPrefix(newPrefix);
+      setSelectedRowKeys(changedRowKeys);
+      setSelectedEmployeeNames(getEmployeeNames(filteredEmployees));
     }
-  }
-}
+  }, []);
 
-function getEmployeeName(row) {
-  return `${row.FirstName} ${row.LastName}`;
-}
-
-function getEmployeeNames(selectedRowsData) {
-  return selectedRowsData.length ? selectedRowsData.map(getEmployeeName).join(', ') : 'Nobody has been selected';
-}
+  return (
+    <div>
+      <DataGrid
+        id="grid-container"
+        dataSource={employees}
+        keyExpr="ID"
+        onSelectionChanged={onSelectionChanged}
+        ref={dataGridRef}
+        selectedRowKeys={selectedRowKeys}
+        showBorders={true}
+      >
+        <Selection mode="multiple" />
+        <Column dataField="Prefix" caption="Title" width={70} />
+        <Column dataField="FirstName" />
+        <Column dataField="LastName" />
+        <Column dataField="Position" width={180} />
+        <Column dataField="BirthDate" dataType="date" width={125} />
+        <Column dataField="HireDate" dataType="date" width={125} />
+        <Toolbar>
+          <Item location="before">
+            <SelectBox
+              dataSource={titles}
+              inputAttr={titleLabel}
+              onValueChanged={onSelectionFilterChanged}
+              placeholder="Select title"
+              width={150}
+              value={prefix}
+            />
+          </Item>
+          <Item location="before">
+            <Button
+              disabled={!selectedRowKeys.length}
+              onClick={onClearButtonClicked}
+              text="Clear Selection"
+            />
+          </Item>
+        </Toolbar>
+      </DataGrid>
+      <div className="selected-data">
+        <span className="caption">Selected Records:</span>{' '}
+        <span>
+          {selectedEmployeeNames}
+        </span>
+      </div>
+    </div>
+  );
+};
 
 export default App;

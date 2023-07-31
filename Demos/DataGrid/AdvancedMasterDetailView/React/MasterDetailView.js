@@ -4,29 +4,21 @@ import { TabPanel, Item } from 'devextreme-react/tab-panel';
 import AddressTab from './AddressTab.js';
 import OrdersTab from './OrdersTab.js';
 
-class MasterDetailView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.renderOrdersTab = this.renderOrdersTab.bind(this);
-    this.renderAddressTab = this.renderAddressTab.bind(this);
-  }
+const MasterDetailView = (props) => {
+  const renderOrdersTab = React.useCallback(() => (
+    <OrdersTab supplierId={props.data.key} />
+  ), [props.data.key]);
 
-  render() {
-    return (
-      <TabPanel>
-        <Item title="Orders" render={this.renderOrdersTab} />
-        <Item title="Address" render={this.renderAddressTab} />
-      </TabPanel>
-    );
-  }
+  const renderAddressTab = React.useCallback(() => (
+    <AddressTab data={props.data.data} />
+  ), [props.data.data]);
 
-  renderOrdersTab() {
-    return <OrdersTab supplierId={this.props.data.key} />;
-  }
-
-  renderAddressTab() {
-    return <AddressTab data={this.props.data.data} />;
-  }
-}
+  return (
+    <TabPanel>
+      <Item title="Orders" render={renderOrdersTab} />
+      <Item title="Address" render={renderAddressTab} />
+    </TabPanel>
+  );
+};
 
 export default MasterDetailView;

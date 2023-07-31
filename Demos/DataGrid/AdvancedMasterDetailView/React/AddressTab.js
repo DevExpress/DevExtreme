@@ -3,28 +3,24 @@ import { Form, Item } from 'devextreme-react/form';
 
 const items = ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone'];
 
-class AddressTab extends React.Component {
-  render() {
-    return (
-      <Form
-        formData={this.props.data}
-        colCount={2}
-        className="address-form form-container"
-      >
-        {
-          items.map((item, index) => <Item
-            dataField={item}
-            key={index}
-            render={this.renderFormItem}
-          />)
-        }
-      </Form>
-    );
-  }
+const renderFormItem = (item) => (
+  <span>{item.editorOptions.value}</span>
+);
 
-  renderFormItem(item) {
-    return <span>{item.editorOptions.value}</span>;
-  }
-}
+const AddressTab = (props) => (
+  <Form
+    formData={props.data}
+    colCount={2}
+    className="address-form form-container"
+  >
+    {
+      items.map((item, index) => <Item
+        dataField={item}
+        key={index}
+        render={renderFormItem}
+      />)
+    }
+  </Form>
+);
 
 export default AddressTab;

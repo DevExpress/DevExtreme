@@ -6,94 +6,73 @@ import DataGrid, {
 
 import { employees, states } from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { events: [] };
-    this.logEvent = this.logEvent.bind(this);
-    this.onEditingStart = this.logEvent.bind(this, 'EditingStart');
-    this.onInitNewRow = this.logEvent.bind(this, 'InitNewRow');
-    this.onRowInserting = this.logEvent.bind(this, 'RowInserting');
-    this.onRowInserted = this.logEvent.bind(this, 'RowInserted');
-    this.onRowUpdating = this.logEvent.bind(this, 'RowUpdating');
-    this.onRowUpdated = this.logEvent.bind(this, 'RowUpdated');
-    this.onRowRemoving = this.logEvent.bind(this, 'RowRemoving');
-    this.onRowRemoved = this.logEvent.bind(this, 'RowRemoved');
-    this.onSaving = this.logEvent.bind(this, 'Saving');
-    this.onSaved = this.logEvent.bind(this, 'Saved');
-    this.onEditCanceling = this.logEvent.bind(this, 'EditCanceling');
-    this.onEditCanceled = this.logEvent.bind(this, 'EditCanceled');
+const App = () => {
+  const [events, setEvents] = React.useState([]);
 
-    this.clearEvents = this.clearEvents.bind(this);
-  }
+  const logEvent = React.useCallback((eventName) => {
+    setEvents([eventName, ...events]);
+  }, [events]);
 
-  logEvent(eventName) {
-    this.setState((state) => ({ events: [eventName].concat(state.events) }));
-  }
+  const clearEvents = React.useCallback(() => {
+    setEvents([]);
+  }, []);
 
-  clearEvents() {
-    this.setState({ events: [] });
-  }
+  return (
+    <React.Fragment>
+      <DataGrid
+        id="gridContainer"
+        dataSource={employees}
+        keyExpr="ID"
+        allowColumnReordering={true}
+        showBorders={true}
+        onEditingStart={() => logEvent('EditingStart')}
+        onInitNewRow={() => logEvent('InitNewRow')}
+        onRowInserting={() => logEvent('RowInserting')}
+        onRowInserted={() => logEvent('RowInserted')}
+        onRowUpdating={() => logEvent('RowUpdating')}
+        onRowUpdated={() => logEvent('RowUpdated')}
+        onRowRemoving={() => logEvent('RowRemoving')}
+        onRowRemoved={() => logEvent('RowRemoved')}
+        onSaving={() => logEvent('Saving')}
+        onSaved={() => logEvent('Saved')}
+        onEditCanceling={() => logEvent('EditCanceling')}
+        onEditCanceled={() => logEvent('EditCanceled')}>
 
-  render() {
-    return (
-      <React.Fragment>
-        <DataGrid
-          id="gridContainer"
-          dataSource={employees}
-          keyExpr="ID"
-          allowColumnReordering={true}
-          showBorders={true}
-          onEditingStart={this.onEditingStart}
-          onInitNewRow={this.onInitNewRow}
-          onRowInserting={this.onRowInserting}
-          onRowInserted={this.onRowInserted}
-          onRowUpdating={this.onRowUpdating}
-          onRowUpdated={this.onRowUpdated}
-          onRowRemoving={this.onRowRemoving}
-          onRowRemoved={this.onRowRemoved}
-          onSaving={this.onSaving}
-          onSaved={this.onSaved}
-          onEditCanceling={this.onEditCanceling}
-          onEditCanceled={this.onEditCanceled}>
+        <Paging enabled={true} />
+        <Editing
+          mode="row"
+          allowUpdating={true}
+          allowDeleting={true}
+          allowAdding={true} />
 
-          <Paging enabled={true} />
-          <Editing
-            mode="row"
-            allowUpdating={true}
-            allowDeleting={true}
-            allowAdding={true} />
+        <Column dataField="Prefix" caption="Title" />
+        <Column dataField="FirstName" />
+        <Column dataField="LastName" />
+        <Column dataField="Position" width={130} />
+        <Column
+          dataField="StateID"
+          caption="State"
+          width={125}
+        >
+          <Lookup dataSource={states} displayExpr="Name" valueExpr="ID" />
+        </Column>
+        <Column
+          dataField="BirthDate"
+          width={125}
+          dataType="date" />
+      </DataGrid>
 
-          <Column dataField="Prefix" caption="Title" />
-          <Column dataField="FirstName" />
-          <Column dataField="LastName" />
-          <Column dataField="Position" width={130} />
-          <Column
-            dataField="StateID"
-            caption="State"
-            width={125}
-          >
-            <Lookup dataSource={states} displayExpr="Name" valueExpr="ID" />
-          </Column>
-          <Column
-            dataField="BirthDate"
-            width={125}
-            dataType="date" />
-        </DataGrid>
-
-        <div id="events">
-          <div>
-
-            <div className="caption">Fired events</div>
-            <Button id="clear" text="Clear" onClick={this.clearEvents} />
-          </div>
-          <ul>
-            {this.state.events.map((event, index) => <li key={index}>{event}</li>)}
-          </ul>
+      <div id="events">
+        <div>
+          <div className="caption">Fired events</div>
+          <Button id="clear" text="Clear" onClick={clearEvents} />
         </div>
-      </React.Fragment>
-    );
-  }
-}
+        <ul>
+          {events.map((event, index) => <li key={index}>{event}</li>)}
+        </ul>
+      </div>
+    </React.Fragment>
+  );
+};
 
 export default App;

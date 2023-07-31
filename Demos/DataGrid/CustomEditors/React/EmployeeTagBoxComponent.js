@@ -3,25 +3,19 @@ import TagBox from 'devextreme-react/tag-box';
 
 const nameLabel = { 'aria-label': 'Name' };
 
-export default class EmployeeTagBoxComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onValueChanged = this.onValueChanged.bind(this);
-    this.onSelectionChanged = this.onSelectionChanged.bind(this);
-  }
+const EmployeeTagBoxComponent = (props) => {
+  const onValueChanged = React.useCallback((e) => {
+    props.data.setValue(e.value);
+  }, [props]);
 
-  onValueChanged(e) {
-    this.props.data.setValue(e.value);
-  }
+  const onSelectionChanged = React.useCallback(() => {
+    props.data.component.updateDimensions();
+  }, [props]);
 
-  onSelectionChanged() {
-    this.props.data.component.updateDimensions();
-  }
-
-  render() {
-    return <TagBox
-      dataSource={this.props.data.column.lookup.dataSource}
-      defaultValue={this.props.data.value}
+  return (
+    <TagBox
+      dataSource={props.data.column.lookup.dataSource}
+      defaultValue={props.data.value}
       valueExpr="ID"
       displayExpr="FullName"
       showSelectionControls={true}
@@ -30,7 +24,9 @@ export default class EmployeeTagBoxComponent extends React.Component {
       showMultiTagOnly={false}
       applyValueMode="useButtons"
       searchEnabled={true}
-      onValueChanged={this.onValueChanged}
-      onSelectionChanged={this.onSelectionChanged} />;
-  }
-}
+      onValueChanged={onValueChanged}
+      onSelectionChanged={onSelectionChanged} />
+  );
+};
+
+export default EmployeeTagBoxComponent;

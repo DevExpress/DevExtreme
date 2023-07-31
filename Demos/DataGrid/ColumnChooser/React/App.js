@@ -17,167 +17,139 @@ const columnChooserModes = [{
 const searchEditorOptions = { placeholder: 'Search column' };
 const columnChooserModeLabel = { 'aria-label': 'Column Chooser Mode' };
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+const App = () => {
+  const [mode, setMode] = React.useState(columnChooserModes[1].key);
+  const [searchEnabled, setSearchEnabled] = React.useState(true);
+  const [allowSelectAll, setAllowSelectAll] = React.useState(true);
+  const [selectByClick, setSelectByClick] = React.useState(true);
+  const [recursive, setRecursive] = React.useState(true);
 
-    this.state = {
-      mode: columnChooserModes[1].key,
-      searchEnabled: true,
-      allowSelectAll: true,
-      selectByClick: true,
-      recursive: true,
-    };
+  const isDragMode = mode === columnChooserModes[0].key;
 
-    this.onModeValueChanged = this.onModeValueChanged.bind(this);
-    this.onSearchEnabledValueChanged = this.onSearchEnabledValueChanged.bind(this);
-    this.onAllowSelectAllValueChanged = this.onAllowSelectAllValueChanged.bind(this);
-    this.onSelectByClickValueChanged = this.onSelectByClickValueChanged.bind(this);
-    this.onRecursiveValueChanged = this.onRecursiveValueChanged.bind(this);
-  }
+  const onModeValueChanged = React.useCallback((e) => {
+    setMode(e.value);
+  }, []);
 
-  render() {
-    const {
-      mode, searchEnabled, allowSelectAll, selectByClick, recursive,
-    } = this.state;
+  const onSearchEnabledValueChanged = React.useCallback((e) => {
+    setSearchEnabled(e.value);
+  }, []);
 
-    const isDragMode = mode === columnChooserModes[0].key;
+  const onAllowSelectAllValueChanged = React.useCallback((e) => {
+    setAllowSelectAll(e.value);
+  }, []);
 
-    return (
-      <div>
-        <DataGrid
-          id="employees"
-          dataSource={employees}
-          keyExpr="ID"
-          columnAutoWidth={true}
-          showRowLines={true}
-          width="100%"
-          showBorders={true}
+  const onSelectByClickValueChanged = React.useCallback((e) => {
+    setSelectByClick(e.value);
+  }, []);
+
+  const onRecursiveValueChanged = React.useCallback((e) => {
+    setRecursive(e.value);
+  }, []);
+
+  return (
+    <div>
+      <DataGrid
+        id="employees"
+        dataSource={employees}
+        keyExpr="ID"
+        columnAutoWidth={true}
+        showRowLines={true}
+        width="100%"
+        showBorders={true}
+      >
+        <Column dataField='FirstName' allowHiding={false} />
+        <Column dataField='LastName' />
+        <Column dataField='Position' />
+        <Column dataField='City' />
+        <Column dataField='State' />
+
+        <Column caption="Contacts">
+          <Column dataField="MobilePhone" allowHiding={false} />
+          <Column dataField="Email" />
+          <Column dataField="Skype" visible={false} />
+        </Column>
+
+        <Column dataField="HireDate" dataType="date" />
+
+        <ColumnChooser
+          enabled={true}
+          mode={mode}
         >
-          <Column dataField='FirstName' allowHiding={false} />
-          <Column dataField='LastName' />
-          <Column dataField='Position' />
-          <Column dataField='City' />
-          <Column dataField='State' />
+          <Position
+            my="right top"
+            at="right bottom"
+            of=".dx-datagrid-column-chooser-button"
+          />
 
-          <Column caption="Contacts">
-            <Column dataField="MobilePhone" allowHiding={false} />
-            <Column dataField="Email" />
-            <Column dataField="Skype" visible={false} />
-          </Column>
+          <ColumnChooserSearch
+            enabled={searchEnabled}
+            editorOptions={searchEditorOptions} />
 
-          <Column dataField="HireDate" dataType="date" />
+          <ColumnChooserSelection
+            allowSelectAll={allowSelectAll}
+            selectByClick={selectByClick}
+            recursive={recursive} />
+        </ColumnChooser>
+      </DataGrid>
+      <div className="options">
+        <div className="caption">Options</div>
 
-          <ColumnChooser
-            enabled={true}
-            mode={mode}
-          >
-            <Position
-              my="right top"
-              at="right bottom"
-              of=".dx-datagrid-column-chooser-button"
+        <div className="selectboxes-container">
+          <div className="option">
+            <span>Column chooser mode</span>
+            &nbsp;
+            <SelectBox
+              items={columnChooserModes}
+              value={mode}
+              valueExpr="key"
+              inputAttr={columnChooserModeLabel}
+              displayExpr="name"
+              onValueChanged={onModeValueChanged}
             />
-
-            <ColumnChooserSearch
-              enabled={searchEnabled}
-              editorOptions={searchEditorOptions} />
-
-            <ColumnChooserSelection
-              allowSelectAll={allowSelectAll}
-              selectByClick={selectByClick}
-              recursive={recursive} />
-          </ColumnChooser>
-        </DataGrid>
-        <div className="options">
-          <div className="caption">Options</div>
-
-          <div className="selectboxes-container">
-            <div className="option">
-              <span>Column chooser mode</span>
-              &nbsp;
-              <SelectBox
-                items={columnChooserModes}
-                value={mode}
-                valueExpr="key"
-                inputAttr={columnChooserModeLabel}
-                displayExpr="name"
-                onValueChanged={this.onModeValueChanged}
-              />
-            </div>
           </div>
-
-          <div className='checkboxes-container'>
-            <div className="option">
-              <CheckBox
-                id="searchEnabled"
-                defaultValue={searchEnabled}
-                text="Search enabled"
-                onValueChanged={this.onSearchEnabledValueChanged}
-              />
-            </div>
-            <div className="option">
-              <CheckBox
-                id="allowSelectAll"
-                defaultValue={allowSelectAll}
-                text="Allow select all"
-                onValueChanged={this.onAllowSelectAllValueChanged}
-                disabled={isDragMode}
-              />
-            </div>
-            <div className="option">
-              <CheckBox
-                id="selectByClick"
-                defaultValue={selectByClick}
-                text="Select by click"
-                onValueChanged={this.onSelectByClickValueChanged}
-                disabled={isDragMode}
-              />
-            </div>
-            <div className="option">
-              <CheckBox
-                id="recursive"
-                defaultValue={recursive}
-                text="Recursive"
-                onValueChanged={this.onRecursiveValueChanged}
-                disabled={isDragMode}
-              />
-            </div>
-          </div>
-
         </div>
+
+        <div className='checkboxes-container'>
+          <div className="option">
+            <CheckBox
+              id="searchEnabled"
+              defaultValue={searchEnabled}
+              text="Search enabled"
+              onValueChanged={onSearchEnabledValueChanged}
+            />
+          </div>
+          <div className="option">
+            <CheckBox
+              id="allowSelectAll"
+              defaultValue={allowSelectAll}
+              text="Allow select all"
+              onValueChanged={onAllowSelectAllValueChanged}
+              disabled={isDragMode}
+            />
+          </div>
+          <div className="option">
+            <CheckBox
+              id="selectByClick"
+              defaultValue={selectByClick}
+              text="Select by click"
+              onValueChanged={onSelectByClickValueChanged}
+              disabled={isDragMode}
+            />
+          </div>
+          <div className="option">
+            <CheckBox
+              id="recursive"
+              defaultValue={recursive}
+              text="Recursive"
+              onValueChanged={onRecursiveValueChanged}
+              disabled={isDragMode}
+            />
+          </div>
+        </div>
+
       </div>
-    );
-  }
-
-  onModeValueChanged(e) {
-    this.setState({
-      mode: e.value,
-    });
-  }
-
-  onSearchEnabledValueChanged(e) {
-    this.setState({
-      searchEnabled: e.value,
-    });
-  }
-
-  onAllowSelectAllValueChanged(e) {
-    this.setState({
-      allowSelectAll: e.value,
-    });
-  }
-
-  onSelectByClickValueChanged(e) {
-    this.setState({
-      selectByClick: e.value,
-    });
-  }
-
-  onRecursiveValueChanged(e) {
-    this.setState({
-      recursive: e.value,
-    });
-  }
-}
+    </div>
+  );
+};
 
 export default App;

@@ -1,6 +1,9 @@
 window.config = {
   transpiler: 'plugin-babel',
   meta: {
+    'react': {
+      'esModule': true,
+    },
     'devextreme/localization.js': {
       'esModule': true,
     },

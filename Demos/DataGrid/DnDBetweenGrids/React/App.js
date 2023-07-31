@@ -1,5 +1,4 @@
 import React from 'react';
-
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import Grid from './Grid.js';
 
@@ -14,18 +13,15 @@ const tasksStore = AspNetData.createStore({
   },
 });
 
-class App extends React.Component {
-  render() {
-    return (
-      <div className="tables">
-        <div className="column">
-          <Grid tasksStore={tasksStore} status={1} />
-        </div>
-        <div className="column">
-          <Grid tasksStore={tasksStore} status={2} />
-        </div>
-      </div>
-    );
-  }
-}
+const App = () => (
+  <div className="tables">
+    <div className="column">
+      <Grid tasksStore={tasksStore} status={1} />
+    </div>
+    <div className="column">
+      <Grid tasksStore={tasksStore} status={2} />
+    </div>
+  </div>
+);
+
 export default App;
