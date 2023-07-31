@@ -61,8 +61,7 @@ test('Item collection should be updated after direct option changing (T817436)',
   test('DropDownButton renders correctly', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await insertStylesheetRulesToPage(`.${DROP_DOWN_BUTTON_CLASS} { display: inline-flex; margin: 2px; } .${BUTTON_GROUP_CLASS} { vertical-align: middle;}`);
-
+    await insertStylesheetRulesToPage(`.${DROP_DOWN_BUTTON_CLASS}.dx-widget { display: inline-flex; vertical-align: middle; margin: 2px; } .${BUTTON_GROUP_CLASS} { vertical-align: middle; }`);
     await testScreenshot(t, takeScreenshot, `DropDownButton render${width ? 'with fixed width' : ''}.png`);
 
     await t
