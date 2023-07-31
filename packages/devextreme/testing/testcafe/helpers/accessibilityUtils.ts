@@ -4,7 +4,6 @@ import { axeCheck, createReport } from '@testcafe-community/axe';
 export const a11yCheck = async (t: TestController): Promise<void> => {
   const { error, results } = await axeCheck(t, undefined, {
     rules: {
-      'color-contrast': { enabled: false },
       'th-has-data-cells': { enabled: false },
     },
   });
