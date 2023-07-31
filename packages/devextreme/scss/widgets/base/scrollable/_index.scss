@@ -175,18 +175,16 @@
   box-sizing: border-box;
   transform: translate(0, 0);
   background-color: transparent;
-  transition: background-color 0s linear;
   opacity: 1;
-  transition: opacity 0s linear;
+  transition: opacity 0s linear, background-color 0s linear;
   overflow: hidden;
   padding: 2px;
 
   &.dx-state-invisible {
     display: block !important; // stylelint-disable-line declaration-no-important
     background-color: transparent;
-    transition: background-color 0.5s linear 1s;
     opacity: 0;
-    transition: opacity 0.5s linear 1s;
+    transition: opacity 0.5s linear 1s, background-color 0.5s linear 1s;
   }
 
   .dx-rtl & {
