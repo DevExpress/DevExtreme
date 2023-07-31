@@ -12,6 +12,7 @@ import {
 import Guid from '../../../../../js/core/guid';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
+const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 
 const stylingModes = ['text', 'outlined', 'contained'];
 
@@ -60,7 +61,8 @@ test('Item collection should be updated after direct option changing (T817436)',
   test('DropDownButton renders correctly', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await insertStylesheetRulesToPage(`.${DROP_DOWN_BUTTON_CLASS} { display: inline-flex; vertical-aligh: middle; margin: 2px; }`);
+    await insertStylesheetRulesToPage(`.${DROP_DOWN_BUTTON_CLASS} { display: inline-flex; margin: 2px; } .${BUTTON_GROUP_CLASS} { vertical-align: middle;}`);
+
     await testScreenshot(t, takeScreenshot, `DropDownButton render${width ? 'with fixed width' : ''}.png`);
 
     await t
