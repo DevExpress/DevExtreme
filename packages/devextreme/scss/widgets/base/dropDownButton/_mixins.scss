@@ -34,6 +34,7 @@
       border-inline-end-width: 0;
   
       .dx-button-content {
+        padding-inline: $dropdownbutton-horizontal-padding * 2;
         padding-inline-end: $dropdownbutton-action-padding-right;
       }
     }
