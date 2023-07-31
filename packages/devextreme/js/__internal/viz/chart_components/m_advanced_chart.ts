@@ -35,7 +35,12 @@ function processBubbleMargin(marginOptions, bubbleSize) {
   return marginOptions;
 }
 
-function estimateBubbleSize(size, panesCount, maxSize, rotated) {
+function estimateBubbleSize(
+  size: { width: number; height: number },
+  panesCount: number,
+  maxSize: number,
+  rotated: boolean,
+): number {
   const width = rotated ? size.width / panesCount : size.width;
   const height = rotated ? size.height : size.height / panesCount;
 

@@ -22,6 +22,41 @@ const SELECTED_STATE = states.selectedMark;
 const MAX_RESOLVE_ITERATION_COUNT = 5;
 const LEGEND_ACTIONS = [states.resetItem, states.applyHover, states.applySelected, states.applySelected];
 
+function shiftInColumnFunction(box, length) {
+  return { x: box.x, y: box.y - length };
+}
+
+function dividePoints(series, points?) {
+  return series.getVisiblePoints().reduce((r, point) => {
+    const angle = normalizeAngle(point.middleAngle);
+    (angle <= 90 || angle >= 270 ? r.right : r.left).push(point);
+    return r;
+  }, points || { left: [], right: [] });
+}
+
+function resolveOverlappedLabels(points, shiftCallback, inverseDirection, canvas) {
+  let overlapped = false;
+  if (inverseDirection) {
+    points.left.reverse();
+    points.right.reverse();
+  }
+
+  overlapped = overlapping.resolveLabelOverlappingInOneDirection(
+    points.left,
+    canvas,
+    false,
+    false,
+    shiftCallback,
+  );
+  return overlapping.resolveLabelOverlappingInOneDirection(
+    points.right,
+    canvas,
+    false,
+    false,
+    shiftCallback,
+  ) || overlapped;
+}
+
 function getLegendItemAction(points) {
   let state = NORMAL_STATE;
 
@@ -197,10 +232,9 @@ const dxPieChart = BaseChart.inherit({
   },
 
   _getLegendTargets() {
-    const that = this;
     const itemsByArgument = {};
 
-    (that.series || []).forEach((series) => {
+    (this.series || []).forEach((series) => {
       series.getPoints().forEach((point) => {
         const argument = point.argument.valueOf();
         const index = series.getPointsByArg(argument).indexOf(point);
@@ -218,7 +252,7 @@ const dxPieChart = BaseChart.inherit({
     _each(itemsByArgument, (_, points) => {
       (points as any).forEach((point, index) => {
         if (index === 0) {
-          items.push(that._getLegendOptions(point) as never);
+          items.push(this._getLegendOptions(point) as never);
           return;
         }
         const item = items[items.length - 1] as any;
@@ -237,26 +271,25 @@ const dxPieChart = BaseChart.inherit({
   },
 
   _getLayoutSeries(series, drawOptions) {
-    const that = this;
     let layout;
-    const canvas = that._canvas;
+    const canvas = this._canvas;
     let drawnLabels = false;
 
-    layout = that.layoutManager.applyPieChartSeriesLayout(canvas, series, true);
+    layout = this.layoutManager.applyPieChartSeriesLayout(canvas, series, true);
     series.forEach((singleSeries) => {
       singleSeries.correctPosition(layout, canvas);
       drawnLabels = singleSeries.drawLabelsWOPoints() || drawnLabels;
     });
 
     if (drawnLabels) {
-      layout = that.layoutManager.applyPieChartSeriesLayout(canvas, series, drawOptions.hideLayoutLabels);
+      layout = this.layoutManager.applyPieChartSeriesLayout(canvas, series, drawOptions.hideLayoutLabels);
     }
 
     series.forEach((singleSeries) => {
       singleSeries.hideLabels();
     });
 
-    that._sizeGroupLayout = {
+    this._sizeGroupLayout = {
       x: layout.centerX,
       y: layout.centerY,
       radius: layout.radiusOuter,
@@ -281,8 +314,7 @@ const dxPieChart = BaseChart.inherit({
   },
 
   _updateSeriesDimensions(drawOptions) {
-    const that = this;
-    const visibleSeries = that._getVisibleSeries();
+    const visibleSeries = this._getVisibleSeries();
     const lengthVisibleSeries = visibleSeries.length;
     let innerRad;
     let delta;
@@ -291,13 +323,13 @@ const dxPieChart = BaseChart.inherit({
 
     if (lengthVisibleSeries) {
       layout = sizeGroupLayout
-        ? that._getLayoutSeriesForEqualPies(visibleSeries, sizeGroupLayout)
-        : that._getLayoutSeries(visibleSeries, drawOptions);
+        ? this._getLayoutSeriesForEqualPies(visibleSeries, sizeGroupLayout)
+        : this._getLayoutSeries(visibleSeries, drawOptions);
 
       delta = (layout.radiusOuter - layout.radiusInner - seriesSpacing * (lengthVisibleSeries - 1)) / lengthVisibleSeries;
       innerRad = layout.radiusInner;
 
-      that._setGeometry(layout);
+      this._setGeometry(layout);
 
       visibleSeries.forEach((singleSeries) => {
         singleSeries.correctRadius({
@@ -330,16 +362,15 @@ const dxPieChart = BaseChart.inherit({
   },
 
   _getLegendCallBack() {
-    const that = this;
     const legend = this._legend;
     const items = this._getLegendTargets().map((i) => i.legendData);
 
-    return function (target) {
+    return (target) => {
       items.forEach((data) => {
         const points = [];
         const callback = legend.getActionCallback({ index: data.id });
 
-        that.series.forEach((series) => {
+        this.series.forEach((series) => {
           const seriesPoints = series.getPointsByKeys(data.argument, data.argumentIndex);
           points.push.apply(points, seriesPoints);
         });
@@ -370,13 +401,13 @@ const dxPieChart = BaseChart.inherit({
   _applyExtraSettings: _noop,
 
   _resolveLabelOverlappingShift() {
-    const that = this;
-    const inverseDirection = that.option('segmentsDirection') === 'anticlockwise';
-    const seriesByPosition = that.series.reduce((r, s) => {
+    const inverseDirection = this.option('segmentsDirection') === 'anticlockwise';
+    const seriesByPosition = this.series.reduce((r, s) => {
       (r[s.getOptions().label.position] || r.outside).push(s);
       return r;
     }, { inside: [], columns: [], outside: [] });
     let labelsOverlapped = false;
+    const shiftFunction = (box, length) => _getVerticallyShiftedAngularCoords(box, -length, this._center);
 
     if (seriesByPosition.inside.length > 0) {
       const pointsToResolve = seriesByPosition.inside.reduce((r, singleSeries) => {
@@ -386,63 +417,36 @@ const dxPieChart = BaseChart.inherit({
           return r;
         }, r);
       }, { left: [], right: [] });
-      labelsOverlapped = resolve(pointsToResolve, shiftInColumnFunction) || labelsOverlapped;
+      labelsOverlapped = resolveOverlappedLabels(
+        pointsToResolve,
+        shiftInColumnFunction,
+        inverseDirection,
+        this._canvas,
+      ) || labelsOverlapped;
     }
 
     labelsOverlapped = seriesByPosition.columns.reduce(
-      (r, singleSeries) => resolve(dividePoints(singleSeries), shiftInColumnFunction) || r,
+      (r, singleSeries) => resolveOverlappedLabels(
+        dividePoints(singleSeries),
+        shiftInColumnFunction,
+        inverseDirection,
+        this._canvas,
+      ) || r,
       labelsOverlapped,
     );
 
     if (seriesByPosition.outside.length > 0) {
-      labelsOverlapped = resolve(
+      labelsOverlapped = resolveOverlappedLabels(
         seriesByPosition.outside.reduce(
           (r, singleSeries) => dividePoints(singleSeries, r),
           null,
         ),
         shiftFunction,
+        inverseDirection,
+        this._canvas,
       ) || labelsOverlapped;
     }
     return labelsOverlapped;
-
-    function dividePoints(series, points?) {
-      return series.getVisiblePoints().reduce((r, point) => {
-        const angle = normalizeAngle(point.middleAngle);
-        (angle <= 90 || angle >= 270 ? r.right : r.left).push(point);
-        return r;
-      }, points || { left: [], right: [] });
-    }
-
-    function resolve(points, shiftCallback) {
-      let overlapped = false;
-      if (inverseDirection) {
-        points.left.reverse();
-        points.right.reverse();
-      }
-
-      overlapped = overlapping.resolveLabelOverlappingInOneDirection(
-        points.left,
-        that._canvas,
-        false,
-        false,
-        shiftCallback,
-      );
-      return overlapping.resolveLabelOverlappingInOneDirection(
-        points.right,
-        that._canvas,
-        false,
-        false,
-        shiftCallback,
-      ) || overlapped;
-    }
-
-    function shiftFunction(box, length) {
-      return _getVerticallyShiftedAngularCoords(box, -length, that._center);
-    }
-
-    function shiftInColumnFunction(box, length) {
-      return { x: box.x, y: box.y - length };
-    }
   },
 
   _setGeometry({ centerX: x, centerY: y, radiusInner }) {
@@ -490,12 +494,11 @@ const dxPieChart = BaseChart.inherit({
   _correctAxes: _noop,
 
   _getExtraOptions() {
-    const that = this;
     return {
-      startAngle: that.option('startAngle'),
-      innerRadius: that.option('innerRadius'),
-      segmentsDirection: that.option('segmentsDirection'),
-      type: that.option('type'),
+      startAngle: this.option('startAngle'),
+      innerRadius: this.option('innerRadius'),
+      segmentsDirection: this.option('segmentsDirection'),
+      type: this.option('type'),
     };
   },
 
