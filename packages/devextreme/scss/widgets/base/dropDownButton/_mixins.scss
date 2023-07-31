@@ -1,54 +1,30 @@
 @mixin dx-dropdown-button(
-  $dropdownbutton-horizontal-padding,
   $dropdownbutton-action-padding-left,
   $dropdownbutton-action-padding-right,
   $dropdownbutton-icon-spindown-size: 18px,
 ) {
   .dx-dropdownbutton {
-    // &:not(.dx-dropdownbutton-has-arrow) {
-    //   // .dx-button-has-icon {
-    //   //   .dx-button-content {
-    //   //     padding-inline: $dropdownbutton-horizontal-padding;
-    //   //   }
-    //   // }
-  
-    //   // .dx-button-has-text {
-    //   //   .dx-button-content {
-    //   //     padding-inline: $dropdownbutton-horizontal-padding * 2;
-    //   //   }
-    //   // }
-    // }
-
     .dx-icon {
       &.dx-icon-spindown {
         width: $dropdownbutton-icon-spindown-size;
         height: $dropdownbutton-icon-spindown-size;
-        // font-size: $dropdownbutton-icon-spindown-size;
       }
     }
   }
 
   .dx-dropdownbutton-action {
+    .dx-button-content {
+      padding-inline-start: $dropdownbutton-action-padding-left;
+    }
+
     &:not(.dx-buttongroup-last-item) {
       border-inline-start-width: 1px;
       border-inline-end-width: 0;
   
       .dx-button-content {
-        padding-inline: $dropdownbutton-horizontal-padding * 2;
         padding-inline-end: $dropdownbutton-action-padding-right;
       }
     }
-
-    // .dx-button-content {
-    //   //padding-inline-start: $dropdownbutton-action-padding-left;
-    //   padding-inline-end: $dropdownbutton-action-padding-right;
-    // }
-
-    // &.dx-buttongroup-last-item{
-    //   .dx-button-content {
-    //     padding-inline-end: 0;
-    //   }
-    // }
 
     &.dx-button-has-text .dx-icon.dx-icon-right {
       margin-inline-start: 4px;
