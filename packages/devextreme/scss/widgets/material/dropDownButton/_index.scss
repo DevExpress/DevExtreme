@@ -13,12 +13,7 @@
 
 // adduse
 
-$material-dropdownbutton-horizontal-padding: 8px;
-
 @include dx-dropdown-button(
-  $material-dropdownbutton-horizontal-padding,
-  12px,
-  $material-text-button-horizontal-padding,
   $material-dropdownbutton-icon-spindown-size,
 );
 

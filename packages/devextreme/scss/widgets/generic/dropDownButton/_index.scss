@@ -10,11 +10,7 @@
 @use "../../base/dropDownButton/mixins" as *;
 
 // adduse
-@include dx-dropdown-button(
-  5px,
-  10px,
-  4px,
-);
+@include dx-dropdown-button();
 
 .dx-dropdownbutton-popup-wrapper {
   @include dx-dropdownlist-list-appearance();

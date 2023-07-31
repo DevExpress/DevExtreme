@@ -14,12 +14,10 @@ $material-normal-button-hovered-state-shadow: $material-button-box-shadow-size $
 $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $button-focused-shadow-color;
 
 @mixin dx-button-onlyicon-sizing() {
-  min-width: $material-button-height;
-
   @include dx-button-sizing(
-    0,
-    0,
-    0,
+    $material-button-icon-padding,
+    $material-button-icon-padding,
+    $material-button-icon-padding,
     $material-button-icon-size,
     0
   );
