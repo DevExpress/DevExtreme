@@ -150,6 +150,7 @@ export default {
 }
 
 .dx-theme-generic .dx-tabs-wrapper .dx-item.dx-tab {
+  max-width: fit-content;
   padding-left: 14px;
   padding-right: 9px;
   line-height: 1.618;
