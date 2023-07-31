@@ -212,9 +212,12 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     _getTextContainer(itemData) {
         const { text } = itemData;
+        if(!text) {
+            return;
+        }
         const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
         const itemText = isPlainObject(itemData) ? text : String(itemData);
-        return text && $itemContainer.text(itemText);
+        return $itemContainer.text(itemText);
     }
 
     _getItemExtraPropNames() {
