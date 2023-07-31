@@ -631,6 +631,23 @@ QUnit.module('Strategy', moduleConfig, () => {
 
         assert.deepEqual(this.instance.option('endDate'), '2023-07-26', 'end date is serialized');
     });
+
+    QUnit.test('DateRangeBox selected value should have the same format as initial value', function(assert) {
+        this.reinit({
+            value: ['2023/07/20', '2023/07/25']
+        });
+        this.instance.open();
+
+        const $startDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(20);
+        $startDateCell.trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('startDate'), '2023/07/15', 'selected start date has the the format as initial value');
+
+        const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(22);
+        $endDateCell.trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('endDate'), '2023/07/17', 'selected end date has the the format as initial value');
+    });
 });
 
 QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig, () => {
