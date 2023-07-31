@@ -49,7 +49,7 @@ createTestCafe({
 
         const runner = testCafe.createRunner()
             .browsers(browsers)
-            .reporter(reporter)
+            // .reporter(reporter)
             .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
         runner.compilerOptions({
