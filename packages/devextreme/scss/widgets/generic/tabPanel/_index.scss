@@ -91,6 +91,25 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 }
 
 
+// TODO: Reset Tabs Borders
+.dx-tabpanel { // stylelint-disable-line no-duplicate-selectors
+  @include dx-tabs-old();
+
+  .dx-tabs-wrapper,
+  .dx-tabs-scrollable,
+  .dx-tabpanel-tabs {
+    border: none;
+  }
+
+  .dx-tabs-wrapper {
+    background-color: transparent;
+  }
+
+  .dx-tab::after {
+    content: none;
+  }
+}
+
 .dx-tabpanel {
   > .dx-tabpanel-tabs {
     .dx-tab {
@@ -149,22 +168,5 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
     &.dx-state-focused {
       border-color: $tabs-focused-border-color;
     }
-  }
-}
-
-// TODO: Reset Tabs Borders
-.dx-tabpanel { // stylelint-disable-line no-duplicate-selectors
-  .dx-tabs-wrapper,
-  .dx-tabs-scrollable,
-  .dx-tabpanel-tabs {
-    border: none;
-  }
-
-  .dx-tabs-wrapper {
-    background-color: transparent;
-  }
-
-  .dx-tab::after {
-    content: none;
   }
 }
