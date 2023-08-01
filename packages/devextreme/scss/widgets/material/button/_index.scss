@@ -24,8 +24,6 @@
 }
 
 .dx-button-has-icon {
-  min-width: $material-button-height;
-
   @include dx-button-onlyicon-sizing();
 }
 
