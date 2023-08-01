@@ -1,7 +1,7 @@
 @mixin dx-dropdownbutton(
   $dropdownbutton-action-padding-left,
   $dropdownbutton-action-padding-right,
-  $dropdownbutton-icon-spindown-size: 18px,
+  $dropdownbutton-icon-spindown-size,
 ) {
   .dx-dropdownbutton {
     .dx-icon {
