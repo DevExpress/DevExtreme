@@ -21,7 +21,7 @@ Object.values(Themes).forEach((theme) => {
       keyExpr: 'id',
       columns: ['field1', 'field2'],
       showBorders: true,
-    })
+    });
   }).after(async () => {
     await changeTheme(Themes.genericLight);
   });
