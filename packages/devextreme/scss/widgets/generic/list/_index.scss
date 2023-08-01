@@ -112,17 +112,6 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
     @include toggle-delete-icon($list-item-active-color);
   }
-
-  .dx-icon {
-    color: $list-icon-color;
-  }
-
-  &.dx-state-active,
-  &.dx-state-focused {
-    .dx-button .dx-icon {
-      color: $button-icon-color;
-    }
-  }
 }
 
 @mixin dx-list-sizing($item-horizontal-padding) {
@@ -296,7 +285,7 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
 
   .dx-list-item-after-bag {
     &.dx-list-static-delete-button-container {
-      width: $item-horizontal-padding + $generic-button-icon-size + $generic-list-deletebutton-padding * 2 + $generic-button-border-weight * 2;
+      width: $item-horizontal-padding + $generic-base-icon-size + $generic-list-deletebutton-padding * 2 + $generic-button-border-weight * 2;
     }
 
     &.dx-list-reorder-handle-container {

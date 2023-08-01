@@ -7,18 +7,24 @@
 @use "../../base/icons" as *;
 @use "../../base/button/mixins" as *;
 
-$generic-button-padding:
-  $generic-button-vertical-padding
-  $generic-button-horizontal-padding;
-
-$generic-button-icon-size: $generic-base-icon-size;
-
 @mixin dx-button-onlyicon-sizing() {
-  @include dx-button-sizing($generic-button-icon-horizontal-padding, $generic-button-icon-size, 0);
+  @include dx-button-sizing(
+    $generic-button-icon-horizontal-padding,
+    $generic-button-icon-horizontal-padding,
+    $generic-button-icon-horizontal-padding,
+    $generic-base-icon-size,
+    0
+  );
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($generic-button-padding, $generic-button-icon-size, math.div($generic-button-icon-size, 2));
+  @include dx-button-sizing(
+    $generic-button-vertical-padding,
+    $generic-button-horizontal-padding,
+    $generic-button-horizontal-padding,
+    $generic-base-icon-size,
+    math.div($generic-base-icon-size, 2)
+  );
 }
 
 @mixin dx-button-styling-variant(
@@ -63,15 +69,6 @@ $generic-button-icon-size: $generic-base-icon-size;
   border-radius: $button-border-radius;
   border-width: $generic-button-border-weight;
   border-style: solid;
-}
-
-@mixin dx-button-special-hover($hover: transparent) {
-  &.dx-state-hover {
-    .dx-button-content {
-      background-color: $hover;
-      border-radius: $button-border-radius;
-    }
-  }
 }
 
 @mixin dx-button-mode-contained-styling() {
