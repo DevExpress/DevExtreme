@@ -24,12 +24,6 @@ $scrollview-loading-indicator-size: 42px;
   }
 }
 
-.dx-scrollview-pull-down-text {
-  div {
-    position: relative;
-  }
-}
-
 .dx-scrollview-pull-down-image {
   display: none;
 }
@@ -81,6 +75,10 @@ $scrollview-loading-indicator-size: 42px;
 }
 
 .dx-scrollview-pull-down-text {
+  div {
+    position: relative;
+  }
+
   > div {
     display: none;
 
