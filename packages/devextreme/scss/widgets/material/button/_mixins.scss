@@ -7,7 +7,6 @@
 @use "../../base/button/mixins" as *;
 
 $material-button-padding: $material-button-vertical-padding $material-button-horizontal-padding;
-$material-button-icon-text-padding: 12px;
 $material-normal-button-shadow: $material-button-box-shadow-size $button-shadow-color;
 $material-normal-button-active-state-shadow: $material-button-active-box-shadow-size $button-active-shadow-color;
 $material-normal-button-hovered-state-shadow: $material-button-box-shadow-size $button-hover-shadow-color;
