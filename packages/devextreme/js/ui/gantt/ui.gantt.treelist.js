@@ -236,16 +236,15 @@ export class GanttTreeList {
         return this._nodeState;
     }
     getAllNodes() {
-        const treeList = this._treeList;
-        const store = treeList?.getDataSource().store();
-        const keyGetter = compileGetter(store?.key());
-        let nodes = [];
-        if(store) {
-            nodes = store._array
-                .map(item => treeList.getNodeByKey(keyGetter(item)))
-                .filter(item => item);
+        const store = this._treeList?.getDataSource()?.store();
+        if(!store || !this._treeList.getNodeByKey) {
+            return [];
         }
-        return nodes;
+
+        const keyGetter = compileGetter(store.key());
+        return store._array
+            .map(item => this.treeList.getNodeByKey(keyGetter(item)))
+            .filter(item => !!item);
     }
     isExpandedStateChanged(keys1, keys2) {
         if(keys1 === null && keys2 === null) {
