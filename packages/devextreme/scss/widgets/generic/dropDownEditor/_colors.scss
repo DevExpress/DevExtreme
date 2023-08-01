@@ -83,7 +83,7 @@ $dropdowneditor-icon-border-radius: null !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
-  $dropdowneditor-icon-border-radius: 0px !default;
+  $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "light" {

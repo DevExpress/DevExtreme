@@ -8,40 +8,6 @@
   }
 }
 
-@mixin dx-buttongroup-sizing(
-  $button-border-radius,
-  $button-group-first-item-padding-left,
-  $button-border-width,
-) {
-  .dx-button-mode-outlined,
-  .dx-button-mode-contained {
-    &.dx-buttongroup-item {
-      padding-inline-start: 1px;
-      padding-inline-end: 1px;
-    }
-
-    &.dx-buttongroup-first-item {
-      padding-inline-start: $button-group-first-item-padding-left;
-      border-inline-start-width: $button-border-width;
-
-      &.dx-button {
-        border-start-start-radius: $button-border-radius;
-        border-end-start-radius: $button-border-radius;
-      }
-    }
-
-    &.dx-buttongroup-last-item {
-      padding-inline-end: 0;
-      border-inline-end-width:  $button-border-width;
-
-      &.dx-button {
-        border-start-end-radius: $button-border-radius;
-        border-end-end-radius: $button-border-radius;
-      }
-    }
-  }
-};
-
 @mixin dx-buttongroup-item(
   $button-normal-bg,
   $button-group-default-bg,
@@ -250,3 +216,37 @@
     }
   }
 }
+
+@mixin dx-buttongroup-sizing(
+  $button-border-radius,
+  $button-group-first-item-padding-left,
+  $button-border-width,
+) {
+  .dx-button-mode-outlined,
+  .dx-button-mode-contained {
+    &.dx-buttongroup-item {
+      padding-inline-start: 1px;
+      padding-inline-end: 1px;
+    }
+
+    &.dx-buttongroup-first-item {
+      padding-inline-start: $button-group-first-item-padding-left;
+      border-inline-start-width: $button-border-width;
+
+      &.dx-button {
+        border-start-start-radius: $button-border-radius;
+        border-end-start-radius: $button-border-radius;
+      }
+    }
+
+    &.dx-buttongroup-last-item {
+      padding-inline-end: 0;
+      border-inline-end-width:  $button-border-width;
+
+      &.dx-button {
+        border-start-end-radius: $button-border-radius;
+        border-end-end-radius: $button-border-radius;
+      }
+    }
+  }
+};
