@@ -525,6 +525,18 @@ QUnit.module('Menu rendering', () => {
 
         assert.ok(clickSpy.calledOnce);
     });
+
+    QUnit.test('Link should be rendered with empty text (T1181344)', function(assert) {
+        createMenu({
+            items: [{ text: '', url: 'http://some_url' }],
+        });
+
+        const content = $(`.${DX_MENU_ITEM_CONTENT_CLASS}`).children()[0];
+
+        assert.strictEqual(content.tagName, 'A');
+        assert.strictEqual(content.getAttribute('href'), 'http://some_url');
+        assert.strictEqual(content.text, '');
+    });
 });
 
 QUnit.module('Menu tests', {

@@ -58,6 +58,35 @@ const moduleConfig = {
     }
 };
 
+// TODO: change OldEditor to Editor after isDirty for renovated editors is implemented
+QUnit.module('isDirty', () => {
+    QUnit.test('isDirty is false by default', function(assert) {
+        const editor = new OldEditor($('<div>').appendTo('body'));
+
+        const isDirty = editor.option('isDirty');
+
+        assert.strictEqual(isDirty, false);
+    });
+
+    QUnit.test('isDirty should be true if value differ from initial', function(assert) {
+        const editor = new OldEditor($('<div>').appendTo('body'));
+
+        editor.option('value', '1234');
+
+        assert.strictEqual(editor.option('isDirty'), true);
+    });
+
+    QUnit.test('isDirty should be false if value updated to initial', function(assert) {
+        const initialValue = '1';
+        const editor = new OldEditor($('<div>').appendTo('body'), { value: initialValue });
+
+        editor.option('value', '123');
+        editor.option('value', initialValue);
+
+        assert.strictEqual(editor.option('isDirty'), false);
+    });
+});
+
 QUnit.module('base', moduleConfig, () => {
     QUnit.test('isEditor static method', function(assert) {
         const editor = this.fixture.createEditor();

@@ -1,12 +1,9 @@
+import $ from '../../../core/renderer';
 import CalendarStrategy from '../../date_box/ui.date_box.strategy.calendar';
 import eventsEngine from '../../../events/core/events_engine';
 import { extend } from '../../../core/utils/extend';
 import { isSameDateArrays, getDeserializedDate, isSameDates } from '../ui.date_range.utils';
 import { isFunction } from '../../../core/utils/type';
-
-const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
-const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
-const TODAY_BUTTON_CLASS = 'dx-button-today';
 
 class RangeCalendarStrategy extends CalendarStrategy {
     constructor(dateBox) {
@@ -31,19 +28,12 @@ class RangeCalendarStrategy extends CalendarStrategy {
     }
 
     getFirstPopupElement() {
-        const $popupWrapper = this._getPopup().$wrapper();
-
-        const $todayButton = $popupWrapper.find(`.${TODAY_BUTTON_CLASS}`);
-
-        if($todayButton.length) {
-            return $todayButton;
-        }
-
-        return $popupWrapper.find(APPLY_BUTTON_SELECTOR);
+        return $(this._getPopup().getFocusableElements()[0]);
     }
 
     getLastPopupElement() {
-        return this._getPopup().$wrapper().find(CANCEL_BUTTON_SELECTOR);
+        const elements = this._getPopup().getFocusableElements();
+        return $(elements[elements.length - 1]);
     }
 
     supportedKeys() {

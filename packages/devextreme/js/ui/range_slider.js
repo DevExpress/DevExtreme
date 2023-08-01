@@ -304,10 +304,14 @@ const RangeSlider = Slider.inherit({
         this.option('value', [start, end]);
     },
 
+    _rangesAreEqual(firstRange, secondRange) {
+        return firstRange[0] === secondRange[0] && firstRange[1] === secondRange[1];
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'value': {
-                if(args.value[0] === args.previousValue[0] && args.value[1] === args.previousValue[1]) {
+                if(this._rangesAreEqual(args.value, args.previousValue)) {
                     break;
                 }
 
@@ -318,6 +322,9 @@ const RangeSlider = Slider.inherit({
 
                 const start = this.option('start');
                 const end = this.option('end');
+
+                const isDirty = !this._rangesAreEqual(this._initialValue, args.value);
+                this.option('isDirty', isDirty);
 
                 this._createActionByOption('onValueChanged', {
                     excludeValidators: ['disabled', 'readOnly']
