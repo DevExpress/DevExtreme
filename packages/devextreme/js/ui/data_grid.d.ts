@@ -368,10 +368,7 @@ export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxData
    * @type object
    */
   readonly data: TRowData;
-  /**
-   * @docid _ui_data_grid_CellHoverChangedEvent.key
-   * @type any
-   */
+  /** @docid _ui_data_grid_CellHoverChangedEvent.key */
   readonly key: TKey;
   /** @docid _ui_data_grid_CellHoverChangedEvent.value */
   readonly value?: any;
@@ -411,10 +408,7 @@ export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid
    * @type object
    */
   readonly data: TRowData;
-  /**
-   * @docid _ui_data_grid_CellPreparedEvent.key
-   * @type any
-   */
+  /** @docid _ui_data_grid_CellPreparedEvent.key */
   readonly key: TKey;
   /** @docid _ui_data_grid_CellPreparedEvent.value */
   readonly value?: any;

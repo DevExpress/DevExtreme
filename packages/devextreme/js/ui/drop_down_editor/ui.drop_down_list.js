@@ -340,7 +340,7 @@ const DropDownList = DropDownEditor.inherit({
         return plainItems;
     },
 
-    _updateActiveDescendant() {
+    _updateActiveDescendant($target) {
         const opened = this.option('opened');
         const listFocusedItemId = this._list?.getFocusedItemId();
         const isElementOnDom = $(`#${listFocusedItemId}`).length > 0;
@@ -348,7 +348,7 @@ const DropDownList = DropDownEditor.inherit({
 
         this.setAria({
             'activedescendant': activedescendant || null
-        });
+        }, $target);
     },
 
     _setSelectedItem: function(item) {

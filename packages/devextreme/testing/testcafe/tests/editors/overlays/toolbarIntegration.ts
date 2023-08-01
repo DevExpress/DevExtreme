@@ -55,7 +55,7 @@ fixture.disablePageReloads`Popup_toolbar`
           location: 'before',
           widget: 'dxButton',
           options: {
-            type: 'back',
+            icon: 'back',
           },
           toolbar,
         }, {

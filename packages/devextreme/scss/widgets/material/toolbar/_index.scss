@@ -86,13 +86,11 @@
     .dx-button-mode-contained {
       border: none;
 
-      &.dx-button,
-      &.dx-button.dx-button-back {
+      &.dx-button {
         border-radius: 0;
       }
 
-      &.dx-button-normal,
-      &.dx-button-back {
+      &.dx-button-normal {
         @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg);
       }
 
@@ -121,12 +119,6 @@
       .dx-button-content {
         padding: 0 $material-list-item-horizontal-padding;
       }
-    }
-  }
-
-  .dx-button {
-    &.dx-button-back:not(.dx-buttongroup-item) {
-      border-radius: $material-base-border-radius;
     }
   }
 

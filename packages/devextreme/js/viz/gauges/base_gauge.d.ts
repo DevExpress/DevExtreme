@@ -40,7 +40,10 @@ import {
  * @hidden
  */
 export interface TooltipInfo {
-    /** @docid _viz_base_gauge_TooltipInfo.target */
+    /**
+     * @docid _viz_base_gauge_TooltipInfo.target
+     * @type object
+     */
     target: any;
 }
 

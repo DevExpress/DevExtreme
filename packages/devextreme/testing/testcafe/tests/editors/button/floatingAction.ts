@@ -30,29 +30,6 @@ fixture.disablePageReloads`FloatingAction - default theme`
 
 for (const label of ['Add Row', '']) {
   for (const icon of ['home', '']) {
-    test(`FAB with one speed dial action button, label: ${label}, icon: ${icon}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-      await testScreenshot(t, takeScreenshot, `FAB with one speed dial action button,label='${label}',icon='${icon}'.png`, {
-        element: '#container',
-      });
-
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
-      await appendElementTo('#container', 'div', 'speed-dial-action');
-
-      await setGlobalConfig();
-
-      await createWidget('dxSpeedDialAction', {
-        label,
-        icon,
-        visible: true,
-      }, '#speed-dial-action');
-    });
-
     test(`FAB with two speed dial action buttons after opening, label: ${label}, icon: ${icon}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -87,6 +64,29 @@ for (const label of ['Add Row', '']) {
         index: 2,
         visible: true,
       }, '#speed-dial-action-trash');
+    });
+
+    test(`FAB with one speed dial action button, label: ${label}, icon: ${icon}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      await t
+        .expect(await takeScreenshot(`FAB with one speed dial action button,label='${label}',icon='${icon}'${getThemePostfix(`${process.env.theme}`)}.png`, '#container'))
+        .ok();
+
+      await t
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await setStyleAttribute(Selector('#container'), 'width: 300px; height: 300px;');
+      await appendElementTo('#container', 'div', 'speed-dial-action');
+
+      await setGlobalConfig();
+
+      await createWidget('dxSpeedDialAction', {
+        label,
+        icon,
+        visible: true,
+      }, '#speed-dial-action');
     });
   }
 }

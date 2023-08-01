@@ -10,6 +10,7 @@ import { format } from '@js/core/utils/string';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import List from '@js/ui/list_light';
+import errors from '@js/ui/widget/ui.errors';
 import { prepareItems } from '@ts/grids/grid_core/m_export';
 
 import dataGridCore from '../m_core';
@@ -608,6 +609,10 @@ export class ExportController extends dataGridCore.ViewController {
   }
 
   init() {
+    if (this.option('export.enabled') && !isDefined(this.option('onExporting'))) {
+      errors.log('W1024');
+    }
+
     this._columnsController = this.getController('columns');
     this._rowsView = this.getView('rowsView');
     this._headersView = this.getView('columnHeadersView' as any);
@@ -833,6 +838,12 @@ dataGridCore.registerModule('export', {
           if (args.name === 'export') {
             args.handled = true;
             this._invalidate();
+
+            if (args.fullName === 'export.enabled') {
+              if (args.value && !isDefined(this.option('onExporting'))) {
+                errors.log('W1024');
+              }
+            }
           }
         },
 

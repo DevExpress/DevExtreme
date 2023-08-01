@@ -600,7 +600,7 @@ const Lookup = DropDownList.inherit({
 
 
     _listItemGroupedElements: function() {
-        const groups = this._list._itemContainer().children();
+        const groups = this._list._getItemsContainer().children();
         const items = [];
 
         groups.each((_, group) => {
@@ -889,6 +889,16 @@ const Lookup = DropDownList.inherit({
 
             this._setSearchPlaceholder();
         }
+    },
+
+    _updateActiveDescendant() {
+        this.callBase();
+
+        if(!this._$searchBox) {
+            return;
+        }
+        const $input = this._$searchBox.find('input');
+        this.callBase($input);
     },
 
     _removeSearch: function() {

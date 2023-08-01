@@ -7,7 +7,7 @@ import titleModule from 'viz/core/title';
 import dxChart from 'viz/chart';
 import dxPieChart from 'viz/pie_chart';
 import dxPolarChart from 'viz/polar_chart';
-import baseChartModule from 'viz/chart_components/base_chart';
+import { overlapping } from '__internal/viz/chart_components/m_base_chart';
 import seriesFamilyModule from 'viz/core/series_family';
 import { setupSeriesFamily } from '../../helpers/chartMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -3663,11 +3663,11 @@ QUnit.test('groups order', function(assert) {
 QUnit.module('T576725', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
-        sinon.stub(baseChartModule.overlapping, 'resolveLabelOverlappingInOneDirection');
+        sinon.stub(overlapping, 'resolveLabelOverlappingInOneDirection');
     },
     afterEach: function() {
         moduleSetup.afterEach.call(this);
-        baseChartModule.overlapping.resolveLabelOverlappingInOneDirection.restore();
+        overlapping.resolveLabelOverlappingInOneDirection.restore();
     }
 }));
 
@@ -3687,7 +3687,7 @@ QUnit.test('Overlapping of the labels should be taken into account canvas with l
         resolveLabelOverlapping: 'shift'
     });
 
-    assert.ok(baseChartModule.overlapping.resolveLabelOverlappingInOneDirection.lastCall.args[1].top > 0);
+    assert.ok(overlapping.resolveLabelOverlappingInOneDirection.lastCall.args[1].top > 0);
 });
 
 QUnit.module('Series visibility changed', moduleSetup);

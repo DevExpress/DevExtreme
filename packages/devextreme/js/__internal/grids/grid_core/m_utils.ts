@@ -189,8 +189,11 @@ export default {
 
     if (!noDataElement.length) {
       noDataElement = $('<span>')
-        .addClass(noDataClass)
-        .appendTo($element);
+        .addClass(noDataClass);
+    }
+
+    if (!noDataElement.parent().is($element)) {
+      noDataElement.appendTo($element);
     }
 
     if (isVisible && !isLoading) {

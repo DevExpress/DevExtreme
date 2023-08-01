@@ -1,3 +1,19 @@
+@use "../icons" as *;
+
 @mixin dx-button-disabled() {
   cursor: default;
+}
+
+@mixin dx-button-sizing($padding, $icon-size, $icon-margin) {
+  .dx-button-content {
+    padding: $padding;
+  }
+
+  .dx-icon {
+    width: $icon-size;
+    height: $icon-size;
+    font-size: $icon-size;
+
+    @include dx-icon-margin($icon-margin);
+  }
 }

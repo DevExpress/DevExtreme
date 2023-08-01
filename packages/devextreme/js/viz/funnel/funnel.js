@@ -2,7 +2,7 @@ import { addAlgorithm, getAlgorithm } from './tiling';
 import dynamicSlope from './tiling.funnel';
 import dynamicHeight from './tiling.pyramid';
 import { noop } from '../../core/utils/common';
-import baseWidget from '../core/base_widget';
+import baseWidget from '../../__internal/viz/core/m_base_widget';
 import componentRegistrator from '../../core/component_registrator';
 import Item from './item';
 const NODES_CREATE_CHANGE = 'NODES_CREATE';

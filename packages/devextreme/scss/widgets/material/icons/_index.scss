@@ -8,13 +8,12 @@
 // adduse
 
 
-@include dx-font-icons("dxiconsmaterial", "DevExtreme Material Icons", "devextreme_material_icons");
+@include dx-font-icons("dxiconsmaterial", "DevExtreme Material Icons", "devextreme_material_icons", optimizeLegibility);
 
 .dx-icon {
   font-size: 24px;
   line-height: 1;
   white-space: nowrap;
-  text-rendering: optimizeLegibility;
   font-feature-settings: 'liga';
 }
 
