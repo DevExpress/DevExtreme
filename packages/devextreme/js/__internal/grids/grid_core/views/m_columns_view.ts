@@ -141,6 +141,18 @@ const removeHandler = function (templateDeferred) {
   templateDeferred.resolve();
 };
 
+export const normalizeWidth = (width: string | number | undefined): string | undefined => {
+  if (typeof width === 'number') {
+    return `${width.toFixed(3)}px`;
+  }
+
+  if (width === 'adaptiveHidden') {
+    return HIDDEN_COLUMNS_WIDTH;
+  }
+
+  return width;
+};
+
 const viewWithColumnStateMixin: ModuleType<View> = modules.View.inherit(columnStateMixin);
 
 export class ColumnsView extends viewWithColumnStateMixin {
@@ -824,10 +836,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
     if (gridCoreUtils.checkChanges(optionNames, ['width', 'visibleWidth'])) {
       const visibleColumns = this._columnsController.getVisibleColumns();
-      const widths = iteratorUtils.map(visibleColumns, (column) => {
-        const width = column.visibleWidth || column.width;
-        return isDefined(width) ? width : 'auto';
-      });
+      const widths = visibleColumns.map((column) => column.visibleWidth || column.width);
 
       this.setColumnWidths({ widths, optionNames });
       return;
@@ -849,7 +858,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return this._tableElement || $();
   }
 
-  getTableElement(isFixedTableRendering?) {
+  getTableElement(isFixedTableRendering?): dxElementWrapper | undefined {
     return this._tableElement;
   }
 
@@ -1008,121 +1017,117 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
   }
 
-  _getWidths($cellElements) {
-    const result: any[] = [];
-    let width;
-
-    if ($cellElements) {
-      iteratorUtils.each($cellElements, (index, item) => {
-        width = item.offsetWidth;
-        if (item.getBoundingClientRect) {
-          const clientRect = getBoundingRect(item);
-          if (clientRect.width > width - 1) {
-            width = clientRect.width;
-          }
-        }
-
-        result.push(width);
-      });
+  _getWidths($cellElements?: dxElementWrapper): number[] {
+    if (!$cellElements) {
+      return [];
     }
+
+    const result: number[] = [];
+    const cellElements = $cellElements.toArray();
+
+    (cellElements as HTMLElement[]).forEach((cell) => {
+      let width = cell.offsetWidth;
+
+      if ((cell as any).getBoundingClientRect) {
+        const rect = getBoundingRect(cell);
+
+        if (rect.width > cell.offsetWidth - 1) {
+          width = rect.width;
+        }
+      }
+
+      result.push(width);
+    });
 
     return result;
   }
 
-  getColumnWidths($tableElement) {
-    const that = this;
-    let result: any[] = [];
-    let $rows;
-    let $cells;
-
+  getColumnWidths($tableElement?: dxElementWrapper): number[] {
     (this.option('forceApplyBindings') || noop)();
 
-    $tableElement = $tableElement || that.getTableElement();
+    $tableElement = $tableElement ?? this.getTableElement();
 
     if ($tableElement) {
-      $rows = $tableElement.children('tbody:not(.dx-header)').children();
+      const $rows = $tableElement.children('tbody:not(.dx-header)').children();
 
       for (let i = 0; i < $rows.length; i++) {
         const $row = $rows.eq(i);
-        const isRowVisible = $row.get(0).style.display !== 'none' && !$row.hasClass('dx-state-invisible');
-        if (!$row.is(`.${GROUP_ROW_CLASS}`) && !$row.is(`.${DETAIL_ROW_CLASS}`) && !$row.is(`.${ERROR_ROW_CLASS}`) && isRowVisible) {
-          $cells = $row.children('td');
-          break;
+
+        const isGroupRow = $row.hasClass(GROUP_ROW_CLASS);
+        const isDetailRow = $row.hasClass(DETAIL_ROW_CLASS);
+        const isErrorRow = $row.hasClass(ERROR_ROW_CLASS);
+
+        const isRowVisible = ($row.get(0) as HTMLElement).style.display !== 'none' && !$row.hasClass('dx-state-invisible');
+        const isRelevantRow = !isGroupRow && !isDetailRow && !isErrorRow;
+
+        if (isRowVisible && isRelevantRow) {
+          const $cells = $row.children('td');
+
+          const result = this._getWidths($cells);
+
+          return result;
         }
       }
-
-      result = that._getWidths($cells);
     }
 
-    return result;
+    return [];
   }
 
   getVisibleColumnIndex(columnIndex, rowIndex) {
     return columnIndex;
   }
 
-  setColumnWidths({
-    widths, $tableElement, columns, fixed,
-  }: any) {
-    let $cols;
-    let width;
-    let minWidth;
-    let columnIndex;
+  setColumnWidths({ widths, optionNames }: any): void {
+    const $tableElement = this.getTableElement();
+
+    if (!$tableElement?.length || !widths) {
+      return;
+    }
+
+    const columns = this.getColumns();
     const columnAutoWidth = this.option('columnAutoWidth');
 
-    $tableElement = $tableElement || this.getTableElement();
+    const $cols = $tableElement.children('colgroup').children('col');
+    $cols.toArray().forEach((col) => col.removeAttribute('style'));
 
-    if ($tableElement && $tableElement.length && widths) {
-      columnIndex = 0;
-      $cols = $tableElement.children('colgroup').children('col');
-      setWidth($cols, 'auto');
-      columns = columns || this.getColumns(null, $tableElement);
+    columns.forEach((column, columnIndex) => {
+      /*
+      Probably we do not need this if statement. It seems like there is no point to set
+      min-width, width and max-width for each cell, beacuse below width for cols in colgroup is set.
+      Style for cols applies to all td elements.
 
-      for (let i = 0; i < columns.length; i++) {
-        if (columnAutoWidth && !fixed) {
-          width = columns[i].width;
+      Also check _createCell method because min-width, width and max-width are also set there.
+      */
+      if (columnAutoWidth && column.width && !column.command) {
+        const width = getWidthStyle(column.visibleWidth || column.width);
+        const minWidth = getWidthStyle(column.minWidth || width);
 
-          if (width && !columns[i].command) {
-            width = columns[i].visibleWidth || width;
+        const $rows = $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
 
-            width = getWidthStyle(width);
-            minWidth = getWidthStyle(columns[i].minWidth || width);
-            // @ts-expect-error
-            const $rows = $rows || $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
-            for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
-              const row = $rows[rowIndex];
+        for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
+          const $row = $rows.eq(rowIndex);
 
-              let cell;
-              const visibleIndex = this.getVisibleColumnIndex(i, rowIndex);
-              if (row.classList.contains(GROUP_ROW_CLASS)) {
-                cell = row.querySelector(`td[aria-colindex='${visibleIndex + 1}']:not(.${GROUP_CELL_CLASS})`);
-              } else {
-                cell = row.cells[visibleIndex];
-              }
-              if (cell) {
-                setCellWidth(cell, columns[i], width);
-                cell.style.minWidth = minWidth;
-              }
-            }
+          const visibleIndex = this.getVisibleColumnIndex(columnIndex, rowIndex);
+
+          const $cell = $row.hasClass(GROUP_ROW_CLASS)
+            ? $row.find(`td[aria-colindex='${visibleIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
+            : $row.find('td').eq(visibleIndex);
+
+          const cell = $cell.get(0) as HTMLElement;
+
+          if (cell) {
+            setCellWidth(cell, column, width);
+            cell.style.minWidth = minWidth;
           }
         }
-
-        if (columns[i].colspan) {
-          columnIndex += columns[i].colspan;
-          continue;
-        }
-        width = widths[columnIndex];
-        if (width === 'adaptiveHidden') {
-          width = HIDDEN_COLUMNS_WIDTH;
-        }
-        if (typeof width === 'number') {
-          width = `${width.toFixed(3)}px`;
-        }
-        setWidth($cols.eq(columnIndex), isDefined(width) ? width : 'auto');
-
-        columnIndex++;
       }
-    }
+
+      const colWidth = normalizeWidth(widths[columnIndex]);
+
+      if (isDefined(colWidth)) {
+        setWidth($cols.eq(columnIndex), colWidth);
+      }
+    });
   }
 
   getCellElements(rowIndex): dxElementWrapper | undefined {
@@ -1204,7 +1209,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
   getColumnElements() {}
 
-  getColumns(rowIndex?, $tableElement?) {
+  getColumns(rowIndex?) {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 

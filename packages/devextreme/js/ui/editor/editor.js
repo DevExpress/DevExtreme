@@ -52,6 +52,7 @@ const Editor = Widget.inherit({
     },
 
     _init: function() {
+        this._initialValue = this.option('value');
         this.callBase();
         this._options.cache('validationTooltipOptions', this.option('validationTooltipOptions'));
         const $element = this.$element();
@@ -337,6 +338,8 @@ const Editor = Widget.inherit({
                 break;
             case 'value':
                 if(args.value != args.previousValue) { // eslint-disable-line eqeqeq
+                    this.option('isDirty', this._initialValue !== args.value);
+
                     this.validationRequest.fire({
                         value: args.value,
                         editor: this
