@@ -242,9 +242,7 @@ export class GanttTreeList {
         let nodes = [];
         if(store) {
             nodes = store._array
-                .map(item => treeList
-                    .getNodeByKey(keyGetter(item))
-                )
+                .map(item => treeList.getNodeByKey(keyGetter(item)))
                 .filter(item => item);
         }
         return nodes;
