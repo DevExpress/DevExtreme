@@ -97,41 +97,6 @@ $pulldown-padding: 15px;
       transform: none;
     }
   }
-
-  &.dx-scrollable-native-win8 {
-    &.dx-scrollable-disabled {
-      overflow-y: auto;
-
-      .dx-scrollable-container {
-        overflow-y: auto;
-        overflow-x: hidden;
-      }
-
-      .dx-scrollable-content {
-        overflow-y: hidden;
-      }
-
-      .dx-scrollview-content {
-        overflow-y: hidden;
-      }
-    }
-
-    .dx-scrollable-container {
-      -ms-overflow-style: -ms-autohiding-scrollbar;
-    }
-
-    .dx-scrollview-bottom-pocket {
-      width: 100%;
-      text-align: center;
-    }
-  }
-}
-
-
-.dx-device-android-4 .dx-scrollable-native.dx-scrollable-native-android {
-  .dx-scrollview-pull-down-loading .dx-icon-pulldown {
-    display: block;
-  }
 }
 
 .dx-scrollview-content {

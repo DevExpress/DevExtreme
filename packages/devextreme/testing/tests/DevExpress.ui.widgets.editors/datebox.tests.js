@@ -74,6 +74,8 @@ const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 const TODAY_BUTTON_SELECTOR = '.dx-button-today.dx-button';
+const BUTTON_SELECTOR = '.dx-button';
+const TEXTBOX_SELECTOR = '.dx-textbox';
 
 const widgetName = 'dxDateBox';
 const { module: testModule, test } = QUnit;
@@ -4602,328 +4604,390 @@ QUnit.module('width of datebox with calendar', {
     });
 });
 
-QUnit.module('keyboard navigation', {
-    beforeEach: function() {
-        fx.off = true;
+if(devices.real().deviceType === 'desktop') {
+    QUnit.module('keyboard navigation', {
+        beforeEach: function() {
+            fx.off = true;
 
-        this.$dateBox = $('#dateBox');
+            this.$dateBox = $('#dateBox');
 
-        this.dateBox = this.$dateBox
-            .dxDateBox({
+            this.dateBox = this.$dateBox
+                .dxDateBox({
+                    pickerType: 'calendar',
+                    type: 'time',
+                    focusStateEnabled: true,
+                    min: new Date(2008, 7, 8, 4, 30),
+                    value: new Date(2008, 7, 8, 5, 0),
+                    max: new Date(2008, 7, 8, 6, 0)
+                })
+                .dxDateBox('instance');
+
+            this.$input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            this.keyboard = keyboardMock(this.$input);
+        },
+        afterEach: function() {
+            fx.off = false;
+        }
+    }, () => {
+        QUnit.testInActiveWindow('popup hides on tab', function(assert) {
+            this.$input.focusin();
+
+            assert.ok(this.$dateBox.hasClass(STATE_FOCUSED_CLASS), 'element is focused');
+            this.dateBox.option('opened', true);
+            this.keyboard.keyDown('tab');
+            assert.ok(this.$dateBox.hasClass(STATE_FOCUSED_CLASS), 'element is focused');
+
+            assert.equal(this.dateBox.option('opened'), false, 'popup is hidden');
+        });
+
+        QUnit.testInActiveWindow('home/end should not be handled', function(assert) {
+            this.$input.focusin();
+            this.dateBox.option('opened', true);
+            const $timeList = $(`.${LIST_CLASS}`);
+
+            this.keyboard.keyDown('down');
+            this.keyboard.keyDown('end');
+            assert.ok(!$timeList.find(LIST_ITEM_SELECTOR).eq(0).hasClass(STATE_FOCUSED_CLASS), 'element is not focused');
+            this.keyboard.keyDown('home');
+            assert.ok(!$timeList.find(LIST_ITEM_SELECTOR).eq(0).hasClass(STATE_FOCUSED_CLASS), 'element is not focused');
+        });
+
+        QUnit.testInActiveWindow('arrow keys control', function(assert) {
+            this.$input.focusin();
+            this.dateBox.option('opened', true);
+            this.keyboard.keyDown('down');
+
+            const $timeList = $(`.${LIST_CLASS}`);
+
+            assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(2).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
+
+            this.keyboard.keyDown('down');
+            assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(3).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
+
+            this.keyboard.keyDown('down');
+            assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(0).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
+
+            this.keyboard.keyDown('up');
+            assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(3).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
+
+            this.keyboard.keyDown('enter');
+            assert.strictEqual(this.dateBox.option('opened'), false, 'popup is hidden');
+
+            const selectedDate = this.dateBox.option('value');
+            assert.strictEqual(selectedDate.getHours(), 6, 'hours is right');
+            assert.strictEqual(selectedDate.getMinutes(), 0, 'minutes is right');
+        });
+
+        QUnit.test('apply contoured date on enter for date and datetime mode', function(assert) {
+            this.dateBox = this.$dateBox
+                .dxDateBox({
+                    pickerType: 'calendar',
+                    type: 'date',
+                    applyValueMode: 'useButtons',
+                    focusStateEnabled: true,
+                    min: new Date(2008, 6, 8, 4, 30),
+                    value: new Date(2008, 7, 8, 5, 0),
+                    max: new Date(2008, 9, 8, 6, 0),
+                    opened: true
+                })
+                .dxDateBox('instance');
+
+            const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            $($input).trigger($.Event('keydown', { key: 'ArrowUp' }));
+            $($input).trigger($.Event('keydown', { key: 'ArrowDown' }));
+            $($input).trigger($.Event('keydown', { key: 'ArrowUp' }));
+            $($input).trigger($.Event('keydown', { key: 'Enter' }));
+
+            assert.equal(this.dateBox.option('opened'), false, 'popup is hidden');
+
+            const selectedDate = this.dateBox.option('value');
+            assert.equal(selectedDate.getDate(), 1, 'day is right');
+        });
+
+        QUnit.test('Enter key press prevents default when popup in opened', function(assert) {
+            assert.expect(1);
+
+            let prevented = 0;
+
+            const $dateBox = $('<div>').appendTo('body').dxDateBox({
                 pickerType: 'calendar',
-                type: 'time',
                 focusStateEnabled: true,
-                min: new Date(2008, 7, 8, 4, 30),
-                value: new Date(2008, 7, 8, 5, 0),
-                max: new Date(2008, 7, 8, 6, 0)
-            })
-            .dxDateBox('instance');
+                value: new Date(2015, 5, 13),
+                opened: true
+            });
 
-        this.$input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        this.keyboard = keyboardMock(this.$input);
-    },
-    afterEach: function() {
-        fx.off = false;
-    }
-}, () => {
-    QUnit.testInActiveWindow('popup hides on tab', function(assert) {
-        this.$input.focusin();
+            const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input);
 
-        assert.ok(this.$dateBox.hasClass(STATE_FOCUSED_CLASS), 'element is focused');
-        this.dateBox.option('opened', true);
-        this.keyboard.keyDown('tab');
-        assert.ok(this.$dateBox.hasClass(STATE_FOCUSED_CLASS), 'element is focused');
+            try {
+                $($dateBox).on('keydown', e => {
+                    if(e.isDefaultPrevented()) {
+                        prevented++;
+                    }
+                });
 
-        assert.equal(this.dateBox.option('opened'), false, 'popup is hidden');
-    });
+                keyboard.keyDown('enter');
+                assert.equal(prevented, 1, 'defaults prevented on enter key press');
 
-    QUnit.testInActiveWindow('home/end should not be handled', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
+            } finally {
+                $dateBox.remove();
+            }
+        });
 
-        this.$input.focusin();
-        this.dateBox.option('opened', true);
-        const $timeList = $(`.${LIST_CLASS}`);
+        QUnit.testInActiveWindow('the \'shift+tab\' key press leads to the cancel button focus if the input is focused', function(assert) {
+            this.dateBox.option({
+                pickerType: 'calendar',
+                type: 'datetime',
+                opened: true,
+                applyValueMode: 'useButtons'
+            });
 
-        this.keyboard.keyDown('down');
-        this.keyboard.keyDown('end');
-        assert.ok(!$timeList.find(LIST_ITEM_SELECTOR).eq(0).hasClass(STATE_FOCUSED_CLASS), 'element is not focused');
-        this.keyboard.keyDown('home');
-        assert.ok(!$timeList.find(LIST_ITEM_SELECTOR).eq(0).hasClass(STATE_FOCUSED_CLASS), 'element is not focused');
-    });
+            const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-    QUnit.testInActiveWindow('arrow keys control', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
+            $input
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                    shiftKey: true
+                }));
 
-        this.$input.focusin();
-        this.dateBox.option('opened', true);
-        this.keyboard.keyDown('down');
+            const $cancelButton = this.dateBox._popup.$wrapper().find('.dx-button.dx-popup-cancel');
+            assert.ok($cancelButton.hasClass('dx-state-focused'), 'cancel button is focused');
+        });
 
-        const $timeList = $(`.${LIST_CLASS}`);
-
-        assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(2).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
-
-        this.keyboard.keyDown('down');
-        assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(3).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
-
-        this.keyboard.keyDown('down');
-        assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(0).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
-
-        this.keyboard.keyDown('up');
-        assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(3).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
-
-        this.keyboard.keyDown('enter');
-        assert.strictEqual(this.dateBox.option('opened'), false, 'popup is hidden');
-
-        const selectedDate = this.dateBox.option('value');
-        assert.strictEqual(selectedDate.getHours(), 6, 'hours is right');
-        assert.strictEqual(selectedDate.getMinutes(), 0, 'minutes is right');
-    });
-
-    QUnit.test('apply contoured date on enter for date and datetime mode', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
-
-        this.dateBox = this.$dateBox
-            .dxDateBox({
+        QUnit.test('pressing tab should set focus on today button in popup', function(assert) {
+            this.dateBox.option({
                 pickerType: 'calendar',
                 type: 'date',
                 applyValueMode: 'useButtons',
-                focusStateEnabled: true,
-                min: new Date(2008, 6, 8, 4, 30),
-                value: new Date(2008, 7, 8, 5, 0),
-                max: new Date(2008, 9, 8, 6, 0),
                 opened: true
-            })
-            .dxDateBox('instance');
+            });
 
-        const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        $($input).trigger($.Event('keydown', { key: 'ArrowUp' }));
-        $($input).trigger($.Event('keydown', { key: 'ArrowDown' }));
-        $($input).trigger($.Event('keydown', { key: 'ArrowUp' }));
-        $($input).trigger($.Event('keydown', { key: 'Enter' }));
+            $input
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                }));
 
-        assert.equal(this.dateBox.option('opened'), false, 'popup is hidden');
-
-        const selectedDate = this.dateBox.option('value');
-        assert.equal(selectedDate.getDate(), 1, 'day is right');
-    });
-
-    QUnit.test('Enter key press prevents default when popup in opened', function(assert) {
-        assert.expect(1);
-
-        let prevented = 0;
-
-        const $dateBox = $('<div>').appendTo('body').dxDateBox({
-            pickerType: 'calendar',
-            focusStateEnabled: true,
-            value: new Date(2015, 5, 13),
-            opened: true
+            const $todayButton = this.dateBox._popup.$wrapper().find(TODAY_BUTTON_SELECTOR);
+            assert.ok($todayButton.hasClass(STATE_FOCUSED_CLASS));
         });
 
-        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
+        QUnit.test('pressing tab should set focus on first item in popup with custom items', function(assert) {
+            this.dateBox.option({
+                pickerType: 'calendar',
+                type: 'date',
+                applyValueMode: 'useButtons',
+                opened: true,
+                dropDownOptions: {
+                    toolbarItems: [{
+                        widget: 'dxButton',
+                        toolbar: 'top',
+                        location: 'before',
+                        options: {
+                            text: 'Button',
+                        },
+                    },
+                    {
+                        widget: 'dxTextBox',
+                        toolbar: 'bottom',
+                        location: 'before',
+                        options: {
+                            text: 'Text box',
+                        },
+                    }],
+                },
+            });
+            const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        try {
-            $($dateBox).on('keydown', e => {
+            $input
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                }));
+
+            const $firstItem = this.dateBox._popup.$wrapper().find(BUTTON_SELECTOR);
+            assert.ok($firstItem.hasClass(STATE_FOCUSED_CLASS));
+        });
+
+        QUnit.test('pressing tab + shift should set focus on last item in popup with custom items', function(assert) {
+            this.dateBox.option({
+                pickerType: 'calendar',
+                type: 'date',
+                applyValueMode: 'useButtons',
+                opened: true,
+                dropDownOptions: {
+                    toolbarItems: [{
+                        widget: 'dxButton',
+                        toolbar: 'top',
+                        location: 'before',
+                        options: {
+                            text: 'Button',
+                        },
+                    },
+                    {
+                        widget: 'dxTextBox',
+                        toolbar: 'bottom',
+                        location: 'before',
+                        options: {
+                            text: 'Text box',
+                        },
+                    }],
+                },
+            });
+            const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            $input
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                    shiftKey: true
+                }));
+
+            const $lastItem = this.dateBox._popup.$wrapper().find(TEXTBOX_SELECTOR);
+            assert.ok($lastItem.hasClass(STATE_FOCUSED_CLASS));
+        });
+
+        QUnit.test('Home and end key press prevent default when popup in opened (T587313)', function(assert) {
+            assert.expect(1);
+
+            let prevented = 0;
+
+            this.dateBox.option('opened', true);
+
+            this.$dateBox.on('keydown', (e) => {
                 if(e.isDefaultPrevented()) {
                     prevented++;
                 }
             });
 
-            keyboard.keyDown('enter');
-            assert.equal(prevented, 1, 'defaults prevented on enter key press');
+            this.keyboard.keyDown('home');
+            this.keyboard.keyDown('end');
 
-        } finally {
-            $dateBox.remove();
-        }
-    });
-
-    QUnit.testInActiveWindow('the \'shift+tab\' key press leads to the cancel button focus if the input is focused', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
-        this.dateBox.option({
-            pickerType: 'calendar',
-            type: 'datetime',
-            opened: true,
-            applyValueMode: 'useButtons'
+            assert.equal(prevented, 0, 'defaults prevented on home and end keys');
         });
 
-        const $input = this.$dateBox.find('.' + TEXTEDITOR_INPUT_CLASS);
+        QUnit.test('Home and end key press does not prevent default when popup in not opened (T587313)', function(assert) {
+            assert.expect(1);
 
-        $input
-            .focus()
-            .trigger($.Event('keydown', {
-                key: 'Tab',
-                shiftKey: true
-            }));
+            let prevented = 0;
 
-        const $cancelButton = this.dateBox._popup.$wrapper().find('.dx-button.dx-popup-cancel');
-        assert.ok($cancelButton.hasClass('dx-state-focused'), 'cancel button is focused');
-    });
+            this.dateBox.option('opened', false);
 
-    QUnit.test('Home and end key press prevent default when popup in opened (T587313)', function(assert) {
-        assert.expect(1);
+            this.$dateBox.on('keydown', (e) => {
+                if(e.isDefaultPrevented()) {
+                    prevented++;
+                }
+            });
 
-        let prevented = 0;
+            this.keyboard.keyDown('home');
+            this.keyboard.keyDown('end');
 
-        this.dateBox.option('opened', true);
+            assert.equal(prevented, 0, 'defaults has not prevented on home and end keys');
+        });
 
-        this.$dateBox.on('keydown', (e) => {
-            if(e.isDefaultPrevented()) {
-                prevented++;
+        QUnit.testInActiveWindow('Unsupported key handlers must be processed correctly', function(assert) {
+            this.dateBox.option({
+                pickerType: 'list',
+                type: 'time'
+            });
+
+            const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input);
+
+            this.dateBox.focus();
+
+            let isNoError = true;
+
+            try {
+                keyboard
+                    .press('down')
+                    .press('up')
+                    .press('right')
+                    .press('left');
+            } catch(e) {
+                isNoError = false;
             }
+
+            assert.ok(isNoError, 'key handlers processed without errors');
         });
 
-        this.keyboard.keyDown('home');
-        this.keyboard.keyDown('end');
-
-        assert.equal(prevented, 0, 'defaults prevented on home and end keys');
-    });
-
-    QUnit.test('Home and end key press does not prevent default when popup in not opened (T587313)', function(assert) {
-        assert.expect(1);
-
-        let prevented = 0;
-
-        this.dateBox.option('opened', false);
-
-        this.$dateBox.on('keydown', (e) => {
-            if(e.isDefaultPrevented()) {
-                prevented++;
-            }
-        });
-
-        this.keyboard.keyDown('home');
-        this.keyboard.keyDown('end');
-
-        assert.equal(prevented, 0, 'defaults has not prevented on home and end keys');
-    });
-
-    QUnit.testInActiveWindow('Unsupported key handlers must be processed correctly', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
-
-        this.dateBox.option({
-            pickerType: 'list',
-            type: 'time'
-        });
-
-        const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
-
-        this.dateBox.focus();
-
-        let isNoError = true;
-
-        try {
-            keyboard
-                .press('down')
-                .press('up')
-                .press('right')
-                .press('left');
-        } catch(e) {
-            isNoError = false;
-        }
-
-        assert.ok(isNoError, 'key handlers processed without errors');
-    });
-
-    QUnit.test('Pressing escape when focus \'today\' button must hide the popup', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
-
-        const escapeKeyDown = $.Event('keydown', { key: 'Escape' });
-        this.dateBox.option({
-            type: 'date',
-            pickerType: 'calendar',
-            applyValueMode: 'useButtons'
-        });
-        this.dateBox.open();
-
-        $(this.dateBox.content())
-            .parent()
-            .find('.dx-button-today')
-            .trigger(escapeKeyDown);
-
-        assert.ok(!this.dateBox.option('opened'));
-    });
-
-    [
-        { editorName: 'hour', editorIndex: 0 },
-        { editorName: 'minute', editorIndex: 1 },
-        { editorName: 'period', editorIndex: 2 }
-    ].forEach(({ editorName, editorIndex }) => {
-        QUnit.test(`Pressing escape when focus the ${editorName} editor must hide the popup`, function(assert) {
+        QUnit.test('Pressing escape when focus \'today\' button must hide the popup', function(assert) {
             const escapeKeyDown = $.Event('keydown', { key: 'Escape' });
             this.dateBox.option({
+                type: 'date',
                 pickerType: 'calendar',
-                type: 'datetime'
+                applyValueMode: 'useButtons'
             });
             this.dateBox.open();
 
             $(this.dateBox.content())
-                .find(`.${TEXTEDITOR_INPUT_CLASS}`)
-                .eq(editorIndex)
+                .parent()
+                .find('.dx-button-today')
                 .trigger(escapeKeyDown);
 
             assert.ok(!this.dateBox.option('opened'));
         });
-    });
 
-    QUnit.test('DateBox value is applied after the second press of the "Enter" key', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
+        [
+            { editorName: 'hour', editorIndex: 0 },
+            { editorName: 'minute', editorIndex: 1 },
+            { editorName: 'period', editorIndex: 2 }
+        ].forEach(({ editorName, editorIndex }) => {
+            QUnit.test(`Pressing escape when focus the ${editorName} editor must hide the popup`, function(assert) {
+                const escapeKeyDown = $.Event('keydown', { key: 'Escape' });
+                this.dateBox.option({
+                    pickerType: 'calendar',
+                    type: 'datetime'
+                });
+                this.dateBox.open();
 
-        this.dateBox.option({
-            pickerType: 'calendar',
-            type: 'datetime',
-            applyValueMode: 'useButtons',
-            focusStateEnabled: true,
-            value: null,
-            opened: true
+                $(this.dateBox.content())
+                    .find(`.${TEXTEDITOR_INPUT_CLASS}`)
+                    .eq(editorIndex)
+                    .trigger(escapeKeyDown);
+
+                assert.ok(!this.dateBox.option('opened'));
+            });
         });
 
-        const instance = this.dateBox;
-        const $content = $(instance.content());
-        const $input = $(instance.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
-        function getValue() {
-            return instance.option('value');
-        }
-        function calendarHasSelectedDate() {
-            return $content.find('.dx-calendar-selected-date').length > 0;
-        }
+        QUnit.test('DateBox value is applied after the second press of the "Enter" key', function(assert) {
+            this.dateBox.option({
+                pickerType: 'calendar',
+                type: 'datetime',
+                applyValueMode: 'useButtons',
+                focusStateEnabled: true,
+                value: null,
+                opened: true
+            });
 
-        assert.notOk(getValue());
-        assert.notOk(calendarHasSelectedDate());
+            const instance = this.dateBox;
+            const $content = $(instance.content());
+            const $input = $(instance.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input);
+            function getValue() {
+                return instance.option('value');
+            }
+            function calendarHasSelectedDate() {
+                return $content.find('.dx-calendar-selected-date').length > 0;
+            }
 
-        keyboard.press('enter');
+            assert.notOk(getValue());
+            assert.notOk(calendarHasSelectedDate());
 
-        assert.notOk(getValue(), 'value does not applied to the DateBox after the first press of the "Enter" key');
-        assert.ok(calendarHasSelectedDate(), 'but Calendar got selected date');
+            keyboard.press('enter');
 
-        keyboard.press('enter');
-        assert.ok(getValue(), 'DateBox got selected value after the second press of the "Enter" key');
+            assert.notOk(getValue(), 'value does not applied to the DateBox after the first press of the "Enter" key');
+            assert.ok(calendarHasSelectedDate(), 'but Calendar got selected date');
+
+            keyboard.press('enter');
+            assert.ok(getValue(), 'DateBox got selected value after the second press of the "Enter" key');
+        });
     });
-});
+}
 
 QUnit.module('Popup open state', () => {
     ['date', 'time'].forEach(type => {

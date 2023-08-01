@@ -5444,7 +5444,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
 
         keyboardMock($element.find(toSelector(TEXTEDITOR_INPUT_CLASS)), true)
             .focus()
-            .press('tab');
+            .keyDown('tab');
 
         assert.ok(instance.option('opened'), 'popup is still opened');
         assert.ok($applyButton.hasClass(STATE_FOCUSED_CLASS), 'the apply button is focused');
