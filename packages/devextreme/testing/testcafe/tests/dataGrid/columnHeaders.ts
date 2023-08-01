@@ -5,9 +5,9 @@ import { changeTheme } from '../../helpers/changeTheme';
 import { Themes } from './helpers/themes';
 
 fixture.disablePageReloads`Column Headers`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../containerAllThemes.html'));
 
-[Themes.genericLight, Themes.materialBlue].forEach((theme) => {
+Object.values(Themes).forEach((theme) => {
   test(`Checking column headers via aXe - ${theme}`, async (t) => {
     await a11yCheck(t);
   }).before(async () => {
@@ -23,6 +23,6 @@ fixture.disablePageReloads`Column Headers`
       showBorders: true,
     })
   }).after(async () => {
-    await changeTheme('generic.light');
+    await changeTheme(Themes.genericLight);
   });
 });
