@@ -10,7 +10,7 @@ on:
     branches: [23_2]
 
 env:
-  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+  NX_SKIP_NX_CACHE: ${{ github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache') }}
 
 jobs:
   build:
