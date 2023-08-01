@@ -2,11 +2,12 @@ import { a11yCheck } from '../../helpers/accessibilityUtils';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
+import { Themes } from './helpers/themes';
 
 fixture.disablePageReloads`Column Headers`
   .page(url(__dirname, '../container.html'));
 
-['generic.light', 'material.blue.light'].forEach((theme) => {
+[Themes.genericLight, Themes.materialBlue].forEach((theme) => {
   test(`Checking column headers via aXe - ${theme}`, async (t) => {
     await a11yCheck(t);
   }).before(async () => {
