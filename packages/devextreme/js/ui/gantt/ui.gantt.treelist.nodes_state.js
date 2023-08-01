@@ -33,7 +33,6 @@ export class GanttTreeListNodesState {
         this._resetHash();
     }
     applyNodes(nodes, rootValue) {
-        nodes = nodes.filter(node => node);
         if(this._rootValue !== rootValue) {
             this._resetHash();
             this._rootValue = rootValue;
