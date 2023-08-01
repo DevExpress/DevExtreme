@@ -9,7 +9,7 @@ fixture.disablePageReloads`DateRangeBox keyboard navigation`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
 
-const initialValue = ['2021/10/17', '2021/11/24'];
+const initialValue = [new Date('2021/10/17'), new Date('2021/11/24')];
 
 const getDateByOffset = (date: Date | string, offset: number) => {
   const resultDate = new Date(date);
