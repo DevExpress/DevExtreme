@@ -237,7 +237,7 @@ export class GanttTreeList {
     }
     getAllNodes() {
         const store = this._treeList?.getDataSource()?.store();
-        if(!store || !this._treeList.getNodeByKey) {
+        if(!store || !this._treeList?.getNodeByKey) {
             return [];
         }
 
