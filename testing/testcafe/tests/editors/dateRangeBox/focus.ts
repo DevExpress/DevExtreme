@@ -263,7 +263,7 @@ test('onFocusIn should be called only on focus of startDate input', async (t) =>
   })();
 
   return createWidget('dxDateRangeBox', {
-    value: ['2021/09/17', '2021/10/24'],
+    value: [new Date('2021/09/17'), new Date('2021/10/24')],
     openOnFieldClick: true,
     width: 500,
     onFocusIn() {
@@ -423,7 +423,7 @@ test('EndDateBox should be stay focused after close popup by click on drop down 
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .ok();
 }).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2021/09/17', '2021/10/24'],
+  value: [new Date('2021/09/17'), new Date('2021/10/24')],
   openOnFieldClick: false,
 }));
 
