@@ -243,7 +243,7 @@ export class GanttTreeList {
 
         const keyGetter = compileGetter(store.key());
         return store._array
-            .map(item => this.treeList.getNodeByKey(keyGetter(item)))
+            .map(item => this._treeList.getNodeByKey(keyGetter(item)))
             .filter(item => !!item);
     }
     isExpandedStateChanged(keys1, keys2) {
