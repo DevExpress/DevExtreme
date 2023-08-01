@@ -5,7 +5,7 @@ import { getWidth, setWidth } from '@js/core/utils/size';
 import Sortable from '@js/ui/sortable';
 
 import gridCoreUtils from '../m_utils';
-import { CLASSES } from './const';
+import { ATTRIBUTES, CLASSES } from './const';
 import { GridCoreRowDraggingDom } from './dom';
 
 const RowDraggingExtender = {
@@ -26,18 +26,19 @@ const RowDraggingExtender = {
     const columnsController = this._columnsController;
     const isHandleColumnVisible = allowReordering && rowDragging.showDragIcons;
 
-    columnsController && columnsController.addCommandColumn({
+    columnsController?.addCommandColumn({
       type: 'drag',
       command: 'drag',
       visibleIndex: -2,
       alignment: 'center',
+      elementAttr: [{ name: ATTRIBUTES.dragCell, value: '' }],
       cssClass: CLASSES.commandDrag,
       width: 'auto',
       cellTemplate: this._getHandleTemplate(),
       visible: isHandleColumnVisible,
     });
 
-    columnsController.columnOption('type:drag', 'visible', isHandleColumnVisible);
+    columnsController?.columnOption('type:drag', 'visible', isHandleColumnVisible);
   },
 
   _renderContent() {
