@@ -185,6 +185,14 @@ export default class DataGrid extends Widget {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
   }
 
+  getConfirmDeletionButton(): Selector {
+    return this.body.find('[aria-label=\'Yes\']');
+  }
+
+  getCancelDeletionButton(): Selector {
+    return this.body.find('[aria-label=\'No\']');
+  }
+
   getRevertTooltip(): Selector {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.revertTooltip)}`);
   }
