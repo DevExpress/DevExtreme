@@ -4108,3 +4108,37 @@ QUnit.module('Aria accessibility', {
         this.checkInputAttributes('aria-activedescendant', newContouredCellID);
     });
 });
+
+QUnit.module('isDirty', moduleConfig, () => {
+    QUnit.test('should be false by default', function(assert) {
+        assert.strictEqual(this.instance.option('isDirty'), false);
+    });
+
+    QUnit.test('should be set to true after value changed', function(assert) {
+        this.instance.option('value', ['2023/02/02', null]);
+
+        assert.strictEqual(this.instance.option('isDirty'), true);
+    });
+
+    QUnit.test('should be false if value updated to initial', function(assert) {
+        const initialValue = ['2023/02/02', '2023/01/01'];
+        this.reinit({ value: initialValue });
+
+        this.instance.option('value', ['2023/02/02', null]);
+        this.instance.option('value', initialValue);
+
+        assert.strictEqual(this.instance.option('isDirty'), false);
+    });
+
+    QUnit.test('should be set to true after startDateBox value changed', function(assert) {
+        this.instance.getStartDateBox().option('value', '2023/03/03');
+
+        assert.strictEqual(this.instance.option('isDirty'), true);
+    });
+
+    QUnit.test('should be set to true after endDateBox value changed', function(assert) {
+        this.instance.getEndDateBox().option('value', '2023/03/03');
+
+        assert.strictEqual(this.instance.option('isDirty'), true);
+    });
+});

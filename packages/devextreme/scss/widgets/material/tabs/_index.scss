@@ -19,22 +19,15 @@ $material-tabs-nav-button-background: color.change($button-default-hover-bg, $al
 .dx-tabs {
   padding: 0;
   background-color: $material-tabs-background;
-  position: relative;
 
   .dx-inkripple {
     overflow: hidden;
   }
 }
 
-.dx-tabs-nav-buttons .dx-tabs-scrollable {
-  margin-right: 36px;
-  margin-left: 36px;
-}
-
 .dx-tabs-nav-button {
   border: none;
   background-color: $tabs-tab-bg;
-  position: absolute;
   height: $material-tab-height;
   border-radius: 0;
   box-shadow: none;
