@@ -226,6 +226,12 @@ export class ColumnsView extends viewWithColumnStateMixin {
       $cell.addClass(column.cssClass);
     }
 
+    if (Array.isArray(column.elementAttr)) {
+      column.elementAttr.forEach(({ name, value }) => {
+        $cell.attr(name, value);
+      });
+    }
+
     if (column.command === 'expand') {
       $cell.addClass(column.cssClass);
       $cell.addClass(this.addWidgetPrefix(GROUP_SPACE_CLASS));
@@ -1025,9 +1031,11 @@ export class ColumnsView extends viewWithColumnStateMixin {
     const result: number[] = [];
     const cellElements = $cellElements.toArray();
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     (cellElements as HTMLElement[]).forEach((cell) => {
       let width = cell.offsetWidth;
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       if ((cell as any).getBoundingClientRect) {
         const rect = getBoundingRect(cell);
 
