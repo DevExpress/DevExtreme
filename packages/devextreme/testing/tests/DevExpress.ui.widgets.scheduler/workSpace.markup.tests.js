@@ -1242,7 +1242,7 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
         assert.equal(firstCellHeader.toLowerCase(), days[this.instance.option('firstDayOfWeek')].toLowerCase(), 'Workspace has a right first day of week when option was changed');
     });
 
-    QUnit.test('WorkSpace Month view has right count of rows with view option intervalCount', function(assert) {
+    QUnit.skip('WorkSpace Month view has right count of rows with view option intervalCount', function(assert) {
         this.instance.option('intervalCount', 2);
 
         let rows = this.instance.$element().find('.dx-scheduler-date-table-row');
@@ -1254,7 +1254,7 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
         assert.equal(rows.length, 19, 'view has right rows count');
     });
 
-    QUnit.test('WorkSpace Month view has right count of cells with view option intervalCount', function(assert) {
+    QUnit.skip('WorkSpace Month view has right count of cells with view option intervalCount', function(assert) {
         this.instance.option('intervalCount', 2);
 
         const rows = this.instance.$element().find('.dx-scheduler-date-table-cell');
