@@ -5,9 +5,9 @@
 $generic-dropdownbutton-icon-spindown-size: null !default;
 
 @if $size == "default" {
-  $material-dropdownbutton-icon-spindown-size: 18px;
+  $generic-dropdownbutton-icon-spindown-size: 18px;
 }
 
 @else if $size == "compact" {
-  $material-dropdownbutton-icon-spindown-size: 16px;
+  $generic-dropdownbutton-icon-spindown-size: 16px;
 }

@@ -13,7 +13,7 @@
 @include dx-dropdownbutton(
   10px,
   4px,
-  $generic-dropdownbutton-icon-spindown-size: 18px,
+  $generic-dropdownbutton-icon-spindown-size,
 );
 
 .dx-dropdownbutton-popup-wrapper {

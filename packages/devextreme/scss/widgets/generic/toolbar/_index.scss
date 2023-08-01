@@ -62,7 +62,9 @@
   }
 
   .dx-toolbar-hidden-button {
-    @include dx-button-mode-text-styling();
+    .dx-button {
+      @include dx-button-mode-text-styling();
+    }
   }
 
   .dx-toolbar-hidden-button-group {
