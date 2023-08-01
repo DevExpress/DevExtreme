@@ -11,7 +11,6 @@ $scrollable-bg: $base-bg !default;
 * $type color
 */
 $scrollable-scroll-bg: null !default;
-$scrollable-scroll-shadow-color: transparent !default;
 $scrollable-scrollbar-bg: transparent !default;
 
 @if $mode == "light" {
