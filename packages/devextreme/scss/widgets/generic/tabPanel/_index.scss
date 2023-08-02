@@ -1,114 +1,23 @@
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
+
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../tabs/old/sizes" as *;
-@use "../tabs/old/colors" as *;
-@use "../tabs/old/index" as *;
+
+@use "../tabs/variables/colors" as *;
+@use "../tabs/variables/borders" as *;
+@use "../tabs/variables/sizes" as *;
+@use "../tabs/mixins" as *;
+@use "../tabs" as *;
+
 @use "../../base/tabPanel";
+
+@use "borders" as *;
+@use "mixins" as *;
 
 // adduse
 
-$tab-selected-not-focused-right-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
-$tab-selected-not-focused-right-rtl-shadow: $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
-$tab-selected-not-focused-left-right-shadow: $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-right $tabs-border-color;
-$tab-selected-not-focused-left-shadow: $generic-tabpanel-inset-shadow-left $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
-$tab-selected-not-focused-left-rtl-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color;
-$tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-right $tabs-border-color, $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-left $tabs-border-color;
-
-
-@mixin tabpanel-tab-color-mixin() {
-  .dx-tab {
-    color: $tabs-border-color;
-
-    .dx-tab-content {
-      color: $tabs-tab-color;
-    }
-  }
-}
-
-
-@mixin tabpanel-tabs-shadow-mixin($accent-color) {
-  .dx-tabs {
-    box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-left;
-  }
-
-  .dx-tab {
-    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color;
-
-    &.dx-state-active.dx-state-focused {
-      box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color, $generic-tabpanel-inset-shadow-bottom $tabs-border-color;
-    }
-  }
-
-  $tabs-expanded: '.dx-tabs-expanded .dx-tab:not(.dx-state-focused, .dx-tab-selected)';
-
-  .dx-tab,
-  #{$tabs-expanded}:only-child {
-    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color;
-  }
-
-  #{$tabs-expanded}:last-of-type {
-    box-shadow: $generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color;
-  }
-
-  #{$tabs-expanded}:first-of-type {
-    @include tabpanel-tab-shadow-mixin(
-      #{$generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $tabs-border-color},
-      #{$generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $tabs-border-color}
-    );
-  }
-
-  .dx-tabs-stretched#{$tabs-expanded}:last-of-type {
-    @include tabpanel-tab-shadow-mixin(
-      #{$generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right $tabs-border-color},
-      #{$generic-tabpanel-inset-shadow-top $tabs-border-color, $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left $tabs-border-color}
-    );
-  }
-}
-
-
-@mixin tabpanel-shadow-mixin($accent-color, $target-class) {
-  & > .dx-tabpanel-tabs {
-    .dx-tab {
-      &.#{$target-class} {
-        box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color;
-      }
-    }
-
-    @include tabpanel-tabs-shadow-mixin($accent-color);
-    @include tabpanel-navigation-shadow-mixin($accent-color);
-  }
-
-  &.dx-disabled-focused-tab {
-    & > .dx-tabpanel-tabs {
-      @include tabpanel-tabs-shadow-mixin($tabs-border-color);
-    }
-
-    @include tabpanel-navigation-shadow-mixin($tabs-border-color);
-  }
-}
-
-
-// TODO: Reset Tabs Borders
-.dx-tabpanel { // stylelint-disable-line no-duplicate-selectors
-  @include dx-tabs-old();
-
-  .dx-tabs-wrapper,
-  .dx-tabs-scrollable,
-  .dx-tabpanel-tabs {
-    border: none;
-  }
-
-  .dx-tabs-wrapper {
-    background-color: transparent;
-  }
-
-  .dx-tab::after {
-    content: none;
-  }
-}
 
 .dx-rtl.dx-tabpanel,
 .dx-tabpanel {
@@ -116,9 +25,109 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
     .dx-tab {
       max-width: 140px;
       padding: $generic-tabpanel-tabs-item-padding;
-    }
 
-    @include tabpanel-tab-color-mixin();
+      &::after {
+        z-index: 2;
+      }
+
+      &.dx-state-disabled {
+        &::after {
+          z-index: 3;
+        }
+      }
+
+      &.dx-state-hover {
+        @include dx-tabpanel-tab-border-mixin(
+          null,
+          $generic-tabpanel-tab-border-hover-bottom,
+          null,
+          null,
+        );
+      }
+
+      &.dx-tab-selected,
+      &.dx-tab-selected:first-child,
+      &.dx-tab-selected:last-child {
+        @include dx-tabpanel-tab-border-mixin(null, none, null, null);
+
+        border-bottom: $generic-tabpanel-tab-border-selected-bottom;
+      }
+
+      &.dx-state-active,
+      &.dx-state-active:first-child,
+      &.dx-state-active:last-child {
+        @include dx-tabpanel-tab-border-mixin(
+          null,
+          $generic-tabpanel-tab-border-active-bottom,
+          null,
+          null,
+        );
+      }
+
+      &.dx-state-focused:not(.dx-state-disabled) {
+        @include dx-tabpanel-tab-border-mixin(null, none, null, null);
+
+        border-bottom: $generic-tabpanel-tab-border-focused-bottom;
+      }
+
+      &.dx-state-disabled:not(.dx-state-focused) {
+        @include dx-tabpanel-tab-border-mixin(null, none, null, null);
+
+        border-bottom: $generic-tabs-border;
+      }
+
+      &.dx-state-disabled.dx-state-focused {
+        @include dx-tabpanel-tab-border-mixin(null, none, null, null);
+
+        border-bottom: $generic-tabs-border-focused-disabled-bottom;
+      }
+
+      &:first-child {
+        &.dx-state-hover {
+          @include dx-tabpanel-tab-border-mixin(
+            null,
+            $generic-tabpanel-tab-border-hover-bottom,
+            $generic-tabs-border-transparent,
+            null,
+          );
+        }
+
+        &.dx-state-focused {
+          @include dx-tabpanel-tab-border-mixin(
+            null,
+            none,
+            $generic-tabpanel-tab-border-focused-left,
+            null,
+          );
+        }
+      }
+
+      &:last-child {
+        &.dx-state-hover {
+          @include dx-tabpanel-tab-border-mixin(
+            null,
+            $generic-tabpanel-tab-border-hover-bottom,
+            null,
+            $generic-tabs-border-transparent,
+          );
+        }
+
+        &.dx-state-focused {
+          @include dx-tabpanel-tab-border-mixin(
+            null,
+            none,
+            null,
+            $generic-tabpanel-tab-border-focused-right,
+          );
+        }
+      }
+
+      &.dx-tab-selected,
+      &.dx-state-focused,
+      &.dx-state-disabled {
+        margin-bottom: -$generic-tabs-border-width;
+      }
+    }
 
     .dx-tabs-nav-buttons {
       .dx-tab {
@@ -127,39 +136,83 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
     }
   }
 
+  .dx-tabs-wrapper {
+    border: none;
+    border-block-start: $generic-tabs-border;
+    border-block-end: $generic-tabs-border;
+  }
+
   &:not(.dx-empty-collection) {
     .dx-multiview-wrapper {
       border-top: none;
     }
   }
 
-  @include tabpanel-shadow-mixin($tabs-border-color, 'dx-tab-selected');
+  .dx-tabs-scrollable {
+    @include dx-tabs-border-mixin(
+      none,
+      none,
+      $generic-tabs-border-width solid,
+      $generic-tabs-border-width solid,
+    );
+
+    &::after {
+      top: 0;
+      bottom: 0;
+    }
+  }
 
   &.dx-state-focused {
-    @include tabpanel-shadow-mixin($tabs-focused-border-color, 'dx-state-focused');
+    &.dx-disabled-focused-tab {
+      .dx-tabs-wrapper {
+        border-block-end: $generic-tabs-border;
+      }
+  
+      .dx-tabs-nav-button {
+        border-block-end: $generic-tabs-border;
+      }
+
+      .dx-tab {
+        &.dx-state-disabled:not(.dx-state-focused) {
+          @include dx-tabpanel-tab-border-mixin(null, none, null, null);
+
+          border-bottom: $generic-tabs-border;
+        }
+      }
+    }
+
+    .dx-tabs-wrapper {
+      border-block-end: $generic-tabs-border-focus;
+    }
+
+    .dx-tabs-nav-button {
+      border-block-end: $generic-tabs-border-focus;
+    }
 
     .dx-tab {
-      &.dx-state-focused.dx-state-disabled {
-        box-shadow: $generic-tabpanel-inset-shadow-bottom $tabs-focused-disabled-border-color, $generic-tabpanel-inset-shadow-top $tabs-focused-disabled-border-color, $generic-tabpanel-inset-shadow-right $tabs-focused-disabled-border-color, $generic-tabpanel-inset-shadow-left $tabs-focused-disabled-border-color;
+      &.dx-focused-disabled-next-tab {
+        &::after {
+          border-inline-end: none;
+        }
+      }
+
+      &.dx-focused-disabled-prev-tab {
+        &::after {
+          border-inline-start: none;
+        }
+      }
+
+      &.dx-state-disabled:not(.dx-state-focused) {
+        @include dx-tabpanel-tab-border-mixin(null, none, null, null);
+
+        border-bottom: $generic-tabs-border-focus;
       }
     }
+  }
 
-    .dx-tab.dx-tab-selected {
-      &:not(.dx-state-focused) {
-        @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-left-right-shadow, $tab-selected-not-focused-left-right-rtl-shadow);
-      }
-    }
-
-    .dx-tab.dx-state-focused + .dx-tab.dx-tab-selected {
-      &:not(.dx-state-focused) {
-        @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-right-shadow, $tab-selected-not-focused-right-rtl-shadow);
-      }
-    }
-
-    .dx-tab.dx-tab-selected.dx-focused-next-tab {
-      &:not(.dx-state-focused) {
-        @include tabpanel-tab-shadow-mixin($tab-selected-not-focused-left-shadow, $tab-selected-not-focused-left-rtl-shadow);
-      }
+  &:not(.dx-empty-collection) {
+    .dx-multiview-wrapper {
+      border-top: none;
     }
   }
 

@@ -1,0 +1,13 @@
+@mixin dx-tabpanel-tab-border-mixin(
+  $border-top,
+  $border-bottom,
+  $border-left,
+  $border-right,
+) {
+  &::after {
+    border-block-start: $border-top;
+    border-block-end: $border-bottom;
+    border-inline-start: $border-left;
+    border-inline-end: $border-right;
+  }
+}
