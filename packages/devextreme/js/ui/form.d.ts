@@ -237,6 +237,13 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     onFieldDataChanged?: ((e: FieldDataChangedEvent) => void);
     /**
      * @docid
+     * @type_function_param1 editorsToValuesMap:object
+     * @publicName reset(editorsToValuesMap)
+     * @public
+     */
+    reset(editorsToValuesMap?: object): void;
+    /**
+     * @docid
      * @default "optional"
      * @public
      */

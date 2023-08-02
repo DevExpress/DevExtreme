@@ -16698,6 +16698,10 @@ declare module DevExpress.ui {
       e: DevExpress.ui.dxForm.FieldDataChangedEvent
     ) => void;
     /**
+     * [descr:dxFormOptions.reset(editorsToValuesMap)]
+     */
+    reset(editorsToValuesMap?: object): void;
+    /**
      * [descr:dxFormOptions.optionalMark]
      */
     optionalMark?: string;
@@ -29494,6 +29498,11 @@ declare module DevExpress.ui {
      * [descr:Editor.reset()]
      */
     reset(): void;
+
+    /**
+     * [descr:Editor.reset(value)]
+     */
+    resetNew(value?: unknown): void;
   }
   module Editor {
     /**
