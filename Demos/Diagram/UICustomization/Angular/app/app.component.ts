@@ -22,10 +22,9 @@ export class AppComponent {
   @ViewChild(DxDiagramComponent, { static: false }) diagram: DxDiagramComponent;
 
   constructor(http: HttpClient) {
-    http.get('../../../../data/diagram-flow.json').subscribe((data) => {
-      this.diagram.instance.import(JSON.stringify(data));
-    }, (err) => {
-      throw 'Data Loading Error';
+    http.get('../../../../data/diagram-flow.json').subscribe({
+      next: (data) => { this.diagram.instance.import(JSON.stringify(data)); },
+      error: (err) => { throw 'Data Loading Error'; },
     });
   }
 

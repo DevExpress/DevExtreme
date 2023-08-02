@@ -27,10 +27,9 @@ export class AppComponent {
   constructor(service: Service, http: HttpClient) {
     this.employees = service.getEmployees();
 
-    http.get('../../../../data/diagram-employees.json').subscribe((data) => {
-      this.diagram.instance.import(JSON.stringify(data));
-    }, (err) => {
-      throw 'Data Loading Error';
+    http.get('../../../../data/diagram-employees.json').subscribe({
+      next: (data) => { this.diagram.instance.import(JSON.stringify(data)); },
+      error: (err) => { throw 'Data Loading Error'; },
     });
   }
 }
