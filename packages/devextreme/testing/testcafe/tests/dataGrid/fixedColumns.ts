@@ -244,3 +244,88 @@ safeSizeTest('Fixed to the right columns should appear when any column has undef
     { dataField: 'Column8', width: 270 },
   ],
 }));
+
+// T1180834
+test('Hovering over a row should work correctly after scrolling when there is a fixed column with a cellTemplate and virtual scrolling is used (React)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  let dataRow = dataGrid.getDataRow(1);
+  let fixedDataRow = dataGrid.getDataRow(1);
+
+  // act
+  await t.hover(dataRow.element);
+
+  // assert
+  await takeScreenshot('T1180834-grid-hover-row-after-scrolling-1.png', dataGrid.element);
+
+  await t
+    .expect(dataRow.isHovered)
+    .ok()
+    .expect(fixedDataRow.isHovered)
+    .ok();
+
+  // act
+  await dataGrid.scrollTo({ y: 300 });
+  dataRow = dataGrid.getDataRow(10);
+  await t.hover(dataRow.element);
+
+  // assert
+  fixedDataRow = dataGrid.getDataRow(10);
+
+  await takeScreenshot('T1180834-grid-hover-row-after-scrolling-2.png', dataGrid.element);
+
+  await t
+    .expect(dataRow.isHovered)
+    .ok()
+    .expect(fixedDataRow.isHovered)
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await createWidget('dxDataGrid', {
+    dataSource: [...new Array(60)].map((_, index) => ({ id: index, text1: `item1 ${index}`, text2: `item2 ${index}` })),
+    height: 500,
+    keyExpr: 'id',
+    renderAsync: false,
+    hoverStateEnabled: true,
+    templatesRenderAsynchronously: true,
+    columns: [
+      'id',
+      { dataField: 'text1', cellTemplate: '#test', fixed: true },
+      'text2',
+    ],
+    paging: {
+      enabled: false,
+    },
+    scrolling: {
+      useNative: false,
+      rowRenderingMode: 'virtual',
+    },
+    showBorders: true,
+  });
+
+  await t.wait(100);
+
+  // simulating async rendering in React
+  await ClientFunction(() => {
+    const dataGrid = ($('#container') as any).dxDataGrid('instance');
+
+    // eslint-disable-next-line no-underscore-dangle
+    dataGrid.getView('rowsView')._templatesCache = {};
+
+    // eslint-disable-next-line no-underscore-dangle
+    dataGrid._getTemplate = () => ({
+      render(options) {
+        setTimeout(() => {
+          ($(options.container) as any).append(($('<div/>') as any).text(options.model.value));
+          options.deferred?.resolve();
+        }, 100);
+      },
+    });
+
+    dataGrid.repaint();
+  })();
+
+  await t.wait(200);
+});

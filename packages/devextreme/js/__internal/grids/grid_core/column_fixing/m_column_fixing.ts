@@ -642,28 +642,25 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
 const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
   _detachHoverEvents() {
-    this._fixedTableElement && eventsEngine.off(this._fixedTableElement, 'mouseover mouseout', '.dx-data-row');
-    this._tableElement && eventsEngine.off(this._tableElement, 'mouseover mouseout', '.dx-data-row');
+    const element = this.element();
+
+    if (this._fixedTableElement && this._tableElement) {
+      eventsEngine.off(element, 'mouseover mouseout', '.dx-data-row');
+    }
   },
 
   _attachHoverEvents() {
-    const that = this;
-    const attachHoverEvent = function ($table) {
-      eventsEngine.on($table, 'mouseover mouseout', '.dx-data-row', that.createAction((args) => {
+    if (this._fixedTableElement && this._tableElement) {
+      eventsEngine.on(this.element(), 'mouseover mouseout', '.dx-data-row', this.createAction((args) => {
         const { event } = args;
-        const rowIndex = that.getRowIndex($(event.target).closest('.dx-row'));
+        const rowIndex = this.getRowIndex($(event.target).closest('.dx-row'));
         const isHover = event.type === 'mouseover';
 
         if (rowIndex >= 0) {
-          that._tableElement && that._getRowElements(that._tableElement).eq(rowIndex).toggleClass(HOVER_STATE_CLASS, isHover);
-          that._fixedTableElement && that._getRowElements(that._fixedTableElement).eq(rowIndex).toggleClass(HOVER_STATE_CLASS, isHover);
+          this._tableElement && this._getRowElements(this._tableElement).eq(rowIndex).toggleClass(HOVER_STATE_CLASS, isHover);
+          this._fixedTableElement && this._getRowElements(this._fixedTableElement).eq(rowIndex).toggleClass(HOVER_STATE_CLASS, isHover);
         }
       }));
-    };
-
-    if (that._fixedTableElement && that._tableElement) {
-      attachHoverEvent(that._fixedTableElement);
-      attachHoverEvent(that._tableElement);
     }
   },
 
@@ -845,9 +842,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     this.element().toggleClass(FIXED_COLUMNS_CLASS, isFixedColumns);
 
     if (this.option('hoverStateEnabled') && isFixedColumns) {
-      deferred.done(() => {
-        this._attachHoverEvents();
-      });
+      this._attachHoverEvents();
     }
 
     return deferred;
