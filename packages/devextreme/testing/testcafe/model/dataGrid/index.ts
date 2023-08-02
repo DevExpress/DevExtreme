@@ -500,6 +500,20 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiToggleKeyboardNavigation(value: boolean): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).option('keyboardNavigation.enabled', value),
+      {
+        dependencies: {
+          getInstance,
+          value,
+        },
+      },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
