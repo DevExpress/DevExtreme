@@ -15,7 +15,9 @@ fixture.disablePageReloads`Column Headers`
   Themes.materialBlueDark,
 ].forEach((theme) => {
   safeSizeTest(`Checking column headers via aXe - ${theme}`, async (t) => {
-    await a11yCheck(t);
+    await a11yCheck(t, {
+      'color-contrast': { enabled: true },
+    });
   }).before(async () => {
     await changeTheme(theme);
     return createWidget('dxDataGrid', {
