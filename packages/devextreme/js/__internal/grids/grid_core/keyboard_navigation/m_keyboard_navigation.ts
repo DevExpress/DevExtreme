@@ -278,6 +278,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       const isColumnResizing = !!columnsResizerController && columnsResizerController.isResizing();
       if (!isCurrentRowsViewClick && !isEditorOverlay && !isColumnResizing) {
         const targetInsideFocusedView = this._focusedView
+        // @ts-expect-error $target not fully typed
           ? $target.parents().filter(this._focusedView.element()).length > 0
           : false;
 
