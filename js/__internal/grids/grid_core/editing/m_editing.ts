@@ -55,6 +55,7 @@ import {
   INSERT_INDEX,
   LAST_NEW_ROW_POSITION,
   LINK_CLASS,
+  LINK_ICON_CLASS,
   METHOD_NAMES,
   PAGE_BOTTOM_NEW_ROW_POSITION,
   PAGE_TOP_NEW_ROW_POSITION,
@@ -2116,7 +2117,7 @@ class EditingControllerImpl extends modules.ViewController {
           $button.addClass(`dx-icon${iconType === 'dxIcon' ? '-' : ' '}${icon}`).attr('title', button.text);
         }
 
-        $button.addClass('dx-link-icon');
+        $button.addClass(LINK_ICON_CLASS);
         $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
 
         const localizationName = this.getButtonLocalizationNames()[button.name];
