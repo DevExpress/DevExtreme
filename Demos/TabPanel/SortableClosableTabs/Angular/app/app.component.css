@@ -9,14 +9,6 @@
   padding-left: 20px;
 }
 
-::ng-deep .dx-tab-content .dx-icon.dx-icon-close {
-  display: inline-block;
-  opacity: 0.6;
-  margin-right: 0;
-  margin-left: 7px;
-  font-size: 18px;
-}
-
 ::ng-deep .dx-sortable-dragging .dx-tab {
   box-sizing: border-box;
   text-align: center;
@@ -60,13 +52,23 @@
   line-height: 1.618;
 }
 
-::ng-deep .dx-theme-generic .dx-icon.dx-icon-close {
+::ng-deep .dx-tabpanel .dx-tab .dx-icon.dx-icon-close {
+  display: inline-block;
+  margin-right: 0;
+  margin-left: 7px;
+  opacity: 0.6;
+}
+
+::ng-deep .dx-theme-generic .dx-tabpanel .dx-tab .dx-icon.dx-icon-close {
   font-size: 15px;
 }
 
-::ng-deep .dx-theme-material .dx-tab-content span {
-  vertical-align: middle;
-  line-height: initial;
+::ng-deep .dx-theme-material .dx-tabpanel .dx-tab .dx-icon.dx-icon-close {
+  font-size: 18px;
+}
+
+::ng-deep .dx-theme-material .dx-tab-content {
+  flex-direction: row;
 }
 
 ::ng-deep .dx-theme-material .employeeNotes {

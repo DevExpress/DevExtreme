@@ -123,14 +123,6 @@ export default {
   padding-left: 20px;
 }
 
-.dx-tab-content .dx-icon.dx-icon-close {
-  display: inline-block;
-  opacity: 0.6;
-  margin-right: 0;
-  margin-left: 7px;
-  font-size: 18px;
-}
-
 .dx-sortable-dragging .dx-tab {
   box-sizing: border-box;
   text-align: center;
@@ -156,13 +148,23 @@ export default {
   line-height: 1.618;
 }
 
-.dx-theme-generic .dx-icon.dx-icon-close {
+.dx-tabpanel .dx-tab .dx-icon.dx-icon-close {
+  display: inline-block;
+  margin-right: 0;
+  margin-left: 7px;
+  opacity: 0.6;
+}
+
+.dx-theme-generic .dx-tabpanel .dx-tab .dx-icon.dx-icon-close {
   font-size: 15px;
 }
 
-.dx-theme-material .dx-tab-content span {
-  vertical-align: middle;
-  line-height: initial;
+.dx-theme-material .dx-tabpanel .dx-tab .dx-icon.dx-icon-close {
+  font-size: 18px;
+}
+
+.dx-theme-material .dx-tab-content {
+  flex-direction: row;
 }
 
 .dx-theme-material .employeeNotes {
