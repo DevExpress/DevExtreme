@@ -11,7 +11,7 @@ fixture.disablePageReloads`Column Headers`
   Themes.genericLight,
   Themes.genericDark,
   Themes.materialBlue,
-  Themes.materialBlueDark
+  Themes.materialBlueDark,
 ].forEach((theme) => {
   test(`Checking column headers via aXe - ${theme}`, async (t) => {
     await a11yCheck(t);
