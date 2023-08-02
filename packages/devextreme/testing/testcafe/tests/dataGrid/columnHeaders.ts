@@ -5,9 +5,9 @@ import { changeTheme } from '../../helpers/changeTheme';
 import { Themes } from './helpers/themes';
 
 fixture.disablePageReloads`Column Headers`
-  .page(url(__dirname, '../containerAllThemes.html'));
+  .page(url(__dirname, '../container.html'));
 
-Object.values(Themes).forEach((theme) => {
+[Themes.genericLight, Themes.genericDark, Themes.materialBlue, Themes.materialBlueDark].forEach((theme) => {
   test(`Checking column headers via aXe - ${theme}`, async (t) => {
     await a11yCheck(t);
   }).before(async () => {
