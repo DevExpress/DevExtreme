@@ -123,7 +123,7 @@ class TrackerView extends modules.View {
 }
 
 class SeparatorView extends modules.View {
-  protected _isShown: any;
+  protected _isShown?: boolean;
 
   _renderSeparator() { }
 
@@ -172,12 +172,12 @@ class ColumnsSeparatorView extends SeparatorView {
 
   private _tablePositionController: any;
 
-  private _isTransparent: any;
+  private _isTransparent?: boolean;
 
   /// #DEBUG
-  private _testPosX: any;
+  private _testPosX?: number;
 
-  private _testCursorName: any;
+  private _testCursorName?: string;
   /// #ENDDEBUG
 
   _renderSeparator() {
@@ -374,7 +374,7 @@ class BlockSeparatorView extends SeparatorView {
 }
 
 class DraggingHeaderView extends modules.View {
-  private _isDragging: any;
+  private _isDragging?: boolean;
 
   private _controller: any;
 
@@ -643,9 +643,9 @@ class ColumnsResizerViewController extends modules.ViewController {
 
   private _subscribesToCallbacks: any;
 
-  private readonly _isResizing: any;
+  private readonly _isResizing?: boolean;
 
-  private _scrollLeft: any;
+  private _scrollLeft?: number;
 
   private _trackerView: any;
 
@@ -1210,7 +1210,7 @@ class DraggingHeaderViewController extends modules.ViewController {
 
   private _blockSeparatorView: any;
 
-  private _animationColumnIndex: any;
+  private _animationColumnIndex?: number;
 
   private _columnHeadersView: any;
 
@@ -1323,7 +1323,7 @@ class DraggingHeaderViewController extends modules.ViewController {
     const blockSeparator = this._blockSeparatorView;
     const columnsSeparator = this._columnsSeparatorView;
 
-    this._animationColumnIndex = null;
+    this._animationColumnIndex = undefined;
     blockSeparator && blockSeparator.hide();
     type !== 'block' && columnsSeparator && columnsSeparator.hide();
   }
