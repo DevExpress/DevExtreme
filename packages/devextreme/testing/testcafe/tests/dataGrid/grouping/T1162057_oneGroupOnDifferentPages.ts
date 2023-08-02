@@ -3,6 +3,7 @@ import { RequestMock } from 'testcafe';
 import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import DataGrid from '../../../model/dataGrid';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture`Grouping Panel - One group on different pages`
   .page(url(__dirname, '../../containerAspNet.html'));
@@ -73,7 +74,7 @@ const endsOnNextPageApiMock = RequestMock()
     { 'access-control-allow-origin': '*' },
   );
 
-test('Group panel restored from cache and ends at the next page', async (t) => {
+safeSizeTest('Group panel restored from cache and ends at the next page', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -91,7 +92,7 @@ test('Group panel restored from cache and ends at the next page', async (t) => {
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
+}, [1184, 304]).before(async (t) => {
   await t.addRequestHooks(endsOnNextPageApiMock);
   await createWidget('dxDataGrid', () => ({
     dataSource: (window as any).DevExpress.data.AspNet.createStore({
