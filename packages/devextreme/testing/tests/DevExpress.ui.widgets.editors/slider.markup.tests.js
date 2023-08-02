@@ -204,6 +204,7 @@ module('aria accessibility', () => {
         assert.equal($handle.attr('aria-valuemin'), 20, 'aria min is correct');
         assert.equal($handle.attr('aria-valuemax'), 50, 'aria max is correct');
         assert.equal($handle.attr('aria-valuenow'), 35, 'aria now is correct');
+        assert.equal($handle.attr('aria-label'), 'Slider', 'aria label is correct');
     });
 
     test('change aria properties on option changing', function(assert) {
