@@ -29500,7 +29500,7 @@ declare module DevExpress.ui {
     reset(): void;
 
     /**
-     * [descr:Editor.reset(value)]
+     * [descr:Editor.resetNew(value)]
      */
     resetNew(value?: unknown): void;
   }
