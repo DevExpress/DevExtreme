@@ -3,9 +3,9 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../tabs/sizes" as *;
-@use "../tabs/colors" as *;
-@use "../tabs/index" as *;
+@use "../tabs/old/sizes" as *;
+@use "../tabs/old/colors" as *;
+@use "../tabs/old/index" as *;
 @use "../../base/tabPanel";
 
 // adduse
@@ -91,6 +91,26 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 }
 
 
+// TODO: Reset Tabs Borders
+.dx-tabpanel { // stylelint-disable-line no-duplicate-selectors
+  @include dx-tabs-old();
+
+  .dx-tabs-wrapper,
+  .dx-tabs-scrollable,
+  .dx-tabpanel-tabs {
+    border: none;
+  }
+
+  .dx-tabs-wrapper {
+    background-color: transparent;
+  }
+
+  .dx-tab::after {
+    content: none;
+  }
+}
+
+.dx-rtl.dx-tabpanel,
 .dx-tabpanel {
   > .dx-tabpanel-tabs {
     .dx-tab {
