@@ -79,7 +79,6 @@
     font-size: $generic-accordion-title-icon-size;
     font-weight: normal;
     inset-inline-end: $generic-accordion-title-horizontal-padding;
-    margin-inline-start: math.div($generic-base-icon-size, 2);
     line-height: 100%;
   }
 
@@ -89,6 +88,8 @@
 }
 
 .dx-accordion-item-title-caption {
+  margin-inline-end: $generic-accordion-title-icon-size;
+
   .dx-icon {
     @include dx-icon-margin($accordion-title-icon-margin);
   }
