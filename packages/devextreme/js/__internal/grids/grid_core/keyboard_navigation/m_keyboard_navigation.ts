@@ -2254,9 +2254,9 @@ export class KeyboardNavigationController extends modules.ViewController {
         ? undefined
         : this._rowsView.getRowElement(localRowIndex),
       rowIndex: focusedRowIndex,
-      row: (focusedRowIndex < 0
+      row: focusedRowIndex < 0
         ? undefined
-        : this._dataController.getVisibleRows()[localRowIndex]) as any,
+        : this._dataController.getVisibleRows()[localRowIndex] as any,
     });
   }
 
@@ -2609,7 +2609,9 @@ export const keyboardNavigationModule: import('../m_types').Module = {
 
           const $firstNotFixedCell = this.getFirstNotFixedCell();
 
-          this._keyboardController._applyTabIndexToElement($firstNotFixedCell);
+          if ($firstNotFixedCell) {
+            this._keyboardController._applyTabIndexToElement($firstNotFixedCell);
+          }
         },
 
         updateFocusElementTabIndex(cellElements) {
