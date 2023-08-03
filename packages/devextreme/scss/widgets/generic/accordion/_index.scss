@@ -53,7 +53,7 @@
   & > .dx-accordion-item-title {
     background-color: $accordion-item-title-opened-bg;
 
-    &::after {
+    &::before {
       content: "\f014";
     }
   }
@@ -72,11 +72,13 @@
   padding: $generic-accordion-title-vertical-padding $generic-accordion-title-horizontal-padding;
   font-size: $generic-s-font-size;
 
-  &::after {
+  &::before {
     content: "\f016";
+    position: absolute;
     font-family: DXIcons;
     font-size: $generic-accordion-title-icon-size;
     font-weight: normal;
+    inset-inline-end: $generic-accordion-title-horizontal-padding;
     margin-inline-start: math.div($generic-base-icon-size, 2);
     line-height: 100%;
   }
