@@ -81,14 +81,14 @@
     content: "\f016";
     position: absolute;
     font-weight: normal;
-    font-size: $material-accordion-title-icon-size;
+    font-size: $accordion-title-icon-size;
     inset-inline-end: $material-accordion-title-horizontal-padding;
     font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
     line-height: 100%;
   }
 
   .dx-icon {
-    @include dx-icon-sizing($material-accordion-title-icon-size);
+    @include dx-icon-sizing($accordion-title-icon-size);
   }
 }
 
