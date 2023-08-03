@@ -48,13 +48,6 @@ $accordion-title-active-bg: null !default;
 */
 $accordion-item-hover-bg: null !default;
 
-/**
-* $name 30. Item active state icon color
-* $type color
-*/
-$accordion-icon-active-color: null !default;
-$accordion-icon-color: $base-icon-color !default;
-
 
 @if $color == "carmine" {
   $accordion-title-color: $accordion-color !default;
@@ -62,7 +55,6 @@ $accordion-icon-color: $base-icon-color !default;
   $accordion-title-active-color: $base-accent !default;
   $accordion-title-active-bg: $base-hover-bg !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-  $accordion-icon-active-color: $base-accent !default;
 }
 
 @if $color == "contrast" {
@@ -71,7 +63,6 @@ $accordion-icon-color: $base-icon-color !default;
   $accordion-title-active-color: $base-inverted-text-color !default;
   $accordion-title-active-bg: $base-inverted-bg !default;
   $accordion-item-hover-bg: $base-hover-color !default;
-  $accordion-icon-active-color: $base-inverted-text-color !default;
 }
 
 @if $color == "dark" {
@@ -80,7 +71,6 @@ $accordion-icon-color: $base-icon-color !default;
   $accordion-title-active-color: $accordion-color !default;
   $accordion-title-active-bg: color.change(lighten($accordion-background-color, 62.5%), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-  $accordion-icon-active-color: $accordion-color !default;
 }
 
 @if $color == "darkmoon" {
@@ -89,7 +79,6 @@ $accordion-icon-color: $base-icon-color !default;
   $accordion-title-active-color: $base-accent !default;
   $accordion-title-active-bg: color.change(lighten($accordion-background-color, 62.5%), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-  $accordion-icon-active-color: $accordion-color !default;
 }
 
 @if $color == "darkviolet" {
@@ -98,7 +87,6 @@ $accordion-icon-color: $base-icon-color !default;
   $accordion-title-active-color: $base-accent-highlight-color !default;
   $accordion-title-active-bg: color.change(lighten($accordion-background-color, 62.5%), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-  $accordion-icon-active-color: $accordion-color !default;
 }
 
 @if $color == "greenmist" {
@@ -107,7 +95,6 @@ $accordion-icon-color: $base-icon-color !default;
   $accordion-title-active-color: $accordion-color !default;
   $accordion-title-active-bg: color.change(darken($accordion-background-color, 9%), $alpha: 0.4) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-  $accordion-icon-active-color: $accordion-color !default;
 }
 
 @if $color == "light" {
@@ -116,7 +103,6 @@ $accordion-icon-color: $base-icon-color !default;
   $accordion-title-active-color: $accordion-color !default;
   $accordion-title-active-bg: color.change(darken($accordion-background-color, 62.5%), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-  $accordion-icon-active-color: $accordion-color !default;
 }
 
 @if $color == "softblue" {
@@ -125,6 +111,5 @@ $accordion-icon-color: $base-icon-color !default;
   $accordion-title-active-color: $accordion-color !default;
   $accordion-title-active-bg: color.change(darken($accordion-background-color, 62.5%), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-  $accordion-icon-active-color: $accordion-color !default;
 }
 
