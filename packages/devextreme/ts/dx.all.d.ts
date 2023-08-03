@@ -16410,6 +16410,10 @@ declare module DevExpress.ui {
      */
     resetValues(): void;
     /**
+     * [descr:dxForm.reset(editorsToValuesMap)]
+     */
+    reset(editorsToValuesMap?: any): void;
+    /**
      * [descr:dxForm.updateData(data)]
      */
     updateData(data: any): void;
@@ -16697,10 +16701,6 @@ declare module DevExpress.ui {
     onFieldDataChanged?: (
       e: DevExpress.ui.dxForm.FieldDataChangedEvent
     ) => void;
-    /**
-     * [descr:dxFormOptions.reset(editorsToValuesMap)]
-     */
-    reset(editorsToValuesMap?: object): void;
     /**
      * [descr:dxFormOptions.optionalMark]
      */
