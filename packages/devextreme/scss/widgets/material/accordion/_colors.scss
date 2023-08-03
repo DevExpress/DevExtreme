@@ -38,9 +38,9 @@ $accordion-item-bg: $accordion-background-color !default;
 $accordion-title-hover-border-color: darken($base-border-color, 6%) !default;
 
 @if $mode == "light" {
-  $accordion-item-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.20) !default;
+  $accordion-item-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.20) !default;
 }
 
 @if $mode == "dark" {
-  $accordion-item-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.32) !default;
+  $accordion-item-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.32) !default;
 }
