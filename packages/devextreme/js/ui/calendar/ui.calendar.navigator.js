@@ -66,7 +66,7 @@ class Navigator extends Widget {
 
         this._prevButton = this._createComponent($('<div>'),
             Button, {
-                focusStateEnabled: true,
+                focusStateEnabled: false,
                 icon: rtlEnabled ? 'chevronright' : 'chevronleft',
                 onClick: (e) => { this._clickAction({ direction: -direction, event: e }); },
                 type,
