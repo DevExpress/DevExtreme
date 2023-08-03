@@ -607,13 +607,20 @@ class DateRangeBox extends Editor {
         return validationMessagePosition;
     }
 
+    _getSerializedDates([startDate, endDate]) {
+        return [
+            this.getStartDateBox()._serializeDate(getDeserializedDate(startDate)),
+            this.getStartDateBox()._serializeDate(getDeserializedDate(endDate))
+        ];
+    }
+
     updateValue(newValue, event) {
         if(!isSameDateArrays(newValue, this.option('value'))) {
             if(event) {
                 this._saveValueChangeEvent(event);
             }
 
-            this.option('value', newValue);
+            this.option('value', this._getSerializedDates(newValue));
         }
     }
 

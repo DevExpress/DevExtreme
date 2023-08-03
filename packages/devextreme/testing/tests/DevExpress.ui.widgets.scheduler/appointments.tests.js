@@ -6,9 +6,9 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import VerticalAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_vertical';
-import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_horizontal_month';
-import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
+import VerticalAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_vertical';
+import HorizontalMonthAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal_month';
+import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
 import eventsEngine from 'events/core/events_engine';
 import dblclickEvent from 'events/dblclick';
 import translator from 'animation/translator';
@@ -22,7 +22,7 @@ import { DataSource } from 'data/data_source/data_source';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { Deferred } from 'core/utils/deferred';
 import { createExpressions } from 'ui/scheduler/resources/utils';
-import { AppointmentDataProvider } from 'ui/scheduler/appointments/dataProvider/appointmentDataProvider.js';
+import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider.js';
 import { createTimeZoneCalculator } from 'renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator.js';
 
 QUnit.testStart(function() {

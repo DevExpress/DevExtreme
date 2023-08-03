@@ -45,6 +45,11 @@
       }
     }
   }
+
+  .dx-calendar-navigator-previous-view,
+  .dx-calendar-navigator-next-view {
+    flex-shrink: 0;
+  } 
 }
 
 @mixin dx-calendar-body-mixin(

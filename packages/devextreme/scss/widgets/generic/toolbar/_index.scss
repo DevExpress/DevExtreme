@@ -25,10 +25,6 @@
     $generic-toolbar-item-spacing
   );
 
-  &.dx-state-disabled {
-    opacity: 1;
-  }
-
   &.dx-toolbar-compact {
     .dx-button {
       min-width: auto;
@@ -57,18 +53,16 @@
   .dx-toolbar-hidden-button,
   .dx-toolbar-hidden-button-group {
     .dx-button {
-      .dx-button-content {
-        padding: $generic-list-item-vertical-padding;
-      }
+      border-radius: 0;
     }
 
-    .dx-button-mode-contained,
-    .dx-button-mode-outlined,
-    .dx-button-mode-text {
-      &.dx-button {
-        border-radius: 0;
-      }
+    .dx-button-content {
+      padding: $generic-list-item-vertical-padding;
+    }
+  }
 
+  .dx-toolbar-hidden-button {
+    .dx-button {
       @include dx-button-mode-text-styling();
     }
   }
@@ -76,18 +70,6 @@
   .dx-toolbar-hidden-button-group {
     margin-top: $generic-toolbar-item-spacing;
     margin-bottom: $generic-toolbar-item-spacing;
-  }
-
-  .dx-button-mode-contained {
-    @include dx-button-mode-contained-styling();
-  }
-
-  .dx-button-mode-outlined {
-    @include dx-button-mode-outlined-styling();
-  }
-
-  .dx-button-mode-text {
-    @include dx-button-mode-text-styling();
   }
 }
 
