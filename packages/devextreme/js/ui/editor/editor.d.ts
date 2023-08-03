@@ -128,7 +128,7 @@ export default class Editor<TProperties = Properties> extends Widget<TProperties
 
     /**
      * @docid
-     * @type_function_param1 value:unknown
+     * @type_function_param1 value:object
      * @publicName resetNew(value)
      * @public
      */
