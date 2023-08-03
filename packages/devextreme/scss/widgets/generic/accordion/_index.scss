@@ -53,7 +53,7 @@
   & > .dx-accordion-item-title {
     background-color: $accordion-item-title-opened-bg;
 
-    &::before {
+    &::after {
       content: "\f014";
     }
   }
@@ -69,23 +69,26 @@
 
 .dx-accordion-item-title {
   color: $accordion-title-color;
-  padding: $generic-accordion-title-padding;
+  padding: $generic-accordion-title-vertical-padding $generic-accordion-title-horizontal-padding;
   font-size: $generic-s-font-size;
-  
-  @include dx-icon(chevrondown);
 
-  &::before {
+  &::after {
+    content: "\f016";
+    font-family: DXIcons;
+    font-size: $generic-accordion-title-icon-size;
     font-weight: normal;
     margin-inline-start: math.div($generic-base-icon-size, 2);
+    line-height: 100%;
   }
 
-  .dx-accordion-item-title-caption .dx-icon {
-    @include dx-icon-margin($accordion-title-icon-margin);
+  .dx-icon {
     @include dx-icon-sizing($generic-base-icon-size);
+  }
+}
 
-    vertical-align: top;
-    position: relative;
-    top: $accordion-title-icon-top-offset;
+.dx-accordion-item-title-caption {
+  .dx-icon {
+    @include dx-icon-margin($accordion-title-icon-margin);
   }
 }
 

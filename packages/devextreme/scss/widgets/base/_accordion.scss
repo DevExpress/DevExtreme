@@ -4,6 +4,8 @@
 .dx-accordion-item-title {
   cursor: pointer;
   position: relative;
+  display: flex;
+  align-items: center;
 
   @include user-select(none);
 
@@ -11,11 +13,13 @@
     background-size: contain;
     display: inline-block;
   }
+}
 
-  &::before {
-    background-position: center;
-    float: right;
-  }
+.dx-accordion-item-title-caption {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  height: 100%;
 }
 
 .dx-accordion-item-body {
@@ -40,13 +44,5 @@
 .dx-state-disabled {
   .dx-accordion-item-title {
     cursor: default;
-  }
-}
-
-.dx-rtl {
-  .dx-accordion-item-title {
-    &::before {
-      float: left;
-    }
   }
 }

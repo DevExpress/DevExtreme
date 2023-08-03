@@ -1320,7 +1320,7 @@ const Calendar = Editor.inherit({
     },
 
     _focusInHandler: function() {
-        this.callBase.apply(this, arguments);
+        // this.callBase.apply(this, arguments);
         this._setViewContoured(this.option('currentDate'));
     },
 

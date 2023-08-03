@@ -26,7 +26,7 @@ $material-accordion-arrow-line-height: 16px !default;
 $material-accordion-title-font-size: $material-base-font-size !default;
 $material-accordion-title-icon-size: $material-button-icon-size !default;
 
-$accordion-item-border-radius: $base-border-radius !default;
+$accordion-item-border-radius: $material-base-border-radius !default;
 
 @if $size == "default" {
   $material-accordion-title-horizontal-padding: 16px !default;

@@ -62,7 +62,7 @@
   }
 
   & > .dx-accordion-item-title {
-    &::before {
+    &::after {
       content: "\f014";
     }
   }
@@ -74,38 +74,32 @@
 
 .dx-accordion-item-title {
   height: $material-accordion-title-height;
-  display: flex;
-  align-items: center;
   padding: $material-accordion-title-vertical-padding $material-accordion-title-horizontal-padding;
   background-color: $accordion-item-bg;
 
-  .dx-accordion-item-title-caption {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    color: $accordion-title-color;
-    font-size: $material-accordion-title-font-size;
-    font-weight: 500;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-
-    .dx-icon {
-      @include dx-icon-margin($accordion-title-icon-margin);
-    }
-  }
-
-  &::before {
-    position: absolute;
-    inset-inline-end: $material-accordion-title-horizontal-padding;
+  &::after {
     font-weight: normal;
     font-size: $material-accordion-title-icon-size;
     content: "\f016";
     font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+    line-height: 100%;
   }
 
   .dx-icon {
     @include dx-icon-sizing($material-accordion-title-icon-size);
+  }
+}
+
+.dx-accordion-item-title-caption {
+  color: $accordion-title-color;
+  font-size: $material-accordion-title-font-size;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+
+  .dx-icon {
+    @include dx-icon-margin($accordion-title-icon-margin);
   }
 }
 
