@@ -10,6 +10,9 @@
 
 // adduse
 
+$generic-accordion-disabled-opacity: 0.5;
+
+
 .dx-accordion {
   background-color: $accordion-background-color;
   color: $accordion-color;
@@ -24,6 +27,10 @@
   }
 
   &.dx-state-active:not(.dx-accordion-item-opened) {
+    .dx-icon {
+      color: $accordion-icon-active-color;
+    }
+
     & > .dx-accordion-item-title {
       color: $accordion-title-active-color;
       background-color: $accordion-title-active-bg;
@@ -71,17 +78,27 @@
   color: $accordion-title-color;
   padding: $generic-accordion-title-padding;
   font-size: $generic-s-font-size;
-  
-  @include dx-icon(chevrondown);
 
   &::before {
     font-weight: normal;
-    margin-inline-start: math.div($generic-base-icon-size, 2);
+    color: $accordion-icon-color;
+    content: "\f016";
+    font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+    font-size: $generic-base-icon-size;
+    margin-left: math.div($generic-base-icon-size, 2);
+    margin-right: 0;
+    line-height: $generic-accordion-arrow-line-height;
+  }
+
+  .dx-icon {
+    @include dx-icon-sizing($generic-base-icon-size);
+
+    display: inline-block;
+    color: $accordion-icon-color;
   }
 
   .dx-accordion-item-title-caption .dx-icon {
     @include dx-icon-margin($accordion-title-icon-margin);
-    @include dx-icon-sizing($generic-base-icon-size);
 
     vertical-align: top;
     position: relative;
@@ -91,7 +108,7 @@
 
 .dx-state-disabled {
   &.dx-accordion-item {
-    opacity: $base-disabled-opacity;
+    opacity: $generic-accordion-disabled-opacity;
   }
 }
 
@@ -103,4 +120,14 @@
 
 .dx-accordion-item-body {
   padding: $generic-accordion-body-padding;
+  font-size: $generic-base-font-size;
+}
+
+.dx-rtl {
+  .dx-accordion-item-title {
+    &::before {
+      margin-left: 0;
+      margin-right: math.div($generic-base-icon-size, 2);
+    }
+  }
 }
