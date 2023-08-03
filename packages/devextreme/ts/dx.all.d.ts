@@ -16412,7 +16412,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxForm.reset(editorsToValuesMap)]
      */
-    reset(editorsToValuesMap?: any): void;
+    reset(editorsToValuesMap?: object): void;
     /**
      * [descr:dxForm.updateData(data)]
      */
