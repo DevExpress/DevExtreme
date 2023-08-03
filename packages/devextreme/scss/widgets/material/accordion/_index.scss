@@ -53,7 +53,7 @@
 }
 
 .dx-accordion-item-opened {
-  margin: $material-accordion-opened-margin 0;
+  margin-block: $accordion-item-opened-margin;
   border-top: none;
   border-radius: $accordion-item-border-radius;
 
