@@ -241,7 +241,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @publicName reset(editorsToValuesMap)
      * @public
      */
-    reset(editorsToValuesMap?: any): void;
+    reset(editorsToValuesMap?: object): void;
     /**
      * @docid
      * @default "optional"

@@ -16700,7 +16700,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.reset(editorsToValuesMap)]
      */
-    reset(editorsToValuesMap?: any): void;
+    reset(editorsToValuesMap?: object): void;
     /**
      * [descr:dxFormOptions.optionalMark]
      */
