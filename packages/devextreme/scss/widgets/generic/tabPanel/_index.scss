@@ -140,6 +140,18 @@
     border: none;
     border-block-start: $generic-tabs-border;
     border-block-end: $generic-tabs-border;
+
+    @include dx-tabs-border-mixin(
+      none,
+      none,
+      $generic-tabs-border,
+      $generic-tabs-border,
+    );
+
+    &::after {
+      top: 0;
+      bottom: 0;
+    }
   }
 
   &:not(.dx-empty-collection) {
@@ -160,6 +172,10 @@
       top: 0;
       bottom: 0;
     }
+
+    // .dx-tabs-wrapper::after {
+    //   content: none;
+    // }
   }
 
   &.dx-state-focused {
