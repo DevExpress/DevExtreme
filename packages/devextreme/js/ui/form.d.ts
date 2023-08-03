@@ -355,11 +355,11 @@ export default class dxForm extends Widget<dxFormOptions> {
     resetValues(): void;
     /**
      * @docid
-     * @type_function_param1 editorsToValuesMap:object
-     * @publicName reset(editorsToValuesMap)
+     * @type_function_param1 editorsData:object
+     * @publicName reset(editorsData)
      * @public
      */
-    reset(editorsToValuesMap?: object): void;
+    reset(editorsData?: object): void;
     /**
      * @docid
      * @publicName updateData(data)
