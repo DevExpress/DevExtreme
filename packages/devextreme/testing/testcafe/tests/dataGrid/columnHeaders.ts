@@ -4,7 +4,7 @@ import createWidget from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Themes } from './helpers/themes';
 
-fixture.disablePageReloads`Column Headers`
+fixture`Column Headers`
   .page(url(__dirname, '../container.html'));
 
 [
