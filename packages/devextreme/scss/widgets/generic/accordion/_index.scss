@@ -75,7 +75,7 @@
   &::before {
     content: "\f016";
     position: absolute;
-    font-family: DXIcons;
+    font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
     font-size: $generic-accordion-title-icon-size;
     font-weight: normal;
     inset-inline-end: $generic-accordion-title-horizontal-padding;
