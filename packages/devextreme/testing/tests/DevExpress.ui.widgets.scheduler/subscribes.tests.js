@@ -4,7 +4,7 @@ import 'ui/scheduler/ui.scheduler';
 import {
     DateGeneratorBaseStrategy,
     DateGeneratorVirtualStrategy
-} from 'ui/scheduler/appointments/settingsGenerator';
+} from '__internal/scheduler/appointments/m_settings_generator';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
@@ -15,7 +15,7 @@ import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
 import { getAppointmentColor, createExpressions } from 'ui/scheduler/resources/utils';
-import { getAppointmentTakesSeveralDays } from 'ui/scheduler/appointments/dataProvider/utils';
+import { getAppointmentTakesSeveralDays } from '__internal/scheduler/appointments/data_provider/m_utils';
 
 const {
     module,
