@@ -186,20 +186,21 @@ export class KeyboardNavigationController extends modules.ViewController {
   // This is part of accessibility issue fix: scrollable should always have focusable element inside
   private translateFocusIfNeed(event, $element: dxElementWrapper) {
     const rowsView = this._rowsView;
-    
+
     const hasScrollable = !!rowsView.getScrollable();
     const hasFixedTable = !!rowsView._fixedTableElement?.length;
     const $firstCell = rowsView.getCell({ rowIndex: 0, columnIndex: 0 });
-    
-    if(!hasScrollable || !hasFixedTable || !$firstCell?.length)
+
+    if (!hasScrollable || !hasFixedTable || !$firstCell?.length) {
       return;
+    }
 
     const firstCellHasTabIndex = !!$firstCell.attr('tabindex');
     const isFirstCellFixed = this._isFixedColumn(0);
     // @ts-expect-error
     const targetIsUsualCell = $element.is(this._$firstNotFixedCell);
 
-    if(firstCellHasTabIndex && isFirstCellFixed && targetIsUsualCell) {
+    if (firstCellHasTabIndex && isFirstCellFixed && targetIsUsualCell) {
       event.preventDefault();
 
       this._focus($firstCell);
@@ -2563,10 +2564,11 @@ export const keyboardNavigationModule: import('../m_types').Module = {
 
         getFirstNotFixedCell(): dxElementWrapper | undefined {
           const columns = this._columnsController.getVisibleColumns();
-          const notFixedColumns = columns.filter(column => !column.fixed);
+          const notFixedColumns = columns.filter((column) => !column.fixed);
 
-          if(notFixedColumns.length === 0)
+          if (notFixedColumns.length === 0) {
             return;
+          }
 
           const columnIndex = notFixedColumns[0].visibleIndex;
 
@@ -2600,9 +2602,10 @@ export const keyboardNavigationModule: import('../m_types').Module = {
         makeScrollableFocusableIfNeed() {
           const hasScrollable = !!this.getScrollable();
           const hasFixedTable = !!this._fixedTableElement?.length;
-          
-          if(!hasScrollable || !hasFixedTable)
+
+          if (!hasScrollable || !hasFixedTable) {
             return;
+          }
 
           const $firstNotFixedCell = this.getFirstNotFixedCell();
 
