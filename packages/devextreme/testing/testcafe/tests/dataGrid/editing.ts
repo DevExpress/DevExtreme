@@ -2352,6 +2352,7 @@ test('Popup EditForm screenshot', async (t) => {
     const dataGrid = new DataGrid('#container');
 
     await t
+      .wait(50)
       .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-${theme.split('.')[0]}-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
       .ok()
       .expect(compareResults.isValid())
@@ -2374,6 +2375,7 @@ test('Popup EditForm screenshot', async (t) => {
       },
       columns: ['Id', 'name', {
         type: 'buttons',
+        width: 200,
         buttons: [
           {
             name: 'delete',
