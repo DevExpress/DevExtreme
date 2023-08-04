@@ -1033,7 +1033,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         simulateFileChoose($fileUploader, [fakeFile]);
         this.clock.tick(200);
 
-        $fileUploader.dxFileUploader('instance').reset();
+        $fileUploader.dxFileUploader('instance').clear();
         this.clock.tick(200);
 
         assert.strictEqual(abortUploadSpy.callCount, 0, '\'abortUpload\' callback was not rised');
@@ -2385,7 +2385,7 @@ QUnit.module('file uploading', moduleConfig, () => {
         const fileUploader = $fileUploader.dxFileUploader('instance');
         const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
         $input.val('fakefile');
-        fileUploader.reset();
+        fileUploader.clear();
 
         assert.equal($input.val(), '', 'value was cleared in input');
     });

@@ -129,9 +129,9 @@ QUnit.module('datebox tests', moduleConfig, () => {
         const date = new Date(2012, 10, 26, 16, 40, 23);
 
         this.instance.option('value', date);
-        this.instance.reset();
+        this.instance.clear();
 
-        assert.equal(this.instance.option('value'), null, 'value is null after reset');
+        assert.equal(this.instance.option('value'), null, 'value is null after clear');
     });
 
     QUnit.test('render valueChangeEvent', function(assert) {

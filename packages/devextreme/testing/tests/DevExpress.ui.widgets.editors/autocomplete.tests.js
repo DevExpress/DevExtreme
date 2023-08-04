@@ -1211,11 +1211,11 @@ QUnit.module('Overlay integration', {
         $(this.$input).trigger('change');
     });
 
-    QUnit.test('popup should be hidden after reset', function(assert) {
+    QUnit.test('popup should be hidden after clear', function(assert) {
         this.instance.option('value', '');
 
         this.keyboard.type('i');
-        this.instance.reset();
+        this.instance.clear();
 
         assert.notOk(this.instance.option('opened'), 'popup is hidden');
     });

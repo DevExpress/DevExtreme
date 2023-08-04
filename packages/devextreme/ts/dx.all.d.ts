@@ -29491,9 +29491,9 @@ declare module DevExpress.ui {
     TProperties = DevExpress.ui.Editor.Properties
   > extends Widget<TProperties> {
     /**
-     * [descr:Editor.reset()]
+     * [descr:Editor.clear()]
      */
-    reset(): void;
+    clear(): void;
   }
   module Editor {
     /**

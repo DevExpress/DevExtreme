@@ -1522,7 +1522,7 @@ const TagBox = SelectBox.inherit({
         }
     },
 
-    reset: function() {
+    clear: function() {
         this._restoreInputText();
         const defaultValue = this._getDefaultOptions().value;
         const currentValue = this.option('value');

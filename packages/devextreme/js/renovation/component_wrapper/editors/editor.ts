@@ -157,7 +157,7 @@ export default class Editor extends Component {
     super._optionChanged(option);
   }
 
-  reset(): void {
+  clear(): void {
     const { value } = this._getDefaultOptions();
     this.option({ value });
   }
