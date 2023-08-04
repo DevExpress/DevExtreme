@@ -295,13 +295,13 @@ module('value', moduleConfig, () => {
         errorLogStub.restore();
     });
 
-    test('should not throw the W1002 error when the clear method is called (T823478)', function(assert) {
+    test('should not throw the W1002 error when the reset method is called (T823478)', function(assert) {
         const errorLogStub = sinon.stub(errors, 'log');
 
         createRadioGroup({
             items: ['1', '2', '3'],
             value: '2'
-        }).dxRadioGroup('clear');
+        }).dxRadioGroup('reset');
 
         assert.ok(errorLogStub.notCalled, 'error was not thrown');
         errorLogStub.restore();

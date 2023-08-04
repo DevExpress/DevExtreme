@@ -2255,7 +2255,7 @@ QUnit.module('validation', {}, () => {
         assert.strictEqual(maskIsValidOnValueChange, false, 'input is validated before valueChangeEvent was fired');
     });
 
-    QUnit.test('clear should not request validation', function(assert) {
+    QUnit.test('reset should not request validation', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '(X)',
             maskRules: {
@@ -2264,7 +2264,7 @@ QUnit.module('validation', {}, () => {
             value: ''
         });
 
-        $textEditor.dxTextEditor('clear');
+        $textEditor.dxTextEditor('reset');
 
         assert.ok(!$textEditor.hasClass('dx-invalid'), 'value is not validated');
     });
