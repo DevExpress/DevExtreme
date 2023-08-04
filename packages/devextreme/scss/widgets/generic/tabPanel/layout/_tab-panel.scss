@@ -1,0 +1,105 @@
+@use "../variables/colors" as *;
+@use "../../colors" as *;
+@use "../variables/sizes" as *;
+@use "../../sizes" as *;
+@use "../../tabs/variables/colors" as *;
+@use "../../tabs/variables/borders" as *;
+@use "../../tabs/variables/sizes" as *;
+@use "../../tabs/mixins" as *;
+@use "../../tabs" as *;
+@use "../../../base/tabPanel";
+@use "../variables/borders" as *;
+@use "../mixins" as *;
+
+// adduse
+
+
+.dx-rtl.dx-tabpanel,
+.dx-tabpanel {
+  .dx-tabs-wrapper {
+    border: none;
+    border-block-start: $generic-tabs-border;
+    border-block-end: $generic-tabs-border;
+
+    @include dx-tabs-border-mixin(
+      none,
+      $generic-tabs-border,
+      none,
+      $generic-tabs-border,
+    );
+
+    &::after {
+      top: 0;
+      bottom: 1px !important;
+    }
+  }
+
+  &:not(.dx-empty-collection) {
+    .dx-multiview-wrapper {
+      border-top: none;
+    }
+  }
+
+  .dx-tabs-scrollable {
+    @include dx-tabs-border-mixin(
+      none,
+      $generic-tabs-border-width solid,
+      none,
+      $generic-tabs-border-width solid,
+    );
+
+    &::after {
+      top: 0;
+      bottom: 1px !important;
+    }
+
+    .dx-tabs-wrapper {
+      border-left: none;
+      border-right: none;
+
+      &::after {
+        content: none;
+      }
+    }
+  }
+
+  // &:not(.dx-tabs-nav-buttons) .dx-tabs-scrollable {
+  //   &::after {
+  //     bottom: 1px;
+  //   }
+  // }
+
+  &.dx-state-focused {
+    &.dx-disabled-focused-tab {
+      .dx-tabs-wrapper {
+        border-block-end: $generic-tabs-border;
+      }
+
+      .dx-tabs-nav-button {
+        border-block-end: $generic-tabs-border;
+      }
+    }
+
+    .dx-tabs-wrapper {
+      border-block-end: $generic-tabs-border-focus;
+    }
+
+    .dx-tabs-nav-button {
+      border-block-end: $generic-tabs-border-focus;
+    }
+  }
+
+  &:not(.dx-empty-collection) {
+    .dx-multiview-wrapper {
+      border-top: none;
+    }
+  }
+
+  .dx-multiview-wrapper {
+    border: $generic-tabs-border;
+
+    &.dx-state-focused {
+      border-color: $tabs-focused-border-color;
+    }
+  }
+}
