@@ -23,12 +23,25 @@
   }
 
   &:not(.dx-tabs-nav-buttons) .dx-tabs-scrollable {
-    border-inline-start: $generic-tabs-border;
-    border-inline-end: $generic-tabs-border;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      border-inline-start: $generic-tabs-border;
+      border-inline-end: $generic-tabs-border;
+    }
 
     .dx-tabs-wrapper {
       border-inline-start: none;
       border-inline-end: none;
+    }
+
+    .dx-scrollable-content {
+      // NOTE: Scrollable cuts border via transform-translate.
+      transform: none !important;
     }
   }
 

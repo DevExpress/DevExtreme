@@ -150,7 +150,7 @@
 
     &::after {
       top: 0;
-      bottom: 0;
+      bottom: 1px !important;
     }
   }
 
@@ -170,13 +170,24 @@
 
     &::after {
       top: 0;
-      bottom: 0;
+      bottom: 1px !important;
     }
 
-    // .dx-tabs-wrapper::after {
-    //   content: none;
-    // }
+    .dx-tabs-wrapper {
+      border-left: none;
+      border-right: none;
+
+      &::after {
+        content: none;
+      }
+    }
   }
+
+  // &:not(.dx-tabs-nav-buttons) .dx-tabs-scrollable {
+  //   &::after {
+  //     bottom: 1px;
+  //   }
+  // }
 
   &.dx-state-focused {
     &.dx-disabled-focused-tab {
