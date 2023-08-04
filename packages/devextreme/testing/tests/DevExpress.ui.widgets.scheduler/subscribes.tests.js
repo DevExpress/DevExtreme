@@ -14,7 +14,7 @@ import config from 'core/config';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
-import { getAppointmentColor, createExpressions } from 'ui/scheduler/resources/utils';
+import { getAppointmentColor, createExpressions } from '__internal/scheduler/resources/m_utils';
 import { getAppointmentTakesSeveralDays } from '__internal/scheduler/appointments/data_provider/m_utils';
 
 const {

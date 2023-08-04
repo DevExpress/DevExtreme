@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import Draggable from '../draggable';
 import { extend } from '../../core/utils/extend';
 import { LIST_ITEM_DATA_KEY } from './constants';
-import { isSchedulerComponent } from './utils/isSchedulerComponent';
+import { isSchedulerComponent } from '../../__internal/scheduler/utils/is_scheduler_component';
 import { Deferred } from '../../core/utils/deferred';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';

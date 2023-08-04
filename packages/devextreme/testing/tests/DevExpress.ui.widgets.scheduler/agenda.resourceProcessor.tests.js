@@ -1,4 +1,4 @@
-import { AgendaResourceProcessor } from 'ui/scheduler/resources/agendaResourceProcessor';
+import { AgendaResourceProcessor } from '__internal/scheduler/resources/m_agenda_resource_processor';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 
