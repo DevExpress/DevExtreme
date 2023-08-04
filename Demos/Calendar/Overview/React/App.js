@@ -22,6 +22,8 @@ const zoomLevelLabel = { 'aria-label': 'Zoom Level' };
 const dayLabel = { 'aria-label': 'First Day of Week' };
 const ruleLabel = { 'aria-label': 'Week Number Rule' };
 
+const isDateDisabled = ({ view, date }) => view === 'month' && isWeekend(date);
+
 export default function App() {
   const [minDateValue, setMinDateValue] = React.useState(null);
   const [maxDateValue, setMaxDateValue] = React.useState(null);
@@ -77,8 +79,6 @@ export default function App() {
   const onUseCellTemplateChange = React.useCallback(({ value }) => {
     setUseCellTemplate(!!value);
   }, [setUseCellTemplate]);
-
-  const isDateDisabled = React.useCallback(({ view, date }) => view === 'month' && isWeekend(date), []);
 
   const onOptionChange = React.useCallback((e) => {
     if (e.name === 'zoomLevel') {
@@ -192,4 +192,3 @@ export default function App() {
     </div>
   );
 }
-

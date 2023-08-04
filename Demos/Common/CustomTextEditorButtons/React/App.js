@@ -9,166 +9,140 @@ const currencyLabel = { 'aria-label': 'Multi Currency' };
 const dateBoxLabel = { 'aria-label': 'Date' };
 const passwordLabel = { 'aria-label': 'Password' };
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const [passwordMode, setPasswordMode] = React.useState('password');
+  const [currencyFormat, setCurrencyFormat] = React.useState('$ #.##');
+  const [currencyValue, setCurrencyValue] = React.useState(14500.55);
+  const [dateValue, setDateValue] = React.useState(new Date().getTime());
 
-    this.state = {
-      passwordMode: 'password',
-      currencyFormat: '$ #.##',
-      currencyValue: 14500.55,
-      dateValue: new Date().getTime(),
-    };
+  const passwordButton = React.useMemo(() => ({
+    icon: '../../../../images/icons/eye.png',
+    type: 'default',
+    onClick: () => {
+      setPasswordMode((prevPasswordMode) => (prevPasswordMode === 'text' ? 'password' : 'text'));
+    },
+  }), [setPasswordMode]);
 
-    this.passwordButton = {
-      icon: '../../../../images/icons/eye.png',
-      type: 'default',
-      onClick: () => {
-        this.setState({
-          passwordMode: (this.state.passwordMode === 'text' ? 'password' : 'text'),
-        });
-      },
-    };
+  const currencyButton = React.useMemo(() => ({
+    text: '€',
+    stylingMode: 'text',
+    width: 32,
+    elementAttr: {
+      class: 'currency',
+    },
+    onClick: (e) => {
+      if (e.component.option('text') === '$') {
+        e.component.option('text', '€');
+        setCurrencyFormat('$ #.##');
+        setCurrencyValue((prevCurrencyValue) => prevCurrencyValue / 0.836);
+      } else {
+        e.component.option('text', '$');
+        setCurrencyFormat('€ #.##');
+        setCurrencyValue((prevCurrencyValue) => prevCurrencyValue * 0.836);
+      }
+    },
+  }), [setCurrencyFormat, setCurrencyValue]);
 
-    this.currencyButton = {
-      text: '€',
-      stylingMode: 'text',
-      width: 32,
-      elementAttr: {
-        class: 'currency',
-      },
-      onClick: (e) => {
-        if (e.component.option('text') === '$') {
-          e.component.option('text', '€');
-          this.setState({
-            currencyFormat: '$ #.##',
-            currencyValue: this.state.currencyValue / 0.836,
-          });
-        } else {
-          e.component.option('text', '$');
-          this.setState({
-            currencyFormat: '€ #.##',
-            currencyValue: this.state.currencyValue * 0.836,
-          });
-        }
-      },
-    };
+  const todayButton = React.useMemo(() => ({
+    text: 'Today',
+    onClick: () => {
+      setDateValue(new Date().getTime());
+    },
+  }), [setDateValue]);
 
-    this.changeCurrency = this.changeCurrency.bind(this);
+  const prevDateButton = React.useMemo(() => ({
+    icon: 'spinprev',
+    stylingMode: 'text',
+    onClick: () => {
+      setDateValue((prevDateValue) => prevDateValue - millisecondsInDay);
+    },
+  }), [setDateValue]);
 
-    this.todayButton = {
-      text: 'Today',
-      onClick: () => {
-        this.setState({
-          dateValue: new Date().getTime(),
-        });
-      },
-    };
+  const nextDateButton = React.useMemo(() => ({
+    icon: 'spinnext',
+    stylingMode: 'text',
+    onClick: () => {
+      setDateValue((prevDateValue) => prevDateValue + millisecondsInDay);
+    },
+  }), [setDateValue]);
 
-    this.prevDateButton = {
-      icon: 'spinprev',
-      stylingMode: 'text',
-      onClick: () => {
-        this.setState({
-          dateValue: this.state.dateValue - millisecondsInDay,
-        });
-      },
-    };
+  const onDateChanged = React.useCallback((e) => {
+    setDateValue(e.value);
+  }, [setDateValue]);
 
-    this.nextDateButton = {
-      icon: 'spinnext',
-      stylingMode: 'text',
-      onClick: () => {
-        this.setState({
-          dateValue: this.state.dateValue + millisecondsInDay,
-        });
-      },
-    };
+  const changeCurrency = React.useCallback((data) => {
+    setCurrencyValue(data.value);
+  }, [setCurrencyValue]);
 
-    this.onDateChanged = (e) => {
-      this.setState({
-        dateValue: e.value,
-      });
-    };
-  }
-
-  changeCurrency(data) {
-    this.setState({
-      currencyValue: data.value,
-    });
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <div className="dx-fieldset">
-          <div className="dx-field">
-            <div className="dx-field-label">Password TextBox</div>
-            <div className="dx-field-value">
-              <TextBox
-                placeholder="password"
-                stylingMode="filled"
-                defaultValue="password"
-                inputAttr={passwordLabel}
-                mode={this.state.passwordMode}>
-                <TextBoxButton
-                  name="password"
-                  location="after"
-                  options={this.passwordButton}
-                />
-              </TextBox>
-            </div>
-          </div>
-          <div className="dx-field">
-            <div className="dx-field-label">Multi-currency NumberBox</div>
-            <div className="dx-field-value">
-              <NumberBox
-                showClearButton={true}
-                showSpinButtons={true}
-                format={this.state.currencyFormat}
-                value={this.state.currencyValue}
-                inputAttr={currencyLabel}
-                onValueChanged={this.changeCurrency}>
-                <NumberBoxButton
-                  name="currency"
-                  location="after"
-                  options={this.currencyButton}
-                />
-                <NumberBoxButton name="clear" />
-                <NumberBoxButton name="spins" />
-              </NumberBox>
-            </div>
-          </div>
-          <div className="dx-field">
-            <div className="dx-field-label">Advanced DateBox</div>
-            <div className="dx-field-value">
-              <DateBox value={this.state.dateValue}
-                stylingMode="outlined"
-                inputAttr={dateBoxLabel}
-                onValueChanged={this.onDateChanged}>
-                <DateBoxButton
-                  name="today"
-                  location="before"
-                  options={this.todayButton}
-                />
-                <DateBoxButton
-                  name="prevDate"
-                  location="before"
-                  options={this.prevDateButton}
-                />
-                <DateBoxButton
-                  name="nextDate"
-                  location="after"
-                  options={this.nextDateButton}
-                />
-                <DateBoxButton name="dropDown" />
-              </DateBox>
-            </div>
+  return (
+    <React.Fragment>
+      <div className="dx-fieldset">
+        <div className="dx-field">
+          <div className="dx-field-label">Password TextBox</div>
+          <div className="dx-field-value">
+            <TextBox
+              placeholder="password"
+              stylingMode="filled"
+              defaultValue="password"
+              inputAttr={passwordLabel}
+              mode={passwordMode}>
+              <TextBoxButton
+                name="password"
+                location="after"
+                options={passwordButton}
+              />
+            </TextBox>
           </div>
         </div>
-      </React.Fragment>
-    );
-  }
+        <div className="dx-field">
+          <div className="dx-field-label">Multi-currency NumberBox</div>
+          <div className="dx-field-value">
+            <NumberBox
+              showClearButton={true}
+              showSpinButtons={true}
+              format={currencyFormat}
+              value={currencyValue}
+              inputAttr={currencyLabel}
+              onValueChanged={changeCurrency}>
+              <NumberBoxButton
+                name="currency"
+                location="after"
+                options={currencyButton}
+              />
+              <NumberBoxButton name="clear" />
+              <NumberBoxButton name="spins" />
+            </NumberBox>
+          </div>
+        </div>
+        <div className="dx-field">
+          <div className="dx-field-label">Advanced DateBox</div>
+          <div className="dx-field-value">
+            <DateBox value={dateValue}
+              stylingMode="outlined"
+              inputAttr={dateBoxLabel}
+              onValueChanged={onDateChanged}>
+              <DateBoxButton
+                name="today"
+                location="before"
+                options={todayButton}
+              />
+              <DateBoxButton
+                name="prevDate"
+                location="before"
+                options={prevDateButton}
+              />
+              <DateBoxButton
+                name="nextDate"
+                location="after"
+                options={nextDateButton}
+              />
+              <DateBoxButton name="dropDown" />
+            </DateBox>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
 }
 
 export default App;

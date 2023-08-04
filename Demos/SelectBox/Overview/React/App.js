@@ -15,107 +15,98 @@ const readOnlyProductLabel = { 'aria-label': 'ReadOnly Product' };
 const templatedProductLabel = { 'aria-label': 'Templated Product' };
 const disabledProductLabel = { 'aria-label': 'Disabled Product' };
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.products = service.getProducts();
-    this.simpleProducts = service.getSimpleProducts();
-    this.data = new ArrayStore({
-      data: this.products,
-      key: 'ID',
-    });
-    this.state = {
-      value: this.simpleProducts[0],
-    };
-    this.onValueChanged = this.onValueChanged.bind(this);
-  }
+const products = service.getProducts();
+const simpleProducts = service.getSimpleProducts();
+const data = new ArrayStore({
+  data: products,
+  key: 'ID',
+});
 
-  onValueChanged(e) {
-    this.setState({
-      value: e.value,
-    });
+function App() {
+  const [value, setValue] = React.useState(service.getSimpleProducts()[0]);
+
+  const onValueChanged = React.useCallback((e) => {
+    setValue(e.value);
     notify(`The value is changed to: "${e.value}"`);
-  }
+  }, []);
 
-  render() {
-    return (
-      <div>
-        <div className="dx-fieldset">
-          <div className="dx-field">
-            <div className="dx-field-label">Default mode</div>
-            <div className="dx-field-value">
-              <SelectBox items={this.simpleProducts} inputAttr={simpleProductLabel} />
-            </div>
-          </div>
-          <div className="dx-field">
-            <div className="dx-field-label">With a custom placeholder</div>
-            <div className="dx-field-value">
-              <SelectBox items={this.simpleProducts}
-                placeholder="Choose Product"
-                inputAttr={productWithPlaceholderLabel}
-                showClearButton={true} />
-            </div>
-          </div>
-          <div className="dx-field">
-            <div className="dx-field-label">Read only</div>
-            <div className="dx-field-value">
-              <SelectBox items={this.simpleProducts}
-                defaultValue={this.simpleProducts[0]}
-                inputAttr={readOnlyProductLabel}
-                readOnly={true} />
-            </div>
-          </div>
-          <div className="dx-field">
-            <div className="dx-field-label">Disabled</div>
-            <div className="dx-field-value">
-              <SelectBox items={this.simpleProducts}
-                inputAttr={disabledProductLabel}
-                defaultValue={this.simpleProducts[0]}
-                disabled={true} />
-            </div>
-          </div>
-          <div className="dx-field">
-            <div className="dx-field-label">Data source usage</div>
-            <div className="dx-field-value">
-              <SelectBox dataSource={this.data}
-                displayExpr="Name"
-                inputAttr={productIDLabel}
-                valueExpr="ID"
-                defaultValue={this.products[0].ID} />
-            </div>
-          </div>
-          <div className="dx-field">
-            <div className="dx-field-label">Custom templates</div>
-            <div className="dx-field-value">
-              <SelectBox id="custom-templates"
-                dataSource={this.products}
-                displayExpr="Name"
-                inputAttr={templatedProductLabel}
-                valueExpr="ID"
-                defaultValue={this.products[3].ID}
-                fieldRender={Field}
-                itemRender={Item} />
-            </div>
+  return (
+    <div>
+      <div className="dx-fieldset">
+        <div className="dx-field">
+          <div className="dx-field-label">Default mode</div>
+          <div className="dx-field-value">
+            <SelectBox items={simpleProducts} inputAttr={simpleProductLabel} />
           </div>
         </div>
-        <div className="dx-fieldset">
-          <div className="dx-fieldset-header">Event Handling</div>
-          <div className="dx-field">
-            <div className="dx-field-label">Product</div>
-            <div className="dx-field-value">
-              <SelectBox items={this.simpleProducts}
-                value={this.state.value}
-                inputAttr={productLabel}
-                onValueChanged={this.onValueChanged} />
-            </div>
+        <div className="dx-field">
+          <div className="dx-field-label">With a custom placeholder</div>
+          <div className="dx-field-value">
+            <SelectBox items={simpleProducts}
+              placeholder="Choose Product"
+              inputAttr={productWithPlaceholderLabel}
+              showClearButton={true} />
           </div>
-          <div className="current-value">
-        Selected product is <span>{this.state.value}</span>
+        </div>
+        <div className="dx-field">
+          <div className="dx-field-label">Read only</div>
+          <div className="dx-field-value">
+            <SelectBox items={simpleProducts}
+              defaultValue={simpleProducts[0]}
+              inputAttr={readOnlyProductLabel}
+              readOnly={true} />
+          </div>
+        </div>
+        <div className="dx-field">
+          <div className="dx-field-label">Disabled</div>
+          <div className="dx-field-value">
+            <SelectBox items={simpleProducts}
+              inputAttr={disabledProductLabel}
+              defaultValue={simpleProducts[0]}
+              disabled={true} />
+          </div>
+        </div>
+        <div className="dx-field">
+          <div className="dx-field-label">Data source usage</div>
+          <div className="dx-field-value">
+            <SelectBox dataSource={data}
+              displayExpr="Name"
+              inputAttr={productIDLabel}
+              valueExpr="ID"
+              defaultValue={products[0].ID} />
+          </div>
+        </div>
+        <div className="dx-field">
+          <div className="dx-field-label">Custom templates</div>
+          <div className="dx-field-value">
+            <SelectBox id="custom-templates"
+              dataSource={products}
+              displayExpr="Name"
+              inputAttr={templatedProductLabel}
+              valueExpr="ID"
+              defaultValue={products[3].ID}
+              fieldRender={Field}
+              itemRender={Item} />
           </div>
         </div>
       </div>
-    );
-  }
+      <div className="dx-fieldset">
+        <div className="dx-fieldset-header">Event Handling</div>
+        <div className="dx-field">
+          <div className="dx-field-label">Product</div>
+          <div className="dx-field-value">
+            <SelectBox items={simpleProducts}
+              value={value}
+              inputAttr={productLabel}
+              onValueChanged={onValueChanged} />
+          </div>
+        </div>
+        <div className="current-value">
+          Selected product is <span>{value}</span>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default App;

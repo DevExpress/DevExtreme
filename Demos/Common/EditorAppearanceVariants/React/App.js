@@ -1,5 +1,4 @@
 import React from 'react';
-
 import SelectBox from 'devextreme-react/select-box';
 import TextBox from 'devextreme-react/text-box';
 import DateBox from 'devextreme-react/date-box';
@@ -8,7 +7,6 @@ import TextArea from 'devextreme-react/text-area';
 import Button from 'devextreme-react/button';
 import Validator, { RequiredRule } from 'devextreme-react/validator';
 import notify from 'devextreme/ui/notify';
-
 import {
   states, stylingModes, labelModes, notesLabel,
   birthDateLabel, hireDateLabel,

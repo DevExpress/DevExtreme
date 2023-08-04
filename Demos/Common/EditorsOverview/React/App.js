@@ -35,163 +35,133 @@ const transformations = [
   },
 ];
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const [text, setText] = React.useState('UI Superhero');
+  const [width, setWidth] = React.useState(370);
+  const [height, setHeight] = React.useState(260);
+  const [color, setColor] = React.useState('#f05b41');
+  const [transform, setTransform] = React.useState(noFlipTransform);
+  const [border, setBorder] = React.useState(false);
 
-    this.state = {
-      text: 'UI Superhero',
-      width: 370,
-      height: 260,
-      color: '#f05b41',
-      transform: noFlipTransform,
-      border: false,
-    };
+  const handleTextChange = React.useCallback((e) => {
+    setText(e.value);
+  }, []);
 
-    this.handleTextChange = this.handleTextChange.bind(this);
-    this.handleColorChange = this.handleColorChange.bind(this);
-    this.handleWidthChange = this.handleWidthChange.bind(this);
-    this.handleHeightChange = this.handleHeightChange.bind(this);
-    this.handleTransformChange = this.handleTransformChange.bind(this);
-    this.handleBorderChange = this.handleBorderChange.bind(this);
-  }
+  const handleColorChange = React.useCallback((e) => {
+    setColor(e.value);
+  }, []);
 
-  render() {
-    return (
-      <React.Fragment>
-        <div className="settings">
-          <div className="column">
-            <div className="field">
-              <div className="label">Title</div>
-              <div className="value">
-                <TextBox
-                  value={this.state.text}
-                  inputAttr={titleLabel}
-                  onValueChanged={this.handleTextChange}
-                  maxLength={40}
-                  valueChangeEvent="keyup"
-                />
-              </div>
-            </div>
-            <div className="field">
-              <div className="label">Color</div>
-              <div className="value">
-                <ColorBox
-                  value={this.state.color}
-                  onValueChanged={this.handleColorChange}
-                  applyValueMode="instantly"
-                  inputAttr={colorLabel}
-                />
-              </div>
+  const handleHeightChange = React.useCallback((e) => {
+    setWidth((e.value * 37) / 26);
+    setHeight(e.value);
+  }, []);
+
+  const handleWidthChange = React.useCallback((e) => {
+    setWidth(e.value);
+    setHeight((e.value * 26) / 37);
+  }, []);
+
+  const handleTransformChange = React.useCallback((e) => {
+    setTransform(e.value);
+  }, []);
+
+  const handleBorderChange = React.useCallback((e) => {
+    setBorder(e.value);
+  }, []);
+
+  return (
+    <React.Fragment>
+      <div className="settings">
+        <div className="column">
+          <div className="field">
+            <div className="label">Title</div>
+            <div className="value">
+              <TextBox
+                value={text}
+                inputAttr={titleLabel}
+                onValueChanged={handleTextChange}
+                maxLength={40}
+                valueChangeEvent="keyup"
+              />
             </div>
           </div>
-          <div className="column">
-            <div className="field">
-              <div className="label">Width</div>
-              <div className="value">
-                <NumberBox
-                  value={this.state.width}
-                  onValueChanged={this.handleWidthChange}
-                  showSpinButtons={true}
-                  max={700}
-                  min={70}
-                  format="#0px"
-                  inputAttr={widthLabel}
-                />
-              </div>
-            </div>
-            <div className="field">
-              <div className="label">Height</div>
-              <div className="value">
-                <NumberBox
-                  value={this.state.height}
-                  onValueChanged={this.handleHeightChange}
-                  showSpinButtons={true}
-                  max={700}
-                  min={70}
-                  format="#0px"
-                  inputAttr={heightLabel}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="field">
-              <div className="label">Transform</div>
-              <div className="value">
-                <SelectBox
-                  value={this.state.transform}
-                  onValueChanged={this.handleTransformChange}
-                  inputAttr={transformLabel}
-                  items={transformations}
-                  grouped={true}
-                  displayExpr="name"
-                  valueExpr="value"
-                />
-              </div>
-            </div>
-
-            <div className="field">
-              <div className="label">Border</div>
-              <div className="value">
-                <Switch
-                  value={this.state.border}
-                  onValueChanged={this.handleBorderChange}
-                />
-              </div>
+          <div className="field">
+            <div className="label">Color</div>
+            <div className="value">
+              <ColorBox
+                value={color}
+                onValueChanged={handleColorChange}
+                applyValueMode="instantly"
+                inputAttr={colorLabel}
+              />
             </div>
           </div>
         </div>
+        <div className="column">
+          <div className="field">
+            <div className="label">Width</div>
+            <div className="value">
+              <NumberBox
+                value={width}
+                onValueChanged={handleWidthChange}
+                showSpinButtons={true}
+                max={700}
+                min={70}
+                format="#0px"
+                inputAttr={widthLabel}
+              />
+            </div>
+          </div>
+          <div className="field">
+            <div className="label">Height</div>
+            <div className="value">
+              <NumberBox
+                value={height}
+                onValueChanged={handleHeightChange}
+                showSpinButtons={true}
+                max={700}
+                min={70}
+                format="#0px"
+                inputAttr={heightLabel}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="column">
+          <div className="field">
+            <div className="label">Transform</div>
+            <div className="value">
+              <SelectBox
+                value={transform}
+                onValueChanged={handleTransformChange}
+                inputAttr={transformLabel}
+                items={transformations}
+                grouped={true}
+                displayExpr="name"
+                valueExpr="value"
+              />
+            </div>
+          </div>
 
-        <Logo
-          text={this.state.text}
-          width={this.state.width}
-          height={this.state.height}
-          color={this.state.color}
-          transform={this.state.transform}
-          border={this.state.border}
-        />
-      </React.Fragment>
-    );
-  }
+          <div className="field">
+            <div className="label">Border</div>
+            <div className="value">
+              <Switch value={border} onValueChanged={handleBorderChange} />
+            </div>
+          </div>
+        </div>
+      </div>
 
-  handleTextChange(e) {
-    this.setState({
-      text: e.value,
-    });
-  }
-
-  handleColorChange(e) {
-    this.setState({
-      color: e.value,
-    });
-  }
-
-  handleHeightChange(e) {
-    this.setState({
-      width: (e.value * 37) / 26,
-      height: e.value,
-    });
-  }
-
-  handleWidthChange(e) {
-    this.setState({
-      width: e.value,
-      height: (e.value * 26) / 37,
-    });
-  }
-
-  handleTransformChange(e) {
-    this.setState({
-      transform: e.value,
-    });
-  }
-
-  handleBorderChange(e) {
-    this.setState({
-      border: e.value,
-    });
-  }
+      <Logo
+        text={text}
+        width={width}
+        height={height}
+        color={color}
+        transform={transform}
+        border={border}
+      />
+    </React.Fragment>
+  );
 }
 
 export default App;

@@ -12,7 +12,7 @@ const commonSettings = {
   openOnFieldClick: false,
 };
 
-export default function App() {
+function App() {
   return (
     <div>
       <div className="dx-fieldset">
@@ -63,3 +63,5 @@ export default function App() {
     </div>
   );
 }
+
+export default App;

@@ -1,61 +1,49 @@
 import React from 'react';
-import { Switch } from 'devextreme-react/switch';
+import Switch from 'devextreme-react/switch';
 
-class App extends React.Component {
-  constructor() {
-    super();
+function App() {
+  const [value, setValue] = React.useState(false);
 
-    this.state = {
-      value: false,
-    };
+  const valueChanged = React.useCallback((e) => {
+    setValue(e.value);
+  }, []);
 
-    this.valueChanged = this.valueChanged.bind(this);
-  }
-
-  render() {
-    return (
-      <div>
-        <div className="dx-fieldset">
-          <div className="dx-field">
-            <div className="dx-field-label">Switched on</div>
-            <div className="dx-field-value">
-              <Switch defaultValue={true} />
-            </div>
+  return (
+    <div>
+      <div className="dx-fieldset">
+        <div className="dx-field">
+          <div className="dx-field-label">Switched on</div>
+          <div className="dx-field-value">
+            <Switch defaultValue={true} />
           </div>
-          <div className="dx-field">
-            <div className="dx-field-label">Switched off</div>
-            <div className="dx-field-value">
-              <Switch defaultValue={false} />
-            </div>
+        </div>
+        <div className="dx-field">
+          <div className="dx-field-label">Switched off</div>
+          <div className="dx-field-value">
+            <Switch defaultValue={false} />
           </div>
-          <div className="dx-field">
-            <div className="dx-field-label">Value change handling</div>
-            <div className="dx-field-value">
-              <Switch
-                value={this.state.value}
-                onValueChanged={this.valueChanged}
-              />
-            </div>
+        </div>
+        <div className="dx-field">
+          <div className="dx-field-label">Value change handling</div>
+          <div className="dx-field-value">
+            <Switch
+              value={value}
+              onValueChanged={valueChanged}
+            />
           </div>
-          <div className="dx-field">
-            <div className="dx-field-label">Disabled</div>
-            <div className="dx-field-value">
-              <Switch
-                value={this.state.value}
-                disabled={true}
-              />
-            </div>
+        </div>
+        <div className="dx-field">
+          <div className="dx-field-label">Disabled</div>
+          <div className="dx-field-value">
+            <Switch
+              value={value}
+              disabled={true}
+            />
           </div>
         </div>
       </div>
-    );
-  }
-
-  valueChanged(e) {
-    this.setState({
-      value: e.value,
-    });
-  }
+    </div>
+  );
 }
 
 export default App;

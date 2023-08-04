@@ -37,7 +37,7 @@ export default function App() {
           <span>Default functionality</span>
           <div className="selected-days-wrapper ">
             <span>Days selected: </span>
-            <span>{ selectedDays }</span>
+            <span>{selectedDays}</span>
           </div>
         </div>
         <div className="dx-field-value">
