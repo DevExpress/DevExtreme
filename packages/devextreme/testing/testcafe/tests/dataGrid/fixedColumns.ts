@@ -132,6 +132,8 @@ test('Fixed columns should have same width as not fixed columns with columnAutoW
     },
     '#otherContainer',
   );
+}).after(async (t) => {
+  await ClientFunction(() => { $('#otherContainer').empty(); })();
 });
 
 // T1148937
