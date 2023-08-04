@@ -9,7 +9,6 @@
 @use "../../tabs" as *;
 @use "../../../base/tabPanel";
 @use "../variables/borders" as *;
-@use "../mixins" as *;
 
 // adduse
 
@@ -30,17 +29,11 @@
 
     &::after {
       top: 0;
-      bottom: 1px !important;
+      bottom: $generic-tabs-border-width !important; // TODO
     }
   }
 
-  &:not(.dx-empty-collection) {
-    .dx-multiview-wrapper {
-      border-top: none;
-    }
-  }
-
-  .dx-tabs-scrollable {
+  .dx-tabs .dx-tabs-scrollable {
     @include dx-tabs-border-mixin(
       none,
       $generic-tabs-border-width solid,
@@ -50,7 +43,7 @@
 
     &::after {
       top: 0;
-      bottom: 1px !important;
+      bottom: $generic-tabs-border-width !important; // TODO
     }
 
     .dx-tabs-wrapper {

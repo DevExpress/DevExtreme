@@ -39,22 +39,9 @@
         <div id="button"></div>
         <script>
            $(function() {
-                const items = [
-                    { title: 'tab one', text: 'tab one', icon: '', disabled: false },
-                    { title: 'tab two', text: 'tab two', icon: '', disabled: false },
-                    { title: 'tab three', text: 'tab three', icon: '', disabled: false },
-                    { title: 'tab four', text: 'tab four', icon: '', disabled: false },
-                    { title: 'tab five', text: 'tab five', icon: '', disabled: false },
-                    { title: 'tab six', text: 'tab six', icon: '', disabled: false },
-                    { title: 'tab seven', text: 'tab seven', icon: '', disabled: false },
-                    { title: 'tab eight', text: 'tab eight', icon: '', disabled: false },
-                ]
-
-                $("#button").dxTabPanel({
-                    width: 450,
-                    scrollByContent: true,
-                    // showNavButtons: false,
-                    items,
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
         </script>
