@@ -173,6 +173,7 @@
         "dxDataGrid-ariaSelectAll": "Izvēlēties visu",
         "dxDataGrid-ariaSelectRow": "Izvēlēties rindu",
         "dxDataGrid-ariaToolbar": "Datu tabulas rīkjosla",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Filtra veidotājs",
         "dxDataGrid-filterPanelCreateFilter": "Izveidot filtru",
         "dxDataGrid-filterPanelClearFilter": "Notīrīt",
