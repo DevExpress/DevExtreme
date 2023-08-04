@@ -23,47 +23,44 @@ const { format } = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 });
 
-export default function App() {
-  return (
-    <VectorMap
-      id="vector-map"
-      palette="Violet"
-      bounds={mapBounds}>
-      <Size height={700} />
-      <Layer
-        name="areas"
-        dataSource={mapsData.world}
-        colorGroups={colorGroups}
-        colorGroupingField="total"
-        customize={customizeLayer}
-        palette="violet"
-      >
-        <Label dataField="name" enabled={true} />
-      </Layer>
-
-      <Legend customizeText={customizeLegendText}>
-        <Source layer="areas" grouping="color" />
-      </Legend>
-
-      <Title text="Nominal GDP">
-        <Subtitle text="(in millions of US dollars)" />
-      </Title>
-
-      <Tooltip enabled={true}
-        contentRender={TooltipTemplate} />
-      <Export enabled={true} />
-    </VectorMap>
-  );
-}
-
-function customizeLayer(elements) {
+const customizeLayer = (elements) => {
   elements.forEach((element) => {
     const countryGDPData = countriesGDP[element.attribute('name')];
     element.attribute('total', (countryGDPData && countryGDPData.total) || 0);
   });
-}
+};
 
-function customizeLegendText(arg) {
-  return `${format(arg.start)} to ${format(arg.end)}`;
-}
+const customizeLegendText = (arg) => `${format(arg.start)} to ${format(arg.end)}`;
 
+const App = () => (
+  <VectorMap
+    id="vector-map"
+    palette="Violet"
+    bounds={mapBounds}>
+    <Size height={700} />
+    <Layer
+      name="areas"
+      dataSource={mapsData.world}
+      colorGroups={colorGroups}
+      colorGroupingField="total"
+      customize={customizeLayer}
+      palette="violet"
+    >
+      <Label dataField="name" enabled={true} />
+    </Layer>
+
+    <Legend customizeText={customizeLegendText}>
+      <Source layer="areas" grouping="color" />
+    </Legend>
+
+    <Title text="Nominal GDP">
+      <Subtitle text="(in millions of US dollars)" />
+    </Title>
+
+    <Tooltip enabled={true}
+      contentRender={TooltipTemplate} />
+    <Export enabled={true} />
+  </VectorMap>
+);
+
+export default App;

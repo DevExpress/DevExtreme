@@ -9,7 +9,7 @@ const apiKey = {
   bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
 };
 
-export default function App() {
+const App = () => {
   const [mapTypeValue, setMapTypeValue] = React.useState(mapTypes[0].key);
 
   const onMapTypeChange = React.useCallback((value) => {
@@ -44,4 +44,6 @@ export default function App() {
       </div>
     </div>
   );
-}
+};
+
+export default App;

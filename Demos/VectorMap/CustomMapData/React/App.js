@@ -1,17 +1,23 @@
 import React from 'react';
-
 import VectorMap, {
   Layer,
   Export,
   Title,
   Label,
 } from 'devextreme-react/vector-map';
-
 import { pangaeaBorders, pangaeaContinents } from './data.js';
 
 const projection = {
   to: ([l, lt]) => [l / 100, lt / 100],
   from: ([x, y]) => [x * 100, y * 100],
+};
+
+const customizeLayer = (elements) => {
+  elements.forEach((element) => {
+    element.applySettings({
+      color: element.attribute('color'),
+    });
+  });
 };
 
 export default function App() {
@@ -36,12 +42,4 @@ export default function App() {
       <Export enabled={true}></Export>
     </VectorMap>
   );
-}
-
-function customizeLayer(elements) {
-  elements.forEach((element) => {
-    element.applySettings({
-      color: element.attribute('color'),
-    });
-  });
 }

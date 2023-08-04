@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Map, {
   Export,
   Label,
@@ -11,7 +10,6 @@ import Map, {
   Tooltip,
   Size,
 } from 'devextreme-react/vector-map';
-
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { countriesGDP } from './data.js';
 import TooltipTemplate from './TooltipTemplate.js';
@@ -26,15 +24,15 @@ function customizeLayer(elements) {
   });
 }
 
-const { format } = new Intl.NumberFormat('en-US', {
+const format = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
-});
+}).format;
 
 function customizeLegendText(arg) {
   return `${format(arg.start)} to ${format(arg.end)}`;
 }
 
-function App() {
+export default function App() {
   return (
     <Map bounds={mapBounds}>
       <Size height={500} />
@@ -56,10 +54,7 @@ function App() {
         <Subtitle text="(in millions of US dollars)" />
       </Title>
 
-      <Tooltip enabled={true}
-        contentRender={TooltipTemplate} />
+      <Tooltip enabled={true} contentRender={TooltipTemplate} />
       <Export enabled={true} />
-    </Map>
-  );
+    </Map>);
 }
-export default App;

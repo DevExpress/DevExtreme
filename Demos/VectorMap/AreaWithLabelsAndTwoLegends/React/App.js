@@ -1,5 +1,4 @@
 import React from 'react';
-
 import VectorMap, {
   Label,
   Layer,
@@ -7,7 +6,6 @@ import VectorMap, {
   Source,
   Tooltip,
 } from 'devextreme-react/vector-map';
-
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { populations, markers } from './data.js';
 
@@ -15,6 +13,33 @@ const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
 const sizeGroups = [0, 8000, 10000, 50000];
 
 const bounds = [-180, 85, 180, -75];
+
+const customizeText = (arg) => {
+  if (arg.index === 0) {
+    return '< 0.5%';
+  } if (arg.index === 5) {
+    return '> 3%';
+  }
+  return `${arg.start}% to ${arg.end}%`;
+};
+
+const customizeTooltip = (arg) => ({
+  text: arg.attribute('text'),
+});
+
+const customizeMarkers = (arg) => ['< 8000K', '8000K to 10000K', '> 10000K'][arg.index];
+
+const customizeItems = (items) => items.reverse();
+
+const customizeLayer = (elements) => {
+  elements.forEach((element) => {
+    const name = element.attribute('name');
+    const population = populations[name];
+    if (population) {
+      element.attribute('population', population);
+    }
+  });
+};
 
 export default function App() {
   return (
@@ -59,37 +84,4 @@ export default function App() {
         customizeTooltip={customizeTooltip} />
     </VectorMap>
   );
-}
-
-function customizeText(arg) {
-  if (arg.index === 0) {
-    return '< 0.5%';
-  } if (arg.index === 5) {
-    return '> 3%';
-  }
-  return `${arg.start}% to ${arg.end}%`;
-}
-
-function customizeTooltip(arg) {
-  return {
-    text: arg.attribute('text'),
-  };
-}
-
-function customizeMarkers(arg) {
-  return ['< 8000K', '8000K to 10000K', '> 10000K'][arg.index];
-}
-
-function customizeItems(items) {
-  return items.reverse();
-}
-
-function customizeLayer(elements) {
-  elements.forEach((element) => {
-    const name = element.attribute('name');
-    const population = populations[name];
-    if (population) {
-      element.attribute('population', population);
-    }
-  });
 }

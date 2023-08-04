@@ -13,35 +13,13 @@ const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
 
 const bounds = [-180, 85, 180, -60];
 
-function App() {
-  return (
-    <VectorMap
-      id="vector-map" bounds={bounds}>
-      <Layer
-        dataSource={mapsData.world}
-        palette="Violet"
-        name="areas"
-        colorGroupingField="population"
-        colorGroups={colorGroups}
-        customize={customizeLayer}
-      >
-      </Layer>
-
-      <Legend
-        customizeText={customizeText}>
-        <Source layer="areas" grouping="color"></Source>
-      </Legend>
-    </VectorMap>
-  );
-}
-
-function customizeLayer(elements) {
+const customizeLayer = (elements) => {
   elements.forEach((element) => {
     element.attribute('population', populations[element.attribute('name')]);
   });
-}
+};
 
-function customizeText(arg) {
+const customizeText = (arg) => {
   let text;
   if (arg.index === 0) {
     text = '< 0.5%';
@@ -51,6 +29,23 @@ function customizeText(arg) {
     text = `${arg.start}% to ${arg.end}%`;
   }
   return text;
-}
+};
 
-export default App;
+export default function App() {
+  return (
+    <VectorMap id="vector-map" bounds={bounds}>
+      <Layer
+        dataSource={mapsData.world}
+        palette="Violet"
+        name="areas"
+        colorGroupingField="population"
+        colorGroups={colorGroups}
+        customize={customizeLayer}
+      ></Layer>
+
+      <Legend customizeText={customizeText}>
+        <Source layer="areas" grouping="color"></Source>
+      </Legend>
+    </VectorMap>
+  );
+}

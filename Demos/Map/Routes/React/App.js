@@ -1,8 +1,6 @@
 import React from 'react';
-
 import Map from 'devextreme-react/map';
 import SelectBox from 'devextreme-react/select-box';
-
 import {
   markersData, routesData, modeLabel, colorLabel,
 } from './data.js';

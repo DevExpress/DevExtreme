@@ -12,28 +12,28 @@ import { weatherData } from './data.js';
 
 const bounds = [-118, 52, -80, 20];
 
-export default function App() {
-  return (
-    <VectorMap
-      id="vector-map"
-      bounds={bounds}>
-      <Layer
-        dataSource={mapsData.usa}
-        hoverEnabled={false}
-        borderColor="#ffffff"
-      >
-      </Layer>
-      <Layer
-        dataSource={weatherData}
-        type="marker"
-        elementType="image"
-        dataField="url"
-        size={51}>
-        <Label dataField="text">
-          <Font size={14} />
-        </Label>
-      </Layer>
-      <LoadingIndicator show={true} />
-    </VectorMap>
-  );
-}
+const App = () => (
+  <VectorMap
+    id="vector-map"
+    bounds={bounds}>
+    <Layer
+      dataSource={mapsData.usa}
+      hoverEnabled={false}
+      borderColor="#ffffff"
+    >
+    </Layer>
+    <Layer
+      dataSource={weatherData}
+      type="marker"
+      elementType="image"
+      dataField="url"
+      size={51}>
+      <Label dataField="text">
+        <Font size={14} />
+      </Label>
+    </Layer>
+    <LoadingIndicator show={true} />
+  </VectorMap>
+);
+
+export default App;

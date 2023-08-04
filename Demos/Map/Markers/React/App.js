@@ -1,9 +1,7 @@
 import React from 'react';
-
 import Map from 'devextreme-react/map';
 import Button from 'devextreme-react/button';
 import CheckBox from 'devextreme-react/check-box';
-
 import { markersData } from './data.js';
 
 const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
@@ -12,14 +10,14 @@ const apiKey = {
   bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
 };
 
-export default function App() {
+const App = () => {
   const [currentMarkersData, setCurrentMarkersData] = React.useState(markersData);
   const [currentMarkerUrl, setCurrentMarkerUrl] = React.useState(markerUrl);
 
   const onCustomMarkersChange = React.useCallback((value) => {
     setCurrentMarkerUrl(value ? currentMarkerUrl : null);
     setCurrentMarkersData(markersData);
-  }, [setCurrentMarkerUrl, setCurrentMarkersData]);
+  }, [currentMarkerUrl, setCurrentMarkerUrl, setCurrentMarkersData]);
 
   const showTooltips = React.useCallback(() => {
     setCurrentMarkersData(currentMarkersData.map((item) => {
@@ -27,7 +25,7 @@ export default function App() {
       newItem.tooltip.isShown = true;
       return newItem;
     }));
-  }, [setCurrentMarkersData]);
+  }, [currentMarkersData, setCurrentMarkersData]);
 
   return (
     <React.Fragment>
@@ -40,8 +38,7 @@ export default function App() {
         markers={currentMarkersData}
         provider="bing"
         apiKey={apiKey}
-      >
-      </Map>
+      ></Map>
       <div className="options">
         <div className="caption">Options</div>
         <div className="option">
@@ -60,4 +57,6 @@ export default function App() {
       </div>
     </React.Fragment>
   );
-}
+};
+
+export default App;
