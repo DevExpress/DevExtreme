@@ -2562,6 +2562,10 @@ declare module DevExpress.common.grids {
      */
     allowSearch?: boolean;
     /**
+     * [descr:GridBaseOptions.columnChooser.container]
+     */
+    container?: string | DevExpress.core.UserDefinedElement;
+    /**
      * [descr:GridBaseOptions.columnChooser.emptyPanelText]
      */
     emptyPanelText?: string;
