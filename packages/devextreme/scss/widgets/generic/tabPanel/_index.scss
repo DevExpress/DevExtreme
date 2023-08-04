@@ -143,8 +143,8 @@
 
     @include dx-tabs-border-mixin(
       none,
-      none,
       $generic-tabs-border,
+      none,
       $generic-tabs-border,
     );
 
@@ -163,8 +163,8 @@
   .dx-tabs-scrollable {
     @include dx-tabs-border-mixin(
       none,
-      none,
       $generic-tabs-border-width solid,
+      none,
       $generic-tabs-border-width solid,
     );
 

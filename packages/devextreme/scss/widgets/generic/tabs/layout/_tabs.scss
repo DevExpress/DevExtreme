@@ -7,6 +7,10 @@
 @use "../variables/sizes" as *;
 @use "../variables/colors" as *;
 @use "../variables/borders" as *;
+@use "../mixins" as *;
+
+// adduse
+
 
 .dx-tabs {
   color: $tabs-border-color;
@@ -15,33 +19,14 @@
     opacity: 1;
   }
 
-  &.dx-tabs-nav-buttons {
-    .dx-tabs-wrapper {
-      &::after {
-        border-inline-start: $generic-tabs-border-transparent;
-        border-inline-end: $generic-tabs-border-transparent;
-      }
-    }
-  }
-
   &:not(.dx-tabs-nav-buttons) .dx-tabs-scrollable {
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      left: 0;
-      border-inline-start: $generic-tabs-border;
-      border-inline-end: $generic-tabs-border;
-    }
-
-    .dx-tabs-wrapper {
-      &::after {
-        border-inline-start: none;
-        border-inline-end: none;
-      }
-    }
+    @include dx-tabs-after-mixin();
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border,
+      $generic-tabs-border,
+      $generic-tabs-border,
+      $generic-tabs-border,
+    );
 
     .dx-scrollable-content {
       // NOTE: Scrollable cuts border via transform-translate.
@@ -49,21 +34,43 @@
     }
   }
 
+  .dx-tabs-scrollable {
+    height: 100%;
+  }
+
   .dx-tabs-wrapper {
     background-color: $tabs-tab-bg;
+    border-block-start: $generic-tabs-border-transparent;
+    border-block-end: $generic-tabs-border-transparent;
+    
+    @include dx-tabs-after-mixin();
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border,
+      $generic-tabs-border,
+      $generic-tabs-border,
+      $generic-tabs-border,
+    );
+  }
 
-    &::after {
-      content: "";
-      position: absolute;
-      top: -$generic-tabs-border-width;
-      bottom: -$generic-tabs-border-width;
-      right: 0;
-      left: 0;
-      border: $generic-tabs-border;
+  &.dx-tabs-nav-buttons {
+    .dx-tabs-wrapper {
+      @include dx-tabs-border-mixin(
+        null,
+        $generic-tabs-border-transparent,
+        null,
+        $generic-tabs-border-transparent,
+      );
     }
   }
 
-  .dx-tabs-scrollable {
-    height: 100%;
+  &:not(.dx-tabs-nav-buttons) .dx-tabs-scrollable {
+    .dx-tabs-wrapper {
+      @include dx-tabs-border-mixin(
+        null,
+        none,
+        null,
+        none,
+      );
+    }
   }
 }
