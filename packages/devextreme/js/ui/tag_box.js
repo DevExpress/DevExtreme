@@ -1244,7 +1244,7 @@ const TagBox = SelectBox.inherit({
             if(!this.option('showMultiTagOnly')) {
                 this.option('value', this._getValue().slice(0, this.option('maxDisplayedTags')));
             } else {
-                this.reset();
+                this.clear();
             }
             return;
         }
