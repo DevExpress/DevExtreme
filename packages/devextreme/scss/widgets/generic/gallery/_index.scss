@@ -105,4 +105,8 @@
   .dx-gallery-indicator-item-selected {
     background: $gallery-indicator-focused-bg;
   }
+
+  &:not(:has(.dx-gallery-indicator)) {
+    border: solid 1px $base-accent;
+  }
 }

@@ -749,6 +749,34 @@ QUnit.module('behavior', {
 
         assert.ok(resizeEventSpy.called);
     });
+
+    QUnit.test('Gallery should have 1px border on focus (showIndicator=false)', function(assert) {
+        const gallery = this.$element.dxGallery({
+            items: [0, 1, 2, 3],
+            showIndicator: false,
+            focusStateEnabled: true,
+        }).dxGallery('instance');
+
+        gallery.focus();
+
+        const borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '1px');
+    });
+
+    QUnit.test('Gallery should not have border on focus (showIndicator=true)', function(assert) {
+        const gallery = this.$element.dxGallery({
+            items: [0, 1, 2, 3],
+            showIndicator: true,
+            focusStateEnabled: true,
+        }).dxGallery('instance');
+
+        gallery.focus();
+
+        const borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '0px');
+    });
 });
 
 QUnit.module('render', {
