@@ -527,6 +527,28 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         assert.ok(selectedNodes.filter(node => node.text === 'field1'), 'field1 column is selected');
     });
 
+    QUnit.test('Column chooser\'s container option should work', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            columnChooser: {
+                enabled: true,
+                container: '#container'
+            },
+            columns: ['field1'],
+            dataSource: []
+        });
+
+        // act
+        dataGrid.showColumnChooser();
+
+        // assert
+        const popup = dataGrid.getView('columnChooserView')._popupContainer;
+        const $popupContainer = popup.$wrapper().parent();
+
+        assert.strictEqual($popupContainer.attr('id'), 'container', 'The container option is applied');
+    });
+
     QUnit.test('Dragged hidden column from the group panel should become visible', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
