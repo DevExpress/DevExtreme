@@ -15,6 +15,16 @@
   background-color: $tabs-tab-bg;
   color: $tabs-tab-color;
 
+  &::after {
+    content: "";
+    position: absolute;
+    top: -$generic-tabs-border-width;
+    bottom: -$generic-tabs-border-width;
+    right: 0;
+    left: 0;
+    z-index: 1;
+  }
+
   &.dx-state-hover {
     background-color: $tabs-tab-hover-bg;
 
@@ -76,12 +86,15 @@
   }
 
   &.dx-state-focused.dx-state-disabled {
+    &::after {
+      z-index: 2;
+    }
+
     @include dx-tabs-border-mixin(
       $generic-tabs-border-focused-disabled-top,
       $generic-tabs-border-focused-disabled-bottom,
       $generic-tabs-border-focused-disabled-left,
       $generic-tabs-border-focused-disabled-right,
-      $is-expanded: true,
     );
   }
 

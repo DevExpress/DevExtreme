@@ -17,8 +17,10 @@
 
   &.dx-tabs-nav-buttons {
     .dx-tabs-wrapper {
-      border-inline-start: $generic-tabs-border-transparent;
-      border-inline-end: $generic-tabs-border-transparent;
+      &::after {
+        border-inline-start: $generic-tabs-border-transparent;
+        border-inline-end: $generic-tabs-border-transparent;
+      }
     }
   }
 
@@ -35,8 +37,10 @@
     }
 
     .dx-tabs-wrapper {
-      border-inline-start: none;
-      border-inline-end: none;
+      &::after {
+        border-inline-start: none;
+        border-inline-end: none;
+      }
     }
 
     .dx-scrollable-content {
@@ -46,8 +50,17 @@
   }
 
   .dx-tabs-wrapper {
-    border: $generic-tabs-border;
     background-color: $tabs-tab-bg;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: -$generic-tabs-border-width;
+      bottom: -$generic-tabs-border-width;
+      right: 0;
+      left: 0;
+      border: $generic-tabs-border;
+    }
   }
 
   .dx-tabs-scrollable {
