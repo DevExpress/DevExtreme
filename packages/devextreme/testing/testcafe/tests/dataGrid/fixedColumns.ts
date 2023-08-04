@@ -444,6 +444,9 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
 
   await a11yCheck(t);
 }).before(async () => {
+  await ClientFunction(() => { $('<div id="myButton">').appendTo('body'); })();
+  await createWidget('dxButton', { text: 'Focus' }, '#myButton');
+
   await createWidget('dxDataGrid', {
     columnWidth: 150,
     width: 800,
@@ -467,9 +470,6 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
       { dataField: 'column8', fixed: true, fixedPosition: 'right' },
     ],
   });
-
-  await ClientFunction(() => { $('<div id="myButton">').appendTo('body'); })();
-  await createWidget('dxButton', { text: 'Focus' }, '#myButton');
 }).after(async () => {
   await ClientFunction(() => { $('#myButton').remove(); })();
 });

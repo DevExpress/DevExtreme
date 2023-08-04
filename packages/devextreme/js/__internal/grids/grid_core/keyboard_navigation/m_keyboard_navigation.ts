@@ -188,23 +188,19 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   // This is part of accessibility issue fix: scrollable should always have focusable element inside
   private translateFocusIfNeed(event, $element: dxElementWrapper) {
-    const rowsView = this._rowsView;
-    const $firstCell = rowsView.getCell({ rowIndex: 0, columnIndex: 0 });
+    const needTranslateFocus = this._rowsView.isScrollableNeedFocusable();
 
-    const hasScrollable = !!rowsView.getScrollable();
-    const hasFixedTable = !!rowsView._fixedTableElement?.length;
-    const hasFirstCell = !!$firstCell?.length;
-
-    if (!hasScrollable || !hasFixedTable || !hasFirstCell) {
+    if (!needTranslateFocus) {
       return;
     }
 
+    const $firstCell = this._rowsView.getCell({ rowIndex: 0, columnIndex: 0 });
     const firstCellHasTabIndex = !!$firstCell.attr('tabindex');
-    const isFirstCellFixed = this._isFixedColumn(0);
-    // @ts-expect-error
+
+    // @ts-expect-error dxElementWrapper doesn't have overload for 'is' method
     const notFixedCellIsTarget = $element.is(this._$firstNotFixedCell);
 
-    if (firstCellHasTabIndex && isFirstCellFixed && notFixedCellIsTarget) {
+    if (firstCellHasTabIndex && notFixedCellIsTarget) {
       event.preventDefault();
 
       this._focus($firstCell);
@@ -738,7 +734,11 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     if (isOriginalHandlerRequired) {
       this._editorFactory.loseFocus();
-      this._$firstNotFixedCell?.removeAttr('tabIndex');
+
+      if (this._rowsView.isScrollableNeedFocusable()) {
+        console.log('removeTab');
+        this._$firstNotFixedCell?.removeAttr('tabIndex');
+      }
 
       if (this._editingController.isEditing() && !this._isRowEditMode()) {
         this._resetFocusedCell(true);
@@ -2612,10 +2612,9 @@ export const keyboardNavigationModule: import('../m_types').Module = {
 
         // This is part of accessibility issue fix: scrollable should always have focusable element inside
         makeScrollableFocusableIfNeed() {
-          const hasScrollable = !!this.getScrollable();
-          const hasFixedTable = !!this._fixedTableElement?.length;
+          const needFocusable = this.isScrollableNeedFocusable();
 
-          if (!hasScrollable || !hasFixedTable) {
+          if (!needFocusable) {
             return;
           }
 
@@ -2624,6 +2623,15 @@ export const keyboardNavigationModule: import('../m_types').Module = {
           if ($firstNotFixedCell) {
             this._keyboardController._applyTabIndexToElement($firstNotFixedCell);
           }
+        },
+
+        isScrollableNeedFocusable() {
+          const hasScrollable = !!this.getScrollable();
+          const hasFixedTable = !!this._fixedTableElement?.length;
+          const hasFirstCell = !!this.getCell({ rowIndex: 0, columnIndex: 0 })?.length;
+          const isFirstCellFixed = this._keyboardController._isFixedColumn(0);
+
+          return hasScrollable && hasFixedTable && hasFirstCell && isFirstCellFixed;
         },
 
         updateFocusElementTabIndex(cellElements) {
