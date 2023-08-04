@@ -187,7 +187,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   // This is part of accessibility issue fix: scrollable should always have focusable element inside
-  private translateFocusIfNeed(event, $element: dxElementWrapper) {
+  private translateFocusIfNeed(event: any, $element: dxElementWrapper): void {
     const needTranslateFocus = this._rowsView.isScrollableNeedFocusable();
 
     if (!needTranslateFocus) {
@@ -2611,7 +2611,7 @@ export const keyboardNavigationModule: import('../m_types').Module = {
         },
 
         // This is part of accessibility issue fix: scrollable should always have focusable element inside
-        makeScrollableFocusableIfNeed() {
+        makeScrollableFocusableIfNeed(): void {
           const needFocusable = this.isScrollableNeedFocusable();
 
           if (!needFocusable) {
@@ -2625,7 +2625,7 @@ export const keyboardNavigationModule: import('../m_types').Module = {
           }
         },
 
-        isScrollableNeedFocusable() {
+        isScrollableNeedFocusable(): boolean {
           const hasScrollable = !!this.getScrollable();
           const hasFixedTable = !!this._fixedTableElement?.length;
           const hasFirstCell = !!this.getCell({ rowIndex: 0, columnIndex: 0 })?.length;
