@@ -1,135 +1,156 @@
-import { wrapToArray } from '../../../core/utils/array';
-import { when, Deferred } from '../../../core/utils/deferred';
-import { getFieldExpr, getDisplayExpr, getValueExpr, getWrappedDataSource } from './utils';
+/* eslint-disable max-classes-per-file */
+import { wrapToArray } from '@js/core/utils/array';
+import { Deferred, when } from '@js/core/utils/deferred';
 
+import {
+  getDisplayExpr, getFieldExpr, getValueExpr, getWrappedDataSource,
+} from './m_utils';
+
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class PromiseItem {
-    constructor(rawAppointment, promise) {
-        this.rawAppointment = rawAppointment;
-        this.promise = promise;
-    }
+  rawAppointment: any;
+
+  promise: any;
+
+  constructor(rawAppointment, promise) {
+    this.rawAppointment = rawAppointment;
+    this.promise = promise;
+  }
 }
 
 export class AgendaResourceProcessor {
-    get resourceDeclarations() {
-        return this._resourceDeclarations;
-    }
+  _resourceDeclarations: any;
 
-    set resourceDeclarations(value) {
-        this._resourceDeclarations = value;
+  isLoaded: boolean;
 
-        this.isLoaded = false;
-        this.isLoading = false;
+  isLoading: boolean;
 
-        this.resourceMap.clear();
-        this.appointmentPromiseQueue = [];
-    }
+  resourceMap: any;
 
-    constructor(resourceDeclarations = []) {
-        this._resourceDeclarations = resourceDeclarations;
-        this.isLoaded = false;
-        this.isLoading = false;
+  appointmentPromiseQueue: any[];
 
-        this.resourceMap = new Map();
-        this.appointmentPromiseQueue = [];
-    }
+  get resourceDeclarations() {
+    return this._resourceDeclarations;
+  }
 
-    _pushAllResources() {
-        this.appointmentPromiseQueue.forEach(({ promise, rawAppointment }) => {
-            const result = [];
+  set resourceDeclarations(value) {
+    this._resourceDeclarations = value;
 
-            this.resourceMap.forEach((resource, fieldName) => {
-                const item = {
-                    label: resource.label,
-                    values: []
-                };
+    this.isLoaded = false;
+    this.isLoading = false;
 
-                if(fieldName in rawAppointment) {
-                    wrapToArray(rawAppointment[fieldName])
-                        .forEach(value => item.values.push(resource.map.get(value)));
-                }
+    this.resourceMap.clear();
+    this.appointmentPromiseQueue = [];
+  }
 
-                if(item.values.length) {
-                    result.push(item);
-                }
-            });
+  constructor(resourceDeclarations = []) {
+    this._resourceDeclarations = resourceDeclarations;
+    this.isLoaded = false;
+    this.isLoading = false;
 
-            promise.resolve(result);
-        });
-        this.appointmentPromiseQueue = [];
-    }
+    this.resourceMap = new Map();
+    this.appointmentPromiseQueue = [];
+  }
 
-    _onPullResource(fieldName, valueName, displayName, label, items) {
-        const map = new Map();
-        items.forEach(item => map.set(item[valueName], item[displayName]));
+  _pushAllResources() {
+    this.appointmentPromiseQueue.forEach(({ promise, rawAppointment }) => {
+      const result: any = [];
 
-        this.resourceMap.set(fieldName, { label, map });
-    }
+      this.resourceMap.forEach((resource, fieldName) => {
+        const item = {
+          label: resource.label,
+          values: [] as any,
+        };
 
-    _hasResourceDeclarations(resources) {
-        if(resources.length === 0) {
-            this.appointmentPromiseQueue.forEach(({ promise }) => promise.resolve([]));
-            this.appointmentPromiseQueue = [];
-
-            return false;
+        if (fieldName in rawAppointment) {
+          wrapToArray(rawAppointment[fieldName])
+            .forEach((value) => item.values.push(resource.map.get(value)));
         }
 
-        return true;
-    }
-
-    _tryPullResources(resources, resultAsync) {
-        if(!this.isLoading) {
-            this.isLoading = true;
-            const promises = [];
-
-            resources.forEach(resource => {
-                const promise = new Deferred()
-                    .done(items => this._onPullResource(
-                        getFieldExpr(resource),
-                        getValueExpr(resource),
-                        getDisplayExpr(resource),
-                        resource.label,
-                        items)
-                    );
-
-                promises.push(promise);
-
-                const dataSource = getWrappedDataSource(resource.dataSource);
-                if(dataSource.isLoaded()) {
-                    promise.resolve(dataSource.items());
-                } else {
-                    dataSource
-                        .load()
-                        .done(list => promise.resolve(list))
-                        .fail(() => promise.reject());
-                }
-            });
-
-            when.apply(null, promises)
-                .done(() => {
-                    this.isLoaded = true;
-                    this.isLoading = false;
-
-                    this._pushAllResources();
-                }).fail(() => resultAsync.reject());
+        if (item.values.length) {
+          result.push(item);
         }
+      });
+
+      promise.resolve(result);
+    });
+    this.appointmentPromiseQueue = [];
+  }
+
+  _onPullResource(fieldName, valueName, displayName, label, items) {
+    const map = new Map();
+    items.forEach((item) => map.set(item[valueName], item[displayName]));
+
+    this.resourceMap.set(fieldName, { label, map });
+  }
+
+  _hasResourceDeclarations(resources) {
+    if (resources.length === 0) {
+      this.appointmentPromiseQueue.forEach(({ promise }) => promise.resolve([]));
+      this.appointmentPromiseQueue = [];
+
+      return false;
     }
 
-    initializeState(resourceDeclarations = []) {
-        this.resourceDeclarations = resourceDeclarations;
-    }
+    return true;
+  }
 
-    createListAsync(rawAppointment) {
-        const resultAsync = new Deferred();
-        this.appointmentPromiseQueue.push(new PromiseItem(rawAppointment, resultAsync));
+  _tryPullResources(resources, resultAsync) {
+    if (!this.isLoading) {
+      this.isLoading = true;
+      const promises: any = [];
 
-        if(this._hasResourceDeclarations(this.resourceDeclarations)) {
-            if(this.isLoaded) {
-                this._pushAllResources();
-            } else {
-                this._tryPullResources(this.resourceDeclarations, resultAsync);
-            }
+      resources.forEach((resource) => {
+        // @ts-expect-error
+        const promise = new Deferred()
+          .done((items) => this._onPullResource(
+            getFieldExpr(resource),
+            getValueExpr(resource),
+            getDisplayExpr(resource),
+            resource.label,
+            items,
+          ));
+
+        promises.push(promise);
+
+        const dataSource: any = getWrappedDataSource(resource.dataSource);
+        if (dataSource.isLoaded()) {
+          promise.resolve(dataSource.items());
+        } else {
+          dataSource
+            .load()
+            .done((list) => promise.resolve(list))
+            .fail(() => promise.reject());
         }
+      });
 
-        return resultAsync.promise();
+      when.apply(null, promises)
+        .done(() => {
+          this.isLoaded = true;
+          this.isLoading = false;
+
+          this._pushAllResources();
+        }).fail(() => resultAsync.reject());
     }
+  }
+
+  initializeState(resourceDeclarations = []) {
+    this.resourceDeclarations = resourceDeclarations;
+  }
+
+  createListAsync(rawAppointment) {
+    // @ts-expect-error
+    const resultAsync = new Deferred();
+    this.appointmentPromiseQueue.push(new PromiseItem(rawAppointment, resultAsync));
+
+    if (this._hasResourceDeclarations(this.resourceDeclarations)) {
+      if (this.isLoaded) {
+        this._pushAllResources();
+      } else {
+        this._tryPullResources(this.resourceDeclarations, resultAsync);
+      }
+    }
+
+    return resultAsync.promise();
+  }
 }

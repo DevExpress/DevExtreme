@@ -1,7 +1,7 @@
 import { TimeZoneEditor } from '../timeZoneEditor';
 
-jest.mock('../../../../../../../ui/scheduler/timezones/utils.timezones_data', () => ({
-  ...jest.requireActual('../../../../../../../ui/scheduler/timezones/utils.timezones_data'),
+jest.mock('../../../../../../../__internal/scheduler/timezones/m_utils_timezones_data', () => ({
+  ...jest.requireActual('../../../../../../../__internal/scheduler/timezones/m_utils_timezones_data'),
   __esModule: true,
   default: {
     getDisplayedTimeZones: (args) => args,

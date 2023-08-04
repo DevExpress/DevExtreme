@@ -9,7 +9,7 @@ import { ViewType } from '../types';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
 import { SchedulerToolbar } from '../header/header';
-import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
+import * as resourceUtils from '../../../../__internal/scheduler/resources/m_utils';
 import { getPreparedDataItems } from '../utils/data';
 import { getFilterStrategy } from '../utils/filtering/local';
 import combineRemoteFilter from '../utils/filtering/remote';
@@ -301,7 +301,7 @@ describe('Scheduler', () => {
           scheduler.loadGroupResources();
 
           expect(loadResources)
-            .toBeCalledWith(groupsValue, resourcesValue, scheduler.resourcePromisesMap);
+            .toHaveBeenCalledWith(groupsValue, resourcesValue, scheduler.resourcePromisesMap);
 
           expect(scheduler.loadedResources)
             .toEqual([
@@ -365,7 +365,7 @@ describe('Scheduler', () => {
           scheduler.loadGroupResources();
 
           expect(loadResources)
-            .toBeCalledWith(groupsValue, resourcesValue, scheduler.resourcePromisesMap);
+            .toHaveBeenCalledWith(groupsValue, resourcesValue, scheduler.resourcePromisesMap);
 
           expect(scheduler.loadedResources)
             .toEqual([{
@@ -508,7 +508,7 @@ describe('Scheduler', () => {
               .toBe('Test_combineRemoteFilter');
 
             expect(combineRemoteFilter)
-              .toBeCalledWith({
+              .toHaveBeenCalledWith({
                 dataAccessors: expect.anything(),
                 dataSourceFilter: userFilter,
                 min: new Date(2021, 10, 24, 9),
@@ -831,7 +831,7 @@ describe('Scheduler', () => {
           expect(currentViewProps)
             .toEqual({ type: 'week' });
           expect(getCurrentViewProps)
-            .toBeCalledWith('week', views);
+            .toHaveBeenCalledWith('week', views);
         });
       });
 
@@ -1659,13 +1659,13 @@ describe('Scheduler', () => {
             .toBe(true);
 
           expect(hideTooltip)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
 
           expect(changeAppointmentEditFormVisible)
-            .toBeCalledTimes(1);
+            .toHaveBeenCalledTimes(1);
 
           expect(changeAppointmentEditFormVisible)
-            .toBeCalledWith(true);
+            .toHaveBeenCalledWith(true);
         });
       });
     });
