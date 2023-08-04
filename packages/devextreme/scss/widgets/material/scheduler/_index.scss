@@ -368,6 +368,11 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     $material-scheduler-navigator-icon-font-size,
   );
 
+  .dx-scheduler-navigator-next,
+  .dx-scheduler-navigator-previous {
+    @include dx-button-onlyicon-sizing($material-scheduler-navigator-icon-font-size);
+  }
+
   background-color: $scheduler-header-bg;
 }
 

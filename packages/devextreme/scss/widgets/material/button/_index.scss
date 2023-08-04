@@ -51,7 +51,6 @@
 .dx-button { // stylelint-disable-line no-duplicate-selectors
   height: $material-button-height;
   position: relative;
-  overflow: hidden;
 
   .dx-button-content {
     position: relative;
@@ -102,14 +101,6 @@
       $button-success-active-bg,
       $button-success-icon-color
     );
-  }
-
-  &.dx-button-back {
-    @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg);
-
-    border-radius: 50%;
-
-    @include dx-button-onlyicon-sizing();
   }
 }
 

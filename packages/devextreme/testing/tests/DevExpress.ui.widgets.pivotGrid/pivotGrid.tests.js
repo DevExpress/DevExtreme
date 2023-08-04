@@ -7035,6 +7035,30 @@ QUnit.module('Data area', () => {
         assert.strictEqual(dataArea.groupElement().css('position'), 'relative');
     });
 
+    // Covers the CSP issue T1178847
+    QUnit.test('Should remove data area table\'s styles during render', function(assert) {
+        const dataArea = createDataArea();
+        const $testElement = $('#pivotArea');
+
+        dataArea.render($testElement, [
+            [
+                { columnType: 'D', rowType: 'D', text: '1' },
+            ],
+        ]);
+
+        const $table = $testElement.find('table');
+        $table.css({ 'box-shadow': '0 0 #ff0000' });
+
+        dataArea.render($testElement, [
+            [
+                { columnType: 'D', rowType: 'D', text: '2' },
+            ],
+        ]);
+
+        const expectedCss = $table.css('box-shadow');
+        assert.equal(expectedCss, 'none', 'box-shadow style was reset');
+    });
+
     QUnit.test('Render when data area is not empty', function(assert) {
         const dataArea = createDataArea();
         let rows;

@@ -3,7 +3,6 @@ import { mount, shallow } from 'enzyme';
 import devices from '../../../core/devices';
 import { convertRulesToOptions } from '../../../core/options/utils';
 import { current } from '../../../ui/themes';
-import errors from '../../../core/errors';
 import {
   clear as clearEventHandlers,
   defaultEvent,
@@ -509,8 +508,8 @@ describe('Button', () => {
         });
 
         it('should add button type class', () => {
-          expect(new Button({ type: 'back' }).cssClasses)
-            .toEqual(expect.stringMatching('dx-button-back'));
+          expect(new Button({ type: 'danger' }).cssClasses)
+            .toEqual(expect.stringMatching('dx-button-danger'));
         });
 
         it('should add "normal" button type class by default', () => {
@@ -562,15 +561,6 @@ describe('Button', () => {
           expect(new Button({ icon: 'icon' }).iconSource).toBe('icon');
         });
 
-        it('should return "icon" property value if the type is "back"', () => {
-          expect(new Button({ icon: 'icon', type: 'back' }).iconSource)
-            .toBe('icon');
-        });
-
-        it('should return "back" property value for the back button', () => {
-          expect(new Button({ type: 'back' }).iconSource).toBe('back');
-        });
-
         it('should return "back" if icon property is empty and type is "back"', () => {
           expect(new Button({}).iconSource).toBe('');
         });
@@ -593,11 +583,6 @@ describe('Button', () => {
 
         it('should return config for the icon only button', () => {
           expect(new Button({ icon: 'icon' }).inkRippleConfig)
-            .toEqual(rippleConfig);
-        });
-
-        it('should return config for the back button', () => {
-          expect(new Button({ type: 'back' }).inkRippleConfig)
             .toEqual(rippleConfig);
         });
       });
@@ -656,25 +641,6 @@ describe('Button', () => {
           expect(getDefaultOptions().focusStateEnabled).toBe(false);
         });
       });
-    });
-  });
-
-  describe('checkDeprecation', () => {
-    afterEach(() => {
-      jest.resetAllMocks();
-    });
-
-    it('check deprecation error', () => {
-      const component = new Button({ type: 'back' });
-      component.checkDeprecation();
-      expect(errors.log).toHaveBeenCalledTimes(1);
-      expect(errors.log).toHaveBeenNthCalledWith(1, 'W0016', 'type', 'back', '22.2', 'Use the \'back\' icon instead');
-    });
-
-    it('no deprecation error', () => {
-      const component = new Button({ icon: 'back' });
-      component.checkDeprecation();
-      expect(errors.log).toHaveBeenCalledTimes(0);
     });
   });
 });

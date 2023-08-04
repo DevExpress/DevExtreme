@@ -63,7 +63,6 @@ export type FileSavingEventInfo<T> = Cancelable & {
   /**
    * @docid
    * @type this
-   * @default Widget
    */
   readonly component: T;
   /** @docid */

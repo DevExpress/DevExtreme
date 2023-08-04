@@ -4,11 +4,8 @@
 
 // adduse
 
-
-$button-icon-color: $base-icon-color !default;
 $button-border-radius: $base-border-radius !default;
 $button-disabled-text-opacity: 0.5 !default;
-$button-disabled-icon-opacity: 0.6 !default;
 
 /**
 * $name 10. Text color
@@ -27,7 +24,6 @@ $button-normal-bg: null !default;
 * $type color
 */
 $button-normal-border-color: null !default;
-$button-special-hover: null !default;
 $button-normal-bg-inverted: null !default;
 $button-normal-contained-bg-hover: null !default;
 $button-normal-contained-bg-focused: null !default;
@@ -124,7 +120,6 @@ $button-success-text-bg-active: null !default;
 @if $color == "carmine" {
   $button-normal-bg: $base-element-bg !default;
   $button-normal-border-color: darken($base-border-color, 17%) !default; // #dee1e3 => #b1b7bd
-  $button-special-hover: transparent !default;
   $button-normal-bg-inverted: darken($button-normal-bg, 100%) !default;
   $button-normal-contained-bg-hover: darken($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: darken($button-normal-bg, 8%) !default;
@@ -171,7 +166,6 @@ $button-success-text-bg-active: null !default;
 @if $color == "contrast" {
   $button-normal-border-color: $base-border-color !default;
   $button-normal-bg: $base-bg !default;
-  $button-special-hover: $base-accent !default;
   $button-normal-contained-bg-hover: $base-hover-color !default;
   $button-normal-contained-bg-focused: $base-focus-color !default;
   $button-normal-contained-bg-active: $button-normal-bg !default;
@@ -217,7 +211,6 @@ $button-success-text-bg-active: null !default;
 @if $color == "dark" {
   $button-normal-bg: $base-element-bg !default;
   $button-normal-border-color: $base-border-color !default;
-  $button-special-hover: transparent !default;
   $button-normal-bg-inverted: lighten($button-normal-bg, 100%) !default;
   $button-normal-contained-bg-hover: lighten($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: lighten($button-normal-bg, 8%) !default;
@@ -264,7 +257,6 @@ $button-success-text-bg-active: null !default;
 @if $color == "darkmoon" {
   $button-normal-bg: $base-element-bg !default;
   $button-normal-border-color: lighten($base-border-color, 13%) !default;
-  $button-special-hover: transparent !default;
   $button-normal-bg-inverted: lighten($button-normal-bg, 100%) !default;
   $button-normal-contained-bg-hover: lighten($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: lighten($button-normal-bg, 8%) !default;
@@ -311,7 +303,6 @@ $button-success-text-bg-active: null !default;
 @if $color == "darkviolet" {
   $button-normal-bg: #303038 !default;
   $button-normal-border-color: $base-hover-bg !default;
-  $button-special-hover: transparent !default;
   $button-normal-bg-inverted: lighten($button-normal-bg, 100%) !default;
   $button-normal-contained-bg-hover: lighten($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: lighten($button-normal-bg, 8%) !default;
@@ -358,7 +349,6 @@ $button-success-text-bg-active: null !default;
 @if $color == "greenmist" {
   $button-normal-bg: $base-element-bg !default;
   $button-normal-border-color: lighten($base-label-color, 16.5%) !default;
-  $button-special-hover: transparent !default;
   $button-normal-bg-inverted: darken($button-normal-bg, 100%) !default;
   $button-normal-contained-bg-hover: darken($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: darken($button-normal-bg, 8%) !default;
@@ -405,7 +395,6 @@ $button-success-text-bg-active: null !default;
 @if $color == "light" {
   $button-normal-bg: $base-element-bg !default;
   $button-normal-border-color: $base-border-color !default; // #dee1e3 => #b1b7bd
-  $button-special-hover: transparent !default;
   $button-normal-bg-inverted: darken($button-normal-bg, 100%) !default;
   $button-normal-contained-bg-hover: darken($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: darken($button-normal-bg, 8%) !default;
@@ -452,7 +441,6 @@ $button-success-text-bg-active: null !default;
 @if $color == "softblue" {
   $button-normal-bg: $base-element-bg !default;
   $button-normal-border-color: darken($base-border-color, 11%) !default; // #dee1e3 => #b1b7bd
-  $button-special-hover: transparent !default;
   $button-normal-bg-inverted: darken($button-normal-bg, 100%) !default;
   $button-normal-contained-bg-hover: darken($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: darken($button-normal-bg, 8%) !default;

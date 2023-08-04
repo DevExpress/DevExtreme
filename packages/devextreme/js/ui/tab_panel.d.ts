@@ -32,7 +32,10 @@ type ItemLike = string | Item | any;
  * @hidden
  */
 export interface TabPanelItemInfo<TItem extends ItemLike> {
-    /** @docid */
+    /**
+     * @docid
+     * @type object
+     */
     readonly itemData?: TItem;
     /** @docid */
     readonly itemElement?: DxElement;

@@ -13,6 +13,7 @@
   text-align: center;
   vertical-align: middle;
   max-width: 100%;
+  overflow: hidden;
 
   @include user-select(none);
 
@@ -24,17 +25,12 @@
     align-items: center;
     justify-content: center;
     vertical-align: middle;
+    background-size: contain;
   }
 }
 
 .dx-button a {
   text-decoration: none;
-}
-
-.dx-button-back {
-  .dx-button-text {
-    display: none;
-  }
 }
 
 .dx-button-content {

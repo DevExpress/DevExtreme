@@ -2,3 +2,15 @@
 
 // adduse
 
+$generic-dropdownbutton-icon-spindown-size: null !default;
+$generic-dropdownbutton-action-horizontal-padding: null !default;
+
+@if $size == "default" {
+  $generic-dropdownbutton-icon-spindown-size: 18px;
+  $generic-dropdownbutton-action-horizontal-padding: 12px !default;
+}
+
+@else if $size == "compact" {
+  $generic-dropdownbutton-icon-spindown-size: 16px;
+  $generic-dropdownbutton-action-horizontal-padding: 10px !default;
+}

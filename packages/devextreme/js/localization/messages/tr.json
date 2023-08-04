@@ -178,6 +178,7 @@
         "dxDataGrid-ariaSelectAll": "Hepsini seç",
         "dxDataGrid-ariaSelectRow": "Satırı seç",
         "dxDataGrid-ariaToolbar": "Data grid toolbar",
+        "dxDataGrid-ariaEditForm": "Edit form",
         "dxDataGrid-filterBuilderPopupTitle": "Filtre Oluşturucu",
         "dxDataGrid-filterPanelCreateFilter": "Filtre Oluştur",
         "dxDataGrid-filterPanelClearFilter": "Temizle",

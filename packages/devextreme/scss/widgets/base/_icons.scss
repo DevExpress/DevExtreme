@@ -179,17 +179,6 @@
     margin-left: $size;
     margin-right: 0;
   }
-
-  &.dx-icon-right {
-    margin-left: $size;
-    margin-right: 0;
-
-    @at-root #{selector-append(".dx-rtl", &)},
-    .dx-rtl & {
-      margin-right: $size;
-      margin-left: 0;
-    }
-  }
 }
 
 @mixin dx-font-icon($glyph) {
@@ -448,15 +437,7 @@ $icons: (
   @include dx-font-icon(map.get($icons, $name));
 }
 
-@mixin dx-font-icons-list() {
-  @each $key, $val in $icons {
-    .dx-icon-#{$key} {
-      @include dx-icon($key);
-    }
-  }
-}
-
-@mixin dx-font-icons($font-file: "dxicons", $font-name: "DevExtreme Generic Icons", $font-name-safari: "devextreme_generic_icons") {
+@mixin dx-font-icons($font-file: "dxicons", $font-name: "DevExtreme Generic Icons", $font-name-safari: "devextreme_generic_icons", $text-rendering: auto) {
   @font-face {
     font-family: 'DXIcons';
     src:
@@ -472,12 +453,21 @@ $icons: (
   .dx-icon {
     display: inline-block;
     font-size: inherit;
-    text-rendering: auto;
+    text-rendering: $text-rendering;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  @include dx-font-icons-list();
+  %icon-font {
+    font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+  }
+
+  @each $key, $glyph in $icons {
+    .dx-icon-#{$key} { @extend %icon-font; }
+    .dx-icon-#{$key}:before {
+      content: $glyph;
+    }
+  }
 }
 
 .dx-rtl {

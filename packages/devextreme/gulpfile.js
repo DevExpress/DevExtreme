@@ -34,8 +34,6 @@ require('./build/gulp/localization');
 require('./build/gulp/generator/gulpfile');
 require('./build/gulp/check_licenses');
 require('./build/gulp/qunit-in-docker');
-require('./build/gulp/renovation-testing-playground');
-require('./build/gulp/renovation-npm');
 require('./build/gulp/systemjs');
 
 if(!env.TEST_CI) {
@@ -85,14 +83,10 @@ function createDefaultBatch(dev) {
         tasks.push('npm');
         tasks.push('check-license-notices');
     }
-    if(!env.BUILD_TESTCAFE) {
-        tasks.push('discover-declarations');
-    }
 
     return gulp.series(tasks);
 }
 
-gulp.task('discover-declarations', shell.task('npm run discover-declarations'));
 gulp.task('misc-batch', createMiscBatch());
 gulp.task('style-compiler-batch', createStyleCompilerBatch());
 gulp.task('main-batch', createMainBatch(false));

@@ -87,6 +87,7 @@ const PLACEHOLDER_CLASS = 'dx-placeholder';
 
 const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
 const SCROLL_VIEW_CONTENT_CLASS = 'dx-scrollview-content';
+const LIST_ITEMS_CLASS = 'dx-list-items';
 
 const FOCUSED_CLASS = 'dx-state-focused';
 
@@ -2889,13 +2890,13 @@ QUnit.module('keyboard navigation', {
         const instance = $element.dxLookup('instance');
 
         instance._$list.dxList('focus');
-        assert.ok(instance._$list.find('.dx-list-item').eq(0).hasClass(FOCUSED_CLASS), 'list-item is focused after focusing on list');
+        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).eq(0).hasClass(FOCUSED_CLASS), 'list-item is focused after focusing on list');
 
-        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEMS_CLASS}`).parent();
         const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
-        assert.ok(instance._$list.find('.dx-list-item').eq(1).hasClass(FOCUSED_CLASS), 'second list-item is focused after down key pressing');
+        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(FOCUSED_CLASS), 'second list-item is focused after down key pressing');
     });
 
     QUnit.testInActiveWindow('lookup item should be selected after \'enter\' key pressing', function(assert) {
@@ -2958,7 +2959,7 @@ QUnit.module('keyboard navigation', {
 
         instance.option('searchEnabled', false);
 
-        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEMS_CLASS}`).parent();
         const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
@@ -3027,7 +3028,7 @@ QUnit.module('keyboard navigation', {
             searchEnabled: false
         }).dxLookup('instance');
 
-        const $listItemContainer = instance._$list.find(`.${LIST_ITEM_CLASS}`).parent();
+        const $listItemContainer = instance._$list.find(`.${LIST_ITEMS_CLASS}`).parent();
         const keyboard = keyboardMock($listItemContainer);
 
         assert.ok(instance.option('opened'), 'overlay opened');
@@ -3413,6 +3414,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 const listItemContainerAttributes = {
                     tabindex: '0',
+                    role: 'group',
                 };
 
                 let fieldAttributes = {
@@ -3516,19 +3518,72 @@ if(devices.real().deviceType === 'desktop') {
             });
         });
 
+        QUnit.test('activedescendant attribute should be correct if searchEnabled is true', function(assert) {
+            helper.createWidget({
+                opened: true,
+                searchEnabled: true,
+                dataSource: [1, 2, 3]
+            });
+
+            const $list = $(`.${LIST_CLASS}`);
+            const list = getList();
+            const $input = $(`.${LOOKUP_FIELD_CLASS}`);
+            const $searchInput = $(`.${LOOKUP_SEARCH_CLASS}`).find('input');
+            const $firstItem = $list.find('.dx-list-item:eq(0)');
+            const $secondItem = $list.find('.dx-list-item:eq(1)');
+
+            assert.notOk($firstItem.attr('id'), 'id on 0 item is not exist');
+            assert.notOk($secondItem.attr('id'), 'id on 1 item is not exist');
+            assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not exists');
+            assert.strictEqual($searchInput.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not exists');
+
+            list.option('focusedElement', $secondItem);
+
+            assert.ok($secondItem.attr('id'), 'id is exist');
+            assert.strictEqual($input.attr('aria-activedescendant'), $secondItem.attr('id'), 'aria-activedescendant is exists');
+            assert.strictEqual($searchInput.attr('aria-activedescendant'), $secondItem.attr('id'), 'aria-activedescendant is exists');
+        });
+
+        QUnit.test('activedescendant attribute should be correct if searchEnabled is false', function(assert) {
+            helper.createWidget({
+                opened: true,
+                searchEnabled: false,
+                dataSource: [1, 2, 3]
+            });
+
+            const $list = $(`.${LIST_CLASS}`);
+            const list = getList();
+            const $input = $(`.${LOOKUP_FIELD_CLASS}`);
+            const $firstItem = $list.find('.dx-list-item:eq(0)');
+
+            assert.ok($firstItem.attr('id'), 'id on 0 is exist');
+            assert.strictEqual($input.attr('aria-activedescendant'), $firstItem.attr('id'), 'aria-activedescendant is exists');
+
+            const $secondItem = $list.find('.dx-list-item:eq(1)');
+            list.option('focusedElement', $secondItem);
+
+            assert.notOk($firstItem.attr('id'), 'id on 0 item is not exist');
+            assert.ok($secondItem.attr('id'), 'id on 1 item is exist');
+            assert.strictEqual($input.attr('aria-activedescendant'), $secondItem.attr('id'), 'aria-activedescendant is exists');
+        });
+
         ['items', 'dataSource'].forEach(dataSourcePropertyName => {
             QUnit.test(`should have correct role and aria-label if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
                 helper.createWidget({ opened: true });
                 const $list = $(`.${LIST_CLASS}`);
                 const $scrollView = $list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`);
+                const $itemsContainer = $list.find(`.${LIST_ITEMS_CLASS}`);
 
-                helper.checkAttributes($scrollView, { tabindex: '0' });
+                helper.checkAttributes($scrollView, { tabindex: '0', role: 'group' });
+                helper.checkAttributes($itemsContainer, { });
 
                 helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
-                helper.checkAttributes($scrollView, { tabindex: '0', 'aria-label': 'Items', role: 'listbox' });
+                helper.checkAttributes($scrollView, { tabindex: '0', role: 'group' });
+                helper.checkAttributes($itemsContainer, { 'aria-label': 'Items', role: 'listbox' });
 
                 helper.widget.option(dataSourcePropertyName, []);
-                helper.checkAttributes($scrollView, { tabindex: '0' });
+                helper.checkAttributes($scrollView, { tabindex: '0', role: 'group' });
+                helper.checkAttributes($itemsContainer, { });
             });
         });
     });
@@ -3658,36 +3713,44 @@ QUnit.module('default options', {
 
         try {
 
-            const lookup = $lookup.dxLookup({ dataSource: new DataSource({
-                store: [{
-                    'ID': 1,
-                    'Group': 'dark',
-                    'Color': 'black'
-                }, {
-                    'ID': 2,
-                    'Group': 'dark',
-                    'Color': 'grey'
-                }, {
-                    'ID': 3,
-                    'Group': 'dark',
-                    'Color': 'green'
-                }, {
-                    'ID': 4,
-                    'Group': 'light',
-                    'Color': 'white'
-                }, {
-                    'ID': 5,
-                    'Group': 'light',
-                    'Color': 'yellow'
-                }, {
-                    'ID': 6,
-                    'Group': 'light',
-                    'Color': 'rose'
-                }, {
-                    'ID': 7,
-                    'Group': 'light',
-                    'Color': 'blue'
-                }], key: 'ID', group: 'Group' }), grouped: true, valueExpr: 'Color', displayExpr: 'Color', value: 'grey' }).dxLookup('instance');
+            const lookup = $lookup.dxLookup({
+                dataSource: new DataSource({
+                    store: [{
+                        'ID': 1,
+                        'Group': 'dark',
+                        'Color': 'black'
+                    }, {
+                        'ID': 2,
+                        'Group': 'dark',
+                        'Color': 'grey'
+                    }, {
+                        'ID': 3,
+                        'Group': 'dark',
+                        'Color': 'green'
+                    }, {
+                        'ID': 4,
+                        'Group': 'light',
+                        'Color': 'white'
+                    }, {
+                        'ID': 5,
+                        'Group': 'light',
+                        'Color': 'yellow'
+                    }, {
+                        'ID': 6,
+                        'Group': 'light',
+                        'Color': 'rose'
+                    }, {
+                        'ID': 7,
+                        'Group': 'light',
+                        'Color': 'blue'
+                    }],
+                    key: 'ID', group: 'Group'
+                }),
+                grouped: true,
+                valueExpr: 'Color',
+                displayExpr: 'Color',
+                value: 'grey'
+            }).dxLookup('instance');
 
             $lookup.css('margin-top', 200);
 

@@ -18,9 +18,15 @@ import {
  * @hidden
  */
 export interface ValueChangedInfo {
-    /** @docid */
+    /**
+     * @docid
+     * @type object
+     */
     readonly previousValue?: any;
-    /** @docid */
+    /**
+     * @docid
+     * @type object
+     */
     readonly value?: any;
 }
 
@@ -98,6 +104,13 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @hidden
      */
     stylingMode?: EditorStyle;
+
+     /**
+     * @docid
+     * @default false
+     * @public
+     */
+     isDirty?: boolean;
 }
 /**
  * @docid

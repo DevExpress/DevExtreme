@@ -2,7 +2,7 @@ import { AppointmentFilter, DataAccessorType, ViewType } from '../../types';
 import {
   AppointmentFilterBaseStrategy,
   AppointmentFilterVirtualStrategy,
-} from '../../../../../ui/scheduler/appointments/dataProvider/appointmentFilter';
+} from '../../../../../__internal/scheduler/appointments/data_provider/m_appointment_filter';
 import { TimeZoneCalculator } from '../../timeZoneCalculator/utils';
 import { Group, ViewDataProviderType } from '../../workspaces/types';
 import { ResourceProps } from '../../props';

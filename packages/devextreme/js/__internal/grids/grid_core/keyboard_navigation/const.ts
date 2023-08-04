@@ -30,7 +30,15 @@ export const FOCUSED_CLASS = 'dx-focused';
 
 export const FAST_EDITING_DELETE_KEY = 'delete';
 
-export const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex], .dx-checkbox';
+export const INTERACTIVE_ELEMENTS_SELECTOR = `
+  input:not([type="hidden"]):not([disabled]),
+  textarea:not([disabled]),
+  a:not([disabled]),
+  select:not([disabled]),
+  button:not([disabled]),
+  [tabindex]:not([disabled]),
+  .dx-checkbox:not([disabled])
+`;
 export const NON_FOCUSABLE_ELEMENTS_SELECTOR = `${INTERACTIVE_ELEMENTS_SELECTOR}, .dx-dropdowneditor-icon`;
 
 export const EDIT_MODE_FORM = 'form';

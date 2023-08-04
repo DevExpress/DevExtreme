@@ -77,7 +77,10 @@ import { PositionConfig } from '../animation/position';
  * @namespace DevExpress.common.grids
  */
 export type AdaptiveDetailRowPreparingInfo = {
-  /** @docid */
+  /**
+   * @docid
+   * @type object
+   */
   readonly formOptions: any;
 };
 
@@ -2412,7 +2415,10 @@ export type LoadPanel = {
  * @namespace DevExpress.common.grids
  */
 export interface NewRowInfo<TRowData = any> {
-  /** @docid */
+  /**
+   * @docid
+   * @type object
+   */
   data: TRowData;
   /**
    * @docid
@@ -2716,7 +2722,10 @@ export type RowDraggingTemplateData<TRowData = any> = {
  * @namespace DevExpress.common.grids
  */
 export type RowInsertedInfo<TRowData = any, TKey = any> = {
-  /** @docid */
+  /**
+   * @docid
+   * @type object
+   */
   readonly data: TRowData;
   /** @docid */
   readonly key: TKey;
@@ -2730,7 +2739,10 @@ export type RowInsertedInfo<TRowData = any, TKey = any> = {
  * @namespace DevExpress.common.grids
  */
 export type RowInsertingInfo<TRowData = any> = {
-  /** @docid */
+  /**
+   * @docid
+   * @type object
+   */
   data: TRowData;
   /**
    * @docid
@@ -2755,7 +2767,10 @@ export type RowKeyInfo<TKey = any> = {
  * @namespace DevExpress.common.grids
  */
 export interface RowRemovedInfo<TRowData = any, TKey = any> {
-  /** @docid */
+  /**
+   * @docid
+   * @type object
+   */
   readonly data: TRowData;
   /** @docid */
   readonly key: TKey;
@@ -2769,7 +2784,10 @@ export interface RowRemovedInfo<TRowData = any, TKey = any> {
  * @namespace DevExpress.common.grids
  */
 export interface RowRemovingInfo<TRowData = any, TKey = any> {
-  /** @docid */
+  /**
+   * @docid
+   * @type object
+   */
   readonly data: TRowData;
   /** @docid */
   readonly key: TKey;
@@ -2786,7 +2804,10 @@ export interface RowRemovingInfo<TRowData = any, TKey = any> {
  * @namespace DevExpress.common.grids
  */
 export interface RowUpdatedInfo<TRowData = any, TKey = any> {
-  /** @docid */
+  /**
+   * @docid
+   * @type object
+   */
   readonly data: TRowData;
   /** @docid */
   readonly key: TKey;

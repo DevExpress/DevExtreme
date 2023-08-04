@@ -157,10 +157,6 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
         return extend(calendarPopupConfig, { width: 'auto' });
     },
 
-    getFirstPopupElement: function() {
-        return this._timeView._hourBox.$element().find('input');
-    },
-
     _attachTabHandler: function() {
         const dateBox = this.dateBox;
         const handler = function(e) {

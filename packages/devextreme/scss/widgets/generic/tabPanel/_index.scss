@@ -3,9 +3,9 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../tabs/sizes" as *;
-@use "../tabs/colors" as *;
-@use "../tabs/index" as *;
+@use "../tabs/old/sizes" as *;
+@use "../tabs/old/colors" as *;
+@use "../tabs/old/index" as *;
 @use "../../base/tabPanel";
 
 // adduse
@@ -71,10 +71,6 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 
 @mixin tabpanel-shadow-mixin($accent-color, $target-class) {
   & > .dx-tabpanel-tabs {
-    .dx-tabs {
-      display: block;
-    }
-
     .dx-tab {
       &.#{$target-class} {
         box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color;
@@ -95,14 +91,40 @@ $tab-selected-not-focused-left-right-rtl-shadow: $generic-tabpanel-inset-shadow-
 }
 
 
+// TODO: Reset Tabs Borders
+.dx-tabpanel { // stylelint-disable-line no-duplicate-selectors
+  @include dx-tabs-old();
+
+  .dx-tabs-wrapper,
+  .dx-tabs-scrollable,
+  .dx-tabpanel-tabs {
+    border: none;
+  }
+
+  .dx-tabs-wrapper {
+    background-color: transparent;
+  }
+
+  .dx-tab::after {
+    content: none;
+  }
+}
+
+.dx-rtl.dx-tabpanel,
 .dx-tabpanel {
   > .dx-tabpanel-tabs {
     .dx-tab {
-      width: 140px;
+      max-width: 140px;
       padding: $generic-tabpanel-tabs-item-padding;
     }
 
     @include tabpanel-tab-color-mixin();
+
+    .dx-tabs-nav-buttons {
+      .dx-tab {
+        min-width: 140px;
+      }
+    }
   }
 
   &:not(.dx-empty-collection) {

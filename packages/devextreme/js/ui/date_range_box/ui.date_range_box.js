@@ -607,13 +607,20 @@ class DateRangeBox extends Editor {
         return validationMessagePosition;
     }
 
+    _getSerializedDates([startDate, endDate]) {
+        return [
+            this.getStartDateBox()._serializeDate(getDeserializedDate(startDate)),
+            this.getStartDateBox()._serializeDate(getDeserializedDate(endDate))
+        ];
+    }
+
     updateValue(newValue, event) {
         if(!isSameDateArrays(newValue, this.option('value'))) {
             if(event) {
                 this._saveValueChangeEvent(event);
             }
 
-            this.option('value', newValue);
+            this.option('value', this._getSerializedDates(newValue));
         }
     }
 
@@ -926,7 +933,11 @@ class DateRangeBox extends Editor {
             }
             case 'value': {
                 const newValue = sortDatesArray(value);
+
                 if(!isSameDateArrays(newValue, previousValue)) {
+                    const isDirty = !isSameDateArrays(newValue, this._initialValue);
+                    this.option('isDirty', isDirty);
+
                     this._setOptionWithoutOptionChange('value', newValue);
                     this._setOptionWithoutOptionChange('startDate', newValue[0]);
                     this._setOptionWithoutOptionChange('endDate', newValue[1]);

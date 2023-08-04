@@ -9,8 +9,9 @@ import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from '../../model/dataGrid/overlay';
 import { getData } from './helpers/generateDataSourceData';
+import { a11yCheck } from '../../helpers/accessibilityUtils';
 
-fixture.disablePageReloads`Editing`
+fixture`Editing`
   .page(url(__dirname, '../container.html'));
 
 const getGridConfig = (config): Record<string, unknown> => {
@@ -25,6 +26,8 @@ const getGridConfig = (config): Record<string, unknown> => {
 
   return config ? { ...defaultConfig, ...config } : defaultConfig;
 };
+
+const encodedIcon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjIwcHgiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0iIzAwMDAwMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KCTxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIC8+DQo8L3N2Zz4NCg==';
 
 test('Tab key on editor should focus next cell if editing mode is cell', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -1694,7 +1697,6 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     .expect(popupDataGrid.getDataRow(0).element.exists)
     .ok();
 
-  await t.debug();
   // assert
   await t
     .expect(await takeScreenshot('grid-popup-editing-grid.png', overlay.content))
@@ -2289,5 +2291,110 @@ test('Popup EditForm screenshot', async (t) => {
         data,
       },
     })();
+  });
+});
+
+[
+  'cell',
+  'batch',
+  'row',
+  'form',
+  'popup',
+].forEach((mode) => {
+  test(`Embedded editors in ${mode} edit mode shoud have aria-label attribute`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      .click(dataGrid.getToolbar().getItem(0));
+
+    await a11yCheck(t);
+  }).before(() => createWidget('dxDataGrid', {
+    dataSource: getData(3, 2),
+    height: 400,
+    showBorders: true,
+    editing: {
+      mode,
+      allowUpdating: true,
+      allowAdding: true,
+    },
+    toolbar: {
+      items: [
+        {
+          name: 'addRowButton',
+          showText: 'always',
+        },
+      ],
+    },
+  }));
+});
+
+[
+  {
+    theme: 'material.blue.light',
+    useIcons: true,
+  },
+  {
+    theme: 'generic.light',
+    useIcons: true,
+  },
+  {
+    theme: 'material.blue.light',
+    useIcons: false,
+  },
+  {
+    theme: 'generic.light',
+    useIcons: false,
+  },
+].forEach(({ theme, useIcons }) => {
+  // T1179114
+  test(`The disabled state should be correct for a custom button when given as a SVG image (${theme})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-${theme.split('.')[0]}-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      width: 600,
+      dataSource: [{
+        Id: 0,
+        name: 'test',
+      }],
+      keyExpr: 'Id',
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        allowDeleting: true,
+        useIcons,
+      },
+      columns: ['Id', 'name', {
+        type: 'buttons',
+        buttons: [
+          {
+            name: 'delete',
+            disabled: false,
+          },
+          {
+            name: 'delete',
+            disabled: true,
+          },
+          {
+            icon: encodedIcon,
+            disabled: false,
+          },
+          {
+            icon: encodedIcon,
+            disabled: true,
+          },
+        ],
+      }],
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
   });
 });

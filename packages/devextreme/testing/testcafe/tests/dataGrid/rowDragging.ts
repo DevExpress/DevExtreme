@@ -591,12 +591,14 @@ test('The placeholder should have correct position after dragging the row to the
 });
 
 // T1126013
-// TODO: It is unstable test. Unskip after fix trello.com/c/k1u72fE0
 test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
   const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.hasScrollable())
+    .ok();
   await dataGrid.scrollTo({ y: 3000 });
   await dataGrid.moveRow(fromIndex, 0, 50, true);
   await dataGrid.moveRow(fromIndex, 0, -20);

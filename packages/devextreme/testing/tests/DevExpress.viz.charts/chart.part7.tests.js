@@ -6,7 +6,7 @@ import { ERROR_MESSAGES as dxErrors } from 'viz/core/errors_warnings';
 import seriesModule from 'viz/series/base_series';
 import dataValidatorModule from 'viz/components/data_validator';
 import { MockSeries, categories, seriesMockData, MockTranslator } from '../../helpers/chartMocks.js';
-import graphicObjects from 'common/charts';
+import graphicObjects from '__internal/common/m_charts';
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 

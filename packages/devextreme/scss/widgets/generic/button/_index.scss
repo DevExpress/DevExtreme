@@ -29,10 +29,6 @@
   @include dx-button-withtext-sizing();
 }
 
-.dx-button-back {
-  @include dx-button-onlyicon-sizing();
-}
-
 // NOTE: Button styles
 
 .dx-button { // stylelint-disable-line no-duplicate-selectors
@@ -49,9 +45,4 @@
 
 .dx-button-mode-text {
   @include dx-button-mode-text-styling();
-}
-
-.dx-button-normal,
-.dx-button-back {
-  @include dx-button-special-hover($button-special-hover);
 }

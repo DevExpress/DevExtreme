@@ -238,7 +238,7 @@ QUnit.test('ngmodel should not bind value option to widget', function(assert) {
     assert.equal(scope.value, 'newTest', 'value passed correctly');
 });
 
-QUnit.test('optionChanged should fired once when value is a plain object and use ngmodel binding', function(assert) {
+QUnit.test('optionChanged should fire twice when value is a plain object and use ngmodel binding', function(assert) {
     if(angular.version.minor < 3) {
         assert.expect(0);
         return;
@@ -264,7 +264,7 @@ QUnit.test('optionChanged should fired once when value is a plain object and use
 
     instance.option('value', { value: 2 });
 
-    assert.equal(spy.callCount, 1, 'optionChanged handler called once');
+    assert.equal(spy.callCount, 2, 'optionChanged handler called twice');
 });
 
 QUnit.test('editor without ng model should not fail', function(assert) {

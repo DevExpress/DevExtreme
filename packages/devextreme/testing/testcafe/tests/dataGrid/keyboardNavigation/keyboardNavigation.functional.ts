@@ -4047,6 +4047,7 @@ test('DataGrid - "Maximum call stack size exceeded" error occurs on navigating s
     pageSize: 3,
   },
 }));
+
 test('DataGrid - focusedRowIndex is -1 when the first data cell is focused with the keyboard (T1175896)', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t
@@ -4071,3 +4072,113 @@ test('DataGrid - focusedRowIndex is -1 when the first data cell is focused with 
     }
   },
 }));
+
+test('DataGrid - Cell focus in edit mode does not work correctly if a cell has a disabled editor (T1177434)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getToolbar().getItem(0))
+    .pressKey('tab')
+
+    .expect(Selector(':focus').tagName)
+    .eql('td')
+    .expect(Selector(':focus').getAttribute('aria-colindex'))
+    .eql('3');
+}).before(async () => createWidget('dxDataGrid', {
+  onEditorPreparing(e) {
+    if (e.dataField === 'field_1') { e.editorOptions.disabled = true; }
+  },
+  dataSource: getData(3, 3),
+  showBorders: true,
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowAdding: true,
+    allowDeleting: true,
+  },
+  selection: {
+    mode: 'multiple',
+  },
+  toolbar: {
+    items: [
+      {
+        name: 'addRowButton',
+        showText: 'always',
+      },
+    ],
+  },
+}));
+
+test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
+  await t
+    .pressKey('tab tab tab tab tab tab')
+
+    .expect(Selector(':focus').tagName)
+    .eql('td')
+    .expect(Selector(':focus').getAttribute('aria-colindex'))
+    .eql('1');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(2, 2),
+  showBorders: true,
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowDeleting: true,
+  },
+  columns: ['field_0', 'field_1', {
+    type: 'buttons',
+    buttons: [{
+      template() {
+        return $('<button>').text('Edit');
+      },
+    }, {
+      template() {
+        return $('<button>').attr({
+          disabled: true,
+        }).text('Delete');
+      },
+    }],
+  }],
+}));
+
+// T1178858
+test('Keyboard navigation behavior should be changed after changing the keyboardNavigation.enabled option', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const $firstDataCell = dataGrid.getDataRow(0).getDataCell(0);
+
+  await t
+    .click($firstDataCell.element)
+    .pressKey('tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused)
+    .ok();
+
+  await dataGrid.apiToggleKeyboardNavigation(false);
+
+  await t
+    .click($firstDataCell.element)
+    .pressKey('tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused)
+    .notOk();
+
+  await dataGrid.apiToggleKeyboardNavigation(true);
+
+  await t
+    .click($firstDataCell.element)
+    .pressKey('tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 600,
+    dataSource: [
+      { name: 'Alex', c0: 'c0_0' },
+      { name: 'Ben', c0: 'c0_1' },
+      { name: 'Dan', c0: 'c0_2' },
+      { name: 'John', c0: 'c0_3' },
+    ],
+    keyExpr: 'name',
+    keyboardNavigation: {
+      enabled: true,
+    },
+  });
+});

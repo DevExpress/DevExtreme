@@ -1,3 +1,27 @@
+@use "../icons" as *;
+
 @mixin dx-button-disabled() {
   cursor: default;
+}
+
+@mixin dx-button-sizing(
+  $vertical-padding,
+  $horizontal-padding-left,
+  $horizontal-padding-right,
+  $icon-size,
+  $icon-margin
+) {
+  .dx-button-content {
+    padding-block: $vertical-padding;
+    padding-inline-start: $horizontal-padding-left;
+    padding-inline-end: $horizontal-padding-right;
+  }
+
+  .dx-icon {
+    width: $icon-size;
+    height: $icon-size;
+    font-size: $icon-size;
+
+    @include dx-icon-margin($icon-margin);
+  }
 }
