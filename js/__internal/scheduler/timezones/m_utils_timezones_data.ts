@@ -1,159 +1,161 @@
-import query from '../../../data/query';
-import errors from '../../../core/errors';
-import tzData from './timezones_data';
-import { sign } from '../../../core/utils/math';
+/* eslint-disable radix */
+import errors from '@js/core/errors';
+import { sign } from '@js/core/utils/math';
+import query from '@js/data/query';
 
-const getConvertedUntils = value => {
-    return value.split('|').map(until => {
-        if(until === 'Infinity') {
-            return null;
-        }
-        return parseInt(until, 36) * 1000;
-    });
-};
+import tzData from './timezones_data';
+
+const getConvertedUntils = (value) => value.split('|').map((until) => {
+  if (until === 'Infinity') {
+    return null;
+  }
+  return parseInt(until, 36) * 1000;
+});
 
 const parseTimezone = (timeZoneConfig) => {
-    const offsets = timeZoneConfig.offsets;
-    const offsetIndices = timeZoneConfig.offsetIndices;
-    const untils = timeZoneConfig.untils;
+  const { offsets } = timeZoneConfig;
+  const { offsetIndices } = timeZoneConfig;
+  const { untils } = timeZoneConfig;
 
-    const offsetList = offsets.split('|').map(value => parseInt(value));
-    const offsetIndexList = offsetIndices.split('').map(value => parseInt(value));
-    const dateList = getConvertedUntils(untils)
-        .map((accumulator => value => accumulator += value)(0));
+  const offsetList = offsets.split('|').map((value) => parseInt(value));
+  const offsetIndexList = offsetIndices.split('').map((value) => parseInt(value));
+  const dateList = getConvertedUntils(untils)
+    // eslint-disable-next-line
+    .map(((accumulator) => (value) => accumulator += value)(0));
 
-    return { offsetList, offsetIndexList, dateList };
+  return { offsetList, offsetIndexList, dateList };
 };
 
 class TimeZoneCache {
-    constructor() {
-        this.map = new Map();
+  map: Map<any, any>;
+
+  constructor() {
+    this.map = new Map();
+  }
+
+  tryGet(id) {
+    if (!this.map.get(id)) {
+      const config = timeZoneDataUtils.getTimezoneById(id);
+      if (!config) {
+        return false;
+      }
+
+      const timeZoneInfo = parseTimezone(config);
+      this.map.set(id, timeZoneInfo);
     }
 
-    tryGet(id) {
-        if(!this.map.get(id)) {
-            const config = timeZoneDataUtils.getTimezoneById(id);
-            if(!config) {
-                return false;
-            }
-
-            const timeZoneInfo = parseTimezone(config);
-            this.map.set(id, timeZoneInfo);
-        }
-
-        return this.map.get(id);
-    }
+    return this.map.get(id);
+  }
 }
 
 const tzCache = new TimeZoneCache();
 
 const timeZoneDataUtils = {
-    _tzCache: tzCache,
-    _timeZones: tzData.zones,
+  _tzCache: tzCache,
+  _timeZones: tzData.zones,
 
-    getDisplayedTimeZones: function(timestamp) {
-        const timeZones = this._timeZones.map((timezone) => {
-            const timeZoneInfo = parseTimezone(timezone);
-            const offset = this.getUtcOffset(timeZoneInfo, timestamp);
+  getDisplayedTimeZones(timestamp) {
+    const timeZones = this._timeZones.map((timezone) => {
+      const timeZoneInfo = parseTimezone(timezone);
+      const offset = this.getUtcOffset(timeZoneInfo, timestamp);
 
-            const title = `(GMT ${this.formatOffset(offset)}) ${this.formatId(timezone.id)}`;
+      const title = `(GMT ${this.formatOffset(offset)}) ${this.formatId(timezone.id)}`;
 
-            return {
-                offset,
-                title,
-                id: timezone.id
-            };
-        });
+      return {
+        offset,
+        title,
+        id: timezone.id,
+      };
+    });
 
-        return query(timeZones).sortBy('offset').toArray();
-    },
+    return query(timeZones).sortBy('offset').toArray();
+  },
 
+  formatOffset(offset) {
+    const hours = Math.floor(offset);
+    const minutesInDecimal = offset - hours;
 
-    formatOffset: function(offset) {
-        const hours = Math.floor(offset);
-        const minutesInDecimal = offset - hours;
+    const signString = sign(offset) >= 0 ? '+' : '-';
+    const hoursString = `0${Math.abs(hours)}`.slice(-2);
+    const minutesString = minutesInDecimal > 0 ? `:${minutesInDecimal * 60}` : ':00';
 
-        const signString = sign(offset) >= 0 ? '+' : '-';
-        const hoursString = `0${Math.abs(hours)}`.slice(-2);
-        const minutesString = minutesInDecimal > 0 ? `:${minutesInDecimal * 60}` : ':00';
+    return signString + hoursString + minutesString;
+  },
 
-        return signString + hoursString + minutesString;
-    },
+  formatId(id) {
+    return id.split('/').join(' - ').split('_').join(' ');
+  },
 
-    formatId: function(id) {
-        return id.split('/').join(' - ').split('_').join(' ');
-    },
-
-    getTimezoneById: function(id) {
-        if(!id) {
-            return;
-        }
-
-        const tzList = this._timeZones;
-
-        for(let i = 0; i < tzList.length; i++) {
-            const currentId = tzList[i]['id'];
-            if(currentId === id) {
-                return tzList[i];
-            }
-        }
-
-        errors.log('W0009', id);
-        return;
-    },
-
-    getTimeZoneOffsetById: function(id, timestamp) {
-        const timeZoneInfo = tzCache.tryGet(id);
-
-        return timeZoneInfo ? this.getUtcOffset(timeZoneInfo, timestamp) : undefined;
-    },
-
-    getTimeZoneDeclarationTuple: function(id, year) {
-        const timeZoneInfo = tzCache.tryGet(id);
-
-        return timeZoneInfo ? this.getTimeZoneDeclarationTupleCore(timeZoneInfo, year) : [];
-    },
-
-    getTimeZoneDeclarationTupleCore: function(timeZoneInfo, year) {
-        const offsetList = timeZoneInfo.offsetList;
-        const offsetIndexList = timeZoneInfo.offsetIndexList;
-        const dateList = timeZoneInfo.dateList;
-
-        const tupleResult = [];
-
-        for(let i = 0; i < dateList.length; i++) {
-            const currentDate = dateList[i];
-            const currentYear = new Date(currentDate).getFullYear();
-
-            if(currentYear === year) {
-                const offset = offsetList[offsetIndexList[i + 1]];
-                tupleResult.push({ date: currentDate, offset: -offset / 60 });
-            }
-
-            if(currentYear > year) {
-                break;
-            }
-        }
-
-        return tupleResult;
-    },
-
-    getUtcOffset: function(timeZoneInfo, dateTimeStamp) {
-        const offsetList = timeZoneInfo.offsetList;
-        const offsetIndexList = timeZoneInfo.offsetIndexList;
-        const dateList = timeZoneInfo.dateList;
-
-        const infinityUntilCorrection = 1;
-        const lastIntervalStartIndex = dateList.length - 1 - infinityUntilCorrection;
-
-        let index = lastIntervalStartIndex;
-        while(index >= 0 && dateTimeStamp < dateList[index]) {
-            index--;
-        }
-
-        const offset = offsetList[offsetIndexList[index + 1]];
-        return -offset / 60 || offset;
+  getTimezoneById(id) {
+    if (!id) {
+      return undefined;
     }
+
+    const tzList = this._timeZones;
+
+    for (let i = 0; i < tzList.length; i++) {
+      const currentId = tzList[i].id;
+      if (currentId === id) {
+        return tzList[i];
+      }
+    }
+
+    errors.log('W0009', id);
+    return undefined;
+  },
+
+  getTimeZoneOffsetById(id, timestamp) {
+    const timeZoneInfo = tzCache.tryGet(id);
+
+    return timeZoneInfo ? this.getUtcOffset(timeZoneInfo, timestamp) : undefined;
+  },
+
+  getTimeZoneDeclarationTuple(id, year) {
+    const timeZoneInfo = tzCache.tryGet(id);
+
+    return timeZoneInfo ? this.getTimeZoneDeclarationTupleCore(timeZoneInfo, year) : [];
+  },
+
+  getTimeZoneDeclarationTupleCore(timeZoneInfo, year) {
+    const { offsetList } = timeZoneInfo;
+    const { offsetIndexList } = timeZoneInfo;
+    const { dateList } = timeZoneInfo;
+
+    const tupleResult: any = [];
+
+    for (let i = 0; i < dateList.length; i++) {
+      const currentDate = dateList[i];
+      const currentYear = new Date(currentDate).getFullYear();
+
+      if (currentYear === year) {
+        const offset = offsetList[offsetIndexList[i + 1]];
+        tupleResult.push({ date: currentDate, offset: -offset / 60 });
+      }
+
+      if (currentYear > year) {
+        break;
+      }
+    }
+
+    return tupleResult;
+  },
+
+  getUtcOffset(timeZoneInfo, dateTimeStamp) {
+    const { offsetList } = timeZoneInfo;
+    const { offsetIndexList } = timeZoneInfo;
+    const { dateList } = timeZoneInfo;
+
+    const infinityUntilCorrection = 1;
+    const lastIntervalStartIndex = dateList.length - 1 - infinityUntilCorrection;
+
+    let index = lastIntervalStartIndex;
+    while (index >= 0 && dateTimeStamp < dateList[index]) {
+      index--;
+    }
+
+    const offset = offsetList[offsetIndexList[index + 1]];
+    return -offset / 60 || offset;
+  },
 };
 
 export default timeZoneDataUtils;
