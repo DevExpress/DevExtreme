@@ -29,7 +29,7 @@
 
     &::after {
       top: 0;
-      bottom: $generic-tabs-border-width !important; // TODO
+      bottom: $generic-tabs-border-width;
     }
   }
 
@@ -43,7 +43,7 @@
 
     &::after {
       top: 0;
-      bottom: $generic-tabs-border-width !important; // TODO
+      bottom: $generic-tabs-border-width;
     }
 
     .dx-tabs-wrapper {
@@ -55,12 +55,6 @@
       }
     }
   }
-
-  // &:not(.dx-tabs-nav-buttons) .dx-tabs-scrollable {
-  //   &::after {
-  //     bottom: 1px;
-  //   }
-  // }
 
   &.dx-state-focused {
     &.dx-disabled-focused-tab {
