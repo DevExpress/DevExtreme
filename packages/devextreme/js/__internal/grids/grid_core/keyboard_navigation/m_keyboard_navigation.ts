@@ -736,7 +736,6 @@ export class KeyboardNavigationController extends modules.ViewController {
       this._editorFactory.loseFocus();
 
       if (this._rowsView.isScrollableNeedFocusable()) {
-        console.log('removeTab');
         this._$firstNotFixedCell?.removeAttr('tabIndex');
       }
 
