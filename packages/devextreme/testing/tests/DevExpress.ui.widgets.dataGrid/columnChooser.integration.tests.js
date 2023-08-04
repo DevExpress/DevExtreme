@@ -529,11 +529,12 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
 
     QUnit.test('Column chooser\'s container option should work', function(assert) {
         // arrange
+        const $targetContainer = $('#container');
         const dataGrid = createDataGrid({
             loadingTimeout: null,
             columnChooser: {
                 enabled: true,
-                container: '#container'
+                container: $targetContainer
             },
             columns: ['field1'],
             dataSource: []
@@ -546,7 +547,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         const popup = dataGrid.getView('columnChooserView')._popupContainer;
         const $popupContainer = popup.$wrapper().parent();
 
-        assert.strictEqual($popupContainer.attr('id'), 'container', 'The container option is applied');
+        assert.ok($popupContainer.is($targetContainer), 'The container option is applied');
     });
 
     QUnit.test('Dragged hidden column from the group panel should become visible', function(assert) {
