@@ -1,6 +1,6 @@
 import { ItemView } from './types';
 import { ToolbarItem } from '../../toolbar/toolbar_props';
-import { isOneView } from '../../../../ui/scheduler/header/utils';
+import { isOneView } from '../../../../__internal/scheduler/header/m_utils';
 
 const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
 const VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS = 'dx-scheduler-view-switcher-dropdown-button';
