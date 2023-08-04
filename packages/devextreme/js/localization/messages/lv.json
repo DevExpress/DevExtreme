@@ -519,7 +519,7 @@
         "dxDiagram-commandLineColor": "Līnijas Krāsa",
         "dxDiagram-commandLineWidth": "Līnijas Platums",
         "dxDiagram-commandLineStyle": "Līnijas Stils",
-        "dxDiagram-commandLineStyleSolid": "",
+        "dxDiagram-commandLineStyleSolid": "Solid",
         "dxDiagram-commandLineStyleDotted": "Nepārtraukti",
         "dxDiagram-commandLineStyleDashed": "Strīpaini",
         "dxDiagram-commandFillColor": "Aizpildīt Krāsu",
