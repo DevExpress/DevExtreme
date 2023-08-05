@@ -18,6 +18,7 @@ import { hasWindow } from '../core/utils/window';
 
 const TABPANEL_CLASS = 'dx-tabpanel';
 const TABPANEL_TABS_CLASS = 'dx-tabpanel-tabs';
+const TABPANEL_TABS_ITEM_CLASS = 'dx-tabpanel-tab';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
@@ -240,7 +241,10 @@ const TabPanel = MultiView.inherit({
                 if(!this._isFocusOutHandlerExecuting) {
                     this._focusOutHandler(args.event);
                 }
-            }).bind(this)
+            }).bind(this),
+            _itemAttributes: {
+                'class': TABPANEL_TABS_ITEM_CLASS,
+            },
         };
     },
 
