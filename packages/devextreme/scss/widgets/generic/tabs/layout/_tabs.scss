@@ -30,7 +30,8 @@
 
     .dx-scrollable-content {
       // NOTE: Scrollable cuts border via transform-translate.
-      transform: none !important;
+
+      transform: none !important; // stylelint-disable-line declaration-no-important
     }
   }
 }
