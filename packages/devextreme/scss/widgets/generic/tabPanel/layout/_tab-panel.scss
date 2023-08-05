@@ -13,25 +13,25 @@
 // adduse
 
 
-.dx-tabpanel {
-  .dx-tabs-wrapper {
-    border: none;
-    border-block-start: $generic-tabs-border;
-    border-block-end: $generic-tabs-border;
+.dx-tabs-wrapper {
+  border: none;
+  border-block-start: $generic-tabs-border;
+  border-block-end: $generic-tabs-border;
 
-    @include dx-tabs-border-mixin(
-      none,
-      $generic-tabs-border,
-      none,
-      $generic-tabs-border,
-    );
+  @include dx-tabs-border-mixin(
+    none,
+    $generic-tabs-border,
+    none,
+    $generic-tabs-border,
+  );
 
-    &::after {
-      top: 0;
-      bottom: $generic-tabs-border-width;
-    }
+  &::after {
+    top: 0;
+    bottom: $generic-tabs-border-width;
   }
+}
 
+.dx-tabpanel {
   .dx-tabs .dx-tabs-scrollable {
     @include dx-tabs-border-mixin(
       none,
@@ -45,13 +45,8 @@
       bottom: $generic-tabs-border-width;
     }
 
-    .dx-tabs-wrapper {
-      border-inline-start: none;
-      border-inline-end: none;
-
-      &::after {
-        content: none;
-      }
+    .dx-tabs-wrapper::after {
+      content: none;
     }
   }
 
