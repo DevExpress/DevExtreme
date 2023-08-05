@@ -39,9 +39,24 @@
         <div id="button"></div>
         <script>
            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+                const items = [
+                    { title: 'tab one', text: 'tab one', icon: 'plus', disabled: false },
+                    { title: 'tab two', text: 'tab two', icon: 'plus', disabled: false },
+                    { title: 'tab three', text: 'tab three', icon: 'plus', disabled: true },
+                    { title: 'tab four', text: 'tab four', icon: 'plus', disabled: true },
+                    { title: 'tab five', text: 'tab five', icon: 'plus', disabled: false },
+                    { title: 'tab six', text: 'tab six', icon: 'plus', disabled: true },
+                    { title: 'tab seven', text: 'tab seven', icon: 'plus', disabled: false },
+                    { title: 'tab eight', text: 'tab eight', icon: 'plus', disabled: false },
+                ]
+
+                $("#button").dxTabPanel({
+                    height: 200,
+                    width: 450,
+                    scrollByContent: true,
+                    // showNavButtons: false,
+                    // rtlEnabled: true,
+                    items,
                 });
             });
         </script>

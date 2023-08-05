@@ -10,12 +10,36 @@
 @use "../../../base/tabPanel";
 @use "../variables/borders" as *;
 
-.dx-rtl.dx-tabpanel,
+// adduse
+
+
 .dx-tabpanel {
   > .dx-tabpanel-tabs {
     .dx-tab {
       max-width: 140px;
       padding: $generic-tabpanel-tabs-item-padding;
+
+      &:first-child:not(.dx-state-focused) {
+        &.dx-state-hover {
+          @include dx-tabs-border-mixin(
+            null,
+            null,
+            $generic-tabpanel-tab-border-hover-bottom,
+            $generic-tabs-border-transparent,
+          );
+        }
+      }
+
+      &:last-child:not(.dx-state-focused) {
+        &.dx-state-hover {
+          @include dx-tabs-border-mixin(
+            null,
+            $generic-tabs-border-transparent,
+            $generic-tabpanel-tab-border-hover-bottom,
+            null,
+          );
+        }
+      }
 
       &.dx-state-disabled {
         &::after {
@@ -32,9 +56,7 @@
         );
       }
 
-      &.dx-tab-selected,
-      &.dx-tab-selected:first-child,
-      &.dx-tab-selected:last-child {
+      &.dx-tab-selected {
         @include dx-tabs-border-mixin(
           null,
           null,
@@ -45,9 +67,7 @@
         border-bottom: $generic-tabpanel-tab-border-selected-bottom;
       }
 
-      &.dx-state-active,
-      &.dx-state-active:first-child,
-      &.dx-state-active:last-child {
+      &.dx-state-active {
         @include dx-tabs-border-mixin(
           null,
           null,
@@ -87,46 +107,6 @@
         );
 
         border-bottom: $generic-tabs-border-focused-disabled-bottom;
-      }
-
-      &:first-child {
-        &.dx-state-hover {
-          @include dx-tabs-border-mixin(
-            null,
-            null,
-            $generic-tabpanel-tab-border-hover-bottom,
-            $generic-tabs-border-transparent,
-          );
-        }
-
-        &.dx-state-focused {
-          @include dx-tabs-border-mixin(
-            null,
-            null,
-            none,
-            $generic-tabpanel-tab-border-focused-left,
-          );
-        }
-      }
-
-      &:last-child {
-        &.dx-state-hover {
-          @include dx-tabs-border-mixin(
-            null,
-            $generic-tabs-border-transparent,
-            $generic-tabpanel-tab-border-hover-bottom,
-            null,
-          );
-        }
-
-        &.dx-state-focused {
-          @include dx-tabs-border-mixin(
-            null,
-            $generic-tabpanel-tab-border-focused-right,
-            none,
-            null,
-          );
-        }
       }
 
       &.dx-tab-selected,
@@ -173,7 +153,12 @@
       }
 
       &.dx-state-disabled:not(.dx-state-focused) {
-        @include dx-tabs-border-mixin(null, none, null, null);
+        @include dx-tabs-border-mixin(
+          null,
+          none,
+          null,
+          null,
+        );
 
         border-bottom: $generic-tabs-border-focus;
       }

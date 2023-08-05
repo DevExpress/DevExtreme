@@ -13,7 +13,6 @@
 // adduse
 
 
-.dx-rtl.dx-tabpanel,
 .dx-tabpanel {
   .dx-tabs-wrapper {
     border: none;
@@ -47,8 +46,8 @@
     }
 
     .dx-tabs-wrapper {
-      border-left: none;
-      border-right: none;
+      border-inline-start: none;
+      border-inline-end: none;
 
       &::after {
         content: none;
@@ -78,7 +77,7 @@
 
   &:not(.dx-empty-collection) {
     .dx-multiview-wrapper {
-      border-top: none;
+      border-block-start: none;
     }
   }
 
