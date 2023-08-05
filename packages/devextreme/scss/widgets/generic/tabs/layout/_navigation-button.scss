@@ -8,8 +8,9 @@
 @use "../variables/colors" as *;
 @use "../variables/borders" as *;
 
+// adduse
 
-// .dx-tabs {
+
 .dx-tabs-nav-button {
   width: $generic-tabs-nav-button-width;
   background-color: $tabs-tab-bg;
@@ -53,4 +54,3 @@
     }
   }
 }
-// }
