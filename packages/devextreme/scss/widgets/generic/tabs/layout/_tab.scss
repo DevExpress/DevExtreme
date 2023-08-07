@@ -100,13 +100,6 @@
     );
   }
 
-  &.dx-tab-selected,
-  &.dx-state-focused:not(.dx-state-disabled) {
-    &:last-child::after {
-      right: .49px;
-    }
-  }
-
   .dx-tab-text {
     color: $tabs-tab-color;
     line-height: $generic-tab-text-line-height;

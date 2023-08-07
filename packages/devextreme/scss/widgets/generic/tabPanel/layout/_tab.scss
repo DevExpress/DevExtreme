@@ -17,7 +17,7 @@
   max-width: 140px;
   padding: $generic-tabpanel-tabs-item-padding;
 
-  &:first-child:not(.dx-state-focused) {
+  &:first-child:not(.dx-state-focused, .dx-tab-selected) {
     &.dx-state-hover {
       @include dx-tabs-border-mixin(
         null,
@@ -28,7 +28,7 @@
     }
   }
 
-  &:last-child:not(.dx-state-focused) {
+  &:last-child:not(.dx-state-focused, .dx-tab-selected) {
     &.dx-state-hover {
       @include dx-tabs-border-mixin(
         null,

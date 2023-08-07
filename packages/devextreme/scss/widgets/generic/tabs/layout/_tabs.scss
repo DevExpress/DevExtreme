@@ -53,3 +53,9 @@
     $generic-tabs-border,
   );
 }
+
+.dx-tabs-nav-buttons {
+  .dx-tabs-wrapper::after {
+    border: none;
+  }
+}
