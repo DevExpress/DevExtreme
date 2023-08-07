@@ -1222,13 +1222,33 @@ class DraggingHeaderViewController extends modules.ViewController {
 
   private _columnChooserView: any;
 
+  private isCustomGroupColumnPosition?: boolean;
+
   _generatePointsByColumns(options) {
     const that = this;
 
+    this.isCustomGroupColumnPosition = this.checkIsCustomGroupColumnPosition(options);
     return gridCoreUtils.getPointsByColumns(options.columnElements, (point) => that._pointCreated(point, options.columns, options.targetDraggingPanel.getName(), options.sourceColumn), options.isVerticalOrientation, options.startColumnIndex);
   }
 
-  _pointCreated(point, columns, location, sourceColumn) {
+  private checkIsCustomGroupColumnPosition(options): boolean {
+    let wasOnlyCommandColumns = true;
+
+    for (let i = 0; i < options.columns.length; i += 1) {
+      const col = options.columns[i];
+      if (col.command === 'expand' && !wasOnlyCommandColumns) {
+        return true;
+      }
+
+      if (!col.command) {
+        wasOnlyCommandColumns = false;
+      }
+    }
+
+    return false;
+  }
+
+  private _pointCreated(point, columns, location, sourceColumn) {
     const targetColumn = columns[point.columnIndex];
     const prevColumn = columns[point.columnIndex - 1];
 
@@ -1243,8 +1263,10 @@ class DraggingHeaderViewController extends modules.ViewController {
         return true;
       case 'headers':
         if (isFirstExpandColumn) {
-          while (columns[point.columnIndex]?.command === 'expand') {
-            point.columnIndex++;
+          if (!this.isCustomGroupColumnPosition) {
+            while (columns[point.columnIndex]?.command === 'expand') {
+              point.columnIndex += 1;
+            }
           }
           return false;
         }
