@@ -4,6 +4,9 @@ import { safeSizeTest } from '../../helpers/safeSizeTest';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import DataGrid from '../../model/dataGrid';
+import { makeRowsViewTemplatesAsync } from './helpers/asyncTemplates';
+
+const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../container.html'));
@@ -253,6 +256,11 @@ test('Hovering over a row should work correctly after scrolling when there is a 
   let dataRow = dataGrid.getDataRow(1);
   let fixedDataRow = dataGrid.getDataRow(1);
 
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
   // act
   await t.hover(dataRow.element);
 
@@ -282,7 +290,7 @@ test('Hovering over a row should work correctly after scrolling when there is a 
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
+}).before(async () => {
   await createWidget('dxDataGrid', {
     dataSource: [...new Array(60)].map((_, index) => ({ id: index, text1: `item1 ${index}`, text2: `item2 ${index}` })),
     height: 500,
@@ -305,27 +313,5 @@ test('Hovering over a row should work correctly after scrolling when there is a 
     showBorders: true,
   });
 
-  await t.wait(100);
-
-  // simulating async rendering in React
-  await ClientFunction(() => {
-    const dataGrid = ($('#container') as any).dxDataGrid('instance');
-
-    // eslint-disable-next-line no-underscore-dangle
-    dataGrid.getView('rowsView')._templatesCache = {};
-
-    // eslint-disable-next-line no-underscore-dangle
-    dataGrid._getTemplate = () => ({
-      render(options) {
-        setTimeout(() => {
-          ($(options.container) as any).append(($('<div/>') as any).text(options.model.value));
-          options.deferred?.resolve();
-        }, 100);
-      },
-    });
-
-    dataGrid.repaint();
-  })();
-
-  await t.wait(200);
+  await makeRowsViewTemplatesAsync(DATA_GRID_SELECTOR, 100);
 });
