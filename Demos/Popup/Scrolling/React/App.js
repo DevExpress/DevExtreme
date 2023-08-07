@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Button } from 'devextreme-react';
 import { Popup, ToolbarItem } from 'devextreme-react/popup';
 import ScrollView from 'devextreme-react/scroll-view';
@@ -138,4 +137,3 @@ export default function App() {
     </React.Fragment>
   );
 }
-

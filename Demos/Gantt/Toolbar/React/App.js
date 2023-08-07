@@ -14,12 +14,26 @@ function App() {
     popupVisible: false,
   });
 
-  const [aboutButtonOptions] = React.useState({
+  const getAboutButtonOptions = React.useCallback(() => ({
     text: 'About',
     icon: 'info',
     stylingMode: 'text',
     onClick: () => { aboutButtonClick(); },
-  });
+  }), [aboutButtonClick]);
+
+  const aboutButtonClick = React.useCallback(() => {
+    setGanttConfig({
+      ...ganttConfig,
+      popupVisible: true,
+    });
+  }, [ganttConfig]);
+
+  const onHiding = React.useCallback(() => {
+    setGanttConfig({
+      ...ganttConfig,
+      popupVisible: false,
+    });
+  }, [ganttConfig]);
 
   return (
     <React.Fragment>
@@ -49,7 +63,7 @@ function App() {
           <Item name="showResources" />
           <Item name="showDependencies" />
           <Item name="separator" />
-          <Item widget="dxButton" options={aboutButtonOptions} />
+          <Item widget="dxButton" options={getAboutButtonOptions()} />
         </Toolbar>
 
         <Column dataField="title" caption="Subject" width={300} />
@@ -80,20 +94,6 @@ function App() {
       </Popup>
     </React.Fragment>
   );
-
-  function aboutButtonClick() {
-    setGanttConfig({
-      ...ganttConfig,
-      popupVisible: true,
-    });
-  }
-
-  function onHiding() {
-    setGanttConfig({
-      ...ganttConfig,
-      popupVisible: false,
-    });
-  }
 }
 
 export default App;

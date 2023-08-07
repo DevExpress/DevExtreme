@@ -25,88 +25,25 @@ function App() {
 
   const topNumberBoxValueChanged = React.useCallback(
     (top) => setCoordinatePosition({ ...coordinatePosition, top }),
-    [coordinatePosition],
+    [coordinatePosition, setCoordinatePosition],
   );
 
   const bottomNumberBoxValueChanged = React.useCallback(
     (bottom) => setCoordinatePosition({ ...coordinatePosition, bottom }),
-    [coordinatePosition],
+    [coordinatePosition, setCoordinatePosition],
   );
 
   const leftNumberBoxValueChanged = React.useCallback(
     (left) => setCoordinatePosition({ ...coordinatePosition, left }),
-    [coordinatePosition],
+    [coordinatePosition, setCoordinatePosition],
   );
 
   const rightNumberBoxValueChanged = React.useCallback(
     (right) => setCoordinatePosition({ ...coordinatePosition, right }),
-    [coordinatePosition],
+    [coordinatePosition, setCoordinatePosition],
   );
 
-  return <React.Fragment>
-    <div className='options'>
-      <div>Position</div>
-      <RadioGroup
-        layout='horizontal'
-        defaultValue='predefined'
-        items={radioGroupItems}
-        onValueChange={(value) => setIsPredefined(value === 'predefined')} />
-      <SelectBox
-        items={positions}
-        value={predefinedPosition}
-        inputAttr={positionLabel}
-        onSelectionChanged={({ selectedItem }) => setPredefinedPosition(selectedItem)}
-        visible={isPredefined} />
-      <div className='section'>
-        <NumberBox
-          visible={!isPredefined}
-          placeholder='top'
-          defaultValue=''
-          valueChangeEvent='keyup'
-          disabled={!!coordinatePosition.bottom}
-          inputAttr={positionTopLabel}
-          onValueChange={topNumberBoxValueChanged} />
-        <NumberBox
-          visible={!isPredefined}
-          placeholder='bottom'
-          defaultValue=''
-          valueChangeEvent='keyup'
-          inputAttr={positionBottomLabel}
-          disabled={!!coordinatePosition.top}
-          onValueChange={bottomNumberBoxValueChanged} />
-      </div>
-      <div className='section'>
-        <NumberBox
-          visible={!isPredefined}
-          placeholder='left'
-          defaultValue=''
-          valueChangeEvent='keyup'
-          inputAttr={positionLeftLabel}
-          disabled={!!coordinatePosition.right}
-          onValueChange={leftNumberBoxValueChanged} />
-        <NumberBox
-          visible={!isPredefined}
-          placeholder='right'
-          defaultValue=''
-          valueChangeEvent='keyup'
-          inputAttr={positionRightLabel}
-          disabled={!!coordinatePosition.left}
-          onValueChange={rightNumberBoxValueChanged} />
-      </div>
-      <div>Direction</div>
-      <SelectBox
-        items={directions}
-        inputAttr={directionLabel}
-        value={direction}
-        onSelectionChanged={({ selectedItem }) => setDirection(selectedItem)} />
-      <div className='section'>
-        <Button text='Show' width='48%' onClick={() => show()} />
-        <Button text='Hide all' width='48%' onClick={() => HideToasts()} />
-      </div>
-    </div>
-  </React.Fragment>;
-
-  function show() {
+  const show = React.useCallback(() => {
     const position = isPredefined ? predefinedPosition : coordinatePosition;
 
     Notify({
@@ -127,7 +64,72 @@ function App() {
       direction,
     });
     setId(id + 1);
-  }
+  }, [id, isPredefined, predefinedPosition, coordinatePosition, direction]);
+
+  return (
+    <React.Fragment>
+      <div className='options'>
+        <div>Position</div>
+        <RadioGroup
+          layout='horizontal'
+          defaultValue='predefined'
+          items={radioGroupItems}
+          onValueChange={(value) => setIsPredefined(value === 'predefined')} />
+        <SelectBox
+          items={positions}
+          value={predefinedPosition}
+          inputAttr={positionLabel}
+          onSelectionChanged={({ selectedItem }) => setPredefinedPosition(selectedItem)}
+          visible={isPredefined} />
+        <div className='section'>
+          <NumberBox
+            visible={!isPredefined}
+            placeholder='top'
+            defaultValue=''
+            valueChangeEvent='keyup'
+            disabled={!!coordinatePosition.bottom}
+            inputAttr={positionTopLabel}
+            onValueChange={topNumberBoxValueChanged} />
+          <NumberBox
+            visible={!isPredefined}
+            placeholder='bottom'
+            defaultValue=''
+            valueChangeEvent='keyup'
+            inputAttr={positionBottomLabel}
+            disabled={!!coordinatePosition.top}
+            onValueChange={bottomNumberBoxValueChanged} />
+        </div>
+        <div className='section'>
+          <NumberBox
+            visible={!isPredefined}
+            placeholder='left'
+            defaultValue=''
+            valueChangeEvent='keyup'
+            inputAttr={positionLeftLabel}
+            disabled={!!coordinatePosition.right}
+            onValueChange={leftNumberBoxValueChanged} />
+          <NumberBox
+            visible={!isPredefined}
+            placeholder='right'
+            defaultValue=''
+            valueChangeEvent='keyup'
+            inputAttr={positionRightLabel}
+            disabled={!!coordinatePosition.left}
+            onValueChange={rightNumberBoxValueChanged} />
+        </div>
+        <div>Direction</div>
+        <SelectBox
+          items={directions}
+          inputAttr={directionLabel}
+          value={direction}
+          onSelectionChanged={({ selectedItem }) => setDirection(selectedItem)} />
+        <div className='section'>
+          <Button text='Show' width='48%' onClick={show} />
+          <Button text='Hide all' width='48%' onClick={() => HideToasts()} />
+        </div>
+      </div>
+    </React.Fragment>
+  );
 }
 
 export default App;
