@@ -94,8 +94,6 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   private rowsViewFocusHandlerContext!: (event: any) => void;
 
-  private rowsViewFocusOutHandlerContext!: (event: any) => void;
-
   _isNeedScroll: any;
 
   _focusedView: any;
@@ -113,8 +111,6 @@ export class KeyboardNavigationController extends modules.ViewController {
   focusType: any;
 
   _testInteractiveElement: any;
-
-  _$firstNotFixedCell: dxElementWrapper | undefined;
 
   _dataController!: Controllers['data'];
 
@@ -151,7 +147,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     this.focusedHandlerWithContext = this.focusedHandlerWithContext || this.focusedHandler.bind(this);
     this.renderCompletedWithContext = this.renderCompletedWithContext || this.renderCompleted.bind(this);
     this.rowsViewFocusHandlerContext = this.rowsViewFocusHandlerContext || this.rowsViewFocusHandler.bind(this);
-    this.rowsViewFocusOutHandlerContext = this.rowsViewFocusOutHandlerContext || this.rowsViewFocusOutHandler.bind(this);
 
     this._updateFocusTimeout = null;
     this._fastEditingStarted = false;
@@ -186,28 +181,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  // This is part of accessibility issue fix: scrollable should always have focusable element inside
-  private translateFocusIfNeed(event: any, $element: dxElementWrapper): void {
-    const needTranslateFocus = this._rowsView.isScrollableNeedFocusable();
-
-    if (!needTranslateFocus) {
-      return;
-    }
-
-    const $firstCell = this._rowsView.getCell({ rowIndex: 0, columnIndex: 0 });
-    const firstCellHasTabIndex = !!$firstCell.attr('tabindex');
-
-    // @ts-expect-error dxElementWrapper doesn't have overload for 'is' method
-    const notFixedCellIsTarget = $element.is(this._$firstNotFixedCell);
-
-    if (firstCellHasTabIndex && notFixedCellIsTarget) {
-      event.preventDefault();
-
-      this._focus($firstCell);
-    }
-  }
-
-  private rowsViewFocusHandler(event: any): void {
+  protected rowsViewFocusHandler(event: any): void {
     const $element = $(event.target);
     const isRelatedTargetInRowsView = $(event.relatedTarget).closest(
       this._rowsView.element(),
@@ -233,8 +207,6 @@ export class KeyboardNavigationController extends modules.ViewController {
       }
     }
 
-    this.translateFocusIfNeed(event, $element);
-
     const isCell = $element.is('td');
     const needSetFocusPosition = (this.option('focusedRowIndex') ?? -1) < 0;
     if (isCell && needSetFocusPosition) {
@@ -242,27 +214,19 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  private rowsViewFocusOutHandler(): void {
-    this._rowsView.makeScrollableFocusableIfNeed();
-  }
-
-  private subscribeToRowsViewFocusEvents(): void {
+  protected subscribeToRowsViewFocusEvent(): void {
     const $rowsView = this._rowsView?.element();
 
     eventsEngine.on($rowsView, 'focusin', this.rowsViewFocusHandlerContext);
-    eventsEngine.on($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
   }
 
-  private unsubscribeFromRowsViewFocusEvents(): void {
+  protected unsubscribeFromRowsViewFocusEvent(): void {
     const $rowsView = this._rowsView?.element();
 
     eventsEngine.off($rowsView, 'focusin', this.rowsViewFocusHandlerContext);
-    eventsEngine.off($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
   }
 
-  private renderCompleted(e: any): void {
-    this._$firstNotFixedCell = this._rowsView.getFirstNotFixedCell();
-
+  protected renderCompleted(e: any): void {
     const $rowsView = this._rowsView.element();
     const isFullUpdate = !e || e.changeType === 'refresh';
     const isFocusedViewCorrect = this._focusedView && this._focusedView.name === this._rowsView.name;
@@ -273,8 +237,8 @@ export class KeyboardNavigationController extends modules.ViewController {
     const $focusedElement = root.find(':focus');
     const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length;
 
-    this.unsubscribeFromRowsViewFocusEvents();
-    this.subscribeToRowsViewFocusEvents();
+    this.unsubscribeFromRowsViewFocusEvent();
+    this.subscribeToRowsViewFocusEvent();
 
     this.initPointerEventHandler();
     this.initKeyDownHandler();
@@ -289,7 +253,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private initViewHandlers(): void {
-    this.unsubscribeFromRowsViewFocusEvents();
+    this.unsubscribeFromRowsViewFocusEvent();
     this.unsubscribeFromPointerEvent();
     this.unsubscribeFromKeyDownEvent();
 
@@ -695,7 +659,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  _tabKeyHandler(eventArgs, isEditing) {
+  protected _tabKeyHandler(eventArgs, isEditing) {
     const editingOptions = this.option('editing');
     const direction = eventArgs.shift ? 'previous' : 'next';
     const isCellPositionDefined = isDefined(this._focusedCellPosition)
@@ -735,9 +699,9 @@ export class KeyboardNavigationController extends modules.ViewController {
     if (isOriginalHandlerRequired) {
       this._editorFactory.loseFocus();
 
-      if (this._rowsView.isScrollableNeedFocusable()) {
-        this._$firstNotFixedCell?.removeAttr('tabIndex');
-      }
+      // if (this._rowsView.isScrollableNeedFocusable()) {
+      //   this._$firstNotFixedCell?.removeAttr('tabIndex');
+      // }
 
       if (this._editingController.isEditing() && !this._isRowEditMode()) {
         this._resetFocusedCell(true);
@@ -1415,7 +1379,6 @@ export class KeyboardNavigationController extends modules.ViewController {
         $focusViewElement
           .find('.dx-row[tabindex], .dx-row > td[tabindex]')
           .not($focusElement)
-          .not(this._$firstNotFixedCell)
           .removeClass(CELL_FOCUS_DISABLED_CLASS)
           .removeClass(FOCUSED_CLASS)
           .removeAttr('tabindex');
@@ -2573,19 +2536,6 @@ export const keyboardNavigationModule: import('../m_types').Module = {
           }
         },
 
-        getFirstNotFixedCell(): dxElementWrapper | undefined {
-          const columns = this._columnsController.getVisibleColumns();
-          const notFixedColumns = columns.filter((column) => !column.fixed);
-
-          if (notFixedColumns.length === 0) {
-            return;
-          }
-
-          const columnIndex = notFixedColumns[0].visibleIndex;
-
-          return this._getCellElement(0, columnIndex);
-        },
-
         renderFocusState(params) {
           const { preventScroll, pageSizeChanged } = params ?? {};
           const $rowsViewElement = this.element();
@@ -2605,32 +2555,6 @@ export const keyboardNavigationModule: import('../m_types').Module = {
           if (this._keyboardController.isKeyboardEnabled() && cellElements?.length) {
             this.updateFocusElementTabIndex(cellElements, preventScroll);
           }
-
-          this.makeScrollableFocusableIfNeed();
-        },
-
-        // This is part of accessibility issue fix: scrollable should always have focusable element inside
-        makeScrollableFocusableIfNeed(): void {
-          const needFocusable = this.isScrollableNeedFocusable();
-
-          if (!needFocusable) {
-            return;
-          }
-
-          const $firstNotFixedCell = this.getFirstNotFixedCell();
-
-          if ($firstNotFixedCell) {
-            this._keyboardController._applyTabIndexToElement($firstNotFixedCell);
-          }
-        },
-
-        isScrollableNeedFocusable(): boolean {
-          const hasScrollable = !!this.getScrollable();
-          const hasFixedTable = !!this._fixedTableElement?.length;
-          const hasFirstCell = !!this.getCell({ rowIndex: 0, columnIndex: 0 })?.length;
-          const isFirstCellFixed = this._keyboardController._isFixedColumn(0);
-
-          return hasScrollable && hasFixedTable && hasFirstCell && isFirstCellFixed;
         },
 
         updateFocusElementTabIndex(cellElements) {

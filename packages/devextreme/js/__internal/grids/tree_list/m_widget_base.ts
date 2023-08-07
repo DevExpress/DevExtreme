@@ -51,6 +51,7 @@ treeListCore.registerModulesOrder([
   'columnsResizingReordering',
   'contextMenu',
   'keyboardNavigation',
+  'keyboardNavigationScrollableA11y',
   'errorHandling',
   'summary',
   'columnFixing',
