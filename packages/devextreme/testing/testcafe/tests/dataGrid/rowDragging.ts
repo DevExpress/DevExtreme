@@ -667,11 +667,11 @@ test('Item should appear in a correct spot when dragging to a different page wit
   })(dataGrid);
   await t.wait(200);
 
-  const draggedRowIndex = await ClientFunction((grid) => grid.getInstance()
+  const getDraggedRowIndexFunc = ClientFunction((grid) => grid.getInstance()
     .getVisibleRows()
     .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
 
-  await t.expect(draggedRowIndex)
+  await t.expect(getDraggedRowIndexFunc)
     .eql(toIndex - 1);
 }).before(async (t) => {
   await t.maximizeWindow();
