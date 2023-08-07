@@ -28,9 +28,9 @@
 
     @include dx-tabs-border-mixin(
       $generic-tabs-border-hover-top,
-      $generic-tabs-border-hover-right,
+      null,
       $generic-tabs-border-hover-bottom,
-      $generic-tabs-border-hover-left,
+      null,
     );
   }
 
