@@ -1,42 +1,40 @@
 @mixin dx-dropdownbutton(
-  $dropdownbutton-action-padding-left,
-  $dropdownbutton-action-padding-right,
   $dropdownbutton-icon-spindown-size,
+  $dropdownbutton-action-horizontal-padding,
 ) {
-  .dx-dropdownbutton {
-    .dx-icon {
-      &.dx-icon-spindown {
-        width: $dropdownbutton-icon-spindown-size;
-        height: $dropdownbutton-icon-spindown-size;
-      }
+  .dx-dropdownbutton-toggle {
+    .dx-icon-spindown {
+      width: $dropdownbutton-icon-spindown-size;
+      height: $dropdownbutton-icon-spindown-size;
     }
-  }
+  } 
 
   .dx-dropdownbutton-action {
-    .dx-button-content {
-      padding-inline-start: $dropdownbutton-action-padding-left;
-    }
-
     &:not(.dx-buttongroup-last-item) {
       border-inline-start-width: 1px;
       border-inline-end-width: 0;
-  
+    }
+
+    &.dx-button-has-icon:not(.dx-button-has-text) {
       .dx-button-content {
-        padding-inline-end: $dropdownbutton-action-padding-right;
+        padding-inline: $dropdownbutton-action-horizontal-padding;
       }
     }
 
-    &.dx-button-has-text .dx-icon.dx-icon-right {
-      margin-inline-start: 4px;
-      margin-inline-end: 0;
-    }
+    &.dx-button-has-icon,
+    &.dx-button-has-text {
+      .dx-icon.dx-icon-right {
+        margin-inline-start: 4px;
+        margin-inline-end: 0;
+      }
+    } 
   }
 
   .dx-dropdownbutton-has-arrow {
-    .dx-dropdownbutton-action {
-      &.dx-buttongroup-last-item {
+    .dx-dropdownbutton-action.dx-buttongroup-last-item {
+      &.dx-button-has-text {
         .dx-button-content {
-          padding-inline-end: 0;
+          padding-inline-end: $dropdownbutton-action-horizontal-padding;
         }
       }
     }

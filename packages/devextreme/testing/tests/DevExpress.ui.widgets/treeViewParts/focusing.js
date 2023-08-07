@@ -351,3 +351,29 @@ QUnit.test('first item should be focused if both search bar and selectAll item a
 
     assert.ok($firstItem.hasClass(FOCUSED_STATE_CLASS));
 });
+
+QUnit.test('events order should not affect focused items', function(assert) {
+    if(!isDesktopDevice()) {
+        assert.ok(true, 'only on desktops');
+        return;
+    }
+
+    const $treeView = initTree({
+        items: $.extend(true, [], DATA[0]),
+    });
+
+    const clock = sinon.useFakeTimers();
+    const $firstItem = $(`.${NODE_CLASS}`).eq(0);
+    const $secondItem = $(`.${NODE_CLASS}`).eq(1);
+
+    try {
+        $firstItem.trigger('dxpointerdown');
+        $treeView.trigger('focusin');
+        $secondItem.trigger('dxpointerdown');
+        clock.tick(10);
+    } finally {
+        clock.restore();
+    }
+
+    assert.strictEqual($firstItem.hasClass('dx-state-focused'), false);
+});
