@@ -125,6 +125,14 @@ export default class Editor<TProperties = Properties> extends Widget<TProperties
      * @public
      */
     clear(): void;
+
+    /**
+     * @docid
+     * @type_function_param1 value:object
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: any): void;
 }
 
 interface EditorInstance extends Editor<Properties> { }

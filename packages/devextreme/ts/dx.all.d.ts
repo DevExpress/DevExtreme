@@ -29494,6 +29494,11 @@ declare module DevExpress.ui {
      * [descr:Editor.clear()]
      */
     clear(): void;
+
+    /**
+     * [descr:Editor.reset(value)]
+     */
+    reset(value?: any): void;
   }
   module Editor {
     /**
