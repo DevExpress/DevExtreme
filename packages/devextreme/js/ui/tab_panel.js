@@ -243,7 +243,7 @@ const TabPanel = MultiView.inherit({
                 }
             }).bind(this),
             _itemAttributes: {
-                'class': TABPANEL_TABS_ITEM_CLASS,
+                class: TABPANEL_TABS_ITEM_CLASS,
             },
         };
     },

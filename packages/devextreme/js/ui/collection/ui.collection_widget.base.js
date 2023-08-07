@@ -846,9 +846,8 @@ const CollectionWidget = Widget.inherit({
     },
 
     _setAttributes($element) {
-        const { _itemAttributes } = this.option();
-        const attributes = { ..._itemAttributes };
-        const customClassValue = _itemAttributes.class;
+        const attributes = { ...this.option('_itemAttributes') };
+        const { class: customClassValue } = attributes;
 
         if(customClassValue) {
             const currentClassValue = $element.get(0).className;
