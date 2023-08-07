@@ -263,12 +263,20 @@ const Gallery = CollectionWidget.inherit({
         return this.option('rtlEnabled') ? -1 : 1;
     },
 
+    _setBorderWidth: function() {
+        // TODO: Get rid of this code and use :has() selector when Firefox supports it
+        const { showIndicator } = this.option();
+
+        this.$element().css('borderWidth', showIndicator ? 0 : '1px');
+    },
+
     _initMarkup: function() {
         this._renderWrapper();
         this._renderItemsContainer();
 
         this.$element().addClass(GALLERY_CLASS);
         this.$element().toggleClass(GALLERY_LOOP_CLASS, this.option('loop'));
+        this._setBorderWidth();
 
         this.callBase();
 
@@ -1112,6 +1120,7 @@ const Gallery = CollectionWidget.inherit({
                 break;
             case 'showIndicator':
                 this._renderIndicator();
+                this._setBorderWidth();
                 break;
             case 'showNavButtons':
                 this._renderNavButtons();

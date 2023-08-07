@@ -777,6 +777,44 @@ QUnit.module('behavior', {
 
         assert.strictEqual(borderWidth, '0px');
     });
+
+    QUnit.test('Gallery should not have border on focus after runtime showIndicator enable', function(assert) {
+        const gallery = this.$element.dxGallery({
+            items: [0, 1, 2, 3],
+            showIndicator: false,
+            focusStateEnabled: true,
+        }).dxGallery('instance');
+
+        gallery.focus();
+
+        let borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '1px', 'border is enabled');
+
+        gallery.option('showIndicator', true);
+        borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '0px', 'border is disabled');
+    });
+
+    QUnit.test('Gallery should have border on focus after runtime showIndicator disable', function(assert) {
+        const gallery = this.$element.dxGallery({
+            items: [0, 1, 2, 3],
+            showIndicator: true,
+            focusStateEnabled: true,
+        }).dxGallery('instance');
+
+        gallery.focus();
+
+        let borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '0px', 'border is disabled');
+
+        gallery.option('showIndicator', false);
+        borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '1px', 'border is enabled');
+    });
 });
 
 QUnit.module('render', {
