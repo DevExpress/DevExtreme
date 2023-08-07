@@ -141,12 +141,12 @@ test('Column chooser checkboxes should be aligned correctly with tree structure'
         keyExpr: 'id',
         columns: ['field1', {
           dataField: 'field2',
-          visible: isColumnVisible
+          visible: isColumnVisible,
         }],
         showBorders: true,
         columnChooser: {
-          enabled: true
-        }
+          enabled: true,
+        },
       });
     }).after(async () => {
       await changeTheme(Themes.genericLight);
