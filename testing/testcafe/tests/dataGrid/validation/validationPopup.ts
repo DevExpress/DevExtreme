@@ -57,7 +57,7 @@ test('Validation popup with open master detail', async (t) => {
 
   // act
   await takeScreenshot('validation-popup_master-detail.png', dataGrid.element);
-  await dataGrid.scrollTo({ y: 150 });
+  await dataGrid.scrollTo(t, { y: 150 });
   await takeScreenshot('validation-popup_master-detail_after-scroll.png', dataGrid.element);
 
   // assert
@@ -66,7 +66,7 @@ test('Validation popup with open master detail', async (t) => {
     .expect(dataGrid.getInvalidMessageTooltip().exists)
     .ok();
 
-  await dataGrid.scrollTo({ y: 0 });
+  await dataGrid.scrollTo(t, { y: 0 });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -101,7 +101,7 @@ test('Validation popup with open master detail and fixed columns', async (t) => 
 
   // act
   await takeScreenshot('validation-popup_master-detail_fixed-column.png', dataGrid.element);
-  await dataGrid.scrollTo({ y: 150 });
+  await dataGrid.scrollTo(t, { y: 150 });
   await takeScreenshot('validation-popup_master-detail_fixed-column_after-scroll.png', dataGrid.element);
 
   // assert
@@ -110,7 +110,7 @@ test('Validation popup with open master detail and fixed columns', async (t) => 
     .expect(dataGrid.getInvalidMessageTooltip().exists)
     .ok();
 
-  await dataGrid.scrollTo({ y: 0 });
+  await dataGrid.scrollTo(t, { y: 0 });
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
