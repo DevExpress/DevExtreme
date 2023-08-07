@@ -45,7 +45,6 @@ const onExporting = (e) => {
     doc.save('Companies.pdf');
   });
 };
-
 const App = () => (
   <DataGrid
     dataSource={countries}

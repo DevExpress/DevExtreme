@@ -4,64 +4,61 @@ import { filter, fields, groupOperations } from './data.js';
 import { formatValue } from './helpers.js';
 import { EditorComponent } from './EditorComponent.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: filter,
-    };
-    this.onValueChanged = this.onValueChanged.bind(this);
-    this.updateTexts = this.updateTexts.bind(this);
-  }
+function App() {
+  const [value, setValue] = React.useState(filter);
+  const [filterText, setFilterText] = React.useState('');
+  const [dataSourceText, setDataSourceText] = React.useState('');
 
-  render() {
-    return (
-      <div>
-        <FilterBuilder
-          fields={fields}
-          value={this.state.value}
-          onInitialized={this.updateTexts}
-          groupOperations={groupOperations}
-          onValueChanged={this.onValueChanged}
-        >
-          <CustomOperation
-            name="anyof"
-            caption="Is any of"
-            icon="check"
-            editorComponent={EditorComponent}
-            calculateFilterExpression={calculateFilterExpression}
-          />
-        </FilterBuilder>
-        <div className="results">
-          <div>
-            <b>Value</b>
-            <pre>{this.state.filterText}</pre>
-          </div>
-          <div>
-            <b>DataSource&apos;s filter expression</b>
-            <pre>{this.state.dataSourceText}</pre>
-          </div>
+  const updateTexts = React.useCallback((e) => {
+    setFilterText(formatValue(e.component.option('value')));
+    setDataSourceText(formatValue(e.component.getFilterExpression()));
+  }, [setFilterText, setDataSourceText]);
+
+  const onValueChanged = React.useCallback((e) => {
+    setValue(e.value);
+    updateTexts(e);
+  }, [updateTexts, setValue]);
+
+  const calculateFilterExpression = React.useCallback((filterValue, field) => (
+    filterValue
+      && filterValue.length
+      && Array.prototype.concat
+        .apply(
+          [],
+          filterValue.map((i) => [[field.dataField, '=', i], 'or']),
+        )
+        .slice(0, -1)
+  ), []);
+
+  return (
+    <div>
+      <FilterBuilder
+        fields={fields}
+        value={value}
+        onInitialized={updateTexts}
+        groupOperations={groupOperations}
+        onValueChanged={onValueChanged}
+      >
+        <CustomOperation
+          name="anyof"
+          caption="Is any of"
+          icon="check"
+          editorComponent={EditorComponent}
+          calculateFilterExpression={calculateFilterExpression}
+        />
+      </FilterBuilder>
+      <div className="results">
+        <div>
+          <b>Value</b>
+          <pre>{filterText}</pre>
+        </div>
+        <div>
+          <b>DataSource&apos;s filter expression</b>
+          <pre>{dataSourceText}</pre>
         </div>
       </div>
-    );
-  }
-
-  updateTexts(e) {
-    this.setState({
-      filterText: formatValue(e.component.option('value')),
-      dataSourceText: formatValue(e.component.getFilterExpression()),
-    });
-  }
-
-  onValueChanged(e) {
-    this.setState({ value: e.value });
-    this.updateTexts(e);
-  }
-}
-
-function calculateFilterExpression(filterValue, field) {
-  return filterValue && filterValue.length
-    && Array.prototype.concat.apply([], filterValue.map((value) => [[field.dataField, '=', value], 'or'])).slice(0, -1);
+    </div>
+  );
 }
 
 export default App;

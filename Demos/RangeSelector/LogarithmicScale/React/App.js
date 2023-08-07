@@ -7,59 +7,49 @@ import Chart, {
 } from 'devextreme-react/chart';
 import { dataSource } from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      range: [],
-    };
-    this.updateRange = this.updateRange.bind(this);
-  }
+const App = () => {
+  const [range, setRange] = React.useState([]);
 
-  render() {
-    return (
-      <React.Fragment>
-        <Chart
-          id="zoomed-chart"
-          dataSource={dataSource}
-          resizePanesOnZoom={true}
-        >
-          <Series />
-          <ArgumentAxis
-            visualRange={this.state.range}
-            valueMarginsEnabled={false}
-            minorTickCount={10}
-            type="logarithmic"
-          >
-            <Label format="exponential" />
-            <Grid visible={true} />
-            <MinorGrid visible={true} />
-          </ArgumentAxis>
-          <Legend visible={false} />
-        </Chart>
-        <RangeSelector
-          id="range-selector"
-          dataSource={dataSource}
-          onValueChanged={this.updateRange}
-        >
-          <RsChart>
-            <RsSeries />
-          </RsChart>
-          <Scale minRange={1} minorTickCount={10} type="logarithmic">
-            <RsLabel format="exponential" />
-          </Scale>
-          <SliderMarker format="exponential" />
-          <Behavior snapToTicks={false} valueChangeMode="onHandleMove" />
-        </RangeSelector>
-      </React.Fragment>
-    );
-  }
+  const updateRange = React.useCallback((data) => {
+    setRange(data.value);
+  }, [setRange]);
 
-  updateRange(data) {
-    this.setState({
-      range: data.value,
-    });
-  }
-}
+  return (
+    <React.Fragment>
+      <Chart
+        id="zoomed-chart"
+        dataSource={dataSource}
+        resizePanesOnZoom={true}
+      >
+        <Series />
+        <ArgumentAxis
+          visualRange={range}
+          valueMarginsEnabled={false}
+          minorTickCount={10}
+          type="logarithmic"
+        >
+          <Label format="exponential" />
+          <Grid visible={true} />
+          <MinorGrid visible={true} />
+        </ArgumentAxis>
+        <Legend visible={false} />
+      </Chart>
+      <RangeSelector
+        id="range-selector"
+        dataSource={dataSource}
+        onValueChanged={updateRange}
+      >
+        <RsChart>
+          <RsSeries />
+        </RsChart>
+        <Scale minRange={1} minorTickCount={10} type="logarithmic">
+          <RsLabel format="exponential" />
+        </Scale>
+        <SliderMarker format="exponential" />
+        <Behavior snapToTicks={false} valueChangeMode="onHandleMove" />
+      </RangeSelector>
+    </React.Fragment>
+  );
+};
 
 export default App;

@@ -8,50 +8,37 @@ const colCountByScreen = {
   md: 4,
 };
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      calculateColCountAutomatically: false,
-    };
-    this.onCalculateColCountAutomaticallyChanged = this.onCalculateColCountAutomaticallyChanged
-      .bind(this);
-  }
+const App = () => {
+  const [calculateColCountAutomatically, setCalculateColCountAutomatically] = React.useState(false);
 
-  render() {
-    const { calculateColCountAutomatically } = this.state;
+  const onCalculateColCountAutomaticallyChanged = React.useCallback((e) => {
+    setCalculateColCountAutomatically(e.value);
+  }, [setCalculateColCountAutomatically]);
 
-    return (
-      <div>
-        <Form
-          id="form"
-          formData={employee}
-          colCountByScreen={calculateColCountAutomatically ? null : colCountByScreen}
-          labelLocation="top"
-          minColWidth={233}
-          colCount="auto"
-          screenByWidth={screenByWidth}
-        />
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <CheckBox
-              text="Calculate the number of columns automatically"
-              value={calculateColCountAutomatically}
-              onValueChanged={this.onCalculateColCountAutomaticallyChanged}
-            />
-          </div>
+  return (
+    <div>
+      <Form
+        id="form"
+        formData={employee}
+        colCountByScreen={calculateColCountAutomatically ? null : colCountByScreen}
+        labelLocation="top"
+        minColWidth={233}
+        colCount="auto"
+        screenByWidth={screenByWidth}
+      />
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <CheckBox
+            text="Calculate the number of columns automatically"
+            value={calculateColCountAutomatically}
+            onValueChanged={onCalculateColCountAutomaticallyChanged}
+          />
         </div>
       </div>
-    );
-  }
-
-  onCalculateColCountAutomaticallyChanged(e) {
-    this.setState({
-      calculateColCountAutomatically: e.value,
-    });
-  }
-}
+    </div>
+  );
+};
 
 function screenByWidth(width) {
   return width < 720 ? 'sm' : 'md';

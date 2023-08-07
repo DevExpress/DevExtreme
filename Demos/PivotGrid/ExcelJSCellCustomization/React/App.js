@@ -39,6 +39,19 @@ const dataSource = new PivotGridDataSource({
 });
 
 export default function App() {
+  const getConditionalAppearance = React.useCallback((cell) => {
+    if (isTotalCell(cell)) {
+      return { fill: 'F2F2F2', font: '3F3F3F', bold: true };
+    }
+    const { value } = cell;
+    if (value < 20000) {
+      return { font: '9C0006', fill: 'FFC7CE' };
+    }
+    if (value > 50000) {
+      return { font: '006100', fill: 'C6EFCE' };
+    }
+    return { font: '9C6500', fill: 'FFEB9C' };
+  }, []);
   const onExporting = React.useCallback((e) => {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('Sales');
@@ -66,7 +79,7 @@ export default function App() {
       });
     });
     e.cancel = true;
-  });
+  }, [getConditionalAppearance]);
 
   const onCellPrepared = React.useCallback(({ cell, area, cellElement }) => {
     cell.area = area;
@@ -75,7 +88,7 @@ export default function App() {
       const appearance = getConditionalAppearance(cell);
       Object.assign(cellElement.style, getCssStyles(appearance));
     }
-  });
+  }, [getConditionalAppearance]);
 
   function isDataCell(cell) {
     return (cell.area === 'data' && cell.rowType === 'D' && cell.columnType === 'D');
@@ -98,20 +111,6 @@ export default function App() {
       color: `#${font}`,
       'font-weight': bold ? 'bold' : undefined,
     };
-  }
-
-  function getConditionalAppearance(cell) {
-    if (isTotalCell(cell)) {
-      return { fill: 'F2F2F2', font: '3F3F3F', bold: true };
-    }
-    const { value } = cell;
-    if (value < 20000) {
-      return { font: '9C0006', fill: 'FFC7CE' };
-    }
-    if (value > 50000) {
-      return { font: '006100', fill: 'C6EFCE' };
-    }
-    return { font: '9C6500', fill: 'FFEB9C' };
   }
 
   return (

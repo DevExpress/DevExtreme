@@ -27,7 +27,7 @@ export default function App() {
     type: 'default',
     stylingMode: 'contained',
     onClick: hide,
-  }));
+  }), [hide]);
 
   return (
     <React.Fragment>

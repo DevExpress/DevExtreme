@@ -3,7 +3,9 @@ import RangeSelector, {
   Margin, Scale, Label, SliderMarker, Behavior, Format,
 } from 'devextreme-react/range-selector';
 
-function App() {
+const App = () => {
+  const formatText = ({ valueText }) => `${valueText} mg/L`;
+
   return (
     <RangeSelector
       id="range-selector"
@@ -25,10 +27,6 @@ function App() {
       <Behavior snapToTicks={false} />
     </RangeSelector>
   );
-}
-
-function formatText({ valueText }) {
-  return `${valueText} mg/L`;
-}
+};
 
 export default App;

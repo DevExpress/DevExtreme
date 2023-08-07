@@ -16,183 +16,142 @@ const labelLocationLabel = { 'aria-label': 'Label Location' };
 const columnCountLabel = { 'aria-label': 'Column Count' };
 const minCountWidthLabel = { 'aria-label': 'Min Count Width' };
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.companies = service.getCompanies();
-    this.state = {
-      labelMode: 'floating',
-      labelLocation: 'left',
-      readOnly: false,
-      showColon: true,
-      minColWidth: 300,
-      colCount: 2,
-      company: this.companies[0],
-    };
-    this.onCompanyChanged = this.onCompanyChanged.bind(this);
-    this.onLabelModeChanged = this.onLabelModeChanged.bind(this);
-    this.onLabelLocationChanged = this.onLabelLocationChanged.bind(this);
-    this.onReadOnlyChanged = this.onReadOnlyChanged.bind(this);
-    this.onShowColonChanged = this.onShowColonChanged.bind(this);
-    this.onMinColWidthChanged = this.onMinColWidthChanged.bind(this);
-    this.onColumnsCountChanged = this.onColumnsCountChanged.bind(this);
-    this.onFormWidthChanged = this.onFormWidthChanged.bind(this);
-  }
+const App = () => {
+  const companies = service.getCompanies();
+  const [labelMode, setLabelMode] = React.useState('floating');
+  const [labelLocation, setLabelLocation] = React.useState('left');
+  const [readOnly, setReadOnly] = React.useState(false);
+  const [showColon, setShowColon] = React.useState(true);
+  const [minColWidth, setMinColWidth] = React.useState(300);
+  const [colCount, setColCount] = React.useState(2);
+  const [company, setCompany] = React.useState(companies[0]);
+  const [width, setWidth] = React.useState();
 
-  render() {
-    const {
-      labelMode,
-      labelLocation,
-      readOnly,
-      showColon,
-      minColWidth,
-      colCount,
-      company,
-      width,
-    } = this.state;
+  const onCompanyChanged = React.useCallback((e) => {
+    setCompany(e.value);
+  }, [setCompany]);
 
-    const companySelectorLabelMode = labelMode === 'outside'
-      ? 'hidden'
-      : labelMode;
+  const onLabelModeChanged = React.useCallback((e) => {
+    setLabelMode(e.value);
+  }, [setLabelMode]);
 
-    return (
-      <div id="form-demo">
-        <div className="widget-container">
-          { labelMode === 'outside' && (<div>Select company:</div>) }
+  const onLabelLocationChanged = React.useCallback((e) => {
+    setLabelLocation(e.value);
+  }, [setLabelLocation]);
+
+  const onReadOnlyChanged = React.useCallback((e) => {
+    setReadOnly(e.value);
+  }, [setReadOnly]);
+
+  const onShowColonChanged = React.useCallback((e) => {
+    setShowColon(e.value);
+  }, [setShowColon]);
+
+  const onMinColWidthChanged = React.useCallback((e) => {
+    setMinColWidth(e.value);
+  }, [setMinColWidth]);
+
+  const onColumnsCountChanged = React.useCallback((e) => {
+    setColCount(e.value);
+  }, [setColCount]);
+
+  const onFormWidthChanged = React.useCallback((e) => {
+    setWidth(e.value);
+  }, [setWidth]);
+
+  const companySelectorLabelMode = labelMode === 'outside'
+    ? 'hidden'
+    : labelMode;
+
+  return (
+    <div id="form-demo">
+      <div className="widget-container">
+        {labelMode === 'outside' && (<div>Select company:</div>)}
+        <SelectBox
+          displayExpr="Name"
+          dataSource={companies}
+          inputAttr={companyLabel}
+          labelMode={companySelectorLabelMode}
+          label='Select company'
+          value={company}
+          onValueChanged={onCompanyChanged}
+        />
+        <Form
+          id="form"
+          labelMode={labelMode}
+          formData={company}
+          readOnly={readOnly}
+          showColonAfterLabel={showColon}
+          labelLocation={labelLocation}
+          minColWidth={minColWidth}
+          colCount={colCount}
+          width={width}
+        />
+      </div>
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <span>Label mode:</span>
           <SelectBox
-            displayExpr="Name"
-            dataSource={this.companies}
-            inputAttr={companyLabel}
-            labelMode={companySelectorLabelMode}
-            label='Select company'
-            value={company}
-            onValueChanged={this.onCompanyChanged}
-          />
-          <Form
-            id="form"
-            labelMode={labelMode}
-            formData={company}
-            readOnly={readOnly}
-            showColonAfterLabel={showColon}
-            labelLocation={labelLocation}
-            minColWidth={minColWidth}
-            colCount={colCount}
-            width={width}
+            items={labelModes}
+            inputAttr={labelModeLabel}
+            value={labelMode}
+            onValueChanged={onLabelModeChanged}
           />
         </div>
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <span>Label mode:</span>
-            <SelectBox
-              items={labelModes}
-              inputAttr={labelModeLabel}
-              value={labelMode}
-              onValueChanged={this.onLabelModeChanged}
-            />
-          </div>
-          <div className="option">
-            <span>Label location:</span>
-            <SelectBox
-              items={labelLocations}
-              inputAttr={labelLocationLabel}
-              value={labelLocation}
-              onValueChanged={this.onLabelLocationChanged}
-            />
-          </div>
-          <div className="option">
-            <span>Columns count:</span>
-            <SelectBox
-              items={columnsCount}
-              value={colCount}
-              inputAttr={columnCountLabel}
-              onValueChanged={this.onColumnsCountChanged}
-            />
-          </div>
-          <div className="option">
-            <span>Min column width:</span>
-            <SelectBox
-              items={minColumnWidths}
-              value={minColWidth}
-              inputAttr={minCountWidthLabel}
-              onValueChanged={this.onMinColWidthChanged}
-            />
-          </div>
-          <div className="option">
-            <span>Form width:</span>
-            <NumberBox
-              max={550}
-              value={width}
-              inputAttr={widthLabel}
-              onValueChanged={this.onFormWidthChanged}
-            />
-          </div>
-          <div className="option">
-            <CheckBox
-              text="readOnly"
-              value={readOnly}
-              onValueChanged={this.onReadOnlyChanged}
-            />
-          </div>
-          <div className="option">
-            <CheckBox
-              text="showColonAfterLabel"
-              value={showColon}
-              onValueChanged={this.onShowColonChanged}
-            />
-          </div>
+        <div className="option">
+          <span>Label location:</span>
+          <SelectBox
+            items={labelLocations}
+            inputAttr={labelLocationLabel}
+            value={labelLocation}
+            onValueChanged={onLabelLocationChanged}
+          />
+        </div>
+        <div className="option">
+          <span>Columns count:</span>
+          <SelectBox
+            items={columnsCount}
+            value={colCount}
+            inputAttr={columnCountLabel}
+            onValueChanged={onColumnsCountChanged}
+          />
+        </div>
+        <div className="option">
+          <span>Min column width:</span>
+          <SelectBox
+            items={minColumnWidths}
+            value={minColWidth}
+            inputAttr={minCountWidthLabel}
+            onValueChanged={onMinColWidthChanged}
+          />
+        </div>
+        <div className="option">
+          <span>Form width:</span>
+          <NumberBox
+            max={550}
+            value={width}
+            inputAttr={widthLabel}
+            onValueChanged={onFormWidthChanged}
+          />
+        </div>
+        <div className="option">
+          <CheckBox
+            text="readOnly"
+            value={readOnly}
+            onValueChanged={onReadOnlyChanged}
+          />
+        </div>
+        <div className="option">
+          <CheckBox
+            text="showColonAfterLabel"
+            value={showColon}
+            onValueChanged={onShowColonChanged}
+          />
         </div>
       </div>
-    );
-  }
-
-  onCompanyChanged(e) {
-    this.setState({
-      company: e.value,
-    });
-  }
-
-  onLabelModeChanged(e) {
-    this.setState({
-      labelMode: e.value,
-    });
-  }
-
-  onLabelLocationChanged(e) {
-    this.setState({
-      labelLocation: e.value,
-    });
-  }
-
-  onReadOnlyChanged(e) {
-    this.setState({
-      readOnly: e.value,
-    });
-  }
-
-  onShowColonChanged(e) {
-    this.setState({
-      showColon: e.value,
-    });
-  }
-
-  onMinColWidthChanged(e) {
-    this.setState({
-      minColWidth: e.value,
-    });
-  }
-
-  onColumnsCountChanged(e) {
-    this.setState({
-      colCount: e.value,
-    });
-  }
-
-  onFormWidthChanged(e) {
-    this.setState({
-      width: e.value,
-    });
-  }
-}
+    </div>
+  );
+};
 
 export default App;

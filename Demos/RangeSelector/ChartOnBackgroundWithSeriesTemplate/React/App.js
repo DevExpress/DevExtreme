@@ -4,7 +4,11 @@ import RangeSelector, {
 } from 'devextreme-react/range-selector';
 import { dataSource } from './data.js';
 
-function App() {
+const App = () => {
+  const customizeSeries = (valueFromNameField) => (valueFromNameField === 'USA' ? {
+    color: 'red',
+  } : {});
+
   return (
     <RangeSelector
       id="range-selector"
@@ -23,12 +27,6 @@ function App() {
       </Scale>
     </RangeSelector>
   );
-}
-
-function customizeSeries(valueFromNameField) {
-  return valueFromNameField === 'USA' ? {
-    color: 'red',
-  } : {};
-}
+};
 
 export default App;

@@ -143,7 +143,7 @@ function App() {
         onItemClick={onTextAlignChanged}
       ></ButtonGroup>
     ),
-    [textAlign, textAlignItems, onTextAlignChanged],
+    [textAlign, onTextAlignChanged],
   );
 
   const renderTextAlignMenu = React.useCallback(
@@ -157,7 +157,7 @@ function App() {
         onItemClick={onTextAlignChanged}
       ></ButtonGroup>
     ),
-    [textAlign, textAlignItemsExtended, onTextAlignChanged],
+    [textAlign, onTextAlignChanged],
   );
 
   const renderMenuSeparator = React.useCallback(

@@ -10,63 +10,52 @@ const behaviorModes = ['onHandleMove', 'onHandleRelease'];
 
 const valueChangeModeLabel = { 'aria-label': 'Value Change Mode' };
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      workingDaysCount: calculateWorkdays([startValue, endValue]),
-      behaviorMode: behaviorModes[0],
-    };
-    this.processRange = this.processRange.bind(this);
-    this.setBehavior = this.setBehavior.bind(this);
-  }
+function App() {
+  const [workingDaysCount, setWorkingDaysCount] = React.useState(
+    calculateWorkdays([startValue, endValue]),
+  );
+  const [behaviorMode, setBehaviorMode] = React.useState(behaviorModes[0]);
 
-  render() {
-    return (
-      <div id="range-selector-demo">
-        <RangeSelector
-          id="range-selector"
-          title="Calculate the Working Days Count in a Date Period"
-          onValueChanged={this.processRange}
-        >
-          <Margin top={50} />
-          <Scale startValue={startValue} endValue={endValue} minorTickInterval="day" tickInterval="month">
-            <MinorTick visible={false} />
-            <Marker visible={false} />
-            <Label format="MMM" />
-          </Scale>
-          <Behavior valueChangeMode={this.state.behaviorMode} />
-          <SliderMarker format="dd EEEE" />
-        </RangeSelector>
-        <h2>Working days count: { this.state.workingDaysCount }</h2>
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <span>Handle Range Changes </span>
-            <SelectBox
-              dataSource={behaviorModes}
-              width={210}
-              inputAttr={valueChangeModeLabel}
-              value={this.state.behaviorMode}
-              onValueChanged={this.setBehavior}
-            />
-          </div>
+  const processRange = React.useCallback((e) => {
+    setWorkingDaysCount(calculateWorkdays(e.value));
+  }, [setWorkingDaysCount]);
+
+  const setBehavior = React.useCallback((data) => {
+    setBehaviorMode(data.value);
+  }, [setBehaviorMode]);
+
+  return (
+    <div id="range-selector-demo">
+      <RangeSelector
+        id="range-selector"
+        title="Calculate the Working Days Count in a Date Period"
+        onValueChanged={processRange}
+      >
+        <Margin top={50} />
+        <Scale startValue={startValue} endValue={endValue} minorTickInterval="day" tickInterval="month">
+          <MinorTick visible={false} />
+          <Marker visible={false} />
+          <Label format="MMM" />
+        </Scale>
+        <Behavior valueChangeMode={behaviorMode} />
+        <SliderMarker format="dd EEEE" />
+      </RangeSelector>
+      <h2>Working days count: {workingDaysCount}</h2>
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <span>Handle Range Changes </span>
+          <SelectBox
+            dataSource={behaviorModes}
+            width={210}
+            inputAttr={valueChangeModeLabel}
+            value={behaviorMode}
+            onValueChanged={setBehavior}
+          />
         </div>
       </div>
-    );
-  }
-
-  processRange(e) {
-    this.setState({
-      workingDaysCount: calculateWorkdays(e.value),
-    });
-  }
-
-  setBehavior(data) {
-    this.setState({
-      behaviorMode: data.value,
-    });
-  }
+    </div>
+  );
 }
 
 function calculateWorkdays([start, end]) {

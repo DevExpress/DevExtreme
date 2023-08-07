@@ -42,7 +42,6 @@ export default function App() {
         colorGroups={colorGroups}
         customize={customizeLayer}
       ></Layer>
-
       <Legend customizeText={customizeText}>
         <Source layer="areas" grouping="color"></Source>
       </Legend>

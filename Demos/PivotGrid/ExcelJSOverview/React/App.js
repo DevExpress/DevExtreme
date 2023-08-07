@@ -54,7 +54,7 @@ export default function App() {
       });
     });
     e.cancel = true;
-  });
+  }, []);
 
   return (
     <React.Fragment>

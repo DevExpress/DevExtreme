@@ -6,57 +6,45 @@ import DataSource from 'devextreme/data/data_source';
 import { filter, fields, products } from './data.js';
 import CustomItem from './CustomItem.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.dataSource = new DataSource({
-      store: products,
-    });
-    this.filterBuilderInstance = null;
-    this.state = {
-      value: filter,
-    };
-    this.onValueChanged = this.onValueChanged.bind(this);
-    this.refreshDataSource = this.refreshDataSource.bind(this);
-    this.setFilterBuilderInstance = this.setFilterBuilderInstance.bind(this);
-  }
+const App = () => {
+  const dataSource = React.useRef(new DataSource({
+    store: products,
+  }));
+  const filterBuilderInstance = React.useRef(null);
+  const [value, setValue] = React.useState(filter);
 
-  render() {
-    return (
-      <div>
-        <div className="filter-container">
-          <FilterBuilder ref={this.setFilterBuilderInstance}
-            fields={fields}
-            value={this.state.value}
-            onValueChanged={this.onValueChanged} />
-          <Button
-            text="Apply Filter"
-            type="default"
-            onClick={this.refreshDataSource} />
-          <div className="dx-clearfix"></div>
-        </div>
-        <div className="list-container">
-          <List dataSource={this.dataSource} itemRender={CustomItem} />
-        </div>
+  const setFilterBuilderInstance = (ref) => {
+    filterBuilderInstance.current = ref.instance;
+    refreshDataSource();
+  };
+
+  const onValueChanged = React.useCallback((e) => {
+    setValue(e.value);
+  }, [setValue]);
+
+  const refreshDataSource = React.useCallback(() => {
+    dataSource.current.filter(filterBuilderInstance.current.getFilterExpression());
+    dataSource.current.load();
+  }, []);
+
+  return (
+    <div>
+      <div className="filter-container">
+        <FilterBuilder ref={setFilterBuilderInstance}
+          fields={fields}
+          value={value}
+          onValueChanged={onValueChanged} />
+        <Button
+          text="Apply Filter"
+          type="default"
+          onClick={refreshDataSource} />
+        <div className="dx-clearfix"></div>
       </div>
-    );
-  }
-
-  setFilterBuilderInstance(ref) {
-    this.filterBuilderInstance = ref.instance;
-    this.refreshDataSource();
-  }
-
-  onValueChanged(e) {
-    this.setState({
-      value: e.value,
-    });
-  }
-
-  refreshDataSource() {
-    this.dataSource.filter(this.filterBuilderInstance.getFilterExpression());
-    this.dataSource.load();
-  }
-}
+      <div className="list-container">
+        <List dataSource={dataSource.current} itemRender={CustomItem} />
+      </div>
+    </div>
+  );
+};
 
 export default App;
