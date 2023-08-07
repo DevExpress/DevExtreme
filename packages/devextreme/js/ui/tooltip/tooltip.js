@@ -70,13 +70,7 @@ const Tooltip = Popover.inherit({
     _renderContent: function() {
         this.callBase();
 
-        this._contentId = 'dx-' + new Guid();
-
-        this.$overlayContent().attr({
-            'id': this._contentId,
-        });
-
-        this._toggleAriaDescription(true);
+        this._toggleAriaAttributes();
     },
 
     _toggleAriaDescription: function(showing) {
@@ -86,6 +80,16 @@ const Tooltip = Popover.inherit({
         if(!isWindow($target.get(0))) {
             this.setAria('describedby', label, $target);
         }
+    },
+
+    _toggleAriaAttributes: function() {
+        this._contentId = `dx-${new Guid()}`;
+
+        this.$overlayContent().attr({
+            'id': this._contentId,
+        });
+
+        this._toggleAriaDescription(true);
     }
 });
 

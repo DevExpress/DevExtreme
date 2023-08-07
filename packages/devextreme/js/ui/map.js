@@ -12,6 +12,7 @@ import { wrapToArray } from '../core/utils/array';
 import { isNumeric } from '../core/utils/type';
 import { addNamespace } from '../events/utils/index';
 import pointerEvents from '../events/pointer';
+import { noop } from '../core/utils/common';
 
 // NOTE external urls must have protocol explicitly specified (because inside Cordova package the protocol is "file:")
 
@@ -152,6 +153,8 @@ const Map = Widget.inherit({
             }
         ]);
     },
+
+    _renderFocusTarget: noop,
 
     _init: function() {
         this.callBase();

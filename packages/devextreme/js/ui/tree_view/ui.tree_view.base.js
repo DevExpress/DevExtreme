@@ -1464,9 +1464,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(isSelectAllItem || this.option('focusedElement')) {
             clearTimeout(this._setFocusedItemTimeout);
 
-            const element = isSelectAllItem ? getPublicElement(this._$selectAllItem) : $(this.option('focusedElement'));
-
             this._setFocusedItemTimeout = setTimeout(() => {
+                const element = isSelectAllItem ? getPublicElement(this._$selectAllItem) : $(this.option('focusedElement'));
                 this._setFocusedItem(element);
             });
 

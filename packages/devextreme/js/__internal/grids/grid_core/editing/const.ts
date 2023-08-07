@@ -40,6 +40,7 @@ export const MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
 
 export const READONLY_CLASS = 'readonly';
 export const LINK_CLASS = 'dx-link';
+export const LINK_ICON_CLASS = 'dx-link-icon';
 export const ROW_SELECTED = 'dx-selection';
 export const EDIT_BUTTON_CLASS = 'dx-edit-button';
 export const COMMAND_EDIT_CLASS = 'dx-command-edit';
