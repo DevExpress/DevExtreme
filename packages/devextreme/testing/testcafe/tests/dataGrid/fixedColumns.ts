@@ -5,7 +5,7 @@ import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import DataGrid from '../../model/dataGrid';
 import { makeRowsViewTemplatesAsync } from './helpers/asyncTemplates';
-import { a11yCheck } from '../../helpers/accessibilityUtils';
+import { a11yCheck, reloadPage } from '../../helpers/accessibilityUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
@@ -393,32 +393,36 @@ test('Accessibility: Scrollable should always have focusable element when naviga
     });
 
   await a11yCheck(t);
-}).before(async () => createWidget('dxDataGrid', {
-  columnWidth: 150,
-  width: 800,
-  keyExpr: 'id',
-  scrolling: {
-    useNative: true,
-  },
-  dataSource: [
-    {
-      id: 0, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a',
+}).before(async (t) => {
+  await reloadPage(t);
+
+  await createWidget('dxDataGrid', {
+    columnWidth: 150,
+    width: 800,
+    keyExpr: 'id',
+    scrolling: {
+      useNative: true,
     },
-    {
-      id: 1, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a',
-    },
-  ],
-  columns: [
-    { dataField: 'column1', fixed: true },
-    { dataField: 'column2', fixed: true },
-    { dataField: 'column3' },
-    { dataField: 'column4' },
-    { dataField: 'column5' },
-    { dataField: 'column6' },
-    { dataField: 'column7', fixed: true, fixedPosition: 'right' },
-    { dataField: 'column8', fixed: true, fixedPosition: 'right' },
-  ],
-}));
+    dataSource: [
+      {
+        id: 0, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a',
+      },
+      {
+        id: 1, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a',
+      },
+    ],
+    columns: [
+      { dataField: 'column1', fixed: true },
+      { dataField: 'column2', fixed: true },
+      { dataField: 'column3' },
+      { dataField: 'column4' },
+      { dataField: 'column5' },
+      { dataField: 'column6' },
+      { dataField: 'column7', fixed: true, fixedPosition: 'right' },
+      { dataField: 'column8', fixed: true, fixedPosition: 'right' },
+    ],
+  });
+});
 
 test('Accessibility: Scrollable should have focusable element when navigate out of the grid', async (t) => {
   const columnsLength = await ClientFunction(
@@ -445,7 +449,9 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
     .ok();
 
   await a11yCheck(t);
-}).before(async () => {
+}).before(async (t) => {
+  await reloadPage(t);
+
   await ClientFunction(() => { $('<div id="myButton">').appendTo('body'); })();
   await createWidget('dxButton', { text: 'Focus' }, '#myButton');
 

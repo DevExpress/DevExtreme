@@ -16,3 +16,7 @@ export const a11yCheck = async (t: TestController, rules: object = {}): Promise<
     .expect(results.violations.length === 0)
     .ok(createReport(results.violations));
 };
+
+export const reloadPage = async (t: TestController): Promise<void> => {
+  await t.eval(() => location.reload());
+};
