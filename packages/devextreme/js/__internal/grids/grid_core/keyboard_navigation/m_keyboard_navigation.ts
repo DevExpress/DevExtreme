@@ -699,10 +699,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     if (isOriginalHandlerRequired) {
       this._editorFactory.loseFocus();
 
-      // if (this._rowsView.isScrollableNeedFocusable()) {
-      //   this._$firstNotFixedCell?.removeAttr('tabIndex');
-      // }
-
       if (this._editingController.isEditing() && !this._isRowEditMode()) {
         this._resetFocusedCell(true);
         this._resetFocusedView();

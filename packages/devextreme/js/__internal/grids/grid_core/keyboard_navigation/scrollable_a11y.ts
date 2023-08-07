@@ -140,7 +140,6 @@ const rowsViewScrollableA11yExtender = (Base: ModuleType<RowsView>): ModuleType<
   renderFocusState(params): void {
     // @ts-expect-error asb
     super.renderFocusState(params);
-    // (this as any).callBase(params);
 
     this.makeScrollableFocusableIfNeed();
   }
