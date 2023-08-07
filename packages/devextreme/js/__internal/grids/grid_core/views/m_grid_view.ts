@@ -47,7 +47,7 @@ const calculateFreeWidthWithCurrentMinWidth = function (that, columnIndex, curre
 };
 
 const restoreFocus = function (focusedElement, selectionRange) {
-  accessibility.hiddenFocus(focusedElement);
+  accessibility.hiddenFocus(focusedElement, true);
   gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
 };
 
