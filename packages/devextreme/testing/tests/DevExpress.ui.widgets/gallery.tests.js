@@ -80,6 +80,7 @@ QUnit.testStart(() => {
 });
 
 const GALLERY_CLASS = 'dx-gallery';
+const GALLERY_INDICATOR_VISIBLE_CLASS = 'dx-gallery-indicator-visible';
 const GALLERY_WRAPPER_CLASS = GALLERY_CLASS + '-wrapper';
 const GALLERY_ITEM_CONTAINER_CLASS = GALLERY_CLASS + '-container';
 const GALLERY_ITEM_CLASS = GALLERY_CLASS + '-item';
@@ -748,6 +749,28 @@ QUnit.module('behavior', {
         }).dxGallery('instance');
 
         assert.ok(resizeEventSpy.called);
+    });
+
+    [false, true].forEach((showIndicator) => {
+        QUnit.test(`Gallery should ${showIndicator ? '' : 'not'} have indicator-visible (showIndicator=${showIndicator})`, function(assert) {
+            this.$element.dxGallery({
+                items: [0, 1, 2, 3],
+                showIndicator,
+            });
+
+            assert.strictEqual($(this.$element).hasClass(GALLERY_INDICATOR_VISIBLE_CLASS), showIndicator);
+        });
+
+        QUnit.test(`Gallery should ${showIndicator ? '' : 'not'} have indicator-visible after runtime showIndicator ${showIndicator ? 'enable' : 'disable'}`, function(assert) {
+            const gallery = this.$element.dxGallery({
+                items: [0, 1, 2, 3],
+                showIndicator: !showIndicator,
+            }).dxGallery('instance');
+
+            gallery.option('showIndicator', showIndicator);
+
+            assert.strictEqual($(this.$element).hasClass(GALLERY_INDICATOR_VISIBLE_CLASS), showIndicator);
+        });
     });
 
     QUnit.test('Gallery should have 1px border on focus (showIndicator=false)', function(assert) {
