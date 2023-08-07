@@ -507,7 +507,7 @@ test('Footer should not be hidden during auto scrolling when virtual scrollling 
 test('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await dataGrid.scrollTo({ x: 2500 });
+  await dataGrid.scrollTo(t, { x: 2500 });
 
   await t
     .expect(dataGrid.getScrollLeft())
@@ -591,13 +591,12 @@ test('The placeholder should have correct position after dragging the row to the
 });
 
 // T1126013
-// TODO: It is unstable test. Unskip after fix trello.com/c/k1u72fE0
 test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
   const dataGrid = new DataGrid('#container');
-  await dataGrid.scrollTo({ y: 3000 });
+  await dataGrid.scrollTo(t, { y: 3000 });
   await dataGrid.moveRow(fromIndex, 0, 50, true);
   await dataGrid.moveRow(fromIndex, 0, -20);
   await t.wait(500);
