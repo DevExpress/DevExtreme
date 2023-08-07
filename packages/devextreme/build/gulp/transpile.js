@@ -79,20 +79,21 @@ const TS_COMPILER_CONFIG = {
 };
 
 
-const createModuleConfig = (name, dir, filePath) => {
+const createModuleConfig = (name, dir, filePath, dist) => {
     const isIndex = name === 'index.js';
     const relative = path.join('./', dir.replace(srcDir, ''), name);
     const currentPath = isIndex ? path.join(relative, '../') : relative;
     const esmFile = path.relative(currentPath, path.join('./esm', relative));
+    const esmFilePath = path.join(dist, './esm',dir.replace(srcDir, ''), name);
     const cjsFile = path.relative(currentPath, path.join('./cjs', relative));
     const hasRealDTS = fs.existsSync(filePath.replace(/\.js$/, '.d.ts'));
     const hasGeneratedDTS = generatedTs.indexOf(relative.replace(/\.js$/, '.d.ts')) !== -1;
     const hasDTS = hasRealDTS || hasGeneratedDTS;
 
     const result = {
-        sideEffects: false,
+        sideEffects: hasSideEffects(esmFilePath),
         main: normalize(cjsFile),
-        module: normalize(esmFile)
+        module: normalize(esmFile),
     };
 
     if(hasDTS) {
@@ -104,6 +105,15 @@ const createModuleConfig = (name, dir, filePath) => {
     return JSON.stringify(result, null, 2);
 };
 
+function hasSideEffects(jsFileModulePath) {
+    try {
+        const data = fs.readFileSync(jsFileModulePath, 'utf8');
+
+        return !(/^\s*export /ms).test(data)
+    } catch (e) {
+        return true;
+    }
+}
 const transpileTs = (compiler, src) => {
     const task = () => compiler
         .compileTs(src)
@@ -206,7 +216,7 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
             if(file.extname === '.utils') return stream;
 
             return stream
-                .pipe(replace(/[\s\S]*/, createModuleConfig(fileName, fileDir, filePath)))
+                .pipe(replace(/[\s\S]*/, createModuleConfig(fileName, fileDir, filePath, dist)))
                 .pipe(rename(fPath => {
                     const isIndexFile = parsedPath.base === 'index.js';
                     const shouldBePlacedInSeparateDir = !isIndexFile;
