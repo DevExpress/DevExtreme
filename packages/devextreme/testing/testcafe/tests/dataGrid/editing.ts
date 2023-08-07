@@ -2155,7 +2155,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
       const headerPanel = dataGrid.getHeaderPanel();
 
       const scrollTo = async (y) => {
-        await dataGrid.scrollTo({ y });
+        await dataGrid.scrollTo(t, { y });
         return dataGrid.isReady();
       };
 
