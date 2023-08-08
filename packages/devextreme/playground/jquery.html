@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
@@ -30,21 +31,114 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-    <script type="text/javascript" src="../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body>
-    <div role="main">
+    <div role="main" class="root">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
         <div id="button"></div>
+        <div id="container">
+            <ul id="employees"></ul>
+            <div id="popup"></div>
+        </div>
+        <div id="date-box"></div>
+        <div id="treeBox"></div>
+        <div id="select-box"></div>
+        <div id="test-popup"></div>
         <script>
-           $(function() {
+            $(function () {
+                const popupContentTemplate = function () {
+                    return $('<div>').append(
+                        $(`<p>content</p>`),
+                    );
+                };
+                function createPopup(toolbarItems) {
+                    const container = $('<div>').appendTo('#popup');
+
+                    return container.dxPopup({
+                        contentTemplate: popupContentTemplate,
+                        width: 300,
+                        height: 280,
+                        container: '.root',
+                        showTitle: true,
+                        title: 'Information',
+                        visible: false,
+                        dragEnabled: false,
+                        hideOnOutsideClick: true,
+                        showCloseButton: false,
+                        position: {
+                            at: 'top',
+                            my: 'center',
+                            collision: 'fit',
+                        },
+                        toolbarItems,
+                    }).dxPopup('instance');
+                }
+
+                const popups = [];
+
+                popups.push(createPopup([
+                    { shortcut: 'done' },
+                    { shortcut: 'clear' },
+                    { shortcut: 'cancel' },
+                ]))
+                popups.push(createPopup([
+                    { shortcut: 'clear' },
+                    { shortcut: 'done' },
+                    { shortcut: 'cancel' },
+                ]))
+                popups.push(createPopup([
+                    { shortcut: 'cancel' },
+                    { shortcut: 'done' },
+                    { shortcut: 'clear' },
+                ]))
+
+                // $('#date-box').dxDateBox({
+                //     applyValueMode: 'useButtons'
+                // });
+
+                // $('#treeBox').dxDropDownBox({
+                //     valueExpr: 'ID',
+                //     displayExpr: 'ID',
+                //     applyValueMode: 'useButtons',
+                //     placeholder: 'Select a value...',
+                //     showClearButton: true,
+                //     dataSource: [{ ID: 1 }, { ID: 2 }, { ID: 3 }],
+
+                // });
+
+                $('#select-box').dxSelectBox({
+                    dataSource: [1, 2, 3],
+                    applyValueMode: 'useButtons',
+                    // opened: true
+                });
+
+                const $popup = $('#test-popup').dxPopup({
+                    visible: true,
+                    toolbarItems: [
+                        { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
+                        { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
+                        { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
+
+                });
+                const instance = $popup.dxPopup('instance');
+                const $popupBottom = instance.$content().parent().find('.dx-popup-bottom');
+
+                $popupBottom.dxToolbar('repaint');
+                alert($popupBottom.text());
+                // devices.current(devices.real());
+
                 $("#button").dxButton({
                     text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+                    onClick: function () {
+                        popups.forEach(popup => popup.show());
+                    }
                 });
+
             });
         </script>
     </div>
 </body>
+
 </html>
