@@ -390,9 +390,9 @@ test('DateRangeBox keyboard navigation via `tab` key if applyValueMode is useBut
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
-    .notOk()
-    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
     .ok()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
     .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
     .notOk();
 
@@ -525,9 +525,9 @@ test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is 
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
-    .ok()
-    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
     .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .ok()
     .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
     .notOk();
 
