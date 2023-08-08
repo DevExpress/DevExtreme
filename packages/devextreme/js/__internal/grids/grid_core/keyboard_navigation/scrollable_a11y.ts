@@ -11,12 +11,11 @@ import $, { dxElementWrapper } from '@js/core/renderer';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import { ModuleType } from '@ts/grids/grid_core/m_types';
-import { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import { KeyboardNavigationController } from './m_keyboard_navigation';
+import type { KeyboardNavigationController } from './m_keyboard_navigation';
 
 // eslint-disable-next-line max-len
-const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavigationController>): ModuleType<KeyboardNavigationController> => class ScrollableA11yExtender extends Base {
+export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavigationController>): ModuleType<KeyboardNavigationController> => class ScrollableA11yExtender extends Base {
   private _$firstNotFixedCell: dxElementWrapper | undefined;
 
   private rowsViewFocusOutHandlerContext!: (event: any) => void;
@@ -53,11 +52,11 @@ const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavig
   }
 
   private rowsViewFocusOutHandler(): void {
-    this._rowsView.makeScrollableFocusableIfNeed();
+    this.makeScrollableFocusableIfNeed();
   }
 
   private translateFocusIfNeed(event: any, $target: dxElementWrapper): void {
-    const needTranslateFocus = this._rowsView.isScrollableNeedFocusable();
+    const needTranslateFocus = this.isScrollableNeedFocusable();
     const isFirstCellFixed = this._isFixedColumn(0);
 
     if (!needTranslateFocus || !isFirstCellFixed) {
@@ -78,7 +77,8 @@ const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavig
   }
 
   protected renderCompleted(e: any): void {
-    this._$firstNotFixedCell = this._rowsView.getFirstNotFixedCell();
+    this._$firstNotFixedCell = this.getFirstNotFixedCell();
+    this.makeScrollableFocusableIfNeed();
 
     super.renderCompleted(e);
   }
@@ -91,18 +91,15 @@ const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavig
       || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition));
 
     if (isOriginalHandlerRequired) {
-      if (this._rowsView.isScrollableNeedFocusable()) {
+      if (this.isScrollableNeedFocusable()) {
         this._$firstNotFixedCell?.removeAttr('tabIndex');
       }
     }
 
     super._tabKeyHandler(eventArgs, isEditing);
   }
-};
 
-// eslint-disable-next-line max-len
-const rowsViewScrollableA11yExtender = (Base: ModuleType<RowsView>): ModuleType<RowsView> => class ScrollableA11yExtender extends Base {
-  getFirstNotFixedCell(): dxElementWrapper | undefined {
+  private getFirstNotFixedCell(): dxElementWrapper | undefined {
     const columns = this._columnsController.getVisibleColumns();
 
     let columnIndex = -1;
@@ -120,46 +117,26 @@ const rowsViewScrollableA11yExtender = (Base: ModuleType<RowsView>): ModuleType<
       return undefined;
     }
 
-    return this._getCellElement(0, columnIndex);
+    return this._rowsView._getCellElement(0, columnIndex) as dxElementWrapper | undefined;
   }
 
-  isScrollableNeedFocusable(): boolean {
-    const hasScrollable = !!this.getScrollable();
-    const hasFixedTable = !!(this as any)._fixedTableElement?.length;
-    const isCellsRendered = !!this.getCellElements(0)?.length;
+  private isScrollableNeedFocusable(): boolean {
+    const hasScrollable = !!this._rowsView.getScrollable();
+    const hasFixedTable = !!this._rowsView._fixedTableElement?.length;
+    const isCellsRendered = !!this._rowsView.getCellElements(0)?.length;
 
     return hasScrollable && hasFixedTable && isCellsRendered;
   }
 
-  makeScrollableFocusableIfNeed(): void {
+  private makeScrollableFocusableIfNeed(): void {
     const needFocusable = this.isScrollableNeedFocusable();
 
     if (!needFocusable) {
       return;
     }
 
-    const $firstNotFixedCell = this.getFirstNotFixedCell();
-
-    if ($firstNotFixedCell) {
-      (this as any)._keyboardController._applyTabIndexToElement($firstNotFixedCell);
+    if (this._$firstNotFixedCell) {
+      this._applyTabIndexToElement(this._$firstNotFixedCell);
     }
   }
-
-  renderFocusState(params): void {
-    // @ts-expect-error asb
-    super.renderFocusState(params);
-
-    this.makeScrollableFocusableIfNeed();
-  }
-};
-
-export const keyboardNavigationScrollableA11yModule = {
-  extenders: {
-    controllers: {
-      keyboardNavigation: keyboardNavigationScrollableA11yExtender,
-    },
-    views: {
-      rowsView: rowsViewScrollableA11yExtender,
-    },
-  },
 };

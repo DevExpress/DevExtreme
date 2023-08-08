@@ -78,6 +78,7 @@ import {
   isNotFocusedRow,
   shouldPreventScroll,
 } from './m_keyboard_navigation_utils';
+import { keyboardNavigationScrollableA11yExtender } from './scrollable_a11y';
 
 export class KeyboardNavigationController extends modules.ViewController {
   _updateFocusTimeout: any;
@@ -2786,6 +2787,7 @@ export const keyboardNavigationModule: import('../m_types').Module = {
           }
         },
       },
+      keyboardNavigation: keyboardNavigationScrollableA11yExtender,
     },
   },
 };
