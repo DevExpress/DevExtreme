@@ -79,7 +79,7 @@ const sortActionButtonsItems = (actionButtonsItems) => {
     });
 };
 
-const getButtonPlace = name => {
+const getButtonInfo = shortcut => {
 
     const device = devices.current();
     const platform = device.platform;
@@ -87,7 +87,7 @@ const getButtonPlace = name => {
     let location = 'before';
 
     if(platform === 'ios') {
-        switch(name) {
+        switch(shortcut) {
             case 'cancel':
                 toolbar = 'top';
                 break;
@@ -100,7 +100,7 @@ const getButtonPlace = name => {
                 break;
         }
     } else if(platform === 'android') {
-        switch(name) {
+        switch(shortcut) {
             case 'cancel':
                 location = 'after';
                 break;
@@ -112,7 +112,8 @@ const getButtonPlace = name => {
 
     return {
         toolbar,
-        location
+        location,
+        shortcut
     };
 };
 
@@ -487,8 +488,7 @@ const Popup = Overlay.inherit({
 
         each(toolbarItems, (_, data) => {
             const isShortcut = isDefined(data.shortcut);
-            const item = isShortcut ? getButtonPlace(data.shortcut) : data;
-            item.shortcut = data.shortcut;
+            const item = isShortcut ? getButtonInfo(data.shortcut) : data;
 
             if(isShortcut && currentPlatform === 'ios' && index < 2) {
                 item.toolbar = 'top';
