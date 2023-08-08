@@ -13,15 +13,8 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 $icon-position: relative;
 
 .dx-checkbox {
-  line-height: 0;
-
   .dx-checkbox-container {
     overflow: visible;
-  }
-
-  &.dx-state-readonly,
-  &.dx-state-disabled {
-    border-color: color.change($checkbox-border-color, $alpha: 0.26);
   }
 
   &.dx-state-focused,
@@ -65,17 +58,15 @@ $icon-position: relative;
 .dx-checkbox-icon {
   width: $material-checkbox-size;
   height: $material-checkbox-size;
-  border: 2px solid $checkbox-border-color;
+  border-width: 2px;
+  border-style: solid;
+  border-color: $checkbox-border-color;
   border-radius: $material-checkbox-border-radius;
 
   &::after {
     content: "";
     width: $material-checkbox-ripple-size;
     height: $material-checkbox-ripple-size;
-    top: 50%;
-    left: 50%;
-    margin-top: math.div(-$material-checkbox-ripple-size, 2);
-    margin-left: math.div(-$material-checkbox-ripple-size, 2);
     border-radius: 50%;
     display: block;
     position: absolute;
@@ -84,17 +75,12 @@ $icon-position: relative;
     transition: $material-checkbox-ripple-transition;
   }
 
-  &::before {
-    z-index: 2;
-  }
-
   .dx-checkbox-checked & {
     color: $checkbox-checked-color;
     background-color: $checkbox-bg;
     border: none;
 
     @include dx-icon(check);
-    @include dx-icon-font-centered-sizing($material-checkbox-arrow-icon-size, $icon-position);
 
     font-size: $material-checkbox-arrow-font-size;
   }
@@ -104,16 +90,15 @@ $icon-position: relative;
     color: $checkbox-checked-color;
     border: none;
 
-    @include dx-font-icon("\f074");
-    @include dx-icon-font-centered-sizing($material-checkbox-indeterminate-icon-size, $icon-position);
-
+    @include dx-icon(minus);
+    
     font-size: $material-checkbox-indeterminate-font-size;
   }
 }
 
 .dx-invalid {
   .dx-checkbox-icon {
-    border: 2px solid $checkbox-invalid-focused-border-color;
+    border-color: $checkbox-invalid-focused-border-color;
   }
 
   &.dx-state-focused {

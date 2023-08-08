@@ -1,3 +1,4 @@
+@use "../mixins" as *;
 @use "./mixins" as *;
 
 // adduse
@@ -6,7 +7,6 @@
 .dx-checkbox {
   display: inline-block;
   cursor: pointer;
-  line-height: 0;
   -webkit-user-drag: none;
 
   @include user-select(none);
@@ -17,6 +17,9 @@
 }
 
 .dx-checkbox-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   position: relative;
   background-position: 0 0;
@@ -36,22 +39,13 @@
 }
 
 .dx-checkbox-text {
-  text-align: left;
   white-space: pre-wrap;
   word-wrap: break-word;
   line-height: normal;
-  padding-left: 5px;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    margin: 0;
-    padding: 0 5px 0 0;
-    text-align: right;
-  }
+  padding-inline-start: 5px;
 }
 
 .dx-state-disabled {
-  &.dx-checkbox,
   .dx-checkbox {
     cursor: default;
   }

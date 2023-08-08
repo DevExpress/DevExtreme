@@ -13,7 +13,7 @@ export default {
     '@accordion-item-hover-bg',
     '@accordion-title-active-bg',
     '@checkbox-border-color',
-    '@checkbox-focused-borderd-color',
+    '@checkbox-focused-border-color',
     '@checkbox-bg',
     '@checkbox-hover-border-color',
     '@checkbox-active-icon-bg',

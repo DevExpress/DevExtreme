@@ -10,11 +10,8 @@
 
 
 $generic-checkbox-disable-opacity: 0.4;
-$icon-position: relative;
 
 .dx-checkbox {
-  line-height: 0;
-
   &.dx-state-readonly {
     .dx-checkbox-icon {
       border-color: $checkbox-readonly-border-color;
@@ -24,13 +21,13 @@ $icon-position: relative;
 
   &.dx-state-hover {
     .dx-checkbox-icon {
-      border: 1px solid $checkbox-hover-border-color;
+      border-color: $checkbox-hover-border-color;
     }
   }
 
   &.dx-state-focused {
     .dx-checkbox-icon {
-      border: 1px solid $checkbox-focused-borderd-color;
+      border-color: $checkbox-focused-border-color;
     }
   }
 
@@ -45,24 +42,20 @@ $icon-position: relative;
   width: $generic-checkbox-size;
   height: $generic-checkbox-size;
   border-radius: $checkbox-icon-border-radius;
-  border: 1px solid $checkbox-border-color;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $checkbox-border-color;
   background-color: $checkbox-bg;
 
   .dx-checkbox-checked & {
     @include dx-icon(check);
 
     color: $checkbox-checked-color;
-
-    @include dx-icon-font-centered-sizing($generic-checkbox-arrow-icon-size, $icon-position);
-
     font-size: $generic-checkbox-arrow-font-size;
   }
 
   .dx-checkbox-indeterminate & {
     color: $checkbox-indeterminate-bg;
-
-    @include dx-icon-font-centered-sizing($generic-checkbox-indeterminate-icon-size, $icon-position);
-
     font-size: $generic-checkbox-indeterminate-font-size;
 
     &::before {
@@ -70,9 +63,17 @@ $icon-position: relative;
       background-color: $checkbox-checked-color;
       border-radius: 2px;
       height: $generic-checkbox-indeterminate-icon-size;
+      width: $generic-checkbox-indeterminate-icon-size;
     }
   }
 }
+
+// .dx-checkbox-checked {
+//   .dx-checkbox-icon {
+//     color: $checkbox-bg;
+//     background-color: $checkbox-checked-color;
+//   }
+// }
 
 .dx-state-disabled {
   &.dx-checkbox,
@@ -92,7 +93,7 @@ $icon-position: relative;
 .dx-invalid {
   .dx-checkbox-container {
     .dx-checkbox-icon {
-      border: 1px solid $checkbox-invalid-faded-border-color;
+      border-color: $checkbox-invalid-faded-border-color;
     }
   }
 
