@@ -845,12 +845,25 @@ const CollectionWidget = Widget.inherit({
         return this._itemContainer();
     },
 
+    _setAttributes($element) {
+        const attributes = { ...this.option('_itemAttributes') };
+        const { class: customClassValue } = attributes;
+
+        if(customClassValue) {
+            const currentClassValue = $element.get(0).className;
+
+            attributes.class = [currentClassValue, customClassValue].join(' ');
+        }
+
+        $element.attr(attributes);
+    },
+
     _renderItem: function(index, itemData, $container, $itemToReplace) {
         const itemIndex = index?.item ?? index;
         $container = $container || this._getItemsContainer();
         const $itemFrame = this._renderItemFrame(itemIndex, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, itemIndex);
-        $itemFrame.attr(this.option('_itemAttributes'));
+        this._setAttributes($itemFrame);
         this._attachItemClickEvent(itemData, $itemFrame);
         const $itemContent = this._getItemContent($itemFrame);
 
