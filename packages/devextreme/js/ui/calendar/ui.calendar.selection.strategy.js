@@ -68,7 +68,6 @@ class CalendarSelectionStrategy {
 
     _shouldHandleWeekNumberClick() {
         const { selectionMode, selectWeekOnClick } = this.calendar.option();
-        debugger;
 
         return selectWeekOnClick && selectionMode !== 'single';
     }
