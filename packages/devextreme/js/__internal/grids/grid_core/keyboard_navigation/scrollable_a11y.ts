@@ -58,8 +58,9 @@ const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavig
 
   private translateFocusIfNeed(event: any, $target: dxElementWrapper): void {
     const needTranslateFocus = this._rowsView.isScrollableNeedFocusable();
+    const isFirstCellFixed = this._isFixedColumn(0);
 
-    if (!needTranslateFocus) {
+    if (!needTranslateFocus || !isFirstCellFixed) {
       return;
     }
 
@@ -103,13 +104,21 @@ const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavig
 const rowsViewScrollableA11yExtender = (Base: ModuleType<RowsView>): ModuleType<RowsView> => class ScrollableA11yExtender extends Base {
   getFirstNotFixedCell(): dxElementWrapper | undefined {
     const columns = this._columnsController.getVisibleColumns();
-    const notFixedColumns = columns.filter((column) => !column.fixed);
 
-    if (notFixedColumns.length === 0) {
-      return undefined;
+    let columnIndex = -1;
+
+    for (let index = 0; index < columns.length; index += 1) {
+      const notFixedColumn = !columns[index].fixed;
+
+      if (notFixedColumn) {
+        columnIndex = index;
+        break;
+      }
     }
 
-    const columnIndex = notFixedColumns[0].visibleIndex;
+    if (columnIndex === -1) {
+      return undefined;
+    }
 
     return this._getCellElement(0, columnIndex);
   }
@@ -117,10 +126,9 @@ const rowsViewScrollableA11yExtender = (Base: ModuleType<RowsView>): ModuleType<
   isScrollableNeedFocusable(): boolean {
     const hasScrollable = !!this.getScrollable();
     const hasFixedTable = !!(this as any)._fixedTableElement?.length;
-    const hasFirstCell = !!this.getCell({ rowIndex: 0, columnIndex: 0 })?.length;
-    const isFirstCellFixed = (this as any)._keyboardController._isFixedColumn(0) as boolean;
+    const isCellsRendered = !!this.getCellElements(0)?.length;
 
-    return hasScrollable && hasFixedTable && hasFirstCell && isFirstCellFixed;
+    return hasScrollable && hasFixedTable && isCellsRendered;
   }
 
   makeScrollableFocusableIfNeed(): void {

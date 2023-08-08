@@ -481,3 +481,55 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
 }).after(async () => {
   await ClientFunction(() => { $('#myButton').remove(); })();
 });
+
+test('Accessibility: Scrollable should have focusable when fixed on the right side columns are focused', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  const columnsLength = await ClientFunction(
+    () => (window as any).widget.getVisibleColumns().length,
+  )();
+
+  const pressKey = async (key: string, times = 1) => {
+    for (let i = 0; i < times; i += 1) {
+      await t.pressKey(key);
+    }
+  };
+
+  // focus through headers
+  await pressKey('tab', columnsLength);
+
+  // focus through data row till last cell (which is fixed)
+  await pressKey('tab', columnsLength);
+
+  await t
+    .expect(dataGrid.getFixedDataCell(0, columnsLength - 1).isFocused)
+    .ok();
+
+  await a11yCheck(t);
+}).before(async (t) => {
+  await reloadPage(t);
+
+  await createWidget('dxDataGrid', {
+    columnWidth: 150,
+    width: 800,
+    keyExpr: 'id',
+    scrolling: {
+      useNative: true,
+    },
+    dataSource: [
+      {
+        id: 0, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a',
+      },
+    ],
+    columns: [
+      { dataField: 'column1' },
+      { dataField: 'column2' },
+      { dataField: 'column3' },
+      { dataField: 'column4' },
+      { dataField: 'column5' },
+      { dataField: 'column6' },
+      { dataField: 'column7', fixed: true, fixedPosition: 'right' },
+      { dataField: 'column8', fixed: true, fixedPosition: 'right' },
+    ],
+  });
+});
