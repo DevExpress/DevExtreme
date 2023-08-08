@@ -205,9 +205,6 @@ $datagrid-columnchooser-overlay-border-radius: null !default;
 $datagrid-column-separator-bg: null !default;
 $datagrid-text-stub-background-image-path: null !default;
 
-$datagrid-text-link-disabled-opacity: $base-disabled-opacity;
-$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
-
 @if $color == "carmine" {
   $datagrid-columnchooser-item-color: $base-label-color !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 6.5%) !default;
@@ -295,7 +292,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 }
 
 @if $color == "dark" {
-  $datagrid-columnchooser-item-color: darken($datagrid-base-color, 38.5%) !default;
+  $datagrid-columnchooser-item-color: darken($datagrid-base-color, 26%) !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 6.5%) !default;
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
@@ -467,7 +464,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 }
 
 @if $color == "light" {
-  $datagrid-columnchooser-item-color: lighten($datagrid-base-color, 38.5%) !default;
+  $datagrid-columnchooser-item-color: lighten($datagrid-base-color, 26%) !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 6.5%) !default;
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;

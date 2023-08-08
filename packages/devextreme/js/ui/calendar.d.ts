@@ -37,6 +37,9 @@ export interface ComponentDisabledDate<T> {
 export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
 
 /** @public */
+export type CalendarSelectionMode = 'single' | 'multiple' | 'range';
+
+/** @public */
 export type WeekNumberRule = 'auto' | 'firstDay' | 'fullWeek' | 'firstFourDays';
 
 /** @public */
@@ -171,6 +174,12 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     name?: string;
     /**
      * @docid
+     * @default 'single'
+     * @public
+     */
+    selectionMode?: CalendarSelectionMode;
+    /**
+     * @docid
      * @default false
      * @public
      */
@@ -193,6 +202,12 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @public
      */
     value?: Date | number | string;
+    /**
+     * @docid
+     * @default []
+     * @public
+     */
+    values?: Array<Date | number | string>;
     /**
      * @docid
      * @default 'month'

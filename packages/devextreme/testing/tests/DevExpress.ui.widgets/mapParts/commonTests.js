@@ -832,3 +832,27 @@ QUnit.test('change provider and async options', function(assert) {
         assert.ok(map._asyncActionSuppressed);
     });
 });
+
+QUnit.module('Accessibility', {
+    beforeEach: function() {
+        const fakeURL = '/fakeGoogleUrl?';
+
+        GoogleStaticProvider.remapConstant(fakeURL);
+
+        ajaxMock.setup({
+            url: fakeURL,
+            responseText: ''
+        });
+    },
+    afterEach: function() {
+        ajaxMock.clear();
+    }
+}, () => {
+    QUnit.test('tabindex should not be on main div', function(assert) {
+        const $map = $('#map').dxMap({
+            provider: 'googleStatic',
+        });
+
+        assert.notOk($map.attr('tabindex'));
+    });
+});

@@ -7,26 +7,22 @@
     border-radius: 8px;
 
     .dx-list-item {
-      display: block;
-
       &:last-of-type {
         border-bottom: none;
       }
     }
-
-    .dx-list-item-content {
-      display: block;
-    }
   }
 
-  .dx-overlay-content {
-    .dx-popup-content {
-      padding: 1px;
-    }
+  .dx-popup-content {
+    padding: 1px;
   }
 
-  .dx-list-item {
+  .dx-list-item{
     display: block;
     border-top: 0;
+  }
+  
+  .dx-list-item-content {
+    display: block;
   }
 }

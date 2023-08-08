@@ -9,9 +9,6 @@
 
 // adduse
 
-$material-accordion-disabled-opacity: 0.5;
-
-
 .dx-accordion {
   background-color: $accordion-background-color;
   color: $accordion-color;
@@ -20,13 +17,20 @@ $material-accordion-disabled-opacity: 0.5;
 
 .dx-accordion-item {
   background-color: $accordion-item-bg;
-  box-shadow: $material-accordion-shadow;
+  box-shadow: $accordion-item-shadow;
   transition: margin 200ms cubic-bezier(0.4, 0, 0.2, 1);
   will-change: margin, height;
   border-top: 1px solid $accordion-item-border-color;
 
   &:first-child {
     border-top: none;
+    border-start-start-radius: $accordion-item-border-radius;
+    border-start-end-radius: $accordion-item-border-radius;
+  }
+
+  &:last-child {
+    border-end-start-radius: $accordion-item-border-radius;
+    border-end-end-radius: $accordion-item-border-radius;
   }
 
   &.dx-state-active,
@@ -34,12 +38,6 @@ $material-accordion-disabled-opacity: 0.5;
     > .dx-accordion-item-title {
       color: $accordion-title-active-color;
       background-color: $accordion-title-active-bg;
-    }
-
-    &:not(.dx-accordion-item-opened) {
-      .dx-icon {
-        color: $accordion-icon-active-color;
-      }
     }
   }
 
@@ -55,8 +53,9 @@ $material-accordion-disabled-opacity: 0.5;
 }
 
 .dx-accordion-item-opened {
-  margin: $material-accordion-opened-margin 0;
+  margin-block: $material-accordion-item-opened-margin;
   border-top: none;
+  border-radius: $accordion-item-border-radius;
 
   &:first-child {
     margin-top: 0;
@@ -74,73 +73,42 @@ $material-accordion-disabled-opacity: 0.5;
 }
 
 .dx-accordion-item-title {
-  height: $material-accordion-title-height;
-  position: relative;
-  padding: 12px $material-accordion-title-padding;
+  min-height: $material-accordion-title-height;
+  padding: $material-accordion-title-vertical-padding $material-accordion-title-horizontal-padding;
   background-color: $accordion-item-bg;
 
-  .dx-accordion-item-title-caption,
   &::before {
-    position: absolute;
-  }
-
-  .dx-accordion-item-title-caption {
-    color: $accordion-title-color;
-    font-size: $material-accordion-title-font-size;
-    font-weight: 500;
-    top: floor(math.div($material-accordion-title-height - $material-accordion-title-font-size, 2));
-    left: $material-accordion-title-padding;
-    right: $material-accordion-title-padding * 2 + $material-base-icon-size;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  &::before {
-    top: floor(math.div($material-accordion-title-height - $material-base-icon-size, 2)) - 2;
-    right: $material-accordion-title-padding;
-    font-weight: normal;
-    color: $accordion-icon-color;
     content: "\f016";
+    position: absolute;
+    font-weight: normal;
+    font-size: $accordion-title-icon-size;
+    inset-inline-end: $material-accordion-title-horizontal-padding;
     font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
-    font-size: $material-base-icon-size;
-    height: $material-base-icon-size;
-    width: $material-base-icon-size;
+    line-height: 100%;
   }
 
   .dx-icon {
-    @include dx-icon-sizing($material-base-icon-size);
+    @include dx-icon-sizing($accordion-title-icon-size);
   }
+}
 
-  .dx-accordion-item-title-caption .dx-icon {
+.dx-accordion-item-title-caption {
+  color: $accordion-title-color;
+  font-size: $material-accordion-title-font-size;
+  font-weight: 500;
+  margin-inline-end: $accordion-title-icon-size;
+
+  .dx-icon {
     @include dx-icon-margin($accordion-title-icon-margin);
-
-    position: relative;
-    top: $accordion-title-icon-top-offset;
   }
 }
 
 .dx-state-disabled {
   &.dx-accordion-item {
-    opacity: $material-accordion-disabled-opacity;
+    opacity: $base-disabled-opacity;
   }
 }
 
 .dx-accordion-item-body {
   padding: $material-accordion-body-padding;
-  font-size: 12px;
-}
-
-.dx-rtl {
-  .dx-accordion-item-title {
-    .dx-accordion-item-title-caption {
-      right: $material-accordion-title-padding;
-      left: $material-accordion-title-padding * 2 + $material-base-icon-size;
-    }
-
-    &::before {
-      left: $material-accordion-title-padding;
-      right: auto;
-    }
-  }
 }

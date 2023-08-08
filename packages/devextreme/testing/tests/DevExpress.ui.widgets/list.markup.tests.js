@@ -278,9 +278,12 @@ if(devices.real().deviceType === 'desktop') {
                     }, options))
             });
             this.clock = sinon.useFakeTimers();
-            this.expectedItemContainerAttrs = {
-                role: 'listbox',
+            this.expectedContainerAttrs = {
                 tabindex: '0',
+                role: 'group'
+            };
+            this.expectedItemsContainerAttrs = {
+                role: 'listbox',
                 'aria-label': 'Items'
             };
             this.expectedListAttrs = {
@@ -297,7 +300,8 @@ if(devices.real().deviceType === 'desktop') {
             QUnit.test('Selected: [], selectionMode: "none"', function() {
                 helper.createWidget({ searchEnabled });
 
-                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
+                helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([], { role: 'option' });
             });
@@ -311,7 +315,8 @@ if(devices.real().deviceType === 'desktop') {
                 });
                 helper.widget.option('searchEnabled', !searchEnabled);
 
-                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
+                helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option' });
             });
@@ -324,7 +329,8 @@ if(devices.real().deviceType === 'desktop') {
                     selectionMode: 'single'
                 });
 
-                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
+                helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'option' });
             });
@@ -337,7 +343,8 @@ if(devices.real().deviceType === 'desktop') {
                     selectionMode: 'multiple'
                 });
 
-                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
+                helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkAttributes(helper.$widget, this.expectedListAttrs);
                 helper.checkItemsAttributes([1, 2], { attributes: ['aria-selected'], role: 'option' });
             });
@@ -351,11 +358,13 @@ if(devices.real().deviceType === 'desktop') {
                 });
 
                 helper.widget.option('focusedElement', helper.getItems().eq(0));
-                helper.checkAttributes(helper.$itemContainer, { ...this.expectedItemContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
+                helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkItemsAttributes([0], { attributes: ['aria-selected'], focusedItemIndex: 0, role: 'option' });
 
                 helper.widget.option('focusedElement', null);
-                helper.checkAttributes(helper.$itemContainer, this.expectedItemContainerAttrs);
+                helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
                 helper.checkItemsAttributes([0], { attributes: ['aria-selected'], role: 'option' });
             });
         });
@@ -364,25 +373,25 @@ if(devices.real().deviceType === 'desktop') {
             QUnit.test(`list focusable element should have aria-label if data source is set with ${dataSourcePropertyName} property`, function(assert) {
                 helper.createWidget({ items: [] });
 
-                assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
+                assert.strictEqual(helper.getListContainer().attr('aria-label'), undefined);
 
                 helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
-                assert.strictEqual(helper.$itemContainer.attr('aria-label'), 'Items');
+                assert.strictEqual(helper.getListContainer().attr('aria-label'), 'Items');
 
                 helper.widget.option(dataSourcePropertyName, []);
-                assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
+                assert.strictEqual(helper.getListContainer().attr('aria-label'), undefined);
             });
 
             QUnit.test(`list should have correct role if data sourse is set with ${dataSourcePropertyName} property`, function(assert) {
                 helper.createWidget({ items: [] });
 
-                assert.strictEqual(helper.$itemContainer.attr('role'), undefined);
+                assert.strictEqual(helper.getListContainer().attr('role'), undefined);
 
                 helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
-                assert.strictEqual(helper.$itemContainer.attr('role'), 'listbox');
+                assert.strictEqual(helper.getListContainer().attr('role'), 'listbox');
 
                 helper.widget.option(dataSourcePropertyName, []);
-                assert.strictEqual(helper.$itemContainer.attr('role'), undefined);
+                assert.strictEqual(helper.getListContainer().attr('role'), undefined);
             });
         });
 
@@ -391,7 +400,7 @@ if(devices.real().deviceType === 'desktop') {
 
             helper.createWidget({ noDataText, items: [] });
 
-            assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
+            assert.strictEqual(helper.getListContainer().attr('aria-label'), undefined);
         });
 
         QUnit.test('aria-label of empty list should be empty after noDataText option change', function(assert) {
@@ -400,7 +409,7 @@ if(devices.real().deviceType === 'desktop') {
             const noDataText = 'Custom no data text';
             helper.widget.option('noDataText', noDataText);
 
-            assert.strictEqual(helper.$itemContainer.attr('aria-label'), undefined);
+            assert.strictEqual(helper.getListContainer().attr('aria-label'), undefined);
         });
     });
 }

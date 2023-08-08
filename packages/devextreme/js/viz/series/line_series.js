@@ -502,16 +502,11 @@ polar.line = extend({}, polarScatterSeries, lineMethods, {
     },
 
     _closeSegment(points) {
-        let point;
-
-        if(this._segments.length) {
-            point = this._segments[0].line[0];
-        } else {
-            point = clonePoint(points[0], points[0].x, points[0].y, points[0].angle);
-        }
-        point = this._modifyReflectedPoint(point, points[points.length - 1]);
-        if(point) {
-            points.push(point);
+        const point = this._segments.length ? this._segments[0].line[0] : points[0];
+        let newPoint = clonePoint(point, point.x, point.y, point.angle);
+        newPoint = this._modifyReflectedPoint(newPoint, points.at(-1));
+        if(newPoint) {
+            points.push(newPoint);
         }
     },
 

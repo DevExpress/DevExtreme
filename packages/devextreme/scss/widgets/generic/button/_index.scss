@@ -46,7 +46,3 @@
 .dx-button-mode-text {
   @include dx-button-mode-text-styling();
 }
-
-.dx-button-normal {
-  @include dx-button-special-hover($button-special-hover);
-}

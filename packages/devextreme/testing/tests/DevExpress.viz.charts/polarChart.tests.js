@@ -739,3 +739,28 @@ QUnit.test('Change of useSpiderWeb', function(assert) {
     assert.strictEqual(stubAxes[2], chart.getArgumentAxis());
     assert.strictEqual(stubAxes[3], chart.getValueAxis());
 });
+
+QUnit.module('series rendering', () => {
+    ['line', 'area'].forEach((seriesType) => {
+        QUnit.test(`point angle for ${seriesType} should not change after force render (T1174645)`, function(assert) {
+            const chart = $('#chartContainer').dxPolarChart({
+                onDrawn: (e) => {
+                    const series = e.component.getAllSeries()[0];
+                    const point = series.getAllPoints()[0];
+
+                    assert.strictEqual(point.angle, 90);
+                },
+                dataSource: [
+                    { id: 1, arg: 10, val: 100 },
+                    { id: 2, arg: 10, val: 100 },
+                    { id: 3, arg: 20, val: 200 },
+                ],
+                series: {
+                    type: seriesType
+                }
+            }).dxPolarChart('instance');
+
+            chart.render({ force: true });
+        });
+    });
+});

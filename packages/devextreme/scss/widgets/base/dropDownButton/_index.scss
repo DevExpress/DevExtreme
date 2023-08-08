@@ -1,0 +1,30 @@
+// adduse
+
+.dx-dropdownbutton {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.dx-dropdownbutton-action {
+  min-width: 0;
+}
+
+.dx-dropdownbutton-content {
+  &.dx-popup-content {
+    padding: 0;
+  }
+
+  & .dx-list .dx-empty-message,
+  & .dx-list .dx-list-item {
+    border: none;
+  }
+}
+
+.dx-dropdownbutton-toggle {
+  flex: 0 0 auto;
+  min-width: 0;
+
+  .dx-button-content {
+    padding-inline: 0;
+  }
+}

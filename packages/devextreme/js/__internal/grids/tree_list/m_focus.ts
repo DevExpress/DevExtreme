@@ -62,7 +62,7 @@ core.registerModule('focus', extend(true, {}, focusModule, {
               if (parentData) {
                 d.resolve(dataSource.parentKeyOf(parentData));
               } else {
-                d.reject();
+                d.resolve();
               }
             }).fail(d.reject);
           }

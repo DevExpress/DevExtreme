@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use "../colors" as *;
 
 // adduse
 
@@ -20,6 +21,9 @@ $generic-command-edit-icon-size: null !default;
 $generic-command-edit-icon-margin: null !default;
 $generic-grid-base-nodata-font-size: null !default;
 $generic-grid-base-checkbox-padding-bottom: null !default;
+
+$datagrid-text-link-disabled-opacity: $base-disabled-opacity;
+$datagrid-icon-link-disabled-opacity: 0.6;
 
 @if $size == "default" {
   $generic-grid-base-cell-padding: 7px !default;

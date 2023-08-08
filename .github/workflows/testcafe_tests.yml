@@ -46,7 +46,7 @@ jobs:
     - name: Zip artifacts
       working-directory: ./packages/devextreme
       run: |
-        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
@@ -74,16 +74,16 @@ jobs:
           { componentFolder: "scheduler", name: "scheduler (3/5)", indices: "3/5" },
           { componentFolder: "scheduler", name: "scheduler (4/5)", indices: "4/5" },
           { componentFolder: "scheduler", name: "scheduler (5/5)", indices: "5/5" },
-          { componentFolder: "form", name: "form" },
+          { componentFolder: "form", name: "form (1/2)", indices: "1/2" },
+          { componentFolder: "form", name: "form (2/2)", indices: "2/2" },
           { componentFolder: "editors", name: "editors" },
           { componentFolder: "navigation", name: "navigation" },
           { componentFolder: "htmlEditor", name: "htmlEditor", concurrency: 1 },
-          { componentFolder: "form", name: "form - material", theme: 'material.blue.light' },
+          { componentFolder: "form", name: "form - material (1/2)", theme: 'material.blue.light', indices: "1/2" },
+          { componentFolder: "form", name: "form - material (2/2)", theme: 'material.blue.light', indices: "2/2" },
           { componentFolder: "editors", name: "editors - material", theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
           { componentFolder: "htmlEditor", name: "htmlEditor - material", theme: 'material.blue.light', concurrency: 1 },
-          { componentFolder: "renovation", name: "renovation (jquery)", platform: "jquery" },
-          { componentFolder: "renovation", name: "renovation (react)", platform: "react" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
@@ -115,24 +115,9 @@ jobs:
         name: devextreme-artifacts
         path: ./packages/devextreme
 
-    - name: Prepare localization
-      if: matrix.ARGS.componentFolder == 'renovation'
-      working-directory: ./packages/devextreme
-      run: npx gulp localization
-
     - name: Unpack artifacts
       working-directory: ./packages/devextreme
       run: 7z x artifacts.zip -aoa
-
-    - name: Prepare renovation playground
-      if: matrix.ARGS.componentFolder == 'renovation'
-      working-directory: ./packages/devextreme
-      run: |
-        pushd testing/renovation
-        npm install --no-audit --no-fund --legacy-peer-deps
-        popd
-        npm run build:react
-        npx gulp build-renovation-testing
 
     - name: Run TestCafe tests
       working-directory: ./packages/devextreme

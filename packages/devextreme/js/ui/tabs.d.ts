@@ -16,12 +16,14 @@ import CollectionWidget, {
 
 import {
     SingleOrMultiple,
+    Orientation,
 } from '../common';
 
 export type ItemLike = string | Item | any;
 
 export {
     SingleOrMultiple,
+    Orientation,
 };
 
 /**
@@ -143,6 +145,12 @@ export interface dxTabsBaseOptions<
      * @public
      */
     items?: Array<TItem>;
+    /**
+     * @docid dxTabsOptions.orientation
+     * @default 'horizontal'
+     * @public
+     */
+    orientation?: Orientation;
     /**
      * @docid dxTabsOptions.repaintChangesOnly
      * @default false

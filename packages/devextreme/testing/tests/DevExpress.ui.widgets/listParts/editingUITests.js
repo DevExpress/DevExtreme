@@ -2542,7 +2542,7 @@ QUnit.test('sortable options', function(assert) {
     const sortable = $list.find('.dx-sortable').dxSortable('instance');
 
     assert.equal(sortable.option('dragDirection'), 'vertical', 'dragDirection');
-    assert.equal(sortable.option('filter'), '> .dx-list-item', 'filter');
+    assert.equal(sortable.option('filter'), '> .dx-list-items > .dx-list-item', 'filter');
     assert.equal(sortable.option('handle'), '.dx-list-reorder-handle', 'handle');
     assert.equal(sortable.option('component'), $list.dxList('instance'), 'component');
 });
@@ -2561,7 +2561,7 @@ QUnit.test('sortable options for grouped List', function(assert) {
 
 
     assert.equal(sortable.option('dragDirection'), 'vertical', 'dragDirection');
-    assert.equal(sortable.option('filter'), '> .dx-list-group > .dx-list-group-body > .dx-list-item', 'filter');
+    assert.equal(sortable.option('filter'), '> .dx-list-items > .dx-list-group > .dx-list-group-body > .dx-list-item', 'filter');
     assert.equal(sortable.option('handle'), '.dx-list-reorder-handle', 'handle');
     assert.equal(sortable.option('component'), $list.dxList('instance'), 'component');
 });
@@ -2582,8 +2582,8 @@ QUnit.test('sortable filter is correct after "grouped" option changed', function
     });
 
     let sortable = $list.find('.dx-sortable').dxSortable('instance');
-    const groupedFilter = '> .dx-list-group > .dx-list-group-body > .dx-list-item';
-    const simpleFilter = '> .dx-list-item';
+    const groupedFilter = '> .dx-list-items > .dx-list-group > .dx-list-group-body > .dx-list-item';
+    const simpleFilter = '> .dx-list-items > .dx-list-item';
 
     assert.strictEqual(sortable.option('filter'), groupedFilter, 'correct grouped filter');
 

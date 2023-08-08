@@ -5,40 +5,39 @@
 @use "colors" as *;
 @use "../colors" as *;
 @use "../../base/icons" as *;
-
-$generic-button-padding:
-  $generic-button-vertical-padding
-  $generic-button-horizontal-padding;
-
-$generic-button-icon-size: $generic-base-icon-size;
-
-@mixin dx-button-sizing($padding, $icon-size, $icon-margin) {
-  .dx-button-content {
-    padding: $padding;
-  }
-
-  .dx-icon {
-    width: $icon-size;
-    height: $icon-size;
-    font-size: $icon-size;
-
-    @include dx-icon-margin($icon-margin);
-  }
-}
+@use "../../base/button/mixins" as *;
 
 @mixin dx-button-onlyicon-sizing() {
-  @include dx-button-sizing($generic-button-icon-horizontal-padding, $generic-button-icon-size, 0);
+  @include dx-button-sizing(
+    $generic-button-icon-horizontal-padding,
+    $generic-button-icon-horizontal-padding,
+    $generic-button-icon-horizontal-padding,
+    $generic-base-icon-size,
+    0
+  );
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($generic-button-padding, $generic-button-icon-size, math.div($generic-button-icon-size, 2));
+  @include dx-button-sizing(
+    $generic-button-vertical-padding,
+    $generic-button-horizontal-padding,
+    $generic-button-horizontal-padding,
+    $generic-base-icon-size,
+    math.div($generic-base-icon-size, 2)
+  );
 }
 
 @mixin dx-button-styling-variant(
-    $background-color, $border-color, $text-color,
-    $hover-background-color, $hover-border-color,
-    $focused-background-color, $focused-border-color,
-    $active-background-color, $active-border-color, $active-text-color,
+    $background-color,
+    $border-color,
+    $text-color,
+    $hover-background-color,
+    $hover-border-color,
+    $focused-background-color,
+    $focused-border-color,
+    $active-background-color,
+    $active-border-color,
+    $active-text-color,
     $icon-color
   ) {
   background-color: $background-color;
@@ -70,26 +69,6 @@ $generic-button-icon-size: $generic-base-icon-size;
   border-radius: $button-border-radius;
   border-width: $generic-button-border-weight;
   border-style: solid;
-
-  @at-root #{selector-append(".dx-state-disabled", &)},
-  .dx-state-disabled & {
-    .dx-icon {
-      opacity: $button-disabled-icon-opacity;
-    }
-
-    .dx-button-text {
-      opacity: $button-disabled-text-opacity;
-    }
-  }
-}
-
-@mixin dx-button-special-hover($hover: transparent) {
-  &.dx-state-hover {
-    .dx-button-content {
-      background-color: $hover;
-      border-radius: $button-border-radius;
-    }
-  }
 }
 
 @mixin dx-button-mode-contained-styling() {

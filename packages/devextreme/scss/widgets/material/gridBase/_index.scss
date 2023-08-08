@@ -15,6 +15,7 @@
 @use "../menu/colors" as *;
 @use "../toolbar/colors" as *;
 @use "../button/mixins" as *;
+@use "../../base/button/mixins" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
 @use "../typography/sizes" as *;
@@ -283,8 +284,10 @@ $grid-masterdetail-padding: 16px;
             }
           }
 
-          .dx-link.dx-state-disabled {
-            opacity: $datagrid-text-link-disabled-opacity;
+          .dx-state-disabled {
+            &.dx-link {
+              opacity: $datagrid-text-link-disabled-opacity;
+            }
 
             &.dx-link-icon {
               opacity: $datagrid-icon-link-disabled-opacity;
@@ -1098,7 +1101,7 @@ $grid-masterdetail-padding: 16px;
     }
 
     .dx-revert-button {
-      @include dx-button-sizing(2px, 18px, 0);
+      @include dx-button-sizing(2px, 2px, 2px, 18px, 0);
 
       border-radius: $button-border-radius;
 
@@ -1106,6 +1109,7 @@ $grid-masterdetail-padding: 16px;
         $button-danger-bg,
         $button-danger-color,
         none,
+        transparent,
         $button-danger-bg,
         none,
         $button-danger-bg,

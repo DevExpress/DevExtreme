@@ -6,6 +6,12 @@
   .dx-tabs {
     height: 100%;
   }
+
+  .dx-tab {
+    flex-basis: unset;
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
 }
 
 .dx-tabpanel-container {

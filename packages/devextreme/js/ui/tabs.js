@@ -29,6 +29,8 @@ const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
+const TABS_VERTICAL_CLASS = 'dx-tabs-vertical';
+const TABS_HORIZONTAL_CLASS = 'dx-tabs-horizontal';
 
 const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
@@ -41,7 +43,9 @@ const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
-const FOCUSED_NEXT_TAB_CLASS = 'dx-focused-next-tab';
+const STATE_DISABLED_CLASS = 'dx-state-disabled';
+const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
+const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 
 const TABS_ITEM_DATA_KEY = 'dxTabData';
 
@@ -53,6 +57,11 @@ const FEEDBACK_DURATION_INTERVAL = 5;
 const FEEDBACK_SCROLL_TIMEOUT = 300;
 
 const TAB_OFFSET = 30;
+
+const ORIENTATION = {
+    horizontal: 'horizontal',
+    vertical: 'vertical',
+};
 
 
 const Tabs = CollectionWidget.inherit({
@@ -66,6 +75,7 @@ const Tabs = CollectionWidget.inherit({
             scrollByContent: true,
             scrollingEnabled: true,
             selectionMode: 'single',
+            orientation: ORIENTATION.horizontal,
 
             /**
              * @name dxTabsOptions.activeStateEnabled
@@ -123,12 +133,10 @@ const Tabs = CollectionWidget.inherit({
 
     _init: function() {
         this.callBase();
-
         this.setAria('role', 'tablist');
-
         this.$element().addClass(TABS_CLASS);
+        this._toggleOrientationClass(this.option('orientation'));
         this._renderWrapper();
-
         this._renderMultiple();
 
         this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
@@ -217,7 +225,7 @@ const Tabs = CollectionWidget.inherit({
         if(!(this.option('scrollingEnabled') && this._isItemsWidthExceeded())) {
             this._cleanScrolling();
 
-            if(this._needStretchItems() && !this._isItemsWidthExceeded()) {
+            if(this._needStretchItems()) {
                 this.$element().addClass(TABS_STRETCHED_CLASS);
             }
 
@@ -229,8 +237,15 @@ const Tabs = CollectionWidget.inherit({
 
     _isItemsWidthExceeded: function() {
         const tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
+        const elementWidth = getWidth(this.$element());
 
-        return tabItemsWidth - 1 > getWidth(this.$element());
+        if([tabItemsWidth, elementWidth].includes(0)) {
+            return false;
+        }
+
+        const isItemsWidthExceeded = tabItemsWidth + 5 > elementWidth;
+
+        return isItemsWidthExceeded;
     },
 
     _needStretchItems: function() {
@@ -243,8 +258,9 @@ const Tabs = CollectionWidget.inherit({
         });
 
         const maxTabWidth = Math.max.apply(null, itemsWidth);
+        const needStretchItems = maxTabWidth >= elementWidth / $visibleItems.length;
 
-        return maxTabWidth >= elementWidth / $visibleItems.length;
+        return needStretchItems;
     },
 
     _cleanNavButtons: function() {
@@ -404,7 +420,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _updateSelection: function(addedSelection) {
-        this._scrollable && this._scrollable.scrollToElement(this.itemElements().eq(addedSelection[0]), { left: 1, right: 1 });
+        this._scrollable && this._scrollable.scrollToElement(this.itemElements().eq(addedSelection[0]));
     },
 
     _visibilityChanged: function(visible) {
@@ -431,8 +447,45 @@ const Tabs = CollectionWidget.inherit({
         this.callBase();
     },
 
-    _toggleFocusedNextClass(index, isNextTabFocused) {
-        this._itemElements().eq(index).toggleClass(FOCUSED_NEXT_TAB_CLASS, isNextTabFocused);
+    _toggleTabsVerticalClass(value) {
+        this.$element().toggleClass(TABS_VERTICAL_CLASS, value);
+    },
+
+    _toggleTabsHorizontalClass(value) {
+        this.$element().toggleClass(TABS_HORIZONTAL_CLASS, value);
+    },
+
+    _toggleOrientationClass(orientation) {
+        const isVertical = orientation === ORIENTATION.vertical;
+
+        this._toggleTabsVerticalClass(isVertical);
+        this._toggleTabsHorizontalClass(!isVertical);
+    },
+
+    _toggleFocusedDisabledNextClass(currentIndex, isNextDisabled) {
+        this._itemElements().eq(currentIndex).toggleClass(FOCUSED_DISABLED_NEXT_TAB_CLASS, isNextDisabled);
+    },
+
+    _toggleFocusedDisabledPrevClass(currentIndex, isPrevDisabled) {
+        this._itemElements().eq(currentIndex).toggleClass(FOCUSED_DISABLED_PREV_TAB_CLASS, isPrevDisabled);
+    },
+
+    _toggleFocusedDisabledClasses(value) {
+        const { selectedIndex: currentIndex } = this.option();
+
+        const prevItemIndex = currentIndex - 1;
+        const nextItemIndex = currentIndex + 1;
+
+        const nextFocusedIndex = $(value).index();
+
+        const isNextDisabled = this._itemElements().eq(nextItemIndex).hasClass(STATE_DISABLED_CLASS);
+        const isPrevDisabled = this._itemElements().eq(prevItemIndex).hasClass(STATE_DISABLED_CLASS);
+
+        const shouldNextClassBeSetted = isNextDisabled && nextFocusedIndex === nextItemIndex;
+        const shouldPrevClassBeSetted = isPrevDisabled && nextFocusedIndex === prevItemIndex;
+
+        this._toggleFocusedDisabledNextClass(currentIndex, shouldNextClassBeSetted);
+        this._toggleFocusedDisabledPrevClass(currentIndex, shouldPrevClassBeSetted);
     },
 
     _optionChanged: function(args) {
@@ -457,17 +510,14 @@ const Tabs = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case 'focusedElement': {
-                const { selectedIndex } = this.option();
-                const currentIndex = $(args.value).index();
-
-                if(currentIndex !== selectedIndex) {
-                    this._toggleFocusedNextClass(selectedIndex, currentIndex === selectedIndex + 1);
-                }
-
+                this._toggleFocusedDisabledClasses(args.value);
                 this.callBase(args);
                 this._scrollToItem(args.value);
                 break;
             }
+            case 'orientation':
+                this._toggleOrientationClass(args.value);
+                break;
             default:
                 this.callBase(args);
         }

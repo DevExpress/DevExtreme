@@ -56,7 +56,7 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
     .ok();
 
   // act
-  await treeList.scrollTo({ top: 0 });
+  await treeList.scrollTo(t, { top: 0 });
   scrollTopPosition = await treeList.getScrollTop();
 
   // assert
@@ -79,6 +79,40 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
 }).before(async () => {
   await clearLocalStorage();
   return createWidget('dxTreeList', getTreeListConfig());
+}).after(async () => {
+  await clearLocalStorage();
+});
+
+test('TreeList - Unable to focus a node when deleting the previous node in certain scenarios (T1178893)', async (t) => {
+  const treeList = new TreeList('#container');
+
+  await t
+    .expect(treeList.getFocusedRow().getAttribute('aria-rowindex'))
+    .eql('3')
+
+    .click(treeList.getDataRow(2).getCommandCell(2).getButton(2))
+    .click(treeList.getConfirmDeletionButton())
+    .expect(treeList.getFocusedRow().getAttribute('aria-rowindex'))
+    .eql('3')
+
+    .click(treeList.getDataRow(2).getCommandCell(2).getButton(2))
+    .click(treeList.getConfirmDeletionButton())
+    .expect(treeList.getFocusedRow().getAttribute('aria-rowindex'))
+    .eql('3')
+    .expect(treeList.getDataRow(2).getDataCell(0).element.textContent)
+    .eql('5');
+}).before(async () => {
+  await clearLocalStorage();
+  const config = getTreeListConfig();
+  config.editing = {
+    mode: 'row',
+    allowUpdating: true,
+    allowAdding: true,
+    allowDeleting: true,
+  };
+  config.focusedRowKey = 3;
+
+  return createWidget('dxTreeList', config);
 }).after(async () => {
   await clearLocalStorage();
 });

@@ -167,17 +167,11 @@ export default CollectionWidget.inherit({
         when(isPartialRefresh || insert(keyInfo, items, change.data, change.index)).done(() => {
             this._beforeItemElementInserted(change);
 
-            const $itemContainer = this._getItemContainer(change.data);
-
-            this._renderItem(change.index ?? items.length, change.data, $itemContainer);
+            this._renderItem(change.index ?? items.length, change.data);
 
             this._afterItemElementInserted();
             this._correctionIndex++;
         });
-    },
-
-    _getItemContainer: function(changeData) {
-        return this._itemContainer();
     },
 
     _updateSelectionAfterRemoveByChange: function(removeIndex) {

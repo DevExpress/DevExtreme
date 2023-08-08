@@ -13,9 +13,7 @@ import gridCoreUtils from '../m_utils';
 import { subscribeToExternalScrollers, VirtualScrollController } from './m_virtual_scrolling_core';
 
 const BOTTOM_LOAD_PANEL_CLASS = 'bottom-load-panel';
-const TABLE_CONTENT_CLASS = 'table-content';
 const GROUP_SPACE_CLASS = 'group-space';
-const CONTENT_CLASS = 'content';
 const FREESPACE_CLASS = 'dx-freespace-row';
 const COLUMN_LINES_CLASS = 'dx-column-lines';
 const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
@@ -774,18 +772,6 @@ const VirtualScrollingRowsViewExtender = (function () {
     loadIfNeed() {
       const dataController = this._dataController;
       dataController?.loadIfNeed?.();
-    },
-
-    setColumnWidths(widths) {
-      const scrollable = this.getScrollable();
-      let $content;
-
-      this.callBase.apply(this, arguments);
-
-      if (this.option('scrolling.mode') === 'virtual') {
-        $content = scrollable ? $(scrollable.content()) : this.element();
-        this.callBase(widths, $content.children(`.${this.addWidgetPrefix(CONTENT_CLASS)}`).children(`:not(.${this.addWidgetPrefix(TABLE_CONTENT_CLASS)})`));
-      }
     },
 
     _restoreErrorRow() {
