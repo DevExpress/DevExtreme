@@ -879,7 +879,7 @@ QUnit.module('keyboard navigation', {
                 assert.ok($(`.${COLORVIEW_CLASS}`).hasClass(STATE_FOCUSED_CLASS));
             });
 
-            QUnit.test('pressing tab + shift should set focus on cancel button in popup', function(assert) {
+            QUnit.test('pressing tab + shift should set focus on apply button in popup', function(assert) {
                 this.instance.option({
                     opened: true,
                     applyValueMode: 'useButtons',
