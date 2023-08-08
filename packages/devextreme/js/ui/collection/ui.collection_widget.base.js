@@ -1097,14 +1097,14 @@ const CollectionWidget = Widget.inherit({
         return $(itemElement).data(this._itemDataKey());
     },
 
-    _getSummaryItemsSize(quantity, items, includeMargin) {
+    _getSummaryItemsSize(dimension, items, includeMargin) {
         let result = 0;
 
         if(items) {
             each(items, function(_, item) {
-                if(quantity === 'width') {
+                if(dimension === 'width') {
                     result += getOuterWidth(item, includeMargin || false);
-                } else if(quantity === 'height') {
+                } else if(dimension === 'height') {
                     result += getOuterHeight(item, includeMargin || false);
                 }
             });
