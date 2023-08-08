@@ -17,7 +17,7 @@
 
 @include dx-buttongroup-sizing(
   $button-border-radius,
-  1px,
+  // 1px,
   1px,
 );
 @include dx-buttongroup-item(
@@ -75,4 +75,7 @@
   $button-group-danger-selected-bg-focused,
   $button-group-danger-selected-color,
   $button-disabled-text-color,
+  $button-group-success-contained-selected-bg,
+  $button-group-default-contained-selected-bg,
+  $button-group-danger-contained-selected-bg,
 );

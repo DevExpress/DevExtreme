@@ -17,6 +17,8 @@ const BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-last-item';
 const BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + '-has-width';
 const SHAPE_STANDARD_CLASS = 'dx-shape-standard';
 
+const stylingModes = ['outlined', 'text', 'contained'];
+
 const ButtonCollection = CollectionWidget.inherit({
     _initTemplates() {
         this.callBase();
@@ -54,6 +56,10 @@ const ButtonCollection = CollectionWidget.inherit({
 
     _hasCustomTemplate(template) {
         return isFunction(template) || this.option('integrationOptions.templates')[template];
+    },
+
+    _selectedItemClass() {
+        return 'dx-item-selected dx-button-selected';
     },
 
     _prepareItemStyles($item) {
@@ -146,9 +152,18 @@ const ButtonGroup = Widget.inherit({
     _initMarkup() {
         this.setAria('role', 'group');
         this.$element().addClass(BUTTON_GROUP_CLASS);
+        this._renderStylingMode();
         this._renderButtons();
         this._syncSelectionOptions();
         this.callBase();
+    },
+
+    _renderStylingMode() {
+        const { stylingMode } = this.option('stylingMode');
+
+        const isValidStylingMode = stylingMode && stylingModes.includes(stylingMode);
+
+        this.$element().addClass(`dx-buttongroup-mode-${isValidStylingMode ? stylingMode : 'contained'}`);
     },
 
     _fireSelectionChangeEvent: function(addedItems, removedItems) {
