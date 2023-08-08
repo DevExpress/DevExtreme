@@ -107,10 +107,6 @@ QUnit.module('Keyboard controller', {
                 },
                 renderFocusState: commonUtils.noop,
                 renderCompleted: $.Callbacks(),
-
-                getFirstNotFixedCell: commonUtils.noop,
-                makeScrollableFocusableIfNeed: commonUtils.noop,
-                isScrollableNeedFocusable: commonUtils.noop,
             };
         };
 

@@ -1373,7 +1373,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
     if ($focusElement) {
       if ($focusViewElement) {
-        console.log('_focus', $focusElement);
         $focusViewElement
           .find('.dx-row[tabindex], .dx-row > td[tabindex]')
           .not($focusElement)
