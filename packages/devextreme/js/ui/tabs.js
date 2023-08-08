@@ -392,7 +392,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _updateNavButtonsVisibility() {
-        const isVertical = this.option('orientation') === ORIENTATION.vertical;
+        const isVertical = this._isVertical();
         const scrollable = this.getScrollable();
 
         if(isVertical) {
