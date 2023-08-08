@@ -235,8 +235,12 @@ const Tabs = CollectionWidget.inherit({
         }
     },
 
+    _isVertical() {
+        return this.option('orientation') === ORIENTATION.vertical;
+    },
+
     _isItemsSizeExceeded() {
-        const isVertical = this.option('orientation') === ORIENTATION.vertical;
+        const isVertical = this._isVertical();
 
         const isItemsSizeExceeded = isVertical ? this._isItemsHeightExceeded() : this._isItemsWidthExceeded();
 
@@ -344,10 +348,7 @@ const Tabs = CollectionWidget.inherit({
 
     _renderScrollable: function() {
         const $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
-
-        const { orientation } = this.option();
-
-        const isVertical = orientation === ORIENTATION.vertical;
+        const isVertical = this._isVertical();
         const scrollableDirection = isVertical ? 'vertical' : 'horizontal';
 
         this._scrollable = this._createComponent($itemContainer, Scrollable, {
