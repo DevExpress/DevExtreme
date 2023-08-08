@@ -1334,9 +1334,9 @@ test('New virtual mode. Navigation to the last row if new row is added (T1069849
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // act
-    await dataGrid.scrollTo({ y: 200 });
+    await dataGrid.scrollTo(t, { y: 200 });
     await t.wait(100);
-    await dataGrid.scrollTo({ y: 400 });
+    await dataGrid.scrollTo(t, { y: 400 });
     await t.wait(300);
 
     // assert
