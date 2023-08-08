@@ -9,7 +9,7 @@ import DataGrid from '../../model/dataGrid';
 import { getData } from './helpers/generateDataSourceData';
 import { Themes } from './helpers/themes';
 
-fixture.disablePageReloads`Column chooser`
+fixture`Column chooser`
   .page(url(__dirname, '../container.html'));
 
 test('Column chooser screenshot', async (t) => {
