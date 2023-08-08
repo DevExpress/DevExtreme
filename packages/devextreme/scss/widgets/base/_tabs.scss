@@ -112,3 +112,24 @@
     flex-direction: row-reverse;
   }
 }
+
+.dx-tabs-vertical {
+  display: inline-flex;
+  flex-direction: column;
+  width: auto;
+
+  .dx-tabs-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .dx-tabs-nav-button {
+    .dx-icon {
+      transform: rotate(90deg);
+    }
+  }
+
+  .dx-tab {
+    justify-content: flex-start;
+  }
+}
