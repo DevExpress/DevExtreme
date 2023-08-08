@@ -4752,8 +4752,8 @@ if(devices.real().deviceType === 'desktop') {
                     shiftKey: true
                 }));
 
-            const $doneButton = this.dateBox._popup.$wrapper().find('.dx-button.dx-popup-done');
-            assert.ok($doneButton.hasClass('dx-state-focused'), 'cancel button is focused');
+            const $cancelButton = this.dateBox._popup.$wrapper().find('.dx-button.dx-popup-cancel');
+            assert.ok($cancelButton.hasClass('dx-state-focused'), 'cancel button is focused');
         });
 
         QUnit.test('pressing tab should set focus on today button in popup', function(assert) {
