@@ -1,6 +1,6 @@
 import type { Appointment } from '../../../../ui/scheduler';
 import { AppointmentDataItem, DataAccessorType, LoadDataType } from '../types';
-import { replaceWrongEndDate } from '../../../../ui/scheduler/appointments/dataProvider/utils';
+import { replaceWrongEndDate } from '../../../../__internal/scheduler/appointments/data_provider/m_utils';
 import { createAppointmentAdapter } from '../../../../ui/scheduler/appointmentAdapter';
 import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
 import { isDefined } from '../../../../core/utils/type';
