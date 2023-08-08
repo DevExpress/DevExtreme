@@ -131,22 +131,11 @@ const Tabs = CollectionWidget.inherit({
         ]);
     },
 
-    _setBaseElementClasses() {
-        const isVertical = this.option('orientation') === ORIENTATION.vertical;
-        const orientationClass = isVertical ? TABS_VERTICAL_CLASS : TABS_HORIZONTAL_CLASS;
-
-        const elementClasses = [
-            TABS_CLASS,
-            orientationClass,
-        ].join(' ');
-
-        this.$element().addClass(elementClasses);
-    },
-
     _init: function() {
         this.callBase();
         this.setAria('role', 'tablist');
-        this._setBaseElementClasses();
+        this.$element().addClass(TABS_CLASS);
+        this._toggleOrientationClass(this.option('orientation'));
         this._renderWrapper();
         this._renderMultiple();
 
@@ -466,7 +455,7 @@ const Tabs = CollectionWidget.inherit({
         this.$element().toggleClass(TABS_HORIZONTAL_CLASS, value);
     },
 
-    _replaceOrientationClass(orientation) {
+    _toggleOrientationClass(orientation) {
         const isVertical = orientation === ORIENTATION.vertical;
 
         this._toggleTabsVerticalClass(isVertical);
@@ -527,7 +516,7 @@ const Tabs = CollectionWidget.inherit({
                 break;
             }
             case 'orientation':
-                this._replaceOrientationClass(args.value);
+                this._toggleOrientationClass(args.value);
                 break;
             default:
                 this.callBase(args);

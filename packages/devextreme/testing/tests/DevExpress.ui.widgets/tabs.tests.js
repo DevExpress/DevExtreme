@@ -274,9 +274,11 @@ QUnit.module('General', () => {
 
         tabs.option('orientation', 'vertical');
         assert.ok($element.hasClass(TABS_VERTICAL_CLASS));
+        assert.notOk($element.hasClass(TABS_HORIZONTAL_CLASS));
 
         tabs.option('orientation', 'horizontal');
         assert.ok($element.hasClass(TABS_HORIZONTAL_CLASS));
+        assert.notOk($element.hasClass(TABS_VERTICAL_CLASS));
     });
 });
 
