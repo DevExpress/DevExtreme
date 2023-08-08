@@ -9056,6 +9056,10 @@ declare module DevExpress.ui {
      */
     selectionMode?: DevExpress.ui.dxCalendar.CalendarSelectionMode;
     /**
+     * [descr:dxCalendarOptions.selectWeekOnClick]
+     */
+    selectWeekOnClick?: boolean;
+    /**
      * [descr:dxCalendarOptions.showTodayButton]
      */
     showTodayButton?: boolean;
