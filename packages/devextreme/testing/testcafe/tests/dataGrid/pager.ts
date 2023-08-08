@@ -26,7 +26,7 @@ async function createDataGridWithPager(): Promise<any> {
     },
   });
 }
-fixture.disablePageReloads`Pager`
+fixture`Pager`
   .page(url(__dirname, '../container.html'));
 
 safeSizeTest('Full size pager', async (t) => {
