@@ -157,6 +157,26 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
     values: [new Date(2023, 0, 5), new Date(2023, 0, 17), new Date(2023, 1, 2)],
     selectionMode,
   }));
+
+  test(`Week cell click selection (selectionMode=${selectionMode})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    const calendar = new Calendar('#container');
+
+    await t
+      .click(calendar.getView().getWeekNumberCellByIndex(3));
+
+    await testScreenshot(t, takeScreenshot, `Week cell click selection (selectionMode=${selectionMode}).png`, { element: '#container', shouldTestInCompact: true });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxCalendar', {
+    values: [new Date(2023, 0, 5), new Date(2023, 0, 17), new Date(2023, 1, 2)],
+    selectionMode,
+    showWeekNumbers: true,
+    disabledDates: ({ view, date }) => view === 'month' && new Date(date).getDay() === 2,
+  }));
 });
 
 test('Calendar with multiview rendered correct', async (t) => {

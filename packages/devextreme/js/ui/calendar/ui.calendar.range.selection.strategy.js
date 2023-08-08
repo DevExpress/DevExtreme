@@ -18,6 +18,7 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
             range,
             selectionMode: 'range',
             onCellHover: this._cellHoverHandler.bind(this),
+            onWeekNumberClick: this._shouldHandleWeekNumberClick() ? this._weekNumberClickHandler.bind(this) : null,
         };
     }
 
@@ -158,6 +159,12 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
 
             this._updateViewsOption('hoveredRange', []);
         }
+    }
+
+    _weekNumberClickHandler({ rowDates, event }) {
+        const values = [rowDates[0], rowDates[rowDates.length - 1]];
+
+        this.dateValue(values, event);
     }
 }
 

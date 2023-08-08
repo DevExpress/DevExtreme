@@ -2449,6 +2449,146 @@ QUnit.module('Options', {
                 assert.strictEqual($cells.length, 0);
             });
         });
+
+        QUnit.module('SelectWeekOnClick', {
+            beforeEach: function() {
+                this.initialValue = ['2023/08/08', '2023/08/16', '2023/08/20'];
+            }
+        }, () => {
+            ['multiple', 'range'].forEach((selectionMode) => {
+                ['init', 'runtime'].forEach((scenario) => {
+                    QUnit.test(`Click on week number should select week (selectionMode=${selectionMode};selectWeekOnClick=true on ${scenario})`, function(assert) {
+                        this.reinit({
+                            values: this.initialValue,
+                            selectionMode,
+                            selectWeekOnClick: scenario === 'init',
+                            showWeekNumbers: true,
+                        });
+
+                        if(scenario === 'runtime') {
+                            this.calendar.option('selectWeekOnClick', true);
+                        }
+
+                        const $row = this.$element.find('tr').eq(3);
+                        const $weekNumberCell = $row.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
+                        const firstDateInRow = dataUtils.data($row.find(`.${CALENDAR_CELL_CLASS}`).first().get(0), CALENDAR_DATE_VALUE_KEY);
+                        const lastDateInRow = dataUtils.data($row.find(`.${CALENDAR_CELL_CLASS}`).last().get(0), CALENDAR_DATE_VALUE_KEY);
+
+                        $weekNumberCell.trigger('dxclick');
+
+                        const values = this.calendar.option('values');
+                        const expectedValuesLength = selectionMode === 'multiple' ? 7 : 2;
+
+                        assert.strictEqual(values.length, expectedValuesLength, `${values.length} days are selected`);
+                        assert.deepEqual(values[0], firstDateInRow, 'fisrt selected date is first date in row');
+                        assert.deepEqual(values[values.length - 1], lastDateInRow, 'last selected date is last date in row');
+                    });
+
+                    QUnit.test(`Click on week number should not select week (selectionMode=${selectionMode};selectWeekOnClick=false on ${scenario})`, function(assert) {
+                        this.reinit({
+                            values: this.initialValue,
+                            selectionMode,
+                            selectWeekOnClick: scenario !== 'init',
+                            showWeekNumbers: true,
+                        });
+
+                        if(scenario === 'runtime') {
+                            this.calendar.option('selectWeekOnClick', false);
+                        }
+
+                        const $row = this.$element.find('tr').eq(3);
+                        const $weekNumberCell = $row.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
+
+                        $weekNumberCell.trigger('dxclick');
+
+                        const values = this.calendar.option('values');
+
+                        assert.deepEqual(values, this.initialValue, 'values are not changed');
+                    });
+                });
+            });
+
+            QUnit.test('Click on week number should not select disabled dates in multiple selectionMode', function(assert) {
+                this.reinit({
+                    selectionMode: 'multiple',
+                    showWeekNumbers: true,
+                    disabledDates: ({ date }) => date.getDay() !== 0,
+                });
+
+                const $row = this.$element.find('tr').eq(3);
+                const $weekNumberCell = $row.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
+
+                $weekNumberCell.trigger('dxclick');
+
+                const values = this.calendar.option('values');
+
+                assert.strictEqual(values.length, 1, 'only one day is selected');
+            });
+
+            QUnit.test('Click on week number should select disabled dates in range selectionMode', function(assert) {
+                this.reinit({
+                    selectionMode: 'range',
+                    showWeekNumbers: true,
+                    disabledDates: ({ date }) => date.getDay() !== 0,
+                });
+
+                const $row = this.$element.find('tr').eq(3);
+                const $weekNumberCell = $row.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
+                const firstDateInRow = dataUtils.data($row.find(`.${CALENDAR_CELL_CLASS}`).first().get(0), CALENDAR_DATE_VALUE_KEY);
+                const lastDateInRow = dataUtils.data($row.find(`.${CALENDAR_CELL_CLASS}`).last().get(0), CALENDAR_DATE_VALUE_KEY);
+
+                $weekNumberCell.trigger('dxclick');
+
+                const values = this.calendar.option('values');
+
+                assert.deepEqual(values[0], firstDateInRow, 'fisrt selected date is first date in row');
+                assert.deepEqual(values[values.length - 1], lastDateInRow, 'last selected date is last date in row');
+            });
+
+            [
+                {
+                    selectionMode: 'single',
+                    selectWeekOnClick: true,
+                    expectedCursor: 'auto',
+                },
+                {
+                    selectionMode: 'single',
+                    selectWeekOnClick: false,
+                    expectedCursor: 'auto',
+                },
+                {
+                    selectionMode: 'multiple',
+                    selectWeekOnClick: false,
+                    expectedCursor: 'auto',
+                },
+                {
+                    selectionMode: 'range',
+                    selectWeekOnClick: false,
+                    expectedCursor: 'auto',
+                },
+                {
+                    selectionMode: 'multiple',
+                    selectWeekOnClick: true,
+                    expectedCursor: 'pointer',
+                },
+                {
+                    selectionMode: 'range',
+                    selectWeekOnClick: true,
+                    expectedCursor: 'pointer',
+                }
+            ].forEach(({ selectionMode, selectWeekOnClick, expectedCursor }) => {
+                QUnit.test(`Week number should have "cursor: ${expectedCursor}" style (selectionMode=${selectionMode};selectWeekOnClick=${selectWeekOnClick})`, function(assert) {
+                    this.reinit({
+                        selectionMode,
+                        selectWeekOnClick,
+                        showWeekNumbers: true,
+                    });
+                    const cursor = this.$element.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`).first().css('cursor');
+
+                    assert.strictEqual(cursor, expectedCursor);
+                });
+            });
+        });
     });
 
     QUnit.module('ViewsCount = 2', {
