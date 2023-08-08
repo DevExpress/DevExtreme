@@ -29,6 +29,8 @@ const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
+const TABS_VERTICAL_CLASS = 'dx-tabs-vertical';
+const TABS_HORIZONTAL_CLASS = 'dx-tabs-horizontal';
 
 const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
@@ -56,6 +58,11 @@ const FEEDBACK_SCROLL_TIMEOUT = 300;
 
 const TAB_OFFSET = 30;
 
+const ORIENTATION = {
+    horizontal: 'horizontal',
+    vertical: 'vertical',
+};
+
 
 const Tabs = CollectionWidget.inherit({
 
@@ -68,6 +75,7 @@ const Tabs = CollectionWidget.inherit({
             scrollByContent: true,
             scrollingEnabled: true,
             selectionMode: 'single',
+            orientation: ORIENTATION.horizontal,
 
             /**
              * @name dxTabsOptions.activeStateEnabled
@@ -125,12 +133,10 @@ const Tabs = CollectionWidget.inherit({
 
     _init: function() {
         this.callBase();
-
         this.setAria('role', 'tablist');
-
         this.$element().addClass(TABS_CLASS);
+        this._toggleOrientationClass(this.option('orientation'));
         this._renderWrapper();
-
         this._renderMultiple();
 
         this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
@@ -441,6 +447,21 @@ const Tabs = CollectionWidget.inherit({
         this.callBase();
     },
 
+    _toggleTabsVerticalClass(value) {
+        this.$element().toggleClass(TABS_VERTICAL_CLASS, value);
+    },
+
+    _toggleTabsHorizontalClass(value) {
+        this.$element().toggleClass(TABS_HORIZONTAL_CLASS, value);
+    },
+
+    _toggleOrientationClass(orientation) {
+        const isVertical = orientation === ORIENTATION.vertical;
+
+        this._toggleTabsVerticalClass(isVertical);
+        this._toggleTabsHorizontalClass(!isVertical);
+    },
+
     _toggleFocusedDisabledNextClass(currentIndex, isNextDisabled) {
         this._itemElements().eq(currentIndex).toggleClass(FOCUSED_DISABLED_NEXT_TAB_CLASS, isNextDisabled);
     },
@@ -494,6 +515,9 @@ const Tabs = CollectionWidget.inherit({
                 this._scrollToItem(args.value);
                 break;
             }
+            case 'orientation':
+                this._toggleOrientationClass(args.value);
+                break;
             default:
                 this.callBase(args);
         }
