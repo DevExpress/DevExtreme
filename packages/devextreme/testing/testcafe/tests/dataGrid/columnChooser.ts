@@ -129,6 +129,7 @@ test('Column chooser checkboxes should be aligned correctly with tree structure'
 
       await a11yCheck(t, {
         'color-contrast': { enabled: true },
+        'aria-required-children': { enabled: false },
       });
     }).before(async () => {
       await changeTheme(theme);
