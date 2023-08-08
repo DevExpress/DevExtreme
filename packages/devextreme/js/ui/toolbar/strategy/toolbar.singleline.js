@@ -196,7 +196,7 @@ export class SingleLineStrategy {
     }
 
     _getItemsWidth() {
-        return this._toolbar._getSummaryItemsWidth([this._toolbar._$beforeSection, this._toolbar._$centerSection, this._toolbar._$afterSection]);
+        return this._toolbar._getSummaryItemsWidth('width', [this._toolbar._$beforeSection, this._toolbar._$centerSection, this._toolbar._$afterSection]);
     }
 
     _itemOptionChanged(item, property, value) {
