@@ -40,7 +40,6 @@ const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_CONTOURED_CELL_CLASS = 'dx-calendar-contoured-date';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const TODAY_BUTTON_SELECTOR = '.dx-button-today.dx-button';
-const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
 
@@ -4193,8 +4192,8 @@ if(devices.real().deviceType === 'desktop') {
                     shiftKey: true
                 }));
 
-            const $cancelButton = this.getPopupContent().parent().find(CANCEL_BUTTON_SELECTOR);
-            assert.ok($cancelButton.hasClass(STATE_FOCUSED_CLASS));
+            const $applyButton = this.getPopupContent().parent().find(APPLY_BUTTON_SELECTOR);
+            assert.ok($applyButton.hasClass(STATE_FOCUSED_CLASS));
         });
 
         QUnit.test('pressing tab should set focus on first item in popup with custom items', function(assert) {

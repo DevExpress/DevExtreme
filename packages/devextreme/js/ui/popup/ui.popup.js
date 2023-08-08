@@ -514,11 +514,11 @@ const Popup = Overlay.inherit({
             }
         });
 
-        const sortedActionItems = sortActionButtonsItems(actionButtonsInfo).map(item => item.item);
-
         if(toolbar === 'top' && this._hasCloseButton()) {
             toolbarsItems.push(this._getCloseButton());
         }
+
+        const sortedActionItems = sortActionButtonsItems(actionButtonsInfo).map(item => item.item);
 
         return toolbarsItems.concat(...sortedActionItems);
     },
