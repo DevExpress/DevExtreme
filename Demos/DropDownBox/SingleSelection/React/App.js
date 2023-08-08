@@ -46,7 +46,13 @@ function App() {
       onItemClick={onTreeItemClick}
       onItemSelectionChanged={treeViewItemSelectionChanged}
     />
-  ), [treeDataSource]);
+  ), [
+    treeDataSource,
+    treeViewRef,
+    treeViewOnContentReady,
+    onTreeItemClick,
+    treeViewItemSelectionChanged,
+  ]);
 
   const dataGridRender = React.useCallback(() => (
     <DataGrid
@@ -61,7 +67,7 @@ function App() {
       <Paging enabled={true} pageSize={10} />
       <FilterRow visible={true} />
     </DataGrid>
-  ), [gridDataSource, gridBoxValue]);
+  ), [gridDataSource, gridBoxValue, dataGridOnSelectionChanged]);
 
   const syncTreeViewSelection = React.useCallback((e) => {
     setTreeBoxValue(e.value);

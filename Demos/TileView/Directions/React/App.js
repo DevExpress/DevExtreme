@@ -1,58 +1,44 @@
 import React from 'react';
-
 import TileView from 'devextreme-react/tile-view';
 import SelectBox from 'devextreme-react/select-box';
-
 import RenderHomeItem from './HomeItem.js';
 import { homes, directionLabel } from './data.js';
 
 const directions = ['horizontal', 'vertical'];
 
-class App extends React.Component {
-  constructor() {
-    super();
+const App = () => {
+  const [direction, setDirection] = React.useState('horizontal');
 
-    this.state = {
-      direction: 'horizontal',
-    };
+  const directionChanged = React.useCallback((e) => {
+    setDirection(e.value);
+  }, [setDirection]);
 
-    this.directionChanged = this.directionChanged.bind(this);
-  }
-
-  render() {
-    return (
-      <div>
-        <TileView
-          items={homes}
-          itemRender={RenderHomeItem}
-          height={390}
-          baseItemHeight={120}
-          baseItemWidth={185}
-          width='100%'
-          itemMargin={10}
-          direction={this.state.direction}
-        />
-        <div className='options'>
-          <div className='caption'>Options</div>
-          <div className='option'>
-            <span>Direction</span>&nbsp;
-            <SelectBox
-              items={directions}
-              inputAttr={directionLabel}
-              value={this.state.direction}
-              onValueChanged={this.directionChanged}>
-            </SelectBox>
-          </div>
+  return (
+    <div>
+      <TileView
+        items={homes}
+        itemRender={RenderHomeItem}
+        height={390}
+        baseItemHeight={120}
+        baseItemWidth={185}
+        width='100%'
+        itemMargin={10}
+        direction={direction}
+      />
+      <div className='options'>
+        <div className='caption'>Options</div>
+        <div className='option'>
+          <span>Direction</span>&nbsp;
+          <SelectBox
+            items={directions}
+            inputAttr={directionLabel}
+            value={direction}
+            onValueChanged={directionChanged}
+          ></SelectBox>
         </div>
       </div>
-    );
-  }
-
-  directionChanged(e) {
-    this.setState({
-      direction: e.value,
-    });
-  }
-}
+    </div>
+  );
+};
 
 export default App;

@@ -1,7 +1,5 @@
 import React from 'react';
-
 import List from 'devextreme-react/list';
-
 import DataSource from 'devextreme/data/data_source';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import ProductInfo from './ProductInfo.js';
@@ -18,22 +16,19 @@ const dataSource = new DataSource({
   filter: ['UnitPrice', '>', 15],
 });
 
-class App extends React.Component {
-  render() {
-    return (
-      <div className="list-container">
-        <List
-          dataSource={dataSource}
-          height={600}
-          grouped={true}
-          collapsibleGroups={true}
-          selectionMode="multiple"
-          showSelectionControls={true}
-          pageLoadMode="scrollBottom"
-          itemRender={ProductInfo} />
-      </div>
-    );
-  }
+export default function App() {
+  return (
+    <div className="list-container">
+      <List
+        dataSource={dataSource}
+        height={600}
+        grouped={true}
+        collapsibleGroups={true}
+        selectionMode="multiple"
+        showSelectionControls={true}
+        pageLoadMode="scrollBottom"
+        itemRender={ProductInfo}
+      />
+    </div>
+  );
 }
-
-export default App;

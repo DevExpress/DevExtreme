@@ -7,63 +7,45 @@ import notify from 'devextreme/ui/notify';
 import RenderContactItem from './ContactItem.js';
 import { actionSheetItems, contacts } from './data.js';
 
-class App extends React.Component {
-  constructor() {
-    super();
+const App = () => {
+  const [isActionSheetVisible, setIsActionSheetVisible] = React.useState(false);
+  const [actionSheetTarget, setActionSheetTarget] = React.useState('');
 
-    this.state = {
-      isActionSheetVisible: false,
-      actionSheetTarget: '',
-    };
+  const onListItemClick = React.useCallback((e) => {
+    setIsActionSheetVisible(true);
+    setActionSheetTarget(e.itemElement);
+  }, [setIsActionSheetVisible, setActionSheetTarget]);
 
-    this.onActionSheetItemClick = this.onActionSheetItemClick.bind(this);
-    this.onListItemClick = this.onListItemClick.bind(this);
-    this.onVisibleChange = this.onVisibleChange.bind(this);
-  }
-
-  render() {
-    return (
-      <div className="app-container">
-        <List
-          id="list"
-          items={contacts}
-          itemRender={RenderContactItem}
-          onItemClick={this.onListItemClick}
-        />
-        <ActionSheet
-          title="Choose action"
-          usePopover={true}
-          visible={this.state.isActionSheetVisible}
-          target={this.state.actionSheetTarget}
-          items={actionSheetItems}
-          onItemClick={this.onActionSheetItemClick}
-          onVisibleChange={this.onVisibleChange}
-        />
-      </div>
-    );
-  }
-
-  onListItemClick(e) {
-    this.setState({
-      isActionSheetVisible: true,
-      actionSheetTarget: e.itemElement,
-    });
-  }
-
-  onActionSheetItemClick(e) {
-    this.setState({
-      isActionSheetVisible: false,
-    });
+  const onActionSheetItemClick = React.useCallback((e) => {
+    setIsActionSheetVisible(false);
     notify(`The "${e.itemData.text}" button is clicked.`);
-  }
+  }, [setIsActionSheetVisible]);
 
-  onVisibleChange(isVisible) {
-    if (isVisible !== this.state.isActionSheetVisible) {
-      this.setState({
-        isActionSheetVisible: isVisible,
-      });
+  const onVisibleChange = React.useCallback((isVisible) => {
+    if (isVisible !== isActionSheetVisible) {
+      setIsActionSheetVisible(isVisible);
     }
-  }
-}
+  }, [setIsActionSheetVisible]);
+
+  return (
+    <div className="app-container">
+      <List
+        id="list"
+        items={contacts}
+        itemRender={RenderContactItem}
+        onItemClick={onListItemClick}
+      />
+      <ActionSheet
+        title="Choose action"
+        usePopover={true}
+        visible={isActionSheetVisible}
+        target={actionSheetTarget}
+        items={actionSheetItems}
+        onItemClick={onActionSheetItemClick}
+        onVisibleChange={onVisibleChange}
+      />
+    </div>
+  );
+};
 
 export default App;
