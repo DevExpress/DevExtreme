@@ -300,7 +300,11 @@ test('Hovering over a row should work correctly after scrolling when there is a 
     templatesRenderAsynchronously: true,
     columns: [
       'id',
-      { dataField: 'text1', cellTemplate: '#test', fixed: true },
+      {
+        dataField: 'text1',
+        cellTemplate: (_, { value }) => ($('<div/>') as any).text(value),
+        fixed: true,
+      },
       'text2',
     ],
     paging: {
