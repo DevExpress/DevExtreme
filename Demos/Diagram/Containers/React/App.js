@@ -2,15 +2,11 @@ import React from 'react';
 import Diagram, { Group, Toolbox } from 'devextreme-react/diagram';
 import 'whatwg-fetch';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+export default function App() {
+  const diagramRef = React.useRef();
 
-    this.diagramRef = React.createRef();
-  }
-
-  componentDidMount() {
-    const diagram = this.diagramRef.current.instance;
+  React.useEffect(() => {
+    const diagram = diagramRef.current.instance;
     fetch('../../../../data/diagram-structure.json')
       .then((response) => response.json())
       .then((json) => {
@@ -19,18 +15,14 @@ class App extends React.Component {
       .catch(() => {
         throw new Error('Data Loading Error');
       });
-  }
+  }, []);
 
-  render() {
-    return (
-      <Diagram id="diagram" ref={this.diagramRef}>
-        <Toolbox>
-          <Group category="general" title="General" />
-          <Group category="containers" title="Containers" expanded={true} />
-        </Toolbox>
-      </Diagram>
-    );
-  }
+  return (
+    <Diagram id="diagram" ref={diagramRef}>
+      <Toolbox>
+        <Group category="general" title="General" />
+        <Group category="containers" title="Containers" expanded={true} />
+      </Toolbox>
+    </Diagram>
+  );
 }
-
-export default App;

@@ -2,15 +2,11 @@ import React from 'react';
 import Diagram from 'devextreme-react/diagram';
 import 'whatwg-fetch';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+export default function App() {
+  const diagramRef = React.useRef();
 
-    this.diagramRef = React.createRef();
-  }
-
-  componentDidMount() {
-    const diagram = this.diagramRef.current.instance;
+  React.useEffect(() => {
+    const diagram = diagramRef.current.instance;
     fetch('../../../../data/diagram-flow.json')
       .then((response) => response.json())
       .then((json) => {
@@ -19,13 +15,9 @@ class App extends React.Component {
       .catch(() => {
         throw new Error('Data Loading Error');
       });
-  }
+  }, []);
 
-  render() {
-    return (
-      <Diagram id="diagram" ref={this.diagramRef} />
-    );
-  }
+  return (
+    <Diagram id="diagram" ref={diagramRef} />
+  );
 }
-
-export default App;

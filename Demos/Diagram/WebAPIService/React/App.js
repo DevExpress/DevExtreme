@@ -28,21 +28,17 @@ const dataSource = createStore({
 
 const shapes = ['rectangle'];
 
-class App extends React.Component {
-  render() {
-    return (
-      <Diagram id="diagram">
-        <Nodes dataSource={dataSource} keyExpr="ID" textExpr="Title" parentKeyExpr="HeadID">
-          <AutoLayout type="tree" />
-        </Nodes>
-        <ContextToolbox shapeIconsPerRow={2} width={100} shapes={shapes}>
-        </ContextToolbox>
-        <Toolbox showSearch={false} shapeIconsPerRow={2}>
-          <Group title="Items" shapes={shapes} />
-        </Toolbox>
-      </Diagram>
-    );
-  }
+export default function App() {
+  return (
+    <Diagram id="diagram">
+      <Nodes dataSource={dataSource} keyExpr="ID" textExpr="Title" parentKeyExpr="HeadID">
+        <AutoLayout type="tree" />
+      </Nodes>
+      <ContextToolbox shapeIconsPerRow={2} width={100} shapes={shapes}>
+      </ContextToolbox>
+      <Toolbox showSearch={false} shapeIconsPerRow={2}>
+        <Group title="Items" shapes={shapes} />
+      </Toolbox>
+    </Diagram>
+  );
 }
-
-export default App;
