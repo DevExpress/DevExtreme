@@ -1,4 +1,4 @@
-import { getOuterWidth } from '../../core/utils/size';
+import { getOuterHeight, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { ensureDefined, deferRenderer, noop } from '../../core/utils/common';
@@ -845,12 +845,25 @@ const CollectionWidget = Widget.inherit({
         return this._itemContainer();
     },
 
+    _setAttributes($element) {
+        const attributes = { ...this.option('_itemAttributes') };
+        const { class: customClassValue } = attributes;
+
+        if(customClassValue) {
+            const currentClassValue = $element.get(0).className;
+
+            attributes.class = [currentClassValue, customClassValue].join(' ');
+        }
+
+        $element.attr(attributes);
+    },
+
     _renderItem: function(index, itemData, $container, $itemToReplace) {
         const itemIndex = index?.item ?? index;
         $container = $container || this._getItemsContainer();
         const $itemFrame = this._renderItemFrame(itemIndex, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, itemIndex);
-        $itemFrame.attr(this.option('_itemAttributes'));
+        this._setAttributes($itemFrame);
         this._attachItemClickEvent(itemData, $itemFrame);
         const $itemContent = this._getItemContent($itemFrame);
 
@@ -1084,12 +1097,16 @@ const CollectionWidget = Widget.inherit({
         return $(itemElement).data(this._itemDataKey());
     },
 
-    _getSummaryItemsWidth: function(items, includeMargin) {
+    _getSummaryItemsSize(dimension, items, includeMargin) {
         let result = 0;
 
         if(items) {
             each(items, function(_, item) {
-                result += getOuterWidth(item, includeMargin || false);
+                if(dimension === 'width') {
+                    result += getOuterWidth(item, includeMargin || false);
+                } else if(dimension === 'height') {
+                    result += getOuterHeight(item, includeMargin || false);
+                }
             });
         }
 
