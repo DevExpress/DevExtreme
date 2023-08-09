@@ -1,35 +1,34 @@
-import $ from '../../../core/renderer';
-import { extend } from '../../../core/utils/extend';
-import registerComponent from '../../../core/component_registrator';
-import errors from '../../../core/errors';
-import devices from '../../../core/devices';
+import '@js/ui/button_group';
+import '@js/ui/drop_down_button';
 
-import Widget from '../../widget/ui.widget';
-import Toolbar from '../../toolbar';
-import SchedulerCalendar from './calendar';
-import dateUtils from '../../../core/utils/date';
+import registerComponent from '@js/core/component_registrator';
+import devices from '@js/core/devices';
+import errors from '@js/core/errors';
+import $ from '@js/core/renderer';
+import dateUtils from '@js/core/utils/date';
+import { extend } from '@js/core/utils/extend';
+import { renovationGetCurrentView } from '@js/renovation/ui/scheduler/model/untyped_getCurrentView';
+import { dxSchedulerOptions } from '@js/ui/scheduler';
+import Toolbar from '@js/ui/toolbar';
+import Widget from '@js/ui/widget/ui.widget';
 
+import SchedulerCalendar from './m_calendar';
 import {
-    getViewSwitcher,
-    getDropDownViewSwitcher,
-} from './viewSwitcher';
+  getDateNavigator,
+} from './m_date_navigator';
 import {
-    getDateNavigator
-} from './dateNavigator';
-
-import '../../../ui/button_group';
-import '../../../ui/drop_down_button';
-
+  getCaption,
+  getNextIntervalDate,
+  getStep,
+  getViewName,
+  getViewType,
+  nextWeek,
+  validateViews,
+} from './m_utils';
 import {
-    getCaption,
-    getNextIntervalDate,
-    validateViews,
-    getStep,
-    getViewType,
-    getViewName,
-    nextWeek,
-} from './utils';
-import { getCurrentView } from '../../../renovation/ui/scheduler/model/views';
+  getDropDownViewSwitcher,
+  getViewSwitcher,
+} from './m_view_switcher';
 
 const DEFAULT_ELEMENT = 'defaultElement';
 const VIEW_SWITCHER = 'viewSwitcher';
@@ -37,243 +36,260 @@ const DATE_NAVIGATOR = 'dateNavigator';
 
 const COMPONENT_CLASS = 'dx-scheduler-header';
 
-export class SchedulerHeader extends Widget {
-    get views() {
-        return this.option('views');
-    }
+export class SchedulerHeader extends Widget<dxSchedulerOptions> {
+  currentView: any;
 
-    get captionText() {
-        return this._getCaption().text;
-    }
+  eventMap: any;
 
-    get intervalOptions() {
-        const step = getStep(this.currentView);
-        const intervalCount = this.option('intervalCount');
-        const firstDayOfWeek = this.option('firstDayOfWeek');
-        const agendaDuration = this.option('agendaDuration');
+  _toolbar: any;
 
-        return { step, intervalCount, firstDayOfWeek, agendaDuration };
-    }
+  _calendar: any;
 
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
-        });
-    }
+  get views() {
+    return this.option('views');
+  }
 
-    _createEventMap() {
-        this.eventMap = new Map(
-            [
-                ['currentView', [(view) => {
-                    this.currentView = getCurrentView(
-                        getViewName(view),
-                        this.option('views'),
-                    );
-                }]],
-                ['items', [this.repaint.bind(this)]],
-                ['views', [validateViews]],
-                ['currentDate', [this._getCalendarOptionUpdater('date')]],
-                ['min', [this._getCalendarOptionUpdater('min')]],
-                ['max', [this._getCalendarOptionUpdater('max')]],
-                ['tabIndex', [this.repaint.bind(this)]],
-                ['focusStateEnabled', [this.repaint.bind(this)]],
-                ['useDropDownViewSwitcher', [this.repaint.bind(this)]],
-            ]
-        );
-    }
+  get captionText() {
+    return this._getCaption().text;
+  }
 
-    _addEvent(name, event) {
-        if(!this.eventMap.has(name)) {
-            this.eventMap.set(name, []);
-        }
+  get intervalOptions() {
+    const step = getStep(this.currentView);
+    const intervalCount = this.option('intervalCount');
+    const firstDayOfWeek = this.option('firstDayOfWeek');
+    const agendaDuration = this.option('agendaDuration');
 
-        const events = this.eventMap.get(name);
-        this.eventMap.set(name, [...events, event]);
-    }
+    return {
+      step, intervalCount, firstDayOfWeek, agendaDuration,
+    };
+  }
 
-    _optionChanged(args) {
-        const { name, value } = args;
+  _getDefaultOptions() {
+    // @ts-expect-error
+    return extend(super._getDefaultOptions(), {
+      _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
+    });
+  }
 
-        if(this.eventMap.has(name)) {
-            const events = this.eventMap.get(name);
-            events.forEach((event) => {
-                event(value);
-            });
-        }
-    }
-
-    _init() {
-        super._init();
-        this._createEventMap();
-        this.$element().addClass(COMPONENT_CLASS);
-
-        this.currentView = getCurrentView(
-            getViewName(this.option('currentView')),
+  _createEventMap() {
+    this.eventMap = new Map(
+      [
+        ['currentView', [(view) => {
+          this.currentView = renovationGetCurrentView(
+            getViewName(view),
+            // @ts-expect-error
             this.option('views'),
-        );
+          );
+        }]],
+        ['items', [this.repaint.bind(this)]],
+        ['views', [validateViews]],
+        ['currentDate', [this._getCalendarOptionUpdater('date')]],
+        ['min', [this._getCalendarOptionUpdater('min')]],
+        ['max', [this._getCalendarOptionUpdater('max')]],
+        ['tabIndex', [this.repaint.bind(this)]],
+        ['focusStateEnabled', [this.repaint.bind(this)]],
+        ['useDropDownViewSwitcher', [this.repaint.bind(this)]],
+      ],
+    );
+  }
+
+  _addEvent(name, event) {
+    if (!this.eventMap.has(name)) {
+      this.eventMap.set(name, []);
     }
 
-    _render() {
-        super._render();
+    const events = this.eventMap.get(name);
+    this.eventMap.set(name, [...events, event]);
+  }
 
-        this._createEventMap();
+  _optionChanged(args) {
+    const { name, value } = args;
 
-        this._renderToolbar();
+    if (this.eventMap.has(name)) {
+      const events = this.eventMap.get(name);
+      events.forEach((event) => {
+        event(value);
+      });
+    }
+  }
+
+  _init() {
+    // @ts-expect-error
+    super._init();
+    this._createEventMap();
+    // @ts-expect-error
+    this.$element().addClass(COMPONENT_CLASS);
+
+    this.currentView = renovationGetCurrentView(
+      getViewName(this.option('currentView')),
+      // @ts-expect-error
+      this.option('views'),
+    );
+  }
+
+  _render() {
+    // @ts-expect-error
+    super._render();
+
+    this._createEventMap();
+
+    this._renderToolbar();
+  }
+
+  _renderToolbar() {
+    const config = this._createToolbarConfig();
+
+    const toolbarElement = $('<div>');
+    toolbarElement.appendTo(this.$element());
+
+    // @ts-expect-error
+    this._toolbar = this._createComponent(toolbarElement, Toolbar, config);
+  }
+
+  _createToolbarConfig() {
+    const items = this.option('items') as any;
+
+    const parsedItems = items.map((element) => this._parseItem(element));
+
+    return {
+      items: parsedItems,
+    };
+  }
+
+  _parseItem(item) {
+    const isDefaultElement = this._isDefaultItem(item);
+
+    if (isDefaultElement) {
+      const defaultElementType = item[DEFAULT_ELEMENT];
+
+      switch (defaultElementType) {
+        case VIEW_SWITCHER:
+          if (this.option('useDropDownViewSwitcher')) {
+            return getDropDownViewSwitcher(this, item);
+          }
+
+          return getViewSwitcher(this, item);
+        case DATE_NAVIGATOR:
+          this._renderCalendar();
+
+          return getDateNavigator(this, item);
+        default:
+          errors.log(`Unknown default element type: ${defaultElementType}`);
+          break;
+      }
     }
 
-    _renderToolbar() {
-        const config = this._createToolbarConfig();
+    return item;
+  }
 
-        const toolbarElement = $('<div>');
-        toolbarElement.appendTo(this.$element());
-
-        this._toolbar = this._createComponent(toolbarElement, Toolbar, config);
+  _callEvent(event, arg) {
+    if (this.eventMap.has(event)) {
+      const events = this.eventMap.get(event);
+      events.forEach((event) => event(arg));
     }
+  }
 
-    _createToolbarConfig() {
-        const items = this.option('items');
+  _updateCurrentView(view) {
+    const onCurrentViewChange = this.option('onCurrentViewChange') as any;
+    onCurrentViewChange(view.name);
 
-        const parsedItems = items.map(element => {
-            return this._parseItem(element);
-        });
+    this._callEvent('currentView', view);
+  }
 
-        return {
-            items: parsedItems,
-        };
-    }
+  _updateCalendarValueAndCurrentDate(date) {
+    this._updateCurrentDate(date);
+    this._calendar.option('value', date);
+  }
 
-    _parseItem(item) {
-        const isDefaultElement = this._isDefaultItem(item);
+  _updateCurrentDate(date) {
+    const onCurrentDateChange = this.option('onCurrentDateChange') as any;
+    onCurrentDateChange(date);
 
-        if(isDefaultElement) {
-            const defaultElementType = item[DEFAULT_ELEMENT];
+    this._callEvent('currentDate', date);
+  }
 
-            switch(defaultElementType) {
-                case VIEW_SWITCHER:
-                    if(this.option('useDropDownViewSwitcher')) {
-                        return getDropDownViewSwitcher(this, item);
-                    }
-
-                    return getViewSwitcher(this, item);
-                case DATE_NAVIGATOR:
-                    this._renderCalendar();
-
-                    return getDateNavigator(this, item);
-                default:
-                    errors.log(`Unknown default element type: ${defaultElementType}`);
-                    break;
-            }
-        }
-
-        return item;
-    }
-
-    _callEvent(event, arg) {
-        if(this.eventMap.has(event)) {
-            const events = this.eventMap.get(event);
-            events.forEach(event => event(arg));
-        }
-    }
-
-    _updateCurrentView(view) {
-        const onCurrentViewChange = this.option('onCurrentViewChange');
-        onCurrentViewChange(view.name);
-
-        this._callEvent('currentView', view);
-    }
-
-    _updateCalendarValueAndCurrentDate(date) {
-        this._updateCurrentDate(date);
-        this._calendar.option('value', date);
-    }
-
-    _updateCurrentDate(date) {
-        const onCurrentDateChange = this.option('onCurrentDateChange');
-        onCurrentDateChange(date);
-
-        this._callEvent('currentDate', date);
-    }
-
-    _renderCalendar() {
-        this._calendar = this._createComponent('<div>', SchedulerCalendar, {
-            value: this.option('currentDate'),
-            min: this.option('min'),
-            max: this.option('max'),
-            firstDayOfWeek: this.option('firstDayOfWeek'),
-            focusStateEnabled: this.option('focusStateEnabled'),
-            tabIndex: this.option('tabIndex'),
-            onValueChanged: (e) => {
-                this._updateCurrentDate(e.value);
-                this._calendar.hide();
-            },
-        });
-
-        this._calendar.$element().appendTo(this.$element());
-    }
-
-    _getCalendarOptionUpdater(name) {
-        return value => {
-            if(this._calendar) {
-                this._calendar.option(name, value);
-            }
-        };
-    }
-
-    _getNextDate(direction, initialDate = null) {
-        const date = initialDate || this.option('currentDate');
-        const options = { ...this.intervalOptions, date };
-
-        return getNextIntervalDate(options, direction);
-    }
-
-    _isMonth() {
-        const currentView = this.currentView;
-        return getViewType(currentView) === 'month';
-    }
-
-    _getDisplayedDate() {
-        const startViewDate = this.option('startViewDate');
-
-        if(this._isMonth()) {
-            return nextWeek(startViewDate);
-        }
-
-        return new Date(startViewDate);
-    }
-
-    _getCaption() {
-        let date = this.option('currentDate');
-
-        if(this.option('startViewDate')) {
-            date = this._getDisplayedDate();
-        }
-
-        date = dateUtils.trimTime(date);
-        const options = { ...this.intervalOptions, date };
-        const customizationFunction = this.option('customizeDateNavigatorText');
-        const useShortDateFormat = this.option('_useShortDateFormat');
-
-        return getCaption(options, useShortDateFormat, customizationFunction);
-    }
-
-    _updateDateByDirection(direction) {
-        const date = this._getNextDate(direction);
-
-        this._updateCalendarValueAndCurrentDate(date);
-    }
-
-    _showCalendar(e) {
-        this._calendar.show(e.element);
-    }
-
-    _hideCalendar() {
+  _renderCalendar() {
+    // @ts-expect-error
+    this._calendar = this._createComponent('<div>', SchedulerCalendar, {
+      value: this.option('currentDate'),
+      min: this.option('min'),
+      max: this.option('max'),
+      firstDayOfWeek: this.option('firstDayOfWeek'),
+      focusStateEnabled: this.option('focusStateEnabled'),
+      tabIndex: this.option('tabIndex'),
+      onValueChanged: (e) => {
+        this._updateCurrentDate(e.value);
         this._calendar.hide();
+      },
+    });
+
+    this._calendar.$element().appendTo(this.$element());
+  }
+
+  _getCalendarOptionUpdater(name) {
+    return (value) => {
+      if (this._calendar) {
+        this._calendar.option(name, value);
+      }
+    };
+  }
+
+  _getNextDate(direction, initialDate = null) {
+    const date = initialDate ?? this.option('currentDate');
+    const options = { ...this.intervalOptions, date };
+
+    return getNextIntervalDate(options, direction);
+  }
+
+  _isMonth() {
+    const { currentView } = this;
+    return getViewType(currentView) === 'month';
+  }
+
+  _getDisplayedDate() {
+    const startViewDate = this.option('startViewDate');
+
+    if (this._isMonth()) {
+      return nextWeek(startViewDate);
     }
 
-    _isDefaultItem(item) {
-        return Object.prototype.hasOwnProperty
-            .call(item, DEFAULT_ELEMENT);
+    return new Date(startViewDate as any);
+  }
+
+  _getCaption() {
+    let date = this.option('currentDate');
+
+    if (this.option('startViewDate')) {
+      date = this._getDisplayedDate();
     }
+
+    date = dateUtils.trimTime(date);
+    const options = { ...this.intervalOptions, date };
+    const customizationFunction = this.option('customizeDateNavigatorText');
+    const useShortDateFormat = this.option('_useShortDateFormat');
+
+    return getCaption(options, useShortDateFormat, customizationFunction);
+  }
+
+  _updateDateByDirection(direction) {
+    const date = this._getNextDate(direction);
+
+    this._updateCalendarValueAndCurrentDate(date);
+  }
+
+  _showCalendar(e) {
+    this._calendar.show(e.element);
+  }
+
+  _hideCalendar() {
+    this._calendar.hide();
+  }
+
+  _isDefaultItem(item) {
+    return Object.prototype.hasOwnProperty
+      .call(item, DEFAULT_ELEMENT);
+  }
 }
 
+// @ts-expect-error
 registerComponent('dxSchedulerHeader', SchedulerHeader);

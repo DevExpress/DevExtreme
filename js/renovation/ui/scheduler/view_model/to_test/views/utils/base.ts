@@ -5,7 +5,7 @@ import dateLocalization from '../../../../../../../localization/date';
 import timeZoneUtils from '../../../../../../../ui/scheduler/utils.timeZone';
 import { VERTICAL_GROUP_COUNT_CLASSES } from '../../../../../../../ui/scheduler/classes';
 import { VIEWS } from '../../../../../../../ui/scheduler/constants';
-import { getGroupCount } from '../../../../../../../ui/scheduler/resources/utils';
+import { getGroupCount } from '../../../../../../../__internal/scheduler/resources/m_utils';
 import { isVerticalGroupingApplied } from '../../../../workspaces/utils';
 import {
   CalculateCellIndex,

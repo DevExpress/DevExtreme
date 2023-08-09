@@ -6,7 +6,7 @@ import { Deferred } from 'core/utils/deferred';
 import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
-import { createExpressions } from 'ui/scheduler/resources/utils';
+import { createExpressions } from '__internal/scheduler/resources/m_utils';
 
 const { testStart, module, test } = QUnit;
 
