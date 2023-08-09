@@ -1,5 +1,4 @@
 import React from 'react';
-
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 import Popup from 'devextreme-react/popup';
 import { markup } from './data.js';
@@ -7,89 +6,53 @@ import { markup } from './data.js';
 const headerValues = [false, 1, 2, 3, 4, 5];
 const headerOptions = { inputAttr: { 'aria-label': 'Header' } };
 
-class App extends React.Component {
-  constructor() {
-    super();
+export default function App() {
+  const [value, setValue] = React.useState(markup);
+  const [popupVisible, setPopupVisible] = React.useState(false);
 
-    this.state = {
-      value: markup,
-      popupVisible: false,
-    };
+  const getToolbarButtonOptions = React.useCallback(() => ({
+    text: 'Show markup',
+    stylingMode: 'text',
+    onClick: customButtonClick,
+  }), [customButtonClick]);
 
-    this.toolbarButtonOptions = {
-      text: 'Show markup',
-      stylingMode: 'text',
-      onClick: this.customButtonClick.bind(this),
-    };
+  const valueChanged = React.useCallback((e) => {
+    setValue(e.value);
+  }, [setValue]);
 
-    this.valueChanged = this.valueChanged.bind(this);
-    this.popupHiding = this.popupHiding.bind(this);
-  }
+  const popupHiding = React.useCallback(() => {
+    setPopupVisible(false);
+  }, [setPopupVisible]);
 
-  render() {
-    const { value, popupVisible } = this.state;
+  const customButtonClick = React.useCallback(() => {
+    setPopupVisible(true);
+  }, [setPopupVisible]);
 
-    return (
-      <div className="widget-container">
-        <HtmlEditor
-          value={value}
-          onValueChanged={this.valueChanged}
-        >
-          <Toolbar>
-            <Item name="undo" />
-            <Item name="redo" />
-            <Item name="separator" />
-            <Item
-              name="header"
-              acceptedValues={headerValues}
-              options={headerOptions}
-            />
-            <Item name="separator" />
-            <Item name="bold" />
-            <Item name="italic" />
-            <Item name="strike" />
-            <Item name="underline" />
-            <Item name="separator" />
-            <Item name="alignLeft" />
-            <Item name="alignCenter" />
-            <Item name="alignRight" />
-            <Item name="alignJustify" />
-            <Item name="separator" />
-            <Item
-              widget="dxButton"
-              options={this.toolbarButtonOptions}
-            />
-          </Toolbar>
-        </HtmlEditor>
-        <Popup
-          showTitle={true}
-          title="Markup"
-          visible={popupVisible}
-          onHiding={this.popupHiding}
-        >
-          {value}
-        </Popup>
-      </div>
-    );
-  }
-
-  valueChanged(e) {
-    this.setState({
-      value: e.value,
-    });
-  }
-
-  popupHiding() {
-    this.setState({
-      popupVisible: false,
-    });
-  }
-
-  customButtonClick() {
-    this.setState({
-      popupVisible: true,
-    });
-  }
+  return (
+    <div className="widget-container">
+      <HtmlEditor value={value} onValueChanged={valueChanged}>
+        <Toolbar>
+          <Item name="undo" />
+          <Item name="redo" />
+          <Item name="separator" />
+          <Item name="header" acceptedValues={headerValues} options={headerOptions} />
+          <Item name="separator" />
+          <Item name="bold" />
+          <Item name="italic" />
+          <Item name="strike" />
+          <Item name="underline" />
+          <Item name="separator" />
+          <Item name="alignLeft" />
+          <Item name="alignCenter" />
+          <Item name="alignRight" />
+          <Item name="alignJustify" />
+          <Item name="separator" />
+          <Item widget="dxButton" options={getToolbarButtonOptions()} />
+        </Toolbar>
+      </HtmlEditor>
+      <Popup showTitle={true} title="Markup" visible={popupVisible} onHiding={popupHiding}>
+        {value}
+      </Popup>
+    </div>
+  );
 }
-
-export default App;
