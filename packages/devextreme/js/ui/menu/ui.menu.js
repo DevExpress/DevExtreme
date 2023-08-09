@@ -231,7 +231,7 @@ class Menu extends MenuBase {
 
     _updateItemsWidthCache() {
         const $menuItems = this.$element().find('ul').first().children('li').children(`.${DX_MENU_ITEM_CLASS}`);
-        this._menuItemsWidth = this._getSummaryItemsWidth($menuItems, true);
+        this._menuItemsWidth = this._getSummaryItemsSize('width', $menuItems, true);
     }
 
     _dimensionChanged() {
