@@ -274,7 +274,7 @@ test('Hovering over a row should work correctly after scrolling when there is a 
     .ok();
 
   // act
-  await dataGrid.scrollTo({ y: 300 });
+  await dataGrid.scrollTo(t, { y: 300 });
   dataRow = dataGrid.getDataRow(10);
   await t.hover(dataRow.element);
 
