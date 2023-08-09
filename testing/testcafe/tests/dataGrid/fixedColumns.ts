@@ -4,6 +4,9 @@ import { safeSizeTest } from '../../helpers/safeSizeTest';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import DataGrid from '../../model/dataGrid';
+import { makeRowsViewTemplatesAsync } from './helpers/asyncTemplates';
+
+const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../container.html'));
@@ -244,3 +247,75 @@ safeSizeTest('Fixed to the right columns should appear when any column has undef
     { dataField: 'Column8', width: 270 },
   ],
 }));
+
+// T1180834
+test('Hovering over a row should work correctly after scrolling when there is a fixed column with a cellTemplate and virtual scrolling is used (React)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  let dataRow = dataGrid.getDataRow(1);
+  let fixedDataRow = dataGrid.getDataRow(1);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  // act
+  await t.hover(dataRow.element);
+
+  // assert
+  await takeScreenshot('T1180834-grid-hover-row-after-scrolling-1.png', dataGrid.element);
+
+  await t
+    .expect(dataRow.isHovered)
+    .ok()
+    .expect(fixedDataRow.isHovered)
+    .ok();
+
+  // act
+  await dataGrid.scrollTo({ y: 300 });
+  dataRow = dataGrid.getDataRow(10);
+  await t.hover(dataRow.element);
+
+  // assert
+  fixedDataRow = dataGrid.getDataRow(10);
+
+  await takeScreenshot('T1180834-grid-hover-row-after-scrolling-2.png', dataGrid.element);
+
+  await t
+    .expect(dataRow.isHovered)
+    .ok()
+    .expect(fixedDataRow.isHovered)
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [...new Array(60)].map((_, index) => ({ id: index, text1: `item1 ${index}`, text2: `item2 ${index}` })),
+    height: 500,
+    keyExpr: 'id',
+    renderAsync: false,
+    hoverStateEnabled: true,
+    templatesRenderAsynchronously: true,
+    columns: [
+      'id',
+      {
+        dataField: 'text1',
+        cellTemplate: (_, { value }) => ($('<div/>') as any).text(value),
+        fixed: true,
+      },
+      'text2',
+    ],
+    paging: {
+      enabled: false,
+    },
+    scrolling: {
+      useNative: false,
+      rowRenderingMode: 'virtual',
+    },
+    showBorders: true,
+  });
+
+  await makeRowsViewTemplatesAsync(DATA_GRID_SELECTOR, 100);
+});

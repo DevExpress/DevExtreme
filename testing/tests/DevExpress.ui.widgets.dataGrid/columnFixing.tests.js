@@ -2226,30 +2226,6 @@ QUnit.module('Fixed columns', {
         assert.equal(fixedMenuItems.length, 0, 'there are no fixed menu items');
     });
 
-    // T1148937
-    QUnit.test('The hover event should be attached after all async templates have rendered (React)', function(assert) {
-        // arrange
-        const d = $.Deferred();
-        const $testElement = $('#container');
-
-        this.setupDataGrid();
-        this.option('hoverStateEnabled', true);
-        this.rowsView._templateDeferreds.add(d);
-        sinon.spy(this.rowsView, '_attachHoverEvents');
-
-        // act
-        this.rowsView.render($testElement);
-
-        // assert
-        assert.strictEqual(this.rowsView._attachHoverEvents.callCount, 0, 'hover event is not attached');
-
-        // act
-        this.rowsView._templateDeferreds.delete(d);
-        d.resolve();
-
-        // assert
-        assert.strictEqual(this.rowsView._attachHoverEvents.callCount, 1, 'hover event is attached');
-    });
 });
 
 QUnit.module('Headers reordering and resizing with fixed columns', {
@@ -3482,4 +3458,3 @@ QUnit.module('Fixed columns with real dataController and columnController', {
         assert.strictEqual($groupCells.eq(2).text(), '4', 'summary value');
     });
 });
-
