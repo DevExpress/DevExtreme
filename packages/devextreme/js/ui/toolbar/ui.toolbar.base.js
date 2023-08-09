@@ -284,7 +284,7 @@ class ToolbarBase extends AsyncCollectionWidget {
         const $element = this.$element();
         $element.removeClass(TOOLBAR_COMPACT_CLASS);
 
-        if(this.option('compactMode') && this._getSummaryItemsWidth(this.itemElements(), true) > getWidth($element)) {
+        if(this.option('compactMode') && this._getSummaryItemsSize('width', this.itemElements(), true) > getWidth($element)) {
             $element.addClass(TOOLBAR_COMPACT_CLASS);
         }
     }

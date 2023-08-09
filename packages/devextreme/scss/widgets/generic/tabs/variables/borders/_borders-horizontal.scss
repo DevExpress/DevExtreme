@@ -1,10 +1,12 @@
-@use "../../colors" as *;
-@use "../../sizes" as *;
-@use "../../button/colors" as *;
-@use "../../../base/icons" as *;
-@use "../../../base/tabs";
-@use "../variables/colors" as *;
-@use "../variables/sizes" as *;
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/colors" as *;
+@use "../../../../base/icons" as *;
+@use "../../../../base/tabs";
+@use "../../variables/colors" as *;
+@use "../../variables/sizes" as *;
+
+// adduse
 
 
 $generic-tabs-border: $generic-tabs-border-width solid $tabs-border-color !default;
@@ -201,8 +203,8 @@ $generic-tabs-border-active-right: null !default;
 @if $color == "light" {
   $generic-tabs-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
-  $generic-tabs-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
-  $generic-tabs-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
+  $generic-tabs-border-hover-left: none !default;
+  $generic-tabs-border-hover-right: none !default;
 
   $generic-tabs-border-selected-top: $generic-tabs-border-width solid $tabs-border-color !default;
   $generic-tabs-border-selected-bottom: $generic-tabs-border-width solid $tabs-border-color !default;

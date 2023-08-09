@@ -1,0 +1,29 @@
+@use "sass:math";
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/colors" as *;
+@use "../../../../base/icons" as *;
+@use "../../../../base/tabs";
+@use "../../variables/sizes" as *;
+@use "../../variables/colors" as *;
+@use "../../variables/borders" as *;
+
+// adduse
+
+.dx-tabs-vertical {
+  .dx-tabs-nav-button {
+    width: 100%;
+    height: $generic-tabs-nav-button-height;
+    border-color: $tabs-border-color;
+
+    &.dx-tabs-nav-button-left {
+      border-right: $generic-tabs-border-width solid $tabs-border-color;
+      border-bottom: none;
+    }
+
+    &.dx-tabs-nav-button-right {
+      border-left: $generic-tabs-border-width solid $tabs-border-color;
+      border-top: none;
+    }
+  }
+}
