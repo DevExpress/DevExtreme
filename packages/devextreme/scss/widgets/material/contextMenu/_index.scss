@@ -21,6 +21,8 @@
     color: $base-text-color;
 
     .dx-menu-item-content {
+      display: flex;
+      align-items: center;
       padding: $material-menu-vertical-padding $material-context-menu-horizontal-padding;
 
       .dx-menu-item-popout-container {

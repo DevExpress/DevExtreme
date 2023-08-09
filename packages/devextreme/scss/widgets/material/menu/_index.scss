@@ -54,7 +54,7 @@ $material-menu-font-size: $material-base-font-size;
 
     .dx-menu-item-content {
       display: flex;
-      padding: $material-menu-vertical-padding $material-menu-icon-to-text-offset;
+      padding: $material-menu-vertical-padding $material-menu-horizontal-padding;
 
       .dx-menu-item-popout-container {
         display: flex;
