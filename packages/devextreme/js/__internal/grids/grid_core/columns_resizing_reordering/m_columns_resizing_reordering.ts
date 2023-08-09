@@ -1262,16 +1262,19 @@ class DraggingHeaderViewController extends modules.ViewController {
       case 'columnChooser':
         return true;
       case 'headers':
-        if (isFirstExpandColumn) {
-          if (!this.isCustomGroupColumnPosition) {
-            while (columns[point.columnIndex]?.command === 'expand') {
-              point.columnIndex += 1;
-            }
-          }
+        if (!isFirstExpandColumn) {
+          return isColumnAfterExpandColumn || sourceColumnReorderingDisabled || otherColumnReorderingDisabled;
+        }
+
+        if (this.isCustomGroupColumnPosition) {
           return false;
         }
 
-        return isColumnAfterExpandColumn || sourceColumnReorderingDisabled || otherColumnReorderingDisabled;
+        while (columns[point.columnIndex]?.command === 'expand') {
+          point.columnIndex += 1;
+        }
+
+        return false;
       default:
         return columns.length === 0;
     }
