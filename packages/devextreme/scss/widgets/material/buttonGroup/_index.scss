@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../button/sizes" as *;
 @use "../button/colors" as *;
 @use "../../base/buttonGroup";
 @use "../../base/buttonGroup/mixins" as *;
@@ -17,9 +18,43 @@
 
 @include dx-buttongroup-sizing(
   $button-border-radius,
-  // 1px,
   1px,
 );
+
+.dx-buttongroup-mode-contained {
+  border-radius: $button-border-radius;
+  box-shadow: $material-button-box-shadow-size $button-hover-shadow-color;
+
+  .dx-button-mode-contained {
+    box-shadow: none;
+
+    border-width: 0;
+    border-style: solid;
+    border-inline-end-width: 1px;
+    border-inline-end-color: $button-normal-selected-bg;
+
+    &.dx-buttongroup-last-item {
+      border-inline-end-width: 0px;
+    }
+
+    &.dx-button-default {
+      box-shadow: none;
+      border-inline-end-color: $button-default-selected-bg
+    }
+  
+    &.dx-button-danger {
+      box-shadow: none;
+      border-inline-end-color: $button-danger-selected-bg
+    }
+  
+    &.dx-button-success {
+      box-shadow: none;
+      border-inline-end-color: $button-success-selected-bg
+    }
+  }
+}
+
+
 @include dx-buttongroup-item(
   $button-normal-bg,
   $button-group-default-bg,

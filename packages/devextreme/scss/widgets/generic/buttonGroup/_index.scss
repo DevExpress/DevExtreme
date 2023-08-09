@@ -12,7 +12,6 @@
 
 @include dx-buttongroup-sizing(
   $button-border-radius,
-  // 0,
   $generic-button-border-weight,
 );
 @include dx-buttongroup-item(
