@@ -5,6 +5,7 @@
 
 $material-toolbar-height: null !default;
 $material-toolbar-menu-vertical-padding: null !default;
+$material-toolbar-menu-item-line-height: null !default;
 
 $material-toolbar-padding: 0 !default;
 $material-toolbar-item-spacing: 5px !default;
@@ -12,11 +13,13 @@ $material-toolbar-label-font-size: $material-m-font-size !default;
 $material-toolbar-section-padding: 15px !default;
 
 @if $size == "default" {
+  $material-toolbar-menu-item-line-height: 24px !default;
   $material-toolbar-height: 56px !default;
   $material-toolbar-menu-vertical-padding: 7px !default;
 }
 
 @else if $size == "compact" {
+  $material-toolbar-menu-item-line-height: 20px !default;
   $material-toolbar-height: 38px !default;
   $material-toolbar-menu-vertical-padding: 5px !default;
 }
