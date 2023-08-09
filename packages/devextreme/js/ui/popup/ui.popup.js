@@ -484,7 +484,7 @@ const Popup = Overlay.inherit({
         this._toolbarItemClasses = [];
         const currentPlatform = devices.current().platform;
         let index = 0;
-        const actionButtonsInfo = [];
+        const doneCancelButtonsInfo = [];
 
         each(toolbarItems, (_, data) => {
             const isShortcut = isDefined(data.shortcut);
@@ -501,7 +501,7 @@ const Popup = Overlay.inherit({
                 if(isShortcut) {
                     extend(item, { location: data.location }, this._getToolbarItemByAlias(data));
                     if(data.shortcut === 'done' || data.shortcut === 'cancel') {
-                        actionButtonsInfo.push({
+                        doneCancelButtonsInfo.push({
                             shortcut: data.shortcut,
                             item
                         });
@@ -518,7 +518,7 @@ const Popup = Overlay.inherit({
             toolbarsItems.push(this._getCloseButton());
         }
 
-        const sortedActionItems = sortActionButtonsItems(actionButtonsInfo).map(item => item.item);
+        const sortedActionItems = sortActionButtonsItems(doneCancelButtonsInfo).map(item => item.item);
 
         return toolbarsItems.concat(...sortedActionItems);
     },
