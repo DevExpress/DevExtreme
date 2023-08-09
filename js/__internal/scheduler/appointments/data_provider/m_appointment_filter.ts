@@ -13,10 +13,10 @@ import {
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { createAppointmentAdapter } from '@js/ui/scheduler/appointmentAdapter';
 import { getRecurrenceProcessor } from '@js/ui/scheduler/recurrence';
+
 import {
   getResourcesDataByGroups,
-} from '@js/ui/scheduler/resources/utils';
-
+} from '../../resources/m_utils';
 import {
   _appointmentPartInInterval,
   compareDateWithEndDayHour,

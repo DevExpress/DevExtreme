@@ -1,5 +1,5 @@
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
-import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
+import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_data';
 import { utils } from 'ui/scheduler/utils';
 import { replaceWrongEndDate } from '__internal/scheduler/appointments/data_provider/m_utils';
 
