@@ -62,6 +62,7 @@ const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 
 const ALLOWED_TOOLBAR_ITEM_ALIASES = ['cancel', 'clear', 'done'];
+const ACTION_BUTTONS_ORDER = ['cancel', 'done'];
 
 const BUTTON_DEFAULT_TYPE = 'default';
 const BUTTON_NORMAL_TYPE = 'normal';
@@ -71,9 +72,8 @@ const BUTTON_CONTAINED_MODE = 'contained';
 const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
 const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
-const sortActionButtonsItems = (actionButtonsItems) => {
-    const ACTION_BUTTONS_ORDER = ['cancel', 'done'];
 
+const sortActionButtonsItems = (actionButtonsItems) => {
     return actionButtonsItems.sort((a, b) => {
         return ACTION_BUTTONS_ORDER.indexOf(a.shortcut) - ACTION_BUTTONS_ORDER.indexOf(b.shortcut);
     });
@@ -500,7 +500,7 @@ const Popup = Overlay.inherit({
             if(item?.toolbar === toolbar) {
                 if(isShortcut) {
                     extend(item, { location: data.location }, this._getToolbarItemByAlias(data));
-                    if(data.shortcut === 'done' || data.shortcut === 'cancel') {
+                    if(ACTION_BUTTONS_ORDER.includes(data.shortcut)) {
                         doneCancelButtonsInfo.push({
                             shortcut: data.shortcut,
                             item
