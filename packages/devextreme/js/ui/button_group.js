@@ -159,7 +159,7 @@ const ButtonGroup = Widget.inherit({
     },
 
     _renderStylingMode() {
-        const { stylingMode } = this.option('stylingMode');
+        const { stylingMode } = this.option();
 
         const isValidStylingMode = stylingMode && stylingModes.includes(stylingMode);
 
