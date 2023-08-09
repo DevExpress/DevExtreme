@@ -171,7 +171,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
       while (scrollTop > 0) {
         scrollTop -= 25;
 
-        await dataGrid.scrollTo({ y: scrollTop });
+        await dataGrid.scrollTo(t, { y: scrollTop });
         await triggerScrollEvent(dataGrid);
       }
     };
@@ -182,7 +182,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
     await takeScreenshot(`T1167889-master-detail-with-scrolling.useNative=${useNative}-1.png`, dataGrid.element);
 
     // act
-    await dataGrid.scrollTo({ y: 1000 });
+    await dataGrid.scrollTo(t, { y: 1000 });
     await t.wait(100);
 
     // assert

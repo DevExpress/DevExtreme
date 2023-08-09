@@ -7,6 +7,10 @@
 @use "../variables/sizes" as *;
 @use "../variables/colors" as *;
 @use "../variables/borders" as *;
+@use "../mixins" as *;
+
+// adduse
+
 
 .dx-tabs {
   color: $tabs-border-color;
@@ -15,29 +19,43 @@
     opacity: 1;
   }
 
-  &.dx-tabs-nav-buttons {
-    .dx-tabs-wrapper {
-      border-inline-start: $generic-tabs-border-transparent;
-      border-inline-end: $generic-tabs-border-transparent;
-    }
-  }
-
   &:not(.dx-tabs-nav-buttons) .dx-tabs-scrollable {
-    border-inline-start: $generic-tabs-border;
-    border-inline-end: $generic-tabs-border;
+    @include dx-tabs-after-mixin();
+    @include dx-tabs-border-mixin(
+      $generic-tabs-border,
+      $generic-tabs-border,
+      $generic-tabs-border,
+      $generic-tabs-border,
+    );
 
-    .dx-tabs-wrapper {
-      border-inline-start: none;
-      border-inline-end: none;
+    .dx-scrollable-content {
+
+      // NOTE: Scrollable cuts border via transform-translate.
+      transform: none !important; // stylelint-disable-line declaration-no-important
     }
   }
+}
 
-  .dx-tabs-wrapper {
-    border: $generic-tabs-border;
-    background-color: $tabs-tab-bg;
-  }
+.dx-tabs-scrollable {
+  height: 100%;
+}
 
-  .dx-tabs-scrollable {
-    height: 100%;
+.dx-tabs-wrapper {
+  background-color: $tabs-tab-bg;
+  border-block-start: $generic-tabs-border-transparent;
+  border-block-end: $generic-tabs-border-transparent;
+  
+  @include dx-tabs-after-mixin();
+  @include dx-tabs-border-mixin(
+    $generic-tabs-border,
+    $generic-tabs-border,
+    $generic-tabs-border,
+    $generic-tabs-border,
+  );
+}
+
+.dx-tabs-nav-buttons {
+  .dx-tabs-wrapper::after {
+    border: none;
   }
 }

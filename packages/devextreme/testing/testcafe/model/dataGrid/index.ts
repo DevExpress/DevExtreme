@@ -222,7 +222,12 @@ export default class DataGrid extends Widget {
     return new GroupPanel(this.body.find(`.${this.addWidgetPrefix(CLASS.groupPanel)}`));
   }
 
-  scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
+  async scrollTo(
+    t: TestController,
+    options: { x?: number; y?: number; top?: number },
+  ): Promise<void> {
+    await t.expect(this.hasScrollable()).ok();
+
     const { getInstance } = this;
 
     return ClientFunction(

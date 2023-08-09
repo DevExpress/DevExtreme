@@ -105,6 +105,14 @@
 
 
 .dx-state-focused.dx-gallery {
+  border-width: 1px;
+  border-style: solid;
+  border-color: $base-accent;
+
+  &.dx-gallery-indicator-visible {
+    border-width: 0;
+  }
+
   .dx-gallery-indicator-item-selected {
     background: $gallery-indicator-focused-bg;
   }

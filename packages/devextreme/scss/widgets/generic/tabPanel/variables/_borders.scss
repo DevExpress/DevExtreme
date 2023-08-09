@@ -1,0 +1,97 @@
+@use "../../colors" as *;
+@use "../variables/sizes" as *;
+@use "../../sizes" as *;
+@use "../../button/colors" as *;
+@use "../../tabs/variables/sizes" as *;
+@use "../../tabs/variables/colors" as *;
+
+// adduse
+
+$generic-tabpanel-tab-border-hover-bottom: null !default;
+$generic-tabpanel-tab-border-selected-bottom: null !default;
+$generic-tabpanel-tab-border-active-bottom: null !default;
+
+$generic-tabpanel-tab-border-focused-bottom: null !default;
+$generic-tabpanel-tab-border-focused-left: null !default;
+$generic-tabpanel-tab-border-focused-right: null !default;
+
+
+@if $color == "carmine" {
+  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabpanel-tab-border-focused-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabpanel-tab-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+}
+
+@if $color == "contrast" {
+  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabpanel-tab-border-focused-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabpanel-tab-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+}
+
+@if $color == "dark" {
+  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabpanel-tab-border-focused-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabpanel-tab-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+}
+
+@if $color == "darkmoon" {
+  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabpanel-tab-border-focused-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabpanel-tab-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+}
+
+@if $color == "darkviolet" {
+  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabpanel-tab-border-focused-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabpanel-tab-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+}
+
+@if $color == "greenmist" {
+  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabpanel-tab-border-focused-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabpanel-tab-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+}
+
+@if $color == "light" {
+  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabpanel-tab-border-focused-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabpanel-tab-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+}
+
+@if $color == "softblue" {
+  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabpanel-tab-border-focused-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
+  $generic-tabpanel-tab-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabpanel-tab-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+}

@@ -743,7 +743,7 @@ module('render', {
         assert.ok($item.is(instance.$element().find('.item')));
     });
 
-    test('_getSummaryItemsWidth function returns right values', function(assert) {
+    test('_getSummaryItemsSize function returns right width', function(assert) {
         const instance = new TestComponent('#cmp', {
             items: [
                 { template: $('<div class="test-width">').css('width', '20px').css('padding-left', '7px') },
@@ -751,8 +751,20 @@ module('render', {
             ]
         });
 
-        assert.equal(instance._getSummaryItemsWidth($('#cmp .test-width')), 37, 'done');
-        assert.equal(instance._getSummaryItemsWidth($('#cmp .test-width'), true), 42, 'done');
+        assert.equal(instance._getSummaryItemsSize('width', $('#cmp .test-width')), 37, 'done');
+        assert.equal(instance._getSummaryItemsSize('width', $('#cmp .test-width'), true), 42, 'done');
+    });
+
+    test('_getSummaryItemsSize function returns right height', function(assert) {
+        const instance = new TestComponent('#cmp', {
+            items: [
+                { template: $('<div class="test-height">').css('height', '20px').css('padding-top', '7px') },
+                { template: $('<div class="test-height">').css('height', '10px').css('margin-top', '5px') },
+            ]
+        });
+
+        assert.equal(instance._getSummaryItemsSize('height', $('#cmp .test-height')), 37, 'done');
+        assert.equal(instance._getSummaryItemsSize('height', $('#cmp .test-height'), true), 42, 'done');
     });
 });
 
