@@ -1,13 +1,13 @@
 @use "sass:math";
-@use "../../colors" as *;
-@use "../../sizes" as *;
-@use "../../button/colors" as *;
-@use "../../../base/icons" as *;
-@use "../../../base/tabs";
-@use "../variables/sizes" as *;
-@use "../variables/colors" as *;
-@use "../variables/borders" as *;
-@use "../mixins" as *;
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/colors" as *;
+@use "../../../../base/icons" as *;
+@use "../../../../base/tabs";
+@use "../../variables/sizes" as *;
+@use "../../variables/colors" as *;
+@use "../../variables/borders" as *;
+@use "../../mixins" as *;
 
 // adduse
 
@@ -28,9 +28,9 @@
 
     @include dx-tabs-border-mixin(
       $generic-tabs-border-hover-top,
-      null,
+      $generic-tabs-border-hover-right,
       $generic-tabs-border-hover-bottom,
-      null,
+      $generic-tabs-border-hover-left,
     );
   }
 
