@@ -40,8 +40,8 @@
     $active-text-color,
     $icon-color,
     $selected-background-color: tomato,
-    $selected-text-color: tomato,
     $selected-border-color: tomato,
+    $selected-text-color: tomato,
   ) {
   background-color: $background-color;
   border-color: $border-color;
@@ -52,8 +52,8 @@
   }
 
   &.dx-item-selected {
-    background-color: $hover-background-color;
-    border-color: $hover-border-color;
+    background-color: $selected-background-color;
+    border-color: $selected-border-color;
   }
 
   &.dx-state-hover {
@@ -85,7 +85,7 @@
     $button-normal-contained-bg-hover, $button-normal-border-color,
     $button-normal-contained-bg-focused, $button-normal-border-color,
     $button-normal-contained-bg-active, $button-normal-border-color, $button-normal-color,
-    $button-normal-color, $button-normal-contained-bg-selected, $button-normal-selected-color,
+    $button-normal-color, $button-normal-contained-bg-selected, $button-normal-border-color,
   );
 
   &.dx-button-danger {
@@ -94,7 +94,7 @@
       $button-danger-contained-bg-hover, transparent,
       $button-danger-contained-bg-focused, transparent,
       $button-danger-contained-bg-active, transparent, $button-danger-color,
-      $button-danger-color
+      $button-danger-color, $button-danger-contained-bg-selected, transparent,
     );
   }
 
@@ -104,7 +104,7 @@
       $button-success-contained-bg-hover, transparent,
       $button-success-contained-bg-focused, transparent,
       $button-success-contained-bg-active, transparent, $button-success-color,
-      $button-success-color
+      $button-success-color, $button-success-contained-bg-selected, transparent,
     );
   }
 
@@ -114,7 +114,7 @@
       $button-default-contained-bg-hover, transparent,
       $button-default-contained-bg-focused, transparent,
       $button-default-contained-bg-active, transparent, $button-default-color,
-      $button-default-color,
+      $button-default-color, $button-default-contained-bg-selected, transparent,
     );
   }
 }
@@ -125,7 +125,7 @@
     $button-normal-outlined-bg-hover, $button-normal-border-color,
     $button-normal-outlined-bg-focused, $button-normal-border-color,
     $button-normal-outlined-bg-active, $button-normal-border-color, $button-normal-color,
-    $button-normal-color, $button-normal-outlined-bg-selected, $button-normal-selected-color,
+    $button-normal-color, $button-normal-outlined-bg-selected, $button-normal-border-color,
   );
 
   &.dx-button-danger {
@@ -134,7 +134,7 @@
       $button-danger-outlined-bg-hover, $button-danger-border-color,
       $button-danger-outlined-bg-focused, $button-danger-border-color,
       $button-danger-outlined-bg-active, $button-danger-border-color, $button-danger-border-color,
-      $button-danger-border-color
+      $button-danger-border-color, $button-danger-outlined-bg-selected, $button-danger-border-color,
     );
   }
 
@@ -144,7 +144,7 @@
       $button-success-outlined-bg-hover, $button-success-border-color,
       $button-success-outlined-bg-focused, $button-success-border-color,
       $button-success-outlined-bg-active, $button-success-border-color, $button-success-border-color,
-      $button-success-border-color
+      $button-success-border-color, $button-success-outlined-bg-selected, $button-success-border-color,
     );
   }
 
@@ -154,7 +154,7 @@
       $button-default-outlined-bg-hover, $button-default-border-color,
       $button-default-outlined-bg-focused, $button-default-border-color,
       $button-default-outlined-bg-active, $button-default-border-color, $button-default-border-color,
-      $button-default-border-color
+      $button-default-border-color, $button-default-outlined-bg-selected, $button-default-border-color,
     );
   }
 }
@@ -165,7 +165,7 @@
     $button-normal-text-bg-hover, transparent,
     $button-normal-text-bg-focused, transparent,
     $button-normal-text-bg-active, transparent, $button-normal-color,
-    $button-normal-color, $button-normal-text-bg-selected, $button-normal-selected-color,
+    $button-normal-color, $button-normal-text-bg-selected, transparent,
   );
 
   &.dx-button-danger {
@@ -174,7 +174,7 @@
       $button-danger-text-bg-hover, transparent,
       $button-danger-text-bg-focused, transparent,
       $button-danger-text-bg-active, transparent, $button-danger-border-color,
-      $button-danger-border-color
+      $button-danger-border-color, $button-danger-text-bg-selected, transparent,
     );
   }
 
@@ -184,7 +184,7 @@
       $button-success-text-bg-hover, transparent,
       $button-success-text-bg-focused, transparent,
       $button-success-text-bg-active, transparent, $button-success-border-color,
-      $button-success-border-color
+      $button-success-border-color, $button-success-text-bg-selected, transparent,
     );
   }
 
@@ -194,7 +194,7 @@
       $button-default-text-bg-hover, transparent,
       $button-default-text-bg-focused, transparent,
       $button-default-text-bg-active, transparent, $button-default-border-color,
-      $button-default-border-color
+      $button-default-border-color, $button-default-text-bg-selected, transparent,
     );
   }
 }
