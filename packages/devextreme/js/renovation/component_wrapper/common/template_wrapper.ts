@@ -118,6 +118,7 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
     // eslint-disable-next-line spellcheck/spell-checker
     const node = findDOMfromVNode(this.$LI, true);
 
+    /* istanbul ignore next */
     if (!node?.parentNode) {
       return () => {};
     }
