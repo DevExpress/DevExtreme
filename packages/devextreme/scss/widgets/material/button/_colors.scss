@@ -18,6 +18,12 @@ $button-shadow-color: null !default;
 $button-normal-color: $base-text-color !default;
 
 /**
+* $name 10. Selected item text color
+* $type color
+*/
+$button-normal-selected-color: $base-text-color !default;
+
+/**
 * $name 20. Background color
 * $type color
 */
@@ -40,6 +46,11 @@ $button-normal-focused-bg: null !default;
 * $type color
 */
 $button-normal-active-bg: null !default;
+
+/**
+* $name 20. Selected item background color
+* $type color
+*/
 $button-normal-selected-bg: null !default;
 $button-normal-icon-color: $button-normal-color !default;
 $button-normal-bg-inverted: null !default;
@@ -49,6 +60,12 @@ $button-normal-bg-inverted: null !default;
 * $type color
 */
 $button-default-color: $base-inverted-text-color !default;
+
+/**
+* $name 10. Selected item text color
+* $type color
+*/
+$button-default-selected-color: $base-inverted-text-color !default;
 
 /**
 * $name 20. Background color
@@ -73,6 +90,11 @@ $button-default-focused-bg: null !default;
 * $type color
 */
 $button-default-active-bg: null !default;
+
+/**
+* $name 20. Selected item background color
+* $type color
+*/
 $button-default-selected-bg: null !default;
 $button-default-icon-color: $button-default-color !default;
 $button-default-outlined-hover-bg: color.change($button-default-bg, $alpha: 0.08) !default;
@@ -90,6 +112,12 @@ $button-default-text-selected-bg: color.change($button-default-bg, $alpha: 0.36)
 * $type color
 */
 $button-danger-color: $base-inverted-text-color !default;
+
+/**
+* $name 10. Selected item text color
+* $type color
+*/
+$button-danger-selected-color: $base-inverted-text-color !default;
 
 /**
 * $name 20. Background color
@@ -114,6 +142,11 @@ $button-danger-focused-bg: null !default;
 * $type color
 */
 $button-danger-active-bg: null !default;
+
+/**
+* $name 20. Selected item background color
+* $type color
+*/
 $button-danger-selected-bg: null !default;
 $button-danger-icon-color: $button-danger-color !default;
 $button-danger-outlined-hover-bg: color.change($button-danger-bg, $alpha: 0.08) !default;
@@ -131,6 +164,12 @@ $button-danger-text-selected-bg: color.change($button-danger-bg, $alpha: 0.36) !
 * $type color
 */
 $button-success-color: $base-inverted-text-color !default;
+
+/**
+* $name 10. Selected item text color
+* $type color
+*/
+$button-success-selected-color: $base-inverted-text-color !default;
 
 /**
 * $name 20. Background color
@@ -155,6 +194,11 @@ $button-success-focused-bg: null !default;
 * $type color
 */
 $button-success-active-bg: null !default;
+
+/**
+* $name 20. Selected item background color
+* $type color
+*/
 $button-success-selected-bg: null !default;
 $button-success-icon-color: $button-success-color !default;
 $button-success-outlined-hover-bg: color.change($button-success-bg, $alpha: 0.08) !default;

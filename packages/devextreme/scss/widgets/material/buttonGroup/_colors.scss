@@ -13,11 +13,6 @@ $button-group-normal-selected-color: $base-text-color !default;
 $button-group-normal-contained-selected-bg: null !default;
 $button-group-normal-contained-selected-bg-hover: null !default;
 $button-group-normal-contained-selected-bg-focused: null !default;
-
-/**
-* $name 20. Selected item background color
-* $type color
-*/
 $button-group-normal-selected-bg: null !default;
 
 /**
@@ -26,11 +21,6 @@ $button-group-normal-selected-bg: null !default;
 */
 $button-group-default-selected-color: $button-default-bg !default;
 $button-group-default-bg: $base-element-bg !default;
-
-/**
-* $name 20. Selected item background color
-* $type color
-*/
 $button-group-default-selected-bg: color.change($button-default-bg, $alpha: 0.22) !default;
 $button-group-default-selected-bg-hover: color.change($button-group-default-selected-bg, $alpha: 0.14) !default;
 $button-group-default-selected-bg-focused: color.change($button-group-default-selected-bg, $alpha: 0.14) !default;
@@ -44,11 +34,6 @@ $button-group-default-contained-focused-bg: null !default;
 */
 $button-group-danger-selected-color: $button-danger-bg !default;
 $button-group-danger-bg: $base-element-bg !default;
-
-/**
-* $name 20. Selected item background color
-* $type color
-*/
 $button-group-danger-selected-bg: color.change($button-danger-bg, $alpha: 0.22) !default;
 $button-group-danger-selected-bg-hover: color.change($button-group-danger-selected-bg, $alpha: 0.14) !default;
 $button-group-danger-selected-bg-focused: color.change($button-group-danger-selected-bg, $alpha: 0.14) !default;
@@ -62,11 +47,6 @@ $button-group-danger-contained-focused-bg: null !default;
 */
 $button-group-success-selected-color: $button-success-bg !default;
 $button-group-success-bg: $base-element-bg !default;
-
-/**
-* $name 20. Selected item background color
-* $type color
-*/
 $button-group-success-selected-bg: color.change($button-success-bg, $alpha: 0.22) !default;
 $button-group-success-selected-bg-hover: color.change($button-group-success-selected-bg, $alpha: 0.5) !default;
 $button-group-success-selected-bg-focused: color.change($button-group-success-selected-bg, $alpha: 0.14) !default;

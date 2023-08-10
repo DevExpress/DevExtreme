@@ -69,6 +69,7 @@
     $button-normal-active-bg,
     $button-normal-icon-color,
     $button-normal-selected-bg,
+    $button-normal-selected-color,
   );
 
   &.dx-button-default {
@@ -80,6 +81,7 @@
       $button-default-active-bg,
       $button-default-icon-color,
       $button-default-selected-bg,
+      $button-default-selected-color,
     );
   }
 
@@ -92,6 +94,7 @@
       $button-danger-active-bg,
       $button-danger-icon-color,
       $button-danger-selected-bg,
+      $button-danger-selected-color,
     );
   }
 
@@ -104,6 +107,7 @@
       $button-success-active-bg,
       $button-success-icon-color,
       $button-success-selected-bg,
+      $button-success-selected-color,
     );
   }
 }
@@ -124,10 +128,22 @@
 }
 
 .dx-button-mode-text {
-  @include dx-button-flat-color-styling($button-normal-color, $button-normal-text-hover-bg, $button-normal-text-focused-bg, $button-normal-text-active-bg, $button-normal-text-selected-bg);
+  @include dx-button-flat-color-styling(
+    $button-normal-color,
+    $button-normal-text-hover-bg,
+    $button-normal-text-focused-bg,
+    $button-normal-text-active-bg,
+    $button-normal-text-selected-bg
+  );
 
   &.dx-button-default {
-    @include dx-button-flat-color-styling($button-default-bg, $button-default-text-hover-bg, $button-default-text-focused-bg, $button-default-text-active-bg, $button-default-text-selected-bg);
+    @include dx-button-flat-color-styling(
+      $button-default-bg,
+      $button-default-text-hover-bg,
+      $button-default-text-focused-bg,
+      $button-default-text-active-bg,
+      $button-default-text-selected-bg
+    );
   }
 
   &.dx-button-danger {

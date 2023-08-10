@@ -86,8 +86,14 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 }
 
 @mixin dx-button-styling(
-    $button-bg, $button-color, $button-hover-bg,
-    $button-focused-bg, $button-active-bg, $button-icon-color, $button-selected-bg,
+    $button-bg,
+    $button-color,
+    $button-hover-bg,
+    $button-focused-bg,
+    $button-active-bg,
+    $button-icon-color,
+    $button-selected-bg,
+    $button-selected-color,
   ) {
   border-radius: $button-border-radius;
 
