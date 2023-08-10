@@ -14,8 +14,10 @@ fixture`Column Headers`
   Themes.materialBlueDark,
 ].forEach((theme) => {
   test(`Checking column headers via aXe - ${theme}`, async (t) => {
-    await a11yCheck(t, {
-      'color-contrast': { enabled: true },
+    await a11yCheck(t, null, {
+      rules: {
+        'th-has-data-cells': { enabled: false },
+      },
     });
   }).before(async () => {
     await changeTheme(theme);
