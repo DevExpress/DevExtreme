@@ -30,7 +30,7 @@
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "3.0.11",
-    "devexpress-diagram": "2.1.76",
+    "devexpress-diagram": "2.1.77",
     "devexpress-gantt": "4.1.47",
     "devextreme-quill": "1.6.2",
     "devextreme-showdown": "^1.0.1",
@@ -222,9 +222,6 @@
     "build:react": "gulp generate-react",
     "build:react:watch": "gulp generate-react-watch",
     "build:react:typescript": "gulp generate-react-typescript",
-    "prepare-npm-renovation": "cd ./build/gulp/renovation-npm && npm i --no-audit --no-fund --no-package-lock",
-    "build-npm-renovation:react": "npm run prepare-npm-renovation && gulp renovation-npm-react",
-    "build-npm-renovation:react:production": "cross-env NPM_PRODUCTION=true npm run build-npm-renovation:react",
     "build:modular": "cd ./playground/modular && webpack",
     "build:modular:watch": "cd ./playground/modular && webpack --watch",
     "build:testing-playground": "gulp build-renovation-testing:watch --playgroundName",
