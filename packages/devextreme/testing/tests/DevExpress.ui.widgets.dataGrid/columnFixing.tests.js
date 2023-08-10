@@ -287,9 +287,9 @@ QUnit.module('Fixed columns', {
         $colElements = $testElement.find('.dx-datagrid-headers').children('.dx-datagrid-content-fixed').find('table').find('col');
         assert.equal($colElements.length, 5, 'count col in fixed table');
         assert.equal($colElements[0].style.width, '100px', 'width of the first col');
-        assert.equal($colElements[1].style.width, 'auto', 'width of the second col');
-        assert.equal($colElements[2].style.width, 'auto', 'width of the third col');
-        assert.equal($colElements[3].style.width, 'auto', 'width of the fourth col');
+        assert.equal($colElements[1].style.width, '', 'width of the second col');
+        assert.equal($colElements[2].style.width, '', 'width of the third col');
+        assert.equal($colElements[3].style.width, '', 'width of the fourth col');
         assert.equal($colElements[4].style.width, '100px', 'width of the fifth col');
     });
 
@@ -327,9 +327,9 @@ QUnit.module('Fixed columns', {
         $colElements = $testElement.find('.dx-datagrid-headers').children('.dx-datagrid-content-fixed').find('table').find('col');
         assert.equal($colElements.length, 5, 'count col in fixed table');
         assert.equal($colElements[0].style.width, '50px', 'width of the first col');
-        assert.equal($colElements[1].style.width, 'auto', 'width of the second col');
-        assert.equal($colElements[2].style.width, 'auto', 'width of the third col');
-        assert.equal($colElements[3].style.width, 'auto', 'width of the fourth col');
+        assert.equal($colElements[1].style.width, '', 'width of the second col');
+        assert.equal($colElements[2].style.width, '', 'width of the third col');
+        assert.equal($colElements[3].style.width, '', 'width of the fourth col');
         assert.equal($colElements[4].style.width, '50px', 'width of the fifth col');
     });
 
@@ -406,9 +406,9 @@ QUnit.module('Fixed columns', {
         $colElements = $testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table').find('col');
         assert.equal($colElements.length, 5, 'count col in fixed table');
         assert.equal($colElements[0].style.width, '100px', 'width of the first col');
-        assert.equal($colElements[1].style.width, 'auto', 'width of the second col');
-        assert.equal($colElements[2].style.width, 'auto', 'width of the third col');
-        assert.equal($colElements[3].style.width, 'auto', 'width of the fourth col');
+        assert.equal($colElements[1].style.width, '', 'width of the second col');
+        assert.equal($colElements[2].style.width, '', 'width of the third col');
+        assert.equal($colElements[3].style.width, '', 'width of the fourth col');
         assert.equal($colElements[4].style.width, '100px', 'width of the fifth col');
     });
 
@@ -2221,30 +2221,6 @@ QUnit.module('Fixed columns', {
         assert.equal(fixedMenuItems.length, 0, 'there are no fixed menu items');
     });
 
-    // T1148937
-    QUnit.test('The hover event should be attached after all async templates have rendered (React)', function(assert) {
-        // arrange
-        const d = $.Deferred();
-        const $testElement = $('#container');
-
-        this.setupDataGrid();
-        this.option('hoverStateEnabled', true);
-        this.rowsView._templateDeferreds.add(d);
-        sinon.spy(this.rowsView, '_attachHoverEvents');
-
-        // act
-        this.rowsView.render($testElement);
-
-        // assert
-        assert.strictEqual(this.rowsView._attachHoverEvents.callCount, 0, 'hover event is not attached');
-
-        // act
-        this.rowsView._templateDeferreds.delete(d);
-        d.resolve();
-
-        // assert
-        assert.strictEqual(this.rowsView._attachHoverEvents.callCount, 1, 'hover event is attached');
-    });
 });
 
 QUnit.module('Headers reordering and resizing with fixed columns', {
@@ -3283,8 +3259,8 @@ QUnit.module('Fixed columns with real dataController and columnController', {
         assert.strictEqual($colElements.length, 4, 'col count');
         assert.strictEqual($colElements[0].style.width, '100px', 'width of the first col');
         assert.strictEqual($colElements[1].style.width, '30px', 'width of the second col');
-        assert.strictEqual($colElements[2].style.width, 'auto', 'width of the third col');
-        assert.strictEqual($colElements[3].style.width, 'auto', 'width of the fourth col');
+        assert.strictEqual($colElements[2].style.width, '', 'width of the third col');
+        assert.strictEqual($colElements[3].style.width, '', 'width of the fourth col');
     });
 
     QUnit.test('The cells option of row should be correct when there are fixed columns', function(assert) {
@@ -3477,4 +3453,3 @@ QUnit.module('Fixed columns with real dataController and columnController', {
         assert.strictEqual($groupCells.eq(2).text(), '4', 'summary value');
     });
 });
-

@@ -165,7 +165,6 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      working-directory: ./packages/devextreme
       run: npm install --no-audit --no-fund
 
     - name: Lint CSS
@@ -210,13 +209,15 @@ jobs:
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Check generated component reexports
-      working-directory: ./packages/devextreme
+    - name: Install dependencies
       run: |
         node -v
         npm -v
         npm install --no-audit --no-fund --ignore-scripts
 
+    - name: Check generated component reexports
+      working-directory: ./packages/devextreme
+      run: |
         npm run update-ts-reexports
 
         git add . -N

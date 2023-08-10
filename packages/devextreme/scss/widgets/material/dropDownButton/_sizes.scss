@@ -2,15 +2,15 @@
 
 // adduse
 
-$material-toggle-button-flex: null !default;
-$material-text-button-horizontal-padding: null !default;
+$material-dropdownbutton-action-horizontal-padding: null !default;
+$material-dropdownbutton-icon-spindown-size: null !default;
 
 @if $size == "default" {
-  $material-toggle-button-flex: 0 0 24px !default;
-  $material-text-button-horizontal-padding: 8px;
+  $material-dropdownbutton-action-horizontal-padding: 12px !default;
+  $material-dropdownbutton-icon-spindown-size: 24px;
 }
 
 @else if $size == "compact" {
-  $material-toggle-button-flex: 0 0 20px !default;
-  $material-text-button-horizontal-padding: 5px;
+  $material-dropdownbutton-action-horizontal-padding: 8px !default;
+  $material-dropdownbutton-icon-spindown-size: 18px;
 }

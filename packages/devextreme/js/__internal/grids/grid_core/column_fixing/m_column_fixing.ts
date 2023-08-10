@@ -5,6 +5,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
+import { setWidth } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import { name as wheelEventName } from '@js/events/core/wheel';
@@ -12,6 +13,7 @@ import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 
 import gridCoreUtils from '../m_utils';
+import { normalizeWidth } from '../views/m_columns_view';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -40,7 +42,7 @@ const getTransparentColumnIndex = function (fixedColumns: any[]) {
   return transparentColumnIndex;
 };
 
-const normalizeColumnWidths = function (fixedColumns, widths, fixedWidths) {
+const normalizeColumnWidths = function (fixedColumns, widths: number[], fixedWidths): number[] {
   let fixedColumnIndex = 0;
 
   if (fixedColumns && widths && fixedWidths) {
@@ -366,10 +368,10 @@ const baseFixedColumns = {
     }
   },
 
-  getColumns(rowIndex, $tableElement) {
-    $tableElement = $tableElement || this.getTableElement();
+  getColumns(rowIndex) {
+    const $tableElement = this.getTableElement();
 
-    if (this._isFixedTableRendering || $tableElement && $tableElement.closest('table').parent(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`).length) {
+    if (this._isFixedTableRendering) {
       return this.getFixedColumns(rowIndex);
     }
 
@@ -434,41 +436,56 @@ const baseFixedColumns = {
     this.synchronizeRows();
   },
 
-  setColumnWidths(options) {
-    let columns;
-    const visibleColumns = this._columnsController.getVisibleColumns();
+  setColumnWidths(options): void {
     const { widths } = options;
-    const isWidthsSynchronized = widths && widths.length && isDefined(visibleColumns[0].visibleWidth);
-    const { optionNames } = options;
-    const isColumnWidthChanged = optionNames && optionNames.width;
-    let useVisibleColumns = false;
 
-    this.callBase.apply(this, arguments);
+    const visibleColumns = this._columnsController.getVisibleColumns();
+    const isColumnWidthsSynced = widths?.length && visibleColumns.some((column) => isDefined(column.visibleWidth));
+    const isColumnWidthChanged = options.optionNames?.width;
+
+    this.callBase(options);
 
     if (this._fixedTableElement) {
-      const hasAutoWidth = widths && widths.some((width) => width === 'auto');
-      useVisibleColumns = hasAutoWidth && (!isWidthsSynchronized || !this.isScrollbarVisible(true));
+      const hasAutoWidth = widths?.some((width) => width === 'auto' || !isDefined(width));
+      // if order of calling isScrollbarVisible changed, performance tests will fail
+      const needVisibleColumns = hasAutoWidth && (!isColumnWidthsSynced || !this.isScrollbarVisible(true));
+      const columns = needVisibleColumns ? visibleColumns : this.getFixedColumns();
 
-      if (useVisibleColumns) {
-        columns = visibleColumns;
-      }
-      this.callBase(extend({}, options, { $tableElement: this._fixedTableElement, columns, fixed: true }));
+      this.setFixedTableColumnWidths(columns, widths);
     }
 
-    if (isWidthsSynchronized || isColumnWidthChanged && this.option('wordWrapEnabled')) {
+    const wordWrapEnabled = this.option('wordWrapEnabled');
+    const needSynchronizeRows = isColumnWidthsSynced || (isColumnWidthChanged && wordWrapEnabled);
+
+    if (needSynchronizeRows) {
       this.synchronizeRows();
     }
   },
 
-  _createColGroup(columns) {
-    if (this._isFixedTableRendering && !this.option('columnAutoWidth')) {
-      const visibleColumns = this._columnsController.getVisibleColumns();
-      const useVisibleColumns = visibleColumns.filter((column) => !column.width).length;
-      if (useVisibleColumns) {
-        columns = visibleColumns;
-      }
+  setFixedTableColumnWidths(columns, widths): void {
+    if (!this._fixedTableElement || !widths) {
+      return;
     }
-    return this.callBase(columns);
+
+    const $cols = this._fixedTableElement.children('colgroup').children('col');
+    $cols.toArray().forEach((col) => col.removeAttribute('style'));
+
+    let columnIndex = 0;
+
+    columns.forEach((column) => {
+      if (column.colspan) {
+        columnIndex += column.colspan;
+        return;
+      }
+
+      const colWidth = normalizeWidth(widths[columnIndex]);
+
+      if (isDefined(colWidth)) {
+        setWidth($cols.eq(columnIndex), colWidth);
+      }
+
+      columnIndex += 1;
+    });
   },
 
   _getClientHeight(element) {
@@ -625,28 +642,25 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
 const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
   _detachHoverEvents() {
-    this._fixedTableElement && eventsEngine.off(this._fixedTableElement, 'mouseover mouseout', '.dx-data-row');
-    this._tableElement && eventsEngine.off(this._tableElement, 'mouseover mouseout', '.dx-data-row');
+    const element = this.element();
+
+    if (this._fixedTableElement && this._tableElement) {
+      eventsEngine.off(element, 'mouseover mouseout', '.dx-data-row');
+    }
   },
 
   _attachHoverEvents() {
-    const that = this;
-    const attachHoverEvent = function ($table) {
-      eventsEngine.on($table, 'mouseover mouseout', '.dx-data-row', that.createAction((args) => {
+    if (this._fixedTableElement && this._tableElement) {
+      eventsEngine.on(this.element(), 'mouseover mouseout', '.dx-data-row', this.createAction((args) => {
         const { event } = args;
-        const rowIndex = that.getRowIndex($(event.target).closest('.dx-row'));
+        const rowIndex = this.getRowIndex($(event.target).closest('.dx-row'));
         const isHover = event.type === 'mouseover';
 
         if (rowIndex >= 0) {
-          that._tableElement && that._getRowElements(that._tableElement).eq(rowIndex).toggleClass(HOVER_STATE_CLASS, isHover);
-          that._fixedTableElement && that._getRowElements(that._fixedTableElement).eq(rowIndex).toggleClass(HOVER_STATE_CLASS, isHover);
+          this._tableElement && this._getRowElements(this._tableElement).eq(rowIndex).toggleClass(HOVER_STATE_CLASS, isHover);
+          this._fixedTableElement && this._getRowElements(this._fixedTableElement).eq(rowIndex).toggleClass(HOVER_STATE_CLASS, isHover);
         }
       }));
-    };
-
-    if (that._fixedTableElement && that._tableElement) {
-      attachHoverEvent(that._fixedTableElement);
-      attachHoverEvent(that._tableElement);
     }
   },
 
@@ -828,9 +842,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     this.element().toggleClass(FIXED_COLUMNS_CLASS, isFixedColumns);
 
     if (this.option('hoverStateEnabled') && isFixedColumns) {
-      deferred.done(() => {
-        this._attachHoverEvents();
-      });
+      this._attachHoverEvents();
     }
 
     return deferred;

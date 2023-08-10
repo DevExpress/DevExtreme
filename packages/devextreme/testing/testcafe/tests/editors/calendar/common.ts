@@ -5,7 +5,7 @@ import createWidget from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import Calendar from '../../../model/calendar';
 import {
-  appendElementTo, insertStylesheetRulesToPage, setClassAttribute, setStyleAttribute,
+  appendElementTo, setClassAttribute, setStyleAttribute,
 } from '../../../helpers/domUtils';
 
 const STATE_HOVER_CLASS = 'dx-state-hover';
@@ -24,8 +24,6 @@ fixture.disablePageReloads`Calendar`
 
 test('Caption button text should be ellipsis when width is limit', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await insertStylesheetRulesToPage('#container { min-width: 0 }');
 
   await testScreenshot(t, takeScreenshot, 'Calendar with limit width.png', { element: '#container' });
 

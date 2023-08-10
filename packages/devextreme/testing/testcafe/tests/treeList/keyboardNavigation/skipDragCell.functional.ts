@@ -8,27 +8,29 @@ fixture
   .page(url(__dirname, '../../container.html'));
 
 const TREE_LIST_SELECTOR = '#container';
+const DATA_SOURCE = [
+  {
+    id: 1,
+    parentId: 0,
+    columnA: 'A_0',
+    columnB: 'B_0',
+  },
+  {
+    id: 2,
+    parentId: 0,
+    columnA: 'A_1',
+    columnB: 'B_1',
+  },
+  {
+    id: 3,
+    parentId: 0,
+    columnA: 'A_2',
+    columnB: 'B_2',
+  },
+];
+
 const createTreeList = async () => createWidget('dxTreeList', {
-  dataSource: [
-    {
-      id: 1,
-      parentId: 0,
-      columnA: 'A_0',
-      columnB: 'B_0',
-    },
-    {
-      id: 2,
-      parentId: 0,
-      columnA: 'A_1',
-      columnB: 'B_1',
-    },
-    {
-      id: 3,
-      parentId: 0,
-      columnA: 'A_2',
-      columnB: 'B_2',
-    },
-  ],
+  dataSource: DATA_SOURCE,
   keyExpr: 'id',
   parentIdExpr: 'parentId',
   columns: ['id', 'columnA', 'columnB'],
@@ -38,6 +40,20 @@ const createTreeList = async () => createWidget('dxTreeList', {
   sorting: {
     mode: 'none',
   },
+});
+
+const createTreeListRenderAsyncWithButtons = async () => createWidget('dxTreeList', {
+  dataSource: DATA_SOURCE,
+  keyExpr: 'id',
+  parentIdExpr: 'parentId',
+  columns: ['id', 'columnA', 'columnB', { type: 'buttons' }],
+  rowDragging: {
+    allowReordering: true,
+  },
+  sorting: {
+    mode: 'none',
+  },
+  renderAsync: true,
 });
 
 test('The drag cell should be skipped when navigating from the header cell by tab keypress', async (t) => {
@@ -50,6 +66,18 @@ test('The drag cell should be skipped when navigating from the header cell by ta
     .expect(expectedFocusedCell.isFocused)
     .ok();
 }).before(async () => createTreeList());
+
+test('The drag cell should be skipped when navigating from the header cell by tab keypress'
+  + ' with buttons column and renderAsync: true', async (t) => {
+  const treeList = new TreeList(TREE_LIST_SELECTOR);
+  const expectedFocusedCell = treeList.getDataCell(0, 1);
+  const cellToStartNavigation = treeList.getHeaders().getHeaderRow(0).getHeaderCell(3);
+
+  await t.click(cellToStartNavigation.element)
+    .pressKey('tab')
+    .expect(expectedFocusedCell.isFocused)
+    .ok();
+}).before(async () => createTreeListRenderAsyncWithButtons());
 
 test('The drag cell should be skipped when navigating to the header cell by shift+tab keypress', async (t) => {
   const treeList = new TreeList(TREE_LIST_SELECTOR);

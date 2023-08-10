@@ -19,25 +19,22 @@ $material-tabs-nav-button-background: color.change($button-default-hover-bg, $al
 .dx-tabs {
   padding: 0;
   background-color: $material-tabs-background;
-  position: relative;
 
   .dx-inkripple {
     overflow: hidden;
   }
 }
 
-.dx-tabs-nav-buttons .dx-tabs-scrollable {
-  margin-right: 36px;
-  margin-left: 36px;
-}
-
 .dx-tabs-nav-button {
   border: none;
   background-color: $tabs-tab-bg;
-  position: absolute;
-  height: $material-tab-height;
+  height: auto;
   border-radius: 0;
   box-shadow: none;
+
+  &.dx-state-disabled {
+    opacity: 0;
+  }
 
   &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
     @include dx-button-flat-color-styling($base-icon-color, $material-tabs-nav-button-background, $material-tabs-nav-button-background, $material-tabs-nav-button-background);
@@ -127,7 +124,7 @@ $material-tabs-nav-button-background: color.change($button-default-hover-bg, $al
 
 .dx-tab-content,
 .dx-tab-text {
-  vertical-align: middle;
+  flex-direction: column;
   text-transform: uppercase;
   line-height: $material-tab-text-line-height;
   font-weight: 500;

@@ -2,9 +2,10 @@
 
 // adduse
 .dx-accordion-item-title {
-  font-size: 18px;
   cursor: pointer;
   position: relative;
+  display: flex;
+  align-items: center;
 
   @include user-select(none);
 
@@ -12,16 +13,17 @@
     background-size: contain;
     display: inline-block;
   }
+}
 
-  &::before {
-    background-position: center;
-    float: right;
-  }
+.dx-accordion-item-title-caption {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  height: 100%;
 }
 
 .dx-accordion-item-body {
   overflow: hidden;
-  font-size: 14px;
 }
 
 .dx-accordion-item-closed {
@@ -42,13 +44,5 @@
 .dx-state-disabled {
   .dx-accordion-item-title {
     cursor: default;
-  }
-}
-
-.dx-rtl {
-  .dx-accordion-item-title {
-    &::before {
-      float: left;
-    }
   }
 }

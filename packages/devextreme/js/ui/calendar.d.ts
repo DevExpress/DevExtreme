@@ -180,6 +180,12 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     selectionMode?: CalendarSelectionMode;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    selectWeekOnClick?: boolean;
+    /**
+     * @docid
      * @default false
      * @public
      */

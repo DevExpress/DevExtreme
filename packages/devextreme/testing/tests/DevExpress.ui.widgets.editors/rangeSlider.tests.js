@@ -364,6 +364,42 @@ QUnit.module('focus policy', moduleOptions, () => {
     });
 });
 
+QUnit.module('isDirty', () => {
+    QUnit.test('should be false by default', function(assert) {
+        const instance = $('#slider').dxRangeSlider({}).dxRangeSlider('instance');
+
+        assert.strictEqual(instance.option('isDirty'), false);
+    });
+
+    QUnit.test('should be set to true after value changed', function(assert) {
+        const instance = $('#slider').dxRangeSlider({ value: [0, 1] }).dxRangeSlider('instance');
+
+        instance.option('value', [2, 3]);
+
+        assert.strictEqual(instance.option('isDirty'), true);
+    });
+
+    QUnit.test('should be false if value updated to initial', function(assert) {
+        const initialValue = [0, 10];
+
+        const instance = $('#slider').dxRangeSlider({ value: initialValue }).dxRangeSlider('instance');
+
+        instance.option('start', [1, 2]);
+
+        assert.strictEqual(instance.option('isDirty'), true);
+    });
+
+    ['start', 'end'].forEach((slider) => {
+        QUnit.test(`should be set to true after ${slider} value changed`, function(assert) {
+            const instance = $('#slider').dxRangeSlider({ value: [0, 10] }).dxRangeSlider('instance');
+
+            instance.option(slider, 1);
+
+            assert.strictEqual(instance.option('isDirty'), true);
+        });
+    });
+});
+
 QUnit.module('keyboard navigation', moduleOptions, () => {
     QUnit.test('control keys test', function(assert) {
         assert.expect(8);
@@ -1166,16 +1202,16 @@ QUnit.module('option value', () => {
         }
     });
 
-    QUnit.test('reset method should set value to default', function(assert) {
+    QUnit.test('clear method should set value to default', function(assert) {
         $('#slider').dxRangeSlider({
             value: [10, 30]
         });
 
         const instance = $('#slider').dxRangeSlider('instance');
 
-        instance.reset();
+        instance.clear();
 
-        assert.deepEqual(instance.option('value'), [40, 60], 'value was reset to default');
+        assert.deepEqual(instance.option('value'), [40, 60], 'value was cleared to default');
     });
 });
 

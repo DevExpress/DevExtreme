@@ -184,6 +184,14 @@ export default class DataGrid extends Widget {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
   }
 
+  getConfirmDeletionButton(): Selector {
+    return this.body.find('[aria-label=\'Yes\']');
+  }
+
+  getCancelDeletionButton(): Selector {
+    return this.body.find('[aria-label=\'No\']');
+  }
+
   getRevertTooltip(): Selector {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.revertTooltip)}`);
   }
@@ -208,7 +216,12 @@ export default class DataGrid extends Widget {
     return new ColumnChooser(this.body.find(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
   }
 
-  scrollTo(options: { x?: number; y?: number; top?: number }): Promise<void> {
+  async scrollTo(
+    t: TestController,
+    options: { x?: number; y?: number; top?: number },
+  ): Promise<void> {
+    await t.expect(this.hasScrollable()).ok();
+
     const { getInstance } = this;
 
     return ClientFunction(
@@ -487,6 +500,20 @@ export default class DataGrid extends Widget {
       {
         dependencies: {
           getInstance,
+        },
+      },
+    )();
+  }
+
+  apiToggleKeyboardNavigation(value: boolean): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).option('keyboardNavigation.enabled', value),
+      {
+        dependencies: {
+          getInstance,
+          value,
         },
       },
     )();

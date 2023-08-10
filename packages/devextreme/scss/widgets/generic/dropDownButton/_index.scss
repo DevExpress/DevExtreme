@@ -6,52 +6,14 @@
 @use "../../base/icons" as *;
 @use "../button/sizes" as *;
 @use "../common/mixins" as *;
-@use "../../base/dropDownButton" as *;
+@use "../../base/dropDownButton";
+@use "../../base/dropDownButton/mixins" as *;
 
 // adduse
-@include dx-dropdown-button(5px);
-
-.dx-dropdownbutton {
-  vertical-align: middle;
-
-  .dx-button {
-    overflow: hidden;
-  }
-
-  .dx-button-has-text .dx-icon.dx-icon-right {
-    margin-left: 4px;
-    margin-right: 0;
-  }
-}
-
-.dx-dropdownbutton-toggle {
-  max-width: 20px;
-}
-
-.dx-dropdownbutton-action {
-  min-width: 0;
-
-  &.dx-button .dx-button-content {
-    padding-left: 10px;
-    padding-right: 4px;
-
-
-    .dx-rtl & {
-      padding-left: 4px;
-      padding-right: 10px;
-    }
-  }
-
-  &.dx-buttongroup-last-item {
-    &.dx-button .dx-button-content {
-      padding-right: 0;
-
-      .dx-rtl & {
-        padding-left: 0;
-      }
-    }
-  }
-}
+@include dx-dropdownbutton(
+  $generic-dropdownbutton-icon-spindown-size,
+  $generic-dropdownbutton-action-horizontal-padding,
+);
 
 .dx-dropdownbutton-popup-wrapper {
   @include dx-dropdownlist-list-appearance();
