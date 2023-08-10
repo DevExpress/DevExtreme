@@ -54,7 +54,7 @@ export const addOneRenderedCall = (template) => {
     const render = template.render.bind(template);
     return extend({}, template, {
         render(options) {
-            if (options && options.container) {
+            if(options && options.container) {
                 const $container = $(options.container);
                 options.container = getPublicElement($container);
             }
