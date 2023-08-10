@@ -97,6 +97,7 @@ describe('Builder integration tests', () => {
     const config: ConfigSettings = {
       command: commands.BUILD_THEME,
       outputColorScheme: 'custom-scheme',
+      baseTheme: 'material.blue.light',
       items: allChangedVariables,
     };
 
