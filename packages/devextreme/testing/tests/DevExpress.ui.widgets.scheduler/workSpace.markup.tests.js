@@ -1255,7 +1255,6 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
     });
 
     QUnit.test('WorkSpace Month view has right count of cells with view option intervalCount', function(assert) {
-        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
         this.instance.option('intervalCount', 2);
 
         const rows = this.instance.$element().find('.dx-scheduler-date-table-cell');
