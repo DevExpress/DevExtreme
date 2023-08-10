@@ -351,4 +351,160 @@ const DATA_GRID_SELECTOR = '#container';
   }).after(async () => {
     await changeTheme('generic.light');
   });
+
+  test(`Column chooser with the 'dragAndDrop' mode in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const columnChooser = dataGrid.getColumnChooser();
+    const columnChooserButton = dataGrid.getColumnChooserButton();
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await t.click(columnChooserButton);
+
+    // assert
+    await t
+      .expect(columnChooser.isOpened)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, null, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 7),
+      keyExpr: 'field_0',
+      columnChooser: {
+        enabled: true,
+        mode: 'dragAndDrop',
+      },
+      columns: [
+        {
+          dataField: 'field_0',
+          visible: false,
+        },
+        {
+          dataField: 'field_1',
+          visible: false,
+        },
+        'field_2',
+        'field_3',
+        'field_4',
+        'field_5',
+        'field_6',
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
+  test(`Column chooser with the 'select' mode in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const columnChooser = dataGrid.getColumnChooser();
+    const columnChooserButton = dataGrid.getColumnChooserButton();
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await t.click(columnChooserButton);
+
+    // assert
+    await t
+      .expect(columnChooser.isOpened)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, null, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 7),
+      keyExpr: 'field_0',
+      columnChooser: {
+        enabled: true,
+        mode: 'select',
+      },
+      columns: [
+        {
+          dataField: 'field_0',
+          visible: false,
+        },
+        {
+          dataField: 'field_1',
+          visible: false,
+        },
+        'field_2',
+        'field_3',
+        'field_4',
+        'field_5',
+        'field_6',
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
+  test(`Empty column chooser in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const columnChooser = dataGrid.getColumnChooser();
+    const columnChooserButton = dataGrid.getColumnChooserButton();
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await t.click(columnChooserButton);
+
+    // assert
+    await t
+      .expect(columnChooser.isOpened)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, null, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      columnChooser: {
+        enabled: true,
+      },
+      columns: [
+        'field_0',
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
 });
