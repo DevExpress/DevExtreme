@@ -1,6 +1,7 @@
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 // eslint-disable-next-line spellcheck/spell-checker
 import { findDOMfromVNode } from 'inferno';
+import { replaceWith } from '../../../core/utils/dom';
 import { shallowEquals } from '../../utils/shallow_equals';
 // eslint-disable-next-line import/named
 import $, { dxElementWrapper } from '../../../core/renderer';
@@ -9,8 +10,6 @@ import domAdapter from '../../../core/dom_adapter';
 import { DxElement, getPublicElement } from '../../../core/element';
 import { FunctionTemplate } from '../../../core/templates/function_template';
 import { isDefined } from '../../../core/utils/type';
-import { noop } from '../../../core/utils/common';
-import { recordMutations } from './mutations_recording';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 type UnknownRecord = Record<PropertyKey, unknown>;
@@ -62,10 +61,10 @@ export function buildTemplateArgs(
   return args;
 }
 
-function buildTemplateContent(
+function renderTemplateContent(
   props: TemplateWrapperProps,
   container: DxElement<Element>,
-): ChildNode[] {
+): Element[] {
   const {
     data, index,
   } = props.model ?? { data: {} };
@@ -96,31 +95,49 @@ function buildTemplateContent(
     : [$(rendered).get(0)];
 }
 
-export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
-  private cleanParent: () => void = noop;
+function removeDifferentElements(
+  oldChildren: Element[],
+  newChildren: Element[],
+): void {
+  newChildren.forEach((newElement) => {
+    const hasOldChild = !!oldChildren.find((oldElement) => newElement === oldElement);
 
+    if (!hasOldChild && newElement.parentNode) {
+      newElement.parentNode.removeChild(newElement);
+    }
+  });
+}
+
+export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
   constructor(props: TemplateWrapperProps) {
     super(props);
     this.renderTemplate = this.renderTemplate.bind(this);
   }
 
-  renderTemplate(): void {
-    // eslint-disable-next-line spellcheck/spell-checker, rulesdir/no-non-null-assertion
-    const node = findDOMfromVNode(this.$LI, true)!;
-    // eslint-disable-next-line rulesdir/no-non-null-assertion
-    const container = node.parentElement!;
+  renderTemplate(): () => void {
+    // eslint-disable-next-line spellcheck/spell-checker
+    const node = findDOMfromVNode(this.$LI, true);
 
-    this.cleanParent();
-    this.cleanParent = recordMutations(
-      container,
-      () => {
-        const content = buildTemplateContent(this.props, getPublicElement($(container)));
+    if (!node?.parentNode) {
+      return () => {};
+    }
 
-        if (content.length !== 0 && !(content.length === 1 && content[0] === container)) {
-          node.after(...content);
-        }
-      },
-    );
+    const container = node.parentNode as Element;
+    const $container = $(container);
+    const $oldContainerContent = $container.contents().toArray();
+
+    const content = renderTemplateContent(this.props, getPublicElement($container));
+    // TODO Vinogradov: Fix the renderer function type.
+    // @ts-expect-error The renderer function's argument hasn't the full range of possible types
+    // (the Element[] type is missing).
+    replaceWith($(node), $(content));
+
+    // NOTE: This is a dispose method that called before renderTemplate.
+    return () => {
+      const $actualContainerContent = $(container).contents().toArray();
+      removeDifferentElements($oldContainerContent, $actualContainerContent);
+      container.appendChild(node);
+    };
   }
 
   shouldComponentUpdate(nextProps: TemplateWrapperProps): boolean {
@@ -156,9 +173,7 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
 
   // NOTE: Prevent nodes clearing on unmount.
   //       Nodes will be destroyed by inferno on markup update
-  componentWillUnmount(): void {
-    this.cleanParent();
-  }
+  componentWillUnmount(): void {}
 
   render(): JSX.Element | null {
     return null;
