@@ -507,4 +507,369 @@ const DATA_GRID_SELECTOR = '#container';
   }).after(async () => {
     await changeTheme('generic.light');
   });
+
+  [false, true].forEach((useIcons) => {
+    test(`Row editing mode with useIcons=${useIcons} in ${theme}`, async (t) => {
+    // arrange
+      const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+      // assert
+      await t
+        .expect(dataGrid.isReady())
+        .ok();
+
+      // act, assert
+      await a11yCheck(t, DATA_GRID_SELECTOR, {
+        runOnly: 'color-contrast',
+      });
+    }).before(async () => {
+      await changeTheme(theme);
+
+      return createWidget('dxDataGrid', {
+        dataSource: getData(10, 5),
+        keyExpr: 'field_0',
+        editing: {
+          mode: 'row',
+          allowUpdating: true,
+          allowDeleting: true,
+          allowAdding: true,
+          useIcons,
+        },
+        columns: [
+          'field_1',
+          'field_2',
+          'field_3',
+          'field_4',
+        ],
+      }, DATA_GRID_SELECTOR, {
+        disableFxAnimation: true,
+      });
+    }).after(async () => {
+      await changeTheme('generic.light');
+    });
+
+    test(`Row in edit state with useIcons=${useIcons} in ${theme}`, async (t) => {
+      // arrange
+      const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+      // assert
+      await t
+        .expect(dataGrid.isReady())
+        .ok();
+
+      // act
+      await dataGrid.apiEditRow(0);
+
+      // assert
+      await t
+        .expect(dataGrid.getDataRow(0).isEdited)
+        .ok();
+
+      // act, assert
+      await a11yCheck(t, DATA_GRID_SELECTOR, {
+        runOnly: 'color-contrast',
+      });
+    }).before(async () => {
+      await changeTheme(theme);
+
+      return createWidget('dxDataGrid', {
+        dataSource: getData(10, 5),
+        keyExpr: 'field_0',
+        editing: {
+          mode: 'row',
+          allowUpdating: true,
+          allowDeleting: true,
+          allowAdding: true,
+          useIcons,
+        },
+        columns: [
+          'field_1',
+          'field_2',
+          'field_3',
+          'field_4',
+        ],
+      }, DATA_GRID_SELECTOR, {
+        disableFxAnimation: true,
+      });
+    }).after(async () => {
+      await changeTheme('generic.light');
+    });
+  });
+
+  test(`Row editing mode in ${theme} - confirm delete message`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const isDialogOpened = dataGrid.getDialog().exists;
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await dataGrid.apiDeleteRow(0);
+
+    // assert
+    await t
+      .expect(isDialogOpened)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, null, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+      },
+      columns: [
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
+  test(`Batch editing mode in ${theme} - edit cell`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await dataGrid.apiEditCell(0, 0);
+
+    // assert
+    await t
+      .expect(dataGrid.getDataCell(0, 0).isEditCell)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, DATA_GRID_SELECTOR, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+      },
+      columns: [
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
+  test(`Batch editing mode in ${theme} - modified cell`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await dataGrid.apiCellValue(0, 0, 'test');
+
+    // assert
+    await t
+      .expect(dataGrid.getDataCell(0, 0).isModified)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, DATA_GRID_SELECTOR, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+      },
+      columns: [
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
+  test(`Batch editing mode in ${theme} - delete row`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await dataGrid.apiDeleteRow(0);
+
+    // assert
+    await t
+      .expect(dataGrid.getDataRow(0).isRemoved)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, DATA_GRID_SELECTOR, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+      },
+      columns: [
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
+  test(`Form editing mode in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await dataGrid.apiEditRow(0);
+
+    // assert
+    await t
+      .expect(dataGrid.getEditForm().element.exists)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, DATA_GRID_SELECTOR, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'form',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+      },
+      columns: [
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
+  test(`Popup editing mode in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await dataGrid.apiEditRow(0);
+
+    // assert
+    await t
+      .expect(dataGrid.getPopupEditForm().element.exists)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, null, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'popup',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+      },
+      columns: [
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
 });

@@ -59,6 +59,7 @@ export const CLASS = {
   fieldItemContent: 'dx-field-item-content',
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
+  dialogWrapper: 'dx-dialog-wrapper',
 };
 
 const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
@@ -188,6 +189,10 @@ export default class DataGrid extends Widget {
 
   getConfirmDeletionButton(): Selector {
     return this.body.find('[aria-label=\'Yes\']');
+  }
+
+  getDialog(): Selector {
+    return this.body.find(`.${CLASS.dialogWrapper}`);
   }
 
   getCancelDeletionButton(): Selector {
@@ -369,6 +374,15 @@ export default class DataGrid extends Widget {
 
     return ClientFunction(
       () => (getInstance() as any).editRow(rowIndex),
+      { dependencies: { getInstance, rowIndex } },
+    )();
+  }
+
+  apiDeleteRow(rowIndex: number): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).deleteRow(rowIndex),
       { dependencies: { getInstance, rowIndex } },
     )();
   }
