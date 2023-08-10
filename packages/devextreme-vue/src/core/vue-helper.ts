@@ -61,7 +61,7 @@ export function configurationDefaultTemplate(node): Slot | undefined {
   }
 
   return hasInlineTemplate(node.children.default()) ? node.children.default : undefined;
-}љ
+}
 
 export function configurationTemplate(node: VNode): Slot | undefined {
   return configurationDefaultTemplate(node);
