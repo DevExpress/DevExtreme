@@ -1,0 +1,26 @@
+@use "../../../sizes" as *;
+@use "../../../../base/icons" as *;
+@use "../../variables/sizes" as *;
+@use "../../variables/colors" as *;
+@use "../../mixins" as *;
+
+// adduse
+
+
+.dx-tabs-vertical {
+  .dx-tab-selected {
+    @include dx-tabs-border-mixin(left, $tabs-selected-tab-border-color);
+
+    &.dx-state-disabled {
+      @include dx-tabs-border-mixin(left, $tabs-disabled-tab-border-color);
+    }
+  }
+
+  .dx-tab-text {
+    flex-direction: row;
+
+    .dx-icon {
+      @include dx-icon-margin($material-base-icon-margin-right);
+    }
+  }
+}

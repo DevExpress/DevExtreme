@@ -1,0 +1,14 @@
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/mixins" as *;
+@use "../../variables/colors" as *;
+@use "../../variables/sizes" as *;
+
+// adduse
+
+
+.dx-tabs-vertical {
+  .dx-tabs-nav-button {
+    padding: $material-tab-vertical-nav-button-content-padding;
+  }
+}

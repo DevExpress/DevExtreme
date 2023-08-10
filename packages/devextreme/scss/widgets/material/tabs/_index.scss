@@ -7,9 +7,11 @@
 @use "../../base/tabs";
 @use "variables/colors" as *;
 @use "variables/sizes" as *;
-@use "layout/tab" as *;
+@use "layout/tab/base" as *;
+@use "layout/tab/vertical" as *;
 @use "layout/tabs" as *;
-@use "layout/navigation-button" as *;
+@use "layout/navigation-button/base" as *;
+@use "layout/navigation-button/vertical" as *;
 
 // adduse
 @use "../scrollable";
