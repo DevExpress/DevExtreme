@@ -66,32 +66,29 @@ test('Tabs in contrast theme', async (t) => {
   [true, false].forEach((selectOnFocus) => {
     test('Tabs item states', async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      await testScreenshot(t, takeScreenshot, `Tabs without focus, selectOnFocus=${selectOnFocus}, orientation=${orientation}.png`, { element: '#tabs' });
 
-      if (!(isMaterial() && orientation === 'vertical')) {
-        await testScreenshot(t, takeScreenshot, `Tabs without focus, selectOnFocus=${selectOnFocus}, orientation=${orientation}.png`, { element: '#tabs' });
+      await t.pressKey('tab');
+      await testScreenshot(t, takeScreenshot, `Tabs when its available item has focus, selectOnFocus=${selectOnFocus}, orientation=${orientation}.png`, { element: '#tabs' });
 
-        await t.pressKey('tab');
-        await testScreenshot(t, takeScreenshot, `Tabs when its available item has focus, selectOnFocus=${selectOnFocus}, orientation=${orientation}.png`, { element: '#tabs' });
+      await t.pressKey('right');
+      await testScreenshot(t, takeScreenshot, `Tabs when its disabled item has focus, selectOnFocus=${selectOnFocus}, orientation=${orientation}.png`, { element: '#tabs' });
 
-        await t.pressKey('right');
-        await testScreenshot(t, takeScreenshot, `Tabs when its disabled item has focus, selectOnFocus=${selectOnFocus}, orientation=${orientation}.png`, { element: '#tabs' });
+      const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
+      const fourthItem = Selector(`.${TAB_CLASS}:nth-child(4)`);
 
-        const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
-        const fourthItem = Selector(`.${TAB_CLASS}:nth-child(4)`);
+      await t
+        .pressKey('right')
+        .dispatchEvent(thirdItem, 'mousedown');
 
-        await t
-          .pressKey('right')
-          .dispatchEvent(thirdItem, 'mousedown');
+      await testScreenshot(t, takeScreenshot, `Tabs when 3 item has active state selectOnFocus=${selectOnFocus}, orientation=${orientation}.png`, { element: '#tabs' });
 
-        await testScreenshot(t, takeScreenshot, `Tabs when 3 item has active state selectOnFocus=${selectOnFocus}, orientation=${orientation}.png`, { element: '#tabs' });
+      await t
+        .dispatchEvent(thirdItem, 'mouseup')
+        .click(thirdItem)
+        .hover(fourthItem);
 
-        await t
-          .dispatchEvent(thirdItem, 'mouseup')
-          .click(thirdItem)
-          .hover(fourthItem);
-
-        await testScreenshot(t, takeScreenshot, `Tabs when 3 item is selected, 4 item is hovered, selectOnFocus=${selectOnFocus}, orientation=${orientation}.png`, { element: '#tabs' });
-      }
+      await testScreenshot(t, takeScreenshot, `Tabs when 3 item is selected, 4 item is hovered, selectOnFocus=${selectOnFocus}, orientation=${orientation}.png`, { element: '#tabs' });
 
       await t
         .expect(compareResults.isValid())
