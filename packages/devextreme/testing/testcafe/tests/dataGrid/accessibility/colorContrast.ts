@@ -153,4 +153,60 @@ const DATA_GRID_SELECTOR = '#container';
   }).after(async () => {
     await changeTheme('generic.light');
   });
+
+  test(`Grouping and Summary in ${theme}`, async (t) => {
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    await a11yCheck(t, DATA_GRID_SELECTOR, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(60, 5),
+      keyExpr: 'field_0',
+      columns: [
+        'field_0',
+        {
+          dataField: 'field_1',
+          groupIndex: 0,
+        },
+        {
+          dataField: 'field_2',
+          groupIndex: 1,
+        },
+        'field_3',
+        'field_4',
+      ],
+      paging: {
+        pageSize: 10,
+      },
+      groupPanel: {
+        visible: true,
+      },
+      summary: {
+        groupItems: [{
+          column: 'field_3',
+          summaryType: 'count',
+          showInGroupFooter: true,
+        }, {
+          column: 'field_4',
+          summaryType: 'count',
+          showInGroupFooter: false,
+          alignByColumn: true,
+        }],
+        totalItems: [{
+          column: 'field_0',
+          summaryType: 'count',
+        }],
+      },
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
 });
