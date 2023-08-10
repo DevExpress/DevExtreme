@@ -589,7 +589,7 @@ const ColumnHeadersViewFilterRowExtender = (function () {
             const editor = getEditorInstance($editorContainer);
             // @ts-expect-error
             if (editor && editor.NAME === 'dxDateBox' && !editor.option('isValid')) {
-              editor.reset();
+              editor.clear();
               editor.option('isValid', true);
             }
           }
