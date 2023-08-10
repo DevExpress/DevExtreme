@@ -6,6 +6,7 @@ import { getData } from '../helpers/generateDataSourceData';
 import { Themes } from '../helpers/themes';
 import { changeTheme } from '../../../helpers/changeTheme';
 import FilterTextBox from '../../../model/dataGrid/editors/filterTextBox';
+import HeaderFilter from '../../../model/dataGrid/headers/headerFilter';
 
 fixture`Color contrast`
   .page(url(__dirname, '../../container.html'));
@@ -253,6 +254,51 @@ const DATA_GRID_SELECTOR = '#container';
           selectedFilterOperation: 'between',
           filterValue: [1, 7],
         },
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
+  test(`Header filter - filter menu in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+    const filterIconElement = headerCell.getFilterIcon();
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await t.click(filterIconElement);
+
+    // assert
+    await t
+      .expect(new HeaderFilter().element.exists)
+      .ok();
+
+    // act
+    await a11yCheck(t, null, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      headerFilter: {
+        visible: true,
+      },
+      columns: [
+        'field_0',
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
       ],
     }, DATA_GRID_SELECTOR, {
       disableFxAnimation: true,
