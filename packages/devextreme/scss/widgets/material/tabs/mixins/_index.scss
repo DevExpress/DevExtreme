@@ -1,0 +1,32 @@
+// adduse
+
+
+@mixin dx-tabs-border-mixin($position, $color) {
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $color;
+
+    @if $position == bottom {
+      top: unset;
+      height: 2px;
+      width: auto;
+    } @else if $position == top {
+      bottom: unset;
+      height: 2px;
+      width: auto;
+    } @else if $position == left {
+      right: unset;
+      width: 2px;
+      height: auto;
+    } @else if $position == right {
+      left: unset;
+      width: 2px;
+      height: auto;
+    }
+  }
+}

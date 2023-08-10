@@ -1,0 +1,69 @@
+@use "../../colors" as *;
+@use "../../sizes" as *;
+@use "../../button/mixins" as *;
+@use "../variables/colors" as *;
+@use "../variables/sizes" as *;
+
+// adduse
+
+
+.dx-tabs-nav-button {
+  border: none;
+  background-color: $tabs-tab-bg;
+  height: $material-tab-height;
+  border-radius: 0;
+  box-shadow: none;
+
+  &.dx-state-disabled {
+    opacity: 0;
+  }
+
+  &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
+    @include dx-button-flat-color-styling(
+      $base-icon-color,
+      $material-tabs-nav-button-background,
+      $material-tabs-nav-button-background,
+      $material-tabs-nav-button-background,
+    );
+
+    border-radius: 0;
+
+    .dx-inkripple-wave {
+      background-color: $material-tabs-nav-button-background;
+    }
+  }
+
+  &.dx-button-has-icon .dx-icon {
+    width: $material-tab-nav-button-icon-width;
+    height: $material-tab-nav-button-icon-height;
+    font-size: $material-tab-nav-button-icon-font-size;
+  }
+
+  .dx-button-content {
+    padding: 0;
+  }
+  
+  &.dx-state-active {
+    border: none;
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
+    background-color: $tabs-tab-bg;
+
+    .dx-button-content {
+      opacity: $tabs-tab-button-disabled-opacity;
+    }
+  }
+
+  .dx-button-content {
+    flex: unset;
+    padding: $material-tab-nav-button-content-padding;
+  }
+}
+
+.dx-tabs-vertical {
+  .dx-tabs-nav-button {
+    padding: $material-tab-vertical-nav-button-content-padding;
+  }
+}

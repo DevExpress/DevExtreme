@@ -1,0 +1,82 @@
+@use "../../sizes" as *;
+@use "../../../base/icons" as *;
+@use "../variables/sizes" as *;
+@use "../variables/colors" as *;
+@use "../mixins" as *;
+
+// adduse
+
+
+.dx-tab {
+  padding: $material-tabs-item-padding;
+  min-width: $material-tab-min-width;
+  background-color: $tabs-tab-bg;
+  color: $tabs-tab-color;
+
+  &.dx-state-hover {
+    background-color: $tabs-hovered-tab-bg-color;
+  }
+
+  &.dx-tab-selected {
+    color: $tabs-tab-selected-color;
+
+    @include dx-tabs-border-mixin(bottom, $tabs-selected-tab-border-color);
+
+    &.dx-state-disabled {
+      @include dx-tabs-border-mixin(bottom, $tabs-disabled-tab-border-color);
+    }
+
+    .dx-icon {
+      color: $tabs-tab-icon-selected-color;
+    }
+  }
+
+  &.dx-state-focused {
+    background-color: $tabs-focused-tab-bg-color;
+  }
+
+
+  &.dx-state-disabled {
+    color: $tabs-tab-disabled-color;
+
+    .dx-icon {
+      color: $tabs-tab-icon-disabled-color;
+    }
+  }
+
+  &.dx-state-active,
+  &.dx-state-active .dx-inkripple-wave {
+    background-color: $tabs-active-tab-bg-color;
+  }
+
+  .dx-tab-text {
+    flex-direction: column;
+    text-transform: uppercase;
+    line-height: $material-tab-text-line-height;
+    font-weight: 500;
+  }
+
+  .dx-icon {
+    color: $tabs-tab-icon-color;
+
+    @include dx-icon-sizing($material-base-icon-size);
+  }
+}
+
+.dx-tabs-vertical {
+  .dx-tab-selected {
+    @include dx-tabs-border-mixin(left, $tabs-selected-tab-border-color);
+
+    &.dx-state-disabled {
+      @include dx-tabs-border-mixin(left, $tabs-disabled-tab-border-color);
+    }
+  }
+
+  .dx-tab-text {
+    flex-direction: row;
+
+    .dx-icon {
+      @include dx-icon-margin($material-base-icon-margin-right);
+    }
+  }
+}
