@@ -43,7 +43,7 @@ $tabs-disabled-tab-border-color: null !default;
 * $name 60. Tab background color
 * $type color
 */
-$tabs-tab-bg: $base-bg !default;
+$tabs-tab-bg: null !default;
 $tabs-tab-icon-color: $tabs-tab-color !default;
 
 /**
@@ -79,8 +79,10 @@ $tabs-active-tab-bg-color: color.change($base-accent, $alpha: 0.16) !default;
 
 @if $mode == "light" {
   $tabs-disabled-tab-border-color: color.change($tabs-tab-color, $alpha: 0.13) !default;
+  $tabs-tab-bg: $base-bg !default;
 }
 
 @if $mode == "dark" {
   $tabs-disabled-tab-border-color: color.change($tabs-tab-color, $alpha: 0.4) !default;
+  $tabs-tab-bg: $base-bg !default;
 }
