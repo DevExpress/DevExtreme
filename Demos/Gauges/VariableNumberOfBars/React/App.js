@@ -8,54 +8,43 @@ const format = {
   precision: 0,
 };
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const [productsActivity, setProductsActivity] = React.useState(products.map((p) => p.active));
+  const [values, setValues] = React.useState(products.map((p) => p.count));
 
-    this.state = {
-      productsActivity: products.map((p) => p.active),
-      values: products.map((p) => p.count),
-    };
+  const getValueChangedHandler = React.useCallback((productIndex) => (e) => {
+    const updatedProductsActivity = [...productsActivity];
+    updatedProductsActivity[productIndex] = e.value;
+    setProductsActivity(updatedProductsActivity);
+    setValues(
+      products
+        .map((p, i) => (updatedProductsActivity[i] ? p.count : null))
+        .filter((c) => c !== null),
+    );
+  }, [productsActivity, setProductsActivity, setValues]);
 
-    this.getValueChangedHandler = (productIndex) => (e) => {
-      const productsActivity = this.state.productsActivity.slice();
-      productsActivity[productIndex] = e.value;
-      this.setState({
-        productsActivity,
-        values: products
-          .map((p, i) => (productsActivity[i] ? p.count : null))
-          .filter((c) => c !== null),
-      });
-    };
-  }
-
-  render() {
-    return (
-      <div>
-        <div className="long-title">
-          <h3>Sampling by Goods</h3>
-        </div>
-        <div id="gauge-demo">
-          <BarGauge
-            id="gauge"
-            startValue={0}
-            endValue={50}
-            values={this.state.values}
-          >
-            <Label format={format} />
-          </BarGauge>
-          <div id="panel">
-            {this.state.productsActivity.map((p, i) => <CheckBox
+  return (
+    <div>
+      <div className="long-title">
+        <h3>Sampling by Goods</h3>
+      </div>
+      <div id="gauge-demo">
+        <BarGauge id="gauge" startValue={0} endValue={50} values={values}>
+          <Label format={format} />
+        </BarGauge>
+        <div id="panel">
+          {productsActivity.map((p, i) => (
+            <CheckBox
               key={i}
               text={products[i].name}
               value={p}
-              onValueChanged={this.getValueChangedHandler(i)}
-            ></CheckBox>)}
-          </div>
+              onValueChanged={getValueChangedHandler(i)}
+            ></CheckBox>
+          ))}
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default App;
