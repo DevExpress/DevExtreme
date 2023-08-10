@@ -175,7 +175,11 @@ test('Calendar with showWeekNumbers rendered correct with cellTemplate', async (
     values: [new Date(2023, 0, 5), new Date(2023, 0, 17), new Date(2023, 1, 2)],
     selectionMode,
     showWeekNumbers: true,
-    disabledDates: ({ view, date }) => view === 'month' && new Date(date).getDay() === 2,
+    firstDayOfWeek: 1,
+    disabledDates: ({ date }) => {
+      const day = date.getDay();
+      return day === 1 || day === 4 || day === 0;
+    },
   }));
 });
 
