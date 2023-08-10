@@ -153,7 +153,7 @@ QUnit.module('common', moduleConfig, () => {
 
         const $input = this.$element.find('.dx-texteditor-input');
 
-        instance.reset();
+        instance.clear();
         instance.option('value', 'Test');
 
         assert.equal($input.val(), 'Test', 'value has been applied');
@@ -474,7 +474,7 @@ QUnit.module('common', moduleConfig, () => {
         });
 
         QUnit.test('after value reset', function(assert) {
-            this.dropDownBox.reset();
+            this.dropDownBox.clear();
             this.clock.tick(2000);
 
             assert.strictEqual(this.dropDownBox.option('text'), '', 'byKey result is ignored');

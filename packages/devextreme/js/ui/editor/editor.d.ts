@@ -121,18 +121,18 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
 export default class Editor<TProperties = Properties> extends Widget<TProperties> {
     /**
      * @docid
-     * @publicName reset()
+     * @publicName clear()
      * @public
      */
-    reset(): void;
+    clear(): void;
 
     /**
      * @docid
-     * @type_function_param1 value:object
-     * @publicName resetNew(value)
+     * @type_function_param1 value:any
+     * @publicName reset(value)
      * @public
      */
-    resetNew(value?: any): void;
+    reset(value?: any): void;
 }
 
 interface EditorInstance extends Editor<Properties> { }

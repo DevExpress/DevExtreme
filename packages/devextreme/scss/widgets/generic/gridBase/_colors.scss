@@ -292,7 +292,7 @@ $datagrid-text-stub-background-image-path: null !default;
 }
 
 @if $color == "dark" {
-  $datagrid-columnchooser-item-color: darken($datagrid-base-color, 38.5%) !default;
+  $datagrid-columnchooser-item-color: darken($datagrid-base-color, 26%) !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 6.5%) !default;
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
@@ -464,7 +464,7 @@ $datagrid-text-stub-background-image-path: null !default;
 }
 
 @if $color == "light" {
-  $datagrid-columnchooser-item-color: lighten($datagrid-base-color, 38.5%) !default;
+  $datagrid-columnchooser-item-color: lighten($datagrid-base-color, 26%) !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 6.5%) !default;
   $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;

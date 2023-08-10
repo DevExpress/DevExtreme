@@ -56,7 +56,7 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
     .ok();
 
   // act
-  await treeList.scrollTo({ top: 0 });
+  await treeList.scrollTo(t, { top: 0 });
   scrollTopPosition = await treeList.getScrollTop();
 
   // assert

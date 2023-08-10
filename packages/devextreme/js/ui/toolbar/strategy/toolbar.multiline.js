@@ -21,7 +21,7 @@ export class MultiLineStrategy {
     }
 
     _getItemsWidth() {
-        return this._toolbar._getSummaryItemsWidth(this._toolbar.itemElements(), true);
+        return this._toolbar._getSummaryItemsSize('width', this._toolbar.itemElements(), true);
     }
 
     _arrangeItems() {
