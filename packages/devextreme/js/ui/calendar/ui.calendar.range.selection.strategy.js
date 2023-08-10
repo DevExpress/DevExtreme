@@ -162,7 +162,8 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
     }
 
     _weekNumberClickHandler({ rowDates, event }) {
-        const values = [rowDates[0], rowDates[rowDates.length - 1]];
+        const selectedDates = rowDates.filter((date) => !this._isDateDisabled(date));
+        const values = selectedDates.length ? [selectedDates[0], selectedDates[selectedDates.length - 1]] : [null, null];
 
         this.dateValue(values, event);
     }

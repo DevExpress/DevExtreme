@@ -2506,6 +2506,24 @@ QUnit.module('Options', {
                         assert.deepEqual(values, this.initialValue, 'values are not changed');
                     });
                 });
+
+                QUnit.test(`Click on week number should select nothing when all dates are disabled (selectionMode=${selectionMode})`, function(assert) {
+                    this.reinit({
+                        selectionMode,
+                        showWeekNumbers: true,
+                        disabledDates: () => true,
+                    });
+
+                    const $row = this.$element.find('tr').eq(3);
+                    const $weekNumberCell = $row.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
+
+                    $weekNumberCell.trigger('dxclick');
+
+                    const values = this.calendar.option('values');
+                    const expectedValues = selectionMode === 'range' ? [null, null] : [];
+
+                    assert.deepEqual(values, expectedValues, 'no dates are selected');
+                });
             });
 
             QUnit.test('Click on week number should not select disabled dates in multiple selectionMode', function(assert) {
@@ -2525,24 +2543,30 @@ QUnit.module('Options', {
                 assert.strictEqual(values.length, 1, 'only one day is selected');
             });
 
-            QUnit.test('Click on week number should select disabled dates in range selectionMode', function(assert) {
+            QUnit.test('Click on week number should select range from first available date to last available date', function(assert) {
                 this.reinit({
                     selectionMode: 'range',
                     showWeekNumbers: true,
-                    disabledDates: ({ date }) => date.getDay() !== 0,
+                    firstDayOfWeek: 0,
+                    disabledDates: ({ date }) => {
+                        const day = date.getDay();
+                        return day === 0 || day === 6 || day === 3;
+                    }
                 });
 
                 const $row = this.$element.find('tr').eq(3);
                 const $weekNumberCell = $row.find(`.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`);
                 const firstDateInRow = dataUtils.data($row.find(`.${CALENDAR_CELL_CLASS}`).first().get(0), CALENDAR_DATE_VALUE_KEY);
+                const firstAvailableDateInRow = dataUtils.data($row.find(`.${CALENDAR_CELL_CLASS}`).eq(1).get(0), CALENDAR_DATE_VALUE_KEY);
                 const lastDateInRow = dataUtils.data($row.find(`.${CALENDAR_CELL_CLASS}`).last().get(0), CALENDAR_DATE_VALUE_KEY);
+                const lastAvailableDateInRow = dataUtils.data($row.find(`.${CALENDAR_CELL_CLASS}`).eq(5).get(0), CALENDAR_DATE_VALUE_KEY);
 
                 $weekNumberCell.trigger('dxclick');
 
                 const values = this.calendar.option('values');
 
-                assert.deepEqual(values[0], firstDateInRow, 'fisrt selected date is first date in row');
-                assert.deepEqual(values[values.length - 1], lastDateInRow, 'last selected date is last date in row');
+                assert.notDeepEqual(values, [firstDateInRow, lastDateInRow], 'disabled dates are not selected as range start/end');
+                assert.deepEqual(values, [firstAvailableDateInRow, lastAvailableDateInRow], 'first/last available dates are range start/end');
             });
 
             [
