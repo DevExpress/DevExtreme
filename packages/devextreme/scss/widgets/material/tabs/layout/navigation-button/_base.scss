@@ -9,7 +9,7 @@
 
 .dx-tabs-nav-button {
   border: none;
-  background-color: $tabs-tab-bg;
+  background-color: $tabs-tab-background;
   height: $material-tab-height;
   border-radius: 0;
   box-shadow: none;
@@ -41,7 +41,7 @@
 
   &.dx-state-disabled {
     opacity: 1;
-    background-color: $tabs-tab-bg;
+    background-color: $tabs-tab-background;
 
     .dx-button-content {
       opacity: $tabs-tab-button-disabled-opacity;
