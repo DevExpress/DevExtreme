@@ -1,7 +1,7 @@
 import CleanCSS, { Options, OptionsPromise } from 'clean-css';
 import AutoPrefix from 'autoprefixer';
 import PostCss from 'postcss';
-import commonOptions from '../data/clean-css-themebuilder-options.json';
+import commonOptions from '../data/clean-css-options.json';
 // eslint-disable-next-line import/extensions
 import { browsersList } from '../data/metadata/dx-theme-builder-metadata';
 

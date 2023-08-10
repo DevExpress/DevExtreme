@@ -1,10 +1,8 @@
 import { readFileSync } from 'fs';
 import * as path from 'path';
-import CleanCSS from 'clean-css';
 import { buildTheme } from '../../src/modules/builder';
 import commands from '../../src/modules/commands';
 import { version, metadata } from '../../src/data/metadata/dx-theme-builder-metadata';
-import commonOptions from '../../src/data/clean-css-options.json';
 
 const buildTimeout = 150000;
 
@@ -116,16 +114,11 @@ describe('Builder integration tests', () => {
       items: [],
     };
 
-    return buildTheme(config).then(async (result) => {
+    return buildTheme(config).then((result) => {
       const themeBuilderCss = normalizeCss(result.css);
       const cssPath = path.resolve(__dirname, '../../../devextreme/artifacts/css/dx.light.css');
       const distributionCss = normalizeCss(readFileSync(cssPath, 'utf8'));
-
-      const cleaner = new CleanCSS(commonOptions as any);
-
-      const themeBuilderCssMinified = (await cleaner.minify(themeBuilderCss)).styles;
-      const distributionCssMinified = (await cleaner.minify(distributionCss)).styles;
-      expect(themeBuilderCssMinified).toBe(distributionCssMinified);
+      expect(themeBuilderCss).toBe(distributionCss);
     });
   }, buildTimeout);
 
@@ -137,16 +130,11 @@ describe('Builder integration tests', () => {
       items: [],
     };
 
-    return buildTheme(config).then(async (result) => {
+    return buildTheme(config).then((result) => {
       const themeBuilderCss = normalizeCss(result.css);
       const cssPath = path.resolve(__dirname, '../../../devextreme/artifacts/css/dx.material.blue.light.css');
       const distributionCss = normalizeCss(readFileSync(cssPath, 'utf8'));
-     
-      const cleaner = new CleanCSS(commonOptions as any);
-
-      const themeBuilderCssMinified = (await cleaner.minify(themeBuilderCss)).styles;
-      const distributionCssMinified = (await cleaner.minify(distributionCss)).styles;
-      expect(themeBuilderCssMinified).toBe(distributionCssMinified);
+      expect(themeBuilderCss).toBe(distributionCss);
     });
   }, buildTimeout);
 });
