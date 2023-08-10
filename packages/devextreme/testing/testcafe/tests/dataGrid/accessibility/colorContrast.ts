@@ -872,4 +872,116 @@ const DATA_GRID_SELECTOR = '#container';
   }).after(async () => {
     await changeTheme('generic.light');
   });
+
+  test(`Validation in cell editing mode in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await t
+      .click(dataGrid.getDataCell(0, 0).element)
+      .pressKey('ctrl+a backspace enter');
+
+    // assert
+    await t
+      .expect(dataGrid.getRevertTooltip().exists)
+      .ok()
+      .expect(dataGrid.getInvalidMessageTooltip().exists)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, null, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+      },
+      columns: [
+        {
+          dataField: 'field_1',
+          validationRules: [{ type: 'required' }],
+        },
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
+  test(`Error row in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await dataGrid.apiEditRow(0);
+
+    // assert
+    await t
+      .expect(dataGrid.getDataRow(0).isEdited)
+      .ok();
+
+    // act
+    await dataGrid.apiCellValue(0, 0, 'test');
+    await dataGrid.apiSaveEditData();
+
+    // assert
+    await t
+      .expect(dataGrid.getErrorRow().exists)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, DATA_GRID_SELECTOR, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+      },
+      columns: [
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+      onRowValidating(e) {
+        e.isValid = false;
+        e.errorText = 'Test';
+      },
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
 });
