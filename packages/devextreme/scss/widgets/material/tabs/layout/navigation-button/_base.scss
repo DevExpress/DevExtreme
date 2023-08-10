@@ -14,10 +14,6 @@
   border-radius: 0;
   box-shadow: none;
 
-  &.dx-state-disabled {
-    opacity: 0;
-  }
-
   &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
     @include dx-button-flat-color-styling(
       $base-icon-color,
@@ -37,10 +33,6 @@
     width: $material-tab-nav-button-icon-width;
     height: $material-tab-nav-button-icon-height;
     font-size: $material-tab-nav-button-icon-font-size;
-  }
-
-  .dx-button-content {
-    padding: 0;
   }
   
   &.dx-state-active {
