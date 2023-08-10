@@ -155,10 +155,10 @@ QUnit.module('readOnly', moduleConfig, () => {
 });
 
 QUnit.module('methods', moduleConfig, () => {
-    QUnit.test('reset', function(assert) {
+    QUnit.test('clear', function(assert) {
         const editor = this.fixture.createEditor({ value: '123' });
 
-        editor.reset();
+        editor.clear();
 
         assert.strictEqual(editor.option('value'), null);
     });

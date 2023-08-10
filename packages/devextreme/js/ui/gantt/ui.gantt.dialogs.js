@@ -305,7 +305,7 @@ class ResourcesEditDialogInfo extends DialogInfoBase {
                             this._parameters.resources.add(newItem);
                             this.list.option('items', this._parameters.resources.items);
                             this.list.scrollToItem(newItem);
-                            this.textBox.reset();
+                            this.textBox.clear();
                             e.component.option('disabled', true);
                         }
                     }
