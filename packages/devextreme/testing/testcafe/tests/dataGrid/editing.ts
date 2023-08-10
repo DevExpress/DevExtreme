@@ -2155,7 +2155,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
       const headerPanel = dataGrid.getHeaderPanel();
 
       const scrollTo = async (y) => {
-        await dataGrid.scrollTo({ y });
+        await dataGrid.scrollTo(t, { y });
         return dataGrid.isReady();
       };
 
@@ -2350,8 +2350,15 @@ test('Popup EditForm screenshot', async (t) => {
   test(`The disabled state should be correct for a custom button when given as a SVG image (${theme})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
+    const commandCell = dataGrid.getDataRow(0).getCommandCell(2);
+    const firstCustomIcon = commandCell.getButton(2);
+    const secondCustomIcon = commandCell.getButton(3);
 
     await t
+      .expect(firstCustomIcon.clientWidth)
+      .eql(20)
+      .expect(secondCustomIcon.clientWidth)
+      .eql(20)
       .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-${theme.split('.')[0]}-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
       .ok()
       .expect(compareResults.isValid())
@@ -2374,6 +2381,7 @@ test('Popup EditForm screenshot', async (t) => {
       },
       columns: ['Id', 'name', {
         type: 'buttons',
+        width: 200,
         buttons: [
           {
             name: 'delete',

@@ -28,6 +28,7 @@ type AccessibleOptions = Pick<Properties,
   "readOnly" |
   "rtlEnabled" |
   "selectionMode" |
+  "selectWeekOnClick" |
   "showTodayButton" |
   "showWeekNumbers" |
   "tabIndex" |
@@ -86,6 +87,7 @@ const DxCalendar = createComponent({
     readOnly: Boolean,
     rtlEnabled: Boolean,
     selectionMode: String,
+    selectWeekOnClick: Boolean,
     showTodayButton: Boolean,
     showWeekNumbers: Boolean,
     tabIndex: Number,
@@ -130,6 +132,7 @@ const DxCalendar = createComponent({
     "update:readOnly": null,
     "update:rtlEnabled": null,
     "update:selectionMode": null,
+    "update:selectWeekOnClick": null,
     "update:showTodayButton": null,
     "update:showWeekNumbers": null,
     "update:tabIndex": null,

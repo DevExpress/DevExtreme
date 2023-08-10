@@ -309,16 +309,16 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
         assert.strictEqual(dropDownEditor.option('value'), null, 'Default value is null');
     });
 
-    QUnit.test('reset()', function(assert) {
+    QUnit.test('clear()', function(assert) {
         const dropDownEditor = this.dropDownEditor;
         dropDownEditor.option('value', '123');
         // act
-        dropDownEditor.reset();
+        dropDownEditor.clear();
         // assert
-        assert.strictEqual(dropDownEditor.option('value'), null, 'Value should be reset');
+        assert.strictEqual(dropDownEditor.option('value'), null, 'Value should be cleared');
     });
 
-    QUnit.test('reset method should clear the input value', function(assert) {
+    QUnit.test('clear method should clear the input value', function(assert) {
         const dropDownEditor = this.dropDownEditor;
         const $editor = dropDownEditor.$element();
         const $input = $editor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
@@ -327,7 +327,7 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
         $input.val('456');
 
         // act
-        dropDownEditor.reset();
+        dropDownEditor.clear();
 
         // assert
         assert.strictEqual(dropDownEditor.option('value'), null, 'Value should be null');

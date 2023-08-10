@@ -10,7 +10,8 @@
   "types": "index.d.ts",
   "scripts": {
     "clean": "gulp clean",
-    "build": "npm run clean && gulp generate",
+    "generate": "npm run clean && gulp generate",
+    "lint": "eslint --ignore-pattern src/core/__tests__/ src/core",
     "pack": "gulp npm.pack",
     "test": "jest"
   },
@@ -22,7 +23,7 @@
   "author": "Developer Express Inc.",
   "license": "MIT",
   "peerDependencies": {
-    "devextreme": "23.2-next",
+    "devextreme": "23.2.0",
     "vue": "^2.5.16 || ^3.0.0"
   },
   "devDependencies": {
@@ -30,7 +31,7 @@
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/test-utils": "2.0.0-beta.7",
     "del": "^3.0.0",
-    "devextreme-vue-generator": "^3.0.3",
+    "devextreme-vue-generator": "https://gitpkg.now.sh/DevExpress/devextreme-vue/packages/devextreme-vue-generator?master",
     "devextreme-vue2-strategy": "~23.2.0",
     "gulp": "^4.0.2",
     "gulp-header": "^2.0.9",
@@ -39,7 +40,7 @@
     "jest": "^26.6.3",
     "ts-jest": "^26.5.6",
     "typescript": "^4.7.4",
-    "vue": "3.0.0",
+    "vue": "3.2.47",
     "vue-router": "^4.0.16",
     "vue-template-compiler": "^2.6.3"
   }

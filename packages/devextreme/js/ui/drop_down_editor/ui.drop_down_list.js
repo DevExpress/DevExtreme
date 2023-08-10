@@ -424,7 +424,7 @@ const DropDownList = DropDownEditor.inherit({
         return this.option('displayCustomValue');
     },
 
-    reset: function() {
+    clear: function() {
         this.callBase();
 
         this._clearFilter();

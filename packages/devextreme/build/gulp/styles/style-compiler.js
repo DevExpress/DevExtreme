@@ -12,6 +12,7 @@ const through = require('through2');
 const autoPrefix = require('gulp-autoprefixer');
 const parseArguments = require('minimist');
 
+const cleanCssSanitizeOptions = require('./clean-css-options.json');
 const cleanCssOptions = require('../../../../devextreme-themebuilder/src/data/clean-css-options.json');
 const { sizes, materialColors, materialModes, genericColors } = require('./theme-options');
 const functions = require('../gulp-data-uri').sassFunctions;
@@ -31,7 +32,7 @@ const DEFAULT_DEV_BUNDLE_NAMES = [
 
 const getBundleSourcePath = name => `scss/bundles/dx.${name}.scss`;
 
-const compileBundles = (bundles) => {
+const compileBundles = (bundles, isDevBundle) => {
     return src(bundles)
         .pipe(plumber(e => {
             console.log(e);
@@ -44,7 +45,7 @@ const compileBundles = (bundles) => {
         .pipe(autoPrefix())
         .pipe(through.obj((file, enc, callback) => {
             const content = file.contents.toString();
-            new CleanCss(cleanCssOptions).minify(content, (_, css) => {
+            new CleanCss(isDevBundle ? cleanCssOptions : cleanCssSanitizeOptions).minify(content, (_, css) => {
                 file.contents = new Buffer.from(css.styles);
                 callback(null, file);
             });
@@ -112,7 +113,7 @@ task('copy-fonts-and-icons', () => {
 });
 
 task('compile-themes-all', () => compileBundles(getBundleSourcePath('*')));
-task('compile-themes-dev', () => compileBundles(DEFAULT_DEV_BUNDLE_NAMES.map(getBundleSourcePath)));
+task('compile-themes-dev', () => compileBundles(DEFAULT_DEV_BUNDLE_NAMES.map(getBundleSourcePath), true));
 
 task('style-compiler-themes', series(
     'create-scss-bundles',

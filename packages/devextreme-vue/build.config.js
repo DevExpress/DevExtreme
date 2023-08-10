@@ -7,8 +7,8 @@ module.exports = {
     strategySrc: '../vue2-strategy/npm/*',
     strategyDist: './npm/core/strategy/vue2',
     package: 'package.json',
-    license: '../../LICENSE',
-    readme: '../../README.md'
+    license: './LICENSE',
+    readme: './README.md'
   },
   metadataPath: './metadata/integration-data.json',
   generatedComponentsDir: './src',

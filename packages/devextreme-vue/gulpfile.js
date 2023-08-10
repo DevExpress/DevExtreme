@@ -16,7 +16,6 @@ const
   CLEAN = 'clean',
 
   OUTPUTDIR_CLEAN = 'output-dir.clean',
-  GEN_RUN = 'generator.run',
 
   BUILD_STRATEGY = 'build.strategy',
   COPY_STRATEGY = 'copy.strategy',
@@ -39,7 +38,7 @@ gulp.task(NPM_CLEAN, (c) =>
 
 gulp.task(CLEAN, gulp.parallel(OUTPUTDIR_CLEAN, NPM_CLEAN));
 
-gulp.task(GEN_RUN, (done) => {
+gulp.task(GENERATE, (done) => {
   generateSync(
     JSON.parse(fs.readFileSync(config.metadataPath).toString()),
     config.baseComponent,
@@ -55,10 +54,6 @@ gulp.task(GEN_RUN, (done) => {
 
   done();
 });
-
-gulp.task(GENERATE, gulp.series(
-  GEN_RUN
-));
 
 gulp.task(NPM_PACKAGE,
   () => gulp.src(config.npm.package).pipe(gulp.dest(config.npm.dist))

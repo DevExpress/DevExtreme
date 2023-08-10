@@ -708,6 +708,7 @@ const DxColumnChooser = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:allowSearch": null,
+    "update:container": null,
     "update:emptyPanelText": null,
     "update:enabled": null,
     "update:height": null,
@@ -722,6 +723,7 @@ const DxColumnChooser = createConfigurationComponent({
   },
   props: {
     allowSearch: Boolean,
+    container: {},
     emptyPanelText: String,
     enabled: Boolean,
     height: Number,
