@@ -1051,4 +1051,45 @@ const DATA_GRID_SELECTOR = '#container';
   }).after(async () => {
     await changeTheme('generic.light');
   });
+
+  test(`Export in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const headerPanel = dataGrid.getHeaderPanel();
+    const exportButton = headerPanel.getExportButton();
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await t.click(exportButton.element);
+
+    // assert
+    await t
+      .expect(exportButton.isOpened)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, null, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      export: {
+        enabled: true,
+        formats: ['xlsx', 'pdf'],
+        allowExportSelectedData: true,
+      },
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
 });

@@ -1,12 +1,12 @@
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import { DropDownSelectPopup } from './dropDownSelectPopup';
+import ExportButton from './panelButtons/exportButton';
 
 const CLASS = {
   addRowButton: 'addrow-button',
   saveButton: 'save-button',
   cancelButton: 'cancel-button',
-  exportButton: 'export-button',
   columnChooserButton: 'column-chooser-button',
   dropDownMenuButton: 'dx-dropdownmenu-button',
 };
@@ -31,8 +31,8 @@ export default class HeaderPanel extends FocusableElement {
     return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.cancelButton)}`);
   }
 
-  getExportButton(): Selector {
-    return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.exportButton)}`);
+  getExportButton(): ExportButton {
+    return new ExportButton(this.element, this.widgetName);
   }
 
   getColumnChooserButton(): Selector {
