@@ -10,6 +10,7 @@ import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
 import Headers from './headers';
+import ContextMenu from '../contextMenu';
 
 import { WidgetName } from '../../helpers/createWidget';
 import { Overlay } from './overlay';
@@ -101,7 +102,7 @@ export default class DataGrid extends Widget {
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxDataGrid'; }
 
-  addWidgetPrefix(className: string): string {
+  addWidgetPrefix(className = ''): string {
     return Widget.addClassPrefix(this.getName(), className);
   }
 
@@ -230,6 +231,10 @@ export default class DataGrid extends Widget {
 
   getGroupPanel(): GroupPanel {
     return new GroupPanel(this.body.find(`.${this.addWidgetPrefix(CLASS.groupPanel)}`));
+  }
+
+  getContextMenu(): ContextMenu {
+    return new ContextMenu(this.body.find(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
   }
 
   async scrollTo(

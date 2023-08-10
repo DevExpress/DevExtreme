@@ -1092,4 +1092,46 @@ const DATA_GRID_SELECTOR = '#container';
   }).after(async () => {
     await changeTheme('generic.light');
   });
+
+  test(`Context menu in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const contextMenu = dataGrid.getContextMenu();
+    const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await t.rightClick(headerRow.element);
+
+    // assert
+    await t
+      .expect(contextMenu.isOpened)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, null, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      columnFixing: {
+        enabled: true,
+      },
+      sorting: {
+        mode: 'multiple',
+      },
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
 });
