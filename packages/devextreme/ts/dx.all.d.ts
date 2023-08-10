@@ -16414,6 +16414,10 @@ declare module DevExpress.ui {
      */
     resetValues(): void;
     /**
+     * [descr:dxForm.reset(editorsData)]
+     */
+    reset(editorsData?: object): void;
+    /**
      * [descr:dxForm.updateData(data)]
      */
     updateData(data: any): void;
