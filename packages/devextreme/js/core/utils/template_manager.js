@@ -1,5 +1,6 @@
 import config from '../config';
 import devices from '../devices';
+import { getPublicElement } from '../element';
 import Errors from '../errors';
 import $ from '../renderer';
 import { ChildDefaultTemplate } from '../templates/child_default_template';
