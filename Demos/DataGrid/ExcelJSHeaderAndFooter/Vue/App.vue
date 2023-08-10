@@ -109,7 +109,6 @@ export default {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'CountriesPopulation.xlsx');
         });
       });
-      e.cancel = true;
     },
   },
 };

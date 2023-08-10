@@ -46,7 +46,6 @@ const onExporting = (e) => {
       saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Companies.xlsx');
     });
   });
-  e.cancel = true;
 };
 
 const renderGridCell = (data) => <a href={ data.text } target='_blank' rel='noopener noreferrer'>Website</a>;

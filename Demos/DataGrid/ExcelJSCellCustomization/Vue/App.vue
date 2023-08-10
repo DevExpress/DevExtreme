@@ -131,7 +131,6 @@ export default {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Companies.xlsx');
         });
       });
-      e.cancel = true;
     },
     phoneNumberFormat(value) {
       const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/);

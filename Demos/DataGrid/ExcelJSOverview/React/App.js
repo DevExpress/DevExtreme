@@ -22,7 +22,6 @@ const onExporting = (e) => {
       saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
     });
   });
-  e.cancel = true;
 };
 
 const App = () => (

@@ -76,7 +76,6 @@ export class AppComponent {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
       });
     });
-    e.cancel = true;
   }
 
   onCellPrepared({ cell, area, cellElement }) {

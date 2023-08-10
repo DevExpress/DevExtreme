@@ -89,7 +89,6 @@ $(() => {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Companies.xlsx');
         });
       });
-      e.cancel = true;
     },
   });
 });

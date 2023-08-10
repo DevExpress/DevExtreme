@@ -65,7 +65,6 @@ export default function App() {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Sales.xlsx');
       });
     });
-    e.cancel = true;
   }, []);
 
   const onCellPrepared = React.useCallback(({ cell, area, cellElement }) => {
