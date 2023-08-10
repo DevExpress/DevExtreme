@@ -306,4 +306,49 @@ const DATA_GRID_SELECTOR = '#container';
   }).after(async () => {
     await changeTheme('generic.light');
   });
+
+  test(`Fixed columns in ${theme}`, async (t) => {
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    await a11yCheck(t, DATA_GRID_SELECTOR, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 7),
+      keyExpr: 'field_0',
+      columns: [
+        {
+          dataField: 'field_0',
+          fixed: true,
+        },
+        {
+          dataField: 'field_1',
+          fixed: true,
+        },
+        'field_2',
+        'field_3',
+        'field_4',
+        {
+          dataField: 'field_5',
+          fixed: true,
+          fixedPosition: 'right',
+        },
+        {
+          dataField: 'field_6',
+          fixed: true,
+          fixedPosition: 'right',
+        },
+      ],
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
 });
