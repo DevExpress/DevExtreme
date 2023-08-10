@@ -1,12 +1,11 @@
 import React from 'react';
-
 import {
   Chart, Series, ArgumentAxis, Label, CommonSeriesSettings,
 } from 'devextreme-react/chart';
 import { dataSource } from './data.js';
 import { LabelTemplate } from './LabelTemplate.js';
 
-export default function App() {
+function App() {
   return (
     <Chart id="chart"
       title="Ice Hockey World Championship Gold Medal Winners"
@@ -32,3 +31,5 @@ export default function App() {
     </Chart>
   );
 }
+
+export default App;

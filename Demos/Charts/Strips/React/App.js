@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Chart,
   Series,
@@ -48,7 +47,7 @@ function customizeText(arg) {
   return `${arg.valueText}&#176F`;
 }
 
-export default function App() {
+function App() {
   return (
     <Chart
       id="chart"
@@ -86,3 +85,5 @@ export default function App() {
     </Chart>
   );
 }
+
+export default App;

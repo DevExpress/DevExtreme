@@ -16,7 +16,7 @@ import TooltipTemplate from './TooltipTemplate.js';
 
 const annotationSources = getAnnotationSources();
 
-export default function App() {
+function App() {
   return (
     <PieChart
       id="pie"
@@ -75,3 +75,5 @@ export default function App() {
     </PieChart>
   );
 }
+
+export default App;

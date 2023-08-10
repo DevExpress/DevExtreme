@@ -1,5 +1,4 @@
 import React from 'react';
-
 import PieChart, {
   Series,
   Legend,
@@ -10,82 +9,67 @@ import {
   paletteCollection, paletteExtensionModes, dataSource, paletteLabel, paletteExtensionLabel,
 } from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const [palette, setPalette] = React.useState(paletteCollection[0]);
+  const [extensionMode, setExtensionMode] = React.useState(paletteExtensionModes[1]);
 
-    this.state = {
-      palette: paletteCollection[0],
-      extensionMode: paletteExtensionModes[1],
-    };
+  const handlePaletteChange = React.useCallback((e) => {
+    setPalette(e.value);
+  }, [setPalette]);
 
-    this.setPalette = this.setPalette.bind(this);
-    this.setExtensionMode = this.setExtensionMode.bind(this);
-  }
+  const handleExtensionModeChange = React.useCallback((e) => {
+    setExtensionMode(e.value);
+  }, [setExtensionMode]);
 
-  render() {
-    return (
-      <React.Fragment>
-        <div className="flex-container">
-          <PieChart
-            id="pie"
-            dataSource={dataSource}
-            palette={this.state.palette}
-            paletteExtensionMode={this.state.extensionMode.toLowerCase()}
-          >
-            <Legend visible={false} />
-            <Series />
-          </PieChart>
+  return (
+    <React.Fragment>
+      <div className="flex-container">
+        <PieChart
+          id="pie"
+          dataSource={dataSource}
+          palette={palette}
+          paletteExtensionMode={extensionMode.toLowerCase()}
+        >
+          <Legend visible={false} />
+          <Series />
+        </PieChart>
 
-          <div className="palette-container flex-block">
-            {getPalette(this.state.palette).simpleSet.map((color) => (
-              <div
-                className="palette-item"
-                style={{ backgroundColor: color }}
-                key={color}
-              />
-            ))}
+        <div className="palette-container flex-block">
+          {getPalette(palette).simpleSet.map((color) => (
+            <div
+              className="palette-item"
+              style={{ backgroundColor: color }}
+              key={color}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="options-container">
+          <div className="option">
+            <span>Palette </span>
+            <SelectBox
+              items={paletteCollection}
+              inputAttr={paletteLabel}
+              defaultValue={palette}
+              onValueChanged={handlePaletteChange}
+            />
+          </div>
+          <div className="option">
+            <span>Palette Extension Mode </span>
+            <SelectBox
+              items={paletteExtensionModes}
+              inputAttr={paletteExtensionLabel}
+              defaultValue={extensionMode}
+              onValueChanged={handleExtensionModeChange}
+            />
           </div>
         </div>
-
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="options-container">
-            <div className="option">
-              <span>Palette </span>
-              <SelectBox
-                items={paletteCollection}
-                inputAttr={paletteLabel}
-                defaultValue={this.state.palette}
-                onValueChanged={this.setPalette}
-              />
-            </div>
-            <div className="option">
-              <span>Palette Extension Mode </span>
-              <SelectBox
-                items={paletteExtensionModes}
-                inputAttr={paletteExtensionLabel}
-                defaultValue={this.state.extensionMode}
-                onValueChanged={this.setExtensionMode}
-              />
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
-
-  setPalette(e) {
-    this.setState({
-      palette: e.value,
-    });
-  }
-
-  setExtensionMode(e) {
-    this.setState({
-      extensionMode: e.value,
-    });
-  }
+      </div>
+    </React.Fragment>
+  );
 }
 
 export default App;

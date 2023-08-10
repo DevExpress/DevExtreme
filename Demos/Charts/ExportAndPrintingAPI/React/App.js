@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Chart, {
   Series,
   Legend,
@@ -12,74 +11,51 @@ import Chart, {
 import Button from 'devextreme-react/button';
 import { mountains } from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.chartRef = React.createRef();
-    this.printChart = this.printChart.bind(this);
-    this.exportChart = this.exportChart.bind(this);
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <Chart
-          id="chart"
-          ref={this.chartRef}
-          dataSource={mountains}
-          title="The Highest Mountains"
-        >
-          <Series argumentField="name" valueField="height" type="bar" color="#E55253" />
-          <ArgumentAxis visible={true} />
-          <ValueAxis>
-            <VisualRange startValue={8000} />
-            <Label customizeText={customizeLabelText} />
-          </ValueAxis>
-          <Tooltip
-            enabled={true}
-            customizeTooltip={customizeTooltipText}
-          />
-          <Legend visible={false} />
-        </Chart>
-        <div id="buttonGroup">
-          <Button icon="print"
-            text="Print"
-            onClick={this.printChart}
-          />
-          &nbsp;
-          <Button icon="export"
-            text="Export"
-            onClick={this.exportChart}
-          />
-        </div>
-      </React.Fragment>
-    );
-  }
-
-  get chart() {
-    return this.chartRef.current.instance;
-  }
-
-  printChart() {
-    this.chart.print();
-  }
-
-  exportChart() {
-    this.chart.exportTo('Example', 'png');
-  }
-}
-
 function customizeTooltipText(pointInfo) {
   return {
-    text: `<span class='title'>${pointInfo.argumentText
-    }</span><br />&nbsp;<br />System: ${pointInfo.point.data.system
-    }<br />Height: ${pointInfo.valueText} m`,
+    text: `<span class='title'>${pointInfo.argumentText}</span><br />&nbsp;<br />System: ${pointInfo.point.data.system}<br />Height: ${pointInfo.valueText} m`,
   };
 }
 
 function customizeLabelText({ value }) {
   return `${value} m`;
+}
+
+function App() {
+  const chartRef = React.useRef(null);
+
+  const printChart = React.useCallback(() => {
+    chartRef.current.instance.print();
+  }, []);
+
+  const exportChart = React.useCallback(() => {
+    chartRef.current.instance.exportTo('Example', 'png');
+  }, []);
+
+  return (
+    <React.Fragment>
+      <Chart
+        id="chart"
+        ref={chartRef}
+        dataSource={mountains}
+        title="The Highest Mountains"
+      >
+        <Series argumentField="name" valueField="height" type="bar" color="#E55253" />
+        <ArgumentAxis visible={true} />
+        <ValueAxis>
+          <VisualRange startValue={8000} />
+          <Label customizeText={customizeLabelText} />
+        </ValueAxis>
+        <Tooltip enabled={true} customizeTooltip={customizeTooltipText} />
+        <Legend visible={false} />
+      </Chart>
+      <div id="buttonGroup">
+        <Button icon="print" text="Print" onClick={printChart} />
+        &nbsp;
+        <Button icon="export" text="Export" onClick={exportChart} />
+      </div>
+    </React.Fragment>
+  );
 }
 
 export default App;

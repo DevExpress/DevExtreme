@@ -1,5 +1,4 @@
 import React from 'react';
-
 import SelectBox from 'devextreme-react/select-box';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
@@ -20,57 +19,48 @@ const dataSource = new DataSource({
   paginate: false,
 });
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.source = dataSource;
-    this.onValueChanged = this.onValueChanged.bind(this);
-  }
+function App() {
+  const onValueChanged = React.useCallback((e) => {
+    dataSource.filter(['month', '<=', e.value]);
+    dataSource.load();
+  }, []);
 
-  render() {
-    return (
-      <React.Fragment>
-        <div className="long-title"><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div>
-        <div id="chart-demo">
-          <table
-            className="demo-table"
-            border="1"
-          >
-            <tbody>
-              <tr>
-                <th />
-                <th>Aluminium (USD/ton)</th>
-                <th>Nickel (USD/ton)</th>
-                <th>Copper (USD/ton)</th>
-              </tr>
-              {
-                years.map((year, index) => <RowTemplate
-                  key={index}
-                  year={year}
-                  source={this.source} />)
-              }
-            </tbody>
-          </table>
-          <div className="action">
-            <div className="label">Choose a number of months:
-            </div>
-            <SelectBox
-              id="choose-months"
-              dataSource={months}
-              inputAttr={monthLabel}
-              defaultValue={months[0]}
-              onValueChanged={this.onValueChanged}
-            />
-          </div>
+  return (
+    <React.Fragment>
+      <div className="long-title"><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div>
+      <div id="chart-demo">
+        <table
+          className="demo-table"
+          border="1"
+        >
+          <tbody>
+            <tr>
+              <th />
+              <th>Aluminium (USD/ton)</th>
+              <th>Nickel (USD/ton)</th>
+              <th>Copper (USD/ton)</th>
+            </tr>
+            {
+              years.map((year, index) => <RowTemplate
+                key={index}
+                year={year}
+                source={dataSource} />)
+            }
+          </tbody>
+        </table>
+        <div className="action">
+          <div className="label">Choose a number of months:</div>
+          <SelectBox
+            id="choose-months"
+            dataSource={months}
+            inputAttr={monthLabel}
+            defaultValue={months[0]}
+            onValueChanged={onValueChanged}
+          />
         </div>
-      </React.Fragment>
-    );
-  }
-
-  onValueChanged(e) {
-    this.source.filter(['month', '<=', e.value]);
-    this.source.load();
-  }
+      </div>
+    </React.Fragment>
+  );
 }
 
 export default App;

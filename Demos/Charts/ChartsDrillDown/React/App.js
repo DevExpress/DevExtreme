@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Chart, Series, Legend, ValueAxis,
 } from 'devextreme-react/chart';
@@ -8,70 +7,53 @@ import service from './data.js';
 
 const colors = ['#6babac', '#e55253'];
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isFirstLevel: true,
-      data: service.filterData(''),
-    };
+function App() {
+  const [isFirstLevel, setIsFirstLevel] = React.useState(true);
+  const [data, setData] = React.useState(service.filterData(''));
 
-    this.customizePoint = this.customizePoint.bind(this);
-    this.onPointClick = this.onPointClick.bind(this);
-    this.onButtonClick = this.onButtonClick.bind(this);
-  }
+  const customizePoint = React.useCallback(() => ({
+    color: colors[Number(isFirstLevel)],
+    hoverStyle: !isFirstLevel ? {
+      hatching: 'none',
+    } : {},
+  }), [isFirstLevel]);
 
-  render() {
-    return (
-      <div>
-        <Chart
-          id="chart"
-          title="The Most Populated Countries by Continents"
-          customizePoint={this.customizePoint}
-          onPointClick={this.onPointClick}
-          className={this.state.isFirstLevel ? 'pointer-on-bars' : ''}
-          dataSource={this.state.data}
-        >
-          <Series type="bar" />
-          <ValueAxis showZero={false} />
-          <Legend visible={false} />
-        </Chart>
-        <Button className="button-container"
-          text="Back"
-          icon="chevronleft"
-          visible={!this.state.isFirstLevel}
-          onClick={this.onButtonClick}
-        />
-      </div>
-    );
-  }
-
-  customizePoint() {
-    return {
-      color: colors[Number(this.state.isFirstLevel)],
-      hoverStyle: !this.state.isFirstLevel ? {
-        hatching: 'none',
-      } : {},
-    };
-  }
-
-  onPointClick(e) {
-    if (this.state.isFirstLevel) {
-      this.setState({
-        isFirstLevel: false,
-        data: service.filterData(e.target.originalArgument),
-      });
+  const onPointClick = React.useCallback((e) => {
+    if (isFirstLevel) {
+      setIsFirstLevel(false);
+      setData(service.filterData(e.target.originalArgument));
     }
-  }
+  }, [isFirstLevel, setData, setIsFirstLevel]);
 
-  onButtonClick() {
-    if (!this.state.isFirstLevel) {
-      this.setState({
-        isFirstLevel: true,
-        data: service.filterData(''),
-      });
+  const onButtonClick = React.useCallback(() => {
+    if (!isFirstLevel) {
+      setIsFirstLevel(true);
+      setData(service.filterData(''));
     }
-  }
+  }, [isFirstLevel, setData, setIsFirstLevel]);
+
+  return (
+    <div>
+      <Chart
+        id="chart"
+        title="The Most Populated Countries by Continents"
+        customizePoint={customizePoint}
+        onPointClick={onPointClick}
+        className={isFirstLevel ? 'pointer-on-bars' : ''}
+        dataSource={data}
+      >
+        <Series type="bar" />
+        <ValueAxis showZero={false} />
+        <Legend visible={false} />
+      </Chart>
+      <Button className="button-container"
+        text="Back"
+        icon="chevronleft"
+        visible={!isFirstLevel}
+        onClick={onButtonClick}
+      />
+    </div>
+  );
 }
 
 export default App;

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Chart,
   Series,
@@ -16,6 +15,24 @@ import {
 } from 'devextreme-react/chart';
 import { dataSource } from './data.js';
 
+function customizePoint({ data }) {
+  let color;
+  let hoverStyle;
+  switch (data.type) {
+    case 'Star':
+      color = 'red';
+      hoverStyle = { border: { color: 'red' } };
+      break;
+    case 'Satellite':
+      color = 'gray';
+      hoverStyle = { border: { color: 'gray' } };
+      break;
+    default:
+      break;
+  }
+  return { color, hoverStyle };
+}
+
 export default function App() {
   return (
     <Chart
@@ -31,11 +48,7 @@ export default function App() {
       <CommonPaneSettings>
         <Border visible={true} />
       </CommonPaneSettings>
-      <Series
-        argumentField="name"
-        valueField="mass"
-        type="scatter"
-      >
+      <Series argumentField="name" valueField="mass" type="scatter">
         <Point size={20} />
       </Series>
       <Tooltip enabled={true} />
@@ -44,22 +57,4 @@ export default function App() {
       <Export enabled={true} />
     </Chart>
   );
-}
-
-function customizePoint({ data }) {
-  let color; let
-    hoverStyle;
-  switch (data.type) {
-    case 'Star':
-      color = 'red';
-      hoverStyle = { border: { color: 'red' } };
-      break;
-    case 'Satellite':
-      color = 'gray';
-      hoverStyle = { border: { color: 'gray' } };
-      break;
-    default:
-      break;
-  }
-  return { color, hoverStyle };
 }

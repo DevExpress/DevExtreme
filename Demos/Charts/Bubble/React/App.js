@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Chart,
   Series,
@@ -12,12 +11,30 @@ import {
   Tooltip,
   Export,
 } from 'devextreme-react/chart';
-
 import { dataSource } from './data.js';
 
 const palette = ['#00ced1', '#008000', '#ffd700', '#ff7f50'];
 
-export default function App() {
+function customizeTooltip(pointInfo) {
+  return {
+    text: `${pointInfo.point.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`,
+  };
+}
+
+function seriesClick(e) {
+  const series = e.target;
+  if (series.isVisible()) {
+    series.hide();
+  } else {
+    series.show();
+  }
+}
+
+function customizeText(e) {
+  return `${e.value}M`;
+}
+
+function App() {
   return (
     <Chart
       id="chart"
@@ -61,10 +78,7 @@ export default function App() {
         sizeField="perc4"
         tagField="tag4"
       />
-      <Legend
-        position="inside"
-        horizontalAlignment="left"
-      >
+      <Legend position="inside" horizontalAlignment="left">
         <Border visible={true} />
       </Legend>
       <Export enabled={true} />
@@ -72,21 +86,4 @@ export default function App() {
   );
 }
 
-function customizeTooltip(pointInfo) {
-  return {
-    text: `${pointInfo.point.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`,
-  };
-}
-
-function seriesClick(e) {
-  const series = e.target;
-  if (series.isVisible()) {
-    series.hide();
-  } else {
-    series.show();
-  }
-}
-
-function customizeText(e) {
-  return `${e.value}M`;
-}
+export default App;

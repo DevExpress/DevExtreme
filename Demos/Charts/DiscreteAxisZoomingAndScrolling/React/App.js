@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Chart, {
   ValueAxis,
   Label,
@@ -9,7 +8,6 @@ import Chart, {
   Border,
   Series,
 } from 'devextreme-react/chart';
-
 import RangeSelector, {
   Size,
   Chart as ChartOptions,
@@ -31,65 +29,56 @@ const rsChartSeriesList = series.map((item) => <RsChartSeries
   name={item.name}
   key={item.name} />);
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      visualRange: { startValue: 'Inner Core', endValue: 'Upper Crust' },
-    };
-
-    this.updateVisualRange = this.updateVisualRange.bind(this);
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <Chart
-          id="zoomedChart"
-          palette="Soft"
-          title="The Chemical Composition of the Earth Layers"
-          dataSource={dataSource}
-        >
-          {seriesList}
-          <ValueAxis>
-            <Label customizeText={formatValueAxisLabel} />
-          </ValueAxis>
-          <ArgumentAxis visualRange={this.state.visualRange} />
-          <CommonSeriesSettings type="bar" ignoreEmptyPoints={true} />
-          <Legend visible={true}
-            verticalAlignment="top"
-            horizontalAlignment="right"
-            orientation="horizontal"
-          >
-            <Border visible={true} />
-          </Legend>
-        </Chart>
-        <RangeSelector
-          dataSource={dataSource}
-          onValueChanged={this.updateVisualRange }
-        >
-          <Size height={120} />
-          <Margin left={10} />
-          <Scale minorTickCount={1} startValue="Inner Core" endValue="Upper Crust" />
-          <Behavior valueChangeMode="onHandleMove" />
-
-          <ChartOptions palette="Soft">
-            {rsChartSeriesList}
-            <Legend visible={false} />
-            <CommonSeriesSettingsOptions type="bar" ignoreEmptyPoints ={true} />
-          </ChartOptions>
-        </RangeSelector>
-      </React.Fragment>
-    );
-  }
-
-  updateVisualRange(e) {
-    this.setState({ visualRange: e.value });
-  }
+function formatValueAxisLabel(e) {
+  return `${e.valueText}%`;
 }
 
-function formatValueAxisLabel() {
-  return `${this.valueText}%`;
+function App() {
+  const [visualRange, setVisualRange] = React.useState({ startValue: 'Inner Core', endValue: 'Upper Crust' });
+
+  const updateVisualRange = React.useCallback((e) => {
+    setVisualRange(e.value);
+  }, [setVisualRange]);
+
+  return (
+    <React.Fragment>
+      <Chart
+        id="zoomedChart"
+        palette="Soft"
+        title="The Chemical Composition of the Earth Layers"
+        dataSource={dataSource}
+      >
+        {seriesList}
+        <ValueAxis>
+          <Label customizeText={formatValueAxisLabel} />
+        </ValueAxis>
+        <ArgumentAxis visualRange={visualRange} />
+        <CommonSeriesSettings type="bar" ignoreEmptyPoints={true} />
+        <Legend visible={true}
+          verticalAlignment="top"
+          horizontalAlignment="right"
+          orientation="horizontal"
+        >
+          <Border visible={true} />
+        </Legend>
+      </Chart>
+      <RangeSelector
+        dataSource={dataSource}
+        onValueChanged={updateVisualRange}
+      >
+        <Size height={120} />
+        <Margin left={10} />
+        <Scale minorTickCount={1} startValue="Inner Core" endValue="Upper Crust" />
+        <Behavior valueChangeMode="onHandleMove" />
+
+        <ChartOptions palette="Soft">
+          {rsChartSeriesList}
+          <Legend visible={false} />
+          <CommonSeriesSettingsOptions type="bar" ignoreEmptyPoints ={true} />
+        </ChartOptions>
+      </RangeSelector>
+    </React.Fragment>
+  );
 }
 
 export default App;

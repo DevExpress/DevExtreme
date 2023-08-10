@@ -5,58 +5,51 @@ import { populationByAge, algorithmLabel } from './data.js';
 
 const algorithms = ['sliceAndDice', 'squarified', 'strip', 'custom'];
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedAlgorithm: algorithms[2],
-      currentAlgorithm: getCurrentAlgorithm(algorithms[2]),
-    };
-    this.setAlgorithm = this.setAlgorithm.bind(this);
-  }
+function App() {
+  const [selectedAlgorithm, setSelectedAlgorithm] = React.useState(algorithms[2]);
+  const [
+    currentAlgorithm,
+    setCurrentAlgorithm,
+  ] = React.useState(getCurrentAlgorithm(algorithms[2]));
 
-  render() {
-    return (
-      <React.Fragment>
-        <TreeMap
-          id="treemap"
-          dataSource={populationByAge}
-          layoutAlgorithm={this.state.currentAlgorithm}
-          title="Population by Age Groups"
-        >
-          <Colorizer
-            colorizeGroups={true}
-            type="discrete"
+  const setAlgorithm = React.useCallback((data) => {
+    setSelectedAlgorithm(data.value);
+    setCurrentAlgorithm(getCurrentAlgorithm(data.value));
+  }, [setSelectedAlgorithm, setCurrentAlgorithm]);
+
+  return (
+    <React.Fragment>
+      <TreeMap
+        id="treemap"
+        dataSource={populationByAge}
+        layoutAlgorithm={currentAlgorithm}
+        title="Population by Age Groups"
+      >
+        <Colorizer
+          colorizeGroups={true}
+          type="discrete"
+        />
+        <Tooltip
+          enabled={true}
+          customizeTooltip={customizeTooltip}
+          format="thousands"
+        />
+      </TreeMap>
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <span>Tiling Algorithm </span>
+          <SelectBox
+            dataSource={algorithms}
+            width={200}
+            inputAttr={algorithmLabel}
+            value={selectedAlgorithm}
+            onValueChanged={setAlgorithm}
           />
-          <Tooltip
-            enabled={true}
-            customizeTooltip={customizeTooltip}
-            format="thousands"
-          />
-        </TreeMap>
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <span>Tiling Algorithm </span>
-            <SelectBox
-              dataSource={algorithms}
-              width={200}
-              inputAttr={algorithmLabel}
-              value={this.state.selectedAlgorithm}
-              onValueChanged={this.setAlgorithm}
-            />
-          </div>
         </div>
-      </React.Fragment>
-    );
-  }
-
-  setAlgorithm(data) {
-    this.setState({
-      selectedAlgorithm: data.value,
-      currentAlgorithm: getCurrentAlgorithm(data.value),
-    });
-  }
+      </div>
+    </React.Fragment>
+  );
 }
 
 function customAlgorithm(arg) {

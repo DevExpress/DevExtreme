@@ -1,11 +1,9 @@
 import React from 'react';
-
 import PieChart, {
   Series,
   Label,
   Legend,
 } from 'devextreme-react/pie-chart';
-
 import { countries, waterLandRatio } from './data.js';
 
 const pieCharts = [{

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Chart, {
   ArgumentAxis,
   Legend,
@@ -10,45 +9,43 @@ import Chart, {
   Tick,
 } from 'devextreme-react/chart';
 
-class App extends React.Component {
-  customizeText(e) {
-    return `Day ${e.value}`;
-  }
+function customizeText(e) {
+  return `Day ${e.value}`;
+}
 
-  render() {
-    return (
-      <Chart
-        title="Daily Sales"
-        dataSource="../../../../data/simpleJSON.json"
-        rotated={true}
-        id="chart"
+function App() {
+  return (
+    <Chart
+      title="Daily Sales"
+      dataSource="../../../../data/simpleJSON.json"
+      rotated={true}
+      id="chart"
+    >
+
+      <ArgumentAxis>
+        <Label customizeText={customizeText} />
+      </ArgumentAxis>
+
+      <ValueAxis>
+        <Tick visible={false} />
+        <Label visible={false} />
+      </ValueAxis>
+
+      <Series
+        valueField="sales"
+        argumentField="day"
+        type="bar"
+        color="#79cac4"
       >
+        <Label visible={true} backgroundColor="#c18e92" />
+      </Series>
 
-        <ArgumentAxis>
-          <Label customizeText={this.customizeText} />
-        </ArgumentAxis>
+      <Legend visible={false} />
 
-        <ValueAxis>
-          <Tick visible={false} />
-          <Label visible={false} />
-        </ValueAxis>
+      <Export enabled={true} />
 
-        <Series
-          valueField="sales"
-          argumentField="day"
-          type="bar"
-          color="#79cac4"
-        >
-          <Label visible={true} backgroundColor="#c18e92" />
-        </Series>
-
-        <Legend visible={false} />
-
-        <Export enabled={true} />
-
-      </Chart>
-    );
-  }
+    </Chart>
+  );
 }
 
 export default App;

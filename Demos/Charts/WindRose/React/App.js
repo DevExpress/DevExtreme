@@ -11,69 +11,52 @@ import {
 } from 'devextreme-react/polar-chart';
 import { windSources, windRoseData, periodLabel } from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      periodValues: windRoseData[0].values,
-    };
-    this.handleChange = this.handleChange.bind(this);
+function onLegendClick({ target: series }) {
+  if (series.isVisible()) {
+    series.hide();
+  } else {
+    series.show();
   }
+}
 
-  render() {
-    return (
-      <div id="chart-demo">
-        <PolarChart
-          id="radarChart"
-          palette="Soft"
-          dataSource={this.state.periodValues}
-          onLegendClick={this.onLegendClick}
-          title="Wind Rose, Philadelphia PA"
-        >
-          <CommonSeriesSettings type="stackedbar" />
-          {
-            windSources.map((item) => <Series
-              key={item.value}
-              valueField={item.value}
-              name={item.name} />)
-          }
-          <Margin
-            bottom={50}
-            left={100}
-          />
-          <ArgumentAxis
-            discreteAxisDivisionMode="crossLabels"
-            firstPointOnStartAngle={true}
-          />
-          <ValueAxis valueMarginsEnabled={false} />
-          <Export enabled={true} />
-        </PolarChart>
-        <div className="center">
-          <SelectBox
-            width="300"
-            dataSource={windRoseData}
-            inputAttr={periodLabel}
-            displayExpr="period"
-            valueExpr="values"
-            value={this.state.periodValues}
-            onValueChanged={this.handleChange}
-          />
-        </div>
+function App() {
+  const [periodValues, setPeriodValues] = React.useState(windRoseData[0].values);
+
+  const handleChange = React.useCallback(({ value }) => {
+    setPeriodValues(value);
+  }, [setPeriodValues]);
+
+  return (
+    <div id="chart-demo">
+      <PolarChart
+        id="radarChart"
+        palette="Soft"
+        dataSource={periodValues}
+        onLegendClick={onLegendClick}
+        title="Wind Rose, Philadelphia PA"
+      >
+        <CommonSeriesSettings type="stackedbar" />
+        {windSources.map((item) => (
+          <Series key={item.value} valueField={item.value} name={item.name} />
+        ))}
+        <Margin bottom={50} left={100} />
+        <ArgumentAxis discreteAxisDivisionMode="crossLabels" firstPointOnStartAngle={true} />
+        <ValueAxis valueMarginsEnabled={false} />
+        <Export enabled={true} />
+      </PolarChart>
+      <div className="center">
+        <SelectBox
+          width="300"
+          dataSource={windRoseData}
+          inputAttr={periodLabel}
+          displayExpr="period"
+          valueExpr="values"
+          value={periodValues}
+          onValueChanged={handleChange}
+        />
       </div>
-    );
-  }
-
-  onLegendClick({ target: series }) {
-    if (series.isVisible()) {
-      series.hide();
-    } else {
-      series.show();
-    }
-  }
-
-  handleChange({ value }) {
-    this.setState({ periodValues: value });
-  }
+    </div>
+  );
 }
 
 export default App;

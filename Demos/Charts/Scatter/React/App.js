@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Chart,
   Series,
@@ -17,7 +16,7 @@ import { generateDataSource } from './data.js';
 
 const dataSource = generateDataSource();
 
-export default function App() {
+function App() {
   return (
     <Chart id="chart" dataSource={dataSource}>
       <CommonSeriesSettings type="scatter" />
@@ -44,3 +43,5 @@ export default function App() {
     </Chart>
   );
 }
+
+export default App;

@@ -1,29 +1,21 @@
 import React from 'react';
 
-class Breadcrumb extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onClick = this.onClick.bind(this);
-  }
+function Breadcrumb(props) {
+  const onClick = React.useCallback(() => {
+    props.onClick(props.info.node);
+  }, [props]);
 
-  render() {
-    const { info } = this.props;
-    return (
-      <span>
-        <span
-          className={info.node ? 'link' : ''}
-          onClick={this.onClick}
-        >
-          {info.text}
-        </span>
-        {this.props.isLast ? '' : ' > '}
+  return (
+    <span>
+      <span
+        className={props.info.node ? 'link' : ''}
+        onClick={onClick}
+      >
+        {props.info.text}
       </span>
-    );
-  }
-
-  onClick() {
-    this.props.onClick(this.props.info.node);
-  }
+      {props.isLast ? '' : ' > '}
+    </span>
+  );
 }
 
 export default Breadcrumb;

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import PieChart, {
   Series,
   Label,
@@ -8,8 +7,11 @@ import PieChart, {
   Legend,
   Export,
 } from 'devextreme-react/pie-chart';
-
 import { dataSource } from './data.js';
+
+function formatLabel(arg) {
+  return `${arg.argumentText}: ${arg.valueText}%`;
+}
 
 function App() {
   return (
@@ -32,10 +34,6 @@ function App() {
       <Export enabled={true} />
     </PieChart>
   );
-}
-
-function formatLabel(arg) {
-  return `${arg.argumentText}: ${arg.valueText}%`;
 }
 
 export default App;

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import PieChart, {
   CommonSeriesSettings,
   Legend,
@@ -10,40 +9,37 @@ import PieChart, {
   Tooltip,
   Subtitle,
 } from 'devextreme-react/pie-chart';
-
 import { exportImportData } from './data.js';
 
-class App extends React.Component {
-  render() {
-    return (
-      <PieChart
-        id="pie"
-        type="doughnut"
-        innerRadius={0.2}
-        palette="Ocean"
-        dataSource={exportImportData}
-      >
-        <Title text="Imports/Exports of Goods and Services">
-          <Subtitle text="(billion US$, 2012)" />
-        </Title>
+function customizeTooltip(arg) {
+  return { text: `${arg.argumentText}<br>${arg.seriesName}: ${arg.valueText}B` };
+}
 
-        <CommonSeriesSettings>
-          <Label visible={false} />
-        </CommonSeriesSettings>
-        <Series name="Export" argumentField="Country" valueField="Export" />
-        <Series name="Import" argumentField="Country" valueField="Import" />
+function App() {
+  return (
+    <PieChart
+      id="pie"
+      type="doughnut"
+      innerRadius={0.2}
+      palette="Ocean"
+      dataSource={exportImportData}
+    >
+      <Title text="Imports/Exports of Goods and Services">
+        <Subtitle text="(billion US$, 2012)" />
+      </Title>
 
-        <Export enabled={true} />
-        <Legend visible={true} />
+      <CommonSeriesSettings>
+        <Label visible={false} />
+      </CommonSeriesSettings>
+      <Series name="Export" argumentField="Country" valueField="Export" />
+      <Series name="Import" argumentField="Country" valueField="Import" />
 
-        <Tooltip enabled={true} format="currency" customizeTooltip={this.customizeTooltip} />
-      </PieChart>
-    );
-  }
+      <Export enabled={true} />
+      <Legend visible={true} />
 
-  customizeTooltip(arg) {
-    return { text: `${arg.argumentText}<br>${arg.seriesName}: ${arg.valueText}B` };
-  }
+      <Tooltip enabled={true} format="currency" customizeTooltip={customizeTooltip} />
+    </PieChart>
+  );
 }
 
 export default App;

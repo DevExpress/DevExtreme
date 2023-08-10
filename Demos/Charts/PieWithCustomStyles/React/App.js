@@ -7,27 +7,6 @@ import {
 } from './utils.js';
 import { data } from './data.js';
 
-class App extends React.Component {
-  render() {
-    return (
-      <PieChart
-        id="pie"
-        dataSource={data}
-        customizePoint={customizePoint}
-      >
-        <Series
-          argumentField='type'
-          valueField='value'>
-          <Label visible customizeText={customizeText}>
-            <Connector visible />
-          </Label>
-        </Series>
-        <Export enabled />
-      </PieChart>
-    );
-  }
-}
-
 function customizeText(info) {
   return info.argument;
 }
@@ -56,6 +35,25 @@ function customizePoint(point) {
   }
 
   return { color: { fillId } };
+}
+
+function App() {
+  return (
+    <PieChart
+      id="pie"
+      dataSource={data}
+      customizePoint={customizePoint}
+    >
+      <Series
+        argumentField='type'
+        valueField='value'>
+        <Label visible customizeText={customizeText}>
+          <Connector visible />
+        </Label>
+      </Series>
+      <Export enabled />
+    </PieChart>
+  );
 }
 
 export default App;

@@ -4,7 +4,7 @@ import RowTemplate from './RowTemplate.js';
 
 const years = ['2010', '2011', '2012'];
 
-export default function App() {
+function App() {
   return (
     <React.Fragment>
       <div className="long-title"><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div>
@@ -29,3 +29,5 @@ export default function App() {
     </React.Fragment>
   );
 }
+
+export default App;

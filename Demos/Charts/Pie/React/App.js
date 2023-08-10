@@ -1,5 +1,4 @@
 import React from 'react';
-
 import PieChart, {
   Series,
   Label,
@@ -7,56 +6,42 @@ import PieChart, {
   Size,
   Export,
 } from 'devextreme-react/pie-chart';
-
 import { areas } from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+function pointClickHandler(e) {
+  toggleVisibility(e.target);
+}
 
-    this.pointClickHandler = this.pointClickHandler.bind(this);
-    this.legendClickHandler = this.legendClickHandler.bind(this);
-  }
+function legendClickHandler(e) {
+  const arg = e.target;
+  const item = e.component.getAllSeries()[0].getPointsByArg(arg)[0];
+  toggleVisibility(item);
+}
 
-  render() {
-    return (
-      <PieChart
-        id="pie"
-        dataSource={areas}
-        palette="Bright"
-        title="Area of Countries"
-        onPointClick={this.pointClickHandler}
-        onLegendClick={this.legendClickHandler}
-      >
-        <Series
-          argumentField="country"
-          valueField="area"
-        >
-          <Label visible={true}>
-            <Connector visible={true} width={1} />
-          </Label>
-        </Series>
+function toggleVisibility(item) {
+  item.isVisible() ? item.hide() : item.show();
+}
 
-        <Size width={500} />
-        <Export enabled={true} />
-      </PieChart>
-    );
-  }
+function App() {
+  return (
+    <PieChart
+      id="pie"
+      dataSource={areas}
+      palette="Bright"
+      title="Area of Countries"
+      onPointClick={pointClickHandler}
+      onLegendClick={legendClickHandler}
+    >
+      <Series argumentField="country" valueField="area">
+        <Label visible={true}>
+          <Connector visible={true} width={1} />
+        </Label>
+      </Series>
 
-  pointClickHandler(e) {
-    this.toggleVisibility(e.target);
-  }
-
-  legendClickHandler(e) {
-    const arg = e.target;
-    const item = e.component.getAllSeries()[0].getPointsByArg(arg)[0];
-
-    this.toggleVisibility(item);
-  }
-
-  toggleVisibility(item) {
-    item.isVisible() ? item.hide() : item.show();
-  }
+      <Size width={500} />
+      <Export enabled={true} />
+    </PieChart>
+  );
 }
 
 export default App;

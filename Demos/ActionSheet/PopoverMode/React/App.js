@@ -25,7 +25,7 @@ const App = () => {
     if (isVisible !== isActionSheetVisible) {
       setIsActionSheetVisible(isVisible);
     }
-  }, [setIsActionSheetVisible]);
+  }, [setIsActionSheetVisible, isActionSheetVisible]);
 
   return (
     <div className="app-container">
