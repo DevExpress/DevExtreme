@@ -984,4 +984,41 @@ const DATA_GRID_SELECTOR = '#container';
   }).after(async () => {
     await changeTheme('generic.light');
   });
+
+  test(`Adaptability in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await dataGrid.apiExpandAdaptiveDetailRow('val_0_0');
+
+    // assert
+    await t
+      .expect(dataGrid.getAdaptiveRow(0).element.exists)
+      .ok();
+
+    // act, assert
+    await a11yCheck(t, DATA_GRID_SELECTOR, {
+      runOnly: 'color-contrast',
+    });
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 10),
+      keyExpr: 'field_0',
+      columnWidth: 100,
+      width: 800,
+      columnHidingEnabled: true,
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
 });
