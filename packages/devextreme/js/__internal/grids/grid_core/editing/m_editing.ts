@@ -74,6 +74,7 @@ import type { ICellBasedEditingControllerExtender } from './m_editing_cell_based
 import type { IFormBasedEditingControllerExtender } from './m_editing_form_based';
 import {
   createFailureHandler,
+  generateNewRowTempKey,
   getButtonIndex,
   getButtonName,
   getEditingTexts,
@@ -780,7 +781,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   _addInsertInfo(change, parentKey?) {
     let insertInfo;
-    this._ensureChangeKeyValue(change);
+    this.ensureChangeKeyValue(change);
     const { key } = change;
 
     insertInfo = this._getInternalData(key)?.insertInfo;
@@ -799,7 +800,7 @@ class EditingControllerImpl extends modules.ViewController {
     return { insertInfo, key };
   }
 
-  _ensureChangeKeyValue(change: any) {
+  private ensureChangeKeyValue(change: any) {
     if (isDefined(change.key)) {
       return;
     }
@@ -810,7 +811,7 @@ class EditingControllerImpl extends modules.ViewController {
       keyValue = change.data[keyExpr];
     }
     if (!isDefined(keyValue)) {
-      keyValue = String(new Guid());
+      keyValue = generateNewRowTempKey();
     }
 
     change.key = keyValue;

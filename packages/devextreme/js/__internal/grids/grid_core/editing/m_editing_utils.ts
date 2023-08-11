@@ -1,4 +1,8 @@
+import Guid from '@js/core/guid';
 import { isObject } from '@js/core/utils/type';
+
+const NEW_ROW_TEMP_KEY_PREFIX = '_DX_NEW_ROW_TEMP_KEY_';
+const GUID_LENGTH = 36;
 
 export const createFailureHandler = function (deferred) {
   return function (arg) {
@@ -29,6 +33,15 @@ export const getEditingTexts = (options) => {
     delete: editingTexts.deleteRow,
     add: editingTexts.addRowToNode,
   };
+};
+
+export const generateNewRowTempKey = function (): string {
+  return NEW_ROW_TEMP_KEY_PREFIX + String(new Guid());
+};
+export const isNewRowTempKey = function (key: string): boolean {
+  return !!key
+    && key.startsWith(NEW_ROW_TEMP_KEY_PREFIX)
+    && key.length === NEW_ROW_TEMP_KEY_PREFIX.length + GUID_LENGTH;
 };
 
 export const getButtonIndex = (buttons, name) => {
