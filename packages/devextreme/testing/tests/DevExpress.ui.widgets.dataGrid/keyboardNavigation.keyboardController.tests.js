@@ -106,7 +106,7 @@ QUnit.module('Keyboard controller', {
                     return this._views[name];
                 },
                 renderFocusState: commonUtils.noop,
-                renderCompleted: $.Callbacks(),
+                renderCompleted: $.Callbacks()
             };
         };
 
