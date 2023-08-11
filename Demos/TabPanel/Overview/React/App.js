@@ -1,103 +1,77 @@
 import React from 'react';
-
 import CheckBox from 'devextreme-react/check-box';
 import TabPanel from 'devextreme-react/tab-panel';
-
 import { multiViewItems as companies } from './data.js';
 import CompanyItem from './CompanyItem.js';
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      animationEnabled: true,
-      swipeEnabled: true,
-      loop: false,
-      selectedIndex: 0,
-    };
-    this.onSelectionChanged = this.onSelectionChanged.bind(this);
-    this.onLoopChanged = this.onLoopChanged.bind(this);
-    this.onAnimationEnabledChanged = this.onAnimationEnabledChanged.bind(this);
-    this.onSwipeEnabledChanged = this.onSwipeEnabledChanged.bind(this);
-  }
+const itemTitleRender = (company) => <span>{company.CompanyName}</span>;
 
-  render() {
-    const {
-      animationEnabled, loop, selectedIndex, swipeEnabled,
-    } = this.state;
-    return (
-      <div>
-        <TabPanel
-          height={260}
-          dataSource={companies}
-          selectedIndex={selectedIndex}
-          onOptionChanged={this.onSelectionChanged}
-          loop={loop}
-          itemTitleRender={this.itemTitleRender}
-          itemComponent={CompanyItem}
-          animationEnabled={animationEnabled}
-          swipeEnabled={swipeEnabled}
-        />
-        <div className="item-box">
-            Item <span>{ selectedIndex + 1 }</span> of <span>{ companies.length }</span>
+const App = () => {
+  const [animationEnabled, setAnimationEnabled] = React.useState(true);
+  const [swipeEnabled, setSwipeEnabled] = React.useState(true);
+  const [loop, setLoop] = React.useState(false);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  const onSelectionChanged = React.useCallback((args) => {
+    if (args.name === 'selectedIndex') {
+      setSelectedIndex(args.value);
+    }
+  }, [setSelectedIndex]);
+
+  const onLoopChanged = React.useCallback((args) => {
+    setLoop(args.value);
+  }, [setLoop]);
+
+  const onAnimationEnabledChanged = React.useCallback((args) => {
+    setAnimationEnabled(args.value);
+  }, [setAnimationEnabled]);
+
+  const onSwipeEnabledChanged = React.useCallback((args) => {
+    setSwipeEnabled(args.value);
+  }, [setSwipeEnabled]);
+
+  return (
+    <div>
+      <TabPanel
+        height={260}
+        dataSource={companies}
+        selectedIndex={selectedIndex}
+        onOptionChanged={onSelectionChanged}
+        loop={loop}
+        itemTitleRender={itemTitleRender}
+        itemComponent={CompanyItem}
+        animationEnabled={animationEnabled}
+        swipeEnabled={swipeEnabled}
+      />
+      <div className="item-box">
+        Item <span>{selectedIndex + 1}</span> of <span>{companies.length}</span>
+      </div>
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <CheckBox
+            value={loop}
+            onValueChanged={onLoopChanged}
+            text="Loop enabled"
+          />
         </div>
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <CheckBox
-              value={loop}
-              onValueChanged={this.onLoopChanged}
-              text="Loop enabled"
-            />
-          </div>
-          <div className="option">
-            <CheckBox
-              value={ animationEnabled }
-              onValueChanged={this.onAnimationEnabledChanged}
-              text="Animation enabled"
-            />
-          </div>
-          <div className="option">
-            <CheckBox
-              value={ swipeEnabled }
-              onValueChanged={this.onSwipeEnabledChanged}
-              text="Swipe enabled"
-            />
-          </div>
+        <div className="option">
+          <CheckBox
+            value={animationEnabled}
+            onValueChanged={onAnimationEnabledChanged}
+            text="Animation enabled"
+          />
+        </div>
+        <div className="option">
+          <CheckBox
+            value={swipeEnabled}
+            onValueChanged={onSwipeEnabledChanged}
+            text="Swipe enabled"
+          />
         </div>
       </div>
-    );
-  }
-
-  itemTitleRender(company) {
-    return <span>{company.CompanyName}</span>;
-  }
-
-  onSelectionChanged(args) {
-    if (args.name === 'selectedIndex') {
-      this.setState({
-        selectedIndex: args.value,
-      });
-    }
-  }
-
-  onLoopChanged(args) {
-    this.setState({
-      loop: args.value,
-    });
-  }
-
-  onAnimationEnabledChanged(args) {
-    this.setState({
-      animationEnabled: args.value,
-    });
-  }
-
-  onSwipeEnabledChanged(args) {
-    this.setState({
-      swipeEnabled: args.value,
-    });
-  }
-}
+    </div>
+  );
+};
 
 export default App;

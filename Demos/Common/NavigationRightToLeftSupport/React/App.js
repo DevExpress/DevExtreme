@@ -10,12 +10,32 @@ const languages = [
   'English: Left-to-Right direction',
 ];
 
-function App() {
+const renderArabicTitle = (item) => (<div>{item.nameAr}</div>);
+
+const renderArabic = (country) => (
+  <div>
+    <div>عاصمة: { country.capitalAr } </div>
+    <div>عدد السكان: { country.population } نسمة</div>
+    <div>المساحة: { country.area } كم<sup>2</sup></div>
+  </div>
+);
+
+const renderEnglishTitle = (item) => (<div>{item.nameEn}</div>);
+
+const renderEnglish = (country) => (
+  <div>
+    <div>Capital: { country.capitalEn } </div>
+    <div>Population: { country.population } people</div>
+    <div>Area: { country.area } km<sup>2</sup></div>
+  </div>
+);
+
+const App = () => {
   const [rtlEnabled, setRtl] = React.useState(false);
 
   const selectLanguage = React.useCallback(({ value }) => {
     setRtl(value === languages[0]);
-  }, []);
+  }, [setRtl]);
 
   return (
     <div className={rtlEnabled ? 'dx-rtl' : ''}>
@@ -68,34 +88,6 @@ function App() {
       </div>
     </div>
   );
-}
-
-function renderArabicTitle(item) {
-  return (<div>{item.nameAr}</div>);
-}
-
-function renderArabic(country) {
-  return (
-    <div>
-      <div>عاصمة: { country.capitalAr } </div>
-      <div>عدد السكان: { country.population } نسمة</div>
-      <div>المساحة: { country.area } كم<sup>2</sup></div>
-    </div>
-  );
-}
-
-function renderEnglishTitle(item) {
-  return (<div>{item.nameEn}</div>);
-}
-
-function renderEnglish(country) {
-  return (
-    <div>
-      <div>Capital: { country.capitalEn } </div>
-      <div>Population: { country.population } people</div>
-      <div>Area: { country.area } km<sup>2</sup></div>
-    </div>
-  );
-}
+};
 
 export default App;

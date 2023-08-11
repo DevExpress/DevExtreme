@@ -7,111 +7,93 @@ import service from './data.js';
 const orientations = ['horizontal', 'vertical'];
 const orientationLabel = { 'aria-label': 'Orientation' };
 const showSubmenuModeLabel = { 'aria-label': 'Show Submenu Mode' };
+const products = service.getProducts();
+const showSubmenuModes = [
+  {
+    name: 'onHover',
+    delay: { show: 0, hide: 500 },
+  },
+  {
+    name: 'onClick',
+    delay: { show: 0, hide: 300 },
+  },
+];
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.products = service.getProducts();
-    this.showSubmenuModes = [{
-      name: 'onHover',
-      delay: { show: 0, hide: 500 },
-    }, {
-      name: 'onClick',
-      delay: { show: 0, hide: 300 },
-    }];
-    this.state = {
-      showFirstSubmenuModes: this.showSubmenuModes[1],
-      orientation: 'horizontal',
-      hideSubmenuOnMouseLeave: false,
-      currentProduct: null,
-    };
-    this.itemClick = this.itemClick.bind(this);
-    this.showSubmenuModeChanged = this.showSubmenuModeChanged.bind(this);
-    this.orientationChanged = this.orientationChanged.bind(this);
-    this.hideSubmenuOnMouseLeaveChanged = this.hideSubmenuOnMouseLeaveChanged.bind(this);
-  }
+const App = () => {
+  const [showFirstSubmenuModes, setShowFirstSubmenuModes] = React.useState(showSubmenuModes[1]);
+  const [orientation, setOrientation] = React.useState('horizontal');
+  const [hideSubmenuOnMouseLeave, setHideSubmenuOnMouseLeave] = React.useState(false);
+  const [currentProduct, setCurrentProduct] = React.useState(null);
 
-  render() {
-    const {
-      showFirstSubmenuModes, orientation, hideSubmenuOnMouseLeave, currentProduct,
-    } = this.state;
-    return (
-      <div className="form">
-        <div>
-          <div className="label">Catalog:</div>
-          <Menu dataSource={this.products}
-            displayExpr="name"
-            showFirstSubmenuMode={showFirstSubmenuModes}
-            orientation={orientation}
-            hideSubmenuOnMouseLeave={hideSubmenuOnMouseLeave}
-            onItemClick={this.itemClick}
-          />
-          {currentProduct
-          && <div id="product-details">
+  const itemClick = React.useCallback((e) => {
+    if (e.itemData.price) {
+      setCurrentProduct(e.itemData);
+    }
+  }, [setCurrentProduct]);
+
+  const showSubmenuModeChanged = React.useCallback((e) => {
+    setShowFirstSubmenuModes(e.value);
+  }, [setShowFirstSubmenuModes]);
+
+  const orientationChanged = React.useCallback((e) => {
+    setOrientation(e.value);
+  }, [setOrientation]);
+
+  const hideSubmenuOnMouseLeaveChanged = React.useCallback((e) => {
+    setHideSubmenuOnMouseLeave(e.value);
+  }, [setHideSubmenuOnMouseLeave]);
+
+  return (
+    <div className="form">
+      <div>
+        <div className="label">Catalog:</div>
+        <Menu
+          dataSource={products}
+          displayExpr="name"
+          showFirstSubmenuMode={showFirstSubmenuModes}
+          orientation={orientation}
+          hideSubmenuOnMouseLeave={hideSubmenuOnMouseLeave}
+          onItemClick={itemClick}
+        />
+        {currentProduct && (
+          <div id="product-details">
             <img src={currentProduct.icon} />
             <div className="name">{currentProduct.name}</div>
             <div className="price">{`$${currentProduct.price}`}</div>
           </div>
-          }
+        )}
+      </div>
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <div>Show First Submenu Mode</div>
+          <SelectBox
+            items={showSubmenuModes}
+            displayExpr="name"
+            inputAttr={showSubmenuModeLabel}
+            value={showFirstSubmenuModes}
+            onValueChanged={showSubmenuModeChanged}
+          />
         </div>
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <div>Show First Submenu Mode</div>
-            <SelectBox
-              items={this.showSubmenuModes}
-              displayExpr="name"
-              inputAttr={showSubmenuModeLabel}
-              value={showFirstSubmenuModes}
-              onValueChanged={this.showSubmenuModeChanged}
-            />
-          </div>
-          <div className="option">
-            <div>Orientation</div>
-            <SelectBox
-              items={orientations}
-              inputAttr={orientationLabel}
-              value={orientation}
-              onValueChanged={this.orientationChanged}
-            />
-          </div>
-          <div className="option">
-            <CheckBox
-              text="Hide Submenu on Mouse Leave"
-              value={hideSubmenuOnMouseLeave}
-              onValueChanged={this.hideSubmenuOnMouseLeaveChanged}
-            />
-          </div>
+        <div className="option">
+          <div>Orientation</div>
+          <SelectBox
+            items={orientations}
+            inputAttr={orientationLabel}
+            value={orientation}
+            onValueChanged={orientationChanged}
+          />
+        </div>
+        <div className="option">
+          <CheckBox
+            text="Hide Submenu on Mouse Leave"
+            value={hideSubmenuOnMouseLeave}
+            onValueChanged={hideSubmenuOnMouseLeaveChanged}
+          />
         </div>
       </div>
-    );
-  }
-
-  itemClick(e) {
-    if (e.itemData.price) {
-      this.setState({
-        currentProduct: e.itemData,
-      });
-    }
-  }
-
-  showSubmenuModeChanged(e) {
-    this.setState({
-      showFirstSubmenuModes: e.value,
-    });
-  }
-
-  orientationChanged(e) {
-    this.setState({
-      orientation: e.value,
-    });
-  }
-
-  hideSubmenuOnMouseLeaveChanged(e) {
-    this.setState({
-      hideSubmenuOnMouseLeave: e.value,
-    });
-  }
-}
+    </div>
+  );
+};
 
 export default App;

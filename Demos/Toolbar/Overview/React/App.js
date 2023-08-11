@@ -9,47 +9,41 @@ import 'devextreme/ui/select_box';
 
 import { productTypes, products } from './data.js';
 
-function renderLabel() {
-  return <div className="toolbar-label"><b>Tom&apos;s Club</b> Products</div>;
-}
+const renderLabel = () => <div className="toolbar-label"><b>Tom&apos;s Club</b> Products</div>;
 
-class App extends React.Component {
-  render() {
-    return (
-      <React.Fragment>
-        <Toolbar>
-          <Item location="before"
-            widget="dxButton"
-            options={backButtonOptions} />
-          <Item location="before"
-            widget="dxButton"
-            options={refreshButtonOptions} />
-          <Item location="center"
-            locateInMenu="never"
-            render={renderLabel} />
-          <Item location="after"
-            locateInMenu="auto"
-            widget="dxSelectBox"
-            options={selectBoxOptions} />
-          <Item location="after"
-            locateInMenu="auto"
-            widget="dxButton"
-            options={addButtonOptions} />
-          <Item locateInMenu="always"
-            widget="dxButton"
-            options={saveButtonOptions} />
-          <Item locateInMenu="always"
-            widget="dxButton"
-            options={printButtonOptions} />
-          <Item locateInMenu="always"
-            widget="dxButton"
-            options={settingsButtonOptions} />
-        </Toolbar>
-        <List id="products" dataSource={productsStore} />
-      </React.Fragment>
-    );
-  }
-}
+const App = () => (
+  <React.Fragment>
+    <Toolbar>
+      <Item location="before"
+        widget="dxButton"
+        options={backButtonOptions} />
+      <Item location="before"
+        widget="dxButton"
+        options={refreshButtonOptions} />
+      <Item location="center"
+        locateInMenu="never"
+        render={renderLabel} />
+      <Item location="after"
+        locateInMenu="auto"
+        widget="dxSelectBox"
+        options={selectBoxOptions} />
+      <Item location="after"
+        locateInMenu="auto"
+        widget="dxButton"
+        options={addButtonOptions} />
+      <Item locateInMenu="always"
+        widget="dxButton"
+        options={saveButtonOptions} />
+      <Item locateInMenu="always"
+        widget="dxButton"
+        options={printButtonOptions} />
+      <Item locateInMenu="always"
+        widget="dxButton"
+        options={settingsButtonOptions} />
+    </Toolbar>
+    <List id="products" dataSource={productsStore} />
+  </React.Fragment>
+);
 
 const productsStore = new DataSource(products);
 

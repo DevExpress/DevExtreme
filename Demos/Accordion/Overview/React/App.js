@@ -9,85 +9,16 @@ import CustomTitle from './CustomTitle.js';
 import CustomItem from './CustomItem.js';
 
 const companyLabel = { 'aria-label': 'Company' };
+const companies = service.getCompanies();
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.companies = service.getCompanies();
-    this.state = {
-      selectedItems: [this.companies[0]],
-      multiple: false,
-      collapsible: false,
-      animationDuration: 300,
-    };
-    this.selectionChanged = this.selectionChanged.bind(this);
-    this.selectedItemsChanged = this.selectedItemsChanged.bind(this);
-    this.multipleChanged = this.multipleChanged.bind(this);
-    this.collapsibleChanged = this.collapsibleChanged.bind(this);
-    this.animationDurationChanged = this.animationDurationChanged.bind(this);
-  }
+const App = () => {
+  const [selectedItems, setSelectedItems] = React.useState([companies[0]]);
+  const [multiple, setMultiple] = React.useState(false);
+  const [collapsible, setCollapsible] = React.useState(false);
+  const [animationDuration, setAnimationDuration] = React.useState(300);
 
-  render() {
-    const {
-      selectedItems, multiple, collapsible, animationDuration,
-    } = this.state;
-    return (
-      <div id="accordion">
-        <Accordion
-          dataSource={this.companies}
-          collapsible={collapsible}
-          multiple={multiple}
-          animationDuration={animationDuration}
-          selectedItems={selectedItems}
-          onSelectionChanged={this.selectionChanged}
-          itemTitleRender={CustomTitle}
-          itemRender={CustomItem}
-          id="accordion-container"
-        />
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <CheckBox text="Multiple enabled"
-              value={multiple}
-              onValueChanged={this.multipleChanged}
-            />
-          </div>
-          <div className="option">
-            <CheckBox
-              text="Collapsible enabled"
-              value={collapsible}
-              onValueChanged={this.collapsibleChanged}
-            />
-          </div>
-          <div className="option">
-            <span>Animation duration</span>
-            <Slider
-              min={0}
-              max={1000}
-              value={animationDuration}
-              onValueChanged={this.animationDurationChanged}
-            >
-              <Tooltip enabled={true} position="bottom" />
-              <Label visible={true} />
-            </Slider>
-          </div>
-          <div className="option">
-            <span className="caption">Selected Items</span>
-            <TagBox dataSource={this.companies}
-              displayExpr="CompanyName"
-              value={selectedItems}
-              inputAttr={companyLabel}
-              onValueChanged={this.selectedItemsChanged}
-              disabled={!multiple}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  selectionChanged(e) {
-    let newItems = [...this.state.selectedItems];
+  const selectionChanged = React.useCallback((e) => {
+    let newItems = [...selectedItems];
     e.removedItems.forEach((item) => {
       const index = newItems.indexOf(item);
       if (index >= 0) {
@@ -97,34 +28,80 @@ class App extends React.Component {
     if (e.addedItems.length) {
       newItems = [...newItems, ...e.addedItems];
     }
-    this.setState({
-      selectedItems: newItems,
-    });
-  }
+    setSelectedItems(newItems);
+  }, [selectedItems, setSelectedItems]);
 
-  selectedItemsChanged(e) {
-    this.setState({
-      selectedItems: e.value,
-    });
-  }
+  const selectedItemsChanged = React.useCallback((e) => {
+    setSelectedItems(e.value);
+  }, [setSelectedItems]);
 
-  multipleChanged(e) {
-    this.setState({
-      multiple: e.value,
-    });
-  }
+  const multipleChanged = React.useCallback((e) => {
+    setMultiple(e.value);
+  }, [setMultiple]);
 
-  collapsibleChanged(e) {
-    this.setState({
-      collapsible: e.value,
-    });
-  }
+  const collapsibleChanged = React.useCallback((e) => {
+    setCollapsible(e.value);
+  }, [setCollapsible]);
 
-  animationDurationChanged(e) {
-    this.setState({
-      animationDuration: e.value,
-    });
-  }
-}
+  const animationDurationChanged = React.useCallback((e) => {
+    setAnimationDuration(e.value);
+  }, [setAnimationDuration]);
+
+  return (
+    <div id="accordion">
+      <Accordion
+        dataSource={companies}
+        collapsible={collapsible}
+        multiple={multiple}
+        animationDuration={animationDuration}
+        selectedItems={selectedItems}
+        onSelectionChanged={selectionChanged}
+        itemTitleRender={CustomTitle}
+        itemRender={CustomItem}
+        id="accordion-container"
+      />
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <CheckBox
+            text="Multiple enabled"
+            value={multiple}
+            onValueChanged={multipleChanged}
+          />
+        </div>
+        <div className="option">
+          <CheckBox
+            text="Collapsible enabled"
+            value={collapsible}
+            onValueChanged={collapsibleChanged}
+          />
+        </div>
+        <div className="option">
+          <span>Animation duration</span>
+          <Slider
+            min={0}
+            max={1000}
+            value={animationDuration}
+            onValueChanged={animationDurationChanged}
+          >
+            <Tooltip enabled={true} position="bottom" />
+            <Label visible={true} />
+          </Slider>
+        </div>
+        <div className="option">
+          <span className="caption">Selected Items</span>
+          <TagBox
+            dataSource={companies}
+            displayExpr="CompanyName"
+            value={selectedItems}
+            inputAttr={companyLabel}
+            onValueChanged={selectedItemsChanged}
+            disabled={!multiple}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default App;
