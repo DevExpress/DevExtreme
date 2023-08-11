@@ -21,6 +21,7 @@ import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred, when } from '../core/utils/deferred';
 import { isReachedLeft, isReachedRight, isReachedTop, isReachedBottom } from '../renovation/ui/scroll_view/utils/get_boundary_props';
 import { getScrollLeftMax } from '../renovation/ui/scroll_view/utils/get_scroll_left_max';
+import { getWindow } from '../core/utils/window';
 
 // STYLE tabs
 
@@ -244,9 +245,14 @@ const Tabs = CollectionWidget.inherit({
         return this.option('orientation') === ORIENTATION.vertical;
     },
 
+    _isServerSide() {
+        const window = getWindow();
+
+        return window.isWindowMock || !window;
+    },
+
     _isItemsSizeExceeded() {
         const isVertical = this._isVertical();
-
         const isItemsSizeExceeded = isVertical ? this._isItemsHeightExceeded() : this._isItemsWidthExceeded();
 
         return isItemsSizeExceeded;
@@ -274,7 +280,7 @@ const Tabs = CollectionWidget.inherit({
         return itemsHeight - 1 > elementHeight;
     },
 
-    _needStretchItems: function() {
+    _needStretchItems() {
         const $visibleItems = this._getVisibleItems();
         const elementWidth = getWidth(this.$element());
         const itemsWidth = [];
@@ -569,7 +575,9 @@ const Tabs = CollectionWidget.inherit({
             }
             case 'orientation': {
                 this._toggleOrientationClass(args.value);
-                this._updateScrollableDirection();
+                if(!this._isServerSide()) {
+                    this._updateScrollableDirection();
+                }
                 break;
             }
             default:
