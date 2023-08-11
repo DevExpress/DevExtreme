@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
@@ -1043,6 +1043,78 @@ safeSizeTest('The scroll position of a fixed table should be synchronized with t
     fixedPosition: 'left',
   }, 'id', 'text'],
 }));
+
+// T1089634
+test('The page should not be changed when hiding/showing the grid view after the data has been edited', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  // act
+  await dataGrid.scrollTo(t, { y: 500 });
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await takeScreenshot('T1089634-virtual-scrolling-1.png', '#container');
+
+  // act
+  await dataGrid.apiEditCell(5, 1);
+  await dataGrid.apiCellValue(5, 1, 'test');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(19, 1).isModified)
+    .ok();
+
+  // act - simulate click on button
+  await dataGrid.hide();
+  await t.click(Selector('body'));
+  await t.wait(100);
+
+  await takeScreenshot('T1089634-virtual-scrolling-2.png', '#container');
+
+  // act
+  await dataGrid.show();
+
+  await takeScreenshot('T1089634-virtual-scrolling-3.png', '#container');
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await ClientFunction(() => {
+    $('body').css({
+      minHeight: 100,
+      minWidth: 100,
+    });
+  })();
+
+  return createWidget('dxDataGrid', {
+    height: 500,
+    dataSource: [...new Array(200)].map((_, index) => ({ id: index, field1: `item1 ${index}`, field2: `item2 ${index}` })),
+    editing: {
+      mode: 'batch',
+      allowUpdating: true,
+    },
+    scrolling: {
+      mode: 'virtual',
+    },
+  });
+}).after(async () => ClientFunction(() => {
+  $('body').css({
+    minHeight: '',
+    minWidth: '',
+  });
+})());
 
 fixture`Remote Scrolling`
   .page(url(__dirname, '../containerAspNet.html'))
