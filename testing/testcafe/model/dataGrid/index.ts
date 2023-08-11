@@ -560,6 +560,34 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  hide(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const gridInstance = getInstance() as any;
+        const $gridElement = $(gridInstance.element());
+
+        $gridElement.hide();
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  show(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const gridInstance = getInstance() as any;
+        const $gridElement = $(gridInstance.element());
+
+        $gridElement.show();
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+
   isVirtualRowIntersectViewport(): Promise<boolean> {
     const { getInstance } = this;
 
