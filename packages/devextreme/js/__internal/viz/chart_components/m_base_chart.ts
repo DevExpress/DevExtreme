@@ -20,7 +20,7 @@ import { map as _map, processSeriesTemplate, setCanvasValues as _setCanvasValues
 import { Series } from '@js/viz/series/base_series';
 
 import BaseWidget from '../core/m_base_widget';
-import RollingStock from './rolling_stock';
+import { RollingStock } from './rolling_stock';
 
 type SortingMethodParams = (a: any, b: any) => number;
 

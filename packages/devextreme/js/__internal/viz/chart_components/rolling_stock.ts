@@ -20,14 +20,17 @@ interface RollingStockBBox {
   oppositeEnd: number;
 }
 
-export default class RollingStock {
+export class RollingStock {
   labels: RollingStockLabel[];
 
-  #shiftFunction: (bBox: BoundingRect, shiftLength: number) => { x: number; y: number };
+  private readonly shiftFunction: (
+    bBox: BoundingRect,
+    shiftLength: number
+  ) => { x: number; y: number };
 
-  #initialPosition: number;
+  private readonly initialPosition: number;
 
-  #bBox: RollingStockBBox;
+  private readonly bBox: RollingStockBBox;
 
   constructor(
     label: RollingStockLabel,
@@ -41,46 +44,46 @@ export default class RollingStock {
     const endY = bBox.y + bBox.height;
 
     this.labels = [label];
-    this.#shiftFunction = shiftFunction;
+    this.shiftFunction = shiftFunction;
 
-    this.#bBox = {
+    this.bBox = {
       start: isRotated ? x : y,
       width: isRotated ? bBox.width : bBox.height,
       end: isRotated ? endX : endY,
       oppositeStart: isRotated ? y : x,
       oppositeEnd: isRotated ? endY : endX,
     };
-    this.#initialPosition = isRotated ? bBox.x : bBox.y;
+    this.initialPosition = isRotated ? bBox.x : bBox.y;
   }
 
   toChain(nextRollingStock: RollingStock): void {
     const nextRollingStockBBox = nextRollingStock.getBoundingRect();
 
-    nextRollingStock.shift(nextRollingStockBBox.start - this.#bBox.end);
+    nextRollingStock.shift(nextRollingStockBBox.start - this.bBox.end);
 
-    this._changeBoxWidth(nextRollingStockBBox.width);
+    this.changeBoxWidth(nextRollingStockBBox.width);
     this.labels = this.labels.concat(nextRollingStock.labels);
   }
 
   getBoundingRect(): RollingStockBBox {
-    return this.#bBox;
+    return this.bBox;
   }
 
   shift(shiftLength: number): void {
     this.labels.forEach((label) => {
       const bBox = label.getBoundingRect();
-      const coords = this.#shiftFunction(bBox, shiftLength);
+      const coords = this.shiftFunction(bBox, shiftLength);
       if (!label.hideInsideLabel(coords)) {
         label.shift(coords.x, coords.y);
       }
     });
-    this.#bBox.end -= shiftLength;
-    this.#bBox.start -= shiftLength;
+    this.bBox.end -= shiftLength;
+    this.bBox.start -= shiftLength;
   }
 
   setRollingStockInCanvas(canvas: { end: number }): void {
-    if (this.#bBox.end > canvas.end) {
-      this.shift(this.#bBox.end - canvas.end);
+    if (this.bBox.end > canvas.end) {
+      this.shift(this.bBox.end - canvas.end);
     }
   }
 
@@ -93,11 +96,11 @@ export default class RollingStock {
   }
 
   getInitialPosition(): number {
-    return this.#initialPosition;
+    return this.initialPosition;
   }
 
-  _changeBoxWidth(width: number): void {
-    this.#bBox.end += width;
-    this.#bBox.width += width;
+  private changeBoxWidth(width: number): void {
+    this.bBox.end += width;
+    this.bBox.width += width;
   }
 }
