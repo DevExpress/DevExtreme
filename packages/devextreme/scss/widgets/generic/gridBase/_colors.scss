@@ -324,7 +324,7 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-row-alternation-bg: lighten($datagrid-base-background-color, 4%) !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
   $datagrid-summary-color: color.change($datagrid-base-color, $alpha: 0.7) !default;
-  $datagrid-columnchooser-message-color: darken($datagrid-base-color, 40%) !default;
+  $datagrid-columnchooser-message-color: darken($datagrid-base-color, 26%) !default;
   $datagrid-summary-bg: $datagrid-base-background-color !default;
   $datagrid-columnchooser-overlay-border-radius: $base-border-radius-large !default; // TODO: may be not need
   $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
@@ -496,7 +496,7 @@ $datagrid-text-stub-background-image-path: null !default;
   $datagrid-row-alternation-bg: darken($datagrid-base-background-color, 4%) !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
   $datagrid-summary-color: color.change($datagrid-base-color, $alpha: 0.7) !default;
-  $datagrid-columnchooser-message-color: lighten($datagrid-base-color, 40%) !default;
+  $datagrid-columnchooser-message-color: lighten($datagrid-base-color, 26%) !default;
   $datagrid-summary-bg: $datagrid-base-background-color !default;
   $datagrid-columnchooser-overlay-border-radius: $base-border-radius-large !default; // TODO: may be not need
   $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
