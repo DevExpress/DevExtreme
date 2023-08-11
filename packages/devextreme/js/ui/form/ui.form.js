@@ -73,6 +73,7 @@ const Form = Widget.inherit({
     _init: function() {
         this.callBase();
 
+        this._dirtyFields = new Set();
         this._cachedColCountOptions = [];
         this._itemsRunTimeInfo = new FormItemsRunTimeInfo();
         this._groupsColCount = [];
@@ -926,6 +927,7 @@ const Form = Widget.inherit({
     },
 
     _triggerOnFieldDataChanged: function(args) {
+        this._updateIsDirty(args.dataField);
         this._createActionByOption('onFieldDataChanged')(args);
     },
 
@@ -1137,10 +1139,23 @@ const Form = Widget.inherit({
         this.callBase();
     },
 
+    _updateIsDirty: function(dataField) {
+        const editor = this.getEditor(dataField);
+        if(!editor) return;
+
+        if(editor.option('isDirty')) {
+            this._dirtyFields.add(dataField);
+        } else {
+            this._dirtyFields.delete(dataField);
+        }
+
+        this.option('isDirty', !!this._dirtyFields.size);
+    },
+
     _resetValues: function() {
         this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
             if(isDefined(itemRunTimeInfo.widgetInstance) && Editor.isEditor(itemRunTimeInfo.widgetInstance)) {
-                itemRunTimeInfo.widgetInstance.reset();
+                itemRunTimeInfo.widgetInstance.clear();
                 itemRunTimeInfo.widgetInstance.option('isValid', true);
             }
         });

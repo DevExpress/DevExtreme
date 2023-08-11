@@ -22,6 +22,7 @@ import { triggerResizeEvent } from '../events/visibility_change';
 // STYLE gallery
 
 const GALLERY_CLASS = 'dx-gallery';
+const GALLERY_INDICATOR_VISIBLE_CLASS = 'dx-gallery-indicator-visible';
 const GALLERY_WRAPPER_CLASS = GALLERY_CLASS + '-wrapper';
 const GALLERY_LOOP_CLASS = 'dx-gallery-loop';
 const GALLERY_ITEM_CONTAINER_CLASS = GALLERY_CLASS + '-container';
@@ -576,9 +577,11 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _renderIndicator: function() {
+        const { showIndicator } = this.option();
         this._cleanIndicators();
+        this.$element().toggleClass(GALLERY_INDICATOR_VISIBLE_CLASS, showIndicator);
 
-        if(!this.option('showIndicator')) {
+        if(!showIndicator) {
             return;
         }
 

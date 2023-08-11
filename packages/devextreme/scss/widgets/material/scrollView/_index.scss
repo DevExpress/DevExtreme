@@ -12,6 +12,26 @@
 
 $scrollview-loading-indicator-size: 42px;
 
+.dx-scrollview-scrollbottom-text,
+.dx-scrollview-pull-down-text {
+  margin-left: 10px;
+  top: math.div(50px - $material-base-font-size, 2);
+  display: inline-block;
+
+  .dx-rtl & {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+}
+
+.dx-scrollview-pull-down-image {
+  display: none;
+}
+
+.dx-scrollview-pull-down {
+  text-align: center;
+}
+
 .dx-scrollable-native.dx-scrollable-native-android .dx-scrollview-pull-down {
   background-color: $scrollable-bg;
   box-shadow: 0 1px 4px 0 $scrollview-shadow-color;
@@ -55,6 +75,10 @@ $scrollview-loading-indicator-size: 42px;
 }
 
 .dx-scrollview-pull-down-text {
+  div {
+    position: relative;
+  }
+
   > div {
     display: none;
 

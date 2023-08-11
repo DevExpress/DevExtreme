@@ -33,8 +33,6 @@
 .dx-numberbox-spin-up-icon,
 .dx-numberbox-spin-down-icon {
   @include dx-icon-font-centered-sizing($generic-base-icon-size);
-
-  border-radius: $numberbox-spin-icon-border-radius;
 }
 
 .dx-numberbox-spin-button {

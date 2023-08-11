@@ -74,20 +74,25 @@ jobs:
 
     - name: Get sources
       uses: actions/checkout@v3
+      with:
+        path: ./devextreme
 
-    - uses: ./.github/actions/pin-browsers
+    - name: Pin browsers
+      uses: ./devextreme/.github/actions/pin-browsers
 
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: '**/node_modules'
+        path: './devextreme/**/node_modules'
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Install packages in devextreme repo
+      working-directory: ./devextreme
       run: npm install --no-audit --no-fund
 
     - name: Discover declarations in devextreme repo
+      working-directory: ./devextreme
       run: npx nx discover-declarations devextreme-root
 
     - name: Clone devextreme-angular repo from PR author fork
@@ -98,25 +103,25 @@ jobs:
         REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
 
         if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
-          git clone -b $REMOTE_BRANCH $REMOTE_URL ../devextreme-angular-repo
+          git clone -b $REMOTE_BRANCH $REMOTE_URL ./devextreme-angular-repo
         fi
 
     - name: Clone devextreme-angular repo
       run: |
-        test -d ../devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ../devextreme-angular-repo
+        test -d ./devextreme-angular-repo || git clone -b master https://github.com/devexpress/devextreme-angular ./devextreme-angular-repo
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
         name: devextreme-npm
-        path: ../devextreme-angular-repo/devextreme-setup
+        path: ./devextreme-angular-repo/devextreme-setup
 
     - name: Install packages for devextreme-angular
-      working-directory: ../devextreme-angular-repo
+      working-directory: ./devextreme-angular-repo
       run: npm install --no-audit --no-fund
 
     - name: Install devextreme package
-      working-directory: ../devextreme-angular-repo
+      working-directory: ./devextreme-angular-repo
       run: |
         pushd devextreme-setup
         installerName=$(realpath .)/devextreme-installer.tgz
@@ -128,20 +133,12 @@ jobs:
         cd ../../
         npm install --save-dev --legacy-peer-deps $installerName
 
-    - name: Move devextreme-angular-repo to packages
-      run: mv ../devextreme-angular-repo ./packages
-
     - name: Build with Angular 12
-      working-directory: packages/devextreme-angular-repo
-      run: |
-        npm run update-integration-meta
-        cd packages/devextreme-angular-generator
-        npm run build
-        cd ../devextreme-angular
-        npm run build
+      working-directory: ./devextreme-angular-repo
+      run: npm run build
 
     - name: Run tests with Angular 12
-      working-directory: packages/devextreme-angular-repo/packages/devextreme-angular
+      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
       run: npm run test:dev
 
   test_bundlers:
@@ -210,7 +207,7 @@ jobs:
 
     runs-on: devextreme-shr2
     name: Demos visual tests ${{ matrix.CONSTEL }}
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
     - name: Get sources

@@ -33,6 +33,9 @@ const COLORVIEW_HEX_INPUT_SELECTOR = '.dx-colorview-label-hex .dx-texteditor-inp
 const COLORVIEW_APPLY_BUTTON_SELECTOR = '.dx-colorview-apply-button';
 const CLEAR_BUTTON_AREA_SELECTOR = '.dx-clear-button-area';
 const COLOR_VIEW_PALETTE_HANDLE_SELECTOR = '.dx-colorview-palette-handle';
+const COLOR_VIEW_CANCEL_BUTTON_SELECTOR = '.dx-colorview-cancel-button';
+const BUTTON_SELECTOR = '.dx-button';
+const TEXTBOX_SELECTOR = '.dx-textbox';
 
 const move = function($element, position) {
     const parentOffset = $element.parent().offset();
@@ -784,20 +787,11 @@ QUnit.module('keyboard navigation', {
         assert.ok(this.instance._colorView, 'colorView work fine when focusStateEnabled set to false');
     });
 
-    QUnit.testInActiveWindow('focusing colorView element should trigger focus on editor input', function(assert) {
-        this.instance.option('opened', true);
-
-        $(this.instance._colorView.$element()).triggerHandler('focus');
-        assert.ok(this.instance.$element().hasClass(STATE_FOCUSED_CLASS), 'colorView on focus reset focus to element');
-    });
-
-    QUnit.testInActiveWindow('pressing tab should set focus on first input in overlay', function(assert) {
+    QUnit.testInActiveWindow('pressing tab should set focus on first item in overlay', function(assert) {
         this.instance.option('opened', true);
         this.keyboard.keyDown('tab');
 
-        const $inputR = $(this.instance._colorView._rgbInputs[0].$element());
-
-        assert.ok($inputR.hasClass(STATE_FOCUSED_CLASS), 'tab set focus to first input in overlay');
+        assert.ok($(`.${COLORVIEW_CLASS}`).hasClass(STATE_FOCUSED_CLASS), 'tab sets focus to the first overlay item');
     });
 
     QUnit.testInActiveWindow('first input focused on tab should have selected text (T1127632)', function(assert) {
@@ -805,18 +799,32 @@ QUnit.module('keyboard navigation', {
             assert.ok(true, 'test does not actual for mobile devices');
             return;
         }
+        const toolbarItems = [{
+            widget: 'dxTextBox',
+            toolbar: 'top',
+            location: 'before',
+            options: {
+                text: 'Textbox',
+            },
+        }];
 
-        this.instance.option('opened', true);
+        this.instance.option({
+            opened: true,
+            applyValueMode: 'useButtons',
+            dropDownOptions: {
+                toolbarItems,
+            },
+        });
         this.keyboard.keyDown('tab');
 
-        const $firstInput = $(this.instance._colorView._rgbInputs[0].$element()).find('.dx-texteditor-container input');
+        const $firstInput = $(getColorBoxOverlayContent().find(TEXTBOX_SELECTOR)[0]).find('input');
         const caretPosition = {
             start: $firstInput[0].selectionStart,
             end: $firstInput[0].selectionEnd
         };
 
         assert.strictEqual(caretPosition.start, 0, 'selectionStart is correct');
-        assert.strictEqual(caretPosition.end, 3, 'selectionEnd is correct');
+        assert.strictEqual(caretPosition.end, 7, 'selectionEnd is correct');
     });
 
     QUnit.test('Pressing the \'Esc\' key should close the dropDown', function(assert) {
@@ -842,6 +850,75 @@ QUnit.module('keyboard navigation', {
                 instance.option('opened', true);
             });
     });
+
+    if(devices.real().deviceType === 'desktop') {
+        QUnit.module('applyValueMode is useButtons', () => {
+            const toolbarItems = [{
+                widget: 'dxButton',
+                toolbar: 'top',
+                location: 'before',
+                options: {
+                    text: 'Button',
+                },
+            },
+            {
+                widget: 'dxTextBox',
+                toolbar: 'bottom',
+                location: 'before',
+                options: {
+                    text: 'Text box',
+                },
+            }];
+
+            QUnit.test('pressing tab should set focus on first item in popup', function(assert) {
+                this.instance.option({
+                    opened: true,
+                    applyValueMode: 'useButtons',
+                });
+                this.keyboard.keyDown('tab');
+
+                assert.ok($(`.${COLORVIEW_CLASS}`).hasClass(STATE_FOCUSED_CLASS));
+            });
+
+            QUnit.test('pressing tab + shift should set focus on cancel button in popup', function(assert) {
+                this.instance.option({
+                    opened: true,
+                    applyValueMode: 'useButtons',
+                });
+                this.keyboard.keyDown('tab', { shiftKey: true });
+
+                const $cancelButton = getColorBoxOverlayContent().find(COLOR_VIEW_CANCEL_BUTTON_SELECTOR);
+
+                assert.ok($cancelButton.hasClass(STATE_FOCUSED_CLASS));
+            });
+
+            QUnit.test('pressing tab should set focus on first item in popup with custom items', function(assert) {
+                this.instance.option({
+                    opened: true,
+                    applyValueMode: 'useButtons',
+                    dropDownOptions: {
+                        toolbarItems,
+                    },
+                });
+                this.keyboard.keyDown('tab');
+
+                assert.ok(getColorBoxOverlayContent().find(BUTTON_SELECTOR).hasClass(STATE_FOCUSED_CLASS), 'button is focused');
+            });
+
+            QUnit.test('pressing tab + shift should set focus on last item in popup with custom items', function(assert) {
+                this.instance.option({
+                    opened: true,
+                    applyValueMode: 'useButtons',
+                    dropDownOptions: {
+                        toolbarItems,
+                    },
+                });
+                this.keyboard.keyDown('tab', { shiftKey: true });
+
+                assert.ok(getColorBoxOverlayContent().find(TEXTBOX_SELECTOR).hasClass(STATE_FOCUSED_CLASS), 'textbox is focused');
+            });
+        });
+    }
 });
 
 QUnit.module('Regressions', {
@@ -1141,5 +1218,11 @@ QUnit.module('Accessibility', {
         const $handle = getColorBoxOverlayContent().find(COLOR_VIEW_PALETTE_HANDLE_SELECTOR);
 
         assert.strictEqual($input.attr('aria-activedescendant'), $handle.attr('id'));
+    });
+
+    QUnit.test('input should not have "aria-activedescendant" attribute if colorview have not opened yet', function(assert) {
+        const $colorBox = this.element.dxColorBox({});
+        const $input = $colorBox.find(`.${COLOR_BOX_INPUT_CLASS}`);
+        assert.notOk($input.attr('aria-activedescendant'));
     });
 });

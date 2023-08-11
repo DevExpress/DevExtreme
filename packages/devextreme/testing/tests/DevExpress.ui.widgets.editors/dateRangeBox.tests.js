@@ -39,6 +39,10 @@ const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_CONTOURED_CELL_CLASS = 'dx-calendar-contoured-date';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
+const TODAY_BUTTON_SELECTOR = '.dx-button-today.dx-button';
+const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
+const BUTTON_SELECTOR = '.dx-button';
+const TEXTBOX_SELECTOR = '.dx-textbox';
 
 const getStartDateBoxInstance = dateRangeBoxInstance => dateRangeBoxInstance.getStartDateBox();
 
@@ -1359,7 +1363,7 @@ QUnit.module('Events', moduleConfig, () => {
                 onValueChanged: this.onValueChangedHandler
             });
 
-            this.instance.reset();
+            this.instance.clear();
 
             assert.strictEqual(this.onValueChangedHandler.callCount, 1);
             assert.deepEqual(this.instance.option('value'), [null, null], 'value is correct');
@@ -3798,7 +3802,7 @@ QUnit.module('Validation', {
             assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
         });
 
-        QUnit.test('reset method call should raise external validation', function(assert) {
+        QUnit.test('clear method call should raise external validation', function(assert) {
             this.reinit({
                 value: [new Date('2023/4/4'), new Date('2023/4/8')]
             });
@@ -3810,7 +3814,7 @@ QUnit.module('Validation', {
                 }]
             });
 
-            this.instance.reset();
+            this.instance.clear();
 
             assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
         });
@@ -4108,3 +4112,127 @@ QUnit.module('Aria accessibility', {
         this.checkInputAttributes('aria-activedescendant', newContouredCellID);
     });
 });
+
+QUnit.module('isDirty', moduleConfig, () => {
+    QUnit.test('should be false by default', function(assert) {
+        assert.strictEqual(this.instance.option('isDirty'), false);
+    });
+
+    QUnit.test('should be set to true after value changed', function(assert) {
+        this.instance.option('value', ['2023/02/02', null]);
+
+        assert.strictEqual(this.instance.option('isDirty'), true);
+    });
+
+    QUnit.test('should be false if value updated to initial', function(assert) {
+        const initialValue = ['2023/02/02', '2023/01/01'];
+        this.reinit({ value: initialValue });
+
+        this.instance.option('value', ['2023/02/02', null]);
+        this.instance.option('value', initialValue);
+
+        assert.strictEqual(this.instance.option('isDirty'), false);
+    });
+
+    QUnit.test('should be set to true after startDateBox value changed', function(assert) {
+        this.instance.getStartDateBox().option('value', '2023/03/03');
+
+        assert.strictEqual(this.instance.option('isDirty'), true);
+    });
+
+    QUnit.test('should be set to true after endDateBox value changed', function(assert) {
+        this.instance.getEndDateBox().option('value', '2023/03/03');
+
+        assert.strictEqual(this.instance.option('isDirty'), true);
+    });
+});
+
+if(devices.real().deviceType === 'desktop') {
+    QUnit.module('Keyboard navigation', moduleConfig, () => {
+        const toolbarItems = [{
+            widget: 'dxButton',
+            toolbar: 'top',
+            location: 'before',
+            options: {
+                text: 'Button',
+            },
+        },
+        {
+            widget: 'dxTextBox',
+            toolbar: 'bottom',
+            location: 'before',
+            options: {
+                text: 'Text box',
+            },
+        }];
+
+        QUnit.test('pressing tab should set focus on today button in popup', function(assert) {
+            this.reinit({
+                opened: true,
+                applyValueMode: 'useButtons',
+            });
+            this.$endDateInput
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                }));
+
+            const $todayButton = this.getPopupContent().parent().find(TODAY_BUTTON_SELECTOR);
+            assert.ok($todayButton.hasClass(STATE_FOCUSED_CLASS));
+        });
+
+        QUnit.test('pressing tab + shift should set focus on cancel button in popup', function(assert) {
+            this.reinit({
+                opened: true,
+                applyValueMode: 'useButtons',
+            });
+            this.$startDateInput
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                    shiftKey: true
+                }));
+
+            const $cancelButton = this.getPopupContent().parent().find(CANCEL_BUTTON_SELECTOR);
+            assert.ok($cancelButton.hasClass(STATE_FOCUSED_CLASS));
+        });
+
+        QUnit.test('pressing tab should set focus on first item in popup with custom items', function(assert) {
+            this.reinit({
+                opened: true,
+                applyValueMode: 'useButtons',
+                dropDownOptions: {
+                    toolbarItems,
+                },
+            });
+            this.$endDateInput
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                }));
+
+            const $firstItem = this.getPopupContent().parent().find(BUTTON_SELECTOR);
+            assert.ok($firstItem.hasClass(STATE_FOCUSED_CLASS));
+        });
+
+        QUnit.test('pressing tab + shift should set focus on last item in popup with custom items', function(assert) {
+            this.reinit({
+                opened: true,
+                applyValueMode: 'useButtons',
+                dropDownOptions: {
+                    toolbarItems,
+                },
+            });
+            this.$startDateInput
+                .focus()
+                .trigger($.Event('keydown', {
+                    key: 'Tab',
+                    shiftKey: true
+                }));
+
+            const $lastItem = this.getPopupContent().parent().find(TEXTBOX_SELECTOR);
+            assert.ok($lastItem.hasClass(STATE_FOCUSED_CLASS));
+        });
+    });
+}
+

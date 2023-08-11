@@ -27,6 +27,8 @@ const getGridConfig = (config): Record<string, unknown> => {
   return config ? { ...defaultConfig, ...config } : defaultConfig;
 };
 
+const encodedIcon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjIwcHgiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0iIzAwMDAwMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KCTxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIC8+DQo8L3N2Zz4NCg==';
+
 test('Tab key on editor should focus next cell if editing mode is cell', async (t) => {
   const dataGrid = new DataGrid('#container');
 
@@ -1695,7 +1697,6 @@ test('DataGrid inside editing popup should have synchronized columns (T1059401)'
     .expect(popupDataGrid.getDataRow(0).element.exists)
     .ok();
 
-  await t.debug();
   // assert
   await t
     .expect(await takeScreenshot('grid-popup-editing-grid.png', overlay.content))
@@ -2154,7 +2155,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
       const headerPanel = dataGrid.getHeaderPanel();
 
       const scrollTo = async (y) => {
-        await dataGrid.scrollTo({ y });
+        await dataGrid.scrollTo(t, { y });
         return dataGrid.isReady();
       };
 
@@ -2325,4 +2326,83 @@ test('Popup EditForm screenshot', async (t) => {
       ],
     },
   }));
+});
+
+[
+  {
+    theme: 'material.blue.light',
+    useIcons: true,
+  },
+  {
+    theme: 'generic.light',
+    useIcons: true,
+  },
+  {
+    theme: 'material.blue.light',
+    useIcons: false,
+  },
+  {
+    theme: 'generic.light',
+    useIcons: false,
+  },
+].forEach(({ theme, useIcons }) => {
+  // T1179114
+  test(`The disabled state should be correct for a custom button when given as a SVG image (${theme})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+    const commandCell = dataGrid.getDataRow(0).getCommandCell(2);
+    const firstCustomIcon = commandCell.getButton(2);
+    const secondCustomIcon = commandCell.getButton(3);
+
+    await t
+      .expect(firstCustomIcon.clientWidth)
+      .eql(20)
+      .expect(secondCustomIcon.clientWidth)
+      .eql(20)
+      .expect(await takeScreenshot(`T1179114-grid-edit-custom-button-in-${theme.split('.')[0]}-theme-when-useicons-is-${useIcons}.png`, dataGrid.element))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      width: 600,
+      dataSource: [{
+        Id: 0,
+        name: 'test',
+      }],
+      keyExpr: 'Id',
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        allowDeleting: true,
+        useIcons,
+      },
+      columns: ['Id', 'name', {
+        type: 'buttons',
+        width: 200,
+        buttons: [
+          {
+            name: 'delete',
+            disabled: false,
+          },
+          {
+            name: 'delete',
+            disabled: true,
+          },
+          {
+            icon: encodedIcon,
+            disabled: false,
+          },
+          {
+            icon: encodedIcon,
+            disabled: true,
+          },
+        ],
+      }],
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
 });

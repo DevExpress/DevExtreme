@@ -7029,7 +7029,7 @@ QUnit.module('Editing with real dataController', {
         that.editCell(0, 5);
         that.clock.tick(10);
         const $selectBox = $(rowsView.getCellElement(0, 5)).find('.dx-selectbox');
-        $selectBox.dxSelectBox('instance').reset();
+        $selectBox.dxSelectBox('instance').clear();
         that.closeEditCell();
         that.clock.tick(10);
 

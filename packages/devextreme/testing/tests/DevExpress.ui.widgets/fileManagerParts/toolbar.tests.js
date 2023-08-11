@@ -807,7 +807,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
         this.clock.tick(400);
 
         const originalWidth = implementationsMap.getWidth;
-        implementationsMap.getWidth = () => 360;
+        implementationsMap.getWidth = () => 300;
         $('#fileManager').css('width', '100%');
         fileManager.repaint();
         this.clock.tick(800);

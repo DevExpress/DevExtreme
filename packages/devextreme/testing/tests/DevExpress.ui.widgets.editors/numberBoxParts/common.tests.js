@@ -692,12 +692,12 @@ QUnit.module('basics', {}, () => {
         assert.equal($numberBox.dxNumberBox('option', 'value'), null, 'value is correct');
     });
 
-    QUnit.test('the value should be reset to null if reset method called', function(assert) {
+    QUnit.test('the value should be cleared to null if clear method called', function(assert) {
         const numberBox = $('#numberbox').dxNumberBox({
             value: 0
         }).dxNumberBox('instance');
 
-        numberBox.reset();
+        numberBox.clear();
 
         assert.equal(numberBox.option('value'), null, 'value is correct');
     });

@@ -1,7 +1,7 @@
 import { getFilterStrategy } from '../local';
 
 jest.mock(
-  '../../../../../../ui/scheduler/appointments/dataProvider/appointmentFilter',
+  '../../../../../../__internal/scheduler/appointments/data_provider/m_appointment_filter',
   () => ({
     AppointmentFilterBaseStrategy: jest.fn(() => ({ strategy: 'base' })),
     AppointmentFilterVirtualStrategy: jest.fn(() => ({ strategy: 'virtual' })),

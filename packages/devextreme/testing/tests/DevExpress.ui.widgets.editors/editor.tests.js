@@ -58,6 +58,34 @@ const moduleConfig = {
     }
 };
 
+QUnit.module('isDirty', moduleConfig, () => {
+    QUnit.test('is false by default', function(assert) {
+        const editor = this.fixture.createEditor();
+
+        const isDirty = editor.option('isDirty');
+
+        assert.strictEqual(isDirty, false);
+    });
+
+    QUnit.test('should be true if value differ from initial', function(assert) {
+        const editor = this.fixture.createEditor();
+
+        editor.option('value', '1234');
+
+        assert.strictEqual(editor.option('isDirty'), true);
+    });
+
+    QUnit.test('should should be false if value updated to initial', function(assert) {
+        const initialValue = '1';
+        const editor = this.fixture.createEditor({ value: initialValue });
+
+        editor.option('value', '123');
+        editor.option('value', initialValue);
+
+        assert.strictEqual(editor.option('isDirty'), false);
+    });
+});
+
 QUnit.module('base', moduleConfig, () => {
     QUnit.test('isEditor static method', function(assert) {
         const editor = this.fixture.createEditor();
@@ -127,10 +155,10 @@ QUnit.module('readOnly', moduleConfig, () => {
 });
 
 QUnit.module('methods', moduleConfig, () => {
-    QUnit.test('reset', function(assert) {
+    QUnit.test('clear', function(assert) {
         const editor = this.fixture.createEditor({ value: '123' });
 
-        editor.reset();
+        editor.clear();
 
         assert.strictEqual(editor.option('value'), null);
     });

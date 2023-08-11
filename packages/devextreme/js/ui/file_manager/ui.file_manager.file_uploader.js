@@ -224,7 +224,7 @@ class FileManagerFileUploader extends Widget {
         this._raiseUploadSessionStarted(sessionInfo);
 
         return whenSome(deferreds).always(() => setTimeout(() => {
-            uploaderInfo.fileUploader.reset();
+            uploaderInfo.fileUploader.clear();
             uploaderInfo.session = null;
         }));
     }

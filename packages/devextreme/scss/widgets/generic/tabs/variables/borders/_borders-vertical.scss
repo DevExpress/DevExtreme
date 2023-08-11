@@ -1,0 +1,252 @@
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/colors" as *;
+@use "../../../../base/icons" as *;
+@use "../../../../base/tabs";
+@use "../../variables/colors" as *;
+@use "../../variables/sizes" as *;
+@use "../../variables/borders/borders-horizontal";
+
+// adduse
+
+
+$generic-tabs-vertical-border-hover-top: null !default;
+$generic-tabs-vertical-border-hover-bottom: null !default;
+$generic-tabs-vertical-border-hover-left: null !default;
+$generic-tabs-vertical-border-hover-right: null !default;
+
+$generic-tabs-vertical-border-selected-top: null !default;
+$generic-tabs-vertical-border-selected-bottom: null !default;
+$generic-tabs-vertical-border-selected-left: null !default;
+$generic-tabs-vertical-border-selected-right: null !default;
+
+$generic-tabs-vertical-border-focused-top: null !default;
+$generic-tabs-vertical-border-focused-bottom: null !default;
+$generic-tabs-vertical-border-focused-left: null !default;
+$generic-tabs-vertical-border-focused-right: null !default;
+
+$generic-tabs-vertical-border-focused-disabled-top: null !default;
+$generic-tabs-vertical-border-focused-disabled-bottom: null !default;
+$generic-tabs-vertical-border-focused-disabled-left: null !default;
+$generic-tabs-vertical-border-focused-disabled-right: null !default;
+
+$generic-tabs-vertical-border-active-top: null !default;
+$generic-tabs-vertical-border-active-bottom: null !default;
+$generic-tabs-vertical-border-active-left: null !default;
+$generic-tabs-vertical-border-active-right: null !default;
+
+@if $color == "carmine" {
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
+  $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+
+  $generic-tabs-vertical-border-selected-top: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-bottom: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-left: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-right: $generic-tabs-border-width solid $tabs-border-color !default;
+
+  $generic-tabs-vertical-border-focused-top: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabs-vertical-border-focused-disabled-top: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-bottom: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+
+  $generic-tabs-vertical-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+}
+
+@if $color == "contrast" {
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
+  $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+
+  $generic-tabs-vertical-border-selected-top: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-bottom: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-left: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-right: $generic-tabs-border-width solid $tabs-border-color !default;
+
+  $generic-tabs-vertical-border-focused-top: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabs-vertical-border-focused-disabled-top: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-bottom: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+
+  $generic-tabs-vertical-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+}
+
+@if $color == "dark" {
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
+  $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+
+  $generic-tabs-vertical-border-selected-top: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-bottom: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-left: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-right: $generic-tabs-border-width solid $tabs-border-color !default;
+
+  $generic-tabs-vertical-border-focused-top: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabs-vertical-border-focused-disabled-top: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-bottom: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+
+  $generic-tabs-vertical-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+}
+
+@if $color == "darkmoon" {
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
+  $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+
+  $generic-tabs-vertical-border-selected-top: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-bottom: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-left: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-right: $generic-tabs-border-width solid $tabs-border-color !default;
+
+  $generic-tabs-vertical-border-focused-top: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabs-vertical-border-focused-disabled-top: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-bottom: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+
+  $generic-tabs-vertical-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+}
+
+@if $color == "darkviolet" {
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
+  $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+
+  $generic-tabs-vertical-border-selected-top: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-bottom: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-left: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-right: $generic-tabs-border-width solid $tabs-border-color !default;
+
+  $generic-tabs-vertical-border-focused-top: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabs-vertical-border-focused-disabled-top: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-bottom: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+
+  $generic-tabs-vertical-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+}
+
+@if $color == "greenmist" {
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
+  $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+
+  $generic-tabs-vertical-border-selected-top: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-bottom: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-left: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-right: $generic-tabs-border-width solid $tabs-border-color !default;
+
+  $generic-tabs-vertical-border-focused-top: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabs-vertical-border-focused-disabled-top: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-bottom: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+
+  $generic-tabs-vertical-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+}
+
+@if $color == "light" {
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
+  $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+
+  $generic-tabs-vertical-border-selected-top: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-bottom: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-left: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-right: $generic-tabs-border-width solid $tabs-border-color !default;
+
+  $generic-tabs-vertical-border-focused-top: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabs-vertical-border-focused-disabled-top: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-bottom: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+
+  $generic-tabs-vertical-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+}
+
+@if $color == "softblue" {
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
+  $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+  $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
+
+  $generic-tabs-vertical-border-selected-top: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-bottom: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-left: $generic-tabs-border-width solid $tabs-border-color !default;
+  $generic-tabs-vertical-border-selected-right: $generic-tabs-border-width solid $tabs-border-color !default;
+
+  $generic-tabs-vertical-border-focused-top: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-left: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+  $generic-tabs-vertical-border-focused-right: $generic-tabs-border-width solid $tabs-focused-border-color !default;
+
+  $generic-tabs-vertical-border-focused-disabled-top: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-bottom: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-left: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+  $generic-tabs-vertical-border-focused-disabled-right: $generic-tabs-border-width solid $tabs-focused-disabled-border-color !default;
+
+  $generic-tabs-vertical-border-active-top: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-bottom: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-left: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+  $generic-tabs-vertical-border-active-right: $generic-tabs-border-width solid $tabs-tab-active-border-color !default;
+}

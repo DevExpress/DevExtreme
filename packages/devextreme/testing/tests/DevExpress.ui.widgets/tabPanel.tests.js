@@ -30,6 +30,7 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
+const TABPANEL_TABS_ITEM_CLASS = 'dx-tabpanel-tab';
 const TABS_CLASS = 'dx-tabs';
 const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
 const MULTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
@@ -147,6 +148,16 @@ QUnit.module('rendering', {
         assert.equal($contents.eq(0).text(), 'Test1', 'first item content is rendered');
     });
 
+    QUnit.test(`tab must have ${TABPANEL_TABS_ITEM_CLASS} class`, function(assert) {
+        const $element = $('#tabPanel').dxTabPanel({
+            items: [1],
+        });
+
+        const tabs = $element.find(`.${TABS_ITEM_CLASS}`);
+
+        assert.ok($(tabs[0]).hasClass(TABPANEL_TABS_ITEM_CLASS));
+    });
+
     [true, false].forEach(rtlEnabled => {
         QUnit.test(`rtlEnabled: ${rtlEnabled}, dataSource: { title, icon } -> icon alignment`, function(assert) {
             const $element = $('<div>').appendTo('#qunit-fixture');
@@ -170,7 +181,7 @@ QUnit.module('rendering', {
             const horizontalMargin = rtlEnabled
                 ? iconRect.right - textRect.right - iconRect.width
                 : textRect.left - iconRect.left - iconRect.width;
-            assert.strictEqual(horizontalMargin, 9, `correct horizontal alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+            assert.strictEqual(horizontalMargin, 8, `correct horizontal alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
         });
     });
 });

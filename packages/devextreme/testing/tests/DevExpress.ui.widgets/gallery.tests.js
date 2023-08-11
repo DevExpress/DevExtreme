@@ -80,6 +80,7 @@ QUnit.testStart(() => {
 });
 
 const GALLERY_CLASS = 'dx-gallery';
+const GALLERY_INDICATOR_VISIBLE_CLASS = 'dx-gallery-indicator-visible';
 const GALLERY_WRAPPER_CLASS = GALLERY_CLASS + '-wrapper';
 const GALLERY_ITEM_CONTAINER_CLASS = GALLERY_CLASS + '-container';
 const GALLERY_ITEM_CLASS = GALLERY_CLASS + '-item';
@@ -748,6 +749,94 @@ QUnit.module('behavior', {
         }).dxGallery('instance');
 
         assert.ok(resizeEventSpy.called);
+    });
+
+    [false, true].forEach((showIndicator) => {
+        QUnit.test(`Gallery should ${showIndicator ? '' : 'not'} have indicator-visible (showIndicator=${showIndicator})`, function(assert) {
+            this.$element.dxGallery({
+                items: [0, 1, 2, 3],
+                showIndicator,
+            });
+
+            assert.strictEqual($(this.$element).hasClass(GALLERY_INDICATOR_VISIBLE_CLASS), showIndicator);
+        });
+
+        QUnit.test(`Gallery should ${showIndicator ? '' : 'not'} have indicator-visible after runtime showIndicator ${showIndicator ? 'enable' : 'disable'}`, function(assert) {
+            const gallery = this.$element.dxGallery({
+                items: [0, 1, 2, 3],
+                showIndicator: !showIndicator,
+            }).dxGallery('instance');
+
+            gallery.option('showIndicator', showIndicator);
+
+            assert.strictEqual($(this.$element).hasClass(GALLERY_INDICATOR_VISIBLE_CLASS), showIndicator);
+        });
+    });
+
+    QUnit.test('Gallery should have 1px border on focus (showIndicator=false)', function(assert) {
+        const gallery = this.$element.dxGallery({
+            items: [0, 1, 2, 3],
+            showIndicator: false,
+            focusStateEnabled: true,
+        }).dxGallery('instance');
+
+        gallery.focus();
+
+        const borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '1px');
+    });
+
+    QUnit.test('Gallery should not have border on focus (showIndicator=true)', function(assert) {
+        const gallery = this.$element.dxGallery({
+            items: [0, 1, 2, 3],
+            showIndicator: true,
+            focusStateEnabled: true,
+        }).dxGallery('instance');
+
+        gallery.focus();
+
+        const borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '0px');
+    });
+
+    QUnit.test('Gallery should not have border on focus after runtime showIndicator enable', function(assert) {
+        const gallery = this.$element.dxGallery({
+            items: [0, 1, 2, 3],
+            showIndicator: false,
+            focusStateEnabled: true,
+        }).dxGallery('instance');
+
+        gallery.focus();
+
+        let borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '1px', 'border is enabled');
+
+        gallery.option('showIndicator', true);
+        borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '0px', 'border is disabled');
+    });
+
+    QUnit.test('Gallery should have border on focus after runtime showIndicator disable', function(assert) {
+        const gallery = this.$element.dxGallery({
+            items: [0, 1, 2, 3],
+            showIndicator: true,
+            focusStateEnabled: true,
+        }).dxGallery('instance');
+
+        gallery.focus();
+
+        let borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '0px', 'border is disabled');
+
+        gallery.option('showIndicator', false);
+        borderWidth = this.$element.css('border-width');
+
+        assert.strictEqual(borderWidth, '1px', 'border is enabled');
     });
 });
 

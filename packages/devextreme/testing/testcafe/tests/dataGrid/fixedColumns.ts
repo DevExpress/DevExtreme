@@ -1,8 +1,12 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import DataGrid from '../../model/dataGrid';
+import { makeRowsViewTemplatesAsync } from './helpers/asyncTemplates';
+
+const DATA_GRID_SELECTOR = '#container';
 
 fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../container.html'));
@@ -201,4 +205,117 @@ test('Hovering over a row should work correctly when there is a fixed column and
   })();
 
   await t.wait(200);
+});
+
+// T1177143
+safeSizeTest('Fixed to the right columns should appear when any column has undefined or 0 width', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await takeScreenshot('T1177143-right-fixed-column-with-no-width-columns-1.png', dataGrid.element);
+
+  await dataGrid.scrollTo(t, { x: 5000 });
+
+  await takeScreenshot('T1177143-right-fixed-column-with-no-width-columns-2.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+  columnAutoWidth: false,
+  dataSource: [{
+    Column1: 'a',
+    Column2: 'b',
+    Column3: 'b',
+    Column4: 'c',
+    Column5: 'd',
+    Column6: 'e',
+    Column7: 'f',
+    Column8: 'g',
+  }],
+  columns: [
+    {
+      dataField: 'Column1', fixed: true, fixedPosition: 'right', width: 100,
+    },
+    { dataField: 'Column2', width: undefined },
+    { dataField: 'Column3', width: 0 },
+    { dataField: 'Column4', width: 220 },
+    { dataField: 'Column5', width: 240 },
+    { dataField: 'Column6', width: 240 },
+    { dataField: 'Column7', width: 0 },
+    { dataField: 'Column8', width: 270 },
+  ],
+}));
+
+// T1180834
+test('Hovering over a row should work correctly after scrolling when there is a fixed column with a cellTemplate and virtual scrolling is used (React)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  let dataRow = dataGrid.getDataRow(1);
+  let fixedDataRow = dataGrid.getDataRow(1);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  // act
+  await t.hover(dataRow.element);
+
+  // assert
+  await takeScreenshot('T1180834-grid-hover-row-after-scrolling-1.png', dataGrid.element);
+
+  await t
+    .expect(dataRow.isHovered)
+    .ok()
+    .expect(fixedDataRow.isHovered)
+    .ok();
+
+  // act
+  await dataGrid.scrollTo(t, { y: 300 });
+  dataRow = dataGrid.getDataRow(10);
+  await t.hover(dataRow.element);
+
+  // assert
+  fixedDataRow = dataGrid.getDataRow(10);
+
+  await takeScreenshot('T1180834-grid-hover-row-after-scrolling-2.png', dataGrid.element);
+
+  await t
+    .expect(dataRow.isHovered)
+    .ok()
+    .expect(fixedDataRow.isHovered)
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [...new Array(60)].map((_, index) => ({ id: index, text1: `item1 ${index}`, text2: `item2 ${index}` })),
+    height: 500,
+    keyExpr: 'id',
+    renderAsync: false,
+    hoverStateEnabled: true,
+    templatesRenderAsynchronously: true,
+    columns: [
+      'id',
+      {
+        dataField: 'text1',
+        cellTemplate: (_, { value }) => ($('<div/>') as any).text(value),
+        fixed: true,
+      },
+      'text2',
+    ],
+    paging: {
+      enabled: false,
+    },
+    scrolling: {
+      useNative: false,
+      rowRenderingMode: 'virtual',
+    },
+    showBorders: true,
+  });
+
+  await makeRowsViewTemplatesAsync(DATA_GRID_SELECTOR, 100);
 });

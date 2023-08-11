@@ -4,9 +4,17 @@
   cursor: default;
 }
 
-@mixin dx-button-sizing($padding, $icon-size, $icon-margin) {
+@mixin dx-button-sizing(
+  $vertical-padding,
+  $horizontal-padding-left,
+  $horizontal-padding-right,
+  $icon-size,
+  $icon-margin
+) {
   .dx-button-content {
-    padding: $padding;
+    padding-block: $vertical-padding;
+    padding-inline-start: $horizontal-padding-left;
+    padding-inline-end: $horizontal-padding-right;
   }
 
   .dx-icon {
