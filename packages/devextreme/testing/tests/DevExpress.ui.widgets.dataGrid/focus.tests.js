@@ -3534,7 +3534,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.ok($(this.getRowElement(0)).find('.dx-texteditor-input').is(':focus'), 'input is focused');
-        assert.equal(this.option('focusedRowKey').length, 36, 'focusedRowKey is tmp "guid" key');
+        assert.equal(this.option('focusedRowKey').length, 57, 'focusedRowKey is tmp "guid" key');
         assert.equal(this.option('focusedRowIndex'), 0, 'focusedRowIndex');
     });
 
@@ -4112,7 +4112,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // assert
         assert.strictEqual(onFocusedRowChangedSpy.callCount, 1, 'onFocusedRowChanged event is called for a new row');
         assert.ok($(this.getRowElement(newRowIndex)).find('.dx-texteditor-input').is(':focus'), 'input is focused');
-        assert.equal(this.option('focusedRowKey').length, 36, 'focusedRowKey is tmp "guid" key');
+        assert.equal(this.option('focusedRowKey').length, 57, 'focusedRowKey is tmp "guid" key');
         // Skip this check
         // focusedRowIndex different with shadow-dom and without it
         // Uncomment after fix of the T1160487 ticket.
