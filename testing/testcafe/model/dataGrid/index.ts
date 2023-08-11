@@ -28,7 +28,6 @@ export const CLASS = {
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
   groupPanel: 'group-panel',
-  columnChooser: 'column-chooser',
   focusedRow: 'dx-row-focused',
   filterPanel: 'filter-panel',
   filterRow: 'filter-row',
