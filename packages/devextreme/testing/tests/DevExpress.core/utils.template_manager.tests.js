@@ -12,6 +12,7 @@ import { EmptyTemplate } from 'core/templates/empty_template';
 import { ChildDefaultTemplate } from 'core/templates/child_default_template';
 import devices from 'core/devices';
 import { getPublicElement } from 'core/element';
+import $ from 'jquery';
 
 QUnit.module('TemplateManager utils', {
     beforeEach: function() {
@@ -115,7 +116,7 @@ QUnit.test('#addOneRenderedCall', function(assert) {
 
     assert.strictEqual(nextTemplate.customField, 'customField', 'should keep previous fields');
 
-    const wrappedElement = $("<div>");
+    const wrappedElement = $('<div>');
     const options = { container: wrappedElement };
     nextTemplate.render(options);
     assert.ok(render.calledWith(options), 'should call old `render` method');
