@@ -505,7 +505,6 @@ export const AdvancedChart = BaseChart.inherit({
       Object.keys(argRanges).forEach((p) => commonArgRange.addRange(argRanges[p]));
       const commonInterval = commonArgRange.interval;
       this._argumentAxes.forEach((a) => {
-        debugger;
         const currentInterval = argRanges[getPaneName(a)].interval ?? commonInterval; // T956425
         a.setBusinessRange(
           new Range({ ...commonArgRange, interval: currentInterval }),
