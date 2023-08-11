@@ -1,7 +1,7 @@
 // @ts-expect-error
 import { grep, noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
-import { each as _each, reverseEach as _reverseEach } from '@js/core/utils/iterator';
+import { reverseEach as _reverseEach } from '@js/core/utils/iterator';
 import { isDefined as _isDefined, isFunction } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import { isPointerEvent, isTouchEvent } from '@js/events/utils/index';
@@ -418,14 +418,14 @@ export const BaseChart = BaseWidget.inherit({
 
   _executeAppendAfterSeries() {},
 
-  _disposeObjectsInArray(propName, fieldNames) {
-    _each(this[propName] || [], (_, item) => {
+  _disposeObjectsInArray(propName: string, fieldNames: string[]) {
+    (this[propName] || []).forEach((item) => {
       if (fieldNames && item) {
-        _each(fieldNames, (_, field) => {
-          item[field] && item[field].dispose();
+        fieldNames.forEach((field) => {
+          item[field]?.dispose();
         });
       } else {
-        item && item.dispose();
+        item?.dispose();
       }
     });
     this[propName] = null;
@@ -946,7 +946,7 @@ export const BaseChart = BaseWidget.inherit({
         this.series[seriesIndex].dispose();
         this.series.splice(seriesIndex, 1);
       } else {
-        _each(this.series, (_, s) => s.dispose());
+        this.series.forEach((s) => s.dispose());
         this.series.length = 0;
       }
     }
@@ -956,7 +956,7 @@ export const BaseChart = BaseWidget.inherit({
   },
 
   _disposeSeriesFamilies() {
-    _each(this.seriesFamilies || [], (_, family) => { family.dispose(); });
+    (this.seriesFamilies || []).forEach((family) => { family.dispose(); });
     this.seriesFamilies = null;
     this._needHandleRenderComplete = true;
   },
@@ -1190,7 +1190,7 @@ export const BaseChart = BaseWidget.inherit({
   _renderCompleteHandler() {
     let allSeriesInited = true;
     if (this._needHandleRenderComplete) {
-      _each(this.series, (_, s) => {
+      this.series.forEach((s) => {
         allSeriesInited = allSeriesInited && s.canRenderCompleteHandle();
       });
       if (allSeriesInited) {
@@ -1255,8 +1255,11 @@ export const BaseChart = BaseWidget.inherit({
 
     this.needToPopulateSeries = false;
 
-    _each(seriesThemes, (_, theme) => {
-      const curSeries = this.series && this.series.filter((s) => s.name === theme.name && !seriesBasis.map((sb: any) => sb.series).includes(s))[0];
+    seriesThemes.forEach((theme) => {
+      const findSeries = (s) => s.name === theme.name
+        && !seriesBasis.map((sb: any) => sb.series).includes(s);
+
+      const curSeries = this.series?.find(findSeries);
       if (curSeries && curSeries.type === theme.type) {
         seriesBasis.push({ series: curSeries, options: theme } as never);
       } else {
@@ -1285,7 +1288,7 @@ export const BaseChart = BaseWidget.inherit({
       });
     };
 
-    _each(seriesBasis, (_, basis: any) => {
+    seriesBasis.forEach((basis: any) => {
       const seriesTheme = basis.options;
       const argumentAxis = this._argumentAxes?.filter((a) => a.pane === seriesTheme.pane)[0] ?? this.getArgumentAxis();
       const renderSettings = {
@@ -1333,15 +1336,8 @@ export const BaseChart = BaseWidget.inherit({
   },
 
   getSeriesByName: function getSeriesByName(name) {
-    let found = null;
-    _each(this.series, (i, singleSeries) => {
-      if (singleSeries.name === name) {
-        found = singleSeries;
-        return false;
-      }
-      return undefined;
-    });
-    return found;
+    const found = (this.series || []).find((singleSeries) => singleSeries.name === name);
+    return found || null;
   },
 
   getSeriesByPos: function getSeriesByPos(pos) {

@@ -1,6 +1,6 @@
 import { noop as _noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
-import { each as _each, reverseEach as _reverseEach } from '@js/core/utils/iterator';
+import { reverseEach as _reverseEach } from '@js/core/utils/iterator';
 import { isDefined as _isDefined, type } from '@js/core/utils/type';
 import { Axis } from '@js/viz/axes/base_axis';
 import { SeriesFamily } from '@js/viz/core/series_family';
@@ -161,17 +161,9 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _getPaneIndex(paneName) {
-    let paneIndex;
     const name = paneName || DEFAULT_PANE_NAME;
 
-    _each(this.panes, (index, pane) => {
-      if (pane.name === name) {
-        paneIndex = index;
-        return false;
-      }
-      return undefined;
-    });
-    return paneIndex;
+    return this.panes.findIndex((pane) => pane.name === name);
   },
 
   _updateSize() {
@@ -226,7 +218,7 @@ export const AdvancedChart = BaseChart.inherit({
       );
     }) as any;
 
-    _each(valueAxesOptions, (priority, axisOptions) => {
+    valueAxesOptions.forEach((axisOptions, priority) => {
       let axisPanes = [];
       const { name } = axisOptions;
 
@@ -249,7 +241,7 @@ export const AdvancedChart = BaseChart.inherit({
         axisPanes.push(undefined as never);
       }
 
-      _each(axisPanes, (_, pane) => {
+      axisPanes.forEach((pane) => {
         const optionPath = isArray(valueAxisOption) ? `valueAxis[${String(priority)}]` : 'valueAxis';
 
         valueAxesPopulatedOptions.push(this._populateAxesOptions('valueAxis', axisOptions, {
@@ -270,11 +262,11 @@ export const AdvancedChart = BaseChart.inherit({
     const axesBasis = [];
     let axes = isArgumentAxes ? this._argumentAxes : this._valueAxes;
 
-    _each(options, (_, opt) => {
+    options.forEach((opt) => {
       const curAxes = axes?.filter((a) => a.name === opt.name
                 && (!_isDefined(opt.pane) && this.panes.some((p) => p.name === a.pane) || a.pane === opt.pane));
-      if (curAxes && curAxes.length > 0) {
-        _each(curAxes, (_, axis) => {
+      if (curAxes?.length > 0) {
+        curAxes.forEach((axis) => {
           const axisTypes = getAxisTypes(this._groupsData, axis, isArgumentAxes);// T891599
           axis.updateOptions(opt);
           if (isArgumentAxes) {
@@ -302,7 +294,7 @@ export const AdvancedChart = BaseChart.inherit({
       axes = this._valueAxes = [];
     }
 
-    _each(axesBasis, (_, basis: any) => {
+    axesBasis.forEach((basis: any) => {
       let { axis } = basis;
       if (basis.axis && isArgumentAxes) {
         basis.axis.isVirtual = basis.axis.pane !== paneWithNonVirtualAxis;
@@ -389,23 +381,23 @@ export const AdvancedChart = BaseChart.inherit({
     };
 
     if (this.seriesFamilies?.length) {
-      _each(this.seriesFamilies, (_, family) => {
+      this.seriesFamilies.forEach((family) => {
         family.updateOptions(familyOptions);
         family.adjustSeriesValues();
       });
       return;
     }
 
-    _each(this.series, (_, item) => {
+    this.series.forEach((item) => {
       if (!types.includes(item.type as never)) {
         types.push(item.type as never);
       }
     });
 
-    _each(this._getLayoutTargets(), (_, pane) => {
+    this._getLayoutTargets().forEach((pane) => {
       paneSeries = this._getSeriesForPane(pane.name);
 
-      _each(types, (_, type) => {
+      types.forEach((type) => {
         const family = new SeriesFamily({
           type,
           pane: pane.name,
@@ -513,6 +505,7 @@ export const AdvancedChart = BaseChart.inherit({
       Object.keys(argRanges).forEach((p) => commonArgRange.addRange(argRanges[p]));
       const commonInterval = commonArgRange.interval;
       this._argumentAxes.forEach((a) => {
+        debugger;
         const currentInterval = argRanges[getPaneName(a)].interval ?? commonInterval; // T956425
         a.setBusinessRange(
           new Range({ ...commonArgRange, interval: currentInterval }),
@@ -668,12 +661,12 @@ export const AdvancedChart = BaseChart.inherit({
   _prepareStripsAndConstantLines(typeSelector, userOptions, rotated) {
     userOptions = this._themeManager.getOptions(typeSelector, userOptions, rotated);
     if (userOptions.strips) {
-      _each(userOptions.strips, (i) => {
+      userOptions.strips.forEach((i) => {
         userOptions.strips[i] = _extend(true, {}, userOptions.stripStyle, userOptions.strips[i]);
       });
     }
     if (userOptions.constantLines) {
-      _each(userOptions.constantLines, (i, line) => {
+      userOptions.constantLines.forEach((line, i) => {
         userOptions.constantLines[i] = _extend(true, {}, userOptions.constantLineStyle, line);
       });
     }
