@@ -25,13 +25,12 @@
     "type": "git",
     "url": "https://github.com/DevExpress/DevExtreme.git"
   },
-  "types": "./artifacts/npm/devextreme/bundles/dx.all.d.ts",
-  "main": "./artifacts/npm/devextreme",
+  "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "3.0.11",
-    "devexpress-diagram": "2.1.75",
+    "devexpress-diagram": "2.1.77",
     "devexpress-gantt": "4.1.47",
     "devextreme-quill": "1.6.2",
     "devextreme-showdown": "^1.0.1",
@@ -70,6 +69,7 @@
     "angular": "1.8.3",
     "ast-types": "0.14.2",
     "autoprefixer": "10.4.14",
+    "axe-core": "4.7.2",
     "babel-core": "7.0.0-bridge.0",
     "babel-loader": "8.3.0",
     "babel-plugin-add-module-exports": "1.0.4",
@@ -182,6 +182,10 @@
     "yaml": "2.2.2",
     "yargs": "7.1.2"
   },
+  "bin": {
+    "devextreme-bundler-init": "bin/bundler-init.js",
+    "devextreme-bundler": "bin/bundler.js"
+  },
   "scripts": {
     "clean": "gulp clean",
     "lint": "npm-run-all -p -c lint-js lint-css lint-ts lint-renovation lint-dts lint-texts",
@@ -202,9 +206,6 @@
     "build:react": "gulp generate-react",
     "build:react:watch": "gulp generate-react-watch",
     "build:react:typescript": "gulp generate-react-typescript",
-    "prepare-npm-renovation": "cd ./build/gulp/renovation-npm && npm i --no-audit --no-fund --no-package-lock",
-    "build-npm-renovation:react": "npm run prepare-npm-renovation && gulp renovation-npm-react",
-    "build-npm-renovation:react:production": "cross-env NPM_PRODUCTION=true npm run build-npm-renovation:react",
     "build:modular": "cd ./playground/modular && webpack",
     "build:modular:watch": "cd ./playground/modular && webpack --watch",
     "build:testing-playground": "gulp build-renovation-testing:watch --playgroundName",
@@ -232,11 +233,6 @@
     "test-typescript": "gulp test-ts",
     "tcd-update": "tcd-update"
   },
-  "browserslist": [
-    "last 2 versions",
-    "ios > 9",
-    "> 1%"
-  ],
   "jest": {
     "modulePathIgnorePatterns": [
       "node_modules"
@@ -245,5 +241,11 @@
   "pre-commit": [
     "lint-staged",
     "pre-commit"
+  ],
+  "browserslist": [
+    "last 2 versions",
+    "ios > 9",
+    "> 1%",
+    "not dead"
   ]
 }
