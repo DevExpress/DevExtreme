@@ -1482,3 +1482,36 @@ safeSizeTest('Editing buttons should rerender correctly after scrolling if repai
     repaintChangesOnly: true,
   });
 });
+
+// T1181439
+test('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.scrollBy({ left: 1000 });
+
+  await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(19).element);
+
+  await dataGrid.scrollBy({ left: 0 });
+  await dataGrid.scrollBy({ top: 50 });
+
+  await t.expect(dataGrid.getScrollLeft()).eql(0);
+}).before(async () => {
+  const data = [...new Array(30)].map((_, i) => ({
+    id: i + 1,
+  }));
+
+  return createWidget('dxDataGrid', {
+    dataSource: data,
+    scrolling: {
+      mode: 'virtual',
+      useNative: true,
+    },
+    height: 440,
+    width: 600,
+    columns: [...new Array(20)].map(() => ({
+      dataField: 'id',
+      width: 75,
+    })),
+    masterDetail: { enabled: true },
+  });
+});
