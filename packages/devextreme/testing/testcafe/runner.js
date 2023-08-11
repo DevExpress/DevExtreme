@@ -30,7 +30,15 @@ createTestCafe({
 
         const args = getArgs();
         const testName = args.test.trim();
-        const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
+
+        let reporter = args.reporter;
+
+        if(typeof reporter === 'string') {
+            reporter = reporter.trim();
+        } else if(reporter == null) {
+            reporter = 'spec';
+        }
+
         const indices = args.indices.trim();
         let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
