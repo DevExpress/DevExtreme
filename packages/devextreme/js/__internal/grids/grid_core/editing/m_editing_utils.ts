@@ -40,6 +40,7 @@ export const generateNewRowTempKey = function (): string {
 };
 export const isNewRowTempKey = function (key: string): boolean {
   return !!key
+    && typeof key === 'string'
     && key.startsWith(NEW_ROW_TEMP_KEY_PREFIX)
     && key.length === NEW_ROW_TEMP_KEY_PREFIX.length + GUID_LENGTH;
 };
