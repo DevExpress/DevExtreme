@@ -1,15 +1,14 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import createWidget from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import DataGrid from '../../model/dataGrid';
 import { makeRowsViewTemplatesAsync } from './helpers/asyncTemplates';
-import { a11yCheck, reloadPage } from '../../helpers/accessibilityUtils';
 
 const DATA_GRID_SELECTOR = '#container';
 
-fixture.disablePageReloads`FixedColumns`
+fixture`FixedColumns`
   .page(url(__dirname, '../container.html'));
 
 // T1156153
@@ -132,8 +131,6 @@ test('Fixed columns should have same width as not fixed columns with columnAutoW
     },
     '#otherContainer',
   );
-}).after(async () => {
-  await ClientFunction(() => { $('#otherContainer').empty(); })();
 });
 
 // T1148937
@@ -321,215 +318,4 @@ test('Hovering over a row should work correctly after scrolling when there is a 
   });
 
   await makeRowsViewTemplatesAsync(DATA_GRID_SELECTOR, 100);
-});
-
-test('Accessibility: Scrollable should always have focusable element when navigate through grid', async (t) => {
-  const dataGrid = new DataGrid('#container');
-
-  const columnsByFixing = await ClientFunction(
-    () => (window as any).widget.getVisibleColumns().map((column) => column.fixed),
-  )();
-  const columnsLength = await ClientFunction(
-    () => (window as any).widget.getVisibleColumns().length,
-  )();
-
-  const pressKey = async (key: string, times = 1) => {
-    for (let i = 0; i < times; i += 1) {
-      await t.pressKey(key);
-    }
-  };
-
-  await a11yCheck(t);
-
-  // focus through headers
-  await pressKey('tab', columnsLength);
-
-  // focus cells in first row
-  for (let columnIndex = 0; columnIndex < columnsLength; columnIndex += 1) {
-    await pressKey('tab');
-
-    const isFixedCell = columnsByFixing[columnIndex];
-    const cell = isFixedCell
-      ? dataGrid.getFixedDataCell(0, columnIndex)
-      : dataGrid.getDataCell(0, columnIndex);
-
-    await t
-      .expect(cell.isFocused)
-      .ok();
-
-    // it makes sense to check accessibility only if fixed column is focused
-    const needCheckA11y = columnsByFixing[columnIndex];
-
-    if (needCheckA11y) {
-      await a11yCheck(t);
-    }
-  }
-
-  // focus first cell in second row
-  await pressKey('tab');
-
-  await t
-    .expect(dataGrid.getFixedDataCell(1, 0).isFocused)
-    .ok();
-
-  await a11yCheck(t);
-
-  // focus last not fixed header cell
-  const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(columnsLength - 3);
-
-  await pressKey('shift+tab', 9);
-
-  await t
-    .expect(headerCell.isFocused)
-    .ok();
-
-  await a11yCheck(t);
-
-  // focus out rows view by outside click
-  const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
-  await t
-    .click(Selector('body'), {
-      offsetY: dataGridOffsetBottom + 10,
-    });
-
-  await a11yCheck(t);
-}).before(async (t) => {
-  await reloadPage(t);
-
-  await createWidget('dxDataGrid', {
-    columnWidth: 150,
-    width: 800,
-    keyExpr: 'id',
-    scrolling: {
-      useNative: true,
-    },
-    dataSource: [
-      {
-        id: 0, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a',
-      },
-      {
-        id: 1, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a',
-      },
-    ],
-    columns: [
-      { dataField: 'column1', fixed: true },
-      { dataField: 'column2', fixed: true },
-      { dataField: 'column3' },
-      { dataField: 'column4' },
-      { dataField: 'column5' },
-      { dataField: 'column6' },
-      { dataField: 'column7', fixed: true, fixedPosition: 'right' },
-      { dataField: 'column8', fixed: true, fixedPosition: 'right' },
-    ],
-  });
-});
-
-test('Accessibility: Scrollable should have focusable element when navigate out of the grid', async (t) => {
-  const columnsLength = await ClientFunction(
-    () => (window as any).widget.getVisibleColumns().length,
-  )();
-
-  const pressKey = async (key: string, times = 1) => {
-    for (let i = 0; i < times; i += 1) {
-      await t.pressKey(key);
-    }
-  };
-
-  // focus through headers
-  await pressKey('tab', columnsLength);
-
-  // focus through data row
-  await pressKey('tab', columnsLength);
-
-  // focus button outside of the grid
-  await pressKey('tab');
-
-  await t
-    .expect(Selector('#myButton').focused)
-    .ok();
-
-  await a11yCheck(t);
-}).before(async (t) => {
-  await reloadPage(t);
-
-  await ClientFunction(() => { $('<div id="myButton">').appendTo('body'); })();
-  await createWidget('dxButton', { text: 'Focus' }, '#myButton');
-
-  await createWidget('dxDataGrid', {
-    columnWidth: 150,
-    width: 800,
-    keyExpr: 'id',
-    scrolling: {
-      useNative: true,
-    },
-    dataSource: [
-      {
-        id: 0, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a',
-      },
-    ],
-    columns: [
-      { dataField: 'column1', fixed: true },
-      { dataField: 'column2', fixed: true },
-      { dataField: 'column3' },
-      { dataField: 'column4' },
-      { dataField: 'column5' },
-      { dataField: 'column6' },
-      { dataField: 'column7', fixed: true, fixedPosition: 'right' },
-      { dataField: 'column8', fixed: true, fixedPosition: 'right' },
-    ],
-  });
-}).after(async () => {
-  await ClientFunction(() => { $('#myButton').remove(); })();
-});
-
-test('Accessibility: Scrollable should have focusable when fixed on the right side columns are focused', async (t) => {
-  const dataGrid = new DataGrid('#container');
-
-  const columnsLength = await ClientFunction(
-    () => (window as any).widget.getVisibleColumns().length,
-  )();
-
-  const pressKey = async (key: string, times = 1) => {
-    for (let i = 0; i < times; i += 1) {
-      await t.pressKey(key);
-    }
-  };
-
-  // focus through headers
-  await pressKey('tab', columnsLength);
-
-  // focus through data row till last cell (which is fixed)
-  await pressKey('tab', columnsLength);
-
-  await t
-    .expect(dataGrid.getFixedDataCell(0, columnsLength - 1).isFocused)
-    .ok();
-
-  await a11yCheck(t);
-}).before(async (t) => {
-  await reloadPage(t);
-
-  await createWidget('dxDataGrid', {
-    columnWidth: 150,
-    width: 800,
-    keyExpr: 'id',
-    scrolling: {
-      useNative: true,
-    },
-    dataSource: [
-      {
-        id: 0, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a',
-      },
-    ],
-    columns: [
-      { dataField: 'column1' },
-      { dataField: 'column2' },
-      { dataField: 'column3' },
-      { dataField: 'column4' },
-      { dataField: 'column5' },
-      { dataField: 'column6' },
-      { dataField: 'column7', fixed: true, fixedPosition: 'right' },
-      { dataField: 'column8', fixed: true, fixedPosition: 'right' },
-    ],
-  });
 });

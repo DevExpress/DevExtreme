@@ -5,6 +5,9 @@
 This extender is to fix accessibilty issue: Scrollable should always have focusable element inside.
 When there are fixed columns on the left and grid has scroll, scrollable element does not have
 any focusable elements inside, because first cell of fixed table gets tabIndex.
+
+This fix makes first cell in not fixed table to always have tabIndex, so checker won't show error.
+And to make navigation via Tab key working properly some focus event handlers are added.
 */
 
 import $, { dxElementWrapper } from '@js/core/renderer';
@@ -18,13 +21,13 @@ import type { KeyboardNavigationController } from './m_keyboard_navigation';
 export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavigationController>): ModuleType<KeyboardNavigationController> => class ScrollableA11yExtender extends Base {
   private _$firstNotFixedCell: dxElementWrapper | undefined;
 
-  private rowsViewFocusOutHandlerContext!: (event: any) => void;
+  private rowsViewFocusOutHandlerContext!: (event: Event) => void;
 
   init(): void {
     super.init();
 
     // eslint-disable-next-line max-len
-    this.rowsViewFocusOutHandlerContext = this.rowsViewFocusOutHandlerContext || this.rowsViewFocusOutHandler.bind(this);
+    this.rowsViewFocusOutHandlerContext = this.rowsViewFocusOutHandlerContext ?? this.rowsViewFocusOutHandler.bind(this);
   }
 
   protected subscribeToRowsViewFocusEvent(): void {
@@ -55,7 +58,7 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     this.makeScrollableFocusableIfNeed();
   }
 
-  private translateFocusIfNeed(event: any, $target: dxElementWrapper): void {
+  private translateFocusIfNeed(event: Event, $target: dxElementWrapper): void {
     const needTranslateFocus = this.isScrollableNeedFocusable();
     const isFirstCellFixed = this._isFixedColumn(0);
 
@@ -83,17 +86,22 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     super.renderCompleted(e);
   }
 
+  protected _focus($cell: any, disableFocus?: any, skipFocusEvent?: any): void {
+    super._focus($cell, disableFocus, skipFocusEvent);
+
+    this.makeScrollableFocusableIfNeed();
+  }
+
   protected _tabKeyHandler(eventArgs: any, isEditing: any): void {
     const isCellPositionDefined = isDefined(this._focusedCellPosition)
       && !isEmptyObject(this._focusedCellPosition);
     const isOriginalHandlerRequired = !isCellPositionDefined
       || (!eventArgs.shift && this._isLastValidCell(this._focusedCellPosition))
       || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition));
+    const isNeedFocusable = this.isScrollableNeedFocusable();
 
-    if (isOriginalHandlerRequired) {
-      if (this.isScrollableNeedFocusable()) {
-        this._$firstNotFixedCell?.removeAttr('tabIndex');
-      }
+    if (isOriginalHandlerRequired && isNeedFocusable) {
+      this._$firstNotFixedCell?.removeAttr('tabIndex');
     }
 
     super._tabKeyHandler(eventArgs, isEditing);
@@ -101,23 +109,11 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
 
   private getFirstNotFixedCell(): dxElementWrapper | undefined {
     const columns = this._columnsController.getVisibleColumns();
+    const columnIndex = columns.findIndex(({ fixed }) => !fixed);
 
-    let columnIndex = -1;
-
-    for (let index = 0; index < columns.length; index += 1) {
-      const notFixedColumn = !columns[index].fixed;
-
-      if (notFixedColumn) {
-        columnIndex = index;
-        break;
-      }
-    }
-
-    if (columnIndex === -1) {
-      return undefined;
-    }
-
-    return this._rowsView._getCellElement(0, columnIndex) as dxElementWrapper | undefined;
+    return columnIndex === -1
+      ? undefined
+      : this._rowsView._getCellElement(0, columnIndex) as dxElementWrapper | undefined;
   }
 
   private isScrollableNeedFocusable(): boolean {
@@ -131,12 +127,10 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
   private makeScrollableFocusableIfNeed(): void {
     const needFocusable = this.isScrollableNeedFocusable();
 
-    if (!needFocusable) {
+    if (!needFocusable || !this._$firstNotFixedCell) {
       return;
     }
 
-    if (this._$firstNotFixedCell) {
-      this._applyTabIndexToElement(this._$firstNotFixedCell);
-    }
+    this._applyTabIndexToElement(this._$firstNotFixedCell);
   }
 };
