@@ -16,6 +16,11 @@
   .dx-tabs-wrapper {
     border-inline-start: $generic-tabs-border;
     border-inline-end: $generic-tabs-border;
+
+    &::after {
+      border-inline-start: none;
+      border-inline-end: none;
+    }
   }
 
   &.dx-tabs-nav-buttons {
