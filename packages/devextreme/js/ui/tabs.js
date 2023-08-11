@@ -63,6 +63,11 @@ const ORIENTATION = {
     vertical: 'vertical',
 };
 
+const SCROLLABLE_DIRECTION = {
+    horizontal: 'horizontal',
+    vertical: 'vertical',
+};
+
 
 const Tabs = CollectionWidget.inherit({
 
@@ -346,13 +351,25 @@ const Tabs = CollectionWidget.inherit({
         return this._$wrapper;
     },
 
-    _renderScrollable: function() {
-        const $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
+    _getScrollableDirection() {
         const isVertical = this._isVertical();
-        const scrollableDirection = isVertical ? 'vertical' : 'horizontal';
+        const scrollableDirection = isVertical ? SCROLLABLE_DIRECTION.vertical : SCROLLABLE_DIRECTION.horizontal;
+
+        return scrollableDirection;
+    },
+
+    _updateScrollableDirection() {
+        const scrollable = this.getScrollable();
+        const scrollableDirection = this._getScrollableDirection();
+
+        scrollable.option('direction', scrollableDirection);
+    },
+
+    _renderScrollable() {
+        const $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
 
         this._scrollable = this._createComponent($itemContainer, Scrollable, {
-            direction: scrollableDirection,
+            direction: this._getScrollableDirection(),
             showScrollbar: 'never',
             useKeyboard: false,
             useNative: false,
@@ -545,9 +562,11 @@ const Tabs = CollectionWidget.inherit({
                 this._scrollToItem(args.value);
                 break;
             }
-            case 'orientation':
+            case 'orientation': {
                 this._toggleOrientationClass(args.value);
+                this._updateScrollableDirection();
                 break;
+            }
             default:
                 this.callBase(args);
         }
