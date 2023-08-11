@@ -2595,10 +2595,10 @@ export const editingModule = {
           this.callBase($cell, cellOptions);
 
           if (cellOptions.removed) {
-            this.setAria('label', 'removed cell', $cell);
+            this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaDeletedCell'), $cell);
           }
           if (cellOptions.modified) {
-            this.setAria('label', 'modified cell', $cell);
+            this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaModifiedCell'), $cell);
           }
         },
         _createCell(options) {

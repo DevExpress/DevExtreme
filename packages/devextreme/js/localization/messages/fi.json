@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Arvo",
         "dxDataGrid-ariaFilterCell": "Suodatinsolu",
         "dxDataGrid-ariaCollapse": "Tiivistä",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Laajenna",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
