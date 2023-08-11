@@ -444,7 +444,7 @@ QUnit.module('Horizontal scrolling', () => {
         });
 
         const getScrollable = () => {
-            const $scrollable = $element.children('.' + SCROLLABLE_CLASS);
+            const $scrollable = $element.children(`.${SCROLLABLE_CLASS}`);
             const scrollable = $scrollable.dxScrollable('instance');
             return scrollable;
         };

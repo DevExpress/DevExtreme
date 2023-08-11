@@ -367,12 +367,12 @@ const Tabs = CollectionWidget.inherit({
     _updateScrollableDirection() {
         const scrollable = this.getScrollable();
 
-        if(!scrollable) {
-            this._renderScrolling();
-        } else {
+        if(scrollable) {
             const scrollableDirection = this._getScrollableDirection();
 
             scrollable.option('direction', scrollableDirection);
+        } else {
+            this._renderScrolling();
         }
     },
 
