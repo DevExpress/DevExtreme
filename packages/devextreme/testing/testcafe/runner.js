@@ -30,15 +30,7 @@ createTestCafe({
 
         const args = getArgs();
         const testName = args.test.trim();
-
-        let reporter = args.reporter;
-
-        if(typeof reporter === 'string') {
-            reporter = reporter.trim();
-        } else if(reporter == null) {
-            reporter = 'spec';
-        }
-
+        const reporter = typeof args.reporter === 'string' ? args.reporter.trim() : args.reporter;
         const indices = args.indices.trim();
         let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
@@ -152,7 +144,7 @@ function getArgs() {
             concurrency: 0,
             browsers: 'chrome',
             test: '',
-            reporter: ['minimal', dashboardReporter],
+            reporter: [process.env.CI === 'true' ? 'list' : 'minimal', dashboardReporter],
             componentFolder: '',
             file: '*',
             cache: true,
