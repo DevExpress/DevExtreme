@@ -48,15 +48,16 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 
 
 @mixin dx-button-styling-variant(
-    $background-color,
-    $text-color,
-    $hover-background-color,
-    $focused-background-color,
-    $active-background-color,
-    $disabled-background-color,
-    $icon-color,
-    $selected-background-color: $active-background-color,
-  ) {
+  $background-color,
+  $text-color,
+  $hover-background-color,
+  $focused-background-color,
+  $active-background-color,
+  $disabled-background-color,
+  $icon-color,
+  $selected-background-color: $active-background-color,
+  $selected-color: $text-color,
+) {
   background-color: $background-color;
   color: $text-color;
 
@@ -66,6 +67,7 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 
   &.dx-item-selected {
     background-color: $selected-background-color;
+    color: $selected-color;
   }
 
   &.dx-state-hover {
@@ -86,15 +88,15 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 }
 
 @mixin dx-button-styling(
-    $button-bg,
-    $button-color,
-    $button-hover-bg,
-    $button-focused-bg,
-    $button-active-bg,
-    $button-icon-color,
-    $button-selected-bg,
-    $button-selected-color,
-  ) {
+  $button-bg,
+  $button-color,
+  $button-hover-bg,
+  $button-focused-bg,
+  $button-active-bg,
+  $button-icon-color,
+  $button-selected-bg,
+  $button-selected-color,
+) {
   border-radius: $button-border-radius;
 
   @include dx-button-styling-variant(
@@ -106,6 +108,7 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
     $button-disabled-background,
     $button-icon-color,
     $button-selected-bg,
+    $button-selected-color,
   );
 
   &.dx-state-disabled {
@@ -132,15 +135,15 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 
 @mixin dx-button-flat-color-styling($button-color, $hover-bg, $focused-bg, $active-bg, $selected-bg: transparent) {
   @include dx-button-styling-variant(
-      transparent,
-      $button-color,
-      $hover-bg,
-      $focused-bg,
-      $active-bg,
-      transparent,
-      $button-color,
-      $selected-bg,
-    );
+    transparent,
+    $button-color,
+    $hover-bg,
+    $focused-bg,
+    $active-bg,
+    transparent,
+    $button-color,
+    $selected-bg,
+  );
 }
 
 @mixin dx-button-outlined-color-styling($button-color, $border-color, $hover-bg, $focused-bg, $active-bg, $selected-bg) {
