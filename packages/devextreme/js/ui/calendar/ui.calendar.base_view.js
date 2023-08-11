@@ -247,7 +247,7 @@ const BaseView = Widget.inherit({
             this._createWeekNumberCellClickAction();
 
             eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, `.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`, ((e) => {
-                const $row = $(e.currentTarget).parent();
+                const $row = $(e.currentTarget).closest('tr');
 
                 const firstDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).first().data(CALENDAR_DATE_VALUE_KEY);
                 const lastDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).last().data(CALENDAR_DATE_VALUE_KEY);
