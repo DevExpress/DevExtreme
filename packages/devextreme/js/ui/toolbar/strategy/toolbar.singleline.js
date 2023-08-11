@@ -107,21 +107,34 @@ export class SingleLineStrategy {
         });
     }
 
+    _getHiddenItems() {
+        return this._toolbar._itemContainer()
+            .children(`.${TOOLBAR_AUTO_HIDE_ITEM_CLASS}.${TOOLBAR_HIDDEN_ITEM}`)
+            .not(`.${INVISIBLE_STATE_CLASS}`);
+    }
+
     _getMenuItems() {
         const menuItems = grep(this._toolbar.option('items') ?? [], (item) => {
             return this._toolbar._isMenuItem(item);
         });
 
-        const $hiddenItems = this._toolbar._itemContainer()
-            .children(`.${TOOLBAR_AUTO_HIDE_ITEM_CLASS}.${TOOLBAR_HIDDEN_ITEM}`)
-            .not(`.${INVISIBLE_STATE_CLASS}`);
+        const $hiddenItems = this._getHiddenItems();
 
         this._restoreItems = this._restoreItems ?? [];
 
-        const overflowItems = [].slice.call($hiddenItems).map((item) => {
-            const itemData = this._toolbar._getItemData(item);
-            const $itemContainer = $(item);
-            const $itemMarkup = $itemContainer.children();
+        const overflowItems = [].slice.call($hiddenItems).map((hiddenItem) => {
+            const itemData = this._toolbar._getItemData(hiddenItem);
+            const $itemContainer = $(hiddenItem);
+            let $itemMarkup = $itemContainer.children();
+            const isItemMarkupInsideMenu = $itemMarkup.length === 0 && itemData.locateInMenu === 'auto';
+
+            if(isItemMarkupInsideMenu) {
+                each(this._restoreItems ?? [], (_, { container, item }) => {
+                    if(container.is($itemContainer)) {
+                        $itemMarkup = item;
+                    }
+                });
+            }
 
             return extend({
                 menuItemTemplate: () => {
