@@ -1,0 +1,37 @@
+@use "../../variables/colors" as *;
+@use "../../../colors" as *;
+@use "../../variables/sizes" as *;
+@use "../../../sizes" as *;
+@use "../../../tabs/variables/colors" as *;
+@use "../../../tabs/variables/borders" as *;
+@use "../../../tabs/variables/sizes" as *;
+@use "../../../tabs/mixins" as *;
+@use "../../../tabs" as *;
+@use "../../../../base/tabPanel";
+@use "../../variables/borders" as *;
+
+// adduse
+
+
+.dx-tabpanel-tab {
+  max-width: 140px;
+  padding: $generic-tabpanel-tabs-item-padding;
+
+  &.dx-state-disabled {
+    &::after {
+      z-index: 3;
+    }
+  }
+}
+
+.dx-tabs-nav-buttons {
+  .dx-tabpanel-tab {
+    min-width: 140px;
+
+    &:last-child {
+      &.dx-tab-selected::after {
+        right: 0;
+      }
+    }
+  }
+}
