@@ -25576,6 +25576,10 @@ declare module DevExpress.ui {
      * [descr:dxTabPanelOptions.swipeEnabled]
      */
     swipeEnabled?: boolean;
+    /**
+     * [descr:dxTabPanelOptions.tabsPosition]
+     */
+    tabsPosition?: DevExpress.common.Position;
   }
   /**
    * [descr:dxTabs]
