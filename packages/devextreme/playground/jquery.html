@@ -41,9 +41,9 @@
            $(function() {
                 const dataSource = [
                     { title: 'John Heart', text: 'John Heart' },
-                    { title: 'Marina Thomas', text: 'Marina Thomas', disabled: true },
                     { title: 'Robert Reagan', text: 'Robert Reagan' },
-                    { title: 'Greta Sims', text: 'Greta Sims' },
+                    { title: 'Marina Thomas', text: 'Marina Thomas', disabled: true },
+                    { title: 'Greta Sims', text: 'Greta Sims', disabled: true },
                     { title: 'Olivia Peyton', text: 'Olivia Peyton' },
                     { title: 'Ed Holmes', text: 'Ed Holmes' },
                     { title: 'Wally Hobbs', text: 'Wally Hobbs' },
@@ -55,7 +55,7 @@
                     height: 250,
                     tabsPosition: 'left',
                     dataSource,
-                    showNavButtons: true,
+                    // showNavButtons: true,
                 };
 
                 $("#button").dxTabPanel(tabsOptions);

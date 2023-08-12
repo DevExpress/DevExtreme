@@ -16,6 +16,10 @@
 .dx-tabpanel-tab {
   padding: $generic-tabpanel-tabs-item-padding;
 
+  &.dx-tab::after {
+    z-index: 2;
+  }
+
   &.dx-state-disabled {
     &::after {
       z-index: 3;
