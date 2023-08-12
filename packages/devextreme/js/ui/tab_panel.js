@@ -1,4 +1,3 @@
-import { getOuterHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import { touch } from '../core/utils/support';
 import { extend } from '../core/utils/extend';
@@ -12,7 +11,6 @@ import { getImageContainer } from '../core/utils/icon';
 import { getPublicElement } from '../core/element';
 import { isPlainObject, isDefined } from '../core/utils/type';
 import { BindableTemplate } from '../core/templates/bindable_template';
-import { hasWindow } from '../core/utils/window';
 
 // STYLE tabPanel
 
@@ -160,20 +158,8 @@ const TabPanel = MultiView.inherit({
         this._titleRenderedAction = this._createActionByOption('onTitleRendered');
     },
 
-    _renderContent: function() {
-        const that = this;
-
-        this.callBase();
-        if(this.option('templatesRenderAsynchronously')) {
-            this._resizeEventTimer = setTimeout(function() {
-                that._updateLayout();
-            }, 0);
-        }
-    },
-
     _renderLayout: function() {
         if(this._tabs) {
-            this._updateLayout();
             return;
         }
 
@@ -191,18 +177,6 @@ const TabPanel = MultiView.inherit({
             .addClass(TABPANEL_CONTAINER_CLASS)
             .appendTo($element);
         this._$container.append(this._$wrapper);
-
-        this._updateLayout();
-    },
-
-    _updateLayout: function() {
-        if(hasWindow()) {
-            const tabsHeight = getOuterHeight(this._$tabContainer);
-            this._$container.css({
-                'marginTop': -tabsHeight,
-                'paddingTop': tabsHeight
-            });
-        }
     },
 
     _refreshActiveDescendant: function() {
@@ -363,7 +337,6 @@ const TabPanel = MultiView.inherit({
     _visibilityChanged: function(visible) {
         if(visible) {
             this._tabs._dimensionChanged();
-            this._updateLayout();
         }
     },
 
@@ -389,7 +362,6 @@ const TabPanel = MultiView.inherit({
                 break;
             case 'items':
                 this._setTabsOption(name, this.option(name));
-                this._updateLayout();
                 if(!this.option('repaintChangesOnly')) {
                     this._tabs.repaint();
                 }
@@ -464,12 +436,6 @@ const TabPanel = MultiView.inherit({
                 this.callBase(args);
         }
     },
-
-    _clean: function() {
-        clearTimeout(this._resizeEventTimer);
-        this.callBase();
-    }
-
 });
 
 TabPanel.ItemClass = TabPanelItem;
