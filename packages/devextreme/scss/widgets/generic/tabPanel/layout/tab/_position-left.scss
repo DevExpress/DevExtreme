@@ -129,5 +129,9 @@
   
       border-inline-end: $generic-tabs-border-focus;
     }
+
+    .dx-tabpanel-tab.dx-focused-disabled-next-tab::after {
+      border-inline-end: none;
+    }
   }
 }

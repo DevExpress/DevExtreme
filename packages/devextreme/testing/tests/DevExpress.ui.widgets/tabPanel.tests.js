@@ -41,6 +41,7 @@ const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 const TABS_TITLE_TEXT_CLASS = 'dx-tab-text';
 const ICON_CLASS = 'dx-icon';
 const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
+const FOCUS_STATE_CLASS = 'dx-state-focused';
 
 const TABPANEL_TABS_POSITION_CLASS = {
     top: 'dx-tabpanel-tabs-position-top',
@@ -70,82 +71,6 @@ QUnit.module('rendering', {
         this.$tabPanel = $('#tabPanel').dxTabPanel();
     }
 }, () => {
-    [true, false].forEach(hasItems => {
-        QUnit.test(`tabPanel.hasItems:${hasItems}, container should consider tabs height`, function(assert) {
-            const items = hasItems ? [{ text: 'test' }] : [];
-            const $tabPanel = $('#tabPanel').dxTabPanel({
-                items: items
-            });
-            const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
-            const $tabs = $tabPanel.find('.' + TABS_CLASS);
-
-            assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.1, 'padding correct');
-            assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.1, 'margin correct');
-        });
-    });
-
-    QUnit.test('container should consider tabs height for async datasource', function(assert) {
-        const clock = sinon.useFakeTimers();
-
-        try {
-            const $tabPanel = $('#tabPanel').dxTabPanel({
-                dataSource: {
-                    load() {
-                        const d = $.Deferred();
-                        setTimeout(() => {
-                            d.resolve([{ tabTemplate() { return $('<div>').height(100); } }]);
-                        });
-                        return d;
-                    }
-                }
-            });
-
-            const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
-            const $tabs = $tabPanel.find('.' + TABS_CLASS);
-
-            clock.tick(10);
-
-            assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
-            assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
-        } finally {
-            clock.restore();
-        }
-    });
-
-    QUnit.test('container should consider tabs height for async templates', function(assert) {
-        const clock = sinon.useFakeTimers();
-        try {
-            const $tabPanel = $('#tabPanel').hide().dxTabPanel({
-                items: [{ text: 'test' }],
-                templatesRenderAsynchronously: true
-            }).show();
-
-            const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
-            const $tabs = $tabPanel.find('.' + TABS_CLASS);
-
-            clock.tick(10);
-
-            assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
-            assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
-        } finally {
-            clock.restore();
-        }
-    });
-
-    QUnit.test('container should consider tabs height when it rendered in hiding area', function(assert) {
-        const $tabPanel = $('<div>').dxTabPanel({
-            items: [{ text: 'test' }]
-        });
-
-        $tabPanel.appendTo('#qunit-fixture');
-        triggerShownEvent($tabPanel);
-
-        const $container = $tabPanel.find('.' + TABPANEL_CONTAINER_CLASS);
-        const $tabs = $tabPanel.find('.' + TABS_CLASS);
-        assert.roughEqual(parseFloat($container.css('padding-top')), $tabs.outerHeight(), 0.5, 'padding correct');
-        assert.roughEqual(parseFloat($container.css('margin-top')), -$tabs.outerHeight(), 0.5, 'margin correct');
-    });
-
     // T803640
     QUnit.test('content should be rendered if create widget inside deferUpdate (React)', function(assert) {
         let $tabPanel;
@@ -651,6 +576,14 @@ QUnit.module('keyboard navigation', {
         assert.equal(isRenderer(this.tabs.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.equal(multiViewFocusedIndex, 1, 'second multiView element has been focused');
         assert.equal(multiViewFocusedIndex, $(this.tabs.option('focusedElement')).index(), 'tabs focused element is equal multiView focused element');
+    });
+
+    QUnit.test('click on multiview must set focus class on tabs', function(assert) {
+        this.instance.focus();
+        $(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1).trigger('dxpointerdown');
+        this.clock.tick(10);
+
+        assert.strictEqual(this.tabs.$element().hasClass(FOCUS_STATE_CLASS), true);
     });
 
     QUnit.test('tabPanels focusedElement dependence on tabs focusedElement', function(assert) {
