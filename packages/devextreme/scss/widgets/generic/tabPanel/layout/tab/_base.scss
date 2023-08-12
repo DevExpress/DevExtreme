@@ -14,7 +14,6 @@
 
 
 .dx-tabpanel-tab {
-  max-width: 140px;
   padding: $generic-tabpanel-tabs-item-padding;
 
   &.dx-tab::after {
@@ -28,7 +27,11 @@
   }
 }
 
-.dx-tabs-nav-buttons {
+.dx-tabs:not(.dx-tabs-vertical) .dx-tabpanel-tab {
+  max-width: 140px;
+}
+
+.dx-tabs-nav-buttons:not(.dx-tabs-vertical) {
   .dx-tabpanel-tab {
     min-width: 140px;
 

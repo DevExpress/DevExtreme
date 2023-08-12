@@ -132,6 +132,7 @@
 
     .dx-tabpanel-tab.dx-focused-disabled-next-tab::after {
       border-inline-end: none;
+      border-block-end: none;
     }
   }
 }
