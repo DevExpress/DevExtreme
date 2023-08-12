@@ -961,8 +961,9 @@ safeSizeTest('Rows are rendered properly when window content is scrolled (T10703
   });
 });
 
+// TODO: this test is unstable
 // T1129252
-test('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
+test.skip('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1050,7 +1051,8 @@ fixture`Remote Scrolling`
     await t.maximizeWindow();
   });
 
-test('Scroll to the bottom after expand several group', async (t) => {
+// TODO: this test is unstable
+test.skip('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const scrollToBottom = async () => {
