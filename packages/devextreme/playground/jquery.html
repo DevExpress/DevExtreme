@@ -39,26 +39,10 @@
         <div id="button"></div>
         <script>
            $(function() {
-                const dataSource = [
-                    { title: 'John Heart', text: 'John Heart' },
-                    { title: 'Robert Reagan', text: 'Robert Reagan' },
-                    { title: 'Marina Thomas', text: 'Marina Thomas', disabled: true },
-                    { title: 'Greta Sims', text: 'Greta Sims', disabled: true },
-                    { title: 'Olivia Peyton', text: 'Olivia Peyton' },
-                    { title: 'Ed Holmes', text: 'Ed Holmes' },
-                    { title: 'Wally Hobbs', text: 'Wally Hobbs' },
-                    { title: 'Brad Jameson', text: 'Brad Jameson' },
-                ];
-
-                const tabsOptions = {
-                    width: 450,
-                    height: 250,
-                    tabsPosition: 'right',
-                    dataSource,
-                    showNavButtons: true,
-                };
-
-                $("#button").dxTabPanel(tabsOptions);
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
+                });
             });
         </script>
     </div>
