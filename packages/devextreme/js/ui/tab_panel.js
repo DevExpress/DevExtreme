@@ -300,16 +300,18 @@ const TabPanel = MultiView.inherit({
     _updateFocusState: function(e, isFocused) {
         this.callBase(e, isFocused);
 
-        const isMultiViewTarget = e.target === this._focusTarget().get(0);
+        const isTabsTarget = e.target === this._tabs._focusTarget().get(0);
         const isDisabled = this._isDisabled(this.option('focusedElement'));
 
-        this._toggleFocusClass(isFocused, this._focusTarget());
+        if(isTabsTarget) {
+            this._toggleFocusClass(isFocused, this._focusTarget());
+        }
+
+        this._toggleFocusClass(isFocused, this._tabs.$element());
+        this._toggleFocusClass(isFocused, this._tabs.option('focusedElement'));
+
         this._toggleWrapperFocusedClass(isFocused && !isDisabled);
         this._toggleDisabledFocusedClass(isFocused && isDisabled);
-
-        if(isMultiViewTarget) {
-            this._toggleFocusClass(isFocused, this._tabs.option('focusedElement'));
-        }
     },
 
     _focusOutHandler: function(e) {

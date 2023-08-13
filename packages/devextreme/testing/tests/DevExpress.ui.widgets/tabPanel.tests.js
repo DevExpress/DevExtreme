@@ -4,7 +4,6 @@ import devices from 'core/devices';
 import { deferUpdate } from 'core/utils/common';
 import support from 'core/utils/support';
 import { isRenderer } from 'core/utils/type';
-import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import TabPanel from 'ui/tab_panel';
@@ -37,10 +36,11 @@ const MULTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
 const TABS_ITEM_CLASS = 'dx-tab';
 const SELECTED_TAB_CLASS = 'dx-tab-selected';
 const SELECTED_ITEM_CLASS = 'dx-item-selected';
-const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 const TABS_TITLE_TEXT_CLASS = 'dx-tab-text';
 const ICON_CLASS = 'dx-icon';
 const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
+const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
+const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 const FOCUS_STATE_CLASS = 'dx-state-focused';
 
 const TABPANEL_TABS_POSITION_CLASS = {
@@ -536,8 +536,10 @@ QUnit.module('focus policy', {
 
 QUnit.module('keyboard navigation', {
     beforeEach() {
-        const items = [{ text: 'user', icon: 'user', title: 'Personal Data', firstName: 'John', lastName: 'Smith' },
-            { text: 'comment', icon: 'comment', title: 'Contacts', phone: '(555)555-5555', email: 'John.Smith@example.com' }];
+        const items = [
+            { text: 'user', icon: 'user', title: 'Personal Data', firstName: 'John', lastName: 'Smith' },
+            { text: 'comment', icon: 'comment', title: 'Contacts', phone: '(555)555-5555', email: 'John.Smith@example.com' },
+        ];
 
         fx.off = true;
         this.$element = $('#tabPanel').dxTabPanel({
@@ -545,7 +547,8 @@ QUnit.module('keyboard navigation', {
             items
         });
         this.instance = this.$element.dxTabPanel('instance');
-        this.tabs = this.$element.find(toSelector(TABS_CLASS)).dxTabs('instance');
+        this.$tabs = this.$element.find(toSelector(TABS_CLASS));
+        this.tabs = this.$tabs.dxTabs('instance');
         this.clock = sinon.useFakeTimers();
     },
     afterEach() {
@@ -584,6 +587,31 @@ QUnit.module('keyboard navigation', {
         this.clock.tick(10);
 
         assert.strictEqual(this.tabs.$element().hasClass(FOCUS_STATE_CLASS), true);
+    });
+
+    QUnit.test('click on available tab removed specific tab classes if previous item is disabled', function(assert) {
+        this.instance.option('items', [ 0, { disabled: true }, 2 ]);
+        this.instance.focus();
+
+        const keyboard = keyboardMock(this.$tabs);
+        keyboard.press('right');
+
+        const $thirdTab = this.$tabs.find(toSelector(TABPANEL_TABS_ITEM_CLASS)).get(2);
+        pointerMock($thirdTab).start().click();
+
+        this.clock.tick(10);
+
+        assert.strictEqual($($thirdTab).hasClass(FOCUS_STATE_CLASS), true);
+        assert.strictEqual($($thirdTab).hasClass(SELECTED_TAB_CLASS), true);
+
+        const $firstTab = this.$tabs.find(toSelector(TABPANEL_TABS_ITEM_CLASS)).get(0);
+        assert.strictEqual($($firstTab).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), false);
+
+        keyboard.press('left');
+        pointerMock($firstTab).start().click();
+        this.clock.tick(10);
+
+        assert.strictEqual($($thirdTab).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), false);
     });
 
     QUnit.test('tabPanels focusedElement dependence on tabs focusedElement', function(assert) {
