@@ -252,7 +252,7 @@ export default modules.Controller.inherit((function () {
       dataSource.on('loadingChanged', that._loadingChangedHandler);
       dataSource.on('loadError', that._loadErrorHandler);
       dataSource.on('changing', that._changingHandler);
-      dataSource.store().on('beforePush', that._pushHandler);
+      dataSource.store().on('beforePushAggregation', that._pushHandler);
 
       each(dataSource, (memberName, member) => {
         if (!that[memberName] && isFunction(member)) {
@@ -276,7 +276,7 @@ export default modules.Controller.inherit((function () {
       dataSource.off('loadingChanged', that._loadingChangedHandler);
       dataSource.off('loadError', that._loadErrorHandler);
       dataSource.off('changing', that._changingHandler);
-      store && store.off('beforePush', that._pushHandler);
+      store && store.off('beforePushAggregation', that._pushHandler);
 
       if (!isSharedDataSource) {
         dataSource.dispose();
