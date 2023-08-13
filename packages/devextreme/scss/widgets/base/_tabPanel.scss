@@ -4,6 +4,16 @@
 .dx-tabpanel {
   display: flex;
   flex-direction: column;
+
+  .dx-tabs-vertical {
+    .dx-tabs-wrapper {
+      height: 100%;
+    }
+
+    .dx-tabpanel-tab {
+      flex-grow: 0;
+    }
+  }
 }
 
 .dx-tabpanel-tabs-position-right {
