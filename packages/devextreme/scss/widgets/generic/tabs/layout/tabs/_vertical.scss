@@ -16,8 +16,12 @@
   .dx-tabs-wrapper {
     border-inline-start: $generic-tabs-border;
     border-inline-end: $generic-tabs-border;
+    border-block-start: none;
+    border-block-end: none;
 
     &::after {
+      top: 0;
+      bottom: 0;
       border-inline-start: none;
       border-inline-end: none;
     }
