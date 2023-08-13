@@ -337,31 +337,29 @@ test('TabPanel borders without scrolling', async (t) => {
   test(`TabPanel with tabsPosition=${tabsPosition}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    if (!isMaterial()) {
-      const tabPanel = new TabPanel('#container');
+    const tabPanel = new TabPanel('#container');
 
-      await testScreenshot(t, takeScreenshot, `TabPanel without focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `TabPanel without focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
-      await t.pressKey('tab');
-      await testScreenshot(t, takeScreenshot, `TabPanel when its available item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+    await t.pressKey('tab');
+    await testScreenshot(t, takeScreenshot, `TabPanel when its available item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
-      await t.pressKey('right');
-      await testScreenshot(t, takeScreenshot, `TabPanel when its disabled item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+    await t.pressKey('right');
+    await testScreenshot(t, takeScreenshot, `TabPanel when its disabled item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
-      await t.pressKey('right');
+    await t.pressKey('right');
 
-      const thirdItem = tabPanel.getItem(2);
-      const firstItem = tabPanel.getItem(0);
+    const thirdItem = tabPanel.getItem(2);
+    const firstItem = tabPanel.getItem(0);
 
-      await t.dispatchEvent(firstItem.element, 'mousedown');
-      await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has active state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+    await t.dispatchEvent(firstItem.element, 'mousedown');
+    await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has active state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
-      await t
-        .dispatchEvent(thirdItem.element, 'mouseup')
-        .hover(firstItem.element);
+    await t
+      .dispatchEvent(thirdItem.element, 'mouseup')
+      .hover(firstItem.element);
 
-      await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
-    }
+    await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
