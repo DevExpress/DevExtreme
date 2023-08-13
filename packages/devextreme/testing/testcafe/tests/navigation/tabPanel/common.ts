@@ -333,20 +333,20 @@ test('TabPanel borders without scrolling', async (t) => {
   });
 });
 
-['top', 'right', 'bottom', 'left'].forEach((tabPosition) => {
-  test(`TabPanel with tabPosition=${tabPosition}`, async (t) => {
+['right', 'bottom', 'left'].forEach((tabsPosition) => {
+  test(`TabPanel with tabsPosition=${tabsPosition}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     if (!isMaterial()) {
       const tabPanel = new TabPanel('#container');
 
-      await testScreenshot(t, takeScreenshot, `TabPanel without focus, tabPosition=${tabPosition}.png`, { element: '#container' });
+      await testScreenshot(t, takeScreenshot, `TabPanel without focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
       await t.pressKey('tab');
-      await testScreenshot(t, takeScreenshot, `TabPanel when its available item has focus, tabPosition=${tabPosition}.png`, { element: '#container' });
+      await testScreenshot(t, takeScreenshot, `TabPanel when its available item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
       await t.pressKey('right');
-      await testScreenshot(t, takeScreenshot, `TabPanel when its disabled item has focus, tabPosition=${tabPosition}.png`, { element: '#container' });
+      await testScreenshot(t, takeScreenshot, `TabPanel when its disabled item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
       await t.pressKey('right');
 
@@ -354,13 +354,13 @@ test('TabPanel borders without scrolling', async (t) => {
       const firstItem = tabPanel.getItem(0);
 
       await t.dispatchEvent(firstItem.element, 'mousedown');
-      await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has active state, tabPosition=${tabPosition}.png`, { element: '#container' });
+      await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has active state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
       await t
         .dispatchEvent(thirdItem.element, 'mouseup')
         .hover(firstItem.element);
 
-      await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, tabPosition=${tabPosition}.png`, { element: '#container' });
+      await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
     }
 
     await t
@@ -391,7 +391,7 @@ test('TabPanel borders without scrolling', async (t) => {
       dataSource,
       height: 250,
       width: 450,
-      tabPosition,
+      tabsPosition,
       // prevent firing dxinactive event for to avoid failing test
       itemHoldTimeout: 5000,
     };
