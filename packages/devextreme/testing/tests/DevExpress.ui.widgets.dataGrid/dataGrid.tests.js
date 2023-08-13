@@ -4637,6 +4637,41 @@ QUnit.module('templates', baseModuleConfig, () => {
         assert.equal($firstRow.find('.my-cell').text(), 'updated', 'cell is updated');
     });
 
+    QUnit.test('Push api should work when parallel loading started', function(assert) {
+        // arrange
+        const pushAggregationTimeout = 100;
+        const deferred = $.Deferred();
+
+
+        const dataSource = new DataSource({
+            load: () => deferred,
+            pushAggregationTimeout,
+            reshapeOnPush: true,
+            key: 'id',
+        });
+
+        const dataGrid = createDataGrid({
+            dataSource,
+            columns: ['id']
+        });
+
+        this.clock.tick(10);
+
+
+        dataGrid.getDataSource().store().push([{
+            type: 'insert',
+            data: { id: 2 },
+        }]);
+
+        deferred.resolve([{ id: 1 }]);
+
+        this.clock.tick(pushAggregationTimeout);
+        this.clock.tick(10);
+        // act
+
+        console.log(dataGrid.getVisibleRows());
+    });
+
     // T120698
     QUnit.test('totalCount', function(assert) {
         // arrange, act
