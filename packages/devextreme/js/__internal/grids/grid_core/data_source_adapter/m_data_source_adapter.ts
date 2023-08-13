@@ -244,7 +244,6 @@ export default modules.Controller.inherit((function () {
       that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
       that._loadErrorHandler = that._handleLoadError.bind(that);
       that._beforePushHandler = that._handleBeforePush.bind(that);
-      that._pushHandler = that._handlePush.bind(that);
       that._changingHandler = that._handleChanging.bind(that);
 
       dataSource.on('changed', that._dataChangedHandler);
@@ -254,7 +253,6 @@ export default modules.Controller.inherit((function () {
       dataSource.on('loadError', that._loadErrorHandler);
       dataSource.on('changing', that._changingHandler);
       dataSource.store().on('beforePush', that._beforePushHandler);
-      dataSource.store().on('prepush', that._pushHandler);
 
       each(dataSource, (memberName, member) => {
         if (!that[memberName] && isFunction(member)) {
@@ -323,16 +321,16 @@ export default modules.Controller.inherit((function () {
 
       this.resetPagesCache(true);
 
-      if (!fromStore) {
-        if (this._cachedStoreData) {
-          // @ts-expect-error
-          applyBatch({
-            keyInfo: store,
-            data: this._cachedStoreData,
-            changes,
-          });
-        }
+      if (this._cachedStoreData) {
+        // @ts-expect-error
+        applyBatch({
+          keyInfo: store,
+          data: this._cachedStoreData,
+          changes,
+        });
+      }
 
+      if (!fromStore) {
         this._applyBatch(changes);
       }
 
@@ -409,18 +407,6 @@ export default modules.Controller.inherit((function () {
     },
     _handleBeforePush({ changes }) {
       this.push(changes, true);
-    },
-    _handlePush(changes) {
-      const store = this.store();
-
-      if (this._cachedStoreData) {
-        // @ts-expect-error
-        applyBatch({
-          keyInfo: store,
-          data: this._cachedStoreData,
-          changes,
-        });
-      }
     },
     _handleChanging(e) {
       this.changing.fire(e);
