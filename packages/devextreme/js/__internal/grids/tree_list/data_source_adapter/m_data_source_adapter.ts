@@ -650,7 +650,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function () {
       that.callBase(options);
     },
 
-    _handleBeforePush({ changes }) {
+    _handlePush({ changes }) {
       const reshapeOnPush = this._dataSource._reshapeOnPush;
       const isNeedReshape = reshapeOnPush && !!changes.length;
 

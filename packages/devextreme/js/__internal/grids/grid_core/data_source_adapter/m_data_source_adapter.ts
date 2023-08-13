@@ -243,7 +243,7 @@ export default modules.Controller.inherit((function () {
       that._dataLoadedHandler = that._handleDataLoaded.bind(that);
       that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
       that._loadErrorHandler = that._handleLoadError.bind(that);
-      that._beforePushHandler = that._handleBeforePush.bind(that);
+      that._pushHandler = that._handlePush.bind(that);
       that._changingHandler = that._handleChanging.bind(that);
 
       dataSource.on('changed', that._dataChangedHandler);
@@ -252,7 +252,7 @@ export default modules.Controller.inherit((function () {
       dataSource.on('loadingChanged', that._loadingChangedHandler);
       dataSource.on('loadError', that._loadErrorHandler);
       dataSource.on('changing', that._changingHandler);
-      dataSource.store().on('beforePush', that._beforePushHandler);
+      dataSource.store().on('beforePush', that._pushHandler);
 
       each(dataSource, (memberName, member) => {
         if (!that[memberName] && isFunction(member)) {
@@ -276,7 +276,7 @@ export default modules.Controller.inherit((function () {
       dataSource.off('loadingChanged', that._loadingChangedHandler);
       dataSource.off('loadError', that._loadErrorHandler);
       dataSource.off('changing', that._changingHandler);
-      store && store.off('beforePush', that._beforePushHandler);
+      store && store.off('beforePush', that._pushHandler);
 
       if (!isSharedDataSource) {
         dataSource.dispose();
@@ -405,7 +405,7 @@ export default modules.Controller.inherit((function () {
 
       changes.splice(0, changes.length);
     },
-    _handleBeforePush({ changes }) {
+    _handlePush({ changes }) {
       this.push(changes, true);
     },
     _handleChanging(e) {
