@@ -161,7 +161,7 @@ test('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click
     .pressKey('right')
     .expect(tabPanel.isFocused).ok()
     .expect(tabPanel.tabs.isFocused)
-    .notOk()
+    .ok()
     .expect(tabPanel.tabs.getItem(0).isFocused)
     .notOk()
     .expect(tabPanel.tabs.getItem(1).isFocused)
