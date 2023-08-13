@@ -1137,12 +1137,12 @@ QUnit.module('api', moduleConfig, () => {
         assert.equal(valueChangeCounter, 0, 'onValueChanged not fired');
     });
 
-    QUnit.test('reset()', function(assert) {
+    QUnit.test('clear()', function(assert) {
         const textBox = this.instance;
 
-        textBox.reset();
+        textBox.clear();
 
-        assert.strictEqual(textBox.option('value'), '', 'Value should be reset');
+        assert.strictEqual(textBox.option('value'), '', 'Value should be cleared');
     });
 
     QUnit.test('onFocusOut and other events fired after value was changed', function(assert) {

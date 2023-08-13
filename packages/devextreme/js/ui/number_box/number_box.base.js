@@ -458,7 +458,7 @@ const NumberBoxBase = TextEditor.inherit({
         this.callBase();
     },
 
-    reset: function() {
+    clear: function() {
         if(this.option('value') === null) {
             this.option('text', '');
             if(this._input().length) {

@@ -3,7 +3,11 @@
   "version": "23.2.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx start devextreme-angular-sandbox"
+    "start": "nx start devextreme-angular-sandbox",
+    "tools:discover-declarations": "dx-tools discover --js-scripts ./packages/devextreme/js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\" --artifacts ./artifacts/internal-tools",
+    "tools:generate-imd": "dx-tools integration-data-generator --artifacts ./artifacts/internal-tools",
+    "vue:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd && mkdir -p ./packages/devextreme-vue/metadata && cp ./artifacts/internal-tools/integration-data.json ./packages/devextreme-vue/metadata/integration-data.json",
+    "vue:build-generator": "cd node_modules/devextreme-vue-generator && npm i --no-audit --no-fund && npm run build:local"
   },
   "private": true,
   "devDependencies": {
@@ -27,7 +31,7 @@
     "eslint-plugin-simple-import-sort": "10.0.0",
     "eslint-plugin-spellcheck": "0.0.20",
     "eslint-plugin-testcafe": "0.2.1",
-    "nx": "16.4.0",
+    "nx": "16.5.5",
     "nx-cloud": "^16.0.5",
     "postcss": "^8.4.24"
   },

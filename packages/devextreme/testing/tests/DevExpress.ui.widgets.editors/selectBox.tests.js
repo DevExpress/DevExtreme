@@ -1614,7 +1614,7 @@ QUnit.module('clearButton', moduleSetup, () => {
         assert.strictEqual(selectBox.option('opened'), true, 'selectBox is opened after instant re-click');
     });
 
-    QUnit.test('search should not be prevented after reset method call (T1021888)', function(assert) {
+    QUnit.test('search should not be prevented after clear method call (T1021888)', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
             searchEnabled: true,
@@ -1626,7 +1626,7 @@ QUnit.module('clearButton', moduleSetup, () => {
         const keyboard = keyboardMock($input);
         const $list = $selectBox.find(`.${LIST_CLASS}`);
 
-        selectBox.reset();
+        selectBox.clear();
 
         keyboard.type('1');
 

@@ -3,7 +3,10 @@
 // adduse
 
 
-@mixin dx-tabs-after-mixin($is-expanded: false) {
+@mixin dx-tabs-after-mixin(
+  $is-expanded-vertical: false,
+  $is-expanded-horizontal: false,
+) {
   &::after {
     content: "";
     pointer-events: none;
@@ -14,9 +17,14 @@
     left: 0;
     z-index: 1;
 
-    @if $is-expanded {
+    @if $is-expanded-vertical {
       top: -$generic-tabs-border-width;
       bottom: -$generic-tabs-border-width;
+    }
+
+    @if $is-expanded-horizontal {
+      right: -$generic-tabs-border-width;
+      left: -$generic-tabs-border-width;
     }
   }
 }

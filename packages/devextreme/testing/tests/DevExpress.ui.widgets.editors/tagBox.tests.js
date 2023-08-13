@@ -1029,14 +1029,14 @@ QUnit.module('the \'value\' option', moduleSetup, () => {
         assert.deepEqual(value, ['item1'], 'outer value is not changed');
     });
 
-    QUnit.test('reset()', function(assert) {
+    QUnit.test('clear()', function(assert) {
         const tagBox = $('#tagBox').dxTagBox({
             items: [1, 2, 3],
             value: [1]
         }).dxTagBox('instance');
 
-        tagBox.reset();
-        assert.deepEqual(tagBox.option('value'), [], 'Value should be reset');
+        tagBox.clear();
+        assert.deepEqual(tagBox.option('value'), [], 'Value should be cleared');
     });
 
     QUnit.test('displayExpr change at runtime', function(assert) {
