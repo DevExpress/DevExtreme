@@ -43,3 +43,13 @@
     bottom: unset;
   }
 }
+
+.dx-tabpanel-tabs-position-left {
+  .dx-tabs {
+    border-inline-end: 1px solid $base-border-color;
+
+    @at-root #{selector-append(".dx-empty-collection", &)} {
+      border-inline-start: none;
+    }
+  }
+}
