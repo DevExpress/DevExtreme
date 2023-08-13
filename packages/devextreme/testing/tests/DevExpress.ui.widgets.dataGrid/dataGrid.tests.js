@@ -4657,6 +4657,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
         this.clock.tick(10);
 
+        // act
 
         dataGrid.getDataSource().store().push([{
             type: 'insert',
@@ -4667,9 +4668,13 @@ QUnit.module('templates', baseModuleConfig, () => {
 
         this.clock.tick(pushAggregationTimeout);
         this.clock.tick(10);
-        // act
 
-        console.log(dataGrid.getVisibleRows());
+        // assert
+
+        const rows = dataGrid.getVisibleRows();
+        assert.strictEqual(rows.length, 2);
+        assert.deepEqual(rows[0].data, { id: 1 });
+        assert.deepEqual(rows[1].data, { id: 2 });
     });
 
     // T120698
