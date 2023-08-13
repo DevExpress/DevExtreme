@@ -55,7 +55,12 @@
 }
 
 .dx-tabs-nav-buttons {
-  .dx-tabs-wrapper::after {
-    border: none;
+  .dx-tabs-wrapper {
+    border-block-start: $generic-tabs-border;
+    border-block-end: $generic-tabs-border;
+
+    &::after {
+      border: none;
+    }
   }
 }
