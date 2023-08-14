@@ -175,7 +175,7 @@ const Store = Class.inherit({
 
         when(...beforePushArgs.waitFor).done(() => {
             this._pushImpl(changes);
-            this._eventsStrategy.fireEvent('beforePush', [changes]);
+            this._eventsStrategy.fireEvent('beforePush', [{ changes }]);
             this._eventsStrategy.fireEvent('push', [changes]);
         });
     },

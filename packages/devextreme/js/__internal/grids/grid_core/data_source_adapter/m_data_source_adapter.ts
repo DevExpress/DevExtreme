@@ -405,7 +405,7 @@ export default modules.Controller.inherit((function () {
 
       changes.splice(0, changes.length);
     },
-    _handlePush(changes) {
+    _handlePush({ changes }) {
       this.push(changes, true);
     },
     _handleChanging(e) {
