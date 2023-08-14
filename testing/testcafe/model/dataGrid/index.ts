@@ -249,7 +249,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  scrollBy(options: { x?: number; y?: number; top?: number }): Promise<void> {
+  scrollBy(options: { x?: number; y?: number; top?: number; left?: number }): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
