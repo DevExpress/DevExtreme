@@ -660,8 +660,8 @@ export const AdvancedChart = BaseChart.inherit({
   _prepareStripsAndConstantLines(typeSelector, userOptions, rotated) {
     userOptions = this._themeManager.getOptions(typeSelector, userOptions, rotated);
     if (userOptions.strips) {
-      userOptions.strips.forEach((i) => {
-        userOptions.strips[i] = _extend(true, {}, userOptions.stripStyle, userOptions.strips[i]);
+      userOptions.strips.forEach((line, i) => {
+        userOptions.strips[i] = _extend(true, {}, userOptions.stripStyle, line);
       });
     }
     if (userOptions.constantLines) {
