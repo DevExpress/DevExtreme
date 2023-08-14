@@ -108,9 +108,11 @@ const createModuleConfig = (name, dir, filePath, dist) => {
 function hasSideEffects(jsFileModulePath) {
     try {
         const data = fs.readFileSync(jsFileModulePath, 'utf8');
+        const sideEffectImportsRegExp = /^\s*import\s+['"]/ms;
 
-        return !(/^\s*export /ms).test(data)
+        return sideEffectImportsRegExp.test(data);
     } catch (e) {
+        console.warn('WARNING: ' + e);
         return true;
     }
 }
