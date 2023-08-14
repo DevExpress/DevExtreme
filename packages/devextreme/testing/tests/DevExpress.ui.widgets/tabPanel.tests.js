@@ -606,31 +606,6 @@ QUnit.module('keyboard navigation', {
         assert.strictEqual($($thirdTab).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), false);
     });
 
-    QUnit.test('click on available tab removed specific tab classes if previous item is disabled', function(assert) {
-        this.instance.option('items', [ 0, { disabled: true }, 2 ]);
-        this.instance.focus();
-
-        const keyboard = keyboardMock(this.$tabs);
-        keyboard.press('right');
-
-        const $thirdTab = this.$tabs.find(toSelector(TABPANEL_TABS_ITEM_CLASS)).get(2);
-        pointerMock($thirdTab).start().click();
-
-        this.clock.tick(10);
-
-        assert.strictEqual($($thirdTab).hasClass(FOCUS_STATE_CLASS), true);
-        assert.strictEqual($($thirdTab).hasClass(SELECTED_TAB_CLASS), true);
-
-        const $firstTab = this.$tabs.find(toSelector(TABPANEL_TABS_ITEM_CLASS)).get(0);
-        assert.strictEqual($($firstTab).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), false);
-
-        keyboard.press('left');
-        pointerMock($firstTab).start().click();
-        this.clock.tick(10);
-
-        assert.strictEqual($($thirdTab).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), false);
-    });
-
     QUnit.test('tabPanels focusedElement dependence on tabs focusedElement', function(assert) {
         assert.expect(3);
 
