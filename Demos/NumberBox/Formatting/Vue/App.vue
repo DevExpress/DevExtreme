@@ -65,14 +65,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import DxNumberBox from 'devextreme-vue/number-box';
-
-export default {
-  components: {
-    DxNumberBox,
-  },
-};
 </script>
 <style scoped>
   .dx-field {

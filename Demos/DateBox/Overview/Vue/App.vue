@@ -108,38 +108,26 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import DxDateBox from 'devextreme-vue/date-box';
-
 import service from './data.js';
 
-export default {
-  components: {
-    DxDateBox,
-  },
-  data() {
-    return {
-      value: new Date(1981, 3, 27),
-      now: new Date(),
-      firstWorkDay2017: new Date(2017, 0, 3),
-      min: new Date(1900, 0, 1),
-      dateClear: new Date(2015, 11, 1, 6),
-      disabledDates: service.getFederalHolidays(),
-    };
-  },
-  computed: {
-    diffInDay() {
-      return (
-        `${Math.floor(
-          Math.abs(
-            (new Date().getTime() - this.value.getTime())
-              / (24 * 60 * 60 * 1000),
-          ),
-        )} days`
-      );
-    },
-  },
-};
+const value = ref(new Date(1981, 3, 27));
+const now = new Date();
+const firstWorkDay2017 = new Date(2017, 0, 3);
+const min = new Date(1900, 0, 1);
+const dateClear = new Date(2015, 11, 1, 6);
+const disabledDates = service.getFederalHolidays();
+
+const diffInDay = computed(() => (
+  `${Math.floor(
+    Math.abs(
+      (new Date().getTime() - value.value.getTime())
+            / (24 * 60 * 60 * 1000),
+    ),
+  )} days`
+));
 </script>
 <style scoped>
 #age {

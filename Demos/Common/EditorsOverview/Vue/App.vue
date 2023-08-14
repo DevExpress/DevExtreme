@@ -84,63 +84,47 @@
     />
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref, watch } from 'vue';
 import DxTextBox from 'devextreme-vue/text-box';
 import DxColorBox from 'devextreme-vue/color-box';
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxSwitch from 'devextreme-vue/switch';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import SuperheroLogo from './SuperheroLogo.vue';
 
-export default {
-  components: {
-    DxTextBox,
-    DxColorBox,
-    DxNumberBox,
-    DxSwitch,
-    DxSelectBox,
-    SuperheroLogo,
+const color = ref('#f05b41');
+const text = ref('UI Superhero');
+const width = ref(370);
+const height = ref(260);
+const transform = ref('scaleX(1)');
+const border = ref(false);
+const transformations = [
+  {
+    key: 'Flip',
+    items: [
+      { name: '0 degrees', value: 'scaleX(1)' },
+      { name: '180 degrees', value: 'scaleX(-1)' },
+    ],
   },
-  data() {
-    return {
-      color: '#f05b41',
-      text: 'UI Superhero',
-      width: 370,
-      height: 260,
-      transform: 'scaleX(1)',
-      border: false,
-      transformations: [
-        {
-          key: 'Flip',
-          items: [
-            { name: '0 degrees', value: 'scaleX(1)' },
-            { name: '180 degrees', value: 'scaleX(-1)' },
-          ],
-        },
-        {
-          key: 'Rotate',
-          items: [
-            { name: '0 degrees', value: 'rotate(0)' },
-            { name: '15 degrees', value: 'rotate(15deg)' },
-            { name: '30 degrees', value: 'rotate(30deg)' },
-            { name: '-15 degrees', value: 'rotate(-15deg)' },
-            { name: '-30 degrees', value: 'rotate(-30deg)' },
-          ],
-        },
-      ],
-    };
+  {
+    key: 'Rotate',
+    items: [
+      { name: '0 degrees', value: 'rotate(0)' },
+      { name: '15 degrees', value: 'rotate(15deg)' },
+      { name: '30 degrees', value: 'rotate(30deg)' },
+      { name: '-15 degrees', value: 'rotate(-15deg)' },
+      { name: '-30 degrees', value: 'rotate(-30deg)' },
+    ],
   },
-  watch: {
-    height(val) {
-      this.width = (val * 37) / 26;
-    },
-    width(val) {
-      this.height = (val * 26) / 37;
-    },
-  },
-};
+];
+
+watch(() => height.value, (val) => {
+  width.value = (val * 37) / 26;
+});
+watch(() => width.value, (val) => {
+  height.value = (val * 26) / 37;
+});
 </script>
 <style>
 .settings {

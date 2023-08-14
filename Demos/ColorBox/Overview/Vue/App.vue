@@ -72,42 +72,18 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxColorBox from 'devextreme-vue/color-box';
 
-export default {
-  components: {
-    DxColorBox,
-  },
+const color = ref('#f05b41');
 
-  data() {
-    return {
-      color: '#f05b41',
-    };
-  },
-
-  computed: {
-    defaultModeLabel() {
-      return { 'aria-label': 'Default mode' };
-    },
-    alphaChannelLabel() {
-      return { 'aria-label': 'With alpha channel editing' };
-    },
-    customButtonCaptionsLabel() {
-      return { 'aria-label': 'Custom button captions' };
-    },
-    readOnlyLabel() {
-      return { 'aria-label': 'Read only' };
-    },
-    disabledLabel() {
-      return { 'aria-label': 'Disabled' };
-    },
-    eventHandlingLabel() {
-      return { 'aria-label': 'Event Handling' };
-    },
-  },
-};
+const defaultModeLabel = { 'aria-label': 'Default mode' };
+const alphaChannelLabel = { 'aria-label': 'With alpha channel editing' };
+const customButtonCaptionsLabel = { 'aria-label': 'Custom button captions' };
+const readOnlyLabel = { 'aria-label': 'Read only' };
+const disabledLabel = { 'aria-label': 'Disabled' };
+const eventHandlingLabel = { 'aria-label': 'Event Handling' };
 </script>
 <style>
 .form {

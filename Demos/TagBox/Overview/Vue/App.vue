@@ -117,41 +117,24 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxTagBox from 'devextreme-vue/tag-box';
-import ArrayStore from 'devextreme/data/array_store';
 import Item from './Item.vue';
 import Tag from './Tag.vue';
-
 import { simpleProducts, products } from './data.js';
 
-export default {
-  components: {
-    DxTagBox,
-    Item,
-    Tag,
-  },
-  data() {
-    return {
-      products,
-      simpleProducts,
-      editableProducts: simpleProducts.slice(),
-      data: new ArrayStore({
-        data: products,
-        key: 'ID',
-      }),
-      value: [1, 2],
-      onCustomItemCreating: (args) => {
-        const newValue = args.text;
-        const isItemInDataSource = this.editableProducts.some((item) => item === newValue);
-        if (!isItemInDataSource) {
-          this.editableProducts = [newValue, ...this.editableProducts];
-        }
-        args.customItem = newValue;
-      },
-    };
-  },
-};
+const editableProducts = ref(simpleProducts.slice());
+
+const value = ref([1, 2]);
+const onCustomItemCreating = ref((args) => {
+  const newValue = args.text;
+  const isItemInDataSource = editableProducts.value.some((item) => item === newValue);
+  if (!isItemInDataSource) {
+    editableProducts.value = [newValue, ...editableProducts.value];
+  }
+  args.customItem = newValue;
+});
 </script>
 <style scoped>
 body .custom-item {

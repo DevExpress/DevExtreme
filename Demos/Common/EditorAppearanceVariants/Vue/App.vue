@@ -130,8 +130,8 @@
     />
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxTextBox from 'devextreme-vue/text-box';
 import DxTextArea from 'devextreme-vue/text-area';
@@ -143,43 +143,24 @@ import {
   DxRequiredRule,
 } from 'devextreme-vue/validator';
 import notify from 'devextreme/ui/notify';
-
 import { states } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxTextBox,
-    DxTextArea,
-    DxDateBox,
-    DxButton,
-    DxValidator,
-    DxRequiredRule,
-    DxDateRangeBox,
-  },
-  data() {
-    return {
-      birthDate: new Date(1981, 5, 3),
-      stylingMode: 'outlined',
-      labelMode: 'static',
-      text: 'Olivia loves to sell. She has been selling DevAV products since 2012.',
-      states,
-      phoneRules: {
-        X: /[02-9]/,
-      },
-    };
-  },
-  methods: {
-    validateClick({ validationGroup }) {
-      const result = validationGroup.validate();
-      if (result.isValid) {
-        notify('The task was saved successfully.', 'success');
-      } else {
-        notify('The task was not saved. Please check if all fields are valid.', 'error');
-      }
-    },
-  },
+const birthDate = ref(new Date(1981, 5, 3));
+const stylingMode = ref('outlined');
+const labelMode = ref('static');
+const text = ref('Olivia loves to sell. She has been selling DevAV products since 2012.');
+const phoneRules = {
+  X: /[02-9]/,
 };
+
+function validateClick({ validationGroup }) {
+  const result = validationGroup.validate();
+  if (result.isValid) {
+    notify('The task was saved successfully.', 'success');
+  } else {
+    notify('The task was not saved. Please check if all fields are valid.', 'error');
+  }
+}
 </script>
 <style>
 #content-wrapper {

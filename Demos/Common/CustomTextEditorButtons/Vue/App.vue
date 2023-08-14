@@ -71,76 +71,61 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxTextBox, DxButton as DxTextBoxButton } from 'devextreme-vue/text-box';
 import { DxNumberBox, DxButton as DxNumberBoxButton } from 'devextreme-vue/number-box';
 import { DxDateBox, DxButton as DxDateBoxButton } from 'devextreme-vue/date-box';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
-
-export default {
-  components: {
-    DxTextBox,
-    DxDateBox,
-    DxNumberBox,
-    DxTextBoxButton,
-    DxNumberBoxButton,
-    DxDateBoxButton,
+const passwordMode = ref('password');
+const passwordButton = {
+  icon: '../../../../images/icons/eye.png',
+  type: 'default',
+  onClick: () => {
+    passwordMode.value = passwordMode.value === 'text' ? 'password' : 'text';
   },
-  data() {
-    return {
-      passwordMode: 'password',
-      passwordButton: {
-        icon: '../../../../images/icons/eye.png',
-        type: 'default',
-        onClick: () => {
-          this.passwordMode = this.passwordMode === 'text' ? 'password' : 'text';
-        },
-      },
-      currencyFormat: '$ #.##',
-      currencyValue: 14500.55,
-      currencyButton: {
-        text: '€',
-        stylingMode: 'text',
-        width: 32,
-        elementAttr: {
-          class: 'currency',
-        },
-        onClick: (e) => {
-          if (e.component.option('text') === '$') {
-            e.component.option('text', '€');
-            this.currencyFormat = '$ #.##';
-            this.currencyValue /= 0.836;
-          } else {
-            e.component.option('text', '$');
-            this.currencyFormat = '€ #.##';
-            this.currencyValue *= 0.836;
-          }
-        },
-      },
-      dateValue: new Date().getTime(),
-      todayButton: {
-        text: 'Today',
-        onClick: () => {
-          this.dateValue = new Date().getTime();
-        },
-      },
-      prevDateButton: {
-        icon: 'spinprev',
-        stylingMode: 'text',
-        onClick: () => {
-          this.dateValue -= millisecondsInDay;
-        },
-      },
-      nextDateButton: {
-        icon: 'spinnext',
-        stylingMode: 'text',
-        onClick: () => {
-          this.dateValue += millisecondsInDay;
-        },
-      },
-    };
+};
+const currencyFormat = ref('$ #.##');
+const currencyValue = ref(14500.55);
+const currencyButton = {
+  text: '€',
+  stylingMode: 'text',
+  width: 32,
+  elementAttr: {
+    class: 'currency',
+  },
+  onClick: (e) => {
+    if (e.component.option('text') === '$') {
+      e.component.option('text', '€');
+      currencyFormat.value = '$ #.##';
+      currencyValue.value /= 0.836;
+    } else {
+      e.component.option('text', '$');
+      currencyFormat.value = '€ #.##';
+      currencyValue.value *= 0.836;
+    }
+  },
+};
+const dateValue = ref(new Date().getTime());
+const todayButton = {
+  text: 'Today',
+  onClick: () => {
+    dateValue.value = new Date().getTime();
+  },
+};
+const prevDateButton = {
+  icon: 'spinprev',
+  stylingMode: 'text',
+  onClick: () => {
+    dateValue.value -= millisecondsInDay;
+  },
+};
+const nextDateButton = {
+  icon: 'spinnext',
+  stylingMode: 'text',
+  onClick: () => {
+    dateValue.value += millisecondsInDay;
   },
 };
 </script>

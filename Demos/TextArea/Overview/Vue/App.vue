@@ -57,41 +57,30 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxTextArea from 'devextreme-vue/text-area';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
-
 import service from './data.js';
 
-export default {
-  components: {
-    DxCheckBox,
-    DxTextArea,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      eventValue: service.valueChangeEvents[0].name,
-      maxLength: null,
-      value: service.getContent(),
-      valueForEditableTextArea: service.getContent(),
-      valueChangeEvents: service.valueChangeEvents,
-      autoResizeEnabled: false,
-      height: 90,
-    };
-  },
-  methods: {
-    onCheckboxValueChanged(e) {
-      const str = service.getContent();
-      this.value = e.value ? str.substring(0, 100) : str;
-      this.maxLength = e.value ? 100 : null;
-    },
-    onAutoResizeChanged(e) {
-      this.height = e.value ? undefined : 90;
-    },
-  },
-};
+const eventValue = ref(service.valueChangeEvents[0].name);
+const maxLength = ref(null);
+const value = ref(service.getContent());
+const valueForEditableTextArea = ref(service.getContent());
+const valueChangeEvents = service.valueChangeEvents;
+const autoResizeEnabled = ref(false);
+const height = ref(90);
+
+function onCheckboxValueChanged(e) {
+  const str = service.getContent();
+  value.value = e.value ? str.substring(0, 100) : str;
+  maxLength.value = e.value ? 100 : null;
+}
+
+function onAutoResizeChanged(e) {
+  height.value = e.value ? undefined : 90;
+}
 </script>
 <style>
 .full-width-content {

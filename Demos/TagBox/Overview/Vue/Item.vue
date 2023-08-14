@@ -6,13 +6,10 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    itemData: {
-      type: Object,
-      default: () => {},
-    },
-  },
-};
+<script setup lang="ts">
+withDefaults(defineProps<{
+  itemData?: {[key:string]: string}
+}>(), {
+  itemData: () => ({ Name: '' }),
+});
 </script>

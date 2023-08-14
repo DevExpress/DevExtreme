@@ -16,7 +16,6 @@
         >
           <template #content="{ data }">
             <DxTreeView
-              :ref="treeViewRefName"
               :data-source="treeDataSource"
               :select-by-click="true"
               data-structure="plain"
@@ -24,8 +23,8 @@
               parent-id-expr="categoryId"
               selection-mode="single"
               display-expr="name"
-              @content-ready="$event.component.selectItem(treeBoxValue)"
-              @item-selection-changed="treeView_itemSelectionChanged($event)"
+              @content-ready="treeViewContentReady($event)"
+              @item-selection-changed="treeViewItemSelectionChanged($event)"
               @item-click="onTreeItemClick($event)"
             />
           </template>
@@ -69,7 +68,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxDropDownBox from 'devextreme-vue/drop-down-box';
 import DxTreeView from 'devextreme-vue/tree-view';
 import {
@@ -78,66 +78,55 @@ import {
 import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';
 
-export default {
-  components: {
-    DxDropDownBox,
-    DxTreeView,
-    DxDataGrid,
-    DxSelection,
-    DxPaging,
-    DxFilterRow,
-    DxScrolling,
-  },
-  data() {
-    return {
-      treeDataSource: null,
-      treeBoxValue: null,
-      gridDataSource: null,
-      isGridBoxOpened: false,
-      isTreeBoxOpened: false,
-      gridBoxValue: [3],
-      treeViewRefName: 'tree-view',
-      gridColumns: ['CompanyName', 'City', 'Phone'],
-    };
-  },
-  created() {
-    this.treeDataSource = this.makeAsyncDataSource('treeProducts.json');
-    this.gridDataSource = this.makeAsyncDataSource('customers.json');
-    this.treeBoxValue = '1_1';
-  },
-  methods: {
-    makeAsyncDataSource(jsonFile) {
-      return new CustomStore({
-        loadMode: 'raw',
-        key: 'ID',
-        load() {
-          return fetch(`../../../../data/${jsonFile}`)
-            .then((response) => response.json());
-        },
-      });
+const treeBoxValue = ref('1_1');
+const isGridBoxOpened = ref(false);
+const isTreeBoxOpened = ref(false);
+const gridBoxValue = ref([3]);
+const gridDataSource = makeAsyncDataSource('customers.json');
+const treeDataSource = makeAsyncDataSource('treeProducts.json');
+const gridColumns = ['CompanyName', 'City', 'Phone'];
+
+let treeView = null;
+
+function treeViewContentReady({ component }) {
+  treeView = component;
+  syncTreeViewSelection();
+}
+
+function makeAsyncDataSource(jsonFile) {
+  return new CustomStore({
+    loadMode: 'raw',
+    key: 'ID',
+    load() {
+      return fetch(`../../../../data/${jsonFile}`)
+        .then((response) => response.json());
     },
-    syncTreeViewSelection() {
-      if (!this.$refs[this.textBoxRefName]) return;
-      if (!this.treeBoxValue) {
-        this.$refs[this.textBoxRefName].instance.unselectAll();
-      } else {
-        this.$refs[this.textBoxRefName].instance.selectItem(this.treeBoxValue);
-      }
-    },
-    treeView_itemSelectionChanged(e) {
-      this.treeBoxValue = e.component.getSelectedNodeKeys();
-    },
-    gridBoxDisplayExpr(item) {
-      return item && `${item.CompanyName} <${item.Phone}>`;
-    },
-    onTreeItemClick() {
-      this.isTreeBoxOpened = false;
-    },
-    onGridSelectionChanged() {
-      this.isGridBoxOpened = false;
-    },
-  },
-};
+  });
+}
+
+function syncTreeViewSelection() {
+  treeView?.unselectAll();
+
+  if (treeBoxValue.value) {
+    treeView?.selectItem(treeBoxValue.value);
+  }
+}
+
+function treeViewItemSelectionChanged(e) {
+  treeBoxValue.value = e.component.getSelectedNodeKeys();
+}
+
+function gridBoxDisplayExpr(item) {
+  return item && `${item.CompanyName} <${item.Phone}>`;
+}
+
+function onTreeItemClick() {
+  isTreeBoxOpened.value = false;
+}
+
+function onGridSelectionChanged() {
+  isGridBoxOpened.value = false;
+}
 </script>
 <style scoped>
 .dx-fieldset {

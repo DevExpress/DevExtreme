@@ -100,89 +100,82 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxDateBox from 'devextreme-vue/date-box';
 import DxCalendar from 'devextreme-vue/calendar';
 
-export default {
-  components: {
-    DxCheckBox,
-    DxSelectBox,
-    DxDateBox,
-    DxCalendar,
-  },
-  data() {
-    return {
-      minDateValue: null,
-      maxDateValue: null,
-      disabledDates: null,
-      firstDay: 0,
-      showWeekNumbers: false,
-      weekNumberRule: 'auto',
-      currentValue: new Date(),
-      zoomLevels: ['month', 'year', 'decade', 'century'],
-      cellTemplate: 'cell',
-      disabled: false,
-      zoomLevel: 'month',
-      weekDays: [
-        { id: 0, text: 'Sunday' },
-        { id: 1, text: 'Monday' },
-        { id: 2, text: 'Tuesday' },
-        { id: 3, text: 'Wednesday' },
-        { id: 4, text: 'Thursday' },
-        { id: 5, text: 'Friday' },
-        { id: 6, text: 'Saturday' },
-      ],
-      weekNumberRules: ['auto', 'firstDay', 'firstFourDays', 'fullWeek'],
-    };
-  },
-  methods: {
-    isWeekend(date) {
-      const day = date.getDay();
-      return day === 0 || day === 6;
-    },
-    setMinDate({ value }) {
-      this.minDateValue = value
-        ? new Date((new Date()).getTime() - 1000 * 60 * 60 * 24 * 3)
-        : null;
-    },
-    setMaxDate({ value }) {
-      this.maxDateValue = value
-        ? new Date((new Date()).getTime() + 1000 * 60 * 60 * 24 * 3)
-        : null;
-    },
-    disableWeekend({ value }) {
-      this.disabledDates = value
-        ? (data) => data.view === 'month' && this.isWeekend(data.date)
-        : null;
-    },
-    useCellTemplate({ value }) {
-      this.cellTemplate = value ? 'custom' : 'cell';
-    },
-    getCellCssClass({ date, view }) {
-      let cssClass = '';
-      const holidays = [[1, 0], [4, 6], [25, 11]];
+const minDateValue = ref(null);
+const maxDateValue = ref(null);
+const disabledDates = ref(null);
+const firstDay = ref(0);
+const showWeekNumbers = ref(false);
+const weekNumberRule = ref('auto');
+const currentValue = ref(new Date());
+const zoomLevels = ['month', 'year', 'decade', 'century'];
+const cellTemplate = ref('cell');
+const disabled = ref(false);
+const zoomLevel = ref('month');
+const weekDays = [
+  { id: 0, text: 'Sunday' },
+  { id: 1, text: 'Monday' },
+  { id: 2, text: 'Tuesday' },
+  { id: 3, text: 'Wednesday' },
+  { id: 4, text: 'Thursday' },
+  { id: 5, text: 'Friday' },
+  { id: 6, text: 'Saturday' },
+];
+const weekNumberRules = ['auto', 'firstDay', 'firstFourDays', 'fullWeek'];
 
-      if (view === 'month') {
-        if (!date) {
-          cssClass = 'week-number';
-        } else {
-          if (this.isWeekend(date)) { cssClass = 'weekend'; }
+function isWeekend(date) {
+  const day = date.getDay();
+  return day === 0 || day === 6;
+}
 
-          holidays.forEach((item) => {
-            if (date.getDate() === item[0] && date.getMonth() === item[1]) {
-              cssClass = 'holiday';
-            }
-          });
+function setMinDate({ value }) {
+  minDateValue.value = value
+    ? new Date((new Date()).getTime() - 1000 * 60 * 60 * 24 * 3)
+    : null;
+}
+
+function setMaxDate({ value }) {
+  maxDateValue.value = value
+    ? new Date((new Date()).getTime() + 1000 * 60 * 60 * 24 * 3)
+    : null;
+}
+
+function disableWeekend({ value }) {
+  disabledDates.value = value
+    ? (data) => data.view === 'month' && isWeekend(data.date)
+    : null;
+}
+
+function useCellTemplate({ value }) {
+  cellTemplate.value = value ? 'custom' : 'cell';
+}
+
+function getCellCssClass({ date, view }) {
+  let cssClass = '';
+  const holidays = [[1, 0], [4, 6], [25, 11]];
+
+  if (view === 'month') {
+    if (!date) {
+      cssClass = 'week-number';
+    } else {
+      if (isWeekend(date)) { cssClass = 'weekend'; }
+
+      holidays.forEach((item) => {
+        if (date.getDate() === item[0] && date.getMonth() === item[1]) {
+          cssClass = 'holiday';
         }
-      }
+      });
+    }
+  }
 
-      return cssClass;
-    },
-  },
-};
+  return cssClass;
+}
 </script>
 <style scoped>
 #container {

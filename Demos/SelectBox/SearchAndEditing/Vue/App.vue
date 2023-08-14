@@ -103,12 +103,12 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import DataSource from 'devextreme/data/data_source';
-
 import { products, simpleProducts } from './data.js';
 
 const productsDataSource = new DataSource({
@@ -118,61 +118,46 @@ const productsDataSource = new DataSource({
     key: 'ID',
   },
 });
-
-export default {
-  components: {
-    DxSelectBox,
-    DxNumberBox,
-    DxCheckBox,
+const editBoxValue = ref(simpleProducts[0]);
+const product = ref(simpleProducts[0].ID);
+const searchModeOption = ref('contains');
+const searchExprOption = ref('Name');
+const searchTimeoutOption = ref(200);
+const minSearchLengthOption = ref(0);
+const showDataBeforeSearchOption = ref(false);
+const searchExprItems = [
+  {
+    name: "'Name'",
+    value: 'Name',
   },
-  data() {
-    return {
-      products,
-      productsDataSource,
-      editBoxValue: simpleProducts[0],
-      product: simpleProducts[0].ID,
-      searchModeOption: 'contains',
-      searchExprOption: 'Name',
-      searchTimeoutOption: 200,
-      minSearchLengthOption: 0,
-      showDataBeforeSearchOption: false,
-      searchExprItems: [
-        {
-          name: "'Name'",
-          value: 'Name',
-        },
-        {
-          name: "['Name', 'Category']",
-          value: ['Name', 'Category'],
-        },
-      ],
-    };
+  {
+    name: "['Name', 'Category']",
+    value: ['Name', 'Category'],
   },
-  methods: {
-    customItemCreating(data) {
-      if (!data.text) {
-        data.customItem = null;
-        return;
-      }
+];
 
-      const productIds = simpleProducts.map((item) => item.ID);
-      const incrementedId = Math.max.apply(null, productIds) + 1;
-      const newItem = {
-        Name: data.text,
-        ID: incrementedId,
-      };
+function customItemCreating(data) {
+  if (!data.text) {
+    data.customItem = null;
+    return;
+  }
 
-      data.customItem = productsDataSource
-        .store()
-        .insert(newItem)
-        .then(() => productsDataSource.load())
-        .then(() => newItem)
-        .catch((error) => {
-          throw error;
-        });
-    },
-  },
-};
+  const productIds = simpleProducts.map((item) => item.ID);
+  const incrementedId = Math.max.apply(null, productIds) + 1;
+  const newItem = {
+    Name: data.text,
+    ID: incrementedId,
+  };
+
+  data.customItem = productsDataSource
+    .store()
+    .insert(newItem)
+    .then(() => productsDataSource.load())
+    .then(() => newItem)
+    .catch((error) => {
+      throw error;
+    });
+}
 </script>
 <style scoped>
 .widget-container {

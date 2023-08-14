@@ -52,27 +52,15 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { DxTagBox } from 'devextreme-vue/tag-box';
-import DataSource from 'devextreme/data/data_source';
 import Group from './Group.vue';
-
 import productsData from './data.js';
 
-export default {
-  components: {
-    DxTagBox,
-    Group,
-  },
-  data() {
-    return {
-      products: new DataSource({
-        store: productsData,
-        key: 'ID',
-        group: 'Category',
-      }),
-    };
-  },
+const products = {
+  store: productsData,
+  key: 'ID',
+  group: 'Category',
 };
 </script>
 <style scoped>

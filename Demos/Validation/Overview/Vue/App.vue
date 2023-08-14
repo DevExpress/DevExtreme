@@ -201,7 +201,8 @@
     </div>
   </form>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { DxTextBox, DxButton as DxTextBoxButton } from 'devextreme-vue/text-box';
@@ -218,98 +219,81 @@ import {
   DxRangeRule,
   DxAsyncRule,
 } from 'devextreme-vue/validator';
-
 import notify from 'devextreme/ui/notify';
 import service from './data.js';
 
-const sendRequest = function(value) {
+const currentDate = new Date();
+const countries = ref(service.getCountries());
+const phoneRules = ref({
+  X: /[02-9]/,
+});
+const password = ref('');
+const confirmPassword = ref('');
+const passwordMode = ref('password');
+const confirmPasswordMode = ref('password');
+const passwordButton = ref({
+  icon: '../../../../images/icons/eye.png',
+  type: 'default',
+  onClick: () => {
+    passwordMode.value = passwordMode.value === 'text' ? 'password' : 'text';
+  },
+});
+const confirmPasswordButton = ref({
+  icon: '../../../../images/icons/eye.png',
+  type: 'default',
+  onClick: () => {
+    confirmPasswordMode.value = confirmPasswordMode.value === 'text' ? 'password' : 'text';
+  },
+});
+const namePattern = ref(/^[^0-9]+$/);
+const phonePattern = ref(/^[02-9]\d{9}$/);
+const maxDate = ref(new Date(currentDate.setFullYear(currentDate.getFullYear() - 21)));
+
+let validatorInstance;
+
+function passwordComparison() {
+  return password.value;
+}
+
+function checkComparison() {
+  return true;
+}
+
+function asyncValidation(params) {
+  return sendRequest(params.value);
+}
+
+function onPasswordChanged() {
+  if (confirmPassword.value) {
+    validatorInstance?.validate();
+  }
+}
+
+function onInit(e) {
+  validatorInstance = e.component;
+}
+
+function onFormSubmit(e) {
+  notify({
+    message: 'You have submitted the form',
+    position: {
+      my: 'center top',
+      at: 'center top',
+    },
+  }, 'success', 3000);
+
+  e.preventDefault();
+}
+
+function sendRequest(value) {
   const invalidEmail = 'test@dx-email.com';
+
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(value !== invalidEmail);
     }, 1000);
   });
-};
-
-export default {
-  components: {
-    DxSelectBox,
-    DxCheckBox,
-    DxTextBox,
-    DxDateBox,
-    DxButton,
-    DxValidator,
-    DxRequiredRule,
-    DxCompareRule,
-    DxEmailRule,
-    DxPatternRule,
-    DxStringLengthRule,
-    DxRangeRule,
-    DxAsyncRule,
-    DxValidationSummary,
-    DxTextBoxButton,
-  },
-  data() {
-    const currentDate = new Date();
-    return {
-      countries: service.getCountries(),
-      phoneRules: {
-        X: /[02-9]/,
-      },
-      password: '',
-      confirmPassword: '',
-      passwordMode: 'password',
-      confirmPasswordMode: 'password',
-      passwordButton: {
-        icon: '../../../../images/icons/eye.png',
-        type: 'default',
-        onClick: () => {
-          this.passwordMode = this.passwordMode === 'text' ? 'password' : 'text';
-        },
-      },
-      confirmPasswordButton: {
-        icon: '../../../../images/icons/eye.png',
-        type: 'default',
-        onClick: () => {
-          this.confirmPasswordMode = this.confirmPasswordMode === 'text' ? 'password' : 'text';
-        },
-      },
-      namePattern: /^[^0-9]+$/,
-      phonePattern: /^[02-9]\d{9}$/,
-      maxDate: new Date(currentDate.setFullYear(currentDate.getFullYear() - 21)),
-    };
-  },
-  methods: {
-    passwordComparison() {
-      return this.password;
-    },
-    checkComparison() {
-      return true;
-    },
-    asyncValidation(params) {
-      return sendRequest(params.value);
-    },
-    onPasswordChanged() {
-      if (this.confirmPassword) {
-        this.validatorInstance.validate();
-      }
-    },
-    onInit(e) {
-      this.validatorInstance = e.component;
-    },
-    onFormSubmit(e) {
-      notify({
-        message: 'You have submitted the form',
-        position: {
-          my: 'center top',
-          at: 'center top',
-        },
-      }, 'success', 3000);
-
-      e.preventDefault();
-    },
-  },
-};
+}
 </script>
 <style scoped>
 #summary {

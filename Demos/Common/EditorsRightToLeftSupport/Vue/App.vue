@@ -112,8 +112,8 @@
     </div>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxAutocomplete from 'devextreme-vue/autocomplete';
 import DxCheckBox from 'devextreme-vue/check-box';
@@ -122,39 +122,24 @@ import DxTextArea from 'devextreme-vue/text-area';
 import DxTextBox from 'devextreme-vue/text-box';
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxTagBox from 'devextreme-vue/tag-box';
-import { europeanUnion } from './data.js';
+import { europeanUnion as europeanUnionData } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxAutocomplete,
-    DxCheckBox,
-    DxSwitch,
-    DxTextArea,
-    DxTextBox,
-    DxNumberBox,
-    DxTagBox,
-  },
-  data() {
-    return {
-      europeanUnion,
-      languages: [
-        'Arabic: Right-to-Left direction',
-        'English: Left-to-Right direction',
-      ],
-      displayExpr: 'nameEn',
-      rtlEnabled: false,
-      textValue: 'text',
-      onLanguageChanged: (args) => {
-        const isRTL = args.value === this.languages[0];
+const languages = [
+  'Arabic: Right-to-Left direction',
+  'English: Left-to-Right direction',
+];
+const europeanUnion = ref(europeanUnionData);
+const displayExpr = ref('nameEn');
+const rtlEnabled = ref(false);
+const textValue = ref('text');
 
-        this.displayExpr = isRTL ? 'nameAr' : 'nameEn';
-        this.rtlEnabled = isRTL;
-        this.textValue = isRTL ? 'نص' : 'text';
-      },
-    };
-  },
-};
+function onLanguageChanged(args) {
+  const isRTL = args.value === languages[0];
+
+  displayExpr.value = isRTL ? 'nameAr' : 'nameEn';
+  rtlEnabled.value = isRTL;
+  textValue.value = isRTL ? 'نص' : 'text';
+}
 </script>
 <style>
 .options {

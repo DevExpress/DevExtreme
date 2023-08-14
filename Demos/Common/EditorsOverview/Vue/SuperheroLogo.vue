@@ -169,36 +169,22 @@
     >{{ text }}</div>
   </div>
 </template>
-<script>
-
-export default {
-  props: {
-    color: {
-      type: String,
-      default: '#000000',
-    },
-    text: {
-      type: String,
-      default: '',
-    },
-    width: {
-      type: Number,
-      default: 100,
-    },
-    height: {
-      type: Number,
-      default: 100,
-    },
-    transform: {
-      type: String,
-      default: '',
-    },
-    border: {
-      type: Boolean,
-      default: false,
-    },
-  },
-};
+<script setup lang="ts">
+withDefaults(defineProps<{
+  color?: string
+  text?: string
+  width?: number
+  height?: number
+  transform?: string
+  border?: boolean
+}>(), {
+  color: '#000000',
+  text: '',
+  width: 100,
+  height: 100,
+  transform: '',
+  border: false,
+});
 </script>
 <style>
 .picture-container {

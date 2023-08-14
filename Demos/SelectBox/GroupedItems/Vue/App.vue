@@ -45,44 +45,32 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import DataSource from 'devextreme/data/data_source';
 import Group from './Group.vue';
-
 import { ungroupedData, pregroupedData } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    Group,
+const fromUngroupedData = new DataSource({
+  store: {
+    type: 'array',
+    data: ungroupedData,
+    key: 'ID',
   },
-  data() {
-    return {
-      fromUngroupedData: new DataSource({
-        store: {
-          type: 'array',
-          data: ungroupedData,
-          key: 'ID',
-        },
-        group: 'Category',
-      }),
-      fromPregroupedData: new DataSource({
-        store: {
-          type: 'array',
-          data: pregroupedData,
-          key: 'ID',
-        },
-        map(item) {
-          item.key = item.Category;
-          item.items = item.Products;
-          return item;
-        },
-      }),
-    };
+  group: 'Category',
+});
+const fromPregroupedData = new DataSource({
+  store: {
+    type: 'array',
+    data: pregroupedData,
+    key: 'ID',
   },
-  created() {
-    this.fromPregroupedData.load();
+  map(item) {
+    item.key = item.Category;
+    item.items = item.Products;
+    return item;
   },
-};
+});
+
+fromPregroupedData.load();
 </script>
