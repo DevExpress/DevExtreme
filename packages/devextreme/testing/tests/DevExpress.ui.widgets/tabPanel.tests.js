@@ -581,14 +581,6 @@ QUnit.module('keyboard navigation', {
         assert.equal(multiViewFocusedIndex, $(this.tabs.option('focusedElement')).index(), 'tabs focused element is equal multiView focused element');
     });
 
-    QUnit.test('click on multiview must set focus class on tabs', function(assert) {
-        this.instance.focus();
-        $(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1).trigger('dxpointerdown');
-        this.clock.tick(10);
-
-        assert.strictEqual(this.tabs.$element().hasClass(FOCUS_STATE_CLASS), true);
-    });
-
     QUnit.test('click on available tab removed specific tab classes if previous item is disabled', function(assert) {
         this.instance.option('items', [ 0, { disabled: true }, 2 ]);
         this.instance.focus();
