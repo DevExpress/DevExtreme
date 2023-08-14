@@ -18,6 +18,7 @@ import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
+import { GroupPanel } from './groupPanel';
 
 export const CLASS = {
   dataGrid: 'dx-datagrid',
@@ -26,6 +27,7 @@ export const CLASS = {
   searchBox: 'dx-searchbox',
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
+  groupPanel: 'group-panel',
   columnChooser: 'column-chooser',
   focusedRow: 'dx-row-focused',
   filterPanel: 'filter-panel',
@@ -216,6 +218,10 @@ export default class DataGrid extends Widget {
     return new ColumnChooser(this.body.find(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
   }
 
+  getGroupPanel(): GroupPanel {
+    return new GroupPanel(this.body.find(`.${this.addWidgetPrefix(CLASS.groupPanel)}`));
+  }
+
   async scrollTo(
     t: TestController,
     options: { x?: number; y?: number; top?: number },
@@ -248,7 +254,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  scrollBy(options: { x?: number; y?: number; top?: number }): Promise<void> {
+  scrollBy(options: { x?: number; y?: number; top?: number; left?: number }): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(

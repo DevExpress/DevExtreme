@@ -16,9 +16,14 @@
   .dx-tabs-wrapper {
     border-inline-start: $generic-tabs-border;
     border-inline-end: $generic-tabs-border;
+
+    &::after {
+      border-inline-start: none;
+      border-inline-end: none;
+    }
   }
 
-  &.dx-tabs-nav-buttons { // TODO: CHECK IT
+  &.dx-tabs-nav-buttons {
     .dx-tabs-wrapper {
       border-block-start: none;
       border-block-end: none;

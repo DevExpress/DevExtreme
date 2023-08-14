@@ -182,10 +182,6 @@
     "yaml": "2.2.2",
     "yargs": "7.1.2"
   },
-  "bin": {
-    "devextreme-bundler-init": "bin/bundler-init.js",
-    "devextreme-bundler": "bin/bundler.js"
-  },
   "scripts": {
     "clean": "gulp clean",
     "lint": "npm-run-all -p -c lint-js lint-css lint-ts lint-renovation lint-dts lint-texts",

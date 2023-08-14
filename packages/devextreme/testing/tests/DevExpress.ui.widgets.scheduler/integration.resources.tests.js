@@ -14,7 +14,7 @@ import 'ui/scheduler/ui.scheduler';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
-import { getOrLoadResourceItem } from 'ui/scheduler/resources/utils';
+import { getOrLoadResourceItem } from '__internal/scheduler/resources/m_utils';
 
 QUnit.testStart(() => initTestMarkup());
 
