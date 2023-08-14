@@ -16,10 +16,6 @@
 .dx-tabpanel-tab {
   padding: $generic-tabpanel-tabs-item-padding;
 
-  &.dx-tab::after {
-    z-index: 2;
-  }
-
   &.dx-state-disabled {
     &::after {
       z-index: 3;
@@ -38,6 +34,38 @@
     &:last-child {
       &.dx-tab-selected::after {
         right: 0;
+      }
+    }
+  }
+}
+
+.dx-tabpanel.dx-state-focused {
+  .dx-tabpanel-tab {
+    &.dx-focused-disabled-next-tab {
+      &::after {
+        border-inline-end: none;
+      }
+    }
+  
+    &.dx-focused-disabled-prev-tab {
+      &::after {
+        border-inline-start: none;
+      }
+    }
+  }
+
+  .dx-tabs-vertical {
+    .dx-tabpanel-tab {
+      &.dx-focused-disabled-next-tab {
+        &::after {
+          border-block-end: none;
+        }
+      }
+  
+      &.dx-focused-disabled-prev-tab {
+        &::after {
+          border-block-start: none;
+        }
       }
     }
   }
