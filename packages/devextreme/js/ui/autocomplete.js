@@ -214,7 +214,7 @@ const Autocomplete = DropDownList.inherit({
         }
     },
 
-    reset: function() {
+    clear: function() {
         this.callBase();
         this.close();
     }

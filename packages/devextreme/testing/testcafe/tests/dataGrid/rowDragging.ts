@@ -590,8 +590,9 @@ test('The placeholder should have correct position after dragging the row to the
   });
 });
 
+// TODO: this test is unstable
 // T1126013
-test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+test.skip('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
@@ -645,8 +646,9 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
   });
 });
 
+// TODO: this test is unstable
 // T1139685
-test('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
+test.skip('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 

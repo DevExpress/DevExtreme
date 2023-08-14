@@ -36,8 +36,8 @@ $generic-tabs-vertical-border-active-left: null !default;
 $generic-tabs-vertical-border-active-right: null !default;
 
 @if $color == "carmine" {
-  $generic-tabs-vertical-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
-  $generic-tabs-vertical-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
   $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
 
@@ -63,8 +63,8 @@ $generic-tabs-vertical-border-active-right: null !default;
 }
 
 @if $color == "contrast" {
-  $generic-tabs-vertical-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
-  $generic-tabs-vertical-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
   $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
 
@@ -90,8 +90,8 @@ $generic-tabs-vertical-border-active-right: null !default;
 }
 
 @if $color == "dark" {
-  $generic-tabs-vertical-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
-  $generic-tabs-vertical-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
   $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
 
@@ -117,8 +117,8 @@ $generic-tabs-vertical-border-active-right: null !default;
 }
 
 @if $color == "darkmoon" {
-  $generic-tabs-vertical-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
-  $generic-tabs-vertical-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
   $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
 
@@ -144,8 +144,8 @@ $generic-tabs-vertical-border-active-right: null !default;
 }
 
 @if $color == "darkviolet" {
-  $generic-tabs-vertical-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
-  $generic-tabs-vertical-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
   $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
 
@@ -171,8 +171,8 @@ $generic-tabs-vertical-border-active-right: null !default;
 }
 
 @if $color == "greenmist" {
-  $generic-tabs-vertical-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
-  $generic-tabs-vertical-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
   $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
 
@@ -225,8 +225,8 @@ $generic-tabs-vertical-border-active-right: null !default;
 }
 
 @if $color == "softblue" {
-  $generic-tabs-vertical-border-hover-top: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
-  $generic-tabs-vertical-border-hover-bottom: $generic-tabs-border-width solid $tabs-tab-hover-border-color-vertical !default;
+  $generic-tabs-vertical-border-hover-top: none !default;
+  $generic-tabs-vertical-border-hover-bottom: none !default;
   $generic-tabs-vertical-border-hover-left: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
   $generic-tabs-vertical-border-hover-right: $generic-tabs-border-width solid $tabs-tab-hover-border-color-horizontal !default;
 
