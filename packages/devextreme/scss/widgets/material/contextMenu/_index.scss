@@ -49,7 +49,7 @@
     &.dx-menu-item-has-text {
       &.dx-menu-item-has-icon {
         .dx-icon {
-          margin-right: $material-menu-icon-to-text-offset;
+          margin-inline-end: $material-menu-icon-to-text-offset;
         }
       }
     }
@@ -77,15 +77,6 @@
     .dx-menu-item {
       .dx-menu-item-popout-container {
         left: $material-context-menu-horizontal-padding;
-      }
-
-      &.dx-menu-item-has-text {
-        &.dx-menu-item-has-icon {
-          .dx-icon {
-            margin-left: $material-menu-item-with-icon-horizontal-padding - $material-context-menu-horizontal-padding - $material-base-icon-size;
-            margin-right: 0;
-          }
-        }
       }
 
       &.dx-menu-item-has-submenu > .dx-menu-item-content {
