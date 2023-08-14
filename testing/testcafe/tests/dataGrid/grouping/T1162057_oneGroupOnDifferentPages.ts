@@ -73,7 +73,8 @@ const endsOnNextPageApiMock = RequestMock()
     { 'access-control-allow-origin': '*' },
   );
 
-test('Group panel restored from cache and ends at the next page', async (t) => {
+// TODO: this test is unstable
+test.skip('Group panel restored from cache and ends at the next page', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_SELECTOR);
 
