@@ -263,9 +263,7 @@ QUnit.module('options', {
         assert.equal(this.tabWidgetInstance.option('selectedItem'), this.items[1], 'option <selectedItem> of nested tabs widget successfully changed');
     });
 
-    QUnit.test('orientation tabs option test', function(assert) {
-        assert.expect(2);
-
+    QUnit.test('orientation option should be passed to tabs correctly', function(assert) {
         assert.equal(this.tabWidgetInstance.option('orientation'), TABS_ORIENTATION.horizontal, 'option <orientation> successfully passed to nested tabs widget');
 
         this.tabPanelInstance.option('tabsPosition', TABS_POSITION.right);

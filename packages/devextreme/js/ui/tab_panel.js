@@ -276,19 +276,17 @@ const TabPanel = MultiView.inherit({
     _getTabsOrientation() {
         const { tabsPosition } = this.option();
 
-        if([TABS_POSITION.top, TABS_POSITION.bottom].includes(tabsPosition)) {
-            return TABS_ORIENTATION.horizontal;
-        }
-
         if([TABS_POSITION.right, TABS_POSITION.left].includes(tabsPosition)) {
             return TABS_ORIENTATION.vertical;
         }
+
+        return TABS_ORIENTATION.horizontal;
     },
 
-    _getTabPanelTabsPositionClass(value = null) {
-        value = value ?? this.option('tabsPosition');
+    _getTabPanelTabsPositionClass() {
+        const position = this.option('tabsPosition');
 
-        switch(value) {
+        switch(position) {
             case TABS_POSITION.right:
                 return TABPANEL_TABS_POSITION_CLASS.right;
             case TABS_POSITION.bottom:
@@ -301,13 +299,12 @@ const TabPanel = MultiView.inherit({
         }
     },
 
-    _toggleTabPanelTabsPositionClass(prevPosition) {
-        const prevClass = this._getTabPanelTabsPositionClass(prevPosition);
-        const newClass = this._getTabPanelTabsPositionClass();
-
-        if(prevClass) {
-            this.$element().toggleClass(prevClass, false);
+    _toggleTabPanelTabsPositionClass() {
+        for(const positionClass in TABPANEL_TABS_POSITION_CLASS) {
+            this.$element().removeClass(positionClass);
         }
+
+        const newClass = this._getTabPanelTabsPositionClass();
 
         this.$element().addClass(newClass);
     },
@@ -384,7 +381,7 @@ const TabPanel = MultiView.inherit({
     },
 
     _optionChanged: function(args) {
-        const { name, value, previousValue, fullName } = args;
+        const { name, value, fullName } = args;
 
         switch(name) {
             case 'dataSource':
@@ -460,7 +457,7 @@ const TabPanel = MultiView.inherit({
                 this._invalidate();
                 break;
             case 'tabsPosition':
-                this._toggleTabPanelTabsPositionClass(previousValue);
+                this._toggleTabPanelTabsPositionClass();
                 this._updateTabsOrientation();
                 break;
             default:
