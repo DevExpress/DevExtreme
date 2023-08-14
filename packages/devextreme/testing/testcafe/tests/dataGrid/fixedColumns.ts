@@ -8,7 +8,7 @@ import { makeRowsViewTemplatesAsync } from './helpers/asyncTemplates';
 
 const DATA_GRID_SELECTOR = '#container';
 
-fixture.disablePageReloads`FixedColumns`
+fixture`FixedColumns`
   .page(url(__dirname, '../container.html'));
 
 // T1156153
