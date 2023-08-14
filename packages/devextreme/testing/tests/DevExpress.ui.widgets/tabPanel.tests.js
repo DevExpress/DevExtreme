@@ -264,11 +264,11 @@ QUnit.module('options', {
     });
 
     QUnit.test('orientation option should be passed to tabs correctly', function(assert) {
-        assert.equal(this.tabWidgetInstance.option('orientation'), TABS_ORIENTATION.horizontal, 'option <orientation> successfully passed to nested tabs widget');
+        assert.strictEqual(this.tabWidgetInstance.option('orientation'), TABS_ORIENTATION.horizontal, 'option <orientation> successfully passed to nested tabs widget');
 
         this.tabPanelInstance.option('tabsPosition', TABS_POSITION.right);
 
-        assert.equal(this.tabWidgetInstance.option('orientation'), TABS_ORIENTATION.vertical, 'option <orientation> of nested tabs widget successfully changed');
+        assert.strictEqual(this.tabWidgetInstance.option('orientation'), TABS_ORIENTATION.vertical, 'option <orientation> of nested tabs widget successfully changed');
     });
 
     QUnit.test('dataSource option test', function(assert) {
