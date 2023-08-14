@@ -6,7 +6,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
 import Guid from '../../../../../js/core/guid';
-import { appendElementTo, setClassAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, setAttribute, setClassAttribute } from '../../../helpers/domUtils';
 
 const BUTTON_CLASS = 'dx-button';
 const ACTIVE_STATE_CLASS = 'dx-state-active';
@@ -77,6 +77,51 @@ test('Drop down button should lost hover and active state', async (t) => {
       { text: 'item1', locateInMenu: 'always' },
       { text: 'item2', locateInMenu: 'always' },
       { text: 'item3', locateInMenu: 'always' }],
+  }, '#toolbar');
+});
+
+test('Toolbar items should be rendered correctly after change disabled option in runtime', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const toolbar = new Toolbar('#toolbar');
+  await t.debug();
+  await t
+    .click(toolbar.getOverflowMenu().element);
+  await t.debug();
+  await toolbar.option('items[0].disabled', true);
+  await t.debug();
+  // await toolbar.option('items[1].disabled', true);
+  await t.debug();
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar appearance after disabling buttons.png', { element: '#container' });
+
+  await toolbar.option('items[0].disabled', false);
+  await toolbar.option('items[1].disabled', false);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar appearance after cancel disabling buttons.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'toolbar');
+  await setAttribute('#container', 'style', 'width: 200px; height: 200px;');
+
+  await createWidget('dxToolbar', {
+    items: [{
+      locateInMenu: 'auto',
+      widget: 'dxButton',
+      options: {
+        width: 120,
+        text: 'Create',
+      },
+    }, {
+      locateInMenu: 'auto',
+      widget: 'dxButton',
+      options: {
+        text: 'Settings',
+      },
+    }],
   }, '#toolbar');
 });
 
