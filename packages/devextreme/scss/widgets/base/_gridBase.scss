@@ -737,12 +737,11 @@
       top: 0;
       left: 0;
       cursor: pointer;
-      margin-left: -2px;
-      margin-top: -2px;
       height: 100%;
       overflow: visible;
 
       .dx-menu-horizontal {
+        display: flex;
         height: 100%;
 
         .dx-menu-item-text,
