@@ -19,7 +19,7 @@ import {
   getCaption, nextWeek,
   getStep, getViewName,
   getNextIntervalDate,
-} from '../../../../ui/scheduler/header/utils';
+} from '../../../../__internal/scheduler/header/m_utils';
 import { formToolbarItem, formatViews, isMonthView } from './utils';
 
 import type { DateNavigatorTextInfo } from '../../../../ui/scheduler';
@@ -106,7 +106,7 @@ export class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items
     const startViewDate = new Date(this.props.startViewDate);
 
     if (isMonthView(this.props.viewType)) {
-      return nextWeek(startViewDate);
+      return nextWeek(startViewDate) as Date;
     }
 
     return startViewDate;
@@ -171,7 +171,7 @@ export class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items
 
     const options = { ...this.intervalOptions, date };
 
-    return getNextIntervalDate(options, direction);
+    return getNextIntervalDate(options, direction) as Date;
   }
 
   updateDateByDirection(direction: Direction): void {

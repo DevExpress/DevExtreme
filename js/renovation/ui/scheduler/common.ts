@@ -2,7 +2,7 @@ import { utils } from '../../../ui/scheduler/utils';
 import { DataAccessorsProps } from './props';
 import { DataAccessorType } from './types';
 import { ViewDataProviderValidationOptions } from './workspaces/types';
-import { createExpressions } from '../../../ui/scheduler/resources/utils';
+import { createExpressions } from '../../../__internal/scheduler/resources/m_utils';
 
 export const createDataAccessors = (
   dataAccessorsProps: DataAccessorsProps,

@@ -15,7 +15,7 @@ import {
     createExpressions,
     getDataAccessors,
     loadResources
-} from 'ui/scheduler/resources/utils';
+} from '__internal/scheduler/resources/m_utils';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 
