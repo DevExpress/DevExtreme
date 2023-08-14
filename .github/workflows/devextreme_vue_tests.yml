@@ -5,6 +5,9 @@ on:
   push:
     branches: [23_2]
 
+env:
+  NX_SKIP_NX_CACHE: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
