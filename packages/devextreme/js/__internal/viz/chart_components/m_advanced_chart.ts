@@ -265,7 +265,7 @@ export const AdvancedChart = BaseChart.inherit({
     options.forEach((opt) => {
       const curAxes = axes?.filter((a) => a.name === opt.name
                 && (!_isDefined(opt.pane) && this.panes.some((p) => p.name === a.pane) || a.pane === opt.pane));
-      if (curAxes?.length > 0) {
+      if (curAxes?.length) {
         curAxes.forEach((axis) => {
           const axisTypes = getAxisTypes(this._groupsData, axis, isArgumentAxes);// T891599
           axis.updateOptions(opt);
