@@ -6,11 +6,11 @@ import { isDateAndTimeView } from '@js/renovation/ui/scheduler/view_model/to_tes
 import { createAppointmentAdapter } from '@js/ui/scheduler/appointmentAdapter';
 import { ExpressionUtils } from '@js/ui/scheduler/expressionUtils';
 import { getRecurrenceProcessor } from '@js/ui/scheduler/recurrence';
-import {
-  createResourcesTree, getDataAccessors, getGroupCount, getResourceTreeLeaves,
-} from '@js/ui/scheduler/resources/utils';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 
+import {
+  createResourcesTree, getDataAccessors, getGroupCount, getResourceTreeLeaves,
+} from '../resources/m_utils';
 import { CellPositionCalculator } from './m_cell_position_calculator';
 import { createFormattedDateText } from './m_text_utils';
 

@@ -14,7 +14,8 @@ import messageLocalization from '@js/localization/message';
 import { Semaphore } from '@js/renovation/ui/scheduler/utils/semaphore/semaphore';
 import Form from '@js/ui/form';
 import { createAppointmentAdapter } from '@js/ui/scheduler/appointmentAdapter';
-import timeZoneDataUtils from '@js/ui/scheduler/timezones/utils.timezones_data';
+
+import timeZoneDataUtils from '../timezones/m_utils_timezones_data';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
 
