@@ -83,7 +83,7 @@ class VerticalGroupedStrategy {
 
             const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval) * this._workSpace.getCellHeight();
             const scrollTop = this.getScrollableScrollTop();
-            const headerRowHeight = getBoundingRect(this._workSpace._$headerPanelContainer.get(0)).height - 30;
+            const headerRowHeight = getBoundingRect(this._workSpace._$headerPanelContainer.get(0)).height;
 
             let topOffset = groupIndex * dayHeight + headerRowHeight + this._workSpace.option('getHeaderHeight')() - scrollTop;
 
