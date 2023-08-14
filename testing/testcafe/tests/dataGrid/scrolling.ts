@@ -1049,7 +1049,7 @@ safeSizeTest('The scroll position of a fixed table should be synchronized with t
 }));
 
 // T1089634
-test('The page should not be changed when hiding/showing the grid view after the data has been edited', async (t) => {
+safeSizeTest('The page should not be changed when hiding/showing the grid view after the data has been edited', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1067,7 +1067,7 @@ test('The page should not be changed when hiding/showing the grid view after the
     .expect(dataGrid.isReady())
     .ok();
 
-  await takeScreenshot('T1089634-virtual-scrolling-1.png', dataGrid.element);
+  await takeScreenshot('T1089634-virtual-scrolling-1.png');
 
   // act
   await dataGrid.apiEditCell(5, 1);
@@ -1083,12 +1083,12 @@ test('The page should not be changed when hiding/showing the grid view after the
   await t.click(Selector('body'));
   await t.wait(100);
 
-  await takeScreenshot('T1089634-virtual-scrolling-2.png', dataGrid.element);
+  await takeScreenshot('T1089634-virtual-scrolling-2.png');
 
   // act
   await dataGrid.show();
 
-  await takeScreenshot('T1089634-virtual-scrolling-3.png', dataGrid.element);
+  await takeScreenshot('T1089634-virtual-scrolling-3.png');
 
   // assert
   const testLoadCount = await getTestLoadCount();
@@ -1098,7 +1098,7 @@ test('The page should not be changed when hiding/showing the grid view after the
     .eql(1)
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}, [800, 800]).before(async () => {
   await ClientFunction(() => {
     (window as any).testLoadCount = 0;
 
