@@ -144,7 +144,7 @@ function getArgs() {
             concurrency: 0,
             browsers: 'chrome',
             test: '',
-            reporter: ['minimal', dashboardReporter],
+            reporter: [process.env.CI === 'true' ? 'list' : 'minimal', dashboardReporter],
             componentFolder: '',
             file: '*',
             cache: true,

@@ -16,7 +16,7 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
-import { createReducedResourcesTree, getDataAccessors, getPathToLeaf } from '../resources/utils';
+import { createReducedResourcesTree, getDataAccessors, getPathToLeaf } from '../../../__internal/scheduler/resources/m_utils';
 import { calculateStartViewDate } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/agenda';
 import { formatWeekday, getVerticalGroupCountClass } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '../constants';

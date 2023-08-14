@@ -42,6 +42,6 @@ QUnit.module('Context Toolbox', {
         this.instance._contextToolbox._show(0, 0, 0, 'general', () => {});
         $contextToolbox = $('#qunit-fixture').find(Consts.CONTEXT_TOOLBOX_CONTENT_SELECTOR);
         assert.equal($contextToolbox.length, 1);
-        assert.equal($contextToolbox.width(), 300);
+        assert.equal($contextToolbox.parents('.dx-popup-normal').outerWidth(), 300);
     });
 });

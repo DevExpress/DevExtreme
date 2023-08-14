@@ -1,6 +1,6 @@
 import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';
 import dateUtils from '../../../../../core/utils/date';
-import { getGroupCount } from '../../../../../ui/scheduler/resources/utils';
+import { getGroupCount } from '../../../../../__internal/scheduler/resources/m_utils';
 import { GroupOrientation } from '../../types';
 import { GetDateForHeaderText } from '../../view_model/to_test/views/types';
 import {

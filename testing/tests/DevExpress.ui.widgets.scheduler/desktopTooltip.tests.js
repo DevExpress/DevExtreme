@@ -1,4 +1,4 @@
-import { DesktopTooltipStrategy } from 'ui/scheduler/tooltip_strategies/desktopTooltipStrategy';
+import { DesktopTooltipStrategy } from '__internal/scheduler/tooltip_strategies/m_desktop_tooltip_strategy';
 import { FunctionTemplate } from 'core/templates/function_template';
 import { extend } from 'core/utils/extend';
 import Tooltip from 'ui/tooltip';
