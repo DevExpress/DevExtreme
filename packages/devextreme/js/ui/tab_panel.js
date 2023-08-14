@@ -300,8 +300,8 @@ const TabPanel = MultiView.inherit({
     },
 
     _toggleTabPanelTabsPositionClass() {
-        for(const positionClass in TABPANEL_TABS_POSITION_CLASS) {
-            this.$element().removeClass(positionClass);
+        for(const key in TABPANEL_TABS_POSITION_CLASS) {
+            this.$element().removeClass(TABPANEL_TABS_POSITION_CLASS[key]);
         }
 
         const newClass = this._getTabPanelTabsPositionClass();
