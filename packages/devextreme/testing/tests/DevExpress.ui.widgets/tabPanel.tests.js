@@ -181,7 +181,7 @@ QUnit.module('rendering', {
             const horizontalMargin = rtlEnabled
                 ? iconRect.right - textRect.right - iconRect.width
                 : textRect.left - iconRect.left - iconRect.width;
-            assert.strictEqual(horizontalMargin, 9, `correct horizontal alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+            assert.strictEqual(horizontalMargin, 8, `correct horizontal alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
         });
     });
 });

@@ -36,7 +36,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Run tests
-      run: npx nx test-styles devextreme-root
+      run: npx nx test-styles devextreme-main
 
   notify:
     runs-on: devextreme-shr2

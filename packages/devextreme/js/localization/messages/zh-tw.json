@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "值",
         "dxDataGrid-ariaFilterCell": "過濾單元",
         "dxDataGrid-ariaCollapse": "摺疊",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "展開",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",

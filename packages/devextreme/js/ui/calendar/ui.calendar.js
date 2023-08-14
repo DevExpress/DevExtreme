@@ -115,6 +115,8 @@ const Calendar = Editor.inherit({
 
             selectionMode: 'single',
 
+            selectWeekOnClick: true,
+
             showTodayButton: false,
 
             showWeekNumbers: false,
@@ -769,6 +771,7 @@ const Calendar = Editor.inherit({
             max: this._getMaxDate(),
             firstDayOfWeek: this.option('firstDayOfWeek') ?? dateLocalization.firstDayOfWeekIndex(),
             showWeekNumbers: this.option('showWeekNumbers'),
+            selectWeekOnClick: this.option('selectWeekOnClick'),
             weekNumberRule: this.option('weekNumberRule'),
             zoomLevel: this.option('zoomLevel'),
             tabIndex: undefined,
@@ -1408,6 +1411,9 @@ const Calendar = Editor.inherit({
                 this._refreshSelectionStrategy();
                 this._selectionStrategy.restoreValue();
                 this._initCurrentDate();
+                break;
+            case 'selectWeekOnClick':
+                this._refreshViews();
                 break;
             case 'firstDayOfWeek':
                 this._refreshViews();

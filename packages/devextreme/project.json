@@ -1,5 +1,5 @@
 {
-  "name": "devextreme-root",
+  "name": "devextreme-main",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/devextreme",
   "projectType": "library",

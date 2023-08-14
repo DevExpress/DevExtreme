@@ -31,7 +31,7 @@ import {
   createDataAccessors, isViewDataProviderConfigValid,
 } from './common';
 import { createTimeZoneCalculator } from './timeZoneCalculator/createTimeZoneCalculator';
-import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
+import { getGroupCount, loadResources } from '../../../__internal/scheduler/resources/m_utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
 import {

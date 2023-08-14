@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "القيمة",
         "dxDataGrid-ariaFilterCell": "تصفية الخلية",
         "dxDataGrid-ariaCollapse": "طي",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "توسيع",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",

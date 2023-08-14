@@ -479,6 +479,12 @@ export type ColumnChooser = {
    */
   allowSearch?: boolean;
   /**
+     * @docid GridBaseOptions.columnChooser.container
+     * @default undefined
+     * @public
+     */
+  container?: string | UserDefinedElement;
+  /**
    * @docid GridBaseOptions.columnChooser.emptyPanelText
    * @default "Drag a column here to hide it"
    */

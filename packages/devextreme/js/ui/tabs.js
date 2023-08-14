@@ -1,4 +1,4 @@
-import { getWidth, getOuterWidth } from '../core/utils/size';
+import { getWidth, getHeight, getOuterWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
@@ -19,8 +19,9 @@ import { default as CollectionWidget } from './collection/ui.collection_widget.l
 import { getImageContainer } from '../core/utils/icon';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred, when } from '../core/utils/deferred';
-import { isReachedLeft, isReachedRight } from '../renovation/ui/scroll_view/utils/get_boundary_props';
+import { isReachedLeft, isReachedRight, isReachedTop, isReachedBottom } from '../renovation/ui/scroll_view/utils/get_boundary_props';
 import { getScrollLeftMax } from '../renovation/ui/scroll_view/utils/get_scroll_left_max';
+import { getWindow } from '../core/utils/window';
 
 // STYLE tabs
 
@@ -59,6 +60,11 @@ const FEEDBACK_SCROLL_TIMEOUT = 300;
 const TAB_OFFSET = 30;
 
 const ORIENTATION = {
+    horizontal: 'horizontal',
+    vertical: 'vertical',
+};
+
+const SCROLLABLE_DIRECTION = {
     horizontal: 'horizontal',
     vertical: 'vertical',
 };
@@ -200,11 +206,11 @@ const Tabs = CollectionWidget.inherit({
         when.apply(this, this._deferredTemplates).done(() => this._renderScrolling());
     },
 
-    _renderScrolling: function() {
+    _renderScrolling() {
         const removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
         this.$element().removeClass(removeClasses.join(' '));
 
-        if(this.option('scrollingEnabled') && this._isItemsWidthExceeded()) {
+        if(this.option('scrollingEnabled') && this._isItemsSizeExceeded()) {
             if(!this._scrollable) {
                 this._renderScrollable();
                 this._renderNavButtons();
@@ -222,7 +228,7 @@ const Tabs = CollectionWidget.inherit({
             this._scrollToItem(this.option('selectedItem'));
         }
 
-        if(!(this.option('scrollingEnabled') && this._isItemsWidthExceeded())) {
+        if(!(this.option('scrollingEnabled') && this._isItemsSizeExceeded())) {
             this._cleanScrolling();
 
             if(this._needStretchItems()) {
@@ -235,8 +241,26 @@ const Tabs = CollectionWidget.inherit({
         }
     },
 
-    _isItemsWidthExceeded: function() {
-        const tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
+    _isVertical() {
+        return this.option('orientation') === ORIENTATION.vertical;
+    },
+
+    _isServerSide() {
+        const window = getWindow();
+
+        return window.isWindowMock || !window;
+    },
+
+    _isItemsSizeExceeded() {
+        const isVertical = this._isVertical();
+        const isItemsSizeExceeded = isVertical ? this._isItemsHeightExceeded() : this._isItemsWidthExceeded();
+
+        return isItemsSizeExceeded;
+    },
+
+    _isItemsWidthExceeded() {
+        const $visibleItems = this._getVisibleItems();
+        const tabItemsWidth = this._getSummaryItemsSize('width', $visibleItems, true);
         const elementWidth = getWidth(this.$element());
 
         if([tabItemsWidth, elementWidth].includes(0)) {
@@ -248,7 +272,15 @@ const Tabs = CollectionWidget.inherit({
         return isItemsWidthExceeded;
     },
 
-    _needStretchItems: function() {
+    _isItemsHeightExceeded() {
+        const $visibleItems = this._getVisibleItems();
+        const itemsHeight = this._getSummaryItemsSize('height', $visibleItems, true);
+        const elementHeight = getHeight(this.$element());
+
+        return itemsHeight - 1 > elementHeight;
+    },
+
+    _needStretchItems() {
         const $visibleItems = this._getVisibleItems();
         const elementWidth = getWidth(this.$element());
         const itemsWidth = [];
@@ -325,11 +357,30 @@ const Tabs = CollectionWidget.inherit({
         return this._$wrapper;
     },
 
-    _renderScrollable: function() {
+    _getScrollableDirection() {
+        const isVertical = this._isVertical();
+        const scrollableDirection = isVertical ? SCROLLABLE_DIRECTION.vertical : SCROLLABLE_DIRECTION.horizontal;
+
+        return scrollableDirection;
+    },
+
+    _updateScrollableDirection() {
+        const scrollable = this.getScrollable();
+
+        if(scrollable) {
+            const scrollableDirection = this._getScrollableDirection();
+
+            scrollable.option('direction', scrollableDirection);
+        } else {
+            this._renderScrolling();
+        }
+    },
+
+    _renderScrollable() {
         const $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
 
         this._scrollable = this._createComponent($itemContainer, Scrollable, {
-            direction: 'horizontal',
+            direction: this._getScrollableDirection(),
             showScrollbar: 'never',
             useKeyboard: false,
             useNative: false,
@@ -368,11 +419,17 @@ const Tabs = CollectionWidget.inherit({
         this.$element().append($rightButton);
     },
 
-    _updateNavButtonsVisibility: function() {
+    _updateNavButtonsVisibility() {
+        const isVertical = this._isVertical();
         const scrollable = this.getScrollable();
 
-        this._leftButton && this._leftButton.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
-        this._rightButton && this._rightButton.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
+        if(isVertical) {
+            this._leftButton?.option('disabled', isReachedTop(scrollable.scrollTop(), 1));
+            this._rightButton?.option('disabled', isReachedBottom($(scrollable.container()).get(0), scrollable.scrollTop(), 0, 1));
+        } else {
+            this._leftButton?.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
+            this._rightButton?.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
+        }
     },
 
     _updateScrollPosition: function(offset, duration) {
@@ -499,6 +556,7 @@ const Tabs = CollectionWidget.inherit({
                 this._scrollable && this._scrollable.option(args.name, args.value);
                 break;
             case 'width':
+            case 'height':
                 this.callBase(args);
                 this._dimensionChanged();
                 break;
@@ -515,9 +573,13 @@ const Tabs = CollectionWidget.inherit({
                 this._scrollToItem(args.value);
                 break;
             }
-            case 'orientation':
+            case 'orientation': {
                 this._toggleOrientationClass(args.value);
+                if(!this._isServerSide()) {
+                    this._updateScrollableDirection();
+                }
                 break;
+            }
             default:
                 this.callBase(args);
         }

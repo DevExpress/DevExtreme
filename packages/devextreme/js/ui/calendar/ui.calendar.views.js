@@ -10,6 +10,7 @@ import dateSerialization from '../../core/utils/date_serialization';
 const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
+const CALENDAR_WEEK_SELECTION_CLASS = 'dx-calendar-week-selection';
 
 const Views = {
 
@@ -88,7 +89,7 @@ const Views = {
         },
 
         _renderWeekNumberCell: function(rowData) {
-            const { showWeekNumbers, cellTemplate } = this.option();
+            const { showWeekNumbers, cellTemplate, selectionMode, selectWeekOnClick } = this.option();
 
             if(!showWeekNumbers) {
                 return;
@@ -100,6 +101,10 @@ const Views = {
             const $cell = $(cell);
 
             cell.className = CALENDAR_WEEK_NUMBER_CELL_CLASS;
+
+            if(selectionMode !== 'single' && selectWeekOnClick) {
+                $cell.addClass(CALENDAR_WEEK_SELECTION_CLASS);
+            }
 
             if(cellTemplate) {
                 cellTemplate.render(this._prepareCellTemplateData(weekNumber, -1, $cell));

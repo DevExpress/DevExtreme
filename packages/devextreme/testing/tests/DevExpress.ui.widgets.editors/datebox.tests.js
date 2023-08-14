@@ -129,9 +129,9 @@ QUnit.module('datebox tests', moduleConfig, () => {
         const date = new Date(2012, 10, 26, 16, 40, 23);
 
         this.instance.option('value', date);
-        this.instance.reset();
+        this.instance.clear();
 
-        assert.equal(this.instance.option('value'), null, 'value is null after reset');
+        assert.equal(this.instance.option('value'), null, 'value is null after clear');
     });
 
     QUnit.test('render valueChangeEvent', function(assert) {
@@ -6268,11 +6268,11 @@ QUnit.module('validation', {
             assert.ok(this.dateBox.option('isValid'), 'datebox is valid after clear button click');
         });
 
-        QUnit.test(`reset method call should raise inner validation when value is ${value ? 'custom' : 'default'}`, function(assert) {
+        QUnit.test(`clear method call should raise inner validation when value is ${value ? 'custom' : 'default'}`, function(assert) {
             this.dateBox.option({ value });
 
             this.keyboard.type('123').press('enter');
-            this.dateBox.reset();
+            this.dateBox.clear();
 
             assert.ok(this.dateBox.option('isValid'), 'datebox is valid after clear button click');
         });
