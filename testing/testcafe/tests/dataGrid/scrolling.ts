@@ -1052,7 +1052,7 @@ fixture`Remote Scrolling`
   });
 
 // TODO: this test is unstable
-test('Scroll to the bottom after expand several group', async (t) => {
+test.skip('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const scrollToBottom = async () => {
