@@ -1,7 +1,7 @@
 import type { Appointment } from '../../../../ui/scheduler';
 import {
   getAppointmentColor as getDeferredAppointmentColor,
-} from '../../../../ui/scheduler/resources/utils';
+} from '../../../../__internal/scheduler/resources/m_utils';
 import { ResourceProps } from '../props';
 import { DataAccessorType } from '../types';
 import { Group } from '../workspaces/types';

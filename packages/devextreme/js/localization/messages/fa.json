@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "مقدار",
         "dxDataGrid-ariaFilterCell": "فیلتر سلول",
         "dxDataGrid-ariaCollapse": "عدم نمایش",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "نمایش",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",

@@ -21,7 +21,7 @@ import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { Deferred } from 'core/utils/deferred';
-import { createExpressions } from 'ui/scheduler/resources/utils';
+import { createExpressions } from '__internal/scheduler/resources/m_utils';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider.js';
 import { createTimeZoneCalculator } from 'renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator.js';
 

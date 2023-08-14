@@ -10,32 +10,38 @@ const DIAGRAM_CONTEXT_TOOLBOX_TARGET_CLASS = 'dx-diagram-context-toolbox-target'
 const DIAGRAM_CONTEXT_TOOLBOX_CLASS = 'dx-diagram-context-toolbox';
 const DIAGRAM_TOUCH_CONTEXT_TOOLBOX_CLASS = 'dx-diagram-touch-context-toolbox';
 const DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS = 'dx-diagram-context-toolbox-content';
+const DIAGRAM_CONTEXT_TOOLBOX_MINHEIGHT = 150;
 
 class DiagramContextToolbox extends Widget {
     _init() {
         super._init();
 
         this._onShownAction = this._createActionByOption('onShown');
+        const window = getWindow();
         this._popoverPositionData = [
             {
                 my: { x: 'center', y: 'top' },
                 at: { x: 'center', y: 'bottom' },
-                offset: { x: 0, y: 5 }
+                offset: { x: 0, y: 5 },
+                calcMaxHeight: (rect) => Math.max(DIAGRAM_CONTEXT_TOOLBOX_MINHEIGHT, window.innerHeight - rect.bottom - 6)
             },
             {
                 my: { x: 'right', y: 'center' },
                 at: { x: 'left', y: 'center' },
-                offset: { x: -5, y: 0 }
+                offset: { x: -5, y: 0 },
+                calcMaxHeight: (rect) => Math.max(DIAGRAM_CONTEXT_TOOLBOX_MINHEIGHT, Math.min(rect.top, window.innerHeight - rect.bottom) * 2 - 2)
             },
             {
                 my: { x: 'center', y: 'bottom' },
                 at: { x: 'center', y: 'top' },
-                offset: { x: 0, y: -5 }
+                offset: { x: 0, y: -5 },
+                calcMaxHeight: (rect) => Math.max(DIAGRAM_CONTEXT_TOOLBOX_MINHEIGHT, rect.top - 6)
             },
             {
                 my: { x: 'left', y: 'center' },
                 at: { x: 'right', y: 'center' },
-                offset: { x: 5, y: 0 }
+                offset: { x: 5, y: 0 },
+                calcMaxHeight: (rect) => Math.max(DIAGRAM_CONTEXT_TOOLBOX_MINHEIGHT, Math.min(rect.top, window.innerHeight - rect.bottom) * 2 - 2)
             }
         ];
     }
@@ -47,17 +53,16 @@ class DiagramContextToolbox extends Widget {
             .appendTo(this.$element());
 
         const $popoverElement = $('<div>')
+            .addClass(DIAGRAM_CONTEXT_TOOLBOX_CLASS)
             .appendTo(this.$element());
 
-        let popoverClass = DIAGRAM_CONTEXT_TOOLBOX_CLASS;
         if(this._isTouchMode()) {
-            popoverClass += ' ' + DIAGRAM_TOUCH_CONTEXT_TOOLBOX_CLASS;
+            $popoverElement.addClass(DIAGRAM_TOUCH_CONTEXT_TOOLBOX_CLASS);
         }
         this._popoverInstance = this._createComponent($popoverElement, Popover, {
             hideOnOutsideClick: false,
             container: this.$element()
         });
-        this._popoverInstance.$element().addClass(popoverClass);
     }
     _isTouchMode() {
         const { Browser } = getDiagram();
@@ -66,11 +71,6 @@ class DiagramContextToolbox extends Widget {
     _show(x, y, side, category, callback) {
         this._popoverInstance.hide();
 
-        const $content = $('<div>')
-            .addClass(DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS);
-        if(this.option('toolboxWidth') !== undefined) {
-            $content.css('width', this.option('toolboxWidth'));
-        }
         this._$popoverTargetElement
             .css({
                 left: x + this._popoverPositionData[side].offset.x,
@@ -85,18 +85,28 @@ class DiagramContextToolbox extends Widget {
             left: targetDiv.offsetLeft - ((targetDiv.getBoundingClientRect().left + window.scrollX) - targetDiv.offsetLeft),
             top: targetDiv.offsetTop - ((targetDiv.getBoundingClientRect().top + window.scrollY) - targetDiv.offsetTop)
         });
-
+        const posRect = targetDiv.getBoundingClientRect();
         this._popoverInstance.option({
+            maxHeight: this._popoverPositionData[side].calcMaxHeight(posRect),
+            width: this.option('toolboxWidth') !== undefined ? this.option('toolboxWidth') : undefined,
             position: {
                 my: this._popoverPositionData[side].my,
                 at: this._popoverPositionData[side].at,
                 of: this._$popoverTargetElement
             },
-            contentTemplate: $content,
-            onContentReady: function() {
+            contentTemplate: () => {
+                return $('<div>')
+                    .append(
+                        $('<div>').addClass(DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS))
+                    .dxScrollView({
+                        width: '100%',
+                        height: '100%',
+                    });
+            },
+            onContentReady: () => {
                 const $element = this.$element().find('.' + DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS);
                 this._onShownAction({ category, callback, $element, hide: () => this._popoverInstance.hide() });
-            }.bind(this)
+            }
         });
         this._popoverInstance.show();
     }

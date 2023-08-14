@@ -52,11 +52,11 @@ jobs:
       shell: bash
       run: |
         git add . -N
-        changes=$(git diff HEAD -- packages/devextreme-vue/src packages/vue2-strategy/src)
+        changes=$(git diff --name-status HEAD -- packages/devextreme-vue/src packages/vue2-strategy/src)
         if [ -n "$changes" ]; then
           echo "Generated code is outdated. The following files have uncommitted changes:"
           echo "$changes";
-          echo "To update generated code, generate metadata, build packages and commit changes."
+          echo "To update generated code, use "npm run vue:generate" and commit changes."
           exit 1
         fi
 

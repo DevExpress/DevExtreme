@@ -1222,7 +1222,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 
-  getCell(cellPosition, rows, cells) {
+  getCell(cellPosition, rows?, cells?) {
     const $rows = rows || this._getRowElements();
     let $cells;
 

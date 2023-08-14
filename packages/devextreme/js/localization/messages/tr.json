@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Veri",
         "dxDataGrid-ariaFilterCell": "Filtre hücresi",
         "dxDataGrid-ariaCollapse": "Daralt",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Genişlet",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
