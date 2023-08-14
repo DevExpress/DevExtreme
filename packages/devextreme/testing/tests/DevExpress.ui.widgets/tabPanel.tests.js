@@ -42,6 +42,25 @@ const TABS_TITLE_TEXT_CLASS = 'dx-tab-text';
 const ICON_CLASS = 'dx-icon';
 const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
 
+const TABPANEL_TABS_POSITION_CLASS = {
+    top: 'dx-tabpanel-tabs-position-top',
+    right: 'dx-tabpanel-tabs-position-right',
+    bottom: 'dx-tabpanel-tabs-position-bottom',
+    left: 'dx-tabpanel-tabs-position-left',
+};
+
+const TABS_POSITION = {
+    top: 'top',
+    right: 'right',
+    bottom: 'bottom',
+    left: 'left',
+};
+
+const TABS_ORIENTATION = {
+    horizontal: 'horizontal',
+    vertical: 'vertical',
+};
+
 const toSelector = cssClass => {
     return '.' + cssClass;
 };
@@ -158,6 +177,22 @@ QUnit.module('rendering', {
         assert.ok($(tabs[0]).hasClass(TABPANEL_TABS_ITEM_CLASS));
     });
 
+    QUnit.test(`tabPanel must have ${TABPANEL_TABS_POSITION_CLASS.top} class by default`, function(assert) {
+        const $element = $('#tabPanel').dxTabPanel();
+
+        assert.ok($element.hasClass(TABPANEL_TABS_POSITION_CLASS.top));
+    });
+
+    QUnit.test('tabPanel must have a correct position class if tabsPosition has been changed', function(assert) {
+        const $element = $('#tabPanel').dxTabPanel();
+        const instance = $element.dxTabPanel('instance');
+
+        instance.option('tabsPosition', TABS_POSITION.right);
+
+        assert.notOk($element.hasClass(TABPANEL_TABS_POSITION_CLASS.top));
+        assert.ok($element.hasClass(TABPANEL_TABS_POSITION_CLASS.right));
+    });
+
     [true, false].forEach(rtlEnabled => {
         QUnit.test(`rtlEnabled: ${rtlEnabled}, dataSource: { title, icon } -> icon alignment`, function(assert) {
             const $element = $('<div>').appendTo('#qunit-fixture');
@@ -226,6 +261,14 @@ QUnit.module('options', {
         this.tabPanelInstance.option('selectedItem', this.items[1]);
 
         assert.equal(this.tabWidgetInstance.option('selectedItem'), this.items[1], 'option <selectedItem> of nested tabs widget successfully changed');
+    });
+
+    QUnit.test('orientation option should be passed to tabs correctly', function(assert) {
+        assert.strictEqual(this.tabWidgetInstance.option('orientation'), TABS_ORIENTATION.horizontal, 'option <orientation> successfully passed to nested tabs widget');
+
+        this.tabPanelInstance.option('tabsPosition', TABS_POSITION.right);
+
+        assert.strictEqual(this.tabWidgetInstance.option('orientation'), TABS_ORIENTATION.vertical, 'option <orientation> of nested tabs widget successfully changed');
     });
 
     QUnit.test('dataSource option test', function(assert) {

@@ -17,6 +17,10 @@ import {
 } from '../events/index';
 
 import {
+    Position,
+} from '../common';
+
+import {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
@@ -237,6 +241,12 @@ export interface dxTabPanelOptions<
      * @public
      */
     swipeEnabled?: boolean;
+    /**
+     * @docid
+     * @default 'top'
+     * @public
+     */
+    tabsPosition?: Position;
 }
 /**
  * @docid
