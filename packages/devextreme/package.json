@@ -227,7 +227,8 @@
     "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false",
     "qunit-in-docker": "gulp qunit-in-docker --constel",
     "test-typescript": "gulp test-ts",
-    "tcd-update": "tcd-update"
+    "tcd-update": "tcd-update",
+    "discover-ci": "npm run internal-tool -- discover-ts-declarations --js-scripts ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" && npm run internal-tool -- discover --js-scripts ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\""
   },
   "jest": {
     "modulePathIgnorePatterns": [
