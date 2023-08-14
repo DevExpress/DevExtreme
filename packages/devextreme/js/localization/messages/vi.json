@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Giá trị",
         "dxDataGrid-ariaFilterCell": "Lọc ô",
         "dxDataGrid-ariaCollapse": "Thu lại",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Mở ra",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",

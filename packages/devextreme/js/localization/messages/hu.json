@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Érték",
         "dxDataGrid-ariaFilterCell": "Szűrő cella",
         "dxDataGrid-ariaCollapse": "Összecsukás",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Kibontás",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
