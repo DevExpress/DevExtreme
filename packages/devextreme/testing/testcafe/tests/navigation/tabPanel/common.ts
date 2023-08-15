@@ -1,12 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
-import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
+import { Selector, ClientFunction } from 'testcafe';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';
 import { Item } from '../../../../../js/ui/tab_panel.d';
 
 const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
+const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
 
 fixture.disablePageReloads`TabPanel_common`
   .page(url(__dirname, '../../container.html'));
@@ -163,17 +164,29 @@ test('TabPanel borders without scrolling', async (t) => {
 
     await t
       .dispatchEvent(thirdItem.element, 'mouseup')
+      .click(Selector('body'), { offsetY: -50 })
       .hover(firstItem.element);
 
     await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
-    await t.hover(Selector(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`));
+    await t
+      .click(Selector('body'), { offsetY: -50 })
+      .hover(Selector(`.${rtlEnabled ? TABS_LEFT_NAV_BUTTON_CLASS : TABS_RIGHT_NAV_BUTTON_CLASS}`));
+
     await testScreenshot(t, takeScreenshot, `TabPanel when right navigation button has hover state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await ClientFunction(() => {
+      (window as any).DevExpress.ui.dxTabs.defaultOptions({
+        options: {
+          useInkRipple: false,
+        },
+      });
+    })();
+
     const dataSource = [
       {
         title: 'John Heart',
@@ -337,36 +350,43 @@ test('TabPanel borders without scrolling', async (t) => {
   test(`TabPanel with tabsPosition=${tabsPosition}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    if (!isMaterial()) {
-      const tabPanel = new TabPanel('#container');
+    const tabPanel = new TabPanel('#container');
 
-      await testScreenshot(t, takeScreenshot, `TabPanel without focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `TabPanel without focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
-      await t.pressKey('tab');
-      await testScreenshot(t, takeScreenshot, `TabPanel when its available item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+    await t.pressKey('tab');
+    await testScreenshot(t, takeScreenshot, `TabPanel when its available item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
-      await t.pressKey('right');
-      await testScreenshot(t, takeScreenshot, `TabPanel when its disabled item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+    await t.pressKey('right');
+    await testScreenshot(t, takeScreenshot, `TabPanel when its disabled item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
-      await t.pressKey('right');
+    await t.pressKey('right');
 
-      const thirdItem = tabPanel.getItem(2);
-      const firstItem = tabPanel.getItem(0);
+    const thirdItem = tabPanel.getItem(2);
+    const firstItem = tabPanel.getItem(0);
 
-      await t.dispatchEvent(firstItem.element, 'mousedown');
-      await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has active state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+    await t.dispatchEvent(firstItem.element, 'mousedown');
+    await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has active state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
-      await t
-        .dispatchEvent(thirdItem.element, 'mouseup')
-        .hover(firstItem.element);
+    await t
+      .dispatchEvent(thirdItem.element, 'mouseup')
+      .click(Selector('body'), { offsetY: -50 })
+      .hover(firstItem.element);
 
-      await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
-    }
+    await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await ClientFunction(() => {
+      (window as any).DevExpress.ui.dxTabs.defaultOptions({
+        options: {
+          useInkRipple: false,
+        },
+      });
+    })();
+
     const dataSource = [
       {
         title: 'John Heart',
