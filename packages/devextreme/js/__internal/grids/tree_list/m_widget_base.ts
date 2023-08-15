@@ -1,4 +1,4 @@
-import './module_not_extended/column_headers';
+import './column_headers/m_column_headers';
 import './m_columns_controller';
 import './data_controller/m_data_controller';
 import './module_not_extended/sorting';
