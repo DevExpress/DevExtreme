@@ -31,25 +31,10 @@
     border-width: 0;
     border-style: solid;
     border-inline-end-width: 1px;
-    border-inline-end-color: $button-normal-selected-bg;
+    border-inline-end-color: $button-group-separator-color;
 
     &.dx-buttongroup-last-item {
       border-inline-end-width: 0px;
-    }
-
-    &.dx-button-default {
-      box-shadow: none;
-      border-inline-end-color: $button-default-selected-bg
-    }
-  
-    &.dx-button-danger {
-      box-shadow: none;
-      border-inline-end-color: $button-danger-selected-bg
-    }
-  
-    &.dx-button-success {
-      box-shadow: none;
-      border-inline-end-color: $button-success-selected-bg
     }
   }
 }
