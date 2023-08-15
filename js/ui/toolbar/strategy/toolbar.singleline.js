@@ -125,16 +125,7 @@ export class SingleLineStrategy {
         const overflowItems = [].slice.call($hiddenItems).map((hiddenItem) => {
             const itemData = this._toolbar._getItemData(hiddenItem);
             const $itemContainer = $(hiddenItem);
-            let $itemMarkup = $itemContainer.children();
-            const isItemMarkupInsideMenu = $itemMarkup.length === 0 && itemData.locateInMenu === 'auto';
-
-            if(isItemMarkupInsideMenu) {
-                each(this._restoreItems ?? [], (_, { container, item }) => {
-                    if(container.is($itemContainer)) {
-                        $itemMarkup = item;
-                    }
-                });
-            }
+            const $itemMarkup = $itemContainer.children();
 
             return extend({
                 menuItemTemplate: () => {
