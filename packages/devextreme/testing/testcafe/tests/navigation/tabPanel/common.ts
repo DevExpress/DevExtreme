@@ -164,11 +164,14 @@ test('TabPanel borders without scrolling', async (t) => {
 
     await t
       .dispatchEvent(thirdItem.element, 'mouseup')
+      .click(Selector('body'), { offsetY: -50 })
       .hover(firstItem.element);
 
     await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
-    await t.hover(Selector(`.${rtlEnabled ? TABS_LEFT_NAV_BUTTON_CLASS : TABS_RIGHT_NAV_BUTTON_CLASS}`));
+    await t
+      .click(Selector('body'), { offsetY: -50 })
+      .hover(Selector(`.${rtlEnabled ? TABS_LEFT_NAV_BUTTON_CLASS : TABS_RIGHT_NAV_BUTTON_CLASS}`));
 
     await testScreenshot(t, takeScreenshot, `TabPanel when right navigation button has hover state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
@@ -367,6 +370,7 @@ test('TabPanel borders without scrolling', async (t) => {
 
     await t
       .dispatchEvent(thirdItem.element, 'mouseup')
+      .click(Selector('body'), { offsetY: -50 })
       .hover(firstItem.element);
 
     await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
