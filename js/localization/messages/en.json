@@ -168,7 +168,7 @@
         "dxDataGrid-filterPanelClearFilter": "Clear",
         "dxDataGrid-filterPanelFilterEnabledHint": "Enable the filter",
 
-        "dxTreeList-ariaTreeList": "Tree list",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Add",
