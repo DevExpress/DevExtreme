@@ -59,7 +59,9 @@ const resizingControllerMembers = {
       this._refreshSizesHandler = (e) => {
         dataController.changed.remove(this._refreshSizesHandler);
 
-        this._refreshSizes(e);
+        if (this._checkSize()) {
+          this._refreshSizes(e);
+        }
       };
       // TODO remove resubscribing
       dataController.changed.add(() => {
@@ -600,16 +602,12 @@ const resizingControllerMembers = {
   },
   _checkSize(checkSize) {
     const $rootElement = this.component.$element();
+    const isWidgetVisible = $rootElement.is(':visible');
+    const isGridSizeChanged = this._lastWidth !== getWidth($rootElement)
+          || this._lastHeight !== getHeight($rootElement)
+          || this._devicePixelRatio !== getWindow().devicePixelRatio;
 
-    if (checkSize && (
-      this._lastWidth === getWidth($rootElement)
-            && this._lastHeight === getHeight($rootElement)
-            && this._devicePixelRatio === getWindow().devicePixelRatio
-            || !$rootElement.is(':visible')
-    )) {
-      return false;
-    }
-    return true;
+    return isWidgetVisible && (!checkSize || isGridSizeChanged);
   },
   _setScrollerSpacingCore() {
     const that = this;
