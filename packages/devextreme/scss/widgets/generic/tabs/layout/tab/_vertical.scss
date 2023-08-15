@@ -16,6 +16,10 @@
   .dx-tab {
     @include dx-tabs-after-mixin(null, true);
 
+    &::after {
+      z-index: 2;
+    }
+
     &.dx-state-hover {
       @include dx-tabs-border-mixin(
         $generic-tabs-vertical-border-hover-top,

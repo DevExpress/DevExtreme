@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
-import { testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';
@@ -327,6 +327,73 @@ test('TabPanel borders without scrolling', async (t) => {
       dataSource,
       width: 720,
       rtlEnabled,
+    };
+
+    return createWidget('dxTabPanel', tabPanelOptions);
+  });
+});
+
+['right', 'bottom', 'left'].forEach((tabsPosition) => {
+  test(`TabPanel with tabsPosition=${tabsPosition}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    if (!isMaterial()) {
+      const tabPanel = new TabPanel('#container');
+
+      await testScreenshot(t, takeScreenshot, `TabPanel without focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+
+      await t.pressKey('tab');
+      await testScreenshot(t, takeScreenshot, `TabPanel when its available item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+
+      await t.pressKey('right');
+      await testScreenshot(t, takeScreenshot, `TabPanel when its disabled item has focus, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+
+      await t.pressKey('right');
+
+      const thirdItem = tabPanel.getItem(2);
+      const firstItem = tabPanel.getItem(0);
+
+      await t.dispatchEvent(firstItem.element, 'mousedown');
+      await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has active state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+
+      await t
+        .dispatchEvent(thirdItem.element, 'mouseup')
+        .hover(firstItem.element);
+
+      await testScreenshot(t, takeScreenshot, `TabPanel when 1 item has hover state, tabsPosition=${tabsPosition}.png`, { element: '#container' });
+    }
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    const dataSource = [
+      {
+        title: 'John Heart',
+        text: 'John Heart',
+      }, {
+        title: 'Olivia Peyton',
+        text: 'Olivia Peyton',
+        disabled: true,
+      }, {
+        title: 'Robert Reagan',
+        text: 'Robert Reagan',
+      }, {
+        title: 'Greta Sims',
+        text: 'Greta Sims',
+      }, {
+        title: 'Olivia Peyton',
+        text: 'Olivia Peyton',
+      },
+    ] as Item[];
+
+    const tabPanelOptions = {
+      dataSource,
+      height: 250,
+      width: 450,
+      tabsPosition,
+      // prevent firing dxinactive event for to avoid failing test
+      itemHoldTimeout: 5000,
     };
 
     return createWidget('dxTabPanel', tabPanelOptions);
