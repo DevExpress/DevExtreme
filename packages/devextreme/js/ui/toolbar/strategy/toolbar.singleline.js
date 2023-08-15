@@ -213,12 +213,18 @@ export class SingleLineStrategy {
     }
 
     _itemOptionChanged(item, property, value) {
-        if(this._toolbar._isMenuItem(item)) {
-            if(property === 'disabled' || property === 'options.disabled') {
+        if(property === 'disabled' || property === 'options.disabled') {
+            if(this._toolbar._isMenuItem(item)) {
                 this._menu?._itemOptionChanged(item, property, value);
                 return;
             }
+
+            if(item.locateInMenu === 'auto') {
+                this._toolbar.option('overflowMenuVisible', false);
+                this._arrangeItems();
+            }
         }
+
 
         this.renderMenuItems();
     }
