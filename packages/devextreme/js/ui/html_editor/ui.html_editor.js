@@ -184,7 +184,7 @@ const HtmlEditor = Editor.inherit({
         const frameDocument = frameWindow.document;
         const frameDocumentBody = frameDocument.body;
 
-        frameDocumentBody.innerHTML = value;
+        frameDocumentBody.innerHTML = value.replace(/style=/g, 'data-style=');
 
         const removeInlineHandlers = (element) => {
             if(element.attributes) {
@@ -209,7 +209,7 @@ const HtmlEditor = Editor.inherit({
             .querySelectorAll('script')
             .forEach(scriptNode => { scriptNode.remove(); });
 
-        const sanitizedHtml = frameDocumentBody.innerHTML;
+        const sanitizedHtml = frameDocumentBody.innerHTML.replace(/data-style=/g, 'style=');
 
         $frame.remove();
         return sanitizedHtml;

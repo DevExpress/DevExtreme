@@ -274,12 +274,9 @@ export default function() {
             const htmlEditor = $('#htmlEditor').dxHtmlEditor({
             }).dxHtmlEditor('instance');
 
-            try {
-                const sanitizedValue = htmlEditor._removeXSSVulnerableHtml(value);
-                assert.strictEqual(sanitizedValue, value);
-            } catch(e) {
-                assert.ok(false, `error: ${e.message}`);
-            }
+            const sanitizedValue = htmlEditor._removeXSSVulnerableHtml(value);
+
+            assert.strictEqual(sanitizedValue, value);
         });
 
         testWithoutCsp('render markup with a font-family style', function(assert) {
