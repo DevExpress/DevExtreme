@@ -754,10 +754,10 @@
     .dx-menu-item.dx-state-focused {
       &::after {
         position: absolute;
-        left: 2px;
-        top: 2px;
-        width: 100%;
-        height: 102%;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
         content: '';
       }
     }
