@@ -20,9 +20,9 @@ const createScheduler = async (
     indicatorTime: new Date(2021, 7, 1, 6),
     currentView: 'day',
     views,
-    group: 'groups',
+    groups: ['groupId'],
     resources: [{
-      fieldExpr: 'groups',
+      fieldExpr: 'groupId',
       label: 'group',
       dataSource: [
         { text: 'Group 1', id: 1 },
