@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
+import { Selector, ClientFunction } from 'testcafe';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
@@ -179,6 +179,14 @@ test('TabPanel borders without scrolling', async (t) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await ClientFunction(() => {
+      (window as any).DevExpress.ui.dxTabs.defaultOptions({
+        options: {
+          useInkRipple: false,
+        },
+      });
+    })();
+
     const dataSource = [
       {
         title: 'John Heart',
@@ -371,6 +379,14 @@ test('TabPanel borders without scrolling', async (t) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
+    await ClientFunction(() => {
+      (window as any).DevExpress.ui.dxTabs.defaultOptions({
+        options: {
+          useInkRipple: false,
+        },
+      });
+    })();
+
     const dataSource = [
       {
         title: 'John Heart',
