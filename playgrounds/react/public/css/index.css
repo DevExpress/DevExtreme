@@ -1,0 +1,33 @@
+body {
+    color: #222222;
+    background-color: #ffffff;
+}
+
+.example-block {
+    margin: 50px 0;
+}
+
+.example-header {
+    margin-bottom: 20px;
+}
+
+.example-title {
+    padding: 7px 15px;
+}
+
+.example-state {
+    max-height: 200px;
+}
+
+.container {
+    padding: 20px;
+}
+
+.paragraph {
+    padding: 7px 0;
+}
+
+.button {
+    text-decoration: underline;
+    cursor: pointer;
+}
