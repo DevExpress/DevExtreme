@@ -269,6 +269,19 @@ export default function() {
             assert.equal(markup, '<p><span style="font-size: 20px;">Test</span></p>');
         });
 
+        test('Should no errors on creating iframe(T1179661)', function(assert) {
+            const value = '<div style="background-color: red;"></div>';
+            const htmlEditor = $('#htmlEditor').dxHtmlEditor({
+            }).dxHtmlEditor('instance');
+
+            try {
+                const sanitizedValue = htmlEditor._removeXSSVulnerableHtml(value);
+                assert.strictEqual(sanitizedValue, value);
+            } catch(e) {
+                assert.ok(false, `error: ${e.message}`);
+            }
+        });
+
         testWithoutCsp('render markup with a font-family style', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: '<span style="font-family: Terminal;">Test</span>'
