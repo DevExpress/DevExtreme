@@ -138,7 +138,10 @@ class HorizontalGroupedStrategy {
     }
 
     _calculateOffset(groupIndex) {
-        return this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex + this._workSpace.getIndicatorOffset(groupIndex) + groupIndex;
+        const indicatorStartPosition = this._workSpace.getIndicatorOffset(groupIndex);
+        const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex;
+
+        return indicatorStartPosition + offset;
     }
 
     _calculateGroupByDateOffset(groupIndex) {
