@@ -208,7 +208,7 @@ test('TabPanel borders without scrolling', async (t) => {
       itemHoldTimeout: 5000,
     };
 
-    return createWidget('dxTabPanel', tabPanelOptions);
+    return createWidget('dxTabPanel', tabPanelOptions, '#container', { disableFxAnimation: true });
   });
 
   test(`Tab borders in TabPanel with expanded tabs if rtlEnabled=${rtlEnabled}`, async (t) => {
@@ -399,6 +399,6 @@ test('TabPanel borders without scrolling', async (t) => {
       itemHoldTimeout: 5000,
     };
 
-    return createWidget('dxTabPanel', tabPanelOptions);
+    return createWidget('dxTabPanel', tabPanelOptions, '#container', { disableFxAnimation: true });
   });
 });
