@@ -41,6 +41,22 @@ const isIos = devices.current().platform === 'ios';
 
 let editorsCount = 0;
 
+const removeInlineHandlers = (element) => {
+    if(element.attributes) {
+        for(let i = 0; i < element.attributes.length; i++) {
+            const name = element.attributes[i].name;
+            if(name.startsWith('on')) {
+                element.removeAttribute(name);
+            }
+        }
+    }
+    if(element.childNodes) {
+        for(let i = 0; i < element.childNodes.length; i++) {
+            removeInlineHandlers(element.childNodes[i]);
+        }
+    }
+};
+
 const HtmlEditor = Editor.inherit({
 
     _getDefaultOptions: function() {
@@ -185,22 +201,6 @@ const HtmlEditor = Editor.inherit({
         const frameDocumentBody = frameDocument.body;
 
         frameDocumentBody.innerHTML = value.replace(/style=/g, 'data-style=');
-
-        const removeInlineHandlers = (element) => {
-            if(element.attributes) {
-                for(let i = 0; i < element.attributes.length; i++) {
-                    const name = element.attributes[i].name;
-                    if(name.startsWith('on')) {
-                        element.removeAttribute(name);
-                    }
-                }
-            }
-            if(element.childNodes) {
-                for(let i = 0; i < element.childNodes.length; i++) {
-                    removeInlineHandlers(element.childNodes[i]);
-                }
-            }
-        };
 
         removeInlineHandlers(frameDocumentBody);
 

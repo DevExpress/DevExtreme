@@ -271,12 +271,13 @@ export default function() {
 
         test('Should no errors on creating iframe(T1179661)', function(assert) {
             const value = '<div style="background-color: red;"></div>';
-            const htmlEditor = $('#htmlEditor').dxHtmlEditor({
-            }).dxHtmlEditor('instance');
+            const htmlEditor = $('#htmlEditor')
+                .dxHtmlEditor({})
+                .dxHtmlEditor('instance');
 
             const sanitizedValue = htmlEditor._removeXSSVulnerableHtml(value);
 
-            assert.strictEqual(sanitizedValue, value);
+            assert.strictEqual(sanitizedValue, value, 'should contains inline style');
         });
 
         testWithoutCsp('render markup with a font-family style', function(assert) {
