@@ -210,10 +210,8 @@ export class SingleLineStrategy {
                 return;
             }
 
-            if(item.locateInMenu === 'auto') {
-                this._toolbar.option('overflowMenuVisible', false);
-                this._arrangeItems();
-            }
+            this._toolbar.option('overflowMenuVisible', false);
+            this._arrangeItems();
         }
 
 
