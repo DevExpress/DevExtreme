@@ -115,9 +115,11 @@ test('Tabs in contrast theme', async (t) => {
         showNavButtons: true,
         width: orientation === 'horizontal' ? 450 : 'auto',
         height: orientation === 'horizontal' ? 'auto' : 250,
+        // prevent firing dxinactive event for to avoid failing test
+        itemHoldTimeout: 5000,
       };
 
-      return createWidget('dxTabs', tabsOptions, '#tabs');
+      return createWidget('dxTabs', tabsOptions, '#tabs', { disableFxAnimation: true });
     });
   });
 });
