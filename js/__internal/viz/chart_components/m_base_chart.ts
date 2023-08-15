@@ -715,8 +715,8 @@ export const BaseChart = BaseWidget.inherit({
 
   _renderSeriesElements(drawOptions, isLegendInside) {
     const { series } = this;
-    const resolveLabelOverlapping = that._themeManager.getOptions('resolveLabelOverlapping');
-    const pointsToAnimation = that._getPointsToAnimation(series);
+    const resolveLabelOverlapping = this._themeManager.getOptions('resolveLabelOverlapping');
+    const pointsToAnimation = this._getPointsToAnimation(series);
 
     series.forEach((singleSeries, index) => {
       this._applyExtraSettings(singleSeries, drawOptions);

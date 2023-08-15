@@ -1286,7 +1286,7 @@ const dxChart = AdvancedChart.inherit({
         rects.push(null as never);
         continue;
       }
-      rect = renderer.rect(0, 0, 0, 0).attr({
+      const rect = renderer.rect(0, 0, 0, 0).attr({
         fill: backgroundColor,
         'stroke-width': 0,
       }).append(this._panesBackgroundGroup);

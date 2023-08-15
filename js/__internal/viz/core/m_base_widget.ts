@@ -149,7 +149,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
 
     this._$element.children(`.${SIZED_ELEMENT_CLASS}`).remove();
 
-    this.callBase.apply(...params);
+    this.callBase(...params);
     this._changesLocker = 0;
     this._optionChangedLocker = 0;
     this._asyncFirstDrawing = true;
