@@ -214,7 +214,6 @@ export class SingleLineStrategy {
             this._arrangeItems();
         }
 
-
         this.renderMenuItems();
     }
 
