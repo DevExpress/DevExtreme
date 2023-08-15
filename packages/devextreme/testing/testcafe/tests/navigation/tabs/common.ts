@@ -119,7 +119,7 @@ test('Tabs in contrast theme', async (t) => {
         itemHoldTimeout: 5000,
       };
 
-      return createWidget('dxTabs', tabsOptions, '#tabs', { disableFxAnimation: true });
+      return createWidget('dxTabs', tabsOptions, '#tabs');
     });
   });
 });
