@@ -1312,23 +1312,23 @@ const dxChart = AdvancedChart.inherit({
   _createCrosshairCursor() {
     const options = this._themeManager.getOptions('crosshair') || {};
     const argumentAxis = this.getArgumentAxis();
-    const axes = !this._isRotated()
-      ? [[argumentAxis], this._valueAxes]
-      : [this._valueAxes, [argumentAxis]];
+    const axes = this._isRotated()
+      ? [this._valueAxes, [argumentAxis]]
+      : [[argumentAxis], this._valueAxes];
     const parameters = { canvas: this._getCommonCanvas(), panes: this._getPanesParameters(), axes };
 
     if (!options?.enabled) {
       return;
     }
-    if (!this._crosshair) {
+    if (this._crosshair) {
+      this._crosshair.update(options, parameters);
+    } else {
       this._crosshair = new Crosshair(
         this._renderer,
         options,
         parameters,
         this._crosshairCursorGroup,
       );
-    } else {
-      this._crosshair.update(options, parameters);
     }
     this._crosshair.render();
   },
