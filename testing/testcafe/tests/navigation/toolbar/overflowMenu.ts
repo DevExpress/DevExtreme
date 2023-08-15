@@ -6,7 +6,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
 import Guid from '../../../../../js/core/guid';
-import { appendElementTo, setClassAttribute } from '../../../helpers/domUtils';
+import { appendElementTo, setAttribute, setClassAttribute } from '../../../helpers/domUtils';
 
 const BUTTON_CLASS = 'dx-button';
 const ACTIVE_STATE_CLASS = 'dx-state-active';
@@ -77,6 +77,159 @@ test('Drop down button should lost hover and active state', async (t) => {
       { text: 'item1', locateInMenu: 'always' },
       { text: 'item2', locateInMenu: 'always' },
       { text: 'item3', locateInMenu: 'always' }],
+  }, '#toolbar');
+});
+
+test('Toolbar items should be rendered correctly after change disabled option for overflow button in runtime', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const toolbar = new Toolbar('#toolbar');
+
+  await t
+    .click(toolbar.getOverflowMenu().element);
+
+  await toolbar.option('items[1].disabled', true);
+
+  await t
+    .click(toolbar.getOverflowMenu().element);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar appearance after disabling overflow button.png', { element: '#container' });
+
+  await toolbar.option('items[1].disabled', false);
+
+  await t
+    .click(toolbar.getOverflowMenu().element);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar appearance after cancel disabling overflow button.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'toolbar');
+  await setAttribute('#container', 'style', 'width: 200px; height: 200px;');
+
+  await createWidget('dxToolbar', {
+    items: [{
+      locateInMenu: 'auto',
+      widget: 'dxButton',
+      options: {
+        width: 120,
+        text: 'Create',
+      },
+    }, {
+      locateInMenu: 'auto',
+      widget: 'dxButton',
+      options: {
+        text: 'Settings',
+      },
+    }, {
+      locateInMenu: 'always',
+      widget: 'dxButton',
+      options: {
+        text: 'LogIn',
+      },
+    }],
+  }, '#toolbar');
+});
+
+test('Toolbar items should be rendered correctly after change disabled option for toolbar button in runtime', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const toolbar = new Toolbar('#toolbar');
+
+  await t
+    .click(toolbar.getOverflowMenu().element);
+
+  await toolbar.option('items[0].disabled', true);
+
+  await t
+    .click(toolbar.getOverflowMenu().element);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar appearance after disabling toolbar button.png', { element: '#container' });
+
+  await toolbar.option('items[0].disabled', false);
+
+  await t
+    .click(toolbar.getOverflowMenu().element);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar appearance after cancel disabling toolbar button.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'toolbar');
+  await setAttribute('#container', 'style', 'width: 200px; height: 200px;');
+
+  await createWidget('dxToolbar', {
+    items: [{
+      locateInMenu: 'auto',
+      widget: 'dxButton',
+      options: {
+        width: 120,
+        text: 'Create',
+      },
+    }, {
+      locateInMenu: 'auto',
+      widget: 'dxButton',
+      options: {
+        text: 'Settings',
+      },
+    }, {
+      locateInMenu: 'always',
+      widget: 'dxButton',
+      options: {
+        text: 'LogIn',
+      },
+    }],
+  }, '#toolbar');
+});
+
+test('Toolbar items should be rendered correctly after change disabled option for menu button in runtime', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const toolbar = new Toolbar('#toolbar');
+
+  await t
+    .click(toolbar.getOverflowMenu().element);
+
+  await toolbar.option('items[2].disabled', true);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar appearance after disabling menu button.png', { element: '#container' });
+
+  await toolbar.option('items[2].disabled', false);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar appearance after cancel disabling menu button.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'toolbar');
+  await setAttribute('#container', 'style', 'width: 200px; height: 200px;');
+
+  await createWidget('dxToolbar', {
+    items: [{
+      locateInMenu: 'auto',
+      widget: 'dxButton',
+      options: {
+        width: 120,
+        text: 'Create',
+      },
+    }, {
+      locateInMenu: 'auto',
+      widget: 'dxButton',
+      options: {
+        text: 'Settings',
+      },
+    }, {
+      locateInMenu: 'always',
+      widget: 'dxButton',
+      options: {
+        text: 'LogIn',
+      },
+    }],
   }, '#toolbar');
 });
 
