@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Vrednost",
         "dxDataGrid-ariaFilterCell": "Filtriraj po celici",
         "dxDataGrid-ariaCollapse": "Skrči",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Razširi",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",

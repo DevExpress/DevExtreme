@@ -530,6 +530,10 @@ const Tabs = CollectionWidget.inherit({
     _toggleFocusedDisabledClasses(value) {
         const { selectedIndex: currentIndex } = this.option();
 
+        this._itemElements()
+            .removeClass(FOCUSED_DISABLED_NEXT_TAB_CLASS)
+            .removeClass(FOCUSED_DISABLED_PREV_TAB_CLASS);
+
         const prevItemIndex = currentIndex - 1;
         const nextItemIndex = currentIndex + 1;
 

@@ -3,11 +3,11 @@
   "version": "23.2.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx start devextreme-angular-sandbox",
     "tools:discover-declarations": "dx-tools discover --js-scripts ./packages/devextreme/js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\" --artifacts ./artifacts/internal-tools",
     "tools:generate-imd": "dx-tools integration-data-generator --artifacts ./artifacts/internal-tools",
     "vue:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd && mkdir -p ./packages/devextreme-vue/metadata && cp ./artifacts/internal-tools/integration-data.json ./packages/devextreme-vue/metadata/integration-data.json",
-    "vue:build-generator": "cd node_modules/devextreme-vue-generator && npm i --no-audit --no-fund && npm run build:local"
+    "vue:build-generator": "cd node_modules/devextreme-vue-generator && npm i --no-audit --no-fund && npm run build:local",
+    "vue:generate": "npm run vue:discover-metadata && npm run vue:build-generator && cd packages/devextreme-vue && npm run generate"
   },
   "private": true,
   "devDependencies": {

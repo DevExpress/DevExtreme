@@ -34,12 +34,12 @@ import Widget from '../widget/ui.widget';
 import { AppointmentPopup, ACTION_TO_APPOINTMENT } from '../../__internal/scheduler/appointment_popup/m_popup';
 import { AppointmentForm } from '../../__internal/scheduler/appointment_popup/m_form';
 import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
-import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrategy';
-import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
+import { DesktopTooltipStrategy } from '../../__internal/scheduler/tooltip_strategies/m_desktop_tooltip_strategy';
+import { MobileTooltipStrategy } from '../../__internal/scheduler/tooltip_strategies/m_mobile_tooltip_strategy';
 import { hide as hideLoading, show as showLoading } from './loading';
 import AppointmentCollection from '../../__internal/scheduler/appointments/m_appointment_collection';
 import AppointmentLayoutManager from './appointments.layout_manager';
-import { SchedulerHeader } from './header/header';
+import { SchedulerHeader } from '../../__internal/scheduler/header/m_header';
 import subscribes from './subscribes';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone';
@@ -62,7 +62,7 @@ import {
     getCellGroups,
     loadResources,
     setResourceToAppointment
-} from './resources/utils';
+} from '../../__internal/scheduler/resources/m_utils';
 import { ExpressionUtils } from './expressionUtils';
 import {
     validateDayHours,
@@ -70,7 +70,7 @@ import {
     isTimelineView
 } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from '../../__internal/scheduler/appointments/m_render';
-import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
+import { AgendaResourceProcessor } from '../../__internal/scheduler/resources/m_agenda_resource_processor';
 import { AppointmentDataProvider } from '../../__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
 import { getAppointmentTakesAllDay } from '../../renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
 import { getPreparedDataItems } from '../../renovation/ui/scheduler/utils/data';

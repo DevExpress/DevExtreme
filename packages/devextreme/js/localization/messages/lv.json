@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Vērtība",
         "dxDataGrid-ariaFilterCell": "Filtrēt šūnu",
         "dxDataGrid-ariaCollapse": "Savērst",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Izvērst",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",

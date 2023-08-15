@@ -10,7 +10,15 @@
 @use "../tabs" as *;
 @use "../../base/tabPanel";
 @use "variables/borders" as *;
-@use "layout/tab" as *;
-@use "layout/tab-panel" as *;
+@use "layout/tab/base" as *;
+@use "layout/tab/position-top" as *;
+@use "layout/tab/position-right" as *;
+@use "layout/tab/position-bottom" as *;
+@use "layout/tab/position-left" as *;
+@use "layout/tab-panel/base" as *;
+@use "layout/tab-panel/position-top" as *;
+@use "layout/tab-panel/position-right" as *;
+@use "layout/tab-panel/position-bottom" as *;
+@use "layout/tab-panel/position-left" as *;
 
 // adduse

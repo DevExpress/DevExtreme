@@ -783,6 +783,7 @@ const DxTabPanelOptions = createConfigurationComponent({
     "update:showNavButtons": null,
     "update:swipeEnabled": null,
     "update:tabIndex": null,
+    "update:tabsPosition": null,
     "update:visible": null,
     "update:width": null,
   },
@@ -826,6 +827,7 @@ const DxTabPanelOptions = createConfigurationComponent({
     showNavButtons: Boolean,
     swipeEnabled: Boolean,
     tabIndex: Number,
+    tabsPosition: String,
     visible: Boolean,
     width: [Function, Number, String]
   }

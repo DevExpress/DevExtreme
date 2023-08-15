@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Τιμή",
         "dxDataGrid-ariaFilterCell": "Φιλτράρισμα κελιού",
         "dxDataGrid-ariaCollapse": "Συρρίκνωση",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Επέκταση",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",

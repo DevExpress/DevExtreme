@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Hodnota",
         "dxDataGrid-ariaFilterCell": "Filtrovat buňku",
         "dxDataGrid-ariaCollapse": "Sbalit",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Rozbalit",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
