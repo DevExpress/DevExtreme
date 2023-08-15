@@ -9,20 +9,62 @@
 // adduse
 
 .dx-tabpanel {
-  .dx-tabs {
-    border-bottom: 1px solid $base-border-color;
-
-    @at-root #{selector-append(".dx-empty-collection", &)} {
-      border-top: none;
-    }
-  }
-
-  .dx-tab {
+  .dx-tabpanel-tab {
     min-width: 72px;
     flex-grow: 0;
   }
 
   .dx-tabs-nav-button {
     height: auto;
+  }
+}
+
+.dx-tabpanel-tabs-position-top {
+  .dx-tabs {
+    border-block-end: 1px solid $base-border-color;
+
+    @at-root #{selector-append(".dx-empty-collection", &)} {
+      border-block-end: none;
+    }
+  }
+}
+
+.dx-tabpanel-tabs-position-bottom {
+  .dx-tabs {
+    border-block-start: 1px solid $base-border-color;
+
+    @at-root #{selector-append(".dx-empty-collection", &)} {
+      border-block-start: none;
+    }
+  }
+
+  .dx-tabpanel-tab.dx-tab-selected::after {
+    top: 0;
+    bottom: unset;
+  }
+}
+
+.dx-tabpanel-tabs-position-left {
+  .dx-tabs {
+    border-inline-end: 1px solid $base-border-color;
+
+    @at-root #{selector-append(".dx-empty-collection", &)} {
+      border-inline-end: none;
+    }
+  }
+}
+
+.dx-tabpanel-tabs-position-right {
+  .dx-tabs {
+    border-inline-start: 1px solid $base-border-color;
+
+    @at-root #{selector-append(".dx-empty-collection", &)} {
+      border-inline-start: none;
+    }
+  }
+
+  .dx-tabpanel-tab.dx-tab-selected::after {
+    right: 0;
+    left: unset;
   }
 }

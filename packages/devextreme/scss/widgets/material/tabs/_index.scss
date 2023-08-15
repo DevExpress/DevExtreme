@@ -14,7 +14,7 @@
 
 
 @mixin dx-tabs-border-mixin($position, $color) {
-  &::before {
+  &::after {
     content: "";
     position: absolute;
     left: 0;
