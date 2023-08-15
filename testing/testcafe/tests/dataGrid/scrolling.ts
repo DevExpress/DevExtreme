@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
@@ -30,6 +30,10 @@ function getData(rowCount, colCount): Record<string, string>[] {
   }
 
   return items;
+}
+
+async function getTestLoadCount(): Promise<number> {
+  return ClientFunction(() => (window as any).testLoadCount as number)();
 }
 
 fixture`Scrolling`
@@ -1044,6 +1048,92 @@ safeSizeTest('The scroll position of a fixed table should be synchronized with t
     fixedPosition: 'left',
   }, 'id', 'text'],
 }));
+
+// T1089634
+safeSizeTest('The page should not be changed when hiding/showing the grid view after the data has been edited', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  // act
+  await dataGrid.scrollTo(t, { y: 500 });
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await takeScreenshot('T1089634-virtual-scrolling-1.png');
+
+  // act
+  await dataGrid.apiEditCell(5, 1);
+  await dataGrid.apiCellValue(5, 1, 'test');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(19, 1).isModified)
+    .ok();
+
+  // act - simulate click on button
+  await dataGrid.hide();
+  await t.click(Selector('body'));
+  await t.wait(100);
+
+  await takeScreenshot('T1089634-virtual-scrolling-2.png');
+
+  // act
+  await dataGrid.show();
+
+  await takeScreenshot('T1089634-virtual-scrolling-3.png');
+
+  // assert
+  const testLoadCount = await getTestLoadCount();
+
+  await t
+    .expect(testLoadCount)
+    .eql(1)
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 800]).before(async () => {
+  await ClientFunction(() => {
+    (window as any).testLoadCount = 0;
+
+    $('body').css({
+      minHeight: 100,
+      minWidth: 100,
+    });
+  })();
+
+  return createWidget('dxDataGrid', {
+    height: 500,
+    dataSource: {
+      load() {
+        ((window as any).testLoadCount as number) += 1;
+
+        return new Array(200).fill(null).map((_, index) => ({ id: index, field1: `item1 ${index}`, field2: `item2 ${index}` }));
+      },
+      key: 'id',
+    },
+    editing: {
+      mode: 'batch',
+      allowUpdating: true,
+    },
+    scrolling: {
+      mode: 'virtual',
+    },
+  });
+}).after(async () => ClientFunction(() => {
+  $('body').css({
+    minHeight: '',
+    minWidth: '',
+  });
+  delete (window as any).testLoadCount;
+})());
 
 fixture`Remote Scrolling`
   .page(url(__dirname, '../containerAspNet.html'))
