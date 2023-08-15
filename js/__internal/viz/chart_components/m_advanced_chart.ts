@@ -1,6 +1,6 @@
 import { noop as _noop } from '@js/core/utils/common';
 import { extend as _extend } from '@js/core/utils/extend';
-import { each as _each, reverseEach as _reverseEach } from '@js/core/utils/iterator';
+import { reverseEach as _reverseEach } from '@js/core/utils/iterator';
 import { isDefined as _isDefined, type } from '@js/core/utils/type';
 import { Axis } from '@js/viz/axes/base_axis';
 import { SeriesFamily } from '@js/viz/core/series_family';
@@ -22,17 +22,25 @@ const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
 
 function prepareAxis(axisOptions) {
-  return isArray(axisOptions) ? axisOptions.length === 0 ? [{}] : axisOptions : [axisOptions];
-}
-
-function processBubbleMargin(opt, bubbleSize) {
-  if (opt.processBubbleSize) {
-    opt.size = bubbleSize;
+  if (isArray(axisOptions)) {
+    return axisOptions.length === 0 ? [{}] : axisOptions;
   }
-  return opt;
+  return [axisOptions];
 }
 
-function estimateBubbleSize(size, panesCount, maxSize, rotated) {
+function processBubbleMargin(marginOptions, bubbleSize) {
+  if (marginOptions.processBubbleSize) {
+    marginOptions.size = bubbleSize;
+  }
+  return marginOptions;
+}
+
+function estimateBubbleSize(
+  size: { width: number; height: number },
+  panesCount: number,
+  maxSize: number,
+  rotated: boolean,
+): number {
   const width = rotated ? size.width / panesCount : size.width;
   const height = rotated ? size.height : size.height / panesCount;
 
@@ -62,15 +70,18 @@ function setAxisVisualRangeByOption(arg, axis, isDirectOption, index?) {
 
 function getAxisTypes(groupsData, axis, isArgumentAxes) {
   if (isArgumentAxes) {
-    return { argumentAxisType: groupsData.argumentAxisType, argumentType: groupsData.argumentType };
+    return {
+      argumentAxisType: groupsData.argumentAxisType,
+      argumentType: groupsData.argumentType,
+    };
   }
-  const { valueAxisType, valueType } = groupsData.groups.filter((g) => g.valueAxis === axis)[0];
+  const { valueAxisType, valueType } = groupsData.groups.find((g) => g.valueAxis === axis);
   return { valueAxisType, valueType };
 }
 
 function wrapVisualRange(fullName, value) {
   const pathElements = fullName.split('.');
-  const destElem = pathElements[pathElements.length - 1];
+  const destElem = pathElements.at(-1);
 
   if (destElem === 'endValue' || destElem === 'startValue') {
     return {
@@ -116,19 +127,18 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _dispose() {
-    const that = this;
     const disposeObjectsInArray = this._disposeObjectsInArray;
 
-    that.callBase();
+    this.callBase();
 
-    that.panes = null;
-    if (that._legend) {
-      that._legend.dispose();
-      that._legend = null;
+    this.panes = null;
+    if (this._legend) {
+      this._legend.dispose();
+      this._legend = null;
     }
-    disposeObjectsInArray.call(that, 'panesBackground');
-    disposeObjectsInArray.call(that, 'seriesFamilies');
-    that._disposeAxes();
+    disposeObjectsInArray.call(this, 'panesBackground');
+    disposeObjectsInArray.call(this, 'seriesFamilies');
+    this._disposeAxes();
   },
 
   _createPanes() {
@@ -139,27 +149,21 @@ export const AdvancedChart = BaseChart.inherit({
 
   _cleanPanesClipRects(clipArrayName) {
     const clipArray = this._panesClipRects[clipArrayName];
-    (clipArray || []).forEach((clipRect) => clipRect && clipRect.dispose());
+    (clipArray || []).forEach((clipRect) => {
+      clipRect?.dispose();
+    });
     this._panesClipRects[clipArrayName] = [];
   },
 
   _getElementsClipRectID(paneName) {
     const clipShape = this._panesClipRects.fixed[this._getPaneIndex(paneName)];
-    return clipShape && clipShape.id;
+    return clipShape?.id;
   },
 
   _getPaneIndex(paneName) {
-    let paneIndex;
     const name = paneName || DEFAULT_PANE_NAME;
 
-    _each(this.panes, (index, pane) => {
-      if (pane.name === name) {
-        paneIndex = index;
-        return false;
-      }
-      return undefined;
-    });
-    return paneIndex;
+    return this.panes.findIndex((pane) => pane.name === name);
   },
 
   _updateSize() {
@@ -174,21 +178,22 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _populateAxes() {
-    const that = this;
-    const { panes } = that;
-    const rotated = that._isRotated();
-    const argumentAxesOptions = prepareAxis(that.option('argumentAxis') || {})[0];
-    const valueAxisOption = that.option('valueAxis');
+    const { panes } = this;
+    const rotated = this._isRotated();
+    const argumentAxesOptions = prepareAxis(this.option('argumentAxis') || {})[0];
+    const valueAxisOption = this.option('valueAxis');
     const valueAxesOptions = prepareAxis(valueAxisOption || {});
     let argumentAxesPopulatedOptions = [];
     const valueAxesPopulatedOptions = [];
     const axisNames = [];
     let valueAxesCounter = 0;
     let paneWithNonVirtualAxis;
-    const crosshairMargins = that._getCrosshairMargins();
+    const crosshairMargins = this._getCrosshairMargins();
 
-    function getNextAxisName() {
-      return DEFAULT_AXIS_NAME + valueAxesCounter++;
+    function getNextAxisName(): string {
+      const name = DEFAULT_AXIS_NAME + String(valueAxesCounter);
+      valueAxesCounter += 1;
+      return name;
     }
 
     if (rotated) {
@@ -199,7 +204,7 @@ export const AdvancedChart = BaseChart.inherit({
 
     argumentAxesPopulatedOptions = _map(panes, (pane) => {
       const virtual = pane.name !== paneWithNonVirtualAxis;
-      return that._populateAxesOptions(
+      return this._populateAxesOptions(
         'argumentAxis',
         argumentAxesOptions,
         {
@@ -213,12 +218,12 @@ export const AdvancedChart = BaseChart.inherit({
       );
     }) as any;
 
-    _each(valueAxesOptions, (priority, axisOptions) => {
+    valueAxesOptions.forEach((axisOptions, priority) => {
       let axisPanes = [];
       const { name } = axisOptions;
 
       if (name && axisNames.includes(name as never)) {
-        that._incidentOccurred('E2102');
+        this._incidentOccurred('E2102');
         return;
       }
       if (name) {
@@ -236,10 +241,10 @@ export const AdvancedChart = BaseChart.inherit({
         axisPanes.push(undefined as never);
       }
 
-      _each(axisPanes, (_, pane) => {
-        const optionPath = isArray(valueAxisOption) ? `valueAxis[${priority}]` : 'valueAxis';
+      axisPanes.forEach((pane) => {
+        const optionPath = isArray(valueAxisOption) ? `valueAxis[${String(priority)}]` : 'valueAxis';
 
-        valueAxesPopulatedOptions.push(that._populateAxesOptions('valueAxis', axisOptions, {
+        valueAxesPopulatedOptions.push(this._populateAxesOptions('valueAxis', axisOptions, {
           name: name || getNextAxisName(),
           pane,
           priority,
@@ -249,21 +254,20 @@ export const AdvancedChart = BaseChart.inherit({
       });
     });
 
-    that._redesignAxes(argumentAxesPopulatedOptions, true, paneWithNonVirtualAxis);
-    that._redesignAxes(valueAxesPopulatedOptions, false);
+    this._redesignAxes(argumentAxesPopulatedOptions, true, paneWithNonVirtualAxis);
+    this._redesignAxes(valueAxesPopulatedOptions, false);
   },
 
   _redesignAxes(options, isArgumentAxes, paneWithNonVirtualAxis) {
-    const that = this;
     const axesBasis = [];
-    let axes = isArgumentAxes ? that._argumentAxes : that._valueAxes;
+    let axes = isArgumentAxes ? this._argumentAxes : this._valueAxes;
 
-    _each(options, (_, opt) => {
-      const curAxes = axes && axes.filter((a) => a.name === opt.name
-                && (!_isDefined(opt.pane) && that.panes.some((p) => p.name === a.pane) || a.pane === opt.pane));
-      if (curAxes && curAxes.length > 0) {
-        _each(curAxes, (_, axis) => {
-          const axisTypes = getAxisTypes(that._groupsData, axis, isArgumentAxes);// T891599
+    options.forEach((opt) => {
+      const curAxes = axes?.filter((a) => a.name === opt.name
+                && (!_isDefined(opt.pane) && this.panes.some((p) => p.name === a.pane) || a.pane === opt.pane));
+      if (curAxes?.length) {
+        curAxes.forEach((axis) => {
+          const axisTypes = getAxisTypes(this._groupsData, axis, isArgumentAxes);// T891599
           axis.updateOptions(opt);
           if (isArgumentAxes) {
             axis.setTypes(axisTypes.argumentAxisType, axisTypes.argumentType, 'argumentType');
@@ -281,28 +285,28 @@ export const AdvancedChart = BaseChart.inherit({
     if (axes) {
       _reverseEach(axes, (index, axis) => {
         if (!axesBasis.some((basis: any) => basis.axis && basis.axis === axis)) {
-          that._disposeAxis(index, isArgumentAxes);
+          this._disposeAxis(index, isArgumentAxes);
         }
       });
     } else if (isArgumentAxes) {
-      axes = that._argumentAxes = [];
+      axes = this._argumentAxes = [];
     } else {
-      axes = that._valueAxes = [];
+      axes = this._valueAxes = [];
     }
 
-    _each(axesBasis, (_, basis: any) => {
+    axesBasis.forEach((basis: any) => {
       let { axis } = basis;
       if (basis.axis && isArgumentAxes) {
         basis.axis.isVirtual = basis.axis.pane !== paneWithNonVirtualAxis;
       } else if (basis.options) {
-        axis = that._createAxis(
+        axis = this._createAxis(
           isArgumentAxes,
           basis.options,
           isArgumentAxes ? basis.options.pane !== paneWithNonVirtualAxis : undefined,
         );
         axes.push(axis);
       }
-      axis.applyVisualRangeSetter(that._getVisualRangeSetter());
+      axis.applyVisualRangeSetter(this._getVisualRangeSetter());
     });
   },
 
@@ -317,16 +321,18 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _disposeAxes() {
-    const that = this;
-    const disposeObjectsInArray = that._disposeObjectsInArray;
-    disposeObjectsInArray.call(that, '_argumentAxes');
-    disposeObjectsInArray.call(that, '_valueAxes');
+    const disposeObjectsInArray = this._disposeObjectsInArray;
+    disposeObjectsInArray.call(this, '_argumentAxes');
+    disposeObjectsInArray.call(this, '_valueAxes');
   },
 
   _appendAdditionalSeriesGroups() {
     this._crosshairCursorGroup.linkAppend();
     // this._legendGroup.linkAppend();
-    this._scrollBar && this._scrollBarGroup.linkAppend(); // TODO: Must be appended in the same place where removed (chart)
+    if (this._scrollBar) {
+      // TODO: Must be appended in the same place where removed (chart)
+      this._scrollBarGroup.linkAppend();
+    }
   },
   _getLegendTargets() {
     return (this.series || []).map((s) => {
@@ -346,10 +352,8 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _renderTrackers() {
-    const that = this;
-    let i;
-    for (i = 0; i < that.series.length; ++i) {
-      that.series[i].drawTrackers();
+    for (let i = 0; i < this.series.length; i += 1) {
+      this.series[i].drawTrackers();
     }
     // TODO we don't need it
     // if (that._legend) {
@@ -362,11 +366,10 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _processSeriesFamilies() {
-    const that = this;
     const types = [];
     const families = [];
     let paneSeries;
-    const themeManager = that._themeManager;
+    const themeManager = this._themeManager;
     const negativesAsZeroes = themeManager.getOptions('negativesAsZeroes');
     const negativesAsZeros = themeManager.getOptions('negativesAsZeros'); // misspelling case
     const familyOptions = {
@@ -377,24 +380,24 @@ export const AdvancedChart = BaseChart.inherit({
       negativesAsZeroes: _isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros,
     };
 
-    if (that.seriesFamilies?.length) {
-      _each(that.seriesFamilies, (_, family) => {
+    if (this.seriesFamilies?.length) {
+      this.seriesFamilies.forEach((family) => {
         family.updateOptions(familyOptions);
         family.adjustSeriesValues();
       });
       return;
     }
 
-    _each(that.series, (_, item) => {
+    this.series.forEach((item) => {
       if (!types.includes(item.type as never)) {
         types.push(item.type as never);
       }
     });
 
-    _each(that._getLayoutTargets(), (_, pane) => {
-      paneSeries = that._getSeriesForPane(pane.name);
+    this._getLayoutTargets().forEach((pane) => {
+      paneSeries = this._getSeriesForPane(pane.name);
 
-      _each(types, (_, type) => {
+      types.forEach((type) => {
         const family = new SeriesFamily({
           type,
           pane: pane.name,
@@ -403,7 +406,7 @@ export const AdvancedChart = BaseChart.inherit({
           barGroupPadding: familyOptions.barGroupPadding,
           barGroupWidth: familyOptions.barGroupWidth,
           negativesAsZeroes: familyOptions.negativesAsZeroes,
-          rotated: that._isRotated(),
+          rotated: this._isRotated(),
         });
 
         family.add(paneSeries);
@@ -411,15 +414,13 @@ export const AdvancedChart = BaseChart.inherit({
         families.push(family as never);
       });
     });
-    that.seriesFamilies = families;
+    this.seriesFamilies = families;
   },
 
   _updateSeriesDimensions() {
-    const that = this;
-    let i;
-    const seriesFamilies = that.seriesFamilies || [];
+    const seriesFamilies = this.seriesFamilies || [];
 
-    for (i = 0; i < seriesFamilies.length; i++) {
+    for (let i = 0; i < seriesFamilies.length; i += 1) {
       const family = seriesFamilies[i];
 
       family.updateSeriesValues();
@@ -428,27 +429,25 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _getLegendCallBack(series) {
-    return this._legend && this._legend.getActionCallback(series);
+    return this._legend?.getActionCallback(series);
   },
 
   _appendAxesGroups() {
-    const that = this;
-    that._stripsGroup.linkAppend();
-    that._gridGroup.linkAppend();
-    that._axesGroup.linkAppend();
-    that._labelsAxesGroup.linkAppend();
-    that._constantLinesGroup.linkAppend();
-    that._stripLabelAxesGroup.linkAppend();
-    that._scaleBreaksGroup.linkAppend();
+    this._stripsGroup.linkAppend();
+    this._gridGroup.linkAppend();
+    this._axesGroup.linkAppend();
+    this._labelsAxesGroup.linkAppend();
+    this._constantLinesGroup.linkAppend();
+    this._stripLabelAxesGroup.linkAppend();
+    this._scaleBreaksGroup.linkAppend();
   },
 
   _populateMarginOptions() {
-    const that = this;
-    const bubbleSize = estimateBubbleSize(that.getSize(), that.panes.length, that._themeManager.getOptions('maxBubbleSize'), that._isRotated());
+    const bubbleSize = estimateBubbleSize(this.getSize(), this.panes.length, this._themeManager.getOptions('maxBubbleSize'), this._isRotated());
     let argumentMarginOptions = {};
 
-    that._valueAxes.forEach((valueAxis) => {
-      const groupSeries = that.series.filter((series) => series.getValueAxis() === valueAxis);
+    this._valueAxes.forEach((valueAxis) => {
+      const groupSeries = this.series.filter((series) => series.getValueAxis() === valueAxis);
       let marginOptions = {};
 
       groupSeries.forEach((series) => {
@@ -463,22 +462,21 @@ export const AdvancedChart = BaseChart.inherit({
       valueAxis.setMarginOptions(marginOptions);
     });
 
-    that._argumentAxes.forEach((a) => a.setMarginOptions(argumentMarginOptions));
+    this._argumentAxes.forEach((a) => a.setMarginOptions(argumentMarginOptions));
   },
 
   _populateBusinessRange(updatedAxis, keepRange) {
-    const that = this;
-    const rotated = that._isRotated();
-    const series = that._getVisibleSeries();
+    const rotated = this._isRotated();
+    const series = this._getVisibleSeries();
     const argRanges = {};
     const commonArgRange = new Range({ rotated: !!rotated });
     const getPaneName = (axis) => axis.pane || DEFAULT_PANE_NAME;
 
-    that.panes.forEach((p) => {
+    this.panes.forEach((p) => {
       argRanges[p.name] = new Range({ rotated: !!rotated });
     });
 
-    that._valueAxes.forEach((valueAxis) => {
+    this._valueAxes.forEach((valueAxis) => {
       const groupRange = new Range({
         rotated: !!rotated,
         pane: valueAxis.pane,
@@ -495,28 +493,41 @@ export const AdvancedChart = BaseChart.inherit({
 
       if (!updatedAxis || updatedAxis && groupSeries.length && valueAxis === updatedAxis) {
         valueAxis.setGroupSeries(groupSeries);
-        valueAxis.setBusinessRange(groupRange, that._axesReinitialized || keepRange, that._argumentAxes[0]._lastVisualRangeUpdateMode);
+        valueAxis.setBusinessRange(
+          groupRange,
+          this._axesReinitialized || keepRange,
+          this._argumentAxes[0]._lastVisualRangeUpdateMode,
+        );
       }
     });
 
     if (!updatedAxis || updatedAxis && series.length) {
       Object.keys(argRanges).forEach((p) => commonArgRange.addRange(argRanges[p]));
       const commonInterval = commonArgRange.interval;
-      that._argumentAxes.forEach((a) => {
+      this._argumentAxes.forEach((a) => {
         const currentInterval = argRanges[getPaneName(a)].interval ?? commonInterval; // T956425
-        a.setBusinessRange(new Range({ ...commonArgRange, interval: currentInterval }), that._axesReinitialized, undefined, that._groupsData.categories);
+        a.setBusinessRange(
+          new Range({ ...commonArgRange, interval: currentInterval }),
+          this._axesReinitialized,
+          undefined,
+          this._groupsData.categories,
+        );
       });
     }
 
-    that._populateMarginOptions();
+    this._populateMarginOptions();
   },
 
   getArgumentAxis() {
-    return (this._argumentAxes || []).filter((a) => !a.isVirtual)[0];
+    return (this._argumentAxes || []).find((a) => !a.isVirtual);
   },
 
   getValueAxis(name) {
-    return (this._valueAxes || []).filter(_isDefined(name) ? (a) => a.name === name : (a) => a.pane === this.defaultPane)[0];
+    return (this._valueAxes || []).find(
+      _isDefined(name)
+        ? (a) => a.name === name
+        : (a) => a.pane === this.defaultPane,
+    );
   },
 
   _getGroupsData() {
@@ -538,9 +549,8 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _groupSeries() {
-    const that = this;
-    that._correctValueAxes(false);
-    that._groupsData = that._getGroupsData();
+    this._correctValueAxes(false);
+    this._groupsData = this._getGroupsData();
   },
 
   _processValueAxisFormat() {
@@ -562,11 +572,23 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _populateAxesOptions(typeSelector, userOptions, axisOptions, rotated, virtual) {
-    const that = this;
-    const preparedUserOptions = that._prepareStripsAndConstantLines(typeSelector, userOptions, rotated);
-    const options = _extend(true, {}, preparedUserOptions, axisOptions, that._prepareAxisOptions(typeSelector, preparedUserOptions, rotated));
+    const preparedUserOptions = this._prepareStripsAndConstantLines(
+      typeSelector,
+      userOptions,
+      rotated,
+    );
+    const options = _extend(
+      true,
+      {},
+      preparedUserOptions,
+      axisOptions,
+      this._prepareAxisOptions(typeSelector, preparedUserOptions, rotated),
+    );
     if (virtual) {
-      options.visible = options.tick.visible = options.minorTick.visible = options.label.visible = false;
+      options.visible = false;
+      options.tick.visible = false;
+      options.minorTick.visible = false;
+      options.label.visible = false;
       options.title = {};
     }
 
@@ -578,26 +600,23 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _createAxis(isArgumentAxes, options, virtual) {
-    const that = this;
     const typeSelector = isArgumentAxes ? 'argumentAxis' : 'valueAxis';
     const renderingSettings = _extend({
-      renderer: that._renderer,
-      incidentOccurred: that._incidentOccurred,
-      eventTrigger: that._eventTrigger,
+      renderer: this._renderer,
+      incidentOccurred: this._incidentOccurred,
+      eventTrigger: this._eventTrigger,
       axisClass: isArgumentAxes ? 'arg' : 'val',
       widgetClass: 'dxc',
-      stripsGroup: that._stripsGroup,
-      stripLabelAxesGroup: that._stripLabelAxesGroup,
-      constantLinesGroup: that._constantLinesGroup,
-      scaleBreaksGroup: that._scaleBreaksGroup,
-      axesContainerGroup: that._axesGroup,
-      labelsAxesGroup: that._labelsAxesGroup,
-      gridGroup: that._gridGroup,
+      stripsGroup: this._stripsGroup,
+      stripLabelAxesGroup: this._stripLabelAxesGroup,
+      constantLinesGroup: this._constantLinesGroup,
+      scaleBreaksGroup: this._scaleBreaksGroup,
+      axesContainerGroup: this._axesGroup,
+      labelsAxesGroup: this._labelsAxesGroup,
+      gridGroup: this._gridGroup,
       isArgumentAxis: isArgumentAxes,
-      getTemplate(template) {
-        return that._getTemplate(template);
-      },
-    }, that._getAxisRenderingOptions(typeSelector));
+      getTemplate: (template) => this._getTemplate(template),
+    }, this._getAxisRenderingOptions(typeSelector));
     const axis = new Axis(renderingSettings) as any;
     axis.updateOptions(options);
     axis.isVirtual = virtual;
@@ -610,25 +629,23 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _applyCustomVisualRangeOption(axis, range) {
-    const that = this;
     if (axis.getOptions().optionPath) {
-      that._parseVisualRangeOption(`${axis.getOptions().optionPath}.visualRange`, range);
+      this._parseVisualRangeOption(`${axis.getOptions().optionPath}.visualRange`, range);
     }
   },
 
   _getVisualRangeSetter() {
-    const chart = this;
-    return function (axis, { skipEventRising, range }) {
-      chart._applyCustomVisualRangeOption(axis, range);
+    return (axis, { skipEventRising, range }) => {
+      this._applyCustomVisualRangeOption(axis, range);
       axis.setCustomVisualRange(range);
 
       axis.skipEventRising = skipEventRising;
 
-      if (!chart._applyVisualRangeByVirtualAxes(axis, range)) {
-        if (chart._applyingChanges) {
-          chart._change_VISUAL_RANGE();
+      if (!this._applyVisualRangeByVirtualAxes(axis, range)) {
+        if (this._applyingChanges) {
+          this._change_VISUAL_RANGE();
         } else {
-          chart._requestChange([VISUAL_RANGE]);
+          this._requestChange([VISUAL_RANGE]);
         }
       }
     };
@@ -643,12 +660,12 @@ export const AdvancedChart = BaseChart.inherit({
   _prepareStripsAndConstantLines(typeSelector, userOptions, rotated) {
     userOptions = this._themeManager.getOptions(typeSelector, userOptions, rotated);
     if (userOptions.strips) {
-      _each(userOptions.strips, (i) => {
-        userOptions.strips[i] = _extend(true, {}, userOptions.stripStyle, userOptions.strips[i]);
+      userOptions.strips.forEach((line, i) => {
+        userOptions.strips[i] = _extend(true, {}, userOptions.stripStyle, line);
       });
     }
     if (userOptions.constantLines) {
-      _each(userOptions.constantLines, (i, line) => {
+      userOptions.constantLines.forEach((line, i) => {
         userOptions.constantLines[i] = _extend(true, {}, userOptions.constantLineStyle, line);
       });
     }
@@ -661,9 +678,8 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _layoutAxes(drawAxes) {
-    const that = this;
     drawAxes();
-    const needSpace = that.checkForMoreSpaceForPanesCanvas();
+    const needSpace = this.checkForMoreSpaceForPanesCanvas();
 
     if (needSpace) {
       const rect = this._rect.slice();
@@ -677,11 +693,12 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   checkForMoreSpaceForPanesCanvas() {
-    return this.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
+    return this
+      .layoutManager
+      .needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
   },
 
   _parseVisualRangeOption(fullName, value) {
-    const that = this;
     const name = fullName.split(/[.[]/)[0];
     let index = fullName.match(/\d+/g);
 
@@ -691,19 +708,22 @@ export const AdvancedChart = BaseChart.inherit({
       if (type(value) !== 'object') {
         value = wrapVisualRange(fullName, value) ?? value;
       }
-      that._setCustomVisualRange(name, index, value);
+      this._setCustomVisualRange(name, index, value);
     } else if ((type(value) === 'object' || isArray(value)) && name.indexOf('Axis') > 0 && JSON.stringify(value).indexOf('visualRange') > 0) {
       if (_isDefined(value.visualRange)) {
-        that._setCustomVisualRange(name, index, value.visualRange);
+        this._setCustomVisualRange(name, index, value.visualRange);
       } else if (isArray(value)) {
-        value.forEach((a, i) => _isDefined(a.visualRange) && that._setCustomVisualRange(name, i, a.visualRange));
+        value.forEach((a, i) => {
+          if (_isDefined(a.visualRange)) {
+            this._setCustomVisualRange(name, i, a.visualRange);
+          }
+        });
       }
     }
   },
 
   _setCustomVisualRange(axesName, index, value) {
-    const that = this;
-    const options = that._options.silent(axesName);
+    const options = this._options.silent(axesName);
 
     if (!options) {
       return;
@@ -715,7 +735,7 @@ export const AdvancedChart = BaseChart.inherit({
       options[index]._customVisualRange = value;
     }
 
-    that._axesReinitialized = true;
+    this._axesReinitialized = true;
   },
 
   _raiseZoomEndHandlers() {
@@ -738,22 +758,23 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _notifyVisualRange() {
-    const that = this;
-
-    that._valueAxes.forEach((axis) => {
+    this._valueAxes.forEach((axis) => {
       const axisPath = axis.getOptions().optionPath;
       if (axisPath) {
         const path = `${axisPath}.visualRange`;
-        const visualRange = convertVisualRangeObject(axis.visualRange(), !isArray(that.option(path)));
+        const visualRange = convertVisualRangeObject(
+          axis.visualRange(),
+          !isArray(this.option(path)),
+        );
 
-        if (!axis.skipEventRising || !rangesAreEqual(visualRange, that.option(path))) {
-          if (!that.option(axisPath) && axisPath !== 'valueAxis') {
-            that.option(axisPath, {
+        if (!axis.skipEventRising || !rangesAreEqual(visualRange, this.option(path))) {
+          if (!this.option(axisPath) && axisPath !== 'valueAxis') {
+            this.option(axisPath, {
               name: axis.name,
               visualRange,
             });
           } else {
-            that.option(path, visualRange);
+            this.option(path, visualRange);
           }
         } else {
           axis.skipEventRising = null;
@@ -778,8 +799,7 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _getAxesByOptionPath(arg, isDirectOption, optionName) {
-    const that = this;
-    const sourceAxes = that._getAxesForScaling();
+    const sourceAxes = this._getAxesForScaling();
     let axes = [];
 
     if (isDirectOption) {
@@ -793,7 +813,9 @@ export const AdvancedChart = BaseChart.inherit({
     } else if (isArray(arg.value)) {
       arg.value.forEach((v, index) => {
         const axis = sourceAxes.filter((a) => a.getOptions().optionPath === `${arg.name}[${index}]`)[0];
-        _isDefined(v[optionName]) && _isDefined(axis) && (axes[index] = axis as never);
+        if (_isDefined(v[optionName]) && _isDefined(axis)) {
+          axes[index] = axis as never;
+        }
       });
     }
 
@@ -801,15 +823,14 @@ export const AdvancedChart = BaseChart.inherit({
   },
 
   _optionChanged(arg) {
-    const that = this;
-    if (!that._optionChangedLocker) {
+    if (!this._optionChangedLocker) {
       const optionName = 'visualRange';
       let axes;
       const isDirectOption = arg.fullName.indexOf(optionName) > 0 ? true
-        : that.getPartialChangeOptionsName(arg).indexOf(optionName) > -1 ? false : undefined;
+        : this.getPartialChangeOptionsName(arg).indexOf(optionName) > -1 ? false : undefined;
 
       if (_isDefined(isDirectOption)) {
-        axes = that._getAxesByOptionPath(arg, isDirectOption, optionName);
+        axes = this._getAxesByOptionPath(arg, isDirectOption, optionName);
 
         if (axes) {
           if (axes.length > 1 || isArray(arg.value)) {
@@ -820,35 +841,31 @@ export const AdvancedChart = BaseChart.inherit({
         }
       }
     }
-    that.callBase(arg);
+    this.callBase(arg);
   },
 
   _change_VISUAL_RANGE() {
-    const that = this;
-
-    that._recreateSizeDependentObjects(false);
-    if (!that._changes.has('FULL_RENDER')) {
-      const resizePanesOnZoom = that.option('resizePanesOnZoom');
-      that._doRender({
+    this._recreateSizeDependentObjects(false);
+    if (!this._changes.has('FULL_RENDER')) {
+      const resizePanesOnZoom = this.option('resizePanesOnZoom');
+      this._doRender({
         force: true,
         drawTitle: false,
         drawLegend: false,
-        adjustAxes: resizePanesOnZoom ?? (that.option('adjustAxesOnZoom') || false),
+        adjustAxes: resizePanesOnZoom ?? (this.option('adjustAxesOnZoom') || false),
         animate: false,
       });
-      that._raiseZoomEndHandlers();
+      this._raiseZoomEndHandlers();
     }
   },
 
   // API
   resetVisualRange() {
-    const that = this;
-
-    that._valueAxes.forEach((axis) => {
+    this._valueAxes.forEach((axis) => {
       axis.resetVisualRange(false); // T602156
-      that._applyCustomVisualRangeOption(axis);
+      this._applyCustomVisualRangeOption(axis);
     });
-    that._requestChange([VISUAL_RANGE]);
+    this._requestChange([VISUAL_RANGE]);
   },
 
   _getCrosshairMargins() {
