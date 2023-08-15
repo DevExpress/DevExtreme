@@ -7,6 +7,7 @@ import TabPanel from '../../../model/tabPanel';
 import { Item } from '../../../../../js/ui/tab_panel.d';
 
 const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
+const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
 
 fixture.disablePageReloads`TabPanel_common`
   .page(url(__dirname, '../../container.html'));
@@ -170,7 +171,7 @@ test('TabPanel borders without scrolling', async (t) => {
 
     await t
       .click(Selector('body'), { offsetY: -50 })
-      .hover(Selector(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`));
+      .hover(Selector(`.${rtlEnabled ? TABS_LEFT_NAV_BUTTON_CLASS : TABS_RIGHT_NAV_BUTTON_CLASS}`));
 
     await testScreenshot(t, takeScreenshot, `TabPanel when right navigation button has hover state, rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
