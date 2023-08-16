@@ -399,10 +399,12 @@ const TabPanel = MultiView.inherit({
                 const newItem = value ? this._tabs._itemElements().eq(id) : value;
                 this._setTabsOption('focusedElement', getPublicElement(newItem));
 
-                const isDisabled = this._isDisabled(value);
+                if(value) {
+                    const isDisabled = this._isDisabled(value);
 
-                this._toggleWrapperFocusedClass(!isDisabled);
-                this._toggleDisabledFocusedClass(isDisabled);
+                    this._toggleWrapperFocusedClass(!isDisabled);
+                    this._toggleDisabledFocusedClass(isDisabled);
+                }
 
                 this.callBase(args);
                 break;
