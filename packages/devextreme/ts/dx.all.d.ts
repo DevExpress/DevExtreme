@@ -16418,6 +16418,10 @@ declare module DevExpress.ui {
      */
     resetValues(): void;
     /**
+     * [descr:dxForm.reset(editorsData)]
+     */
+    reset(editorsData?: Record<string, any>): void;
+    /**
      * [descr:dxForm.updateData(data)]
      */
     updateData(data: any): void;
@@ -25576,6 +25580,10 @@ declare module DevExpress.ui {
      * [descr:dxTabPanelOptions.swipeEnabled]
      */
     swipeEnabled?: boolean;
+    /**
+     * [descr:dxTabPanelOptions.tabsPosition]
+     */
+    tabsPosition?: DevExpress.common.Position;
   }
   /**
    * [descr:dxTabs]

@@ -153,7 +153,7 @@ QUnit.module('DateTime indicator on Day View', {
         assert.equal($indicators.length, 2, 'Indicator count is correct');
         assert.equal($indicators.eq(0).position().left, 0);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, instance.getRoundedCellWidth(1) + 1);
+        assert.equal($indicators.eq(1).position().left, instance.getRoundedCellWidth(1));
         assert.equal($indicators.eq(1).position().top, 9.5 * cellHeight);
     });
 
@@ -172,7 +172,7 @@ QUnit.module('DateTime indicator on Day View', {
         assert.equal($indicators.length, 2, 'Indicator count is correct');
         assert.equal($indicators.eq(0).position().left, 0);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, instance.getRoundedCellWidth(1) + 1);
+        assert.equal($indicators.eq(1).position().left, instance.getRoundedCellWidth(1));
         assert.equal($indicators.eq(1).position().top, 9.5 * cellHeight);
     });
 

@@ -118,7 +118,9 @@ const dxPolarChart = AdvancedChart.inherit({
   },
 
   checkForMoreSpaceForPanesCanvas() {
-    return this.layoutManager.needMoreSpaceForPanesCanvas([{ canvas: this.getArgumentAxis().getCanvas() }], this._isRotated());
+    return this.layoutManager.needMoreSpaceForPanesCanvas([{
+      canvas: this.getArgumentAxis().getCanvas(),
+    }], this._isRotated());
   },
 
   _getLayoutTargets() {
@@ -138,30 +140,28 @@ const dxPolarChart = AdvancedChart.inherit({
   },
 
   _createClipPathForPane() {
-    const that = this;
-    const valueAxis = that._getValueAxis();
+    const valueAxis = this._getValueAxis();
     let center = valueAxis.getCenter();
     const radius = valueAxis.getRadius();
-    const panesClipRects = that._panesClipRects;
+    const panesClipRects = this._panesClipRects;
 
     center = { x: Math.round(center.x), y: Math.round(center.y) };
 
-    that._createClipCircle(panesClipRects.fixed, center.x, center.y, radius);
-    that._createClipCircle(panesClipRects.base, center.x, center.y, radius);
+    this._createClipCircle(panesClipRects.fixed, center.x, center.y, radius);
+    this._createClipCircle(panesClipRects.base, center.x, center.y, radius);
 
-    if (that.series.some((s) => s.areErrorBarsVisible())) {
-      that._createClipCircle(panesClipRects.wide, center.x, center.y, radius);
+    if (this.series.some((s) => s.areErrorBarsVisible())) {
+      this._createClipCircle(panesClipRects.wide, center.x, center.y, radius);
     } else {
       panesClipRects.wide[0] = null;
     }
   },
 
   _createClipCircle(clipArray, left, top, radius) {
-    const that = this;
     let clipCircle = clipArray[0];
 
     if (!clipCircle) {
-      clipCircle = that._renderer.clipCircle(left, top, radius);
+      clipCircle = this._renderer.clipCircle(left, top, radius);
       clipArray[0] = clipCircle;
     } else {
       clipCircle.attr({ cx: left, cy: top, r: radius });

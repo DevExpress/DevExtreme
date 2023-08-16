@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
+import { Selector, ClientFunction } from 'testcafe';
 import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
@@ -94,6 +94,14 @@ test('Tabs in contrast theme', async (t) => {
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
     }).before(async () => {
+      await ClientFunction(() => {
+        (window as any).DevExpress.ui.dxTabs.defaultOptions({
+          options: {
+            useInkRipple: false,
+          },
+        });
+      })();
+
       await appendElementTo('#container', 'div', 'tabs');
       await setAttribute('#container', 'style', 'width: 500px; height: 600px;');
 
@@ -115,6 +123,9 @@ test('Tabs in contrast theme', async (t) => {
         showNavButtons: true,
         width: orientation === 'horizontal' ? 450 : 'auto',
         height: orientation === 'horizontal' ? 'auto' : 250,
+        // prevent firing dxinactive event for to avoid failing test
+        itemHoldTimeout: 5000,
+        useInkRipple: false,
       };
 
       return createWidget('dxTabs', tabsOptions, '#tabs');
