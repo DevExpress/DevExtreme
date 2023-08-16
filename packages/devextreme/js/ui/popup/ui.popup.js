@@ -73,7 +73,7 @@ const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) <
 const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
 
 
-const sortActionButtonsItems = (actionButtonsItems) => {
+const sortApplyValueItems = (actionButtonsItems) => {
     return actionButtonsItems.sort((a, b) => {
         return APPLY_VALUE_BUTTONS_ORDER.indexOf(a.shortcut) - APPLY_VALUE_BUTTONS_ORDER.indexOf(b.shortcut);
     });
@@ -484,7 +484,7 @@ const Popup = Overlay.inherit({
         this._toolbarItemClasses = [];
         const currentPlatform = devices.current().platform;
         let index = 0;
-        const doneCancelButtonsInfo = [];
+        const applyValueButtonsInfo = [];
 
         each(toolbarItems, (_, data) => {
             const isShortcut = isDefined(data.shortcut);
@@ -501,7 +501,7 @@ const Popup = Overlay.inherit({
                 if(isShortcut) {
                     extend(item, { location: data.location }, this._getToolbarItemByAlias(data));
                     if(APPLY_VALUE_BUTTONS_ORDER.includes(data.shortcut)) {
-                        doneCancelButtonsInfo.push({
+                        applyValueButtonsInfo.push({
                             shortcut: data.shortcut,
                             item
                         });
@@ -518,9 +518,9 @@ const Popup = Overlay.inherit({
             toolbarsItems.push(this._getCloseButton());
         }
 
-        const sortedActionItems = sortActionButtonsItems(doneCancelButtonsInfo).map(item => item.item);
+        const sortedApplyValueItems = sortApplyValueItems(applyValueButtonsInfo).map(item => item.item);
 
-        return toolbarsItems.concat(...sortedActionItems);
+        return toolbarsItems.concat(...sortedApplyValueItems);
     },
 
     _hasCloseButton() {
