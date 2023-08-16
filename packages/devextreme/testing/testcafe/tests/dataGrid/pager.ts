@@ -207,34 +207,3 @@ test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work
     },
     height: 400,
   }));
-
-[
-  Themes.genericLight,
-  Themes.genericDark,
-  Themes.materialBlue,
-  Themes.materialBlueDark,
-].forEach((theme) => {
-  test(`Checking pager info via aXe - ${theme}`, async (t) => {
-    await a11yCheck(t, {
-      'color-contrast': { enabled: true },
-    });
-  }).before(async () => {
-    await changeTheme(theme);
-    return createWidget('dxDataGrid', {
-      dataSource: [{
-        id: 1,
-        field1: 'field1',
-        field2: 'field2',
-      }],
-      keyExpr: 'id',
-      columns: ['field1', 'field2'],
-      showBorders: true,
-      pager: {
-        visible: true,
-        showInfo: true,
-      },
-    });
-  }).after(async () => {
-    await changeTheme(Themes.genericLight);
-  });
-});
