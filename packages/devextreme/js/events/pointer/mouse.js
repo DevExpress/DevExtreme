@@ -4,13 +4,13 @@ import Observer from './observer';
 
 const eventMap = {
     'dxpointerdown': 'pointerdown',
-    'dxpointermove': 'pointermove',
-    'dxpointerup': 'pointerup',
+    'dxpointermove': 'mousemove',
+    'dxpointerup': 'mouseup',
     'dxpointercancel': '',
-    'dxpointerover': 'pointerover',
-    'dxpointerout': 'pointerout',
-    'dxpointerenter': 'pointerenter',
-    'dxpointerleave': 'pointerleave'
+    'dxpointerover': 'mouseover',
+    'dxpointerout': 'mouseout',
+    'dxpointerenter': 'mouseenter',
+    'dxpointerleave': 'mouseleave'
 };
 
 const normalizeMouseEvent = function(e) {
