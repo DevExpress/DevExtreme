@@ -55,7 +55,7 @@ module.exports = {
         path.join(path.resolve('.'), './js/renovation/test_utils/setup_enzyme.ts'),
     ],
     testMatch: [
-        '<rootDir>/js/**/__tests__/**/*.test.[jt]s?(x)'
+        '<rootDir>/js/__internal/**/__tests__/**/*.test.ts',
     ],
     transform: {
         'test_components.+\\.tsx$': path.resolve('./js/renovation/test_utils/transformers/declaration.js'),
