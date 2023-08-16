@@ -276,7 +276,7 @@ export default modules.Controller.inherit((function () {
       dataSource.off('loadingChanged', that._loadingChangedHandler);
       dataSource.off('loadError', that._loadErrorHandler);
       dataSource.off('changing', that._changingHandler);
-      store && store.off('beforePushAggregation', that._pushHandler);
+      store && store.off('beforePush', that._pushHandler);
 
       if (!isSharedDataSource) {
         dataSource.dispose();
