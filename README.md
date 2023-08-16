@@ -8,7 +8,7 @@ DevExtreme is a set of enterprise-ready UI component suites for Angular, React, 
 - Support: [www.devexpress.com/support](https://www.devexpress.com/support)
 
 
-## Getting Started
+## Getting Started (test)
 
 - DevExtreme Angular
     - [Create a DevExtreme Angular Application](https://js.devexpress.com/Documentation/Guide/Angular_Components/Getting_Started/Create_a_DevExtreme_Application/)
