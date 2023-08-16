@@ -19,6 +19,12 @@ const SHAPE_STANDARD_CLASS = 'dx-shape-standard';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
+const BUTTON_GROUP_STYLING_MODE_CLASS = {
+    contained: 'dx-buttongroup-mode-contained',
+    outlined: 'dx-buttongroup-mode-outlined',
+    text: 'dx-buttongroup-mode-text',
+};
+
 const ButtonCollection = CollectionWidget.inherit({
     _initTemplates() {
         this.callBase();
@@ -161,9 +167,11 @@ const ButtonGroup = Widget.inherit({
     _renderStylingMode() {
         const { stylingMode } = this.option();
 
-        const isValidStylingMode = stylingMode && stylingModes.includes(stylingMode);
+        for(const key in BUTTON_GROUP_STYLING_MODE_CLASS) {
+            this.$element().removeClass(BUTTON_GROUP_STYLING_MODE_CLASS[key]);
+        }
 
-        this.$element().addClass(`dx-buttongroup-mode-${isValidStylingMode ? stylingMode : 'contained'}`);
+        this.$element().addClass(BUTTON_GROUP_STYLING_MODE_CLASS[stylingMode] ?? BUTTON_GROUP_STYLING_MODE_CLASS.contained);
     },
 
     _fireSelectionChangeEvent: function(addedItems, removedItems) {
