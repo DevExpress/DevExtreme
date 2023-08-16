@@ -2524,8 +2524,8 @@ QUnit.test('No errors should occur on form reset twice when dxNumberBox is set a
 
     form.itemOption('TestField', 'visible', false);
 
-    form.resetValues();
-    form.resetValues();
+    form.clear();
+    form.clear();
 
     assert.ok(true, 'There are no exceptions');
 });
@@ -3469,7 +3469,7 @@ QUnit.module('visible/visibleIndex', () => {
     });
 });
 
-QUnit.test('resetValues - old test', function(assert) {
+QUnit.test('clear - old test', function(assert) {
     const form = $('#form').dxForm({
         formData: {
             name: 'User',
@@ -3480,7 +3480,7 @@ QUnit.test('resetValues - old test', function(assert) {
         items: ['name', 'lastName', 'room', 'isDeveloper']
     }).dxForm('instance');
 
-    form.resetValues();
+    form.clear();
 
     assert.strictEqual(form.getEditor('name').option('value'), '', 'editor for the name dataField');
     assert.strictEqual(form.getEditor('lastName').option('value'), '', 'editor for the lastName dataField');
@@ -3488,7 +3488,7 @@ QUnit.test('resetValues - old test', function(assert) {
     assert.strictEqual(form.getEditor('isDeveloper').option('value'), false, 'editor for the isDeveloper dataField');
 });
 
-QUnit.test('resetValues - clear formData and editors', function(assert) {
+QUnit.test('clear - clear formData and editors', function(assert) {
     const formData = {
         dxAutocomplete: 'a',
         dxCalendar: new Date(2019, 1, 1),
@@ -3529,7 +3529,7 @@ QUnit.test('resetValues - clear formData and editors', function(assert) {
         items: formItems
     }).dxForm('instance');
 
-    form.resetValues();
+    form.clear();
 
     const defaultResetValue = null;
     const stringEditorResetValue = '';

@@ -710,7 +710,7 @@ const Form = Widget.inherit({
                 if(!this.option('items')) {
                     this._invalidate();
                 } else if(isEmptyObject(args.value)) {
-                    this._resetValues();
+                    this._clear();
                 }
                 break;
             case 'onFieldDataChanged':
@@ -1161,7 +1161,7 @@ const Form = Widget.inherit({
         });
     },
 
-    _resetValues: function() {
+    _clear: function() {
         this._doForAllEditors(editor => {
             editor.clear();
             editor.option('isValid', true);
@@ -1213,8 +1213,12 @@ const Form = Widget.inherit({
         this.callBase();
     },
 
+    clear: function() {
+        this._clear();
+    },
+
     resetValues: function() {
-        this._resetValues();
+        this._clear();
     },
 
     reset: function(editorsData) {
