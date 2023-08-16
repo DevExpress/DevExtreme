@@ -133,7 +133,8 @@
     $button-normal-text-hover-bg,
     $button-normal-text-focused-bg,
     $button-normal-text-active-bg,
-    $button-normal-text-selected-bg
+    $button-normal-text-selected-bg,
+    $button-normal-selected-color,
   );
 
   &.dx-button-default {
@@ -142,7 +143,8 @@
       $button-default-text-hover-bg,
       $button-default-text-focused-bg,
       $button-default-text-active-bg,
-      $button-default-text-selected-bg
+      $button-default-text-selected-bg,
+      $button-default-selected-color,
     );
   }
 
@@ -152,7 +154,8 @@
       $button-danger-text-hover-bg,
       $button-danger-text-focused-bg,
       $button-danger-text-active-bg,
-      $button-danger-text-selected-bg
+      $button-danger-text-selected-bg,
+      $button-danger-selected-color,
     );
   }
 
@@ -162,7 +165,8 @@
       $button-success-text-hover-bg,
       $button-success-text-focused-bg,
       $button-success-text-active-bg,
-      $button-success-text-selected-bg
+      $button-success-text-selected-bg,
+      $button-success-selected-color,
     );
   }
 }
@@ -174,7 +178,8 @@
     $button-normal-outlined-hover-bg,
     $button-normal-outlined-focused-bg,
     $button-normal-outlined-active-bg,
-    $button-normal-outlined-selected-bg
+    $button-normal-outlined-selected-bg,
+    $button-normal-selected-color,
   );
 
   &.dx-button-default {
@@ -184,7 +189,8 @@
       $button-default-outlined-hover-bg,
       $button-default-outlined-focused-bg,
       $button-default-outlined-active-bg,
-      $button-default-outlined-selected-bg
+      $button-default-outlined-selected-bg,
+      $button-default-selected-color,
     );
   }
 
@@ -195,7 +201,8 @@
       $button-danger-outlined-hover-bg,
       $button-danger-outlined-focused-bg,
       $button-danger-outlined-active-bg,
-      $button-danger-outlined-selected-bg
+      $button-danger-outlined-selected-bg,
+      $button-danger-selected-color,
     );
   }
 
@@ -206,7 +213,8 @@
       $button-success-outlined-hover-bg,
       $button-success-outlined-focused-bg,
       $button-success-outlined-active-bg,
-      $button-success-outlined-selected-bg
+      $button-success-outlined-selected-bg,
+      $button-success-selected-color,
     );
   }
 }
