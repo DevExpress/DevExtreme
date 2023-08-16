@@ -46,7 +46,7 @@ import {
     GROUP_HEADER_CONTENT_CLASS,
     VERTICAL_GROUP_COUNT_CLASSES,
 } from '../classes';
-import WidgetObserver from '../base/widgetObserver';
+import WidgetObserver from '../../../__internal/scheduler/base/m_widget_observer';
 import { resetPosition, locate } from '../../../animation/translator';
 
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './ui.scheduler.virtual_scrolling';
@@ -72,7 +72,7 @@ import {
     calculateIsGroupedAllDayPanel,
     getCellDuration
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
+import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../../../__internal/scheduler/resources/m_utils';
 import {
     getCellWidth,
     getCellHeight,

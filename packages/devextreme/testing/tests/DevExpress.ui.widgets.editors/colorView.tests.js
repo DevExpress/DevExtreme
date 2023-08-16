@@ -1150,14 +1150,16 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.test('handle should have role="application" and id', function(assert) {
+        const $target = $('<div>');
         const $element = $('#color-view').dxColorView({
-            ariaId: 'ariaId'
+            target: $target,
         });
 
         const $handle = $element.find(COLORVIEW_PALETTE_HANDLE_SELECTOR);
 
         assert.strictEqual($handle.attr('role'), 'application');
-        assert.strictEqual($handle.attr('id'), 'ariaId');
+        assert.ok($handle.attr('id'));
+        assert.strictEqual($target.attr('aria-activedescendant'), $handle.attr('id'));
     });
 
     QUnit.test('hex input should have id equal to aria-labelledby of handle', function(assert) {

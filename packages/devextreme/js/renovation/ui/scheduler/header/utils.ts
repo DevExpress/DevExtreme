@@ -11,7 +11,7 @@ import { SchedulerToolbarItem } from './props';
 import {
   validateViews, getViewName,
   getViewText, getViewType,
-} from '../../../../ui/scheduler/header/utils';
+} from '../../../../__internal/scheduler/header/m_utils';
 import devices from '../../../../core/devices';
 
 const DEFAULT_ELEMENT = 'defaultElement';
@@ -47,7 +47,8 @@ export const formToolbarItem = (
       case DATE_NAVIGATOR:
         return getDateNavigator(
           item as ToolbarItem,
-          showCalendar, captionText,
+          showCalendar,
+          captionText,
           updateDateByDirection,
           isPreviousButtonDisabled,
           isNextButtonDisabled,

@@ -1202,16 +1202,16 @@ QUnit.module('option value', () => {
         }
     });
 
-    QUnit.test('reset method should set value to default', function(assert) {
+    QUnit.test('clear method should set value to default', function(assert) {
         $('#slider').dxRangeSlider({
             value: [10, 30]
         });
 
         const instance = $('#slider').dxRangeSlider('instance');
 
-        instance.reset();
+        instance.clear();
 
-        assert.deepEqual(instance.option('value'), [40, 60], 'value was reset to default');
+        assert.deepEqual(instance.option('value'), [40, 60], 'value was cleared to default');
     });
 });
 

@@ -1,0 +1,44 @@
+@use "../variables/sizes" as *;
+
+// adduse
+
+
+@mixin dx-tabs-after-mixin(
+  $is-expanded-vertical: false,
+  $is-expanded-horizontal: false,
+) {
+  &::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+
+    @if $is-expanded-vertical {
+      top: -$generic-tabs-border-width;
+      bottom: -$generic-tabs-border-width;
+    }
+
+    @if $is-expanded-horizontal {
+      right: -$generic-tabs-border-width;
+      left: -$generic-tabs-border-width;
+    }
+  }
+}
+
+@mixin dx-tabs-border-mixin(
+  $border-block-start,
+  $border-inline-end,
+  $border-block-end,
+  $border-inline-start,
+) {
+  &::after {
+    border-block-start: $border-block-start;
+    border-inline-end: $border-inline-end;
+    border-block-end: $border-block-end;
+    border-inline-start: $border-inline-start;    
+  }
+}

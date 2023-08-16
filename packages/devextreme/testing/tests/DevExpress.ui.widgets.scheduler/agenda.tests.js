@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import SchedulerAgenda from 'ui/scheduler/workspaces/ui.scheduler.agenda';
 import dateLocalization from 'localization/date';
-import { AppointmentDataProvider } from 'ui/scheduler/appointments/dataProvider/appointmentDataProvider';
+import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HOVER_CLASS = 'dx-state-hover';

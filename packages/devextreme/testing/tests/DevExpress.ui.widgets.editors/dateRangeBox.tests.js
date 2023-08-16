@@ -1363,7 +1363,7 @@ QUnit.module('Events', moduleConfig, () => {
                 onValueChanged: this.onValueChangedHandler
             });
 
-            this.instance.reset();
+            this.instance.clear();
 
             assert.strictEqual(this.onValueChangedHandler.callCount, 1);
             assert.deepEqual(this.instance.option('value'), [null, null], 'value is correct');
@@ -3802,7 +3802,7 @@ QUnit.module('Validation', {
             assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
         });
 
-        QUnit.test('reset method call should raise external validation', function(assert) {
+        QUnit.test('clear method call should raise external validation', function(assert) {
             this.reinit({
                 value: [new Date('2023/4/4'), new Date('2023/4/8')]
             });
@@ -3814,7 +3814,7 @@ QUnit.module('Validation', {
                 }]
             });
 
-            this.instance.reset();
+            this.instance.clear();
 
             assert.strictEqual(this.instance.option('isValid'), false, 'external validation is failed');
         });

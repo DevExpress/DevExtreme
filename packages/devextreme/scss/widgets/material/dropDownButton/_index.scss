@@ -14,9 +14,8 @@
 // adduse
 
 @include dx-dropdownbutton(
-  $material-text-button-horizontal-padding * 2,
-  $material-text-button-horizontal-padding,
   $material-dropdownbutton-icon-spindown-size,
+  $material-dropdownbutton-action-horizontal-padding,
 );
 
 .dx-dropdownbutton-popup-wrapper {

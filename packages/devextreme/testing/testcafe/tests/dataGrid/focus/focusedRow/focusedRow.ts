@@ -764,8 +764,8 @@ test('Scroll should not change focused row if focus method is called inside onCo
     .expect(dataGrid.getDataRow(0).isFocusedRow).ok();
 
   // act
-  await dataGrid.scrollTo({ y: 200 });
-  await dataGrid.scrollTo({ y: 0 });
+  await dataGrid.scrollTo(t, { y: 200 });
+  await dataGrid.scrollTo(t, { y: 0 });
 
   // assert
   await t
@@ -848,7 +848,7 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
     .ok();
 
   // act
-  await dataGrid.scrollTo({ top: 0 });
+  await dataGrid.scrollTo(t, { top: 0 });
   scrollTopPosition = await dataGrid.getScrollTop();
 
   // assert

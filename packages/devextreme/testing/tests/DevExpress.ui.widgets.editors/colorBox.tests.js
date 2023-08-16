@@ -1219,4 +1219,10 @@ QUnit.module('Accessibility', {
 
         assert.strictEqual($input.attr('aria-activedescendant'), $handle.attr('id'));
     });
+
+    QUnit.test('input should not have "aria-activedescendant" attribute if colorview have not opened yet', function(assert) {
+        const $colorBox = this.element.dxColorBox({});
+        const $input = $colorBox.find(`.${COLOR_BOX_INPUT_CLASS}`);
+        assert.notOk($input.attr('aria-activedescendant'));
+    });
 });

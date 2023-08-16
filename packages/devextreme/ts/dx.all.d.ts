@@ -2562,6 +2562,10 @@ declare module DevExpress.common.grids {
      */
     allowSearch?: boolean;
     /**
+     * [descr:GridBaseOptions.columnChooser.container]
+     */
+    container?: string | DevExpress.core.UserDefinedElement;
+    /**
      * [descr:GridBaseOptions.columnChooser.emptyPanelText]
      */
     emptyPanelText?: string;
@@ -9055,6 +9059,10 @@ declare module DevExpress.ui {
      * [descr:dxCalendarOptions.selectionMode]
      */
     selectionMode?: DevExpress.ui.dxCalendar.CalendarSelectionMode;
+    /**
+     * [descr:dxCalendarOptions.selectWeekOnClick]
+     */
+    selectWeekOnClick?: boolean;
     /**
      * [descr:dxCalendarOptions.showTodayButton]
      */
@@ -16409,6 +16417,10 @@ declare module DevExpress.ui {
      * [descr:dxForm.resetValues()]
      */
     resetValues(): void;
+    /**
+     * [descr:dxForm.reset(editorsData)]
+     */
+    reset(editorsData?: Record<string, any>): void;
     /**
      * [descr:dxForm.updateData(data)]
      */
@@ -25568,6 +25580,10 @@ declare module DevExpress.ui {
      * [descr:dxTabPanelOptions.swipeEnabled]
      */
     swipeEnabled?: boolean;
+    /**
+     * [descr:dxTabPanelOptions.tabsPosition]
+     */
+    tabsPosition?: DevExpress.common.Position;
   }
   /**
    * [descr:dxTabs]
@@ -25708,6 +25724,10 @@ declare module DevExpress.ui {
      * [descr:dxTabsOptions.items]
      */
     items?: Array<TItem>;
+    /**
+     * [descr:dxTabsOptions.orientation]
+     */
+    orientation?: DevExpress.common.Orientation;
     /**
      * [descr:dxTabsOptions.repaintChangesOnly]
      */
@@ -29491,9 +29511,14 @@ declare module DevExpress.ui {
     TProperties = DevExpress.ui.Editor.Properties
   > extends Widget<TProperties> {
     /**
-     * [descr:Editor.reset()]
+     * [descr:Editor.clear()]
      */
-    reset(): void;
+    clear(): void;
+
+    /**
+     * [descr:Editor.reset(value)]
+     */
+    reset(value?: any): void;
   }
   module Editor {
     /**

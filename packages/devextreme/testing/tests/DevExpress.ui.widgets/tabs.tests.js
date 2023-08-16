@@ -38,13 +38,16 @@ QUnit.testStart(function() {
 const TABS_ITEM_CLASS = 'dx-tab';
 const TAB_SELECTED_CLASS = 'dx-tab-selected';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
+const TABS_VERTICAL_CLASS = 'dx-tabs-vertical';
+const TABS_HORIZONTAL_CLASS = 'dx-tabs-horizontal';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
 const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
 const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
-const FOCUSED_NEXT_TAB_CLASS = 'dx-focused-next-tab';
+const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
+const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 const BUTTON_NEXT_ICON = 'chevronnext';
 const BUTTON_PREV_ICON = 'chevronprev';
 const TAB_OFFSET = 30;
@@ -182,22 +185,100 @@ QUnit.module('General', () => {
         assert.equal(selectedIndex, undefined);
     });
 
-    QUnit.testInActiveWindow('specific class should be set to the selected item when next item the has focused and disabled states', function(assert) {
+    QUnit.testInActiveWindow('specific class should be set to the selected item when next item has focused and disabled states', function(assert) {
+        const $element = $('#tabs').dxTabs({
+            items: [
+                { text: '0' },
+                { text: '1' },
+                { text: '2', disabled: true },
+                { text: '3', disabled: true },
+            ],
+            focusStateEnabled: true,
+        });
+        const keyboard = keyboardMock($element);
+
+        keyboard.press('right');
+        keyboard.press('right');
+
+        const $items = $element.find(toSelector(TABS_ITEM_CLASS));
+
+        assert.notOk($items.eq(0).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The first item does not have specific class');
+        assert.ok($items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item has specific class');
+
+        keyboard.press('left');
+        assert.notOk($items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item does not have specific class');
+
+        keyboard.press('right');
+        keyboard.press('right');
+
+        assert.notOk($items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item does not have specific class');
+    });
+
+    QUnit.testInActiveWindow('specific class should be set to the selected item when prev item has focused and disabled states', function(assert) {
         const $element = $('#tabs').dxTabs({
             items: [
                 { text: '0' },
                 { text: '1', disabled: true },
+                { text: '2', disabled: true },
+                { text: '3' },
+                { text: '4' },
             ],
             focusStateEnabled: true,
         });
-        const $item = $element.find(`.${DISABLED_STATE_CLASS}`).eq(0);
         const keyboard = keyboardMock($element);
 
         keyboard.press('right');
-        assert.ok($($item).hasClass(FOCUSED_NEXT_TAB_CLASS), 'The first item has specific class');
+        keyboard.press('right');
+
+        const $items = $element.find(toSelector(TABS_ITEM_CLASS));
+
+        assert.notOk($items.eq(0).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The first item does not have specific class');
+        assert.notOk($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item does not have specific class');
+
+        keyboard.press('right');
+        assert.notOk($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item does not have specific class');
 
         keyboard.press('left');
-        assert.ok($($item).hasClass(FOCUSED_NEXT_TAB_CLASS), 'The first item does not have specific class');
+        assert.ok($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item has specific class');
+
+        keyboard.press('right');
+        keyboard.press('right');
+
+        assert.notOk($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item does not have specific class');
+    });
+
+    QUnit.test('the tabs element must have a horizontal class by default', function(assert) {
+        const $element = $('#tabs').dxTabs({
+            items: [1, 2, 3],
+        });
+
+        assert.ok($element.hasClass(TABS_HORIZONTAL_CLASS));
+    });
+
+    QUnit.test('the tabs element must have a vertical class if orientation is vertical', function(assert) {
+        const $element = $('#tabs').dxTabs({
+            items: [1, 2, 3],
+            orientation: 'vertical',
+        });
+
+        assert.ok($element.hasClass(TABS_VERTICAL_CLASS));
+    });
+
+    QUnit.test('the tabs element must have a correct orientation class in runtime change', function(assert) {
+        const $element = $('#tabs').dxTabs({
+            items: [1, 2, 3],
+        });
+        const tabs = $element.dxTabs('instance');
+
+        assert.ok($element.hasClass(TABS_HORIZONTAL_CLASS));
+
+        tabs.option('orientation', 'vertical');
+        assert.ok($element.hasClass(TABS_VERTICAL_CLASS));
+        assert.notOk($element.hasClass(TABS_HORIZONTAL_CLASS));
+
+        tabs.option('orientation', 'horizontal');
+        assert.ok($element.hasClass(TABS_HORIZONTAL_CLASS));
+        assert.notOk($element.hasClass(TABS_VERTICAL_CLASS));
     });
 });
 
@@ -351,6 +432,32 @@ QUnit.module('Horizontal scrolling', () => {
 
         instance.option('scrollByContent', false);
         assert.ok(!scrollable.option('scrollByContent'), 'scrollByContent was set');
+    });
+
+    QUnit.test('scrollable should have correct direction option if tabs orientation has been updated', function(assert) {
+        const $element = $('#scrollableTabs').dxTabs({
+            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            scrollingEnabled: true,
+            scrollByContent: true,
+            width: 100,
+            orientation: 'horizontal',
+        });
+
+        const getScrollable = () => {
+            const $scrollable = $element.children(`.${SCROLLABLE_CLASS}`);
+            const scrollable = $scrollable.dxScrollable('instance');
+            return scrollable;
+        };
+
+        const tabs = $element.dxTabs('instance');
+
+        assert.strictEqual(getScrollable().option('direction'), 'horizontal');
+
+        tabs.option({ width: 'auto', height: 100, orientation: 'vertical' });
+        assert.strictEqual(getScrollable().option('direction'), 'vertical');
+
+        tabs.option({ width: 100, height: 'auto', orientation: 'horizontal' });
+        assert.strictEqual(getScrollable().option('direction'), 'horizontal');
     });
 
     QUnit.test('tabs should not crash in Firefox after creation', function(assert) {

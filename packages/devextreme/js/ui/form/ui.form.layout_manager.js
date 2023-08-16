@@ -767,9 +767,9 @@ const LayoutManager = Widget.inherit({
         }
     },
 
-    _resetWidget(instance) {
+    _clearWidget(instance) {
         this._disableEditorValueChangedHandler = true;
-        instance.reset();
+        instance.clear();
         this._disableEditorValueChangedHandler = false;
         instance.option('isValid', true);
     },
@@ -805,7 +805,7 @@ const LayoutManager = Widget.inherit({
                                         { allowIndeterminateState, editorType, dataField })) {
                                         itemRunTimeInfo.widgetInstance.option('value', dataValue);
                                     } else {
-                                        this._resetWidget(itemRunTimeInfo.widgetInstance);
+                                        this._clearWidget(itemRunTimeInfo.widgetInstance);
                                     }
 
                                 }

@@ -3,8 +3,6 @@
 // adduse
 
 
-$icon-size: 16px;
-
 @mixin dx-tabs-link() {
   a {
     position: absolute;
@@ -23,6 +21,7 @@ $icon-size: 16px;
   /* TODO: remove position, table-layout, display from root element */
   @include user-select(none);
 
+  position: relative;
   display: flex;
   width: 100%;
 
@@ -45,6 +44,7 @@ $icon-size: 16px;
 }
 
 .dx-tabs-wrapper {
+  position: relative;
   display: flex;
   width: 100%;
 }
@@ -74,24 +74,24 @@ $icon-size: 16px;
   @include dx-tabs-link();
 
   .dx-icon {
-    width: $icon-size;
-    height: $icon-size;
-    display: block;
-    margin: 0 auto;
+    display: inline-block;
     -webkit-user-drag: none;
   }
 }
 
 .dx-tab-content {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   max-width: 100%;
+
+  // line-height: 0; TODO: For future feature
 }
 
 .dx-tab-text {
-  display: inline-block;
-  margin: 0 auto;
-  text-align: center;
-  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   -webkit-user-drag: none;
 
   @include dx-overflow();
@@ -99,7 +99,6 @@ $icon-size: 16px;
 
 .dx-tabs-item-badge {
   display: inline-block;
-  vertical-align: top;
 }
 
 .dx-tabs-nav-button {
@@ -112,5 +111,26 @@ $icon-size: 16px;
 .dx-rtl {
   &.dx-tabs {
     flex-direction: row-reverse;
+  }
+}
+
+.dx-tabs-vertical {
+  display: inline-flex;
+  flex-direction: column;
+  width: auto;
+
+  .dx-tabs-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .dx-tabs-nav-button {
+    .dx-icon {
+      transform: rotate(90deg);
+    }
+  }
+
+  .dx-tab {
+    justify-content: flex-start;
   }
 }

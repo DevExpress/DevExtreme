@@ -1295,6 +1295,19 @@ module('tooltip integration', {
         assert.ok(!hideTopOverlayCallback.hasCallback());
     });
 
+    [true, false].forEach(visibility => {
+        test(`id and aria-describedby should not apply if tooltip visibility is ${visibility}`, function(assert) {
+            this.init({
+                tooltip: { enabled: visibility }
+            });
+
+            const $tooltip = $(`.${TOOLTIP_CONTENT_CLASS}`);
+            const $slider = $(`.${SLIDER_HANDLE_CLASS}`);
+            assert.notOk($tooltip.attr('id'));
+            assert.notOk($slider.attr('aria-describedby'));
+        });
+    });
+
     test('tooltip option changing when slider "visible" = false', function(assert) {
         this.init({
             visible: false
