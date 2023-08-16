@@ -422,7 +422,7 @@ module('Appointment popup buttons', moduleConfig, () => {
             scheduler.tooltip.clickOnItem();
 
             const popup = scheduler.appointmentPopup;
-            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_BOTTOM_LOCATION, SECTION_AFTER, [DONE_BUTTON, CANCEL_BUTTON]), 'the \'Cancel\' and \'Done\' buttons are located in the \'after\' section');
+            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_BOTTOM_LOCATION, SECTION_AFTER, [ CANCEL_BUTTON, DONE_BUTTON]), 'the \'Cancel\' and \'Done\' buttons are located in the \'after\' section');
         } finally {
             this.realDeviceMock.restore();
         }
