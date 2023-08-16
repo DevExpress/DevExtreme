@@ -585,6 +585,7 @@ if(Quill) {
 
         _resetFormatWidget(name, widget) {
             widget.$element().removeClass(ACTIVE_FORMAT_CLASS);
+            widget.$element().removeClass(SELECTED_STATE_CLASS);
 
             if(this._isColorFormat(name)) {
                 this._updateColorWidget(name);
