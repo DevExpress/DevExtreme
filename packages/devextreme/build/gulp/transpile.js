@@ -107,13 +107,14 @@ const createModuleConfig = (name, dir, filePath, dist) => {
 
 function hasSideEffects(jsFileModulePath) {
     try {
-        const data = fs.readFileSync(jsFileModulePath, 'utf8');
-        const sideEffectImportsRegExp = /^\s*import\s+['"]/ms;
+        const code = fs.readFileSync(jsFileModulePath, 'utf8');
+        const hasImportsWithSideEffectRegExp = /^\s*import\s+['"]/ms;
+        const hasExportsRegExp = /^\s*export\s+/ms;
 
-        return sideEffectImportsRegExp.test(data);
+        return hasImportsWithSideEffectRegExp.test(code) || !hasExportsRegExp.test(code);
     } catch (e) {
-        console.warn('WARNING: ' + e);
-        return true;
+        const message = (e instanceof Error) ? e.message : e;
+        throw('Exception while check side effects. Exception: ' + message);
     }
 }
 const transpileTs = (compiler, src) => {
