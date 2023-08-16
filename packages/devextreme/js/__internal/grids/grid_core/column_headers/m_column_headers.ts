@@ -1,4 +1,5 @@
 import domAdapter from '@js/core/dom_adapter';
+import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -174,7 +175,7 @@ export const columnHeadersModule = {
             resultTemplate = {
               render(options) {
                 const $content = createCellContent(that, options.container, options.model);
-                renderingTemplate.render(extend({}, options, { container: $content }));
+                renderingTemplate.render(extend({}, options, { container: getPublicElement($content) }));
               },
             };
           } else {
