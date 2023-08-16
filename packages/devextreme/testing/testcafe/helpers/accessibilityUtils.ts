@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import { axeCheck, createReport } from '@testcafe-community/axe';
+import { ElementContext, RunOptions } from 'axe-core';
 
 const defaultOptions = {
   rules: {
@@ -8,10 +9,14 @@ const defaultOptions = {
   },
 };
 
+interface A11yCheckOptions extends RunOptions {
+  runOnly?: any;
+}
+
 export const a11yCheck = async (
   t: TestController,
-  selector: any = undefined,
-  options: any = defaultOptions,
+  options: A11yCheckOptions = defaultOptions,
+  selector?: ElementContext,
 ):
 Promise<void> => {
   const { error, results } = await axeCheck(t, selector, { rules: {}, ...options });

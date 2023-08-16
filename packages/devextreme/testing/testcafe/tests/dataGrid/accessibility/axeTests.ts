@@ -8,7 +8,7 @@ import { changeTheme } from '../../../helpers/changeTheme';
 import FilterTextBox from '../../../model/dataGrid/editors/filterTextBox';
 import HeaderFilter from '../../../model/dataGrid/headers/headerFilter';
 
-fixture`Color contrast`
+fixture`Testing with axe`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
@@ -19,6 +19,10 @@ const DATA_GRID_SELECTOR = '#container';
   Themes.materialBlue,
   Themes.materialBlueDark,
 ].forEach((theme) => {
+  const a11yCheckConfig = theme === Themes.genericLight ? {} : {
+    runOnly: 'color-contrast',
+  };
+
   test(`Grid without data in ${theme}`, async (t) => {
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -26,9 +30,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -46,9 +48,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -85,9 +85,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -124,9 +122,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -163,9 +159,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -230,9 +224,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act
-    await a11yCheck(t, null, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -281,9 +273,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act
-    await a11yCheck(t, null, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -315,9 +305,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -372,9 +360,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, null, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -427,9 +413,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, null, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -482,9 +466,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, null, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -519,9 +501,7 @@ const DATA_GRID_SELECTOR = '#container';
         .ok();
 
       // act, assert
-      await a11yCheck(t, DATA_GRID_SELECTOR, {
-        runOnly: 'color-contrast',
-      });
+      await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     }).before(async () => {
       await changeTheme(theme);
 
@@ -566,9 +546,7 @@ const DATA_GRID_SELECTOR = '#container';
         .ok();
 
       // act, assert
-      await a11yCheck(t, DATA_GRID_SELECTOR, {
-        runOnly: 'color-contrast',
-      });
+      await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
     }).before(async () => {
       await changeTheme(theme);
 
@@ -615,9 +593,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, null, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -661,9 +637,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -707,9 +681,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -753,9 +725,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -799,9 +769,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -845,9 +813,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, null, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -895,9 +861,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, null, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -953,9 +917,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1003,9 +965,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1032,9 +992,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, DATA_GRID_SELECTOR, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1072,9 +1030,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, null, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1113,9 +1069,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, null, {
-      runOnly: 'color-contrast',
-    });
+    await a11yCheck(t, a11yCheckConfig);
   }).before(async () => {
     await changeTheme(theme);
 

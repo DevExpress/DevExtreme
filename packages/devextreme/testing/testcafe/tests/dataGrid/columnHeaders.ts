@@ -14,7 +14,7 @@ fixture`Column Headers`
   Themes.materialBlueDark,
 ].forEach((theme) => {
   test(`Checking column headers via aXe - ${theme}`, async (t) => {
-    await a11yCheck(t, null, {
+    await a11yCheck(t, {
       rules: {
         'th-has-data-cells': { enabled: false },
       },
