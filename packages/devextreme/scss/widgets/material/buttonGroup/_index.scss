@@ -27,18 +27,16 @@
 
   .dx-button-mode-contained {
     box-shadow: none;
-
     border-width: 0;
     border-style: solid;
     border-inline-end-width: 1px;
     border-inline-end-color: $button-group-separator-color;
 
     &.dx-buttongroup-last-item {
-      border-inline-end-width: 0px;
+      border-inline-end-width: 0;
     }
   }
 }
-
 
 @include dx-buttongroup-item(
   $button-normal-bg,
