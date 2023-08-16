@@ -7,7 +7,7 @@ import createWidget from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from '../../model/dataGrid';
 import { getData } from './helpers/generateDataSourceData';
-import { Themes } from './helpers/themes';
+import { Themes } from '../../helpers/themes';
 
 fixture`Column chooser`
   .page(url(__dirname, '../container.html'));

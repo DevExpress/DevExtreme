@@ -2,7 +2,7 @@ import { a11yCheck } from '../../helpers/accessibilityUtils';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
-import { Themes } from './helpers/themes';
+import { Themes } from '../../helpers/themes';
 
 fixture`Column Headers`
   .page(url(__dirname, '../container.html'));

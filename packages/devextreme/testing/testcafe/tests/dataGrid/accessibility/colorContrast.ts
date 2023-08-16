@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import { getData } from '../helpers/generateDataSourceData';
-import { Themes } from '../helpers/themes';
+import { Themes } from '../../../helpers/themes';
 import { changeTheme } from '../../../helpers/changeTheme';
 import FilterTextBox from '../../../model/dataGrid/editors/filterTextBox';
 import HeaderFilter from '../../../model/dataGrid/headers/headerFilter';

@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { changeTheme } from '../../helpers/changeTheme';
-import { Themes } from './helpers/themes';
+import { Themes } from '../../helpers/themes';
 
 fixture.disablePageReloads`Search Panel`
   .page(url(__dirname, '../container.html'));
