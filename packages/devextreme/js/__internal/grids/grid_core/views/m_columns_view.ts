@@ -471,7 +471,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
           options.change = change;
         }
 
-        if (!(model.rowType === 'header' || (model.rowType === 'data' && model.column.command) || isDefined(template.allowRenderToDetachedContainer))) {
+        if (!(model.rowType === 'header' || (model.rowType === 'data' && model.column.command) || (model.rowType === 'data' && !model.column.cellTemplate) || isDefined(template.allowRenderToDetachedContainer))) {
           options.container = getPublicElement(container);
         }
 
