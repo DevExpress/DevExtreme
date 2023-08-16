@@ -434,6 +434,32 @@ QUnit.module('Horizontal scrolling', () => {
         assert.ok(!scrollable.option('scrollByContent'), 'scrollByContent was set');
     });
 
+    QUnit.test('scrollable should have correct direction option if tabs orientation has been updated', function(assert) {
+        const $element = $('#scrollableTabs').dxTabs({
+            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            scrollingEnabled: true,
+            scrollByContent: true,
+            width: 100,
+            orientation: 'horizontal',
+        });
+
+        const getScrollable = () => {
+            const $scrollable = $element.children(`.${SCROLLABLE_CLASS}`);
+            const scrollable = $scrollable.dxScrollable('instance');
+            return scrollable;
+        };
+
+        const tabs = $element.dxTabs('instance');
+
+        assert.strictEqual(getScrollable().option('direction'), 'horizontal');
+
+        tabs.option({ width: 'auto', height: 100, orientation: 'vertical' });
+        assert.strictEqual(getScrollable().option('direction'), 'vertical');
+
+        tabs.option({ width: 100, height: 'auto', orientation: 'horizontal' });
+        assert.strictEqual(getScrollable().option('direction'), 'horizontal');
+    });
+
     QUnit.test('tabs should not crash in Firefox after creation', function(assert) {
         $('#tabs').addClass('bigtab').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],

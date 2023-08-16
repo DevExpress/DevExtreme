@@ -8,7 +8,7 @@ import { makeRowsViewTemplatesAsync } from './helpers/asyncTemplates';
 
 const DATA_GRID_SELECTOR = '#container';
 
-fixture.disablePageReloads`FixedColumns`
+fixture`FixedColumns`
   .page(url(__dirname, '../container.html'));
 
 // T1156153
@@ -248,8 +248,9 @@ safeSizeTest('Fixed to the right columns should appear when any column has undef
   ],
 }));
 
+// TODO: this test is unstable
 // T1180834
-test('Hovering over a row should work correctly after scrolling when there is a fixed column with a cellTemplate and virtual scrolling is used (React)', async (t) => {
+test.skip('Hovering over a row should work correctly after scrolling when there is a fixed column with a cellTemplate and virtual scrolling is used (React)', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

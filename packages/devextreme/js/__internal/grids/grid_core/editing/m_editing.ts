@@ -2594,10 +2594,26 @@ export const editingModule = {
         _formItemPrepared: noop,
         _getCellOptions(options) {
           const cellOptions = this.callBase(options);
+          const { columnIndex, row } = options;
 
           cellOptions.isEditing = this._editingController.isEditCell(cellOptions.rowIndex, cellOptions.columnIndex);
+          cellOptions.removed = row.removed;
+
+          if (row.modified) {
+            cellOptions.modified = row.modifiedValues[columnIndex] !== undefined;
+          }
 
           return cellOptions;
+        },
+        _setCellAriaAttributes($cell, cellOptions) {
+          this.callBase($cell, cellOptions);
+
+          if (cellOptions.removed) {
+            this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaDeletedCell'), $cell);
+          }
+          if (cellOptions.modified) {
+            this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaModifiedCell'), $cell);
+          }
         },
         _createCell(options) {
           const $cell = this.callBase(options);

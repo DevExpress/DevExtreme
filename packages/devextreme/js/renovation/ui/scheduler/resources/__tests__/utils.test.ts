@@ -3,10 +3,10 @@ import {
 } from '../utils';
 import {
   getAppointmentColor as getDeferredAppointmentColor,
-} from '../../../../../ui/scheduler/resources/utils';
+} from '../../../../../__internal/scheduler/resources/m_utils';
 
-jest.mock('../../../../../ui/scheduler/resources/utils', () => ({
-  ...jest.requireActual('../../../../../ui/scheduler/resources/utils'),
+jest.mock('../../../../../__internal/scheduler/resources/m_utils', () => ({
+  ...jest.requireActual('../../../../../__internal/scheduler/resources/m_utils'),
   getAppointmentColor: jest.fn(() => Promise.resolve('#aabbcc')),
 }));
 
@@ -23,7 +23,7 @@ describe('Resource utils', () => {
         appointmentConfig,
       ).then(() => {
         expect(getDeferredAppointmentColor)
-          .toBeCalledWith({
+          .toHaveBeenCalledWith({
             dataAccessors: ['some_value'],
             resourcesDataAccessors: ['some_value'],
           },

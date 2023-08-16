@@ -1,0 +1,42 @@
+{
+  "name": "devextreme-vue2-strategy",
+  "private": true,
+  "version": "23.2.0",
+  "main": "npm/index",
+  "types": "npm/index",
+  "files": [
+    "npm"
+  ],
+  "scripts": {
+    "build": "gulp build",
+    "pack": "npm run build",
+    "test": "jest",
+    "start": "webpack-dev-server"
+  },
+  "peerDependencies": {
+    "devextreme": "23.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "css-loader": "^2.1.1",
+    "del": "^3.0.0",
+    "devextreme-vue-generator": "https://gitpkg.now.sh/DevExpress/devextreme-vue/packages/devextreme-vue-generator?master",
+    "gulp": "^4.0.2",
+    "gulp-typescript": "^5.0.1",
+    "jest": "^26.0.0",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^0.20.3",
+    "ts-jest": "^26.0.0",
+    "ts-loader": "^8.0.4",
+    "tslint": "^5.11.0",
+    "typescript": "^4.7.4",
+    "url-loader": "^1.1.2",
+    "vue": "^2.6.3",
+    "vue-loader": "^15.0.0",
+    "vue-template-compiler": "^2.6.3",
+    "webpack": "^4.29.2",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^4.0.0"
+  }
+}

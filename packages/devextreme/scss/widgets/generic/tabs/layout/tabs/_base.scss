@@ -45,7 +45,7 @@
   border-block-start: $generic-tabs-border-transparent;
   border-block-end: $generic-tabs-border-transparent;
   
-  @include dx-tabs-after-mixin();
+  @include dx-tabs-after-mixin(true);
   @include dx-tabs-border-mixin(
     $generic-tabs-border,
     $generic-tabs-border,
@@ -55,7 +55,12 @@
 }
 
 .dx-tabs-nav-buttons {
-  .dx-tabs-wrapper::after {
-    border: none;
+  .dx-tabs-wrapper {
+    border-block-start: $generic-tabs-border;
+    border-block-end: $generic-tabs-border;
+
+    &::after {
+      border: none;
+    }
   }
 }

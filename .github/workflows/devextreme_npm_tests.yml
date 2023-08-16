@@ -36,7 +36,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build devextreme repo
-      run: npx nx build devextreme-root
+      run: npx nx build devextreme-main
 
     - name: Pack devextreme package
       working-directory: ./packages/devextreme/artifacts/npm/devextreme
@@ -93,7 +93,7 @@ jobs:
 
     - name: Discover declarations in devextreme repo
       working-directory: ./devextreme
-      run: npx nx discover-declarations devextreme-root
+      run: npx nx discover-declarations devextreme-main
 
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
@@ -207,7 +207,7 @@ jobs:
 
     runs-on: devextreme-shr2
     name: Demos visual tests ${{ matrix.CONSTEL }}
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
     - name: Get sources

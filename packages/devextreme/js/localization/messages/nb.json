@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Verdi",
         "dxDataGrid-ariaFilterCell": "Filtrér celle",
         "dxDataGrid-ariaCollapse": "Skjul",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Utvid",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",

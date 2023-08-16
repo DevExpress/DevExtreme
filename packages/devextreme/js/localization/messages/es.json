@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Valor",
         "dxDataGrid-ariaFilterCell": "Celda de filtro",
         "dxDataGrid-ariaCollapse": "Colapsar",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Expandir",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",

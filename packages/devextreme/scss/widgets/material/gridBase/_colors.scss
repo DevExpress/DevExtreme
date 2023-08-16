@@ -161,7 +161,7 @@ $datagrid-row-alternation-bg: null !default;
 * $type color
 */
 $datagrid-summary-color: color.change($datagrid-base-color, $alpha: 0.7) !default;
-$datagrid-columnchooser-message-color: lighten($datagrid-base-color, 40%) !default;
+$datagrid-columnchooser-message-color: lighten($datagrid-base-color, 26%) !default;
 $datagrid-summary-bg: $datagrid-base-background-color !default;
 $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
 $datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2%) !default;

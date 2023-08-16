@@ -1,8 +1,34 @@
 // adduse
 
-.dx-tabpanel-tabs {
-  width: 100%;
 
+.dx-tabpanel {
+  display: flex;
+  flex-direction: column;
+
+  .dx-tabs-vertical {
+    .dx-tabs-wrapper {
+      min-height: 100%;
+    }
+
+    .dx-tabpanel-tab {
+      flex-grow: 0;
+    }
+  }
+}
+
+.dx-tabpanel-tabs-position-right {
+  flex-direction: row-reverse;
+}
+
+.dx-tabpanel-tabs-position-bottom {
+  flex-direction: column-reverse;
+}
+
+.dx-tabpanel-tabs-position-left {
+  flex-direction: row;
+}
+
+.dx-tabpanel-tabs {
   .dx-tabs {
     height: 100%;
   }
@@ -15,6 +41,5 @@
 }
 
 .dx-tabpanel-container {
-  width: 100%;
-  height: 100%;
+  flex-grow: 1;
 }

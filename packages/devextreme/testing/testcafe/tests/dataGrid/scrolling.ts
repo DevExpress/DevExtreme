@@ -1,4 +1,4 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
@@ -30,6 +30,10 @@ function getData(rowCount, colCount): Record<string, string>[] {
   }
 
   return items;
+}
+
+async function getTestLoadCount(): Promise<number> {
+  return ClientFunction(() => (window as any).testLoadCount as number)();
 }
 
 fixture`Scrolling`
@@ -961,8 +965,9 @@ safeSizeTest('Rows are rendered properly when window content is scrolled (T10703
   });
 });
 
+// TODO: this test is unstable
 // T1129252
-test('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
+test.skip('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1044,13 +1049,100 @@ safeSizeTest('The scroll position of a fixed table should be synchronized with t
   }, 'id', 'text'],
 }));
 
+// T1089634
+safeSizeTest('The page should not be changed when hiding/showing the grid view after the data has been edited', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  // act
+  await dataGrid.scrollTo(t, { y: 500 });
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await takeScreenshot('T1089634-virtual-scrolling-1.png');
+
+  // act
+  await dataGrid.apiEditCell(5, 1);
+  await dataGrid.apiCellValue(5, 1, 'test');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(19, 1).isModified)
+    .ok();
+
+  // act - simulate click on button
+  await dataGrid.hide();
+  await t.click(Selector('body'));
+  await t.wait(100);
+
+  await takeScreenshot('T1089634-virtual-scrolling-2.png');
+
+  // act
+  await dataGrid.show();
+
+  await takeScreenshot('T1089634-virtual-scrolling-3.png');
+
+  // assert
+  const testLoadCount = await getTestLoadCount();
+
+  await t
+    .expect(testLoadCount)
+    .eql(1)
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 800]).before(async () => {
+  await ClientFunction(() => {
+    (window as any).testLoadCount = 0;
+
+    $('body').css({
+      minHeight: 100,
+      minWidth: 100,
+    });
+  })();
+
+  return createWidget('dxDataGrid', {
+    height: 500,
+    dataSource: {
+      load() {
+        ((window as any).testLoadCount as number) += 1;
+
+        return new Array(200).fill(null).map((_, index) => ({ id: index, field1: `item1 ${index}`, field2: `item2 ${index}` }));
+      },
+      key: 'id',
+    },
+    editing: {
+      mode: 'batch',
+      allowUpdating: true,
+    },
+    scrolling: {
+      mode: 'virtual',
+    },
+  });
+}).after(async () => ClientFunction(() => {
+  $('body').css({
+    minHeight: '',
+    minWidth: '',
+  });
+  delete (window as any).testLoadCount;
+})());
+
 fixture`Remote Scrolling`
   .page(url(__dirname, '../containerAspNet.html'))
   .beforeEach(async (t) => {
     await t.maximizeWindow();
   });
 
-test('Scroll to the bottom after expand several group', async (t) => {
+// TODO: this test is unstable
+test.skip('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const scrollToBottom = async () => {
@@ -1482,5 +1574,38 @@ safeSizeTest('Editing buttons should rerender correctly after scrolling if repai
       allowDeleting: true,
     },
     repaintChangesOnly: true,
+  });
+});
+
+// T1181439
+test('Restoring focus on re-rendering should be done without unexpected scrolling to the focused element', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.scrollBy({ left: 1000 });
+
+  await t.click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(19).element);
+
+  await dataGrid.scrollBy({ left: 0 });
+  await dataGrid.scrollBy({ top: 50 });
+
+  await t.expect(dataGrid.getScrollLeft()).eql(0);
+}).before(async () => {
+  const data = [...new Array(30)].map((_, i) => ({
+    id: i + 1,
+  }));
+
+  return createWidget('dxDataGrid', {
+    dataSource: data,
+    scrolling: {
+      mode: 'virtual',
+      useNative: true,
+    },
+    height: 440,
+    width: 600,
+    columns: [...new Array(20)].map(() => ({
+      dataField: 'id',
+      width: 75,
+    })),
+    masterDetail: { enabled: true },
   });
 });

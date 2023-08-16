@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Reikšmė",
         "dxDataGrid-ariaFilterCell": "Filtro laukas",
         "dxDataGrid-ariaCollapse": "Suskleisti",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Išskleisti",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
