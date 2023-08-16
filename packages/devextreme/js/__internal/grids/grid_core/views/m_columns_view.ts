@@ -504,6 +504,9 @@ export class ColumnsView extends viewWithColumnStateMixin {
     } else if (isFunction(template)) {
       renderingTemplate = {
         render(options) {
+          if (options.model.column.type === 'buttons') {
+            options.container = $(options.container);
+          }
           const renderedTemplate = template(options.container, options.model, options.change);
           if (renderedTemplate && (renderedTemplate.nodeType || isRenderer(renderedTemplate))) {
             options.container.append(renderedTemplate);
