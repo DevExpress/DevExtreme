@@ -4477,3 +4477,226 @@ QUnit.test('form should be dirty when some editors are dirty', function(assert) 
 
     assert.strictEqual(form.option('isDirty'), false, 'form is not dirty when all editors are back to pristine');
 });
+
+QUnit.module('reset', () => {
+    [
+        ['dxCalendar', new Date(2019, 1, 2), { dxCalendar: new Date(2019, 1, 3) } ],
+        ['dxRangeSlider', [1, 5], { dxRangeSlider: [1, 3] } ],
+        ['dxSlider', 199, { dxSlider: 99 }],
+        ['dxSwitch', true, { dxSwitch: false }],
+        ['dxAutocomplete', '1', { dxAutocomplete: '2' }],
+        ['dxColorBox', new Date(2019, 1, 1), { dxColorBox: new Date(2019, 1, 2) } ],
+        ['dxDateBox', new Date(2017, 0, 3), { dxDateBox: new Date(2019, 1, 2) }],
+        ['dxDropDownBox', '1', { dxDropDownBox: '3' }],
+        ['dxHtmlEditor', '<p>a</p>', { dxHtmlEditor: '<p>b</p>' }],
+        ['dxLookup', '1', { dxLookup: '3' }],
+        ['dxNumberBox', '1', { dxNumberBox: '3' }],
+        ['dxRadioGroup', '1', { dxRadioGroup: '3' }],
+        ['dxSelectBox', '1', { dxSelectBox: '2' }],
+        ['dxTagBox', ['1'], { dxTagBox: ['2'] }],
+        ['dxTextArea', 'a', { dxTextArea: 'b' }],
+        ['dxTextBox', 'a', { dxTextBox: 'b' }],
+        ['dxDateRangeBox', [new Date(2021, 8, 17), new Date(2021, 9, 17)], { dxDateRangeBox: [null, null] } ],
+        ['dxCheckBox', true, { dxCheckBox: false } ],
+        ['dxCheckBox', undefined, { dxCheckBox: false } ]
+    ].forEach((editorData) => {
+        QUnit.test(`should update ${editorData[0]} value to initial value and isDirty to false`, function(assert) {
+            const editorName = editorData[0];
+            const newEditorValue = editorData[1];
+            const initialFormData = editorData[2];
+            const editorInitialValue = initialFormData[editorName];
+
+            const form = $('#form').dxForm({
+                formData: initialFormData,
+                items: [{ dataField: editorName, editorType: editorName }]
+            }).dxForm('instance');
+
+            assert.deepEqual(form.getEditor(editorName).option('value'), editorInitialValue);
+
+            assert.strictEqual(form.option('isDirty'), false, 'pristine after init');
+
+            form.updateData(editorName, newEditorValue);
+
+            assert.deepEqual(form.getEditor(editorName).option('value'), newEditorValue);
+
+            assert.strictEqual(form.option('isDirty'), true, 'is dirty after update');
+
+            form.reset();
+
+            assert.deepEqual(form.getEditor(editorName).option('value'), editorInitialValue);
+
+            assert.strictEqual(form.option('isDirty'), false, 'pristine after resetting form');
+        });
+    });
+
+    QUnit.test('should update isDirty when nested editors updated', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            dataField: 'ZipCode'
+                        }],
+                    }],
+                }],
+            }],
+        }).dxForm('instance');
+
+        form.updateData('ZipCode', '4012');
+
+        form.reset();
+
+        assert.strictEqual(form.option('isDirty'), false, 'isDirty set to false after reset');
+    });
+
+    QUnit.test('should update nested editors', function(assert) {
+        const form = $('#form').dxForm({
+            items: [{
+                itemType: 'group',
+                items: [{
+                    itemType: 'group',
+                    items: [{
+                        itemType: 'group',
+                        items: [{
+                            dataField: 'ZipCode'
+                        }],
+                    }],
+                }],
+            }],
+        }).dxForm('instance');
+
+        form.updateData('ZipCode', '4012');
+
+        assert.strictEqual(form.getEditor('ZipCode').option('value'), '4012');
+
+        form.reset();
+
+        assert.strictEqual(form.getEditor('ZipCode').option('value'), '');
+    });
+
+    QUnit.test('should update all editors\' values to initial values', function(assert) {
+        const initialName = 'Mart';
+        const initialAddress = '8th Street';
+
+        const form = $('#form').dxForm({
+            formData: {
+                Name: initialName,
+                Address: initialAddress,
+            },
+        }).dxForm('instance');
+
+        form.updateData('Address', 'Paradise 4012 str');
+        form.updateData('Name', 'Lucy Lawless');
+
+        form.reset();
+
+        assert.strictEqual(form.getEditor('Name').option('value'), initialName, 'name updated to initial');
+        assert.strictEqual(form.getEditor('Address').option('value'), initialAddress, 'address updated to initial');
+    });
+
+
+    QUnit.test('with parameters should update passed fields with parameter value', function(assert) {
+        const initialName = 'Mart';
+
+        const form = $('#form').dxForm({
+            formData: {
+                Name: initialName,
+                Address: '8th Street',
+            },
+        }).dxForm('instance');
+
+        form.reset({ Address: 'new address' });
+
+        assert.strictEqual(form.getEditor('Address').option('value'), 'new address');
+        assert.strictEqual(form.getEditor('Name').option('value'), initialName);
+    });
+
+    QUnit.test('with parameters should update fields not specified in parameters with initial value', function(assert) {
+        const initialName = 'Mart';
+
+        const form = $('#form').dxForm({
+            formData: {
+                Name: initialName,
+                Address: '8th Street',
+            },
+        }).dxForm('instance');
+
+        form.getEditor('Name').option('value', 'Peetya');
+
+        form.reset({ Address: 'new address' });
+
+        assert.strictEqual(form.getEditor('Name').option('value'), initialName);
+    });
+
+    QUnit.test('should be able to update to undefined value with parameter', function(assert) {
+        const form = $('#form').dxForm({
+            formData: { dxCheckBox: false },
+            items: [{ dataField: 'dxCheckBox', editorType: 'dxCheckBox' }]
+        }).dxForm('instance');
+
+        form.reset({ dxCheckBox: undefined });
+
+        assert.strictEqual(form.getEditor('dxCheckBox').option('value'), undefined);
+    });
+
+    QUnit.test('should update isDirty to false after reset', function(assert) {
+        const initialAddress = '8th Street';
+
+        const form = $('#form').dxForm({
+            formData: { Address: initialAddress }
+        }).dxForm('instance');
+
+        form.updateData('Address', '4012 str');
+
+        assert.strictEqual(form.option('isDirty'), true, 'form isDirty before reset');
+
+        form.reset();
+
+        assert.strictEqual(form.option('isDirty'), false, 'form is pristine before reset');
+    });
+
+    QUnit.test('should update isDirty to false after reset back to initial value by parameter', function(assert) {
+        const initialAddress = '8th Street';
+
+        const form = $('#form').dxForm({
+            formData: {
+                Address: initialAddress,
+            },
+        }).dxForm('instance');
+
+        form.updateData('Address', '4012 str');
+
+        assert.strictEqual(form.option('isDirty'), true);
+        form.reset({ Address: initialAddress });
+        assert.strictEqual(form.option('isDirty'), false);
+    });
+
+    QUnit.test('should clear validation summary', function(assert) {
+        const form = $('#form').dxForm({
+            formData: { field1: '' },
+            showValidationSummary: true,
+            items: [ {
+                dataField: 'field1',
+                validationRules: [{ type: 'required' }]
+            }, {
+                dataField: 'field2',
+                validationRules: [{ type: 'required' }]
+            } ]
+        }).dxForm('instance');
+
+        form.validate();
+
+        const validationItemsBeforeReset = $(`.${FORM_VALIDATION_SUMMARY}`).children();
+
+        assert.strictEqual(validationItemsBeforeReset.length, 2, 'form has validation summary items before reset');
+
+        form.reset();
+
+        const validationItemsAfterReset = $(`.${FORM_VALIDATION_SUMMARY}`).children();
+
+        assert.strictEqual(validationItemsAfterReset.length, 0, 'form does not have validation summary items after reset');
+    });
+});

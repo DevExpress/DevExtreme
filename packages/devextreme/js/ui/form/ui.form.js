@@ -1152,12 +1152,19 @@ const Form = Widget.inherit({
         this.option('isDirty', !!this._dirtyFields.size);
     },
 
-    _resetValues: function() {
+    _doForAllEditors: function(editorAction) {
         this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
-            if(isDefined(itemRunTimeInfo.widgetInstance) && Editor.isEditor(itemRunTimeInfo.widgetInstance)) {
-                itemRunTimeInfo.widgetInstance.clear();
-                itemRunTimeInfo.widgetInstance.option('isValid', true);
+            const widgetInstance = itemRunTimeInfo.widgetInstance;
+            if(isDefined(widgetInstance) && Editor.isEditor(widgetInstance)) {
+                editorAction(widgetInstance);
             }
+        });
+    },
+
+    _resetValues: function() {
+        this._doForAllEditors(editor => {
+            editor.clear();
+            editor.option('isValid', true);
         });
 
         ValidationEngine.resetGroup(this._getValidationGroup());
@@ -1208,6 +1215,19 @@ const Form = Widget.inherit({
 
     resetValues: function() {
         this._resetValues();
+    },
+
+    reset: function(editorsData) {
+        this._doForAllEditors(editor => {
+            const editorName = editor.option('name');
+            if(editorsData && editorName in editorsData) {
+                editor.reset(editorsData[editorName]);
+            } else {
+                editor.reset();
+            }
+        });
+
+        this._clearValidationSummary();
     },
 
     updateData: function(data, value) {
