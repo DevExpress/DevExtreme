@@ -3,14 +3,14 @@ import BaseStrategy from './base';
 import Observer from './observer';
 
 const eventMap = {
-    'dxpointerdown': 'mousedown',
-    'dxpointermove': 'mousemove',
-    'dxpointerup': 'mouseup',
+    'dxpointerdown': 'pointerdown',
+    'dxpointermove': 'pointermove',
+    'dxpointerup': 'pointerup',
     'dxpointercancel': '',
-    'dxpointerover': 'mouseover',
-    'dxpointerout': 'mouseout',
-    'dxpointerenter': 'mouseenter',
-    'dxpointerleave': 'mouseleave'
+    'dxpointerover': 'pointerover',
+    'dxpointerout': 'pointerout',
+    'dxpointerenter': 'pointerenter',
+    'dxpointerleave': 'pointerleave'
 };
 
 const normalizeMouseEvent = function(e) {
