@@ -9,11 +9,22 @@ const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 fixture.disablePageReloads`Calendar keyboard navigation`
   .page(url(__dirname, '../../container.html'));
 
-test('It should be possible navigate to today cell by keyboard', async (t) => {
+test('Tab navigation order prevButton-caption-nextButton-viewdWrapper-todayButton', async (t) => {
   const calendar = new Calendar('#container');
 
   await t
     .click(Selector('body'))
+    .pressKey('tab');
+
+  await t
+    .expect(calendar.getNavigatorPrevButton().isFocused)
+    .ok()
+    .pressKey('tab')
+    .expect(calendar.getNavigatorCaption().isFocused)
+    .ok()
+    .pressKey('tab')
+    .expect(calendar.getNavigatorNextButton().isFocused)
+    .ok()
     .pressKey('tab');
 
   const cell = calendar.getView().getCellByDate(new Date(2021, 9, 17));
