@@ -10,13 +10,15 @@ const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
 fixture.disablePageReloads`HtmlEditor - common`
   .page(url(__dirname, '../../../containerQuill.html'));
 
+const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
+
 test('TabPanel in HtmlEditor must have correct borders', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const htmlEditor = new HtmlEditor('#container');
 
   await t.click(htmlEditor.toolbar.getItemByName('image'));
 
-  await testScreenshot(t, takeScreenshot, 'tabpanel-in-htmleditor.png', { element: htmlEditor.content });
+  await testScreenshot(t, takeScreenshot, 'tabpanel-in-htmleditor.png', { element: ADD_IMAGE_POPUP_CONTENT_SELECTOR });
 
   await t
     .expect(compareResults.isValid())
