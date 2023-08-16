@@ -3,7 +3,7 @@ import BaseStrategy from './base';
 import Observer from './observer';
 
 const eventMap = {
-    'dxpointerdown': 'pointerdown',
+    'dxpointerdown': 'mousedown',
     'dxpointermove': 'mousemove',
     'dxpointerup': 'mouseup',
     'dxpointercancel': '',
