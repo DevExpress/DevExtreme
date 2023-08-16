@@ -20,7 +20,7 @@ import {
     Position,
 } from '../common';
 
-import {
+import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
@@ -257,7 +257,7 @@ export interface dxTabPanelOptions<
 export default class dxTabPanel<
     TItem extends ItemLike = any,
     TKey = any,
-> extends dxMultiView<dxTabPanelOptions<TItem, TKey>, TItem, TKey> { }
+> extends CollectionWidget<Properties<TItem, TKey>, TItem, TKey> { }
 
 /**
  * @public
