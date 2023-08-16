@@ -109,7 +109,7 @@
 }
 
 .dx-rtl {
-  &.dx-tabs {
+  &.dx-tabs:not(.dx-tabs-vertical) {
     flex-direction: row-reverse;
   }
 }
