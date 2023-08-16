@@ -1,12 +1,36 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import HtmlEditor from '../../../../model/htmlEditor';
 import url from '../../../../helpers/getPageUrl';
 import createWidget from '../../../../helpers/createWidget';
 import { BASE64_IMAGE_1 } from './images/base64';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
 
 fixture.disablePageReloads`HtmlEditor - common`
   .page(url(__dirname, '../../../containerQuill.html'));
+
+test('TabPanel in HtmlEditor must have correct borders', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const htmlEditor = new HtmlEditor('#container');
+
+  await t.click(htmlEditor.toolbar.getItemByName('image'));
+
+  await testScreenshot(t, takeScreenshot, 'tabpanel-in-htmleditor.png', { element: htmlEditor.content });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxHtmlEditor', {
+    height: 600,
+    width: 800,
+    imageUpload: {
+      tabs: ['file', 'url'],
+    },
+    toolbar: { items: ['image'] },
+  });
+});
 
 test('Add button should be enabled after switch to url form', async (t) => {
   const htmlEditor = new HtmlEditor('#container');
