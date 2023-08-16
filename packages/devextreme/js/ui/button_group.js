@@ -59,7 +59,7 @@ const ButtonCollection = CollectionWidget.inherit({
     },
 
     _selectedItemClass() {
-        return 'dx-item-selected dx-button-selected';
+        return 'dx-item-selected dx-state-selected';
     },
 
     _prepareItemStyles($item) {

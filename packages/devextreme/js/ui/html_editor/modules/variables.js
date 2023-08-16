@@ -13,6 +13,7 @@ let VariableModule = BaseModule;
 if(Quill) {
     const VARIABLE_FORMAT_CLASS = 'dx-variable-format';
     const ACTIVE_FORMAT_CLASS = 'dx-format-active';
+    const SELECTED_STATE_CLASS = 'dx-state-selected';
 
     Quill.register({ 'formats/variable': Variable }, true);
 
@@ -42,6 +43,7 @@ if(Quill) {
                 const $ofElement = $(e.component.option('position').of);
                 if($ofElement.hasClass(VARIABLE_FORMAT_CLASS)) {
                     $ofElement.addClass(ACTIVE_FORMAT_CLASS);
+                    $ofElement.addClass(SELECTED_STATE_CLASS);
                 }
             });
         }

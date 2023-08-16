@@ -190,61 +190,6 @@
 .dx-htmleditor-toolbar {
   background-color: transparent;
 
-  .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
-    &.dx-button-mode-text,
-    &.dx-button-mode-outlined {
-      @include dx-htmleditor-button-states($button-group-normal-selected-bg, $button-group-normal-selected-bg-hover, $button-group-normal-selected-bg-focused);
-
-      &.dx-button-success {
-        @include dx-htmleditor-button-states($button-group-success-selected-bg, $button-group-success-selected-bg-hover, $button-group-success-selected-bg-focused);
-      }
-
-      &.dx-button-default {
-        @include dx-htmleditor-button-states($button-group-default-selected-bg, $button-group-default-selected-bg-hover, $button-group-default-selected-bg-focused);
-      }
-
-      &.dx-button-danger {
-        @include dx-htmleditor-button-states($button-group-danger-selected-bg, $button-group-danger-selected-bg-hover, $button-group-danger-selected-bg-focused);
-      }
-
-      &.dx-button-normal,
-      &.dx-button-normal .dx-icon {
-        color: $button-group-normal-selected-color;
-      }
-
-      &.dx-button-success,
-      &.dx-button-success .dx-icon {
-        color: $button-group-success-selected-color;
-      }
-
-      &.dx-button-default,
-      &.dx-button-default .dx-icon {
-        color: $button-group-default-selected-color;
-      }
-
-      &.dx-button-danger,
-      &.dx-button-danger .dx-icon {
-        color: $button-group-danger-selected-color;
-      }
-    }
-
-    &.dx-button-mode-contained {
-      @include dx-htmleditor-button-states($button-normal-bg, $button-normal-contained-bg-hover, $button-normal-contained-bg-focused);
-
-      &.dx-button-success {
-        @include dx-htmleditor-button-states($button-success-bg, $button-success-contained-bg-hover, $button-success-contained-bg-focused);
-      }
-
-      &.dx-button-default {
-        @include dx-htmleditor-button-states($button-default-bg, $button-default-contained-bg-hover, $button-default-contained-bg-focused);
-      }
-
-      &.dx-button-danger {
-        @include dx-htmleditor-button-states($button-danger-bg, $button-danger-contained-bg-hover, $button-danger-contained-bg-focused);
-      }
-    }
-  }
-
   .dx-htmleditor-toolbar-separator {
     height: $generic-toolbar-height;
   }

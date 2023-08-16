@@ -3,6 +3,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "colors" as *;
+@use "../colors" as *;
 @use "../../base/icons" as *;
 @use "../../base/button/mixins" as *;
 
@@ -65,7 +66,7 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
     color: $icon-color;
   }
 
-  &.dx-item-selected {
+  &.dx-state-selected {
     background-color: $selected-background-color;
     color: $selected-color;
   }
