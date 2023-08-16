@@ -11,8 +11,6 @@ import { TemplateBase } from 'core/templates/template_base';
 import { EmptyTemplate } from 'core/templates/empty_template';
 import { ChildDefaultTemplate } from 'core/templates/child_default_template';
 import devices from 'core/devices';
-import { getPublicElement } from 'core/element';
-import $ from 'jquery';
 
 QUnit.module('TemplateManager utils', {
     beforeEach: function() {
@@ -106,20 +104,14 @@ QUnit.test('#suitableTemplatesByName', function(assert) {
 });
 
 QUnit.test('#addOneRenderedCall', function(assert) {
-    const render = sinon.spy(({ container }) => {
-        const comparer = QUnit.urlParams['nojquery'] ? 'isEqualNode' : 'is';
-        const expectedPublicElement = getPublicElement(wrappedElement);
-        assert.ok(container[comparer](expectedPublicElement), 'container should be a public element');
-    });
+    const render = sinon.spy();
     const template = { render, customField: 'customField' };
     const nextTemplate = addOneRenderedCall(template);
 
     assert.strictEqual(nextTemplate.customField, 'customField', 'should keep previous fields');
 
-    const wrappedElement = $('<div>');
-    const options = { container: wrappedElement };
-    nextTemplate.render(options);
-    assert.ok(render.calledWith(options), 'should call old `render` method');
+    nextTemplate.render('options');
+    assert.ok(render.calledWith('options'), 'should call old `render` method');
 });
 
 QUnit.test('#getNormalizedTemplateArgs', function(assert) {

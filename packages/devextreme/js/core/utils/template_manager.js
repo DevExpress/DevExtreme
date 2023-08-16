@@ -1,6 +1,5 @@
 import config from '../config';
 import devices from '../devices';
-import { getPublicElement } from '../element';
 import Errors from '../errors';
 import $ from '../renderer';
 import { ChildDefaultTemplate } from '../templates/child_default_template';
@@ -54,10 +53,6 @@ export const addOneRenderedCall = (template) => {
     const render = template.render.bind(template);
     return extend({}, template, {
         render(options) {
-            if(options && options.container) {
-                const $container = $(options.container);
-                options.container = getPublicElement($container);
-            }
             const templateResult = render(options);
             options && options.onRendered && options.onRendered();
             return templateResult;
