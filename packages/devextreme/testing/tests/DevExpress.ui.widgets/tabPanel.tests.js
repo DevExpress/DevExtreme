@@ -533,7 +533,7 @@ QUnit.module('focus policy', {
         });
     });
 
-    QUnit.test('changing showNavButtons should not set focus class on wrapper in runtime', function(assert) {
+    QUnit.test('Focus class should not be added on wrapper after change showNavButtons option in runtime', function(assert) {
         const $tabPanel = $('#tabPanel').dxTabPanel({
             items: ['item 1'],
             showNavButtons: false,
@@ -545,7 +545,7 @@ QUnit.module('focus policy', {
 
         tabPanel.option({ showNavButtons: true });
 
-        assert.strictEqual($($tabPanel).find(`.${MULTIVIEW_WRAPPER_CLASS}`).hasClass(FOCUS_STATE_CLASS), false);
+        assert.strictEqual($tabPanel.find(`.${MULTIVIEW_WRAPPER_CLASS}`).hasClass(FOCUS_STATE_CLASS), false);
     });
 });
 
