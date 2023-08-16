@@ -1,6 +1,6 @@
 import dateUtils from '../../../../core/utils/date';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
-import { getAllGroups, getGroupCount } from '../../resources/utils';
+import { getAllGroups, getGroupCount } from '../../../../__internal/scheduler/resources/m_utils';
 import {
     calculateCellIndex,
     calculateDayDuration,

@@ -981,9 +981,10 @@ describe('templates and slots', () => {
     $('#component').dxChildrenTestWidget({});
 
     const children = $('#component')[0].childNodes;
-    expect(children[2]).toBe(slotBefore[0]);
-    expect(children[3]).toBe(slotContent[0]);
-    expect(children[4]).toBe(slotAfter[0]);
+    expect(children.length).toBe(5);
+    expect(children[1]).toBe(slotBefore[0]);
+    expect(children[2]).toBe(slotContent[0]);
+    expect(children[3]).toBe(slotAfter[0]);
   });
 
   it('should not fail if template returned parent node', () => {

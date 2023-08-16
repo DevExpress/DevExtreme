@@ -40,7 +40,7 @@ jobs:
       run: npx gulp localization
 
     - name: Jest test
-      run: npx nx test-jest devextreme-root
+      run: npx nx test-jest devextreme-main
 
   notify:
     runs-on: devextreme-shr2

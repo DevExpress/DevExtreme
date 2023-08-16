@@ -11,6 +11,7 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
             value: this.dateOption('values'),
             range: [],
             selectionMode: 'multi',
+            onWeekNumberClick: this._shouldHandleWeekNumberClick() ? this._weekNumberClickHandler.bind(this) : null,
         };
     }
 
@@ -44,6 +45,12 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
 
     restoreValue() {
         this.calendar.option('values', []);
+    }
+
+    _weekNumberClickHandler({ rowDates, event }) {
+        const selectedDates = rowDates.filter((date) => !this._isDateDisabled(date));
+
+        this.dateValue(selectedDates, event);
     }
 }
 

@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Значение",
         "dxDataGrid-ariaFilterCell": "Фильтр",
         "dxDataGrid-ariaCollapse": "Свернуть",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Развернуть",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",

@@ -336,7 +336,7 @@ module('basic options changing', {
             }
         });
 
-        this.instance.reset();
+        this.instance.clear();
 
         assert.strictEqual(textChangedCounter, 1, 'text option chanded once');
         assert.strictEqual(latestTextValue, '', 'text corresponds the value');

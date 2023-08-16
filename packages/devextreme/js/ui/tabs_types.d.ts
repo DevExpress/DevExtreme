@@ -1,5 +1,6 @@
 export {
   SingleOrMultiple,
+  Orientation,
   ContentReadyEvent,
   DisposingEvent,
   InitializedEvent,

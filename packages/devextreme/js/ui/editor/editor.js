@@ -391,7 +391,7 @@ const Editor = Widget.inherit({
         }
     },
 
-    reset: function() {
+    clear: function() {
         const defaultOptions = this._getDefaultOptions();
         this.option('value', defaultOptions.value);
     }

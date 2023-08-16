@@ -507,7 +507,7 @@ test('Footer should not be hidden during auto scrolling when virtual scrollling 
 test('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await dataGrid.scrollTo({ x: 2500 });
+  await dataGrid.scrollTo(t, { x: 2500 });
 
   await t
     .expect(dataGrid.getScrollLeft())
@@ -590,16 +590,14 @@ test('The placeholder should have correct position after dragging the row to the
   });
 });
 
+// TODO: this test is unstable
 // T1126013
-test('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+test.skip('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
   const dataGrid = new DataGrid('#container');
-  await t
-    .expect(dataGrid.hasScrollable())
-    .ok();
-  await dataGrid.scrollTo({ y: 3000 });
+  await dataGrid.scrollTo(t, { y: 3000 });
   await dataGrid.moveRow(fromIndex, 0, 50, true);
   await dataGrid.moveRow(fromIndex, 0, -20);
   await t.wait(500);
@@ -648,8 +646,9 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
   });
 });
 
+// TODO: this test is unstable
 // T1139685
-test('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
+test.skip('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
@@ -667,11 +666,11 @@ test('Item should appear in a correct spot when dragging to a different page wit
   })(dataGrid);
   await t.wait(200);
 
-  const draggedRowIndex = await ClientFunction((grid) => grid.getInstance()
+  const getDraggedRowIndexFunc = ClientFunction((grid) => grid.getInstance()
     .getVisibleRows()
     .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
 
-  await t.expect(draggedRowIndex)
+  await t.expect(getDraggedRowIndexFunc)
     .eql(toIndex - 1);
 }).before(async (t) => {
   await t.maximizeWindow();

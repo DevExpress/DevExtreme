@@ -21,6 +21,8 @@ export default class Editor extends Component {
   // eslint-disable-next-line @typescript-eslint/ban-types
   _valueChangeAction!: Function;
 
+  _initialValue: unknown;
+
   _valueChangeEventInstance?: Event;
 
   getProps(): Record<string, unknown> {
@@ -62,6 +64,11 @@ export default class Editor extends Component {
 
   _render(): void {
     (this.option('_onMarkupRendered') as () => void)?.();
+  }
+
+  _init(): void {
+    super._init();
+    this._initialValue = this.option('value');
   }
 
   _initializeComponent(): void {
@@ -128,6 +135,7 @@ export default class Editor extends Component {
     switch (name) {
       case 'value':
         this._raiseValidation(value, previousValue);
+        this.option('isDirty', this._initialValue !== value);
         this._raiseValueChangeAction(value, previousValue);
         break;
       case 'onValueChanged':
@@ -149,7 +157,7 @@ export default class Editor extends Component {
     super._optionChanged(option);
   }
 
-  reset(): void {
+  clear(): void {
     const { value } = this._getDefaultOptions();
     this.option({ value });
   }
