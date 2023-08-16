@@ -504,7 +504,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     } else if (isFunction(template)) {
       renderingTemplate = {
         render(options) {
-          if (options.model.column.type === 'buttons') {
+          if (options.model.column && options.model.column.type === 'buttons') {
             options.container = $(options.container);
           }
           const renderedTemplate = template(options.container, options.model, options.change);
@@ -562,7 +562,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
       const async = options.renderAsync ?? columnAsync;
 
       if ((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
-        if (isDataRow && column && column.command && !['expand', 'virtual'].includes(column.command)) {
+        if (isDataRow && (column && column.command && !['expand', 'virtual'].includes(column.command)) || !isDefined(column)) {
           templateOptions.container = getPublicElement(container);
         }
         renderingTemplate.render(templateOptions);
