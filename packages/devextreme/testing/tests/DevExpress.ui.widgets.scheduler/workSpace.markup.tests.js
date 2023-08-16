@@ -1243,24 +1243,25 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
     });
 
     QUnit.test('WorkSpace Month view has right count of rows with view option intervalCount', function(assert) {
-        this.instance.option('currentDate', '2023-04-01');
+        this.instance.option('currentDate', new Date(2023, 6, 1));
         this.instance.option('intervalCount', 2);
 
         let rows = this.instance.$element().find('.dx-scheduler-date-table-row');
-        assert.equal(rows.length, 9, 'view has right rows count');
+        assert.equal(rows.length, 10, 'view has right rows count');
 
         this.instance.option('intervalCount', 4);
 
         rows = this.instance.$element().find('.dx-scheduler-date-table-row');
-        assert.equal(rows.length, 18, 'view has right rows count');
+        assert.equal(rows.length, 19, 'view has right rows count');
     });
 
     QUnit.test('WorkSpace Month view has right count of cells with view option intervalCount', function(assert) {
-        this.instance.option('currentDate', '2023-04-01');
+        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
+        this.instance.option('currentDate', new Date(2023, 6, 1));
         this.instance.option('intervalCount', 2);
 
         const rows = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(rows.length, 7 * 9, 'view has right cells count');
+        assert.equal(rows.length, 7 * 10, 'view has right cells count');
     });
 
     QUnit.test('WorkSpace Month view with option intervalCount has cells with special firstDayOfMonth class', function(assert) {
