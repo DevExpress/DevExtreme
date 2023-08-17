@@ -1,1 +1,1 @@
-import '../../__internal/grids/tree_list/module_not_extended/column_headers';
+import '../../__internal/grids/tree_list/column_headers/m_column_headers';

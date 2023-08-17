@@ -124,6 +124,10 @@ export const RowsView = rowsModule.views.rowsView.inherit((function () {
     isExpandIcon($targetElement) {
       return !!$targetElement.closest(`.${TREELIST_EXPANDED_CLASS}, .${TREELIST_COLLAPSED_CLASS}`).length;
     },
+
+    setTableRole($tableElement) {
+      this.setAria('role', 'treegrid', $tableElement);
+    },
   };
 })());
 
