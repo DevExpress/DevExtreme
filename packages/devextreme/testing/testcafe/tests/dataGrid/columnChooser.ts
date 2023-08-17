@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { a11yCheck } from '../../helpers/accessibilityUtils';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
-import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from '../../model/dataGrid';
 import { getData } from './helpers/generateDataSourceData';
-import { Themes } from '../../helpers/themes';
 
 fixture`Column chooser`
   .page(url(__dirname, '../container.html'));

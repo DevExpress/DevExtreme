@@ -1,5 +1,4 @@
 import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
-import { a11yCheck } from '../../helpers/accessibilityUtils';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import DataGrid from '../../model/dataGrid';
 import url from '../../helpers/getPageUrl';
@@ -7,7 +6,6 @@ import createWidget from '../../helpers/createWidget';
 import SelectBox from '../../model/selectBox';
 import TextBox from '../../model/textBox';
 import { changeTheme } from '../../helpers/changeTheme';
-import { Themes } from './helpers/themes';
 
 async function createDataGridWithPager(): Promise<any> {
   const dataSource = Array.from({ length: 100 }, (_, room) => ({ name: 'Alex', phone: '555555', room }));
