@@ -170,7 +170,7 @@ export interface dxMultiViewBaseOptions<
 export default class dxMultiView<
     TItem extends ItemLike = any,
     TKey = any,
-> extends CollectionWidget<dxMultiViewOptions<TItem, TKey>, TItem, TKey> { }
+> extends CollectionWidget<Properties<TItem, TKey>, TItem, TKey> { }
 
 /**
  * @public

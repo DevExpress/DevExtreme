@@ -20834,7 +20834,11 @@ declare module DevExpress.ui {
   export class dxMultiView<
     TItem extends DevExpress.ui.dxMultiView.ItemLike = any,
     TKey = any
-  > extends CollectionWidget<dxMultiViewOptions<TItem, TKey>, TItem, TKey> {}
+  > extends CollectionWidget<
+    DevExpress.ui.dxMultiView.Properties<TItem, TKey>,
+    TItem,
+    TKey
+  > {}
   module dxMultiView {
     /**
      * [descr:_ui_multi_view_ContentReadyEvent]
