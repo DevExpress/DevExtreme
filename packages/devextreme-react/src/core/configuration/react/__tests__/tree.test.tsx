@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ElementType, IOptionElement } from '../element';
 import { processChildren } from '../tree';
 
-function createElementWithChildren(children: Array<any>):IOptionElement {
+function createElementWithChildren(children: any[]): IOptionElement {
   return {
     type: ElementType.Option,
     descriptor: {

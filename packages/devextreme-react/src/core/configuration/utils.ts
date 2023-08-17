@@ -35,7 +35,7 @@ export const isIE = (): boolean => {
   const msie = ua.indexOf('MSIE'); // IE 10 or older
   const trident = ua.indexOf('Trident/'); // IE 11
 
-  return (msie > 0 || trident > 0);
+  return msie > 0 || trident > 0;
 };
 
 export const shallowEquals = (

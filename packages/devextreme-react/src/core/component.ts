@@ -3,8 +3,8 @@ import * as React from 'react';
 import { ComponentBase, IHtmlOptions } from './component-base';
 import { ExtensionComponent } from './extension-component';
 
-class Component<P> extends ComponentBase<P> {
-  private _extensionCreators: Array<(element: Element) => void> = [];
+class Component<P extends IHtmlOptions> extends ComponentBase<P> {
+  private _extensionCreators: ((element: Element) => void)[] = [];
 
   constructor(props: P) {
     super(props);
@@ -27,13 +27,15 @@ class Component<P> extends ComponentBase<P> {
     this._extensionCreators = [];
   }
 
+  // @ts-expect-error TS2416
   protected renderChildren(): Record<string, unknown>[] | null | undefined {
     return React.Children.map(
+      // @ts-expect-error TS2339
       this.props.children,
       (child) => {
-        if (child && Object.prototype.isPrototypeOf.call(ExtensionComponent, (child as any).type)) {
+        if (child && Object.prototype.isPrototypeOf.call(ExtensionComponent, child.type)) {
           return React.cloneElement(
-            child as any,
+            child,
             { onMounted: this._registerExtension },
           );
         }

@@ -6,8 +6,8 @@ interface IConfigChanges {
   options: Record<string, any>;
   removedOptions: string[];
   templates: Record<string, ITemplate>;
-  addRemovedValues(
-    currentOptions: Record<string, any>, prevOptions: Record<string, any>, path: string): void;
+  addRemovedValues: (
+    currentOptions: Record<string, any>, prevOptions: Record<string, any>, path: string) => void;
 }
 
 function compareTemplates(current: IConfigNode, prev: IConfigNode, changesAccum: IConfigChanges) {
@@ -84,7 +84,7 @@ function appendRemovedValues(
   path: string,
   changesAccum: string[],
 ) {
-  const removedKeys = Object.keys(prev).filter((key) => Object.keys(current).indexOf(key) < 0);
+  const removedKeys = Object.keys(prev).filter((key) => !Object.keys(current).includes(key));
 
   removedKeys.forEach((key) => {
     changesAccum.push(mergeNameParts(path, key));
@@ -115,7 +115,7 @@ function compareCollections(
     const currentCollection = current.configCollections[key];
     const prevCollection = prev.configCollections[key] || [];
     if (!currentCollection || currentCollection.length !== prevCollection.length) {
-      const updatedCollection: Array<Record<string, any>> = [];
+      const updatedCollection: Record<string, any>[] = [];
       currentCollection.forEach(
         (item) => {
           const config = buildNode(item, changesAccum.templates, true);

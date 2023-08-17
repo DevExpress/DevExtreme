@@ -106,6 +106,7 @@ describe('option update', () => {
     const spyForceUpdateCallback = jest.spyOn(current, 'forceUpdate').mockImplementation((cb) => {
       expect((current as any).updateScheduled).toEqual(true);
       expect(onRendered).not.toHaveBeenCalled();
+      // @ts-ignore
       cb();
       expect(onRendered).toHaveBeenCalled();
 

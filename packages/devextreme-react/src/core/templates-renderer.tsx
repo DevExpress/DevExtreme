@@ -33,7 +33,8 @@ class TemplatesRenderer extends React.PureComponent<{
 
     const updateFunc = useDeferUpdate ? deferUpdate : requestAnimationFrame;
 
-    updateFunc(() => {
+    // eslint-disable-next-line no-void
+    void updateFunc(() => {
       if (this.mounted) {
         this.isUpdateFuncLaunched = true;
 
@@ -58,6 +59,7 @@ class TemplatesRenderer extends React.PureComponent<{
     return React.createElement(
       React.Fragment,
       {},
+      // @ts-expect-error TS2769
       templatesStore.renderWrappers(),
     );
   }

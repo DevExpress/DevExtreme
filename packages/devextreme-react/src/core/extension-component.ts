@@ -1,6 +1,6 @@
-import { ComponentBase } from './component-base';
+import { ComponentBase, IHtmlOptions } from './component-base';
 
-class ExtensionComponent<P> extends ComponentBase<P> {
+class ExtensionComponent<P extends IHtmlOptions> extends ComponentBase<P> {
   public componentDidMount(): void {
     const { onMounted } = this.props as any;
     if (onMounted) {

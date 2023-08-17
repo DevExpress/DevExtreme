@@ -9,7 +9,7 @@
     "url": "https://github.com/DevExpress/devextreme-react.git"
   },
   "peerDependencies": {
-    "devextreme": "23.2-next"
+    "devextreme": "~23.2.0"
   },
   "dependencies": {
     "devextreme-react": "~23.2.0",

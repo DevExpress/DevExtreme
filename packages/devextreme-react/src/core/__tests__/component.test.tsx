@@ -1,5 +1,5 @@
 import * as events from 'devextreme/events';
-import { render, cleanup } from '@testing-library/react';
+import * as testingLib from '@testing-library/react';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { isIE } from '../configuration/utils';
@@ -13,21 +13,26 @@ import {
 import { TemplatesRenderer } from '../templates-renderer';
 
 jest.useFakeTimers();
+jest.mock('react-dom', () => ({
+  __esModule: true,
+  default: jest.requireActual('react-dom'),
+  ...jest.requireActual('react-dom'),
+}));
 
 jest.mock('../configuration/utils', () => ({
-  ...require.requireActual('../configuration/utils'),
+  ...jest.requireActual('../configuration/utils'),
   isIE: jest.fn(),
 }));
 
 describe('rendering', () => {
   afterEach(() => {
     jest.clearAllMocks();
-    cleanup();
+    testingLib.cleanup();
   });
 
   it('renders component without children correctly', () => {
     const templatesRendererRenderFn = jest.spyOn(TemplatesRenderer.prototype, 'render');
-    const { container } = render(<TestComponent />);
+    const { container } = testingLib.render(<TestComponent />);
 
     expect(container.children.length).toBe(1);
 
@@ -39,7 +44,7 @@ describe('rendering', () => {
 
   it('renders component with children correctly', () => {
     const templatesRendererRenderFn = jest.spyOn(TemplatesRenderer.prototype, 'render');
-    const { container } = render(
+    const { container } = testingLib.render(
       <TestComponent>
         <span />
       </TestComponent>,
@@ -61,9 +66,7 @@ describe('rendering', () => {
         <div>Test</div>
       </TestComponent>
     );
-    const { container, unmount, rerender } = render(
-      component, { legacyRoot: true },
-    );
+    const { container, unmount, rerender } = testingLib.render(component, { legacyRoot: true });
 
     unmount();
     rerender(component);
@@ -79,7 +82,7 @@ describe('rendering', () => {
   it('renders portal component without children correctly', () => {
     const createPortalFn = jest.spyOn(ReactDOM, 'createPortal');
     const templatesRendererRenderFn = jest.spyOn(TemplatesRenderer.prototype, 'render');
-    const { container } = render(<TestPortalComponent />);
+    const { container } = testingLib.render(<TestPortalComponent />);
 
     expect(container.children.length).toBe(1);
 
@@ -93,7 +96,7 @@ describe('rendering', () => {
   it('renders portal component with children correctly', () => {
     const createPortalFn = jest.spyOn(ReactDOM, 'createPortal');
     const templatesRendererRenderFn = jest.spyOn(TemplatesRenderer.prototype, 'render');
-    const { container } = render(
+    const { container } = testingLib.render(
       <TestPortalComponent>
         <span />
       </TestPortalComponent>,
@@ -120,7 +123,7 @@ describe('rendering', () => {
   it('renders portal component with children correctly (IE11)', () => {
     (isIE as jest.Mock).mockImplementation(() => true);
     const templatesRendererRenderFn = jest.spyOn(TemplatesRenderer.prototype, 'render');
-    const { container } = render(
+    const { container } = testingLib.render(
       <TestPortalComponent>
         <span />
       </TestPortalComponent>,
@@ -147,21 +150,22 @@ describe('rendering', () => {
   });
 
   it('create widget on componentDidMount', () => {
-    render(<TestComponent />);
+    testingLib.render(<TestComponent />);
 
     expect(WidgetClass.mock.instances.length).toBe(1);
   });
 
   it('pass templatesRenderAsynchronously to widgets', () => {
-    render(
+    testingLib.render(
       <TestComponent />,
     );
 
+    // @ts-ignore
     expect(WidgetClass.mock.calls[0][1]).toEqual({ templatesRenderAsynchronously: true });
   });
 
   it('creates nested component', () => {
-    render(
+    testingLib.render(
       <TestComponent>
         <TestComponent />
       </TestComponent>,
@@ -172,7 +176,7 @@ describe('rendering', () => {
   });
 
   it('clears nested option in strict mode', () => {
-    render(
+    testingLib.render(
       <React.StrictMode>
         <TestComponent>
           <TestComponent />
@@ -183,19 +187,20 @@ describe('rendering', () => {
   });
 
   it('do not pass children to options', () => {
-    render(
+    testingLib.render(
       <TestComponent>
         <TestComponent />
       </TestComponent>,
     );
 
+    // @ts-ignore
     expect(WidgetClass.mock.calls[1][1].children).toBeUndefined();
   });
 });
 
 describe('element attrs management', () => {
   it('passes id, className and style to element', () => {
-    const { container } = render(
+    const { container } = testingLib.render(
       <TestComponent id="id1" className="class1" style={{ background: 'red' }} />,
       {},
     );
@@ -208,7 +213,7 @@ describe('element attrs management', () => {
   });
 
   it('updates id, className and style', () => {
-    const { container, rerender } = render(
+    const { container, rerender } = testingLib.render(
       <TestComponent id="id1" className="class1" style={{ background: 'red' }} />,
     );
 
@@ -229,7 +234,7 @@ describe('element attrs management', () => {
   });
 
   it('sets id, className and style after init', () => {
-    const { container, rerender } = render(
+    const { container, rerender } = testingLib.render(
       <TestComponent />,
     );
 
@@ -249,7 +254,7 @@ describe('element attrs management', () => {
   });
 
   it('cleans className (empty string)', () => {
-    const { container, rerender } = render(
+    const { container, rerender } = testingLib.render(
       <TestComponent className="class1" />,
     );
 
@@ -263,7 +268,7 @@ describe('element attrs management', () => {
   });
 
   it('cleans className (undefined)', () => {
-    const { container, rerender } = render(
+    const { container, rerender } = testingLib.render(
       <TestComponent className="class1" />,
     );
 
@@ -276,7 +281,7 @@ describe('element attrs management', () => {
 
 describe('disposing', () => {
   it('call dispose', () => {
-    const component = render(
+    const component = testingLib.render(
       <TestComponent />,
     );
 
@@ -287,7 +292,7 @@ describe('disposing', () => {
 
   it('fires dxremove', () => {
     const handleDxRemove = jest.fn();
-    const { container, unmount } = render(
+    const { container, unmount } = testingLib.render(
       <TestComponent />,
     );
 
@@ -300,7 +305,7 @@ describe('disposing', () => {
   });
 
   it('remove option guards', () => {
-    const component = render(
+    const component = testingLib.render(
       <TestComponent option1 />,
     );
 

@@ -43,7 +43,7 @@ describe('useLegacyTemplateEngine', () => {
         {data.dxkey}
       </div>
     );
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const { container } = testingRender(
       <ComponentWithTemplates itemRender={ItemTemplate}>
@@ -51,6 +51,7 @@ describe('useLegacyTemplateEngine', () => {
       </ComponentWithTemplates>,
     );
 
+    // @ts-ignore
     const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates.item;
 
     act(() => {
@@ -79,7 +80,7 @@ describe('useLegacyTemplateEngine', () => {
       );
     };
 
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const { container } = testingRender(
       <ComponentWithTemplates itemComponent={ItemTemplate}>
@@ -87,6 +88,7 @@ describe('useLegacyTemplateEngine', () => {
       </ComponentWithTemplates>,
     );
 
+    // @ts-ignore
     const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates.item;
 
     act(() => render({

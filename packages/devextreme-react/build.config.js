@@ -5,8 +5,8 @@ module.exports = {
   npm: {
     dist: './npm/',
     package: 'package.json',
-    license: '../../LICENSE',
-    readme: '../../README.md'
+    license: 'LICENSE',
+    readme: 'README.md'
   },
   metadataPath: './metadata/integration-data.json',
   generatedComponentsDir: './src',

@@ -85,7 +85,9 @@ describe('templates-store', () => {
     const renderer1 = jest.fn(() => 1);
     const renderer2 = jest.fn(() => 2);
 
+    // @ts-ignore
     templatesStore.add('1', renderer1);
+    // @ts-ignore
     templatesStore.add('2', renderer2);
 
     const wrappers = templatesStore.renderWrappers();

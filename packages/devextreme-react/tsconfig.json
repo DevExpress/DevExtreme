@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.json",
 
   "compilerOptions": {
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "skipLibCheck": true
   },
 
   "include": [

@@ -32,7 +32,7 @@ const contentCreators = {
 };
 
 class TemplatesManager {
-  private _templatesStore: TemplatesStore;
+  private readonly _templatesStore: TemplatesStore;
 
   private _templates: Record<string, any> = {};
 

@@ -4,7 +4,7 @@ const elementPropNames = ['style', 'id'];
 const classNamePropName = 'className';
 
 function isIgnoredProp(name: string) {
-  return name === 'children' || name === classNamePropName || elementPropNames.indexOf(name) > -1;
+  return name === 'children' || name === classNamePropName || elementPropNames.includes(name);
 }
 
 function separateProps(

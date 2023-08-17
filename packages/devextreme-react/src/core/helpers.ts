@@ -5,7 +5,7 @@ export function generateID(): string {
 export class DoubleKeyMap<TKey1, TKey2, TValue> {
   private readonly _map: Map<TKey1, Map<TKey2, TValue>> = new Map();
 
-  public set({ key1, key2 }: { key1: TKey1, key2: TKey2 }, value: TValue): void {
+  public set({ key1, key2 }: { key1: TKey1; key2: TKey2 }, value: TValue): void {
     let innerMap = this._map.get(key1);
     if (!innerMap) {
       innerMap = new Map<TKey2, TValue>();
@@ -15,12 +15,12 @@ export class DoubleKeyMap<TKey1, TKey2, TValue> {
     innerMap.set(key2, value);
   }
 
-  public get({ key1, key2 }: { key1: TKey1, key2: TKey2 }): TValue | undefined {
+  public get({ key1, key2 }: { key1: TKey1; key2: TKey2 }): TValue | undefined {
     const innerMap = this._map.get(key1);
     return innerMap ? innerMap.get(key2) : undefined;
   }
 
-  public delete({ key1, key2 }: { key1: TKey1, key2: TKey2 }): void {
+  public delete({ key1, key2 }: { key1: TKey1; key2: TKey2 }): void {
     const innerMap = this._map.get(key1);
     if (!innerMap) {
       return;

@@ -59,11 +59,11 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   private _templatesRendererRef: TemplatesRenderer | null;
 
-  private _templatesStore: TemplatesStore;
+  private readonly _templatesStore: TemplatesStore;
 
-  private _templatesManager: TemplatesManager;
+  private readonly _templatesManager: TemplatesManager;
 
-  private _optionsManager: OptionsManager;
+  private readonly _optionsManager: OptionsManager;
 
   protected useRequestAnimationFrameFlag = false;
 
@@ -130,9 +130,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       );
     }
 
-    this._optionsManager.setInstance(
-      this._instance, config, this.subscribableOptions, this.independentEvents,
-    );
+    this._optionsManager.setInstance(this._instance, config, this.subscribableOptions, this.independentEvents);
     this._instance.on('optionChanged', this._optionsManager.onOptionChanged);
   }
 
@@ -188,11 +186,13 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   }
 
   protected renderChildren(): React.ReactNode {
+    // @ts-expect-error TS2339
     const { children } = this.props;
     return children;
   }
 
   protected renderContent(): React.ReactNode {
+    // @ts-expect-error TS2339
     const { children } = this.props;
 
     return this.isPortalComponent && children

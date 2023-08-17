@@ -3,13 +3,14 @@ import { ElementType, getElementInfo } from './configuration/react/element';
 
 interface INestedOptionMeta {
   optionName: string;
-  registerNestedOption(component: React.ReactElement<any>): any;
-  updateFunc(newProps: any, prevProps: any): void;
-  makeDirty(): void;
+  registerNestedOption: (component: React.ReactElement) => any;
+  updateFunc: (newProps: any, prevProps: any) => void;
+  makeDirty: () => void;
 }
 
 class NestedOption<P> extends React.PureComponent<P, any> {
   public render(): React.ReactNode {
+    // @ts-expect-error TS2339
     const { children: stateChildren } = this.props;
     const children = React.Children.map(
       stateChildren,

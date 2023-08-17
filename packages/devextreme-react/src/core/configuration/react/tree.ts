@@ -19,10 +19,10 @@ interface IWidgetDescriptor {
 }
 
 export function processChildren(parentElement: IOptionElement, parentFullName: string): {
-  configs: Record<string, IConfigNode>,
-  configCollections: Record<string, IConfigNode[]>,
-  templates: ITemplate[],
-  hasTranscludedContent: boolean
+  configs: Record<string, IConfigNode>;
+  configCollections: Record<string, IConfigNode[]>;
+  templates: ITemplate[];
+  hasTranscludedContent: boolean;
 } {
   const templates: ITemplate[] = [];
   const configCollections: Record<string, IConfigNode[]> = {};

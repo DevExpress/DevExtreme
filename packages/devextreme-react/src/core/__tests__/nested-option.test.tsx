@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable max-classes-per-file */
 import { render, cleanup } from '@testing-library/react';
 import * as React from 'react';
@@ -51,13 +52,13 @@ class AnotherNestedComponent extends ConfigurationComponent<{ b: string }> {
   public static OptionName = 'anotherOption';
 }
 
-class CollectionNestedComponent extends ConfigurationComponent<{ c?: number, d?: string }> {
+class CollectionNestedComponent extends ConfigurationComponent<{ c?: number; d?: string }> {
   public static IsCollectionItem = true;
 
   public static OptionName = 'itemOptions';
 }
 
-class CollectionSubNestedComponent extends ConfigurationComponent<{ c?: number, d?: string }> {
+class CollectionSubNestedComponent extends ConfigurationComponent<{ c?: number; d?: string }> {
   public static IsCollectionItem = true;
 
   public static OptionName = 'subItemsOptions';
@@ -221,6 +222,7 @@ describe('nested option', () => {
     );
 
     const actualProps = WidgetClass.mock.calls[0][1];
+
     expect(actualProps.option).toEqual([
       { predefinedProp: 'predefined-value-1', a: 123 },
       { predefinedProp: 'predefined-value-2', a: 456 },

@@ -26,7 +26,7 @@ class TemplatesStore {
 
   private removeDefferedTemplate(): void {
     Object.entries(this._templates)
-      .filter(([, templateInfo]) => (templateInfo.isDeferredRemove))
+      .filter(([, templateInfo]) => templateInfo.isDeferredRemove)
       .forEach(([templateId]) => {
         delete this._templates[templateId];
       });

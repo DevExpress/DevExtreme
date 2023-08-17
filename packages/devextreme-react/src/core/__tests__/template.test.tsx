@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable max-classes-per-file */
 import * as events from 'devextreme/events';
 import { cleanup, render, screen } from '@testing-library/react';
@@ -46,7 +47,7 @@ function renderTemplate(
   container = container || document.createElement('div');
   const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates[name];
   return render({
-    container, model, ...(index && { index }), onRendered,
+    container, model, ...index && { index }, onRendered,
   });
 }
 
@@ -64,7 +65,7 @@ function testTemplateOption(testedOption: string) {
 
   if (testedOption === 'itemComponent') {
     prepareTemplate = (render) => {
-      class ItemComponent extends React.PureComponent<{ data: any, index?: number }> {
+      class ItemComponent extends React.PureComponent<{ data: any; index?: number }> {
         public render() {
           const { data, index } = this.props;
           return render(data, index);
@@ -75,7 +76,7 @@ function testTemplateOption(testedOption: string) {
   }
 
   it('pass integrationOptions to widget', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = () => <div>Template</div>;
     render(
@@ -97,7 +98,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('renders', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = prepareTemplate((data: any) => (
       <div className="template">
@@ -119,7 +120,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('renders with text node inside component', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = () => <div>Template</div>;
 
@@ -137,7 +138,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('renders new template after component change', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const elementOptions: Record<string, any> = { ref };
     elementOptions[testedOption] = () => <div className="template">First Template</div>;
     const { rerender, container } = render(
@@ -179,7 +180,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('renders inside unwrapped container', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = () => <div className="template">Template</div>;
     const { container } = render(
@@ -194,7 +195,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('renders template removeEvent listener', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = prepareTemplate((data: any) => (
@@ -217,7 +218,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('does not render template removeEvent listener', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = prepareTemplate((data: any) => (
@@ -245,7 +246,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('render invisible element as tr tag', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = prepareTemplate((data: any) => (
@@ -271,7 +272,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('calls onRendered callback', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = prepareTemplate((data: any) => (
@@ -294,7 +295,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('renders empty template without errors', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = () => null;
@@ -312,7 +313,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('has templates with unique ids', () => {
-    const ref = React.createRef() as React.RefObject<ComponentWithTemplates>;
+    const ref = React.createRef<ComponentWithTemplates>();
 
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = prepareTemplate((data: any) => (
@@ -325,8 +326,8 @@ function testTemplateOption(testedOption: string) {
       <ComponentWithTemplates {...elementOptions} ref={ref} />,
     );
 
-    const componentInstance = ref.current as unknown as {
-      _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
+    const componentInstance = ref.current as {
+      _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> }; };
 
     act(() => { renderItemTemplate({ text: 1 }); });
     act(() => { renderItemTemplate({ text: 2 }); });
@@ -337,7 +338,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('removes previous template if its container was removed', () => {
-    const ref = React.createRef() as React.RefObject<ComponentWithTemplates>;
+    const ref = React.createRef<ComponentWithTemplates>();
 
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = prepareTemplate((data: any) => (
@@ -350,8 +351,8 @@ function testTemplateOption(testedOption: string) {
       <ComponentWithTemplates {...elementOptions} ref={ref} />,
     );
 
-    const componentInstance = ref.current as unknown as {
-      _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
+    const componentInstance = ref.current as {
+      _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> }; };
 
     const container = document.createElement('div');
     act(() => { renderItemTemplate({ text: 1 }, container); });
@@ -363,7 +364,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('has templates with ids genetated with keyExpr', () => {
-    const ref = React.createRef() as React.RefObject<ComponentWithTemplates>;
+    const ref = React.createRef<ComponentWithTemplates>();
 
     const elementOptions: Record<string, unknown> = {};
     elementOptions[testedOption] = prepareTemplate((data: Record<string, unknown>) => (
@@ -380,7 +381,7 @@ function testTemplateOption(testedOption: string) {
     act(() => { renderItemTemplate({ text: 1 }); });
     act(() => { renderItemTemplate({ text: 2 }); });
 
-    const componentInstance = ref.current as unknown as { _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
+    const componentInstance = ref.current as { _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
 
     const templatesKeys = Object.getOwnPropertyNames(componentInstance._templatesStore._templates);
     expect(templatesKeys.length).toBe(2);
@@ -389,8 +390,8 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('removes text template', () => {
-    const ref = React.createRef() as React.RefObject<ComponentWithTemplates>;
-    const refContainer = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<ComponentWithTemplates>();
+    const refContainer = React.createRef<HTMLDivElement>();
 
     const elementOptions: Record<string, any> = {};
     elementOptions[testedOption] = prepareTemplate((data: any) => (
@@ -405,7 +406,7 @@ function testTemplateOption(testedOption: string) {
       </ComponentWithTemplates>,
     );
 
-    const componentInstance = ref.current as unknown as { _templatesStore: TemplatesStore };
+    const componentInstance = ref.current as { _templatesStore: TemplatesStore };
 
     act(() => { renderItemTemplate({}, refContainer.current); });
     expect(componentInstance._templatesStore.renderWrappers().length).toBe(1);
@@ -431,8 +432,8 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('removes template', () => {
-    const ref = React.createRef() as React.RefObject<ComponentWithTemplates>;
-    const refContainer = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<ComponentWithTemplates>();
+    const refContainer = React.createRef<HTMLDivElement>();
 
     const elementOptions: Record<string, any> = {
       [testedOption]: prepareTemplate((data: any) => (
@@ -449,7 +450,7 @@ function testTemplateOption(testedOption: string) {
       </ComponentWithTemplates>,
     );
 
-    const componentInstance = ref.current as unknown as { _templatesStore: TemplatesStore };
+    const componentInstance = ref.current as { _templatesStore: TemplatesStore };
 
     act(() => { renderItemTemplate(undefined, refContainer.current); });
     expect(componentInstance._templatesStore.renderWrappers().length).toBe(1);
@@ -474,7 +475,7 @@ describe('function template', () => {
   testTemplateOption('itemRender');
 
   it('renders simple item', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const itemRender: any = jest.fn((text: string) => (
       <div className="template">
         Template
@@ -494,7 +495,7 @@ describe('function template', () => {
   });
 
   it('renders index', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const itemRender: any = jest.fn((_, index: number) => (
       <div className="template">
         Index
@@ -522,7 +523,7 @@ describe('component template', () => {
   testTemplateOption('itemComponent');
 
   it('renders index', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const ItemTemplate = (props: any) => {
       const { data, index } = props;
       return (
@@ -587,7 +588,7 @@ describe('nested template', () => {
   });
 
   it('renders nested templates', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const FirstTemplate = () => <div className="template">Template</div>;
     const { container } = render(
       <ComponentWithTemplates>
@@ -601,7 +602,7 @@ describe('nested template', () => {
   });
 
   it('renders children of nested template', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const { container } = render(
       <ComponentWithTemplates>
         <Template name="item1">
@@ -617,7 +618,7 @@ describe('nested template', () => {
   });
 
   it('renders new templates after component change', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const FirstTemplate = () => <div className="template">First Template</div>;
     const { container, rerender } = render(
@@ -643,7 +644,7 @@ describe('nested template', () => {
   });
 
   it('renders new templates after children change', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const { container, rerender } = render(
       <ComponentWithTemplates>
         <Template name="item1">
@@ -669,7 +670,7 @@ describe('nested template', () => {
   });
 
   it('has templates with ids genetated by keyFn', () => {
-    const ref = React.createRef() as React.RefObject<ComponentWithTemplates>;
+    const ref = React.createRef<ComponentWithTemplates>();
     const FirstTemplate = () => <div className="template">Template</div>;
     const keyExpr = (data) => data.text;
     render(
@@ -752,7 +753,6 @@ describe('component/render in nested options', () => {
     );
 
     const options = WidgetClass.mock.calls[0][1];
-
     const { integrationOptions } = options;
 
     expect(integrationOptions.templates.nested).toBeDefined();
@@ -790,13 +790,16 @@ describe('component/render in nested options', () => {
       <TestComponent>
         <CollectionNestedComponent render={UserTemplate} />
         <CollectionNestedComponent render={UserTemplate} />
+        // @ts-expect-error TS2769
         <CollectionNestedComponent>
           <NestedComponent itemRender={UserTemplate} />
         </CollectionNestedComponent>
+        // @ts-expect-error TS2769
         <CollectionNestedComponent>
           <NestedComponent />
           abc
         </CollectionNestedComponent>
+        // @ts-expect-error TS2769
         <NestedComponent>
           <CollectionNestedComponent render={UserTemplate} />
         </NestedComponent>
@@ -821,38 +824,32 @@ describe('component/render in nested options', () => {
     ]);
   });
 
-  it("pass integrationOptions for collection nested component with 'template' option if a child defined", () => {
+  it('pass integrationOptions for collection nested component with \'template\' option if a child defined', () => {
     const UserTemplate = () => <div>Template</div>;
     render(
       <TestComponent>
         <NestedComponent>
           <UserTemplate />
         </NestedComponent>
-
         <CollectionNestedComponent>
           <UserTemplate />
         </CollectionNestedComponent>
-
         <CollectionNestedComponent>
           <UserTemplate />
         </CollectionNestedComponent>
-
         <CollectionNestedComponent>
           <NestedComponent />
           <UserTemplate />
         </CollectionNestedComponent>
-
         <CollectionNestedComponent>
           <NestedComponent />
           abc
         </CollectionNestedComponent>
-
         <CollectionNestedComponent>
           <NestedComponent />
         </CollectionNestedComponent>
 
         <CollectionNestedComponent />
-
         <CollectionNestedComponent>
           <CollectionNestedComponent />
           <CollectionNestedComponent />
@@ -881,7 +878,7 @@ describe('component/render in nested options', () => {
     ]);
   });
 
-  it("pass integrationOptions for collection nested component with 'template' option for different transcluded content", () => {
+  it('pass integrationOptions for collection nested component with \'template\' option for different transcluded content', () => {
     const UserTemplate = () => <div>Template</div>;
     render(
       <TestComponent>
@@ -941,7 +938,7 @@ describe('component/render in nested options', () => {
   });
 
   it('renders templates', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const FirstTemplate = () => <div className="template">First Template</div>;
     const { container, rerender } = render(
@@ -966,7 +963,7 @@ describe('component/render in nested options', () => {
   });
 
   it('renders static templates', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const FirstTemplate = () => <div className="template">First Template</div>;
     const { container, rerender } = render(
@@ -997,7 +994,7 @@ describe('component/render in nested options', () => {
 
   // T748280
   it('renders updates in deeply nested templates', () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const getTemplate = (arg: string) => () => <div className="template">{arg}</div>;
     const TestContainer = (props: any) => {
@@ -1150,7 +1147,7 @@ describe('async template', () => {
       </div>
     );
 
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const { container } = render(
       <ComponentWithAsyncTemplates {...elementOptions}>
@@ -1169,7 +1166,7 @@ describe('async template', () => {
   });
 
   it('does not force update on each template', async () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
 
     const elementOptions: Record<string, any> = {};
     elementOptions.itemRender = (data: any) => (
@@ -1186,7 +1183,7 @@ describe('async template', () => {
     );
 
     const renderSpy = jest.spyOn(
-      TemplatesStore.prototype as TemplatesStore,
+      TemplatesStore.prototype,
       'renderWrappers',
     );
 
@@ -1203,7 +1200,7 @@ describe('async template', () => {
 
   /* T1124149 */
   it('should render template if it is added while previous rendering', async () => {
-    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+    const ref = React.createRef<HTMLDivElement>();
     const elementOptions: Record<string, any> = {};
     elementOptions.itemRender = (data: any) => (
       <div className={`template ${data.cls}`}>

@@ -21,9 +21,9 @@ export function scheduleGuards(): void {
 }
 
 class OptionsManager {
-  private readonly guards: Record<string, ()=> void> = {};
+  private readonly guards: Record<string, () => void> = {};
 
-  private templatesManager: TemplatesManager;
+  private readonly templatesManager: TemplatesManager;
 
   private instance: any;
 
@@ -77,7 +77,7 @@ class OptionsManager {
   }
 
   public update(config: IConfigNode): void {
-    const changedOptions:Array<[string, unknown]> = [];
+    const changedOptions: [string, unknown][] = [];
     const optionChangedHandler = ({ value, fullName }) => {
       changedOptions.push([fullName, value]);
     };
@@ -126,7 +126,7 @@ class OptionsManager {
     this.instance.endUpdate();
   }
 
-  public onOptionChanged(e: { name: string, fullName: string, value: unknown }): void {
+  public onOptionChanged(e: { name: string; fullName: string; value: unknown }): void {
     if (this.isUpdating) {
       return;
     }
@@ -144,7 +144,7 @@ class OptionsManager {
     const { value, type } = valueDescriptor;
     if (value instanceof Array && type === ValueType.Array) {
       for (let i = 0; i < value.length; i += 1) {
-        if (value[i] !== (e.value as Array<unknown>)?.[i]) {
+        if (value[i] !== (e.value as unknown[])?.[i]) {
           this.addGuard(e.fullName, value);
           return;
         }

@@ -56,6 +56,7 @@ it('creates widget on componentDidMount inside another component on same element
   );
 
   expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
+  // @ts-ignore
   expect(ExtensionWidgetClass.mock.calls[0][0]).toBe(WidgetClass.mock.calls[0][0]);
 });
 
@@ -76,9 +77,11 @@ it('pulls options from a single nested component', () => {
     </TestComponent>,
   );
 
+  // @ts-ignore
   const options = ExtensionWidgetClass.mock.calls[0][1];
 
   expect(options).toHaveProperty('option1');
+  // @ts-ignore
   expect(options.option1).toMatchObject({
     a: 123,
   });

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable max-classes-per-file */
 import { cleanup, render } from '@testing-library/react';
 import * as React from 'react';
@@ -16,6 +17,10 @@ import TemplatesManager from '../templates-manager';
 import { TemplatesStore } from '../templates-store';
 
 jest.useFakeTimers();
+jest.mock('devextreme/core/utils/common', () => ({
+  __esModule: true, //    <----- this __esModule: true is important
+  ...jest.requireActual('devextreme/core/utils/common'),
+}));
 
 interface IControlledComponentProps {
   defaultControlledOption?: string;
@@ -37,7 +42,7 @@ class NestedComponent extends ConfigurationComponent<{
   a?: number;
   b?: string;
   c?: string;
-  arrayValue?: Array<unknown> | null;
+  arrayValue?: unknown[] | null;
   defaultC?: string;
   complexValue?: Record<string, unknown>;
   value?: number;
@@ -873,7 +878,7 @@ describe('onXXXChange', () => {
     beforeAll(() => {
       jest.spyOn(
         OptionsManagerModule.OptionsManager.prototype as
-        OptionsManagerModule.OptionsManager & { isOptionSubscribable: () => boolean; },
+        OptionsManagerModule.OptionsManager & { isOptionSubscribable: () => boolean },
         'isOptionSubscribable',
       )
         .mockImplementation(() => true);
@@ -933,7 +938,7 @@ describe('onXXXChange', () => {
     });
 
     it('is not called if received value is being modified', () => {
-      const ref = React.createRef() as React.RefObject<TestComponent>;
+      const ref = React.createRef<TestComponent>();
       const onPropChange = jest.fn();
       const defaultProps = {
         text: '0',
@@ -1109,7 +1114,7 @@ describe('onXXXChange', () => {
     beforeAll(() => {
       jest.spyOn(
         OptionsManagerModule.OptionsManager.prototype as
-        OptionsManagerModule.OptionsManager & { isOptionSubscribable: () => boolean; },
+        OptionsManagerModule.OptionsManager & { isOptionSubscribable: () => boolean },
         'isOptionSubscribable',
       )
         .mockImplementation(() => false);
@@ -1150,7 +1155,7 @@ describe('onXXXChange', () => {
     beforeAll(() => {
       jest.spyOn(
         OptionsManagerModule.OptionsManager.prototype as
-        OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean; },
+        OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean },
         'isIndependentEvent',
       )
         .mockImplementation(() => true);
@@ -1175,7 +1180,7 @@ describe('onXXXChange', () => {
     });
 
     it('it is fired on outher change', () => {
-      const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+      const ref = React.createRef<HTMLDivElement>();
       const onPropChange = jest.fn();
       const { rerender } = render(
         <TestComponent
@@ -1207,7 +1212,7 @@ describe('onXXXChange', () => {
     beforeAll(() => {
       jest.spyOn(
         OptionsManagerModule.OptionsManager.prototype as
-        OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean; },
+        OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean },
         'isIndependentEvent',
       )
         .mockImplementation(() => false);

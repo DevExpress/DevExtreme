@@ -2,6 +2,12 @@
     "compilerOptions": {
         "baseUrl": "./packages",
         "paths": {
+            "devextreme-react": [
+                "devextreme-react/src"
+            ],
+            "devextreme-react/*": [
+                "devextreme-react/src/*"
+            ],
             "devextreme-vue": [
                 "devextreme-vue/src"
             ],
@@ -16,6 +22,7 @@
         "allowSyntheticDefaultImports": true,
         "target": "es5",
         "module": "commonjs",
+        "jsx": "react",
         "noEmitOnError": true,
         "declaration": true,
         "experimentalDecorators": true,
