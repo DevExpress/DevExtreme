@@ -113,12 +113,10 @@ describe('compile with widgets', () => {
   test('setter return indexFileContent for index file', () => {
     const compiler = new Compiler();
     const contentOfIndexFile = 'some content';
-    const indexFileUrl = new URL('db:../widgets/generic/tb_index');
+    const indexFilePath = 'db:../widgets/generic/tb_index';
     compiler.indexFileContent = contentOfIndexFile;
-
-    expect(compiler.load(indexFileUrl)).toEqual({
-      contents: contentOfIndexFile,
-      syntax: 'scss',
-    });
+    
+    const expectIndexFileUrl = new URL(indexFilePath);
+    expect(compiler.canonicalize(indexFilePath)).toEqual(expectIndexFileUrl);
   });
 });

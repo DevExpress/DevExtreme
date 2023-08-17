@@ -26,122 +26,57 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
 }));
 
 describe('Sass features', () => {
-  test('collector function', () => {
-    const compiler = new Compiler();
-    const map = new sass.SassMap(OrderedMap<sass.Value, sass.Value>([
-      // number variable
-      [
-        new sass.SassString('$var1'),
-        new sass.SassNumber(300, 'px'),
-      ],
-      // string variable
-      [
-        new sass.SassString('$var2'),
-        new sass.SassString('Helvetica', { quotes: false }),
-      ],
-      // color variable
-      [
-        new sass.SassString('$var3'),
-        new sass.SassColor({
-          red: 50,
-          green: 60,
-          blue: 70,
-          alpha: 0.4,
-        }),
-      ],
-      // list variable with ','
-      [
-        new sass.SassString('$var4'),
-        new sass.SassList([
-          new sass.SassNumber(10, 'px'),
-          new sass.SassNumber(15, 'px'),
-          new sass.SassNumber(32, 'px'),
-        ], {
-          separator: ',',
-        }),
-      ],
-      // list variable
-      [
-        new sass.SassString('$var5'),
-        new sass.SassList([
-          new sass.SassNumber(10, 'px'),
-          new sass.SassNumber(15, 'px'),
-          new sass.SassNumber(32, 'px'),
-        ], {
-          separator: ' ',
-        }),
-      ],
-      // null variable
-      [
-        new sass.SassString('$var6'),
-        sass.sassNull,
-      ],
-      // next variable after null
-      [
-        new sass.SassString('$var7'),
-        new sass.SassNumber(200, 'px'),
-      ],
-    ]));
+  test('getCustomVariables function', () => {
+    const createSassMap = (key: sass.SassString, value: sass.Value) => {
+      return new sass.SassMap(OrderedMap<sass.Value, sass.Value>([
+        [ key, value ]
+      ]));
+    };
 
-    compiler.collector([map]);
-
-    expect(compiler.changedVariables).toEqual({
-      $var1: '300px',
-      $var2: 'Helvetica',
-      $var3: '#323c4666',
-      $var4: '10px, 15px, 32px',
-      $var5: '10px 15px 32px',
-      $var7: '200px',
-    });
-  });
-
-  test('getMatchingUserItemsAsString - return right string for the url', () => {
-    const compiler = new Compiler();
-
-    compiler.userItems = [{
-      key: '$var2',
-      value: 'rgba(0,0,0,0)',
-    }, {
-      key: '$var0',
-      value: '10px',
-    }];
-    const expected = '$var2: rgba(0,0,0,0);$var0: 10px;';
-
-    const content = compiler.getMatchingUserItemsAsString('generic');
-
-    expect(content).toEqual(expected);
-  });
-
-  test('setter function (custom importer)', () => {
     const compiler = new Compiler();
     compiler.userItems = [{
-      key: '$var2',
-      value: 'rgba(0,0,0,0)',
-    }, {
-      key: '$var0',
-      value: '10px',
-    }];
+        key: '$var2',
+        value: 'rgba(30, 200, 163, 0.3)'
+      }
+    ]
 
-    const url = new URL('db:tb_generic');
-    const expectedContent = '$var2: rgba(0,0,0,0);$var0: 10px;';
+    const keyNumber = new sass.SassString('$var1');
+    const valueNumber: any = new sass.SassNumber(300, 'px');
+    expect(compiler.getCustomVar([createSassMap(keyNumber, valueNumber)])).toEqual(valueNumber);
+    
+    const keyString = new sass.SassString('$var2');
+    const valueString = new sass.SassString('Helvetica', { quotes: false });
+    expect(compiler.getCustomVar([createSassMap(keyString, valueString)])).toEqual(valueString);
 
-    const setterResult = compiler.load(url);
-    expect(setterResult).toEqual({
-      contents: expectedContent,
-      syntax: 'scss',
+    const keyColor = new sass.SassString('$var2');
+    const valueColor = new sass.SassColor({
+      red: 50,
+      green: 60,
+      blue: 70,
+      alpha: 0.4,
     });
-    expect(compiler.importerCache[url.pathname]).toBe(expectedContent);
-  });
+    expect(compiler.getCustomVar([createSassMap(keyColor, valueColor)])).toEqual(valueColor);
 
-  test('setter call getMatchingUserItemsAsString once for every url', () => {
-    const url = new URL('db:tb_generic');
-    const compiler = new Compiler();
-    compiler.getMatchingUserItemsAsString = jest.fn().mockImplementation(() => 'content');
-    compiler.load(url);
-    compiler.load(url);
-    compiler.load(url);
+    const keyListSeparator = new sass.SassString('$var4');
+    const valueListSeparator = new sass.SassList([
+      new sass.SassNumber(10, 'px'),
+      new sass.SassNumber(15, 'px'),
+      new sass.SassNumber(32, 'px'),
+    ], {
+      separator: ',',
+    });
+    expect(compiler.getCustomVar([createSassMap(keyListSeparator, valueListSeparator)])).toEqual(valueListSeparator);
 
-    expect(compiler.getMatchingUserItemsAsString).toHaveBeenCalledTimes(1);
-    expect(compiler.importerCache[url.pathname]).toBe('content');
+    const keyList = new sass.SassString('$var5');
+    const valueList = new sass.SassList([
+      new sass.SassNumber(10, 'px'),
+      new sass.SassNumber(15, 'px'),
+      new sass.SassNumber(32, 'px'),
+    ]);
+    expect(compiler.getCustomVar([createSassMap(keyList, valueList)])).toEqual(valueList);
+
+    const keyNull = new sass.SassString('$var6');
+    const valueNull = sass.sassNull;
+    expect(compiler.getCustomVar([createSassMap(keyNull, valueNull)])).toEqual(valueNull);
   });
 });

@@ -198,9 +198,7 @@ $slideout-background: #000 !default;
 * $type color
 */
 $slideout-background: #000 !default;
-$never-used: collector((
-"$slideout-background": $slideout-background,
-));
+$slideout-background: getCustomVar(("$slideout-background": $slideout-background));
 `;
 
     const result = generator.collectMetadata(path, content);
@@ -253,22 +251,6 @@ $slideout-background: #000 !default;
     });
   });
 
-  test('collectMetadata - "./variables" imports change in main index file', () => {
-    const path = '/scss/widgets/material/_colors.scss';
-    const content = `
-@forward "./variables";
-@use "./variables" as *;
-`;
-
-    const expected = `
-@forward "tb_material";
-@use "tb_material" as *;
-`;
-    const result = generator.collectMetadata(path, content);
-
-    expect(result).toBe(expected);
-  });
-
   test('collectMetadata - right content for bundle', () => {
     const path = '/scss/bundles/dx.light.scss';
     const content = `
@@ -292,16 +274,6 @@ describe('Metadata generator - generate files content', () => {
     expect(MetadataGenerator.isBundleFile('path/bundles/dx.light.scss')).toBe(true);
     expect(MetadataGenerator.isBundleFile('path/widgets/generic/accordion/_index.scss')).toBe(false);
     expect(MetadataGenerator.isBundleFile('base/accordion/_index.scss')).toBe(false);
-  });
-
-  test('getMainColorsFileTheme', () => {
-    expect(MetadataGenerator.getMainColorsFileTheme('/widgets/generic/_colors.scss')).toBe('generic');
-    expect(MetadataGenerator.getMainColorsFileTheme('widgets\\generic\\_colors.scss')).toBe('generic');
-    expect(MetadataGenerator.getMainColorsFileTheme('widgets/material/_colors.scss')).toBe('material');
-    expect(MetadataGenerator.getMainColorsFileTheme('/scss/widgets/material/_colors.scss')).toBe('material');
-    expect(MetadataGenerator.getMainColorsFileTheme('bundles/dx.light.scss')).toBe(null);
-    expect(MetadataGenerator.getMainColorsFileTheme('path/widgets/generic/accordion/_index.scss')).toBe(null);
-    expect(MetadataGenerator.getMainColorsFileTheme('base/accordion/_index.scss')).toBe(null);
   });
 
   test('getBundleContent', () => {
@@ -338,19 +310,5 @@ describe('Metadata generator - generate files content', () => {
 
     expect(MetadataGenerator.getBundleContent(commonBundleContent))
       .toBe(commonBundleContent);
-  });
-
-  test('getMainColorsFileContent', () => {
-    const content = `
-@forward "./variables";
-@use "./variables" as *;
-`;
-
-    const expected = `
-@forward "tb_material";
-@use "tb_material" as *;
-`;
-
-    expect(MetadataGenerator.getMainColorsFileContent(content, 'material')).toBe(expected);
   });
 });
