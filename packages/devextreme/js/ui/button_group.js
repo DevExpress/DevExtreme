@@ -17,8 +17,6 @@ const BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-last-item';
 const BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + '-has-width';
 const SHAPE_STANDARD_CLASS = 'dx-shape-standard';
 
-const stylingModes = ['outlined', 'text', 'contained'];
-
 const BUTTON_GROUP_STYLING_MODE_CLASS = {
     contained: 'dx-buttongroup-mode-contained',
     outlined: 'dx-buttongroup-mode-outlined',

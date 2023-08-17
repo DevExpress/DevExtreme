@@ -331,7 +331,6 @@ QUnit.module('option changed', {
 
         restStylingModes.forEach((newStylingMode) => {
             QUnit.test(`ButtonGroup has "${newStylingMode}" class if styling mode value is changed to "${newStylingMode}"`, function(assert) {
-                debugger;
                 this.buttonGroup.option('stylingMode', newStylingMode);
 
                 assert.strictEqual(this.$buttonGroup.hasClass(`${BUTTON_GROUP_CLASS}-mode-${newStylingMode}`), true, `${stylingMode} class was changed to ${newStylingMode}`);
@@ -339,7 +338,6 @@ QUnit.module('option changed', {
                 const restStylingModes = stylingModes.filter((mode) => mode !== newStylingMode);
 
                 restStylingModes.forEach(mode => {
-
                     assert.strictEqual(this.$buttonGroup.hasClass(`${BUTTON_GROUP_CLASS}-mode-${mode}`), false, `${mode} class was not added`);
                 });
             });
