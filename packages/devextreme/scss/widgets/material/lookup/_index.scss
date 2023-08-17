@@ -25,7 +25,7 @@
     }
 
     .dx-lookup-arrow {
-      right: math.div($material-base-icon-size, 2);
+      inset-inline-end: math.div($material-base-icon-size, 2);
     }
 
     &.dx-invalid {
@@ -43,11 +43,6 @@
 
     &.dx-rtl,
     .dx-rtl & {
-      .dx-lookup-arrow {
-        left: math.div($material-base-icon-size, 2);
-        right: auto;
-      }
-
       .dx-lookup-field {
         padding-left: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size;
         padding-right: $material-filled-texteditor-input-horizontal-padding;

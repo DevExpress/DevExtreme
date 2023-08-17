@@ -23,6 +23,8 @@ testStart(() => {
 });
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
+const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
+const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
 
 module('Lookup', {
     beforeEach: function() {
@@ -85,11 +87,11 @@ module('Lookup', {
         assert.ok(this.element.hasClass('dx-widget'));
     });
 
-    test('lookup empty class is attached when no item is selected', function(assert) {
+    test('empty classes are attached when no item is selected', function(assert) {
         const $lookup = this.element.dxLookup({ dataSource: [1, 2, 3], showClearButton: true, placeholder: 'placeholder' });
-        const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
 
-        assert.ok($lookup.hasClass(LOOKUP_EMPTY_CLASS), 'Lookup without preselected value has empty class');
+        assert.strictEqual($lookup.hasClass(LOOKUP_EMPTY_CLASS), true, 'Lookup without preselected value has lookup empty class');
+        assert.strictEqual($lookup.hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'Lookup without preselected value has texteditor empty class');
     });
 
     test('data source should be paginated by default', function(assert) {

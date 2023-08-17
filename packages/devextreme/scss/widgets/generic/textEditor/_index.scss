@@ -309,9 +309,7 @@ $generic-texteditor-label-transition:
 
   &.dx-texteditor-with-floating-label {
     &.dx-texteditor-empty,
-    &.dx-lookup-empty,
-    &.dx-texteditor-empty.dx-state-readonly,
-    &.dx-lookup-empty.dx-state-readonly {
+    &.dx-texteditor-empty.dx-state-readonly {
       .dx-placeholder {
         display: none;
       }
@@ -542,8 +540,7 @@ $generic-texteditor-label-transition:
   }
 
   &.dx-texteditor-with-floating-label {
-    &.dx-texteditor-empty,
-    &.dx-lookup-empty {
+    &.dx-texteditor-empty {
       @include dx-state-empty($texteditor-border-color, solid);
 
       &.dx-invalid {
@@ -744,9 +741,7 @@ $generic-texteditor-label-transition:
 
   &.dx-texteditor-with-floating-label {
     &.dx-texteditor-empty,
-    &.dx-lookup-empty,
-    &.dx-texteditor-empty.dx-state-readonly,
-    &.dx-lookup-empty.dx-state-readonly {
+    &.dx-texteditor-empty.dx-state-readonly {
       .dx-placeholder {
         display: none;
       }

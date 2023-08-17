@@ -38,6 +38,7 @@ const LOOKUP_POPOVER_MODE = 'dx-lookup-popover-mode';
 const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
 const LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = 'dx-popover-flipped-vertical';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
@@ -441,7 +442,12 @@ const Lookup = DropDownList.inherit({
 
         const displayValue = this.option('displayValue');
         this._updateField(displayValue);
-        this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
+
+        const isFieldEmpty = !this.option('selectedItem');
+
+        this.$element()
+            .toggleClass(LOOKUP_EMPTY_CLASS, isFieldEmpty)
+            .toggleClass(TEXTEDITOR_EMPTY_CLASS, isFieldEmpty);
     },
 
     _getLabelContainer: function() {

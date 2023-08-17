@@ -13,18 +13,6 @@
 // adduse
 @use "../dropDownList";
 
-$generic-lookup-field-padding:
-  $generic-base-inline-borderedwidget-top-padding
-  $generic-base-inline-borderedwidget-inner-size
-  $generic-base-inline-borderedwidget-bottom-padding
-  $generic-base-inline-borderedwidget-horizontal-padding;
-$generic-lookup-field-padding-rtl:
-  $generic-base-inline-borderedwidget-top-padding
-  $generic-base-inline-borderedwidget-horizontal-padding
-  $generic-base-inline-borderedwidget-bottom-padding
-  $generic-base-inline-borderedwidget-inner-size;
-
-
 .dx-lookup {
   height: $generic-lookup-height;
   border: 1px solid $texteditor-border-color;
@@ -39,17 +27,7 @@ $generic-lookup-field-padding-rtl:
     &.dx-editor-underlined {
       .dx-texteditor-label {
         .dx-label {
-          padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
-        }
-      }
-
-      .dx-rtl &,
-      &.dx-rtl {
-        .dx-texteditor-label {
-          .dx-label {
-            padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
-            padding-left: 0;
-          }
+          padding-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
         }
       }
     }
@@ -57,12 +35,8 @@ $generic-lookup-field-padding-rtl:
 }
 
 .dx-lookup-field {
-  padding: $generic-lookup-field-padding;
+  padding-inline: $generic-base-inline-borderedwidget-horizontal-padding $generic-base-inline-borderedwidget-inner-size;
   font-size: 1em;
-
-  .dx-rtl & {
-    padding: $generic-lookup-field-padding-rtl;
-  }
 }
 
 .dx-lookup-arrow {

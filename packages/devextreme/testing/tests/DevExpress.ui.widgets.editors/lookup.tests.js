@@ -82,7 +82,10 @@ const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 const CLEAR_BUTTON_CLASS = 'dx-popup-clear';
 const APPLY_BUTTON_CLASS = 'dx-popup-done';
 
+const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
+const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 
 const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
@@ -1250,21 +1253,29 @@ QUnit.module('Lookup', {
         assert.equal(loadingFired, 1, 'loading called once');
     });
 
-    QUnit.test('lookup empty class is attached when no item is selected', function(assert) {
-        const $lookup = this.element.dxLookup({ dataSource: [1, 2, 3], showClearButton: true, placeholder: 'placeholder' }); const lookup = $lookup.dxLookup('instance'); const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
+    QUnit.test('empty classes are attached when no item is selected', function(assert) {
+        const $lookup = this.element.dxLookup({
+            dataSource: [1, 2, 3],
+            showClearButton: true,
+            placeholder: 'placeholder'
+        });
+        const lookup = $lookup.dxLookup('instance');
 
-        assert.ok($lookup.hasClass(LOOKUP_EMPTY_CLASS), 'Lookup without preselected value has empty class');
+        assert.strictEqual($lookup.hasClass(LOOKUP_EMPTY_CLASS), true, 'Lookup without preselected value has lookup empty class');
+        assert.strictEqual($lookup.hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'Lookup without preselected value has texteditor empty class');
 
         lookup.option('value', 1);
 
-        assert.ok(!$lookup.hasClass(LOOKUP_EMPTY_CLASS), 'Lookup with selected item has not empty class');
+        assert.strictEqual($lookup.hasClass(LOOKUP_EMPTY_CLASS), false, 'Lookup with selected item has not lookup empty class');
+        assert.strictEqual($lookup.hasClass(TEXTEDITOR_EMPTY_CLASS), false, 'Lookup with selected item has not texteditor empty class');
 
         openPopupWithList(lookup);
         $(lookup._popup.$wrapper()).find('.dx-button.dx-popup-clear').trigger('dxclick');
 
         const $lookupField = $lookup.find('.dx-lookup-field');
 
-        assert.ok($lookup.hasClass(LOOKUP_EMPTY_CLASS), 'Lookup has empty class after clearance');
+        assert.strictEqual($lookup.hasClass(LOOKUP_EMPTY_CLASS), true, 'lookup empty class was added after clearance');
+        assert.strictEqual($lookup.hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'lookup empty class was added after clearance');
         assert.equal($.trim($lookupField.text()), 'placeholder', 'placeholder is shown');
         assert.strictEqual(lookup.option('value'), null, 'value reset');
     });
