@@ -114,19 +114,13 @@ module('Renovated Views', () => {
                 currentDate: new Date(2020, 0, 1),
             });
 
-            scheduler.drawControl();
-
-            debugger;
-
             const cellHeight = scheduler.workSpace.getCellHeight();
 
             scheduler.option('currentDate', 2021, 0, 1);
 
             const cellHeightAfterCurrentDateChange = scheduler.workSpace.getCellHeight();
 
-            debugger;
-
-            assert.equal(cellHeightAfterCurrentDateChange, cellHeight, 'Correct cell hieght');
+            assert.equal(cellHeightAfterCurrentDateChange, cellHeight, 'Correct cell height');
         });
     });
 
