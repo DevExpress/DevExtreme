@@ -103,7 +103,9 @@ export const acquireIntegrationTemplate = (templateSource, templates, isAsyncTem
     if(!skipTemplates || skipTemplates.indexOf(templateSource) === -1) {
         integrationTemplate = templates[templateSource];
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
-            integrationTemplate = addPublicElementNormalization(integrationTemplate);
+            if (isFunction(integrationTemplate.render)) {
+                integrationTemplate = addPublicElementNormalization(integrationTemplate);
+            }
 
             if (!isAsyncTemplate) {
                 integrationTemplate = addOneRenderedCall(integrationTemplate);
