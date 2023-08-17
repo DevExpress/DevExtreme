@@ -109,8 +109,6 @@ module('Virtual scrolling timelines', () => {
                             () => {
                                 assert.ok(true, printOffset(offset));
 
-                                debugger;
-
                                 const { appointments } = scheduler;
 
                                 assert.equal(expectedRects.length, appointments.getAppointmentCount(), 'Appointment amount is correct');
