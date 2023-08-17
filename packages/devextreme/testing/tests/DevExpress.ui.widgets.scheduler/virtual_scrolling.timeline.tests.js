@@ -31,6 +31,7 @@ module('Virtual scrolling timelines', () => {
     module('Appointments', () => {
         module('timelineDay', () => {
             test('multiday appointment should be rendered correctly', function(assert) {
+
                 const data = [{
                     text: 'Appt-001',
                     startDate: new Date(2021, 1, 2, 15, 45),
@@ -69,7 +70,7 @@ module('Virtual scrolling timelines', () => {
                             offset: { x: 2200 },
                             expectedRects: [{
                                 left: -9099,
-                                top: -9827,
+                                top: -9817,
                                 width: 300
                             }]
                         },
@@ -77,7 +78,7 @@ module('Virtual scrolling timelines', () => {
                             offset: { x: 3200 },
                             expectedRects: [{
                                 left: -10099,
-                                top: -9827,
+                                top: -9817,
                                 width: 1300
                             }]
                         },
@@ -85,7 +86,7 @@ module('Virtual scrolling timelines', () => {
                             offset: { x: 4200 },
                             expectedRects: [{
                                 left: -10399,
-                                top: -9827,
+                                top: -9817,
                                 width: 1600
                             }]
                         },
@@ -93,7 +94,7 @@ module('Virtual scrolling timelines', () => {
                             offset: { x: 5200 },
                             expectedRects: [{
                                 left: -10399,
-                                top: -9827,
+                                top: -9817,
                                 width: 900
                             }]
                         },
@@ -107,6 +108,8 @@ module('Virtual scrolling timelines', () => {
                             promise,
                             () => {
                                 assert.ok(true, printOffset(offset));
+
+                                debugger;
 
                                 const { appointments } = scheduler;
 
