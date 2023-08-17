@@ -2607,6 +2607,8 @@ export const editingModule = {
           }
 
           const isEditableCell = cellOptions.column.allowEditing
+            && !cellOptions.removed
+            && !cellOptions.modified
             && cellOptions.rowType === 'data'
             && cellOptions.column.calculateCellValue === cellOptions.column.defaultCalculateCellValue
             && this._editingController.isCellBasedEditMode();
