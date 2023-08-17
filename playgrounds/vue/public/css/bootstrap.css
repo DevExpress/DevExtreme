@@ -14,6 +14,7 @@
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html {
   font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 body {
@@ -2452,6 +2453,7 @@ table th[class*="col-"] {
     width: 100%;
     margin-bottom: 15.75px;
     overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
     border: 1px solid #464545;
   }
   .table-responsive > .table {
@@ -2577,6 +2579,9 @@ output {
 .form-control::-moz-placeholder {
   color: #999999;
   opacity: 1;
+}
+.form-control:-ms-input-placeholder {
+  color: #999999;
 }
 .form-control::-webkit-input-placeholder {
   color: #999999;
@@ -3003,7 +3008,8 @@ select[multiple].input-lg {
   font-weight: normal;
   text-align: center;
   vertical-align: middle;
-  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
   cursor: pointer;
   background-image: none;
   border: 1px solid transparent;
@@ -3014,6 +3020,7 @@ select[multiple].input-lg {
   border-radius: 4px;
   -webkit-user-select: none;
   -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .btn:focus,
@@ -5923,6 +5930,7 @@ button.close {
 }
 .modal.fade .modal-dialog {
   -webkit-transform: translate(0, -25%);
+  -ms-transform: translate(0, -25%);
   -o-transform: translate(0, -25%);
   transform: translate(0, -25%);
   -webkit-transition: -webkit-transform 0.3s ease-out;
@@ -5931,6 +5939,7 @@ button.close {
 }
 .modal.in .modal-dialog {
   -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
   -o-transform: translate(0, 0);
   transform: translate(0, 0);
 }
