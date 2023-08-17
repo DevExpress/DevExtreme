@@ -1344,7 +1344,6 @@ QUnit.test('Simple text, tooltip is interactive', function(assert) {
 
     assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
         '-moz-user-select': 'auto',
-        '-ms-user-select': 'auto',
         '-webkit-user-select': 'auto'
     }, 'text can be selected');
 });
@@ -1368,7 +1367,6 @@ QUnit.test('Html text, tooltip is interactive', function(assert) {
 
     assert.deepEqual(this.renderer.root.css.lastCall.args[0], {
         '-moz-user-select': 'auto',
-        '-ms-user-select': 'auto',
         '-webkit-user-select': 'auto'
     }, 'text can be selected');
 });

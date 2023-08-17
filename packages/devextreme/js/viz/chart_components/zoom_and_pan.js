@@ -507,7 +507,6 @@ export default {
                 renderer.root.off(EVENTS_NS);
                 zoomAndPan.actionData && zoomAndPan.actionData.rect && zoomAndPan.actionData.rect.dispose();
                 zoomAndPan.actionData = null;
-                renderer.root.css({ 'touch-action': '', '-ms-touch-action': '' });
             },
             setup: function(options) {
                 zoomAndPan.cleanup();

@@ -114,7 +114,7 @@ Tooltip.prototype = {
 
         const pointerEvents = options.interactive ? 'auto' : 'none';
         if(options.interactive) {
-            this._renderer.root.css({ '-ms-user-select': 'auto', '-moz-user-select': 'auto', '-webkit-user-select': 'auto' });
+            this._renderer.root.css({ '-moz-user-select': 'auto', '-webkit-user-select': 'auto' });
         }
 
         const drawTooltip = ({ group, onRender, eventData, isMoving, templateCallback = () => {} }) => {
