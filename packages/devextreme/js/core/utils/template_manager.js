@@ -65,7 +65,8 @@ export const addPublicElementNormalization = (template) => {
     const render = template.render.bind(template);
     return extend({}, template, {
         render(options) {
-            return render({ ...options, container: getPublicElement(options.container) });
+            const $container = $(options.container);
+            return render({ ...options, container: getPublicElement($container) });
         }
     });
 }
