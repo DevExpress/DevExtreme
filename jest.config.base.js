@@ -9,7 +9,7 @@ module.exports = {
     ]
   },
   testURL: 'http://localhost',
-  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+  testRegex: "(\\.|/)(test|spec)\\.(jsx?|tsx?)$",
   moduleFileExtensions: [
     "ts",
     "tsx",
