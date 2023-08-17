@@ -29,8 +29,6 @@ DevExpress.Color = require('../../color');
 
 const animationFrame = require('../../animation/frame');
 
-require('../../__internal/common/crypto/rsa_pkcs1_sha1');
-
 /**
  * @name utils
  * @namespace DevExpress
