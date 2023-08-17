@@ -1,7 +1,7 @@
 import * as sass from 'sass-embedded';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
-import { parse } from './parse-value';
+import { hexToColor } from './parse-value';
 import { optimizeCss } from './post-compiler';
 
 export enum ImportType {
@@ -48,6 +48,8 @@ export default class Compiler {
     this.changedVariables = {};
     this.userItems = items || [];
 
+    // debugger;
+
     let compilerOptions: sass.Options<'async'> = {
       importers: [{
         // eslint-disable-next-line spellcheck/spell-checker
@@ -55,7 +57,7 @@ export default class Compiler {
         load: this.load,
       }],
       functions: {
-        'collector($map)': this.collector,
+        'getCustomVar($value)': this.getCustomVar,
       },
     };
 
@@ -76,57 +78,27 @@ export default class Compiler {
     });
   };
 
-  getMatchingUserItemsAsString(theme: string): string {
-    const meta = theme === 'generic' ? this.meta.generic : this.meta.material;
-    const themeKeys: string[] = meta.map((item) => item.Key);
-
-    return this.userItems
-      .filter((item) => themeKeys.includes(item.key))
-      .map((item) => `${item.key}: ${item.value};`)
-      .join('');
-  }
-
   // eslint-disable-next-line spellcheck/spell-checker
-  canonicalize = (url: string): URL => (url.includes('tb_') ? new URL(`db:${url}`) : null);
+  canonicalize = (url: string): URL => (url.includes('tb_index') ? new URL(`db:${url}`) : null);
 
-  load = (url: URL): sass.ImporterResult => {
-    const { pathname: path } = url;
-    const importType = Compiler.getImportType(path);
+  load = (): sass.ImporterResult => ({
+    contents: this.indexFileContent,
+    syntax: 'scss',
+  } as sass.ImporterResult);
 
-    let content = this.importerCache[path];
-    if (!content) {
-      content = importType === ImportType.Index
-        ? this.indexFileContent
-        : this.getMatchingUserItemsAsString(path.replace('tb_', ''));
+  getCustomVar = (values: sass.Value[]): sass.Value => {
+    const customVariable = values[0].get(0);
+    const nameVariable = customVariable.get(0);
+    const baseVariable = customVariable.get(1);
 
-      this.importerCache[path] = content;
+    if (baseVariable === sass.sassNull || !(nameVariable instanceof sass.SassString)) {
+      return sass.sassNull;
     }
 
-    return {
-      contents: content,
-      syntax: 'scss',
-    } as sass.ImporterResult;
-  };
-
-  collector = (maps: sass.SassMap[]): sass.Value => {
-    maps.forEach((map) => {
-      map.asList.forEach((value) => {
-        if (value.get(1) === sass.sassNull) {
-          return;
-        }
-
-        const key = value.get(0);
-        if (!(key instanceof sass.SassString)) {
-          return;
-        }
-
-        const variableKey = key.text;
-        const variableValue = parse(value.get(1));
-
-        this.changedVariables[variableKey] = variableValue;
-      });
-    });
-
-    return sass.sassNull;
+    const customerVariable = this.userItems.find((item) => item.key === nameVariable.text);
+    if (customerVariable.value.startsWith('#')) {
+      return hexToColor(customerVariable.value);
+    }
+    return baseVariable;
   };
 }
