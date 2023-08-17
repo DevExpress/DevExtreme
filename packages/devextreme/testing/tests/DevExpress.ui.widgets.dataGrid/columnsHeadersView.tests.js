@@ -1539,7 +1539,7 @@ QUnit.module('Headers', {
             assert.equal(selector, '#jqHeaderColumnTemplate');
             return {
                 render: function(options) {
-                    $(options.container).append('<b>' + options.model.caption + '</b>');
+                    options.container.append('<b>' + options.model.caption + '</b>');
                     options.deferred && options.deferred.resolve();
                 }
             };

@@ -475,10 +475,6 @@ export class ColumnsView extends viewWithColumnStateMixin {
           options.container = getPublicElement(container);
         }
 
-        if (model.rowType === 'data' && model.isEditing && model.column.editCellTemplate) {
-          options.container = getPublicElement(container);
-        }
-
         template.render(options);
       }
       // @ts-expect-error
@@ -513,7 +509,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
           }
           const renderedTemplate = template(options.container, options.model, options.change);
           if (renderedTemplate && (renderedTemplate.nodeType || isRenderer(renderedTemplate))) {
-            $(options.container).append(renderedTemplate);
+            options.container.append(renderedTemplate);
           }
           options.deferred && options.deferred.resolve();
         },
@@ -566,7 +562,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
       const async = options.renderAsync ?? columnAsync;
 
       if ((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
-        if (options.rowType === 'detailAdaptive' || isDataRow && (column && column.command && !['expand', 'virtual', 'empty'].includes(column.command)) || !isDefined(column)) {
+        if (options.rowType === 'detailAdaptive' || isDataRow && (column && column.command && !['expand', 'virtual'].includes(column.command)) || !isDefined(column)) {
           templateOptions.container = getPublicElement(container);
         }
         renderingTemplate.render(templateOptions);

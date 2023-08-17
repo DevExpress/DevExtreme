@@ -5399,7 +5399,7 @@ QUnit.module('Editing with real dataController', {
             if(name === '#test') {
                 return {
                     render: function(options) {
-                        $(options.container).text('test_' + options.model.text);
+                        options.container.text('test_' + options.model.text);
                         options.onRendered();
                     }
                 };
@@ -8450,7 +8450,7 @@ QUnit.module('Editing with real dataController', {
         const template = sinon.spy(function(options) {
             // deferUpdate is called in template in devextreme-react
             commonUtils.deferUpdate(() => {
-                $(options.container).text('test_' + options.model.text);
+                options.container.text('test_' + options.model.text);
                 options.onRendered();
             });
         });
