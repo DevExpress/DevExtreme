@@ -168,7 +168,7 @@
         "dxDataGrid-filterPanelClearFilter": "Slett",
         "dxDataGrid-filterPanelFilterEnabledHint": "Aktivér filter",
 
-        "dxTreeList-ariaTreeList": "Treliste",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Legg til",
