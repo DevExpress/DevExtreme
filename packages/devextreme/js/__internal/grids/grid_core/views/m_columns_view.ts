@@ -226,7 +226,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
       const editingController = this.getController('editing') as EditingController;
       const isEditableCell = column.allowEditing
-        && editingController.isCellBasedEditMode()
+        && editingController?.isCellBasedEditMode()
         && column.calculateCellValue === column.defaultCalculateCellValue;
 
       if (isEditableCell) {
