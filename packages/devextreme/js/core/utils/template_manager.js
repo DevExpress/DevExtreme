@@ -69,7 +69,7 @@ export const addPublicElementNormalization = (template) => {
             return render({ ...options, container: getPublicElement($container) });
         }
     });
-}
+};
 
 export const getNormalizedTemplateArgs = (options) => {
     const args = [];
@@ -103,11 +103,11 @@ export const acquireIntegrationTemplate = (templateSource, templates, isAsyncTem
     if(!skipTemplates || skipTemplates.indexOf(templateSource) === -1) {
         integrationTemplate = templates[templateSource];
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
-            if (isFunction(integrationTemplate.render)) {
+            if(isFunction(integrationTemplate.render)) {
                 integrationTemplate = addPublicElementNormalization(integrationTemplate);
             }
 
-            if (!isAsyncTemplate) {
+            if(!isAsyncTemplate) {
                 integrationTemplate = addOneRenderedCall(integrationTemplate);
             }
         }
