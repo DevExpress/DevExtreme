@@ -459,23 +459,17 @@ export class ColumnsView extends viewWithColumnStateMixin {
     while (templates.length) {
       const templateParameters = templates.shift();
 
-      const { template, options } = templateParameters;
-      const { container, model } = options;
+      const { options } = templateParameters;
       // @ts-expect-error
-      const doc = domAdapter.getRootNode($(container).get(0));
+      const doc = domAdapter.getRootNode($(options.container).get(0));
       const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
 
       // @ts-expect-error
-      if (!isAsync || $(container).closest(doc).length || needWaitAsyncTemplates) {
+      if (!isAsync || $(options.container).closest(doc).length || needWaitAsyncTemplates) {
         if (change) {
           options.change = change;
         }
-
-        if (!(model.rowType === 'header' || (model.rowType === 'data' && model.column.command) || isDefined(template.allowRenderToDetachedContainer))) {
-          options.container = getPublicElement(container);
-        }
-
-        template.render(options);
+        templateParameters.template.render(options);
       }
       // @ts-expect-error
       if (isAsync && (new Date() - date) > 30) {
@@ -504,7 +498,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     } else if (isFunction(template)) {
       renderingTemplate = {
         render(options) {
-          const renderedTemplate = template(options.container, options.model, options.change);
+          const renderedTemplate = template(getPublicElement(options.container), options.model, options.change);
           if (renderedTemplate && (renderedTemplate.nodeType || isRenderer(renderedTemplate))) {
             options.container.append(renderedTemplate);
           }
@@ -559,9 +553,6 @@ export class ColumnsView extends viewWithColumnStateMixin {
       const async = options.renderAsync ?? columnAsync;
 
       if ((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
-        if (isDataRow && column.command) {
-          templateOptions.container = getPublicElement(container);
-        }
         renderingTemplate.render(templateOptions);
       } else {
         this._delayedTemplates.push({ template: renderingTemplate, options: templateOptions, async });
