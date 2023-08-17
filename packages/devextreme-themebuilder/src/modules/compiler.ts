@@ -96,9 +96,10 @@ export default class Compiler {
     }
 
     const customerVariable = this.userItems.find((item) => item.key === nameVariable.text);
-    if (customerVariable.value.startsWith('#')) {
+    if (customerVariable?.value.startsWith('#')) {
       return hexToColor(customerVariable.value);
     }
+
     return baseVariable;
   };
 }
