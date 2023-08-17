@@ -559,7 +559,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
       const async = options.renderAsync ?? columnAsync;
 
       if ((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
-        if (isDataRow && column && column.command) {
+        if (isDataRow && column.command) {
           templateOptions.container = getPublicElement(container);
         }
         renderingTemplate.render(templateOptions);
