@@ -562,7 +562,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
       const async = options.renderAsync ?? columnAsync;
 
       if ((renderingTemplate.allowRenderToDetachedContainer || allowRenderToDetachedContainer) && !async) {
-        if (options.rowType === 'detailAdaptive' || isDataRow && (column && column.command && !['expand', 'virtual'].includes(column.command)) || !isDefined(column)) {
+        if (isDataRow && (column && column.command && !['expand', 'virtual'].includes(column.command)) || !isDefined(column)) {
           templateOptions.container = getPublicElement(container);
         }
         renderingTemplate.render(templateOptions);
