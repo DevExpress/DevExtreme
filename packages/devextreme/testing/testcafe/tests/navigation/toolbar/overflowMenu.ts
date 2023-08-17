@@ -91,7 +91,7 @@ test('Drop down button should lost hover and active state', async (t) => {
 
     await toolbar.option(`items[1].${disabledOptionPath}`, true);
 
-    await testScreenshot(t, takeScreenshot, 'Toolbar appearance after disabling overflow button.png', { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `Toolbar appearance after disabling overflow button${disabledOptionPath === 'disabled' ? '' : ' via options.disabled'}.png`, { element: '#container' });
 
     await toolbar.option(`items[1].${disabledOptionPath}`, false);
 
@@ -138,7 +138,7 @@ test('Drop down button should lost hover and active state', async (t) => {
 
     await toolbar.option(`items[0].${disabledOptionPath}`, true);
 
-    await testScreenshot(t, takeScreenshot, 'Toolbar appearance after disabling toolbar button.png', { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `Toolbar appearance after disabling toolbar button${disabledOptionPath === 'disabled' ? '' : ' via options.disabled'}.png`, { element: '#container' });
 
     await toolbar.option(`items[0].${disabledOptionPath}`, false);
 
@@ -185,7 +185,7 @@ test('Drop down button should lost hover and active state', async (t) => {
 
     await toolbar.option(`items[2].${disabledOptionPath}`, true);
 
-    await testScreenshot(t, takeScreenshot, 'Toolbar appearance after disabling menu button.png', { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `Toolbar appearance after disabling menu button${disabledOptionPath === 'disabled' ? '' : ' via options.disabled'}.png`, { element: '#container' });
 
     await toolbar.option(`items[2].${disabledOptionPath}`, false);
 
