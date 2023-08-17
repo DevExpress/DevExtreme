@@ -482,6 +482,44 @@ QUnit.module('Navigator integration', {
         assert.notOk(this.$navigatorNext.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS), 'The next navigator button is enabled');
         assert.ok(this.$navigatorPrev.hasClass(CALENDAR_DISABLED_NAVIGATOR_LINK_CLASS), 'The prev navigator button is disabled');
     });
+
+    [true, false].forEach(focusStateEnabled => {
+        QUnit.test(`navigator and today buttons should have focusStateEnabled=${focusStateEnabled} if calendar focusStateEnabled=${focusStateEnabled} on init`, function(assert) {
+            this.reinit({
+                focusStateEnabled,
+                showTodayButton: true,
+            });
+
+            const nextButton = this.$element.find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`).dxButton('instance');
+            const caption = this.$element.find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`).dxButton('instance');
+            const prevButton = this.$element.find(`.${CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS}`).dxButton('instance');
+            const todayButton = this.$element.find(`.${CALENDAR_TODAY_BUTTON_CLASS}`).dxButton('instance');
+
+            assert.strictEqual(prevButton.option('focusStateEnabled'), focusStateEnabled);
+            assert.strictEqual(caption.option('focusStateEnabled'), focusStateEnabled);
+            assert.strictEqual(nextButton.option('focusStateEnabled'), focusStateEnabled);
+            assert.strictEqual(todayButton.option('focusStateEnabled'), focusStateEnabled);
+        });
+
+        QUnit.test(`navigator buttons should have focusStateEnabled=${focusStateEnabled} if calendar focusStateEnabled=${focusStateEnabled} on runtime`, function(assert) {
+            this.reinit({
+                focusStateEnabled: !focusStateEnabled,
+                showTodayButton: true,
+            });
+
+            this.calendar.option('focusStateEnabled', focusStateEnabled);
+
+            const nextButton = this.$element.find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`).dxButton('instance');
+            const caption = this.$element.find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`).dxButton('instance');
+            const prevButton = this.$element.find(`.${CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS}`).dxButton('instance');
+            const todayButton = this.$element.find(`.${CALENDAR_TODAY_BUTTON_CLASS}`).dxButton('instance');
+
+            assert.strictEqual(prevButton.option('focusStateEnabled'), focusStateEnabled);
+            assert.strictEqual(caption.option('focusStateEnabled'), focusStateEnabled);
+            assert.strictEqual(nextButton.option('focusStateEnabled'), focusStateEnabled);
+            assert.strictEqual(todayButton.option('focusStateEnabled'), focusStateEnabled);
+        });
+    });
 });
 
 

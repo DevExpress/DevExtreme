@@ -1443,6 +1443,9 @@ const Calendar = Editor.inherit({
                 this._refreshViews();
                 this._updateButtonsVisibility();
                 break;
+            case 'focusStateEnabled':
+                this._invalidate();
+                break;
             case 'currentDate':
                 this.setAria('id', undefined, this._view._getCellByDate(previousValue));
                 this._updateCurrentDate(value);
