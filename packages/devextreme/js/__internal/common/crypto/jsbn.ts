@@ -13,9 +13,9 @@
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
  *
  * IN NO EVENT SHALL TOM WU BE LIABLE FOR ANY SPECIAL, INCIDENTAL,
  * INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER
@@ -31,7 +31,8 @@
 
 // Basic JavaScript BN library - subset useful for RSA encryption.
 
-// @ts-nocheck 
+/* eslint-disable */
+// @ts-nocheck
 
 // (public) Constructor
 function BigInteger(a,b,c) {
@@ -567,34 +568,34 @@ BigInteger.prototype.toByteArray = bnToByteArray;
 BigInteger.ZERO = nbv(0);
 BigInteger.ONE = nbv(1);
 
-type BigIntegerInstance = {
+/* eslint-enable */
+
+interface BigIntegerInstance {
 
   // (public) return string representation in given radix
-  toString(b?: number): string;
+  toString: (b?: number) => string;
 
   // (public) -this
-  negate(): BigIntegerInstance;
+  negate: () => BigIntegerInstance;
 
   // (public) |this|
-  abs(): BigIntegerInstance;
+  abs: () => BigIntegerInstance;
 
   // (public) return + if this > a, - if this < a, 0 if equal
-  compareTo(a: BigIntegerInstance): number;
+  compareTo: (a: BigIntegerInstance) => number;
 
   // (public) return the number of bits in "this"
-  bitLength(): number;
+  bitLength: () => number;
 
   // (public) this mod a
-  mod(a: BigIntegerInstance): BigIntegerInstance;
+  mod: (a: BigIntegerInstance) => BigIntegerInstance;
 
   // (public) this^e % m, 0 <= e < 2^32
-  modPowInt(e: number, m: BigIntegerInstance): BigIntegerInstance;
+  modPowInt: (e: number, m: BigIntegerInstance) => BigIntegerInstance;
 
   // (public) convert to bigendian byte array
-  toByteArray(): number[];
+  toByteArray: () => number[];
 
 }
 
-export default BigInteger as {
-  new(value: number[]): BigIntegerInstance
-};
+export default BigInteger as new(value: number[]) => BigIntegerInstance;
