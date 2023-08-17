@@ -532,6 +532,21 @@ QUnit.module('focus policy', {
             });
         });
     });
+
+    QUnit.test('Focus class should not be added on wrapper after change showNavButtons option in runtime', function(assert) {
+        const $tabPanel = $('#tabPanel').dxTabPanel({
+            items: ['item 1'],
+            showNavButtons: false,
+        });
+        const tabPanel = $tabPanel.dxTabPanel('instance');
+
+        $tabPanel.focusin();
+        $tabPanel.focusout();
+
+        tabPanel.option({ showNavButtons: true });
+
+        assert.strictEqual($tabPanel.find(`.${MULTIVIEW_WRAPPER_CLASS}`).hasClass(FOCUS_STATE_CLASS), false);
+    });
 });
 
 QUnit.module('keyboard navigation', {
