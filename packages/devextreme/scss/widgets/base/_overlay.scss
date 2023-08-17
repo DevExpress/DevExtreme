@@ -37,15 +37,3 @@
     width: 100%;
   }
 }
-
-.dx-device-android {
-  .dx-overlay-content {
-    backface-visibility: hidden;
-  }
-
-  .dx-scrollable-native {
-    .dx-overlay-content {
-      backface-visibility: visible;
-    }
-  }
-}
