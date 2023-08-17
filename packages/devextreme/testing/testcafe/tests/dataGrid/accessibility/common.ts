@@ -297,6 +297,50 @@ const DATA_GRID_SELECTOR = '#container';
     await changeTheme('generic.light');
   });
 
+  test(`Filter panel - popup with filter builder in ${theme}`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const filterPanel = dataGrid.getFilterPanel();
+    const filterPanelIcon = filterPanel.getIconFilter();
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    // act
+    await t.click(filterPanelIcon.element);
+
+    // assert
+    await t
+      .expect(filterPanel.isOpened)
+      .ok();
+
+    // act
+    await a11yCheck(t, a11yCheckConfig);
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      filterPanel: {
+        visible: true,
+      },
+      columns: [
+        'field_0',
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    }, DATA_GRID_SELECTOR, {
+      disableFxAnimation: true,
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
   test(`Fixed columns in ${theme}`, async (t) => {
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
