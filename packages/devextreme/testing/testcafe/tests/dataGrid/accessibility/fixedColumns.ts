@@ -5,7 +5,7 @@ import DataGrid from '../../../model/dataGrid';
 import { a11yCheck } from '../../../helpers/accessibilityUtils';
 
 fixture`Fixed columns tests with axe`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const pressKey = async (t: TestController, key: string, times = 1) => {
   for (let i = 0; i < times; i += 1) {
