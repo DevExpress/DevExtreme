@@ -24,7 +24,7 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-import dxMultiView, {
+import {
     Item as dxMultiViewItem,
     dxMultiViewBaseOptions,
 } from './multi_view';
