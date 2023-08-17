@@ -400,6 +400,41 @@ const DATA_GRID_SELECTOR = '#container';
     await changeTheme('generic.light');
   });
 
+  test(`Selection in ${theme}`, async (t) => {
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.getDataRow(1).isSelected)
+      .ok()
+      .expect(dataGrid.getDataRow(2).isSelected)
+      .ok();
+
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      selection: {
+        mode: 'multiple',
+        showCheckBoxesMode: 'always',
+      },
+      selectedRowKeys: ['val_1_0', 'val_2_0'],
+      columns: [
+        'field_0',
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
   test(`Fixed columns in ${theme}`, async (t) => {
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
