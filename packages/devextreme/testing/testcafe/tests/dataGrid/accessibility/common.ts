@@ -30,7 +30,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -159,7 +159,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.isReady())
       .ok();
 
-    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -224,7 +224,13 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act
-    await a11yCheck(t, a11yCheckConfig);
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'aria-command-name': { enabled: false },
+      },
+    });
   }).before(async () => {
     await changeTheme(theme);
 
@@ -273,7 +279,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act
-    await a11yCheck(t, a11yCheckConfig);
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -307,7 +313,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act
-    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -354,7 +360,14 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act
-    await a11yCheck(t, a11yCheckConfig);
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'color-contrast': { enabled: false },
+        'aria-dialog-name': { enabled: false },
+      },
+    });
   }).before(async () => {
     await changeTheme(theme);
 
@@ -482,7 +495,7 @@ const DATA_GRID_SELECTOR = '#container';
       .expect(dataGrid.getDataRow(1).isFocusedRow)
       .ok();
 
-    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -619,7 +632,13 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, a11yCheckConfig);
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'scrollable-region-focusable': { enabled: false },
+      },
+    });
   }).before(async () => {
     await changeTheme(theme);
 
@@ -672,7 +691,13 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, a11yCheckConfig);
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'aria-required-children': { enabled: false },
+      },
+    });
   }).before(async () => {
     await changeTheme(theme);
 
@@ -707,7 +732,7 @@ const DATA_GRID_SELECTOR = '#container';
         .ok();
 
       // act, assert
-      await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+      await a11yCheck(t);
     }).before(async () => {
       await changeTheme(theme);
 
@@ -752,7 +777,7 @@ const DATA_GRID_SELECTOR = '#container';
         .ok();
 
       // act, assert
-      await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+      await a11yCheck(t);
     }).before(async () => {
       await changeTheme(theme);
 
@@ -799,7 +824,13 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, a11yCheckConfig);
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'aria-dialog-name': { enabled: false },
+      },
+    });
   }).before(async () => {
     await changeTheme(theme);
 
@@ -931,7 +962,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -975,7 +1006,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1019,7 +1050,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, a11yCheckConfig);
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1067,7 +1098,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, a11yCheckConfig);
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1123,7 +1154,7 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+    await a11yCheck(t);
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1236,7 +1267,13 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, a11yCheckConfig);
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        'aria-dialog-name': { enabled: false },
+      },
+    });
   }).before(async () => {
     await changeTheme(theme);
 
@@ -1275,7 +1312,13 @@ const DATA_GRID_SELECTOR = '#container';
       .ok();
 
     // act, assert
-    await a11yCheck(t, a11yCheckConfig);
+    await a11yCheck(t, {
+      ...a11yCheckConfig,
+      runOnly: '',
+      rules: {
+        region: { enabled: false },
+      },
+    });
   }).before(async () => {
     await changeTheme(theme);
 
