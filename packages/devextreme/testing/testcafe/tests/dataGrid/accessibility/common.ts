@@ -435,6 +435,37 @@ const DATA_GRID_SELECTOR = '#container';
     await changeTheme('generic.light');
   });
 
+  test(`Focused row in ${theme}`, async (t) => {
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(dataGrid.getDataRow(1).isFocusedRow)
+      .ok();
+
+    await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      focusedRowEnabled: true,
+      focusedRowKey: 'val_1_0',
+      columns: [
+        'field_0',
+        'field_1',
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    });
+  }).after(async () => {
+    await changeTheme('generic.light');
+  });
+
   test(`Fixed columns in ${theme}`, async (t) => {
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
