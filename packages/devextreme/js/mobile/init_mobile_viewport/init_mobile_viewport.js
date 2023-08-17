@@ -41,6 +41,8 @@ export const initMobileViewport = function(options) {
             'msUserSelect': 'none',
             'overflow': 'hidden'
         });
+    } else {
+        $('html').css('msOverflowStyle', '-ms-autohiding-scrollbar');
     }
 
     if(!allowSelection && supportProp('userSelect')) {

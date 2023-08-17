@@ -3,12 +3,13 @@ import callOnce from './call_once';
 import { isNumeric, isString } from './type';
 import domAdapter from '../dom_adapter';
 
-const jsPrefixes = ['', 'Webkit', 'Moz', 'O'];
+const jsPrefixes = ['', 'Webkit', 'Moz', 'O', 'Ms'];
 const cssPrefixes = {
     '': '',
     'Webkit': '-webkit-',
     'Moz': '-moz-',
     'O': '-o-',
+    'ms': '-ms-'
 };
 const getStyles = callOnce(function() {
     return domAdapter.createElement('dx').style;
