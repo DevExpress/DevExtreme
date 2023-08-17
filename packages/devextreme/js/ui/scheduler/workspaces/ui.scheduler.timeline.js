@@ -31,8 +31,7 @@ const HEADER_PANEL_WEEK_CELL_CLASS = 'dx-scheduler-header-panel-week-cell';
 const HEADER_ROW_CLASS = 'dx-scheduler-header-row';
 
 const HORIZONTAL = 'horizontal';
-const DATE_TABLE_CELL_BORDER = 1;
-const DATE_TABLE_HEADER_MARGIN = 10;
+const DATE_TABLE_CELL_BORDER = 1; // TODO: why?
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerTimeline extends SchedulerWorkSpace {
@@ -180,7 +179,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getWorkSpaceMinHeight() {
         let minHeight = this._getWorkSpaceHeight();
-        const workspaceContainerHeight = getOuterHeight(this.$element(), true) - this.getHeaderPanelHeight() - 2 * DATE_TABLE_CELL_BORDER - DATE_TABLE_HEADER_MARGIN;
+        const workspaceContainerHeight = getOuterHeight(this.$element(), true) - this.getHeaderPanelHeight();
 
         if(minHeight < workspaceContainerHeight) {
             minHeight = workspaceContainerHeight;
