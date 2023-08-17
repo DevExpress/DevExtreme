@@ -29,6 +29,7 @@ import gridCoreUtils from '../m_utils';
 import {
   ACTION_OPTION_NAMES,
   BUTTON_NAMES,
+  CELL_BASED_MODES,
   CELL_FOCUS_DISABLED_CLASS,
   CELL_MODIFIED,
   COMMAND_EDIT_CLASS,
@@ -159,14 +160,18 @@ class EditingControllerImpl extends modules.ViewController {
     this.component._optionsByReference[EDITING_CHANGES_OPTION_NAME] = true;
   }
 
-  getEditMode() {
-    const editMode: any = this.option('editing.mode');
-
+  getEditMode(): string {
+    const editMode = this.option('editing.mode') ?? EDIT_MODE_ROW;
     if (EDIT_MODES.includes(editMode)) {
       return editMode;
     }
 
     return EDIT_MODE_ROW;
+  }
+
+  isCellBasedEditMode(): boolean {
+    const editMode: string = this.getEditMode();
+    return CELL_BASED_MODES.includes(editMode);
   }
 
   _getDefaultEditorTemplate() {
