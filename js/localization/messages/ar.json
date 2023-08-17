@@ -179,7 +179,7 @@
         "dxDataGrid-filterPanelClearFilter": "مسح",
         "dxDataGrid-filterPanelFilterEnabledHint": "تمكين عامل التصفية",
 
-        "dxTreeList-ariaTreeList": "قائمة الشجرة",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "اضافة",
