@@ -25,6 +25,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
+import messageLocalization from '@js/localization/message';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 
 import { ColumnsController } from '../columns_controller/m_columns_controller';
@@ -229,7 +230,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
         && column.calculateCellValue === column.defaultCalculateCellValue;
 
       if (isEditableCell) {
-        this.setAria('roledescription', 'Editable', $cell);
+        this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaEditableCell'), $cell);
       }
     }
 
