@@ -1,10 +1,10 @@
 import { ClientFunction, Selector } from 'testcafe';
-import createWidget from '../../helpers/createWidget';
-import url from '../../helpers/getPageUrl';
-import DataGrid from '../../model/dataGrid';
-import { a11yCheck } from '../../helpers/accessibilityUtils';
+import createWidget from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
+import DataGrid from '../../../model/dataGrid';
+import { a11yCheck } from '../../../helpers/accessibilityUtils';
 
-fixture`FixedColumnsA11y`
+fixture`Fixed columns tests with axe`
   .page(url(__dirname, '../container.html'));
 
 const pressKey = async (t: TestController, key: string, times = 1) => {

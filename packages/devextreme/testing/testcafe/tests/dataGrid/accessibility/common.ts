@@ -8,7 +8,7 @@ import { changeTheme } from '../../../helpers/changeTheme';
 import FilterTextBox from '../../../model/dataGrid/editors/filterTextBox';
 import HeaderFilter from '../../../model/dataGrid/headers/headerFilter';
 
-fixture`Testing with axe`
+fixture`Common tests with axe`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
