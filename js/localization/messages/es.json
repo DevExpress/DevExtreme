@@ -179,7 +179,7 @@
         "dxDataGrid-filterPanelClearFilter": "Limpiar filtro",
         "dxDataGrid-filterPanelFilterEnabledHint": "Habilitar filtro",
 
-        "dxTreeList-ariaTreeList": "Lista de árbol",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Añadir",

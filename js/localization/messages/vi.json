@@ -179,7 +179,7 @@
         "dxDataGrid-filterPanelClearFilter": "Loại bỏ",
         "dxDataGrid-filterPanelFilterEnabledHint": "Kích hoạt Bộ lọc",
 
-        "dxTreeList-ariaTreeList": "Danh sách cây",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Thêm",

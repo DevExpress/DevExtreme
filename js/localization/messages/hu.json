@@ -179,7 +179,7 @@
         "dxDataGrid-filterPanelClearFilter": "Törlés",
         "dxDataGrid-filterPanelFilterEnabledHint": "Szűrő engedélyezése",
 
-        "dxTreeList-ariaTreeList": "Fa lista",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Hozzáadás",

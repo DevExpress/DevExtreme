@@ -179,7 +179,7 @@
         "dxDataGrid-filterPanelClearFilter": "Išvalyti",
         "dxDataGrid-filterPanelFilterEnabledHint": "Aktyvuoti filtrą",
 
-        "dxTreeList-ariaTreeList": "Duomenų medis",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Ieškoti duomenų medyje",
         "dxTreeList-ariaToolbar": "Duomenų medžio įrankių juosta",
         "dxTreeList-editingAddRowToNode": "Pridėti",

@@ -179,7 +179,7 @@
         "dxDataGrid-filterPanelClearFilter": "クリア",
         "dxDataGrid-filterPanelFilterEnabledHint": "フィルターの有効化",
 
-        "dxTreeList-ariaTreeList": "ツリー リスト",
+        "dxTreeList-ariaTreeList": "{0} 行と {1} 列のツリー リスト",
         "dxTreeList-ariaSearchInGrid": "ツリー リスト内を検索する",
         "dxTreeList-ariaToolbar": "ツリー リストのツール バー",
         "dxTreeList-editingAddRowToNode": "追加",
