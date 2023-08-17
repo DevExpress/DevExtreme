@@ -83,6 +83,7 @@ export default class DropDownButton extends TextEditorButton {
         if($element) {
             $element
                 .removeClass('dx-button')
+                .removeClass('dx-button-mode-contained')
                 .addClass(DROP_DOWN_EDITOR_BUTTON_CLASS);
         }
     }

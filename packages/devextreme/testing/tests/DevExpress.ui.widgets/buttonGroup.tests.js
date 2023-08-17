@@ -16,6 +16,8 @@ const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item';
 const BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_CLASS + '-item-has-width';
 
+const stylingModes = ['contained', 'outlined', 'text'];
+
 QUnit.testStart(() => {
     const markup = `
         <div id="buttonGroup"></div>
@@ -72,8 +74,18 @@ QUnit.module('option changed', {
         return $('#buttonGroup').dxButtonGroup(options).dxButtonGroup('instance');
     },
     beforeEach() {
-        this.buttonGroup = this.createButtonGroup();
-        this.$buttonGroup = this.buttonGroup.$element();
+        const init = (options) => {
+            this.buttonGroup = this.createButtonGroup(options);
+            this.$buttonGroup = this.buttonGroup.$element();
+        };
+
+        this.reinit = (options) => {
+            this.buttonGroup.dispose();
+
+            init(options);
+        };
+
+        init();
     }
 }, () => {
     QUnit.test('change hover state for all buttons', function(assert) {
@@ -302,6 +314,34 @@ QUnit.module('option changed', {
 
         assert.equal(buttons[0].option('stylingMode'), 'text', 'first button');
         assert.equal(buttons[1].option('stylingMode'), 'text', 'second button');
+    });
+
+    stylingModes.forEach((stylingMode) => {
+        const restStylingModes = stylingModes.filter((mode) => mode !== stylingMode);
+
+        QUnit.test(`ButtonGroup has "${stylingMode}" class if styling mode is "${stylingMode}"`, function(assert) {
+            this.reinit({ stylingMode });
+
+            assert.strictEqual(this.$buttonGroup.hasClass(`${BUTTON_GROUP_CLASS}-mode-${stylingMode}`), true, `${stylingMode} class was added`);
+
+            restStylingModes.forEach(mode => {
+                assert.strictEqual(this.$buttonGroup.hasClass(`${BUTTON_GROUP_CLASS}-mode-${mode}`), false, `${mode} class was not added`);
+            });
+        });
+
+        restStylingModes.forEach((newStylingMode) => {
+            QUnit.test(`ButtonGroup has "${newStylingMode}" class if styling mode value is changed to "${newStylingMode}"`, function(assert) {
+                this.buttonGroup.option('stylingMode', newStylingMode);
+
+                assert.strictEqual(this.$buttonGroup.hasClass(`${BUTTON_GROUP_CLASS}-mode-${newStylingMode}`), true, `${stylingMode} class was changed to ${newStylingMode}`);
+
+                const restStylingModes = stylingModes.filter((mode) => mode !== newStylingMode);
+
+                restStylingModes.forEach(mode => {
+                    assert.strictEqual(this.$buttonGroup.hasClass(`${BUTTON_GROUP_CLASS}-mode-${mode}`), false, `${mode} class was not added`);
+                });
+            });
+        });
     });
 });
 
