@@ -687,7 +687,6 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _popupHiddenHandler: function() {
-        this.focus();
         this._closeAction();
         this._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
     },
