@@ -572,28 +572,28 @@ BigInteger.ONE = nbv(1);
 
 interface BigIntegerInstance {
 
-  // (public) return string representation in given radix
+  // return string representation in given radix
   toString: (b?: number) => string;
 
-  // (public) -this
+  // -this
   negate: () => BigIntegerInstance;
 
-  // (public) |this|
+  // |this|
   abs: () => BigIntegerInstance;
 
-  // (public) return + if this > a, - if this < a, 0 if equal
+  // return + if this > a, - if this < a, 0 if equal
   compareTo: (a: BigIntegerInstance) => number;
 
-  // (public) return the number of bits in "this"
+  // return the number of bits in "this"
   bitLength: () => number;
 
-  // (public) this mod a
+  // this mod a
   mod: (a: BigIntegerInstance) => BigIntegerInstance;
 
-  // (public) this^e % m, 0 <= e < 2^32
+  // this^e % m, 0 <= e < 2^32
   modPowInt: (e: number, m: BigIntegerInstance) => BigIntegerInstance;
 
-  // (public) convert to bigendian byte array
+  // convert to bigendian byte array
   toByteArray: () => number[];
 
 }
