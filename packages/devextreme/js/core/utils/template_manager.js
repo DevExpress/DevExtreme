@@ -1,5 +1,6 @@
 import config from '../config';
 import devices from '../devices';
+import { getPublicElement } from '../element';
 import Errors from '../errors';
 import $ from '../renderer';
 import { ChildDefaultTemplate } from '../templates/child_default_template';
@@ -60,6 +61,15 @@ export const addOneRenderedCall = (template) => {
     });
 };
 
+export const addPublicElementNormalization = (template) => {
+    const render = template.render.bind(template);
+    return extend({}, template, {
+        render(options) {
+            return render({ ...options, container: getPublicElement(options.container) });
+        }
+    });
+}
+
 export const getNormalizedTemplateArgs = (options) => {
     const args = [];
 
@@ -91,8 +101,12 @@ export const acquireIntegrationTemplate = (templateSource, templates, isAsyncTem
 
     if(!skipTemplates || skipTemplates.indexOf(templateSource) === -1) {
         integrationTemplate = templates[templateSource];
-        if(integrationTemplate && !(integrationTemplate instanceof TemplateBase) && !isAsyncTemplate) {
-            integrationTemplate = addOneRenderedCall(integrationTemplate);
+        if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
+            integrationTemplate = addPublicElementNormalization(integrationTemplate);
+
+            if (!isAsyncTemplate) {
+                integrationTemplate = addOneRenderedCall(integrationTemplate);
+            }
         }
     }
 
