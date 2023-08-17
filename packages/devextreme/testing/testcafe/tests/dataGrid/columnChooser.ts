@@ -6,7 +6,7 @@ import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { getData } from './helpers/generateDataSourceData';
 
-fixture`Column chooser`
+fixture.disablePageReloads`Column chooser`
   .page(url(__dirname, '../container.html'));
 
 test('Column chooser screenshot', async (t) => {
