@@ -143,9 +143,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 },
                 {
                     dataField: 'field3',
-                    calculateCellValue: function(rowData) {
-                        return 500;
-                    }
+                    allowEditing: false,
                 },
                 {
                     dataField: 'field4',

@@ -2605,6 +2605,15 @@ export const editingModule = {
           if (cellOptions.modified) {
             this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaModifiedCell'), $cell);
           }
+
+          const isEditableCell = cellOptions.column.allowEditing
+            && cellOptions.rowType === 'data'
+            && cellOptions.column.calculateCellValue === cellOptions.column.defaultCalculateCellValue
+            && this._editingController.isCellBasedEditMode();
+
+          if (isEditableCell) {
+            this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaEditableCell'), $cell);
+          }
         },
         _createCell(options) {
           const $cell = this.callBase(options);

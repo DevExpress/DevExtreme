@@ -25,12 +25,10 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
-import messageLocalization from '@js/localization/message';
 import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
 
 import { ColumnsController } from '../columns_controller/m_columns_controller';
 import { DataController } from '../data_controller/m_data_controller';
-import { EditingController } from '../editing/m_editing';
 import modules from '../m_modules';
 import { ModuleType, View } from '../m_types';
 import gridCoreUtils from '../m_utils';
@@ -218,19 +216,9 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
     const $cell = $(cell);
 
-    if (options.rowType === 'data') {
-      const needLinkToHeader = column.headerId && !column.type && this.component.option('showColumnHeaders');
-      if (needLinkToHeader) {
+    if (options.rowType === 'data' && column.headerId && !column.type) {
+      if (this.component.option('showColumnHeaders')) {
         this.setAria('describedby', column.headerId, $cell);
-      }
-
-      const editingController = this.getController('editing') as EditingController;
-      const isEditableCell = column.allowEditing
-        && editingController?.isCellBasedEditMode()
-        && column.calculateCellValue === column.defaultCalculateCellValue;
-
-      if (isEditableCell) {
-        this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaEditableCell'), $cell);
       }
     }
 
