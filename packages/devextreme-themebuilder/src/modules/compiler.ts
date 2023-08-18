@@ -17,7 +17,7 @@ export default class Compiler {
 
   meta: ThemesMetadata = metadata;
 
-  userItems: ConfigMetaItem[] = [];
+  userItems: { [key: string]: ConfigMetaItem } = {};
 
   indexFileContent: string;
 
@@ -46,7 +46,13 @@ export default class Compiler {
     compile: (source: string, options?: sass.Options<'async'>) => Promise<sass.CompileResult>,
   ): Promise<CompilerResult> => {
     this.changedVariables = {};
-    this.userItems = items || [];
+
+    if (items) {
+      this.userItems = items.reduce((acc: { [key: string]: ConfigMetaItem }, item) => {
+        acc[item.key] = item;
+        return acc;
+      }, {});
+    }
 
     let compilerOptions: sass.Options<'async'> = {
       importers: [{
@@ -90,7 +96,8 @@ export default class Compiler {
     const nameVariable = customVariable.get(0) as sass.SassString;
 
     let result = sass.sassNull;
-    const customerVariable = this.userItems.find((item) => item.key === nameVariable.text);
+
+    const customerVariable = this.userItems[nameVariable.text];
     if (customerVariable) {
       result = parseString(customerVariable.value);
     }
