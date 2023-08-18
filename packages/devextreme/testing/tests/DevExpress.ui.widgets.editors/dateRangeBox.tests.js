@@ -39,7 +39,7 @@ const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_CONTOURED_CELL_CLASS = 'dx-calendar-contoured-date';
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
-const TODAY_BUTTON_SELECTOR = '.dx-button-today.dx-button';
+const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
 
@@ -4165,19 +4165,20 @@ if(devices.real().deviceType === 'desktop') {
             },
         }];
 
-        QUnit.test('pressing tab should set focus on today button in popup', function(assert) {
+        QUnit.test('pressing tab should set focus on previous month button in calendar', function(assert) {
             this.reinit({
                 opened: true,
                 applyValueMode: 'useButtons',
             });
+
             this.$endDateInput
                 .focus()
                 .trigger($.Event('keydown', {
                     key: 'Tab',
                 }));
 
-            const $todayButton = this.getPopupContent().parent().find(TODAY_BUTTON_SELECTOR);
-            assert.ok($todayButton.hasClass(STATE_FOCUSED_CLASS));
+            const $prevButton = this.getPopupContent().parent().find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`);
+            assert.ok($prevButton.hasClass(STATE_FOCUSED_CLASS));
         });
 
         QUnit.test('pressing tab + shift should set focus on apply button in popup', function(assert) {

@@ -10,64 +10,13 @@
 
 // adduse
 
+.dx-buttongroup-mode-contained {
+  .dx-button-mode-contained {
+    border-inline-end-width: 0;
+  }
+}
+
 @include dx-buttongroup-sizing(
   $button-border-radius,
-  0,
   $generic-button-border-weight,
-);
-@include dx-buttongroup-item(
-  $button-normal-bg,
-  $button-group-default-bg,
-  $button-group-success-bg,
-  $button-group-danger-bg,
-  $button-default-border-color,
-  $button-default-border-color,
-  $button-default-outlined-bg-hover,
-  $button-default-outlined-bg-focused,
-  $button-default-text-bg-hover,
-  $button-default-text-bg-focused,
-  $button-success-text-bg-hover,
-  $button-success-text-bg-focused,
-  $button-danger-text-bg-hover,
-  $button-danger-text-bg-focused,
-  $button-success-border-color,
-  $button-success-border-color,
-  $button-success-outlined-bg-hover,
-  $button-success-outlined-bg-focused,
-  $button-danger-border-color,
-  $button-danger-border-color,
-  $button-danger-outlined-bg-hover,
-  $button-danger-outlined-bg-focused,
-  $button-normal-contained-bg-hover,
-  $button-normal-contained-bg-focused,
-  $button-normal-contained-bg-hover,
-  $button-normal-contained-bg-focused,
-  $button-normal-contained-bg-hover,
-  $button-normal-contained-bg-focused,
-  $button-normal-contained-bg-hover,
-  $button-normal-contained-bg-focused,
-  $button-normal-outlined-bg-hover,
-  $button-normal-outlined-bg-focused,
-  $button-normal-text-bg-hover,
-  $button-normal-text-bg-focused,
-  $button-group-normal-contained-selected-bg,
-  $button-group-normal-contained-selected-bg-hover,
-  $button-group-normal-contained-selected-bg-focused,
-  $button-group-normal-selected-bg,
-  $button-group-normal-selected-bg-hover,
-  $button-group-normal-selected-bg-focused,
-  $button-group-normal-selected-color,
-  $button-group-success-selected-bg,
-  $button-group-success-selected-bg-hover,
-  $button-group-success-selected-bg-focused,
-  $button-group-success-selected-color,
-  $button-group-default-selected-bg,
-  $button-group-default-selected-bg-hover,
-  $button-group-default-selected-bg-focused,
-  $button-group-default-selected-color,
-  $button-group-danger-selected-bg,
-  $button-group-danger-selected-bg-hover,
-  $button-group-danger-selected-bg-focused,
-  $button-group-danger-selected-color,
-  none,
 );

@@ -186,7 +186,7 @@
         "dxDataGrid-filterPanelClearFilter": "Zurücksetzen",
         "dxDataGrid-filterPanelFilterEnabledHint": "Filter aktivieren",
 
-        "dxTreeList-ariaTreeList": "Strukturliste",
+        "dxTreeList-ariaTreeList": "TreeList mit {0} Zeilen und {1} Spalten",
         "dxTreeList-ariaSearchInGrid": "Suchen in der Strukturliste",
         "dxTreeList-ariaToolbar": "Symbolleiste der Strukturliste",
         "dxTreeList-editingAddRowToNode": "Hinzufügen",

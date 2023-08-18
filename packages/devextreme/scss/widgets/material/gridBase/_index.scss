@@ -1107,14 +1107,9 @@ $grid-masterdetail-padding: 16px;
       @include dx-button-styling-variant(
         $button-danger-bg,
         $button-danger-color,
-        none,
-        transparent,
         $button-danger-bg,
-        none,
         $button-danger-bg,
-        none,
         $button-danger-bg,
-        none,
         $button-disabled-background,
         $button-danger-color
       );

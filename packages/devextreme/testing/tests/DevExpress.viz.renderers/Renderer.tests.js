@@ -97,7 +97,6 @@ QUnit.test('Creation', function(assert) {
     assert.deepEqual(renderer.root.css.firstCall.args[0], {
         '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)',
         '-moz-user-select': 'none',
-        '-ms-user-select': 'none',
         '-webkit-user-select': 'none',
         display: 'block',
         overflow: 'hidden',

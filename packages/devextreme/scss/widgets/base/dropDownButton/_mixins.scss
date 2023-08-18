@@ -10,11 +10,6 @@
   } 
 
   .dx-dropdownbutton-action {
-    &:not(.dx-buttongroup-last-item) {
-      border-inline-start-width: 1px;
-      border-inline-end-width: 0;
-    }
-
     &.dx-button-has-icon:not(.dx-button-has-text) {
       .dx-button-content {
         padding-inline: $dropdownbutton-action-horizontal-padding;

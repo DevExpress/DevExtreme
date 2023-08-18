@@ -60,8 +60,7 @@
     left: 0;
     cursor: pointer;
 
-    &::-webkit-file-upload-button,
-    &::-ms-browse {
+    &::-webkit-file-upload-button {
       cursor: pointer;
     }
   }
