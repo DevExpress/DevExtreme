@@ -1,3 +1,6 @@
+$accordion-title-color: getCustomVar(("$accordion-title-color")) !default;
+$accordion-item-title-opened-bg: getCustomVar(("$accordion-item-title-opened-bg")) !default;
+
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
