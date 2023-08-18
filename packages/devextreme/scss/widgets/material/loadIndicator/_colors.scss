@@ -9,13 +9,3 @@
 * $type color
 */
 $load-indicator-segment-bg-color: $base-accent !default;
-$loadindicator-background-image: null !default;
-
-@if $mode == "light" {
-  $loadindicator-background-image: data-uri('images/widgets/material/color-schemes/light/loader64.gif') !default;
-}
-
-@if $mode == "dark" {
-  $loadindicator-background-image: data-uri('images/widgets/material/color-schemes/dark/loader64.gif') !default;
-}
-
