@@ -56,8 +56,8 @@ export default class MetadataGenerator {
   }
 
   static getOverrideVariables(metaItems: MetaItem[]): string {
-    const result = metaItems.map((item) => `${item.Key}: getCustomVar(("${item.Key}": ${item.Key}));\n`).join('');
-    return result;
+    const result = metaItems.map((item) => `${item.Key}: getCustomVar(("${item.Key}")) !default;`).join('\n');
+    return `${result}\n\n`;
   }
 
   static getMapFromMeta(metaItems: MetaItem[]): string {
@@ -100,7 +100,6 @@ export default class MetadataGenerator {
     let modifiedContent = content;
 
     const metaItems = MetadataGenerator.getMetaItems(content);
-
     if (!metaItems.length) {
       return modifiedContent;
     }
@@ -110,7 +109,7 @@ export default class MetadataGenerator {
     });
 
     const overeideVariables = MetadataGenerator.getOverrideVariables(metaItems);
-    modifiedContent += overeideVariables;
+    modifiedContent = overeideVariables + modifiedContent;
 
     return modifiedContent;
   }

@@ -89,9 +89,8 @@ export default class Compiler {
   getCustomVar = (values: sass.Value[]): sass.Value => {
     const customVariable = values[0].get(0);
     const nameVariable = customVariable.get(0);
-    const baseVariable = customVariable.get(1);
 
-    if (baseVariable === sass.sassNull || !(nameVariable instanceof sass.SassString)) {
+    if (!(nameVariable instanceof sass.SassString)) {
       return sass.sassNull;
     }
 
@@ -100,6 +99,6 @@ export default class Compiler {
       return hexToColor(customerVariable.value);
     }
 
-    return baseVariable;
+    return sass.sassNull;
   };
 }
