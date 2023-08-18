@@ -1,7 +1,7 @@
 import * as sass from 'sass-embedded';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
-import { hexToColor } from './parse-value';
+import { parse, hexToColor } from './parse-value';
 import { optimizeCss } from './post-compiler';
 
 export enum ImportType {
@@ -57,6 +57,7 @@ export default class Compiler {
         load: this.load,
       }],
       functions: {
+        'collector($map)': this.collector,
         'getCustomVar($value)': this.getCustomVar,
       },
     };
@@ -94,10 +95,33 @@ export default class Compiler {
       return sass.sassNull;
     }
 
+    let result = sass.sassNull;
     const customerVariable = this.userItems.find((item) => item.key === nameVariable.text);
     if (customerVariable?.value.startsWith('#')) {
-      return hexToColor(customerVariable.value);
+      result = hexToColor(customerVariable.value);
     }
+
+    return result;
+  };
+
+  collector = (maps: sass.SassMap[]): sass.Value => {
+    maps.forEach((map) => {
+      map.asList.forEach((value) => {
+        if (value.get(1) === sass.sassNull) {
+          return;
+        }
+
+        const key = value.get(0);
+        if (!(key instanceof sass.SassString)) {
+          return;
+        }
+
+        const variableKey = key.text;
+        const variableValue = parse(value.get(1));
+
+        this.changedVariables[variableKey] = variableValue;
+      });
+    });
 
     return sass.sassNull;
   };

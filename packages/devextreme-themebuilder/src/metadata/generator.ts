@@ -57,7 +57,7 @@ export default class MetadataGenerator {
 
   static getOverrideVariables(metaItems: MetaItem[]): string {
     const result = metaItems.map((item) => `${item.Key}: getCustomVar(("${item.Key}")) !default;`).join('\n');
-    return `${result}\n\n`;
+    return result;
   }
 
   static getMapFromMeta(metaItems: MetaItem[]): string {
@@ -109,7 +109,8 @@ export default class MetadataGenerator {
     });
 
     const overeideVariables = MetadataGenerator.getOverrideVariables(metaItems);
-    modifiedContent = overeideVariables + modifiedContent;
+    const collector = `$never-used: collector(${MetadataGenerator.getMapFromMeta(metaItems)});\n`;
+    modifiedContent = overeideVariables + '\n\n' + modifiedContent + collector;
 
     return modifiedContent;
   }
