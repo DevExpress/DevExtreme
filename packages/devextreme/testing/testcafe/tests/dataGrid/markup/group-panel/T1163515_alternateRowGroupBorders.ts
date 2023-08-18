@@ -3,7 +3,7 @@ import { changeTheme } from '../../../../helpers/changeTheme';
 import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import DataGrid from '../../../../model/dataGrid';
-import { Themes } from '../../helpers/themes';
+import { Themes } from '../../../../helpers/themes';
 
 // TODO: Enable multi-theming testcafe run in the future.
 fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`

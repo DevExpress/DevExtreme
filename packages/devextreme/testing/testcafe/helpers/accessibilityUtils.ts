@@ -1,14 +1,25 @@
 /* eslint-disable spellcheck/spell-checker */
 import { axeCheck, createReport } from '@testcafe-community/axe';
+import { ElementContext, RunOptions } from 'axe-core';
 
-export const a11yCheck = async (t: TestController, rules: object = {}): Promise<void> => {
-  const { error, results } = await axeCheck(t, undefined, {
-    rules: {
-      'color-contrast': { enabled: false },
-      'th-has-data-cells': { enabled: false },
-      ...rules,
-    },
-  });
+const defaultOptions = {
+  rules: {
+    'color-contrast': { enabled: false },
+    'th-has-data-cells': { enabled: false },
+  },
+};
+
+interface A11yCheckOptions extends RunOptions {
+  runOnly?: any;
+}
+
+export const a11yCheck = async (
+  t: TestController,
+  options: A11yCheckOptions = defaultOptions,
+  selector?: ElementContext,
+):
+Promise<void> => {
+  const { error, results } = await axeCheck(t, selector, { rules: {}, ...options });
 
   await t
     .expect(error)
