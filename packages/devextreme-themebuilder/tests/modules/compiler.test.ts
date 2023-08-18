@@ -40,8 +40,6 @@ describe('compile', () => {
   });
 
   test('Compile with one base and one accordion items modified', async () => {
-    // TODO: replace hex to named color
-    return;
     const compiler = new Compiler();
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile(file, [
