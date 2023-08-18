@@ -32,6 +32,7 @@ if(Quill) {
     const TOOLBAR_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-separator';
     const TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-menu-separator';
     const ACTIVE_FORMAT_CLASS = 'dx-format-active';
+    const SELECTED_STATE_CLASS = 'dx-state-selected';
 
     const ICON_CLASS = 'dx-icon';
 
@@ -518,6 +519,7 @@ if(Quill) {
                 this._setValueSilent(widget, formats[name]);
             } else {
                 widget.$element().addClass(ACTIVE_FORMAT_CLASS);
+                widget.$element().addClass(SELECTED_STATE_CLASS);
             }
         }
 
@@ -583,6 +585,7 @@ if(Quill) {
 
         _resetFormatWidget(name, widget) {
             widget.$element().removeClass(ACTIVE_FORMAT_CLASS);
+            widget.$element().removeClass(SELECTED_STATE_CLASS);
 
             if(this._isColorFormat(name)) {
                 this._updateColorWidget(name);

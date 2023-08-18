@@ -362,6 +362,13 @@ export default class dxForm extends Widget<dxFormOptions> {
     resetValues(): void;
     /**
      * @docid
+     * @publicName reset(editorsData)
+     * @param1 editorsData:object
+     * @public
+     */
+    reset(editorsData?: Record<string, any>): void;
+    /**
+     * @docid
      * @publicName updateData(data)
      * @param1 data:object
      * @public

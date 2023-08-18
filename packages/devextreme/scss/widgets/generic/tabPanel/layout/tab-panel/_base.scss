@@ -1,0 +1,31 @@
+@use "../../variables/colors" as *;
+@use "../../../colors" as *;
+@use "../../variables/sizes" as *;
+@use "../../../sizes" as *;
+@use "../../../tabs/variables/colors" as *;
+@use "../../../tabs/variables/borders" as *;
+@use "../../../tabs/variables/sizes" as *;
+@use "../../../tabs/mixins" as *;
+@use "../../../tabs" as *;
+@use "../../../../base/tabPanel";
+@use "../../variables/borders" as *;
+
+// adduse
+
+
+.dx-tabpanel {
+  .dx-tabs-wrapper {
+    border: none;
+  
+    &::after {
+      top: 0;
+      bottom: 0;
+    }
+  }
+
+  .dx-tabs .dx-tabs-scrollable {
+    .dx-tabs-wrapper::after {
+      content: none;
+    }
+  }
+}

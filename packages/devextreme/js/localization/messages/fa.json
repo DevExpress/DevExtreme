@@ -186,7 +186,7 @@
         "dxDataGrid-filterPanelClearFilter": "حذف فیلتر",
         "dxDataGrid-filterPanelFilterEnabledHint": "فعال نمودن فیلتر",
 
-        "dxTreeList-ariaTreeList": "لیست درختی",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "جستجو در لیست درختی",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "افزودن",
