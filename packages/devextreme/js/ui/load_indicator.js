@@ -126,10 +126,9 @@ const LoadIndicator = Widget.inherit({
     },
 
     _renderMarkup: function() {
-        const shouldUseAnimation = animation();
         const { viaImage, indicatorSrc } = this.option();
 
-        if(shouldUseAnimation && !viaImage && !indicatorSrc) { // B236922
+        if(animation() && !viaImage && !indicatorSrc) { // B236922
             this._renderMarkupForAnimation();
         } else {
             this._renderMarkupForImage();
@@ -162,10 +161,9 @@ const LoadIndicator = Widget.inherit({
         if(indicatorSrc) {
             this._$wrapper.addClass(LOADINDICATOR_IMAGE_CLASS);
             this._$wrapper.css('backgroundImage', 'url(' + indicatorSrc + ')');
-            return;
+        } else if(animation()) {
+            this._renderMarkupForAnimation();
         }
-
-        this._renderMarkupForAnimation();
     },
 
     _renderDimensions: function() {

@@ -63,9 +63,9 @@ QUnit.module('Static load indicator', {
         const $indicatorWrapper = $indicator.find(`.${LOADINDICATOR_WRAPPER}`);
 
         assert.notOk($indicatorWrapper.hasClass(`.${LOADINDICATOR_IMAGE}`), 'Image class not added');
-        assert.strictEqual($indicator.find(`.${LOADINDICATOR_ICON}`).length, 1, 'Icon div created');
-        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT}`).length, 8, '16 Segment created');
-        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT}1`).length, 1, 'Numerated segment created');
+        assert.strictEqual($indicator.find(`.${LOADINDICATOR_ICON}`).length, 0, 'Icon div not created');
+        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT}`).length, 0, '16 Segment not created');
+        assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT}1`).length, 0, 'Numerated segment not created');
     });
 
     QUnit.test('custom indicator', function(assert) {
