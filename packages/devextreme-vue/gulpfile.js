@@ -69,7 +69,6 @@ gulp.task(NPM_README,
 
 gulp.task(NPM_BUILD, gulp.series(
   gulp.parallel(NPM_LICENSE, NPM_PACKAGE, NPM_README),
-  GENERATE,
   () => {
     return gulp.src([
         config.src,
