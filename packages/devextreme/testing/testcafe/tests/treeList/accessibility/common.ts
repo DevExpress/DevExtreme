@@ -39,10 +39,10 @@ function getData(rowCount: number): Record<string, any>[] {
   };
 
   test(`Search panel, filter panel, pager and selection in ${theme}`, async (t) => {
-    const dataGrid = new TreeList(TREE_LIST_SELECTOR);
+    const treeList = new TreeList(TREE_LIST_SELECTOR);
 
     await t
-      .expect(dataGrid.isReady())
+      .expect(treeList.isReady())
       .ok();
 
     await a11yCheck(t, a11yCheckConfig, TREE_LIST_SELECTOR);
