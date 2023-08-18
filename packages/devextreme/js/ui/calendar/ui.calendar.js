@@ -696,6 +696,7 @@ const Calendar = Editor.inherit({
 
         this._selectionStrategy.updateAriaSelected();
         this._updateAriaId();
+        this._updateNavigatorLabels();
 
         this.setAria('role', 'application');
 
@@ -1359,6 +1360,20 @@ const Calendar = Editor.inherit({
         this._updateViewsOption('max', this._getMaxDate());
     },
 
+    _updateNavigatorLabels: function() {
+        let zoomLevel = this.option('zoomLevel');
+        zoomLevel = zoomLevel.charAt(0).toUpperCase() + zoomLevel.slice(1);
+
+        const captionButtonText = this._navigator._caption.option('text');
+        const localizedPrevButtonLabel = messageLocalization.format(`dxCalendar-previous${zoomLevel}ButtonLabel`);
+        const localizedCaptionLabel = messageLocalization.format(`dxCalendar-caption${zoomLevel}Label`);
+        const localizedNextButtonLabel = messageLocalization.format(`dxCalendar-next${zoomLevel}ButtonLabel`);
+
+        this.setAria('label', localizedPrevButtonLabel, this._navigator._prevButton.$element());
+        this.setAria('label', `${captionButtonText}. ${localizedCaptionLabel}`, this._navigator._caption.$element());
+        this.setAria('label', localizedNextButtonLabel, this._navigator._nextButton.$element());
+    },
+
     _updateAriaSelected: function(value, previousValue) {
         previousValue.forEach((item) => { this.setAria('selected', undefined, this._view._getCellByDate(item)); });
         value.forEach((item) => { this.setAria('selected', true, this._view._getCellByDate(item)); });
@@ -1423,6 +1438,7 @@ const Calendar = Editor.inherit({
                 this._refreshViews();
                 this._renderNavigator();
                 this._updateAriaId();
+                this._updateNavigatorLabels();
                 break;
             case 'minZoomLevel':
             case 'maxZoomLevel':
