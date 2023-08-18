@@ -209,9 +209,6 @@ export class SingleLineStrategy {
                 this._menu?._itemOptionChanged(item, property, value);
                 return;
             }
-
-            this._toolbar.option('overflowMenuVisible', false);
-            this._arrangeItems();
         }
 
         this.renderMenuItems();
