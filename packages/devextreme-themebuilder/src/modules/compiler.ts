@@ -4,12 +4,6 @@ import { metadata } from '../data/metadata/dx-theme-builder-metadata';
 import { parse, parseString } from './parse-value';
 import { optimizeCss } from './post-compiler';
 
-export enum ImportType {
-  Index,
-  Color,
-  Unknown,
-}
-
 export default class Compiler {
   changedVariables: { [key: string]: string } = {};
 
@@ -20,12 +14,6 @@ export default class Compiler {
   userItems: { [key: string]: ConfigMetaItem } = {};
 
   indexFileContent: string;
-
-  static getImportType = (url: string): ImportType => {
-    if (url.endsWith('tb_index')) return ImportType.Index;
-    if (url.startsWith('tb_')) return ImportType.Color;
-    return ImportType.Unknown;
-  };
 
   compile = async (
     file: string,
