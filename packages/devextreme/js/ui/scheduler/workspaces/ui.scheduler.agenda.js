@@ -260,11 +260,6 @@ class SchedulerAgenda extends WorkSpace {
             groupCellClass: this._getGroupHeaderClass(),
             groupCellCustomContent(cell, cellText, index, data) {
                 const container = domAdapter.createElement('div');
-                const contentWrapper = domAdapter.createElement('div');
-
-                container.className = getGroupHeaderContentClass;
-                contentWrapper.appendChild(cellText);
-                container.appendChild(contentWrapper);
                 container.className = getGroupHeaderContentClass;
 
                 if(cellTemplate && cellTemplate.render) {
@@ -280,6 +275,7 @@ class SchedulerAgenda extends WorkSpace {
                     }));
 
                 } else {
+                    const contentWrapper = domAdapter.createElement('div');
                     contentWrapper.appendChild(cellText);
                     container.appendChild(contentWrapper);
                 }
