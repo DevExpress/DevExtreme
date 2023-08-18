@@ -161,7 +161,7 @@ const LoadIndicator = Widget.inherit({
 
         if(indicatorSrc) {
             this._$wrapper.addClass(LOADINDICATOR_IMAGE_CLASS);
-            this._$wrapper.css('background-image', 'url(' + indicatorSrc + ')');
+            this._$wrapper.css('backgroundImage', 'url(' + indicatorSrc + ')');
             return;
         }
 

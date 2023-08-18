@@ -34,14 +34,20 @@ QUnit.module('indicator with browser animation', {
         assert.ok($element.is(':visible'));
     });
 
-    QUnit.test('render animated indicator markup', function(assert) {
-        const $indicator = $('#loadIndicator'); const loadIndicator = $indicator.dxLoadIndicator({ visible: false, viaImage: false }).dxLoadIndicator('instance');
+    [true, false].forEach((viaImage) => {
+        QUnit.test(`render animated indicator markup with viaImage=${viaImage}`, function(assert) {
+            const $indicator = $('#loadIndicator').dxLoadIndicator({
+                visible: false,
+                viaImage,
+            });
+            const loadIndicator = $indicator.dxLoadIndicator('instance');
 
-        assert.ok($indicator.hasClass(LOADINDICATOR_CLASS), 'Load Indicator initialized');
-        assert.equal($indicator.find('.' + LOADINDICATOR_ICON).length, 1, 'Icon div created');
-        assert.equal($indicator.find('.' + LOADINDICATOR_SEGMENT).length, loadIndicator.option('_animatingSegmentCount') + 1, 'Segments created');
-        assert.equal($indicator.find('.' + LOADINDICATOR_SEGMENT + '1').length, 1, 'Numerated segment created');
-        assert.equal($indicator.find('.' + LOADINDICATOR_CONTENT_CLASS).length, 1, 'content is created');
+            assert.ok($indicator.hasClass(LOADINDICATOR_CLASS), 'Load Indicator initialized');
+            assert.strictEqual($indicator.find(`.${LOADINDICATOR_ICON}`).length, 1, 'Icon div created');
+            assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT}`).length, loadIndicator.option('_animatingSegmentCount') + 1, 'Segments created');
+            assert.strictEqual($indicator.find(`.${LOADINDICATOR_SEGMENT}1`).length, 1, 'Numerated segment created');
+            assert.strictEqual($indicator.find(`.${LOADINDICATOR_CONTENT_CLASS}`).length, 1, 'content is created');
+        });
     });
 
     QUnit.test('visible changes visibility option', function(assert) {

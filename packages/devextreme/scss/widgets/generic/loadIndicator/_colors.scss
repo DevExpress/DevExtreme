@@ -10,55 +10,46 @@
 */
 $loadindicator-bg: null !default;
 $loadindicator-segment-shadow-color: null !default;
-$loadindicator-image-bg: null !default;
 
 
 @if $color == "carmine" {
 
   $loadindicator-bg: $base-accent !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-  $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
 @if $color == "contrast" {
   $loadindicator-bg: $base-inverted-bg !default;
   $loadindicator-segment-shadow-color: $base-shadow-color !default;
-  $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
 @if $color == "dark" {
   $loadindicator-bg: darken($base-text-color, 17.5%) !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-  $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif') !default;
 }
 
 @if $color == "darkmoon" {
   $loadindicator-bg: $base-accent !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-  $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif') !default;
 }
 
 @if $color == "darkviolet" {
   $loadindicator-bg: $base-accent-highlight-color !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-  $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif') !default;
 }
 
 @if $color == "greenmist" {
   $loadindicator-bg: lighten($base-text-color, 17.5%) !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-  $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
 @if $color == "light" {
   $loadindicator-bg: lighten($base-text-color, 17.5%) !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-  $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
 @if $color == "softblue" {
   $loadindicator-bg: $base-accent !default;
   $loadindicator-segment-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-  $loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
