@@ -1,7 +1,7 @@
 import * as sass from 'sass-embedded';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
-import { parse, hexToColor, parseString } from './parse-value';
+import { parse, parseString } from './parse-value';
 import { optimizeCss } from './post-compiler';
 
 export enum ImportType {
@@ -86,20 +86,13 @@ export default class Compiler {
   } as sass.ImporterResult);
 
   getCustomVar = (values: sass.Value[]): sass.Value => {
-    // debugger;
     const customVariable = values[0].get(0);
-    const nameVariable = customVariable.get(0);
-
-    if (!(nameVariable instanceof sass.SassString)) {
-      return sass.sassNull;
-    }
+    const nameVariable = customVariable.get(0) as sass.SassString;
 
     let result = sass.sassNull;
     const customerVariable = this.userItems.find((item) => item.key === nameVariable.text);
     if (customerVariable) {
-      result = customerVariable.value.startsWith('#')
-        ? hexToColor(customerVariable.value)
-        : parseString(customerVariable.value);
+      result = parseString(customerVariable.value);
     }
 
     return result;
