@@ -1,7 +1,7 @@
 import * as sass from 'sass-embedded';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
-import { parse } from './parse-value';
+import { parse, hexToColor, parseString } from './parse-value';
 import { optimizeCss } from './post-compiler';
 
 export enum ImportType {
@@ -56,6 +56,7 @@ export default class Compiler {
       }],
       functions: {
         'collector($map)': this.collector,
+        'getCustomVar($value)': this.getCustomVar,
       },
     };
 
@@ -76,36 +77,32 @@ export default class Compiler {
     });
   };
 
-  getMatchingUserItemsAsString(theme: string): string {
-    const meta = theme === 'generic' ? this.meta.generic : this.meta.material;
-    const themeKeys: string[] = meta.map((item) => item.Key);
-
-    return this.userItems
-      .filter((item) => themeKeys.includes(item.key))
-      .map((item) => `${item.key}: ${item.value};`)
-      .join('');
-  }
-
   // eslint-disable-next-line spellcheck/spell-checker
-  canonicalize = (url: string): URL => (url.includes('tb_') ? new URL(`db:${url}`) : null);
+  canonicalize = (url: string): URL => (url.includes('tb_index') ? new URL(`db:${url}`) : null);
 
-  load = (url: URL): sass.ImporterResult => {
-    const { pathname: path } = url;
-    const importType = Compiler.getImportType(path);
+  load = (): sass.ImporterResult => ({
+    contents: this.indexFileContent,
+    syntax: 'scss',
+  } as sass.ImporterResult);
 
-    let content = this.importerCache[path];
-    if (!content) {
-      content = importType === ImportType.Index
-        ? this.indexFileContent
-        : this.getMatchingUserItemsAsString(path.replace('tb_', ''));
+  getCustomVar = (values: sass.Value[]): sass.Value => {
+    // debugger;
+    const customVariable = values[0].get(0);
+    const nameVariable = customVariable.get(0);
 
-      this.importerCache[path] = content;
+    if (!(nameVariable instanceof sass.SassString)) {
+      return sass.sassNull;
     }
 
-    return {
-      contents: content,
-      syntax: 'scss',
-    } as sass.ImporterResult;
+    let result = sass.sassNull;
+    const customerVariable = this.userItems.find((item) => item.key === nameVariable.text);
+    if (customerVariable) {
+      result = customerVariable.value.startsWith('#')
+        ? hexToColor(customerVariable.value)
+        : parseString(customerVariable.value);
+    }
+
+    return result;
   };
 
   collector = (maps: sass.SassMap[]): sass.Value => {
