@@ -68,13 +68,13 @@ test('Tabs in contrast theme', async (t) => {
       test('Tabs item states', async (t) => {
         const direction = rtlEnabled ? 'left' : 'right';
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-        await testScreenshot(t, takeScreenshot, `Tabs without focus, selectOnFocus=${selectOnFocus}, orientation=${orientation}, rtlEnabled=${rtlEnabled}.png`, { element: '#tabs' });
+        await testScreenshot(t, takeScreenshot, `Tabs without focus selectOnFocus=${selectOnFocus} orientation=${orientation} rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
         await t.pressKey('tab');
-        await testScreenshot(t, takeScreenshot, `Tabs when its available item has focus, selectOnFocus=${selectOnFocus}, orientation=${orientation}, rtlEnabled=${rtlEnabled}.png`, { element: '#tabs' });
+        await testScreenshot(t, takeScreenshot, `Tabs available item focused selectOnFocus=${selectOnFocus} orientation=${orientation} rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
         await t.pressKey(direction);
-        await testScreenshot(t, takeScreenshot, `Tabs when its disabled item has focus, selectOnFocus=${selectOnFocus}, orientation=${orientation}, rtlEnabled=${rtlEnabled}.png`, { element: '#tabs' });
+        await testScreenshot(t, takeScreenshot, `Tabs disabled item focused selectOnFocus=${selectOnFocus} orientation=${orientation} rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
         const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
         const fourthItem = Selector(`.${TAB_CLASS}:nth-child(4)`);
@@ -83,14 +83,14 @@ test('Tabs in contrast theme', async (t) => {
           .pressKey(direction)
           .dispatchEvent(thirdItem, 'mousedown');
 
-        await testScreenshot(t, takeScreenshot, `Tabs when 3 item has active state selectOnFocus=${selectOnFocus}, orientation=${orientation}, rtlEnabled=${rtlEnabled}.png`, { element: '#tabs' });
+        await testScreenshot(t, takeScreenshot, `Tabs 3 item active selectOnFocus=${selectOnFocus} orientation=${orientation}, rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
         await t
           .dispatchEvent(thirdItem, 'mouseup')
           .click(thirdItem)
           .hover(fourthItem);
 
-        await testScreenshot(t, takeScreenshot, `Tabs when 3 item is selected, 4 item is hovered, selectOnFocus=${selectOnFocus}, orientation=${orientation}, rtlEnabled=${rtlEnabled}.png`, { element: '#tabs' });
+        await testScreenshot(t, takeScreenshot, `Tabs 4 item  hovered, selectOnFocus=${selectOnFocus}, orientation=${orientation}, rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
         await t
           .expect(compareResults.isValid())
