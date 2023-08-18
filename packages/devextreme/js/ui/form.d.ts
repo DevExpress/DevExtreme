@@ -357,7 +357,7 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @docid
      * @publicName resetValues()
      * @public
-     * @deprecated Use clear instead
+     * @deprecated dxForm.clear
      */
     resetValues(): void;
     /**
