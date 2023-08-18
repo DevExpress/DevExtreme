@@ -26,6 +26,7 @@ type AccessibleOptions = Pick<Properties,
   "onItemRendered" |
   "onOptionChanged" |
   "onSelectionChanged" |
+  "orientation" |
   "repaintChangesOnly" |
   "rtlEnabled" |
   "scrollByContent" |
@@ -68,6 +69,7 @@ const DxTabs = createComponent({
     onItemRendered: Function,
     onOptionChanged: Function,
     onSelectionChanged: Function,
+    orientation: String,
     repaintChangesOnly: Boolean,
     rtlEnabled: Boolean,
     scrollByContent: Boolean,
@@ -107,6 +109,7 @@ const DxTabs = createComponent({
     "update:onItemRendered": null,
     "update:onOptionChanged": null,
     "update:onSelectionChanged": null,
+    "update:orientation": null,
     "update:repaintChangesOnly": null,
     "update:rtlEnabled": null,
     "update:scrollByContent": null,
