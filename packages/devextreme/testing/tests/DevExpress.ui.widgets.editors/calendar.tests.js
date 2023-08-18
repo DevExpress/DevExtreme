@@ -4821,16 +4821,6 @@ QUnit.module('Aria accessibility', {
         const calendar = this.$element.dxCalendar().dxCalendar('instance');
         const $navigatorNext = this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS));
 
-        const expectedLabel = `
-            Calendar.
-            To navigate between views, press Control, and then Left Arrow or Right Arrow.
-            To zoom in on a view, press Control, and then Down Arrow.
-            To zoom out, press Control, and then Up Arrow.
-        `
-            .replace(/(\r\n|\n|\r)/gm, '')
-            .replace(/\s+/g, ' ')
-            .trim();
-
         ['month', 'year', 'decade', 'century'].forEach((zoomLevel) => {
             calendar.option({ zoomLevel });
             $navigatorNext.trigger('dxclick');
@@ -4842,7 +4832,7 @@ QUnit.module('Aria accessibility', {
                 const label = tableElement.getAttribute('aria-label');
 
                 assert.strictEqual(role, 'grid', `zoomLevel: ${zoomLevel}, role is correct`);
-                assert.strictEqual(label, expectedLabel, 'label is correct');
+                assert.strictEqual(label, 'Calendar', 'label is correct');
             });
         });
     });
@@ -4860,6 +4850,84 @@ QUnit.module('Aria accessibility', {
             const $cell = this.$element.find(toSelector(CALENDAR_WEEK_NUMBER_CELL_CLASS)).first();
 
             assert.equal($cell.attr(attr), value);
+        });
+    });
+
+    ['month', 'year', 'decade', 'century'].forEach((zoomLevel) => {
+        QUnit.test(`Previous view button should have 'Previous ${zoomLevel}' label when zoomLevel=${zoomLevel} on init`, function(assert) {
+            this.$element.dxCalendar({
+                zoomLevel
+            });
+
+            const $prevButton = this.$element.find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`);
+            const expectedLabel = `Previous ${zoomLevel}`;
+
+            assert.equal($prevButton.attr('aria-label'), expectedLabel);
+        });
+
+        QUnit.test(`Previous view button should have 'Previous ${zoomLevel}' label when zoomLevel=${zoomLevel} on runtime`, function(assert) {
+            const calendar = this.$element.dxCalendar({
+                zoomLevel: zoomLevel === 'month' ? 'year' : 'month'
+            }).dxCalendar('instance');
+
+            calendar.option('zoomLevel', zoomLevel);
+
+            const $prevButton = this.$element.find(`.${CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS}`);
+            const expectedLabel = `Previous ${zoomLevel}`;
+
+            assert.equal($prevButton.attr('aria-label'), expectedLabel);
+        });
+
+        QUnit.test(`Next view button should have 'Next ${zoomLevel}' label when zoomLevel=${zoomLevel} on init`, function(assert) {
+            this.$element.dxCalendar({
+                zoomLevel
+            });
+
+            const $nextButton = this.$element.find(`.${CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS}`);
+            const expectedLabel = `Next ${zoomLevel}`;
+
+            assert.equal($nextButton.attr('aria-label'), expectedLabel);
+        });
+
+        QUnit.test(`Next view button should have 'Next ${zoomLevel}' label when zoomLevel=${zoomLevel} on runtime`, function(assert) {
+            const calendar = this.$element.dxCalendar({
+                zoomLevel: zoomLevel === 'month' ? 'year' : 'month'
+            }).dxCalendar('instance');
+
+            calendar.option('zoomLevel', zoomLevel);
+
+            const $nextButton = this.$element.find(`.${CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS}`);
+            const expectedLabel = `Next ${zoomLevel}`;
+
+            assert.equal($nextButton.attr('aria-label'), expectedLabel);
+        });
+
+        QUnit.test(`Caption button should have label with caption text+'${zoomLevel} selection' when zoomLevel=${zoomLevel} on init`, function(assert) {
+            this.$element.dxCalendar({
+                zoomLevel
+            });
+
+            const $captionButton = this.$element.find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
+            const captionText = $captionButton.dxButton('instance').option('text');
+            const capitalizedZoomLevel = zoomLevel.charAt(0).toUpperCase() + zoomLevel.slice(1);
+            const expectedLabel = `${captionText}. ${capitalizedZoomLevel} selection`;
+
+            assert.equal($captionButton.attr('aria-label'), expectedLabel);
+        });
+
+        QUnit.test(`Caption button should have label with caption text+'${zoomLevel} selection' when zoomLevel=${zoomLevel} on runtime`, function(assert) {
+            const calendar = this.$element.dxCalendar({
+                zoomLevel: zoomLevel === 'month' ? 'year' : 'month'
+            }).dxCalendar('instance');
+
+            calendar.option('zoomLevel', zoomLevel);
+
+            const $captionButton = this.$element.find(`.${CALENDAR_CAPTION_BUTTON_CLASS}`);
+            const captionText = $captionButton.dxButton('instance').option('text');
+            const capitalizedZoomLevel = zoomLevel.charAt(0).toUpperCase() + zoomLevel.slice(1);
+            const expectedLabel = `${captionText}. ${capitalizedZoomLevel} selection`;
+
+            assert.equal($captionButton.attr('aria-label'), expectedLabel);
         });
     });
 });
