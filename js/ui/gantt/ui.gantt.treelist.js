@@ -12,6 +12,7 @@ import { GanttTreeListNodesState } from './ui.gantt.treelist.nodes_state';
 const GANTT_TASKS = 'tasks';
 const GANTT_COLLAPSABLE_ROW = 'dx-gantt-collapsable-row';
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
+const GANTT_SCROLL_ACTIVATION_LEVEL = 1;
 
 export class GanttTreeList {
     constructor(gantt) {
@@ -160,7 +161,7 @@ export class GanttTreeList {
         const treeListScrollable = this._treeList.getScrollable();
         if(treeListScrollable) {
             const diff = scrollTop - treeListScrollable.scrollTop();
-            if(diff !== 0) {
+            if(Math.abs(diff) >= GANTT_SCROLL_ACTIVATION_LEVEL) {
                 treeListScrollable.scrollBy({ left: 0, top: diff });
             }
         }
