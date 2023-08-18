@@ -13,29 +13,12 @@
 // adduse
 @use "../dropDownList";
 
-.dx-lookup {
-  height: $generic-lookup-height;
-  border: 1px solid $texteditor-border-color;
-  background: $texteditor-bg;
-
-  &.dx-editor-underlined {
-    background: $texteditor-underlined-bg;
-  }
-
-  &.dx-texteditor-with-floating-label,
-  &.dx-texteditor-with-label {
-    &.dx-editor-underlined {
-      .dx-texteditor-label {
-        .dx-label {
-          padding-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
-        }
-      }
-    }
-  }
-}
 
 .dx-lookup-field {
-  padding-inline: $generic-base-inline-borderedwidget-horizontal-padding $generic-base-inline-borderedwidget-inner-size;
+  padding-block-start: $generic-base-inline-borderedwidget-top-padding;
+  padding-block-end: $generic-base-inline-borderedwidget-bottom-padding;
+  padding-inline-end: $generic-base-inline-borderedwidget-inner-size;
+  padding-inline-start: $generic-base-inline-borderedwidget-horizontal-padding;
   font-size: 1em;
 }
 
@@ -49,7 +32,7 @@
 }
 
 .dx-state-readonly .dx-lookup-field::before {
-  opacity: 0.5,;
+  opacity: 0.5;
 }
 
 .dx-lookup-popup-wrapper {
@@ -83,13 +66,7 @@
 }
 
 @mixin lookup-badge-offset() {
-  right: $generic-dropdowneditor-invalid-badge-offset;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    right: auto;
-    left: $generic-dropdowneditor-invalid-badge-offset;
-  }
+  inset-inline-end: $generic-dropdowneditor-invalid-badge-offset;
 }
 
 .dx-invalid.dx-lookup .dx-lookup-field::after {

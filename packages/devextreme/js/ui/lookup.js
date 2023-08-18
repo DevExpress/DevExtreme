@@ -130,13 +130,13 @@ const Lookup = DropDownList.inherit({
              * @name dxLookupOptions.openOnFieldClick
              * @hidden
              */
+            openOnFieldClick: true,
 
             /**
              * @name dxLookupOptions.showDropDownButton
              * @hidden
              */
             showDropDownButton: false,
-
 
             focusStateEnabled: false,
 
@@ -405,16 +405,8 @@ const Lookup = DropDownList.inherit({
     },
 
     _renderInput: function() {
-        const fieldClickAction = this._createAction(() => {
-            this._toggleOpenState();
-        });
-
         this._$field = $('<div>').addClass(LOOKUP_FIELD_CLASS);
         this._applyInputAttributes(this.option('inputAttr'));
-
-        eventsEngine.on(this._$field, addNamespace(clickEventName, this.NAME), e => {
-            fieldClickAction({ event: e });
-        });
 
         const $arrow = $('<div>').addClass(LOOKUP_ARROW_CLASS);
 
@@ -465,7 +457,11 @@ const Lookup = DropDownList.inherit({
     _updateField: function(text) {
         text = isDefined(text) && String(text) || this.option('placeholder');
 
-        this._$field.text(text);
+        this._$field.empty();
+        const $placeholder = $('<div>').addClass('dx-placeholder');
+
+        $placeholder.attr({ 'data-dx_placeholder': text });
+        this._$field.append($placeholder);
     },
 
     _renderFieldTemplate: function(template) {
