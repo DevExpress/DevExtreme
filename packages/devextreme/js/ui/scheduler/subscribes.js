@@ -6,7 +6,7 @@ import { extend } from '../../core/utils/extend';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import { utils } from './utils';
 import { createAppointmentAdapter } from './appointmentAdapter';
-import { getFormatType, formatDates } from './appointments/textUtils';
+import { getFormatType, formatDates } from '../../__internal/scheduler/appointments/m_text_utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 

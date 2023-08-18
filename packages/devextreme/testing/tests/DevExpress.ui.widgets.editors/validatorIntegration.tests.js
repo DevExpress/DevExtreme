@@ -202,7 +202,7 @@ QUnit.module('Regression', {
         'dxRangeSlider', 'dxSelectBox', 'dxSlider', 'dxSwitch',
         'dxTagBox', 'dxTextArea', 'dxTextBox'
     ].forEach(editor => {
-        QUnit.test(`${editor}.reset should not validate the default value`, function(assert) {
+        QUnit.test(`${editor}.clear should not validate the default value`, function(assert) {
             const validationCallback = sinon.spy();
             this.fixture.createInstance(editor, { }, {
                 validationRules: [{
@@ -211,7 +211,7 @@ QUnit.module('Regression', {
                 }]
             }, false);
 
-            this.fixture.editor.reset();
+            this.fixture.editor.clear();
 
             assert.notOk(validationCallback.called, 'validationCallback should not be called');
         });
@@ -231,7 +231,7 @@ QUnit.module('Regression', {
         });
     });
 
-    QUnit.test('NumberBox.reset should validate the default value', function(assert) {
+    QUnit.test('NumberBox.clear should validate the default value', function(assert) {
         const validationCallback = sinon.spy();
         this.fixture.createInstance('dxNumberBox', { }, {
             validationRules: [{
@@ -240,11 +240,11 @@ QUnit.module('Regression', {
             }]
         }, false);
 
-        this.fixture.editor.reset();
-        // This happens because the default dxNumberBox.value is 0, but the dxNumberBox.reset method resets it to null.
+        this.fixture.editor.clear();
+        // This happens because the default dxNumberBox.value is 0, but the dxNumberBox.clear method resets it to null.
         // Validation is executed due to the valueChanged event.
         // When we decide to break this behavior, we can add "dxNumberBox" to the editors array in the test case above and delete this test.
-        assert.ok(validationCallback.called, 'validationCallback should be called after dxNumberBox.reset');
+        assert.ok(validationCallback.called, 'validationCallback should be called after dxNumberBox.clear');
     });
 
     QUnit.test('Validator.reset should not validate the default NumberBox value', function(assert) {

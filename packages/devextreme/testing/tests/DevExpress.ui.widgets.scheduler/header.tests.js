@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 const { testStart, test, module } = QUnit;
 import themes from 'ui/themes';
-import { getCaption } from 'ui/scheduler/header/utils';
+import { getCaption } from '__internal/scheduler/header/m_utils';
 
 testStart(() => initTestMarkup());
 

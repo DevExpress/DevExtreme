@@ -38,6 +38,8 @@ const SliderTooltip = Tooltip.inherit({
         this._renderContentText();
     },
 
+    _toggleAriaAttributes() {},
+
     _renderContentText() {
         const { value, format } = this.option();
 

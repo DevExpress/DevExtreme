@@ -13,6 +13,9 @@ const CLASS = {
   doneButton: 'dx-popup-done',
   cancelButton: 'dx-popup-cancel',
   todayButton: 'dx-button-today',
+  navigatorNextView: 'dx-calendar-navigator-next-view',
+  navigatorPrevView: 'dx-calendar-navigator-previous-view',
+  navigatorCaption: 'dx-calendar-caption-button',
 };
 export default class Popup extends Overlay {
   public static className = '.dx-popup-wrapper';
@@ -54,5 +57,17 @@ export default class Popup extends Overlay {
 
   getTodayButton(): Button {
     return new Button(this.getWrapper().find(`.${CLASS.todayButton}`));
+  }
+
+  getNavigatorPrevButton(): Button {
+    return new Button(this.getWrapper().find(`.${CLASS.navigatorPrevView}`));
+  }
+
+  getNavigatorNextButton(): Button {
+    return new Button(this.getWrapper().find(`.${CLASS.navigatorNextView}`));
+  }
+
+  getNavigatorCaption(): Button {
+    return new Button(this.getWrapper().find(`.${CLASS.navigatorCaption}`));
   }
 }

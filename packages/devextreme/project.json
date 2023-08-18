@@ -1,5 +1,5 @@
 {
-  "name": "devextreme-root",
+  "name": "devextreme-main",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/devextreme",
   "projectType": "library",
@@ -10,16 +10,16 @@
         "script": "build-npm-devextreme"
       },
       "inputs": [
-        "{projectRoot}/build",
-        "{projectRoot}/fonts",
-        "{projectRoot}/icons",
-        "{projectRoot}/images",
-        "{projectRoot}/js",
-        "{projectRoot}/scss/widgets",
-        "{projectRoot}/testing",
+        "{projectRoot}/build/**/*",
+        "{projectRoot}/fonts/**/*",
+        "{projectRoot}/icons/**/*",
+        "{projectRoot}/images/**/*",
+        "{projectRoot}/js/**/*",
+        "{projectRoot}/scss/widgets/**/*",
+        "{projectRoot}/testing/**/*",
         "!{projectRoot}/testing/*.txt",
         "!{projectRoot}/testing/*.xml",
-        "{projectRoot}/ts",
+        "{projectRoot}/ts/**/*",
         "{projectRoot}/*.js"
       ],
       "outputs": [

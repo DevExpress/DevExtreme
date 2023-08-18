@@ -1318,7 +1318,7 @@ class FileUploader extends Editor {
             case 'multiple':
                 this._initFileInput();
                 if(!args.value) {
-                    this.reset();
+                    this.clear();
                 }
                 break;
             case 'readOnly':
@@ -1385,7 +1385,7 @@ class FileUploader extends Editor {
                 break;
             case 'allowCanceling':
             case 'uploadMode':
-                this.reset();
+                this.clear();
                 this._invalidate();
                 break;
             case 'onBeforeSend':
@@ -1441,7 +1441,7 @@ class FileUploader extends Editor {
         this._doPreventInputChange = false;
     }
 
-    reset() {
+    clear() {
         this.option('value', []);
     }
 }

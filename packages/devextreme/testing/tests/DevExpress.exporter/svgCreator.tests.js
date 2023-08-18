@@ -86,8 +86,6 @@ QUnit.test('getData', function(assert) {
         line-height: normal;
         overflow: hidden;
         display: block;
-        -ms-user-select: none;
-        -ms-touch-action: pan-x pan-y pinch-zoom;
         touch-action: pan-x pan-y pinch-zoom;
         -moz-user-select: none;
         -webkit-user-select: none;
@@ -211,14 +209,12 @@ QUnit.test('getData. markup with image', function(assert) {
 
     testingMarkup.style = `
         line-height: normal;
-        -ms-user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         display: block;
         overflow: hidden;
         touch-action: pan-x pan-y pinch-zoom;
-        -ms-touch-action: pan-x pan-y pinch-zoom;
     `;
 
     const deferred = svgCreator.getData(testingMarkup, {});
@@ -261,14 +257,12 @@ QUnit.test('getData. correct process two images with similar href', function(ass
 
     testingMarkup.style = `
         line-height: normal;
-        -ms-user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         display: block;
         overflow: hidden;
         touch-action: pan-x pan-y pinch-zoom;
-        -ms-touch-action: pan-x pan-y pinch-zoom;
     `;
 
     const deferred = svgCreator.getData(testingMarkup, {});
@@ -306,14 +300,12 @@ QUnit.test('getData. markup with image with href', function(assert) {
 
     testingMarkup.style = `
         line-height: normal;
-        -ms-user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         display: block;
         overflow: hidden;
         touch-action: pan-x pan-y pinch-zoom;
-        -ms-touch-action: pan-x pan-y pinch-zoom;
     `;
 
     const deferred = svgCreator.getData(testingMarkup, {});
@@ -349,14 +341,12 @@ QUnit.test('getData. markup with background-color', function(assert) {
 
     testingMarkup.style = `
         line-height: normal;
-        -ms-user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         display: block;
         overflow: hidden;
         touch-action: pan-x pan-y pinch-zoom;
-        -ms-touch-action: pan-x pan-y pinch-zoom;
     `;
 
     const deferred = svgCreator.getData(testingMarkup, { backgroundColor: '#aaa' });
@@ -395,14 +385,12 @@ QUnit.test('getData. markup with background-color. Source element hasn\'t backgr
     `);
     testingMarkup.style = `
         line-height: normal;
-        -ms-user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         display: block;
         overflow: hidden;
         touch-action: pan-x pan-y pinch-zoom;
-        -ms-touch-action: pan-x pan-y pinch-zoom;
     `;
     const testingElement = svgUtils.getSvgElement(testingMarkup);
     const originalBackgroundColor = $(testingElement).css('backgroundColor');
@@ -440,14 +428,12 @@ QUnit.test('getData returns base64 when blob is not supported', function(assert)
     `);
     testingMarkup.style = `
         line-height: normal;
-        -ms-user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         display: block;
         overflow: hidden;
         touch-action: pan-x pan-y pinch-zoom;
-        -ms-touch-action: pan-x pan-y pinch-zoom;
     `;
 
     svgCreator._getBlob = function() {
@@ -493,8 +479,6 @@ QUnit.test('Do not export elements with \'hidden-for-export\' attribute', functi
         line-height: normal;
          overflow: hidden;
          display: block;
-         -ms-user-select: none;
-         -ms-touch-action: pan-x pan-y pinch-zoom;
          touch-action: pan-x pan-y pinch-zoom;
          -moz-user-select: none;
          -webkit-user-select: none;

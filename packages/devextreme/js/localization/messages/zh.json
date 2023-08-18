@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "值",
         "dxDataGrid-ariaFilterCell": "过滤单元",
         "dxDataGrid-ariaCollapse": "折叠",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "展开",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
@@ -184,7 +186,7 @@
         "dxDataGrid-filterPanelClearFilter": "清空",
         "dxDataGrid-filterPanelFilterEnabledHint": "启用该过滤器",
 
-        "dxTreeList-ariaTreeList": "树状列表",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "添加",

@@ -1614,7 +1614,7 @@ QUnit.module('clearButton', moduleSetup, () => {
         assert.strictEqual(selectBox.option('opened'), true, 'selectBox is opened after instant re-click');
     });
 
-    QUnit.test('search should not be prevented after reset method call (T1021888)', function(assert) {
+    QUnit.test('search should not be prevented after clear method call (T1021888)', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
             searchEnabled: true,
@@ -1626,7 +1626,7 @@ QUnit.module('clearButton', moduleSetup, () => {
         const keyboard = keyboardMock($input);
         const $list = $selectBox.find(`.${LIST_CLASS}`);
 
-        selectBox.reset();
+        selectBox.clear();
 
         keyboard.type('1');
 
@@ -5427,7 +5427,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
         assert.equal(caret.start, caret.end, 'the input has no selection');
     });
 
-    QUnit.testInActiveWindow('the "tab" key press should focus the "apply" button if the input is focused', function(assert) {
+    QUnit.testInActiveWindow('the "tab" key press should focus the "cancel" button if the input is focused', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'desktop specific test');
             return;
@@ -5440,14 +5440,14 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
             opened: true
         });
         const instance = $element.dxSelectBox('instance');
-        const $applyButton = instance._popup.$wrapper().find('.dx-popup-done.dx-button');
+        const $cancelButton = instance._popup.$wrapper().find('.dx-popup-cancel.dx-button');
 
         keyboardMock($element.find(toSelector(TEXTEDITOR_INPUT_CLASS)), true)
             .focus()
             .keyDown('tab');
 
         assert.ok(instance.option('opened'), 'popup is still opened');
-        assert.ok($applyButton.hasClass(STATE_FOCUSED_CLASS), 'the apply button is focused');
+        assert.ok($cancelButton.hasClass(STATE_FOCUSED_CLASS), 'the apply button is focused');
     });
 });
 

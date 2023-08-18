@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Τιμή",
         "dxDataGrid-ariaFilterCell": "Φιλτράρισμα κελιού",
         "dxDataGrid-ariaCollapse": "Συρρίκνωση",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Επέκταση",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
@@ -184,7 +186,7 @@
         "dxDataGrid-filterPanelClearFilter": "Εκκαθάριση",
         "dxDataGrid-filterPanelFilterEnabledHint": "Ενεργοποιήστε το φίλτρο",
 
-        "dxTreeList-ariaTreeList": "Λίστα δένδρων",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Προσθέτω",

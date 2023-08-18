@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Giá trị",
         "dxDataGrid-ariaFilterCell": "Lọc ô",
         "dxDataGrid-ariaCollapse": "Thu lại",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Mở ra",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
@@ -184,7 +186,7 @@
         "dxDataGrid-filterPanelClearFilter": "Loại bỏ",
         "dxDataGrid-filterPanelFilterEnabledHint": "Kích hoạt Bộ lọc",
 
-        "dxTreeList-ariaTreeList": "Danh sách cây",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Thêm",

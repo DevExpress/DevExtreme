@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../menu/colors" as *;
+@use "../button/sizes" as *;
 @use "../common/mixins" as *;
 @use "../../base/icons" as *;
 @use "../../base/mixins" as *;
@@ -53,7 +54,7 @@ $material-menu-arrow-image-size: 7px;
   }
 
   .dx-icon {
-    @include dx-icon-sizing($material-base-icon-size);
+    @include dx-icon-sizing($material-button-icon-size);
   }
 
   .dx-menu-item {

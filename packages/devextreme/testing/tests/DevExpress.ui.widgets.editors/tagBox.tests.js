@@ -1029,14 +1029,14 @@ QUnit.module('the \'value\' option', moduleSetup, () => {
         assert.deepEqual(value, ['item1'], 'outer value is not changed');
     });
 
-    QUnit.test('reset()', function(assert) {
+    QUnit.test('clear()', function(assert) {
         const tagBox = $('#tagBox').dxTagBox({
             items: [1, 2, 3],
             value: [1]
         }).dxTagBox('instance');
 
-        tagBox.reset();
-        assert.deepEqual(tagBox.option('value'), [], 'Value should be reset');
+        tagBox.clear();
+        assert.deepEqual(tagBox.option('value'), [], 'Value should be cleared');
     });
 
     QUnit.test('displayExpr change at runtime', function(assert) {
@@ -2579,7 +2579,7 @@ QUnit.module('keyboard navigation', {
         assert.deepEqual(this.instance.option('value'), expectedValue, 'the value is correct');
     });
 
-    QUnit.testInActiveWindow('the \'apply\' button should be focused on the \'tab\' key press if the input is focused and showSelectionControls if false (T389453)', function(assert) {
+    QUnit.testInActiveWindow('the \'cancel\' button should be focused on the \'tab\' key press if the input is focused and showSelectionControls if false (T389453)', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'desktop specific test');
             return;
@@ -2594,8 +2594,8 @@ QUnit.module('keyboard navigation', {
             .focus()
             .press('tab');
 
-        const $applyButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-done');
-        assert.ok($applyButton.hasClass('dx-state-focused'), 'the apply button is focused');
+        const $cancelButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-cancel');
+        assert.ok($cancelButton.hasClass('dx-state-focused'), 'the apply button is focused');
     });
 
     QUnit.test('keyboard event handlers passed from a config', function(assert) {

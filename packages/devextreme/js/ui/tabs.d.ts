@@ -16,12 +16,14 @@ import CollectionWidget, {
 
 import {
     SingleOrMultiple,
+    Orientation,
 } from '../common';
 
 export type ItemLike = string | Item | any;
 
 export {
     SingleOrMultiple,
+    Orientation,
 };
 
 /**
@@ -30,7 +32,7 @@ export {
  * @type object
  * @inherits EventInfo
  */
-export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>>;
 
 /**
  * @docid _ui_tabs_DisposingEvent
@@ -38,7 +40,7 @@ export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventI
  * @type object
  * @inherits EventInfo
  */
-export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>>;
 
 /**
  * @docid _ui_tabs_InitializedEvent
@@ -46,7 +48,7 @@ export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo
  * @type object
  * @inherits InitializedEventInfo
  */
-export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<TabsInstance<TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxTabs<TItem, TKey>>;
 
 /**
  * @docid _ui_tabs_ItemClickEvent
@@ -54,7 +56,7 @@ export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = Initial
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabs<TItem, TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_tabs_ItemContextMenuEvent
@@ -62,7 +64,7 @@ export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEve
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabs<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_tabs_ItemHoldEvent
@@ -70,7 +72,7 @@ export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = Nat
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabs<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_tabs_ItemRenderedEvent
@@ -78,7 +80,7 @@ export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEven
  * @type object
  * @inherits EventInfo,ItemInfo
  */
-export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_tabs_OptionChangedEvent
@@ -86,7 +88,7 @@ export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventI
  * @type object
  * @inherits EventInfo,ChangedOptionInfo
  */
-export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @docid _ui_tabs_SelectionChangedEvent
@@ -94,7 +96,7 @@ export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = Event
  * @type object
  * @inherits EventInfo,SelectionChangedInfo
  */
-export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & SelectionChangedInfo<TItem>;
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
@@ -113,7 +115,7 @@ export interface dxTabsOptions<
  * @docid dxTabsOptions
  */
 export interface dxTabsBaseOptions<
-    TComponent extends dxTabs<any, TItem, TKey> = dxTabs<any, any, any>,
+    TComponent extends dxTabs<TItem, TKey> = dxTabs<any, any>,
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
@@ -143,6 +145,12 @@ export interface dxTabsBaseOptions<
      * @public
      */
     items?: Array<TItem>;
+    /**
+     * @docid dxTabsOptions.orientation
+     * @default 'horizontal'
+     * @public
+     */
+    orientation?: Orientation;
     /**
      * @docid dxTabsOptions.repaintChangesOnly
      * @default false
@@ -182,12 +190,12 @@ export interface dxTabsBaseOptions<
  * @inherits CollectionWidget
  * @namespace DevExpress.ui
  * @public
+ * @options dxTabsOptions
  */
 export default class dxTabs<
-    TProperties extends dxTabsOptions<TItem, TKey> = dxTabsOptions<any, any>,
     TItem extends ItemLike = any,
     TKey = any,
-> extends CollectionWidget<TProperties, TItem, TKey> { }
+> extends CollectionWidget<Properties<TItem, TKey>, TItem, TKey> { }
 
 /**
  * @public
@@ -229,13 +237,11 @@ export type ExplicitTypes<
     SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
 };
 
-interface TabsInstance<TItem, TKey> extends dxTabs<Properties<TItem, TKey>, TItem, TKey> { }
-
 /** @public */
 export type Properties<
     TItem extends ItemLike = any,
     TKey = any,
-> = dxTabsBaseOptions<TabsInstance<TItem, TKey>, TItem, TKey>;
+> = dxTabsBaseOptions<dxTabs<TItem, TKey>, TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<

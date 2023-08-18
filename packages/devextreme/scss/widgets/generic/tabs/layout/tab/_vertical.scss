@@ -1,0 +1,86 @@
+@use "sass:math";
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/colors" as *;
+@use "../../../../base/icons" as *;
+@use "../../../../base/tabs";
+@use "../../variables/sizes" as *;
+@use "../../variables/colors" as *;
+@use "../../variables/borders" as *;
+@use "../../mixins" as *;
+
+// adduse
+
+
+.dx-tabs-vertical {
+  .dx-tab {
+    @include dx-tabs-after-mixin(null, true);
+
+    &::after {
+      z-index: 2;
+    }
+
+    &.dx-state-hover {
+      @include dx-tabs-border-mixin(
+        $generic-tabs-vertical-border-hover-top,
+        $generic-tabs-vertical-border-hover-right,
+        $generic-tabs-vertical-border-hover-bottom,
+        $generic-tabs-vertical-border-hover-left,
+      );
+    }
+
+    &.dx-tab-selected {
+      @include dx-tabs-border-mixin(
+        $generic-tabs-vertical-border-selected-top,
+        $generic-tabs-vertical-border-selected-right,
+        $generic-tabs-vertical-border-selected-bottom,
+        $generic-tabs-vertical-border-selected-left,
+      );
+    }
+
+    &.dx-state-active {
+      @include dx-tabs-border-mixin(
+        $generic-tabs-vertical-border-active-top,
+        $generic-tabs-vertical-border-active-right,
+        $generic-tabs-vertical-border-active-bottom,
+        $generic-tabs-vertical-border-active-left,
+      );
+    }
+
+    &.dx-state-focused {
+      @include dx-tabs-border-mixin(
+        $generic-tabs-vertical-border-focused-top,
+        $generic-tabs-vertical-border-focused-right,
+        $generic-tabs-vertical-border-focused-bottom,
+        $generic-tabs-vertical-border-focused-left,
+      );
+    }
+
+    &.dx-state-focused.dx-state-disabled {
+      @include dx-tabs-border-mixin(
+        $generic-tabs-vertical-border-focused-disabled-top,
+        $generic-tabs-vertical-border-focused-disabled-right,
+        $generic-tabs-vertical-border-focused-disabled-bottom,
+        $generic-tabs-vertical-border-focused-disabled-left,
+      );
+    }
+  }
+
+  &.dx-state-focused {
+    .dx-tab {
+      &.dx-focused-disabled-next-tab {
+        &::after {
+          border-inline-end: $generic-tabs-border;
+          border-block-end: none;
+        }
+      }
+
+      &.dx-focused-disabled-prev-tab {
+        &::after {
+          border-inline-start: $generic-tabs-border;
+          border-block-start: none;
+        }
+      }
+    }
+  }
+}

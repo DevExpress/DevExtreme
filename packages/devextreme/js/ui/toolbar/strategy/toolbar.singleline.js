@@ -107,20 +107,24 @@ export class SingleLineStrategy {
         });
     }
 
+    _getHiddenItems() {
+        return this._toolbar._itemContainer()
+            .children(`.${TOOLBAR_AUTO_HIDE_ITEM_CLASS}.${TOOLBAR_HIDDEN_ITEM}`)
+            .not(`.${INVISIBLE_STATE_CLASS}`);
+    }
+
     _getMenuItems() {
         const menuItems = grep(this._toolbar.option('items') ?? [], (item) => {
             return this._toolbar._isMenuItem(item);
         });
 
-        const $hiddenItems = this._toolbar._itemContainer()
-            .children(`.${TOOLBAR_AUTO_HIDE_ITEM_CLASS}.${TOOLBAR_HIDDEN_ITEM}`)
-            .not(`.${INVISIBLE_STATE_CLASS}`);
+        const $hiddenItems = this._getHiddenItems();
 
         this._restoreItems = this._restoreItems ?? [];
 
-        const overflowItems = [].slice.call($hiddenItems).map((item) => {
-            const itemData = this._toolbar._getItemData(item);
-            const $itemContainer = $(item);
+        const overflowItems = [].slice.call($hiddenItems).map((hiddenItem) => {
+            const itemData = this._toolbar._getItemData(hiddenItem);
+            const $itemContainer = $(hiddenItem);
             const $itemMarkup = $itemContainer.children();
 
             return extend({
@@ -196,12 +200,12 @@ export class SingleLineStrategy {
     }
 
     _getItemsWidth() {
-        return this._toolbar._getSummaryItemsWidth([this._toolbar._$beforeSection, this._toolbar._$centerSection, this._toolbar._$afterSection]);
+        return this._toolbar._getSummaryItemsSize('width', [this._toolbar._$beforeSection, this._toolbar._$centerSection, this._toolbar._$afterSection]);
     }
 
     _itemOptionChanged(item, property, value) {
-        if(this._toolbar._isMenuItem(item)) {
-            if(property === 'disabled' || property === 'options.disabled') {
+        if(property === 'disabled' || property === 'options.disabled') {
+            if(this._toolbar._isMenuItem(item)) {
                 this._menu?._itemOptionChanged(item, property, value);
                 return;
             }

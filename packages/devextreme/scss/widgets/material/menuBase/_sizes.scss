@@ -5,15 +5,16 @@
 $material-menu-item-line-height: null !default;
 $material-menu-item-with-icon-horizontal-padding: null !default;
 $material-menu-horizontal-padding: null !default;
+$material-menu-icon-to-text-offset: 8px;
 
 @if $size == "default" {
-  $material-menu-item-line-height: 24px !default;
+  $material-menu-item-line-height: 18px !default;
   $material-menu-horizontal-padding: 16px !default;
   $material-menu-item-with-icon-horizontal-padding: 64px !default;
 }
 
 @else if $size == "compact" {
-  $material-menu-item-line-height: 20px !default;
-  $material-menu-horizontal-padding: 11px !default;
+  $material-menu-item-line-height: 16px !default;
+  $material-menu-horizontal-padding: 12px !default;
   $material-menu-item-with-icon-horizontal-padding: 46px !default;
 }

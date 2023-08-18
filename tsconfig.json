@@ -1,0 +1,46 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./packages",
+        "paths": {
+            "devextreme-react": [
+                "devextreme-react/src"
+            ],
+            "devextreme-react/*": [
+                "devextreme-react/src/*"
+            ],
+            "devextreme-vue": [
+                "devextreme-vue/src"
+            ],
+            "devextreme-vue/*": [
+                "devextreme-vue/src/*"
+            ],
+            "devextreme-vue2-strategy": [
+                "vue2-strategy/src/core"
+            ]
+        },
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "es5",
+        "module": "commonjs",
+        "jsx": "react",
+        "noEmitOnError": true,
+        "declaration": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": false,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "strictNullChecks": true,
+        "lib": [
+            "esnext",
+            "dom"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

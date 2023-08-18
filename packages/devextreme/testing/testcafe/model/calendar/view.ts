@@ -6,6 +6,7 @@ import dateUtils from '../../../../js/core/utils/date';
 const CLASS = {
   cell: 'dx-calendar-cell',
   contouredCell: 'dx-calendar-contoured-date',
+  weekNumberCell: 'dx-calendar-week-number-cell',
 };
 
 export default class CalendarView extends Widget {
@@ -37,5 +38,9 @@ export default class CalendarView extends Widget {
 
   getCellByIndex(index: number): Selector {
     return this.element.find(`.${CLASS.cell}`).nth(index);
+  }
+
+  getWeekNumberCellByIndex(index: number): Selector {
+    return this.element.find(`.${CLASS.weekNumberCell}`).nth(index);
   }
 }

@@ -1,0 +1,137 @@
+@use "../../variables/colors" as *;
+@use "../../../colors" as *;
+@use "../../variables/sizes" as *;
+@use "../../../sizes" as *;
+@use "../../../tabs/variables/colors" as *;
+@use "../../../tabs/variables/borders" as *;
+@use "../../../tabs/variables/sizes" as *;
+@use "../../../tabs/mixins" as *;
+@use "../../../tabs" as *;
+@use "../../../../base/tabPanel";
+@use "../../variables/borders" as *;
+
+// adduse
+
+.dx-tabpanel-tabs-position-left {
+  .dx-tabpanel-tab {
+    &:first-child:not(.dx-state-focused, .dx-tab-selected) {
+      &.dx-state-hover {
+        @include dx-tabs-border-mixin(
+          null,
+          $generic-tabpanel-tab-border-hover-bottom,
+          $generic-tabs-border-transparent,
+          null,
+        );
+      }
+    }
+
+    &:last-child:not(.dx-state-focused, .dx-tab-selected) {
+      &.dx-state-hover {
+        @include dx-tabs-border-mixin(
+          $generic-tabs-border-transparent,
+          $generic-tabpanel-tab-border-hover-bottom,
+          null,
+          null,
+        );
+      }
+    }
+
+    &.dx-state-hover {
+      @include dx-tabs-border-mixin(
+        null,
+        $generic-tabpanel-tab-border-hover-bottom,
+        null,
+        null,
+      );
+    }
+
+    &.dx-tab-selected {
+      @include dx-tabs-border-mixin(
+        null,
+        none,
+        null,
+        null,
+      );
+
+      border-inline-end: $generic-tabpanel-tab-border-selected-bottom;
+    }
+
+    &.dx-state-active {
+      @include dx-tabs-border-mixin(
+        null,
+        $generic-tabpanel-tab-border-active-bottom,
+        null,
+        null,
+      );
+    }
+  
+    &.dx-state-focused:not(.dx-state-disabled) {
+      @include dx-tabs-border-mixin(
+        null,
+        none,
+        null,
+        null,
+      );
+  
+      border-inline-end: $generic-tabpanel-tab-border-focused-bottom;
+    }
+  
+    &.dx-state-disabled:not(.dx-state-focused) {
+      @include dx-tabs-border-mixin(
+        none,
+        null,
+        null,
+        null,
+      );
+  
+      border-inline-end: $generic-tabs-border;
+    }
+
+    &.dx-state-disabled.dx-state-focused {
+      @include dx-tabs-border-mixin(
+        null,
+        none,
+        null,
+        null,
+      );
+  
+      border-inline-end: $generic-tabs-border-focused-disabled-bottom;
+    }
+  
+    &.dx-tab-selected,
+    &.dx-state-focused,
+    &.dx-state-disabled {
+      margin-inline-end: -$generic-tabs-border-width;
+    }
+  }
+
+  &.dx-state-focused {
+    &.dx-disabled-focused-tab {
+      .dx-tabpanel-tab.dx-state-disabled:not(.dx-state-focused) {
+        @include dx-tabs-border-mixin(
+          null,
+          none,
+          null,
+          null,
+        );
+  
+        border-inline-end: $generic-tabs-border;
+      }
+    }
+
+    .dx-tabpanel-tab.dx-state-disabled:not(.dx-state-focused) {
+      @include dx-tabs-border-mixin(
+        none,
+        null,
+        null,
+        null,
+      );
+  
+      border-inline-end: $generic-tabs-border-focus;
+    }
+
+    .dx-tabpanel-tab.dx-focused-disabled-next-tab::after {
+      border-inline-end: none;
+    }
+  }
+}

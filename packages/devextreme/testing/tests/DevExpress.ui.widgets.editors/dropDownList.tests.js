@@ -985,7 +985,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         });
 
         QUnit.test('after value reset', function(assert) {
-            this.dropDownList.reset();
+            this.dropDownList.clear();
             this.clock.tick(2000);
 
             assert.strictEqual(this.dropDownList.option('selectedItem'), null, 'byKey result is ignored');
@@ -1185,7 +1185,7 @@ QUnit.module('selectedItem', moduleConfig, () => {
         assert.equal(getList(dropDownList).option('selectedItem'), 1, 'selectedItem is correct');
     });
 
-    QUnit.test('reset()', function(assert) {
+    QUnit.test('clear()', function(assert) {
         const dropDownList = $('#dropDownList').dxDropDownList({
             dataSource: [1, 2, 3, 4],
             value: 2,
@@ -1193,10 +1193,10 @@ QUnit.module('selectedItem', moduleConfig, () => {
         }).dxDropDownList('instance');
 
         // act
-        dropDownList.reset();
+        dropDownList.clear();
         // assert
-        assert.strictEqual(dropDownList.option('value'), null, 'Value should be reset');
-        assert.strictEqual(dropDownList.option('selectedItem'), null, 'Value should be reset');
+        assert.strictEqual(dropDownList.option('value'), null, 'Value should be cleared');
+        assert.strictEqual(dropDownList.option('selectedItem'), null, 'Value should be cleared');
     });
 
     QUnit.test('onSelectionChanged action should not be fired after dataSource has been updated and selectedItem was not changed', function(assert) {

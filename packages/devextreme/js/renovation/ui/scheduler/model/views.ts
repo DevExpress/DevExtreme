@@ -1,42 +1,15 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import { isObject, isString } from '../../../../core/utils/type';
+import { renovationGetCurrentView } from './untyped_getCurrentView';
+import { isString } from '../../../../core/utils/type';
 import { CurrentViewConfigProps, ViewProps } from '../props';
 import { ViewType } from '../types';
 import { CurrentViewConfigType } from '../workspaces/props';
 
-const VIEW_TYPES = [
-  'day', 'week', 'workWeek',
-  'month', 'timelineDay', 'timelineWeek',
-  'timelineWorkWeek', 'timelineMonth', 'agenda',
-];
-
-export const getCurrentView = (
+export const getCurrentView = renovationGetCurrentView as (
   currentView: string | ViewType,
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   views: (ViewType | Partial<ViewProps>)[],
-): ViewType | Partial<ViewProps> => {
-  let currentViewProps: ViewType | Partial<ViewProps> | undefined = views.find((view): boolean => {
-    const names = isObject(view)
-      ? [view.name, view.type]
-      : [view];
-
-    if (names.includes(currentView)) {
-      return true;
-    }
-
-    return false;
-  });
-
-  if (currentViewProps === undefined) {
-    if (VIEW_TYPES.includes(currentView)) {
-      currentViewProps = currentView as ViewType;
-    } else {
-      [currentViewProps] = views;
-    }
-  }
-
-  return currentViewProps;
-};
+) => ViewType | Partial<ViewProps>;
 
 export const getCurrentViewProps = (
   currentView: string | ViewType,

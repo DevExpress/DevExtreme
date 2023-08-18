@@ -2,7 +2,7 @@ import fx from 'animation/fx';
 import CustomStore from 'data/custom_store';
 import { DataSource } from 'data/data_source/data_source';
 
-import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
+import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_data';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
 initTestMarkup();

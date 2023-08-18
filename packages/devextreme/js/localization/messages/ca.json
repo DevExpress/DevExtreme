@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Valorar",
         "dxDataGrid-ariaFilterCell": "Filtrar la cel·la",
         "dxDataGrid-ariaCollapse": "Col·lapsar",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Expandir",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
@@ -184,7 +186,7 @@
         "dxDataGrid-filterPanelClearFilter": "Clar",
         "dxDataGrid-filterPanelFilterEnabledHint": "Activa el filtre",
 
-        "dxTreeList-ariaTreeList": "Llista",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Cerqueu a la llista d’arbres",
         "dxTreeList-ariaToolbar": "Barra d’eines de llista d’arbres",
         "dxTreeList-editingAddRowToNode": "Addiccionar",

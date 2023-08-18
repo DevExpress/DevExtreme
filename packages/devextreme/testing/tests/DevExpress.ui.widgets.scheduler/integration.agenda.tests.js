@@ -4,7 +4,7 @@ import devices from 'core/devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dblclickEvent from 'events/dblclick';
 import fx from 'animation/fx';
-import AgendaAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_agenda';
+import AgendaAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_agenda';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';

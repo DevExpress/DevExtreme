@@ -176,6 +176,8 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
   _dataController!: DataController;
 
+  protected setTableRole($tableElement: dxElementWrapper): void {}
+
   _createScrollableOptions() {
     const that = this;
     const scrollingOptions = that.option('scrolling');
@@ -263,20 +265,20 @@ export class ColumnsView extends viewWithColumnStateMixin {
   }
 
   _createTable(columns, isAppend) {
-    const that = this;
     const $table = $('<table>')
-      .addClass(that.addWidgetPrefix(TABLE_CLASS))
-      .addClass(that.addWidgetPrefix(TABLE_FIXED_CLASS));
+      .addClass(this.addWidgetPrefix(TABLE_CLASS))
+      .addClass(this.addWidgetPrefix(TABLE_FIXED_CLASS));
 
     if (columns && !isAppend) {
-      $table.append(that._createColGroup(columns));
+      $table.append(this._createColGroup(columns));
       if (browser.safari) {
         // T198380, T809552
         // @ts-expect-error
         $table.append($('<thead>').append('<tr>'));
       }
+      this.setTableRole($table);
     } else {
-      that.setAria('hidden', true, $table);
+      this.setAria('hidden', true, $table);
     }
 
     this.setAria('role', 'presentation', $('<tbody>').appendTo($table));
@@ -294,13 +296,13 @@ export class ColumnsView extends viewWithColumnStateMixin {
       });
     }
 
-    if (that.option('cellHintEnabled')) {
+    if (this.option('cellHintEnabled')) {
       eventsEngine.on($table, 'mousemove', '.dx-row > td', this.createAction((args) => {
         const e = args.event;
         const $element = $(e.target);
         const $cell = $(e.currentTarget);
         const $row = $cell.parent();
-        const visibleColumns = that._columnsController.getVisibleColumns();
+        const visibleColumns = this._columnsController.getVisibleColumns();
         const rowOptions: any = $row.data('options');
         const columnIndex = $cell.index();
         // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
@@ -311,7 +313,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
         const isDataRow = $row.hasClass('dx-data-row');
         const isMasterDetailRow = $row.hasClass(DETAIL_ROW_CLASS);
         const isGroupRow = $row.hasClass(GROUP_ROW_CLASS);
-        const isFilterRow = $row.hasClass(that.addWidgetPrefix(FILTER_ROW_CLASS));
+        const isFilterRow = $row.hasClass(this.addWidgetPrefix(FILTER_ROW_CLASS));
 
         const isDataRowWithTemplate = isDataRow && (!column || column.cellTemplate);
         const isEditorShown = isDataRow && cellOptions && (rowOptions.isEditing || cellOptions.isEditing || column?.showEditorAlways);
@@ -340,7 +342,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
       }));
     }
 
-    const getOptions = function (event) {
+    const getOptions = (event) => {
       const $cell = $(event.currentTarget);
       const $fieldItemContent = $(event.target).closest(`.${FORM_FIELD_ITEM_CONTENT_CLASS}`);
       const $row = $cell.parent();
@@ -355,13 +357,13 @@ export class ColumnsView extends viewWithColumnStateMixin {
         eventType: event.type,
       });
 
-      resultOptions.rowIndex = that.getRowIndex($row);
+      resultOptions.rowIndex = this.getRowIndex($row);
 
       if ($fieldItemContent.length) {
         const formItemOptions: any = $fieldItemContent.data('dx-form-item');
         if (formItemOptions.column) {
           resultOptions.column = formItemOptions.column;
-          resultOptions.columnIndex = that._columnsController.getVisibleIndex(resultOptions.column.index);
+          resultOptions.columnIndex = this._columnsController.getVisibleIndex(resultOptions.column.index);
         }
       }
 
@@ -370,25 +372,25 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
     eventsEngine.on($table, 'mouseover', '.dx-row > td', (e) => {
       const options = getOptions(e);
-      options && that.executeAction('onCellHoverChanged', options);
+      options && this.executeAction('onCellHoverChanged', options);
     });
 
     eventsEngine.on($table, 'mouseout', '.dx-row > td', (e) => {
       const options = getOptions(e);
-      options && that.executeAction('onCellHoverChanged', options);
+      options && this.executeAction('onCellHoverChanged', options);
     });
 
     eventsEngine.on($table, clickEventName, '.dx-row > td', (e) => {
       const options = getOptions(e);
-      options && that.executeAction('onCellClick', options);
+      options && this.executeAction('onCellClick', options);
     });
 
     eventsEngine.on($table, dblclickEvent, '.dx-row > td', (e) => {
       const options = getOptions(e);
-      options && that.executeAction('onCellDblClick', options);
+      options && this.executeAction('onCellDblClick', options);
     });
 
-    subscribeToRowEvents(that, $table);
+    subscribeToRowEvents(this, $table);
 
     return $table;
   }
@@ -881,6 +883,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
       case 'onCellPrepared':
       case 'onRowPrepared':
       case 'onCellHoverChanged':
+      case 'keyboardNavigation':
         this._invalidate(true, true);
         args.handled = true;
         break;
@@ -1221,7 +1224,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 
-  getCell(cellPosition, rows, cells) {
+  getCell(cellPosition, rows?, cells?) {
     const $rows = rows || this._getRowElements();
     let $cells;
 

@@ -33,7 +33,6 @@ const COLORVIEW_HEX_INPUT_SELECTOR = '.dx-colorview-label-hex .dx-texteditor-inp
 const COLORVIEW_APPLY_BUTTON_SELECTOR = '.dx-colorview-apply-button';
 const CLEAR_BUTTON_AREA_SELECTOR = '.dx-clear-button-area';
 const COLOR_VIEW_PALETTE_HANDLE_SELECTOR = '.dx-colorview-palette-handle';
-const COLOR_VIEW_CANCEL_BUTTON_SELECTOR = '.dx-colorview-cancel-button';
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
 
@@ -880,16 +879,16 @@ QUnit.module('keyboard navigation', {
                 assert.ok($(`.${COLORVIEW_CLASS}`).hasClass(STATE_FOCUSED_CLASS));
             });
 
-            QUnit.test('pressing tab + shift should set focus on cancel button in popup', function(assert) {
+            QUnit.test('pressing tab + shift should set focus on apply button in popup', function(assert) {
                 this.instance.option({
                     opened: true,
                     applyValueMode: 'useButtons',
                 });
                 this.keyboard.keyDown('tab', { shiftKey: true });
 
-                const $cancelButton = getColorBoxOverlayContent().find(COLOR_VIEW_CANCEL_BUTTON_SELECTOR);
+                const $applyButton = getColorBoxOverlayContent().find(COLORVIEW_APPLY_BUTTON_SELECTOR);
 
-                assert.ok($cancelButton.hasClass(STATE_FOCUSED_CLASS));
+                assert.ok($applyButton.hasClass(STATE_FOCUSED_CLASS));
             });
 
             QUnit.test('pressing tab should set focus on first item in popup with custom items', function(assert) {
@@ -1218,5 +1217,11 @@ QUnit.module('Accessibility', {
         const $handle = getColorBoxOverlayContent().find(COLOR_VIEW_PALETTE_HANDLE_SELECTOR);
 
         assert.strictEqual($input.attr('aria-activedescendant'), $handle.attr('id'));
+    });
+
+    QUnit.test('input should not have "aria-activedescendant" attribute if colorview have not opened yet', function(assert) {
+        const $colorBox = this.element.dxColorBox({});
+        const $input = $colorBox.find(`.${COLOR_BOX_INPUT_CLASS}`);
+        assert.notOk($input.attr('aria-activedescendant'));
     });
 });

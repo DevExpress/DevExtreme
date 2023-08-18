@@ -1,0 +1,68 @@
+{
+    "extends": [
+        "devextreme/typescript",
+        "devextreme/spell-check"
+    ],
+    "env": {
+        "browser": true,
+        "node": true,
+        "jest": true
+    },
+    "ignorePatterns": ["src/*.ts", "src/ui/*.ts", "node_modules", "dist"],
+    "parserOptions": {
+        "project": ["./tsconfig.json"]
+    },
+    "rules": {
+        "import/no-cycle": "warn",
+        "no-param-reassign": "warn",
+        "no-underscore-dangle": "warn",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "spellcheck/spell-checker": [1, {
+            "lang": "en_US",
+            "comments": false,
+            "strings": false,
+            "identifiers": true,
+            "templates": false,
+            "skipIfMatch": [ "^\\$?..$" ],
+            "skipWords": [
+               "unschedule",
+               "subscribable",
+               "renderer",
+               "rerender",
+               "dx",
+               "descr",
+               "params",
+               "typings",
+               "wildcard",
+               "metadata",
+               "namespace",
+               "namespaces"
+            ]
+        }
+    ]
+    },
+    "overrides": [
+        {
+            "files": [ "*.ts" ],
+            "rules": {
+                "import/extensions": "warn",
+                "max-len": ["error", { "code": 150 }],
+
+                // temporary rules - remove it asap!
+                "@typescript-eslint/no-unsafe-return": "warn",
+                "@typescript-eslint/explicit-function-return-type": "warn",
+                "@typescript-eslint/no-dynamic-delete": "warn",
+                "@typescript-eslint/no-floating-promises": "warn",
+                "class-methods-use-this": "warn",
+                "@typescript-eslint/naming-convention": "warn",
+                "@typescript-eslint/init-declarations": "warn",
+                "no-restricted-globals": "warn",
+                "@typescript-eslint/prefer-optional-chain": "warn",
+                "@typescript-eslint/prefer-nullish-coalescing": "warn",
+                "@typescript-eslint/member-ordering": "warn",
+                "@typescript-eslint/no-explicit-any": "warn"
+            }
+        }
+    ]
+}
+

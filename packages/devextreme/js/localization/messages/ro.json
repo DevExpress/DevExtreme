@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Valoare",
         "dxDataGrid-ariaFilterCell": "Celulă de filtrare",
         "dxDataGrid-ariaCollapse": "Restrângere",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Extindere",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
@@ -184,7 +186,7 @@
         "dxDataGrid-filterPanelClearFilter": "Curăță",
         "dxDataGrid-filterPanelFilterEnabledHint": "Activați filtrul",
 
-        "dxTreeList-ariaTreeList": "Structură arboreșcentă",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Adaugă",

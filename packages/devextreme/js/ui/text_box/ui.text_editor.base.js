@@ -565,7 +565,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _clearValue: function() {
-        this.reset();
+        this.clear();
     },
 
     _renderEvents: function() {
@@ -885,7 +885,7 @@ const TextEditorBase = Editor.inherit({
         eventsEngine.trigger(this._input(), 'focus');
     },
 
-    reset: function() {
+    clear: function() {
         if(this._showValidMark) {
             this._showValidMark = false;
             this._renderValidationState();

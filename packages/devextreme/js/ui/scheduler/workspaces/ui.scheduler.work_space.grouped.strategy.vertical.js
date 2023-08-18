@@ -3,7 +3,6 @@ import { Cache } from './cache';
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../classes';
 import { calculateDayDuration, getVerticalGroupCountClass } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
-const DATE_HEADER_OFFSET = 10;
 const WORK_SPACE_BORDER = 1;
 
 class VerticalGroupedStrategy {
@@ -84,7 +83,9 @@ class VerticalGroupedStrategy {
 
             const dayHeight = (calculateDayDuration(startDayHour, endDayHour) / hoursInterval) * this._workSpace.getCellHeight();
             const scrollTop = this.getScrollableScrollTop();
-            let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.option('getHeaderHeight')() + DATE_HEADER_OFFSET - scrollTop;
+            const headerRowHeight = getBoundingRect(this._workSpace._$headerPanelContainer.get(0)).height;
+
+            let topOffset = groupIndex * dayHeight + headerRowHeight + this._workSpace.option('getHeaderHeight')() - scrollTop;
 
             if(this._workSpace.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
                 topOffset += this._workSpace.getCellHeight() * (groupIndex + 1);

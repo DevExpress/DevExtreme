@@ -391,8 +391,10 @@ $grid-masterdetail-padding: 20px;
         width: $generic-grid-base-command-edit-column-width;
         min-width: $generic-grid-base-command-edit-column-width;
 
-        .dx-link.dx-state-disabled {
-          opacity: $datagrid-text-link-disabled-opacity;
+        .dx-state-disabled {
+          &.dx-link {
+            opacity: $datagrid-text-link-disabled-opacity;
+          }
 
           &.dx-link-icon {
             opacity: $datagrid-icon-link-disabled-opacity;
@@ -588,12 +590,13 @@ $grid-masterdetail-padding: 20px;
 
     .dx-apply-button {
       @include dx-button-styling-variant(
-                $button-success-bg, $button-success-border-color, $button-success-color,
-                darken($button-success-bg, 10%), $button-success-border-color,
-                darken($button-success-bg, 15%), $button-success-border-color,
-                darken($button-success-bg, 20%), $button-success-border-color, $button-success-color,
-                $button-success-color
-            );
+        $button-success-bg, $button-success-border-color, $button-success-color,
+        darken($button-success-bg, 10%),
+        darken($button-success-bg, 15%),
+        darken($button-success-bg, 20%),
+        $button-success-color,
+        $button-success-color
+      );
     }
   }
 
@@ -966,12 +969,13 @@ $grid-masterdetail-padding: 20px;
       margin-left: 1px;
 
       @include dx-button-styling-variant(
-                $button-danger-bg, $button-danger-border-color, $button-danger-color,
-                darken($button-danger-bg, 10%), $button-danger-border-color,
-                darken($button-danger-bg, 15%), $button-danger-border-color,
-                darken($button-danger-bg, 20%), $button-danger-border-color, $button-danger-color,
-                $button-danger-color
-            );
+        $button-danger-bg, $button-danger-border-color, $button-danger-color,
+        darken($button-danger-bg, 10%),
+        darken($button-danger-bg, 15%),
+        darken($button-danger-bg, 20%),
+        $button-danger-color,
+        $button-danger-color
+      );
 
       > .dx-button-content {
         padding: $generic-grid-base-cell-padding;

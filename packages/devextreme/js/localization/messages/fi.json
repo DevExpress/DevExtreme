@@ -170,6 +170,8 @@
         "dxDataGrid-ariaValue": "Arvo",
         "dxDataGrid-ariaFilterCell": "Suodatinsolu",
         "dxDataGrid-ariaCollapse": "Tiivistä",
+        "dxDataGrid-ariaModifiedCell": "Modified",
+        "dxDataGrid-ariaDeletedCell": "Deleted",
         "dxDataGrid-ariaExpand": "Laajenna",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
@@ -184,7 +186,7 @@
         "dxDataGrid-filterPanelClearFilter": "Tyhjennä",
         "dxDataGrid-filterPanelFilterEnabledHint": "Ota suodatin käyttöön",
 
-        "dxTreeList-ariaTreeList": "Puu",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Lisää",

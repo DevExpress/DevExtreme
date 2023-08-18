@@ -55,6 +55,7 @@ import {
   INSERT_INDEX,
   LAST_NEW_ROW_POSITION,
   LINK_CLASS,
+  LINK_ICON_CLASS,
   METHOD_NAMES,
   PAGE_BOTTOM_NEW_ROW_POSITION,
   PAGE_TOP_NEW_ROW_POSITION,
@@ -2116,7 +2117,7 @@ class EditingControllerImpl extends modules.ViewController {
           $button.addClass(`dx-icon${iconType === 'dxIcon' ? '-' : ' '}${icon}`).attr('title', button.text);
         }
 
-        $button.addClass('dx-link-icon');
+        $button.addClass(LINK_ICON_CLASS);
         $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
 
         const localizationName = this.getButtonLocalizationNames()[button.name];
@@ -2579,10 +2580,26 @@ export const editingModule = {
         _formItemPrepared: noop,
         _getCellOptions(options) {
           const cellOptions = this.callBase(options);
+          const { columnIndex, row } = options;
 
           cellOptions.isEditing = this._editingController.isEditCell(cellOptions.rowIndex, cellOptions.columnIndex);
+          cellOptions.removed = row.removed;
+
+          if (row.modified) {
+            cellOptions.modified = row.modifiedValues[columnIndex] !== undefined;
+          }
 
           return cellOptions;
+        },
+        _setCellAriaAttributes($cell, cellOptions) {
+          this.callBase($cell, cellOptions);
+
+          if (cellOptions.removed) {
+            this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaDeletedCell'), $cell);
+          }
+          if (cellOptions.modified) {
+            this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaModifiedCell'), $cell);
+          }
         },
         _createCell(options) {
           const $cell = this.callBase(options);
