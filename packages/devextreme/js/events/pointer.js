@@ -5,6 +5,7 @@ import registerEvent from './core/event_registrator';
 import TouchStrategy from './pointer/touch';
 import MouseStrategy from './pointer/mouse';
 import MouseAndTouchStrategy from './pointer/mouse_and_touch';
+import PointerStrategy from './pointer/pointer';
 
 /**
   * @name UI Events.dxpointerdown
@@ -64,16 +65,7 @@ import MouseAndTouchStrategy from './pointer/mouse_and_touch';
 */
 
 const getStrategy = (support, device) => {
-    const { tablet, phone } = device;
-    if(support.touch && !(tablet || phone)) {
-        return MouseAndTouchStrategy;
-    }
-
-    if(support.touch) {
-        return TouchStrategy;
-    }
-
-    return MouseStrategy;
+    return PointerStrategy;
 };
 
 const EventStrategy = getStrategy(support, devices.real());
