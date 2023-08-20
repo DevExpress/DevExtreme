@@ -176,8 +176,6 @@ export class ColumnsView extends viewWithColumnStateMixin {
 
   _dataController!: DataController;
 
-  protected setTableRole($tableElement: dxElementWrapper): void {}
-
   _createScrollableOptions() {
     const that = this;
     const scrollingOptions = that.option('scrolling');
@@ -276,7 +274,8 @@ export class ColumnsView extends viewWithColumnStateMixin {
         // @ts-expect-error
         $table.append($('<thead>').append('<tr>'));
       }
-      this.setTableRole($table);
+
+      this.setAria('role', 'presentation', $table);
     } else {
       this.setAria('hidden', true, $table);
     }

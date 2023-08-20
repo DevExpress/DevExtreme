@@ -130,10 +130,6 @@ export const RowsView = rowsModule.views.rowsView.inherit((function () {
       const isRowExpanded = row.isExpanded;
       this.setAria('expanded', isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
     },
-
-    setTableRole($tableElement) {
-      this.setAria('role', 'treegrid', $tableElement);
-    },
   };
 })());
 
