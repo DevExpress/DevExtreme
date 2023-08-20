@@ -15,7 +15,7 @@ abstract class DynamicProvider extends Provider {
   _routes?: any[];
 
   abstract _extendBounds(location: any): void;
-  abstract _loadImpl(): Promise<void>;
+  abstract _loadImpl(): any;
   abstract _init(): Promise<any>;
   abstract _renderMarker(options: any): Promise<{ marker: any }>;
   abstract _destroyMarker(marker: any): void;
@@ -41,17 +41,17 @@ abstract class DynamicProvider extends Provider {
   }
 
   _renderImpl() {
-    return this._load().then(() => this._init()).then(() => Promise.all([
+    return this._load()!.then(() => this._init()).then(() => Promise.all([
       this.updateMapType(),
       this._areBoundsSet() ? this.updateBounds() : this.updateCenter(),
     ])).then(() => {
       this._attachHandlers();
 
       // NOTE: setTimeout is needed by providers to correctly initialize bounds
-      return new Promise((resolve) => {
+      return new Promise<void>((resolve) => {
         const timeout = setTimeout(() => {
           clearTimeout(timeout);
-          resolve(undefined);
+          resolve();
         });
       });
     });

@@ -15,13 +15,13 @@ abstract class Provider {
     this._$container = $container;
   }
 
-  abstract _renderImpl(): Promise<boolean | undefined | unknown>;
+  abstract _renderImpl(): Promise<void>;
   abstract updateDimensions(): Promise<void>;
   abstract updateMapType(): Promise<void>;
   abstract updateBounds(): Promise<void>;
   abstract updateCenter(): Promise<void>;
   abstract updateZoom(): Promise<void>;
-  abstract updateControls(): Promise<void>;
+  abstract updateControls(): any;
   // abstract addMarkers(options: any): Promise<any[]>;
   abstract removeMarkers(options: any): Promise<void>;
   abstract adjustViewport(): Promise<void>;
