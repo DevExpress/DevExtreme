@@ -26,17 +26,11 @@ test('editor\'s popup inside filterBuilder is opening & closing right (T1182854)
   await t.click(filterBuilder.getField().getValueText());
   await t.expect(getVisiblePopups().count).eql(2); // filterPanel popup + editor popup
 
-  await t.debug();
-
   await t.click(filterBuilder.getField().getValueText());
   await t.expect(getVisiblePopups().count).eql(1); // only filterPanel popup
 
-  await t.debug();
-
   await t.click(filterBuilder.getField().getValueText());
   await t.expect(getVisiblePopups().count).eql(2); // filterPanel popup + editor popup
-
-  await t.debug();
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ column1: 'first' }],
   columns: ['column1'],
