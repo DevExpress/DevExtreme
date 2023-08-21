@@ -82,7 +82,7 @@ export type ButtonType = 'danger' | 'default' | 'normal' | 'success';
 export type CompareRule = {
   /**
   * @docid
-  * @type_function_return object
+  * @type_function_return any
   * @public
   */
   comparisonTarget?: (() => any);
