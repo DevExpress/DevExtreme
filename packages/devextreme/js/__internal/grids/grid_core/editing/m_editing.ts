@@ -808,7 +808,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   private getChangeKeyValue(change: any): unknown {
     if (isDefined(change.key)) {
-      return;
+      return change.key;
     }
 
     const keyExpr = this._dataController.key();
