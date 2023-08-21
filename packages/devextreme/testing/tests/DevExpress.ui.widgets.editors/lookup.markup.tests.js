@@ -25,6 +25,7 @@ testStart(() => {
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
 const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
+const PLACEHOLDER_CLASS = 'dx-placeholder';
 
 module('Lookup', {
     beforeEach: function() {
@@ -71,7 +72,7 @@ module('Lookup', {
             displayExpr: () => ''
         });
 
-        assert.strictEqual($element.find(`.${LOOKUP_FIELD_CLASS}`).text(), 'test', 'placeholder should be rendered');
+        assert.strictEqual($element.find(`.${LOOKUP_FIELD_CLASS}`).find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'test', 'placeholder should be rendered');
     });
 
     test('regression: value is out of range (B231783)', function(assert) {
@@ -80,7 +81,7 @@ module('Lookup', {
             value: 'wrongValue'
         });
 
-        assert.equal(this.$field.text(), 'Select...');
+        assert.equal(this.$field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'Select...');
     });
 
     test('regression: B232016 - Lookup element has no \'dx-widget\' CSS class', function(assert) {
