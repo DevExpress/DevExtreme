@@ -349,8 +349,15 @@ export default class dxForm extends Widget<dxFormOptions> {
     itemOption(id: string, options: any): void;
     /**
      * @docid
+     * @publicName clear()
+     * @public
+     */
+    clear(): void;
+    /**
+     * @docid
      * @publicName resetValues()
      * @public
+     * @deprecated dxForm.clear
      */
     resetValues(): void;
     /**

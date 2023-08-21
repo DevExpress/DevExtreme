@@ -16414,7 +16414,12 @@ declare module DevExpress.ui {
      */
     itemOption(id: string, options: any): void;
     /**
+     * [descr:dxForm.clear()]
+     */
+    clear(): void;
+    /**
      * [descr:dxForm.resetValues()]
+     * @deprecated [depNote:dxForm.resetValues()]
      */
     resetValues(): void;
     /**
