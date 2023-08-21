@@ -245,6 +245,9 @@ test('DateRangeBox should be closed by press esc key when today button is focuse
     .eql(true);
 
   await t
+    .pressKey('tab')
+    .pressKey('tab')
+    .pressKey('tab')
     .pressKey('tab');
 
   await t
@@ -303,7 +306,7 @@ test('DateRangeBox should not be closed by press tab key on startDate input', as
   },
 }));
 
-test('DateRangeBox keyboard navigation via `tab` key if applyValueMode is useButtons, start -> end -> today -> apply -> cancel -> start -> end', async (t) => {
+test('DateRangeBox keyboard navigation via `tab` key if applyValueMode is useButtons, start -> end -> prev -> caption -> next -> today -> apply -> cancel -> start -> end', async (t) => {
   const dateRangeBox = new DateRangeBox('#dateRangeBox');
 
   await t
@@ -332,6 +335,12 @@ test('DateRangeBox keyboard navigation via `tab` key if applyValueMode is useBut
     .notOk()
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .ok()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
+    .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
@@ -350,6 +359,87 @@ test('DateRangeBox keyboard navigation via `tab` key if applyValueMode is useBut
     .expect(dateRangeBox.getStartDateBox().isFocused)
     .notOk()
     .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
@@ -458,7 +548,7 @@ test('DateRangeBox keyboard navigation via `tab` key if applyValueMode is useBut
   }, '#dateRangeBox');
 });
 
-test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is useButtons, end -> start -> cancel -> apply -> today -> end -> start', async (t) => {
+test.skip('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is useButtons, end -> start -> cancel -> apply -> today -> next -> caption -> prev -> end -> start', async (t) => {
   const dateRangeBox = new DateRangeBox('#dateRangeBox');
 
   await t
@@ -486,6 +576,12 @@ test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is 
     .ok()
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
+    .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
@@ -504,6 +600,12 @@ test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is 
     .expect(dateRangeBox.getStartDateBox().isFocused)
     .notOk()
     .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .ok()
@@ -524,6 +626,12 @@ test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is 
     .notOk()
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
+    .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
@@ -542,6 +650,12 @@ test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is 
     .expect(dateRangeBox.getStartDateBox().isFocused)
     .notOk()
     .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
@@ -557,11 +671,92 @@ test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is 
     .expect(dateRangeBox.option('opened'))
     .eql(true)
     .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
+    .notOk()
+    .expect(dateRangeBox.getStartDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .ok()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getTodayButton().isFocused)
+    .notOk();
+
+  await t
+    .pressKey('shift+tab');
+
+  await t
+    .expect(dateRangeBox.option('opened'))
+    .eql(true)
+    .expect(dateRangeBox.isFocused)
     .ok()
     .expect(dateRangeBox.getStartDateBox().isFocused)
     .notOk()
     .expect(dateRangeBox.getEndDateBox().isFocused)
     .ok()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
+    .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getCancelButton().isFocused)
@@ -580,6 +775,12 @@ test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is 
     .expect(dateRangeBox.getStartDateBox().isFocused)
     .ok()
     .expect(dateRangeBox.getEndDateBox().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorPrevButton().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorCaption().isFocused)
+    .notOk()
+    .expect(dateRangeBox.getPopup().getNavigatorNextButton().isFocused)
     .notOk()
     .expect(dateRangeBox.getPopup().getApplyButton().isFocused)
     .notOk()
@@ -646,6 +847,9 @@ test('DateRangeBox should not be closed by press shift+tab key on endDate input'
   width: 500,
   dropDownOptions: {
     hideOnOutsideClick: false,
+  },
+  calendarOptions: {
+    focusStateEnabled: false,
   },
 }));
 

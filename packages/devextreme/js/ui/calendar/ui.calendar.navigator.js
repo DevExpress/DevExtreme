@@ -60,13 +60,13 @@ class Navigator extends Widget {
     }
 
     _renderButtons() {
-        const { rtlEnabled, type, stylingMode } = this.option();
+        const { rtlEnabled, type, stylingMode, focusStateEnabled } = this.option();
 
         const direction = 1;
 
         this._prevButton = this._createComponent($('<div>'),
             Button, {
-                focusStateEnabled: false,
+                focusStateEnabled,
                 icon: rtlEnabled ? 'chevronright' : 'chevronleft',
                 onClick: (e) => { this._clickAction({ direction: -direction, event: e }); },
                 type,
@@ -80,7 +80,7 @@ class Navigator extends Widget {
 
         this._nextButton = this._createComponent($('<div>'),
             Button, {
-                focusStateEnabled: false,
+                focusStateEnabled,
                 icon: rtlEnabled ? 'chevronleft' : 'chevronright',
                 onClick: (e) => { this._clickAction({ direction: direction, event: e }); },
                 type,
@@ -94,7 +94,7 @@ class Navigator extends Widget {
 
         this._caption = this._createComponent($('<div>').addClass(CALENDAR_NAVIGATOR_CAPTION_BUTTON_CLASS),
             Button, {
-                focusStateEnabled: false,
+                focusStateEnabled,
                 onClick: (e) => { this._captionClickAction({ event: e }); },
                 type,
                 stylingMode,

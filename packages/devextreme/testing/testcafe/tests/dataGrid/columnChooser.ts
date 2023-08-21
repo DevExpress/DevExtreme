@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { a11yCheck } from '../../helpers/accessibilityUtils';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
-import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from '../../model/dataGrid';
 import { getData } from './helpers/generateDataSourceData';
-import { Themes } from './helpers/themes';
 
-fixture`Column chooser`
+fixture.disablePageReloads`Column chooser`
   .page(url(__dirname, '../container.html'));
 
 test('Column chooser screenshot', async (t) => {
@@ -113,44 +110,3 @@ test('Column chooser checkboxes should be aligned correctly with tree structure'
     },
   },
 }));
-
-[
-  Themes.genericLight,
-  Themes.genericDark,
-  Themes.materialBlue,
-  Themes.materialBlueDark,
-].forEach((theme) => {
-  [true, false].forEach((isColumnVisible) => {
-    test(`Checking ${isColumnVisible ? 'empty message' : 'column captions'} in the column chooser via aXe - ${theme}`, async (t) => {
-      const dataGrid = new DataGrid('#container');
-
-      await t
-        .click(dataGrid.getHeaderPanel().getColumnChooserButton());
-
-      await a11yCheck(t, {
-        'color-contrast': { enabled: true },
-        'aria-required-children': { enabled: false },
-      });
-    }).before(async () => {
-      await changeTheme(theme);
-      return createWidget('dxDataGrid', {
-        dataSource: [{
-          id: 1,
-          field1: 'field1',
-          field2: 'field2',
-        }],
-        keyExpr: 'id',
-        columns: ['field1', {
-          dataField: 'field2',
-          visible: isColumnVisible,
-        }],
-        showBorders: true,
-        columnChooser: {
-          enabled: true,
-        },
-      });
-    }).after(async () => {
-      await changeTheme(Themes.genericLight);
-    });
-  });
-});

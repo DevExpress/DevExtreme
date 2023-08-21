@@ -140,9 +140,6 @@ $base-border-radius-small: null !default;
 */
 $base-border-radius-large: null !default;
 $scrollview-pulldown-path: null !default;
-$loadindicator-image-path: null !default;
-$loadindicator-image-small-path: null !default;
-$loadindicator-image-large-path: null !default;
 $base-default: null !default;
 $base-info: null !default;
 $screen-text-color: null !default;
@@ -190,9 +187,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/carmine/pulldown.png') !default;
-  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/carmine/loader.gif') !default;
-  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/carmine/loader20.gif') !default;
-  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/carmine/loader64.gif') !default;
 }
 
 @if $color == "contrast" {
@@ -224,9 +218,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: $base-shadow-color !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/contrast/pulldown.png') !default;
-  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/contrast/loader.gif') !default;
-  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/contrast/loader20.gif') !default;
-  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/contrast/loader64.gif') !default;
 }
 
 @if $color == "dark" {
@@ -264,9 +255,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') !default;
-  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/dark/loader.gif') !default;
-  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/dark/loader20.gif') !default;
-  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif') !default;
 }
 
 @if $color == "darkmoon" {
@@ -308,9 +296,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-grid-selected-border-color: #45c7de !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/darkmoon/pulldown.png') !default;
-  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/darkmoon/loader.gif') !default;
-  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/darkmoon/loader20.gif') !default;
-  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/darkmoon/loader64.gif') !default;
 }
 
 @if $color == "darkviolet" {
@@ -352,9 +337,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/darkviolet/pulldown.png') !default;
-  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/darkviolet/loader.gif') !default;
-  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/darkviolet/loader20.gif') !default;
-  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/darkviolet/loader64.gif') !default;
 }
 
 @if $color == "greenmist" {
@@ -392,9 +374,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/greenmist/pulldown.png') !default;
-  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/greenmist/loader.gif') !default;
-  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/greenmist/loader20.gif') !default;
-  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/greenmist/loader64.gif') !default;
 }
 
 @if $color == "light" {
@@ -432,9 +411,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') !default;
-  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/light/loader.gif') !default;
-  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/light/loader20.gif') !default;
-  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
 @if $color == "softblue" {
@@ -477,8 +453,5 @@ $base-grid-selectedrow-border-color: null !default;
   $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/softblue/pulldown.png') !default;
-  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/softblue/loader.gif') !default;
-  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/softblue/loader20.gif') !default;
-  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/softblue/loader64.gif') !default;
 }
 

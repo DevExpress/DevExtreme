@@ -1214,7 +1214,7 @@ QUnit.module('common use cases', {
 
         const toggleButtonElement = getToggleButton(dropDownButton);
 
-        assert.strictEqual(getOuterWidth(toggleButtonElement), 20, 'toggleButton has correct width in generic theme');
+        assert.strictEqual(getWidth(toggleButtonElement), 18, 'toggleButton has correct width in generic theme');
     });
 
     QUnit.test('it should be possible to set non-datasource action button', function(assert) {

@@ -187,7 +187,7 @@
         "dxDataGrid-filterPanelClearFilter": "Supprimer",
         "dxDataGrid-filterPanelFilterEnabledHint": "Activer le filtre",
 
-        "dxTreeList-ariaTreeList": "Liste arborescente",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Rechercher dans l'arborescence",
         "dxTreeList-ariaToolbar": "Barre d'outils de la liste arborescente",
         "dxTreeList-editingAddRowToNode": "Ajouter",

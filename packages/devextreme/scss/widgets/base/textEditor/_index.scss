@@ -7,10 +7,6 @@
 
 .dx-texteditor {
   display: block;
-
-  input::-ms-clear {
-    display: none;
-  }
 }
 
 /* B231111 */
@@ -126,11 +122,5 @@
     text-align: right;
     left: auto;
     right: 0;
-  }
-}
-
-.dx-device-android {
-  .dx-texteditor-input {
-    -webkit-user-modify: read-write-plaintext-only;
   }
 }
