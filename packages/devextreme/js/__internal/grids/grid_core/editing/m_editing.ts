@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { GridsEditMode } from '@js/common/grids';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
@@ -160,7 +161,7 @@ class EditingControllerImpl extends modules.ViewController {
     this.component._optionsByReference[EDITING_CHANGES_OPTION_NAME] = true;
   }
 
-  getEditMode(): string {
+  getEditMode(): GridsEditMode {
     const editMode = this.option('editing.mode') ?? EDIT_MODE_ROW;
     if (EDIT_MODES.includes(editMode)) {
       return editMode;
@@ -170,7 +171,7 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   isCellBasedEditMode(): boolean {
-    const editMode: string = this.getEditMode();
+    const editMode: GridsEditMode = this.getEditMode();
     return CELL_BASED_MODES.includes(editMode);
   }
 
