@@ -787,7 +787,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   _addInsertInfo(change, parentKey?) {
     let insertInfo;
-    this.ensureChangeKeyValue(change);
+    change.key = this.getChangeKeyValue(change);
     const { key } = change;
 
     insertInfo = this._getInternalData(key)?.insertInfo;
@@ -806,7 +806,7 @@ class EditingControllerImpl extends modules.ViewController {
     return { insertInfo, key };
   }
 
-  private ensureChangeKeyValue(change: any) {
+  private getChangeKeyValue(change: any): unknown {
     if (isDefined(change.key)) {
       return;
     }
@@ -820,7 +820,7 @@ class EditingControllerImpl extends modules.ViewController {
       keyValue = generateNewRowTempKey();
     }
 
-    change.key = keyValue;
+    return keyValue;
   }
 
   _setInsertAfterOrBeforeKey(change, parentKey) {
