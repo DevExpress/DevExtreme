@@ -900,6 +900,23 @@ const TextEditorBase = Editor.inherit({
         }
     },
 
+    _resetToInitialValue() {
+        if(this.option('value') === this._initialValue) {
+            this._options.silent('text', this._initialValue);
+            this._renderValue();
+        } else {
+            this.callBase();
+        }
+    },
+
+    reset: function(value = undefined) {
+        if(arguments.length) {
+            this.callBase(value);
+        } else {
+            this.callBase();
+        }
+    },
+
     on: function(eventName, eventHandler) {
         const result = this.callBase(eventName, eventHandler);
         const event = eventName.charAt(0).toUpperCase() + eventName.substr(1);
