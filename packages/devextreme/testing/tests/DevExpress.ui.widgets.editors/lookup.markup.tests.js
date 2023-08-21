@@ -319,7 +319,7 @@ module('options', {
             dataSource: []
         }).dxLookup('instance');
 
-        assert.equal($(instance._$field).text(), 'Select...', 'default value');
+        assert.equal($(instance._$field).find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'Select...', 'default value');
     });
 
     test('fieldTemplate should be rendered', function(assert) {
