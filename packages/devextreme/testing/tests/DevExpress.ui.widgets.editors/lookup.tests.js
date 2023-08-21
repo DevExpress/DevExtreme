@@ -228,7 +228,7 @@ QUnit.module('Lookup', {
 
         assert.equal(this.instance.option('value'), undefined, 'no selected value on start');
         assert.equal(this.instance.option('displayValue'), null, 'no selected value on start');
-        assert.equal(this.$field.text(), this.instance.option('placeholder'), 'no field text if no selected value');
+        assert.equal(this.$field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), this.instance.option('placeholder'), 'no field text if no selected value');
 
         this.togglePopup();
 
@@ -373,7 +373,7 @@ QUnit.module('Lookup', {
             })
             .dxLookup('instance');
 
-        assert.equal(this.$field.text(), lookup.option('placeholder'), 'no field text if no selected value');
+        assert.equal(this.$field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), lookup.option('placeholder'), 'no field text if no selected value');
 
         this.togglePopup();
 
@@ -518,7 +518,7 @@ QUnit.module('Lookup', {
             placeholder: 'test'
         });
 
-        assert.equal($lookup.text(), 'test', 'display value is not defined');
+        assert.equal($lookup.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'test', 'display value is not defined');
     });
 
     QUnit.test('option value returns object when valueExpr is \'this\'', function(assert) {
@@ -1276,7 +1276,7 @@ QUnit.module('Lookup', {
 
         assert.strictEqual($lookup.hasClass(LOOKUP_EMPTY_CLASS), true, 'lookup empty class was added after clearance');
         assert.strictEqual($lookup.hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'lookup empty class was added after clearance');
-        assert.equal($.trim($lookupField.text()), 'placeholder', 'placeholder is shown');
+        assert.equal($.trim($lookupField.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder')), 'placeholder', 'placeholder is shown');
         assert.strictEqual(lookup.option('value'), null, 'value reset');
     });
 
@@ -1784,7 +1784,7 @@ QUnit.module('options', {
         let $firstItem;
         const $field = $(instance._$field);
 
-        assert.equal($field.text(), instance.option('placeholder'), 'no field text if no selected value');
+        assert.equal($field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), instance.option('placeholder'), 'no field text if no selected value');
 
         $(instance._$field).trigger('dxclick');
 
@@ -1806,7 +1806,7 @@ QUnit.module('options', {
         const instance = $('#lookup').dxLookup({ dataSource: items }).dxLookup('instance');
         const $field = $(instance._$field);
 
-        assert.equal($field.text(), instance.option('placeholder'), 'no field text if no selected value');
+        assert.equal($field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), instance.option('placeholder'), 'no field text if no selected value');
 
         instance.option('value', 1);
         assert.equal($field.text(), 1, 'field text is selected item value');
@@ -1976,10 +1976,10 @@ QUnit.module('options', {
         })
             .dxLookup('instance');
 
-        assert.equal($(instance._$field).text(), 'Select...', 'default value');
+        assert.equal($(instance._$field).find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'Select...', 'default value');
 
         instance.option('placeholder', 'placeholder');
-        assert.equal($(instance._$field).text(), 'placeholder', 'set as option');
+        assert.equal($(instance._$field).find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'placeholder', 'set as option');
     });
 
     QUnit.test('minSearchLength', function(assert) {
@@ -1998,15 +1998,15 @@ QUnit.module('options', {
         const $list = $(getList().$element());
 
         assert.equal($list.find('.dx-list-item').filter(':visible').length, 0, 'No items are expected to be shown');
-        assert.equal($field.text(), placeholder);
+        assert.equal($field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), placeholder);
 
         instance.option('minSearchLength', 0);
         assert.equal($list.find('.dx-list-item').filter(':visible').length, 2);
-        assert.equal($field.text(), placeholder);
+        assert.equal($field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), placeholder);
 
         instance.option('minSearchLength', 3);
         assert.equal($list.find('.dx-list-item').filter(':visible').length, 0);
-        assert.equal($field.text(), placeholder);
+        assert.equal($field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), placeholder);
 
         const selectedValueText = 'def';
         instance.option('value', selectedValueText);

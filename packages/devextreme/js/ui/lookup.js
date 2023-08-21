@@ -455,13 +455,19 @@ const Lookup = DropDownList.inherit({
     },
 
     _updateField: function(text) {
-        text = isDefined(text) && String(text) || this.option('placeholder');
+        text = isDefined(text) && String(text);
 
         this._$field.empty();
-        const $placeholder = $('<div>').addClass('dx-placeholder');
 
-        $placeholder.attr({ 'data-dx_placeholder': text });
-        this._$field.append($placeholder);
+        if(text) {
+            this._$field.text(text);
+        } else {
+            const $placeholder = $('<div>')
+                .attr({ 'data-dx_placeholder': this.option('placeholder') });
+
+            this._$field.append($placeholder);
+            $placeholder.addClass('dx-placeholder');
+        }
     },
 
     _renderFieldTemplate: function(template) {
