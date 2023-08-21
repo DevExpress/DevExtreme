@@ -3,13 +3,13 @@
   "version": "23.2.0",
   "license": "MIT",
   "scripts": {
-    "react:build-generator": "cd node_modules/devextreme-react-generator && npm i --no-audit --no-fund && npm run build:local && cp src/import-overrides.json dist",
-    "react:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd && mkdir -p ./packages/devextreme-react/metadata && cp ./artifacts/internal-tools/integration-data.json ./packages/devextreme-react/metadata/integration-data.json",
+    "react:build-generator": "cd node_modules/devextreme-react-generator && npm i --no-audit --no-fund && npm run build:local",
+    "react:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd -- --output-path ./packages/devextreme-react/metadata/integration-data.json",
     "react:generate": "npm run react:discover-metadata && npm run react:build-generator && cd packages/devextreme-react && npm run generate",
     "tools:discover-declarations": "dx-tools discover --js-scripts ./packages/devextreme/js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\" --artifacts ./artifacts/internal-tools",
     "tools:generate-imd": "dx-tools integration-data-generator --artifacts ./artifacts/internal-tools",
     "vue:build-generator": "cd node_modules/devextreme-vue-generator && npm i --no-audit --no-fund && npm run build:local",
-    "vue:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd && mkdir -p ./packages/devextreme-vue/metadata && cp ./artifacts/internal-tools/integration-data.json ./packages/devextreme-vue/metadata/integration-data.json",
+    "vue:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd -- --output-path ./packages/devextreme-vue/metadata/integration-data.json",
     "vue:generate": "npm run vue:discover-metadata && npm run vue:build-generator && cd packages/devextreme-vue && npm run generate"
   },
   "private": true,
