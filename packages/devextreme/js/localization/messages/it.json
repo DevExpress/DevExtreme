@@ -172,6 +172,7 @@
         "dxDataGrid-ariaCollapse": "Comprimi",
         "dxDataGrid-ariaModifiedCell": "Modified",
         "dxDataGrid-ariaDeletedCell": "Deleted",
+        "dxDataGrid-ariaEditableCell": "Editable",
         "dxDataGrid-ariaExpand": "Espandi",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",

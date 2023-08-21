@@ -172,6 +172,7 @@
         "dxDataGrid-ariaCollapse": "折叠",
         "dxDataGrid-ariaModifiedCell": "Modified",
         "dxDataGrid-ariaDeletedCell": "Deleted",
+        "dxDataGrid-ariaEditableCell": "Editable",
         "dxDataGrid-ariaExpand": "展开",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
