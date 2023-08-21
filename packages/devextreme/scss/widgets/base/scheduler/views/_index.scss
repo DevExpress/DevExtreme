@@ -71,7 +71,6 @@ $scheduler-month-date-text-padding: 6px;
   $scheduler-accent-border-color: $scheduler-accent-border-color,
 );
 @use "./agenda" with (
-  $scheduler-header-panel-top-gap: 10px, // TODO !!!!
   $scheduler-group-header-table-cell-width: $scheduler-group-header-table-cell-width,
   $scheduler-small-size-factor: $scheduler-small-size-factor,
   $scheduler-small-font-size: $scheduler-small-font-size,
@@ -437,6 +436,7 @@ $scheduler-month-date-text-padding: 6px;
 .dx-scheduler-header-panel {
   border-spacing: 0;
   table-layout: fixed;
+
   width: 100%;
   font-size: $scheduler-workspace-info-font-size;
 }
