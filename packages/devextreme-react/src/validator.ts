@@ -90,7 +90,7 @@ class AsyncRule extends NestedOption<IAsyncRuleProps> {
 // owners:
 // Validator
 type ICompareRuleProps = React.PropsWithChildren<{
-  comparisonTarget?: (() => Record<string, any>);
+  comparisonTarget?: (() => any);
   comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
   ignoreEmptyValue?: boolean;
   message?: string;
@@ -229,7 +229,7 @@ type IValidationRuleProps = React.PropsWithChildren<{
   min?: any | number;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
-  comparisonTarget?: (() => Record<string, any>);
+  comparisonTarget?: (() => any);
   comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
   pattern?: any | string;
 }>
