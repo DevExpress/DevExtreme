@@ -2303,12 +2303,7 @@ export interface dxDataGridColumnButton<TRowData = any, TKey = any> extends Colu
     name?: DataGridPredefinedColumnButton | string;
     /**
      * @docid dxDataGridColumnButton.onClick
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxDataGrid
-     * @type_function_param1_field model:object
-     * @type_function_param1_field event:event
-     * @type_function_param1_field row:dxDataGridRowObject
-     * @type_function_param1_field column:dxDataGridColumn
+     * @type_function_param1 e:{ui/data_grid:ColumnButtonClickEvent}
      * @public
      */
     onClick?: ((e: ColumnButtonClickEvent<TRowData, TKey>) => void);
