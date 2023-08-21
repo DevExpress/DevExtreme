@@ -9,27 +9,31 @@ const moduleConfigWithoutToolbox = {
     beforeEach: function() {
         this.onOptionChanged = sinon.spy();
 
-        this.$element = $('#diagram').dxDiagram({
-            onOptionChanged: this.onOptionChanged,
-            historyToolbar: {
-                visible: false
-            },
-            mainToolbar: {
-                visible: false
-            },
-            contextToolbox: {
-                enabled: false
-            },
-            contextMenu: {
-                enabled: false
-            },
-            viewToolbar: {
-                visible: false
-            },
-            toolbox: {
-                visibility: 'disabled'
-            }
-        });
+        let diagramOptions = { onOptionChanged: this.onOptionChanged };
+        if(QUnit.urlParams['shadowDom']) {
+            diagramOptions = { ...diagramOptions,
+                historyToolbar: {
+                    visible: false
+                },
+                mainToolbar: {
+                    visible: false
+                },
+                contextToolbox: {
+                    enabled: false
+                },
+                contextMenu: {
+                    enabled: false
+                },
+                viewToolbar: {
+                    visible: false
+                },
+                toolbox: {
+                    visibility: 'disabled'
+                }
+            };
+        }
+
+        this.$element = $('#diagram').dxDiagram(diagramOptions);
 
         this.instance = this.$element.dxDiagram('instance');
     }
@@ -45,7 +49,7 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('Options: flaky', {
+QUnit.module('Options', {
     beforeEach: function() {
         moduleConfigWithoutToolbox.beforeEach.apply(this, arguments);
     }
