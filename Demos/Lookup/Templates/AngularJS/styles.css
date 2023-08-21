@@ -3,19 +3,25 @@
 }
 
 .dx-lookup.field-customization .dx-lookup-field {
-  padding: 0 5px;
+  padding: 2px 5px;
+}
+
+.dx-theme-material .dx-lookup.field-customization .dx-lookup-field {
+  padding: 6px 5px;
 }
 
 .custom-field > img {
   vertical-align: middle;
   height: 30px;
-  width: 21px;
+}
+
+.dx-theme-material .custom-field > img {
+  height: 36px;
 }
 
 .custom-field > div {
   display: inline-block;
   vertical-align: middle;
-  line-height: 30px;
   font-size: 14px;
   margin-left: 5px;
 }

@@ -21,13 +21,15 @@ export default {
   .custom-field > img {
     vertical-align: middle;
     height: 30px;
-    width: 21px;
+  }
+
+  .dx-theme-material .custom-field > img {
+    height: 36px;
   }
 
   .custom-field > div {
     display: inline-block;
     vertical-align: middle;
-    line-height: 30px;
     font-size: 14px;
     margin-left: 5px;
   }

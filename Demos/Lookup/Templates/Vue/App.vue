@@ -72,7 +72,11 @@ export default {
   }
 
   .dx-lookup.field-customization .dx-lookup-field {
-    padding: 0 5px;
+    padding: 2px 5px;
+  }
+
+  .dx-theme-material .dx-lookup.field-customization .dx-lookup-field {
+    padding: 6px 5px;
   }
 
   .dx-viewport .dx-fieldset {
