@@ -329,7 +329,7 @@ const HeaderFilterController = modules.ViewController.inherit((function () {
         const remoteFiltering = dataSource && dataSource.remoteOperations().filtering;
         const { onHidden } = options;
 
-        options = extend({}, options, column, {
+        extend(options, column, {
           type: groupInterval && groupInterval.length > 1 ? 'tree' : 'list',
           remoteFiltering,
           onShowing(e) {
