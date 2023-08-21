@@ -440,15 +440,9 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
   &.dx-texteditor-with-floating-label {
     &.dx-texteditor-empty,
-    &.dx-lookup-empty,
-    &.dx-texteditor-empty.dx-state-readonly,
-    &.dx-lookup-empty.dx-state-readonly {
+    &.dx-texteditor-empty.dx-state-readonly {
       .dx-placeholder {
         display: none;
-      }
-
-      .dx-lookup-field {
-        font-size: 0;
       }
 
       .dx-texteditor-label {
@@ -480,10 +474,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
-      }
-
-      .dx-lookup-field {
-        font-size: $material-texteditor-font-size;
       }
 
       .dx-texteditor-label {
@@ -553,10 +543,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       .dx-label-after {
         height: 100%;
       }
-    }
-
-    .dx-lookup-field {
-      font-size: $material-texteditor-font-size;
     }
 
     &.dx-rtl,
@@ -637,10 +623,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       display: none;
     }
 
-    .dx-lookup-field {
-      font-size: 0;
-    }
-
     &.dx-rtl,
     .dx-rtl & {
       .dx-texteditor-label {
@@ -697,25 +679,8 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     }
   }
 
-  &.dx-texteditor-with-label {
-    &.dx-state-readonly,
-    &.dx-state-readonly.dx-state-hover,
-    &.dx-state-disabled {
-      @include dx-state(color.change($texteditor-color, $alpha: 0.5), 1);
-    }
-
-    &.dx-state-hover {
-      @include dx-state($texteditor-hover-border-color, 1);
-
-      &.dx-invalid {
-        @include dx-state($texteditor-invalid-focused-border-color, 1);
-      }
-    }
-  }
-
   &.dx-texteditor-with-floating-label {
-    &.dx-texteditor-empty,
-    &.dx-lookup-empty {
+    &.dx-texteditor-empty {
       @include dx-state-empty($texteditor-border-color, 1);
 
       &.dx-invalid {
@@ -750,6 +715,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       }
 
       &.dx-dropdowneditor-active {
+        .dx-placeholder {
+          display: block;
+        }
+
         @include dx-state($texteditor-border-color, 1);
       }
     }
@@ -920,10 +889,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         display: block;
       }
 
-      .dx-lookup-field {
-        font-size: $material-texteditor-font-size;
-      }
-
       .dx-texteditor-label {
         transform: $label-transform;
         font-size: $material-texteditor-label-font-size;
@@ -944,15 +909,9 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
   &.dx-texteditor-with-floating-label {
     &.dx-texteditor-empty,
-    &.dx-lookup-empty,
-    &.dx-texteditor-empty.dx-state-readonly,
-    &.dx-lookup-empty.dx-state-readonly {
+    &.dx-texteditor-empty.dx-state-readonly {
       .dx-placeholder {
         display: none;
-      }
-
-      .dx-lookup-field {
-        font-size: 0;
       }
 
       .dx-texteditor-label {
