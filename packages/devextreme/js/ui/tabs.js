@@ -30,17 +30,6 @@ const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
-const TABS_ORIENTATION_CLASS = {
-    vertical: 'dx-tabs-vertical',
-    horizontal: 'dx-tabs-horizontal',
-};
-const TABS_ICON_POSITION_CLASS = {
-    top: 'dx-tabs-icon-position-top',
-    end: 'dx-tabs-icon-position-end',
-    bottom: 'dx-tabs-icon-position-bottom',
-    start: 'dx-tabs-icon-position-start',
-};
-
 const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
 const TABS_ITEM_CLASS = 'dx-tab';
@@ -55,6 +44,18 @@ const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
 const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
+
+const TABS_ORIENTATION_CLASS = {
+    vertical: 'dx-tabs-vertical',
+    horizontal: 'dx-tabs-horizontal',
+};
+
+const TABS_ICON_POSITION_CLASS = {
+    top: 'dx-tabs-icon-position-top',
+    end: 'dx-tabs-icon-position-end',
+    bottom: 'dx-tabs-icon-position-bottom',
+    start: 'dx-tabs-icon-position-start',
+};
 
 const TABS_ITEM_DATA_KEY = 'dxTabData';
 
