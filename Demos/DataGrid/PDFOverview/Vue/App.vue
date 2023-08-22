@@ -1,7 +1,6 @@
 <template>
   <div>
     <DxDataGrid
-      :ref="dataGridRef"
       :allow-column-reordering="true"
       :data-source="customers"
       key-expr="ID"
@@ -28,8 +27,7 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
-import DxButton from 'devextreme-vue/button';
+<script setup lang="ts">
 import {
   DxDataGrid,
   DxColumn,
@@ -37,42 +35,21 @@ import {
   DxExport,
   DxSelection,
   DxPaging,
-  DxItem,
 } from 'devextreme-vue/data-grid';
-
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
-
 import { customers } from './data.js';
 
-export default {
-  components: {
-    DxButton,
-    DxColumn,
-    DxSelection,
-    DxGrouping,
-    DxPaging,
-    DxExport,
-    DxDataGrid,
-    DxItem,
-  },
-  data() {
-    return {
-      customers,
-    };
-  },
-  methods: {
-    onExporting(e) {
-      // eslint-disable-next-line new-cap
-      const doc = new jsPDF();
-      exportDataGrid({
-        jsPDFDocument: doc,
-        component: e.component,
-        indent: 5,
-      }).then(() => {
-        doc.save('Companies.pdf');
-      });
-    },
-  },
+const onExporting = (e) => {
+  // eslint-disable-next-line new-cap
+  const doc = new jsPDF();
+
+  exportDataGrid({
+    jsPDFDocument: doc,
+    component: e.component,
+    indent: 5,
+  }).then(() => {
+    doc.save('Companies.pdf');
+  });
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div id="data-grid-demo">
     <DxDataGrid
-      :data-source="dataSource"
+      :data-source="employees"
       :show-borders="true"
       key-expr="ID"
     >
@@ -91,7 +91,7 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid,
   DxColumn,
@@ -101,29 +101,9 @@ import {
   DxLookup,
   DxForm,
 } from 'devextreme-vue/data-grid';
-import { DxTextArea } from 'devextreme-vue/text-area';
 import { DxItem } from 'devextreme-vue/form';
 import { employees, states } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxPaging,
-    DxEditing,
-    DxPopup,
-    DxLookup,
-    DxForm,
-    DxItem,
-    DxTextArea,
-  },
-  data() {
-    return {
-      dataSource: employees,
-      states,
-    };
-  },
-};
 </script>
 <style>
 #data-grid-demo {

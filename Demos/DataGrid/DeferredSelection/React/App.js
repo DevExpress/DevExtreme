@@ -29,27 +29,28 @@ const App = () => {
   const [peopleCount, setPeopleCount] = React.useState(0);
   const [avgDuration, setAvgDuration] = React.useState(0);
 
-  const calculateStatistics = React.useCallback(() => {
-    dataGrid.getSelectedRowsData().then((rowData) => {
-      let commonDuration = 0;
+  const calculateStatistics = React.useCallback(async() => {
+    const selectedItems = await dataGrid.getSelectedRowsData();
 
-      for (let i = 0; i < rowData.length; i += 1) {
-        commonDuration += rowData[i].Task_Due_Date - rowData[i].Task_Start_Date;
-      }
-      commonDuration /= MILLISECONDS_IN_DAY;
-      setTaskCount(rowData.length);
-      setPeopleCount(
-        query(rowData)
-          .groupBy('ResponsibleEmployee.Employee_Full_Name')
-          .toArray()
-          .length,
-      );
-      setAvgDuration(Math.round(commonDuration / rowData.length) || 0);
-    });
+    const totalDuration = selectedItems.reduce((currentValue, item) => {
+      const duration = item.Task_Due_Date - item.Task_Start_Date;
+
+      return currentValue + duration;
+    }, 0);
+    const averageDurationInDays = totalDuration / MILLISECONDS_IN_DAY / selectedItems.length;
+
+    setTaskCount(selectedItems.length);
+    setPeopleCount(
+      query(selectedItems)
+        .groupBy('ResponsibleEmployee.Employee_Full_Name')
+        .toArray().length,
+    );
+    setAvgDuration(Math.round(averageDurationInDays) || 0);
   }, []);
 
   const onInitialized = React.useCallback((e) => {
     dataGrid = e.component;
+
     calculateStatistics();
   }, [calculateStatistics]);
 

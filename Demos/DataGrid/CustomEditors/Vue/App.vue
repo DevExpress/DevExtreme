@@ -48,7 +48,7 @@
       <DxRequiredRule/>
     </DxColumn>
     <DxColumn
-      :editor-options="editorOptions"
+      :editor-options="{ itemTemplate: 'statusTemplate' }"
       data-field="Status"
       width="200"
     >
@@ -63,7 +63,7 @@
       <span v-if="data == null">(All)</span>
       <div v-else>
         <img
-          :src="'images/icons/status-' + data.id + '.svg'"
+          :src="'../../../../images/icons/status-' + data.id + '.svg'"
           class="status-icon middle"
         >
         <span class="middle">{{ data.name }}</span>
@@ -80,8 +80,7 @@
 
     <template #tagBoxEditor="{ data: cellInfo }">
       <EmployeeTagBoxComponent
-        :value="cellInfo.value"
-        :on-value-changed="(value) => onValueChanged(value, cellInfo)"
+        :cell-info="cellInfo"
         :data-source="employees"
         :data-grid-component="cellInfo.component"
       />
@@ -89,8 +88,7 @@
 
   </DxDataGrid>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxDataGrid,
   DxPaging,
@@ -126,52 +124,25 @@ const tasks = createStore({
   },
 });
 
-export default {
-  components: {
-    DxDataGrid,
-    DxPaging,
-    DxHeaderFilter,
-    DxSearchPanel,
-    DxEditing,
-    DxColumn,
-    DxLookup,
-    DxRequiredRule,
-    EmployeeDropDownBoxComponent,
-    EmployeeTagBoxComponent,
-  },
-  data() {
-    return {
-      tasks,
-      employees,
-      statuses,
-      dropDownOptions: { width: 400 },
-      editorOptions: { itemTemplate: 'statusTemplate' },
-      calculateFilterExpression(filterValue, selectedFilterOperation, target) {
-        if (target === 'search' && typeof (filterValue) === 'string') {
-          return [this.dataField, 'contains', filterValue];
-        }
-        return function(data) {
-          return (data.AssignedEmployee || []).indexOf(filterValue) !== -1;
-        };
-      },
-    };
-  },
-  methods: {
-    cellTemplate(container, options) {
-      const noBreakSpace = '\u00A0';
-      const text = (options.value || []).map((element) => options.column.lookup.calculateCellValue(element)).join(', ');
-      container.textContent = text || noBreakSpace;
-      container.title = text;
-    },
-    onValueChanged(value, cellInfo) {
-      cellInfo.setValue(value);
-      cellInfo.component.updateDimensions();
-    },
-    onRowInserted(e) {
-      e.component.navigateToRow(e.key);
-    },
-  },
+const cellTemplate = (container, options) => {
+  const noBreakSpace = '\u00A0';
+  const text = (options.value || []).map((element) => options.column.lookup.calculateCellValue(element)).join(', ');
+
+  container.textContent = text || noBreakSpace;
+  container.title = text;
 };
+
+const onRowInserted = (e) => {
+  e.component.navigateToRow(e.key);
+};
+
+function calculateFilterExpression(filterValue, selectedFilterOperation, target) {
+  if (target === 'search' && typeof (filterValue) === 'string') {
+    return [this.dataField, 'contains', filterValue];
+  }
+
+  return (data) => (data.AssignedEmployee || []).indexOf(filterValue) !== -1;
+}
 </script>
 <style>
   .status-icon {

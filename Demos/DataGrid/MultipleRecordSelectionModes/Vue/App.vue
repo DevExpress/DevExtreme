@@ -5,7 +5,6 @@
       :show-borders="true"
       key-expr="orderId"
     >
-
       <DxColumn
         :width="90"
         data-field="orderId"
@@ -43,7 +42,7 @@
         <DxSelectBox
           id="select-all-mode"
           :input-attr="{ 'aria-label': 'Select All Mode' }"
-          :data-source="['allPages', 'page']"
+          :data-source="selectAllModes"
           :disabled="checkBoxesMode === 'none'"
           v-model:value="allMode"
         />
@@ -53,14 +52,15 @@
         <DxSelectBox
           id="show-checkboxes-mode"
           :input-attr="{ 'aria-label': 'Show Checkboxes Mode' }"
-          :data-source="['none', 'onClick', 'onLongTap', 'always']"
+          :data-source="showCheckBoxesModes"
           v-model:value="checkBoxesMode"
         />
       </div>
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import {
   DxDataGrid,
@@ -72,23 +72,12 @@ import {
 import themes from 'devextreme/ui/themes';
 import { sales } from './data.js';
 
-export default {
-  components: {
-    DxSelectBox,
-    DxDataGrid,
-    DxColumn,
-    DxPaging,
-    DxSelection,
-    DxFilterRow,
-  },
-  data() {
-    return {
-      allMode: 'allPages',
-      checkBoxesMode: themes.current().startsWith('material') ? 'always' : 'onClick',
-      sales,
-    };
-  },
-};
+const selectAllModes = ['allPages', 'page'];
+const showCheckBoxesModes = ['none', 'onClick', 'onLongTap', 'always'];
+
+const allMode = ref('allPages');
+
+const checkBoxesMode = ref(themes.current().startsWith('material') ? 'always' : 'onClick');
 </script>
 <style scoped>
 .options {

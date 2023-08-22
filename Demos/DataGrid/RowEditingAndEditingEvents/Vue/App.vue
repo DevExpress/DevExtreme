@@ -2,7 +2,7 @@
   <div>
     <DxDataGrid
       id="gridContainer"
-      :data-source="dataSource"
+      :data-source="employees"
       :allow-column-reordering="true"
       :show-borders="true"
       key-expr="ID"
@@ -76,37 +76,22 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxButton from 'devextreme-vue/button';
 import {
   DxDataGrid, DxColumn, DxEditing, DxPaging, DxLookup,
 } from 'devextreme-vue/data-grid';
 import { employees, states } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxEditing,
-    DxPaging,
-    DxButton,
-    DxLookup,
-  },
-  data() {
-    return {
-      events: [],
-      dataSource: employees,
-      states,
-    };
-  },
-  methods: {
-    logEvent(eventName) {
-      this.events.unshift(eventName);
-    },
-    clearEvents() {
-      this.events = [];
-    },
-  },
+const events = ref<string[]>([]);
+
+const logEvent = (eventName) => {
+  events.value.unshift(eventName);
+};
+
+const clearEvents = () => {
+  events.value = [];
 };
 </script>
 <style>

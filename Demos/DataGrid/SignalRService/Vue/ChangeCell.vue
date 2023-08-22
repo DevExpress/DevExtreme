@@ -6,13 +6,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    cellData: {
-      type: Object,
-      default: () => {},
-    },
-  },
-};
+<script setup lang="ts">
+import { ColumnCellTemplateData } from 'devextreme/ui/data_grid';
+
+defineProps<{
+  cellData: ColumnCellTemplateData
+}>();
 </script>

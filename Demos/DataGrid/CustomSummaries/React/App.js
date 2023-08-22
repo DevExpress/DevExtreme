@@ -2,20 +2,20 @@ import React from 'react';
 import DataGrid, {
   Column, Selection, Paging, Summary, TotalItem,
 } from 'devextreme-react/data-grid';
-import service from './data.js';
+import { orders } from './data.js';
 
 const startupSelectedKeys = [1, 4, 7];
-
-const orders = service.getOrders();
 
 const calculateSelectedRow = (options) => {
   if (options.name === 'SelectedRowsSummary') {
     if (options.summaryProcess === 'start') {
       options.totalValue = 0;
-    } else if (options.summaryProcess === 'calculate') {
-      if (options.component.isRowSelected(options.value.ID)) {
-        options.totalValue += options.value.SaleAmount;
-      }
+    }
+
+    const isRowSelected = options.component.isRowSelected(options.value?.ID);
+
+    if (options.summaryProcess === 'calculate' && isRowSelected) {
+      options.totalValue += options.value.SaleAmount;
     }
   }
 };

@@ -12,7 +12,7 @@
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import Grid from './Grid.vue';
 
@@ -26,19 +26,7 @@ const tasksStore = AspNetData.createStore({
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
-
-export default {
-  components: {
-    Grid,
-  },
-  data() {
-    return {
-      tasksStore,
-    };
-  },
-};
 </script>
-
 <style scoped>
 .tables {
   display: flex;

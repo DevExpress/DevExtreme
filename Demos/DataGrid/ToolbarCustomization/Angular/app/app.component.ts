@@ -28,7 +28,7 @@ export class AppComponent {
 
   orders: Order[];
 
-  expanded = true;
+  expandAll = true;
 
   totalCount: number;
 
@@ -53,14 +53,14 @@ export class AppComponent {
       .toArray().length;
   }
 
-  groupChanged(e) {
+  toggleGroupColumn(e) {
     this.dataGrid.instance.clearGrouping();
     this.dataGrid.instance.columnOption(e.value, 'groupIndex', 0);
     this.totalCount = this.getGroupCount(e.value);
   }
 
-  collapseAllClick() {
-    this.expanded = !this.expanded;
+  toggleExpandAll() {
+    this.expandAll = !this.expandAll;
   }
 
   refreshDataGrid() {

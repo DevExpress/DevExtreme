@@ -3,7 +3,7 @@
     <DxDataGrid
       id="grid-container"
       :data-source="employees"
-      :ref="dataGridRefName"
+      ref="dataGridRef"
       :selected-row-keys="selectedRowKeys"
       :show-borders="true"
       key-expr="ID"
@@ -39,7 +39,7 @@
         <DxItem location="before">
           <DxSelectBox
             :data-source="prefixOptions"
-            :value="prefix"
+            :value="selectedPrefix"
             :input-attr="{ 'aria-label': 'Title' }"
             placeholder="Select title"
             width="150px"
@@ -63,7 +63,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import {
   DxColumn,
   DxDataGrid,
@@ -75,67 +76,49 @@ import DxButton from 'devextreme-vue/button';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxButton,
-    DxColumn,
-    DxDataGrid,
-    DxSelectBox,
-    DxSelection,
-    DxToolbar,
-    DxItem,
-  },
-  data() {
-    return {
-      dataGridRefName: 'dataGrid',
-      employees,
-      prefix: '',
-      prefixOptions: ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'],
-      selectedRowsData: [],
-      selectionChangedBySelectBox: false,
-    };
-  },
-  computed: {
-    selectedRowKeys() {
-      return this.selectedRowsData.map((employee) => employee.ID);
-    },
-    selectedEmployeeNames() {
-      const selectedRowsData = this.selectedRowsData;
-      const getEmployeeName = (row) => `${row.FirstName} ${row.LastName}`;
-      return selectedRowsData.length ? selectedRowsData.map(getEmployeeName).join(', ') : 'Nobody has been selected';
-    },
-  },
-  methods: {
-    clearSelection() {
-      const dataGrid = this.$refs[this.dataGridRefName].instance;
+const dataGridRef = ref<DxDataGrid | null>(null);
 
-      dataGrid.clearSelection();
-    },
-    filterSelection({ value }) {
-      this.selectionChangedBySelectBox = true;
+const selectedPrefix = ref<string | null>(null);
+const prefixOptions = ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'];
 
-      const prefix = value;
+let selectionChangedBySelectBox = false;
+const selectedRowsData = ref<any[]>([]);
 
-      if (!prefix) {
-        return;
-      } if (prefix === 'All') {
-        this.selectedRowsData = this.employees;
-      } else {
-        this.selectedRowsData = this.employees
-          .filter((employee) => employee.Prefix === prefix);
-      }
+const getEmployeeName = (row) => `${row.FirstName} ${row.LastName}`;
 
-      this.prefix = prefix;
-    },
-    onSelectionChanged({ selectedRowsData }) {
-      if (!this.selectionChangedBySelectBox) {
-        this.prefix = null;
-      }
+const selectedRowKeys = computed(() => selectedRowsData.value.map((employee) => employee.ID));
+const selectedEmployeeNames = computed(() => (
+  selectedRowsData.value.length ? selectedRowsData.value.map(getEmployeeName).join(', ') : 'Nobody has been selected'
+));
 
-      this.selectedRowsData = selectedRowsData;
-      this.selectionChangedBySelectBox = false;
-    },
-  },
+const clearSelection = () => {
+  const dataGrid = dataGridRef.value!.instance!;
+
+  dataGrid.clearSelection();
+};
+
+const filterSelection = (e) => {
+  if (!e.value) {
+    return;
+  }
+
+  selectedPrefix.value = e.value;
+
+  selectionChangedBySelectBox = true;
+
+  selectedRowsData.value = e.value === 'All'
+    ? employees
+    : employees.filter((employee) => employee.Prefix === e.value);
+};
+
+const onSelectionChanged = (e) => {
+  if (!selectionChangedBySelectBox) {
+    selectedPrefix.value = null;
+  }
+
+  selectedRowsData.value = e.selectedRowsData;
+
+  selectionChangedBySelectBox = false;
 };
 </script>
 <style scoped>

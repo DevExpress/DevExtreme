@@ -5,7 +5,7 @@ import DataGrid, {
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 
-import service from './data.js';
+import { orders } from './data.js';
 
 const saleAmountEditorOptions = { format: 'currency', showClearButton: true };
 const filterLabel = { 'aria-label': 'Filter' };
@@ -42,22 +42,26 @@ const saleAmountHeaderFilter = [{
   text: 'Greater than $20000',
   value: ['SaleAmount', '>=', 20000],
 }];
-const orders = service.getOrders();
 
 const getOrderDay = (rowData) => (new Date(rowData.OrderDate)).getDay();
-const calculateFilterExpression = (value, selectedFilterOperations, target) => {
+
+function calculateFilterExpression(value, selectedFilterOperations, target) {
   const column = this;
+
   if (target === 'headerFilter' && value === 'weekends') {
     return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
   }
+
   return column.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
-};
+}
+
 const orderHeaderFilter = (data) => {
   data.dataSource.postProcess = (results) => {
     results.push({
       text: 'Weekends',
       value: 'weekends',
     });
+
     return results;
   };
 };
@@ -67,6 +71,10 @@ const App = () => {
   const [showHeaderFilter, setShowHeaderFilter] = React.useState(true);
   const [currentFilter, setCurrentFilter] = React.useState(applyFilterTypes[0].key);
   const dataGridRef = React.useRef(null);
+
+  const clearFilter = React.useCallback(() => {
+    dataGridRef.current.instance.clearFilter();
+  }, []);
 
   const onShowFilterRowChanged = React.useCallback((e) => {
     setShowFilterRow(e.value);
@@ -80,10 +88,6 @@ const App = () => {
 
   const onCurrentFilterChanged = React.useCallback((e) => {
     setCurrentFilter(e.value);
-  }, []);
-
-  const clearFilter = React.useCallback(() => {
-    dataGridRef.current.instance.clearFilter();
   }, []);
 
   return (

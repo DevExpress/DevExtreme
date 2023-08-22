@@ -7,7 +7,10 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import { SelectBox } from 'devextreme-react/select-box';
 import themes from 'devextreme/ui/themes';
-import { sales, showCheckboxesModeLabel, selectAllModeLabel } from './data.js';
+import { sales } from './data.js';
+
+const selectAllFieldLabel = { 'aria-label': 'Select All Mode' };
+const showCheckboxesFieldLabel = { 'aria-label': 'Show Checkboxes Mode' };
 
 const showCheckBoxesModes = ['none', 'onClick', 'onLongTap', 'always'];
 const selectAllModes = ['allPages', 'page'];
@@ -18,11 +21,11 @@ const App = () => {
     themes.current().startsWith('material') ? 'always' : 'onClick',
   );
 
-  const onCheckBoxesModeChanged = React.useCallback((value) => {
+  const onCheckBoxesModeChanged = React.useCallback(({ value }) => {
     setCheckBoxesMode(value);
   }, []);
 
-  const onAllModeChanged = React.useCallback((value) => {
+  const onAllModeChanged = React.useCallback(({ value }) => {
     setAllMode(value);
   }, []);
 
@@ -51,9 +54,9 @@ const App = () => {
           <span>Select All Mode </span>
           <SelectBox
             id="select-all-mode"
+            inputAttr={selectAllFieldLabel}
             dataSource={selectAllModes}
             value={allMode}
-            inputAttr={selectAllModeLabel}
             disabled={checkBoxesMode === 'none'}
             onValueChanged={onAllModeChanged}
           />
@@ -62,7 +65,7 @@ const App = () => {
           <span>Show Checkboxes Mode </span>
           <SelectBox
             id="show-checkboxes-mode"
-            inputAttr={showCheckboxesModeLabel}
+            inputAttr={showCheckboxesFieldLabel}
             dataSource={showCheckBoxesModes}
             value={checkBoxesMode}
             onValueChanged={onCheckBoxesModeChanged}

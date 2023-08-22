@@ -2,7 +2,7 @@ import React from 'react';
 import DataGrid, { Column, Paging, SearchPanel } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 
-import service from './data.js';
+import { europeanUnion } from './data.js';
 
 const populationFormat = { type: 'fixedPoint', precision: 0 };
 const areaFormat = { type: 'fixedPoint', precision: 0 };
@@ -14,10 +14,9 @@ const App = () => {
   const [rtlEnabled, setRtlEnabled] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(languages[1]);
 
-  const dataSource = service.getEuropeanUnion();
-
-  const selectLanguage = React.useCallback((e) => {
+  const onSelectLanguage = React.useCallback((e) => {
     const newRtlEnabled = e.value === languages[0];
+
     setRtlEnabled(newRtlEnabled);
     setPlaceholder(newRtlEnabled ? 'بحث' : 'Search...');
     setSelectedValue(e.value);
@@ -36,7 +35,7 @@ const App = () => {
   return (
     <React.Fragment>
       <DataGrid id="gridContainer"
-        dataSource={dataSource}
+        dataSource={europeanUnion}
         keyExpr="nameEn"
         rtlEnabled={rtlEnabled}
         showBorders={true}>
@@ -63,7 +62,7 @@ const App = () => {
             value={selectedValue}
             inputAttr={languageLabel}
             width={250}
-            onValueChanged={selectLanguage} />
+            onValueChanged={onSelectLanguage} />
         </div>
       </div>
     </React.Fragment>

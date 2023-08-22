@@ -25,7 +25,7 @@ const App = () => {
     dataSource.reload();
   }, [selectedItemKeys]);
 
-  const selectionChanged = React.useCallback((data) => {
+  const onSelectionChanged = React.useCallback((data) => {
     setSelectedItemKeys(data.selectedRowKeys);
   }, []);
 
@@ -35,7 +35,7 @@ const App = () => {
         dataSource={dataSource}
         showBorders={true}
         selectedRowKeys={selectedItemKeys}
-        onSelectionChanged={selectionChanged}
+        onSelectionChanged={onSelectionChanged}
       >
         <Selection mode="multiple" />
         <Paging enabled={false} />

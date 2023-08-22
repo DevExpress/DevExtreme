@@ -35,10 +35,17 @@
   </DxDataGrid>
 </template>
 
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid, DxColumn, DxRowDragging, DxScrolling, DxLookup,
 } from 'devextreme-vue/data-grid';
+import CustomStore from 'devextreme/data/custom_store';
+import DataSource from 'devextreme/data/data_source';
+
+const props = defineProps<{
+  tasksStore: CustomStore
+  status: number
+}>();
 
 const priorities = [{
   id: 1, text: 'Low',
@@ -50,46 +57,21 @@ const priorities = [{
   id: 4, text: 'Urgent',
 }];
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxRowDragging,
-    DxScrolling,
-    DxLookup,
-  },
-  props: {
-    tasksStore: {
-      type: Object,
-      default: () => ({}),
-    },
-    status: {
-      type: Number,
-      default: 0,
-    },
-  },
-  data() {
-    return {
-      dataSource: {
-        store: this.tasksStore,
-        reshapeOnPush: true,
-      },
-      priorities,
-      filterExpr: ['Status', '=', this.status],
-    };
-  },
-  methods: {
-    onAdd(e) {
-      const key = e.itemData.ID;
-      const values = { Status: e.toData };
+const dataSource = new DataSource({
+  store: props.tasksStore,
+  reshapeOnPush: true,
+});
 
-      this.tasksStore.update(key, values).then(() => {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.tasksStore.push([{
-          type: 'update', key, data: values,
-        }]);
-      });
-    },
-  },
+const filterExpr = ['Status', '=', props.status];
+
+const onAdd = (e) => {
+  const key = e.itemData.ID;
+  const values = { Status: e.toData };
+
+  dataSource.store().update(key, values).then(() => {
+    dataSource.store().push([{
+      type: 'update', key, data: values,
+    }]);
+  });
 };
 </script>

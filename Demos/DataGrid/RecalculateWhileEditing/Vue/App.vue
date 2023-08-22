@@ -52,7 +52,7 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid,
   DxColumn,
@@ -60,23 +60,8 @@ import {
   DxSummary,
   DxTotalItem,
 } from 'devextreme-vue/data-grid';
+import { orders } from './data.js';
 
-import service from './data.js';
-
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxEditing,
-    DxSummary,
-    DxTotalItem,
-  },
-  data() {
-    return {
-      orders: service.getOrders(),
-    };
-  },
-};
 </script>
 <style scoped>
 #gridContainer {

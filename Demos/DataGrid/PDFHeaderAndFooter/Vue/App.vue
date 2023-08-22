@@ -55,66 +55,50 @@
   </DxDataGrid>
 </template>
 
-<script>
-
+<script setup lang="ts">
 import DxDataGrid, { DxColumn, DxExport } from 'devextreme-vue/data-grid';
-
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
-
 import { countries } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxExport,
-  },
-  data() {
-    return {
-      countries,
-      gdpFormat: {
-        type: 'percent',
-        precision: 1,
-      },
-    };
-  },
-  methods: {
-    onExporting(e) {
-      // eslint-disable-next-line new-cap
-      const doc = new jsPDF();
-      const lastPoint = { x: 0, y: 0 };
+const gdpFormat = {
+  type: 'percent',
+  precision: 1,
+};
 
-      exportDataGrid({
-        jsPDFDocument: doc,
-        component: e.component,
-        topLeft: { x: 1, y: 15 },
-        columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
-        customDrawCell({ rect }) {
-          if (lastPoint.x < rect.x + rect.w) {
-            lastPoint.x = rect.x + rect.w;
-          }
-          if (lastPoint.y < rect.y + rect.h) {
-            lastPoint.y = rect.y + rect.h;
-          }
-        },
-      }).then(() => {
-        const header = 'Country Area, Population, and GDP Structure';
-        const pageWidth = doc.internal.pageSize.getWidth();
-        doc.setFontSize(15);
-        const headerWidth = doc.getTextDimensions(header).w;
-        doc.text(header, (pageWidth - headerWidth) / 2, 20);
+const onExporting = (e) => {
+  // eslint-disable-next-line new-cap
+  const doc = new jsPDF();
+  const lastPoint = { x: 0, y: 0 };
 
-        const footer = 'www.wikipedia.org';
-        doc.setFontSize(9);
-        doc.setTextColor('#cccccc');
-        const footerWidth = doc.getTextDimensions(footer).w;
-        doc.text(footer, (lastPoint.x - footerWidth), lastPoint.y + 5);
-
-        doc.save('Companies.pdf');
-      });
+  exportDataGrid({
+    jsPDFDocument: doc,
+    component: e.component,
+    topLeft: { x: 1, y: 15 },
+    columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
+    customDrawCell({ rect }) {
+      if (lastPoint.x < rect.x + rect.w) {
+        lastPoint.x = rect.x + rect.w;
+      }
+      if (lastPoint.y < rect.y + rect.h) {
+        lastPoint.y = rect.y + rect.h;
+      }
     },
-  },
+  }).then(() => {
+    const header = 'Country Area, Population, and GDP Structure';
+    const pageWidth = doc.internal.pageSize.getWidth();
+    doc.setFontSize(15);
+    const headerWidth = doc.getTextDimensions(header).w;
+    doc.text(header, (pageWidth - headerWidth) / 2, 20);
+
+    const footer = 'www.wikipedia.org';
+    doc.setFontSize(9);
+    doc.setTextColor('#cccccc');
+    const footerWidth = doc.getTextDimensions(footer).w;
+    doc.text(footer, (lastPoint.x - footerWidth), lastPoint.y + 5);
+
+    doc.save('Companies.pdf');
+  });
 };
 </script>
 

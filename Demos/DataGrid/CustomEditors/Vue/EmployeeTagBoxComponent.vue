@@ -6,7 +6,7 @@
     :input-attr="{ 'aria-label': 'Name' }"
     :max-displayed-tags="3"
     :show-multi-tag-only="false"
-    :on-value-changed="(e) => onValueChanged(e.value)"
+    :on-value-changed="onValueChanged"
     :on-selection-changed="onSelectionChanged"
     :search-enabled="true"
     value-expr="ID"
@@ -14,39 +14,25 @@
     apply-value-mode="useButtons"
   />
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxTagBox from 'devextreme-vue/tag-box';
+import DataGrid from 'devextreme/ui/data_grid';
+import CustomStore from 'devextreme/data/custom_store';
 
-export default {
-  components: { DxTagBox },
-  props: {
-    value: {
-      type: Array,
-      default: () => [],
-    },
-    onValueChanged: {
-      type: Function,
-      default: () => function() {},
-    },
-    dataSource: {
-      type: Object,
-      default: () => {},
-    },
-    dataGridComponent: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  data() {
-    return {
-      currentValue: this.value,
-    };
-  },
-  methods: {
-    onSelectionChanged() {
-      this.dataGridComponent.updateDimensions();
-    },
-  },
+const props = defineProps<{
+  cellInfo: any,
+  dataSource: CustomStore,
+  dataGridComponent: DataGrid,
+}>();
+
+const currentValue = ref(props.cellInfo.value);
+
+const onSelectionChanged = () => {
+  props.dataGridComponent.updateDimensions();
+};
+
+const onValueChanged = (e) => {
+  props.cellInfo.setValue(e.value);
 };
 </script>

@@ -53,24 +53,14 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid, DxHeaderFilter, DxSearch, DxColumn,
 } from 'devextreme-vue/data-grid';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid, DxHeaderFilter, DxSearch, DxColumn,
-  },
-  data() {
-    return {
-      employees,
-      searchExpr: ['City', 'State'],
-      editorOptions: { placeholder: 'Search city or state' },
-    };
-  },
-};
+const searchExpr = ['City', 'State'];
+const editorOptions = { placeholder: 'Search city or state' };
 </script>
 <style scoped>
 #employees {

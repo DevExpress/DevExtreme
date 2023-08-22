@@ -4,7 +4,7 @@
       id="gridContainer"
       :data-source="orders"
       :show-borders="true"
-      :selected-row-keys="[1, 4, 7]"
+      :selected-row-keys="selectedRowKeys"
       key-expr="ID"
       @selection-changed="onSelectionChanged"
     >
@@ -48,7 +48,7 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid,
   DxColumn,
@@ -57,39 +57,26 @@ import {
   DxSummary,
   DxTotalItem,
 } from 'devextreme-vue/data-grid';
+import { orders } from './data.js';
 
-import service from './data.js';
+const selectedRowKeys = [1, 4, 7];
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxPaging,
-    DxSelection,
-    DxSummary,
-    DxTotalItem,
-  },
-  data() {
-    return {
-      orders: service.getOrders(),
-    };
-  },
-  methods: {
-    calculateSelectedRow(options) {
-      if (options.name === 'SelectedRowsSummary') {
-        if (options.summaryProcess === 'start') {
-          options.totalValue = 0;
-        } else if (options.summaryProcess === 'calculate') {
-          if (options.component.isRowSelected(options.value.ID)) {
-            options.totalValue += options.value.SaleAmount;
-          }
-        }
-      }
-    },
-    onSelectionChanged(e) {
-      e.component.refresh(true);
-    },
-  },
+const calculateSelectedRow = (options) => {
+  if (options.name === 'SelectedRowsSummary') {
+    if (options.summaryProcess === 'start') {
+      options.totalValue = 0;
+    }
+
+    const isRowSelected = options.component.isRowSelected(options.value?.ID);
+
+    if (options.summaryProcess === 'calculate' && isRowSelected) {
+      options.totalValue += options.value.SaleAmount;
+    }
+  }
+};
+
+const onSelectionChanged = (e) => {
+  e.component.refresh(true);
 };
 </script>
 <style scoped>

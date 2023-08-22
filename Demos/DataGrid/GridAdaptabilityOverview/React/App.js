@@ -3,17 +3,15 @@ import DataGrid, {
   Column, Editing, Grouping, GroupPanel, Pager, Paging, ColumnChooser,
 } from 'devextreme-react/data-grid';
 
-import service from './data.js';
+import { orders } from './data.js';
 
 const allowedPageSizes = [5, 8, 15, 30];
-
-const dataSource = service.getOrders();
 
 const App = () => (
   <div>
     <DataGrid
       id="gridContainer"
-      dataSource={dataSource}
+      dataSource={orders}
       keyExpr="ID"
       columnHidingEnabled={true}
       width="100%"

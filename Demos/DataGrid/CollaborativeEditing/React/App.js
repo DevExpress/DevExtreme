@@ -7,7 +7,7 @@ import Grid from './Grid.js';
 
 const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore/';
 const url = `${BASE_PATH}api/DataGridCollaborativeEditing`;
-const groupId = new Guid().toJSON();
+const groupId = new Guid().toString();
 
 const createStore = () => AspNetData.createStore({
   key: 'ID',

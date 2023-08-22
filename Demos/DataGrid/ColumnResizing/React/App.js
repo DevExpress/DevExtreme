@@ -2,7 +2,7 @@ import React from 'react';
 import DataGrid from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 
-import orders from './data.js';
+import { orders } from './data.js';
 
 const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 const resizingModes = ['nextColumn', 'widget'];

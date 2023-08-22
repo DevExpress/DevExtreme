@@ -38,61 +38,51 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { DxDataGrid, DxColumn, DxExport } from 'devextreme-vue/data-grid';
-import { Workbook } from 'exceljs';
-import { saveAs } from 'file-saver-es';
+import { Anchor, Workbook } from 'exceljs';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
+import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme/excel_exporter';
-import service from './data.js';
+import { employees } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid, DxColumn, DxExport,
-  },
-  data() {
-    return {
-      employees: service.getEmployees(),
-    };
-  },
-  methods: {
-    onExporting(e) {
-      const workbook = new Workbook();
-      const worksheet = workbook.addWorksheet('Main sheet');
+const onExporting = (e) => {
+  const workbook = new Workbook();
+  const worksheet = workbook.addWorksheet('Main sheet');
 
-      exportDataGrid({
-        component: e.component,
-        worksheet,
-        autoFilterEnabled: true,
-        topLeftCell: { row: 2, column: 2 },
-        customizeCell: ({ gridCell, excelCell }) => {
-          if (gridCell.rowType === 'data') {
-            if (gridCell.column.dataField === 'Picture') {
-              excelCell.value = undefined;
+  exportDataGrid({
+    component: e.component,
+    worksheet,
+    autoFilterEnabled: true,
+    topLeftCell: { row: 2, column: 2 },
+    customizeCell: ({ gridCell, excelCell }) => {
+      if (gridCell.rowType === 'data') {
+        if (gridCell.column.dataField === 'Picture') {
+          excelCell.value = undefined;
 
-              const image = workbook.addImage({
-                base64: gridCell.value,
-                extension: 'png',
-              });
+          const image = workbook.addImage({
+            base64: gridCell.value,
+            extension: 'png',
+          });
 
-              worksheet.getRow(excelCell.row).height = 90;
-              worksheet.addImage(image, {
-                tl: { col: excelCell.col - 1, row: excelCell.row - 1 },
-                br: { col: excelCell.col, row: excelCell.row },
-              });
-            }
-          }
-        },
-      }).then(() => {
-        workbook.xlsx.writeBuffer().then((buffer) => {
-          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
-        });
-      });
+          worksheet.getRow(excelCell.row).height = 90;
+          worksheet.addImage(image, {
+            // NOTE: casting these objects to the Anchor type manually because of this issue:
+            // https://github.com/exceljs/exceljs/issues/1747
+            tl: { col: excelCell.col - 1, row: excelCell.row - 1 } as Anchor,
+            br: { col: excelCell.col, row: excelCell.row } as Anchor,
+          });
+        }
+      }
     },
-  },
+  }).then(() => {
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
+    });
+  });
+  e.cancel = true;
 };
-
 </script>
 
 <style scoped>

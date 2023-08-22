@@ -4,6 +4,9 @@ window.config = {
     '*.vue': {
       loader: 'vue-loader',
     },
+    '*.ts': {
+      loader: 'demo-ts-loader',
+    },
     '*.svg': {
       loader: 'svg-loader',
     },
@@ -33,6 +36,7 @@ window.config = {
   map: {
     'vue': 'npm:vue/dist/vue.esm-browser.js',
     'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',
+    'demo-ts-loader': 'root:utils/demo-ts-loader.js',
     'svg-loader': 'root:utils/svg-loader.js',
 
     /** signalr */

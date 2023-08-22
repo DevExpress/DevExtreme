@@ -2,9 +2,7 @@ import React from 'react';
 import DataGrid, {
   Column, Selection, Summary, GroupItem, SortByGroupSummaryInfo,
 } from 'devextreme-react/data-grid';
-import service from './data.js';
-
-const orders = service.getOrders();
+import { orders } from './data.js';
 
 const App = () => (
   <DataGrid

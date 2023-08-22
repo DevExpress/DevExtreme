@@ -1,4 +1,4 @@
-const europeanUnion = [{
+export const europeanUnion = [{
   nameAr: 'النمسا',
   nameEn: 'Austria',
   population: 8451900,
@@ -223,9 +223,3 @@ const europeanUnion = [{
   capitalEn: 'London',
   accession: 1973,
 }];
-
-export default {
-  getEuropeanUnion() {
-    return europeanUnion;
-  },
-};

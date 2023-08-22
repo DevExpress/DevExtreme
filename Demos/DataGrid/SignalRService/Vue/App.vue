@@ -53,8 +53,8 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
 import {
   DxDataGrid,
   DxColumn,
@@ -65,43 +65,32 @@ import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import PriceCell from './PriceCell.vue';
 import ChangeCell from './ChangeCell.vue';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    PriceCell,
-    ChangeCell,
-  },
-  data() {
-    return {
-      connectionStarted: false,
-      dataSource: null,
-    };
-  },
-  mounted() {
-    const hubConnection = new HubConnectionBuilder()
-      .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub', {
-        skipNegotiation: true,
-        transport: HttpTransportType.WebSockets,
-      })
-      .build();
+const connectionStarted = ref(false);
+const dataSource = ref<CustomStore | null>(null);
 
-    const store = new CustomStore({
-      load: () => hubConnection.invoke('getAllStocks'),
-      key: 'symbol',
-    });
+onMounted(() => {
+  const hubConnection = new HubConnectionBuilder()
+    .withUrl('https://js.devexpress.com/Demos/NetCore/liveUpdateSignalRHub', {
+      skipNegotiation: true,
+      transport: HttpTransportType.WebSockets,
+    })
+    .build();
 
-    hubConnection
-      .start()
-      .then(() => {
-        hubConnection.on('updateStockPrice', (data) => {
-          store.push([{ type: 'update', key: data.symbol, data }]);
-        });
-        this.dataSource = store;
-        this.connectionStarted = true;
+  const store = new CustomStore({
+    load: () => hubConnection.invoke('getAllStocks'),
+    key: 'symbol',
+  });
+
+  hubConnection
+    .start()
+    .then(() => {
+      hubConnection.on('updateStockPrice', (data) => {
+        store.push([{ type: 'update', key: data.symbol, data }]);
       });
-  },
-};
+      dataSource.value = store;
+      connectionStarted.value = true;
+    });
+});
 </script>
 
 <style>

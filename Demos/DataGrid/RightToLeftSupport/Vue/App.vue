@@ -2,7 +2,7 @@
   <div>
     <DxDataGrid
       id="gridContainer"
-      :data-source="dataSource"
+      :data-source="europeanUnion"
       key-expr="nameEn"
       :rtl-enabled="rtlEnabled"
       :show-borders="true"
@@ -51,13 +51,14 @@
           :input-attr="{ 'aria-label': 'Language' }"
           :value="languages[1]"
           :width="250"
-          @valueChanged="selectLanguage($event)"
+          @valueChanged="onSelectLanguage($event)"
         />
       </div>
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxDataGrid,
   DxColumn,
@@ -65,31 +66,16 @@ import {
   DxSearchPanel,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
+import { europeanUnion } from './data.js';
 
-import service from './data.js';
+const languages = ['Arabic (Right-to-Left direction)', 'English (Left-to-Right direction)'];
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxPaging,
-    DxSearchPanel,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      dataSource: service.getEuropeanUnion(),
-      languages: ['Arabic (Right-to-Left direction)', 'English (Left-to-Right direction)'],
-      placeholder: 'Search...',
-      rtlEnabled: false,
-    };
-  },
-  methods: {
-    selectLanguage(e) {
-      this.rtlEnabled = e.value === this.languages[0];
-      this.placeholder = this.rtlEnabled ? 'بحث' : 'Search...';
-    },
-  },
+const placeholder = ref('Search...');
+const rtlEnabled = ref(false);
+
+const onSelectLanguage = (e) => {
+  rtlEnabled.value = e.value === languages[0];
+  placeholder.value = rtlEnabled.value ? 'بحث' : 'Search...';
 };
 </script>
 <style scoped>

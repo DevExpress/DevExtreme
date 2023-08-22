@@ -5,11 +5,16 @@
   />
 </template>
 
-<script>
+<script setup lang="ts">
 import DxDataGrid from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const getMasterDetailGridDataSource = (id, url) => ({
+const props = defineProps<{
+  id: number
+  url: string
+}>();
+
+const getMasterDetailGridDataSource = (id: number, url: string) => ({
   store: createStore({
     loadUrl: `${url}/OrderDetails`,
     loadParams: { orderID: id },
@@ -18,23 +23,6 @@ const getMasterDetailGridDataSource = (id, url) => ({
     },
   }),
 });
+const dataSource = getMasterDetailGridDataSource(props.id, props.url);
 
-export default {
-  components: { DxDataGrid },
-  props: {
-    id: {
-      type: Number,
-      default: () => 0,
-    },
-    url: {
-      type: String,
-      default: () => '',
-    },
-  },
-  data() {
-    return {
-      dataSource: getMasterDetailGridDataSource(this.id, this.url),
-    };
-  },
-};
 </script>

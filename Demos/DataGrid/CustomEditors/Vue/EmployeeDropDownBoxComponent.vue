@@ -1,6 +1,6 @@
 <template>
   <DxDropDownBox
-    :ref="dropDownBoxRefName"
+    ref="dropDownBoxRef"
     :drop-down-options="dropDownOptions"
     :input-attr="{ 'aria-label': 'Owner' }"
     :data-source="dataSource"
@@ -19,7 +19,6 @@
         :on-selection-changed="onSelectionChanged"
         :focused-row-enabled="true"
         :focused-row-key="currentValue"
-        key-expr="ID"
       >
         <DxColumn data-field="FullName"/>
         <DxColumn data-field="Title"/>
@@ -34,8 +33,8 @@
     </template>
   </DxDropDownBox>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxDataGrid,
   DxPaging,
@@ -44,47 +43,26 @@ import {
   DxColumn,
 } from 'devextreme-vue/data-grid';
 import DxDropDownBox from 'devextreme-vue/drop-down-box';
+import CustomStore from 'devextreme/data/custom_store';
 
-const dropDownBoxRefName = 'dropDownBoxRef';
+const props = defineProps<{
+  value: number,
+  // eslint-disable-next-line no-unused-vars
+  onValueChanged(value: number): void,
+  dataSource: CustomStore,
+}>();
 
-export default {
-  components: {
-    DxDataGrid,
-    DxPaging,
-    DxSelection,
-    DxScrolling,
-    DxColumn,
-    DxDropDownBox,
-  },
-  props: {
-    value: {
-      type: Number,
-      default: null,
-    },
-    onValueChanged: {
-      type: Function,
-      default: () => function() {},
-    },
-    dataSource: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  data() {
-    return {
-      currentValue: this.value,
-      dropDownOptions: { width: 500 },
-      dropDownBoxRefName,
-    };
-  },
-  methods: {
-    onSelectionChanged(selectionChangedArgs) {
-      this.currentValue = selectionChangedArgs.selectedRowKeys[0];
-      this.onValueChanged(this.currentValue);
-      if (selectionChangedArgs.selectedRowKeys.length > 0) {
-        this.$refs[dropDownBoxRefName].instance.close();
-      }
-    },
-  },
+const currentValue = ref(props.value);
+const dropDownBoxRef = ref<DxDropDownBox | null>(null);
+const dropDownOptions = { width: 500 };
+
+const onSelectionChanged = (selectionChangedArgs) => {
+  currentValue.value = selectionChangedArgs.selectedRowKeys[0];
+
+  props.onValueChanged(currentValue.value);
+
+  if (selectionChangedArgs.selectedRowKeys.length > 0) {
+    dropDownBoxRef.value!.instance!.close();
+  }
 };
 </script>

@@ -54,32 +54,19 @@
         />
       </DxColumn>
     </DxColumn>
-    <template #headerTemplate="{ data }">
+    <template #headerTemplate>
       <div>Area, km<sup>2</sup></div>
     </template>
   </DxDataGrid>
 </template>
 
-<script>
-
+<script setup lang="ts">
 import DxDataGrid, { DxColumn, DxColumnChooser } from 'devextreme-vue/data-grid';
 import { countries } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxColumnChooser,
-  },
-  data() {
-    return {
-      countries,
-      gdpFormat: {
-        type: 'percent',
-        precision: 1,
-      },
-    };
-  },
+const gdpFormat = {
+  type: 'percent',
+  precision: 1,
 };
 </script>
 

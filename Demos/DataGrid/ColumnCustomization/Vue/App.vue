@@ -46,34 +46,18 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid,
   DxColumn,
   DxColumnChooser,
   DxColumnFixing,
 } from 'devextreme-vue/data-grid';
+import { employees } from './data.js';
 
-import service from './data.js';
-
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxColumnChooser,
-    DxColumnFixing,
-  },
-  data() {
-    return {
-      employees: service.getEmployees(),
-    };
-  },
-  methods: {
-    calculateCellValue(data) {
-      return [data.Title, data.FirstName, data.LastName].join(' ');
-    },
-  },
-};
+function calculateCellValue(data) {
+  return [data.Title, data.FirstName, data.LastName].join(' ');
+}
 </script>
 <style scoped>
 #gridContainer {

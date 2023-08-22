@@ -5,18 +5,8 @@
     data-source="../../../../data/customers.json"
   />
 </template>
-<script>
-
+<script setup lang="ts">
 import DxDataGrid from 'devextreme-vue/data-grid';
 
-export default {
-  components: {
-    DxDataGrid,
-  },
-  data() {
-    return {
-      columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax'],
-    };
-  },
-};
+const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 </script>

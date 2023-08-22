@@ -6,11 +6,11 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import { employees } from './data.js';
 
-const contentReady = (e) => {
+const onContentReady = (e) => {
   if (!e.component.getSelectedRowKeys().length) { e.component.selectRowsByIndexes(0); }
 };
 
-const selectionChanged = (e) => {
+const onSelectionChanged = (e) => {
   e.component.collapseAll(-1);
   e.component.expandRow(e.currentSelectedRowKeys[0]);
 };
@@ -30,8 +30,8 @@ const App = () => (
     id="grid-container"
     dataSource={employees}
     keyExpr="ID"
-    onSelectionChanged={selectionChanged}
-    onContentReady={contentReady}
+    onSelectionChanged={onSelectionChanged}
+    onContentReady={onContentReady}
     showBorders={true}
   >
     <Selection mode="single" />

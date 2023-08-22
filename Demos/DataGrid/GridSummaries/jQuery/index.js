@@ -34,8 +34,8 @@ $(() => {
       }, {
         column: 'OrderDate',
         summaryType: 'min',
-        customizeText(data) {
-          return `First: ${DevExpress.localization.formatDate(data.value, 'MMM dd, yyyy')}`;
+        customizeText(itemInfo) {
+          return `First: ${DevExpress.localization.formatDate(itemInfo.value, 'MMM dd, yyyy')}`;
         },
       }, {
         column: 'SaleAmount',

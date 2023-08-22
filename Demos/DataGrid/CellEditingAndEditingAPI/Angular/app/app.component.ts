@@ -38,7 +38,7 @@ export class AppComponent {
     this.states = service.getStates();
   }
 
-  selectionChanged(data: any) {
+  onSelectionChanged(data: any) {
     this.selectedItemKeys = data.selectedRowKeys;
   }
 
@@ -47,15 +47,6 @@ export class AppComponent {
       this.dataSource.remove(key);
     });
     this.dataGrid.instance.refresh();
-  }
-
-  onToolbarPreparing(e) {
-    e.toolbarOptions.items[0].showText = 'always';
-
-    e.toolbarOptions.items.push({
-      location: 'after',
-      template: 'deleteButton',
-    });
   }
 }
 

@@ -17,42 +17,26 @@
         <span>Column resizing mode: </span>
         <DxSelectBox
           :items="resizingModes"
-          :value="currentMode"
+          v-model:value="currentMode"
           :input-attr="{ 'aria-label': 'Column Resizing Mode' }"
           :width="250"
-          :on-value-changed="changeResizingMode"
         />
       </div>
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxDataGrid,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
+import { orders } from './data.js';
 
-import orders from './data.js';
+const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+const resizingModes = ['nextColumn', 'widget'];
+const currentMode = ref('nextColumn');
 
-export default {
-  components: {
-    DxSelectBox,
-    DxDataGrid,
-  },
-  data() {
-    return {
-      orders,
-      columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax'],
-      resizingModes: ['nextColumn', 'widget'],
-      currentMode: 'nextColumn',
-    };
-  },
-  methods: {
-    changeResizingMode(data) {
-      this.currentMode = data.value;
-    },
-  },
-};
 </script>
 <style scoped>
 #orders {

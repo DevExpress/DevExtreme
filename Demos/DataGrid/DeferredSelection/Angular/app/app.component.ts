@@ -50,23 +50,21 @@ export class AppComponent implements AfterViewInit {
     this.calculateStatistics();
   }
 
-  calculateStatistics() {
-    this.dataGrid.instance.getSelectedRowsData().then((rowData) => {
-      let commonDuration = 0;
+  async calculateStatistics() {
+    const selectedItems = await this.dataGrid.instance.getSelectedRowsData();
 
-      for (let i = 0; i < rowData.length; i++) {
-        commonDuration += rowData[i].Task_Due_Date - rowData[i].Task_Start_Date;
-      }
-      commonDuration /= this.MILLISECONDS_IN_DAY;
+    const totalDuration = selectedItems.reduce((currentValue, item) => {
+      const duration = item.Task_Due_Date - item.Task_Start_Date;
 
-      this.taskCount = rowData.length;
-      this.peopleCount = query(rowData)
-        .groupBy('ResponsibleEmployee.Employee_Full_Name')
-        .toArray()
-        .length;
+      return currentValue + duration;
+    }, 0);
+    const averageDurationInDays = totalDuration / this.MILLISECONDS_IN_DAY / selectedItems.length;
 
-      this.avgDuration = Math.round(commonDuration / rowData.length) || 0;
-    });
+    this.taskCount = selectedItems.length;
+    this.peopleCount = query(selectedItems)
+      .groupBy('ResponsibleEmployee.Employee_Full_Name')
+      .toArray().length;
+    this.avgDuration = Math.round(averageDurationInDays) || 0;
   }
 }
 

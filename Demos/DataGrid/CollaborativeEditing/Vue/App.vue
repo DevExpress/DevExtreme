@@ -10,7 +10,7 @@
     />
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import Guid from 'devextreme/core/guid';
@@ -18,7 +18,7 @@ import Grid from './Grid.vue';
 
 const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore/';
 const url = `${BASE_PATH}api/DataGridCollaborativeEditing/`;
-const groupId = new Guid().toJSON();
+const groupId = new Guid().toString();
 
 const createStore = () => AspNetData.createStore({
   key: 'ID',
@@ -37,18 +37,6 @@ const store2 = createStore();
 const updateStores = (events) => {
   store1.push(events);
   store2.push(events);
-};
-
-export default {
-  components: {
-    Grid,
-  },
-  data() {
-    return {
-      store1,
-      store2,
-    };
-  },
 };
 
 const hubUrl = `${BASE_PATH}dataGridCollaborativeEditingHub?GroupId=${groupId}`;

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import Guid from 'devextreme/core/guid';
-import CustomStore from 'devextreme/data/custom_store';
 import { Subject } from 'rxjs';
 
 const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore/';

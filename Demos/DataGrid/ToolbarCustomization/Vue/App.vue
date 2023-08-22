@@ -1,12 +1,12 @@
 <template>
   <DxDataGrid
     id="gridContainer"
-    :ref="gridRefName"
+    ref="dataGridRef"
     :data-source="orders"
     key-expr="ID"
     :show-borders="true"
   >
-    <DxGrouping :auto-expand-all="expanded"/>
+    <DxGrouping :auto-expand-all="expandAll"/>
     <DxColumnChooser :enabled="true"/>
     <DxLoadPanel :enabled="true"/>
     <DxColumn
@@ -64,14 +64,14 @@
         display-expr="text"
         value-expr="value"
         value="CustomerStoreState"
-        @value-changed="groupChanged"
+        @value-changed="toggleGroupColumn"
       />
     </template>
     <template #collapseTemplate>
       <DxButton
-        :text="expanded ? 'Collapse All' : 'Expand All'"
+        :text="expandAll ? 'Collapse All' : 'Expand All'"
         width="136"
-        @click="collapseAllClick"
+        @click="toggleExpandAll"
       />
     </template>
     <template #refreshTemplate>
@@ -82,7 +82,8 @@
     </template>
   </DxDataGrid>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxDataGrid,
   DxColumn,
@@ -95,56 +96,37 @@ import {
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxButton } from 'devextreme-vue/button';
 import query from 'devextreme/data/query';
-import service from './data.js';
+import { orders } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxGrouping,
-    DxColumnChooser,
-    DxLoadPanel,
-    DxToolbar,
-    DxItem,
-    DxSelectBox,
-    DxButton,
-  },
-  data() {
-    return {
-      orders: service.getOrders(),
-      gridRefName: 'dataGrid',
-      expanded: true,
-      totalCount: 0,
-      groupingValues: [{
-        value: 'CustomerStoreState',
-        text: 'Grouping by State',
-      }, {
-        value: 'Employee',
-        text: 'Grouping by Employee',
-      }],
-    };
-  },
-  created() {
-    this.totalCount = this.getGroupCount('CustomerStoreState');
-  },
-  methods: {
-    getGroupCount(groupField) {
-      return query(this.orders)
-        .groupBy(groupField)
-        .toArray().length;
-    },
-    groupChanged(e) {
-      this.$refs[this.gridRefName].instance.clearGrouping();
-      this.$refs[this.gridRefName].instance.columnOption(e.value, 'groupIndex', 0);
-      this.totalCount = this.getGroupCount(e.value);
-    },
-    collapseAllClick() {
-      this.expanded = !this.expanded;
-    },
-    refreshDataGrid() {
-      this.$refs[this.gridRefName].instance.refresh();
-    },
-  },
+const getGroupCount = (groupField) => query(orders)
+  .groupBy(groupField)
+  .toArray().length;
+
+const dataGridRef = ref<DxDataGrid | null>(null);
+const expandAll = ref(true);
+const totalCount = ref(getGroupCount('CustomerStoreState'));
+
+const groupingValues = [{
+  value: 'CustomerStoreState',
+  text: 'Grouping by State',
+}, {
+  value: 'Employee',
+  text: 'Grouping by Employee',
+}];
+
+const toggleGroupColumn = (e) => {
+  dataGridRef.value!.instance!.clearGrouping();
+  dataGridRef.value!.instance!.columnOption(e.value, 'groupIndex', 0);
+
+  totalCount.value = getGroupCount(e.value);
+};
+
+const toggleExpandAll = () => {
+  expandAll.value = !expandAll.value;
+};
+
+const refreshDataGrid = () => {
+  dataGridRef.value!.instance!.refresh();
 };
 </script>
 <style scoped>

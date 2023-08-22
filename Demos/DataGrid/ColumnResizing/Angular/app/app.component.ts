@@ -28,10 +28,6 @@ export class AppComponent {
     this.customers = service.getCustomers();
     this.columnResizingMode = this.resizingModes[0];
   }
-
-  selectResizing(data) {
-    this.columnResizingMode = data.value;
-  }
 }
 
 @NgModule({

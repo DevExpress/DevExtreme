@@ -4,15 +4,13 @@ import DataGrid, {
   Sorting,
   Paging,
 } from 'devextreme-react/data-grid';
-import service from './data.js';
+import { weekData } from './data.js';
 import DiffCell from './DiffCell.js';
 import ChartCell from './ChartCell.js';
 
-const dataSource = service.getWeekData();
-
 const App = () => (
   <DataGrid id="gridContainer"
-    dataSource={dataSource}
+    dataSource={weekData}
     keyExpr="date"
     showRowLines={true}
     showColumnLines={false}

@@ -1,26 +1,15 @@
 <template>
   <DxDataGrid
     id="grid"
-    :data-source="dataSource"
+    :data-source="orders"
     key-expr="OrderNumber"
     :show-borders="true"
   />
 </template>
-<script>
-
+<script setup lang="ts">
 import DxDataGrid from 'devextreme-vue/data-grid';
 import { orders } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-  },
-  data() {
-    return {
-      dataSource: orders,
-    };
-  },
-};
 </script>
 <style>
 #grid {

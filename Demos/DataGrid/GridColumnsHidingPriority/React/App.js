@@ -1,14 +1,12 @@
 import React from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 
-import service from './data.js';
-
-const dataSource = service.getOrders();
+import { orders } from './data.js';
 
 const App = () => (
   <DataGrid
     id="gridContainer"
-    dataSource={dataSource}
+    dataSource={orders}
     keyExpr="ID"
     showBorders={true}
   >

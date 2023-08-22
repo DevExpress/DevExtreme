@@ -35,7 +35,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxCheckBox from 'devextreme-vue/check-box';
 import {
   DxDataGrid,
@@ -47,23 +48,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import { customers } from './data.js';
 
-export default {
-  components: {
-    DxCheckBox,
-    DxColumn,
-    DxGroupPanel,
-    DxGrouping,
-    DxPaging,
-    DxSearchPanel,
-    DxDataGrid,
-  },
-  data() {
-    return {
-      autoExpandAll: true,
-      customers,
-    };
-  },
-};
+const autoExpandAll = ref(true);
 </script>
 <style scoped>
 .options {

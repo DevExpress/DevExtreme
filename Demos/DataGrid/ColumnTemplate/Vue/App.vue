@@ -34,22 +34,10 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
+import { employees } from './data.js';
 
-import service from './data.js';
-
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-  },
-  data() {
-    return {
-      employees: service.getEmployees(),
-    };
-  },
-};
 </script>
 <style scoped>
 #gridContainer {

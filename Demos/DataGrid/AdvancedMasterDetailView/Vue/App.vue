@@ -22,34 +22,20 @@
   </DxDataGrid>
 </template>
 
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid,
   DxColumn,
   DxPaging,
   DxMasterDetail,
 } from 'devextreme-vue/data-grid';
-
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import MasterDetail from './MasterDetail.vue';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxPaging,
-    DxMasterDetail,
-    MasterDetail,
-  },
-  data() {
-    return {
-      suppliersData: createStore({
-        key: 'SupplierID',
-        loadUrl: `${url}/GetSuppliers`,
-      }),
-    };
-  },
-};
+const suppliersData = createStore({
+  key: 'SupplierID',
+  loadUrl: `${url}/GetSuppliers`,
+});
 </script>

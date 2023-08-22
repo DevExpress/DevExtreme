@@ -61,33 +61,17 @@
     </DxSummary>
   </DxDataGrid>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid, DxScrolling, DxColumn, DxGrouping, DxGroupPanel,
   DxSummary, DxGroupItem, DxRemoteOperations,
 } from 'devextreme-vue/data-grid';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxRemoteOperations,
-    DxScrolling,
-    DxGrouping,
-    DxGroupPanel,
-    DxSummary,
-    DxGroupItem,
-  },
-  data() {
-    return {
-      dataSource: AspNetData.createStore({
-        key: 'Id',
-        loadUrl: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/Sales',
-      }),
-    };
-  },
-};
+const dataSource = AspNetData.createStore({
+  key: 'Id',
+  loadUrl: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/Sales',
+});
 </script>
 <style>
 #gridContainer {

@@ -18,24 +18,16 @@
     </DxSparkline>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxSparkline,
   DxSize,
   DxTooltip,
 } from 'devextreme-vue/sparkline';
 
-export default {
-  components: {
-    DxSparkline,
-    DxSize,
-    DxTooltip,
-  },
-  props: {
-    cellData: {
-      type: Array,
-      default: () => [],
-    },
-  },
-};
+withDefaults(defineProps<{
+  cellData?: any[]
+}>(), {
+  cellData: () => [],
+});
 </script>

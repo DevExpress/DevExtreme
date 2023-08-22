@@ -1,11 +1,9 @@
 import React from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 
-import service from './data.js';
+import { employees } from './data.js';
 
 const cellRender = (data) => (<img src={data.value} />);
-
-const employees = service.getEmployees();
 
 const App = () => (
   <DataGrid

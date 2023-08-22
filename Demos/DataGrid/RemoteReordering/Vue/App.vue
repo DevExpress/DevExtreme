@@ -39,7 +39,7 @@
     <DxColumn data-field="Subject"/>
   </DxDataGrid>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid, DxColumn, DxLookup, DxScrolling, DxRowDragging, DxSorting,
 } from 'devextreme-vue/data-grid';
@@ -64,33 +64,16 @@ const employeesStore = createStore({
   },
 });
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxLookup,
-    DxScrolling,
-    DxRowDragging,
-    DxSorting,
-  },
-  data() {
-    return {
-      tasksStore,
-      employeesStore,
-    };
-  },
-  methods: {
-    onReorder(e) {
-      e.promise = this.processReorder(e);
-    },
-
-    async processReorder(e) {
-      const visibleRows = e.component.getVisibleRows();
-      const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
-
-      await tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex });
-      await e.component.refresh();
-    },
-  },
+const onReorder = (e) => {
+  e.promise = processReorder(e);
 };
+
+const processReorder = async(e) => {
+  const visibleRows = e.component.getVisibleRows();
+  const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
+
+  await tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex });
+  await e.component.refresh();
+};
+
 </script>

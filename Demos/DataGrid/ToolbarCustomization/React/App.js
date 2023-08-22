@@ -6,7 +6,7 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 
 import query from 'devextreme/data/query';
-import service from './data.js';
+import { orders } from './data.js';
 
 const countLabel = { 'aria-label': 'Count' };
 const groupingValues = [{
@@ -17,27 +17,27 @@ const groupingValues = [{
   text: 'Grouping by Employee',
 }];
 
-const orders = service.getOrders();
-
 const getGroupCount = (groupField) => query(orders).groupBy(groupField).toArray().length;
 
 const App = () => {
-  const [expanded, setExpanded] = React.useState(true);
+  const [expandAll, setExpandAll] = React.useState(true);
   const [totalCount, setTotalCount] = React.useState(getGroupCount('CustomerStoreState'));
-  const [grouping, setGrouping] = React.useState('CustomerStoreState');
+  const [groupColumn, setGroupColumn] = React.useState('CustomerStoreState');
   const dataGridRef = React.useRef(null);
 
-  const groupChanged = React.useCallback((e) => {
+  const toggleGroupColumn = React.useCallback((e) => {
     const newGrouping = e.value;
+
     dataGridRef.current.instance.clearGrouping();
     dataGridRef.current.instance.columnOption(newGrouping, 'groupIndex', 0);
+
     setTotalCount(getGroupCount(newGrouping));
-    setGrouping(newGrouping);
+    setGroupColumn(newGrouping);
   }, []);
 
-  const collapseAllClick = React.useCallback(() => {
-    setExpanded(!expanded);
-  }, [expanded]);
+  const toggleExpandAll = React.useCallback(() => {
+    setExpandAll(!expandAll);
+  }, [expandAll]);
 
   const refreshDataGrid = React.useCallback(() => {
     dataGridRef.current.instance.refresh();
@@ -50,7 +50,7 @@ const App = () => {
       dataSource={orders}
       keyExpr="ID"
       showBorders={true}>
-      <Grouping autoExpandAll={expanded} />
+      <Grouping autoExpandAll={expandAll} />
       <ColumnChooser enabled={true} />
       <LoadPanel enabled={true} />
       <Column dataField="OrderNumber" caption="Invoice Number" />
@@ -73,14 +73,14 @@ const App = () => {
             displayExpr="text"
             inputAttr={countLabel}
             valueExpr="value"
-            value={grouping}
-            onValueChanged={groupChanged} />
+            value={groupColumn}
+            onValueChanged={toggleGroupColumn} />
         </Item>
         <Item location="before">
           <Button
-            text={expanded ? 'Collapse All' : 'Expand All'}
+            text={expandAll ? 'Collapse All' : 'Expand All'}
             width='136'
-            onClick={collapseAllClick} />
+            onClick={toggleExpandAll} />
         </Item>
         <Item location="after">
           <Button

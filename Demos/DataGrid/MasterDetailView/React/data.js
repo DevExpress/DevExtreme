@@ -1,4 +1,4 @@
-const employees = [{
+export const employees = [{
   ID: 1,
   Prefix: 'Mr.',
   FirstName: 'John',
@@ -80,7 +80,7 @@ const employees = [{
   BirthDate: '1972/09/11',
 }];
 
-const tasks = [{
+export const tasks = [{
   ID: 1,
   Subject: 'Prepare 2013 Financial',
   StartDate: '2013/01/15',
@@ -450,12 +450,3 @@ const tasks = [{
   Completion: 25,
   EmployeeID: 6,
 }];
-
-export default {
-  getEmployees() {
-    return employees;
-  },
-  getTasks() {
-    return tasks;
-  },
-};

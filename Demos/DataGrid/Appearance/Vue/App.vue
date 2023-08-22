@@ -67,27 +67,16 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import service from './data.js';
+import { employees } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxCheckBox,
-  },
-  data() {
-    return {
-      employees: service.getEmployees(),
-      showColumnLines: false,
-      showRowLines: true,
-      showBorders: true,
-      rowAlternationEnabled: true,
-    };
-  },
-};
+const showColumnLines = ref(false);
+const showRowLines = ref(true);
+const showBorders = ref(true);
+const rowAlternationEnabled = ref(true);
 </script>
 <style scoped>
 .options {

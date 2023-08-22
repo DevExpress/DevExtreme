@@ -82,7 +82,8 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxDataGrid, {
   DxColumn, DxEditing, DxValidationRule, DxButton, DxToolbar, DxItem, DxScrolling,
 } from 'devextreme-vue/data-grid';
@@ -90,50 +91,32 @@ import DxSelectBox from 'devextreme-vue/select-box';
 import Guid from 'devextreme/core/guid';
 import { dataSource } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxEditing,
-    DxValidationRule,
-    DxButton,
-    DxToolbar,
-    DxItem,
-    DxScrolling,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      dataSource,
-      newRowPosition: 'viewportTop',
-      scrollingMode: 'standard',
-      changes: [],
-      editRowKey: null,
-      newRowPositionOptions: ['first', 'last', 'pageTop', 'pageBottom', 'viewportTop', 'viewportBottom'],
-      scrollingModeOptions: ['standard', 'virtual'],
-    };
-  },
-  methods: {
-    onAddButtonClick(e) {
-      const key = new Guid().toString();
-      this.changes = [{
-        key,
-        type: 'insert',
-        insertAfterKey: e.row.key,
-      }];
-      this.editRowKey = key;
-    },
-    isAddButtonVisible({ row }) {
-      return !row.isEditing;
-    },
-    onRowInserted(e) {
-      e.component.navigateToRow(e.key);
-    },
-  },
+const newRowPositionOptions = ['first', 'last', 'pageTop', 'pageBottom', 'viewportTop', 'viewportBottom'];
+const scrollingModeOptions = ['standard', 'virtual'];
+
+const newRowPosition = ref('viewportTop');
+const scrollingMode = ref('standard');
+const changes = ref<any[]>([]);
+const editRowKey = ref<string | null>(null);
+
+const onAddButtonClick = (e) => {
+  const key = new Guid().toString();
+
+  changes.value = [{
+    key,
+    type: 'insert',
+    insertAfterKey: e.row.key,
+  }];
+  editRowKey.value = key;
+};
+
+const isAddButtonVisible = ({ row }) => !row.isEditing;
+
+const onRowInserted = (e) => {
+  e.component.navigateToRow(e.key);
 };
 </script>
-
-<style>
+<style scoped>
 #gridContainer {
   height: 440px;
 }

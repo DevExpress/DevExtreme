@@ -1,6 +1,6 @@
 <template>
   <DxDataGrid
-    :data-source="dataSource"
+    :data-source="store"
     :show-borders="true"
     :remote-operations="true"
   >
@@ -36,17 +36,14 @@
     />
   </DxDataGrid>
 </template>
-<script>
-
+<script setup lang="ts">
 import {
   DxDataGrid, DxColumn, DxPaging, DxPager,
 } from 'devextreme-vue/data-grid';
 import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';
 
-function isNotEmpty(value) {
-  return value !== undefined && value !== null && value !== '';
-}
+const isNotEmpty = (value: any): boolean => value !== undefined && value !== null && value !== '';
 
 const store = new CustomStore({
   key: 'OrderNumber',
@@ -63,9 +60,12 @@ const store = new CustomStore({
       'group',
       'groupSummary',
     ].forEach((i) => {
-      if (i in loadOptions && isNotEmpty(loadOptions[i])) { params += `${i}=${JSON.stringify(loadOptions[i])}&`; }
+      if (i in loadOptions && isNotEmpty(loadOptions[i])) {
+        params += `${i}=${JSON.stringify(loadOptions[i])}&`;
+      }
     });
     params = params.slice(0, -1);
+
     return fetch(`https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders${params}`)
       .then((response) => response.json())
       .then((data) => ({
@@ -77,18 +77,4 @@ const store = new CustomStore({
       .catch(() => { throw new Error('Data Loading Error'); });
   },
 });
-
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxPaging,
-    DxPager,
-  },
-  data() {
-    return {
-      dataSource: store,
-    };
-  },
-};
 </script>

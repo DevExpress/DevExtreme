@@ -3,14 +3,14 @@
   [dataSource]="employees"
   [showBorders]="true"
   keyExpr="ID"
-  (onRowValidating)="rowValidating($event)"
-  (onEditorPreparing)="editorPreparing($event)"
+  (onRowValidating)="onRowValidating($event)"
+  (onEditorPreparing)="onEditorPreparing($event)"
 >
   <dxo-paging [enabled]="false"></dxo-paging>
   <dxo-editing
     mode="row"
     [allowUpdating]="true"
-    [allowDeleting]="allowDeleting"
+    [allowDeleting]="isDeleteIconVisible"
     [useIcons]="true"
   ></dxo-editing>
 
@@ -22,7 +22,7 @@
       icon="copy"
       [visible]="isCloneIconVisible"
       [disabled]="isCloneIconDisabled"
-      [onClick]="cloneIconClick"
+      [onClick]="onCloneIconClick"
     ></dxi-button>
   </dxi-column>
   <dxi-column dataField="Prefix" caption="Title"></dxi-column>

@@ -1,4 +1,4 @@
-const weekData = [{
+export const weekData = [{
   date: new Date('2013/12/23'),
   open: {
     value: 3563.19,
@@ -1811,9 +1811,3 @@ const weekData = [{
     date: new Date('2013/01/11'),
   }],
 }];
-
-export default {
-  getWeekData() {
-    return weekData;
-  },
-};

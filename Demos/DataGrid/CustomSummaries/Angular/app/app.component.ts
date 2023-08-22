@@ -1,5 +1,5 @@
 import {
-  NgModule, Component, ViewChild, enableProdMode,
+  NgModule, Component, enableProdMode,
 } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -27,10 +27,12 @@ export class AppComponent {
     if (options.name === 'SelectedRowsSummary') {
       if (options.summaryProcess === 'start') {
         options.totalValue = 0;
-      } else if (options.summaryProcess === 'calculate') {
-        if (options.component.isRowSelected(options.value.ID)) {
-          options.totalValue += options.value.SaleAmount;
-        }
+      }
+
+      const isRowSelected = options.component.isRowSelected(options.value?.ID);
+
+      if (options.summaryProcess === 'calculate' && isRowSelected) {
+        options.totalValue += options.value.SaleAmount;
       }
     }
   }

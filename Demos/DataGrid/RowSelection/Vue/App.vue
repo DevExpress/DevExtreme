@@ -42,33 +42,21 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import { DxDataGrid, DxColumn, DxSelection } from 'devextreme-vue/data-grid';
 import { employees } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxSelection,
-  },
-  data() {
-    return {
-      showEmployeeInfo: false,
-      selectedRowNotes: '',
-      selectedRowPicture: '',
-      employees,
-    };
-  },
-  methods: {
-    onSelectionChanged({ selectedRowsData }) {
-      const data = selectedRowsData[0];
+const showEmployeeInfo = ref(false);
+const selectedRowNotes = ref('');
+const selectedRowPicture = ref('');
 
-      this.showEmployeeInfo = !!data;
-      this.selectedRowNotes = data && data.Notes;
-      this.selectedRowPicture = data && data.Picture;
-    },
-  },
+const onSelectionChanged = ({ selectedRowsData }) => {
+  const data = selectedRowsData[0];
+
+  showEmployeeInfo.value = !!data;
+  selectedRowNotes.value = data?.Notes;
+  selectedRowPicture.value = data?.Picture;
 };
 </script>
 <style scoped>

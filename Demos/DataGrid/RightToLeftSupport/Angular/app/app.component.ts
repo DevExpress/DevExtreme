@@ -32,7 +32,7 @@ export class AppComponent {
     this.dataSource = service.getEuropeanUnion();
   }
 
-  selectLanguage(data) {
+  onSelectLanguage(data) {
     this.rtlEnabled = data.value === this.languages[0];
     this.placeholder = this.rtlEnabled ? 'بحث' : 'Search...';
   }

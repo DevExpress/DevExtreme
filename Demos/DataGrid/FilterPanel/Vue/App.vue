@@ -27,7 +27,7 @@
       />
       <DxColumn
         :editor-options="{ format: 'currency', showClearButton: true }"
-        :header-filter="{dataSource: saleAmountHeaderFilters}"
+        :header-filter="{ dataSource: saleAmountHeaderFilters }"
         data-field="SaleAmount"
         data-type="number"
         format="currency"
@@ -49,7 +49,7 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid,
   DxColumn,
@@ -59,61 +59,49 @@ import {
   DxFilterBuilderPopup,
   DxScrolling,
 } from 'devextreme-vue/data-grid';
-
 import { orders } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxHeaderFilter,
-    DxFilterPanel,
-    DxFilterRow,
-    DxFilterBuilderPopup,
-    DxScrolling,
-  },
-  data() {
-    const getOrderDay = (rowData) => (new Date(rowData.OrderDate)).getDay();
-
-    return {
-      orders,
-      filterBuilderPopupPosition: {
-        of: window,
-        at: 'top',
-        my: 'top',
-        offset: { y: 10 },
-      },
-      filterBuilder: {
-        customOperations: [{
-          name: 'weekends',
-          caption: 'Weekends',
-          dataTypes: ['date'],
-          icon: 'check',
-          hasValue: false,
-          calculateFilterExpression: () => [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]],
-        }],
-        allowHierarchicalFields: true,
-      },
-      filterValue: [['Employee', '=', 'Clark Morgan'], 'and', ['OrderDate', 'weekends']],
-      saleAmountHeaderFilters: [{
-        text: 'Less than $3000',
-        value: ['SaleAmount', '<', 3000],
-      }, {
-        text: '$3000 - $5000',
-        value: [['SaleAmount', '>=', 3000], ['SaleAmount', '<', 5000]],
-      }, {
-        text: '$5000 - $10000',
-        value: [['SaleAmount', '>=', 5000], ['SaleAmount', '<', 10000]],
-      }, {
-        text: '$10000 - $20000',
-        value: [['SaleAmount', '>=', 10000], ['SaleAmount', '<', 20000]],
-      }, {
-        text: 'Greater than $20000',
-        value: ['SaleAmount', '>=', 20000],
-      }],
-    };
-  },
+const filterBuilderPopupPosition = {
+  of: window,
+  at: 'top',
+  my: 'top',
+  offset: { y: 10 },
 };
+
+const filterBuilder = {
+  customOperations: [{
+    name: 'weekends',
+    caption: 'Weekends',
+    dataTypes: ['date'],
+    icon: 'check',
+    hasValue: false,
+    calculateFilterExpression: () => [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]],
+  }],
+  allowHierarchicalFields: true,
+};
+
+const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['OrderDate', 'weekends']];
+
+const saleAmountHeaderFilters = [
+  {
+    text: 'Less than $3000',
+    value: ['SaleAmount', '<', 3000],
+  }, {
+    text: '$3000 - $5000',
+    value: [['SaleAmount', '>=', 3000], ['SaleAmount', '<', 5000]],
+  }, {
+    text: '$5000 - $10000',
+    value: [['SaleAmount', '>=', 5000], ['SaleAmount', '<', 10000]],
+  }, {
+    text: '$10000 - $20000',
+    value: [['SaleAmount', '>=', 10000], ['SaleAmount', '<', 20000]],
+  }, {
+    text: 'Greater than $20000',
+    value: ['SaleAmount', '>=', 20000],
+  },
+];
+
+const getOrderDay = (rowData) => (new Date(rowData.OrderDate)).getDay();
 </script>
 <style scoped>
 .demo-container {

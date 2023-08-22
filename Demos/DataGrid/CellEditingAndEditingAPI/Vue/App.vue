@@ -5,7 +5,7 @@
       :data-source="dataSource"
       :show-borders="true"
       :selected-row-keys="selectedItemKeys"
-      @selection-changed="selectionChanged"
+      @selection-changed="onSelectionChanged"
     >
       <DxEditing
         :allow-updating="true"
@@ -36,7 +36,7 @@
         caption="State"
       >
         <DxLookup
-          :data-source="states"
+          :data-source="statesRef"
           value-expr="ID"
           display-expr="Name"
         />
@@ -53,7 +53,7 @@
         <DxItem location="after">
           <template #default>
             <DxButton
-              @click="deleteRecords()"
+              @click="deleteRecords"
               :disabled="!selectedItemKeys.length"
               icon="trash"
               text="Delete Selected Records"
@@ -64,7 +64,8 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { ref } from 'vue';
 import {
   DxDataGrid,
   DxColumn,
@@ -75,47 +76,32 @@ import {
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/data-grid';
-
 import { DxButton } from 'devextreme-vue/button';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
-
 import { employees, states } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxPaging,
-    DxEditing,
-    DxSelection,
-    DxLookup,
-    DxButton,
-    DxToolbar,
-    DxItem,
-  },
-  data() {
-    return {
-      dataSource: new DataSource({
-        store: new ArrayStore({
-          data: employees,
-          key: 'ID',
-        }),
-      }),
-      selectedItemKeys: [],
-      states,
-      selectionChanged: (data) => {
-        this.selectedItemKeys = data.selectedRowKeys;
-      },
-      deleteRecords: () => {
-        this.selectedItemKeys.forEach((key) => {
-          this.dataSource.store().remove(key);
-        });
-        this.selectedItemKeys = [];
-        this.dataSource.reload();
-      },
-    };
-  },
+const dataSource = new DataSource({
+  store: new ArrayStore({
+    data: employees,
+    key: 'ID',
+  }),
+});
+
+const selectedItemKeys = ref([]);
+const statesRef = ref(states);
+
+const onSelectionChanged = (data) => {
+  selectedItemKeys.value = data.selectedRowKeys;
+};
+
+const deleteRecords = () => {
+  selectedItemKeys.value.forEach((key) => {
+    dataSource.store().remove(key);
+  });
+
+  selectedItemKeys.value = [];
+  dataSource.reload();
 };
 </script>
 <style>

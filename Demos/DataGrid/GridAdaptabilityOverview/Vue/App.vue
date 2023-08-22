@@ -2,7 +2,7 @@
   <div>
     <DxDataGrid
       id="gridContainer"
-      :data-source="dataSource"
+      :data-source="orders"
       :key-expr="'ID'"
       :column-hiding-enabled="true"
       :width="'100%'"
@@ -59,11 +59,10 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid,
   DxColumn,
-  DxExport,
   DxEditing,
   DxGrouping,
   DxGroupPanel,
@@ -71,26 +70,8 @@ import {
   DxPaging,
   DxColumnChooser,
 } from 'devextreme-vue/data-grid';
-import service from './data.js';
+import { orders } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxExport,
-    DxEditing,
-    DxGrouping,
-    DxGroupPanel,
-    DxPager,
-    DxPaging,
-    DxColumnChooser,
-  },
-  data() {
-    return {
-      dataSource: service.getOrders(),
-    };
-  },
-};
 </script>
 <style scoped>
 #gridContainer {

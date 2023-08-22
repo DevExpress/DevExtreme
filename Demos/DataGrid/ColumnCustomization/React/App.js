@@ -1,9 +1,8 @@
 import React from 'react';
 import DataGrid, { Column, ColumnChooser, ColumnFixing } from 'devextreme-react/data-grid';
 
-import service from './data.js';
+import { employees } from './data.js';
 
-const employees = service.getEmployees();
 const calculateCellValue = (data) => [data.Title, data.FirstName, data.LastName].join(' ');
 
 const App = () => (

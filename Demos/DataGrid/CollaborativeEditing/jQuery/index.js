@@ -1,7 +1,7 @@
 $(() => {
   const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore/';
   const url = `${BASE_PATH}api/DataGridCollaborativeEditing/`;
-  const groupId = new DevExpress.data.Guid().toJSON();
+  const groupId = new DevExpress.data.Guid().toString();
 
   const createStore = function () {
     return DevExpress.data.AspNet.createStore({

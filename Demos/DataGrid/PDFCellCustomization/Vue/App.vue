@@ -60,7 +60,7 @@
     </DxDataGrid>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid,
   DxColumn,
@@ -71,69 +71,50 @@ import {
   DxSortByGroupSummaryInfo,
   DxTotalItem,
 } from 'devextreme-vue/data-grid';
-
-import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
+import { jsPDF } from 'jspdf';
+import { companies } from './data.js';
 
-import service from './data.js';
+const onExporting = (e) => {
+  // eslint-disable-next-line new-cap
+  const doc = new jsPDF();
 
-export default {
-  components: {
-    DxColumn,
-    DxGroupPanel,
-    DxGrouping,
-    DxDataGrid,
-    DxExport,
-    DxSummary,
-    DxSortByGroupSummaryInfo,
-    DxTotalItem,
-  },
-  data() {
-    return {
-      companies: service.getCompanies(),
-    };
-  },
-  methods: {
-    onExporting(e) {
-      // eslint-disable-next-line new-cap
-      const doc = new jsPDF();
-      exportDataGrid({
-        jsPDFDocument: doc,
-        component: e.component,
-        columnWidths: [40, 40, 30, 30, 40],
-        customizeCell({ gridCell, pdfCell }) {
-          if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Phone') {
-            pdfCell.text = pdfCell.text.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-          } else if (gridCell.rowType === 'group') {
-            pdfCell.backgroundColor = '#BEDFE6';
-          } else if (gridCell.rowType === 'totalFooter') {
-            pdfCell.font.style = 'italic';
-          }
-        },
-        customDrawCell(options) {
-          const { gridCell, pdfCell } = options;
-
-          if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Website') {
-            options.cancel = true;
-            doc.setFontSize(11);
-            doc.setTextColor('#0000FF');
-
-            const textHeight = doc.getTextDimensions(pdfCell.text).h;
-            doc.textWithLink('website',
-              options.rect.x + pdfCell.padding.left,
-              options.rect.y + options.rect.h / 2 + textHeight / 2, { url: pdfCell.text });
-          }
-        },
-      }).then(() => {
-        doc.save('Companies.pdf');
-      });
+  exportDataGrid({
+    jsPDFDocument: doc,
+    component: e.component,
+    columnWidths: [40, 40, 30, 30, 40],
+    customizeCell({ gridCell, pdfCell }) {
+      if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Phone') {
+        pdfCell.text = pdfCell.text.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+      } else if (gridCell.rowType === 'group') {
+        pdfCell.backgroundColor = '#BEDFE6';
+      } else if (gridCell.rowType === 'totalFooter') {
+        pdfCell.font.style = 'italic';
+      }
     },
-    phoneNumberFormat(value) {
-      const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/);
+    customDrawCell(options) {
+      const { gridCell, pdfCell } = options;
 
-      return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
+      if (gridCell.rowType === 'data' && gridCell.column.dataField === 'Website') {
+        options.cancel = true;
+        doc.setFontSize(11);
+        doc.setTextColor('#0000FF');
+
+        const textHeight = doc.getTextDimensions(pdfCell.text).h;
+        doc.textWithLink('website',
+          options.rect.x + pdfCell.padding.left,
+          options.rect.y + options.rect.h / 2 + textHeight / 2, { url: pdfCell.text });
+      }
     },
-  },
+  }).then(() => {
+    doc.save('Companies.pdf');
+  });
+};
+
+const phoneNumberFormat = (value) => {
+  const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/);
+
+  return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
 };
 </script>
 

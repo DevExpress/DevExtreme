@@ -4,7 +4,7 @@
       <DxButton
         text="Export multiple grids"
         icon="xlsxfile"
-        @click="exportGrids($event)"
+        @click="exportGrids"
       />
     </div>
     <DxTabPanel
@@ -16,7 +16,7 @@
           <DxDataGrid
             id="priceDataGrid"
             width="100%"
-            :ref="priceGridRefKey"
+            ref="priceGridRef"
             :data-source="priceDataSource"
             :show-borders="true"
             :row-alternation-enabled="true"
@@ -50,7 +50,7 @@
           <DxDataGrid
             id="ratingDataGrid"
             width="100%"
-            :ref="ratingGridRefKey"
+            ref="ratingGridRef"
             :data-source="ratingDataSource"
             :show-borders="true"
             :row-alternation-enabled="true"
@@ -78,98 +78,73 @@
     </DxTabPanel>
   </div>
 </template>
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxButton from 'devextreme-vue/button';
 import DxTabPanel, { DxItem } from 'devextreme-vue/tab-panel';
 import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
 import { Workbook } from 'exceljs';
-import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
+import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme/excel_exporter';
 import 'devextreme/data/odata/store';
 
-const priceGridRefKey = 'priceDataGrid';
-const ratingGridRefKey = 'ratingDataGrid';
+const priceGridRef = ref<DxDataGrid | null>(null);
+const ratingGridRef = ref<DxDataGrid | null>(null);
 
-export default {
-  components: {
-    DxButton,
-    DxTabPanel,
-    DxItem,
-    DxDataGrid,
-    DxColumn,
+const priceDataSource = {
+  store: {
+    type: 'odata',
+    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+    key: 'Product_ID',
   },
-  data() {
-    return {
-      priceGridRefKey,
-      ratingGridRefKey,
-      priceDataSource: {
-        store: {
-          type: 'odata',
-          url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-          key: 'Product_ID',
-        },
-        select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
-        filter: ['Product_ID', '<', 10],
-      },
-      ratingDataSource: {
-        store: {
-          type: 'odata',
-          url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-          key: 'Product_ID',
-        },
-        select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
-        filter: ['Product_ID', '<', 10],
-      },
-    };
+  select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
+  filter: ['Product_ID', '<', 10],
+};
+const ratingDataSource = {
+  store: {
+    type: 'odata',
+    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
+    key: 'Product_ID',
   },
-  computed: {
-    priceGridInstance() {
-      return this.$refs[priceGridRefKey].instance;
-    },
-    ratingGridInstance() {
-      return this.$refs[ratingGridRefKey].instance;
-    },
-  },
-  methods: {
-    exportGrids() {
-      const context = this;
-      const workbook = new Workbook();
-      const priceSheet = workbook.addWorksheet('Price');
-      const ratingSheet = workbook.addWorksheet('Rating');
-
-      priceSheet.getRow(2).getCell(2).value = 'Price';
-      priceSheet.getRow(2).getCell(2).font = { bold: true, size: 16, underline: 'double' };
-
-      ratingSheet.getRow(2).getCell(2).value = 'Rating';
-      ratingSheet.getRow(2).getCell(2).font = { bold: true, size: 16, underline: 'double' };
-
-      exportDataGrid({
-        worksheet: priceSheet,
-        component: context.priceGridInstance,
-        topLeftCell: { row: 4, column: 2 },
-        customizeCell: ({ gridCell, excelCell }) => {
-          setAlternatingRowsBackground(gridCell, excelCell);
-        },
-      }).then(() => exportDataGrid({
-        worksheet: ratingSheet,
-        component: context.ratingGridInstance,
-        topLeftCell: { row: 4, column: 2 },
-        customizeCell: ({ gridCell, excelCell }) => {
-          setAlternatingRowsBackground(gridCell, excelCell);
-        },
-      })).then(() => {
-        workbook.xlsx.writeBuffer().then((buffer) => {
-          saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'MultipleGrids.xlsx');
-        });
-      });
-    },
-  },
+  select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
+  filter: ['Product_ID', '<', 10],
 };
 
-function setAlternatingRowsBackground(gridCell, excelCell) {
+const exportGrids = () => {
+  const workbook = new Workbook();
+  const priceSheet = workbook.addWorksheet('Price');
+  const ratingSheet = workbook.addWorksheet('Rating');
+
+  priceSheet.getRow(2).getCell(2).value = 'Price';
+  priceSheet.getRow(2).getCell(2).font = { bold: true, size: 16, underline: 'double' };
+
+  ratingSheet.getRow(2).getCell(2).value = 'Rating';
+  ratingSheet.getRow(2).getCell(2).font = { bold: true, size: 16, underline: 'double' };
+
+  exportDataGrid({
+    worksheet: priceSheet,
+    component: priceGridRef.value?.instance,
+    topLeftCell: { row: 4, column: 2 },
+    customizeCell: ({ gridCell, excelCell }) => {
+      setAlternatingRowsBackground(gridCell, excelCell);
+    },
+  }).then(() => exportDataGrid({
+    worksheet: ratingSheet,
+    component: ratingGridRef.value?.instance,
+    topLeftCell: { row: 4, column: 2 },
+    customizeCell: ({ gridCell, excelCell }) => {
+      setAlternatingRowsBackground(gridCell, excelCell);
+    },
+  })).then(() => {
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'MultipleGrids.xlsx');
+    });
+  });
+};
+
+const setAlternatingRowsBackground = (gridCell, excelCell) => {
   if (gridCell.rowType === 'header' || gridCell.rowType === 'data') {
     if (excelCell.fullAddress.row % 2 === 0) {
       excelCell.fill = {
@@ -177,7 +152,7 @@ function setAlternatingRowsBackground(gridCell, excelCell) {
       };
     }
   }
-}
+};
 </script>
 
 <style scoped>

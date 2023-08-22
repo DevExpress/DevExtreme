@@ -21,21 +21,13 @@
   </DxTabPanel>
 </template>
 
-<script>
+<script setup lang="ts">
 import { DxTabPanel, DxItem } from 'devextreme-vue/tab-panel';
-
 import OrdersTab from './OrdersTab.vue';
 import AddressTab from './AddressTab.vue';
 
-export default {
-  components: {
-    DxTabPanel, DxItem, OrdersTab, AddressTab,
-  },
-  props: {
-    masterDetailData: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-};
+defineProps<{
+  masterDetailData: any
+}>();
+
 </script>

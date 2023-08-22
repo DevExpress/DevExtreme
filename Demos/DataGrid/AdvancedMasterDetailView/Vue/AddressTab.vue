@@ -14,27 +14,16 @@
   </DxForm>
 </template>
 
-<script>
-
+<script setup lang="ts">
 import { DxForm } from 'devextreme-vue/form';
 
-export default {
-  components: { DxForm },
-  props: {
-    data: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  data() {
-    return {
-      items: ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone'],
-    };
-  },
-  methods: {
-    customizeItem(item) {
-      item.template = 'form-item';
-    },
-  },
+defineProps<{
+  data: object
+}>();
+
+const items = ['Address', 'City', 'Region', 'PostalCode', 'Country', 'Phone'];
+
+const customizeItem = (item) => {
+  item.template = 'form-item';
 };
 </script>

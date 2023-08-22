@@ -3,13 +3,15 @@ import DataGrid, {
   Button, Column, Editing, Lookup,
 } from 'devextreme-react/data-grid';
 
-import service from './data.js';
-
-const states = service.getStates();
+import { employees as defaultEmployees, states, getMaxID } from './data.js';
 
 const isChief = (position) => position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
 
-const allowDeleting = (e) => !isChief(e.row.data.Position);
+const isCloneIconVisible = (e) => !e.row.isEditing;
+
+const isCloneIconDisabled = (e) => isChief(e.row.data.Position);
+
+const isDeleteIconVisible = (e) => !isChief(e.row.data.Position);
 
 const onRowValidating = (e) => {
   const position = e.newData.Position;
@@ -26,15 +28,11 @@ const onEditorPreparing = (e) => {
   }
 };
 
-const isCloneIconVisible = (e) => !e.row.isEditing;
-
-const isCloneIconDisabled = (e) => isChief(e.row.data.Position);
-
 const App = () => {
-  const [employees, setEmployees] = React.useState(service.getEmployees());
+  const [employees, setEmployees] = React.useState(defaultEmployees);
 
-  const cloneIconClick = React.useCallback((e) => {
-    const clonedItem = { ...e.row.data, ID: service.getMaxID() };
+  const onCloneIconClick = React.useCallback((e) => {
+    const clonedItem = { ...e.row.data, ID: getMaxID() };
 
     setEmployees((prevState) => {
       const updatedEmployees = [...prevState];
@@ -56,11 +54,11 @@ const App = () => {
         mode="row"
         useIcons={true}
         allowUpdating={true}
-        allowDeleting={allowDeleting} />
+        allowDeleting={isDeleteIconVisible} />
       <Column type="buttons" width={110}>
         <Button name="edit" />
         <Button name="delete" />
-        <Button hint="Clone" icon="copy" visible={isCloneIconVisible} disabled={isCloneIconDisabled} onClick={cloneIconClick} />
+        <Button hint="Clone" icon="copy" visible={isCloneIconVisible} disabled={isCloneIconDisabled} onClick={onCloneIconClick} />
       </Column>
       <Column dataField="Prefix" caption="Title" />
       <Column dataField="FirstName" />

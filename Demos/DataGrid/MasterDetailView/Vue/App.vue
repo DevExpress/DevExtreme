@@ -2,7 +2,7 @@
   <DxDataGrid
     id="grid-container"
     :show-borders="true"
-    :data-source="dataSource"
+    :data-source="employees"
     key-expr="ID"
   >
     <DxColumn
@@ -35,31 +35,15 @@
     </template>
   </DxDataGrid>
 </template>
-<script>
+<script setup lang="ts">
 import {
   DxDataGrid,
   DxColumn,
   DxMasterDetail,
 } from 'devextreme-vue/data-grid';
-
 import DetailTemplate from './DetailTemplate.vue';
-import service from './data.js';
+import { employees } from './data.js';
 
-const employees = service.getEmployees();
-
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxMasterDetail,
-    DetailTemplate,
-  },
-  data() {
-    return {
-      dataSource: employees,
-    };
-  },
-};
 </script>
 <style>
 #grid-container {

@@ -2,9 +2,7 @@
   <div>
     <DxDataGrid
       id="gridContainer"
-      :ref="dataGridRefName"
       :data-source="dataSource"
-      :columns="columns"
       :show-borders="true"
       :focused-row-enabled="true"
       :auto-navigate-to-focused-row="autoNavigateToFocusedRow"
@@ -12,6 +10,31 @@
       @focused-row-changing="onFocusedRowChanging"
       @focused-row-changed="onFocusedRowChanged"
     >
+      <DxColumn
+        data-field="Task_ID"
+        :width="80"
+      />
+      <DxColumn
+        caption="Start Date"
+        data-field="Task_Start_Date"
+        data-type="date"
+      />
+      <DxColumn
+        caption="Assigned To"
+        data-field="ResponsibleEmployee.Employee_Full_Name"
+        data-type="date"
+        :allow-sorting="false"
+      />
+      <DxColumn
+        caption="Subject"
+        data-field="Task_Subject"
+        :width="350"
+      />
+      <DxColumn
+        caption="Status"
+        data-field="Task_Status"
+      />
+
       <DxPaging :page-size="10"/>
     </DxDataGrid>
 
@@ -36,7 +59,6 @@
           <span>Focused Row Key </span>
           <DxNumberBox
             id="taskId"
-            :ref="taskIdEditorRefName"
             :min="1"
             :max="183"
             :step="0"
@@ -55,106 +77,66 @@
   </div>
 </template>
 
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import 'devextreme/data/odata/store';
-
-import { DxDataGrid, DxPager, DxPaging } from 'devextreme-vue/data-grid';
+import { DxDataGrid, DxColumn, DxPaging } from 'devextreme-vue/data-grid';
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 
-const dataGridRefName = 'dataGrid';
-const taskIdEditorRefName = 'taskIdEditor';
+const taskSubject = ref('');
+const taskDetails = ref('');
+const taskStatus = ref('');
+const taskProgress = ref('');
 
-export default {
-  components: {
-    DxDataGrid,
-    DxPager,
-    DxPaging,
-    DxNumberBox,
-    DxCheckBox,
-  },
-  data() {
-    return {
-      taskIdEditorRefName,
-      dataGridRefName,
-      taskSubject: '',
-      taskDetails: '',
-      taskStatus: '',
-      taskProgress: '',
-      dataSource: {
-        store: {
-          type: 'odata',
-          key: 'Task_ID',
-          url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
-        },
-        expand: 'ResponsibleEmployee',
-        select: [
-          'Task_ID',
-          'Task_Subject',
-          'Task_Start_Date',
-          'Task_Status',
-          'Task_Description',
-          'Task_Completion',
-          'ResponsibleEmployee/Employee_Full_Name',
-        ],
-      },
-      focusedRowKey: 117,
-      autoNavigateToFocusedRow: true,
-      columns: [
-        {
-          dataField: 'Task_ID',
-          width: 80,
-        }, {
-          caption: 'Start Date',
-          dataField: 'Task_Start_Date',
-          dataType: 'date',
-        }, {
-          caption: 'Assigned To',
-          dataField: 'ResponsibleEmployee.Employee_Full_Name',
-          cssClass: 'employee',
-          allowSorting: false,
-        }, {
-          caption: 'Subject',
-          dataField: 'Task_Subject',
-          width: 350,
-        }, {
-          caption: 'Status',
-          dataField: 'Task_Status',
-        },
-      ],
-      isReady: false,
-    };
-  },
-  methods: {
-    onFocusedRowChanging(e) {
-      const pageSize = e.component.pageSize();
-      const pageIndex = e.component.pageIndex();
-      const isLoading = e.component.getController('data').isLoading();
-      const key = e.event && e.event.key;
+const focusedRowKey = ref(117);
+const autoNavigateToFocusedRow = ref(true);
 
-      if (!isLoading) {
-        if (key && e.prevRowIndex === e.newRowIndex) {
-          if (e.newRowIndex === pageSize - 1) {
-            e.component.pageIndex(pageIndex + 1).done(() => {
-              e.component.option('focusedRowIndex', 0);
-            });
-          } else if (e.newRowIndex === 0) {
-            e.component.pageIndex(pageIndex - 1).done(() => {
-              e.component.option('focusedRowIndex', pageSize - 1);
-            });
-          }
-        }
+const dataSource = {
+  store: {
+    type: 'odata',
+    key: 'Task_ID',
+    url: 'https://js.devexpress.com/Demos/DevAV/odata/Tasks',
+  },
+  expand: 'ResponsibleEmployee',
+  select: [
+    'Task_ID',
+    'Task_Subject',
+    'Task_Start_Date',
+    'Task_Status',
+    'Task_Description',
+    'Task_Completion',
+    'ResponsibleEmployee/Employee_Full_Name',
+  ],
+};
+
+const onFocusedRowChanging = (e) => {
+  const pageSize = e.component.pageSize();
+  const pageIndex = e.component.pageIndex();
+  const isLoading = e.component.getController('data').isLoading();
+  const key = e.event && e.event.key;
+
+  if (!isLoading) {
+    if (key && e.prevRowIndex === e.newRowIndex) {
+      if (e.newRowIndex === pageSize - 1) {
+        e.component.pageIndex(pageIndex + 1).done(() => {
+          e.component.option('focusedRowIndex', 0);
+        });
+      } else if (e.newRowIndex === 0) {
+        e.component.pageIndex(pageIndex - 1).done(() => {
+          e.component.option('focusedRowIndex', pageSize - 1);
+        });
       }
-    },
-    onFocusedRowChanged(e) {
-      const data = e.row && e.row.data;
-      this.taskSubject = data && data.Task_Subject;
-      this.taskDetails = data && data.Task_Description;
-      this.taskStatus = data && data.Task_Status;
-      this.taskProgress = data && data.Task_Completion ? `${data.Task_Completion}%` : '';
-      this.focusedRowKey = e.component.option('focusedRowKey');
-    },
-  },
+    }
+  }
+};
+
+const onFocusedRowChanged = (e) => {
+  const data = e.row && e.row.data;
+
+  taskSubject.value = data?.Task_Subject;
+  taskDetails.value = data?.Task_Description;
+  taskStatus.value = data?.Task_Status;
+  taskProgress.value = data?.Task_Completion ? `${data.Task_Completion}%` : '';
 };
 </script>

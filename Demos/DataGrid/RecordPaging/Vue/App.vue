@@ -57,7 +57,8 @@
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
 import {
   DxDataGrid,
   DxScrolling,
@@ -66,37 +67,24 @@ import {
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
+import { Column } from 'devextreme/ui/data_grid';
 import { generateData } from './data.js';
 
-export default {
-  components: {
-    DxDataGrid,
-    DxScrolling,
-    DxPager,
-    DxPaging,
-    DxCheckBox,
-    DxSelectBox,
-  },
-  data() {
-    return {
-      dataSource: generateData(100000),
-      displayModes: [{ text: 'Display Mode \'full\'', value: 'full' }, { text: 'Display Mode \'compact\'', value: 'compact' }],
-      displayMode: 'full',
-      pageSizes: [5, 10, 'all'],
-      showPageSizeSelector: true,
-      showInfo: true,
-      showNavButtons: true,
-    };
-  },
-  computed: {
-    isCompactMode() {
-      return this.displayMode === 'compact';
-    },
-  },
-  methods: {
-    customizeColumns(columns) {
-      columns[0].width = 70;
-    },
-  },
+const dataSource = generateData(100000);
+const displayModes = [
+  { text: 'Display Mode \'full\'', value: 'full' },
+  { text: 'Display Mode \'compact\'', value: 'compact' },
+];
+const pageSizes = [5, 10, 'all'];
+
+const displayMode = ref('full');
+const showPageSizeSelector = ref(true);
+const showInfo = ref(true);
+const showNavButtons = ref(true);
+
+const isCompactMode = computed(() => displayMode.value === 'compact');
+
+const customizeColumns = (columns: Column[]) => {
+  columns[0].width = 70;
 };
 </script>

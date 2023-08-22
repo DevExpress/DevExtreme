@@ -28,7 +28,7 @@
     <DxColumn data-field="Freight"/>
   </DxDataGrid>
 </template>
-<script>
+<script setup lang="ts">
 import { DxDataGrid, DxColumn, DxEditing } from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
@@ -42,6 +42,14 @@ const ordersStore = createStore({
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
+
+const onSaving = (e) => {
+  e.cancel = true;
+
+  if (e.changes.length) {
+    e.promise = processBatchRequest(`${URL}/Batch`, e.changes, e.component);
+  }
+};
 
 async function sendBatchRequest(url, changes) {
   const result = await fetch(url, {
@@ -63,30 +71,9 @@ async function sendBatchRequest(url, changes) {
 async function processBatchRequest(url, changes, component) {
   await sendBatchRequest(url, changes);
   await component.refresh(true);
+
   component.cancelEditData();
 }
-
-export default {
-  components: {
-    DxDataGrid,
-    DxColumn,
-    DxEditing,
-  },
-  data() {
-    return {
-      ordersStore,
-    };
-  },
-  methods: {
-    onSaving(e) {
-      e.cancel = true;
-
-      if (e.changes.length) {
-        e.promise = processBatchRequest(`${URL}/Batch`, e.changes, e.component);
-      }
-    },
-  },
-};
 </script>
 <style scoped>
 #gridContainer {

@@ -3,46 +3,40 @@
     :defer-rendering="false"
     :data-source="dataSource"
     :input-attr="{ 'aria-label': 'Product' }"
-    :value="value"
+    :value="productId"
     value-expr="ProductID"
     display-expr="ProductName"
     @valueChanged="$emit('product-changed', $event.value)"
   />
 </template>
 
-<script>
-
+<script setup lang="ts">
+import { ref } from 'vue';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
+defineEmits(['product-changed']);
+
+const props = defineProps<{
+  supplierId: number
+}>();
+
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
 
-export default {
-  components: { DxSelectBox },
-  props: {
-    supplierId: {
-      type: Number,
-      default: null,
-    },
-  },
-  data() {
-    return {
-      dataSource: createStore({
-        key: 'ProductID',
-        loadParams: { SupplierID: this.supplierId },
-        loadUrl: `${url}/GetProductsBySupplier`,
-        onLoaded: this.setDefaultValue,
-      }),
-      value: null,
-    };
-  },
-  methods: {
-    setDefaultValue(items) {
-      const firstItem = items[0];
-      if (firstItem && this.value === null) {
-        this.value = firstItem.ProductID;
-      }
-    },
-  },
-};
+const dataSource = createStore({
+  key: 'ProductID',
+  loadParams: { SupplierID: props.supplierId },
+  loadUrl: `${url}/GetProductsBySupplier`,
+  onLoaded: setDefaultValue,
+});
+
+const productId = ref(null);
+
+function setDefaultValue(items) {
+  const firstItem = items[0];
+
+  if (firstItem && productId.value === null) {
+    productId.value = firstItem.ProductID;
+  }
+}
 </script>
