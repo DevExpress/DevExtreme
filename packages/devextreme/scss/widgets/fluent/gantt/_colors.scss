@@ -1,0 +1,23 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../gridBase/colors" as *;
+
+// adduse
+
+$gantt-collapsable-row-bg: null !default;
+$gantt-icon-color: $datagrid-columnchooser-item-color !default;
+$gantt-parent-task-background-color: null !default;
+
+@if $color == "blue" {
+  $gantt-parent-task-background-color: #8bc34a !default;
+}
+
+@if $mode == "light" {
+  $gantt-collapsable-row-bg: darken($base-bg, 5%) !default;
+}
+
+@if $mode == "dark" {
+  $gantt-collapsable-row-bg: lighten($base-bg, 5%) !default;
+}
+

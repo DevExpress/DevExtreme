@@ -1,0 +1,9 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
+$dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
+$dateview-color: $base-text-color !default;

@@ -1,0 +1,40 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../color" as extcolor;
+
+// adduse
+
+/**
+* $name 10. Indicator background color
+* $type color
+*/
+$gallery-indicator-bg: $base-bg !default;
+
+/**
+* $name 20. Selected indicator background color
+* $type color
+*/
+$gallery-indicator-item-selected-bg: $base-accent !default;
+
+/**
+* $name 30. Focused indicator background color
+* $type color
+*/
+$gallery-indicator-focused-bg: $base-accent !default;
+$gallery-indicator-item-border-color: color.change(#000, $alpha: 0.2) !default;
+$gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
+$gallery-navbutton-color: color.change($base-text-color, $alpha: 0.54) !default;
+$gallery-nav-arrow-color: $base-inverted-icon-color !default;
+
+/**
+* $name 40. Hovered navigation button color
+* $type color
+*/
+$gallery-navbutton-hover-color: $base-accent !default;
+
+/**
+* $name 50. Active navigation button color
+* $type color
+*/
+$gallery-navbutton-active-color: $base-accent !default;

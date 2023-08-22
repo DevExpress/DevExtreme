@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-progressbar-status-padding: null !default;
+
+@if $size == "default" {
+  $fluent-progressbar-status-padding: 8px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-progressbar-status-padding: 4px !default;
+}

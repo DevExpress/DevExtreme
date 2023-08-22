@@ -1,0 +1,125 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../textEditor/sizes" as *;
+@use "../textEditor/colors" as *;
+@use "../../base/numberBox";
+
+// adduse
+@use "../textEditor" as *;
+
+
+.dx-numberbox-spin-container {
+  overflow: hidden;
+  width: $fluent-numberbox-spin-container-width;
+
+  .dx-state-disabled & {
+    opacity: 1;
+  }
+}
+
+.dx-numberbox-spin-up-icon {
+  @include dx-icon(spinup);
+
+  color: $numberbox-spin-icon-color;
+}
+
+.dx-numberbox-spin-down-icon {
+  @include dx-icon(spindown);
+
+  color: $numberbox-spin-icon-color;
+}
+
+.dx-numberbox-spin-up-icon,
+.dx-numberbox-spin-down-icon {
+  @include dx-icon-font-centered-sizing($fluent-base-icon-size);
+}
+
+.dx-numberbox-spin-button {
+  padding: $fluent-numberbox-spin-padding;
+  height: 50%;
+}
+
+.dx-numberbox-spin.dx-numberbox-box {
+  &.dx-editor-underlined {
+    .dx-texteditor-input {
+      padding-right: $fluent-base-standard-texteditor-input-horizontal-padding;
+    }
+
+    @include validation-icon-position();
+  }
+
+  &.dx-editor-filled,
+  &.dx-editor-outlined {
+    .dx-texteditor-input {
+      padding-right: $fluent-filled-texteditor-input-horizontal-padding;
+    }
+
+    @include validation-icon-position();
+  }
+}
+
+.dx-numberbox-spin-touch-friendly {
+  @include validation-icon-position();
+
+  .dx-numberbox-spin-container {
+    width: $fluent-numberbox-touch-friendly-spin-container-width;
+    border-left: none;
+  }
+
+  .dx-numberbox-spin-up-icon,
+  .dx-numberbox-spin-down-icon {
+    background-position: center;
+  }
+
+  &.dx-editor-underlined {
+    &.dx-show-clear-button .dx-texteditor-input {
+      padding-right: $fluent-base-standard-texteditor-input-horizontal-padding;
+    }
+  }
+
+  &.dx-editor-filled,
+  &.dx-editor-outlined {
+    &.dx-show-clear-button .dx-texteditor-input {
+      padding-right: $fluent-filled-texteditor-input-horizontal-padding;
+    }
+  }
+}
+
+
+.dx-rtl .dx-numberbox,
+.dx-numberbox.dx-rtl {
+  &.dx-numberbox-spin-touch-friendly {
+    .dx-numberbox-spin-container {
+      border-right: none;
+    }
+
+    &.dx-show-clear-button .dx-texteditor-input {
+      padding-left: $fluent-numberbox-spin-container-width;
+    }
+  }
+
+  &.dx-numberbox-spin {
+    &.dx-show-clear-button {
+      .dx-texteditor-input {
+        padding-left: $fluent-numberbox-spin-container-width;
+      }
+    }
+
+    &.dx-editor-underlined {
+      .dx-texteditor-input {
+        padding-left: $fluent-base-standard-texteditor-input-horizontal-padding;
+      }
+    }
+
+    &.dx-editor-filled,
+    &.dx-editor-outlined {
+      .dx-texteditor-input {
+        padding-left: $fluent-filled-texteditor-input-horizontal-padding;
+      }
+    }
+  }
+}

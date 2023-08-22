@@ -1,0 +1,22 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../overlay/colors" as *;
+@use "../textEditor/colors" as *;
+@use "../../base/popover";
+
+// adduse
+
+.dx-popover-wrapper {
+  .dx-popup-title {
+    margin: 0;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+
+  .dx-popover-arrow {
+    display: none;
+  }
+}

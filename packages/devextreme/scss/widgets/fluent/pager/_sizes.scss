@@ -1,0 +1,27 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-pager-paddings: 13px !default;
+$fluent-pager-separator-paddings: 8px !default;
+$fluent-pager-page-padding: 9px 12px !default;
+$fluent-pager-page-line-height: 12px !default;
+$fluent-pager-page-font-size: 12px !default;
+$fluent-pager-navbutton-paddings: $fluent-pager-page-padding !default;
+$fluent-pager-navbutton-height: 12px !default;
+$fluent-pager-pagesize-padding-top: 7px !default;
+$fluent-pager-pagesize-padding-bottom: 8px !default;
+$fluent-pager-pagesize-padding-left: 10px !default;
+$fluent-pager-pagesize-padding-right: 9px !default;
+$fluent-pager-light-pagesizes-min-width: null !default;
+$fluent-pager-light-pageindex-min-width: null !default;
+
+@if $size == "default" {
+  $fluent-pager-light-pagesizes-min-width: 62px !default;
+  $fluent-pager-light-pageindex-min-width: 32px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-pager-light-pagesizes-min-width: 42px !default;
+  $fluent-pager-light-pageindex-min-width: 27px !default;
+}
