@@ -169,13 +169,15 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     });
     return elementProps;
   }
+
   private _setInlineStyles(styles) {
     Object.entries(styles).forEach(
-        ([name, value]) => {
-          this._element.style[name] = value;
-        },
+      ([name, value]) => {
+        this._element.style[name] = value;
+      },
     );
   }
+
   private _updateCssClasses(prevProps: P | null, newProps: P) {
     const prevClassName = prevProps ? getClassName(prevProps) : undefined;
     const newClassName = getClassName(newProps);
