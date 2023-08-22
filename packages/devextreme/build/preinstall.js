@@ -16,6 +16,11 @@ const generateProdPackageFile = (sourcePkg) => {
 
     sourcePkg.name = 'devextreme';
     sourcePkg.version = version.package;
+    sourcePkg.bin = {
+        'devextreme-bundler-init': 'bin/bundler-init.js',
+        'devextreme-bundler': 'bin/bundler.js'
+    };
+
     delete sourcePkg.devDependencies;
     delete sourcePkg.scripts.preinstall;
 
