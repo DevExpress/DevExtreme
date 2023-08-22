@@ -213,7 +213,7 @@ describe('element attrs management', () => {
   });
 
   it('element inline styles management in strict mode (T1180862)', () => {
-    const { container } = render(
+    const { container } = testingLib.render(
         <React.StrictMode>
           <TestComponent style={{ color: 'red' }} />
         </React.StrictMode>,
