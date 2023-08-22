@@ -22,11 +22,16 @@ jobs:
       with:
         node-version: '18.16.1'
 
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
     - name: Restore npm cache
       uses: actions/cache@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ github.workflow }}-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install npm packages
       run: npm i --no-audit --no-fund
@@ -37,8 +42,8 @@ jobs:
       run: npm run lint
 
     - name: Build devextreme package
-      run: |
-        npx nx build devextreme-main
+      working-directory: ./packages/devextreme
+      run: npm run build
 
     - name: Generate wrappers
       run: npm run angular:generate
@@ -47,21 +52,13 @@ jobs:
       shell: bash
       run: |
         git add . -N
-        changes=$(git diff --name-status HEAD -- packages/devextreme-vue/src packages/vue2-strategy/src)
+        changes=$(git diff --name-status HEAD -- packages/devextreme-angular/src)
         if [ -n "$changes" ]; then
           echo "Generated code is outdated. The following files have uncommitted changes:"
           echo "$changes";
           echo "To update generated code, use "npm run angular:generate" and commit changes."
           exit 1
         fi
-
-    - name: Archive internal-tools artifacts
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: internal-tools-artifacts
-        path: ./artifacts/internal-tools/
-        retention-days: 7
 
     - name: Run tests
       working-directory: ./packages/devextreme-angular

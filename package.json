@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "angular:build-generator": "cd node_modules/devextreme-angular-generator && npm i --no-audit --no-fund && npm run build:local",
-    "angular:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd && mkdir -p ./packages/devextreme-angular/metadata && cp ./artifacts/internal-tools/integration-data.json ./packages/devextreme-angular/metadata/integration-data.json",
+    "angular:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd -- --output-path ./packages/devextreme-angular/metadata/integration-data.json",
     "angular:generate": "npm run angular:discover-metadata && npm run angular:build-generator && cd packages/devextreme-angular && npm run generate",
     "react:build-generator": "cd node_modules/devextreme-react-generator && npm i --no-audit --no-fund && npm run build:local",
     "react:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd -- --output-path ./packages/devextreme-react/metadata/integration-data.json",
