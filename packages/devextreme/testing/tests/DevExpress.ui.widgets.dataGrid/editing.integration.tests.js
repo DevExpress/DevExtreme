@@ -18,6 +18,7 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
+import messageLocalization from 'localization/message';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -80,6 +81,97 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal($('.dx-texteditor input[id]').length, 0, 'editors has no accessibility id');
+    });
+
+    QUnit.test('Accessibility modified cell in batch mode should have aria-roledescription', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            columns: ['field1', 'field2'],
+            editing: { mode: 'batch', allowUpdating: true },
+            dataSource: [{ field1: '1', field2: '2' }]
+        });
+
+        this.clock.tick(10);
+
+        // act
+        dataGrid.cellValue(0, 0, 'test');
+
+        const $modifiedCell = $('.dx-cell-modified');
+
+        // assert
+        assert.equal($modifiedCell.attr('aria-roledescription'), messageLocalization.format('dxDataGrid-ariaModifiedCell'));
+    });
+
+    QUnit.test('Accessibility cells in deleted row in batch mode should have aria-roledescription', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            columns: ['field1', 'field2'],
+            editing: { mode: 'batch', allowUpdating: true },
+            dataSource: [{ field1: '1', field2: '2' }, { field1: '3', field2: '4' }]
+        });
+
+        this.clock.tick(10);
+
+        // act
+        dataGrid.deleteRow(0, 0);
+
+        const $removedRow = $('.dx-row-removed');
+        const cells = $removedRow.children('td').toArray();
+
+        // assert
+        assert.equal(cells.length, 2);
+
+        const roleDescriptionValue = messageLocalization.format('dxDataGrid-ariaDeletedCell');
+
+        cells.forEach(cell => {
+            assert.equal(cell.getAttribute('aria-roledescription'), roleDescriptionValue);
+        });
+    });
+
+    QUnit.test('Accessibility: editable cells should have aria-roledescription', function(assert) {
+        // arrange, act
+        createDataGrid({
+            columns: [
+                {
+                    dataField: 'field1',
+                },
+                {
+                    dataField: 'field2',
+                    calculateCellValue: function(rowData) {
+                        return 500;
+                    }
+                },
+                {
+                    dataField: 'field3',
+                    allowEditing: false,
+                },
+                {
+                    dataField: 'field4',
+                },
+            ],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true,
+                allowDeleting: true,
+            },
+            dataSource: [{
+                field1: '1',
+                field2: '2',
+                field3: '3',
+                field4: '4',
+            }]
+        });
+
+        this.clock.tick(10);
+        const $cells = $('.dx-data-row > td');
+
+        // assert
+        const editableDescription = messageLocalization.format('dxDataGrid-ariaEditableCell');
+        assert.equal($($cells.get(0)).attr('aria-roledescription'), editableDescription);
+        assert.equal($($cells.get(1)).attr('aria-roledescription'), undefined);
+        assert.equal($($cells.get(2)).attr('aria-roledescription'), undefined);
+        assert.equal($($cells.get(3)).attr('aria-roledescription'), editableDescription);
+        assert.equal($($cells.get(4)).attr('aria-roledescription'), undefined);
     });
 
     QUnit.test('Command column accessibility structure', function(assert) {

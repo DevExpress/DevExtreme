@@ -28,6 +28,11 @@
       "dependsOn": [
         "build"
       ]
+    },
+    "test": {
+      "dependsOn": [
+        "^build"
+      ]
     }
   },
   "workspaceLayout": {

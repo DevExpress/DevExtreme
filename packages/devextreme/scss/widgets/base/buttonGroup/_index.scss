@@ -11,6 +11,10 @@
 
   height: 100%;
   width: 100%;
+
+  .dx-buttongroup-mode-text & {
+    column-gap: 1px;
+  }
 }
 
 .dx-buttongroup-item {
@@ -22,14 +26,6 @@
 
     &.dx-button {
       border-radius: 0;
-    }
-  }
-
-  &.dx-button-mode-text {
-    margin-inline-start: 1px;
-
-    &.dx-buttongroup-first-item{
-      margin-inline-start: 0;
     }
   }
 }

@@ -1,0 +1,30 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-popup-content-padding: null !default;
+$fluent-popup-content-withtitle-top-padding: null !default;
+$fluent-popup-toolbar-horizontal-padding: null !default;
+$fluent-popup-bottom-toolbar-height: null !default;
+$fluent-popup-toolbar-height: null !default;
+
+$fluent-popup-button-margin: 0 8px !default;
+$fluent-popup-toolbar-item-spacing: 8px !default;
+
+@if $size == "default" {
+  $fluent-popup-content-padding: 24px !default;
+  $fluent-popup-content-withtitle-top-padding: 20px !default;
+
+  $fluent-popup-toolbar-horizontal-padding: 24px !default;
+  $fluent-popup-bottom-toolbar-height: 52px !default;
+  $fluent-popup-toolbar-height: 64px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-popup-content-padding: 16px !default;
+  $fluent-popup-content-withtitle-top-padding: 14px !default;
+
+  $fluent-popup-toolbar-horizontal-padding: 16px !default;
+  $fluent-popup-bottom-toolbar-height: 44px !default;
+  $fluent-popup-toolbar-height: 42px !default;
+}

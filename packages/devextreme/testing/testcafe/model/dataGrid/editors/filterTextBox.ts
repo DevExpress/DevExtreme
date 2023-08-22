@@ -3,7 +3,7 @@ import ContextMenu from '../../contextMenu';
 import TextBox from '../../textBox';
 
 const CLASS = {
-  menuButton: 'dx-menu',
+  menuButton: 'dx-menu-item',
   filterMenu: 'dx-context-menu',
   gridMarker: 'dx-datagrid',
 };
@@ -19,7 +19,7 @@ export default class FilterTextBox extends TextBox {
     super(selector);
 
     this.body = Selector('body');
-    this.menuButton = this.element.find(`.${CLASS.menuButton}`);
+    this.menuButton = this.element.find(`.${CLASS.menuButton}`).nth(0);
     this.menu = new ContextMenu(this.body.find(`.${CLASS.gridMarker}.${CLASS.filterMenu}`));
   }
 }

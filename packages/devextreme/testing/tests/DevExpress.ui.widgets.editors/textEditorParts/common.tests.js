@@ -212,7 +212,7 @@ QUnit.module('general', {}, () => {
         const $placeholder = $element.find('.' + PLACEHOLDER_CLASS);
 
         $placeholder.trigger('dxpointerup');
-        assert.ok($input.is(':focus'), 'input get focus on pointerup (needed for win8 native app)');
+        assert.ok($input.is(':focus'), 'input get focus on pointerup');
     });
 
     QUnit.testInActiveWindow('input is focused after click on the \'clear\' button', function(assert) {

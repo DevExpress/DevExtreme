@@ -1,0 +1,32 @@
+@use "../sizes" as *;
+@use "colors" as *;
+
+// adduse
+
+$fluent-checkbox-ripple-size: null !default;
+$fluent-checkbox-arrow-icon-size: null !default;
+$fluent-checkbox-arrow-font-size: null !default;
+$fluent-checkbox-indeterminate-icon-size: null !default;
+$fluent-checkbox-indeterminate-font-size: null !default;
+$fluent-checkbox-border-radius: null !default;
+$fluent-checkbox-size: null !default;
+
+@if $size == "default" {
+  $fluent-checkbox-ripple-size: 2.5em !default;
+  $fluent-checkbox-arrow-icon-size: 1em !default;
+  $fluent-checkbox-arrow-font-size: 16px !default;
+  $fluent-checkbox-indeterminate-icon-size: 1em !default;
+  $fluent-checkbox-indeterminate-font-size: 20px !default;
+  $fluent-checkbox-border-radius: $checkbox-icon-border-radius !default;
+  $fluent-checkbox-size: 18px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-checkbox-ripple-size: 2.14em !default;
+  $fluent-checkbox-arrow-icon-size: 1em !default;
+  $fluent-checkbox-arrow-font-size: 14px !default;
+  $fluent-checkbox-indeterminate-icon-size: 1em !default;
+  $fluent-checkbox-indeterminate-font-size: 18px !default;
+  $fluent-checkbox-border-radius: 2px !default;
+  $fluent-checkbox-size: 16px !default;
+}

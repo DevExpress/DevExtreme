@@ -1,0 +1,25 @@
+@use "../sizes" as *;
+@use "../typography/sizes" as *;
+
+// adduse
+
+$fluent-toolbar-height: null !default;
+$fluent-toolbar-menu-vertical-padding: null !default;
+$fluent-toolbar-menu-item-line-height: null !default;
+
+$fluent-toolbar-padding: 0 !default;
+$fluent-toolbar-item-spacing: 5px !default;
+$fluent-toolbar-label-font-size: $fluent-m-font-size !default;
+$fluent-toolbar-section-padding: 15px !default;
+
+@if $size == "default" {
+  $fluent-toolbar-menu-item-line-height: 24px !default;
+  $fluent-toolbar-height: 56px !default;
+  $fluent-toolbar-menu-vertical-padding: 7px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-toolbar-menu-item-line-height: 20px !default;
+  $fluent-toolbar-height: 38px !default;
+  $fluent-toolbar-menu-vertical-padding: 5px !default;
+}

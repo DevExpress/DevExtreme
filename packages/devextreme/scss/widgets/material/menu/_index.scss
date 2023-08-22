@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../button/sizes" as *;
 @use "../menuBase/sizes" as *;
 @use "../../base/icons" as *;
 
@@ -24,35 +25,53 @@ $material-menu-font-size: $material-base-font-size;
 .dx-menu {
   color: $menu-color;
 
+  .dx-menu-horizontal {
+    .dx-menu-item-popout {
+      margin-inline-start: $material-menu-icon-to-text-offset;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include dx-icon(spindown);
+      @include dx-icon-sizing($material-button-icon-size);
+    }
+  }
+
+  .dx-menu-vertical {
+    .dx-menu-item-popout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include dx-icon(spinright);
+      @include dx-icon-sizing($material-button-icon-size);
+    }
+  }
+
   .dx-menu-item {
     font-size: $material-menu-font-size;
     border-radius: $base-border-radius;
 
     .dx-menu-item-content {
+      display: flex;
       padding: $material-menu-vertical-padding $material-menu-horizontal-padding;
 
       .dx-menu-item-popout-container {
-        width: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
       }
     }
 
     &.dx-menu-item-has-text {
+      .dx-menu-item-text {
+        flex: 1 1 auto;
+      }
+
       &.dx-menu-item-has-icon {
         .dx-icon {
-          margin-right: $material-menu-horizontal-padding;
-        }
-      }
-    }
-  }
-
-  &.dx-rtl {
-    .dx-menu-item {
-      &.dx-menu-item-has-text {
-        &.dx-menu-item-has-icon {
-          .dx-icon {
-            margin-left: $material-menu-item-with-icon-horizontal-padding - $material-menu-horizontal-padding - $material-base-icon-size;
-            margin-right: 0;
-          }
+          margin-inline-end: $material-menu-icon-to-text-offset;
         }
       }
     }

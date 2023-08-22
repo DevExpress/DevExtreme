@@ -39,6 +39,8 @@ const CALENDAR_DXHOVERSTART_EVENT_NAME = addNamespace(hoverStartEventName, 'dxCa
 
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
+const DAY_INTERVAL = 86400000;
+
 const BaseView = Widget.inherit({
 
     _getViewName: function() {
@@ -53,6 +55,7 @@ const BaseView = Widget.inherit({
             disabledDates: null,
             onCellClick: null,
             onCellHover: null,
+            onWeekNumberClick: null,
             rowCount: 3,
             colCount: 4,
             allowValueSelection: true,
@@ -81,10 +84,9 @@ const BaseView = Widget.inherit({
         this._$table = $('<table>');
 
         const localizedWidgetName = messageLocalization.format('dxCalendar-ariaWidgetName');
-        const localizedHotKeysInfo = messageLocalization.format('dxCalendar-ariaHotKeysInfo');
 
         this.setAria({
-            label: `${localizedWidgetName}. ${localizedHotKeysInfo}`,
+            label: localizedWidgetName,
             role: 'grid'
         }, this._$table);
 
@@ -224,8 +226,10 @@ const BaseView = Widget.inherit({
             }
         }));
 
+        const { selectionMode } = this.option();
+
         eventsEngine.off(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME);
-        if(this.option('selectionMode') === 'range') {
+        if(selectionMode === 'range') {
             this._createCellHoverAction();
 
             eventsEngine.on(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME, NOT_WEEK_CELL_SELECTOR, ((e) => {
@@ -237,6 +241,23 @@ const BaseView = Widget.inherit({
                 }
             }));
         }
+
+        if(selectionMode !== 'single') {
+            this._createWeekNumberCellClickAction();
+
+            eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, `.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`, ((e) => {
+                const $row = $(e.currentTarget).closest('tr');
+
+                const firstDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).first().data(CALENDAR_DATE_VALUE_KEY);
+                const lastDateInRow = $row.find(`.${CALENDAR_CELL_CLASS}`).last().data(CALENDAR_DATE_VALUE_KEY);
+                const rowDates = [...coreDateUtils.getDatesOfInterval(firstDateInRow, lastDateInRow, DAY_INTERVAL), lastDateInRow];
+
+                this._weekNumberCellClickAction({
+                    event: e,
+                    rowDates
+                });
+            }));
+        }
     },
 
     _createCellClickAction: function() {
@@ -245,6 +266,10 @@ const BaseView = Widget.inherit({
 
     _createCellHoverAction: function() {
         this._cellHoverAction = this._createActionByOption('onCellHover');
+    },
+
+    _createWeekNumberCellClickAction: function() {
+        this._weekNumberCellClickAction = this._createActionByOption('onWeekNumberClick');
     },
 
     _createDisabledDatesHandler: function() {

@@ -45,7 +45,7 @@ test('allowExportSelectedData: true, menu: false', async (t) => {
   const dataGrid = new DataGrid('#container');
   const headerPanel = dataGrid.getHeaderPanel();
 
-  await t.click(headerPanel.getExportButton());
+  await t.click(headerPanel.getExportButton().element);
 
   await t
     .expect(await takeScreenshot('grid-export-dropdown-button.png', dataGrid.element))

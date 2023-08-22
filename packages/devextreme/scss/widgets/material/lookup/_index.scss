@@ -17,75 +17,33 @@
 .dx-lookup {
   &.dx-editor-filled,
   &.dx-editor-outlined {
-    height: $material-filled-lookup-height;
-
     .dx-lookup-field {
       padding: $material-filled-texteditor-input-padding;
-      padding-right: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size;
-    }
-
-    .dx-lookup-arrow {
-      right: math.div($material-base-icon-size, 2);
+      padding-inline-start: $material-filled-texteditor-input-horizontal-padding;
+      padding-inline-end: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size;
     }
 
     &.dx-invalid {
       .dx-lookup-field {
-        padding-right: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
-      }
-
-      &.dx-rtl {
-        .dx-lookup-field {
-          padding-left: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
-          padding-right: $material-filled-texteditor-input-horizontal-padding;
-        }
+        padding-inline-end: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
       }
     }
 
-    &.dx-rtl,
-    .dx-rtl & {
-      .dx-lookup-arrow {
-        left: math.div($material-base-icon-size, 2);
-        right: auto;
-      }
-
-      .dx-lookup-field {
-        padding-left: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size;
-        padding-right: $material-filled-texteditor-input-horizontal-padding;
-      }
+    .dx-lookup-arrow {
+      inset-inline-end: math.div($material-base-icon-size, 2);
     }
   }
 
   &.dx-editor-underlined {
-    height: $material-standard-lookup-height;
-
-    &.dx-texteditor-with-floating-label,
-    &.dx-texteditor-with-label {
-      height: $material-standard-lookup-with-label-height;
-    }
-
     .dx-lookup-field {
       padding: $material-standard-texteditor-input-padding;
-      padding-right: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
+      padding-inline-start: $material-base-standard-texteditor-input-horizontal-padding;
+      padding-inline-end: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
     }
 
     &.dx-invalid {
       .dx-lookup-field {
-        padding-right: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
-      }
-
-      &.dx-rtl {
-        .dx-lookup-field {
-          padding-left: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
-          padding-right: $material-base-standard-texteditor-input-horizontal-padding;
-        }
-      }
-    }
-
-    &.dx-rtl,
-    .dx-rtl & {
-      .dx-lookup-field {
-        padding-left: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
-        padding-right: $material-base-standard-texteditor-input-horizontal-padding;
+        padding-inline-end: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
       }
     }
   }
@@ -96,15 +54,7 @@
     .dx-lookup-arrow::after {
       @include dx-invalid-material-badge();
 
-      right: $material-base-icon-size;
-    }
-
-    &.dx-rtl,
-    .dx-rtl & {
-      .dx-lookup-arrow::after {
-        left: $material-base-icon-size;
-        right: auto;
-      }
+      inset-inline-end: $material-base-icon-size;
     }
   }
 
@@ -112,15 +62,7 @@
     .dx-lookup-arrow::after {
       @include dx-valid-material-badge();
 
-      right: $material-base-icon-size;
-    }
-
-    &.dx-rtl,
-    .dx-rtl & {
-      .dx-lookup-arrow::after {
-        left: $material-base-icon-size;
-        right: auto;
-      }
+      inset-inline-end: $material-base-icon-size;
     }
   }
 
@@ -129,17 +71,7 @@
       .dx-pending-indicator {
         @include dx-pending-indicator-material();
 
-        right: $material-base-icon-size;
-      }
-    }
-
-    &.dx-rtl,
-    .dx-rtl & {
-      .dx-lookup-field-wrapper {
-        .dx-pending-indicator {
-          left: $material-base-icon-size;
-          right: auto;
-        }
+        inset-inline-end: $material-base-icon-size;
       }
     }
   }
@@ -147,6 +79,10 @@
 
 .dx-lookup-field {
   font-size: $material-lookup-font-size;
+
+  &::before {
+    line-height: normal;
+  }
 
   .dx-texteditor {
     border: none;

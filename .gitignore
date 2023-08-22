@@ -4,6 +4,7 @@
 dist
 bin
 obj
+/artifacts
 
 # dependencies
 node_modules

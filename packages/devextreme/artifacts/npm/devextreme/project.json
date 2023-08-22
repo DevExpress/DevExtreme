@@ -3,7 +3,7 @@
   "sourceRoot": "packages/devextreme/artifacts/npm/devextreme",
   "projectType": "library",
   "implicitDependencies": [
-    "devextreme-root"
+    "devextreme-main"
   ],
   "targets": {
     "build": {

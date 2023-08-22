@@ -1,0 +1,38 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$menu-popup-bg: $base-bg !default;
+$menu-item-hover-bg: $base-hover-bg !default;
+
+/**
+* $name 10. Text color
+* $type color
+*/
+$menu-color: lighten($base-text-color, 46%) !default;
+$menu-item-expanded-color: $menu-color !default;
+
+
+/**
+* $name 20. Selected item background color
+* $type color
+*/
+$menu-item-selected-bg: null !default;
+$menu-popup-border-color: $base-border-color !default;
+$menu-separator-bg: $base-border-color !default;
+$menu-item-selected-color: $base-text-color !default;
+$menu-item-focused-selected-bg: color.change($base-focus-bg, $alpha: 0.7) !default;
+$menu-container-shadow-color: null !default;
+
+@if $mode == "light" {
+  $menu-item-selected-bg: lighten($base-text-color, 88%) !default;
+  $menu-container-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
+}
+
+@if $mode == "dark" {
+  $menu-item-selected-bg: lighten($base-bg, 8%) !default;
+  $menu-container-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
+}
+

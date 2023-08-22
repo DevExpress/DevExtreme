@@ -1,0 +1,44 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/textArea";
+
+// adduse
+
+$textarea-vertical-padding:
+  $fluent-base-inline-widget-height -
+  $fluent-base-inline-block-height;
+
+$textarea-top-padding:
+  floor(math.div($textarea-vertical-padding, 2)) -
+  $fluent-base-border-width;
+
+.dx-textarea {
+  height: auto;
+
+  .dx-texteditor-input-container {
+    margin: 2px;
+  }
+
+  .dx-texteditor-input {
+    padding: $textarea-content-padding;
+    line-height: $textarea-content-line-height;
+  }
+
+  .dx-placeholder::before {
+    padding: ($textarea-content-padding + 3) $textarea-content-padding;
+  }
+
+  .dx-icon-clear {
+    top: 0;
+    margin-top: 0;
+  }
+
+  &.dx-invalid .dx-texteditor-container::after {
+    top: $textarea-top-padding;
+    margin-top: 0;
+  }
+}

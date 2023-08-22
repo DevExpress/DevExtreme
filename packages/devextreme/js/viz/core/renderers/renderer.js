@@ -1788,7 +1788,6 @@ export function Renderer(options) {
         'stroke-width': 0
     }).attr({ 'class': options.cssClass }).css({
         'line-height': 'normal', // T179515
-        '-ms-user-select': NONE,
         '-moz-user-select': NONE,
         '-webkit-user-select': NONE,
         '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)',

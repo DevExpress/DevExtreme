@@ -1,0 +1,17 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 10. Item text color
+* $type color
+*/
+$tileview-color: $base-text-color !default;
+$tileview-bg: $base-element-bg !default;
+$tileview-border-color: color.change($base-border-color, $alpha: 0.6) !default;
+$tileview-hover-bg: $base-element-bg !default;
+$tileview-hover-border-color: color.change($base-accent, $alpha: 0.4) !default;
+$tileview-active-bg: color.change(darken($tileview-bg, 62.5%), $alpha: 0.2) !default;
+$tileview-active-color: $tileview-color !default;

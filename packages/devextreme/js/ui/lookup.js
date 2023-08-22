@@ -12,10 +12,8 @@ import { getFieldName } from '../core/options/utils';
 import messageLocalization from '../localization/message';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
-import { addNamespace } from '../events/utils/index';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 import { current, isMaterial } from './themes';
-import { name as clickEventName } from '../events/click';
 import Popover from './popover/ui.popover';
 import TextBox from './text_box';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
@@ -38,6 +36,7 @@ const LOOKUP_POPOVER_MODE = 'dx-lookup-popover-mode';
 const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
 const LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = 'dx-popover-flipped-vertical';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
@@ -129,13 +128,13 @@ const Lookup = DropDownList.inherit({
              * @name dxLookupOptions.openOnFieldClick
              * @hidden
              */
+            openOnFieldClick: true,
 
             /**
              * @name dxLookupOptions.showDropDownButton
              * @hidden
              */
             showDropDownButton: false,
-
 
             focusStateEnabled: false,
 
@@ -404,16 +403,8 @@ const Lookup = DropDownList.inherit({
     },
 
     _renderInput: function() {
-        const fieldClickAction = this._createAction(() => {
-            this._toggleOpenState();
-        });
-
         this._$field = $('<div>').addClass(LOOKUP_FIELD_CLASS);
         this._applyInputAttributes(this.option('inputAttr'));
-
-        eventsEngine.on(this._$field, addNamespace(clickEventName, this.NAME), e => {
-            fieldClickAction({ event: e });
-        });
 
         const $arrow = $('<div>').addClass(LOOKUP_ARROW_CLASS);
 
@@ -441,7 +432,12 @@ const Lookup = DropDownList.inherit({
 
         const displayValue = this.option('displayValue');
         this._updateField(displayValue);
-        this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
+
+        const isFieldEmpty = !this.option('selectedItem');
+
+        this.$element()
+            .toggleClass(LOOKUP_EMPTY_CLASS, isFieldEmpty)
+            .toggleClass(TEXTEDITOR_EMPTY_CLASS, isFieldEmpty);
     },
 
     _getLabelContainer: function() {
@@ -457,9 +453,19 @@ const Lookup = DropDownList.inherit({
     },
 
     _updateField: function(text) {
-        text = isDefined(text) && String(text) || this.option('placeholder');
+        text = isDefined(text) && String(text);
 
-        this._$field.text(text);
+        this._$field.empty();
+
+        if(text) {
+            this._$field.text(text);
+        } else {
+            const $placeholder = $('<div>')
+                .attr({ 'data-dx_placeholder': this.option('placeholder') });
+
+            this._$field.append($placeholder);
+            $placeholder.addClass('dx-placeholder');
+        }
     },
 
     _renderFieldTemplate: function(template) {

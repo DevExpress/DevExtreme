@@ -22,6 +22,7 @@
   position: relative;
   display: flex;
   flex: auto;
+  outline: none;
 }
 
 .dx-calendar-navigator {
@@ -75,6 +76,11 @@
 
     @include dx-overflow();
   }
+}
+
+
+.dx-calendar-week-number-cell.dx-calendar-week-selection {
+  cursor: pointer;
 }
 
 .dx-calendar-week-number-cell {

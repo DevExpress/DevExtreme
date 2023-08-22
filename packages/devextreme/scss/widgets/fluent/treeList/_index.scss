@@ -1,0 +1,174 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/icons" as *;
+@use "../gridBase" as *;
+@use "../gridBase/colors" as *;
+@use "../gridBase/sizes" as *;
+@use "../../base/treeList" as baseTreeList with (
+  $datagrid-border: $datagrid-border,
+  $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
+  $datagrid-row-error-bg: $datagrid-row-error-bg,
+  $datagrid-base-color: $datagrid-base-color,
+  $datagrid-base-background-color: $datagrid-base-background-color,
+  $datagrid-border-color: $datagrid-border-color,
+  $datagrid-focused-border-color: $datagrid-focused-border-color,
+  $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
+  $datagrid-row-error-color: $datagrid-row-error-color,
+  $header-filter-color: $header-filter-color,
+  $header-filter-color-empty: $header-filter-color-empty,
+  $base-focus-color: $base-focus-color,
+);
+
+// adduse
+@include grid-base(treelist);
+
+$treelist-empty-space-width: 24px;
+$treelist-checkbox-offset-left: $treelist-empty-space-width + $fluent-grid-base-cell-horizontal-padding;
+$treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $fluent-grid-base-checkbox-size;
+$treelist-editor-cell-padding-left: $treelist-checkbox-offset-left-rtl + $fluent-grid-base-cell-horizontal-padding;
+$treelist-icon-container-padding-right: $fluent-grid-base-checkbox-size + $fluent-grid-base-cell-horizontal-padding;
+
+.dx-treelist-rowsview {
+  .dx-treelist-empty-space {
+    position: relative;
+    top: -2px;
+    display: inline-block;
+
+    @include dx-icon(chevronup);
+
+    width: $treelist-empty-space-width;
+
+    &::before {
+      visibility: hidden;
+    }
+  }
+
+  tr:not(.dx-row-focused) .dx-treelist-empty-space {
+    color: $treelist-chevron-icon-color;
+  }
+
+  .dx-treelist-expanded span {
+    @include dx-icon(chevrondown);
+    @include dx-icon-font-centered-sizing($fluent-base-icon-size);
+
+    cursor: pointer;
+
+    &::before {
+      left: 0;
+      margin-left: -$treelist-expanded-icon-margin-left;
+      margin-top: -$treelist-icon-margin-top;
+    }
+  }
+
+  .dx-treelist-collapsed span {
+    @include dx-icon(chevronright);
+    @include dx-icon-font-centered-sizing($fluent-base-icon-size);
+
+    cursor: pointer;
+
+    &::before {
+      left: 0;
+      margin-left: -$treelist-collapsed-icon-margin-left;
+      margin-top: -$treelist-icon-margin-top;
+    }
+  }
+
+  .dx-sort-up,
+  .dx-sort-down,
+  .dx-header-filter {
+    vertical-align: middle;
+  }
+
+  tr:not(.dx-row-focused).dx-selection {
+    .dx-treelist-empty-space {
+      color: $treelist-selection-chevron-icon-color;
+    }
+  }
+
+  .dx-treelist-cell-expandable {
+    white-space: nowrap;
+
+    .dx-treelist-text-content {
+      white-space: normal;
+    }
+  }
+
+  &.dx-treelist-nowrap .dx-treelist-table {
+    .dx-treelist-cell-expandable {
+      .dx-treelist-text-content {
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.dx-treelist-checkbox-size {
+  line-height: 0;
+}
+
+.dx-treelist-cell-expandable,
+.dx-treelist-select-all {
+  .dx-checkbox {
+    position: absolute;
+  }
+}
+
+.dx-treelist-icon-container {
+  max-height: $fluent-grid-base-cell-line-height;
+
+  &.dx-editor-inline-block {
+    position: relative;
+    padding-right: $treelist-icon-container-padding-right;
+
+    .dx-checkbox {
+      top: 50%;
+      margin-top: math.div(-$fluent-grid-base-checkbox-size, 2);
+    }
+  }
+}
+
+.dx-treelist-select-all {
+  position: relative;
+
+  .dx-checkbox {
+    left: $treelist-checkbox-offset-left;
+  }
+}
+
+.dx-treelist .dx-treelist-headers .dx-treelist-content .dx-treelist-table .dx-header-row > .dx-treelist-select-all {
+  padding-left: $treelist-editor-cell-padding-left;
+}
+
+.dx-rtl {
+  .dx-treelist-rowsview {
+    .dx-treelist-expanded,
+    .dx-treelist-collapsed {
+      @include flip-horizontally();
+    }
+
+    .dx-treelist-table-fixed {
+      .dx-treelist-icon-container {
+        float: right;
+      }
+    }
+  }
+
+  .dx-treelist-select-all .dx-checkbox {
+    left: calc(100% - #{$treelist-checkbox-offset-left-rtl});
+  }
+
+  &.dx-treelist .dx-treelist-headers .dx-treelist-content .dx-treelist-table .dx-header-row > .dx-treelist-select-all {
+    padding-right: $treelist-editor-cell-padding-left;
+    padding-left: $fluent-grid-base-cell-horizontal-padding;
+  }
+
+  .dx-treelist-icon-container.dx-editor-inline-block {
+    padding-left: $treelist-icon-container-padding-right;
+    padding-right: 0;
+  }
+}
