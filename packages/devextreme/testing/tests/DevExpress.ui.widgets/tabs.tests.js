@@ -42,12 +42,15 @@ const TABS_ORIENTATION_CLASS = {
     vertical: 'dx-tabs-vertical',
     horizontal: 'dx-tabs-horizontal',
 };
+<<<<<<< HEAD
 const TABS_ICON_POSITION_CLASS = {
     top: 'dx-tabs-icon-position-top',
     end: 'dx-tabs-icon-position-end',
     bottom: 'dx-tabs-icon-position-bottom',
     start: 'dx-tabs-icon-position-start',
 };
+=======
+>>>>>>> 8eb4dc7652 (Tabs: icon position)
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
