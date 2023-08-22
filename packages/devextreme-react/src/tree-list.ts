@@ -7,17 +7,17 @@ import * as PropTypes from "prop-types";
 import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxTreeListRowObject, dxTreeListColumnButton, dxTreeListToolbarItem } from "devextreme/ui/tree_list";
+import type { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxTreeListRowObject, ColumnButtonClickEvent, dxTreeListColumnButton, dxTreeListToolbarItem } from "devextreme/ui/tree_list";
 import type { DataChange, ColumnHeaderFilterSearchConfig, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, GridBase, HeaderFilterSearchConfig } from "devextreme/common/grids";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, dxFilterBuilderCustomOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, EditorEnterKeyEvent, FieldDataChangedEvent } from "devextreme/ui/form";
 import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
-import type { event, EventInfo } from "devextreme/events/index";
 import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/abstract_store";
 import type { PositionConfig } from "devextreme/animation/position";
 import type { dxPopupOptions, dxPopupToolbarItem } from "devextreme/ui/popup";
+import type { event, EventInfo } from "devextreme/events/index";
 import type { Component } from "devextreme/core/component";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
@@ -390,7 +390,7 @@ type IButtonProps = React.PropsWithChildren<{
   hint?: string;
   icon?: string;
   name?: "add" | "cancel" | "delete" | "edit" | "save" | "undelete";
-  onClick?: ((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void);
+  onClick?: ((e: ColumnButtonClickEvent) => void);
   template?: ((cellElement: any, cellInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList, data: Record<string, any>, key: any, row: dxTreeListRowObject, rowIndex: number, rowType: string }) => string) | template;
   text?: string;
   visible?: boolean | ((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean);
