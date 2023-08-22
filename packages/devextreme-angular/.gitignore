@@ -1,4 +1,2 @@
-metadata/generated
-src/ui/
-src/common/
-src/index.ts
+metadata
+!metadata/DeprecatedComponentsMetadata.json

@@ -15,11 +15,14 @@ export default class ContextMenu extends Widget {
 
   overlay: Overlay;
 
+  isOpened: Promise<boolean>;
+
   constructor(id: string | Selector) {
     super(id);
 
     this.items = Selector(`.${CLASS.contextMenu}`).find(`.${CLASS.item}`);
     this.overlay = new Overlay(`.${CLASS.overlay}`);
+    this.isOpened = this.overlay.isVisible();
   }
 
   // eslint-disable-next-line class-methods-use-this

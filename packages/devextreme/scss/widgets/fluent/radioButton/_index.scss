@@ -1,0 +1,40 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/radioButton/mixins" as *;
+@use "../radioGroup/colors" as *;
+@use "../../base/radioButton";
+
+// adduse
+
+$fluent-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+
+@include dx-radiobutton-icon-mixin(
+  $fluent-radiobutton-size,
+  $fluent-radiobutton-border-width,
+  $radiogroup-border-color,
+  $radiogroup-bg,
+  $radiogroup-checked-bg,
+  $fluent-radiobutton-dot-size,
+  true,
+  $fluent-radiobutton-ripple-size,
+  $fluent-radiobutton-ripple-transition,
+);
+@include dx-radiobutton-states-mixin(
+  $radiogroup-border-color,
+  $radiogroup-readonly-border-color,
+  null,
+  null,
+  $radiobutton-focused-bg,
+  $radiogroup-checked-bg,
+  $radiobutton-invalid-faded-border-color,
+  null,
+  $radiobutton-invalid-focused-border-color,
+  $base-disabled-opacity,
+  true,
+  $radiobutton-focused-ripple-bg,
+  $radiobutton-invalid-focused-ripple-bg,
+);

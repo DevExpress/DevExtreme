@@ -172,6 +172,7 @@
         "dxDataGrid-ariaCollapse": "Comprimi",
         "dxDataGrid-ariaModifiedCell": "Modified",
         "dxDataGrid-ariaDeletedCell": "Deleted",
+        "dxDataGrid-ariaEditableCell": "Editable",
         "dxDataGrid-ariaExpand": "Espandi",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
@@ -186,7 +187,7 @@
         "dxDataGrid-filterPanelClearFilter": "Cancella",
         "dxDataGrid-filterPanelFilterEnabledHint": "Attiva il filtro",
 
-        "dxTreeList-ariaTreeList": "Albero",
+        "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Ricerca nell'albero",
         "dxTreeList-ariaToolbar": "Barra degli strumenti albero",
         "dxTreeList-editingAddRowToNode": "Aggiungi",
@@ -280,8 +281,19 @@
 
         "dxCalendar-todayButtonText": "Oggi",
         "dxCalendar-ariaWidgetName": "Calendario",
-        "dxCalendar-ariaHotKeysInfo": "To navigate between views, press Control, and then Left Arrow or Right Arrow. To zoom in on a view, press Control, and then Down Arrow. To zoom out, press Control, and then Up Arrow.",
-
+        "dxCalendar-previousMonthButtonLabel": "Previous month",
+        "dxCalendar-previousYearButtonLabel": "Previous year",
+        "dxCalendar-previousDecadeButtonLabel": "Previous decade",
+        "dxCalendar-previousCenturyButtonLabel": "Previous century",
+        "dxCalendar-nextMonthButtonLabel": "Next month",
+        "dxCalendar-nextYearButtonLabel": "Next year",
+        "dxCalendar-nextDecadeButtonLabel": "Next decade",
+        "dxCalendar-nextCenturyButtonLabel": "Next century",
+        "dxCalendar-captionMonthLabel": "Month selection",
+        "dxCalendar-captionYearLabel": "Year selection",
+        "dxCalendar-captionDecadeLabel": "Decade selection",
+        "dxCalendar-captionCenturyLabel": "Century selection",
+        
         "dxColorView-ariaRed": "Rosso",
         "dxColorView-ariaGreen": "Verde",
         "dxColorView-ariaBlue": "Blu",

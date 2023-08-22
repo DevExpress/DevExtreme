@@ -5,9 +5,6 @@ import 'generic_light.css!';
 QUnit.testStart(() => {
     const markup =
         `<style nonce="qunit-test">
-            .dx-scrollable-native-win8.dx-scrollable-native.dx-scrollview .dx-scrollable-container .dx-scrollview-content {
-                height: auto !important;
-            }
             .dx-list-item {
                 height: 40px;
             }

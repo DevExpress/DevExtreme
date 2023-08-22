@@ -7,49 +7,48 @@ import { TransferState, makeStateKey } from '@angular/platform-browser';
 @NgModule({})
 
 export class DxServerTransferStateModule {
-    constructor(private state: TransferState, @Inject(PLATFORM_ID) private platformId: any) {
-        let that = this;
+  constructor(private readonly state: TransferState, @Inject(PLATFORM_ID) private readonly platformId: any) {
+    const that = this;
 
-        ajax.inject({
-            sendRequest: function(...args) {
-                let key = makeStateKey(that.generateKey(args)),
-                    cachedData = that.state.get(key, null as any);
+    ajax.inject({
+      sendRequest(...args) {
+        const key = makeStateKey(that.generateKey(args));
+        const cachedData = that.state.get(key, null as any);
 
-                if (isPlatformServer(that.platformId)) {
-                    let result = this.callBase.apply(this, args);
-                    result.always((data, status) => {
-                        let dataForCache = {
-                            data: data,
-                            status: status
-                        };
-                        that.state.set(key, dataForCache as any);
-                    });
-                    return result;
-                } else {
-                    if (cachedData) {
-                        let d = (Deferred as any)();
-                        d.resolve(cachedData.data, cachedData.status);
-                        that.state.set(key, null as any);
-
-                        return d.promise();
-                    }
-                    return this.callBase.apply(this, args);
-                }
-            }
-        });
-    }
-
-    generateKey(args) {
-        let keyValue = '';
-        for (let key in args) {
-            if (typeof args[key] === 'object') {
-                let objKey = this.generateKey(args[key]);
-                keyValue += key + objKey;
-            } else {
-                keyValue += key + args[key];
-            }
+        if (isPlatformServer(that.platformId)) {
+          const result = this.callBase.apply(this, args);
+          result.always((data, status) => {
+            const dataForCache = {
+              data,
+              status,
+            };
+            that.state.set(key, dataForCache as any);
+          });
+          return result;
         }
+        if (cachedData) {
+          const d = (Deferred as any)();
+          d.resolve(cachedData.data, cachedData.status);
+          that.state.set(key, null as any);
 
-        return keyValue;
+          return d.promise();
+        }
+        return this.callBase.apply(this, args);
+      },
+    });
+  }
+
+  generateKey(args) {
+    let keyValue = '';
+    for (const key in args) {
+      if (typeof args[key] === 'object') {
+        const objKey = this.generateKey(args[key]);
+        keyValue += key + objKey;
+      } else {
+        keyValue += key + args[key];
+      }
     }
- }
+
+    return keyValue;
+  }
+}

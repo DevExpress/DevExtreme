@@ -184,11 +184,11 @@ class Toolbar extends ToolbarBase {
     }
 
     _itemOptionChanged(item, property, value) {
-        this._layoutStrategy._itemOptionChanged(item, property, value);
-
         if(!this._isMenuItem(item)) {
             super._itemOptionChanged(item, property, value);
         }
+
+        this._layoutStrategy._itemOptionChanged(item, property, value);
 
         if(property === 'disabled' || property === 'options.disabled') {
             toggleItemFocusableElementTabIndex(this, item);

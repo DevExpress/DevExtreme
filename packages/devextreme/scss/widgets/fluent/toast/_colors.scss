@@ -1,0 +1,37 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 10. Text color
+* $type color
+*/
+$toast-color: color.change(#fff, $alpha: 0.87) !default;
+$toast-border-radius: $base-border-radius !default;
+$toast-default-bg: color.change(#000, $alpha: 0.87) !default;
+
+/**
+* $name 20. Info background color
+* $type color
+*/
+$toast-info-bg: $toast-default-bg !default;
+
+/**
+* $name 30. Warning background color
+* $type color
+*/
+$toast-warning-bg: $base-warning !default;
+
+/**
+* $name 40. Error background color
+* $type color
+*/
+$toast-error-bg: $base-danger !default;
+
+/**
+* $name 50. Success background color
+* $type color
+*/
+$toast-success-bg: $base-success !default;

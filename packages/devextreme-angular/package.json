@@ -9,10 +9,13 @@
   "scripts": {
     "gulp": "npx --node-options='--max_old_space_size=8192' gulp",
     "build": "npm run gulp -- build",
+    "generate": "npm run update-integration-meta && npm run build",
+    "lint": "eslint src",
     "test": "npm run gulp -- test",
     "test:dev": "npm run gulp -- run.tests",
     "pack": "npm run gulp -- npm.pack",
-    "inject-descriptions": "dx-tools inject-descriptions-to-bundle --js-scripts ./npm/dist --artifacts ../../artifacts/internal-tools"
+    "inject-descriptions": "dx-tools inject-descriptions-to-bundle --js-scripts ./npm/dist --artifacts ../../artifacts/internal-tools",
+    "update-integration-meta": "dx-tools generate-ng-smd --artifacts ../../artifacts/internal-tools --output-path ./metadata/NGMetaData.json"
   },
   "author": "Developer Express Inc.",
   "license": "MIT",
@@ -20,7 +23,7 @@
     "@angular/common": ">12.0.0",
     "@angular/core": ">12.0.0",
     "@angular/forms": ">12.0.0",
-    "devextreme": "23.2-next"
+    "devextreme": "~23.2.0"
   },
   "devDependencies": {
     "@angular/animations": "~12.2.17",
@@ -37,8 +40,8 @@
     "codelyzer": "6.0.2",
     "core-js": "^2.6.12",
     "del": "^2.2.2",
-    "devextreme": "23.2-next",
-    "devextreme-angular-generator": "^2.1.1",
+    "devextreme": "~23.2.0",
+    "devextreme-angular-generator": "https://gitpkg.now.sh/DevExpress/devextreme-angular/packages/devextreme-angular-generator?master",
     "devextreme-internal-tools": "10.0.0-beta.18",
     "gulp": "^4.0.2",
     "gulp-header": "^1.8.12",
@@ -58,7 +61,7 @@
     "typescript": "~4.2.3",
     "webpack": "^5.88.2",
     "yargs": "^6.6.0",
-    "zone.js": "^0.13.1"
+    "zone.js": "^0.11.8"
   },
   "main": "./src/index.ts",
   "keywords": [

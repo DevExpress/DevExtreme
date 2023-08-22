@@ -6,7 +6,6 @@ const eol = require('gulp-eol');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
 const merge = require('merge-stream');
-const through = require('through2');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
@@ -96,22 +95,6 @@ const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src('webpack.config.js')
         .pipe(gulp.dest(`${dist}/bin`)),
-
-    gulp
-        .src('package.json')
-        .pipe(
-            through.obj((file, enc, callback) => {
-                const pkg = JSON.parse(file.contents.toString(enc));
-
-                pkg.name = 'devextreme';
-                pkg.version = ctx.version.package;
-                delete pkg.devDependencies;
-
-                file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
-                callback(null, file);
-            })
-        )
-        .pipe(gulp.dest(dist)),
 
     gulp
         .src(distGlob)

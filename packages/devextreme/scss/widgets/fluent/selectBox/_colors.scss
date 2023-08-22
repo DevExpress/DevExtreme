@@ -1,0 +1,11 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 10. Item background color
+* $type color
+*/
+$selectbox-list-bg: $base-bg !default;

@@ -1,0 +1,16 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-validation-message-padding: null !default;
+$fluent-validationsummary-item-margin: null !default;
+
+@if $size == "default" {
+  $fluent-validation-message-padding: 6px !default;
+  $fluent-validationsummary-item-margin: 10px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-validation-message-padding: 4px !default;
+  $fluent-validationsummary-item-margin: 6px !default;
+}

@@ -1,0 +1,144 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common/mixins" as *;
+@use "../typography/mixins" as *;
+@use "../form/sizes" as *;
+@use "../checkBox/sizes" as *;
+@use "../switch/sizes" as *;
+@use "../slider/sizes" as *;
+@use "../../base/fieldset";
+
+// adduse
+
+@mixin dx-fieldset-styling() {
+  .dx-field {
+    @include dx-base-typography();
+  }
+
+  .dx-field-label {
+    color: $fieldset-field-label-color;
+    font-size: $fluent-form-label-font-size;
+    cursor: default;
+
+    i {
+      font-style: normal;
+    }
+  }
+
+  .dx-field-value {
+    &.dx-attention {
+      color: $fieldset-field-value-invalid-color;
+      padding-left: $fluent-fieldset-attention-icon-offset;
+
+      &::before {
+        @include dx-invalid-fluent-badge();
+      }
+    }
+  }
+
+  .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button),
+  .dx-field-value-static {
+    width: 60%;
+  }
+}
+
+@mixin dx-field-value-widget-position($name, $size) {
+  &.#{$name},
+  &:not(.dx-widget) > .#{$name} {
+    margin: math.div($fluent-field-min-height - $size, 2) 0;
+  }
+}
+
+// TODO: merge with .dx-fieldset-sizing after removing scope .dx-device-phone
+@mixin dx-fieldset-sizing-base() {
+  .dx-field {
+    padding: 0;
+    display: flex;
+  }
+
+  .dx-field-label {
+    align-self: center;
+    padding-right: $fluent-field-labelvalue-spacing;
+  }
+
+  .dx-field-value {
+    &.dx-widget,
+    &:not(.dx-widget) > .dx-widget {
+      margin: 0;
+    }
+
+    &:not(.dx-widget) {
+      & > .dx-button,
+      & > .dx-checkbox,
+      & > .dx-switch {
+        float: right;
+      }
+    }
+
+    @include dx-field-value-widget-position(dx-checkbox, $fluent-checkbox-size);
+    @include dx-field-value-widget-position(dx-switch, $fluent-switch-height);
+    @include dx-field-value-widget-position(dx-slider, $fluent-slider-height);
+    @include dx-field-value-widget-position(dx-radiogroup, $fluent-radiogroup-min-height);
+
+    &.dx-attention {
+      padding: $fluent-field-value-top-padding $fluent-field-value-horizontal-padding $fluent-field-value-bottom-padding;
+      position: relative;
+      padding-left: $fluent-fieldset-attention-icon-offset;
+
+      &::before {
+        left: 0;
+      }
+    }
+  }
+
+  .dx-field-value-static {
+    padding: $fluent-field-value-top-padding $fluent-field-value-horizontal-padding $fluent-field-value-bottom-padding;
+  }
+}
+
+@mixin dx-fieldset-sizing($vertical-margin, $horizontal-margin, $header-vertical-margin, $field-vertical-margin) {
+  .dx-fieldset {
+    margin: $vertical-margin $horizontal-margin;
+    padding: 0;
+
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+      .dx-field-value {
+        &:not(.dx-widget) {
+          & > .dx-button,
+          & > .dx-checkbox,
+          & > .dx-switch {
+            float: left;
+          }
+        }
+      }
+    }
+  }
+
+  .dx-fieldset-header {
+    margin: 0 0 $header-vertical-margin 0;
+
+    @include dx-s-font-mixin();
+  }
+
+  .dx-field {
+    margin: 0 0 $field-vertical-margin 0;
+  }
+
+  .dx-field:last-of-type {
+    margin: 0;
+  }
+}
+
+@include dx-fieldset-styling();
+@include dx-fieldset-sizing-base();
+@include dx-fieldset-sizing(
+  $fluent-fieldset-vertical-margin,
+  $fluent-fieldset-horizontal-margin,
+  $fluent-fieldset-header-vertical-margin,
+  $fluent-field-vertical-margin
+);

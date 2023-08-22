@@ -1021,8 +1021,6 @@
 
   .dx-#{$widget-name}-notouch-action {
     touch-action: none;
-    -ms-content-zooming: none;
-    -ms-overflow-style: none; // for Edge browser
   }
 
   .dx-#{$widget-name}-column-chooser-list.dx-treeview {

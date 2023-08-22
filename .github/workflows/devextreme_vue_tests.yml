@@ -47,6 +47,10 @@ jobs:
     - name: Build generator
       run: npm run vue:build-generator
 
+    - name: Build devextreme package
+      run: |
+        npx nx build devextreme-main  
+
     - name: Generate wrappers
       working-directory: ./packages/devextreme-vue
       run: npm run generate
@@ -70,10 +74,6 @@ jobs:
         name: internal-tools-artifacts
         path: ./artifacts/internal-tools/
         retention-days: 7
-
-    - name: Build devextreme package
-      run: |
-        npx nx build devextreme-main
 
     - name: Run tests with Vue
       working-directory: packages/devextreme-vue

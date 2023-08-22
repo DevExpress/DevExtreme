@@ -125,36 +125,3 @@
     @include flip-horizontally();
   }
 }
-
-
-.dx-device-android {
-  .dx-scrollable-native {
-    .dx-gallery-item,
-    .dx-gallery-indicator,
-    .dx-gallery-nav-button-prev,
-    .dx-gallery-nav-button-next {
-      backface-visibility: visible;
-    }
-
-    .dx-gallery-active .dx-gallery-item,
-    .dx-gallery-active .dx-gallery-indicator,
-    .dx-gallery-active .dx-gallery-nav-button-prev,
-    .dx-gallery-active .dx-gallery-nav-button-next {
-      backface-visibility: hidden;
-    }
-  }
-
-  .dx-gallery-item {
-    backface-visibility: hidden;
-  }
-}
-
-.dx-device-ios-6 { /* NOTE: fix blinking on ios (B254535) */
-  .dx-gallery,
-  .dx-gallery-item,
-  .dx-gallery-indicator,
-  .dx-gallery-nav-button-prev,
-  .dx-gallery-nav-button-next {
-    backface-visibility: hidden;
-  }
-}

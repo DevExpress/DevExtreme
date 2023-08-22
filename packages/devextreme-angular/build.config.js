@@ -75,7 +75,7 @@ module.exports = {
         outputPath: 'dist'
     },
     tests: {
-        tsConfigPath: "tsconfig.json"
+        tsConfigPath: "tsconfig.tests.json"
     },
     npm: {
         distPath: "npm/dist",

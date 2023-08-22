@@ -14,6 +14,7 @@ export const componentNames = [
     'context-menu',
     'data-grid',
     'date-box',
+    'date-range-box',
     'defer-rendering',
     'diagram',
     'draggable',

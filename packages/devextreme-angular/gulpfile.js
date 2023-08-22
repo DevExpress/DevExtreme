@@ -130,7 +130,7 @@ gulp.task('build.remove-unusable-variable', function() {
         .pipe(gulp.dest(config.distPath));
 });
 
-gulp.task('build.components', gulp.series('generate.facades', 
+gulp.task('build.components', gulp.series('generate.facades',
         'generate.common-reexports',
         'build.copy-sources',
         'build.license-headers',

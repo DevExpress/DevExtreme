@@ -21,7 +21,7 @@ describe('Integration module', () => {
         TestBed.configureTestingModule({
             imports: [ SingletonModule ]
         });
-        TestBed.get(SingletonModule);
+        TestBed.inject(SingletonModule);
 
         expect(spy.calls.count()).toBe(1);
     });

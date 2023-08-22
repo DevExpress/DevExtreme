@@ -128,6 +128,52 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
+    QUnit.test('Accessibility: editable cells should have aria-roledescription', function(assert) {
+        // arrange, act
+        createDataGrid({
+            columns: [
+                {
+                    dataField: 'field1',
+                },
+                {
+                    dataField: 'field2',
+                    calculateCellValue: function(rowData) {
+                        return 500;
+                    }
+                },
+                {
+                    dataField: 'field3',
+                    allowEditing: false,
+                },
+                {
+                    dataField: 'field4',
+                },
+            ],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true,
+                allowDeleting: true,
+            },
+            dataSource: [{
+                field1: '1',
+                field2: '2',
+                field3: '3',
+                field4: '4',
+            }]
+        });
+
+        this.clock.tick(10);
+        const $cells = $('.dx-data-row > td');
+
+        // assert
+        const editableDescription = messageLocalization.format('dxDataGrid-ariaEditableCell');
+        assert.equal($($cells.get(0)).attr('aria-roledescription'), editableDescription);
+        assert.equal($($cells.get(1)).attr('aria-roledescription'), undefined);
+        assert.equal($($cells.get(2)).attr('aria-roledescription'), undefined);
+        assert.equal($($cells.get(3)).attr('aria-roledescription'), editableDescription);
+        assert.equal($($cells.get(4)).attr('aria-roledescription'), undefined);
+    });
+
     QUnit.test('Command column accessibility structure', function(assert) {
         // arrange
         createDataGrid({
