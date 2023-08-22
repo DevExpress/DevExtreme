@@ -1604,11 +1604,7 @@ export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends Colu
     name?: TreeListPredefinedColumnButton | string;
     /**
      * @docid dxTreeListColumnButton.onClick
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field row:dxTreeListRowObject
-     * @type_function_param1_field column:dxTreeListColumn
+     * @type_function_param1 e:{ui/tree_list:ColumnButtonClickEvent}
      * @public
      */
     onClick?: ((e: ColumnButtonClickEvent<TRowData, TKey>) => void);
