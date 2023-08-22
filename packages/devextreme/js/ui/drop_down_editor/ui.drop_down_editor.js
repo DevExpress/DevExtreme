@@ -593,7 +593,7 @@ const DropDownEditor = TextBox.inherit({
     _popupConfig: function() {
 
         return {
-            onInitialized: this._popupInitializedHandler(),
+            onInitialized: this._getPopupInitializedHandler(),
             position: extend(this.option('popupPosition'), {
                 of: this.$element()
             }),
@@ -621,13 +621,14 @@ const DropDownEditor = TextBox.inherit({
         };
     },
 
-    _popupInitializedHandler: function() {
-        if(!this.option('onPopupInitialized')) {
-            return null;
-        }
+    _popupInitializedHandler: noop,
+
+    _getPopupInitializedHandler: function() {
+        const onPopupInitialized = this.option('onPopupInitialized');
 
         return (e) => {
-            this._popupInitializedAction({ popup: e.component });
+            this._popupInitializedHandler(e);
+            onPopupInitialized && this._popupInitializedAction({ popup: e.component });
         };
     },
 
@@ -879,7 +880,7 @@ const DropDownEditor = TextBox.inherit({
             case 'onClosed':
                 this._initVisibilityActions();
                 break;
-            case 'onPopupInitialized':
+            case 'onPopupInitialized': // for dashboards
                 this._initPopupInitializedAction();
                 break;
             case 'fieldTemplate':
