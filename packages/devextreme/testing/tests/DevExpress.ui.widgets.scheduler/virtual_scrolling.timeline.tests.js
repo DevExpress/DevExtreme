@@ -211,7 +211,7 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 5200 },
                                 expectedRects: [{
                                     left: -9099,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 400
                                 }]
                             },
@@ -219,11 +219,11 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 6200 },
                                 expectedRects: [{
                                     left: -10099,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 1400
                                 }, {
                                     left: -8899,
-                                    top: -9677,
+                                    top: -9669,
                                     width: 200
                                 }]
                             },
@@ -231,11 +231,11 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 7200 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 1000
                                 }, {
                                     left: -9899,
-                                    top: -9677,
+                                    top: -9669,
                                     width: 1200
                                 }]
                             },
@@ -243,7 +243,7 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 8200 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9677,
+                                    top: -9669,
                                     width: 1650
                                 }]
                             },
@@ -251,11 +251,11 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 9200 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9677,
+                                    top: -9669,
                                     width: 650
                                 }, {
                                     left: -9649,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 950
                                 }]
                             },
@@ -263,7 +263,7 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 10200 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 1600
                                 }]
                             },
@@ -271,15 +271,15 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 12000 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 1600
                                 }, {
                                     left: -9899,
-                                    top: -9827,
+                                    top: -9817,
                                     width: 1200
                                 }, {
                                     left: -9899,
-                                    top: -9677,
+                                    top: -9669,
                                     width: 1200
                                 }]
                             },
@@ -287,15 +287,15 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 13000 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 1600
                                 }, {
                                     left: -10299,
-                                    top: -9827,
+                                    top: -9817,
                                     width: 1600
                                 }, {
                                     left: -10299,
-                                    top: -9677,
+                                    top: -9669,
                                     width: 1600
                                 }]
                             },
@@ -303,15 +303,15 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 14000 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 1600
                                 }, {
                                     left: -10299,
-                                    top: -9827,
+                                    top: -9817,
                                     width: 1600
                                 }, {
                                     left: -10299,
-                                    top: -9677,
+                                    top: -9669,
                                     width: 1600
                                 }]
                             },
@@ -319,15 +319,15 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 15000 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 1600
                                 }, {
                                     left: -10299,
-                                    top: -9827,
+                                    top: -9817,
                                     width: 1600
                                 }, {
                                     left: -10299,
-                                    top: -9677,
+                                    top: -9669,
                                     width: 1600
                                 }]
                             },
@@ -335,15 +335,15 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 17000 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 1600
                                 }, {
                                     left: -10299,
-                                    top: -9827,
+                                    top: -9817,
                                     width: 1400
                                 }, {
                                     left: -10299,
-                                    top: -9677,
+                                    top: -9669,
                                     width: 1400
                                 }]
                             },
@@ -351,15 +351,15 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 17500 },
                                 expectedRects: [{
                                     left: -10399,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 1600
                                 }, {
                                     left: -10399,
-                                    top: -9827,
+                                    top: -9817,
                                     width: 1000
                                 }, {
                                     left: -10399,
-                                    top: -9677,
+                                    top: -9669,
                                     width: 1000
                                 }]
                             },
@@ -367,15 +367,15 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 18000 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 1600
                                 }, {
                                     left: -10299,
-                                    top: -9827,
+                                    top: -9817,
                                     width: 400
                                 }, {
                                     left: -10299,
-                                    top: -9677,
+                                    top: -9669,
                                     width: 400
                                 }]
                             },
@@ -383,7 +383,7 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 19000 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 1600
                                 }]
                             },
@@ -391,7 +391,7 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 20000 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 950
                                 }]
                             },
@@ -399,7 +399,7 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 20500 },
                                 expectedRects: [{
                                     left: -10399,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 550
                                 }]
                             },
@@ -407,7 +407,7 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 20800 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9528,
+                                    top: -9522,
                                     width: 150
                                 }]
                             },
@@ -488,7 +488,7 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 0 },
                                 expectedRects: [{
                                     left: -9899,
-                                    top: -9603,
+                                    top: -9596,
                                     width: 1200
                                 }]
                             },
@@ -496,7 +496,7 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 10000 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9603,
+                                    top: -9596,
                                     width: 1600
                                 }]
                             },
@@ -504,7 +504,7 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 20000 },
                                 expectedRects: [{
                                     left: -10299,
-                                    top: -9603,
+                                    top: -9596,
                                     width: 1600
                                 }]
                             },
@@ -512,7 +512,7 @@ module('Virtual scrolling timelines', () => {
                                 offset: { x: 21700 },
                                 expectedRects: [{
                                     left: -10399,
-                                    top: -9603,
+                                    top: -9596,
                                     width: 800
                                 }]
                             },
