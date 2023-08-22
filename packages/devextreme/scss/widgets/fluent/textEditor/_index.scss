@@ -988,7 +988,7 @@ $fluent-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms, 
   }
 }
 
-@include dx-editor-buttons-container-fluent(
+@include dx-editor-buttons-container-material(
   $fluent-underlined-editor-button-height,
   $fluent-editor-custom-button-margin,
   $fluent-filled-texteditor-input-button-horizontal-padding,
