@@ -1,0 +1,16 @@
+@use "../sizes" as *;
+
+// adduse
+
+$textarea-content-padding: null !default;
+$textarea-content-line-height: null !default;
+
+@if $size == "default" {
+  $textarea-content-padding: 10px !default;
+  $textarea-content-line-height: 24px !default;
+}
+
+@else if $size == "compact" {
+  $textarea-content-padding: 8px !default;
+  $textarea-content-line-height: 20px !default;
+}

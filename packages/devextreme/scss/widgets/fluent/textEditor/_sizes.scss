@@ -1,0 +1,53 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent-texteditor-font-size: null !default;
+$fluent-texteditor-clear-icon-size: null !default;
+$fluent-filled-texteditor-input-horizontal-padding: null !default;
+$fluent-filled-texteditor-input-top-padding: null !default;
+$fluent-filled-texteditor-input-bottom-padding: null !default;
+$fluent-standard-texteditor-input-top-padding: null !default;
+$fluent-underlined-editor-button-height: null !default;
+$fluent-texteditor-label-font-size: null !default;
+$fluent-standard-texteditor-input-bottom-padding: null !default;
+$fluent-standard-texteditor-with-label-input-top-padding: null !default;
+$fluent-standard-texteditor-with-label-input-bottom-padding: null !default;
+
+@if $size == "default" {
+  $fluent-texteditor-font-size: 16px !default;
+  $fluent-texteditor-label-font-size: 12px !default;
+  $fluent-texteditor-clear-icon-size: 12px !default;
+  $fluent-filled-texteditor-input-horizontal-padding: 16px !default;
+  $fluent-filled-texteditor-input-top-padding: 15px;
+  $fluent-filled-texteditor-input-bottom-padding: 14px;
+  $fluent-standard-texteditor-input-top-padding: 7px !default;
+  $fluent-standard-texteditor-input-bottom-padding: 6px !default;
+  $fluent-standard-texteditor-with-label-input-top-padding: 16px !default;
+  $fluent-standard-texteditor-with-label-input-bottom-padding: 7px !default;
+  $fluent-underlined-editor-button-height: 28px !default;
+}
+
+@else if $size == "compact" {
+  $fluent-texteditor-font-size: 13px !default;
+  $fluent-texteditor-label-font-size: 11px !default;
+  $fluent-texteditor-clear-icon-size: 10px !default;
+  $fluent-filled-texteditor-input-horizontal-padding: 11px !default;
+  $fluent-filled-texteditor-input-top-padding: 9px;
+  $fluent-filled-texteditor-input-bottom-padding: 8px;
+  $fluent-standard-texteditor-input-top-padding: 6px !default;
+  $fluent-standard-texteditor-input-bottom-padding: 5px !default;
+  $fluent-standard-texteditor-with-label-input-top-padding: 10px !default;
+  $fluent-standard-texteditor-with-label-input-bottom-padding: $fluent-standard-texteditor-input-bottom-padding !default;
+  $fluent-underlined-editor-button-height: 22px !default;
+}
+
+$fluent-filled-texteditor-input-padding:
+  $fluent-filled-texteditor-input-top-padding
+  $fluent-filled-texteditor-input-horizontal-padding
+  $fluent-filled-texteditor-input-bottom-padding !default;
+
+$fluent-standard-texteditor-input-padding:
+  $fluent-standard-texteditor-input-top-padding
+  $fluent-base-standard-texteditor-input-horizontal-padding
+  $fluent-standard-texteditor-input-bottom-padding !default;

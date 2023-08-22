@@ -1,0 +1,164 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/treeView" as *;
+@use "../../base/icons" as *;
+@use "../checkBox/colors" as *;
+
+// adduse
+
+$fluent-treeview-container-with-border-offset: 8px;
+$fluent-treeview-border-padding: 1px;
+$fluent-treeview-container-padding:
+  $fluent-treeview-border-padding
+  $fluent-treeview-border-padding
+  $fluent-treeview-border-padding
+  $fluent-treeview-container-with-border-offset;
+
+$fluent-select-all-item-left-padding: 26px;
+$fluent-treeview-node-offset: $fluent-treeview-toggle-item-width;
+$fluent-treeview-item-with-checkbox-offset: $fluent-treeview-checkbox-offset + 5;
+
+
+.dx-treeview-custom-expand-icon,
+.dx-treeview-custom-collapse-icon {
+  @include dx-icon-sizing($fluent-base-icon-size);
+
+  top: $fluent-custom-icon-top;
+}
+
+.dx-treeview-node-loadindicator {
+  top: $fluent-treeview-loadincicator-offset-top;
+  left: $fluent-treeview-loadincicator-offset-left;
+  width: $fluent-treeview-loadincicator-size;
+  height: $fluent-treeview-loadincicator-size;
+}
+
+.dx-rtl {
+  @include dx-treeview-make-rtl($fluent-treeview-container-with-border-offset, $fluent-treeview-node-offset, $fluent-treeview-item-with-checkbox-offset, $fluent-treeview-checkbox-offset, $fluent-select-all-text-offset, $fluent-select-all-item-left-padding, $fluent-treeview-border-padding);
+
+  .dx-treeview-toggle-item-visibility,
+  .dx-treeview-custom-expand-icon,
+  .dx-treeview-custom-collapse-icon {
+    right: 0;
+  }
+
+  .dx-treeview-item-with-checkbox .dx-checkbox {
+    overflow: visible;
+  }
+}
+
+.dx-treeview-search {
+  margin-bottom: $fluent-treeview-searchbox-margin-bottom;
+}
+
+.dx-treeview-with-search > .dx-scrollable {
+  height: calc(100% - #{round($fluent-treeview-search-editor-height + $fluent-treeview-searchbox-margin-bottom)});
+}
+
+.dx-treeview-border-visible {
+  border: 1px solid $treeview-border-color;
+
+  .dx-treeview-select-all-item {
+    padding-left: $fluent-select-all-item-left-padding;
+  }
+
+  .dx-scrollable-content {
+    > .dx-treeview-node-container {
+      padding: $fluent-treeview-container-padding;
+    }
+  }
+}
+
+.dx-treeview-select-all-item {
+  border-bottom: 1px solid $treeview-border-color;
+  padding: $fluent-select-all-item-padding;
+
+  .dx-checkbox-text {
+    padding-left: $fluent-select-all-text-offset;
+  }
+}
+
+.dx-treeview-node {
+  padding-left: $fluent-treeview-node-offset;
+}
+
+.dx-state-selected {
+  > .dx-treeview-item {
+    color: $treeview-item-selected-color;
+  }
+}
+
+.dx-treeview-item-with-checkbox {
+  &.dx-treeview-item-with-custom-expander-icon > .dx-checkbox {
+    top: $fluent-treeview-with-custom-icon-checkbox-vertical-offset;
+  }
+
+  .dx-treeview-item {
+    color: $base-text-color;
+    padding-left: $fluent-treeview-item-with-checkbox-offset;
+  }
+
+  .dx-checkbox {
+    top: $fluent-treeview-checkbox-vertical-offset;
+    left: $fluent-treeview-checkbox-offset;
+  }
+}
+
+.dx-treeview-item-without-checkbox {
+  &.dx-treeview-item-with-custom-expander-icon > .dx-treeview-item {
+    padding-left: $fluent-treeview-item-side-padding;
+  }
+
+  &.dx-state-selected {
+    > .dx-treeview-item {
+      color: $treeview-item-selected-color;
+      background-color: $treeview-item-selected-bg;
+
+      &.dx-state-hover:not(.dx-state-focused) {
+        background-color: $treeview-item-selected-hover-bg;
+      }
+    }
+  }
+
+  &.dx-state-focused {
+    > .dx-treeview-item {
+      background-color: $treeview-focused-bg;
+      color: $treeview-focus-color;
+    }
+  }
+}
+
+.dx-treeview-item {
+  padding: $fluent-treeview-item-padding;
+  min-height: $fluent-treeview-min-item-height;
+  line-height: math.div($fluent-treeview-min-item-height, 2) - 2;
+
+  .dx-treeview-item-content > .dx-icon {
+    @include dx-icon-sizing($fluent-base-icon-size);
+  }
+
+  &.dx-state-hover {
+    background-color: $treeview-hover-bg;
+    color: $treeview-item-hover-color;
+  }
+}
+
+.dx-treeview-toggle-item-visibility {
+  @include dx-icon(chevronright);
+  @include dx-icon-font-centered-sizing($fluent-base-icon-size);
+
+  color: $treeview-spin-icon-color;
+  width: $fluent-treeview-toggle-item-width;
+  height: $fluent-treeview-min-item-height;
+  top: 0;
+  left: 0;
+
+  &.dx-treeview-toggle-item-visibility-opened {
+    @include dx-icon(chevrondown);
+    @include dx-icon-font-centered-sizing($fluent-base-icon-size);
+  }
+}

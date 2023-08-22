@@ -1,0 +1,24 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common/mixins" as *;
+@use "../../base/widget";
+
+// adduse
+
+.dx-widget {
+  @include dx-base-typography();
+}
+
+.dx-state-disabled {
+  &.dx-widget,
+  .dx-widget {
+    .dx-widget {
+      opacity: 1;
+    }
+
+    @include disabled-widget();
+  }
+}

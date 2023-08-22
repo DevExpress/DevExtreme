@@ -1,0 +1,113 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../button/sizes" as *;
+@use "../menuBase/sizes" as *;
+@use "../../base/icons" as *;
+
+// adduse
+@use "../menuBase" as *;
+@use "../../base/menu";
+
+
+$fluent-menu-font-size: $fluent-base-font-size;
+
+.dx-context-menu-container-border {
+  background-color: transparent;
+}
+
+.dx-context-menu-content-delimiter {
+  background-color: transparent;
+}
+
+.dx-menu {
+  color: $menu-color;
+
+  .dx-menu-horizontal {
+    .dx-menu-item-popout {
+      margin-inline-start: $fluent-menu-icon-to-text-offset;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include dx-icon(spindown);
+      @include dx-icon-sizing($fluent-button-icon-size);
+    }
+  }
+
+  .dx-menu-vertical {
+    .dx-menu-item-popout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include dx-icon(spinright);
+      @include dx-icon-sizing($fluent-button-icon-size);
+    }
+  }
+
+  .dx-menu-item {
+    font-size: $fluent-menu-font-size;
+    border-radius: $base-border-radius;
+
+    .dx-menu-item-content {
+      display: flex;
+      padding: $fluent-menu-vertical-padding $fluent-menu-horizontal-padding;
+
+      .dx-menu-item-popout-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+    }
+
+    &.dx-menu-item-has-text {
+      .dx-menu-item-text {
+        flex: 1 1 auto;
+      }
+
+      &.dx-menu-item-has-icon {
+        .dx-icon {
+          margin-inline-end: $fluent-menu-icon-to-text-offset;
+        }
+      }
+    }
+  }
+}
+
+.dx-menu-adaptive-mode {
+  background-color: $menu-popup-bg;
+
+  .dx-treeview {
+    border: 1px solid $menu-popup-border-color;
+    border-radius: $base-border-radius;
+
+    &,
+    &.dx-state-focused {
+      box-shadow: 0 3px 10px color.change($base-shadow-color, $alpha: 0.1);
+    }
+  }
+
+  .dx-treeview-toggle-item-visibility {
+    font-size: 18px;
+  }
+
+  .dx-treeview-node {
+    &.dx-state-focused {
+      .dx-treeview-node .dx-treeview-toggle-item-visibility {
+        color: inherit;
+      }
+
+      .dx-treeview-toggle-item-visibility {
+        color: $menu-popup-bg;
+      }
+    }
+  }
+
+  .dx-treeview-node-container:first-child > .dx-treeview-node {
+    border-bottom: 1px solid $menu-popup-border-color;
+  }
+}

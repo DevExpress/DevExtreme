@@ -1,0 +1,278 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/gantt";
+@use "../../base/gantt/mixins" as *;
+@use "../gridBase/colors" as *;
+@use "../form/sizes" as *;
+
+// adduse
+@use "../splitter";
+
+
+$gantt-successor-background-color: white;
+
+.dx-gantt {
+  border: 1px solid $base-border-color;
+
+  .dx-gantt-toolbar-wrapper {
+    padding: 5px;
+    border-bottom: 1px solid $base-border-color;
+
+    .dx-gantt-toolbar-separator {
+      border-left-color: $base-border-color;
+    }
+
+    .dx-toolbar .dx-toolbar-items-container {
+      min-height: 42px;
+    }
+  }
+
+  .dx-gantt-view {
+    background-color: $base-bg;
+  }
+
+  .dx-header-row {
+    height: $gantt-header-item-height;
+  }
+
+  .dx-gantt-header {
+    color: $datagrid-columnchooser-item-color;
+    font-size: $fluent-form-label-font-size;
+
+    .dx-gantt-tsac,
+    .dx-gantt-tsa,
+    .dx-gantt-hb,
+    .dx-gantt-vb {
+      border-color: $base-border-color;
+      background-color: $base-bg;
+    }
+  }
+
+  .dx-gantt-si {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .dx-gantt-tsac,
+  .dx-gantt-tsa {
+    border-bottom: 1px solid $base-border-color;
+  }
+
+  .dx-gantt-hb {
+    border-top: 1px solid $base-border-color;
+  }
+
+  .dx-gantt-vb {
+    border-left: 1px solid $base-border-color;
+  }
+
+  .dx-gantt-taskWrapper {
+    padding-top: $gantt-task-wrapper-padding-top;
+
+    .dx-gantt-task,
+    .dx-gantt-titleOut {
+      height: $gantt-task-height;
+      line-height: $gantt-task-height;
+    }
+
+    .dx-gantt-task {
+      background-color: $base-accent;
+      border-radius: $base-border-radius;
+
+      .dx-gantt-tPrg {
+        border-radius: $base-border-radius;
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+
+      &.dx-gantt-smallTask {
+        border-radius: $base-border-radius;
+
+        .dx-gantt-titleIn {
+          padding: 0 2px;
+        }
+      }
+
+      &.dx-gantt-parent {
+        height: $gantt-task-height - 2px;
+        line-height: $gantt-task-height - 2px;
+        background-color: $gantt-parent-task-background-color;
+        border-left-color: $gantt-parent-task-background-color;
+        border-right-color: $gantt-parent-task-background-color;
+        border-top-color: $gantt-parent-task-background-color;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+
+        &:not(.dx-gantt-noPrg) .dx-gantt-tPrg {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        &:not(.dx-gantt-smallTask)::before,
+        &:not(.dx-gantt-smallTask)::after,
+        &:not(.dx-gantt-smallTask):not(.dx-gantt-noPrg) .dx-gantt-tPrg::before,
+        &:not(.dx-gantt-smallTask).dx-gantt-cmpl .dx-gantt-tPrg::after {
+          content: '';
+          position: absolute;
+          bottom: -8px;
+          border-width: 4px;
+          border-style: solid;
+        }
+
+        &::before,
+        &:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before {
+          left: 0;
+          border-right-color: transparent;
+          border-bottom-color: transparent;
+        }
+
+        &:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before {
+          border-left-color: rgba(255, 255, 255, 0.2);
+          border-top-color: rgba(255, 255, 255, 0.2);
+        }
+
+        &::after,
+        &.dx-gantt-cmpl .dx-gantt-tPrg::after {
+          right: 0;
+          border-left-color: transparent;
+          border-bottom-color: transparent;
+        }
+
+        &.dx-gantt-cmpl::after {
+          border-right-color: rgba(255, 255, 255, 0.2);
+          border-top-color: rgba(255, 255, 255, 0.2);
+        }
+
+        &.dx-gantt-cmpl .dx-gantt-tPrg::after {
+          border-right-color: $gantt-parent-task-background-color;
+          border-top-color: $gantt-parent-task-background-color;
+        }
+
+        .dx-gantt-task-edit-frame {
+          height: $gantt-task-height - 2px;
+        }
+      }
+    }
+
+    .dx-gantt-titleIn {
+      color: #fff;
+      padding: 0 $gantt-task-title-padding-left;
+    }
+  }
+
+  .dx-gantt-taskRes {
+    height: $gantt-task-height;
+    line-height: $gantt-task-height;
+    color: #fff;
+    background-color: #999;
+    border-radius: $base-border-radius;
+    margin-left: 21px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .dx-gantt-titleOut {
+    padding-right: 20px;
+  }
+
+  .dx-gantt-milestone {
+    background-color: $base-text-color;
+    width: $gantt-milestone-size;
+    height: $gantt-milestone-size;
+  }
+
+  .dx-gantt-task-edit-wrapper {
+    padding-top: $gantt-task-wrapper-padding-top;
+    padding-left: 1px;
+
+    .dx-gantt-task-edit-frame {
+      height: 100%;
+      border: 1px solid darken($base-accent, 10%);
+      border-radius: $base-border-radius;
+
+      .dx-gantt-task-edit-progress {
+        border-color: transparent transparent darken($base-accent, 10%) transparent;
+
+        &::before {
+          width: 12px;
+          height: 6px;
+          bottom: -14px;
+          border: 1px solid darken($base-accent, 10%);
+        }
+      }
+
+      .dx-gantt-task-edit-progress-status {
+        border-radius: $base-border-radius;
+      }
+    }
+  }
+
+  .dx-gantt-task-edit-wrapper-successor {
+    padding-top: $gantt-task-wrapper-padding-top;
+
+    .dx-gantt-task-edit-frame-successor {
+      height: $gantt-task-height;
+    }
+  }
+
+  .dx-gantt-task-edit-dependency-r,
+  .dx-gantt-task-edit-successor-dependency-r,
+  .dx-gantt-task-edit-dependency-l,
+  .dx-gantt-task-edit-successor-dependency-l {
+    background: $gantt-successor-background-color;
+    border: 1px solid darken($base-accent, 10%);
+    width: $gantt-dependency-successor-size;
+    height: $gantt-dependency-successor-size;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+  }
+
+  .dx-gantt-task-edit-dependency-r,
+  .dx-gantt-task-edit-successor-dependency-r {
+    left: -$gantt-dependency-successor-size - 1px;
+  }
+
+  .dx-gantt-task-edit-dependency-l,
+  .dx-gantt-task-edit-successor-dependency-l {
+    right: -$gantt-dependency-successor-size - 1px;
+  }
+
+  .dx-gantt-task-edit-dependency-line {
+    background-color: $base-text-color;
+  }
+
+  .dx-gantt-sel {
+    background-color: $datagrid-selection-bg;
+  }
+
+  .dx-gantt-conn-v {
+    border-left-color: $base-text-color;
+  }
+
+  .dx-gantt-conn-h {
+    border-top-color: $base-text-color;
+  }
+
+  .dx-gantt-arrow {
+    border: 5px solid $base-text-color;
+  }
+
+  .dx-gantt-tm {
+    border-left: 1px dashed $base-accent;
+  }
+
+  .dx-gantt-ti {
+    border-left: 1px dashed $base-accent;
+    border-right: 1px dashed $base-accent;
+    background-color: color.change($base-accent, $alpha: 0.15);
+  }
+
+  .dx-gantt-altRow,
+  .dx-gantt-collapsable-row {
+    background-color: $gantt-collapsable-row-bg;
+  }
+}
+
+@include gantt-icons-mixin($gantt-icon-color);

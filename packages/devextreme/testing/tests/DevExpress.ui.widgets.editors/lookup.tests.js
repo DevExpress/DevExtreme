@@ -82,7 +82,10 @@ const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 const CLEAR_BUTTON_CLASS = 'dx-popup-clear';
 const APPLY_BUTTON_CLASS = 'dx-popup-done';
 
+const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
+const TEXTEDITOR_EMPTY_CLASS = 'dx-texteditor-empty';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 
 const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
@@ -225,7 +228,7 @@ QUnit.module('Lookup', {
 
         assert.equal(this.instance.option('value'), undefined, 'no selected value on start');
         assert.equal(this.instance.option('displayValue'), null, 'no selected value on start');
-        assert.equal(this.$field.text(), this.instance.option('placeholder'), 'no field text if no selected value');
+        assert.equal(this.$field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), this.instance.option('placeholder'), 'no field text if no selected value');
 
         this.togglePopup();
 
@@ -370,7 +373,7 @@ QUnit.module('Lookup', {
             })
             .dxLookup('instance');
 
-        assert.equal(this.$field.text(), lookup.option('placeholder'), 'no field text if no selected value');
+        assert.equal(this.$field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), lookup.option('placeholder'), 'no field text if no selected value');
 
         this.togglePopup();
 
@@ -515,7 +518,7 @@ QUnit.module('Lookup', {
             placeholder: 'test'
         });
 
-        assert.equal($lookup.text(), 'test', 'display value is not defined');
+        assert.equal($lookup.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'test', 'display value is not defined');
     });
 
     QUnit.test('option value returns object when valueExpr is \'this\'', function(assert) {
@@ -1250,22 +1253,30 @@ QUnit.module('Lookup', {
         assert.equal(loadingFired, 1, 'loading called once');
     });
 
-    QUnit.test('lookup empty class is attached when no item is selected', function(assert) {
-        const $lookup = this.element.dxLookup({ dataSource: [1, 2, 3], showClearButton: true, placeholder: 'placeholder' }); const lookup = $lookup.dxLookup('instance'); const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
+    QUnit.test('empty classes are attached when no item is selected', function(assert) {
+        const $lookup = this.element.dxLookup({
+            dataSource: [1, 2, 3],
+            showClearButton: true,
+            placeholder: 'placeholder'
+        });
+        const lookup = $lookup.dxLookup('instance');
 
-        assert.ok($lookup.hasClass(LOOKUP_EMPTY_CLASS), 'Lookup without preselected value has empty class');
+        assert.strictEqual($lookup.hasClass(LOOKUP_EMPTY_CLASS), true, 'Lookup without preselected value has lookup empty class');
+        assert.strictEqual($lookup.hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'Lookup without preselected value has texteditor empty class');
 
         lookup.option('value', 1);
 
-        assert.ok(!$lookup.hasClass(LOOKUP_EMPTY_CLASS), 'Lookup with selected item has not empty class');
+        assert.strictEqual($lookup.hasClass(LOOKUP_EMPTY_CLASS), false, 'Lookup with selected item has not lookup empty class');
+        assert.strictEqual($lookup.hasClass(TEXTEDITOR_EMPTY_CLASS), false, 'Lookup with selected item has not texteditor empty class');
 
         openPopupWithList(lookup);
         $(lookup._popup.$wrapper()).find('.dx-button.dx-popup-clear').trigger('dxclick');
 
         const $lookupField = $lookup.find('.dx-lookup-field');
 
-        assert.ok($lookup.hasClass(LOOKUP_EMPTY_CLASS), 'Lookup has empty class after clearance');
-        assert.equal($.trim($lookupField.text()), 'placeholder', 'placeholder is shown');
+        assert.strictEqual($lookup.hasClass(LOOKUP_EMPTY_CLASS), true, 'lookup empty class was added after clearance');
+        assert.strictEqual($lookup.hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'lookup empty class was added after clearance');
+        assert.equal($.trim($lookupField.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder')), 'placeholder', 'placeholder is shown');
         assert.strictEqual(lookup.option('value'), null, 'value reset');
     });
 
@@ -1773,7 +1784,7 @@ QUnit.module('options', {
         let $firstItem;
         const $field = $(instance._$field);
 
-        assert.equal($field.text(), instance.option('placeholder'), 'no field text if no selected value');
+        assert.equal($field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), instance.option('placeholder'), 'no field text if no selected value');
 
         $(instance._$field).trigger('dxclick');
 
@@ -1795,7 +1806,7 @@ QUnit.module('options', {
         const instance = $('#lookup').dxLookup({ dataSource: items }).dxLookup('instance');
         const $field = $(instance._$field);
 
-        assert.equal($field.text(), instance.option('placeholder'), 'no field text if no selected value');
+        assert.equal($field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), instance.option('placeholder'), 'no field text if no selected value');
 
         instance.option('value', 1);
         assert.equal($field.text(), 1, 'field text is selected item value');
@@ -1965,10 +1976,10 @@ QUnit.module('options', {
         })
             .dxLookup('instance');
 
-        assert.equal($(instance._$field).text(), 'Select...', 'default value');
+        assert.equal($(instance._$field).find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'Select...', 'default value');
 
         instance.option('placeholder', 'placeholder');
-        assert.equal($(instance._$field).text(), 'placeholder', 'set as option');
+        assert.equal($(instance._$field).find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'placeholder', 'set as option');
     });
 
     QUnit.test('minSearchLength', function(assert) {
@@ -1987,15 +1998,15 @@ QUnit.module('options', {
         const $list = $(getList().$element());
 
         assert.equal($list.find('.dx-list-item').filter(':visible').length, 0, 'No items are expected to be shown');
-        assert.equal($field.text(), placeholder);
+        assert.equal($field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), placeholder);
 
         instance.option('minSearchLength', 0);
         assert.equal($list.find('.dx-list-item').filter(':visible').length, 2);
-        assert.equal($field.text(), placeholder);
+        assert.equal($field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), placeholder);
 
         instance.option('minSearchLength', 3);
         assert.equal($list.find('.dx-list-item').filter(':visible').length, 0);
-        assert.equal($field.text(), placeholder);
+        assert.equal($field.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), placeholder);
 
         const selectedValueText = 'def';
         instance.option('value', selectedValueText);
@@ -3945,7 +3956,7 @@ QUnit.module('default options', {
 
             $popup = $('.dx-popup-wrapper');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, $(lookup.field()).outerHeight(), 3, 'popup position if dropDownCentered option is false');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, $(lookup._inputWrapper()).outerHeight(), 3, 'popup position if dropDownCentered option is false');
         } finally {
             $lookup.remove();
             themes.isMaterial = origIsMaterial;
@@ -4034,7 +4045,7 @@ QUnit.module('default options', {
 
             const $popover = $('.dx-popover-wrapper');
 
-            assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup.field()).outerHeight() + 8 + 10, 2, 'popover position of lookup field with body padding 8px');
+            assert.roughEqual($popover.find('.dx-overlay-content').eq(0).position().top, $(lookup._inputWrapper()).outerHeight() + 8 + 10, 2, 'popover position of lookup field with body padding 8px');
 
             lookup.close();
 

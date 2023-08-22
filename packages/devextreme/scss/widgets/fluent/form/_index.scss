@@ -1,0 +1,139 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/form";
+@use "../../base/icons" as *;
+@use "../textEditor/sizes" as *;
+
+// adduse
+@use "../scrollable";
+
+
+.dx-form-group-caption {
+  font-size: $fluent-form-group-caption-font-size;
+}
+
+.dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
+  & > .dx-form-group-content {
+    border-top: 1px solid $form-group-border-color;
+    padding-bottom: $fluent-form-group-content-padding-bottom;
+    padding-top: $fluent-form-group-caption-bottom-padding;
+    margin-top: $fluent-form-group-caption-bottom-margin;
+  }
+}
+
+.dx-form {
+  > .dx-scrollable-wrapper {
+    > .dx-scrollable-container {
+      margin-left: -10px;
+      padding-left: 10px;
+    }
+  }
+}
+
+.dx-scrollable-content > .dx-layout-manager {
+  padding-right: 5px;
+}
+
+.dx-layout-manager {
+  .dx-field-item {
+    &:not(.dx-last-col) {
+      padding-right: 20px;
+    }
+
+    &:not(.dx-first-col) {
+      padding-left: 20px;
+    }
+
+    padding-bottom: 10px;
+    font-size: $fluent-form-label-font-size;
+
+
+    .dx-field-item {
+      &.dx-last-row {
+        padding-bottom: 0;
+      }
+    }
+  }
+}
+
+.dx-form > .dx-layout-manager.dx-layout-manager-one-col {
+  .dx-field-item {
+    .dx-field-item.dx-last-row:not(.dx-last-col) {
+      padding-bottom: 10px;
+    }
+  }
+}
+
+.dx-field-item {
+  &:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs):not(.dx-first-row):not(.dx-label-v-align) {
+    padding-top: $fluent-form-default-top-padding;
+  }
+
+  .dx-switch {
+    vertical-align: middle;
+  }
+
+  &.dx-label-v-align {
+    .dx-invalid-message > .dx-overlay-wrapper,
+    .dx-invalid-message > .dx-overlay-content {
+      transform: translate(0, 0) !important; // stylelint-disable-line declaration-no-important
+    }
+  }
+
+  .dx-toggle-controls-paddings {
+    padding-left: $fluent-filled-texteditor-input-horizontal-padding;
+  }
+}
+
+.dx-field-item-content-wrapper.dx-invalid {
+  .dx-field-item-help-text {
+    color: transparent;
+  }
+}
+
+.dx-field-item-label-location-top {
+  padding: $fluent-form-top-label-padding;
+  padding-left: $fluent-filled-texteditor-input-horizontal-padding;
+  padding-right: $fluent-filled-texteditor-input-horizontal-padding;
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.dx-field-item-label-text {
+  color: $form-field-item-color;
+}
+
+.dx-field-item-help-text {
+  color: $form-field-item-color;
+  padding: 6px $fluent-filled-texteditor-input-horizontal-padding 2px;
+  font-style: normal;
+
+  .dx-form-styling-mode-underlined & {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.dx-field-item-optional .dx-label > span::after,
+.dx-field-item-optional-mark {
+  color: $form-field-mark-color;
+}
+
+.dx-field-item-required .dx-label > span::after,
+.dx-field-item-required-mark {
+  color: $form-field-required-color;
+}
+
+.dx-field-item-custom-label-content {
+  .dx-icon {
+    @include dx-icon-sizing($fluent-form-label-icon-size);
+    @include dx-icon-margin(math.div($fluent-base-icon-size, 3));
+  }
+}

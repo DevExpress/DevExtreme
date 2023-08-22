@@ -1,0 +1,31 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../overlay/colors" as *;
+@use "../color" as extcolor;
+
+// adduse
+
+/**
+* $name 10. Text color
+* $type color
+*/
+$tooltip-color: null !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
+$tooltip-bg: null !default;
+$tooltip-border-radius: $base-border-radius !default;
+
+@if $mode == "light" {
+  $tooltip-color: $base-inverted-text-color !default;
+  $tooltip-bg: #616161 !default;
+}
+
+@if $mode == "dark" {
+  $tooltip-color: $base-text-color !default;
+  $tooltip-bg: rgba(0, 0, 0, 1) !default;
+}
+

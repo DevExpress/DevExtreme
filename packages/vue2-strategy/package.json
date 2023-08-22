@@ -8,8 +8,7 @@
     "npm"
   ],
   "scripts": {
-    "build": "gulp build",
-    "pack": "npm run build",
+    "generate": "gulp build",
     "test": "jest",
     "start": "webpack-dev-server"
   },
